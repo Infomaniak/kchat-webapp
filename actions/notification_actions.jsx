@@ -48,12 +48,12 @@ export function sendDesktopNotification(post, msgProps) {
 
         let mentions = [];
         if (msgProps.mentions) {
-            mentions = JSON.parse(msgProps.mentions);
+            mentions = msgProps;
         }
 
         let followers = [];
         if (msgProps.followers) {
-            followers = JSON.parse(msgProps.followers);
+            followers = msgProps.followers;
             mentions = [...new Set([...followers, ...mentions])];
         }
 
@@ -121,7 +121,7 @@ export function sendDesktopNotification(post, msgProps) {
 
         let notifyText = post.message;
 
-        const msgPropsPost = JSON.parse(msgProps.post);
+        const msgPropsPost = msgProps.post;
         const attachments = msgPropsPost && msgPropsPost.props && msgPropsPost.props.attachments ? msgPropsPost.props.attachments : [];
         let image = false;
         attachments.forEach((attachment) => {

@@ -565,7 +565,7 @@ function handleChannelConvertedEvent(msg) {
 
 export function handleChannelUpdatedEvent(msg) {
     return (doDispatch, doGetState) => {
-        const channel = JSON.parse(msg.data.channel);
+        const channel = msg.data.channel;
 
         doDispatch({type: ChannelTypes.RECEIVED_CHANNEL, data: channel});
 
@@ -577,7 +577,7 @@ export function handleChannelUpdatedEvent(msg) {
 }
 
 function handleChannelMemberUpdatedEvent(msg) {
-    const channelMember = JSON.parse(msg.data.channelMember);
+    const channelMember = msg.data.channelMember;
     const roles = channelMember.roles.split(' ');
     dispatch(loadRolesIfNeeded(roles));
     dispatch({type: ChannelTypes.RECEIVED_MY_CHANNEL_MEMBER, data: channelMember});
@@ -624,7 +624,7 @@ const handleNewPostEventDebounced = debouncePostEvent(100);
 
 export function handleNewPostEvent(msg) {
     return (myDispatch, myGetState) => {
-        const post = JSON.parse(msg.data.post);
+        const post = msg.data.post;
         myDispatch(handleNewPost(post, msg));
 
         getProfilesAndStatusesForPosts([post], myDispatch, myGetState);
@@ -650,7 +650,7 @@ export function handleNewPostEvent(msg) {
 export function handleNewPostEvents(queue) {
     return (myDispatch, myGetState) => {
         // Note that this method doesn't properly update the sidebar state for these posts
-        const posts = queue.map((msg) => JSON.parse(msg.data.post));
+        const posts = queue.map((msg) => msg.data.post);
 
         // Receive the posts as one continuous block since they were received within a short period
         const crtEnabled = isCollapsedThreadsEnabled(myGetState());
@@ -667,7 +667,7 @@ export function handleNewPostEvents(queue) {
 
 export function handlePostEditEvent(msg) {
     // Store post
-    const post = JSON.parse(msg.data.post);
+    const post = msg.data.post;
     const crtEnabled = isCollapsedThreadsEnabled(getState());
     dispatch(receivedPost(post, crtEnabled));
 
@@ -675,7 +675,7 @@ export function handlePostEditEvent(msg) {
     const currentChannelId = getCurrentChannelId(getState());
 
     // Update channel state
-    if (currentChannelId === msg.broadcast.channel_id) {
+    if (currentChannelId === msg.data.channel_id) {
         dispatch(getChannelStats(currentChannelId));
         if (window.isActive) {
             dispatch(viewChannel(currentChannelId));
@@ -684,7 +684,7 @@ export function handlePostEditEvent(msg) {
 }
 
 async function handlePostDeleteEvent(msg) {
-    const post = JSON.parse(msg.data.post);
+    const post = msg.data.post;
     const state = getState();
     const collapsedThreads = isCollapsedThreadsEnabled(state);
 
@@ -720,7 +720,7 @@ export function handlePostUnreadEvent(msg) {
             type: ActionTypes.POST_UNREAD_SUCCESS,
             data: {
                 lastViewedAt: msg.data.last_viewed_at,
-                channelId: msg.broadcast.channel_id,
+                channelId: msg.data.channel_id,
                 msgCount: msg.data.msg_count,
                 msgCountRoot: msg.data.msg_count_root,
                 mentionCount: msg.data.mention_count,
@@ -796,7 +796,7 @@ export function handleLeaveTeamEvent(msg) {
 }
 
 function handleUpdateTeamEvent(msg) {
-    dispatch({type: TeamTypes.UPDATED_TEAM, data: JSON.parse(msg.data.team)});
+    dispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
 }
 
 function handleUpdateTeamSchemeEvent() {
@@ -804,7 +804,7 @@ function handleUpdateTeamSchemeEvent() {
 }
 
 function handleDeleteTeamEvent(msg) {
-    const deletedTeam = JSON.parse(msg.data.team);
+    const deletedTeam = msg.data.team;
     const state = store.getState();
     const {teams} = state.entities.teams;
     if (
@@ -864,7 +864,7 @@ function handleDeleteTeamEvent(msg) {
 }
 
 function handleUpdateMemberRoleEvent(msg) {
-    const memberData = JSON.parse(msg.data.member);
+    const memberData = msg.data.member;
     const newRoles = memberData.roles.split(' ');
 
     dispatch(loadRolesIfNeeded(newRoles));
@@ -876,11 +876,11 @@ function handleUpdateMemberRoleEvent(msg) {
 }
 
 function handleDirectAddedEvent(msg) {
-    return fetchChannelAndAddToSidebar(msg.broadcast.channel_id);
+    return fetchChannelAndAddToSidebar(msg.data.channel_id);
 }
 
 function handleGroupAddedEvent(msg) {
-    return fetchChannelAndAddToSidebar(msg.broadcast.channel_id);
+    return fetchChannelAndAddToSidebar(msg.data.channel_id);
 }
 
 function handleUserAddedEvent(msg) {
@@ -890,11 +890,11 @@ function handleUserAddedEvent(msg) {
         const license = getLicense(state);
         const isTimezoneEnabled = config.ExperimentalTimezone === 'true';
         const currentChannelId = getCurrentChannelId(state);
-        if (currentChannelId === msg.broadcast.channel_id) {
+        if (currentChannelId === msg.data.channel_id) {
             doDispatch(getChannelStats(currentChannelId));
             doDispatch({
                 type: UserTypes.RECEIVED_PROFILE_IN_CHANNEL,
-                data: {id: msg.broadcast.channel_id, user_id: msg.data.user_id},
+                data: {id: msg.data.channel_id, user_id: msg.data.user_id},
             });
             if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true') {
                 doDispatch(getChannelMemberCountsByGroup(currentChannelId, isTimezoneEnabled));
@@ -905,7 +905,7 @@ function handleUserAddedEvent(msg) {
         const currentTeamId = getCurrentTeamId(doGetState());
         const currentUserId = getCurrentUserId(doGetState());
         if (currentTeamId === msg.data.team_id && currentUserId === msg.data.user_id) {
-            doDispatch(fetchChannelAndAddToSidebar(msg.broadcast.channel_id));
+            doDispatch(fetchChannelAndAddToSidebar(msg.data.channel_id));
         }
 
         // This event is fired when a user first joins the server, so refresh analytics to see if we're now over the user limit
@@ -933,7 +933,7 @@ export function handleUserRemovedEvent(msg) {
     const license = getLicense(state);
     const isTimezoneEnabled = config.ExperimentalTimezone === 'true';
 
-    if (msg.broadcast.user_id === currentUser.id) {
+    if (msg.user_id === currentUser.id) {
         dispatch(loadChannelsForCurrentUser());
 
         const rhsChannelId = getSelectedChannelId(state);
@@ -942,7 +942,7 @@ export function handleUserRemovedEvent(msg) {
         }
 
         if (msg.data.channel_id === currentChannel.id) {
-            if (msg.data.remover_id !== msg.broadcast.user_id) {
+            if (msg.data.remover_id !== msg.user_id) {
                 const user = getUser(state, msg.data.remover_id);
                 if (!user) {
                     dispatch(loadUser(msg.data.remover_id));
@@ -965,7 +965,7 @@ export function handleUserRemovedEvent(msg) {
             type: ChannelTypes.LEAVE_CHANNEL,
             data: {
                 id: msg.data.channel_id,
-                user_id: msg.broadcast.user_id,
+                user_id: msg.user_id,
                 team_id: channel?.team_id,
             },
         });
@@ -977,19 +977,19 @@ export function handleUserRemovedEvent(msg) {
         if (isGuest(currentUser.roles)) {
             dispatch(removeNotVisibleUsers());
         }
-    } else if (msg.broadcast.channel_id === currentChannel.id) {
+    } else if (msg.data.channel_id === currentChannel.id) {
         dispatch(getChannelStats(currentChannel.id));
         dispatch({
             type: UserTypes.RECEIVED_PROFILE_NOT_IN_CHANNEL,
-            data: {id: msg.broadcast.channel_id, user_id: msg.data.user_id},
+            data: {id: msg.data.channel_id, user_id: msg.data.user_id},
         });
         if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true') {
             dispatch(getChannelMemberCountsByGroup(currentChannel.id, isTimezoneEnabled));
         }
     }
 
-    if (msg.broadcast.user_id !== currentUser.id) {
-        const channel = getChannel(state, msg.broadcast.channel_id);
+    if (msg.user_id !== currentUser.id) {
+        const channel = getChannel(state, msg.data.channel_id);
         const members = getChannelMembersInChannels(state);
         const isMember = Object.values(members).some((member) => member[msg.data.user_id]);
         if (channel && isGuest(currentUser.roles) && !isMember) {
@@ -1007,8 +1007,8 @@ export function handleUserRemovedEvent(msg) {
         }
     }
 
-    const channelId = msg.broadcast.channel_id || msg.data.channel_id;
-    const userId = msg.broadcast.user_id || msg.data.user_id;
+    const channelId = msg.data.channel_id || msg.data.channel_id;
+    const userId = msg.user_id || msg.data.user_id;
     const channel = getChannel(state, channelId);
     if (channel && !haveISystemPermission(state, {permission: Permissions.VIEW_MEMBERS}) && !haveITeamPermission(state, channel.team_id, Permissions.VIEW_MEMBERS)) {
         dispatch(batchActions([
@@ -1033,7 +1033,7 @@ export async function handleUserUpdatedEvent(msg) {
     const currentUser = getCurrentUser(state);
     const user = msg.data.user;
     if (user && user.props) {
-        const customStatus = user.props.customStatus ? JSON.parse(user.props.customStatus) : undefined;
+        const customStatus = user.props.customStatus ? user.props.customStatus : undefined;
         dispatch(loadCustomEmojisIfNeeded([customStatus?.emoji]));
     }
 
@@ -1052,7 +1052,7 @@ export async function handleUserUpdatedEvent(msg) {
 }
 
 function handleRoleAddedEvent(msg) {
-    const role = JSON.parse(msg.data.role);
+    const role = msg.data.role;
 
     dispatch({
         type: RoleTypes.RECEIVED_ROLE,
@@ -1061,7 +1061,7 @@ function handleRoleAddedEvent(msg) {
 }
 
 function handleRoleRemovedEvent(msg) {
-    const role = JSON.parse(msg.data.role);
+    const role = msg.data.role;
 
     dispatch({
         type: RoleTypes.ROLE_DELETED,
@@ -1070,11 +1070,11 @@ function handleRoleRemovedEvent(msg) {
 }
 
 function handleChannelSchemeUpdatedEvent(msg) {
-    dispatch(getMyChannelMember(msg.broadcast.channel_id));
+    dispatch(getMyChannelMember(msg.data.channel_id));
 }
 
 function handleRoleUpdatedEvent(msg) {
-    const role = JSON.parse(msg.data.role);
+    const role = msg.data.role;
 
     dispatch({
         type: RoleTypes.RECEIVED_ROLE,
@@ -1113,7 +1113,7 @@ function handleChannelDeletedEvent(msg) {
         browserHistory.push(teamUrl + '/channels/' + redirectChannel);
     }
 
-    dispatch({type: ChannelTypes.RECEIVED_CHANNEL_DELETED, data: {id: msg.data.channel_id, team_id: msg.broadcast.team_id, deleteAt: msg.data.delete_at, viewArchivedChannels}});
+    dispatch({type: ChannelTypes.RECEIVED_CHANNEL_DELETED, data: {id: msg.data.channel_id, team_id: msg.team_id, deleteAt: msg.data.delete_at, viewArchivedChannels}});
 }
 
 function handleChannelUnarchivedEvent(msg) {
@@ -1121,11 +1121,11 @@ function handleChannelUnarchivedEvent(msg) {
     const config = getConfig(state);
     const viewArchivedChannels = config.ExperimentalViewArchivedChannels === 'true';
 
-    dispatch({type: ChannelTypes.RECEIVED_CHANNEL_UNARCHIVED, data: {id: msg.data.channel_id, team_id: msg.broadcast.team_id, viewArchivedChannels}});
+    dispatch({type: ChannelTypes.RECEIVED_CHANNEL_UNARCHIVED, data: {id: msg.data.channel_id, team_id: msg.team_id, viewArchivedChannels}});
 }
 
 function handlePreferenceChangedEvent(msg) {
-    const preference = JSON.parse(msg.data.preference);
+    const preference = msg.data.preference;
     dispatch({type: PreferenceTypes.RECEIVED_PREFERENCES, data: [preference]});
 
     if (addedNewDmUser(preference)) {
@@ -1134,7 +1134,7 @@ function handlePreferenceChangedEvent(msg) {
 }
 
 function handlePreferencesChangedEvent(msg) {
-    const preferences = JSON.parse(msg.data.preferences);
+    const preferences = msg.data.preferences;
     dispatch({type: PreferenceTypes.RECEIVED_PREFERENCES, data: preferences});
 
     if (preferences.findIndex(addedNewDmUser) !== -1) {
@@ -1143,7 +1143,7 @@ function handlePreferencesChangedEvent(msg) {
 }
 
 function handlePreferencesDeletedEvent(msg) {
-    const preferences = JSON.parse(msg.data.preferences);
+    const preferences = msg.data.preferences;
     dispatch({type: PreferenceTypes.DELETED_PREFERENCES, data: preferences});
 }
 
@@ -1159,7 +1159,7 @@ export function handleUserTypingEvent(msg) {
         const userId = msg.data.user_id;
 
         const data = {
-            id: msg.broadcast.channel_id + msg.data.parent_id,
+            id: msg.data.channel_id + msg.data.parent_id,
             userId,
             now: Date.now(),
         };
@@ -1203,7 +1203,7 @@ function handleHelloEvent(msg) {
 }
 
 function handleReactionAddedEvent(msg) {
-    const reaction = JSON.parse(msg.data.reaction);
+    const reaction = msg.data.reaction;
 
     dispatch(getCustomEmojiForReaction(reaction.emoji_name));
 
@@ -1214,7 +1214,7 @@ function handleReactionAddedEvent(msg) {
 }
 
 function handleAddEmoji(msg) {
-    const data = JSON.parse(msg.data.emoji);
+    const data = msg.data.emoji;
 
     dispatch({
         type: EmojiTypes.RECEIVED_CUSTOM_EMOJI,
@@ -1223,7 +1223,7 @@ function handleAddEmoji(msg) {
 }
 
 function handleReactionRemovedEvent(msg) {
-    const reaction = JSON.parse(msg.data.reaction);
+    const reaction = msg.data.reaction;
 
     dispatch({
         type: PostTypes.REACTION_DELETED,
@@ -1234,7 +1234,7 @@ function handleReactionRemovedEvent(msg) {
 function handleChannelViewedEvent(msg) {
     // Useful for when multiple devices have the app open to different channels
     if ((!window.isActive || getCurrentChannelId(getState()) !== msg.data.channel_id) &&
-        getCurrentUserId(getState()) === msg.broadcast.user_id) {
+        getCurrentUserId(getState()) === msg.user_id) {
         dispatch(markChannelAsRead(msg.data.channel_id, '', false));
     }
 }
@@ -1282,7 +1282,7 @@ function handlePluginStatusesChangedEvent(msg) {
 
 function handleOpenDialogEvent(msg) {
     const data = (msg.data && msg.data.dialog) || {};
-    const dialog = JSON.parse(data);
+    const dialog = data;
 
     store.dispatch({type: IntegrationTypes.RECEIVED_DIALOG, data: dialog});
 
@@ -1296,7 +1296,7 @@ function handleOpenDialogEvent(msg) {
 }
 
 function handleGroupUpdatedEvent(msg) {
-    const data = JSON.parse(msg.data.group);
+    const data = msg.data.group;
     dispatch(batchActions([
         {
             type: GroupTypes.RECEIVED_GROUP,
@@ -1312,33 +1312,33 @@ function handleGroupUpdatedEvent(msg) {
 function handleGroupAssociatedToTeamEvent(msg) {
     store.dispatch({
         type: GroupTypes.RECEIVED_GROUP_ASSOCIATED_TO_TEAM,
-        data: {teamID: msg.broadcast.team_id, groups: [{id: msg.data.group_id}]},
+        data: {teamID: msg.team_id, groups: [{id: msg.data.group_id}]},
     });
 }
 
 function handleGroupNotAssociatedToTeamEvent(msg) {
     store.dispatch({
         type: GroupTypes.RECEIVED_GROUP_NOT_ASSOCIATED_TO_TEAM,
-        data: {teamID: msg.broadcast.team_id, groups: [{id: msg.data.group_id}]},
+        data: {teamID: msg.team_id, groups: [{id: msg.data.group_id}]},
     });
 }
 
 function handleGroupAssociatedToChannelEvent(msg) {
     store.dispatch({
         type: GroupTypes.RECEIVED_GROUP_ASSOCIATED_TO_CHANNEL,
-        data: {channelID: msg.broadcast.channel_id, groups: [{id: msg.data.group_id}]},
+        data: {channelID: msg.data.channel_id, groups: [{id: msg.data.group_id}]},
     });
 }
 
 function handleGroupNotAssociatedToChannelEvent(msg) {
     store.dispatch({
         type: GroupTypes.RECEIVED_GROUP_NOT_ASSOCIATED_TO_CHANNEL,
-        data: {channelID: msg.broadcast.channel_id, groups: [{id: msg.data.group_id}]},
+        data: {channelID: msg.data.channel_id, groups: [{id: msg.data.group_id}]},
     });
 }
 
 function handleWarnMetricStatusReceivedEvent(msg) {
-    var receivedData = JSON.parse(msg.data.warnMetricStatus);
+    var receivedData = msg.data.warnMetricStatus;
     let bannerData;
     if (receivedData.id === WarnMetricTypes.SYSTEM_WARN_METRIC_NUMBER_OF_ACTIVE_USERS_500) {
         bannerData = AnnouncementBarMessages.WARN_METRIC_STATUS_NUMBER_OF_USERS;
@@ -1365,14 +1365,14 @@ function handleSidebarCategoryCreated(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
 
-        if (msg.broadcast.team_id !== getCurrentTeamId(state)) {
+        if (msg.team_id !== getCurrentTeamId(state)) {
             // The new category will be loaded when we switch teams.
             return;
         }
 
         // Fetch all categories, including ones that weren't explicitly updated, in case any other categories had channels
         // moved out of them.
-        doDispatch(fetchMyCategories(msg.broadcast.team_id));
+        doDispatch(fetchMyCategories(msg.team_id));
     };
 }
 
@@ -1380,13 +1380,13 @@ function handleSidebarCategoryUpdated(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
 
-        if (msg.broadcast.team_id !== getCurrentTeamId(state)) {
+        if (msg.team_id !== getCurrentTeamId(state)) {
             // The updated categories will be loaded when we switch teams.
             return;
         }
 
         // Fetch all categories in case any other categories had channels moved out of them.
-        doDispatch(fetchMyCategories(msg.broadcast.team_id));
+        doDispatch(fetchMyCategories(msg.team_id));
     };
 }
 
@@ -1394,18 +1394,18 @@ function handleSidebarCategoryDeleted(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
 
-        if (msg.broadcast.team_id !== getCurrentTeamId(state)) {
+        if (msg.team_id !== getCurrentTeamId(state)) {
             // The category will be removed when we switch teams.
             return;
         }
 
         // Fetch all categories since any channels that were in the deleted category were moved to other categories.
-        doDispatch(fetchMyCategories(msg.broadcast.team_id));
+        doDispatch(fetchMyCategories(msg.team_id));
     };
 }
 
 function handleSidebarCategoryOrderUpdated(msg) {
-    return receivedCategoryOrder(msg.broadcast.team_id, msg.data.order);
+    return receivedCategoryOrder(msg.team_id, msg.data.order);
 }
 
 export function handleUserActivationStatusChange() {
@@ -1462,7 +1462,7 @@ function handleRefreshAppsBindings() {
 }
 
 function handleFirstAdminVisitMarketplaceStatusReceivedEvent(msg) {
-    const receivedData = JSON.parse(msg.data.firstAdminVisitMarketplaceStatus);
+    const receivedData = msg.data.firstAdminVisitMarketplaceStatus;
     store.dispatch({type: GeneralTypes.FIRST_ADMIN_VISIT_MARKETPLACE_STATUS_RECEIVED, data: receivedData});
 }
 
@@ -1480,7 +1480,7 @@ function handleThreadReadChanged(msg) {
                 handleReadChanged(
                     doDispatch,
                     msg.data.thread_id,
-                    msg.broadcast.team_id,
+                    msg.team_id,
                     msg.data.channel_id,
                     {
                         lastViewedAt: msg.data.timestamp,
@@ -1491,10 +1491,10 @@ function handleThreadReadChanged(msg) {
                     },
                 );
             }
-        } else if (msg.broadcast.channel_id) {
-            handleAllThreadsInChannelMarkedRead(doDispatch, doGetState, msg.broadcast.channel_id, msg.data.timestamp);
+        } else if (msg.data.channel_id) {
+            handleAllThreadsInChannelMarkedRead(doDispatch, doGetState, msg.data.channel_id, msg.data.timestamp);
         } else {
-            handleAllMarkedRead(doDispatch, msg.broadcast.team_id);
+            handleAllMarkedRead(doDispatch, msg.team_id);
         }
     };
 }
@@ -1503,7 +1503,7 @@ function handleThreadUpdated(msg) {
     return (doDispatch, doGetState) => {
         let threadData;
         try {
-            threadData = JSON.parse(msg.data.thread);
+            threadData = msg.data.thread;
         } catch {
             // invalid JSON
             return;
@@ -1543,7 +1543,7 @@ function handleThreadUpdated(msg) {
             dispatch(updateThreadRead(currentUserId, currentTeamId, threadData.id, lastViewedAt));
         }
 
-        handleThreadArrived(doDispatch, doGetState, threadData, msg.broadcast.team_id);
+        handleThreadArrived(doDispatch, doGetState, threadData, msg.team_id);
     };
 }
 
@@ -1554,6 +1554,6 @@ function handleThreadFollowChanged(msg) {
         if (!thread && msg.data.state && msg.data.reply_count) {
             await doDispatch(fetchThread(getCurrentUserId(state), getCurrentTeamId(state), msg.data.thread_id, true));
         }
-        handleFollowChanged(doDispatch, msg.data.thread_id, msg.broadcast.team_id, msg.data.state);
+        handleFollowChanged(doDispatch, msg.data.thread_id, msg.team_id, msg.data.state);
     };
 }

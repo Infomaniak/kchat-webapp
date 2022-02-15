@@ -116,7 +116,7 @@ function formattedError(id: string, message: string): React.ReactElement {
 export function validateChannelUrl(url: string): React.ReactElement[] {
     const errors: React.ReactElement[] = [];
 
-    const USER_ID_LENGTH = 26;
+    const USER_ID_LENGTH = 36;
     const directMessageRegex = new RegExp(`^.{${USER_ID_LENGTH}}__.{${USER_ID_LENGTH}}$`);
     const isDirectMessageFormat = directMessageRegex.test(url);
 

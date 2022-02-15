@@ -216,9 +216,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
     private handleBeforeUnload = (): void => {
         // remove the event listener to prevent getting stuck in a loop
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
-        if (document.cookie.indexOf('MMUSERID=') > -1) {
-            viewChannel('', this.props.currentChannelId || '')(dispatch, getState);
-        }
+        viewChannel('', this.props.currentChannelId || '')(dispatch, getState);
         WebSocketActions.close();
     }
 }

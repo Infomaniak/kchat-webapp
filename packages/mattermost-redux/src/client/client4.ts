@@ -3798,8 +3798,13 @@ export default class Client4 {
             });
         }
 
-        if (headers.has(HEADER_X_VERSION_ID) && !headers.get('Cache-Control')) {
+        if (response.status === 401 && data?.result === 'redirect') {
+            window.location.href = data.uri;
+        }
+
+        if (headers.has(HEADER_X_VERSION_ID)) {
             const serverVersion = headers.get(HEADER_X_VERSION_ID);
+
             if (serverVersion && this.serverVersion !== serverVersion) {
                 this.serverVersion = serverVersion;
             }

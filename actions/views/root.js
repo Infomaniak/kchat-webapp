@@ -20,9 +20,7 @@ export function loadMeAndConfig() {
 
         // need to await for clientConfig first as it is required for loadMe
         const resolvedPromises = await Promise.all(promises);
-        if (document.cookie.indexOf('MMUSERID=') > -1) {
-            resolvedPromises.push(await dispatch(UserActions.loadMe()));
-        }
+        resolvedPromises.push(await dispatch(UserActions.loadMe()));
 
         // load the cloud subscription stats
         const isCloud = resolvedPromises[1]?.data?.Cloud === 'true';
