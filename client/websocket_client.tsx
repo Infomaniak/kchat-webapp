@@ -76,12 +76,9 @@ export default class WebSocketClient {
         // We cannot use a cookie because it will bleed across tabs.
         // We cannot also send it as part of the auth_challenge, because the session cookie is already sent with the request.
         this.conn = new Pusher('app-key', {
-            wsHost: 'kslack-websocket.devd281.dev.infomaniak.ch',
-            httpHost: 'kslack-websocket.devd281.dev.infomaniak.ch',
-            authEndpoint: 'https://kslack.devd281.dev.infomaniak.ch/broadcasting/auth',
-            //wsHost: 'local.devd281.dev.infomaniak.ch',
-            //httpHost: 'local.devd281.dev.infomaniak.ch',
-            //authEndpoint: 'http://local.devd281.dev.infomaniak.ch/broadcasting/auth',
+            wsHost: connectionUrl,
+            httpHost: connectionUrl,
+            authEndpoint: '/broadcasting/auth',
             wsPort: 443,
             wssPort: 443,
             httpPort: 443,
