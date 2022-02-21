@@ -154,8 +154,6 @@ export function initialize() {
         connUrl = connUrl.substring(0, connUrl.length - 1);
     }
 
-    connUrl += Client4.getUrlVersion() + '/websocket';
-
     WebSocketClient.setEventCallback(handleEvent);
     WebSocketClient.setFirstConnectCallback(handleFirstConnect);
     WebSocketClient.setReconnectCallback(() => reconnect(false));
