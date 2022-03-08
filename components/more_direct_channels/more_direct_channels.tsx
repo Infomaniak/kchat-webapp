@@ -231,7 +231,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
     };
 
     getUserProfiles = (page?: number) => {
-        const pageNum = page ? page + 1 : 0;
+        const pageNum = page || 0;
         if (this.props.restrictDirectMessage === 'any') {
             this.props.actions.getProfiles(pageNum, USERS_PER_PAGE * 2).then(() => {
                 this.setUsersLoadingState(false);
