@@ -412,6 +412,8 @@ if (targetIsDevServer) {
         ...config,
         devtool: 'eval-cheap-module-source-map',
         devServer: {
+            server: 'https',
+            allowedHosts: 'all',
             hot: true,
             liveReload: false,
             proxy: [{
@@ -420,6 +422,7 @@ if (targetIsDevServer) {
                     if (req.url.indexOf('/api') === 0 ||
                         req.url.indexOf('/plugins') === 0 ||
                         req.url.indexOf('/static/plugins/') === 0 ||
+                        req.url.indexOf('/broadcasting/auth') === 0 ||
                         req.url.indexOf('/sockjs-node/') !== -1) {
                         return null; // send through proxy to the server
                     }
@@ -431,7 +434,8 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: 'http://localhost:8065',
+                target: 'https://ktalk.preprod.dev.infomaniak.ch',
+                changeOrigin: true,
                 xfwd: true,
                 ws: true,
             }],
