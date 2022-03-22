@@ -158,7 +158,7 @@ export default class WebSocketClient {
         });
 
         this.bindChannelGlobally(this.teamChannel);
-        // this.bindChannelGlobally(this.userChannel);
+        this.bindChannelGlobally(this.userChannel);
     }
 
     bindChannelGlobally(channel: Channel | null) {
