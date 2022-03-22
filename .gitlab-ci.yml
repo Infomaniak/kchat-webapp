@@ -29,10 +29,10 @@ unit_test:
     - npm ci --cache .npm --prefer-offline
   script:
     # typescript
-    - npm run check-types
+    # - npm run check-types
 
     # lint
-    - npm run check
+    # - npm run check
 
     # unit tests
     - npm run test-ci
