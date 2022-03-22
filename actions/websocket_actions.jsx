@@ -633,7 +633,7 @@ export function handleNewPostEvent(msg) {
         //     a. The post is from the auto responder
         //     b. The post is a response to a push notification
         if (
-            post.user_id !== getCurrentUserId(myGetState()) &&
+            msg.data.user_id !== getCurrentUserId(myGetState()) &&
             !getIsManualStatusForUserId(myGetState(), post.user_id) &&
             msg.data.set_online
         ) {
@@ -931,7 +931,7 @@ export function handleUserRemovedEvent(msg) {
     const license = getLicense(state);
     const isTimezoneEnabled = config.ExperimentalTimezone === 'true';
 
-    if (msg.user_id === currentUser.id) {
+    if (msg.data.user_id === currentUser.id) {
         dispatch(loadChannelsForCurrentUser());
 
         const rhsChannelId = getSelectedChannelId(state);
@@ -940,7 +940,7 @@ export function handleUserRemovedEvent(msg) {
         }
 
         if (msg.data.channel_id === currentChannel.id) {
-            if (msg.data.remover_id !== msg.user_id) {
+            if (msg.data.remover_id !== msg.data.user_id) {
                 const user = getUser(state, msg.data.remover_id);
                 if (!user) {
                     dispatch(loadUser(msg.data.remover_id));
@@ -963,7 +963,7 @@ export function handleUserRemovedEvent(msg) {
             type: ChannelTypes.LEAVE_CHANNEL,
             data: {
                 id: msg.data.channel_id,
-                user_id: msg.user_id,
+                user_id: msg.data.user_id,
                 team_id: channel?.team_id,
             },
         });
@@ -986,7 +986,7 @@ export function handleUserRemovedEvent(msg) {
         }
     }
 
-    if (msg.user_id !== currentUser.id) {
+    if (msg.data.user_id !== currentUser.id) {
         const channel = getChannel(state, msg.data.channel_id);
         const members = getChannelMembersInChannels(state);
         const isMember = Object.values(members).some((member) => member[msg.data.user_id]);
@@ -1006,7 +1006,7 @@ export function handleUserRemovedEvent(msg) {
     }
 
     const channelId = msg.data.channel_id || msg.data.channel_id;
-    const userId = msg.user_id || msg.data.user_id;
+    const userId = msg.data.user_id || msg.data.user_id;
     const channel = getChannel(state, channelId);
     if (channel && !haveISystemPermission(state, {permission: Permissions.VIEW_MEMBERS}) && !haveITeamPermission(state, channel.team_id, Permissions.VIEW_MEMBERS)) {
         dispatch(batchActions([
@@ -1232,7 +1232,7 @@ function handleReactionRemovedEvent(msg) {
 function handleChannelViewedEvent(msg) {
     // Useful for when multiple devices have the app open to different channels
     if ((!window.isActive || getCurrentChannelId(getState()) !== msg.data.channel_id) &&
-        getCurrentUserId(getState()) === msg.user_id) {
+        getCurrentUserId(getState()) === msg.data.user_id) {
         dispatch(markChannelAsRead(msg.data.channel_id, '', false));
     }
 }

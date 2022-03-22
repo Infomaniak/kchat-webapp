@@ -77,7 +77,7 @@ export function sendDesktopNotification(post, msgProps) {
 
         if (notifyLevel === NotificationLevels.NONE) {
             return;
-        } else if (notifyLevel === NotificationLevels.MENTION && mentions.indexOf(user.id) === -1 && msgProps.channel_type !== Constants.DM_CHANNEL) {
+        } else if (notifyLevel === NotificationLevels.MENTION && Array.isArray(mentions) && mentions.indexOf(user.id) === -1 && msgProps.channel_type !== Constants.DM_CHANNEL) {
             return;
         } else if (isCrtReply && notifyLevel === NotificationLevels.ALL && followers.indexOf(currentUserId) === -1) {
             // if user is not following the thread don't notify
