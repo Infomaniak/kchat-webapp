@@ -3,7 +3,7 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
-import {SocketEvents} from 'utils/constants';
+// import {SocketEvents} from 'utils/constants';
 
 const MAX_WEBSOCKET_FAILS = 7;
 const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
@@ -11,7 +11,8 @@ const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
 
 export default class WebSocketClient {
     private conn: Pusher | null;
-    private channel: Channel | null;
+    private teamChannel: Channel | null;
+    private userChannel: Channel | null;
     private connectionUrl: string | null;
 
     // responseSequence is the number to track a response sent
@@ -34,7 +35,8 @@ export default class WebSocketClient {
 
     constructor() {
         this.conn = null;
-        this.channel = null;
+        this.teamChannel = null;
+        this.userChannel = null;
         this.connectionUrl = null;
         this.responseSequence = 1;
         this.serverSequence = 0;
@@ -52,7 +54,7 @@ export default class WebSocketClient {
     // on connect, only send auth cookie and blank state.
     // on hello, get the connectionID and store it.
     // on reconnect, send cookie, connectionID, sequence number.
-    initialize(connectionUrl = this.connectionUrl, token?: string) {
+    initialize(connectionUrl = this.connectionUrl, userId: number, teamId: string, token?: string) {
         if (this.conn) {
             return;
         }
@@ -66,8 +68,8 @@ export default class WebSocketClient {
             console.log('websocket connecting to ' + connectionUrl); //eslint-disable-line no-console
         }
 
-        Pusher.Runtime.createXHR = function () {
-            var xhr = new XMLHttpRequest();
+        Pusher.Runtime.createXHR = () => {
+            const xhr = new XMLHttpRequest();
             xhr.withCredentials = true;
             return xhr;
         };
@@ -88,9 +90,12 @@ export default class WebSocketClient {
         });
 
         this.connectionUrl = connectionUrl;
-        this.channel = this.conn.subscribe('private-workspace.infomaniak');
-        //this.channel = this.conn.subscribe('test.' + this.connectionId);
-        //this.channel = this.conn.subscribe('test.12');
+
+        // console.log(`private-team-${teamId}`);
+        // console.log(`private-user-${userId}`);
+
+        this.teamChannel = this.conn.subscribe(`private-team.${teamId}`);
+        this.userChannel = this.conn.subscribe(`private-user.${userId}`);
 
         this.conn.connection.bind('connected', () => {
             if (token) {
@@ -135,7 +140,7 @@ export default class WebSocketClient {
 
             setTimeout(
                 () => {
-                    this.initialize(connectionUrl, token);
+                    this.initialize(connectionUrl, teamId, userId, token);
                 },
                 retryTime,
             );
@@ -152,9 +157,14 @@ export default class WebSocketClient {
             }
         });
 
-        this.channel.bind_global((evt, data) => {
-            console.error(`The event ${evt} was triggered with data`);
-            console.error(data);
+        this.bindChannelGlobally(this.teamChannel);
+        this.bindChannelGlobally(this.userChannel);
+    }
+
+    bindChannelGlobally(channel: Channel | null) {
+        channel.bind_global((evt, data) => {
+            // console.error(`The event ${evt} was triggered with data`);
+            // console.error(data);
 
             if (!data) {
                 return;
