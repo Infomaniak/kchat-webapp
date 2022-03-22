@@ -54,7 +54,7 @@ export default class WebSocketClient {
     // on connect, only send auth cookie and blank state.
     // on hello, get the connectionID and store it.
     // on reconnect, send cookie, connectionID, sequence number.
-    initialize(connectionUrl = this.connectionUrl, userId: string, teamId: string, token?: string) {
+    initialize(connectionUrl = this.connectionUrl, userId: number, teamId: string, token?: string) {
         if (this.conn) {
             return;
         }
@@ -94,7 +94,7 @@ export default class WebSocketClient {
         // console.log(`private-team-${teamId}`);
         // console.log(`private-user-${userId}`);
 
-        this.teamChannel = this.conn.subscribe(`private-workspace.${teamId}`);
+        this.teamChannel = this.conn.subscribe(`private-team.${teamId}`);
         this.userChannel = this.conn.subscribe(`private-user.${userId}`);
 
         this.conn.connection.bind('connected', () => {

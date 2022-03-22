@@ -82,7 +82,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
             BrowserStore.signalLogin();
         }
 
-        const {id: userId, team_id: teamId} = this.props.currentUser;
+        const {user_id: userId, team_id: teamId} = this.props.currentUser;
 
         // Initialize websocket
         WebSocketActions.initialize(userId, teamId);
