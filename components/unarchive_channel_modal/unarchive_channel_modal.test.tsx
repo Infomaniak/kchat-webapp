@@ -18,7 +18,7 @@ describe('components/unarchive_channel_modal', () => {
         delete_at: 0,
         display_name: 'testing',
         header: 'test',
-        id: 'owsyt8n43jfxjpzh9np93mx1wa',
+        id: 'pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz',
         last_post_at: 1508265709635,
         name: 'testing',
         purpose: 'test',

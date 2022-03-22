@@ -43,7 +43,7 @@ describe('root view actions', () => {
         const testStore = await mockStore({});
 
         await testStore.dispatch(Actions.loadMeAndConfig());
-        expect(testStore.getActions()).toEqual([{type: 'MOCK_GET_CLIENT_CONFIG'}, {type: 'MOCK_GET_LICENSE_CONFIG'}]);
+        expect(testStore.getActions()).toEqual([{type: 'MOCK_GET_CLIENT_CONFIG'}, {type: 'MOCK_GET_LICENSE_CONFIG'}, {type: 'MOCK_LOAD_ME'}]);
     });
 
     test('loadMeAndConfig, with user logged in', async () => {

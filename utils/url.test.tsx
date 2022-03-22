@@ -99,7 +99,7 @@ describe('Utils.URL', () => {
             },
             {
                 description: 'Called with a url resembling a direct message url',
-                url: 'uzsfmtmniifsjgesce4u7yznyh__uzsfmtmniifsjgesce4u7yznyh',
+                url: 'pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz__pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz',
                 expectedErrors: ['change_url.invalidDirectMessage'],
             },
             {

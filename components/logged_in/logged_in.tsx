@@ -78,15 +78,6 @@ export default class LoggedIn extends React.PureComponent<Props> {
     }
 
     public componentDidMount(): void {
-        if (this.isValidState()) {
-            BrowserStore.signalLogin();
-        }
-
-        const {user_id: userId, team_id: teamId} = this.props.currentUser;
-
-        // Initialize websocket
-        WebSocketActions.initialize(userId, teamId);
-
         if (this.props.enableTimezone) {
             this.props.actions.autoUpdateTimezone(getBrowserTimezone());
         }
@@ -129,6 +120,19 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         // Prevent backspace from navigating back a page
         window.addEventListener('keydown', this.handleBackSpace);
+
+        if (this.isValidState()) {
+            BrowserStore.signalLogin();
+
+            return;
+        }
+
+        if (this.props.currentUser) {
+            const {user_id: userId, team_id: teamId} = this.props.currentUser;
+
+            // Initialize websocket
+            WebSocketActions.initialize(userId, teamId);
+        }
     }
 
     public componentWillUnmount(): void {
