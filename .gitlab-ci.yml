@@ -2,3 +2,23 @@ include:
   - project: 'docker-public/gitlab-ci-dev-scripts'
     ref: master
     file: '/build-docker-image.yaml'
+
+unit_test:
+  stage: test
+  image: node:16.14.2-bullseye
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_ID'
+      when: on_success
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: never
+  before_script:
+    - npm ci
+  script:
+    - make test
