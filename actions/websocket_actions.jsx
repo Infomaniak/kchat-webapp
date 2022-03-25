@@ -117,13 +117,18 @@ const MAX_WEBSOCKET_FAILS = 7;
 
 const pluginEventHandlers = {};
 
-export function initialize(userId, teamId) {
+export function initialize() {
     if (!window.WebSocket) {
         console.log('Browser does not support websocket'); //eslint-disable-line no-console
         return;
     }
 
     const config = getConfig(getState());
+    const user = getCurrentUser(getState());
+    if (!user) {
+        return;
+    }
+
     let connUrl = '';
     if (config.WebsocketURL) {
         connUrl = config.WebsocketURL;
@@ -159,7 +164,7 @@ export function initialize(userId, teamId) {
     WebSocketClient.setReconnectCallback(() => reconnect(false));
     WebSocketClient.setMissedEventCallback(() => reconnect(false));
     WebSocketClient.setCloseCallback(handleClose);
-    WebSocketClient.initialize(connUrl, userId, teamId);
+    WebSocketClient.initialize(connUrl, user.user_id, user.team_id);
 }
 
 export function close() {

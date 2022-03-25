@@ -55,8 +55,12 @@ export default class WebSocketClient {
     // on hello, get the connectionID and store it.
     // on reconnect, send cookie, connectionID, sequence number.
     initialize(connectionUrl = this.connectionUrl, userId?: number, teamId?: string, token?: string) {
-        // After login store this for reconnect
-        const currentUserId = userId;
+        let currentUserId;
+
+        // Store this for onmessage reconnect
+        if (userId) {
+            currentUserId = userId;
+        }
 
         if (this.conn) {
             return;
@@ -94,13 +98,8 @@ export default class WebSocketClient {
 
         this.connectionUrl = connectionUrl;
 
-        if (teamId) {
-            this.subscribeToTeamChannel(teamId);
-        }
-
-        if (userId || currentUserId) {
-            this.subscribeToUserChannel(userId || currentUserId);
-        }
+        this.subscribeToTeamChannel(teamId);
+        this.subscribeToUserChannel(userId || currentUserId);
 
         this.conn.connection.bind('connected', () => {
             if (token) {

@@ -78,10 +78,8 @@ export default class LoggedIn extends React.PureComponent<Props> {
     }
 
     public componentDidMount(): void {
-        const {user_id: userId, team_id: teamId} = this.props.currentUser || {user_id: undefined, team_id: undefined};
-
         // Initialize websocket
-        WebSocketActions.initialize(userId, teamId);
+        WebSocketActions.initialize();
 
         if (this.props.enableTimezone) {
             this.props.actions.autoUpdateTimezone(getBrowserTimezone());
