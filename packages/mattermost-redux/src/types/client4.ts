@@ -34,6 +34,7 @@ export type Options = {
     url?: string;
     credentials?: 'omit' | 'same-origin' | 'include';
     body?: any;
+    mode?: 'no-cors' | undefined;
 };
 
 export type StatusOK = {

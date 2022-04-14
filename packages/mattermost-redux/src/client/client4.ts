@@ -3852,6 +3852,60 @@ export default class Client4 {
             this.telemetryHandler.pageVisited(this.userId, userRoles, category, name);
         }
     }
+
+    /****************************************************/
+    /*                                                  */
+    /*                IK CUSTOMS CALLS                  */
+    /*                                                  */
+    /****************************************************/
+
+    getIKLogin = (challenge: string) => {
+        return this.doFetch<any>(
+            `${this.getBaseRoute()}/desktop-login?challenge=${challenge}`,
+            {method: 'get'},
+        );
+    };
+
+    // TODO: when is ok update with env and/or current server url (dev, preprod....)
+    getIKLoginToken = (code: string, challenge: string, verifier: string, loginUrl: string, clientId: string) => {
+
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('grant_type', "authorization_code");
+        formData.append('code', code);
+        formData.append('code_verifier', verifier);
+        formData.append('client_id', clientId);
+
+        return this.doFetch<any>(
+            // `${this.getBaseRoute()}/token`,
+            `${loginUrl}/token`,
+            {
+                method: 'post',
+                mode: 'no-cors',
+                body: formData
+            }
+        );
+    }
+
+    // TODO: when is ok update with env and/or current server url (dev, preprod....)
+    refreshIKLoginToken = (refresh: string, loginUrl: string, clientId: string) => {
+
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('grant_type', "refresh_token");
+        formData.append('refresh_token', refresh);
+        formData.append('client_id', clientId);
+
+        return this.doFetch<any>(
+            // `${this.getBaseRoute()}/token`,
+            `${loginUrl}/token`,
+            {
+                method: 'post',
+                mode: 'no-cors',
+                body: formData
+            }
+        );
+    }
 }
 
 function parseAndMergeNestedHeaders(originalHeaders: any) {
