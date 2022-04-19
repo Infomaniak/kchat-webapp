@@ -36,10 +36,12 @@ import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
 import {EmojiIndicesByAlias} from 'utils/emoji.jsx';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils.jsx';
+import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 import webSocketClient from 'client/web_websocket_client.jsx';
 
 const LazyErrorPage = React.lazy(() => import('components/error_page'));
 const LazyLoginController = React.lazy(() => import('components/login/login_controller'));
+const LazyLoginDesktopController = React.lazy(() => import('components/login-desktop/login_desktop_controller'));
 const LazyAdminConsole = React.lazy(() => import('components/admin_console'));
 const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
 const LazyPasswordResetSendLink = React.lazy(() => import('components/password_reset_send_link'));
@@ -73,6 +75,7 @@ const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const TermsOfService = makeAsyncComponent('TermsOfService', LazyTermsOfService);
 const LoginController = makeAsyncComponent('LoginController', LazyLoginController);
+const LoginDesktopController = makeAsyncComponent('LoginDesktopController', LazyLoginDesktopController);
 const AdminConsole = makeAsyncComponent('AdminConsole', LazyAdminConsole);
 const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
 const PasswordResetSendLink = makeAsyncComponent('PasswordResedSendLink', LazyPasswordResetSendLink);
@@ -120,12 +123,28 @@ export default class Root extends React.PureComponent {
         this.currentCategoryFocus = 0;
         this.currentSidebarFocus = 0;
         this.mounted = false;
-
         // Redux
         setUrl(getSiteURL());
 
-        // Disable auth header to enable CSRF check
-        Client4.setAuthHeader = false;
+        if (isDesktopApp()) {
+            // Get values from localStorage
+            const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
+            const tokenExpire = localStorage.getItem('IKTokenExpire');
+
+            // If missing token or refresh token or expire token or Check if token is expired
+            if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= Date.now())) {
+                this.props.history.push('/auth-desktop'+ this.props.location.search)
+            }
+
+            // Enable authHeader and set bearer token
+            if (token) {
+                Client4.setAuthHeader = true;
+                Client4.setToken(token)
+            }
+        } else {
+            Client4.setAuthHeader = false;  // Disable auth header to enable CSRF check
+        }
 
         setSystemEmojis(EmojiIndicesByAlias);
 
@@ -150,7 +169,6 @@ export default class Root extends React.PureComponent {
         this.state = {
             configLoaded: false,
         };
-
         // Keyboard navigation for accessibility
         if (!UserAgent.isInternetExplorer()) {
             this.a11yController = new A11yController();
@@ -246,6 +264,10 @@ export default class Root extends React.PureComponent {
         if (mobileLanding && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing')) {
             this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
             BrowserStore.setLandingPageSeen(true);
+        }
+
+        if (isDesktopApp()) {
+            this.props.history.push('/auth-desktop'+ this.props.location.search)
         }
 
         Utils.applyTheme(this.props.theme);
@@ -375,6 +397,10 @@ export default class Root extends React.PureComponent {
                     <HFTRoute
                         path={'/login'}
                         component={LoginController}
+                    />
+                    <HFTRoute
+                        path={'/auth-desktop'}
+                        component={LoginDesktopController}
                     />
                     <HFTRoute
                         path={'/reset_password'}
