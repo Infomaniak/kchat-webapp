@@ -38,6 +38,7 @@ import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils.jsx';
 import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 import webSocketClient from 'client/web_websocket_client.jsx';
+import LocalStorageStore from 'stores/local_storage_store';
 
 const LazyErrorPage = React.lazy(() => import('components/error_page'));
 const LazyLoginController = React.lazy(() => import('components/login/login_controller'));
@@ -134,13 +135,15 @@ export default class Root extends React.PureComponent {
 
             // If missing token or refresh token or expire token or Check if token is expired
             if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= Date.now())) {
-                this.props.history.push('/auth-desktop'+ this.props.location.search)
+                this.props.history.push('/auth-desktop'+ this.props.location.hash)
             }
 
             // Enable authHeader and set bearer token
             if (token) {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token)
+                Client4.setCSRF(token)
+                LocalStorageStore.setWasLoggedIn(true);
             }
         } else {
             Client4.setAuthHeader = false;  // Disable auth header to enable CSRF check
@@ -267,7 +270,22 @@ export default class Root extends React.PureComponent {
         }
 
         if (isDesktopApp()) {
-            this.props.history.push('/auth-desktop'+ this.props.location.search)
+            const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
+            const tokenExpire = localStorage.getItem('IKTokenExpire');
+
+            // If missing token or refresh token or expire token or Check if token is expired
+            if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= Date.now())) {
+                this.props.history.push('/auth-desktop'+ this.props.location.hash)
+            }
+
+             // Enable authHeader and set bearer token
+             if (token) {
+                Client4.setAuthHeader = true;
+                 Client4.setToken(token)
+                 Client4.setCSRF(token)
+                 LocalStorageStore.setWasLoggedIn(true);
+            }
         }
 
         Utils.applyTheme(this.props.theme);

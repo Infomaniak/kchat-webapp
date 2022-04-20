@@ -122,12 +122,13 @@ import {TelemetryHandler} from './telemetry';
 
 const FormData = require('form-data');
 const HEADER_AUTH = 'Authorization';
-const HEADER_BEARER = 'BEARER';
+const HEADER_BEARER = 'Bearer';
 const HEADER_CONTENT_TYPE = 'Content-Type';
 const HEADER_REQUESTED_WITH = 'X-Requested-With';
 const HEADER_USER_AGENT = 'User-Agent';
 const HEADER_X_CLUSTER_ID = 'X-Cluster-Id';
 const HEADER_X_CSRF_TOKEN = 'X-CSRF-Token';
+const HEADER_X_XSRF_TOKEN = 'X-XSRF-Token';
 export const HEADER_X_VERSION_ID = 'X-Version-Id';
 const PER_PAGE_DEFAULT = 60;
 const LOGS_PER_PAGE_DEFAULT = 10000;
@@ -455,6 +456,7 @@ export default class Client4 {
 
         if (this.setAuthHeader && this.token) {
             headers[HEADER_AUTH] = `${HEADER_BEARER} ${this.token}`;
+            headers[HEADER_X_XSRF_TOKEN] = this.token;
         }
 
         const csrfToken = this.csrf || this.getCSRFFromCookie();
@@ -3881,7 +3883,7 @@ export default class Client4 {
             `${loginUrl}/token`,
             {
                 method: 'post',
-                mode: 'no-cors',
+                // mode: 'no-cors',
                 body: formData
             }
         );

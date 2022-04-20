@@ -39,64 +39,77 @@ class LoginDesktopController extends React.PureComponent {
     }
 
     componentDidMount() {
-        // console.log(this.props.currentUser);
-        // if (this.props.currentUser) {
-        //     GlobalActions.redirectUserToDefaultTeam();
-        //     return;
-        // }
+        console.log(this.props.currentUser);
 
-        const loginCode = (new URLSearchParams(this.props.location.search)).get('code')
+        if (this.props.currentUser) {
+            GlobalActions.redirectUserToDefaultTeam();
+            return;
+        }
+        // const loginCode = (new URLSearchParams(this.props.location.search)).get('code')
+        const hash = this.props.location.hash
 
         const token = localStorage.getItem('IKToken');
         const refreshToken = localStorage.getItem('IKRefreshToken');
         const tokenExpire = localStorage.getItem('IKTokenExpire');
 
         // If need to refresh the token
-        if (tokenExpire && tokenExpire <= Date.now()) {
-            if (!refreshToken) return
+        // if (tokenExpire && tokenExpire <= Date.now()) {
+        //     if (!refreshToken) return
 
-            this.setState({loading: true})
-            Client4.refreshIKLoginToken(
-                refreshToken,
-                "https://login.devd254.dev.infomaniak.ch",
-                "A7376A6D-9A79-4B06-A837-7D92DB93965B"
-            ).then((resp) => {
-                this.storeTokenResponse(resp)
-                this.finishSignin();
-            }).catch((error) => {
-                console.log(error)
-            }
-            ).finally(this.setState({loading: false}))
-            return;
-        }
+        //     this.setState({loading: true})
+        //     Client4.refreshIKLoginToken(
+        //         refreshToken,
+        //         "https://login.devd281.dev.infomaniak.ch",
+        //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
+        //     ).then((resp) => {
+        //         return
+        //         this.storeTokenResponse(resp)
+        //         this.finishSignin();
+        //     }).catch((error) => {
+        //         console.log(error)
+        //         return;
+        //     }
+        //     ).finally(this.setState({loading: false}))
+        //     return;
+        // }
 
         // Receive login code from login redirect
-        if (loginCode) {
-            const challenge = JSON.parse(localStorage.getItem('challenge'));
+        if (hash) {
+            const hash2Obj = {}
+            hash.substring(1).split("&").map(hk => {
+                let temp = hk.split('=');
+                hash2Obj[temp[0]] = temp[1]
+              });
+            this.storeTokenResponse(hash2Obj)
+            localStorage.removeItem('challenge')
+            LocalStorageStore.setWasLoggedIn(true);
+            location.reload();
 
-            this.setState({ loading: true })
-            // Get token
-            Client4.getIKLoginToken(
-                loginCode,
-                challenge?.challenge,
-                challenge?.verifier,
-                "https://login.devd254.dev.infomaniak.ch",
-                "A7376A6D-9A79-4B06-A837-7D92DB93965B"
-            ).then((resp) => {
-                this.storeTokenResponse(resp)
-                localStorage.removeItem('challenge')
-                this.finishSignin();
-            }).catch((error) => {
-                console.log(error)
-            }
-            ).finally(this.setState({ loading: false }))
-
-            localStorage.removeItem('challenge');
             return
+        //     const challenge = JSON.parse(localStorage.getItem('challenge'));
+        //     this.setState({ loading: true })
+        //     return
+        // //    Get token
+        //     Client4.getIKLoginToken(
+        //         loginCode,
+        //         challenge?.challenge,
+        //         challenge?.verifier,
+        //         "https://login.devd281.dev.infomaniak.ch",
+        //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
+        //     ).then((resp) => {
+        //         this.storeTokenResponse(resp)
+        //         localStorage.removeItem('challenge')
+        //         this.finishSignin();
+        //     }).catch((error) => {
+        //         console.log(error)
+        //     }
+        //     ).finally(this.setState({ loading: false }))
+
+        //     localStorage.removeItem('challenge');
+        //     return
         }
 
         if (!token || !refreshToken || !tokenExpire) {
-            // return
             this.setState({ loading: true });
             const codeVerifier = this.getCodeVerifier()
             let codeChallenge = ""
@@ -105,7 +118,7 @@ class LoginDesktopController extends React.PureComponent {
                 // TODO: store in redux instead of localstorage
                 localStorage.setItem('challenge', JSON.stringify({ verifier: codeVerifier, challenge: codeChallenge }));
                 // TODO: add env for login url and/or current server
-                window.location.replace(`https://login.devd254.dev.infomaniak.ch/authorize?client_id=A7376A6D-9A79-4B06-A837-7D92DB93965B&response_type=code&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`)
+                window.location.replace(`https://login.devd254.dev.infomaniak.ch/authorize?client_id=A7376A6D-9A79-4B06-A837-7D92DB93965B&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`)
             }).finally(this.setState({loading: false}));
         }
     }
@@ -125,6 +138,8 @@ class LoginDesktopController extends React.PureComponent {
         localStorage.setItem("IKRefreshToken", response.refresh_token);
         localStorage.setItem("IKTokenExpire", Date.now() + response.expires_in);
         Client4.setToken(response.access_token);
+        Client4.setCSRF(response.access_token)
+        Client4.setAuthHeader = true;
     }
 
     getCodeVerifier = () => {
@@ -148,7 +163,6 @@ class LoginDesktopController extends React.PureComponent {
 
     // Do not clear this
     finishSignin = (team) => {
-        const experimentalPrimaryTeam = this.props.experimentalPrimaryTeam;
         const query = new URLSearchParams(this.props.location.search);
         const redirectTo = query.get('redirect_to');
 
@@ -161,8 +175,6 @@ class LoginDesktopController extends React.PureComponent {
             browserHistory.push(redirectTo);
         } else if (team) {
             browserHistory.push(`/${team.name}`);
-        } else if (experimentalPrimaryTeam) {
-            browserHistory.push(`/${experimentalPrimaryTeam}`);
         } else {
             GlobalActions.redirectUserToDefaultTeam();
         }

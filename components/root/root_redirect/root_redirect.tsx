@@ -3,7 +3,7 @@
 
 import React, {useEffect} from 'react';
 import {Redirect} from 'react-router-dom';
-
+import {isDesktopApp} from 'utils/user_agent';
 import * as GlobalActions from 'actions/global_actions';
 
 type Props = {
@@ -27,7 +27,7 @@ export default function RootRedirect(props: Props) {
         <Redirect
             to={{
                 ...props.location,
-                pathname: '/login',
+                pathname: isDesktopApp() ? '/': '/login',
             }}
         />
     );
