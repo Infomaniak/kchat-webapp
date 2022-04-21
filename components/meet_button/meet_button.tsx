@@ -5,7 +5,6 @@ import {injectIntl, IntlShape} from 'react-intl';
 
 import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
 import CameraIcon from 'components/widgets/icons/camera_icon';
-import JitsiMeetExternalAPI from '../../packages/kmeet/external_api.js';
 
 type Props = {
     currentChannel: Channel;
