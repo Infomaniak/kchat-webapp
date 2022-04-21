@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import {getInfomaniakTokens} from 'selectors/ik';
+import {GlobalState} from 'types/store';
 import {ActionTypes} from 'utils/constants';
 
 const accessTokenKey = '@infomaniak/token';
@@ -25,7 +26,7 @@ export function setTokens(x: { accessToken: string; refreshToken: string }): Act
 export function loadTokens(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         try {
-            const state = getState();
+            const state = getState() as GlobalState;
             const {accessToken, refreshToken} = getInfomaniakTokens(state);
             if (!accessToken) {
                 // TODO: Do login
