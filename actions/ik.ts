@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import {getInfomaniakTokens} from 'selectors/ik';
 import {ActionTypes} from 'utils/constants';
 
 const accessTokenKey = '@infomaniak/token';
@@ -24,17 +25,17 @@ export function setTokens(x: { accessToken: string; refreshToken: string }): Act
 export function loadTokens(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         try {
-            const accessToken = await localStorage.getItem(accessTokenKey);
-            const refreshToken = await localStorage.getItem(refreshTokenKey);
             const state = getState();
-            const token = getInfomaniakTokens(state);
-            if (token !== accessToken) {
-                dispatch(setTokens({accessToken, refreshToken}));
+            const {accessToken, refreshToken} = getInfomaniakTokens(state);
+            if (!accessToken) {
+                // TODO: Do login
+                // TODO: Get new accessToken
+                // TODO: Dispatch action to start watch refresh token
             }
 
-            // accessToken = accessToken || "";
-            // refreshToken = refreshToken || "";
+            dispatch(setTokens({accessToken, refreshToken}));
         } catch { }
+
         return {};
     };
 }
