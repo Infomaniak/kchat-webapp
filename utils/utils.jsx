@@ -680,7 +680,7 @@ export function applyTheme(theme) {
 }
 
 export function resetTheme() {
-    applyTheme(Preferences.THEMES.denim);
+    applyTheme(Preferences.THEMES.ik);
 }
 
 function changeCss(className, classValue) {
