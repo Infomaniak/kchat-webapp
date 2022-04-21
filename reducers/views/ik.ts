@@ -17,7 +17,7 @@ function useInfomaniakTokens(state = {}, action: GenericAction) {
         };
 
     case StorageTypes.STORAGE_REHYDRATE: {
-        return {...state, ...action.x};
+        return {...state, ...action.data};
     }
     case UserTypes.LOGOUT_SUCCESS:
         return {
