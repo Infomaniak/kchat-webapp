@@ -8,7 +8,7 @@ import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {ActionTypes, StorageTypes} from 'utils/constants';
 
-function useInfomaniakTokens(state = {}, action: GenericAction) {
+function useInfomaniakTokens(state = {accessToken: null, refreshToken: null}, action: GenericAction) {
     switch (action.type) {
     case ActionTypes.SET_INFOMANIAK_TOKEN:
         return {

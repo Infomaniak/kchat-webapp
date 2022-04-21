@@ -16,7 +16,10 @@ export function setTokens(x: { accessToken: string; refreshToken: string }): Act
         try {
             await localStorage.setItem(accessTokenKey, x.accessToken);
             await localStorage.setItem(refreshTokenKey, x.refreshToken);
-        } catch { }
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.warn(e);
+        }
 
         dispatch({
             type: ActionTypes.SET_INFOMANIAK_TOKEN,
