@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import { login } from 'actions/views/login';
+import {loadTokens} from 'actions/ik'
 import { getConfig } from 'mattermost-redux/selectors/entities/general';
 import { getMyTeamMember, getTeamByName } from 'mattermost-redux/selectors/entities/teams';
 import { getCurrentUser } from 'mattermost-redux/selectors/entities/users';
@@ -15,9 +15,6 @@ import LoginDesktopController from './login_desktop_controller.jsx';
 
 function mapStateToProps(state) {
     const config = getConfig(state);
-
-    const customBrandText = config.CustomBrandText;
-    const customDescriptionText = config.CustomDescriptionText;
 
     const siteName = config.SiteName;
 
@@ -37,8 +34,6 @@ function mapStateToProps(state) {
 
     return {
         currentUser: getCurrentUser(state),
-        customBrandText,
-        customDescriptionText,
         siteName,
     };
 }
@@ -46,7 +41,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({
-            login,
+            loadTokens,
         }, dispatch),
     };
 }

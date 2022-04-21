@@ -13,19 +13,18 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import LocalStorageStore from 'stores/local_storage_store';
 import { browserHistory } from 'utils/browser_history';
+import { IKConstants } from 'utils/constants-ik';
 import { intlShape } from 'utils/react_intl';
 import * as Utils from 'utils/utils.jsx';
 
 class LoginDesktopController extends React.PureComponent {
     static propTypes = {
         intl: intlShape.isRequired,
-
         location: PropTypes.object.isRequired,
         currentUser: PropTypes.object,
-        customDescriptionText: PropTypes.string,
         siteName: PropTypes.string,
         actions: PropTypes.shape({
-            login: PropTypes.func.isRequired,
+            loadTokens: PropTypes.func.isRequired,
         }).isRequired,
     }
 
@@ -40,6 +39,7 @@ class LoginDesktopController extends React.PureComponent {
     }
 
     componentDidMount() {
+
         if (this.props.currentUser) {
             GlobalActions.redirectUserToDefaultTeam();
             return;
@@ -117,7 +117,7 @@ class LoginDesktopController extends React.PureComponent {
                 // TODO: store in redux instead of localstorage
                 localStorage.setItem('challenge', JSON.stringify({ verifier: codeVerifier, challenge: codeChallenge }));
                 // TODO: add env for login url and/or current server
-                window.location.replace(`https://login.devd254.dev.infomaniak.ch/authorize?client_id=A7376A6D-9A79-4B06-A837-7D92DB93965B&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`)
+                window.location.replace(`${IKConstants.LOGIN_URL}/authorize?client_id=${IKConstants.CLIENT_ID}&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`)
             }).finally(this.setState({loading: false}));
         }
     }
