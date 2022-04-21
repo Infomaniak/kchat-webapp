@@ -3,6 +3,7 @@
 
 import * as GlobalActions from 'actions/global_actions';
 import SiteNameAndDescription from 'components/common/site_name_and_description';
+import LoadingIk from 'components/loading_ik';
 import LoadingScreen from 'components/loading_screen';
 import crypto from 'crypto';
 import logoImage from 'images/logo.png';
@@ -39,8 +40,6 @@ class LoginDesktopController extends React.PureComponent {
     }
 
     componentDidMount() {
-        console.log(this.props.currentUser);
-
         if (this.props.currentUser) {
             GlobalActions.redirectUserToDefaultTeam();
             return;
@@ -181,44 +180,7 @@ class LoginDesktopController extends React.PureComponent {
     }
 
     render() {
-        // TODO: add ik loader
-        const {
-            customDescriptionText,
-            siteName,
-        } = this.props;
-
-        if (this.state.loading) {
-            return (<LoadingScreen/>);
-        }
-
-        let content;
-        let customClass;
-
-            content = "";
-
-        return (
-            <div>
-                <div
-                    id='login_section'
-                    className='col-sm-12'
-                >
-                    <div className={'signup-team__container ' + customClass}>
-                        <img
-                            alt={'signup team logo'}
-                            className='signup-team-logo'
-                            src={logoImage}
-                        />
-                        <div className='signup__content'>
-                            <SiteNameAndDescription
-                                customDescriptionText={customDescriptionText}
-                                siteName={siteName}
-                            />
-                            {content}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+        return (<LoadingIk />);
     }
 }
 
