@@ -136,10 +136,7 @@ export default class Root extends React.PureComponent {
             // If missing token or refresh token or expire token or Check if token is expired
             if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= Date.now())) {
                 this.props.history.push('/auth-desktop'+ this.props.location.hash)
-            }
-
-            // Enable authHeader and set bearer token
-            if (token) {
+            } else if (token) { // Enable authHeader and set bearer token
                 Client4.setAuthHeader = true;
                 Client4.setToken(token)
                 Client4.setCSRF(token)
