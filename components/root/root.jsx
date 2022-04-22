@@ -134,7 +134,7 @@ export default class Root extends React.PureComponent {
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             // If missing token or refresh token or expire token or Check if token is expired
-            if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= Date.now())) {
+            if (!token || !refreshToken || !tokenExpire || (tokenExpire <= parseInt(Date.now() / 1000))) {
                 this.props.history.push('/auth-desktop'+ this.props.location.hash)
             } else if (token) { // Enable authHeader and set bearer token
                 Client4.setAuthHeader = true;
@@ -270,14 +270,13 @@ export default class Root extends React.PureComponent {
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
-
             // If missing token or refresh token or expire token or Check if token is expired
-            if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= Date.now())) {
+            if (!token || !refreshToken || !tokenExpire || (tokenExpire <= parseInt(Date.now() / 1000))) {
                 this.props.history.push('/auth-desktop'+ this.props.location.hash)
             }
 
              // Enable authHeader and set bearer token
-             if (token) {
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
                 Client4.setAuthHeader = true;
                  Client4.setToken(token)
                  Client4.setCSRF(token)

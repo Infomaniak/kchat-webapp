@@ -108,7 +108,7 @@ class LoginDesktopController extends React.PureComponent {
         //     return
         }
 
-        if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= Date.now())) {
+        if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= parseInt(Date.now() / 1000))) {
             this.setState({ loading: true });
             const codeVerifier = this.getCodeVerifier()
             let codeChallenge = ""
@@ -133,9 +133,11 @@ class LoginDesktopController extends React.PureComponent {
     // Store token infos in localStorage
     storeTokenResponse = (response) => {
         // TODO: store in redux
+        let d = new Date()
+        d.setSeconds(d.getSeconds() + parseInt(response.expires_in));
         localStorage.setItem("IKToken", response.access_token);
         localStorage.setItem("IKRefreshToken", response.refresh_token);
-        localStorage.setItem("IKTokenExpire", parseInt(Date.now()) + parseInt(response.expires_in));
+        localStorage.setItem("IKTokenExpire", parseInt(d.getTime() / 1000));
         Client4.setToken(response.access_token);
         Client4.setCSRF(response.access_token)
         Client4.setAuthHeader = true;
