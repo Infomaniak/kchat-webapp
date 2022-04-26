@@ -187,7 +187,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            }), Preferences.THEMES.denim);
+            }), Preferences.THEMES.ik);
         });
 
         it('custom theme', () => {
