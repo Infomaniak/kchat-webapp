@@ -144,7 +144,7 @@ export default class WebSocketClient {
 
             setTimeout(
                 () => {
-                    this.initialize(connectionUrl, teamId, userId, token);
+                    this.initialize(connectionUrl, userId, teamId, token);
                 },
                 retryTime,
             );
@@ -249,7 +249,7 @@ export default class WebSocketClient {
         }
 
         if (this.conn && this.conn.connection.state === 'connected') {
-            this.channel?.trigger(action, msg);
+            this.userChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
             this.conn = null;
             this.initialize(null, null, data.channel_id);

@@ -356,7 +356,7 @@ export default class RhsRootPost extends React.PureComponent {
                     overwriteName={
                         <FormattedMessage
                             id='post_info.system'
-                            defaultMessage='System'
+                            defaultMessage='kChat'
                         />
                     }
                     overwriteImage={Constants.SYSTEM_MESSAGE_PROFILE_IMAGE}
