@@ -154,7 +154,7 @@ export default class PostHeader extends React.PureComponent<Props> {
                     overwriteName={
                         <FormattedMessage
                             id='post_info.system'
-                            defaultMessage='System'
+                            defaultMessage='kChat'
                         />
                     }
                     overwriteImage={Constants.SYSTEM_MESSAGE_PROFILE_IMAGE}
