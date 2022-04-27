@@ -1,39 +1,23 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import * as GlobalActions from 'actions/global_actions';
+import LoadingIk from 'components/loading_ik';
+import LoadingScreen from 'components/loading_screen';
+import Markdown from 'components/markdown';
+import crypto from 'crypto';
+import { Client4 } from 'mattermost-redux/client';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {FormattedMessage, injectIntl} from 'react-intl';
-import {Link} from 'react-router-dom';
-
-import {Client4} from 'mattermost-redux/client';
-
-import * as GlobalActions from 'actions/global_actions';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import LocalStorageStore from 'stores/local_storage_store';
-
-import {browserHistory} from 'utils/browser_history';
+import { browserHistory } from 'utils/browser_history';
+import { IKConstants } from 'utils/constants-ik';
 import Constants from 'utils/constants.jsx';
-import {intlShape} from 'utils/react_intl';
+import { t } from 'utils/i18n.jsx';
+import { showNotification } from 'utils/notifications';
+import { intlShape } from 'utils/react_intl';
 import * as Utils from 'utils/utils.jsx';
-import {showNotification} from 'utils/notifications';
-import {t} from 'utils/i18n.jsx';
-
-import logoImage from 'images/logo.png';
-
-import SiteNameAndDescription from 'components/common/site_name_and_description';
-import AnnouncementBar from 'components/announcement_bar';
-import FormError from 'components/form_error';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message.jsx';
-import BackButton from 'components/common/back_button';
-import LoadingScreen from 'components/loading_screen';
-import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
-import SuccessIcon from 'components/widgets/icons/fa_success_icon';
-import WarningIcon from 'components/widgets/icons/fa_warning_icon';
-import LocalizedInput from 'components/localized_input/localized_input';
-import Markdown from 'components/markdown';
-
-import LoginMfa from '../login_mfa.jsx';
-
 class LoginController extends React.PureComponent {
     static propTypes = {
         intl: intlShape.isRequired,
@@ -95,40 +79,96 @@ class LoginController extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.configureTitle();
 
         if (this.props.currentUser) {
             GlobalActions.redirectUserToDefaultTeam();
             return;
         }
+        // const loginCode = (new URLSearchParams(this.props.location.search)).get('code')
+        const hash = this.props.location.hash
 
-        const search = new URLSearchParams(this.props.location.search);
-        const extra = search.get('extra');
-        const email = search.get('email');
+        const token = localStorage.getItem('IKToken');
+        const refreshToken = localStorage.getItem('IKRefreshToken');
+        const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-        if (extra === Constants.SIGNIN_VERIFIED && email) {
-            this.passwordInput.current?.focus();
+        if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
+            Client4.setAuthHeader = true;
+             Client4.setToken(token)
+             Client4.setCSRF(token)
+            LocalStorageStore.setWasLoggedIn(true);
+            GlobalActions.redirectUserToDefaultTeam();
         }
 
-        // Determine if the user was unexpectedly logged out.
-        if (LocalStorageStore.getWasLoggedIn()) {
-            if (extra === Constants.SIGNIN_CHANGE) {
-                // Assume that if the user triggered a sign in change, it was intended to logout.
-                // We can't preflight this, since in some flows it's the server that invalidates
-                // our session after we use it to complete the sign in change.
-                LocalStorageStore.setWasLoggedIn(false);
-            } else {
-                // Although the authority remains the local sessionExpired bit on the state, set this
-                // extra field in the querystring to signal the desktop app. And although eslint
-                // complains about this, it is allowed: https://reactjs.org/docs/react-component.html#componentdidmount.
-                // eslint-disable-next-line react/no-did-mount-set-state
-                this.setState({sessionExpired: true});
-                search.set('extra', Constants.SESSION_EXPIRED);
-                browserHistory.replace(`${this.props.location.pathname}?${search}`);
-            }
+        // If need to refresh the token
+        // if (tokenExpire && tokenExpire <= Date.now()) {
+        //     if (!refreshToken) return
+
+        //     this.setState({loading: true})
+        //     Client4.refreshIKLoginToken(
+        //         refreshToken,
+        //         "https://login.devd281.dev.infomaniak.ch",
+        //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
+        //     ).then((resp) => {
+        //         return
+        //         this.storeTokenResponse(resp)
+        //         this.finishSignin();
+        //     }).catch((error) => {
+        //         console.log(error)
+        //         return;
+        //     }
+        //     ).finally(this.setState({loading: false}))
+        //     return;
+        // }
+
+        // Receive login code from login redirect
+        if (hash) {
+            const hash2Obj = {}
+            hash.substring(1).split("&").map(hk => {
+                let temp = hk.split('=');
+                hash2Obj[temp[0]] = temp[1]
+              });
+            this.storeTokenResponse(hash2Obj)
+            localStorage.removeItem('challenge')
+            LocalStorageStore.setWasLoggedIn(true);
+            // location.reload();
+            this.finishSignin();
+
+            return
+        //     const challenge = JSON.parse(localStorage.getItem('challenge'));
+        //     this.setState({ loading: true })
+        //     return
+        // //    Get token
+        //     Client4.getIKLoginToken(
+        //         loginCode,
+        //         challenge?.challenge,
+        //         challenge?.verifier,
+        //         "https://login.devd281.dev.infomaniak.ch",
+        //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
+        //     ).then((resp) => {
+        //         this.storeTokenResponse(resp)
+        //         localStorage.removeItem('challenge')
+        //         this.finishSignin();
+        //     }).catch((error) => {
+        //         console.log(error)
+        //     }
+        //     ).finally(this.setState({ loading: false }))
+
+        //     localStorage.removeItem('challenge');
+        //     return
         }
 
-        this.showSessionExpiredNotificationIfNeeded();
+        if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= parseInt(Date.now() / 1000))) {
+            this.setState({ loading: true });
+            const codeVerifier = this.getCodeVerifier()
+            let codeChallenge = ""
+            this.generateCodeChallenge(codeVerifier).then(challenge => {
+                codeChallenge = challenge;
+                // TODO: store in redux instead of localstorage
+                localStorage.setItem('challenge', JSON.stringify({ verifier: codeVerifier, challenge: codeChallenge }));
+                // TODO: add env for login url and/or current server
+                window.location.replace(`${IKConstants.LOGIN_URL}/authorize?client_id=${IKConstants.CLIENT_ID}&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`)
+            }).finally(this.setState({loading: false}));
+        }
     }
 
     componentDidUpdate() {
@@ -141,6 +181,38 @@ class LoginController extends React.PureComponent {
             this.closeSessionExpiredNotification();
             this.closeSessionExpiredNotification = null;
         }
+    }
+
+     // Store token infos in localStorage
+     storeTokenResponse = (response) => {
+        // TODO: store in redux
+        let d = new Date()
+        d.setSeconds(d.getSeconds() + parseInt(response.expires_in));
+        localStorage.setItem("IKToken", response.access_token);
+        localStorage.setItem("IKRefreshToken", response.refresh_token);
+        localStorage.setItem("IKTokenExpire", parseInt(d.getTime() / 1000));
+        Client4.setToken(response.access_token);
+        Client4.setCSRF(response.access_token)
+        Client4.setAuthHeader = true;
+    }
+
+    getCodeVerifier = () => {
+        const ramdonByte = crypto.randomBytes(33);
+        const hash =
+            crypto.createHash('sha256').update(ramdonByte).digest();
+        return hash.toString('base64')
+            .replace(/\+/g, "-")
+            .replace(/\//g, "_")
+            .replace(/=/g, "");
+    }
+
+    generateCodeChallenge = async (codeVerifier) => {
+        const hash =
+        crypto.createHash('sha256').update(codeVerifier).digest()
+        return hash.toString('base64')
+              .replace(/\+/g, "-")
+              .replace(/\//g, "_")
+              .replace(/=/g, "");
     }
 
     configureTitle = () => {
@@ -439,398 +511,7 @@ class LoginController extends React.PureComponent {
         this.setState({sessionExpired: false});
     }
 
-    createExtraText = () => {
-        const extraParam = (new URLSearchParams(this.props.location.search)).get('extra');
 
-        if (this.state.sessionExpired) {
-            return (
-                <div className='alert alert-warning'>
-                    <WarningIcon/>
-                    {' '}
-                    <FormattedMessage
-                        id='login.session_expired'
-                        defaultMessage='Your session has expired. Please log in again.'
-                    />
-                    {' '}
-                    <Link
-                        className='btn-close'
-                        to='/login'
-                        onClick={this.onDismissSessionExpired}
-                    >
-                        <span>
-                            {'×'}
-                        </span>
-                    </Link>
-                </div>
-            );
-        }
-
-        if (extraParam === Constants.GET_TERMS_ERROR) {
-            return (
-                <div className='alert has-error no-padding'>
-                    <label className='control-label'>
-                        <FormattedMessage
-                            id='login.get_terms_error'
-                            defaultMessage='Unable to load terms of service. If this issue persists, contact your System Administrator.'
-                        />
-                    </label>
-                </div>
-            );
-        } else if (extraParam === Constants.TERMS_REJECTED) {
-            return (
-                <div className='alert alert-warning'>
-                    <WarningIcon/>
-                    <FormattedMarkdownMessage
-                        id='login.terms_rejected'
-                        defaultMessage='You must agree to the terms of use before accessing {siteName}. Please contact your System Administrator for more details.'
-                        values={{
-                            siteName: this.props.siteName,
-                        }}
-                    />
-                </div>
-            );
-        } else if (extraParam === Constants.SIGNIN_CHANGE) {
-            return (
-                <div className='alert alert-success'>
-                    <SuccessIcon/>
-                    <FormattedMessage
-                        id='login.changed'
-                        defaultMessage=' Sign-in method changed successfully'
-                    />
-                </div>
-            );
-        } else if (extraParam === Constants.SIGNIN_VERIFIED) {
-            return (
-                <div className='alert alert-success'>
-                    <SuccessIcon/>
-                    <FormattedMessage
-                        id='login.verified'
-                        defaultMessage=' Email Verified'
-                    />
-                </div>
-            );
-        } else if (extraParam === Constants.PASSWORD_CHANGE) {
-            return (
-                <div
-                    id='passwordUpdatedSuccess'
-                    className='alert alert-success'
-                >
-                    <SuccessIcon/>
-                    <FormattedMessage
-                        id='login.passwordChanged'
-                        defaultMessage=' Password updated successfully'
-                    />
-                </div>
-            );
-        } else if (extraParam === Constants.CREATE_LDAP) {
-            return (
-                <div className='alert alert-grey'>
-                    <FormattedMessage
-                        id='login.ldapCreate'
-                        defaultMessage=' Enter your AD/LDAP username and password to create an account.'
-                    />
-                </div>
-            );
-        }
-
-        return null;
-    }
-
-    createLoginOptions = () => {
-        const loginControls = [];
-
-        const ldapEnabled = this.state.ldapEnabled;
-        const gitlabSigninEnabled = this.props.enableSignUpWithGitLab;
-        const googleSigninEnabled = this.props.enableSignUpWithGoogle;
-        const office365SigninEnabled = this.props.enableSignUpWithOffice365;
-        const openIdSigninEnabled = this.props.enableSignUpWithOpenId;
-        const samlSigninEnabled = this.state.samlEnabled;
-        const usernameSigninEnabled = this.state.usernameSigninEnabled;
-        const emailSigninEnabled = this.state.emailSigninEnabled;
-
-        if (emailSigninEnabled || usernameSigninEnabled || ldapEnabled) {
-            let errorClass = '';
-            if (this.state.serverError) {
-                errorClass = ' has-error';
-            }
-
-            loginControls.push(
-                <form
-                    key='loginBoxes'
-                    onSubmit={this.preSubmit}
-                >
-                    <div className='signup__email-container'>
-                        <FormError
-                            error={this.state.serverError}
-                            margin={true}
-                        />
-                        <div className={'form-group' + errorClass}>
-                            <input
-                                id='loginId'
-                                className='form-control'
-                                ref={this.loginIdInput}
-                                name='loginId'
-                                value={this.state.loginId}
-                                onChange={this.handleLoginIdChange}
-                                placeholder={this.createLoginPlaceholder()}
-                                spellCheck='false'
-                                autoCapitalize='off'
-                                autoFocus={true}
-                            />
-                        </div>
-                        <div className={'form-group' + errorClass}>
-                            <LocalizedInput
-                                id='loginPassword'
-                                type='password'
-                                className='form-control'
-                                ref={this.passwordInput}
-                                name='password'
-                                value={this.state.password}
-                                onChange={this.handlePasswordChange}
-                                placeholder={{id: t('login.password'), defaultMessage: 'Password'}}
-                                spellCheck='false'
-                            />
-                        </div>
-                        <div className='form-group'>
-                            <button
-                                id='loginButton'
-                                type='submit'
-                                className='btn btn-primary'
-                            >
-                                <LoadingWrapper
-                                    id='login_button_signing'
-                                    loading={this.state.loading}
-                                    text={Utils.localizeMessage('login.signInLoading', 'Signing in...')}
-                                >
-                                    <FormattedMessage
-                                        id='login.signIn'
-                                        defaultMessage='Sign in'
-                                    />
-                                </LoadingWrapper>
-                            </button>
-                        </div>
-                    </div>
-                </form>,
-            );
-        }
-
-        if (this.props.enableOpenServer && this.checkSignUpEnabled()) {
-            loginControls.push(
-                <div
-                    className='form-group'
-                    key='signup'
-                >
-                    <span>
-                        <FormattedMessage
-                            id='login.noAccount'
-                            defaultMessage="Don't have an account? "
-                        />
-                        <Link
-                            id='signup'
-                            to={'/signup_user_complete' + this.props.location.search}
-                            className='signup-team-login'
-                        >
-                            <FormattedMessage
-                                id='login.create'
-                                defaultMessage='Create one now'
-                            />
-                        </Link>
-                    </span>
-                </div>,
-            );
-        }
-
-        if (usernameSigninEnabled || emailSigninEnabled) {
-            loginControls.push(
-                <div
-                    id='login_forgot'
-                    key='forgotPassword'
-                    className='form-group'
-                >
-                    <Link to={'/reset_password'}>
-                        <FormattedMessage
-                            id='login.forgot'
-                            defaultMessage='I forgot my password.'
-                        />
-                    </Link>
-                </div>,
-            );
-        }
-
-        if ((emailSigninEnabled || usernameSigninEnabled || ldapEnabled) && (gitlabSigninEnabled || googleSigninEnabled || samlSigninEnabled || office365SigninEnabled || openIdSigninEnabled)) {
-            loginControls.push(
-                <div
-                    key='divider'
-                    className='or__container'
-                >
-                    <FormattedMessage
-                        id='login.or'
-                        defaultMessage='or'
-                    />
-                </div>,
-            );
-
-            loginControls.push(
-                <h5 key='oauthHeader'>
-                    <FormattedMessage
-                        id='login.signInWith'
-                        defaultMessage='Sign in with:'
-                    />
-                </h5>,
-            );
-        }
-
-        if (gitlabSigninEnabled) {
-            const buttonStyle = {};
-            if (this.props.gitlabButtonColor) {
-                buttonStyle.backgroundColor = this.props.gitlabButtonColor;
-            }
-            let buttonText = (
-                <FormattedMessage
-                    id='login.gitlab'
-                    defaultMessage='GitLab'
-                />
-            );
-            if (this.props.gitlabButtonText) {
-                buttonText = this.props.gitlabButtonText;
-            }
-            loginControls.push(
-                <a
-                    id='GitLabButton'
-                    className='btn btn-custom-login gitlab'
-                    style={buttonStyle}
-                    key='gitlab'
-                    href={Client4.getOAuthRoute() + '/gitlab/login' + this.props.location.search}
-                >
-                    <span>
-                        <span className='icon'/>
-                        <span>
-                            {buttonText}
-                        </span>
-                    </span>
-                </a>,
-            );
-        }
-
-        if (googleSigninEnabled) {
-            loginControls.push(
-                <a
-                    id='GoogleButton'
-                    className='btn btn-custom-login google'
-                    key='google'
-                    href={Client4.getOAuthRoute() + '/google/login' + this.props.location.search}
-                >
-                    <span>
-                        <span className='icon'/>
-                        <span>
-                            <FormattedMessage
-                                id='login.google'
-                                defaultMessage='Google Apps'
-                            />
-                        </span>
-                    </span>
-                </a>,
-            );
-        }
-
-        if (office365SigninEnabled) {
-            loginControls.push(
-                <a
-                    id='Office365Button'
-                    className='btn btn-custom-login office365'
-                    key='office365'
-                    href={Client4.getOAuthRoute() + '/office365/login' + this.props.location.search}
-                >
-                    <span>
-                        <span className='icon'/>
-                        <span>
-                            <FormattedMessage
-                                id='login.office365'
-                                defaultMessage='Office 365'
-                            />
-                        </span>
-                    </span>
-                </a>,
-            );
-        }
-
-        if (openIdSigninEnabled) {
-            const buttonStyle = {};
-            if (this.props.openidButtonColor) {
-                buttonStyle.backgroundColor = this.props.openidButtonColor;
-            }
-            let buttonText = (
-                <FormattedMessage
-                    id='login.openid'
-                    defaultMessage='Open ID'
-                />
-            );
-            if (this.props.openidButtonText) {
-                buttonText = this.props.openidButtonText;
-            }
-            loginControls.push(
-                <a
-                    id='OpenIdButton'
-                    className='btn btn-custom-login openid'
-                    style={buttonStyle}
-                    key='openid'
-                    href={Client4.getOAuthRoute() + '/openid/login' + this.props.location.search}
-                >
-                    <span>
-                        <span>
-                            {buttonText}
-                        </span>
-                    </span>
-                </a>,
-            );
-        }
-
-        if (samlSigninEnabled) {
-            loginControls.push(
-                <a
-                    className='btn btn-custom-login saml'
-                    key='saml'
-                    href={Client4.getUrl() + '/login/sso/saml' + this.props.location.search}
-                >
-                    <span>
-                        <span
-                            className='icon fa fa-lock fa--margin-top'
-                            title='Saml icon'
-                        />
-                        <span>
-                            {this.props.samlLoginButtonText}
-                        </span>
-                    </span>
-                </a>,
-            );
-        }
-
-        if (loginControls.length === 0) {
-            loginControls.push(
-                <FormError
-                    key='noMethods'
-                    error={
-                        <FormattedMessage
-                            id='login.noMethods'
-                            defaultMessage='No sign-in methods are enabled. Please contact your System Administrator.'
-                        />
-                    }
-                    margin={true}
-                />,
-            );
-        }
-
-        return (
-            <div>
-                {this.createExtraText()}
-                {loginControls}
-            </div>
-        );
-    }
-
-    hideMfa = () => {
-        this.setState({showMfa: false});
-    }
 
     render() {
         const {
@@ -843,55 +524,8 @@ class LoginController extends React.PureComponent {
             return (<LoadingScreen/>);
         }
 
-        let content;
-        let customContent;
-        let customClass;
-        let backButton;
-        if (this.state.showMfa) {
-            content = (
-                <LoginMfa
-                    loginId={this.state.loginId}
-                    password={this.state.password}
-                    submit={this.submit}
-                />
-            );
-            backButton = (<BackButton onClick={this.hideMfa}/>);
-        } else {
-            content = this.createLoginOptions();
-            customContent = this.createCustomLogin();
-            if (customContent) {
-                customClass = 'branded';
-            }
-        }
+        return (<LoadingIk />);
 
-        return (
-            <div>
-                <AnnouncementBar/>
-                {backButton}
-                <div
-                    id='login_section'
-                    className='col-sm-12'
-                >
-                    <div className={'signup-team__container ' + customClass}>
-                        <div className='signup__markdown'>
-                            {customContent}
-                        </div>
-                        <img
-                            alt={'signup team logo'}
-                            className='signup-team-logo'
-                            src={logoImage}
-                        />
-                        <div className='signup__content'>
-                            <SiteNameAndDescription
-                                customDescriptionText={customDescriptionText}
-                                siteName={siteName}
-                            />
-                            {content}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
     }
 }
 
