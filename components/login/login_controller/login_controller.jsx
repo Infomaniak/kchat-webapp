@@ -17,6 +17,7 @@ import Constants from 'utils/constants.jsx';
 import { t } from 'utils/i18n.jsx';
 import { showNotification } from 'utils/notifications';
 import { intlShape } from 'utils/react_intl';
+import { isDesktopApp } from 'utils/user_agent';
 import * as Utils from 'utils/utils.jsx';
 
 // TODO: clean login controller
@@ -86,93 +87,123 @@ class LoginController extends React.PureComponent {
             GlobalActions.redirectUserToDefaultTeam();
             return;
         }
-        // const loginCode = (new URLSearchParams(this.props.location.search)).get('code')
-        const hash = this.props.location.hash
+        if(isDesktopApp()) {
+            // const loginCode = (new URLSearchParams(this.props.location.search)).get('code')
+            const hash = this.props.location.hash
 
-        const token = localStorage.getItem('IKToken');
-        const refreshToken = localStorage.getItem('IKRefreshToken');
-        const tokenExpire = localStorage.getItem('IKTokenExpire');
+            const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
+            const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-        if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
-            Client4.setAuthHeader = true;
-             Client4.setToken(token)
-             Client4.setCSRF(token)
-            LocalStorageStore.setWasLoggedIn(true);
-            GlobalActions.redirectUserToDefaultTeam();
-        }
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
+                Client4.setAuthHeader = true;
+                Client4.setToken(token)
+                Client4.setCSRF(token)
+                LocalStorageStore.setWasLoggedIn(true);
+                GlobalActions.redirectUserToDefaultTeam();
+            }
 
-        // If need to refresh the token
-        // if (tokenExpire && tokenExpire <= Date.now()) {
-        //     if (!refreshToken) return
+            // If need to refresh the token
+            // if (tokenExpire && tokenExpire <= Date.now()) {
+            //     if (!refreshToken) return
 
-        //     this.setState({loading: true})
-        //     Client4.refreshIKLoginToken(
-        //         refreshToken,
-        //         "https://login.devd281.dev.infomaniak.ch",
-        //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
-        //     ).then((resp) => {
-        //         return
-        //         this.storeTokenResponse(resp)
-        //         this.finishSignin();
-        //     }).catch((error) => {
-        //         console.log(error)
-        //         return;
-        //     }
-        //     ).finally(this.setState({loading: false}))
-        //     return;
-        // }
+            //     this.setState({loading: true})
+            //     Client4.refreshIKLoginToken(
+            //         refreshToken,
+            //         "https://login.devd281.dev.infomaniak.ch",
+            //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
+            //     ).then((resp) => {
+            //         return
+            //         this.storeTokenResponse(resp)
+            //         this.finishSignin();
+            //     }).catch((error) => {
+            //         console.log(error)
+            //         return;
+            //     }
+            //     ).finally(this.setState({loading: false}))
+            //     return;
+            // }
 
-        // Receive login code from login redirect
-        if (hash) {
-            const hash2Obj = {}
-            hash.substring(1).split("&").map(hk => {
-                let temp = hk.split('=');
-                hash2Obj[temp[0]] = temp[1]
-              });
-            this.storeTokenResponse(hash2Obj)
-            localStorage.removeItem('challenge')
-            LocalStorageStore.setWasLoggedIn(true);
-            // location.reload();
-            this.finishSignin();
+            // Receive login code from login redirect
+            if (hash) {
+                const hash2Obj = {}
+                hash.substring(1).split("&").map(hk => {
+                    let temp = hk.split('=');
+                    hash2Obj[temp[0]] = temp[1]
+                });
+                this.storeTokenResponse(hash2Obj)
+                localStorage.removeItem('challenge')
+                LocalStorageStore.setWasLoggedIn(true);
+                // location.reload();
+                this.finishSignin();
 
-            return
-        //     const challenge = JSON.parse(localStorage.getItem('challenge'));
-        //     this.setState({ loading: true })
-        //     return
-        // //    Get token
-        //     Client4.getIKLoginToken(
-        //         loginCode,
-        //         challenge?.challenge,
-        //         challenge?.verifier,
-        //         "https://login.devd281.dev.infomaniak.ch",
-        //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
-        //     ).then((resp) => {
-        //         this.storeTokenResponse(resp)
-        //         localStorage.removeItem('challenge')
-        //         this.finishSignin();
-        //     }).catch((error) => {
-        //         console.log(error)
-        //     }
-        //     ).finally(this.setState({ loading: false }))
+                return
+            //     const challenge = JSON.parse(localStorage.getItem('challenge'));
+            //     this.setState({ loading: true })
+            //     return
+            // //    Get token
+            //     Client4.getIKLoginToken(
+            //         loginCode,
+            //         challenge?.challenge,
+            //         challenge?.verifier,
+            //         "https://login.devd281.dev.infomaniak.ch",
+            //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
+            //     ).then((resp) => {
+            //         this.storeTokenResponse(resp)
+            //         localStorage.removeItem('challenge')
+            //         this.finishSignin();
+            //     }).catch((error) => {
+            //         console.log(error)
+            //     }
+            //     ).finally(this.setState({ loading: false }))
 
-        //     localStorage.removeItem('challenge');
-        //     return
-        }
+            //     localStorage.removeItem('challenge');
+            //     return
+            }
 
-        if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= parseInt(Date.now() / 1000))) {
-            this.setState({ loading: true });
-            const codeVerifier = this.getCodeVerifier()
-            let codeChallenge = ""
-            this.generateCodeChallenge(codeVerifier).then(challenge => {
-                codeChallenge = challenge;
-                // TODO: store in redux instead of localstorage
-                localStorage.setItem('challenge', JSON.stringify({ verifier: codeVerifier, challenge: codeChallenge }));
-                // TODO: add env for login url and/or current server
-                window.location.assign(`${IKConstants.LOGIN_URL}/authorize?client_id=${IKConstants.CLIENT_ID}&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`);
-            }).catch(() => {
-                console.log("Error redirect")
-                // Ignore the failure
-            }).finally(this.setState({loading: false}));
+            if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= parseInt(Date.now() / 1000))) {
+                this.setState({ loading: true });
+                const codeVerifier = this.getCodeVerifier()
+                let codeChallenge = ""
+                this.generateCodeChallenge(codeVerifier).then(challenge => {
+                    codeChallenge = challenge;
+                    // TODO: store in redux instead of localstorage
+                    localStorage.setItem('challenge', JSON.stringify({ verifier: codeVerifier, challenge: codeChallenge }));
+                    // TODO: add env for login url and/or current server
+                    window.location.assign(`${IKConstants.LOGIN_URL}/authorize?client_id=${IKConstants.CLIENT_ID}&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`);
+                }).catch(() => {
+                    console.log("Error redirect")
+                    // Ignore the failure
+                }).finally(this.setState({loading: false}));
+            }
+        } else {
+            const search = new URLSearchParams(this.props.location.search);
+            const extra = search.get('extra');
+            const email = search.get('email');
+
+            if (extra === Constants.SIGNIN_VERIFIED && email) {
+                this.passwordInput.current?.focus();
+            }
+
+            // Determine if the user was unexpectedly logged out.
+            if (LocalStorageStore.getWasLoggedIn()) {
+                if (extra === Constants.SIGNIN_CHANGE) {
+                    // Assume that if the user triggered a sign in change, it was intended to logout.
+                    // We can't preflight this, since in some flows it's the server that invalidates
+                    // our session after we use it to complete the sign in change.
+                    LocalStorageStore.setWasLoggedIn(false);
+                } else {
+                    // Although the authority remains the local sessionExpired bit on the state, set this
+                    // extra field in the querystring to signal the desktop app. And although eslint
+                    // complains about this, it is allowed: https://reactjs.org/docs/react-component.html#componentdidmount.
+                    // eslint-disable-next-line react/no-did-mount-set-state
+                    this.setState({sessionExpired: true});
+                    search.set('extra', Constants.SESSION_EXPIRED);
+                    browserHistory.replace(`${this.props.location.pathname}?${search}`);
+                }
+            }
+
+            this.showSessionExpiredNotificationIfNeeded();
         }
     }
 
