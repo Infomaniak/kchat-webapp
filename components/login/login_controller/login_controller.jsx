@@ -168,7 +168,10 @@ class LoginController extends React.PureComponent {
                 // TODO: store in redux instead of localstorage
                 localStorage.setItem('challenge', JSON.stringify({ verifier: codeVerifier, challenge: codeChallenge }));
                 // TODO: add env for login url and/or current server
-                window.location.assign(`${IKConstants.LOGIN_URL}/authorize?client_id=${IKConstants.CLIENT_ID}&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`)
+                window.location.assign(`${IKConstants.LOGIN_URL}/authorize?client_id=${IKConstants.CLIENT_ID}&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`);
+            }).catch(() => {
+                console.log("Error redirect")
+                // Ignore the failure
             }).finally(this.setState({loading: false}));
         }
     }
