@@ -3,11 +3,11 @@
 
 /* eslint-disable max-lines */
 
-import keyMirror from 'key-mirror';
+import keyMirror from 'key-mirror'
 
-import Permissions from 'mattermost-redux/constants/permissions';
+import Permissions from 'mattermost-redux/constants/permissions'
 
-import {CustomStatusDuration} from 'mattermost-redux/types/users';
+import {CustomStatusDuration} from 'mattermost-redux/types/users'
 
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
 
@@ -272,6 +272,32 @@ export const ActionTypes = keyMirror({
     UNSUPPRESS_RHS: null,
 
     FIRST_CHANNEL_NAME: null,
+
+    VOICE_CHANNEL_ENABLE: null,
+    VOICE_CHANNEL_DISABLE: null,
+    VOICE_CHANNEL_USER_CONNECTED: null,
+    VOICE_CHANNEL_USER_DISCONNECTED: null,
+    VOICE_CHANNEL_USER_MUTED: null,
+    VOICE_CHANNEL_USER_UNMUTED: null,
+    VOICE_CHANNEL_USER_VOICE_ON: null,
+    VOICE_CHANNEL_USER_VOICE_OFF: null,
+    VOICE_CHANNEL_USERS_CONNECTED: null,
+    VOICE_CHANNEL_USERS_CONNECTED_STATES: null,
+    VOICE_CHANNEL_PROFILES_CONNECTED: null,
+    VOICE_CHANNEL_PROFILE_CONNECTED: null,
+    VOICE_CHANNEL_CALL_START: null,
+    VOICE_CHANNEL_USER_SCREEN_ON: null,
+    VOICE_CHANNEL_USER_SCREEN_OFF: null,
+    VOICE_CHANNEL_UNINIT: null,
+    VOICE_CHANNEL_USER_RAISE_HAND: null,
+    VOICE_CHANNEL_USER_UNRAISE_HAND: null,
+
+    SHOW_EXPANDED_VIEW: null,
+    HIDE_EXPANDED_VIEW: null,
+    SHOW_SWITCH_CALL_MODAL: null,
+    HIDE_SWITCH_CALL_MODAL: null,
+    SHOW_SCREEN_SOURCE_MODAL: null,
+    HIDE_SCREEN_SOURCE_MODAL: null,
 });
 
 export const PostRequestTypes = keyMirror({
@@ -1481,7 +1507,7 @@ export const Constants = {
         F11: ['F11', 122],
         F12: ['F12', 123],
         NUM_LOCK: ['NumLock', 144],
-        SEMICOLON: [';', 186],
+        SEMICOLON: [',', 186],
         EQUAL: ['=', 187],
         COMMA: [',', 188],
         DASH: ['-', 189],

@@ -3,40 +3,43 @@
 import React, {useRef} from 'react';
 import {injectIntl, IntlShape} from 'react-intl';
 
-import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
+// import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
 import CameraIcon from 'components/widgets/icons/camera_icon';
 
-type Props = {
-    currentChannel: Channel;
-    channelMember?: ChannelMembership;
+export type Props = {
+    currentChannelID: string;
+    hasCall: boolean;
     intl: IntlShape;
-    locale: string;
+    startCallInChannel: Function;
 }
 
-const configOverwrite = {
-    startWithAudioMuted: false,
-    startWithVideoMuted: true,
-    subject: 'toto',
-};
+// const configOverwrite = {
+//     startWithAudioMuted: false,
+//     startWithVideoMuted: true,
+//     subject: 'toto',
+// };
 
 function MeetButton(props: Props) {
-    const {formatMessage} = props.intl;
+    // const {formatMessage} = props.intl;
+    const {startCallInChannel} = props;
     const ref = useRef<HTMLButtonElement>(null);
 
-    const onClick = () => {
-        const options = {
-            windowName: 'kmeet',
-            windowOptions: 'location=0,status=0,width=900,height=500',
-            callback: () => console.log('callback kmeet'),
-        };
+    const onClick = async () => {
+        startCallInChannel();
 
-        window.open('/static/call.html', options.windowName, options.windowOptions);
+        // const options = {
+        //     windowName: 'kmeet',
+        //     windowOptions: 'location=0,status=0,width=900,height=500',
+        //     callback: () => console.log('callback kmeet'),
+        // };
+
+        // window.open('/static/call.html', options.windowName, options.windowOptions);
     };
 
     return (
         <button
             type='button'
-            className='style--none post-action'
+            className='style--none channel-header__push-right'
             onClick={onClick}
             ref={ref}
         >
@@ -44,6 +47,12 @@ function MeetButton(props: Props) {
                 className='icon icon--attachment'
             >
                 <CameraIcon className='d-flex'/>
+                <span
+                    className='icon__text'
+                    style={{margin: '0 4px'}}
+                >
+                    {props.hasCall ? 'Join Call' : 'Start Call'}
+                </span>
             </div>
         </button>
     );

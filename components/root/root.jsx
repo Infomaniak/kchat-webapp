@@ -26,6 +26,7 @@ import GlobalHeader from 'components/global_header/global_header';
 import ModalController from 'components/modal_controller';
 import {HFTRoute, LoggedInHFTRoute} from 'components/header_footer_template_route';
 import IntlProvider from 'components/intl_provider';
+import MeetWidget from 'components/kmeet_conference/call_widget';
 import NeedsTeam from 'components/needs_team';
 
 import {initializePlugins} from 'plugins';
@@ -448,6 +449,7 @@ export default class Root extends React.PureComponent {
                         <ModalController/>
                         <GlobalHeader/>
                         <div className='mainContentRow d-flex flex-row'>
+                            <MeetWidget/>
                             <TeamSidebar/>
                             <Switch>
                                 {this.props.products?.map((product) => (

@@ -14,6 +14,7 @@ import ChannelIdentifierRouter from 'components/channel_layout/channel_identifie
 import PlaybookRunner from 'components/channel_layout/playbook_runner';
 import NextStepsView from 'components/next_steps_view';
 import {makeAsyncComponent} from 'components/async_load';
+import Conference from 'components/kmeet_conference';
 
 const LazyGlobalThreads = makeAsyncComponent(
     'LazyGlobalThreads',
@@ -104,6 +105,10 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                         <Route
                             path='/:team/:path(channels|messages)/:identifier/:postid?'
                             component={ChannelIdentifierRouter}
+                        />
+                        <Route
+                            path='/:team/:path(channels|messages)/:identifier/call'
+                            component={Conference}
                         />
                         <Route
                             path='/:team/_playbooks/:playbookId/run'
