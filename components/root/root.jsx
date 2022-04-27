@@ -127,7 +127,20 @@ export default class Root extends React.PureComponent {
         // Redux
         setUrl(getSiteURL());
 
-        Client4.setAuthHeader = false;  // Disable auth header to enable CSRF check
+        if (isDesktopApp()) {
+            const token = localStorage.getItem('IKToken');
+            const tokenExpire = localStorage.getItem('IKTokenExpire');
+
+             // Enable authHeader and set bearer token
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
+                Client4.setAuthHeader = true;
+                Client4.setToken(token)
+                Client4.setCSRF(token)
+                LocalStorageStore.setWasLoggedIn(true);
+            }
+        } else {
+            Client4.setAuthHeader = false;  // Disable auth header to enable CSRF check
+        }
 
         setSystemEmojis(EmojiIndicesByAlias);
 
@@ -286,9 +299,9 @@ export default class Root extends React.PureComponent {
              // Enable authHeader and set bearer token
             if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
                 Client4.setAuthHeader = true;
-                 Client4.setToken(token)
-                 Client4.setCSRF(token)
-                // LocalStorageStore.setWasLoggedIn(true);
+                Client4.setToken(token)
+                Client4.setCSRF(token)
+                LocalStorageStore.setWasLoggedIn(true);
             }
         }
         this.mounted = true;

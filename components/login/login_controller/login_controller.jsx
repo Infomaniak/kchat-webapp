@@ -18,6 +18,8 @@ import { t } from 'utils/i18n.jsx';
 import { showNotification } from 'utils/notifications';
 import { intlShape } from 'utils/react_intl';
 import * as Utils from 'utils/utils.jsx';
+
+// TODO: clean login controller
 class LoginController extends React.PureComponent {
     static propTypes = {
         intl: intlShape.isRequired,
@@ -166,7 +168,7 @@ class LoginController extends React.PureComponent {
                 // TODO: store in redux instead of localstorage
                 localStorage.setItem('challenge', JSON.stringify({ verifier: codeVerifier, challenge: codeChallenge }));
                 // TODO: add env for login url and/or current server
-                window.location.replace(`${IKConstants.LOGIN_URL}/authorize?client_id=${IKConstants.CLIENT_ID}&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`)
+                window.location.assign(`${IKConstants.LOGIN_URL}/authorize?client_id=${IKConstants.CLIENT_ID}&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`)
             }).finally(this.setState({loading: false}));
         }
     }
