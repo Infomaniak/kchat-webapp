@@ -36,10 +36,13 @@ import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
 import {EmojiIndicesByAlias} from 'utils/emoji.jsx';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils.jsx';
+import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 import webSocketClient from 'client/web_websocket_client.jsx';
+import LocalStorageStore from 'stores/local_storage_store';
 
 const LazyErrorPage = React.lazy(() => import('components/error_page'));
 const LazyLoginController = React.lazy(() => import('components/login/login_controller'));
+const LazyLoginDesktopController = React.lazy(() => import('components/login-desktop/login_desktop_controller'));
 const LazyAdminConsole = React.lazy(() => import('components/admin_console'));
 const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
 const LazyPasswordResetSendLink = React.lazy(() => import('components/password_reset_send_link'));
@@ -73,6 +76,7 @@ const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const TermsOfService = makeAsyncComponent('TermsOfService', LazyTermsOfService);
 const LoginController = makeAsyncComponent('LoginController', LazyLoginController);
+const LoginDesktopController = makeAsyncComponent('LoginDesktopController', LazyLoginDesktopController);
 const AdminConsole = makeAsyncComponent('AdminConsole', LazyAdminConsole);
 const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
 const PasswordResetSendLink = makeAsyncComponent('PasswordResedSendLink', LazyPasswordResetSendLink);
@@ -120,12 +124,23 @@ export default class Root extends React.PureComponent {
         this.currentCategoryFocus = 0;
         this.currentSidebarFocus = 0;
         this.mounted = false;
-
         // Redux
         setUrl(getSiteURL());
 
-        // Disable auth header to enable CSRF check
-        Client4.setAuthHeader = false;
+        if (isDesktopApp()) {
+            const token = localStorage.getItem('IKToken');
+            const tokenExpire = localStorage.getItem('IKTokenExpire');
+
+             // Enable authHeader and set bearer token
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
+                Client4.setAuthHeader = true;
+                Client4.setToken(token)
+                Client4.setCSRF(token)
+                LocalStorageStore.setWasLoggedIn(true);
+            }
+        } else {
+            Client4.setAuthHeader = false;  // Disable auth header to enable CSRF check
+        }
 
         setSystemEmojis(EmojiIndicesByAlias);
 
@@ -150,7 +165,6 @@ export default class Root extends React.PureComponent {
         this.state = {
             configLoaded: false,
         };
-
         // Keyboard navigation for accessibility
         if (!UserAgent.isInternetExplorer()) {
             this.a11yController = new A11yController();
@@ -248,6 +262,19 @@ export default class Root extends React.PureComponent {
             BrowserStore.setLandingPageSeen(true);
         }
 
+        if (isDesktopApp()) {
+            const token = localStorage.getItem('IKToken');
+            const tokenExpire = localStorage.getItem('IKTokenExpire');
+
+             // Enable authHeader and set bearer token
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
+                Client4.setAuthHeader = true;
+                Client4.setToken(token)
+                Client4.setCSRF(token)
+                LocalStorageStore.setWasLoggedIn(true);
+            }
+        }
+
         Utils.applyTheme(this.props.theme);
     }
 
@@ -265,6 +292,18 @@ export default class Root extends React.PureComponent {
     }
 
     componentDidMount() {
+        if (isDesktopApp()) {
+            const token = localStorage.getItem('IKToken');
+            const tokenExpire = localStorage.getItem('IKTokenExpire');
+
+             // Enable authHeader and set bearer token
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
+                Client4.setAuthHeader = true;
+                Client4.setToken(token)
+                Client4.setCSRF(token)
+                LocalStorageStore.setWasLoggedIn(true);
+            }
+        }
         this.mounted = true;
         this.props.actions.loadMeAndConfig().then((response) => {
             if (this.props.location.pathname === '/' && response[2] && response[2].data) {
@@ -375,6 +414,10 @@ export default class Root extends React.PureComponent {
                     <HFTRoute
                         path={'/login'}
                         component={LoginController}
+                    />
+                    <HFTRoute
+                        path={'/auth-desktop'}
+                        component={LoginDesktopController}
                     />
                     <HFTRoute
                         path={'/reset_password'}

@@ -96,6 +96,8 @@ export type ViewsState = {
 
     i18n: I18nState;
 
+    ik: { accessToken: string; refreshToken: string };
+
     lhs: {
         isOpen: boolean;
     };

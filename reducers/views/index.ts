@@ -13,6 +13,7 @@ import posts from './posts';
 import modals from './modals';
 import emoji from './emoji';
 import i18n from './i18n';
+import ik from './ik';
 import lhs from './lhs';
 import search from './search';
 import notice from './notice';
@@ -38,6 +39,7 @@ export default combineReducers({
     modals,
     emoji,
     i18n,
+    ik,
     lhs,
     search,
     notice,
