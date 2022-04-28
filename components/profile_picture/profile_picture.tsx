@@ -20,9 +20,9 @@ type Props = {
     isBusy?: boolean;
     isEmoji?: boolean;
     isRHS?: boolean;
-    profileSrc?: string;
+    profileSrc?: Promise<string> | string;
     size?: ComponentProps<typeof Avatar>['size'];
-    src: string;
+    src: Promise<string> | string;
     status?: string;
     userId?: string;
     channelId?: string;
