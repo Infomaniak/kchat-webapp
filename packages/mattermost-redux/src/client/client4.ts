@@ -891,15 +891,37 @@ export default class Client4 {
         );
     };
 
-    getProfilePictureUrl = (userId: string, lastPictureUpdate: number) => {
+    getProfilePictureUrl = async (userId: string, lastPictureUpdate: number) => {
         const params: any = {};
 
         if (lastPictureUpdate) {
             params._ = lastPictureUpdate;
         }
+        const imgFetched = await this.getProfilePictureFetched(userId, lastPictureUpdate, params);
+        if (imgFetched) {
+            return imgFetched
+        } else {
+            return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
+        }
 
-        return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
     };
+    arrayBufferToBase64(buffer: ArrayBuffer) {
+        return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+    }
+
+    getProfilePictureFetched = async (userId: string, lastPictureUpdate: number, params: any) => {
+        const response = await fetch(`${this.getUserRoute(userId)}/image${buildQueryString(params)}`, this.getOptions({}));
+
+        // Convert the data to Base64 and build a data URL.
+        const binaryData = await response.arrayBuffer();
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(binaryData)))
+        const dataUrl = `data:image/png;base64,${base64}`;
+        return dataUrl;
+    }
+
+    getBasicProfilePictureUrl = (userId: string, lastPictureUpdate: number, params: any) => {
+        return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
+    }
 
     getDefaultProfilePictureUrl = (userId: string) => {
         return `${this.getUserRoute(userId)}/image/default`;

@@ -1220,7 +1220,8 @@ export function displayFullAndNicknameForUser(user) {
 }
 
 export function imageURLForUser(userId, lastPictureUpdate = 0) {
-    return Client4.getUsersRoute() + '/' + userId + '/image?_=' + lastPictureUpdate;
+    return Client4.getProfilePictureUrl(userId, lastPictureUpdate);
+    // return Client4.getUsersRoute() + '/' + userId + '/image?_=' + lastPictureUpdate;
 }
 
 export function defaultImageURLForUser(userId) {
