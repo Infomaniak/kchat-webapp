@@ -24,16 +24,8 @@ function MeetButton(props: Props) {
     const {startCallInChannel} = props;
     const ref = useRef<HTMLButtonElement>(null);
 
-    const onClick = async () => {
+    const onClick = () => {
         startCallInChannel();
-
-        // const options = {
-        //     windowName: 'kmeet',
-        //     windowOptions: 'location=0,status=0,width=900,height=500',
-        //     callback: () => console.log('callback kmeet'),
-        // };
-
-        // window.open('/static/call.html', options.windowName, options.windowOptions);
     };
 
     return (

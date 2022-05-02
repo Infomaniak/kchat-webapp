@@ -1,12 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable max-lines */
 import React, {CSSProperties} from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import moment from 'moment-timezone';
+import * as portals from 'react-reverse-portal';
 
-import {getUserDisplayName, isPublicChannel, isPrivateChannel} from 'components/kmeet_conference/utils';
+import {getUserDisplayName, isPublicChannel, isPrivateChannel, isDMChannel} from 'components/kmeet_conference/utils';
 
 import MutedIcon from 'components/widgets/icons/muted_icon';
 import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
@@ -17,7 +19,7 @@ import PopOutIcon from 'components/widgets/icons/popout';
 import ExpandIcon from 'components/widgets/icons/expand';
 import RaisedHandIcon from 'components/widgets/icons/raised_hand';
 
-import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
+// import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
 import {IDMappedObjects} from 'mattermost-redux/types/utilities';
 import {Team} from 'mattermost-redux/types/teams';
 import {Channel} from 'mattermost-redux/types/channels';
@@ -26,6 +28,7 @@ import {UserState} from 'reducers/views/calls';
 
 import './component.scss';
 import Avatar from 'components/widgets/users/avatar';
+import JitsiClient from '../jitsi_client';
 
 interface Props {
     theme: any;
@@ -74,10 +77,12 @@ interface State {
     expandedViewWindow: Window | null;
     showUsersJoined: string[];
     audioMuted: boolean;
+    expanded: boolean;
 }
 
 export default class CallWidget extends React.PureComponent<Props, State> {
     private node: React.RefObject<HTMLDivElement>;
+    private _ref: React.RefObject<HTMLDivElement>;
     api: any;
     participants: any;
 
@@ -94,6 +99,9 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             border: '1px solid #333',
             userSelect: 'none',
             color: '#333',
+            '& iframe': {
+                display: 'none',
+            },
         },
         topBar: {
             background: 'lightblue',
@@ -222,7 +230,9 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             expandedViewWindow: null,
             showUsersJoined: [],
             audioMuted: true,
+            expanded: false,
         };
+        this._ref = React.createRef();
         this.node = React.createRef();
     }
 
@@ -231,12 +241,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         document.addEventListener('click', this.closeOnBlur, true);
         document.addEventListener('keyup', this.keyboardClose, true);
 
-        if (!(window as any).JitsiMeetExternalAPI) {
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'https://kmeet.infomaniak.com/external_api.js';
-            document.head.appendChild(script);
-        }
+        this.api = JitsiClient;
 
         // This is needed to force a re-render to periodically update
         // the start time.
@@ -252,45 +257,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                 showUsersJoined: this.state.showUsersJoined.filter((userID) => userID !== this.props.currentUserID),
             });
         }, 5000);
-
-        // window.callsClient.on('remoteVoiceStream', (stream: MediaStream) => {
-        //     const voiceTrack = stream.getAudioTracks()[0];
-        //     const audioEl = document.createElement('audio');
-        //     audioEl.srcObject = stream;
-        //     audioEl.controls = false;
-        //     audioEl.autoplay = true;
-        //     audioEl.style.display = 'none';
-        //     audioEl.onerror = (err) => console.log(err);
-
-        //     const deviceID = window.callsClient.currentAudioOutputDevice?.deviceId;
-        //     if (deviceID) {
-        //         // @ts-ignore - setSinkId is an experimental feature
-        //         audioEl.setSinkId(deviceID);
-        //     }
-
-        //     this.setState({
-        //         audioEls: [...this.state.audioEls, audioEl],
-        //     });
-
-        //     document.body.appendChild(audioEl);
-        //     voiceTrack.onended = () => {
-        //         audioEl.remove();
-        //     };
-        // });
-
-        // window.callsClient.on('remoteScreenStream', (stream: MediaStream) => {
-        //     this.setState({
-        //         screenStream: stream,
-        //     });
-        // });
-
-        // window.callsClient.on('connect', () => {
-        //     if (isDMChannel(this.props.channel) || isGMChannel(this.props.channel)) {
-        //         window.callsClient.unmute();
-        //     }
-        //     this.setState({currentAudioInputDevice: window.callsClient.currentAudioInputDevice});
-        //     this.setState({currentAudioOutputDevice: window.callsClient.currentAudioOutputDevice});
-        // });
     }
 
     public componentWillUnmount() {
@@ -304,94 +270,10 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
     public componentDidUpdate(prevProps: Props) {
         if (!prevProps.channel && this.props.channel) {
-            window.requestAnimationFrame(() => {
-                const configOverwrite = {
-                    startWithAudioMuted: false,
-                    startWithVideoMuted: true,
-                    subject: 'tototatatiti',
-                    prejoinConfig: {enabled: false},
-                    disableDeepLinking: true,
-                };
-
-                this.api = new (window as any).JitsiMeetExternalAPI('kmeet.infomaniak.com',
-                    {configOverwrite,
-                        onload: () => console.log('[jitsi] api onload'),
-                        roomName: 'aloche'});
-
-                this.api.on('videoConferenceJoined', () => {
-                    console.log('[jitsi] videoConferenceJoined');
-                    this.participants = this.api.getParticipantsInfo();
-                    console.log(this.participants);
-                });
-
-                this.api.on('readyToClose', () => {
-                    console.log('[jitsi] readyToClose');
-                    this.props.disconnect(this.props.channel.id);
-                });
-
-                this.api.on('participantJoined', () => {
-                    console.log('[jitsi] participant-joined');
-                });
-                this.api.on('audioMuteStatusChanged', ({muted}: {muted: boolean}) => {
-                    console.log('[jitsi] audioMuteStatusChanged', muted);
-                    this.setState({audioMuted: muted});
-                });
-            });
+            // window.requestAnimationFrame(() => {
+            //     this.api.init(this.props.channel.id, this.props.disconnect, this.node.current);
+            // });
         }
-
-        // let screenStream = this.state.screenStream;
-        // if (this.props.screenSharingID === this.props.currentUserID) {
-        //     screenStream = window.callsClient.getLocalScreenStream();
-        // }
-
-        // const wasRendering = Boolean(prevProps.screenSharingID && prevState.screenStream && prevProps.show);
-        // const shouldRender = Boolean(this.props.screenSharingID && screenStream);
-
-        // if (!this.state.screenStream && screenStream) {
-        //     // eslint-disable-next-line react/no-did-update-set-state
-        //     this.setState({screenStream});
-        // } else if (!wasRendering && shouldRender && this.screenPlayer.current) {
-        //     this.screenPlayer.current.srcObject = screenStream;
-        // }
-
-        // let profiles;
-        // if (this.props.profiles.length > prevProps.profiles.length) {
-        //     profiles = this.props.profiles;
-        // } else if (this.props.profiles.length < prevProps.profiles.length) {
-        //     profiles = prevProps.profiles.length;
-        // }
-        // let ids: string[] = [];
-        // const currIDs = Object.keys(this.props.statuses);
-        // const prevIDs = Object.keys(prevProps.statuses);
-        // if (currIDs.length > prevIDs.length) {
-        //     ids = currIDs;
-        //     if (prevIDs.length === 0) {
-        //         return;
-        //     }
-        // } else if (currIDs.length < prevIDs.length) {
-        //     ids = prevIDs;
-        // }
-        // if (ids.length > 0) {
-        //     const statuses = this.props.statuses;
-        //     const prevStatuses = prevProps.statuses;
-        //     for (let i = 0; i < ids.length; i++) {
-        //         const userID = ids[i];
-        //         if (statuses[userID] && !prevStatuses[userID]) {
-        //             // eslint-disable-next-line react/no-did-update-set-state
-        //             this.setState({
-        //                 showUsersJoined: [
-        //                     ...this.state.showUsersJoined,
-        //                     userID,
-        //                 ],
-        //             });
-        //             setTimeout(() => {
-        //                 this.setState({
-        //                     showUsersJoined: this.state.showUsersJoined.filter((id) => id !== userID),
-        //                 });
-        //             }, 5000);
-        //         }
-        //     }
-        // }
     }
 
     private keyboardClose = (e: KeyboardEvent) => {
@@ -436,11 +318,11 @@ export default class CallWidget extends React.PureComponent<Props, State> {
     }
 
     onMuteToggle = () => {
-        if (!this.api) {
-            return;
-        }
+        // if (!this.api) {
+        //     return;
+        // }
 
-        this.api.executeCommand('toggleAudio');
+        // this.api.executeCommand('toggleAudio');
     }
 
     onDisconnectClick = () => {
@@ -448,7 +330,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         //     this.state.expandedViewWindow.close();
         // }
 
-        this.api.executeCommand('hangup');
+        // this.api.executeCommand('hangup');
 
         // this.api.dispose();
 
@@ -889,26 +771,33 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         }
     }
 
+    // https://local.devd281.dev.infomaniak.ch:9005/infomaniak/channels/ziziz
+    // https://local.devd281.dev.infomaniak.ch:9005/infomaniak/channels/4d68d13f-cf70-424e-32aa-b1c3f6d2ae4d/call
+
     onExpandClick = () => {
-        if (this.state.expandedViewWindow && !this.state.expandedViewWindow.closed) {
-            this.state.expandedViewWindow.focus();
-            return;
-        }
+        // if (this.state.expandedViewWindow && !this.state.expandedViewWindow.closed) {
+        //     this.state.expandedViewWindow.focus();
+        //     return;
+        // }
 
-        // TODO: remove this as soon as we support opening a window from desktop app.
-        if (window.desktop) {
-            this.props.showExpandedView();
-        } else {
-            const expandedViewWindow = window.open(
-                `/${this.props.team.name}/expanded/${this.props.channel.id}`,
-                'ExpandedView',
-                'resizable=yes',
-            );
+        // // TODO: remove this as soon as we support opening a window from desktop app.
+        // if (window.desktop) {
 
-            this.setState({
-                expandedViewWindow,
-            });
-        }
+        this.props.showExpandedView();
+
+        // } else {
+        //     const expandedViewWindow = window.open(
+        //         `/${this.props.team.name}/${isDMChannel(this.props.channel) ? 'messages' : 'channels'}/${this.props.channel.name}/call`,
+        //         'ExpandedView',
+        //         'resizable=yes',
+        //     );
+
+        this.setState({
+            expanded: true,
+        });
+
+        // }
+        // browserHistory.push(`/${this.props.team.name}/${isDMChannel(this.props.channel) ? 'messages' : 'channels'}/${this.props.channel.name}/call`);
     }
 
     // onRaiseHandToggle = () => {
@@ -969,38 +858,49 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         // const HandIcon = window.callsClient.isHandRaised ? UnraisedHandIcon : RaisedHandIcon;
         // const handTooltipText = window.callsClient.isHandRaised ? 'Click to lower hand' : 'Click to raise hand';
 
+        // const iframe = <IFrame/>;
+
+        // if (this.state.expanded) {
+        //     return (
+        //         <RenderInWindow>
+        //             <IFrame/>
+        //         </RenderInWindow>
+        //     );
+        // }
+
         return (
-            <div
-                id='calls-widget'
-                style={{
-                    ...this.style.main as CSSProperties,
-                    width: mainWidth,
-                }}
-                ref={this.node}
-            >
-                <div style={this.style.status as CSSProperties}>
-                    <div style={{position: 'absolute', bottom: 'calc(100% + 4px)', width: '100%'}}>
-                        {this.renderNotificationBar()}
-                        {this.renderParticipantsList()}
-                    </div>
+            <React.Fragment>
+                <div
+                    id='calls-widget'
+                    style={{
+                        ...this.style.main as CSSProperties,
+                        width: mainWidth,
+                    }}
+                    ref={this.node}
+                >
+                    <div style={this.style.status as CSSProperties}>
+                        <div style={{position: 'absolute', bottom: 'calc(100% + 4px)', width: '100%'}}>
+                            {this.renderNotificationBar()}
+                            {this.renderParticipantsList()}
+                        </div>
 
-                    <div
-                        style={this.style.topBar}
-                        onMouseDown={this.onMouseDown}
-                    >
-                        <button
-                            id='calls-widget-expand-button'
-                            className='style--none button-controls button-controls--wide'
-                            style={this.style.expandButton as CSSProperties}
-                            onClick={this.onExpandClick}
+                        <div
+                            style={this.style.topBar}
+                            onMouseDown={this.onMouseDown}
                         >
-                            <ShowIcon
-                                style={{width: '14px', height: '14px'}}
-                                fill='lightblue'
-                            />
-                        </button>
+                            <button
+                                id='calls-widget-expand-button'
+                                className='style--none button-controls button-controls--wide'
+                                style={this.style.expandButton as CSSProperties}
+                                onClick={this.onExpandClick}
+                            >
+                                <ShowIcon
+                                    style={{width: '14px', height: '14px'}}
+                                    fill='lightblue'
+                                />
+                            </button>
 
-                        {/* <div style={this.style.profiles}>
+                            {/* <div style={this.style.profiles}>
                             {this.renderProfiles()}
                         </div>
                         <div style={{width: '85%'}}>
@@ -1010,35 +910,35 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                 {(isPublicChannel(this.props.channel) || isPrivateChannel(this.props.channel)) && this.renderChannelName(hasTeamSidebar)}
                             </div>
                         </div> */}
-                    </div>
+                        </div>
 
-                    <div
-                        className='calls-widget-bottom-bar'
-                        style={this.style.bottomBar}
-                    >
-                        <OverlayTrigger
-                            key='leave'
-                            placement='top'
-                            overlay={
-                                <Tooltip id='tooltip-leave'>
-                                    {'Click to leave call'}
-                                </Tooltip>
-                            }
+                        <div
+                            className='calls-widget-bottom-bar'
+                            style={this.style.bottomBar}
                         >
-
-                            <button
-                                id='calls-widget-leave-button'
-                                className='style--none button-controls button-controls--wide'
-                                style={this.style.leaveCallButton}
-                                onClick={this.onDisconnectClick}
+                            <OverlayTrigger
+                                key='leave'
+                                placement='top'
+                                overlay={
+                                    <Tooltip id='tooltip-leave'>
+                                        {'Click to leave call'}
+                                    </Tooltip>
+                                }
                             >
-                                <LeaveCallIcon
-                                    style={{width: '16px', height: '16px', fill: '#D24B4E'}}
-                                />
-                            </button>
-                        </OverlayTrigger>
 
-                        {/* <button
+                                <button
+                                    id='calls-widget-leave-button'
+                                    className='style--none button-controls button-controls--wide'
+                                    style={this.style.leaveCallButton}
+                                    onClick={this.onDisconnectClick}
+                                >
+                                    <LeaveCallIcon
+                                        style={{width: '16px', height: '16px', fill: '#D24B4E'}}
+                                    />
+                                </button>
+                            </OverlayTrigger>
+
+                            {/* <button
                             id='calls-widget-toggle-menu-button'
                             className='cursor--pointer style--none button-controls'
                             style={this.style.menuButton}
@@ -1049,36 +949,36 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             />
                         </button> */}
 
-                        <OverlayTrigger
-                            key='participants'
-                            placement='top'
-                            overlay={
-                                <Tooltip id='tooltip-mute'>
-                                    {this.state.showParticipantsList ? 'Hide participants' : 'Show participants'}
-                                </Tooltip>
-                            }
-                        >
-                            <button
-                                className='style--none button-controls button-controls--wide'
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    color: this.state.showParticipantsList ? 'rgba(28, 88, 217, 1)' : '',
-                                    background: this.state.showParticipantsList ? 'rgba(28, 88, 217, 0.12)' : '',
-                                }}
-                                onClick={this.onParticipantsButtonClick}
+                            <OverlayTrigger
+                                key='participants'
+                                placement='top'
+                                overlay={
+                                    <Tooltip id='tooltip-mute'>
+                                        {this.state.showParticipantsList ? 'Hide participants' : 'Show participants'}
+                                    </Tooltip>
+                                }
                             >
-                                <ParticipantsIcon
-                                    style={{width: '16px', height: '16px', marginRight: '4px'}}
-                                />
+                                <button
+                                    className='style--none button-controls button-controls--wide'
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        color: this.state.showParticipantsList ? 'rgba(28, 88, 217, 1)' : '',
+                                        background: this.state.showParticipantsList ? 'rgba(28, 88, 217, 0.12)' : '',
+                                    }}
+                                    onClick={this.onParticipantsButtonClick}
+                                >
+                                    <ParticipantsIcon
+                                        style={{width: '16px', height: '16px', marginRight: '4px'}}
+                                    />
 
-                                <span
-                                    style={{fontWeight: 600, color: '#333'}}
-                                >{this.props.profiles.length}</span>
-                            </button>
-                        </OverlayTrigger>
+                                    <span
+                                        style={{fontWeight: 600, color: '#333'}}
+                                    >{this.props.profiles.length}</span>
+                                </button>
+                            </OverlayTrigger>
 
-                        {/* { !isDMChannel(this.props.channel) &&
+                            {/* { !isDMChannel(this.props.channel) &&
                         <OverlayTrigger
                             key='hand'
                             placement='top'
@@ -1101,30 +1001,31 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                         </OverlayTrigger>
                         } */}
 
-                        <OverlayTrigger
-                            key='mute'
-                            placement='top'
-                            overlay={
-                                <Tooltip id='tooltip-mute'>
-                                    {muteTooltipText}
-                                </Tooltip>
-                            }
-                        >
-                            <button
-                                id='voice-mute-unmute'
-                                className='cursor--pointer style--none button-controls'
-                                style={this.state.audioMuted ? this.style.mutedButton : this.style.unmutedButton}
-                                onClick={this.onMuteToggle}
+                            <OverlayTrigger
+                                key='mute'
+                                placement='top'
+                                overlay={
+                                    <Tooltip id='tooltip-mute'>
+                                        {muteTooltipText}
+                                    </Tooltip>
+                                }
                             >
-                                <MuteIcon
-                                    style={{width: '16px', height: '16px', fill: this.state.audioMuted ? 'rgba(61, 184, 135, 1)' : 'rgba(61, 184, 135, 1)'}}
-                                    stroke={this.state.audioMuted ? 'rgba(210, 75, 78, 1)' : ''}
-                                />
-                            </button>
-                        </OverlayTrigger>
+                                <button
+                                    id='voice-mute-unmute'
+                                    className='cursor--pointer style--none button-controls'
+                                    style={this.state.audioMuted ? this.style.mutedButton : this.style.unmutedButton}
+                                    onClick={this.onMuteToggle}
+                                >
+                                    <MuteIcon
+                                        style={{width: '16px', height: '16px', fill: this.state.audioMuted ? 'rgba(61, 184, 135, 1)' : 'rgba(61, 184, 135, 1)'}}
+                                        stroke={this.state.audioMuted ? 'rgba(210, 75, 78, 1)' : ''}
+                                    />
+                                </button>
+                            </OverlayTrigger>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </React.Fragment>
         );
     }
 }

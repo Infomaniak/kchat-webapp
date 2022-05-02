@@ -13,12 +13,17 @@ import {getProfilesByIds} from 'mattermost-redux/actions/users';
 
 import {ActionTypes} from 'utils/constants';
 
+import {Client4} from 'mattermost-redux/client';
+
+import {DispatchFunc} from 'mattermost-redux/types/actions';
+
 import MeetButton from './meet_button';
 
 function startCallInChannel() {
-    return async (dispatch, getState) => {
+    return async (dispatch: DispatchFunc, getState) => {
         const state = getState();
         const channelID = getCurrentChannelId(state);
+        const data = await Client4.startMeet(channelID);
         try {
             const users = voiceConnectedUsers(state);
             if (users && users.length > 0) {
@@ -37,7 +42,6 @@ function startCallInChannel() {
         }
 
         if (!connectedChannelID(getState())) {
-            // connectCall(channelID);
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
             });
@@ -47,6 +51,7 @@ function startCallInChannel() {
                     channelID,
                     userID: getCurrentUserId(getState()),
                     currentUserID: getCurrentUserId(getState()),
+                    url: data.url,
                 },
             });
         } else if (connectedChannelID(getState()) !== channelID) {

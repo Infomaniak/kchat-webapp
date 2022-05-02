@@ -7,7 +7,7 @@ import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 import {getProfiles} from 'mattermost-redux/actions/users';
 import {Action, ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {getTeamByName} from 'mattermost-redux/selectors/entities/teams';
-import {getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
+import {getRedirectChannelNameForTeam, getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {setShowNextStepsView} from 'actions/views/next_steps';
@@ -16,6 +16,7 @@ import {getIsLhsOpen} from 'selectors/lhs';
 import {getLastViewedChannelNameByTeamName} from 'selectors/local_storage';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {showNextSteps} from 'components/next_steps_view/steps';
+import {connectedChannelID, expandedView} from 'selectors/calls';
 
 import {GlobalState} from 'types/store';
 
@@ -34,12 +35,14 @@ const mapStateToProps = (state: GlobalState, ownProps: Props) => {
     const config = getConfig(state);
     const enableOnboardingFlow = config.EnableOnboardingFlow === 'true';
     let channelName = getLastViewedChannelNameByTeamName(state, ownProps.match.params.team);
+    const callChannel = getChannel(state, connectedChannelID(state));
     if (!channelName) {
         const team = getTeamByName(state, ownProps.match.params.team);
         channelName = getRedirectChannelNameForTeam(state, team!.id);
     }
     const lastChannelPath = `${ownProps.match.url}/channels/${channelName}`;
     return {
+        callChannel,
         lastChannelPath,
         lhsOpen: getIsLhsOpen(state),
         rhsOpen: getIsRhsOpen(state),
@@ -47,6 +50,7 @@ const mapStateToProps = (state: GlobalState, ownProps: Props) => {
         isCollapsedThreadsEnabled: isCollapsedThreadsEnabled(state),
         currentUserId: getCurrentUserId(state),
         enableTipsViewRoute: enableOnboardingFlow && showNextSteps(state),
+        callExpandedView: expandedView(state),
     };
 };
 

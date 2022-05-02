@@ -26,6 +26,7 @@ import {
     viewChannel,
     markChannelAsRead,
     getChannelMemberCountsByGroup,
+    getChannelMembersByIds,
 } from 'mattermost-redux/actions/channels';
 import {getCloudSubscription, getSubscriptionStats} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
@@ -109,6 +110,9 @@ import {getSiteURL} from 'utils/url';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
+import DialingModal from 'components/kmeet_conference/ringing_dialog';
+import { connectedChannelID, voiceChannelCallStartAt, voiceConnectedChannels, voiceUsersStatuses } from 'selectors/calls';
+import { startCallInChannel } from './calls';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -532,6 +536,9 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.THREAD_UPDATED:
         dispatch(handleThreadUpdated(msg));
+        break;
+    case SocketEvents.CONFERENCE_ADDED:
+        dispatch(handleIncomingConferenceCall(msg));
         break;
 
     case SocketEvents.APPS_FRAMEWORK_REFRESH_BINDINGS: {
@@ -1558,5 +1565,29 @@ function handleThreadFollowChanged(msg) {
             await doDispatch(fetchThread(getCurrentUserId(state), getCurrentTeamId(state), msg.data.thread_id, true));
         }
         handleFollowChanged(doDispatch, msg.data.thread_id, msg.team_id, msg.data.state);
+    };
+}
+
+function handleIncomingConferenceCall(msg) {
+    return (doDispatch, doGetState) => {
+        // Pop calling modal for user to accept or deny call
+        // const data = await Client4
+
+        const state = doGetState();
+        const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
+        const channel = getChannel(state, connectedChannelID(doGetState()));
+
+        // eslint-disable-next-line no-console
+        console.log(connectedChannelID(doGetState()));
+
+        if (!channel || channel.id !== msg.data.channel_id) {
+            doDispatch(openModal({
+                modalId: ModalIdentifiers.INCOMING_CALL,
+                dialogType: DialingModal,
+                dialogProps: {
+                    calling: {users: inCall, channelID: msg.data.channel_id}
+                },
+            }));
+        }
     };
 }

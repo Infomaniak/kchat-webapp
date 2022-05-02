@@ -383,6 +383,7 @@ export const ModalIdentifiers = {
     KEYBOARD_SHORTCUTS_MODAL: 'keyboar_shortcuts_modal',
     USERS_TO_BE_REMOVED: 'users_to_be_removed',
     UPLOAD_LICENSE: 'upload_license',
+    INCOMING_CALL: 'incoming_call',
 };
 
 export const UserStatuses = {
@@ -503,6 +504,7 @@ export const SocketEvents = {
     THREAD_UPDATED: 'thread_updated',
     THREAD_FOLLOW_CHANGED: 'thread_follow_changed',
     THREAD_READ_CHANGED: 'thread_read_changed',
+    CONFERENCE_ADDED: 'conference_added',
 };
 
 export const TutorialSteps = {

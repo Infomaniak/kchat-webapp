@@ -3772,6 +3772,35 @@ export default class Client4 {
         );
     }
 
+    startMeet = (channelID: string) => {
+        return this.doFetch<{
+            channel_id: string;
+            created_at: string;
+            id: string;
+            team_user: Object;
+            team_user_id: string;
+            updated_at: string;
+            url: string;
+        }>(
+            `${this.getBaseRoute()}/conferences`,
+            {method: 'post', body: JSON.stringify({channel_id: channelID})},
+        );
+    }
+
+    acceptIncomingMeetCall(channelID: string) {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${channelID}/answer`,
+            {method: 'post', body: JSON.stringify({channel_id: channelID})},
+        );
+    }
+
+    declineIncomingMeetCall(channelID: string) {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${channelID}/deny`,
+            {method: 'post', body: JSON.stringify({channel_id: channelID})},
+        );
+    }
+
     // Client Helpers
 
     doFetch = async <T>(url: string, options: Options): Promise<T> => {

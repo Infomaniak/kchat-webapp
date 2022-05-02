@@ -14,7 +14,8 @@ import ChannelIdentifierRouter from 'components/channel_layout/channel_identifie
 import PlaybookRunner from 'components/channel_layout/playbook_runner';
 import NextStepsView from 'components/next_steps_view';
 import {makeAsyncComponent} from 'components/async_load';
-import Conference from 'components/kmeet_conference';
+import MeetWidget from 'components/kmeet_conference/call_widget';
+import CallIFrame from 'components/kmeet_conference/iframe';
 
 const LazyGlobalThreads = makeAsyncComponent(
     'LazyGlobalThreads',
@@ -40,6 +41,8 @@ type Props = {
     isCollapsedThreadsEnabled: boolean;
     currentUserId: string;
     enableTipsViewRoute: boolean;
+    callChannel: string;
+    callExpandedView: boolean;
     actions: {
         getProfiles: (page?: number, perPage?: number, options?: Record<string, string | boolean>) => ActionFunc;
     };
@@ -77,61 +80,80 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
     render() {
         const {lastChannelPath, isCollapsedThreadsEnabled, enableTipsViewRoute} = this.props;
         const url = this.props.match.url;
+
         return (
-            <div
-                key='inner-wrap'
-                className={classNames('inner-wrap', 'channel__wrap', {
-                    'move--right': this.props.lhsOpen,
-                    'move--left': this.props.rhsOpen,
-                    'move--left-small': this.props.rhsMenuOpen,
-                })}
-            >
-                <div className='row header'>
-                    <div id='navbar_wrapper'>
-                        <ChannelHeaderMobile/>
+            <React.Fragment>
+                {this.props.callChannel && (
+                    <React.Fragment>
+                        <CallIFrame/>
+                        <MeetWidget/>
+                    </React.Fragment>
+                )}
+                <div
+                    key='inner-wrap'
+                    className={classNames('inner-wrap', 'channel__wrap', {
+                        'move--right': this.props.lhsOpen,
+                        'move--left': this.props.rhsOpen,
+                        'move--left-small': this.props.rhsMenuOpen,
+                    })}
+                >
+                    <div className='row header'>
+                        <div id='navbar_wrapper'>
+                            <ChannelHeaderMobile/>
+                        </div>
+                    </div>
+                    {/* <MeetWidget>
+                    <CallIFrame/>
+                </MeetWidget> */}
+                    <div className='row main'>
+                        <Switch>
+                            <Route
+                                path={`${url}/pl/:postid`}
+                                render={(props) => (
+                                    <PermalinkView
+                                        {...props}
+                                        returnTo={this.state.returnTo}
+                                    />
+                                )}
+                            />
+                            {/* <Route
+                                path='/:team/:path(channels|messages)/:identifier/call'
+                                render={() => (
+                                    <React.Fragment>
+                                        <RenderInWindow>
+                                            <CallIFrame/>
+                                        </RenderInWindow>
+                                        <MeetWidget/>
+                                    </React.Fragment>
+                                )}
+                            /> */}
+                            <Route
+                                path='/:team/:path(channels|messages)/:identifier/:postid?'
+                                component={ChannelIdentifierRouter}
+                            />
+                            <Route
+                                path='/:team/_playbooks/:playbookId/run'
+                            >
+                                <PlaybookRunner/>
+                            </Route>
+                            {enableTipsViewRoute ? (
+                                <Route
+                                    path='/:team/tips'
+                                    component={NextStepsView}
+                                />
+
+                            ) : null}
+                            {isCollapsedThreadsEnabled ? (
+                                <Route
+                                    path='/:team/threads/:threadIdentifier?'
+                                    component={LazyGlobalThreads}
+                                />
+                            ) : null}
+                            <Redirect to={lastChannelPath}/>
+                        </Switch>
                     </div>
                 </div>
-                <div className='row main'>
-                    <Switch>
-                        <Route
-                            path={`${url}/pl/:postid`}
-                            render={(props) => (
-                                <PermalinkView
-                                    {...props}
-                                    returnTo={this.state.returnTo}
-                                />
-                            )}
-                        />
-                        <Route
-                            path='/:team/:path(channels|messages)/:identifier/:postid?'
-                            component={ChannelIdentifierRouter}
-                        />
-                        <Route
-                            path='/:team/:path(channels|messages)/:identifier/call'
-                            component={Conference}
-                        />
-                        <Route
-                            path='/:team/_playbooks/:playbookId/run'
-                        >
-                            <PlaybookRunner/>
-                        </Route>
-                        {enableTipsViewRoute ? (
-                            <Route
-                                path='/:team/tips'
-                                component={NextStepsView}
-                            />
-
-                        ) : null}
-                        {isCollapsedThreadsEnabled ? (
-                            <Route
-                                path='/:team/threads/:threadIdentifier?'
-                                component={LazyGlobalThreads}
-                            />
-                        ) : null}
-                        <Redirect to={lastChannelPath}/>
-                    </Switch>
-                </div>
-            </div>
+            </React.Fragment>
         );
     }
 }
