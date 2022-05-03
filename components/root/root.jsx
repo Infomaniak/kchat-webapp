@@ -92,7 +92,7 @@ const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
 const Mfa = makeAsyncComponent('Mfa', LazyMfa);
 
-const LoggedInRoute = ({component: Component, ...rest}) => (
+const LoggedInRoute = ({ component: Component, ...rest }) => (
     <Route
         {...rest}
         render={(props) => (
@@ -124,11 +124,13 @@ export default class Root extends React.PureComponent {
         this.currentCategoryFocus = 0;
         this.currentSidebarFocus = 0;
         this.mounted = false;
+
+
         // Redux
         setUrl(getSiteURL());
 
-        if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
+        // if (isDesktopApp()) {
+            let token = localStorage.getItem('IKToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
              // Enable authHeader and set bearer token
@@ -138,9 +140,16 @@ export default class Root extends React.PureComponent {
                 Client4.setCSRF(token)
                 LocalStorageStore.setWasLoggedIn(true);
             }
-        } else {
-            Client4.setAuthHeader = false;  // Disable auth header to enable CSRF check
-        }
+        if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.register('/static/service-worker.js').then(registration => {
+                console.log('SW registered: ', registration);
+              }).catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+              });
+          }
+        // } else {
+            // Client4.setAuthHeader = false;  // Disable auth header to enable CSRF check
+        // }
 
         setSystemEmojis(EmojiIndicesByAlias);
 
@@ -292,7 +301,7 @@ export default class Root extends React.PureComponent {
     }
 
     componentDidMount() {
-        if (isDesktopApp()) {
+        // if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
@@ -302,8 +311,10 @@ export default class Root extends React.PureComponent {
                 Client4.setToken(token)
                 Client4.setCSRF(token)
                 LocalStorageStore.setWasLoggedIn(true);
+
+
             }
-        }
+        // }
         this.mounted = true;
         this.props.actions.loadMeAndConfig().then((response) => {
             if (this.props.location.pathname === '/' && response[2] && response[2].data) {
