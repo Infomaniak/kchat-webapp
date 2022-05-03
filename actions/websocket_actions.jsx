@@ -1368,14 +1368,14 @@ function handleSidebarCategoryCreated(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
 
-        if (msg.team_id !== getCurrentTeamId(state)) {
+        if (msg.data.team_id !== getCurrentTeamId(state)) {
             // The new category will be loaded when we switch teams.
             return;
         }
 
         // Fetch all categories, including ones that weren't explicitly updated, in case any other categories had channels
         // moved out of them.
-        doDispatch(fetchMyCategories(msg.team_id));
+        doDispatch(fetchMyCategories(msg.data.team_id));
     };
 }
 
@@ -1383,13 +1383,13 @@ function handleSidebarCategoryUpdated(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
 
-        if (msg.team_id !== getCurrentTeamId(state)) {
+        if (msg.data.team_id !== getCurrentTeamId(state)) {
             // The updated categories will be loaded when we switch teams.
             return;
         }
 
         // Fetch all categories in case any other categories had channels moved out of them.
-        doDispatch(fetchMyCategories(msg.team_id));
+        doDispatch(fetchMyCategories(msg.data.team_id));
     };
 }
 
@@ -1397,18 +1397,18 @@ function handleSidebarCategoryDeleted(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
 
-        if (msg.team_id !== getCurrentTeamId(state)) {
+        if (msg.data.team_id !== getCurrentTeamId(state)) {
             // The category will be removed when we switch teams.
             return;
         }
 
         // Fetch all categories since any channels that were in the deleted category were moved to other categories.
-        doDispatch(fetchMyCategories(msg.team_id));
+        doDispatch(fetchMyCategories(msg.data.team_id));
     };
 }
 
 function handleSidebarCategoryOrderUpdated(msg) {
-    return receivedCategoryOrder(msg.team_id, msg.data.order);
+    return receivedCategoryOrder(msg.data.team_id, msg.data.order);
 }
 
 export function handleUserActivationStatusChange() {
