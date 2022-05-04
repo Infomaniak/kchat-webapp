@@ -435,7 +435,7 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: 'https://ktalk.preprod.dev.infomaniak.ch',
+                target: 'https://kchat.preprod.dev.infomaniak.ch',
                 changeOrigin: true,
                 xfwd: true,
                 ws: true,

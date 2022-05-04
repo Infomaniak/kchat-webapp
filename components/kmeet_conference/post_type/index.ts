@@ -11,6 +11,9 @@ import {Client4} from 'mattermost-redux/client';
 import {voiceConnectedChannels, voiceConnectedProfilesInChannel, connectedChannelID} from 'selectors/calls';
 import {showSwitchCallModal} from 'actions/calls';
 
+import {ActionTypes} from 'utils/constants';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+
 import PostType from './component';
 
 interface OwnProps {
@@ -43,7 +46,28 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     };
 };
 
+function onJoinCall(channelID: string) {
+    return async (doDispatch, doGetState) => {
+        if (!connectedChannelID(doGetState())) {
+            doDispatch({
+                type: ActionTypes.VOICE_CHANNEL_ENABLE,
+            });
+
+            await doDispatch({
+                type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
+                data: {
+                    channelID,
+                    userID: getCurrentUserId(doGetState()),
+                    currentUserID: getCurrentUserId(doGetState()),
+                    url: `https://kmeet.infomaniak.com/${channelID}`,
+                },
+            });
+        }
+    };
+}
+
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+    onJoinCall,
     showSwitchCallModal,
 }, dispatch);
 

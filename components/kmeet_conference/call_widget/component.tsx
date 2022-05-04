@@ -423,7 +423,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                         <button
                             className='cursor--pointer style--none'
                             style={{
-                                display: isSharing ? 'none' : 'flex',
+                                display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 position: 'absolute',

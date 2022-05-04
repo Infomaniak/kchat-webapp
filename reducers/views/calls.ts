@@ -362,14 +362,14 @@ const voiceChannelScreenSharingID = (state: {[channelID: string]: string} = {}, 
     }
 };
 
-const expandedView = (state = false, action: {type: string}) => {
+const expandedView = (state = true, action: {type: string}) => {
     switch (action.type) {
     case ActionTypes.VOICE_CHANNEL_UNINIT:
-        return false;
-    case ActionTypes.SHOW_EXPANDED_VIEW:
         return true;
-    case ActionTypes.HIDE_EXPANDED_VIEW:
+    case ActionTypes.SHOW_EXPANDED_VIEW:
         return false;
+    case ActionTypes.HIDE_EXPANDED_VIEW:
+        return true;
     default:
         return state;
     }

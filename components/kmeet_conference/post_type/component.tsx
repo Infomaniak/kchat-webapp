@@ -19,15 +19,12 @@ interface Props {
     pictures: string[];
     profiles: UserProfile[];
     showSwitchCallModal: (targetID: string) => void;
+    onJoinCall: (channelID: string) => void;
 }
 
-const PostType = ({post, connectedID, hasCall, pictures, profiles, showSwitchCallModal}: Props) => {
+const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall}: Props) => {
     const onJoinCallClick = () => {
-        if (connectedID) {
-            showSwitchCallModal(post.channel_id);
-            return;
-        }
-        window.postMessage({type: 'connectCall', channelID: post.channel_id}, window.origin);
+        onJoinCall(post.channel_id);
     };
 
     const onLeaveButtonClick = () => {
@@ -47,7 +44,7 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, showSwitchCal
             </Duration>
         </>
     ) : (
-        <Duration>{moment(post.props.start_at).fromNow()}</Duration>
+        <Duration>{moment(post.props.create_at).fromNow()}</Duration>
     );
 
     return (

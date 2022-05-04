@@ -38,13 +38,15 @@ function MeetButton(props: Props) {
             <div
                 className='icon icon--attachment'
             >
-                <CameraIcon className='d-flex'/>
-                <span
-                    className='icon__text'
-                    style={{margin: '0 4px'}}
-                >
-                    {props.hasCall ? 'Join Call' : 'Start Call'}
-                </span>
+                <button className='channel-header__icon channel-header__icon--wide channel-header__icon--left'>
+                    <CameraIcon/>
+                    <span
+                        className='icon__text'
+                        style={{margin: '0 6px'}}
+                    >
+                        {props.hasCall ? 'Join Call' : 'Start Call'}
+                    </span>
+                </button>
             </div>
         </button>
     );

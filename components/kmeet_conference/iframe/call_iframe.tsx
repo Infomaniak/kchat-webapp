@@ -61,13 +61,6 @@ const CallIframe = (props: Props) => {
             ref={ref}
             className='hidden'
         />);
-
-    // console.log(props.children);
-    // if (props.portal && ref.current) {
-    //     return createPortal(props.children, container);
-    // }
-
-    // return iframe;
 };
 
 export default CallIframe;
