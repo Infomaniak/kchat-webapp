@@ -897,7 +897,9 @@ export default class Client4 {
         if (lastPictureUpdate) {
             params._ = lastPictureUpdate;
         }
-
+        if (isDesktopApp() && this.token) {
+            params.access_token = this.token;
+        }
         return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
     };
 
