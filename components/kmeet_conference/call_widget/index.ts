@@ -18,7 +18,7 @@ import {connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceCha
 // import {getChannelURL, alphaSortProfiles, stateSortProfiles} from '../../utils';
 
 import {getChannelURL, alphaSortProfiles, stateSortProfiles} from '../utils';
-import {showExpandedView} from 'actions/calls';
+import {showExpandedView, hideExpandedView} from 'actions/calls';
 
 import {UserState} from 'reducers/views/calls';
 
@@ -81,6 +81,7 @@ function disconnect(channelID: string) {
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     showExpandedView,
+    hideExpandedView,
     disconnect,
 }, dispatch);
 

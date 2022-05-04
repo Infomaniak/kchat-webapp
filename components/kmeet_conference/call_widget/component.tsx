@@ -6,9 +6,8 @@
 import React, {CSSProperties} from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import moment from 'moment-timezone';
-import * as portals from 'react-reverse-portal';
 
-import {getUserDisplayName, isPublicChannel, isPrivateChannel, isDMChannel} from 'components/kmeet_conference/utils';
+import {getUserDisplayName, isPublicChannel} from 'components/kmeet_conference/utils';
 
 import MutedIcon from 'components/widgets/icons/muted_icon';
 import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
@@ -48,6 +47,7 @@ interface Props {
     screenSharingID: string;
     show: boolean;
     showExpandedView: () => void;
+    hideExpandedView: () => void;
     showScreenSourceModal: () => void;
     disconnect: () => void;
 }
@@ -782,8 +782,20 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
         // // TODO: remove this as soon as we support opening a window from desktop app.
         // if (window.desktop) {
+        if (this.props.show) {
+            this.props.hideExpandedView();
+            this.setState({
+                expanded: false,
+            });
+
+            return;
+        }
 
         this.props.showExpandedView();
+
+        this.setState({
+            expanded: true,
+        });
 
         // } else {
         //     const expandedViewWindow = window.open(

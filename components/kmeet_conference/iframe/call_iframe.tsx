@@ -32,6 +32,10 @@ const CallIframe = (props: Props) => {
     }, [props.portal]);
 
     React.useEffect(() => {
+        if (window.desktop) {
+            return;
+        }
+
         // When container is ready
         if (props.portal && ref.current) {
         // Create window
@@ -59,7 +63,15 @@ const CallIframe = (props: Props) => {
     return (
         <div
             ref={ref}
-            className='hidden'
+            style={props.portal ? ({
+                position: 'absolute',
+                bottom: 0,
+                top: 0,
+                zIndex: 999,
+                right: 0,
+                left: 0,
+            }) : {}}
+            className={props.portal ? '' : 'hidden'}
         />);
 };
 
