@@ -1,23 +1,28 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import crypto from 'crypto';
+
+import PropTypes from 'prop-types';
+
+import React from 'react';
+
+import {FormattedMessage, injectIntl} from 'react-intl';
+
 import * as GlobalActions from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
 import LoadingScreen from 'components/loading_screen';
 import Markdown from 'components/markdown';
-import crypto from 'crypto';
-import { Client4 } from 'mattermost-redux/client';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import {Client4} from 'mattermost-redux/client';
+
 import LocalStorageStore from 'stores/local_storage_store';
-import { browserHistory } from 'utils/browser_history';
-import { IKConstants } from 'utils/constants-ik';
+import {browserHistory} from 'utils/browser_history';
+import {IKConstants} from 'utils/constants-ik';
 import Constants from 'utils/constants.jsx';
-import { t } from 'utils/i18n.jsx';
-import { showNotification } from 'utils/notifications';
-import { intlShape } from 'utils/react_intl';
-import { isDesktopApp } from 'utils/user_agent';
+import {t} from 'utils/i18n.jsx';
+import {showNotification} from 'utils/notifications';
+import {intlShape} from 'utils/react_intl';
+import {isDesktopApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils.jsx';
 
 // TODO: clean login controller
@@ -82,23 +87,22 @@ class LoginController extends React.PureComponent {
     }
 
     componentDidMount() {
-
         if (this.props.currentUser) {
             GlobalActions.redirectUserToDefaultTeam();
             return;
         }
-        if(isDesktopApp()) {
+        if (isDesktopApp()) {
             // const loginCode = (new URLSearchParams(this.props.location.search)).get('code')
-            const hash = this.props.location.hash
+            const hash = this.props.location.hash;
 
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
                 Client4.setAuthHeader = true;
-                Client4.setToken(token)
-                Client4.setCSRF(token)
+                Client4.setToken(token);
+                Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
                 GlobalActions.redirectUserToDefaultTeam();
             }
@@ -126,53 +130,58 @@ class LoginController extends React.PureComponent {
 
             // Receive login code from login redirect
             if (hash) {
-                const hash2Obj = {}
-                hash.substring(1).split("&").map(hk => {
-                    let temp = hk.split('=');
-                    hash2Obj[temp[0]] = temp[1]
+                const hash2Obj = {};
+                hash.substring(1).split('&').map((hk) => {
+                    const temp = hk.split('=');
+                    hash2Obj[temp[0]] = temp[1];
                 });
-                this.storeTokenResponse(hash2Obj)
-                localStorage.removeItem('challenge')
+                this.storeTokenResponse(hash2Obj);
+                localStorage.removeItem('challenge');
                 LocalStorageStore.setWasLoggedIn(true);
+
                 // location.reload();
                 this.finishSignin();
 
-                return
-            //     const challenge = JSON.parse(localStorage.getItem('challenge'));
-            //     this.setState({ loading: true })
-            //     return
-            // //    Get token
-            //     Client4.getIKLoginToken(
-            //         loginCode,
-            //         challenge?.challenge,
-            //         challenge?.verifier,
-            //         "https://login.devd281.dev.infomaniak.ch",
-            //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
-            //     ).then((resp) => {
-            //         this.storeTokenResponse(resp)
-            //         localStorage.removeItem('challenge')
-            //         this.finishSignin();
-            //     }).catch((error) => {
-            //         console.log(error)
-            //     }
-            //     ).finally(this.setState({ loading: false }))
+                return;
+
+                //     const challenge = JSON.parse(localStorage.getItem('challenge'));
+                //     this.setState({ loading: true })
+                //     return
+                // //    Get token
+                //     Client4.getIKLoginToken(
+                //         loginCode,
+                //         challenge?.challenge,
+                //         challenge?.verifier,
+                //         "https://login.devd281.dev.infomaniak.ch",
+                //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
+                //     ).then((resp) => {
+                //         this.storeTokenResponse(resp)
+                //         localStorage.removeItem('challenge')
+                //         this.finishSignin();
+                //     }).catch((error) => {
+                //         console.log(error)
+                //     }
+                //     ).finally(this.setState({ loading: false }))
 
             //     localStorage.removeItem('challenge');
             //     return
             }
 
-            if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= parseInt(Date.now() / 1000))) {
-                this.setState({ loading: true });
-                const codeVerifier = this.getCodeVerifier()
-                let codeChallenge = ""
-                this.generateCodeChallenge(codeVerifier).then(challenge => {
+            if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= parseInt(Date.now() / 1000, 10))) {
+                this.setState({loading: true});
+                const codeVerifier = this.getCodeVerifier();
+                let codeChallenge = '';
+                this.generateCodeChallenge(codeVerifier).then((challenge) => {
                     codeChallenge = challenge;
+
                     // TODO: store in redux instead of localstorage
-                    localStorage.setItem('challenge', JSON.stringify({ verifier: codeVerifier, challenge: codeChallenge }));
+                    localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
+
                     // TODO: add env for login url and/or current server
                     window.location.assign(`${IKConstants.LOGIN_URL}/authorize?client_id=${IKConstants.CLIENT_ID}&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`);
                 }).catch(() => {
-                    console.log("Error redirect")
+                    console.log('Error redirect');
+
                     // Ignore the failure
                 }).finally(this.setState({loading: false}));
             }
@@ -221,34 +230,34 @@ class LoginController extends React.PureComponent {
 
      // Store token infos in localStorage
      storeTokenResponse = (response) => {
-        // TODO: store in redux
-        let d = new Date()
-        d.setSeconds(d.getSeconds() + parseInt(response.expires_in));
-        localStorage.setItem("IKToken", response.access_token);
-        localStorage.setItem("IKRefreshToken", response.refresh_token);
-        localStorage.setItem("IKTokenExpire", parseInt(d.getTime() / 1000));
-        Client4.setToken(response.access_token);
-        Client4.setCSRF(response.access_token)
-        Client4.setAuthHeader = true;
-    }
+         // TODO: store in redux
+         const d = new Date();
+         d.setSeconds(d.getSeconds() + parseInt(response.expires_in));
+         localStorage.setItem('IKToken', response.access_token);
+         localStorage.setItem('IKRefreshToken', response.refresh_token);
+         localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000));
+         Client4.setToken(response.access_token);
+         Client4.setCSRF(response.access_token);
+         Client4.setAuthHeader = true;
+     }
 
     getCodeVerifier = () => {
         const ramdonByte = crypto.randomBytes(33);
         const hash =
             crypto.createHash('sha256').update(ramdonByte).digest();
-        return hash.toString('base64')
-            .replace(/\+/g, "-")
-            .replace(/\//g, "_")
-            .replace(/=/g, "");
+        return hash.toString('base64').
+            replace(/\+/g, '-').
+            replace(/\//g, '_').
+            replace(/[=]/g, '');
     }
 
     generateCodeChallenge = async (codeVerifier) => {
         const hash =
-        crypto.createHash('sha256').update(codeVerifier).digest()
-        return hash.toString('base64')
-              .replace(/\+/g, "-")
-              .replace(/\//g, "_")
-              .replace(/=/g, "");
+        crypto.createHash('sha256').update(codeVerifier).digest();
+        return hash.toString('base64').
+            replace(/\+/g, '-').
+            replace(/\//g, '_').
+            replace(/[=]/g, '');
     }
 
     configureTitle = () => {
@@ -547,8 +556,6 @@ class LoginController extends React.PureComponent {
         this.setState({sessionExpired: false});
     }
 
-
-
     render() {
         const {
             customDescriptionText,
@@ -560,8 +567,7 @@ class LoginController extends React.PureComponent {
             return (<LoadingScreen/>);
         }
 
-        return (<LoadingIk />);
-
+        return (<LoadingIk/>);
     }
 }
 
