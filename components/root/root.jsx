@@ -124,6 +124,7 @@ export default class Root extends React.PureComponent {
         this.currentCategoryFocus = 0;
         this.currentSidebarFocus = 0;
         this.mounted = false;
+
         // Redux
         setUrl(getSiteURL());
 
@@ -131,15 +132,15 @@ export default class Root extends React.PureComponent {
             const token = localStorage.getItem('IKToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-             // Enable authHeader and set bearer token
+            // Enable authHeader and set bearer token
             if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
                 Client4.setAuthHeader = true;
-                Client4.setToken(token)
-                Client4.setCSRF(token)
+                Client4.setToken(token);
+                Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
             }
         } else {
-            Client4.setAuthHeader = false;  // Disable auth header to enable CSRF check
+            Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
 
         setSystemEmojis(EmojiIndicesByAlias);
@@ -165,6 +166,7 @@ export default class Root extends React.PureComponent {
         this.state = {
             configLoaded: false,
         };
+
         // Keyboard navigation for accessibility
         if (!UserAgent.isInternetExplorer()) {
             this.a11yController = new A11yController();
@@ -266,7 +268,7 @@ export default class Root extends React.PureComponent {
             const token = localStorage.getItem('IKToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-             // Enable authHeader and set bearer token
+            // Enable authHeader and set bearer token
             if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
@@ -296,11 +298,11 @@ export default class Root extends React.PureComponent {
             const token = localStorage.getItem('IKToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-             // Enable authHeader and set bearer token
-            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
+            // Enable authHeader and set bearer token
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
                 Client4.setAuthHeader = true;
-                Client4.setToken(token)
-                Client4.setCSRF(token)
+                Client4.setToken(token);
+                Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
             }
         }
