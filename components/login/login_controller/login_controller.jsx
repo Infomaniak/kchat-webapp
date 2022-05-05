@@ -37,7 +37,6 @@ class LoginController extends React.PureComponent {
         customDescriptionText: PropTypes.string,
         enableCustomBrand: PropTypes.bool.isRequired,
         enableLdap: PropTypes.bool.isRequired,
-        enableOpenServer: PropTypes.bool.isRequired,
         enableSaml: PropTypes.bool.isRequired,
         enableSignInWithEmail: PropTypes.bool.isRequired,
         enableSignInWithUsername: PropTypes.bool.isRequired,
@@ -48,11 +47,6 @@ class LoginController extends React.PureComponent {
         enableSignUpWithOpenId: PropTypes.bool.isRequired,
         experimentalPrimaryTeam: PropTypes.string,
         ldapLoginFieldName: PropTypes.string,
-        samlLoginButtonText: PropTypes.string,
-        gitlabButtonText: PropTypes.string,
-        gitlabButtonColor: PropTypes.string,
-        openidButtonText: PropTypes.string,
-        openidButtonColor: PropTypes.string,
         siteName: PropTypes.string,
         initializing: PropTypes.bool,
         actions: PropTypes.shape({
@@ -131,6 +125,7 @@ class LoginController extends React.PureComponent {
             // Receive login code from login redirect
             if (hash) {
                 const hash2Obj = {};
+                // eslint-disable-next-line array-callback-return
                 hash.substring(1).split('&').map((hk) => {
                     const temp = hk.split('=');
                     hash2Obj[temp[0]] = temp[1];
@@ -138,9 +133,9 @@ class LoginController extends React.PureComponent {
                 this.storeTokenResponse(hash2Obj);
                 localStorage.removeItem('challenge');
                 LocalStorageStore.setWasLoggedIn(true);
+                location.reload();
 
-                // location.reload();
-                this.finishSignin();
+                // this.finishSignin();
 
                 return;
 
@@ -168,6 +163,7 @@ class LoginController extends React.PureComponent {
             }
 
             if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= parseInt(Date.now() / 1000, 10))) {
+                // eslint-disable-next-line react/no-did-mount-set-state
                 this.setState({loading: true});
                 const codeVerifier = this.getCodeVerifier();
                 let codeChallenge = '';
@@ -178,11 +174,12 @@ class LoginController extends React.PureComponent {
                     localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
 
                     // TODO: add env for login url and/or current server
-                    window.location.assign(`${IKConstants.LOGIN_URL}/authorize?client_id=${IKConstants.CLIENT_ID}&response_type=token&access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256`);
+                    window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=token&redirect_uri=ktalk://auth-desktop`);
                 }).catch(() => {
                     console.log('Error redirect');
 
                     // Ignore the failure
+                // eslint-disable-next-line react/no-did-mount-set-state
                 }).finally(this.setState({loading: false}));
             }
         } else {
@@ -232,10 +229,10 @@ class LoginController extends React.PureComponent {
      storeTokenResponse = (response) => {
          // TODO: store in redux
          const d = new Date();
-         d.setSeconds(d.getSeconds() + parseInt(response.expires_in));
+         d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
          localStorage.setItem('IKToken', response.access_token);
          localStorage.setItem('IKRefreshToken', response.refresh_token);
-         localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000));
+         localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
          Client4.setToken(response.access_token);
          Client4.setCSRF(response.access_token);
          Client4.setAuthHeader = true;
