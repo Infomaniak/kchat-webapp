@@ -2683,7 +2683,12 @@ export default class Client4 {
     };
 
     getCustomEmojiImageUrl = (id: string) => {
-        return `${this.getEmojiRoute(id)}/image`;
+        const params: any = {};
+
+        if (isDesktopApp() && this.token) {
+            params.access_token = this.token;
+        }
+        return `${this.getEmojiRoute(id)}/image${buildQueryString(params)}`;
     };
 
     searchCustomEmoji = (term: string, options = {}) => {
