@@ -166,11 +166,11 @@ export default class WebSocketClient {
     }
 
     subscribeToTeamChannel(teamId: string) {
-        this.teamChannel = this.conn.subscribe(`private-team.${teamId}`);
+        this.teamChannel = this.conn.subscribe(`team.${teamId}`);
     }
 
     subscribeToUserChannel(userId: number) {
-        this.userChannel = this.conn.subscribe(`private-user.${userId}`);
+        this.userChannel = this.conn.subscribe(`user.${userId}`);
     }
 
     bindChannelGlobally(channel: Channel | null) {
