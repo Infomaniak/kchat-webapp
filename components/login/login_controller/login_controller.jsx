@@ -133,9 +133,9 @@ class LoginController extends React.PureComponent {
                 this.storeTokenResponse(hash2Obj);
                 localStorage.removeItem('challenge');
                 LocalStorageStore.setWasLoggedIn(true);
-                location.reload();
+                // location.reload();
 
-                // this.finishSignin();
+                this.finishSignin();
 
                 return;
 
