@@ -27,6 +27,11 @@ import {UserState} from 'reducers/views/calls';
 
 import './component.scss';
 import Avatar from 'components/widgets/users/avatar';
+
+// import JitsiClient from '../jitsi_client';
+import GlobeIcon from 'components/widgets/icons/globe_icon';
+
+import {isDesktopApp} from 'utils/user_agent';
 import JitsiClient from '../jitsi_client';
 
 interface Props {
@@ -84,12 +89,13 @@ export default class CallWidget extends React.PureComponent<Props, State> {
     private node: React.RefObject<HTMLDivElement>;
     private _ref: React.RefObject<HTMLDivElement>;
     api: any;
+    client: any;
     participants: any;
 
     private style = {
         main: {
             position: 'fixed',
-            background: 'lightblue',
+            background: 'var(--global-header-background)',
             borderRadius: '8px',
             display: 'flex',
             bottom: '12px',
@@ -98,13 +104,10 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             zIndex: '1000',
             border: '1px solid #333',
             userSelect: 'none',
-            color: '#333',
-            '& iframe': {
-                display: 'none',
-            },
+            color: 'white',
         },
         topBar: {
-            background: 'lightblue',
+            background: 'var(--global-header-background)',
             padding: '0 12px',
             display: 'flex',
             width: '100%',
@@ -130,7 +133,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             justifyContent: 'center',
             alignItems: 'center',
             width: '24px',
-            background: 'rgba(61, 184, 135, 0.16)',
+            background: 'rgba(61, 184, 135, 0.24)',
             borderRadius: '4px',
             color: 'rgba(61, 184, 135, 1)',
         },
@@ -156,7 +159,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         callInfo: {
             display: 'flex',
             fontSize: '11px',
-            color: '#333',
+            color: 'white',
         },
         profiles: {
             display: 'flex',
@@ -166,7 +169,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            color: '#333',
+            color: 'white',
             fontSize: '14px',
             width: '24px',
             height: '24px',
@@ -174,7 +177,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         menu: {
             position: 'absolute',
             background: 'white',
-            color: '#333',
+            color: 'white',
         },
         screenSharingPanel: {
             position: 'relative',
@@ -192,7 +195,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             height: '28px',
             borderRadius: '4px',
             color: '#D24B4E',
-            background: 'rgba(210, 75, 78, 0.04)',
+            background: 'rgba(210, 75, 78, 0.24)',
             marginRight: 'auto',
         },
         dotsMenu: {
@@ -215,6 +218,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        this.client = isDesktopApp() ? JitsiClient : window;
         this.state = {
             showMenu: false,
             showParticipantsList: false,
@@ -241,7 +245,8 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         document.addEventListener('click', this.closeOnBlur, true);
         document.addEventListener('keyup', this.keyboardClose, true);
 
-        this.api = JitsiClient;
+        this.client.audioMuteStatusChanged = (data) => this.setState({audioMuted: data.muted});
+        this.client.readyToClose = () => this.props.disconnect();
 
         // This is needed to force a re-render to periodically update
         // the start time.
@@ -268,14 +273,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         }
     }
 
-    public componentDidUpdate(prevProps: Props) {
-        if (!prevProps.channel && this.props.channel) {
-            // window.requestAnimationFrame(() => {
-            //     this.api.init(this.props.channel.id, this.props.disconnect, this.node.current);
-            // });
-        }
-    }
-
     private keyboardClose = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
             this.setState({showMenu: false});
@@ -287,6 +284,34 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             return;
         }
         this.setState({showMenu: false});
+    }
+
+    onCallClosed() {
+        this.setState({
+            showMenu: false,
+            showParticipantsList: false,
+            currentAudioInputDevice: null,
+            dragging: {
+                dragging: false,
+                x: 0,
+                y: 0,
+                initX: 0,
+                initY: 0,
+                offX: 0,
+                offY: 0,
+            },
+            expandedViewWindow: null,
+        });
+
+        // this.api.dispose();
+    }
+
+    onAudioStatusChange(muted: boolean) {
+        console.log(muted);
+
+        // this.setState({
+        //     audioMuted:
+        // })
     }
 
     getCallDuration = () => {
@@ -318,11 +343,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
     }
 
     onMuteToggle = () => {
-        // if (!this.api) {
-        //     return;
-        // }
-
-        // this.api.executeCommand('toggleAudio');
+        this.client.executeCommand('toggleAudio');
     }
 
     onDisconnectClick = () => {
@@ -330,7 +351,9 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         //     this.state.expandedViewWindow.close();
         // }
 
-        // this.api.executeCommand('hangup');
+        if (this.client.executeCommand) {
+            this.client.executeCommand('hangup');
+        }
 
         // this.api.dispose();
 
@@ -441,7 +464,10 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                         >
 
                             <PopOutIcon
-                                style={{width: '16px', height: '16px', fill: 'white', marginRight: '8px'}}
+                                fill='white'
+                                width='16px'
+                                height='16px'
+                                style={{marginRight: '8px'}}
                             />
                             <span>{'Pop out'}</span>
                         </button>
@@ -771,9 +797,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         }
     }
 
-    // https://local.devd281.dev.infomaniak.ch:9005/infomaniak/channels/ziziz
-    // https://local.devd281.dev.infomaniak.ch:9005/infomaniak/channels/4d68d13f-cf70-424e-32aa-b1c3f6d2ae4d/call
-
     onExpandClick = () => {
         // if (this.state.expandedViewWindow && !this.state.expandedViewWindow.closed) {
         //     this.state.expandedViewWindow.focus();
@@ -781,7 +804,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         // }
 
         // // TODO: remove this as soon as we support opening a window from desktop app.
-        // if (window.desktop) {
         if (this.props.show) {
             this.props.hideExpandedView();
             this.setState({
@@ -900,6 +922,26 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             style={this.style.topBar}
                             onMouseDown={this.onMouseDown}
                         >
+                            <a
+                                href={this.props.channelURL}
+                                onClick={this.onChannelLinkClick}
+                                className='calls-channel-link'
+                            >
+                                {isPublicChannel(this.props.channel) ? <GlobeIcon fill='#D8D8D8'/> : <ParticipantsIcon fill='#D8D8D8'/>}
+                                <span
+                                    style={{
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        maxWidth: hasTeamSidebar ? '24ch' : '14ch',
+                                        marginLeft: '5px',
+                                        color: 'white',
+                                        fontWeight: 600,
+                                    }}
+                                >
+                                    {this.props.channel.display_name}
+                                </span>
+                            </a>
                             <button
                                 id='calls-widget-expand-button'
                                 className='style--none button-controls button-controls--wide'
@@ -908,7 +950,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             >
                                 <ShowIcon
                                     style={{width: '14px', height: '14px'}}
-                                    fill='lightblue'
+                                    fill='white'
                                 />
                             </button>
 
@@ -945,7 +987,8 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     onClick={this.onDisconnectClick}
                                 >
                                     <LeaveCallIcon
-                                        style={{width: '16px', height: '16px', fill: '#D24B4E'}}
+                                        fill='#D24B4E'
+                                        style={{width: '16px', height: '16px'}}
                                     />
                                 </button>
                             </OverlayTrigger>
@@ -981,11 +1024,12 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     onClick={this.onParticipantsButtonClick}
                                 >
                                     <ParticipantsIcon
+                                        fill='white'
                                         style={{width: '16px', height: '16px', marginRight: '4px'}}
                                     />
 
                                     <span
-                                        style={{fontWeight: 600, color: '#333'}}
+                                        style={{fontWeight: 600, color: 'white'}}
                                     >{this.props.profiles.length}</span>
                                 </button>
                             </OverlayTrigger>

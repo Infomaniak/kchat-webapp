@@ -1,21 +1,24 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 import * as React from 'react';
-import Icon from '@mattermost/compass-components/foundations/icon';
+
+import {useDispatch, useSelector} from 'react-redux';
+import IconButton from '@mattermost/compass-components/components/icon-button';
 
 import GenericModal from 'components/generic_modal';
 
 import Avatars from 'components/widgets/users/avatars';
-import {Client4} from 'mattermost-redux/client';
+
+// import {Client4} from 'mattermost-redux/client';
 import {UserProfile} from 'mattermost-redux/types/users';
 import {startCallInChannel} from 'actions/calls';
+
 import './ringing_dialog.scss';
-import IconButton from '@mattermost/compass-components/components/icon-button';
-import { useDispatch, useSelector } from 'react-redux';
-import { DispatchFunc } from 'mattermost-redux/types/actions';
-import { closeModal } from 'actions/views/modals';
-import { ModalIdentifiers } from 'utils/constants';
-import { GlobalState } from 'types/store';
+
+import {DispatchFunc} from 'mattermost-redux/types/actions';
+import {closeModal} from 'actions/views/modals';
+import {ModalIdentifiers} from 'utils/constants';
+import {GlobalState} from 'types/store';
 
 type Props = {
     onClose?: () => void;
@@ -29,7 +32,6 @@ function DialingModal(props: Props) {
     const {users, channelID} = props.calling;
     const dispatch = useDispatch<DispatchFunc>();
     const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
-    console.log('bibitosh', connectedChannelID);
 
     const handleOnClose = () => {
         if (props.onClose) {
@@ -49,6 +51,7 @@ function DialingModal(props: Props) {
         e.preventDefault();
         e.stopPropagation();
         handleOnClose();
+
         // Client4.declineIncomingMeetCall(channelID);
     };
 

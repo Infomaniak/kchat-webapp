@@ -58,20 +58,41 @@
         <div id="app"></div>
     </body>
 
-    <script src="https://kmeet.infomaniak.com/external_api.js"></script>
+    <script src="https://kmeet.preprod.dev.infomaniak.ch/external_api.js"></script>
     <script>
+        const KMEET_DOMAIN = 'kmeet.preprod.dev.infomaniak.ch';
+        const urlParams = new URLSearchParams(window.location.search);
+        const events = {
+            'audioMuteStatusChanged': window.opener.audioMuteStatusChanged,
+        }
+
         const configOverwrite = {
             startWithAudioMuted: false,
             startWithVideoMuted: true,
-            subject: 'tototatatiti',
-            prejoinConfig: { enabled: false },
+            subject: urlParams.get('channelID'),
+            prejoinConfig: {enabled: false},
             disableDeepLinking: true,
         };
 
-        const api = new window.JitsiMeetExternalAPI('kmeet.infomaniak.com', {
+        const jitsi = new window.JitsiMeetExternalAPI(KMEET_DOMAIN, {
             configOverwrite,
-            onload: function() { console.log('test test') },
-            roomName: 'aloche'
-        })
+            roomName: urlParams.get('channelID'),
+            // onload: (self) => {
+            //     console.log(self);
+            // },
+        });
+
+        for (const [event, callback] of Object.entries(events)) {
+            jitsi.addListener(event, callback)
+        }
+
+        jitsi.on('readyToClose', () => window.opener.onCloseJitsi(window))
+
+        // window.opener.jitsi = jitsi
+
+        // window.opener.executeCommand = jitsi.executeCommand
+        window.opener.executeCommand = (command) => jitsi.executeCommand(command)
+
+        console.log(j);
     </script>
 </html>

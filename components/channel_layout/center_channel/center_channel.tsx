@@ -15,7 +15,8 @@ import PlaybookRunner from 'components/channel_layout/playbook_runner';
 import NextStepsView from 'components/next_steps_view';
 import {makeAsyncComponent} from 'components/async_load';
 import MeetWidget from 'components/kmeet_conference/call_widget';
-import CallIFrame from 'components/kmeet_conference/iframe';
+import RenderIFrame from 'components/kmeet_conference/iframe';
+import {isDesktopApp} from 'utils/user_agent';
 
 const LazyGlobalThreads = makeAsyncComponent(
     'LazyGlobalThreads',
@@ -85,7 +86,7 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
             <React.Fragment>
                 {this.props.callChannel && (
                     <React.Fragment>
-                        <CallIFrame/>
+                        {isDesktopApp() && <RenderIFrame/>}
                         <MeetWidget/>
                     </React.Fragment>
                 )}

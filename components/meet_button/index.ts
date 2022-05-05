@@ -17,6 +17,8 @@ import {Client4} from 'mattermost-redux/client';
 
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 
+import {isDesktopApp} from 'utils/user_agent';
+
 import MeetButton from './meet_button';
 
 function startCallInChannel() {
@@ -54,6 +56,22 @@ function startCallInChannel() {
                     url: data.url,
                 },
             });
+
+            if (!isDesktopApp()) {
+                window.onCloseJitsi = (window) => {
+                    window.close();
+                    dispatch({
+                        type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
+                        data: {
+                            channelID,
+                            userID: getCurrentUserId(getState()),
+                            currentUserID: getCurrentUserId(getState()),
+                        },
+                    });
+                };
+
+                window.open(`/static/call.html?channelID=${channelID}`, 'ExpandedView', 'width=1100,height=800,left=200,top=200,resizable=yes');
+            }
         } else if (connectedChannelID(getState()) !== channelID) {
             dispatch({
                 type: ActionTypes.SHOW_SWITCH_CALL_MODAL,

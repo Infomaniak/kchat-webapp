@@ -75,7 +75,7 @@ export function startCallInChannel(channelID: string) {
                     channelID,
                     userID: getCurrentUserId(getState()),
                     currentUserID: getCurrentUserId(getState()),
-                    url: `https://kmeet.infomaniak.com/${channelID}`,
+                    url: `https://kmeet.preprod.dev.infomaniak.ch/${channelID}`,
                 },
             });
         }

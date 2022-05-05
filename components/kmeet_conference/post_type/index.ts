@@ -59,7 +59,7 @@ function onJoinCall(channelID: string) {
                     channelID,
                     userID: getCurrentUserId(doGetState()),
                     currentUserID: getCurrentUserId(doGetState()),
-                    url: `https://kmeet.infomaniak.com/${channelID}`,
+                    url: `https://kmeet.preprod.dev.infomaniak.ch/${channelID}`,
                 },
             });
         }

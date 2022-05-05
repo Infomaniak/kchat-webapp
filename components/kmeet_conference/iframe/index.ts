@@ -2,10 +2,6 @@
 // See LICENSE.txt for license information.
 import {connect} from 'react-redux';
 
-// import {bindActionCreators, Dispatch} from 'redux';
-
-import * as React from 'react';
-
 // import {GenericAction} from 'mattermost-redux/types/actions';
 import {bindActionCreators, Dispatch} from 'redux';
 
