@@ -65,9 +65,22 @@ function onJoinCall(channelID: string) {
         }
     };
 }
+function disconnect(channelID: string) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
+            data: {
+                channelID,
+                userID: getCurrentUserId(getState()),
+                currentUserID: getCurrentUserId(getState()),
+            },
+        });
+    };
+}
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     onJoinCall,
+    disconnect,
     showSwitchCallModal,
 }, dispatch);
 

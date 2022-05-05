@@ -798,6 +798,9 @@ export default class CallWidget extends React.PureComponent<Props, State> {
     }
 
     onExpandClick = () => {
+        if (!isDesktopApp() && window.callWindow) {
+            window.callWindow.focus();
+        }
         // if (this.state.expandedViewWindow && !this.state.expandedViewWindow.closed) {
         //     this.state.expandedViewWindow.focus();
         //     return;

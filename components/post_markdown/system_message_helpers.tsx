@@ -356,8 +356,8 @@ function renderChannelUnarchivedMessage(post: Post): ReactNode {
 
 function renderCallNotificationMessage(post: Post): ReactNode {
     return (
-        <CallNotificationMessage post={post} />
-    )
+        <CallNotificationMessage post={post}/>
+    );
 }
 
 function renderMeMessage(post: Post): ReactNode {

@@ -119,6 +119,7 @@ import {isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 import {UserThreadList, UserThread, UserThreadWithPost} from 'mattermost-redux/types/threads';
 
 import {TelemetryHandler} from './telemetry';
+import { string } from 'yargs';
 
 const FormData = require('form-data');
 const HEADER_AUTH = 'Authorization';
@@ -3768,6 +3769,19 @@ export default class Client4 {
     getAncillaryPermissions = (subsectionPermissions: string[]) => {
         return this.doFetch<string[]>(
             `${this.getPermissionsRoute()}/ancillary?subsection_permissions=${subsectionPermissions.join(',')}`,
+            {method: 'get'},
+        );
+    }
+
+    getMeets = () => {
+        return this.doFetch<Array<{
+            channel_id: string;
+            create_at: number;
+            id: string;
+            url: string;
+            user_id: string;
+        }>>(
+            `${this.getBaseRoute()}/conferences`,
             {method: 'get'},
         );
     }
