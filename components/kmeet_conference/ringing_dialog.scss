@@ -1,0 +1,31 @@
+.modal .GenericModal.modal-dialog.CallRingingModal {
+    max-width: 270px;
+    .modal-content {
+        background: #313131;
+        padding: 15px 30px;
+    }
+    .modal-footer {
+        display: none;
+    }
+    .content-body {
+        display: flex;
+        justify-content: center;
+        padding-top: 40px;
+    }
+    .content-actions {
+        padding: 0;
+        padding-top: 50px;
+        display: flex;
+        justify-content: space-around;
+        button {
+            width: 40%;
+            color: white;
+            &.accept {
+                background: var(--online-indicator);
+            }
+            &.decline {
+                background: var(--dnd-indicator);
+            }
+        }
+    }
+}
