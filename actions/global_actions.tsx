@@ -326,9 +326,13 @@ export async function redirectUserToDefaultTeam() {
     if (!user) {
         return;
     }
-
+    let teamId = '';
     const locale = getCurrentLocale(state);
-    const teamId = LocalStorageStore.getPreviousTeamId(user.id);
+    if (LocalStorageStore.getPreviousTeamId(user.id)) {
+        teamId = LocalStorageStore.getPreviousTeamId(user.id);
+    } else {
+        teamId = user.team_id;
+    }
 
     let myTeams = getMyTeams(state);
     if (myTeams.length === 0) {
@@ -340,7 +344,6 @@ export async function redirectUserToDefaultTeam() {
     if (teamId) {
         team = getTeam(state, teamId);
     }
-
     if (team && team.delete_at === 0) {
         const channel = await getTeamRedirectChannelIfIsAccesible(user, team);
         if (channel) {

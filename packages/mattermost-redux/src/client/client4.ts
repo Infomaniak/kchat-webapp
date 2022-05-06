@@ -118,17 +118,19 @@ import {isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {UserThreadList, UserThread, UserThreadWithPost} from 'mattermost-redux/types/threads';
 
+import {isDesktopApp} from 'utils/user_agent';
+
 import {TelemetryHandler} from './telemetry';
-import { string } from 'yargs';
 
 const FormData = require('form-data');
 const HEADER_AUTH = 'Authorization';
-const HEADER_BEARER = 'BEARER';
+const HEADER_BEARER = 'Bearer';
 const HEADER_CONTENT_TYPE = 'Content-Type';
 const HEADER_REQUESTED_WITH = 'X-Requested-With';
 const HEADER_USER_AGENT = 'User-Agent';
 const HEADER_X_CLUSTER_ID = 'X-Cluster-Id';
 const HEADER_X_CSRF_TOKEN = 'X-CSRF-Token';
+const HEADER_X_XSRF_TOKEN = 'X-XSRF-Token';
 export const HEADER_X_VERSION_ID = 'X-Version-Id';
 const PER_PAGE_DEFAULT = 60;
 const LOGS_PER_PAGE_DEFAULT = 10000;
@@ -456,6 +458,7 @@ export default class Client4 {
 
         if (this.setAuthHeader && this.token) {
             headers[HEADER_AUTH] = `${HEADER_BEARER} ${this.token}`;
+            headers[HEADER_X_XSRF_TOKEN] = this.token;
         }
 
         const csrfToken = this.csrf || this.getCSRFFromCookie();
@@ -895,7 +898,9 @@ export default class Client4 {
         if (lastPictureUpdate) {
             params._ = lastPictureUpdate;
         }
-
+        if (isDesktopApp() && this.token) {
+            params.access_token = this.token;
+        }
         return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
     };
 
@@ -2679,7 +2684,12 @@ export default class Client4 {
     };
 
     getCustomEmojiImageUrl = (id: string) => {
-        return `${this.getEmojiRoute(id)}/image`;
+        const params: any = {};
+
+        if (isDesktopApp() && this.token) {
+            params.access_token = this.token;
+        }
+        return `${this.getEmojiRoute(id)}/image${buildQueryString(params)}`;
     };
 
     searchCustomEmoji = (term: string, options = {}) => {
@@ -3847,7 +3857,7 @@ export default class Client4 {
             });
         }
 
-        if (response.status === 401 && data?.result === 'redirect') {
+        if ((response.status === 401 && data?.result === 'redirect') && !isDesktopApp()) {
             window.location.href = data.uri;
         }
 
@@ -3900,6 +3910,61 @@ export default class Client4 {
             const userRoles = this.userRoles && isSystemAdmin(this.userRoles) ? 'system_admin, system_user' : 'system_user';
             this.telemetryHandler.pageVisited(this.userId, userRoles, category, name);
         }
+    }
+
+    /****************************************************/
+    /*                                                  */
+    /*                IK CUSTOMS CALLS                  */
+    /*                                                  */
+    /****************************************************/
+
+    getIKLogin = (challenge: string) => {
+        return this.doFetch<any>(
+            `${this.getBaseRoute()}/desktop-login?challenge=${challenge}`,
+            {method: 'get'},
+        );
+    };
+
+    // TODO: when is ok update with env and/or current server url (dev, preprod....)
+    getIKLoginToken = (code: string, challenge: string, verifier: string, loginUrl: string, clientId: string) => {
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('grant_type', 'authorization_code');
+        formData.append('code', code);
+        formData.append('code_verifier', verifier);
+        formData.append('client_id', clientId);
+
+        return this.doFetch<any>(
+
+            // `${this.getBaseRoute()}/token`,
+            `${loginUrl}/token`,
+            {
+                method: 'post',
+
+                // mode: 'no-cors',
+                body: formData,
+            },
+        );
+    }
+
+    // TODO: when is ok update with env and/or current server url (dev, preprod....)
+    refreshIKLoginToken = (refresh: string, loginUrl: string, clientId: string) => {
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('grant_type', 'refresh_token');
+        formData.append('refresh_token', refresh);
+        formData.append('client_id', clientId);
+
+        return this.doFetch<any>(
+
+            // `${this.getBaseRoute()}/token`,
+            `${loginUrl}/token`,
+            {
+                method: 'post',
+                mode: 'no-cors',
+                body: formData,
+            },
+        );
     }
 }
 
