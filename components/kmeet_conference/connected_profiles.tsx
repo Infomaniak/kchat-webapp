@@ -22,7 +22,7 @@ const ConnectedProfiles = ({pictures, profiles, maxShowedProfiles, size}: Props)
     profiles = diff > 0 ? profiles.slice(0, maxShowedProfiles) : profiles;
 
     const els = profiles.map((profile, idx) => {
-        return (
+        return profile && (
             <OverlayTrigger
                 placement='bottom'
                 key={'call_thread_profile_' + profile.id}

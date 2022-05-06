@@ -5,6 +5,8 @@ import {injectIntl, IntlShape} from 'react-intl';
 
 // import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
 import CameraIcon from 'components/widgets/icons/camera_icon';
+import { useSelector } from 'react-redux';
+import { getCurrentChannelId } from 'mattermost-redux/selectors/entities/common';
 
 export type Props = {
     currentChannelID: string;
@@ -23,10 +25,11 @@ function MeetButton(props: Props) {
     // const {formatMessage} = props.intl;
     const {startCallInChannel} = props;
     const ref = useRef<HTMLButtonElement>(null);
+    const channelID = useSelector(getCurrentChannelId);
 
-    const onClick = () => {
-        startCallInChannel();
-    };
+    const onClick = React.useCallback(() => {
+        startCallInChannel(channelID);
+    }, [channelID]);
 
     return (
         <button

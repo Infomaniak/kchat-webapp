@@ -1601,6 +1601,13 @@ function handleConferenceUserDisconnected(msg) {
         console.log(msg);
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
+        console.log({
+            channelID: msg.data.channel_id,
+            userID: msg.data.user_id,
+            currentUserID: getCurrentUserId(getState()),
+            url: msg.data.url,
+            id: Object.keys(calls[msg.data.channel_id])[0],
+        });
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
             data: {
@@ -1618,13 +1625,13 @@ function handleConferenceDeleted(msg) {
     return (doDispatch, doGetState) => {
         console.log(msg);
 
-        // doDispatch({
-        //     type: ActionTypes.VOICE_CHANNEL_DELETED,
-        //     data: {
-        //         callID: msg.data.id,
-        //         channelID: msg.data.channel_id
-        //     },
-        // });
+        doDispatch({
+            type: ActionTypes.VOICE_CHANNEL_DELETED,
+            data: {
+                callID: msg.data.url.split('/').at(-1),
+                channelID: msg.data.channel_id,
+            },
+        });
     };
 }
 
@@ -1637,8 +1644,14 @@ function handleIncomingConferenceCall(msg) {
         const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
         const channel = getChannel(state, connectedChannelID(doGetState()));
 
-        // eslint-disable-next-line no-console
-        console.log(connectedChannelID(doGetState()));
+        doDispatch({
+            type: ActionTypes.VOICE_CHANNEL_ADDED,
+            data: {
+                id: msg.data.url.split('/').at(-1),
+                channelID: msg.data.channel_id,
+                participants: msg.data.participants,
+            },
+        });
 
         if (!channel || channel.id !== msg.data.channel_id) {
             doDispatch(openModal({
