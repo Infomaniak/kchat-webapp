@@ -11,7 +11,7 @@ import Avatars from 'components/widgets/users/avatars';
 
 // import {Client4} from 'mattermost-redux/client';
 import {UserProfile} from 'mattermost-redux/types/users';
-import {startCallInChannel} from 'actions/calls';
+import {startOrJoinCallInChannel} from 'actions/calls';
 
 import './ringing_dialog.scss';
 
@@ -45,7 +45,7 @@ function DialingModal(props: Props) {
 
         e.preventDefault();
         e.stopPropagation();
-        dispatch(startCallInChannel(channelID));
+        dispatch(startOrJoinCallInChannel(channelID, props.calling.channelID));
     };
     const onHandleDecline = (e: MouseEvent) => {
         e.preventDefault();

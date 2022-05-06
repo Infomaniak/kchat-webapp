@@ -133,6 +133,13 @@ const voiceConnectedChannels = (state: ConnectedChannelsState = {}, action: Conn
                 [action.data.id]: [action.data.users],
             },
         };
+    case ActionTypes.VOICE_CHANNEL_ADDED:
+        return {
+            ...state,
+            [action.data.channelID]: {
+                [action.data.id]: [action.data.participants],
+            },
+        };
     case ActionTypes.VOICE_CHANNEL_DELETED: {
         const newState = {...state};
         const chan = state[action.data.channelID];
