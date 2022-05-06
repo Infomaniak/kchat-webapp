@@ -557,6 +557,7 @@ export function fetchAllMyTeamsChannelsAndChannelMembers(): ActionFunc {
                     data: {
                         channelID: conferences[i].channel_id,
                         id: conferences[i].id,
+                        users: conferences[i].participants,
                     },
                 });
                 // if (!voiceChannelCallStartAt(getState(), conferences[i].id)) {

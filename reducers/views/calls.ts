@@ -92,26 +92,61 @@ const voiceConnectedChannels = (state: ConnectedChannelsState = {}, action: Conn
         if (!state[action.data.channelID]) {
             return {
                 ...state,
-                [action.data.channelID]: [action.data.userID],
+                [action.data.channelID]: {
+                    [action.data.id]: [action.data.userID],
+                },
             };
         }
         return {
             ...state,
-            [action.data.channelID]: [
+            [action.data.channelID]: {
                 ...state[action.data.channelID],
-                action.data.userID,
-            ],
+                [action.data.id]: [
+                    ...state[action.data.channelID][action.data.id],
+                    action.data.userID,
+                ],
+            },
         };
-    case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED:
-        return {
-            ...state,
-            [action.data.channelID]: state[action.data.channelID]?.filter((val) => val !== action.data.userID),
-        };
+    case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED: {
+        const chan = state[action.data.channelID];
+
+        if (chan) {
+            let callChan = chan[action.data.callID]
+            if (callChan) {
+                callChan = callChan.filter((val) => val !== action.data.userID);
+
+                return {
+                    ...state,
+                    [action.data.channelID]: {
+                        ...state[action.data.channelID],
+                        [action.data.callID]: callChan,
+                    },
+                };
+            }
+        }
+        return state;
+    }
     case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED:
         return {
             ...state,
-            [action.data.channelID]: action.data.users,
+            [action.data.channelID]: {
+                [action.data.id]: [action.data.users],
+            },
         };
+    case ActionTypes.VOICE_CHANNEL_DELETED: {
+        const newState = {...state};
+        const chan = state[action.data.channelID];
+
+        if (chan) {
+            let callChan = chan[action.data.callID];
+            if (callChan) {
+                delete newState[action.data.channelID][action.data.callID];
+
+                return newState;
+            }
+        }
+        return state;
+    }
     default:
         return state;
     }
@@ -124,6 +159,25 @@ const connectedChannelID = (state: string | null = null, action: {type: string; 
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
         if (action.data.currentUserID === action.data.userID) {
             return action.data.channelID;
+        }
+        return state;
+    case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED:
+        if (action.data.currentUserID === action.data.userID) {
+            return null;
+        }
+        return state;
+    default:
+        return state;
+    }
+};
+
+const connectedCallID = (state: string | null = null, action: {type: string; data: {channelID: string; currentUserID: string; userID: string}}) => {
+    switch (action.type) {
+    case ActionTypes.VOICE_CHANNEL_UNINIT:
+        return null;
+    case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
+        if (action.data.currentUserID === action.data.userID) {
+            return action.data.id;
         }
         return state;
     case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED:
@@ -405,6 +459,7 @@ export default combineReducers({
     isVoiceEnabled,
     voiceConnectedChannels,
     connectedChannelID,
+    connectedCallID,
     voiceConnectedProfiles,
     voiceUsersStatuses,
     callStartAt,

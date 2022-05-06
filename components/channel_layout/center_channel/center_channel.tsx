@@ -17,6 +17,7 @@ import {makeAsyncComponent} from 'components/async_load';
 import MeetWidget from 'components/kmeet_conference/call_widget';
 import RenderIFrame from 'components/kmeet_conference/iframe';
 import {isDesktopApp} from 'utils/user_agent';
+import {Channel} from 'mattermost-redux/types/channels';
 
 const LazyGlobalThreads = makeAsyncComponent(
     'LazyGlobalThreads',
@@ -42,7 +43,7 @@ type Props = {
     isCollapsedThreadsEnabled: boolean;
     currentUserId: string;
     enableTipsViewRoute: boolean;
-    callChannel: string;
+    callChannel: Channel;
     callExpandedView: boolean;
     actions: {
         getProfiles: (page?: number, perPage?: number, options?: Record<string, string | boolean>) => ActionFunc;

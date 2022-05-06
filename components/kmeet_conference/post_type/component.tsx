@@ -24,8 +24,10 @@ interface Props {
 
 const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall}: Props) => {
     const onJoinCallClick = () => {
-        onJoinCall(post.channel_id);
+        onJoinCall(post.channel_id, post.id);
     };
+
+    // console.log(post)
 
     const onLeaveButtonClick = () => {
     // if (window.callsClient) {
@@ -72,7 +74,7 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall}: 
                 </Left>
                 <Right>
                     {
-                        !post.props.end_at &&
+                        hasCall &&
                         <Profiles>
                             <ConnectedProfiles
                                 profiles={profiles}
@@ -85,14 +87,14 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall}: 
                         </Profiles>
                     }
                     {
-                        !post.props.end_at && (!connectedID || connectedID !== post.channel_id) &&
+                        hasCall && !connectedID &&
                         <JoinButton onClick={onJoinCallClick}>
                             <CallIcon fill='var(--center-channel-bg)'/>
                             <ButtonText>{'Join call'}</ButtonText>
                         </JoinButton>
                     }
                     {
-                        !post.props.end_at && connectedID && connectedID === post.channel_id &&
+                        hasCall && connectedID && connectedID === post.props.conference_id &&
                         <LeaveButton onClick={onLeaveButtonClick}>
                             <LeaveCallIcon fill='var(--error-text)'/>
                             <ButtonText>{'Leave call'}</ButtonText>
@@ -166,6 +168,9 @@ const Profiles = styled.div`
     display: flex;
     align-items: center;
     margin-right: auto;
+    img {
+        max-width: 40px;
+    }
 `;
 
 const Duration = styled.span`

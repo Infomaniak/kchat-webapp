@@ -3800,18 +3800,24 @@ export default class Client4 {
             {method: 'post', body: JSON.stringify({channel_id: channelID})},
         );
     }
-
-    acceptIncomingMeetCall(channelID: string) {
+    leaveMeet = (callID: string) => {
         return this.doFetch(
-            `${this.getBaseRoute()}/conferences/${channelID}/answer`,
-            {method: 'post', body: JSON.stringify({channel_id: channelID})},
+            `${this.getBaseRoute()}/conferences/${callID}/leave`,
+            {method: 'post'},
         );
     }
 
-    declineIncomingMeetCall(channelID: string) {
+    acceptIncomingMeetCall(callID: string) {
         return this.doFetch(
-            `${this.getBaseRoute()}/conferences/${channelID}/deny`,
-            {method: 'post', body: JSON.stringify({channel_id: channelID})},
+            `${this.getBaseRoute()}/conferences/${callID}/answer`,
+            {method: 'post'},
+        );
+    }
+
+    declineIncomingMeetCall(callID: string) {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${callID}/deny`,
+            {method: 'post'},
         );
     }
 

@@ -291,6 +291,7 @@ export const ActionTypes = keyMirror({
     VOICE_CHANNEL_UNINIT: null,
     VOICE_CHANNEL_USER_RAISE_HAND: null,
     VOICE_CHANNEL_USER_UNRAISE_HAND: null,
+    VOICE_CHANNEL_DELETED: null,
 
     SHOW_EXPANDED_VIEW: null,
     HIDE_EXPANDED_VIEW: null,
@@ -505,6 +506,9 @@ export const SocketEvents = {
     THREAD_FOLLOW_CHANGED: 'thread_follow_changed',
     THREAD_READ_CHANGED: 'thread_read_changed',
     CONFERENCE_ADDED: 'conference_added',
+    CONFERENCE_DELETED: 'conference_deleted',
+    CONFERENCE_USER_CONNECTED: 'conference_user_connected',
+    CONFERENCE_USER_DISCONNECTED: 'conference_user_disconnected',
 };
 
 export const TutorialSteps = {

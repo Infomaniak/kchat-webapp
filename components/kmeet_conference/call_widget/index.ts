@@ -34,8 +34,9 @@ const mapStateToProps = (state: GlobalState) => {
         return [...profiles].sort(alphaSortProfiles()).sort(stateSortProfiles(statuses, ''));
     };
 
-    const statuses = voiceUsersStatuses(state);
-    const profiles = sortedProfiles(voiceConnectedProfiles(state), statuses);
+    // const statuses = voiceUsersStatuses(state);
+    // sortedProfiles( , {});
+    const profiles = voiceConnectedProfiles(state);
 
     const profilesMap: IDMappedObjects<UserProfile> = {};
     const picturesMap: {

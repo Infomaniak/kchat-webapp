@@ -4,6 +4,7 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {GlobalState} from 'types/store';
 
 export const connectedChannelID = (state: GlobalState) => state.views.calls.connectedChannelID;
+export const connectedCallID = (state: GlobalState) => state.views.calls.connectedCallID;
 export const voiceConnectedChannels = (state: GlobalState) => state.views.calls.voiceConnectedChannels;
 
 export const voiceConnectedUsers = (state: GlobalState) => {
@@ -22,11 +23,11 @@ export const voiceConnectedProfiles = (state: GlobalState) => {
     return state.views.calls.voiceConnectedProfiles[connectedChannelID(state)] || [];
 };
 
-export const voiceConnectedProfilesInChannel = (state: GlobalState, channelID: string) => {
+export const voiceConnectedProfilesInChannel = (state: GlobalState, channelID: string, callID: string) => {
     if (!state.views.calls.voiceConnectedProfiles) {
         return [];
     }
-    return state.views.calls.voiceConnectedProfiles[channelID] || [];
+    return state.views.calls.voiceConnectedChannels[channelID][callID] || [];
 };
 
 export const voiceUsersStatuses = (state: GlobalState) => {
