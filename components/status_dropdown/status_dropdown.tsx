@@ -43,6 +43,7 @@ type Props = {
     status?: string;
     userId: string;
     profilePicture: string;
+    // profilePicture: Promise<string> | string;
     autoResetPref?: string;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;

@@ -26,6 +26,7 @@ const DEV = targetIsRun || targetIsStats || targetIsDevServer;
 
 const STANDARD_EXCLUDE = [
     path.join(__dirname, 'node_modules'),
+    path.join(__dirname, 'service-worker.js'),
 ];
 
 // react-hot-loader and development source maps require eval
@@ -131,7 +132,7 @@ if (DEV) {
 }
 
 var config = {
-    entry: ['./root.jsx', 'root.html'],
+    entry: ['./root.jsx', 'root.html', './service-worker.js'],
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
@@ -296,6 +297,7 @@ var config = {
                 {from: 'images/c_avatar.png', to: 'images'},
                 {from: 'images/c_download.png', to: 'images'},
                 {from: 'images/c_socket.png', to: 'images'},
+                {from: 'service-worker.js', to: '/'},
                 {from: 'call.html', to: ''},
             ],
         }),
@@ -416,7 +418,7 @@ if (targetIsDevServer) {
             server: 'https',
             allowedHosts: 'all',
             hot: true,
-            liveReload: false,
+            liveReload: true,
             proxy: [{
                 context: () => true,
                 bypass(req) {
