@@ -119,6 +119,7 @@ import {isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 import {UserThreadList, UserThread, UserThreadWithPost} from 'mattermost-redux/types/threads';
 
 import {isDesktopApp} from 'utils/user_agent';
+import {IKConstants} from 'utils/constants-ik';
 
 import {TelemetryHandler} from './telemetry';
 
@@ -746,12 +747,19 @@ export default class Client4 {
         this.trackEvent('api', 'api_users_logout');
 
         const {response} = await this.doFetchWithResponse(
-            `${this.getUsersRoute()}/logout`,
-            {method: 'post'},
+            `${IKConstants.LOGIN_URL}logout`,
+            {method: 'get'},
         );
+
+        console.log(response)
 
         if (response.ok) {
             this.token = '';
+            if (isDesktopApp()) {
+                localStorage.removeItem('IKToken');
+                localStorage.removeItem('IKRefreshToken');
+                localStorage.removeItem('IKTokenExpire');
+            }
         }
 
         this.serverVersion = '';
@@ -898,6 +906,7 @@ export default class Client4 {
         if (lastPictureUpdate) {
             params._ = lastPictureUpdate;
         }
+
         // const imgFetched = await this.getProfilePictureFetched(userId, lastPictureUpdate, params);
         // if (imgFetched) {
         //     return imgFetched
@@ -919,7 +928,7 @@ export default class Client4 {
 
         // Convert the data to Base64 and build a data URL.
         const binaryData = await response.arrayBuffer();
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(binaryData)))
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(binaryData)));
         const dataUrl = `data:image/png;base64,${base64}`;
         return dataUrl;
     }
