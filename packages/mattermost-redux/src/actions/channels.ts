@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable max-lines */
 
 import * as Redux from 'redux';
 
@@ -37,6 +38,7 @@ import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {savePreferences} from './preferences';
 import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
+import { ActionTypes } from 'utils/constants';
 
 export function selectChannel(channelId: string) {
     return {
@@ -548,6 +550,27 @@ export function fetchAllMyTeamsChannelsAndChannelMembers(): ActionFunc {
         try {
             channels = await Client4.getAllTeamsChannels();
             channelsMembers = await Client4.getAllChannelsMembers(currentUserId);
+            const conferences = await Client4.getMeets();
+            for (let i = 0; i < conferences.length; i++) {
+                dispatch({
+                    type: ActionTypes.VOICE_CHANNEL_USERS_CONNECTED,
+                    data: {
+                        channelID: conferences[i].channel_id,
+                        id: conferences[i].id,
+                        users: conferences[i].participants,
+                    },
+                });
+                // if (!voiceChannelCallStartAt(getState(), conferences[i].id)) {
+                //     dispatch({
+                //         type: ActionTypes.VOICE_CHANNEL_CALL_START,
+                //         data: {
+                //             channelID: conferences[i].channel_id,
+                //             startAt: conferences[i].create_at,
+                //         },
+                //     });
+                // }
+            }
+            console.log(conferences)
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(batchActions([

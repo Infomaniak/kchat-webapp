@@ -269,7 +269,7 @@ var config = {
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' cdn.rudderlabs.com/ js.stripe.com/v3 ' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' cdn.rudderlabs.com/ js.stripe.com/v3 kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
                 },
             },
         }),
@@ -298,6 +298,7 @@ var config = {
                 {from: 'images/c_download.png', to: 'images'},
                 {from: 'images/c_socket.png', to: 'images'},
                 {from: 'service-worker.js', to: '/'},
+                {from: 'call.html', to: ''},
             ],
         }),
 

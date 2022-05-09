@@ -36,7 +36,7 @@ import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
 import {EmojiIndicesByAlias} from 'utils/emoji.jsx';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils.jsx';
-import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
+import {isDesktopApp} from 'utils/user_agent';
 import webSocketClient from 'client/web_websocket_client.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
@@ -128,21 +128,20 @@ export default class Root extends React.PureComponent {
         // Redux
         setUrl(getSiteURL());
 
-        // if (isDesktopApp()) {
-        const token = localStorage.getItem('IKToken');
-        const tokenExpire = localStorage.getItem('IKTokenExpire');
+        if (isDesktopApp()) {
+            const token = localStorage.getItem('IKToken');
+            const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-        // Enable authHeader and set bearer token
-        if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
-            Client4.setAuthHeader = true;
-            Client4.setToken(token);
-            Client4.setCSRF(token);
-            LocalStorageStore.setWasLoggedIn(true);
+            // Enable authHeader and set bearer token
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
+                Client4.setAuthHeader = true;
+                Client4.setToken(token);
+                Client4.setCSRF(token);
+                LocalStorageStore.setWasLoggedIn(true);
+            }
+        } else {
+            Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
-
-        // } else {
-        // Client4.setAuthHeader = false;  // Disable auth header to enable CSRF check
-        // }
 
         setSystemEmojis(EmojiIndicesByAlias);
 
@@ -270,7 +269,7 @@ export default class Root extends React.PureComponent {
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             // Enable authHeader and set bearer token
-            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
@@ -295,16 +294,17 @@ export default class Root extends React.PureComponent {
     }
 
     componentDidMount() {
-        // if (isDesktopApp()) {
-        const token = localStorage.getItem('IKToken');
-        const tokenExpire = localStorage.getItem('IKTokenExpire');
+        if (isDesktopApp()) {
+            const token = localStorage.getItem('IKToken');
+            const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-        // Enable authHeader and set bearer token
-        if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000))) {
-            Client4.setAuthHeader = true;
-            Client4.setToken(token);
-            Client4.setCSRF(token);
-            LocalStorageStore.setWasLoggedIn(true);
+            // Enable authHeader and set bearer token
+            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
+                Client4.setAuthHeader = true;
+                Client4.setToken(token);
+                Client4.setCSRF(token);
+                LocalStorageStore.setWasLoggedIn(true);
+            }
         }
 
         // }

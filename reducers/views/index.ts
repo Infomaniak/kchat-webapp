@@ -27,6 +27,7 @@ import textbox from './textbox';
 import nextSteps from './next_steps';
 import statusDropdown from './status_dropdown';
 import threads from './threads';
+import calls from './calls';
 
 export default combineReducers({
     admin,
@@ -53,4 +54,5 @@ export default combineReducers({
     statusDropdown,
     threads,
     productMenu,
+    calls,
 });

@@ -118,8 +118,9 @@ import {isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {UserThreadList, UserThread, UserThreadWithPost} from 'mattermost-redux/types/threads';
 
+import {isDesktopApp} from 'utils/user_agent';
+
 import {TelemetryHandler} from './telemetry';
-import { isDesktopApp } from 'utils/user_agent';
 
 const FormData = require('form-data');
 const HEADER_AUTH = 'Authorization';
@@ -897,13 +898,17 @@ export default class Client4 {
         if (lastPictureUpdate) {
             params._ = lastPictureUpdate;
         }
-        const imgFetched = await this.getProfilePictureFetched(userId, lastPictureUpdate, params);
-        if (imgFetched) {
-            return imgFetched
-        } else {
-            return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
-        }
+        // const imgFetched = await this.getProfilePictureFetched(userId, lastPictureUpdate, params);
+        // if (imgFetched) {
+        //     return imgFetched
+        // } else {
+        //     return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
+        // }
 
+        if (isDesktopApp() && this.token) {
+            params.access_token = this.token;
+        }
+        return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
     };
     arrayBufferToBase64(buffer: ArrayBuffer) {
         return btoa(String.fromCharCode(...new Uint8Array(buffer)));
@@ -2703,7 +2708,12 @@ export default class Client4 {
     };
 
     getCustomEmojiImageUrl = (id: string) => {
-        return `${this.getEmojiRoute(id)}/image`;
+        const params: any = {};
+
+        if (isDesktopApp() && this.token) {
+            params.access_token = this.token;
+        }
+        return `${this.getEmojiRoute(id)}/image${buildQueryString(params)}`;
     };
 
     searchCustomEmoji = (term: string, options = {}) => {
@@ -3797,6 +3807,54 @@ export default class Client4 {
         );
     }
 
+    getMeets = () => {
+        return this.doFetch<Array<{
+            channel_id: string;
+            create_at: number;
+            id: string;
+            url: string;
+            user_id: string;
+        }>>(
+            `${this.getBaseRoute()}/conferences`,
+            {method: 'get'},
+        );
+    }
+
+    startMeet = (channelID: string) => {
+        return this.doFetch<{
+            channel_id: string;
+            created_at: string;
+            id: string;
+            team_user: Object;
+            team_user_id: string;
+            updated_at: string;
+            url: string;
+        }>(
+            `${this.getBaseRoute()}/conferences`,
+            {method: 'post', body: JSON.stringify({channel_id: channelID})},
+        );
+    }
+    leaveMeet = (callID: string) => {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${callID}/leave`,
+            {method: 'post'},
+        );
+    }
+
+    acceptIncomingMeetCall(callID: string) {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${callID}/answer`,
+            {method: 'post'},
+        );
+    }
+
+    declineIncomingMeetCall(callID: string) {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${callID}/deny`,
+            {method: 'post'},
+        );
+    }
+
     // Client Helpers
 
     doFetch = async <T>(url: string, options: Options): Promise<T> => {
@@ -3893,42 +3951,43 @@ export default class Client4 {
 
     // TODO: when is ok update with env and/or current server url (dev, preprod....)
     getIKLoginToken = (code: string, challenge: string, verifier: string, loginUrl: string, clientId: string) => {
-
         // Body in formData because Laravel do not manage JSON
         const formData = new FormData();
-        formData.append('grant_type', "authorization_code");
+        formData.append('grant_type', 'authorization_code');
         formData.append('code', code);
         formData.append('code_verifier', verifier);
         formData.append('client_id', clientId);
 
         return this.doFetch<any>(
+
             // `${this.getBaseRoute()}/token`,
             `${loginUrl}/token`,
             {
                 method: 'post',
+
                 // mode: 'no-cors',
-                body: formData
-            }
+                body: formData,
+            },
         );
     }
 
     // TODO: when is ok update with env and/or current server url (dev, preprod....)
     refreshIKLoginToken = (refresh: string, loginUrl: string, clientId: string) => {
-
         // Body in formData because Laravel do not manage JSON
         const formData = new FormData();
-        formData.append('grant_type', "refresh_token");
+        formData.append('grant_type', 'refresh_token');
         formData.append('refresh_token', refresh);
         formData.append('client_id', clientId);
 
         return this.doFetch<any>(
+
             // `${this.getBaseRoute()}/token`,
             `${loginUrl}/token`,
             {
                 method: 'post',
                 mode: 'no-cors',
-                body: formData
-            }
+                body: formData,
+            },
         );
     }
 }
