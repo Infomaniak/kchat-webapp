@@ -62,6 +62,8 @@ import ContactUsButton from 'components/announcement_bar/contact_sales/contact_u
 
 import {isDesktopApp} from 'utils/user_agent';
 
+import {buildQueryString} from 'mattermost-redux/utils/helpers';
+
 import {joinPrivateChannelPrompt} from './channel_utils';
 
 const CLICKABLE_ELEMENTS = [
@@ -1233,7 +1235,7 @@ export function defaultImageURLForUser(userId) {
         params.access_token = Client4.getToken();
     }
 
-    return Client4.getUsersRoute() + '/' + userId + `/image/default${Client4.buildQueryString(params)}`;
+    return Client4.getUsersRoute() + '/' + userId + `/image/default${buildQueryString(params)}`;
 }
 
 // in contrast to Client4.getTeamIconUrl, for ui logic this function returns null if last_team_icon_update is unset
