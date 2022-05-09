@@ -929,7 +929,11 @@ export default class Client4 {
     }
 
     getDefaultProfilePictureUrl = (userId: string) => {
-        return `${this.getUserRoute(userId)}/image/default`;
+        const params: any = {};
+        if (isDesktopApp() && this.token) {
+            params.access_token = this.token;
+        }
+        return `${this.getUserRoute(userId)}/image/default${buildQueryString(params)}`;
     };
 
     autocompleteUsers = (name: string, teamId: string, channelId: string, options = {
