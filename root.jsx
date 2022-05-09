@@ -73,4 +73,12 @@ function appendOnLoadEvent(fn) {
 appendOnLoadEvent(() => {
     // Do the pre-render setup and call renderRootComponent when done
     preRenderSetup(renderRootComponent);
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/static/service-worker.js', {scope: '/'}).then((registration) => {
+            console.log('SW registered: ', registration);
+        }).catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+        });
+    }
 });

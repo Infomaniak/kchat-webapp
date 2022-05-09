@@ -3,6 +3,8 @@
 
 import {Client4} from 'mattermost-redux/client';
 import {Emoji, SystemEmoji, CustomEmoji} from 'mattermost-redux/types/emojis';
+import {isDesktopApp} from 'utils/user_agent';
+import {buildQueryString} from 'mattermost-redux/utils/helpers';
 
 export function isSystemEmoji(emoji: Emoji): emoji is SystemEmoji {
     return 'batch' in emoji;
@@ -13,8 +15,13 @@ export function isCustomEmoji(emoji: Emoji): emoji is CustomEmoji {
 }
 
 export function getEmojiImageUrl(emoji: Emoji): string {
+    const params: any = {};
+    if (isDesktopApp() && Client4.getToken()) {
+        params.access_token = Client4.getToken();
+    }
+
     if (isCustomEmoji(emoji)) {
-        return Client4.getEmojiRoute(emoji.id) + '/image';
+        return Client4.getEmojiRoute(emoji.id) + `/image${buildQueryString(params)}`;
     }
 
     const filename = emoji.image || emoji.short_names[0];

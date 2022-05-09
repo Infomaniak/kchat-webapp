@@ -60,6 +60,10 @@ import {getIsMobileView} from 'selectors/views/browser';
 import PurchaseLink from 'components/announcement_bar/purchase_link/purchase_link';
 import ContactUsButton from 'components/announcement_bar/contact_sales/contact_us';
 
+import {isDesktopApp} from 'utils/user_agent';
+
+import {buildQueryString} from 'mattermost-redux/utils/helpers';
+
 import {joinPrivateChannelPrompt} from './channel_utils';
 
 const CLICKABLE_ELEMENTS = [
@@ -1220,11 +1224,24 @@ export function displayFullAndNicknameForUser(user) {
 }
 
 export function imageURLForUser(userId, lastPictureUpdate = 0) {
+    const params = {};
+    if (isDesktopApp() && Client4.getToken()) {
+        params.access_token = Client4.getToken();
+        return Client4.getUsersRoute() + '/' + userId + '/image?_=' + lastPictureUpdate + `&access_token=${Client4.getToken()}`;
+    }
+
+    // return Client4.getProfilePictureUrl(userId, lastPictureUpdate);
+
     return Client4.getUsersRoute() + '/' + userId + '/image?_=' + lastPictureUpdate;
 }
 
 export function defaultImageURLForUser(userId) {
-    return Client4.getUsersRoute() + '/' + userId + '/image/default';
+    const params = {};
+    if (isDesktopApp() && Client4.getToken()) {
+        params.access_token = Client4.getToken();
+    }
+
+    return Client4.getUsersRoute() + '/' + userId + `/image/default${buildQueryString(params)}`;
 }
 
 // in contrast to Client4.getTeamIconUrl, for ui logic this function returns null if last_team_icon_update is unset

@@ -26,6 +26,7 @@ const DEV = targetIsRun || targetIsStats || targetIsDevServer;
 
 const STANDARD_EXCLUDE = [
     path.join(__dirname, 'node_modules'),
+    path.join(__dirname, 'service-worker.js'),
 ];
 
 // react-hot-loader and development source maps require eval
@@ -131,7 +132,7 @@ if (DEV) {
 }
 
 var config = {
-    entry: ['./root.jsx', 'root.html'],
+    entry: ['./root.jsx', 'root.html', './service-worker.js'],
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
@@ -268,7 +269,7 @@ var config = {
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' cdn.rudderlabs.com/ js.stripe.com/v3 ' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' cdn.rudderlabs.com/ js.stripe.com/v3 kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
                 },
             },
         }),
@@ -296,6 +297,8 @@ var config = {
                 {from: 'images/c_avatar.png', to: 'images'},
                 {from: 'images/c_download.png', to: 'images'},
                 {from: 'images/c_socket.png', to: 'images'},
+                {from: 'service-worker.js', to: '/'},
+                {from: 'call.html', to: ''},
             ],
         }),
 
@@ -415,7 +418,7 @@ if (targetIsDevServer) {
             server: 'https',
             allowedHosts: 'all',
             hot: true,
-            liveReload: false,
+            liveReload: true,
             proxy: [{
                 context: () => true,
                 bypass(req) {
@@ -434,7 +437,7 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: 'https://ktalk.preprod.dev.infomaniak.ch',
+                target: 'https://kchat.preprod.dev.infomaniak.ch',
                 changeOrigin: true,
                 xfwd: true,
                 ws: true,

@@ -24,7 +24,8 @@ export type PostType = 'system_add_remove' |
 'system_leave_channel' |
 'system_purpose_change' |
 'system_remove_from_channel' |
-'system_combined_user_activity';
+'system_combined_user_activity'|
+'custom_call';
 
 export type PostEmbedType = 'image' | 'link' | 'message_attachment' | 'opengraph' | 'permalink';
 

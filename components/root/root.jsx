@@ -36,7 +36,7 @@ import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
 import {EmojiIndicesByAlias} from 'utils/emoji.jsx';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils.jsx';
-import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
+import {isDesktopApp} from 'utils/user_agent';
 import webSocketClient from 'client/web_websocket_client.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
@@ -306,6 +306,8 @@ export default class Root extends React.PureComponent {
                 LocalStorageStore.setWasLoggedIn(true);
             }
         }
+
+        // }
         this.mounted = true;
         this.props.actions.loadMeAndConfig().then((response) => {
             if (this.props.location.pathname === '/' && response[2] && response[2].data) {
