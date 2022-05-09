@@ -9,7 +9,8 @@ import './avatar.scss';
 export type TAvatarSizeToken = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 type Props = {
-    url?: Promise<string> | string;
+    // url?: Promise<string> | string;
+    url?: string;
     username?: string;
     size?: TAvatarSizeToken;
     text?: string;
@@ -24,16 +25,16 @@ const Avatar = ({
     text,
     ...attrs
 }: Props & Attrs) => {
-    const [imgSrc, setImgSrc] = React.useState('');
+    // const [imgSrc, setImgSrc] = React.useState('');
     const classes = classNames(`Avatar Avatar-${size}`, attrs.className);
 
-    React.useEffect(() => {
-        if(url instanceof Promise)
-        url?.then((val) => {
-            setImgSrc(val);
-        })
-        else setImgSrc(url || '')
-    }, [url])
+    // React.useEffect(() => {
+    //     if(url instanceof Promise)
+    //     url?.then((val) => {
+    //         setImgSrc(val);
+    //     })
+    //     else setImgSrc(url || '')
+    // }, [url])
 
     if (text) {
         return (
@@ -51,7 +52,7 @@ const Avatar = ({
             className={classes}
             tabIndex={0}
             alt={`${username || 'user'} profile image`}
-            src={imgSrc}
+            src={url}
         />
     );
 };

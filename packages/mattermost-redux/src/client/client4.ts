@@ -892,7 +892,7 @@ export default class Client4 {
         );
     };
 
-    getProfilePictureUrl = async (userId: string, lastPictureUpdate: number) => {
+    getProfilePictureUrl = (userId: string, lastPictureUpdate: number) => {
         const params: any = {};
 
         if (lastPictureUpdate) {
