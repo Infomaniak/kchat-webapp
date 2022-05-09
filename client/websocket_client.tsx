@@ -3,6 +3,9 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
+import {isDesktopApp} from 'utils/user_agent';
+import {Client4} from 'mattermost-redux/client';
+
 // import {SocketEvents} from 'utils/constants';
 
 const MAX_WEBSOCKET_FAILS = 7;
@@ -84,17 +87,37 @@ export default class WebSocketClient {
         // Add connection id, and last_sequence_number to the query param.
         // We cannot use a cookie because it will bleed across tabs.
         // We cannot also send it as part of the auth_challenge, because the session cookie is already sent with the request.
-        this.conn = new Pusher('app-key', {
-            wsHost: connectionUrl,
-            httpHost: connectionUrl,
-            authEndpoint: '/broadcasting/auth',
-            wsPort: 443,
-            wssPort: 443,
-            httpPort: 443,
-            httpsPort: 443,
-            forceTLS: true,
-            enabledTransports: ['ws', 'wss'],
-        });
+
+        if (isDesktopApp()) {
+            this.conn = new Pusher('app-key', {
+                wsHost: connectionUrl,
+                httpHost: connectionUrl,
+                authEndpoint: '/broadcasting/auth',
+                auth: {
+                    headers: {
+                        Authorization: `Bearer ${Client4.getToken() && Client4.getToken()}`,
+                    },
+                },
+                wsPort: 443,
+                wssPort: 443,
+                httpPort: 443,
+                httpsPort: 443,
+                forceTLS: true,
+                enabledTransports: ['ws', 'wss'],
+            });
+        } else {
+            this.conn = new Pusher('app-key', {
+                wsHost: connectionUrl,
+                httpHost: connectionUrl,
+                authEndpoint: '/broadcasting/auth',
+                wsPort: 443,
+                wssPort: 443,
+                httpPort: 443,
+                httpsPort: 443,
+                forceTLS: true,
+                enabledTransports: ['ws', 'wss'],
+            });
+        }
 
         this.connectionUrl = connectionUrl;
 
