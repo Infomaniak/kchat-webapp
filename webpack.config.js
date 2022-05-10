@@ -297,8 +297,9 @@ var config = {
                 {from: 'images/c_avatar.png', to: 'images'},
                 {from: 'images/c_download.png', to: 'images'},
                 {from: 'images/c_socket.png', to: 'images'},
-                {from: 'service-worker.js', to: '/'},
                 {from: 'call.html', to: ''},
+
+                // {from: 'service-worker.js', to: '/'},
             ],
         }),
 
