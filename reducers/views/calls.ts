@@ -111,7 +111,7 @@ const voiceConnectedChannels = (state: ConnectedChannelsState = {}, action: Conn
         const chan = state[action.data.channelID];
 
         if (chan) {
-            let callChan = chan[action.data.callID]
+            let callChan = chan[action.data.callID];
             if (callChan) {
                 callChan = callChan.filter((val) => val !== action.data.userID);
 
@@ -141,15 +141,17 @@ const voiceConnectedChannels = (state: ConnectedChannelsState = {}, action: Conn
             },
         };
     case ActionTypes.VOICE_CHANNEL_DELETED: {
-        const newState = {...state};
         const chan = state[action.data.channelID];
 
         if (chan) {
-            let callChan = chan[action.data.callID];
-            if (callChan) {
-                delete newState[action.data.channelID][action.data.callID];
+            const callChan = chan[action.data.callID];
+            const test = Object.entries(chan).filter(([key, val]) => key !== action.data.callID);
 
-                return newState;
+            const newstate = {
+                [action.data.channelID]: Object.fromEntries(test),
+            };
+            if (callChan) {
+                return newstate;
             }
         }
         return state;
