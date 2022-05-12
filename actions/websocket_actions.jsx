@@ -27,6 +27,7 @@ import {
     markChannelAsRead,
     getChannelMemberCountsByGroup,
     getChannelMembersByIds,
+    getChannelMembers,
 } from 'mattermost-redux/actions/channels';
 import {getCloudSubscription, getSubscriptionStats} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
@@ -68,7 +69,7 @@ import {
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
 import {Client4} from 'mattermost-redux/client';
-import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 import {getMyTeams, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {
@@ -78,6 +79,7 @@ import {
     getCurrentChannel,
     getCurrentChannelId,
     getRedirectChannelNameForTeam,
+    getMembersInCurrentChannel,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -1639,11 +1641,13 @@ function handleIncomingConferenceCall(msg) {
     return (doDispatch, doGetState) => {
         // Pop calling modal for user to accept or deny call
         // const data = await Client4
-
+        const doGetProfilesInChannel = makeGetProfilesInChannel();
         const state = doGetState();
-        const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
-        const channel = getChannel(state, connectedChannelID(doGetState()));
 
+        // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
+        const channel = getChannel(state, connectedChannelID(doGetState()));
+        const users = doGetProfilesInChannel(state, msg.data.channel_id, true);
+        console.log(msg)
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_ADDED,
             data: {
@@ -1658,7 +1662,7 @@ function handleIncomingConferenceCall(msg) {
                 modalId: ModalIdentifiers.INCOMING_CALL,
                 dialogType: DialingModal,
                 dialogProps: {
-                    calling: {users: inCall, channelID: msg.data.channel_id},
+                    calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
                 },
             }));
         }
