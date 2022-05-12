@@ -148,8 +148,9 @@ const voiceConnectedChannels = (state: ConnectedChannelsState = {}, action: Conn
             const filteredCallsIds = Object.entries(chan).filter(([key, val]) => key !== action.data.callID);
 
             const newstate = {
-                [action.data.channelID]: Object.fromEntries(filteredCallsIds),
+                [action.data.channelID]: filteredCallsIds.length > 0 ? Object.fromEntries(filteredCallsIds) : undefined,
             };
+
             if (callChan) {
                 return newstate;
             }
