@@ -200,7 +200,9 @@ export default class WebSocketClient {
 
     bindPresenceChannel(channelID: string) {
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`);
-        this.bindChannelGlobally(this.presenceChannel);
+        if (this.presenceChannel) {
+            this.bindChannelGlobally(this.presenceChannel);
+        }
     }
 
     bindChannelGlobally(channel: Channel | null) {
