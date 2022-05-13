@@ -11,7 +11,8 @@ import ConnectedProfiles from '../connected_profiles';
 
 import {Post} from 'mattermost-redux/types/posts';
 import {UserProfile} from 'mattermost-redux/types/users';
-
+import {isDesktopApp} from 'utils/user_agent';
+import JitsiClient from '../jitsi_client';
 interface Props {
     post: Post;
     connectedID: string;
@@ -20,19 +21,19 @@ interface Props {
     profiles: UserProfile[];
     showSwitchCallModal: (targetID: string) => void;
     onJoinCall: (channelID: string) => void;
+    disconnect: (channedID: string) => void;
 }
 
 const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall}: Props) => {
     const onJoinCallClick = () => {
-        onJoinCall(post.channel_id, post.id);
+        onJoinCall(post.channel_id);
     };
-
-    // console.log(post)
+    const client = isDesktopApp() ? JitsiClient : window;
 
     const onLeaveButtonClick = () => {
-    // if (window.callsClient) {
-    //     window.callsClient.disconnect();
-    // }
+        if (client.executeCommand) {
+            client.executeCommand('hangup');
+        }
     };
 
     const subMessage = post.props.end_at ? (
@@ -49,6 +50,7 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall}: 
         <Duration>{moment(post.props.create_at).fromNow()}</Duration>
     );
 
+    // console.log(post)
     return (
         <Main data-testid={'call-thread'}>
             <SubMain ended={Boolean(post.props.end_at)}>

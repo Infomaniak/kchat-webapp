@@ -1,20 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import {bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
 
-import {GlobalState} from 'mattermost-redux/types/store';
-import {Post} from 'mattermost-redux/types/posts';
+import {bindActionCreators, Dispatch} from 'redux';
 
+import {showSwitchCallModal, startOrJoinCallInChannel} from 'actions/calls';
 import {Client4} from 'mattermost-redux/client';
-
-import {voiceConnectedChannels, voiceConnectedProfilesInChannel, connectedCallID} from 'selectors/calls';
-import {showSwitchCallModal} from 'actions/calls';
-
-import {ActionTypes} from 'utils/constants';
-import {getCurrentChannelId, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-
 import {getUser} from 'mattermost-redux/selectors/entities/users';
+import {Post} from 'mattermost-redux/types/posts';
+import {GlobalState} from 'mattermost-redux/types/store';
+
+import {connectedCallID, voiceConnectedChannels, voiceConnectedProfilesInChannel} from 'selectors/calls';
 
 import PostType from './component';
 
@@ -64,43 +60,8 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     };
 };
 
-function onJoinCall(channelID: string, id: string) {
-    return async (doDispatch, doGetState) => {
-        if (!connectedChannelID(doGetState())) {
-            const channels = voiceConnectedChannels(doGetState());
-            doDispatch({
-                type: ActionTypes.VOICE_CHANNEL_ENABLE,
-            });
-
-            await doDispatch({
-                type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
-                data: {
-                    channelID: getCurrentChannelId(doGetState()),
-                    userID: getCurrentUserId(doGetState()),
-                    currentUserID: getCurrentUserId(doGetState()),
-                    url: `https://kmeet.preprod.dev.infomaniak.ch/${channelID}`,
-                    id,
-                },
-            });
-        }
-    };
-}
-function disconnect(channelID: string) {
-    return (dispatch, getState) => {
-        dispatch({
-            type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
-            data: {
-                channelID,
-                userID: getCurrentUserId(getState()),
-                currentUserID: getCurrentUserId(getState()),
-            },
-        });
-    };
-}
-
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-    onJoinCall,
-    disconnect,
+    onJoinCall: startOrJoinCallInChannel,
     showSwitchCallModal,
 }, dispatch);
 
