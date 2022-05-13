@@ -7,10 +7,6 @@ import {General, Preferences} from 'mattermost-redux/constants';
 
 import {getConfig, getFeatureFlagValue, getLicense} from 'mattermost-redux/selectors/entities/general';
 
-import {
-    AutoTourTreatments,
-    AddMembersToChanneltreatments,
-} from 'mattermost-redux/constants/config';
 import {PreferenceType} from 'mattermost-redux/types/preferences';
 import {GlobalState} from 'mattermost-redux/types/store';
 import {Theme} from 'mattermost-redux/types/themes';
@@ -18,6 +14,7 @@ import {Theme} from 'mattermost-redux/types/themes';
 import {createShallowSelector} from 'mattermost-redux/utils/helpers';
 import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 import {setThemeDefaults} from 'mattermost-redux/utils/theme_utils';
+import {CollapsedThreads} from '@mattermost/types/config';
 
 export function getMyPreferences(state: GlobalState): { [x: string]: PreferenceType } {
     return state.entities.preferences.myPreferences;
@@ -176,7 +173,7 @@ export function getCollapsedThreadsPreference(state: GlobalState): string {
     const configValue = getConfig(state)?.CollapsedThreads;
     let preferenceDefault = Preferences.COLLAPSED_REPLY_THREADS_OFF;
 
-    if (configValue === 'default_on') {
+    if (configValue === CollapsedThreads.DEFAULT_ON || configValue === CollapsedThreads.ALWAYS_ON) {
         preferenceDefault = Preferences.COLLAPSED_REPLY_THREADS_ON;
     }
 
@@ -184,14 +181,14 @@ export function getCollapsedThreadsPreference(state: GlobalState): string {
         state,
         Preferences.CATEGORY_DISPLAY_SETTINGS,
         Preferences.COLLAPSED_REPLY_THREADS,
-        preferenceDefault ?? Preferences.COLLAPSED_REPLY_THREADS_FALLBACK_DEFAULT,
+        preferenceDefault,
     );
 }
 
 export function isCollapsedThreadsAllowed(state: GlobalState): boolean {
     return (
         getFeatureFlagValue(state, 'CollapsedThreads') === 'true' &&
-        getConfig(state).CollapsedThreads !== 'disabled'
+        getConfig(state).CollapsedThreads !== CollapsedThreads.DISABLED
     );
 }
 
@@ -199,21 +196,25 @@ export function isCollapsedThreadsEnabled(state: GlobalState): boolean {
     const isAllowed = isCollapsedThreadsAllowed(state);
     const userPreference = getCollapsedThreadsPreference(state);
 
-    return isAllowed && (userPreference === Preferences.COLLAPSED_REPLY_THREADS_ON || getConfig(state).CollapsedThreads as string === 'always_on');
+    return isAllowed && (userPreference === Preferences.COLLAPSED_REPLY_THREADS_ON || getConfig(state).CollapsedThreads === CollapsedThreads.ALWAYS_ON);
 }
 
 export function isGroupChannelManuallyVisible(state: GlobalState, channelId: string): boolean {
     return getBool(state, Preferences.CATEGORY_GROUP_CHANNEL_SHOW, channelId, false);
 }
 
-export function getAutoTourTreatment(state: GlobalState): AutoTourTreatments | undefined {
-    return getFeatureFlagValue(state, 'AutoTour') as AutoTourTreatments | undefined;
+export function isCustomGroupsEnabled(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'CustomGroups') === 'true' && getConfig(state).EnableCustomGroups === 'true';
 }
 
-export function getCreateGuidedChannel(state: GlobalState): boolean {
-    return getFeatureFlagValue(state, 'GuidedChannelCreation') === 'true';
+export function getUseCaseOnboarding(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'UseCaseOnboarding') === 'true';
 }
 
-export function getAddMembersToChannel(state: GlobalState): AddMembersToChanneltreatments | undefined {
-    return getFeatureFlagValue(state, 'AddMembersToChannel') as AddMembersToChanneltreatments | undefined;
+export function insightsAreEnabled(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'InsightsEnabled') === 'true';
+}
+
+export function cloudFreeEnabled(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'CloudFree') === 'true';
 }

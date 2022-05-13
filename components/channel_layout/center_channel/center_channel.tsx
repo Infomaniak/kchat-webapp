@@ -13,6 +13,7 @@ import ChannelHeaderMobile from 'components/channel_header_mobile';
 import ChannelIdentifierRouter from 'components/channel_layout/channel_identifier_router';
 import PlaybookRunner from 'components/channel_layout/playbook_runner';
 import NextStepsView from 'components/next_steps_view';
+import ActivityAndInsights from 'components/activity_and_insights/activity_and_insights';
 import {makeAsyncComponent} from 'components/async_load';
 import MeetWidget from 'components/kmeet_conference/call_widget';
 import RenderIFrame from 'components/kmeet_conference/iframe';
@@ -45,6 +46,7 @@ type Props = {
     enableTipsViewRoute: boolean;
     callChannel: Channel;
     callExpandedView: boolean;
+    insightsAreEnabled: boolean;
     actions: {
         getProfiles: (page?: number, perPage?: number, options?: Record<string, string | boolean>) => ActionFunc;
     };
@@ -80,7 +82,7 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {lastChannelPath, isCollapsedThreadsEnabled, enableTipsViewRoute} = this.props;
+        const {lastChannelPath, isCollapsedThreadsEnabled, enableTipsViewRoute, insightsAreEnabled} = this.props;
         const url = this.props.match.url;
 
         return (
@@ -149,6 +151,12 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                                 <Route
                                     path='/:team/threads/:threadIdentifier?'
                                     component={LazyGlobalThreads}
+                                />
+                            ) : null}
+                            {insightsAreEnabled ? (
+                                <Route
+                                    path='/:team/activity-and-insights'
+                                    component={ActivityAndInsights}
                                 />
                             ) : null}
                             <Redirect to={lastChannelPath}/>
