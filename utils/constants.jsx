@@ -474,7 +474,7 @@ export const SocketEvents = {
     ROLE_ADDED: 'role_added',
     ROLE_REMOVED: 'role_removed',
     ROLE_UPDATED: 'role_updated',
-    TYPING: 'typing',
+    TYPING: 'client-user_typing',
     PREFERENCE_CHANGED: 'preference_changed',
     PREFERENCES_CHANGED: 'preferences_changed',
     PREFERENCES_DELETED: 'preferences_deleted',
