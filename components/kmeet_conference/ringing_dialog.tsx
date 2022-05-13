@@ -53,6 +53,7 @@ function DialingModal(props: Props) {
         e.preventDefault();
         e.stopPropagation();
         dispatch(startOrJoinCallInChannel(channelID, props.calling.channelID));
+        handleOnClose();
     };
     const onHandleDecline = (e: MouseEvent) => {
         e.preventDefault();
