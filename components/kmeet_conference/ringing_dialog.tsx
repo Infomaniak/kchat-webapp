@@ -1,29 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import * as React from 'react';
-
-import {useDispatch, useSelector} from 'react-redux';
 import IconButton from '@mattermost/compass-components/components/icon-button';
 
-import {FormattedMessage, useIntl} from 'react-intl';
+import * as React from 'react';
 
-import {getCurrentUserId, getCurrentUser, getStatusForUserId, getUser, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
+import {FormattedMessage} from 'react-intl';
 
+import {useDispatch, useSelector} from 'react-redux';
+
+import {startOrJoinCallInChannel} from 'actions/calls';
+import {closeModal} from 'actions/views/modals';
 import GenericModal from 'components/generic_modal';
-
 import Avatars from 'components/widgets/users/avatars';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {DispatchFunc} from 'mattermost-redux/types/actions';
 
 // import {Client4} from 'mattermost-redux/client';
 import {UserProfile} from 'mattermost-redux/types/users';
-import {startOrJoinCallInChannel} from 'actions/calls';
 
-import './ringing_dialog.scss';
-
-import {DispatchFunc} from 'mattermost-redux/types/actions';
-import {closeModal} from 'actions/views/modals';
-import {ModalIdentifiers} from 'utils/constants';
-import {GlobalState} from 'types/store';
 import store from 'stores/redux_store.jsx';
+import {GlobalState} from 'types/store';
+import {ModalIdentifiers} from 'utils/constants';
+import './ringing_dialog.scss';
 
 type Props = {
     onClose?: () => void;
@@ -36,7 +34,6 @@ type Props = {
 
 function DialingModal(props: Props) {
     const {users, channelID, userCalling} = props.calling;
-    const {formatMessage} = useIntl();
     const dispatch = useDispatch<DispatchFunc>();
     const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
     const state = store.getState();
@@ -79,7 +76,7 @@ function DialingModal(props: Props) {
                 {users && (
                     <Avatars
                         userIds={usersIdsNotMe}
-                        size='xl'
+                        size={usersIdsNotMe.length > 1 ? 'xl' : 'xxl'}
                     />
                 )}
             </div>
@@ -87,7 +84,7 @@ function DialingModal(props: Props) {
                 {users && (
                     <>
                         <div className='content-calling__user'>
-                            {Object.values(users).map((user, i) => (
+                            {Object.values(users).map((user) => (
                                 <>
                                     {user.id !== getCurrentUserId(state) && user.id === userCalling && (
                                         <>
@@ -97,7 +94,7 @@ function DialingModal(props: Props) {
                                             {Object.values(users).length > 2 && (
                                                 <span className='more'>
                                                     <>
-                                                  &nbsp;&nbsp;(+{(Object.values(users).length - 2)})
+                                                        &nbsp;&nbsp;{'+'}{(Object.values(users).length - 2)}
                                                     </>
                                                 </span>
                                             )}
