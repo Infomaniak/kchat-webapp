@@ -547,9 +547,11 @@ describe('handleUserTypingEvent', () => {
         const userId = 'otheruser';
         const msg = {
             data: {
-                channel_id: channelId,
-                parent_id: rootId,
-                user_id: userId,
+                data: {
+                    channel_id: channelId,
+                    parent_id: rootId,
+                    user_id: userId,
+                },
             },
         };
 
@@ -570,9 +572,11 @@ describe('handleUserTypingEvent', () => {
         const userId = 'otheruser';
         const msg = {
             data: {
-                channel_id: 'channel',
-                parent_id: '',
-                user_id: userId,
+                data: {
+                    channel_id: 'channel',
+                    parent_id: '',
+                    user_id: userId,
+                },
             },
         };
 
@@ -607,9 +611,11 @@ describe('handleUserTypingEvent', () => {
         const userId = 'otheruser';
         const msg = {
             data: {
-                channel_id: 'channel',
-                parent_id: '',
-                user_id: userId,
+                data: {
+                    channel_id: 'channel',
+                    parent_id: '',
+                    user_id: userId,
+                },
             },
         };
 
@@ -636,9 +642,11 @@ describe('handleUserTypingEvent', () => {
         const userId = 'otheruser';
         const msg = {
             data: {
-                channel_id: 'channel',
-                parent_id: '',
-                user_id: userId,
+                data: {
+                    channel_id: 'channel',
+                    parent_id: '',
+                    user_id: userId,
+                },
             },
         };
 
