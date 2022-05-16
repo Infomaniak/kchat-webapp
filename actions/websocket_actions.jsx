@@ -1614,7 +1614,7 @@ function handleThreadReadChanged(msg) {
             handleReadChanged(
                 doDispatch,
                 msg.data.thread_id,
-                msg.broadcast.team_id,
+                msg.data.team_id,
                 msg.data.channel_id,
                 {
                     lastViewedAt: msg.data.timestamp,
