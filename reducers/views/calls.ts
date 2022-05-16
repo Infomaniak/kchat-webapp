@@ -4,6 +4,7 @@ import {combineReducers} from 'redux';
 
 import {UserProfile} from 'mattermost-redux/types/users';
 import {ActionTypes} from 'utils/constants';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 export type UserState = {
     voice: boolean;
@@ -97,24 +98,25 @@ const voiceConnectedChannels = (state: ConnectedChannelsState = {}, action: Conn
                 },
             };
         }
-        return {
-            ...state,
-            [action.data.channelID]: {
-                ...state[action.data.channelID],
-                [action.data.id]: [
-                    ...state[action.data.channelID][action.data.id],
-                    action.data.userID,
-                ],
-            },
-        };
+        if (action.data.userID && state[action.data.channelID][action.data.id].indexOf(action.data.userID) === -1) {
+            return {
+                ...state,
+                [action.data.channelID]: {
+                    ...state[action.data.channelID],
+                    [action.data.id]: [
+                        ...state[action.data.channelID][action.data.id],
+                        action.data.userID,
+                    ],
+                },
+            };
+        }
+        return state;
     case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED: {
         const chan = state[action.data.channelID];
-
         if (chan) {
             let callChan = chan[action.data.callID];
             if (callChan) {
                 callChan = callChan.filter((val) => val !== action.data.userID);
-
                 return {
                     ...state,
                     [action.data.channelID]: {
@@ -137,7 +139,7 @@ const voiceConnectedChannels = (state: ConnectedChannelsState = {}, action: Conn
         return {
             ...state,
             [action.data.channelID]: {
-                [action.data.id]: [action.data.participants],
+                [action.data.id]: [action.data.userID],
             },
         };
     case ActionTypes.VOICE_CHANNEL_DELETED: {

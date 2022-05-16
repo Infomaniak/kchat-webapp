@@ -33,7 +33,7 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall}: 
     const onLeaveButtonClick = () => {
         if (client.executeCommand) {
             client.executeCommand('hangup');
-        }
+        };
     };
 
     const subMessage = post.props.end_at ? (
