@@ -1603,13 +1603,13 @@ function handleConferenceUserDisconnected(msg) {
         console.log(msg);
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
-        console.log({
-            channelID: msg.data.channel_id,
-            userID: msg.data.user_id,
-            currentUserID: getCurrentUserId(getState()),
-            url: msg.data.url,
-            id: Object.keys(calls[msg.data.channel_id])[0],
-        });
+        // console.log({
+        //     channelID: msg.data.channel_id,
+        //     userID: msg.data.user_id,
+        //     currentUserID: getCurrentUserId(getState()),
+        //     url: msg.data.url,
+        //     id: Object.keys(calls[msg.data.channel_id])[0],
+        // });
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
             data: {
@@ -1617,7 +1617,7 @@ function handleConferenceUserDisconnected(msg) {
                 userID: msg.data.user_id,
                 currentUserID: getCurrentUserId(getState()),
                 url: msg.data.url,
-                id: Object.keys(calls[msg.data.channel_id])[0],
+                callID: Object.keys(calls[msg.data.channel_id])[0],
             },
         });
     };
@@ -1625,8 +1625,6 @@ function handleConferenceUserDisconnected(msg) {
 
 function handleConferenceDeleted(msg) {
     return (doDispatch, doGetState) => {
-        console.log(msg);
-
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_DELETED,
             data: {
@@ -1658,6 +1656,8 @@ function handleIncomingConferenceCall(msg) {
                 id: msg.data.url.split('/').at(-1),
                 channelID: msg.data.channel_id,
                 participants: msg.data.participants,
+                userID: msg.data.user_id,
+                currentUserID: getCurrentUserId(getState()),
             },
         });
 

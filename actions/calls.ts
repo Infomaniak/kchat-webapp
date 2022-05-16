@@ -51,6 +51,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
             });
+
             await dispatch({
                 type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
                 data: {
@@ -83,6 +84,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
             });
+
             await dispatch({
                 type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
                 data: {
