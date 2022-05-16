@@ -48,8 +48,9 @@ import webSocketClient from 'client/web_websocket_client.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
 const LazyErrorPage = React.lazy(() => import('components/error_page'));
-const LazyLoginController = React.lazy(() => import('components/login/login_controller'));
-const LazyLoginDesktopController = React.lazy(() => import('components/login-desktop/login_desktop_controller'));
+const LazyLoginController = React.lazy(() => import('components/login/login_controller/login_controller'));
+
+// const LazyLoginDesktopController = React.lazy(() => import('components/login-desktop/login_desktop_controller'));
 // const LazyLogin = React.lazy(() => import('components/login/login'));
 const LazyAdminConsole = React.lazy(() => import('components/admin_console'));
 const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
@@ -82,7 +83,8 @@ const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const TermsOfService = makeAsyncComponent('TermsOfService', LazyTermsOfService);
 const LoginController = makeAsyncComponent('LoginController', LazyLoginController);
-const LoginDesktopController = makeAsyncComponent('LoginDesktopController', LazyLoginDesktopController);
+
+// const LoginDesktopController = makeAsyncComponent('LoginDesktopController', LazyLoginDesktopController);
 // const Login = makeAsyncComponent('LoginController', LazyLogin);
 const AdminConsole = makeAsyncComponent('AdminConsole', LazyAdminConsole);
 const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
@@ -486,11 +488,7 @@ export default class Root extends React.PureComponent {
                     />
                     <HFRoute
                         path={'/login'}
-                        component={Login}
-                    />
-                    <HFTRoute
-                        path={'/auth-desktop'}
-                        component={LoginDesktopController}
+                        component={LoginController}
                     />
                     <HFTRoute
                         path={'/reset_password'}
