@@ -32,6 +32,8 @@ type Props = {
     channelIsArchived: boolean;
     viewArchivedChannels: boolean;
     isCloud: boolean;
+    isFirstAdmin: boolean;
+    useCaseOnboarding: boolean;
     actions: {
         goToLastViewedChannel: () => Promise<{data: boolean}>;
         setShowNextStepsView: (x: boolean) => void;
@@ -116,7 +118,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
 
     render() {
         const {channelIsArchived, enableOnboardingFlow, showNextSteps, showNextStepsEphemeral, teamUrl} = this.props;
-        if (enableOnboardingFlow && showNextSteps && !showNextStepsEphemeral) {
+        if (enableOnboardingFlow && showNextSteps && !showNextStepsEphemeral && !(this.props.useCaseOnboarding && this.props.isFirstAdmin)) {
             this.props.actions.setShowNextStepsView(true);
             browserHistory.push(`${teamUrl}/tips`);
         }
