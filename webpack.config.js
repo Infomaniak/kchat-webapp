@@ -32,6 +32,10 @@ const STANDARD_EXCLUDE = [
 // react-hot-loader and development source maps require eval
 const CSP_UNSAFE_EVAL_IF_DEV = DEV ? ' \'unsafe-eval\'' : '';
 
+const INCLUDE_PATTERN = /(\<meta name=\'hash\' content=\')(.+)(\'>?)/gi;
+// eslint-disable-next-line no-negated-condition
+const processNestedHtml = (content) => (!INCLUDE_PATTERN.test(content) ? content : content.replace(INCLUDE_PATTERN, `$1${(Math.random() + 1).toString(36).substring(7)}$3`));
+
 var MYSTATS = {
 
     // Add asset Information
@@ -224,6 +228,7 @@ var config = {
                         loader: 'html-loader',
                         options: {
                             sources: false,
+                            preprocessor: processNestedHtml,
                         },
                     },
                 ],
