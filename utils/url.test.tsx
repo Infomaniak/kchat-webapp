@@ -99,8 +99,8 @@ describe('Utils.URL', () => {
             },
             {
                 description: 'Called with a url resembling a direct message url',
-                url: 'pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz__pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz',
-                expectedErrors: ['change_url.invalidDirectMessage'],
+                url: '51a8e380-5196-4d53-aff3-cda79764729e__51a8e380-5196-4d53-aff3-cda79764729e',
+                expectedErrors: ['change_url.invalidDirectMessage', 'change_url.shorter'],
             },
             {
                 description: 'Called with a containing two dashes',

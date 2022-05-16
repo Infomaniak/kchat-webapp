@@ -5,7 +5,7 @@ import {Files, General} from '../constants';
 import {Client4} from 'mattermost-redux/client';
 import {FileInfo} from 'mattermost-redux/types/files';
 import {isDesktopApp} from 'utils/user_agent';
-import {buildQueryString} from 'mattermost-redux/utils/helpers';
+import {buildQueryString} from 'packages/client/src/helpers';
 
 const mimeDB = require('mime-db');
 
