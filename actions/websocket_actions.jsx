@@ -1223,7 +1223,7 @@ export function handleUserTypingEvent(msg) {
         const state = doGetState();
         const config = getConfig(state);
         const currentUserId = getCurrentUserId(state);
-        const userId = msg.data.user_id;
+        const userId = msg.data.data.user_id;
 
         if (
             isPerformanceDebuggingEnabled(state) &&
@@ -1233,7 +1233,7 @@ export function handleUserTypingEvent(msg) {
         }
 
         const data = {
-            id: msg.data.channel_id + msg.data.parent_id,
+            id: msg.data.data.channel_id + msg.data.data.parent_id,
             userId,
             now: Date.now(),
         };
