@@ -51,7 +51,7 @@ const LazyErrorPage = React.lazy(() => import('components/error_page'));
 const LazyLoginController = React.lazy(() => import('components/login/login_controller'));
 
 // const LazyLoginDesktopController = React.lazy(() => import('components/login-desktop/login_desktop_controller'));
-// const LazyLogin = React.lazy(() => import('components/login/login'));
+const LazyLogin = React.lazy(() => import('components/login/login'));
 const LazyAdminConsole = React.lazy(() => import('components/admin_console'));
 const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
 const LazyPasswordResetSendLink = React.lazy(() => import('components/password_reset_send_link'));
@@ -85,7 +85,7 @@ const TermsOfService = makeAsyncComponent('TermsOfService', LazyTermsOfService);
 const LoginController = makeAsyncComponent('LoginController', LazyLoginController);
 
 // const LoginDesktopController = makeAsyncComponent('LoginDesktopController', LazyLoginDesktopController);
-// const Login = makeAsyncComponent('LoginController', LazyLogin);
+const Login = makeAsyncComponent('LoginController', LazyLogin);
 const AdminConsole = makeAsyncComponent('AdminConsole', LazyAdminConsole);
 const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
 const PasswordResetSendLink = makeAsyncComponent('PasswordResedSendLink', LazyPasswordResetSendLink);
@@ -486,9 +486,9 @@ export default class Root extends React.PureComponent {
                         path={'/error'}
                         component={ErrorPage}
                     />
-                    <HFTRoute
+                    <Route
                         path={'/login'}
-                        component={LoginController}
+                        component={Login}
                     />
                     <HFTRoute
                         path={'/reset_password'}

@@ -1019,6 +1019,9 @@ export function loadImage(
     const request = new XMLHttpRequest();
 
     request.open('GET', url, true);
+    if (isDesktopApp() && Client4.getToken()) {
+        request.setRequestHeader('Authorization', `Bearer ${Client4.getToken()}`);
+    }
     request.responseType = 'arraybuffer';
     request.onload = onLoad;
     request.onprogress = (e) => {
