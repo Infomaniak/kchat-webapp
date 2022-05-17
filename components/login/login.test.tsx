@@ -138,23 +138,6 @@ describe('components/login/Login', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    it('should handle session expired', () => {
-        LocalStorageStore.setWasLoggedIn(true);
-        mockConfig.EnableSignInWithEmail = 'true';
-
-        const wrapper = mount(
-            <Login/>,
-        );
-
-        const alertBanner = wrapper.find(AlertBanner).first();
-        expect(alertBanner.props().mode).toEqual('warning');
-        expect(alertBanner.props().title).toEqual('Your session has expired. Please log in again.');
-
-        alertBanner.find('button').first().simulate('click');
-
-        expect(wrapper.find(AlertBanner)).toEqual({});
-    });
-
     it('should handle initializing when logout status success', () => {
         mockState.requests.users.logout.status = RequestStatus.SUCCESS;
 
@@ -191,94 +174,5 @@ describe('components/login/Login', () => {
 
         const loadingScreen = wrapper.find(LoadingScreen).first();
         expect(loadingScreen.find(FormattedMessage).first().props().defaultMessage).toEqual('Loading');
-    });
-
-    it('should handle suppress session expired notification on sign in change', () => {
-        mockLocation.search = '?extra=' + Constants.SIGNIN_CHANGE;
-        LocalStorageStore.setWasLoggedIn(true);
-        mockConfig.EnableSignInWithEmail = 'true';
-
-        const wrapper = mount(
-            <Login/>,
-        );
-
-        expect(LocalStorageStore.getWasLoggedIn()).toEqual(false);
-
-        const alertBanner = wrapper.find(AlertBanner).first();
-        expect(alertBanner.props().mode).toEqual('success');
-        expect(alertBanner.props().title).toEqual('Sign-in method changed successfully');
-
-        alertBanner.find('button').first().simulate('click');
-
-        expect(wrapper.find(AlertBanner)).toEqual({});
-    });
-
-    it('should handle discard session expiry notification on failed sign in', () => {
-        LocalStorageStore.setWasLoggedIn(true);
-        mockConfig.EnableSignInWithEmail = 'true';
-
-        jest.spyOn(users, 'login').mockImplementation(jest.fn().mockResolvedValue({
-            type: 'MOCK_LOGIN_REQUEST',
-            error: {
-                server_error_id: 'api.user.login.invalid_credentials_email_username',
-            },
-        }));
-
-        const wrapper = mount(
-            <Login/>,
-        );
-
-        let alertBanner = wrapper.find(AlertBanner).first();
-        expect(alertBanner.props().mode).toEqual('warning');
-        expect(alertBanner.props().title).toEqual('Your session has expired. Please log in again.');
-
-        const input = wrapper.find(Input).first().find('input').first();
-        input.simulate('change', {target: {value: 'user1'}});
-
-        const passwordInput = wrapper.find(PasswordInput).first().find('input').first();
-        passwordInput.simulate('change', {target: {value: 'passw'}});
-
-        const saveButton = wrapper.find(SaveButton).first();
-        expect(saveButton.props().disabled).toEqual(false);
-
-        saveButton.find('button').first().simulate('click');
-
-        setTimeout(() => {
-            alertBanner = wrapper.find(AlertBanner).first();
-            expect(alertBanner.props().mode).toEqual('danger');
-            expect(alertBanner.props().title).toEqual('The email/username or password is invalid.');
-        });
-    });
-
-    it('should handle gitlab text and color props', () => {
-        mockConfig.EnableSignInWithEmail = 'true';
-        mockConfig.EnableSignUpWithGitLab = 'true';
-        mockConfig.GitLabButtonText = 'GitLab 2';
-        mockConfig.GitLabButtonColor = '#00ff00';
-
-        const wrapper = shallow(
-            <Login/>,
-        );
-
-        const externalLoginButton = wrapper.find(ExternalLoginButton).first();
-        expect(externalLoginButton.props().url).toEqual('/oauth/gitlab/login');
-        expect(externalLoginButton.props().label).toEqual('GitLab 2');
-        expect(externalLoginButton.props().style).toEqual({color: '#00ff00', borderColor: '#00ff00'});
-    });
-
-    it('should handle openid text and color props', () => {
-        mockConfig.EnableSignInWithEmail = 'true';
-        mockConfig.EnableSignUpWithOpenId = 'true';
-        mockConfig.OpenIdButtonText = 'OpenID 2';
-        mockConfig.OpenIdButtonColor = '#00ff00';
-
-        const wrapper = shallow(
-            <Login/>,
-        );
-
-        const externalLoginButton = wrapper.find(ExternalLoginButton).first();
-        expect(externalLoginButton.props().url).toEqual('/oauth/openid/login');
-        expect(externalLoginButton.props().label).toEqual('OpenID 2');
-        expect(externalLoginButton.props().style).toEqual({color: '#00ff00', borderColor: '#00ff00'});
     });
 });
