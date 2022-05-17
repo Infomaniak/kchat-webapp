@@ -4,7 +4,7 @@
 import {Client4} from 'mattermost-redux/client';
 import {Emoji, SystemEmoji, CustomEmoji} from 'mattermost-redux/types/emojis';
 import {isDesktopApp} from 'utils/user_agent';
-import {buildQueryString} from 'mattermost-redux/utils/helpers';
+import {buildQueryString} from 'packages/client/src/helpers';
 
 export function isSystemEmoji(emoji: Emoji): emoji is SystemEmoji {
     if ('category' in emoji) {
@@ -33,7 +33,7 @@ export function getEmojiImageUrl(emoji: Emoji): string {
         return Client4.getSystemEmojiImageUrl(filename);
     }
 
-    return Client4.getEmojiRoute(emoji.id) + '/image';
+    return Client4.getEmojiRoute(emoji.id) + `/image${buildQueryString(params)}`;
 }
 
 export function parseNeededCustomEmojisFromText(text: string, systemEmojis: Map<string, SystemEmoji>, customEmojisByName: Map<string, CustomEmoji>, nonExistentEmoji: Set<string>): Set<string> {
