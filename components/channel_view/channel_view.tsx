@@ -13,6 +13,7 @@ import PostView from 'components/post_view';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 import {browserHistory} from 'utils/browser_history';
+import WebSocketClient from 'client/web_websocket_client';
 
 type Props = {
     channelId: string;
@@ -31,6 +32,8 @@ type Props = {
     channelIsArchived: boolean;
     viewArchivedChannels: boolean;
     isCloud: boolean;
+    isFirstAdmin: boolean;
+    useCaseOnboarding: boolean;
     actions: {
         goToLastViewedChannel: () => Promise<{data: boolean}>;
         setShowNextStepsView: (x: boolean) => void;
@@ -107,12 +110,15 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             if (this.props.channelIsArchived && !this.props.viewArchivedChannels) {
                 this.props.actions.goToLastViewedChannel();
             }
+            if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
+                WebSocketClient.bindPresenceChannel(this.props.channelId);
+            }
         }
     }
 
     render() {
         const {channelIsArchived, enableOnboardingFlow, showNextSteps, showNextStepsEphemeral, teamUrl} = this.props;
-        if (enableOnboardingFlow && showNextSteps && !showNextStepsEphemeral) {
+        if (enableOnboardingFlow && showNextSteps && !showNextStepsEphemeral && !(this.props.useCaseOnboarding && this.props.isFirstAdmin)) {
             this.props.actions.setShowNextStepsView(true);
             browserHistory.push(`${teamUrl}/tips`);
         }
