@@ -42,6 +42,7 @@ describe('components/channel_layout/CenterChannel', () => {
             group_constrained: true,
         },
         callExpandedView: true,
+        insightsAreEnabled: true,
         actions: {
             setShowNextStepsView: jest.fn,
             getProfiles: jest.fn,

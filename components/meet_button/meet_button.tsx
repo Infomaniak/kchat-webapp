@@ -4,9 +4,11 @@ import React, {useRef} from 'react';
 import {injectIntl, IntlShape} from 'react-intl';
 
 // import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
-import CameraIcon from 'components/widgets/icons/camera_icon';
-import { useSelector } from 'react-redux';
-import { getCurrentChannelId } from 'mattermost-redux/selectors/entities/common';
+import {useSelector} from 'react-redux';
+
+import {CameraOutlineIcon} from '@mattermost/compass-icons/components';
+
+import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
 export type Props = {
     currentChannelID: string;
@@ -42,7 +44,7 @@ function MeetButton(props: Props) {
                 className='icon icon--attachment'
             >
                 <button className='channel-header__icon channel-header__icon--wide channel-header__icon--left'>
-                    <CameraIcon/>
+                    <CameraOutlineIcon/>
                     <span
                         className='icon__text'
                         style={{margin: '0 6px'}}

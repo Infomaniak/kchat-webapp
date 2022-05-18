@@ -86,6 +86,7 @@ export type ViewsState = {
         editingPost: {
             postId: string;
             show: boolean;
+            isRHS: boolean;
         };
         menuActions: {
             [postId: string]: {
@@ -105,10 +106,11 @@ export type ViewsState = {
                 dialogType: React.ComponentType;
             };
         };
+        showLaunchingWorkspace: boolean;
     };
 
     emoji: {
-        emojiPickerCustomPage: 0;
+        emojiPickerCustomPage: number;
         shortcutReactToLastPostEmittedFrom: string;
     };
 
@@ -122,6 +124,7 @@ export type ViewsState = {
 
     search: {
         modalSearch: string;
+        channelMembersRhsSearch: string;
         modalFilters: ModalFilters;
         systemUsersSearch: {
             term: string;
@@ -191,9 +194,21 @@ export type ViewsState = {
     nextSteps: {
         show: boolean;
     };
+
     statusDropdown: {
         isOpen: boolean;
     };
+
+    addChannelDropdown: {
+        isOpen: boolean;
+    };
+
+    onboardingTasks: {
+        isShowOnboardingTaskCompletion: boolean;
+        isShowOnboardingCompleteProfileTour: boolean;
+        isShowOnboardingVisitConsoleTour: boolean;
+    };
+
     threads: {
         selectedThreadIdInTeam: RelationOneToOne<Team, UserThread['id'] | null>;
         lastViewedAt: {[id: string]: number};

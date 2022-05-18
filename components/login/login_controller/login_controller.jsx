@@ -18,12 +18,12 @@ import {Client4} from 'mattermost-redux/client';
 import LocalStorageStore from 'stores/local_storage_store';
 import {browserHistory} from 'utils/browser_history';
 import {IKConstants} from 'utils/constants-ik';
-import Constants from 'utils/constants.jsx';
+import Constants from 'utils/constants';
 import {t} from 'utils/i18n.jsx';
 import {showNotification} from 'utils/notifications';
 import {intlShape} from 'utils/react_intl';
 import {isDesktopApp} from 'utils/user_agent';
-import * as Utils from 'utils/utils.jsx';
+import * as Utils from 'utils/utils';
 
 // TODO: clean login controller
 class LoginController extends React.PureComponent {
