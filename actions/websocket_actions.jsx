@@ -601,6 +601,10 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.APPS_FRAMEWORK_PLUGIN_DISABLED:
         dispatch(handleAppsPluginDisabled());
+        break;
+    case SocketEvents.PUSHER_MEMBER_REMOVED:
+        handlePusherMemberRemoved(msg);
+        break;
     default:
     }
 
@@ -1784,4 +1788,8 @@ function handleIncomingConferenceCall(msg) {
             }));
         }
     };
+}
+
+function handlePusherMemberRemoved(msg) {
+    console.log("pusher member removed", msg)
 }
