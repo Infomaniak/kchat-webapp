@@ -7,8 +7,8 @@ import {ActionTypes} from 'utils/constants';
 import {connectedChannelID, voiceConnectedChannels, voiceConnectedUsers} from 'selectors/calls';
 import {getProfilesByIds} from 'mattermost-redux/actions/users';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-import { Client4 } from 'mattermost-redux/client';
-import { isDesktopApp } from 'utils/user_agent';
+import {Client4} from 'mattermost-redux/client';
+import {isDesktopApp} from 'utils/user_agent';
 
 // import {Client4} from 'mattermost-redux/client';
 
@@ -39,9 +39,25 @@ export const hideSwitchCallModal = () => (dispatch: Dispatch<GenericAction>) => 
     });
 };
 
+export function leaveCallInChannel(channelID: string, dialingID: string) {
+    return async (dispatch: DispatchFunc, getState) => {
+        Client4.leaveMeet(dialingID);
+        dispatch({
+            type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
+            data: {
+                channelID,
+                userID: getCurrentUserId(getState()),
+                currentUserID: getCurrentUserId(getState()),
+                callID: dialingID,
+            },
+        });
+    };
+}
+
 export function startOrJoinCallInChannel(channelID: string, dialingID?: string) {
     return async (dispatch: DispatchFunc, getState) => {
         const state = getState();
+
         // const channelID = getCurrentChannelId(state);
 
         const channels = voiceConnectedChannels(state);

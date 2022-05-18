@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import {bindActionCreators, Dispatch} from 'redux';
 
-import {showSwitchCallModal, startOrJoinCallInChannel} from 'actions/calls';
+import {showSwitchCallModal, startOrJoinCallInChannel, leaveCallInChannel} from 'actions/calls';
 import {Client4} from 'mattermost-redux/client';
 import {getUser} from 'mattermost-redux/selectors/entities/users';
 import {Post} from 'mattermost-redux/types/posts';
@@ -63,6 +63,7 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     onJoinCall: startOrJoinCallInChannel,
     showSwitchCallModal,
+    leaveCallInChannel,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostType);

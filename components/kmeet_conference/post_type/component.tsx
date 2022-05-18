@@ -13,6 +13,7 @@ import {Post} from 'mattermost-redux/types/posts';
 import {UserProfile} from 'mattermost-redux/types/users';
 import {isDesktopApp} from 'utils/user_agent';
 import JitsiClient from '../jitsi_client';
+
 interface Props {
     post: Post;
     connectedID: string;
@@ -21,19 +22,34 @@ interface Props {
     profiles: UserProfile[];
     showSwitchCallModal: (targetID: string) => void;
     onJoinCall: (channelID: string) => void;
-    disconnect: (channedID: string) => void;
+    leaveCallInChannel: (channelID: string, callId: string) => Promise<any>;
+
+    // disconnect: (channedID: string) => void;
 }
 
-const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall}: Props) => {
+const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, leaveCallInChannel}: Props) => {
+    const client = isDesktopApp() ? JitsiClient : window;
+
+    client.addEventListener('beforeunload', (e) => {
+        if (hasCall) {
+            e.stopPropagation();
+            e.preventDefault();
+            leaveCallInChannel(post.channel_id, connectedID).then(() => {
+                if (client.executeCommand) {
+                    client.executeCommand('hangup');
+                }
+            });
+        }
+    });
+
     const onJoinCallClick = () => {
         onJoinCall(post.channel_id);
     };
-    const client = isDesktopApp() ? JitsiClient : window;
 
     const onLeaveButtonClick = () => {
         if (client.executeCommand) {
             client.executeCommand('hangup');
-        };
+        }
     };
 
     const subMessage = post.props.end_at ? (
