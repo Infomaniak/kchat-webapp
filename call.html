@@ -73,6 +73,7 @@
             subject: urlParams.get('channelID'),
             prejoinConfig: {enabled: false},
             disableDeepLinking: true,
+            feedbackPercentage: 0,
         };
 
         const jitsi = new window.JitsiMeetExternalAPI(KMEET_DOMAIN, {
@@ -87,7 +88,9 @@
             jitsi.addListener(event, callback)
         }
 
-        jitsi.on('readyToClose', () => window.opener.onCloseJitsi(window))
+        jitsi.on('readyToClose', () => {
+            window.close()
+        })
         window.onclose = () => window.opener.onclose
 
         // window.opener.jitsi = jitsi
