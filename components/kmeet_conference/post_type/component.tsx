@@ -31,7 +31,7 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, l
     const client = isDesktopApp() ? JitsiClient : window;
 
     client.addEventListener('beforeunload', (e) => {
-        if (hasCall) {
+        if (hasCall && connectedID === post.props.conference_id && !post.props.end_at) {
             e.stopPropagation();
             e.preventDefault();
             leaveCallInChannel(post.channel_id, connectedID).then(() => {

@@ -52,6 +52,7 @@ import {setServerVersion, getClientConfig} from 'mattermost-redux/actions/genera
 import {
     getCustomEmojiForReaction,
     getPosts,
+    getPostsSince,
     getPostThread,
     getProfilesAndStatusesForPosts,
     getThreadsForPosts,
@@ -59,6 +60,7 @@ import {
     receivedNewPost,
     receivedPost,
 } from 'mattermost-redux/actions/posts';
+
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
 
 import * as TeamActions from 'mattermost-redux/actions/teams';
@@ -1720,6 +1722,7 @@ function handleConferenceUserDisconnected(msg) {
         console.log(msg);
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
+
         // console.log({
         //     channelID: msg.data.channel_id,
         //     userID: msg.data.user_id,
@@ -1741,7 +1744,8 @@ function handleConferenceUserDisconnected(msg) {
 }
 
 function handleConferenceDeleted(msg) {
-    return (doDispatch, doGetState) => {
+    return (doDispatch, getState) => {
+        dispatch(getPostsSince(msg.data.channel_id, Date.now()));
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_DELETED,
             data: {
@@ -1759,6 +1763,7 @@ function handleIncomingConferenceCall(msg) {
         const doGetProfilesInChannel = makeGetProfilesInChannel();
         const state = doGetState();
         let users = [];
+
         // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
         const channel = getChannel(state, connectedChannelID(doGetState()));
         users = doGetProfilesInChannel(state, msg.data.channel_id, true);
@@ -1791,5 +1796,5 @@ function handleIncomingConferenceCall(msg) {
 }
 
 function handlePusherMemberRemoved(msg) {
-    console.log("pusher member removed", msg)
+    console.log('pusher member removed', msg);
 }
