@@ -66,11 +66,12 @@
             'audioMuteStatusChanged': window.opener.audioMuteStatusChanged,
             'participantJoined': window.opener.onParticipantJoined
         }
+        document.title = urlParams.get('channelName')
 
         const configOverwrite = {
             startWithAudioMuted: false,
             startWithVideoMuted: true,
-            subject: urlParams.get('channelID'),
+            subject: urlParams.get('channelName'),
             prejoinConfig: {enabled: false},
             disableDeepLinking: true,
             feedbackPercentage: 0,
