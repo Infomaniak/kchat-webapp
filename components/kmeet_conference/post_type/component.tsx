@@ -30,8 +30,8 @@ interface Props {
 const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, leaveCallInChannel}: Props) => {
     const client = isDesktopApp() ? JitsiClient : window;
 
-    client.addEventListener('beforeunload', (e) => {
-        if (hasCall) {
+    window.addEventListener('beforeunload', (e) => {
+        if (hasCall && connectedID === post.props.conference_id && !post.props.end_at) {
             e.stopPropagation();
             e.preventDefault();
             leaveCallInChannel(post.channel_id, connectedID).then(() => {
