@@ -29,6 +29,7 @@ import {
     markChannelAsRead,
     getChannelMemberCountsByGroup,
     getChannelMembersByIds,
+    getChannelMembers,
 } from 'mattermost-redux/actions/channels';
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
@@ -51,6 +52,7 @@ import {setServerVersion, getClientConfig} from 'mattermost-redux/actions/genera
 import {
     getCustomEmojiForReaction,
     getPosts,
+    getPostsSince,
     getPostThread,
     getProfilesAndStatusesForPosts,
     getThreadsForPosts,
@@ -58,6 +60,7 @@ import {
     receivedNewPost,
     receivedPost,
 } from 'mattermost-redux/actions/posts';
+
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
 
 import * as TeamActions from 'mattermost-redux/actions/teams';
@@ -69,7 +72,7 @@ import {
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
 import {Client4} from 'mattermost-redux/client';
-import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 import {getMyTeams, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig, getLicense, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
 import {
@@ -79,6 +82,7 @@ import {
     getCurrentChannel,
     getCurrentChannelId,
     getRedirectChannelNameForTeam,
+    getMembersInCurrentChannel,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -599,6 +603,10 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.APPS_FRAMEWORK_PLUGIN_DISABLED:
         dispatch(handleAppsPluginDisabled());
+        break;
+    case SocketEvents.PUSHER_MEMBER_REMOVED:
+        handlePusherMemberRemoved(msg);
+        break;
     default:
     }
 
@@ -1625,7 +1633,7 @@ function handleThreadReadChanged(msg) {
                 },
             );
         } else if (msg.data.channel_id) {
-            handleAllThreadsInChannelMarkedRead(doDispatch, doGetState, msg.broadcast.channel_id, msg.data.timestamp);
+            handleAllThreadsInChannelMarkedRead(doDispatch, doGetState, msg.channel_id, msg.data.timestamp);
         } else {
             handleAllMarkedRead(doDispatch, msg.team_id);
         }
@@ -1714,13 +1722,14 @@ function handleConferenceUserDisconnected(msg) {
         console.log(msg);
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
-        console.log({
-            channelID: msg.data.channel_id,
-            userID: msg.data.user_id,
-            currentUserID: getCurrentUserId(getState()),
-            url: msg.data.url,
-            id: Object.keys(calls[msg.data.channel_id])[0],
-        });
+
+        // console.log({
+        //     channelID: msg.data.channel_id,
+        //     userID: msg.data.user_id,
+        //     currentUserID: getCurrentUserId(getState()),
+        //     url: msg.data.url,
+        //     id: Object.keys(calls[msg.data.channel_id])[0],
+        // });
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
             data: {
@@ -1728,16 +1737,15 @@ function handleConferenceUserDisconnected(msg) {
                 userID: msg.data.user_id,
                 currentUserID: getCurrentUserId(getState()),
                 url: msg.data.url,
-                id: Object.keys(calls[msg.data.channel_id])[0],
+                callID: Object.keys(calls[msg.data.channel_id])[0],
             },
         });
     };
 }
 
 function handleConferenceDeleted(msg) {
-    return (doDispatch, doGetState) => {
-        console.log(msg);
-
+    return (doDispatch, getState) => {
+        dispatch(getPostsSince(msg.data.channel_id, Date.now()));
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_DELETED,
             data: {
@@ -1752,10 +1760,17 @@ function handleIncomingConferenceCall(msg) {
     return (doDispatch, doGetState) => {
         // Pop calling modal for user to accept or deny call
         // const data = await Client4
-
+        const doGetProfilesInChannel = makeGetProfilesInChannel();
         const state = doGetState();
-        const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
+        let users = [];
+
+        // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
         const channel = getChannel(state, connectedChannelID(doGetState()));
+        users = doGetProfilesInChannel(state, msg.data.channel_id, true);
+
+        if (users.length <= 0) {
+            users.push(getUser(state, msg.data.user_id));
+        }
 
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_ADDED,
@@ -1763,6 +1778,8 @@ function handleIncomingConferenceCall(msg) {
                 id: msg.data.url.split('/').at(-1),
                 channelID: msg.data.channel_id,
                 participants: msg.data.participants,
+                userID: msg.data.user_id,
+                currentUserID: getCurrentUserId(getState()),
             },
         });
 
@@ -1771,9 +1788,13 @@ function handleIncomingConferenceCall(msg) {
                 modalId: ModalIdentifiers.INCOMING_CALL,
                 dialogType: DialingModal,
                 dialogProps: {
-                    calling: {users: inCall, channelID: msg.data.channel_id},
+                    calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
                 },
             }));
         }
     };
+}
+
+function handlePusherMemberRemoved(msg) {
+    console.log('pusher member removed', msg);
 }

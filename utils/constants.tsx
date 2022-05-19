@@ -130,6 +130,7 @@ export const Preferences = {
     AB_TEST_PREFERENCE_VALUE: 'ab_test_preference_value',
 
     ONBOARDING: 'onboarding',
+    ADVANCED_TEXT_EDITOR: 'advanced_text_editor',
 };
 
 // For one off things that have a special, attention-grabbing UI until you interact with them
@@ -538,6 +539,7 @@ export const SocketEvents = {
     CONFERENCE_DELETED: 'conference_deleted',
     CONFERENCE_USER_CONNECTED: 'conference_user_connected',
     CONFERENCE_USER_DISCONNECTED: 'conference_user_disconnected',
+    PUSHER_MEMBER_REMOVED: 'pusher:member_removed',
 };
 
 export const TutorialSteps = {
@@ -602,6 +604,12 @@ export const Threads = {
 export const CloudBanners = {
     HIDE: 'hide',
     TRIAL: 'trial',
+};
+
+export const AdvancedTextEditor = {
+    COMMENT: 'comment',
+    POST: 'post',
+    EDIT: 'edit',
 };
 
 export const TELEMETRY_CATEGORIES = {
@@ -1706,6 +1714,7 @@ export const Constants = {
     },
     OVERLAY_TIME_DELAY_SMALL: 100,
     OVERLAY_TIME_DELAY: 400,
+    OVERLAY_DEFAULT_TRIGGER: ['hover', 'focus'],
     PERMALINK_FADEOUT: 5000,
     DEFAULT_MAX_USERS_PER_TEAM: 50,
     DEFAULT_MAX_CHANNELS_PER_TEAM: 2000,

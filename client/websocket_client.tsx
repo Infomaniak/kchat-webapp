@@ -195,7 +195,7 @@ export default class WebSocketClient {
     }
 
     subscribeToUserChannel(userId: number) {
-        this.userChannel = this.conn.subscribe(`private-user.${userId}`);
+        this.userChannel = this.conn.subscribe(`presence-user.${userId}`);
     }
 
     bindPresenceChannel(channelID: string) {

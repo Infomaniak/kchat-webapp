@@ -541,17 +541,7 @@ export function fetchAllMyTeamsChannelsAndChannelMembers(): ActionFunc {
                         users: conferences[i].participants,
                     },
                 });
-                // if (!voiceChannelCallStartAt(getState(), conferences[i].id)) {
-                //     dispatch({
-                //         type: ActionTypes.VOICE_CHANNEL_CALL_START,
-                //         data: {
-                //             channelID: conferences[i].channel_id,
-                //             startAt: conferences[i].create_at,
-                //         },
-                //     });
-                // }
             }
-            console.log(conferences)
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));

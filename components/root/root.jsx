@@ -48,7 +48,7 @@ import webSocketClient from 'client/web_websocket_client.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
 const LazyErrorPage = React.lazy(() => import('components/error_page'));
-const LazyLoginController = React.lazy(() => import('components/login/login_controller/login_controller'));
+const LazyLoginController = React.lazy(() => import('components/login/login_controller'));
 
 // const LazyLoginDesktopController = React.lazy(() => import('components/login-desktop/login_desktop_controller'));
 const LazyLogin = React.lazy(() => import('components/login/login'));

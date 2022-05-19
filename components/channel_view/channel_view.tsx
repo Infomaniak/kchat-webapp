@@ -14,6 +14,7 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 import {browserHistory} from 'utils/browser_history';
 import WebSocketClient from 'client/web_websocket_client';
+import AdvancedCreatePost from 'components/advanced_create_post';
 
 type Props = {
     channelId: string;
@@ -34,6 +35,7 @@ type Props = {
     isCloud: boolean;
     isFirstAdmin: boolean;
     useCaseOnboarding: boolean;
+    isAdvancedTextEditorEnabled: boolean;
     actions: {
         goToLastViewedChannel: () => Promise<{data: boolean}>;
         setShowNextStepsView: (x: boolean) => void;
@@ -176,16 +178,29 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                 </div>
             );
         } else if (!this.props.channelRolesLoading) {
-            createPost = (
-                <div
-                    className='post-create__container'
-                    id='post-create'
-                >
-                    <CreatePost
-                        getChannelView={this.getChannelView}
-                    />
-                </div>
-            );
+            if (this.props.isAdvancedTextEditorEnabled) {
+                createPost = (
+                    <div
+                        className='post-create__container AdvancedTextEditor__ctr'
+                        id='post-create'
+                    >
+                        <AdvancedCreatePost
+                            getChannelView={this.getChannelView}
+                        />
+                    </div>
+                );
+            } else {
+                createPost = (
+                    <div
+                        className='post-create__container'
+                        id='post-create'
+                    >
+                        <CreatePost
+                            getChannelView={this.getChannelView}
+                        />
+                    </div>
+                );
+            }
         }
 
         const DeferredPostView = this.state.deferredPostView;

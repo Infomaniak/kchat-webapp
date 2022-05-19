@@ -57,5 +57,6 @@ const WebsocketEvents = {
     CONFERENCE_DELETED: 'conference_deleted',
     CONFERENCE_USER_CONNECTED: 'conference_user_connected',
     CONFERENCE_USER_DISCONNECTED: 'conference_user_disconnected',
+    PUSHER_MEMBER_REMOVED: 'pusher:member_removed',
 };
 export default WebsocketEvents;

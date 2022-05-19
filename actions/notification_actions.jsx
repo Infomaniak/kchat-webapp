@@ -48,7 +48,7 @@ export function sendDesktopNotification(post, msgProps) {
 
         let mentions = [];
         if (msgProps.mentions) {
-            mentions = msgProps;
+            mentions = msgProps.mentions;
         }
 
         let followers = [];

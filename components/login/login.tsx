@@ -14,7 +14,7 @@ import React, {useEffect, useRef, useState} from 'react';
 // import {useDispatch, useSelector} from 'react-redux';
 import {useSelector} from 'react-redux';
 
-import {Link, useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
 import * as GlobalActions from 'actions/global_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
@@ -54,17 +54,17 @@ export const ExternalLoginButton = ({
     label,
     style,
 }: ExternalLoginButtonType) => (
-    <Link
+    <a
         id={id}
         className={classNames('login-body-card-form-login-option', id)}
-        to={url}
+        href={url}
         style={style}
     >
         {icon}
         <span className='login-body-card-form-login-option-label'>
             {label}
         </span>
-    </Link>
+    </a>
 );
 
 const Login = () => {

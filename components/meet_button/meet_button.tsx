@@ -12,7 +12,7 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
 export type Props = {
     currentChannelID: string;
-    hasCall: boolean;
+    hasCall?: boolean;
     intl: IntlShape;
     startCallInChannel: Function;
 }
@@ -43,7 +43,7 @@ function MeetButton(props: Props) {
             <div
                 className='icon icon--attachment'
             >
-                <button className='channel-header__icon channel-header__icon--wide channel-header__icon--left'>
+                <div className='channel-header__icon channel-header__icon--wide channel-header__icon--left'>
                     <CameraOutlineIcon/>
                     <span
                         className='icon__text'
@@ -51,7 +51,7 @@ function MeetButton(props: Props) {
                     >
                         {props.hasCall ? 'Join Call' : 'Start Call'}
                     </span>
-                </button>
+                </div>
             </div>
         </button>
     );
