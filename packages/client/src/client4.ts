@@ -4063,7 +4063,7 @@ export default class Client4 {
         return this.doFetch<any>(
 
             // `${this.getBaseRoute()}/token`,
-            `${loginUrl}/token`,
+            `${loginUrl}token`,
             {
                 method: 'post',
 

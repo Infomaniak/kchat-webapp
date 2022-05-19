@@ -71,8 +71,8 @@ const Login = () => {
     // const {formatMessage} = useIntl();
     // const dispatch = useDispatch<DispatchFunc>();
     const history = useHistory();
-    const {pathname, search, hash} = useLocation();
-
+    const {pathname, search, hash, code} = useLocation();
+console.log(useLocation())
     // Store token infos in localStorage
     const storeTokenResponse = (response: { expires_in?: any; access_token?: any; refresh_token?: any }) => {
         // TODO: store in redux
@@ -130,8 +130,8 @@ const Login = () => {
         }
 
         if (isDesktopApp()) {
-            // const loginCode = (new URLSearchParams(this.props.location.search)).get('code')
-
+            const loginCode = (new URLSearchParams(search)).get('code')
+console.log(loginCode)
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
@@ -206,6 +206,47 @@ const Login = () => {
                 //     return
             }
 
+            if (loginCode) {
+                // const hash2Obj = {};
+                // // eslint-disable-next-line array-callback-return
+                // hash.substring(1).split('&').map((hk) => {
+                //     const temp = hk.split('=');
+                //     hash2Obj[temp[0]] = temp[1];
+                // });
+                // this.storeTokenResponse(hash2Obj);
+                // localStorage.removeItem('challenge');
+                // LocalStorageStore.setWasLoggedIn(true);
+
+                // // location.reload();
+
+                // this.finishSignin();
+
+                // return;
+
+                const challenge = JSON.parse(localStorage.getItem('challenge'));
+
+                //    Get token
+                Client4.getIKLoginToken(
+                    loginCode,
+                    challenge?.challenge,
+                    challenge?.verifier,
+                    `${IKConstants.LOGIN_URL}`,
+                    `${IKConstants.CLIENT_ID}`,
+                ).then((resp) => {
+                    console.log("get token", resp);
+                    return
+                    // this.storeTokenResponse(resp);
+                    // localStorage.removeItem('challenge');
+                    // this.finishSignin();
+                }).catch((error) => {
+                    console.log(error);
+                },
+                ).finally(console.log("finally"));
+
+            //     localStorage.removeItem('challenge');
+            //     return
+            }
+
             if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= parseInt(Date.now() / 1000, 10))) {
                 // eslint-disable-next-line react/no-did-mount-set-state
                 setLoading(true);
@@ -218,7 +259,7 @@ const Login = () => {
                     localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
 
                     // TODO: add env for login url and/or current server
-                    window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=token&redirect_uri=ktalk://auth-desktop`);
+                    window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=ktalk://auth-desktop`);
                 }).catch(() => {
                     console.log('Error redirect');
 
