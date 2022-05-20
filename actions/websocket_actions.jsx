@@ -4,6 +4,7 @@
 
 import {batchActions} from 'redux-batched-actions';
 
+
 import {
     ChannelTypes,
     EmojiTypes,
@@ -28,8 +29,6 @@ import {
     viewChannel,
     markChannelAsRead,
     getChannelMemberCountsByGroup,
-    getChannelMembersByIds,
-    getChannelMembers,
 } from 'mattermost-redux/actions/channels';
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
@@ -71,7 +70,6 @@ import {
     getUser as loadUser,
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
-import {Client4} from 'mattermost-redux/client';
 import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 import {getMyTeams, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig, getLicense, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
@@ -82,7 +80,6 @@ import {
     getCurrentChannel,
     getCurrentChannelId,
     getRedirectChannelNameForTeam,
-    getMembersInCurrentChannel,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -116,9 +113,9 @@ import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
 import DialingModal from 'components/kmeet_conference/ringing_dialog';
-import {connectedChannelID, voiceChannelCallStartAt, voiceConnectedChannels, voiceUsersStatuses} from 'selectors/calls';
+import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {startCallInChannel} from './calls';
+import {needRefreshToken, refreshIKToken} from 'components/login/utils';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -606,6 +603,9 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.PUSHER_MEMBER_REMOVED:
         handlePusherMemberRemoved(msg);
+        break;
+    case SocketEvents.PUSHER_PONG:
+        handlePusherPong(msg);
         break;
     default:
     }
@@ -1274,6 +1274,9 @@ export function handleUserTypingEvent(msg) {
 }
 
 function handleStatusChangedEvent(msg) {
+    if (needRefreshToken()) {
+        refreshIKToken();
+    }
     dispatch({
         type: UserTypes.RECEIVED_STATUSES,
         data: [{user_id: msg.data.user_id, status: msg.data.status}],
@@ -1797,4 +1800,10 @@ function handleIncomingConferenceCall(msg) {
 
 function handlePusherMemberRemoved(msg) {
     console.log('pusher member removed', msg);
+}
+
+function handlePusherPong() {
+    if (needRefreshToken()) {
+        refreshIKToken();
+    }
 }
