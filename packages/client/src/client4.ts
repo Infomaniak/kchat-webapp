@@ -4069,10 +4069,10 @@ export default class Client4 {
         formData.append('code', code);
         formData.append('code_verifier', verifier);
         formData.append('client_id', clientId);
+        formData.append('redirect_uri', 'ktalk://auth-desktop');
 
         return this.doFetch<any>(
 
-            // `${this.getBaseRoute()}/token`,
             `${loginUrl}token`,
             {
                 method: 'post',
@@ -4094,10 +4094,9 @@ export default class Client4 {
         return this.doFetch<any>(
 
             // `${this.getBaseRoute()}/token`,
-            `${loginUrl}/token`,
+            `${loginUrl}token`,
             {
                 method: 'post',
-                mode: 'no-cors',
                 body: formData,
             },
         );
