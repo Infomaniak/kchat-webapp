@@ -87,25 +87,4 @@ describe('components/user_settings/display/user_settings_theme/user_settings_the
 
         expect(props.actions.deleteTeamSpecificThemes).toHaveBeenCalled();
     });
-
-    it('should call openModal when slack import theme button is clicked', async () => {
-        const props = {
-            ...requiredProps,
-            allowCustomThemes: true,
-            selected: true,
-        };
-
-        render(
-            <IntlProvider locale={'en'}>
-                <Provider store={store}>
-                    <UserSettingsTheme {...props}/>
-                </Provider>
-            </IntlProvider>,
-        );
-
-        // Click the Slack Import button
-        fireEvent.click(screen.getByText('Import theme colors from Slack'));
-
-        expect(props.actions.openModal).toHaveBeenCalledTimes(1);
-    });
 });

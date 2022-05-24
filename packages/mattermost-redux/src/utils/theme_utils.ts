@@ -120,15 +120,15 @@ export const blendColors = (background: string, foreground: string, opacity: num
 // - supports mapping old themes to new themes
 const themeTypeMap: ThemeTypeMap = {
     Mattermost: 'denim',
-    Organization: 'sapphire',
+    // Organization: 'sapphire',
     'Mattermost Dark': 'indigo',
-    'Windows Dark': 'onyx',
+    'Windows Dark': 'indigo',
     Infomaniak: 'ik',
     Denim: 'denim',
-    Sapphire: 'sapphire',
+    // Sapphire: 'sapphire',
     Quartz: 'quartz',
     Indigo: 'indigo',
-    Onyx: 'onyx',
+    // Onyx: 'onyx',
 };
 
 // setThemeDefaults will set defaults on the theme for any unset properties.

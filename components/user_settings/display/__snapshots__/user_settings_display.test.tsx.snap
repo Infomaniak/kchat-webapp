@@ -56,57 +56,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="linkpreview"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -272,22 +221,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
   </div>
 </div>
 `;
@@ -346,57 +279,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <div>
-      <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
     <div>
       <Connect(SettingItemMin)
         section="linkpreview"
@@ -564,22 +446,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
   </div>
 </div>
 `;
@@ -638,119 +504,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <div>
-      <SettingItemMax
-        containerStyle=""
-        extraInfo={null}
-        infoPosition="bottom"
-        inputs={
-          Array [
-            <fieldset>
-              <legend
-                className="form-legend hidden-label"
-              >
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Clock Display"
-                  id="user.settings.display.clockDisplay"
-                />
-              </legend>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="clockFormatA"
-                    name="clockFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="12-hour clock (example: 4:00 PM)"
-                    id="user.settings.display.normalClock"
-                  />
-                </label>
-                <br />
-              </div>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="clockFormatB"
-                    name="clockFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="24-hour clock (example: 16:00)"
-                    id="user.settings.display.militaryClock"
-                  />
-                </label>
-                <br />
-              </div>
-              <div>
-                <br />
-                <injectIntl(FormattedMarkdownMessage)
-                  defaultMessage="Select how you prefer time displayed."
-                  id="user.settings.display.preferTime"
-                />
-              </div>
-            </fieldset>,
-          ]
-        }
-        saving={false}
-        section=""
-        submit={[Function]}
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
     <div>
       <Connect(SettingItemMin)
         section="linkpreview"
@@ -856,22 +609,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
   </div>
 </div>
 `;
@@ -930,57 +667,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <div>
-      <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
     <div>
       <Connect(SettingItemMin)
         section="linkpreview"
@@ -1148,22 +834,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
   </div>
 </div>
 `;
@@ -1222,57 +892,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <div>
-      <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
     <div>
       <Connect(SettingItemMin)
         section="linkpreview"
@@ -1378,27 +997,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
-    <div>
-      <Connect(ManageLanguage)
-        locale="en"
-        updateSection={[Function]}
-        user={
-          Object {
-            "id": "user_id",
-            "locale": "en",
-            "timezone": Object {
-              "automaticTimezone": "America/New_York",
-              "manualTimezone": "",
-              "useAutomaticTimezone": "true",
-            },
-            "username": "username",
-          }
-        }
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
   </div>
 </div>
 `;
@@ -1457,57 +1055,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <div>
-      <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
     <div>
       <Connect(SettingItemMin)
         section="collapse"
@@ -1598,22 +1145,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
   </div>
 </div>
 `;
@@ -1672,57 +1203,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <div>
-      <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
     <div>
       <SettingItemMax
         containerStyle=""
@@ -1890,22 +1370,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
   </div>
 </div>
 `;
@@ -1964,57 +1428,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <div>
-      <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
     <div>
       <Connect(SettingItemMin)
         section="linkpreview"
@@ -2200,22 +1613,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
   </div>
 </div>
 `;
@@ -2274,57 +1671,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div
       className="divider-dark first"
     />
-    <div>
-      <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
     <div>
       <Connect(SettingItemMin)
         section="linkpreview"
@@ -2422,22 +1768,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
@@ -2506,57 +1836,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="linkpreview"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -2652,22 +1931,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
@@ -2736,57 +1999,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="linkpreview"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -2882,22 +2094,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
@@ -2978,57 +2174,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="linkpreview"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -3124,22 +2269,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
@@ -3208,57 +2337,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="clock"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Clock Display"
-            id="user.settings.display.clockDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show first and last name"
-            id="user.settings.display.teammateNameDisplayFullname"
-          />
-        }
-        section="name_format"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Teammate Name Display"
-            id="user.settings.display.teammateNameDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="availabilityStatus"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Show user availability on posts"
-            id="user.settings.display.availabilityStatusOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="linkpreview"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -3354,22 +2432,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        describe="English (US)"
-        section="languages"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Language"
-            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
