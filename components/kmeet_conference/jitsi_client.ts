@@ -31,42 +31,42 @@ class JitsiClient {
     }
 
     init(channelID: string, disconnectFunc: Function, parentRef: MutableRefObject<HTMLDivElement | null>) {
-        if (parentRef.current) {
-            this.channelID = channelID;
-            this.disconnect = disconnectFunc;
-            const configOverwrite = {
-                startWithAudioMuted: false,
-                startWithVideoMuted: true,
-                subject: this.channelID,
-                prejoinConfig: {enabled: false},
-                disableDeepLinking: true,
-            };
+        // if (parentRef.current) {
+        //     this.channelID = channelID;
+        //     this.disconnect = disconnectFunc;
+        //     const configOverwrite = {
+        //         startWithAudioMuted: false,
+        //         startWithVideoMuted: true,
+        //         subject: this.channelID,
+        //         prejoinConfig: {enabled: false},
+        //         disableDeepLinking: true,
+        //     };
 
-            this.api = new (window as any).JitsiMeetExternalAPI(KMEET_DOMAIN,
-                {configOverwrite,
-                    parentNode: parentRef.current,
-                    onload: () => {
-                        console.log('[jitsi] api onload');
+        //     this.api = new (window as any).JitsiMeetExternalAPI(KMEET_DOMAIN,
+        //         {configOverwrite,
+        //             parentNode: parentRef.current,
+        //             onload: () => {
+        //                 console.log('[jitsi] api onload');
 
-                        // for (const [event, callbacks] of Object.entries(this.subscribers)) {
-                        //     callbacks.forEach((cb) => {
-                        //         this.api.addEventListener(event, this.log);
-                        //     });
-                        // }
-                    },
-                    roomName: this.channelID});
+        //                 // for (const [event, callbacks] of Object.entries(this.subscribers)) {
+        //                 //     callbacks.forEach((cb) => {
+        //                 //         this.api.addEventListener(event, this.log);
+        //                 //     });
+        //                 // }
+        //             },
+        //             roomName: this.channelID});
 
-            this.api.addListener('audioMuteStatusChanged', (data: {muted: boolean}) => {
-                if (this.audioMuteStatusChanged) {
-                    this.audioMuteStatusChanged(data);
-                }
-            });
-            this.api.on('readyToClose', () => {
-                if (this.readyToClose) {
-                    this.readyToClose();
-                }
-            });
-        }
+        //     this.api.addListener('audioMuteStatusChanged', (data: {muted: boolean}) => {
+        //         if (this.audioMuteStatusChanged) {
+        //             this.audioMuteStatusChanged(data);
+        //         }
+        //     });
+        //     this.api.on('readyToClose', () => {
+        //         if (this.readyToClose) {
+        //             this.readyToClose();
+        //         }
+        //     });
+        // }
     }
 
     executeCommand(command: string) {

@@ -89,7 +89,7 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
             <React.Fragment>
                 {this.props.callChannel && (
                     <React.Fragment>
-                        {isDesktopApp() && <RenderIFrame/>}
+                        {/* {isDesktopApp() && <RenderIFrame/>} */}
                         <MeetWidget/>
                     </React.Fragment>
                 )}
