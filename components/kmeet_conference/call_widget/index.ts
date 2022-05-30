@@ -8,19 +8,17 @@ import {UserProfile} from 'mattermost-redux/types/users';
 import {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 import {getTeam, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {Client4} from 'mattermost-redux/client';
 
-import {connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelCallStartAt, expandedView} from 'selectors/calls';
+import {connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelCallStartAt, expandedView, connectedCallID, voiceConnectedChannels, voiceConnectedProfilesInChannel} from 'selectors/calls';
 
 // import {getChannelURL, alphaSortProfiles, stateSortProfiles} from '../../utils';
 
 import {getChannelURL, alphaSortProfiles, stateSortProfiles} from '../utils';
 import {showExpandedView, hideExpandedView} from 'actions/calls';
-
-import {UserState} from 'reducers/views/calls';
 
 import {ActionTypes} from 'utils/constants';
 import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
@@ -29,14 +27,33 @@ import CallWidget from './component';
 
 const mapStateToProps = (state: GlobalState) => {
     const channel = getChannel(state, connectedChannelID(state));
+    const connectedConfID = connectedCallID(state) || '';
+    const channels = voiceConnectedChannels(state);
 
-    const sortedProfiles = (profiles: UserProfile[], statuses: {[key: string]: UserState}) => {
-        return [...profiles].sort(alphaSortProfiles()).sort(stateSortProfiles(statuses, ''));
-    };
+    const profiles: UserProfile[] = [];
+    const pictures: string[] = [];
+    if (channels) {
+        let users;
+        if (channels[channel.id] && channels[channel.id][connectedConfID]) {
+            users = channels[channel.id][connectedConfID];
+        }
 
-    // const statuses = voiceUsersStatuses(state);
-    // sortedProfiles( , {});
-    const profiles = voiceConnectedProfiles(state);
+        if (users && users.length > 0) {
+            const connectedProfiles = voiceConnectedProfilesInChannel(state, channel.id, connectedConfID);
+
+            for (let i = 0; i < connectedProfiles.length; i++) {
+                const u = getUser(state, connectedProfiles[i]);
+                if (u) {
+                    profiles[u.id] = u;
+                    pictures[u.id] = Client4.getProfilePictureUrl(u.id, u.last_picture_update);
+                } else if (profiles && profiles[i]) {
+                    try {
+                        profiles.splice(i, 1);
+                    } catch {}
+                }
+            }
+        }
+    }
 
     const profilesMap: IDMappedObjects<UserProfile> = {};
     const picturesMap: {
@@ -61,6 +78,7 @@ const mapStateToProps = (state: GlobalState) => {
         profiles,
         profilesMap,
         picturesMap,
+        pictures,
         statuses: voiceUsersStatuses(state) || {},
         callStartAt: voiceChannelCallStartAt(state, channel?.id) || 0,
         show: !expandedView(state),
