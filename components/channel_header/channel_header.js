@@ -662,7 +662,7 @@ class ChannelHeader extends React.PureComponent {
                     }
                     {hasGuestsText}
                     {editMessage}
-                    <MeetButton/>
+                    {/* <MeetButton/> */}
                 </div>
             );
         }
@@ -828,7 +828,7 @@ class ChannelHeader extends React.PureComponent {
                         channel={channel}
                         channelMember={channelMember}
                     />
-                    <CallButton/>
+                    <MeetButton/>
                     <ChannelInfoButton channel={channel}/>
                 </div>
             </div>

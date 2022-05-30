@@ -1,14 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 import React, {useRef} from 'react';
-import {injectIntl, IntlShape} from 'react-intl';
+import {injectIntl, IntlShape, FormattedMessage} from 'react-intl';
 
 // import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
 import {useSelector} from 'react-redux';
 
-import {CameraOutlineIcon} from '@mattermost/compass-icons/components';
+import OverlayTrigger from 'components/overlay_trigger';
+import {getCurrentChannelId, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 
-import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
+import Tooltip from 'components/tooltip';
+
+import Constants from 'utils/constants';
+
+import store from 'stores/redux_store.jsx';
+import {GlobalState} from 'types/store';
+
+import SvgCallComponent from './SvgCallComponent';
 
 export type Props = {
     currentChannelID: string;
@@ -26,33 +34,41 @@ export type Props = {
 function MeetButton(props: Props) {
     // const {formatMessage} = props.intl;
     const {startCallInChannel} = props;
+    const state = store.getState();
+    const connectedCallID = useSelector((state: GlobalState) => state.views.calls.connectedCallID);
     const ref = useRef<HTMLButtonElement>(null);
     const channelID = useSelector(getCurrentChannelId);
-
+    const currentUserId = getCurrentUserId(state);
     const onClick = React.useCallback(() => {
         startCallInChannel(channelID);
     }, [channelID]);
 
+    const userIsInCall = connectedCallID ? props.hasCall[connectedCallID].map((u) => u).includes(currentUserId) : false;
+
+    const tooltip = (
+        <Tooltip id='call'>
+            <FormattedMessage
+                id={props.hasCall ? 'Join Call' : 'Start Call'}
+                defaultMessage={props.hasCall ? 'Join Call' : 'Start Call'}
+            />
+        </Tooltip>
+    );
+
+    const btnClasses = `channel-header__icon channel-header__icon--call ${userIsInCall && 'channel-header__icon--calling'}`;
     return (
         <button
             type='button'
-            className='style--none channel-header__push-right'
+            className={btnClasses}
             onClick={onClick}
             ref={ref}
         >
-            <div
-                className='icon icon--attachment'
+            <OverlayTrigger
+                delayShow={Constants.OVERLAY_TIME_DELAY}
+                placement='bottom'
+                overlay={tooltip}
             >
-                <div className='channel-header__icon channel-header__icon--wide channel-header__icon--left'>
-                    <CameraOutlineIcon/>
-                    <span
-                        className='icon__text'
-                        style={{margin: '0 6px'}}
-                    >
-                        {props.hasCall ? 'Join Call' : 'Start Call'}
-                    </span>
-                </div>
-            </div>
+                <SvgCallComponent/>
+            </OverlayTrigger>
         </button>
     );
 }
