@@ -12,7 +12,6 @@ import ConnectedProfiles from '../connected_profiles';
 import {Post} from 'mattermost-redux/types/posts';
 import {UserProfile} from 'mattermost-redux/types/users';
 import {isDesktopApp} from 'utils/user_agent';
-import JitsiClient from '../jitsi_client';
 
 interface Props {
     post: Post;
@@ -28,7 +27,7 @@ interface Props {
 }
 
 const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, leaveCallInChannel}: Props) => {
-    const client = isDesktopApp() ? JitsiClient : window;
+    const client = window;
 
     window.addEventListener('beforeunload', (e) => {
         if (hasCall && connectedID === post.props.conference_id && !post.props.end_at) {
