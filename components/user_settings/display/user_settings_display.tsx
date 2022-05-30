@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 /* eslint-disable react/no-string-refs */
+/* eslint-disable max-lines */
 
 import deepEqual from 'fast-deep-equal';
 import React from 'react';
@@ -999,10 +1000,10 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     </h3>
                     <div className='divider-dark first'/>
                     {themeSection}
-                    {clockSection}
+                    {/* {clockSection}
                     {teammateNameDisplaySection}
                     {availabilityStatusOnPostsSection}
-                    {timezoneSelection}
+                    {timezoneSelection} */}
                     {linkPreviewSection}
                     {collapseSection}
                     {messageDisplaySection}
@@ -1010,7 +1011,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     {clickToReply}
                     {channelDisplayModeSection}
                     {oneClickReactionsOnPostsSection}
-                    {languagesSection}
+                    {/* {languagesSection} */}
                 </div>
             </div>
         );

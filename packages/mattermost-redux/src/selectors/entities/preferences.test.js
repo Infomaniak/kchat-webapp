@@ -471,7 +471,7 @@ describe('Selectors.Preferences', () => {
         it('non-default system theme', () => {
             const currentTeamId = '1234';
             const theme = {
-                type: Preferences.THEMES.onyx.type,
+                type: Preferences.THEMES.indigo.type,
             };
 
             assert.equal(Selectors.getTheme({
@@ -492,7 +492,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            }).codeTheme, Preferences.THEMES.onyx.codeTheme);
+            }).codeTheme, Preferences.THEMES.indigo.codeTheme);
         });
 
         it('should return the server-configured theme by default', () => {
@@ -519,7 +519,7 @@ describe('Selectors.Preferences', () => {
                 entities: {
                     general: {
                         config: {
-                            DefaultTheme: 'onyx',
+                            DefaultTheme: 'denim',
                         },
                     },
                     teams: {

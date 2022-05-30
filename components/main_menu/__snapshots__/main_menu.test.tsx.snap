@@ -91,57 +91,6 @@ exports[`components/Menu should match snapshot with guest access disabled and no
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "remove_user_from_team",
-          "manage_team_roles",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamMembersModal)",
-            "type": [Function],
-          }
-        }
-        id="manageMembers"
-        modalId="team_members"
-        show={true}
-        text="Manage Members"
-      />
-    </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      invert={true}
-      permissions={
-        Array [
-          "remove_user_from_team",
-          "manage_team_roles",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamMembersModal)",
-            "type": [Function],
-          }
-        }
-        id="viewMembers"
-        modalId="team_members"
-        show={true}
-        text="View Members"
-      />
-    </Connect(TeamPermissionGate)>
     <MenuItemLink
       id="joinTeam"
       show={false}
@@ -164,22 +113,6 @@ exports[`components/Menu should match snapshot with guest access disabled and no
       show={true}
       text="Leave Team"
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "create_team",
-        ]
-      }
-    >
-      <MenuItemLink
-        id="createTeam"
-        show={true}
-        text="Create a Team"
-        to="/create_team"
-      />
-    </Connect(SystemPermissionGate)>
   </MenuGroup>
   <MenuGroup />
 </Menu>
@@ -295,57 +228,6 @@ exports[`components/Menu should match snapshot with id 1`] = `
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "remove_user_from_team",
-          "manage_team_roles",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamMembersModal)",
-            "type": [Function],
-          }
-        }
-        id="manageMembers"
-        modalId="team_members"
-        show={true}
-        text="Manage Members"
-      />
-    </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      invert={true}
-      permissions={
-        Array [
-          "remove_user_from_team",
-          "manage_team_roles",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamMembersModal)",
-            "type": [Function],
-          }
-        }
-        id="viewMembers"
-        modalId="team_members"
-        show={true}
-        text="View Members"
-      />
-    </Connect(TeamPermissionGate)>
     <MenuItemLink
       id="joinTeam"
       show={false}
@@ -368,22 +250,6 @@ exports[`components/Menu should match snapshot with id 1`] = `
       show={true}
       text="Leave Team"
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "create_team",
-        ]
-      }
-    >
-      <MenuItemLink
-        id="createTeam"
-        show={true}
-        text="Create a Team"
-        to="/create_team"
-      />
-    </Connect(SystemPermissionGate)>
   </MenuGroup>
   <MenuGroup />
 </Menu>
@@ -498,57 +364,6 @@ exports[`components/Menu should match snapshot with most of the thing disabled 1
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "remove_user_from_team",
-          "manage_team_roles",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamMembersModal)",
-            "type": [Function],
-          }
-        }
-        id="manageMembers"
-        modalId="team_members"
-        show={true}
-        text="Manage Members"
-      />
-    </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      invert={true}
-      permissions={
-        Array [
-          "remove_user_from_team",
-          "manage_team_roles",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamMembersModal)",
-            "type": [Function],
-          }
-        }
-        id="viewMembers"
-        modalId="team_members"
-        show={true}
-        text="View Members"
-      />
-    </Connect(TeamPermissionGate)>
     <MenuItemLink
       id="joinTeam"
       show={false}
@@ -571,22 +386,6 @@ exports[`components/Menu should match snapshot with most of the thing disabled 1
       show={true}
       text="Leave Team"
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "create_team",
-        ]
-      }
-    >
-      <MenuItemLink
-        id="createTeam"
-        show={true}
-        text="Create a Team"
-        to="/create_team"
-      />
-    </Connect(SystemPermissionGate)>
   </MenuGroup>
   <MenuGroup />
 </Menu>
@@ -1109,57 +908,6 @@ exports[`components/Menu should match snapshot with most of the thing enabled 1`
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "remove_user_from_team",
-          "manage_team_roles",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamMembersModal)",
-            "type": [Function],
-          }
-        }
-        id="manageMembers"
-        modalId="team_members"
-        show={true}
-        text="Manage Members"
-      />
-    </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      invert={true}
-      permissions={
-        Array [
-          "remove_user_from_team",
-          "manage_team_roles",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamMembersModal)",
-            "type": [Function],
-          }
-        }
-        id="viewMembers"
-        modalId="team_members"
-        show={true}
-        text="View Members"
-      />
-    </Connect(TeamPermissionGate)>
     <MenuItemLink
       id="joinTeam"
       show={false}
@@ -1182,22 +930,6 @@ exports[`components/Menu should match snapshot with most of the thing enabled 1`
       show={true}
       text="Leave Team"
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "create_team",
-        ]
-      }
-    >
-      <MenuItemLink
-        id="createTeam"
-        show={true}
-        text="Create a Team"
-        to="/create_team"
-      />
-    </Connect(SystemPermissionGate)>
   </MenuGroup>
   <MenuGroup />
 </Menu>
@@ -1722,57 +1454,6 @@ exports[`components/Menu should match snapshot with plugins 1`] = `
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "remove_user_from_team",
-          "manage_team_roles",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamMembersModal)",
-            "type": [Function],
-          }
-        }
-        id="manageMembers"
-        modalId="team_members"
-        show={true}
-        text="Manage Members"
-      />
-    </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      invert={true}
-      permissions={
-        Array [
-          "remove_user_from_team",
-          "manage_team_roles",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamMembersModal)",
-            "type": [Function],
-          }
-        }
-        id="viewMembers"
-        modalId="team_members"
-        show={true}
-        text="View Members"
-      />
-    </Connect(TeamPermissionGate)>
     <MenuItemLink
       id="joinTeam"
       show={false}
@@ -1795,22 +1476,6 @@ exports[`components/Menu should match snapshot with plugins 1`] = `
       show={true}
       text="Leave Team"
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "create_team",
-        ]
-      }
-    >
-      <MenuItemLink
-        id="createTeam"
-        show={true}
-        text="Create a Team"
-        to="/create_team"
-      />
-    </Connect(SystemPermissionGate)>
   </MenuGroup>
   <MenuGroup>
     <MenuItemAction

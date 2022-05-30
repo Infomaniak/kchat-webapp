@@ -3,14 +3,13 @@
 import {Dispatch} from 'redux';
 
 import {DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
-import Constants, {ActionTypes} from 'utils/constants';
+import {ActionTypes} from 'utils/constants';
 import {connectedChannelID, voiceConnectedChannels, voiceConnectedUsers} from 'selectors/calls';
 import {getProfilesByIds} from 'mattermost-redux/actions/users';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
 import {isDesktopApp} from 'utils/user_agent';
-import { getChannel, makeGetChannel } from 'mattermost-redux/selectors/entities/channels';
-import { getUser } from 'mattermost-redux/selectors/entities/users';
+import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 
 // import {Client4} from 'mattermost-redux/client';
 
@@ -171,6 +170,40 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                     },
                 });
             };
+
+            return;
         }
+        window.postMessage(
+            {
+                type: 'call-joined',
+                message: {
+                    url: data?.url,
+                    id: data?.id,
+                },
+            },
+            window.origin,
+        );
+
+        window.addEventListener('message', ({origin, data: {type, message = {}} = {}} = {}) => {
+            if (origin !== window.location.origin) {
+                return;
+            }
+
+            switch (type) {
+            case 'call-closed': {
+                Client4.leaveMeet(message.id);
+                dispatch({
+                    type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
+                    data: {
+                        channelID,
+                        userID: getCurrentUserId(getState()),
+                        currentUserID: getCurrentUserId(getState()),
+                        callID: message.id,
+                    },
+                });
+                break;
+            }
+            }
+        });
     };
 }

@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import AppNameDisplay from 'components/app_name_display';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -22,7 +23,8 @@ const LeftControlsContainer = styled.div`
 
 const LeftControls = (): JSX.Element => (
     <LeftControlsContainer>
-        <ProductMenu/>
+        {/* <ProductMenu/> */}
+        <AppNameDisplay/>
         {isDesktopApp() && <HistoryButtons/>}
     </LeftControlsContainer>
 );
