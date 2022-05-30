@@ -5,6 +5,8 @@ import React from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import classNames from 'classnames';
 
+import {Channel} from '@mattermost/types/channels';
+
 import {ActionFunc} from 'mattermost-redux/types/actions';
 
 import LoadingScreen from 'components/loading_screen';
@@ -12,13 +14,9 @@ import PermalinkView from 'components/permalink_view';
 import ChannelHeaderMobile from 'components/channel_header_mobile';
 import ChannelIdentifierRouter from 'components/channel_layout/channel_identifier_router';
 import PlaybookRunner from 'components/channel_layout/playbook_runner';
-import NextStepsView from 'components/next_steps_view';
 import ActivityAndInsights from 'components/activity_and_insights/activity_and_insights';
 import {makeAsyncComponent} from 'components/async_load';
 import MeetWidget from 'components/kmeet_conference/call_widget';
-import RenderIFrame from 'components/kmeet_conference/iframe';
-import {isDesktopApp} from 'utils/user_agent';
-import {Channel} from 'mattermost-redux/types/channels';
 
 const LazyGlobalThreads = makeAsyncComponent(
     'LazyGlobalThreads',
@@ -43,9 +41,7 @@ type Props = {
     rhsMenuOpen: boolean;
     isCollapsedThreadsEnabled: boolean;
     currentUserId: string;
-    enableTipsViewRoute: boolean;
     callChannel: Channel;
-    callExpandedView: boolean;
     insightsAreEnabled: boolean;
     actions: {
         getProfiles: (page?: number, perPage?: number, options?: Record<string, string | boolean>) => ActionFunc;
@@ -82,17 +78,11 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {lastChannelPath, isCollapsedThreadsEnabled, enableTipsViewRoute, insightsAreEnabled} = this.props;
+        const {lastChannelPath, isCollapsedThreadsEnabled, insightsAreEnabled} = this.props;
         const url = this.props.match.url;
-
         return (
             <React.Fragment>
-                {this.props.callChannel && (
-                    <React.Fragment>
-                        {/* {isDesktopApp() && <RenderIFrame/>} */}
-                        <MeetWidget/>
-                    </React.Fragment>
-                )}
+                {this.props.callChannel && <MeetWidget/>}
                 <div
                     key='inner-wrap'
                     className={classNames('inner-wrap', 'channel__wrap', {
@@ -106,9 +96,6 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                             <ChannelHeaderMobile/>
                         </div>
                     </div>
-                    {/* <MeetWidget>
-                    <CallIFrame/>
-                </MeetWidget> */}
                     <div className='row main'>
                         <Switch>
                             <Route
@@ -120,17 +107,6 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                                     />
                                 )}
                             />
-                            {/* <Route
-                                path='/:team/:path(channels|messages)/:identifier/call'
-                                render={() => (
-                                    <React.Fragment>
-                                        <RenderInWindow>
-                                            <CallIFrame/>
-                                        </RenderInWindow>
-                                        <MeetWidget/>
-                                    </React.Fragment>
-                                )}
-                            /> */}
                             <Route
                                 path='/:team/:path(channels|messages)/:identifier/:postid?'
                                 component={ChannelIdentifierRouter}
@@ -140,13 +116,6 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                             >
                                 <PlaybookRunner/>
                             </Route>
-                            {enableTipsViewRoute ? (
-                                <Route
-                                    path='/:team/tips'
-                                    component={NextStepsView}
-                                />
-
-                            ) : null}
                             {isCollapsedThreadsEnabled ? (
                                 <Route
                                     path='/:team/threads/:threadIdentifier?'

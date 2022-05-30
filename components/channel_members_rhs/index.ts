@@ -27,8 +27,8 @@ import {openModal} from 'actions/views/modals';
 import {closeRightHandSide, goBack} from 'actions/views/rhs';
 import {getPreviousRhsState} from 'selectors/rhs';
 import {setChannelMembersRhsSearchTerm} from 'actions/views/search';
-import {loadProfilesAndReloadChannelMembers, searchProfilesAndChannelMembers} from 'actions/user_actions';
-import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
+import {loadProfilesAndReloadChannelMembers} from 'actions/user_actions';
+import {Channel, ChannelMembership} from '@mattermost/types/channels';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 import {loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
 
@@ -147,7 +147,6 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             setChannelMembersRhsSearchTerm,
             loadProfilesAndReloadChannelMembers,
             loadMyChannelMemberAndRole,
-            searchProfilesAndChannelMembers,
         }, dispatch),
     };
 }
