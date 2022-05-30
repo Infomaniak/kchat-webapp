@@ -540,6 +540,8 @@ export const SocketEvents = {
     CONFERENCE_USER_CONNECTED: 'conference_user_connected',
     CONFERENCE_USER_DISCONNECTED: 'conference_user_disconnected',
     PUSHER_MEMBER_REMOVED: 'pusher:member_removed',
+    PUSHER_PING: 'pusher:ping',
+    PUSHER_PONG: 'pusher:pong',
 };
 
 export const TutorialSteps = {
