@@ -18,6 +18,9 @@ import {isDevMode, setCSRFFromCookie} from 'utils/utils';
 import {AnnouncementBarTypes} from 'utils/constants';
 import store from 'stores/redux_store.jsx';
 import App from 'components/app';
+import sentry from 'utils/sentry';
+
+sentry({SENTRY_DSN: 'https://75ce8efdf6ed465d89ae9990c403a72d@sentry.infomaniak.com/53'});
 
 // This is for anything that needs to be done for ALL react components.
 // This runs before we start to render anything.
