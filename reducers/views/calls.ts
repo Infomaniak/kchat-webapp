@@ -223,41 +223,41 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
     case ActionTypes.VOICE_CHANNEL_UNINIT:
         return {};
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
-        if (!state[action.data.channelID]) {
+    case ActionTypes.VOICE_CHANNEL_ADDED:
+        if (!state[action.data.id]) {
             return {
                 ...state,
-                [action.data.channelID]: {
-                    [action.data.id]: [action.data.userID],
+                [action.data.id]: {
+                    [action.data.userID]: {},
                 },
             };
         }
-        if (action.data.userID && state[action.data.channelID][action.data.id].indexOf(action.data.userID) === -1) {
+        if (action.data.userID && Object.keys(state[action.data.id]).indexOf(action.data.userID) === -1) {
             return {
                 ...state,
-                [action.data.channelID]: {
-                    ...state[action.data.channelID],
-                    [action.data.id]: [
-                        ...state[action.data.channelID][action.data.id],
-                        action.data.userID,
-                    ],
+                [action.data.id]: {
+                    ...state[action.data.id],
+                    [action.data.userID]: {},
                 },
             };
         }
         return state;
     case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED: {
-        const chan = state[action.data.channelID];
-        if (chan) {
-            let callChan = chan[action.data.callID];
-            if (callChan) {
-                callChan = callChan.filter((val) => val !== action.data.userID);
-                return {
-                    ...state,
-                    [action.data.channelID]: {
-                        ...state[action.data.channelID],
-                        [action.data.callID]: callChan,
-                    },
-                };
-            }
+        const call = state[action.data.callID];
+        if (call) {
+            const newCall = Object.entries(call).filter(([key, val]) => key !== action.data.userID);
+            return {
+                ...state,
+                [action.data.callID]: Object.fromEntries(newCall),
+            };
+        }
+        return state;
+    }
+    case ActionTypes.VOICE_CHANNEL_DELETED: {
+        if (action.data.callID) {
+            const filteredCallsIds = Object.entries(state).filter(([key, val]) => key !== action.data.callID);
+
+            return filteredCallsIds.length > 0 ? Object.fromEntries(filteredCallsIds) : null;
         }
         return state;
     }
@@ -266,34 +266,13 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
             ...state,
             [action.data.channelID]: action.data.states,
         };
-    case ActionTypes.VOICE_CHANNEL_USER_MUTED:
-        if (!state[action.data.channelID]) {
+        case ActionTypes.VOICE_CHANNEL_USER_MUTED:
+            console.log("mute", action.data)
+        if (!state[action.data.callID]) {
             return {
                 ...state,
-                [action.data.channelID]: {
-                    [action.data.userID]: {
-                        unmuted: false,
-                        voice: false,
-                        raised_hand: 0,
-                    },
-                },
-            };
-        }
-        return {
-            ...state,
-            [action.data.channelID]: {
-                ...state[action.data.channelID],
-                [action.data.userID]: {
-                    ...state[action.data.channelID][action.data.userID],
-                    unmuted: false,
-                },
-            },
-        };
-    case ActionTypes.VOICE_CHANNEL_USER_UNMUTED:
-        if (!state[action.data.channelID]) {
-            return {
-                ...state,
-                [action.data.channelID]: {
+                [action.data.callID]: {
+                    ...state[action.data.callID],
                     [action.data.userID]: {
                         unmuted: true,
                         voice: false,
@@ -304,11 +283,36 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
         }
         return {
             ...state,
-            [action.data.channelID]: {
-                ...state[action.data.channelID],
+            [action.data.callID]: {
+                ...state[action.data.callID],
                 [action.data.userID]: {
-                    ...state[action.data.channelID][action.data.userID],
+                    ...state[action.data.callID][action.data.userID],
                     unmuted: true,
+                },
+            },
+        };
+    case ActionTypes.VOICE_CHANNEL_USER_UNMUTED:
+        console.log("unmute", action.data)
+        if (!state[action.data.callID]) {
+            return {
+                ...state,
+                [action.data.callID]: {
+                    ...state[action.data.callID],
+                    [action.data.userID]: {
+                        unmuted: false,
+                        voice: false,
+                        raised_hand: 0,
+                    },
+                },
+            };
+        }
+        return {
+            ...state,
+            [action.data.callID]: {
+                ...state[action.data.callID],
+                [action.data.userID]: {
+                    ...state[action.data.callID][action.data.userID],
+                    unmuted: false,
                 },
             },
         };

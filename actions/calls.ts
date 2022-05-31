@@ -207,3 +207,16 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
         });
     };
 }
+
+export function updateAudioStatus(dialingID: string, muted: boolean = false) {
+    console.log("dispatch mute")
+    return async (dispatch: DispatchFunc, getState) => {
+        dispatch({
+            type: muted ? ActionTypes.VOICE_CHANNEL_USER_MUTED : ActionTypes.VOICE_CHANNEL_USER_UNMUTED,
+            data: {
+                userID: getCurrentUserId(getState()),
+                callID: dialingID,
+            },
+        });
+    };
+}
