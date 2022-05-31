@@ -28,11 +28,9 @@ import {UserState} from 'reducers/views/calls';
 import './component.scss';
 import Avatar from 'components/widgets/users/avatar';
 
-// import JitsiClient from '../jitsi_client';
 import GlobeIcon from 'components/widgets/icons/globe_icon';
 
 import {isDesktopApp} from 'utils/user_agent';
-import JitsiClient from '../jitsi_client';
 
 interface Props {
     theme: any;
@@ -42,6 +40,7 @@ interface Props {
     channelURL: string;
     profiles: UserProfile[];
     profilesMap: IDMappedObjects<UserProfile>;
+    pictures: string[];
     picturesMap: {
         [key: string]: string;
     };
@@ -218,7 +217,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.client = isDesktopApp() ? JitsiClient : window;
+        this.client = window;
         this.state = {
             showMenu: false,
             showParticipantsList: false,
@@ -247,7 +246,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
         this.client.audioMuteStatusChanged = (data) => this.setState({audioMuted: data.muted});
         this.client.readyToClose = () => this.props.disconnect();
-
         // This is needed to force a re-render to periodically update
         // the start time.
         const id = setInterval(() => this.forceUpdate(), 1000);
@@ -504,7 +502,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         }
 
         const renderParticipants = () => {
-            return this.props.profiles.map((profile, idx) => {
+            return Object.values(this.props.profiles).map((profile) => {
                 const status = this.props.statuses[profile.id];
                 let isMuted = true;
                 let isSpeaking = false;
@@ -525,7 +523,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                     >
                         <Avatar
                             size='sm'
-                            url={this.props.picturesMap[profile.id]}
+                            url={this.props.pictures[profile.id]}
                             style={{marginRight: '8px'}}
                         />
 
@@ -629,14 +627,13 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
     renderProfiles = () => {
         let speakingPictureURL;
-        for (let i = 0; i < this.props.profiles.length; i++) {
-            const profile = this.props.profiles[i];
+        this.props.profiles.forEach((p) => {
+            const profile = p;
             const status = this.props.statuses[profile.id];
             if (status?.voice) {
-                speakingPictureURL = this.props.picturesMap[profile.id];
-                break;
+                speakingPictureURL = this.props.pictures[profile.id];
             }
-        }
+        });
 
         return (
             <div
@@ -695,8 +692,8 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                 return null;
             }
 
-            const profile = this.props.profilesMap[userID];
-            const picture = this.props.picturesMap[userID];
+            const profile = this.props.profiles[userID];
+            const picture = this.props.pictures[userID];
             if (!profile) {
                 return null;
             }
@@ -1033,7 +1030,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
                                     <span
                                         style={{fontWeight: 600, color: 'white'}}
-                                    >{this.props.profiles.length}</span>
+                                    >{Object.keys(this.props.profiles).length}</span>
                                 </button>
                             </OverlayTrigger>
 

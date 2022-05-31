@@ -212,7 +212,7 @@ interface UsersStatusesAction {
     type: string;
     data: {
         channelID: string;
-        userID: string;
+        userID?: string;
         raised_hand?: number;
         states: {[userID: string]: UserState};
     };
@@ -223,30 +223,44 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
     case ActionTypes.VOICE_CHANNEL_UNINIT:
         return {};
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
-        if (state[action.data.channelID]) {
+        if (!state[action.data.channelID]) {
+            return {
+                ...state,
+                [action.data.channelID]: {
+                    [action.data.id]: [action.data.userID],
+                },
+            };
+        }
+        if (action.data.userID && state[action.data.channelID][action.data.id].indexOf(action.data.userID) === -1) {
             return {
                 ...state,
                 [action.data.channelID]: {
                     ...state[action.data.channelID],
-                    [action.data.userID]: {
-                        unmuted: false,
-                        voice: false,
-                        raised_hand: 0,
-                    },
+                    [action.data.id]: [
+                        ...state[action.data.channelID][action.data.id],
+                        action.data.userID,
+                    ],
                 },
             };
         }
         return state;
-    case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED:
-        if (state[action.data.channelID]) {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const {[action.data.userID]: omit, ...res} = state[action.data.channelID];
-            return {
-                ...state,
-                [action.data.channelID]: res,
-            };
+    case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED: {
+        const chan = state[action.data.channelID];
+        if (chan) {
+            let callChan = chan[action.data.callID];
+            if (callChan) {
+                callChan = callChan.filter((val) => val !== action.data.userID);
+                return {
+                    ...state,
+                    [action.data.channelID]: {
+                        ...state[action.data.channelID],
+                        [action.data.callID]: callChan,
+                    },
+                };
+            }
         }
         return state;
+    }
     case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED_STATES:
         return {
             ...state,
