@@ -182,7 +182,7 @@ export function sendDesktopNotification(post, msgProps) {
             dispatch(notifyMe(title, body, channel, teamId, !sound, soundName, url));
 
             //Don't add extra sounds on native desktop clients
-            if (sound && !isDesktopApp() && !isMobileApp()) {
+            if (sound && !isDesktopApp() && !isMobileApp() && (post && post.type !== 'custom_call')) {
                 Utils.ding(soundName);
             }
         }
