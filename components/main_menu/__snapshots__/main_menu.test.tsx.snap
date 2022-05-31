@@ -730,17 +730,6 @@ exports[`components/Menu should match snapshot with most of the thing disabled i
       show={false}
       text="Help"
     />
-    <MenuItemAction
-      icon={
-        <i
-          className="icon icon-play"
-        />
-      }
-      id="gettingStarted"
-      onClick={[Function]}
-      show={false}
-      text="Getting Started"
-    />
     <MenuItemExternalLink
       icon={
         <i
@@ -1274,17 +1263,6 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
       show={true}
       text="Help"
       url="test-link-help"
-    />
-    <MenuItemAction
-      icon={
-        <i
-          className="icon icon-play"
-        />
-      }
-      id="gettingStarted"
-      onClick={[Function]}
-      show={false}
-      text="Getting Started"
     />
     <MenuItemExternalLink
       icon={
@@ -1847,17 +1825,6 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
       id="helpLink"
       show={false}
       text="Help"
-    />
-    <MenuItemAction
-      icon={
-        <i
-          className="icon icon-play"
-        />
-      }
-      id="gettingStarted"
-      onClick={[Function]}
-      show={false}
-      text="Getting Started"
     />
     <MenuItemExternalLink
       icon={

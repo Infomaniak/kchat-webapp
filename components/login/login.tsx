@@ -25,9 +25,6 @@ import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferen
 import {getMyTeamMember, getTeamByName} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
-// import {DispatchFunc} from 'mattermost-redux/types/actions';
-import {Team} from 'mattermost-redux/types/teams';
-
 import LocalStorageStore from 'stores/local_storage_store';
 import {GlobalState} from 'types/store';
 import Constants from 'utils/constants';
@@ -36,6 +33,8 @@ import {isDesktopApp} from 'utils/user_agent';
 import {setCSRFFromCookie} from 'utils/utils';
 
 import './login.scss';
+import {Team} from '@mattermost/types/teams';
+
 import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from './utils';
 
 const Login = () => {
@@ -170,7 +169,7 @@ const Login = () => {
         } else if (useCaseOnboarding) {
             // need info about whether admin or not,
             // and whether admin has already completed
-            // first tiem onboarding. Instead of fetching and orchestrating that here,
+            // first time onboarding. Instead of fetching and orchestrating that here,
             // let the default root component handle it.
             history.push('/');
         } else {

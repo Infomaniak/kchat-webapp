@@ -12,7 +12,6 @@ import FileUploadOverlay from 'components/file_upload_overlay';
 import PostView from 'components/post_view';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
-import {browserHistory} from 'utils/browser_history';
 import WebSocketClient from 'client/web_websocket_client';
 import AdvancedCreatePost from 'components/advanced_create_post';
 
@@ -20,9 +19,7 @@ type Props = {
     channelId: string;
     deactivatedChannel: boolean;
     channelRolesLoading: boolean;
-    showNextStepsEphemeral: boolean;
     enableOnboardingFlow: boolean;
-    showNextSteps: boolean;
     teamUrl: string;
     match: {
         url: string;
@@ -34,11 +31,9 @@ type Props = {
     viewArchivedChannels: boolean;
     isCloud: boolean;
     isFirstAdmin: boolean;
-    useCaseOnboarding: boolean;
     isAdvancedTextEditorEnabled: boolean;
     actions: {
         goToLastViewedChannel: () => Promise<{data: boolean}>;
-        setShowNextStepsView: (x: boolean) => void;
     };
 };
 
@@ -119,11 +114,7 @@ export default class ChannelView extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {channelIsArchived, enableOnboardingFlow, showNextSteps, showNextStepsEphemeral, teamUrl} = this.props;
-        if (enableOnboardingFlow && showNextSteps && !showNextStepsEphemeral && !(this.props.useCaseOnboarding && this.props.isFirstAdmin)) {
-            this.props.actions.setShowNextStepsView(true);
-            browserHistory.push(`${teamUrl}/tips`);
-        }
+        const {channelIsArchived} = this.props;
 
         let createPost;
         if (this.props.deactivatedChannel) {
