@@ -18,7 +18,7 @@ import {connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceCha
 // import {getChannelURL, alphaSortProfiles, stateSortProfiles} from '../../utils';
 
 import {getChannelURL, alphaSortProfiles, stateSortProfiles} from '../utils';
-import {showExpandedView, hideExpandedView} from 'actions/calls';
+import {showExpandedView, hideExpandedView, updateAudioStatus} from 'actions/calls';
 
 import {ActionTypes} from 'utils/constants';
 import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
@@ -79,6 +79,7 @@ const mapStateToProps = (state: GlobalState) => {
         profilesMap,
         picturesMap,
         pictures,
+        callID: connectedConfID,
         statuses: voiceUsersStatuses(state) || {},
         callStartAt: voiceChannelCallStartAt(state, channel?.id) || 0,
         show: !expandedView(state),
@@ -102,6 +103,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     showExpandedView,
     hideExpandedView,
     disconnect,
+    updateAudioStatus,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(CallWidget);

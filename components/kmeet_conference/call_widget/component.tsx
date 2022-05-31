@@ -48,12 +48,14 @@ interface Props {
         [key: string]: UserState;
     };
     callStartAt: number;
+    callID: string;
     screenSharingID: string;
     show: boolean;
     showExpandedView: () => void;
     hideExpandedView: () => void;
     showScreenSourceModal: () => void;
     disconnect: () => void;
+    updateAudioStatus: () => void;
 }
 
 interface DraggingState {
@@ -243,8 +245,11 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         document.addEventListener('mouseup', this.onMouseUp, false);
         document.addEventListener('click', this.closeOnBlur, true);
         document.addEventListener('keyup', this.keyboardClose, true);
-
-        this.client.audioMuteStatusChanged = (data) => this.setState({audioMuted: data.muted});
+        this.client.audioMuteStatusChanged = (data) => {
+            console.log("updated audio", data)
+            this.props.updateAudioStatus(this.props.callID, data.muted)
+            // this.setState({ audioMuted: data.muted })
+        };
         this.client.readyToClose = () => this.props.disconnect();
         // This is needed to force a re-render to periodically update
         // the start time.
