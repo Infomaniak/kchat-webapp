@@ -28,11 +28,9 @@ import {UserState} from 'reducers/views/calls';
 import './component.scss';
 import Avatar from 'components/widgets/users/avatar';
 
-// import JitsiClient from '../jitsi_client';
 import GlobeIcon from 'components/widgets/icons/globe_icon';
 
 import {isDesktopApp} from 'utils/user_agent';
-import JitsiClient from '../jitsi_client';
 
 interface Props {
     theme: any;
@@ -219,7 +217,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.client = isDesktopApp() ? JitsiClient : window;
+        this.client = window;
         this.state = {
             showMenu: false,
             showParticipantsList: false,

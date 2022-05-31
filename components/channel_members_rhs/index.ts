@@ -28,7 +28,7 @@ import {closeRightHandSide, goBack} from 'actions/views/rhs';
 import {getPreviousRhsState} from 'selectors/rhs';
 import {setChannelMembersRhsSearchTerm} from 'actions/views/search';
 import {loadProfilesAndReloadChannelMembers} from 'actions/user_actions';
-import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
+import {Channel, ChannelMembership} from '@mattermost/types/channels';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 import {loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
 
@@ -74,12 +74,14 @@ const searchProfiles = createSelector(
     (profilesInCurrentChannel, userStatuses, teammateNameDisplaySetting, membersInCurrentChannel) => {
         const channelMembers: ChannelMember[] = [];
         profilesInCurrentChannel.forEach((profile) => {
-            channelMembers.push({
-                user: profile,
-                membership: membersInCurrentChannel[profile.id],
-                status: userStatuses[profile.id],
-                displayName: displayUsername(profile, teammateNameDisplaySetting),
-            });
+            if (membersInCurrentChannel[profile.id]) {
+                channelMembers.push({
+                    user: profile,
+                    membership: membersInCurrentChannel[profile.id],
+                    status: userStatuses[profile.id],
+                    displayName: displayUsername(profile, teammateNameDisplaySetting),
+                });
+            }
         });
         return [[] as ChannelMember[], channelMembers];
     },

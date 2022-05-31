@@ -20,9 +20,7 @@ describe('components/channel_layout/CenterChannel', () => {
             url: '/url',
         },
         currentUserId: 'testUserId',
-        showNextSteps: false,
         isOnboardingHidden: true,
-        showNextStepsEphemeral: false,
         enableTipsViewRoute: false,
         callChannel: {
             create_at: 1508265709607,
@@ -44,7 +42,6 @@ describe('components/channel_layout/CenterChannel', () => {
         callExpandedView: true,
         insightsAreEnabled: true,
         actions: {
-            setShowNextStepsView: jest.fn,
             getProfiles: jest.fn,
         },
     };

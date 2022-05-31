@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {injectIntl, IntlShape} from 'react-intl';
-import {matchPath} from 'react-router-dom';
 
 import {Permissions} from 'mattermost-redux/constants';
 
@@ -31,9 +30,7 @@ import TeamGroupsManageModal from 'components/team_groups_manage_modal';
 
 import {ModalData} from 'types/actions';
 import {PluginComponent} from 'types/store/plugins';
-import {UserProfile} from 'mattermost-redux/types/users';
-
-import {browserHistory} from 'utils/browser_history';
+import {UserProfile} from '@mattermost/types/users';
 
 export type Props = {
     mobile: boolean;
@@ -57,11 +54,9 @@ export type Props = {
     isMentionSearch?: boolean;
     teamIsGroupConstrained: boolean;
     isLicensedForLDAPGroups?: boolean;
-    showDueToStepsNotFinished: boolean;
     intl: IntlShape;
     teamUrl: string;
     isFirstAdmin: boolean;
-    useCaseOnboarding: boolean;
     location: {
         pathname: string;
     };
@@ -73,7 +68,6 @@ export type Props = {
         showFlaggedPosts: () => void;
         closeRightHandSide: () => void;
         closeRhsMenu: () => void;
-        unhideNextSteps: () => void;
     };
 
 };
@@ -120,11 +114,6 @@ export class MainMenu extends React.PureComponent<Props> {
         }
     }
 
-    unhideNextStepsAndNavigateToTipsView = () => {
-        this.props.actions.unhideNextSteps();
-        browserHistory.push(`${this.props.teamUrl}/tips`);
-    }
-
     render() {
         const {
             appDownloadLink,
@@ -158,7 +147,6 @@ export class MainMenu extends React.PureComponent<Props> {
 
         const someIntegrationEnabled = this.props.enableIncomingWebhooks || this.props.enableOutgoingWebhooks || this.props.enableCommands || this.props.enableOAuthServiceProvider || this.props.canManageSystemBots;
         const showIntegrations = !this.props.mobile && someIntegrationEnabled && this.props.canManageIntegrations;
-        const inTipsView = matchPath(this.props.location.pathname, {path: '/:team/tips'}) != null;
 
         const {formatMessage} = this.props.intl;
 
@@ -349,13 +337,6 @@ export class MainMenu extends React.PureComponent<Props> {
                         text={formatMessage({id: 'navbar_dropdown.help', defaultMessage: 'Help'})}
                         icon={<i className='fa fa-question'/>}
                     />
-                    <Menu.ItemAction
-                        id='gettingStarted'
-                        show={!(this.props.useCaseOnboarding && this.props.isFirstAdmin) && this.props.showDueToStepsNotFinished && !inTipsView}
-                        onClick={() => this.unhideNextStepsAndNavigateToTipsView()}
-                        text={formatMessage({id: 'navbar_dropdown.gettingStarted', defaultMessage: 'Getting Started'})}
-                        icon={<i className='icon icon-play'/>}
-                    />
                     <Menu.ItemExternalLink
                         id='reportLink'
                         show={Boolean(this.props.reportAProblemLink)}
@@ -435,7 +416,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.manageGroups', defaultMessage: 'Manage Groups'})}
                         />
                     </TeamPermissionGate>
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
                     >
@@ -445,8 +426,8 @@ export class MainMenu extends React.PureComponent<Props> {
                             dialogType={TeamMembersModal}
                             text={formatMessage({id: 'navbar_dropdown.manageMembers', defaultMessage: 'Manage Members'})}
                         />
-                    </TeamPermissionGate>
-                    <TeamPermissionGate
+                    </TeamPermissionGate> */}
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
                         invert={true}
@@ -457,7 +438,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             dialogType={TeamMembersModal}
                             text={formatMessage({id: 'navbar_dropdown.viewMembers', defaultMessage: 'View Members'})}
                         />
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                     <Menu.ItemLink
                         id='joinTeam'
                         show={!this.props.experimentalPrimaryTeam && this.props.moreTeamsToJoin}
@@ -473,7 +454,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         text={formatMessage({id: 'navbar_dropdown.leave', defaultMessage: 'Leave Team'})}
                     />
                 </Menu.Group>
-                <Menu.Group>
+                {/* <Menu.Group>
                     <SystemPermissionGate permissions={[Permissions.CREATE_TEAM]}>
                         <Menu.ItemLink
                             id='createTeam'
@@ -481,7 +462,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.create', defaultMessage: 'Create a Team'})}
                         />
                     </SystemPermissionGate>
-                </Menu.Group>
+                </Menu.Group> */}
                 <Menu.Group>
                     {pluginItems}
                 </Menu.Group>
