@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import {Client4} from 'mattermost-redux/client';
 import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
+import {redirectUserToDefaultTeam} from 'actions/global_actions';
 
 /**
  * Store IKToken infos in localStorage and update Client
@@ -101,7 +102,7 @@ export function needRefreshToken() {
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
-export function refreshIKToken() {
+export function refreshIKToken(redirectToTeam = false) {
     const refreshToken = localStorage.getItem('IKRefreshToken');
     if (!refreshToken) {
         clearLocalStorageToken();
@@ -120,6 +121,9 @@ export function refreshIKToken() {
 
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
+        if (redirectToTeam) {
+            redirectUserToDefaultTeam();
+        }
     }).catch((error) => {
         console.log('catch refresh error', error);
         clearLocalStorageToken();
