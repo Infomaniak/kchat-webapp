@@ -40,6 +40,8 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
         <RightControlsContainer
             id={'RightControlsContainer'}
         >
+            {/* eslint-disable-next-line react/self-closing-comp */}
+            <module-reporting-tools-component></module-reporting-tools-component>
             <CloudUpgradeButton/>
             {productId === null ? (
                 <>
