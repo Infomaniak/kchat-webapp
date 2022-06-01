@@ -39,6 +39,13 @@ import GlobeIcon from 'components/widgets/icons/globe_icon';
 
 import {isDesktopApp} from 'utils/user_agent';
 import ChannelConvIcon from 'components/widgets/icons/channel_conv_icon';
+import CallUnmutedIcon from 'components/widgets/icons/call_micro_on';
+import CallMutedIcon from 'components/widgets/icons/call_micro_off';
+import ExpandConvIcon from 'components/widgets/icons/expand_conv_icon';
+import CameraOnIcon from 'components/widgets/icons/camera_on_icon';
+import CameraOffIcon from 'components/widgets/icons/camera_off_icon';
+import ScreenSharingIcon from 'components/widgets/icons/screen_sharing_icon';
+import ShrinkConvIcon from 'components/widgets/icons/shrink_conv_icon';
 
 interface Props {
     theme: any;
@@ -92,6 +99,7 @@ interface State {
     showUsersJoined: string[];
     audioMuted: boolean;
     expanded: boolean;
+    cameraOn: boolean;
 }
 
 export default class CallWidget extends React.PureComponent<Props, State> {
@@ -246,6 +254,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             showUsersJoined: [],
             audioMuted: true,
             expanded: false,
+            cameraOn: false,
         };
         this._ref = React.createRef();
         this.node = React.createRef();
@@ -530,7 +539,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                     isHandRaised = Boolean(status.raised_hand > 0);
                 }
 
-                const MuteIcon = isMuted ? MutedIcon : UnmutedIcon;
+                const MuteIcon = isMuted ? CallMutedIcon : CallUnmutedIcon;
 
                 return (
                     <li
@@ -899,13 +908,15 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             return null;
         }
 
-        const MuteIcon = this.state.audioMuted ? MutedIcon : UnmutedIcon;
+        const MuteIcon = this.state.audioMuted ? CallMutedIcon : CallUnmutedIcon;
         const muteTooltipText = this.state.audioMuted ? 'Click to unmute' : 'Click to mute';
-
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
         const mainWidth = hasTeamSidebar ? '280px' : '216px';
 
-        const ShowIcon = window.desktop ? ExpandIcon : PopOutIcon;
+        const ShowIcon = this.state.expanded ? ExpandConvIcon : ShrinkConvIcon;
+        const CameraIcon = this.state.cameraOn ? CameraOnIcon : CameraOffIcon;
+        const cameraTooltipText = this.state.cameraOn ? 'Click to disable camera' : 'Click to enable camera';
+        const screenSharingTooltipText = this.state.cameraOn ? 'Click to share your screen' : 'Click to stop sharing your screen';
 
         // const HandIcon = window.callsClient.isHandRaised ? UnraisedHandIcon : RaisedHandIcon;
         // const handTooltipText = window.callsClient.isHandRaised ? 'Click to lower hand' : 'Click to raise hand';
@@ -968,8 +979,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                 onClick={this.onExpandClick}
                             >
                                 <ShowIcon
-                                    style={{width: '14px', height: '14px'}}
-                                    fill='white'
+                                    style={{ width: '16px', height: '16px' }}
                                 />
                             </button>
 
@@ -1009,22 +1019,54 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                         onClick={this.onMuteToggle}
                                     >
                                         <MuteIcon
-                                            style={{width: '16px', height: '16px', fill: this.state.audioMuted ? '#9F9F9F' : '#0098FF'}}
-                                            // stroke={this.state.audioMuted ? 'rgba(210, 75, 78, 1)' : ''}
+                                            fill={this.state.audioMuted ? '#9F9F9F' : '#0098FF'}
+                                            style={{width: '16px', height: '16px'}}
+                                        />
+                                    </button>
+                                </OverlayTrigger>
+                                <OverlayTrigger
+                                    key='camera'
+                                    placement='top'
+                                    overlay={
+                                        <Tooltip id='tooltip-camera'>
+                                            {cameraTooltipText}
+                                        </Tooltip>
+                                    }
+                                >
+                                    <button
+                                        id='camera-on-off'
+                                        className='cursor--pointer style--none button-controls'
+                                        style={this.state.audioMuted ? this.style.mutedButton : this.style.unmutedButton}
+                                        onClick={this.onMuteToggle}
+                                    >
+                                        <CameraIcon
+                                            fill={this.state.cameraOn ? '#0098FF' : '#9F9F9F'}
+                                            style={{width: '16px', height: '16px'}}
+                                        />
+                                    </button>
+                                </OverlayTrigger>
+                                <OverlayTrigger
+                                    key='screen-sharing'
+                                    placement='top'
+                                    overlay={
+                                        <Tooltip id='tooltip-screen-sharing'>
+                                            {screenSharingTooltipText}
+                                        </Tooltip>
+                                    }
+                                >
+                                    <button
+                                        id='screen-sharing-on-off'
+                                        className='cursor--pointer style--none button-controls'
+                                        style={this.state.audioMuted ? this.style.mutedButton : this.style.unmutedButton}
+                                        onClick={this.onMuteToggle}
+                                    >
+                                        <ScreenSharingIcon
+                                            fill={this.props.screenSharingID === this.props.currentUserID ? '#0098FF' : '#9F9F9F'}
+                                            style={{width: '16px', height: '16px'}}
                                         />
                                     </button>
                                 </OverlayTrigger>
                             </div>
-                            {/* <button
-                            id='calls-widget-toggle-menu-button'
-                            className='cursor--pointer style--none button-controls'
-                            style={this.style.menuButton}
-                            onClick={this.onMenuClick}
-                        >
-                            <HorizontalDotsIcon
-                                style={{width: '16px', height: '16px'}}
-                            />
-                        </button> */}
 
                             <OverlayTrigger
                                 key='participants'
@@ -1045,10 +1087,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     }}
                                     onClick={this.onParticipantsButtonClick}
                                 >
-                                    {/* <ParticipantsIcon
-                                        fill='white'
-                                        style={{width: '16px', height: '16px', marginRight: '4px'}}
-                                    /> */}
                                     <CallUsersIcon
                                         style={{marginRight: '4px'}}
                                     />
