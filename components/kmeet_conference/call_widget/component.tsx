@@ -46,6 +46,8 @@ import CameraOnIcon from 'components/widgets/icons/camera_on_icon';
 import CameraOffIcon from 'components/widgets/icons/camera_off_icon';
 import ScreenSharingIcon from 'components/widgets/icons/screen_sharing_icon';
 import ShrinkConvIcon from 'components/widgets/icons/shrink_conv_icon';
+import Avatars from 'components/widgets/users/avatars/avatars';
+import { getCurrentUserId } from 'mattermost-redux/selectors/entities/common';
 
 interface Props {
     theme: any;
@@ -913,7 +915,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
         const mainWidth = hasTeamSidebar ? '280px' : '216px';
 
-        const ShowIcon = this.state.expanded ? ExpandConvIcon : ShrinkConvIcon;
+        const ShowIcon = document && document.hasFocus() ? ExpandConvIcon : ShrinkConvIcon;
         const CameraIcon = this.state.cameraOn ? CameraOnIcon : CameraOffIcon;
         const cameraTooltipText = this.state.cameraOn ? 'Click to disable camera' : 'Click to enable camera';
         const screenSharingTooltipText = this.state.cameraOn ? 'Click to share your screen' : 'Click to stop sharing your screen';
@@ -956,7 +958,15 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                 onClick={this.onChannelLinkClick}
                                 className='calls-channel-link'
                             >
-                                {isPublicChannel(this.props.channel) ? <ChannelConvIcon fill='#9F9F9F'/> : <ParticipantsIcon fill='#9F9F9F'/>}
+                                {isPublicChannel(this.props.channel) ? <ChannelConvIcon fill='#9F9F9F'/> : <div className='content-body'>
+
+                                    <Avatars
+                                        userIds={Object.values(this.props.profiles).map((profile) => profile.id).filter((id) => id !== this.props.currentUserID)}
+                                        size={'md'}
+                                        totalUsers={Object.values(this.props.profiles).length - 1}
+                                    />
+
+                                </div>}
                                 <span
                                     style={{
                                         overflow: 'hidden',
@@ -979,7 +989,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                 onClick={this.onExpandClick}
                             >
                                 <ShowIcon
-                                    style={{ width: '16px', height: '16px' }}
+                                    style={{width: '16px', height: '16px'}}
                                 />
                             </button>
 
@@ -1118,29 +1128,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     />
                                 </button>
                             </OverlayTrigger>
-
-                            {/* { !isDMChannel(this.props.channel) &&
-                        <OverlayTrigger
-                            key='hand'
-                            placement='top'
-                            overlay={
-                                <Tooltip id='tooltip-hand'>
-                                    {handTooltipText}
-                                </Tooltip>import {UserState
-                            }
-                        >
-                            <button
-                                className='cursor--pointer style--none button-controls'
-                                onClick={this.onRaiseHandToggle}
-                                style={{background: window.callsClient.isHandRaised ? 'rgba(255, 188, 66, 0.16)' : ''}}
-                            >
-                                <HandIcon
-                                    style={{width: '16px', height: '16px', fill: window.callsClient.isHandRaised ? 'rgba(255, 188, 66, 1)' : ''}}
-                                />
-                            </button>
-
-                        </OverlayTrigger>
-                        } */}
 
                         </div>
                     </div>
