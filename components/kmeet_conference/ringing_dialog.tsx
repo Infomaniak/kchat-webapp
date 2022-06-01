@@ -81,6 +81,7 @@ function DialingModal(props: Props) {
                     <Avatars
                         userIds={usersIdsNotMe}
                         size={usersIdsNotMe.length > 1 ? 'xl' : 'xxl'}
+                        totalUsers={usersIdsNotMe.length}
                     />
                 )}
             </div>
