@@ -36,6 +36,7 @@ function MeetButton(props: Props) {
     const {startCallInChannel} = props;
     const state = store.getState();
     const connectedCallID = useSelector((state: GlobalState) => state.views.calls.connectedCallID);
+    const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
     const ref = useRef<HTMLButtonElement>(null);
     const channelID = useSelector(getCurrentChannelId);
     const currentUserId = getCurrentUserId(state);
@@ -43,7 +44,12 @@ function MeetButton(props: Props) {
         startCallInChannel(channelID);
     }, [channelID]);
 
-    const userIsInCall = connectedCallID ? props.hasCall[connectedCallID].map((u) => u).includes(currentUserId) : false;
+    console.log(props)
+    console.log("")
+    console.log("Connected voice channel Id => ", connectedChannelID)
+    console.log("Current channel Id => ", channelID)
+
+    const userIsInCall = connectedCallID && connectedChannelID === channelID ? props.hasCall[connectedCallID].map((u) => u).includes(currentUserId) : false;
 
     const tooltip = (
         <Tooltip id='call'>
