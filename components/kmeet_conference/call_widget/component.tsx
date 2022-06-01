@@ -7,6 +7,14 @@ import React, {CSSProperties} from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import moment from 'moment-timezone';
 
+import {IDMappedObjects} from 'mattermost-redux/types/utilities';
+
+import {Team} from 'mattermost-redux/types/teams';
+
+import {Channel} from 'mattermost-redux/types/channels';
+
+import {UserProfile} from 'mattermost-redux/types/users';
+
 import {getUserDisplayName, isPublicChannel} from 'components/kmeet_conference/utils';
 
 import MutedIcon from 'components/widgets/icons/muted_icon';
@@ -17,12 +25,11 @@ import CompassIcon from 'components/widgets/icons/compassIcon';
 import PopOutIcon from 'components/widgets/icons/popout';
 import ExpandIcon from 'components/widgets/icons/expand';
 import RaisedHandIcon from 'components/widgets/icons/raised_hand';
+import CallUsersIcon from 'components/widgets/icons/call_users_icon';
+import LeaveConvIcon from 'components/widgets/icons/leave_conf_icon';
 
 // import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
-import {IDMappedObjects} from 'mattermost-redux/types/utilities';
-import {Team} from 'mattermost-redux/types/teams';
-import {Channel} from 'mattermost-redux/types/channels';
-import {UserProfile} from 'mattermost-redux/types/users';
+
 import {UserState} from 'reducers/views/calls';
 
 import './component.scss';
@@ -31,6 +38,7 @@ import Avatar from 'components/widgets/users/avatar';
 import GlobeIcon from 'components/widgets/icons/globe_icon';
 
 import {isDesktopApp} from 'utils/user_agent';
+import ChannelConvIcon from 'components/widgets/icons/channel_conv_icon';
 
 interface Props {
     theme: any;
@@ -96,7 +104,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
     private style = {
         main: {
             position: 'fixed',
-            background: 'var(--global-header-background)',
+            background: 'var(--center-channel-bg)',
             borderRadius: '8px',
             display: 'flex',
             bottom: '12px',
@@ -106,22 +114,26 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             border: '1px solid #333',
             userSelect: 'none',
             color: 'white',
+            padding: '16px',
         },
         topBar: {
-            background: 'var(--global-header-background)',
-            padding: '0 12px',
+            background: 'var(--center-channel-bg)',
             display: 'flex',
             width: '100%',
             alignItems: 'center',
-            height: '44px',
+            marginBottom: '20px',
             cursor: 'move',
         },
         bottomBar: {
-            padding: '6px 8px',
+            padding: '6px 0 0',
             display: 'flex',
             justifyContent: 'flex-end',
             width: '100%',
             alignItems: 'center',
+        },
+        bottomBarLeft: {
+            display: 'flex',
+            marginRight: 'auto',
         },
         mutedButton: {
             display: 'flex',
@@ -195,9 +207,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             padding: '0 8px',
             height: '28px',
             borderRadius: '4px',
-            color: '#D24B4E',
-            background: 'rgba(210, 75, 78, 0.24)',
-            marginRight: 'auto',
+            background: '#D71E04',
         },
         dotsMenu: {
             position: 'relative',
@@ -246,11 +256,13 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         document.addEventListener('click', this.closeOnBlur, true);
         document.addEventListener('keyup', this.keyboardClose, true);
         this.client.audioMuteStatusChanged = (data) => {
-            console.log("updated audio", data)
-            this.props.updateAudioStatus(this.props.callID, data.muted)
+            console.log('updated audio', data);
+            this.props.updateAudioStatus(this.props.callID, data.muted);
+
             // this.setState({ audioMuted: data.muted })
         };
         this.client.readyToClose = () => this.props.disconnect();
+
         // This is needed to force a re-render to periodically update
         // the start time.
         const id = setInterval(() => this.forceUpdate(), 1000);
@@ -803,6 +815,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         if (!isDesktopApp() && window.callWindow) {
             window.callWindow.focus();
         }
+
         // if (this.state.expandedViewWindow && !this.state.expandedViewWindow.closed) {
         //     this.state.expandedViewWindow.focus();
         //     return;
@@ -932,7 +945,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                 onClick={this.onChannelLinkClick}
                                 className='calls-channel-link'
                             >
-                                {isPublicChannel(this.props.channel) ? <GlobeIcon fill='#D8D8D8'/> : <ParticipantsIcon fill='#D8D8D8'/>}
+                                {isPublicChannel(this.props.channel) ? <ChannelConvIcon fill='#9F9F9F'/> : <ParticipantsIcon fill='#9F9F9F'/>}
                                 <span
                                     style={{
                                         overflow: 'hidden',
@@ -940,8 +953,9 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                         whiteSpace: 'nowrap',
                                         maxWidth: hasTeamSidebar ? '24ch' : '14ch',
                                         marginLeft: '5px',
-                                        color: 'white',
-                                        fontWeight: 600,
+                                        fontWeight: 400,
+                                        color: 'black',
+                                        fontSize: '14px',
                                     }}
                                 >
                                     {this.props.channel.display_name}
@@ -975,29 +989,32 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             className='calls-widget-bottom-bar'
                             style={this.style.bottomBar}
                         >
-                            <OverlayTrigger
-                                key='leave'
-                                placement='top'
-                                overlay={
-                                    <Tooltip id='tooltip-leave'>
-                                        {'Click to leave call'}
-                                    </Tooltip>
-                                }
+                            <div
+                                className='calls-widget-bottom-bar-left'
+                                style={this.style.bottomBarLeft}
                             >
-
-                                <button
-                                    id='calls-widget-leave-button'
-                                    className='style--none button-controls button-controls--wide'
-                                    style={this.style.leaveCallButton}
-                                    onClick={this.onDisconnectClick}
+                                <OverlayTrigger
+                                    key='mute'
+                                    placement='top'
+                                    overlay={
+                                        <Tooltip id='tooltip-mute'>
+                                            {muteTooltipText}
+                                        </Tooltip>
+                                    }
                                 >
-                                    <LeaveCallIcon
-                                        fill='#D24B4E'
-                                        style={{width: '16px', height: '16px'}}
-                                    />
-                                </button>
-                            </OverlayTrigger>
-
+                                    <button
+                                        id='voice-mute-unmute'
+                                        className='cursor--pointer style--none button-controls'
+                                        style={this.state.audioMuted ? this.style.mutedButton : this.style.unmutedButton}
+                                        onClick={this.onMuteToggle}
+                                    >
+                                        <MuteIcon
+                                            style={{width: '16px', height: '16px', fill: this.state.audioMuted ? '#9F9F9F' : '#0098FF'}}
+                                            // stroke={this.state.audioMuted ? 'rgba(210, 75, 78, 1)' : ''}
+                                        />
+                                    </button>
+                                </OverlayTrigger>
+                            </div>
                             {/* <button
                             id='calls-widget-toggle-menu-button'
                             className='cursor--pointer style--none button-controls'
@@ -1028,14 +1045,39 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     }}
                                     onClick={this.onParticipantsButtonClick}
                                 >
-                                    <ParticipantsIcon
+                                    {/* <ParticipantsIcon
                                         fill='white'
                                         style={{width: '16px', height: '16px', marginRight: '4px'}}
+                                    /> */}
+                                    <CallUsersIcon
+                                        style={{marginRight: '4px'}}
                                     />
-
                                     <span
-                                        style={{fontWeight: 600, color: 'white'}}
+                                        style={{fontWeight: 600, color: 'black'}}
                                     >{Object.keys(this.props.profiles).length}</span>
+                                </button>
+                            </OverlayTrigger>
+
+                            <OverlayTrigger
+                                key='leave'
+                                placement='top'
+                                overlay={
+                                    <Tooltip id='tooltip-leave'>
+                                        {'Click to leave call'}
+                                    </Tooltip>
+                                }
+                            >
+
+                                <button
+                                    id='calls-widget-leave-button'
+                                    className='style--none button-controls button-controls--wide'
+                                    style={this.style.leaveCallButton}
+                                    onClick={this.onDisconnectClick}
+                                >
+                                    <LeaveConvIcon
+                                        fill='#fff'
+                                        style={{width: '16px', height: '6px'}}
+                                    />
                                 </button>
                             </OverlayTrigger>
 
@@ -1062,27 +1104,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                         </OverlayTrigger>
                         } */}
 
-                            <OverlayTrigger
-                                key='mute'
-                                placement='top'
-                                overlay={
-                                    <Tooltip id='tooltip-mute'>
-                                        {muteTooltipText}
-                                    </Tooltip>
-                                }
-                            >
-                                <button
-                                    id='voice-mute-unmute'
-                                    className='cursor--pointer style--none button-controls'
-                                    style={this.state.audioMuted ? this.style.mutedButton : this.style.unmutedButton}
-                                    onClick={this.onMuteToggle}
-                                >
-                                    <MuteIcon
-                                        style={{width: '16px', height: '16px', fill: this.state.audioMuted ? 'rgba(61, 184, 135, 1)' : 'rgba(61, 184, 135, 1)'}}
-                                        stroke={this.state.audioMuted ? 'rgba(210, 75, 78, 1)' : ''}
-                                    />
-                                </button>
-                            </OverlayTrigger>
                         </div>
                     </div>
                 </div>
