@@ -223,7 +223,9 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
     case ActionTypes.VOICE_CHANNEL_UNINIT:
         return {};
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
-    case ActionTypes.VOICE_CHANNEL_ADDED:
+        case ActionTypes.VOICE_CHANNEL_ADDED:
+            console.log(action)
+            console.log(state)
         if (!state[action.data.id]) {
             return {
                 ...state,
@@ -257,7 +259,7 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
         if (action.data.callID) {
             const filteredCallsIds = Object.entries(state).filter(([key, val]) => key !== action.data.callID);
 
-            return filteredCallsIds.length > 0 ? Object.fromEntries(filteredCallsIds) : null;
+            return filteredCallsIds.length > 0 ? Object.fromEntries(filteredCallsIds) : {};
         }
         return state;
     }
@@ -267,7 +269,6 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
             [action.data.channelID]: action.data.states,
         };
         case ActionTypes.VOICE_CHANNEL_USER_MUTED:
-            console.log("mute", action.data)
         if (!state[action.data.callID]) {
             return {
                 ...state,
