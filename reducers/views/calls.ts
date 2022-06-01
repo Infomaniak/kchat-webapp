@@ -223,26 +223,30 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
     case ActionTypes.VOICE_CHANNEL_UNINIT:
         return {};
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
-        case ActionTypes.VOICE_CHANNEL_ADDED:
-            console.log(action)
-            console.log(state)
+    case ActionTypes.VOICE_CHANNEL_ADDED:
+        console.log(action)
+        console.log(state)
         if (!state[action.data.id]) {
             return {
                 ...state,
                 [action.data.id]: {
-                    [action.data.userID]: {},
+                    [action.data.userID]: {
+                        muted: true,
+                        voice: false,
+                    },
                 },
             };
         }
-        if (action.data.userID && Object.keys(state[action.data.id]).indexOf(action.data.userID) === -1) {
-            return {
-                ...state,
-                [action.data.id]: {
-                    ...state[action.data.id],
-                    [action.data.userID]: {},
-                },
-            };
-        }
+
+        // if (action.data.userID && Object.keys(state[action.data.id]).indexOf(action.data.userID) === -1) {
+        //     return {
+        //         ...state,
+        //         [action.data.id]: {
+        //             ...state[action.data.id],
+        //             [action.data.userID]: {},
+        //         },
+        //     };
+        // }
         return state;
     case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED: {
         const call = state[action.data.callID];
@@ -263,21 +267,20 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
         }
         return state;
     }
-    case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED_STATES:
-        return {
-            ...state,
-            [action.data.channelID]: action.data.states,
-        };
-        case ActionTypes.VOICE_CHANNEL_USER_MUTED:
+
+    // case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED_STATES:
+    //     return {
+    //         ...state,
+    //         [action.data.channelID]: action.data.states,
+    //     };
+    case ActionTypes.VOICE_CHANNEL_USER_MUTED:
         if (!state[action.data.callID]) {
             return {
                 ...state,
                 [action.data.callID]: {
                     ...state[action.data.callID],
                     [action.data.userID]: {
-                        unmuted: true,
-                        voice: false,
-                        raised_hand: 0,
+                        muted: true,
                     },
                 },
             };
@@ -288,7 +291,7 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
                 ...state[action.data.callID],
                 [action.data.userID]: {
                     ...state[action.data.callID][action.data.userID],
-                    unmuted: true,
+                    muted: true,
                 },
             },
         };
@@ -300,9 +303,7 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
                 [action.data.callID]: {
                     ...state[action.data.callID],
                     [action.data.userID]: {
-                        unmuted: false,
-                        voice: false,
-                        raised_hand: 0,
+                        muted: false,
                     },
                 },
             };
@@ -313,7 +314,7 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
                 ...state[action.data.callID],
                 [action.data.userID]: {
                     ...state[action.data.callID][action.data.userID],
-                    unmuted: false,
+                    muted: false,
                 },
             },
         };
@@ -323,9 +324,7 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
                 ...state,
                 [action.data.channelID]: {
                     [action.data.userID]: {
-                        unmuted: false,
                         voice: true,
-                        raised_hand: 0,
                     },
                 },
             };
@@ -346,9 +345,7 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
                 ...state,
                 [action.data.channelID]: {
                     [action.data.userID]: {
-                        unmuted: false,
                         voice: false,
-                        raised_hand: 0,
                     },
                 },
             };
@@ -363,52 +360,51 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
                 },
             },
         };
-    case ActionTypes.VOICE_CHANNEL_USER_RAISE_HAND:
-        if (!state[action.data.channelID]) {
-            return {
-                ...state,
-                [action.data.channelID]: {
-                    [action.data.userID]: {
-                        unmuted: false,
-                        voice: false,
-                        raised_hand: action.data.raised_hand,
-                    },
-                },
-            };
-        }
-        return {
-            ...state,
-            [action.data.channelID]: {
-                ...state[action.data.channelID],
-                [action.data.userID]: {
-                    ...state[action.data.channelID][action.data.userID],
-                    raised_hand: action.data.raised_hand,
-                },
-            },
-        };
-    case ActionTypes.VOICE_CHANNEL_USER_UNRAISE_HAND:
-        if (!state[action.data.channelID]) {
-            return {
-                ...state,
-                [action.data.channelID]: {
-                    [action.data.userID]: {
-                        voice: false,
-                        unmuted: false,
-                        raised_hand: action.data.raised_hand,
-                    },
-                },
-            };
-        }
-        return {
-            ...state,
-            [action.data.channelID]: {
-                ...state[action.data.channelID],
-                [action.data.userID]: {
-                    ...state[action.data.channelID][action.data.userID],
-                    raised_hand: action.data.raised_hand,
-                },
-            },
-        };
+    // case ActionTypes.VOICE_CHANNEL_USER_RAISE_HAND:
+    //     if (!state[action.data.channelID]) {
+    //         return {
+    //             ...state,
+    //             [action.data.channelID]: {
+    //                 [action.data.userID]: {
+    //                     unmuted: false,
+    //                     voice: false,
+    //                 },
+    //             },
+    //         };
+    //     }
+    //     return {
+    //         ...state,
+    //         [action.data.channelID]: {
+    //             ...state[action.data.channelID],
+    //             [action.data.userID]: {
+    //                 ...state[action.data.channelID][action.data.userID],
+    //                 raised_hand: action.data.raised_hand,
+    //             },
+    //         },
+    //     };
+    // case ActionTypes.VOICE_CHANNEL_USER_UNRAISE_HAND:
+    //     if (!state[action.data.channelID]) {
+    //         return {
+    //             ...state,
+    //             [action.data.channelID]: {
+    //                 [action.data.userID]: {
+    //                     voice: false,
+    //                     unmuted: false,
+    //                     raised_hand: action.data.raised_hand,
+    //                 },
+    //             },
+    //         };
+    //     }
+    //     return {
+    //         ...state,
+    //         [action.data.channelID]: {
+    //             ...state[action.data.channelID],
+    //             [action.data.userID]: {
+    //                 ...state[action.data.channelID][action.data.userID],
+    //                 raised_hand: action.data.raised_hand,
+    //             },
+    //         },
+    //     };
     default:
         return state;
     }
