@@ -297,10 +297,10 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
     case ActionTypes.VOICE_CHANNEL_USER_VIDEO_ON:
         return {
             ...state,
-            [action.data.channelID]: {
-                ...state[action.data.channelID],
+            [action.data.callID]: {
+                ...state[action.data.callID],
                 [action.data.userID]: {
-                    ...state[action.data.channelID][action.data.userID],
+                    ...state[action.data.callID][action.data.userID],
                     video: true,
                 },
             },
@@ -308,10 +308,10 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
     case ActionTypes.VOICE_CHANNEL_USER_VIDEO_OFF:
         return {
             ...state,
-            [action.data.channelID]: {
-                ...state[action.data.channelID],
+            [action.data.callID]: {
+                ...state[action.data.callID],
                 [action.data.userID]: {
-                    ...state[action.data.channelID][action.data.userID],
+                    ...state[action.data.callID][action.data.userID],
                     video: false,
                 },
             },

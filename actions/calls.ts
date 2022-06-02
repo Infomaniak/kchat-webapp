@@ -217,7 +217,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             case 'call-video-status-change': {
                 const muted = message.status;
                 dispatch({
-                    type: muted ? ActionTypes.VOICE_CHANNEL_USER_CAMERA_ON : ActionTypes.VOICE_CHANNEL_USER_CAMERA_OFF,
+                    type: muted ? ActionTypes.VOICE_CHANNEL_USER_VIDEO_OFF : ActionTypes.VOICE_CHANNEL_USER_VIDEO_ON,
                     data: {
                         userID: getCurrentUserId(getState()),
                         callID: connectedCallID(getState()),
