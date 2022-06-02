@@ -40,10 +40,15 @@ import Avatars from 'components/widgets/users/avatars/avatars';
 import {UserState} from 'reducers/views/calls';
 import {isDesktopApp} from 'utils/user_agent';
 import './component.scss';
-import { displayUsername } from 'mattermost-redux/utils/user_utils';
+import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import Constants from 'utils/constants';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-
+import {getUser, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
+import store from 'stores/redux_store.jsx';
+import {GlobalState} from 'types/store';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import { formatMessage } from '@formatjs/intl';
+import { localizeMessage } from 'mattermost-redux/utils/i18n_utils';
 interface Props {
     theme: any;
     currentUserID: string;
@@ -924,9 +929,9 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         if (!this.props.channel) {
             return null;
         }
-console.log(this.props.channel)
+        const globalState = store.getState();
 
-        const muted = this.props.statuses[this.props.currentUserID].muted
+        const muted = this.props.statuses[this.props.currentUserID].muted;
         const MuteIcon = muted ? CallMutedIcon : CallUnmutedIcon;
         const muteTooltipText = muted ? 'Click to unmute' : 'Click to mute';
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
@@ -949,18 +954,39 @@ console.log(this.props.channel)
         //         </RenderInWindow>
         //     );
         // }
-        const isDirect = (this.props.channel.type === Constants.DM_CHANNEL);
-        const isGroup = (this.props.channel.type === Constants.GM_CHANNEL);
-        const isPrivate = (this.props.channel.type === Constants.PRIVATE_CHANNEL);
+
         let channelDisplayName = '';
+        const membersMap: string[] = []; // If we have multiples users
+        const callingUsers = Object.values(this.props.profiles).map((profile) => profile);
 
-        // if (isDirect) {
-        //     const teammateId = this.props.currentUserID;
-        //     if (this.props.currentUserIDd) {
-        //         channelTitle = displayUsername(this.props., teammateNameDisplaySetting) + ' ';
-        //     }
-        // }
+        switch (this.props.channel.type) {
+        case Constants.DM_CHANNEL:
 
+            if (callingUsers) {
+                const callingDMUser = callingUsers.filter((user) => user.id !== this.props.currentUserID)[0];
+                channelDisplayName = displayUsername(getUser(globalState, callingDMUser?.id), getTeammateNameDisplaySetting(globalState));
+            }
+            break;
+        case Constants.GM_CHANNEL:
+            for (const user of callingUsers) {
+                if (user.id === this.props.currentUserID) {
+                    continue;
+                }
+                const userDisplayName = displayUsername(user, getTeammateNameDisplaySetting(globalState));
+
+                if (membersMap.indexOf(userDisplayName) === -1) {
+                    membersMap.push(userDisplayName);
+                }
+            }
+            channelDisplayName = membersMap.join(', ');
+            break;
+        default:
+            channelDisplayName = this.props.channel.display_name;
+            break;
+        }
+        if (channelDisplayName.length < 0 || channelDisplayName === localizeMessage('channel_loader.someone', 'Someone')) {
+            channelDisplayName = localizeMessage('callingWidget.waitingForUsers', 'Waiting for users');
+        }
         return (
             <React.Fragment>
                 <div
@@ -998,7 +1024,7 @@ console.log(this.props.channel)
                                 <span
                                     style={this.style.callChannelDisplay as CSSProperties}
                                 >
-                                    {this.props.channel.display_name}
+                                    {channelDisplayName}
                                 </span>
                             </a>
                             <button
