@@ -669,9 +669,8 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             }
 
                             <MuteIcon
-                                fill={isMuted ? '#C4C4C4' : '#3DB887'}
+                                fill={isMuted ? '#9F9F9F' : '#0098FF'}
                                 style={{width: '14px', height: '14px'}}
-                                stroke={isMuted ? '#C4C4C4' : '#3DB887'}
                             />
 
                         </span>
@@ -791,13 +790,13 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
         const isMuted = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].muted : true;
 
-        const MuteIcon = isMuted ? MutedIcon : UnmutedIcon;
+        const MuteIcon = isMuted ? CallMutedIcon : CallUnmutedIcon;
         const onJoinSelf = (
             <React.Fragment>
                 <span>{`You are ${isMuted ? 'muted' : 'unmuted'}. Click `}</span>
                 <MuteIcon
-                    style={{width: '11px', height: '11px', fill: isMuted ? '#333' : '#333'}}
-                    stroke={isMuted ? 'rgba(210, 75, 78, 1)' : '#3DB887'}
+                    fill={isMuted ? '#9F9F9F' : '#0098FF'}
+                    style={{width: '11px', height: '11px'}}
                 />
                 <span>{` to ${isMuted ? 'unmute' : 'mute'}.`}</span>
             </React.Fragment>
