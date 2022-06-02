@@ -35,15 +35,12 @@ import ShrinkConvIcon from 'components/widgets/icons/shrink_conv_icon';
 import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
 import Avatar from 'components/widgets/users/avatar';
 import Avatars from 'components/widgets/users/avatars/avatars';
-import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import {getUser} from 'mattermost-redux/selectors/entities/users';
 
 import {localizeMessage} from 'mattermost-redux/utils/i18n_utils';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 // import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
 import {UserState} from 'reducers/views/calls';
-import store from 'stores/redux_store.jsx';
 import Constants from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 import './component.scss';
@@ -67,11 +64,15 @@ interface Props {
     callID: string;
     screenSharingID: string;
     show: boolean;
+    teammateNameDisplaySetting: string;
+    getUser: (userId: string) => UserProfile;
     showExpandedView: () => void;
     hideExpandedView: () => void;
     showScreenSourceModal: () => void;
     disconnect: () => void;
     updateAudioStatus: (callID: string, muted: boolean) => void;
+    updateCameraStatus: (callID: string, muted: boolean) => void;
+    updateScreenSharingStatus: (callID: string, muted: boolean) => void;
 }
 
 interface DraggingState {
@@ -101,6 +102,7 @@ interface State {
     audioMuted: boolean;
     expanded: boolean;
     cameraOn: boolean;
+    screenSharing: boolean;
 }
 
 export default class CallWidget extends React.PureComponent<Props, State> {
@@ -268,9 +270,10 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             },
             expandedViewWindow: null,
             showUsersJoined: [],
-            audioMuted: true,
+            audioMuted: false,
             expanded: false,
             cameraOn: false,
+            screenSharing: false,
         };
         this._ref = React.createRef();
         this.node = React.createRef();
@@ -280,11 +283,24 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         document.addEventListener('mouseup', this.onMouseUp, false);
         document.addEventListener('click', this.closeOnBlur, true);
         document.addEventListener('keyup', this.keyboardClose, true);
-        window.audioMuteStatusChanged = (data) => {
-            console.log('updated audio', data);
+
+        // Events from call window
+        window.audioMuteStatusChanged = (data: { muted: boolean }) => {
             this.props.updateAudioStatus(this.props.callID, data.muted);
 
             this.setState({audioMuted: data.muted});
+        };
+
+        window.videoMuteStatusChanged = (data: { muted: boolean }) => {
+            this.props.updateCameraStatus(this.props.callID, data.muted);
+
+            this.setState({cameraOn: data.muted});
+        };
+
+        window.screenSharingStatusChanged = (data: { on: boolean }) => {
+            this.props.updateScreenSharingStatus(this.props.callID, data.on);
+
+            this.setState({screenSharing: data.on});
         };
         this.client.readyToClose = () => this.props.disconnect();
 
@@ -500,6 +516,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             window.callsClient.setAudioOutputDevice(device);
             const ps = [];
             for (const audioEl of this.state.audioEls) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore - setSinkId is an experimental feature
                 ps.push(audioEl.setSinkId(device.deviceId));
             }
@@ -982,20 +999,21 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         if (!this.props.channel) {
             return null;
         }
-        const globalState = store.getState();
 
         const muted = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].muted : true;
         const video = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].video : false;
         const screen = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].screenshare : false;
+
         const MuteIcon = muted ? CallMutedIcon : CallUnmutedIcon;
         const muteTooltipText = muted ? 'Click to unmute' : 'Click to mute';
+
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
         const mainWidth = hasTeamSidebar ? '280px' : '216px';
 
         const ShowIcon = document && document.hasFocus() ? ExpandConvIcon : ShrinkConvIcon;
         const CameraIcon = video ? CameraOnIcon : CameraOffIcon;
         const cameraTooltipText = video ? 'Click to disable camera' : 'Click to enable camera';
-        const screenSharingTooltipText = this.state.cameraOn ? 'Click to share your screen' : 'Click to stop sharing your screen';
+        const screenSharingTooltipText = screen ? 'Click to share your screen' : 'Click to stop sharing your screen';
 
         let channelDisplayName = '';
         const membersMap: string[] = []; // If we have multiples users
@@ -1006,7 +1024,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
             if (callingUsers) {
                 const callingDMUser = callingUsers.filter((user) => user.id !== this.props.currentUserID)[0];
-                channelDisplayName = displayUsername(getUser(globalState, callingDMUser?.id), getTeammateNameDisplaySetting(globalState));
+                channelDisplayName = displayUsername(this.props.getUser(callingDMUser?.id), this.props.teammateNameDisplaySetting);
             }
             break;
         case Constants.GM_CHANNEL:
@@ -1014,7 +1032,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                 if (user.id === this.props.currentUserID) {
                     continue;
                 }
-                const userDisplayName = displayUsername(user, getTeammateNameDisplaySetting(globalState));
+                const userDisplayName = displayUsername(user, this.props.teammateNameDisplaySetting);
 
                 if (membersMap.indexOf(userDisplayName) === -1) {
                     membersMap.push(userDisplayName);
@@ -1050,7 +1068,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             onMouseDown={this.onMouseDown}
                         >
                             <a
-                                href={this.props.channelURL}
                                 onClick={this.onChannelLinkClick}
                                 className='calls-channel-link'
                             >

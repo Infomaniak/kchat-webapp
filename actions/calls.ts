@@ -10,6 +10,7 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
 import {isDesktopApp} from 'utils/user_agent';
 import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
+import { GlobalState } from 'types/store';
 
 // import {Client4} from 'mattermost-redux/client';
 
@@ -241,9 +242,32 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
 }
 
 export function updateAudioStatus(dialingID: string, muted = false) {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         dispatch({
             type: muted ? ActionTypes.VOICE_CHANNEL_USER_MUTED : ActionTypes.VOICE_CHANNEL_USER_UNMUTED,
+            data: {
+                userID: getCurrentUserId(getState()),
+                callID: connectedCallID(getState()),
+            },
+        });
+    };
+}
+
+export function updateCameraStatus(dialingID: string, muted = false) {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        dispatch({
+            type: muted ? ActionTypes.VOICE_CHANNEL_USER_VIDEO_OFF : ActionTypes.VOICE_CHANNEL_USER_VIDEO_ON,
+            data: {
+                userID: getCurrentUserId(getState()),
+                callID: connectedCallID(getState()),
+            },
+        });
+    };
+}
+export function updateScreenSharingStatus(dialingID: string, muted = false) {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        dispatch({
+            type: muted ? ActionTypes.VOICE_CHANNEL_USER_SCREEN_OFF : ActionTypes.VOICE_CHANNEL_USER_SCREEN_ON,
             data: {
                 userID: getCurrentUserId(getState()),
                 callID: connectedCallID(getState()),
