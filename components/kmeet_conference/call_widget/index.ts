@@ -1,29 +1,29 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import {bindActionCreators, Dispatch} from 'redux';
-import {connect} from 'react-redux';
-
 import {GlobalState} from 'mattermost-redux/types/store';
+
 import {UserProfile} from 'mattermost-redux/types/users';
+
 import {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
-import {getChannel} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
-import {getTeam, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {connect} from 'react-redux';
 
+import {bindActionCreators, Dispatch} from 'redux';
+
+import {hideExpandedView, showExpandedView, updateAudioStatus, updateCameraStatus, updateScreenSharingStatus} from 'actions/calls';
 import {Client4} from 'mattermost-redux/client';
-
-import {connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelCallStartAt, expandedView, connectedCallID, voiceConnectedChannels, voiceConnectedProfilesInChannel} from 'selectors/calls';
-
-// import {getChannelURL, alphaSortProfiles, stateSortProfiles} from '../../utils';
-
-import {getChannelURL, alphaSortProfiles, stateSortProfiles} from '../utils';
-import {showExpandedView, hideExpandedView, updateAudioStatus} from 'actions/calls';
-
-import {ActionTypes} from 'utils/constants';
+import {getChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
+import {connectedCallID, connectedChannelID, expandedView, voiceChannelCallStartAt, voiceConnectedChannels, voiceConnectedProfilesInChannel, voiceUsersStatuses} from 'selectors/calls';
+import {ActionTypes} from 'utils/constants';
+
+import {getChannelURL} from '../utils';
+
 import CallWidget from './component';
+import { getTeammateNameDisplaySetting } from 'mattermost-redux/selectors/entities/preferences';
 
 const mapStateToProps = (state: GlobalState) => {
     const channel = getChannel(state, connectedChannelID(state));
@@ -83,6 +83,8 @@ const mapStateToProps = (state: GlobalState) => {
         statuses: voiceUsersStatuses(state) || {},
         callStartAt: voiceChannelCallStartAt(state, channel?.id) || 0,
         show: !expandedView(state),
+        teammateNameDisplaySetting: getTeammateNameDisplaySetting(state),
+        getUser: (userId: string) => getUser(state, userId),
     };
 };
 
@@ -104,6 +106,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     hideExpandedView,
     disconnect,
     updateAudioStatus,
+    updateCameraStatus,
+    updateScreenSharingStatus,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(CallWidget);

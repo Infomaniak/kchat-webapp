@@ -64,7 +64,9 @@
         const urlParams = new URLSearchParams(window.location.search);
         const events = {
             'audioMuteStatusChanged': window.opener.audioMuteStatusChanged,
-            'participantJoined': window.opener.onParticipantJoined
+            'participantJoined': window.opener.onParticipantJoined,
+            'screenSharingStatusChanged': window.opener.screenSharingStatusChanged,
+            'videoMuteStatusChanged': window.opener.videoMuteStatusChanged,
         }
         document.title = urlParams.get('channelName')
 
@@ -80,9 +82,6 @@
         const jitsi = new window.JitsiMeetExternalAPI(KMEET_DOMAIN, {
             configOverwrite,
             roomName: urlParams.get('channelID'),
-            // onload: (self) => {
-            //     console.log(self);
-            // },
         });
 
         for (const [event, callback] of Object.entries(events)) {
@@ -94,11 +93,6 @@
         })
         window.onclose = () => window.opener.onclose
 
-        // window.opener.jitsi = jitsi
-
-        // window.opener.executeCommand = jitsi.executeCommand
         window.opener.executeCommand = (command) => jitsi.executeCommand(command)
-
-        console.log(j);
     </script>
 </html>
