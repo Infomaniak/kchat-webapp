@@ -35,20 +35,19 @@ import ShrinkConvIcon from 'components/widgets/icons/shrink_conv_icon';
 import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
 import Avatar from 'components/widgets/users/avatar';
 import Avatars from 'components/widgets/users/avatars/avatars';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import {getUser} from 'mattermost-redux/selectors/entities/users';
+
+import {localizeMessage} from 'mattermost-redux/utils/i18n_utils';
+import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 // import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
 import {UserState} from 'reducers/views/calls';
+import store from 'stores/redux_store.jsx';
+import Constants from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 import './component.scss';
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
-import Constants from 'utils/constants';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-import {getUser, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
-import store from 'stores/redux_store.jsx';
-import {GlobalState} from 'types/store';
-import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import { formatMessage } from '@formatjs/intl';
-import { localizeMessage } from 'mattermost-redux/utils/i18n_utils';
+
 interface Props {
     theme: any;
     currentUserID: string;
@@ -378,7 +377,38 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         });
     }
 
+    onVideoToggle = () => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'call-command',
+                    message: {
+                        command: 'toggleVideo',
+                    },
+                },
+                window.origin,
+            );
+
+            return;
+        }
+
+        this.client.executeCommand('toggleVideo');
+    }
+
     onMuteToggle = () => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'call-command',
+                    message: {
+                        command: 'toggleAudio',
+                    },
+                },
+                window.origin,
+            );
+
+            return;
+        }
         this.client.executeCommand('toggleAudio');
     }
 
@@ -932,28 +962,16 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         const globalState = store.getState();
 
         const muted = this.props.statuses[this.props.currentUserID].muted;
+        const video = this.props.statuses[this.props.currentUserID].video;
         const MuteIcon = muted ? CallMutedIcon : CallUnmutedIcon;
         const muteTooltipText = muted ? 'Click to unmute' : 'Click to mute';
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
         const mainWidth = hasTeamSidebar ? '280px' : '216px';
 
         const ShowIcon = document && document.hasFocus() ? ExpandConvIcon : ShrinkConvIcon;
-        const CameraIcon = this.state.cameraOn ? CameraOnIcon : CameraOffIcon;
-        const cameraTooltipText = this.state.cameraOn ? 'Click to disable camera' : 'Click to enable camera';
+        const CameraIcon = video ? CameraOnIcon : CameraOffIcon;
+        const cameraTooltipText = video ? 'Click to disable camera' : 'Click to enable camera';
         const screenSharingTooltipText = this.state.cameraOn ? 'Click to share your screen' : 'Click to stop sharing your screen';
-
-        // const HandIcon = window.callsClient.isHandRaised ? UnraisedHandIcon : RaisedHandIcon;
-        // const handTooltipText = window.callsClient.isHandRaised ? 'Click to lower hand' : 'Click to raise hand';
-
-        // const iframe = <IFrame/>;
-
-        // if (this.state.expanded) {
-        //     return (
-        //         <RenderInWindow>
-        //             <IFrame/>
-        //         </RenderInWindow>
-        //     );
-        // }
 
         let channelDisplayName = '';
         const membersMap: string[] = []; // If we have multiples users
@@ -1080,11 +1098,11 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     <button
                                         id='camera-on-off'
                                         className='cursor--pointer style--none button-controls'
-                                        style={this.props.statuses[this.props.currentUserID].muted ? this.style.mutedButton : this.style.unmutedButton}
-                                        onClick={this.onMuteToggle}
+                                        style={this.props.statuses[this.props.currentUserID].video ? this.style.unmutedButton : this.style.mutedButton}
+                                        onClick={this.onVideoToggle}
                                     >
                                         <CameraIcon
-                                            fill={this.state.cameraOn ? '#0098FF' : '#9F9F9F'}
+                                            fill={this.props.statuses[this.props.currentUserID].video ? '#0098FF' : '#9F9F9F'}
                                             style={{width: '16px', height: '16px'}}
                                         />
                                     </button>

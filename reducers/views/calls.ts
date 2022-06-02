@@ -220,12 +220,10 @@ interface UsersStatusesAction {
 
 const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatusesAction) => {
     switch (action.type) {
-    case ActionTypes.VOICE_CHANNEL_UNINIT:
-        return {};
+    // case ActionTypes.VOICE_CHANNEL_UNINIT:
+    //     return {};
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
     case ActionTypes.VOICE_CHANNEL_ADDED:
-        console.log(action)
-        console.log(state)
         if (!state[action.data.id]) {
             return {
                 ...state,
@@ -233,6 +231,7 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
                     [action.data.userID]: {
                         muted: true,
                         voice: false,
+                        screenshare: false,
                     },
                 },
             };
@@ -274,17 +273,6 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
     //         [action.data.channelID]: action.data.states,
     //     };
     case ActionTypes.VOICE_CHANNEL_USER_MUTED:
-        if (!state[action.data.callID]) {
-            return {
-                ...state,
-                [action.data.callID]: {
-                    ...state[action.data.callID],
-                    [action.data.userID]: {
-                        muted: true,
-                    },
-                },
-            };
-        }
         return {
             ...state,
             [action.data.callID]: {
@@ -296,18 +284,6 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
             },
         };
     case ActionTypes.VOICE_CHANNEL_USER_UNMUTED:
-        console.log("unmute", action.data)
-        if (!state[action.data.callID]) {
-            return {
-                ...state,
-                [action.data.callID]: {
-                    ...state[action.data.callID],
-                    [action.data.userID]: {
-                        muted: false,
-                    },
-                },
-            };
-        }
         return {
             ...state,
             [action.data.callID]: {
@@ -318,48 +294,51 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
                 },
             },
         };
-    case ActionTypes.VOICE_CHANNEL_USER_VOICE_ON:
-        if (!state[action.data.channelID]) {
-            return {
-                ...state,
-                [action.data.channelID]: {
-                    [action.data.userID]: {
-                        voice: true,
-                    },
-                },
-            };
-        }
+    case ActionTypes.VOICE_CHANNEL_USER_VIDEO_ON:
         return {
             ...state,
             [action.data.channelID]: {
                 ...state[action.data.channelID],
                 [action.data.userID]: {
                     ...state[action.data.channelID][action.data.userID],
-                    voice: true,
+                    video: true,
                 },
             },
         };
-    case ActionTypes.VOICE_CHANNEL_USER_VOICE_OFF:
-        if (!state[action.data.channelID]) {
-            return {
-                ...state,
-                [action.data.channelID]: {
-                    [action.data.userID]: {
-                        voice: false,
-                    },
-                },
-            };
-        }
+    case ActionTypes.VOICE_CHANNEL_USER_VIDEO_OFF:
         return {
             ...state,
             [action.data.channelID]: {
                 ...state[action.data.channelID],
                 [action.data.userID]: {
                     ...state[action.data.channelID][action.data.userID],
-                    voice: false,
+                    video: false,
                 },
             },
         };
+    case ActionTypes.VOICE_CHANNEL_USER_SCREEN_ON:
+        return {
+            ...state,
+            [action.data.channelID]: {
+                ...state[action.data.channelID],
+                [action.data.userID]: {
+                    ...state[action.data.channelID][action.data.userID],
+                    screenshare: true,
+                },
+            },
+        };
+    case ActionTypes.VOICE_CHANNEL_USER_SCREEN_OFF:
+        return {
+            ...state,
+            [action.data.channelID]: {
+                ...state[action.data.channelID],
+                [action.data.userID]: {
+                    ...state[action.data.channelID][action.data.userID],
+                    screenshare: false,
+                },
+            },
+        };
+
     // case ActionTypes.VOICE_CHANNEL_USER_RAISE_HAND:
     //     if (!state[action.data.channelID]) {
     //         return {
