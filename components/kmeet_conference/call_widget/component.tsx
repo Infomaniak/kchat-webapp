@@ -3,51 +3,45 @@
 /* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-lines */
-import React, {CSSProperties} from 'react';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
-import moment from 'moment-timezone';
-
-import {IDMappedObjects} from 'mattermost-redux/types/utilities';
+import {Channel} from 'mattermost-redux/types/channels';
 
 import {Team} from 'mattermost-redux/types/teams';
 
-import {Channel} from 'mattermost-redux/types/channels';
-
 import {UserProfile} from 'mattermost-redux/types/users';
 
+import {IDMappedObjects} from 'mattermost-redux/types/utilities';
+
+import moment from 'moment-timezone';
+
+import React, {CSSProperties} from 'react';
+
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+
 import {getUserDisplayName, isPublicChannel} from 'components/kmeet_conference/utils';
-
-import MutedIcon from 'components/widgets/icons/muted_icon';
-import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
-import LeaveCallIcon from 'components/widgets/icons/leave_call_icon';
-import ParticipantsIcon from 'components/widgets/icons/participants';
-import CompassIcon from 'components/widgets/icons/compassIcon';
-import PopOutIcon from 'components/widgets/icons/popout';
-import ExpandIcon from 'components/widgets/icons/expand';
-import RaisedHandIcon from 'components/widgets/icons/raised_hand';
-import CallUsersIcon from 'components/widgets/icons/call_users_icon';
-import LeaveConvIcon from 'components/widgets/icons/leave_conf_icon';
-
-// import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
-
-import {UserState} from 'reducers/views/calls';
-
-import './component.scss';
-import Avatar from 'components/widgets/users/avatar';
-
-import GlobeIcon from 'components/widgets/icons/globe_icon';
-
-import {isDesktopApp} from 'utils/user_agent';
-import ChannelConvIcon from 'components/widgets/icons/channel_conv_icon';
-import CallUnmutedIcon from 'components/widgets/icons/call_micro_on';
 import CallMutedIcon from 'components/widgets/icons/call_micro_off';
-import ExpandConvIcon from 'components/widgets/icons/expand_conv_icon';
-import CameraOnIcon from 'components/widgets/icons/camera_on_icon';
+import CallUnmutedIcon from 'components/widgets/icons/call_micro_on';
+import CallUsersIcon from 'components/widgets/icons/call_users_icon';
 import CameraOffIcon from 'components/widgets/icons/camera_off_icon';
+import CameraOnIcon from 'components/widgets/icons/camera_on_icon';
+import ChannelConvIcon from 'components/widgets/icons/channel_conv_icon';
+import CompassIcon from 'components/widgets/icons/compassIcon';
+import ExpandConvIcon from 'components/widgets/icons/expand_conv_icon';
+import LeaveConvIcon from 'components/widgets/icons/leave_conf_icon';
+import MutedIcon from 'components/widgets/icons/muted_icon';
+import PopOutIcon from 'components/widgets/icons/popout';
+import RaisedHandIcon from 'components/widgets/icons/raised_hand';
 import ScreenSharingIcon from 'components/widgets/icons/screen_sharing_icon';
 import ShrinkConvIcon from 'components/widgets/icons/shrink_conv_icon';
+import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
+import Avatar from 'components/widgets/users/avatar';
 import Avatars from 'components/widgets/users/avatars/avatars';
-import { getCurrentUserId } from 'mattermost-redux/selectors/entities/common';
+
+// import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
+import {UserState} from 'reducers/views/calls';
+import {isDesktopApp} from 'utils/user_agent';
+import './component.scss';
+import { displayUsername } from 'mattermost-redux/utils/user_utils';
+import Constants from 'utils/constants';
 
 interface Props {
     theme: any;
@@ -234,6 +228,16 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             right: '8px',
             top: '8px',
             margin: 0,
+        },
+        callChannelDisplay: {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: '14ch',
+            marginLeft: '5px',
+            fontWeight: 400,
+            color: 'var(--center-channel-color)',
+            fontSize: '14px',
         },
     };
 
@@ -909,7 +913,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         if (!this.props.channel) {
             return null;
         }
-
+console.log(this.props.channel)
         const MuteIcon = this.state.audioMuted ? CallMutedIcon : CallUnmutedIcon;
         const muteTooltipText = this.state.audioMuted ? 'Click to unmute' : 'Click to mute';
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
@@ -931,6 +935,17 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         //             <IFrame/>
         //         </RenderInWindow>
         //     );
+        // }
+        const isDirect = (this.props.channel.type === Constants.DM_CHANNEL);
+        const isGroup = (this.props.channel.type === Constants.GM_CHANNEL);
+        const isPrivate = (this.props.channel.type === Constants.PRIVATE_CHANNEL);
+        let channelDisplayName = '';
+
+        // if (isDirect) {
+        //     const teammateId = this.props.currentUserID;
+        //     if (this.props.currentUserIDd) {
+        //         channelTitle = displayUsername(this.props., teammateNameDisplaySetting) + ' ';
+        //     }
         // }
 
         return (
@@ -968,16 +983,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
                                 </div>}
                                 <span
-                                    style={{
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap',
-                                        maxWidth: hasTeamSidebar ? '24ch' : '14ch',
-                                        marginLeft: '5px',
-                                        fontWeight: 400,
-                                        color: 'black',
-                                        fontSize: '14px',
-                                    }}
+                                    style={this.style.callChannelDisplay as CSSProperties}
                                 >
                                     {this.props.channel.display_name}
                                 </span>
@@ -992,17 +998,6 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     style={{width: '16px', height: '16px'}}
                                 />
                             </button>
-
-                            {/* <div style={this.style.profiles}>
-                            {this.renderProfiles()}
-                        </div>
-                        <div style={{width: '85%'}}>
-                            {this.renderSpeaking()}
-                            <div style={this.style.callInfo}>
-                                <div style={{fontWeight: 600}}>{this.getCallDuration()}</div>
-                                {(isPublicChannel(this.props.channel) || isPrivateChannel(this.props.channel)) && this.renderChannelName(hasTeamSidebar)}
-                            </div>
-                        </div> */}
                         </div>
 
                         <div
@@ -1101,7 +1096,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                         style={{marginRight: '4px'}}
                                     />
                                     <span
-                                        style={{fontWeight: 600, color: 'black'}}
+                                        style={{fontWeight: 600, color: 'var(--center-channel-color)'}}
                                     >{Object.keys(this.props.profiles).length}</span>
                                 </button>
                             </OverlayTrigger>
