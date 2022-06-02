@@ -5,22 +5,25 @@ import {connect} from 'react-redux';
 
 import {GlobalState} from 'types/store';
 
-import {voiceConnectedChannels} from 'selectors/calls';
+import {connectedCallID, voiceConnectedChannels} from 'selectors/calls';
 
-import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentChannelId, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 
 import {startOrJoinCallInChannel} from 'actions/calls';
 
 import MeetButton from './meet_button';
 
 function mapStateToProps(state: GlobalState) {
-    // const connectedCall = connectedCallID(state) || '';
-    // const connectedChannel = connectedChannelID(state);
+    const connectedCall = connectedCallID(state);
+    const currentChannelID = getCurrentChannelId(state);
     const channels = voiceConnectedChannels(state);
 
     return {
-        currentChannelID: getCurrentChannelId(state),
-        hasCall: channels[getCurrentChannelId(state)],
+        currentChannelID,
+        hasCall: channels[currentChannelID],
+        isInCall: channels[currentChannelID] &&
+            channels[currentChannelID][connectedCall] &&
+            channels[currentChannelID][connectedCall].includes(getCurrentUserId(state)),
     };
 }
 

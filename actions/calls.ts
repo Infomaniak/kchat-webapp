@@ -2,9 +2,9 @@
 // See LICENSE.txt for license information.
 import {Dispatch} from 'redux';
 
-import {DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {DispatchFunc, GenericAction, GetStateFunc} from 'mattermost-redux/types/actions';
 import {ActionTypes} from 'utils/constants';
-import {connectedChannelID, voiceConnectedChannels, voiceConnectedUsers} from 'selectors/calls';
+import {connectedCallID, connectedChannelID, voiceConnectedChannels, voiceConnectedUsers} from 'selectors/calls';
 import {getProfilesByIds} from 'mattermost-redux/actions/users';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
@@ -203,19 +203,50 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                 });
                 break;
             }
+            case 'call-audio-status-change': {
+                const muted = message.status;
+                dispatch({
+                    type: muted ? ActionTypes.VOICE_CHANNEL_USER_MUTED : ActionTypes.VOICE_CHANNEL_USER_UNMUTED,
+                    data: {
+                        userID: getCurrentUserId(getState()),
+                        callID: connectedCallID(getState()),
+                    },
+                });
+                break;
+            }
+            case 'call-video-status-change': {
+                const muted = message.status;
+                dispatch({
+                    type: muted ? ActionTypes.VOICE_CHANNEL_USER_VIDEO_OFF : ActionTypes.VOICE_CHANNEL_USER_VIDEO_ON,
+                    data: {
+                        userID: getCurrentUserId(getState()),
+                        callID: connectedCallID(getState()),
+                    },
+                });
+                break;
+            }
+            case 'call-ss-status-change': {
+                const on = message.status;
+                dispatch({
+                    type: on ? ActionTypes.VOICE_CHANNEL_USER_SCREEN_OFF : ActionTypes.VOICE_CHANNEL_USER_SCREEN_ON,
+                    data: {
+                        userID: getCurrentUserId(getState()),
+                        callID: connectedCallID(getState()),
+                    },
+                });
+            }
             }
         });
     };
 }
 
-export function updateAudioStatus(dialingID: string, muted: boolean = false) {
-    console.log("dispatch mute")
-    return async (dispatch: DispatchFunc, getState) => {
+export function updateAudioStatus(dialingID: string, muted = false) {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         dispatch({
             type: muted ? ActionTypes.VOICE_CHANNEL_USER_MUTED : ActionTypes.VOICE_CHANNEL_USER_UNMUTED,
             data: {
                 userID: getCurrentUserId(getState()),
-                callID: dialingID,
+                callID: connectedCallID(getState()),
             },
         });
     };
