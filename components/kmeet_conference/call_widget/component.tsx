@@ -42,6 +42,7 @@ import {isDesktopApp} from 'utils/user_agent';
 import './component.scss';
 import { displayUsername } from 'mattermost-redux/utils/user_utils';
 import Constants from 'utils/constants';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 
 interface Props {
     theme: any;
@@ -66,7 +67,7 @@ interface Props {
     hideExpandedView: () => void;
     showScreenSourceModal: () => void;
     disconnect: () => void;
-    updateAudioStatus: () => void;
+    updateAudioStatus: (callID: string, muted: boolean) => void;
 }
 
 interface DraggingState {
@@ -270,11 +271,11 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         document.addEventListener('mouseup', this.onMouseUp, false);
         document.addEventListener('click', this.closeOnBlur, true);
         document.addEventListener('keyup', this.keyboardClose, true);
-        this.client.audioMuteStatusChanged = (data) => {
+        window.audioMuteStatusChanged = (data) => {
             console.log('updated audio', data);
             this.props.updateAudioStatus(this.props.callID, data.muted);
 
-            // this.setState({ audioMuted: data.muted })
+            this.setState({audioMuted: data.muted});
         };
         this.client.readyToClose = () => this.props.disconnect();
 
@@ -377,9 +378,19 @@ export default class CallWidget extends React.PureComponent<Props, State> {
     }
 
     onDisconnectClick = () => {
-        // if (this.state.expandedViewWindow) {
-        //     this.state.expandedViewWindow.close();
-        // }
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'call-command',
+                    message: {
+                        command: 'hangup',
+                    },
+                },
+                window.origin,
+            );
+
+            return;
+        }
 
         if (this.client.executeCommand) {
             this.client.executeCommand('hangup');
@@ -540,7 +551,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                 let isSpeaking = false;
                 let isHandRaised = false;
                 if (status) {
-                    isMuted = !status.unmuted;
+                    isMuted = status.muted;
                     isSpeaking = Boolean(status.voice);
                     isHandRaised = Boolean(status.raised_hand > 0);
                 }
@@ -703,7 +714,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             return null;
         }
 
-        const isMuted = this.state.audioMuted;
+        const isMuted = this.props.statuses[this.props.currentUserID].muted;
 
         const MuteIcon = isMuted ? MutedIcon : UnmutedIcon;
         const onJoinSelf = (
@@ -914,8 +925,10 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             return null;
         }
 console.log(this.props.channel)
-        const MuteIcon = this.state.audioMuted ? CallMutedIcon : CallUnmutedIcon;
-        const muteTooltipText = this.state.audioMuted ? 'Click to unmute' : 'Click to mute';
+
+        const muted = this.props.statuses[this.props.currentUserID].muted
+        const MuteIcon = muted ? CallMutedIcon : CallUnmutedIcon;
+        const muteTooltipText = muted ? 'Click to unmute' : 'Click to mute';
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
         const mainWidth = hasTeamSidebar ? '280px' : '216px';
 
@@ -1020,11 +1033,11 @@ console.log(this.props.channel)
                                     <button
                                         id='voice-mute-unmute'
                                         className='cursor--pointer style--none button-controls'
-                                        style={this.state.audioMuted ? this.style.mutedButton : this.style.unmutedButton}
+                                        style={this.props.statuses[this.props.currentUserID].muted ? this.style.mutedButton : this.style.unmutedButton}
                                         onClick={this.onMuteToggle}
                                     >
                                         <MuteIcon
-                                            fill={this.state.audioMuted ? '#9F9F9F' : '#0098FF'}
+                                            fill={this.props.statuses[this.props.currentUserID].muted ? '#9F9F9F' : '#0098FF'}
                                             style={{width: '16px', height: '16px'}}
                                         />
                                     </button>
@@ -1041,7 +1054,7 @@ console.log(this.props.channel)
                                     <button
                                         id='camera-on-off'
                                         className='cursor--pointer style--none button-controls'
-                                        style={this.state.audioMuted ? this.style.mutedButton : this.style.unmutedButton}
+                                        style={this.props.statuses[this.props.currentUserID].muted ? this.style.mutedButton : this.style.unmutedButton}
                                         onClick={this.onMuteToggle}
                                     >
                                         <CameraIcon
@@ -1062,7 +1075,7 @@ console.log(this.props.channel)
                                     <button
                                         id='screen-sharing-on-off'
                                         className='cursor--pointer style--none button-controls'
-                                        style={this.state.audioMuted ? this.style.mutedButton : this.style.unmutedButton}
+                                        style={this.props.statuses[this.props.currentUserID].muted ? this.style.mutedButton : this.style.unmutedButton}
                                         onClick={this.onMuteToggle}
                                     >
                                         <ScreenSharingIcon
