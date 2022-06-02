@@ -382,6 +382,24 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         });
     }
 
+    onScreenshareToggle = () => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'call-command',
+                    message: {
+                        command: 'toggleShareScreen',
+                    },
+                },
+                window.origin,
+            );
+
+            return;
+        }
+
+        this.client.executeCommand('toggleShareScreen');
+    }
+
     onVideoToggle = () => {
         if (isDesktopApp()) {
             window.postMessage(
@@ -968,6 +986,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
         const muted = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].muted : true;
         const video = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].video : false;
+        const screen = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].screenshare : false;
         const MuteIcon = muted ? CallMutedIcon : CallUnmutedIcon;
         const muteTooltipText = muted ? 'Click to unmute' : 'Click to mute';
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
@@ -1124,11 +1143,11 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     <button
                                         id='screen-sharing-on-off'
                                         className='cursor--pointer style--none button-controls'
-                                        style={muted ? this.style.activeButton : this.style.unActiveButton}
-                                        onClick={this.onMuteToggle}
+                                        style={screen ? this.style.activeButton : this.style.unActiveButton}
+                                        onClick={this.onScreenshareToggle}
                                     >
                                         <ScreenSharingIcon
-                                            fill={this.props.screenSharingID === this.props.currentUserID ? '#0098FF' : '#9F9F9F'}
+                                            fill={screen ? '#0098FF' : '#9F9F9F'}
                                             style={{width: '16px', height: '16px'}}
                                         />
                                     </button>

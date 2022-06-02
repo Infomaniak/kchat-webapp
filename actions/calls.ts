@@ -223,6 +223,17 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                         callID: connectedCallID(getState()),
                     },
                 });
+                break;
+            }
+            case 'call-ss-status-change': {
+                const on = message.status;
+                dispatch({
+                    type: on ? ActionTypes.VOICE_CHANNEL_USER_SCREEN_OFF : ActionTypes.VOICE_CHANNEL_USER_SCREEN_ON,
+                    data: {
+                        userID: getCurrentUserId(getState()),
+                        callID: connectedCallID(getState()),
+                    },
+                });
             }
             }
         });
