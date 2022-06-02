@@ -652,7 +652,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             }
                         </span>
 
-                        <span
+                        {/* <span
                             style={{
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -673,7 +673,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                 style={{width: '14px', height: '14px'}}
                             />
 
-                        </span>
+                        </span> */}
                     </li>
                 );
             });
