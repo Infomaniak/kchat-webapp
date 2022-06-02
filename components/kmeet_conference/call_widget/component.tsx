@@ -373,7 +373,38 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         });
     }
 
+    onVideoToggle = () => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'call-command',
+                    message: {
+                        command: 'toggleVideo',
+                    },
+                },
+                window.origin,
+            );
+
+            return;
+        }
+
+        this.client.executeCommand('toggleVideo');
+    }
+
     onMuteToggle = () => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'call-command',
+                    message: {
+                        command: 'toggleAudio',
+                    },
+                },
+                window.origin,
+            );
+
+            return;
+        }
         this.client.executeCommand('toggleAudio');
     }
 
@@ -927,39 +958,21 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 console.log(this.props.channel)
 
         const muted = this.props.statuses[this.props.currentUserID].muted
+        const video = this.props.statuses[this.props.currentUserID].video
         const MuteIcon = muted ? CallMutedIcon : CallUnmutedIcon;
         const muteTooltipText = muted ? 'Click to unmute' : 'Click to mute';
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
         const mainWidth = hasTeamSidebar ? '280px' : '216px';
 
         const ShowIcon = document && document.hasFocus() ? ExpandConvIcon : ShrinkConvIcon;
-        const CameraIcon = this.state.cameraOn ? CameraOnIcon : CameraOffIcon;
-        const cameraTooltipText = this.state.cameraOn ? 'Click to disable camera' : 'Click to enable camera';
+        const CameraIcon = video ? CameraOnIcon : CameraOffIcon;
+        const cameraTooltipText = video ? 'Click to disable camera' : 'Click to enable camera';
         const screenSharingTooltipText = this.state.cameraOn ? 'Click to share your screen' : 'Click to stop sharing your screen';
 
-        // const HandIcon = window.callsClient.isHandRaised ? UnraisedHandIcon : RaisedHandIcon;
-        // const handTooltipText = window.callsClient.isHandRaised ? 'Click to lower hand' : 'Click to raise hand';
-
-        // const iframe = <IFrame/>;
-
-        // if (this.state.expanded) {
-        //     return (
-        //         <RenderInWindow>
-        //             <IFrame/>
-        //         </RenderInWindow>
-        //     );
-        // }
         const isDirect = (this.props.channel.type === Constants.DM_CHANNEL);
         const isGroup = (this.props.channel.type === Constants.GM_CHANNEL);
         const isPrivate = (this.props.channel.type === Constants.PRIVATE_CHANNEL);
         let channelDisplayName = '';
-
-        // if (isDirect) {
-        //     const teammateId = this.props.currentUserID;
-        //     if (this.props.currentUserIDd) {
-        //         channelTitle = displayUsername(this.props., teammateNameDisplaySetting) + ' ';
-        //     }
-        // }
 
         return (
             <React.Fragment>
@@ -1054,11 +1067,11 @@ console.log(this.props.channel)
                                     <button
                                         id='camera-on-off'
                                         className='cursor--pointer style--none button-controls'
-                                        style={this.props.statuses[this.props.currentUserID].muted ? this.style.mutedButton : this.style.unmutedButton}
-                                        onClick={this.onMuteToggle}
+                                        style={this.props.statuses[this.props.currentUserID].video ? this.style.unmutedButton : this.style.mutedButton}
+                                        onClick={this.onVideoToggle}
                                     >
                                         <CameraIcon
-                                            fill={this.state.cameraOn ? '#0098FF' : '#9F9F9F'}
+                                            fill={this.props.statuses[this.props.currentUserID].video ? '#0098FF' : '#9F9F9F'}
                                             style={{width: '16px', height: '16px'}}
                                         />
                                     </button>
