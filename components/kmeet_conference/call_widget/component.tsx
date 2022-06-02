@@ -144,20 +144,25 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             display: 'flex',
             marginRight: 'auto',
         },
-        mutedButton: {
+        activeButton: {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             width: '24px',
-        },
-        unmutedButton: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '24px',
-            background: 'rgba(61, 184, 135, 0.24)',
             borderRadius: '4px',
-            color: 'rgba(61, 184, 135, 1)',
+            '&:hover': {
+                background: 'rgba(var(--center-channel-color-rgb), 0.04)',
+            },
+        },
+        unActiveButton: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '24px',
+            borderRadius: '4px',
+            '&:hover': {
+                background: 'rgba(var(--center-channel-color-rgb), 0.04)',
+            },
         },
         disconnectButton: {
             display: 'flex',
@@ -749,7 +754,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             return null;
         }
 
-        const isMuted = this.props.statuses[this.props.currentUserID].muted;
+        const isMuted = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].muted : true;
 
         const MuteIcon = isMuted ? MutedIcon : UnmutedIcon;
         const onJoinSelf = (
@@ -961,8 +966,8 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         }
         const globalState = store.getState();
 
-        const muted = this.props.statuses[this.props.currentUserID].muted;
-        const video = this.props.statuses[this.props.currentUserID].video;
+        const muted = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].muted : true;
+        const video = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].video : false;
         const MuteIcon = muted ? CallMutedIcon : CallUnmutedIcon;
         const muteTooltipText = muted ? 'Click to unmute' : 'Click to mute';
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
@@ -1077,11 +1082,11 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     <button
                                         id='voice-mute-unmute'
                                         className='cursor--pointer style--none button-controls'
-                                        style={this.props.statuses[this.props.currentUserID].muted ? this.style.mutedButton : this.style.unmutedButton}
+                                        style={muted ? this.style.activeButton : this.style.unActiveButton}
                                         onClick={this.onMuteToggle}
                                     >
                                         <MuteIcon
-                                            fill={this.props.statuses[this.props.currentUserID].muted ? '#9F9F9F' : '#0098FF'}
+                                            fill={muted ? '#9F9F9F' : '#0098FF'}
                                             style={{width: '16px', height: '16px'}}
                                         />
                                     </button>
@@ -1098,11 +1103,11 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     <button
                                         id='camera-on-off'
                                         className='cursor--pointer style--none button-controls'
-                                        style={this.props.statuses[this.props.currentUserID].video ? this.style.unmutedButton : this.style.mutedButton}
+                                        style={video ? this.style.activeButton : this.style.unActiveButton}
                                         onClick={this.onVideoToggle}
                                     >
                                         <CameraIcon
-                                            fill={this.props.statuses[this.props.currentUserID].video ? '#0098FF' : '#9F9F9F'}
+                                            fill={video ? '#0098FF' : '#9F9F9F'}
                                             style={{width: '16px', height: '16px'}}
                                         />
                                     </button>
@@ -1119,7 +1124,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     <button
                                         id='screen-sharing-on-off'
                                         className='cursor--pointer style--none button-controls'
-                                        style={this.props.statuses[this.props.currentUserID].muted ? this.style.mutedButton : this.style.unmutedButton}
+                                        style={muted ? this.style.activeButton : this.style.unActiveButton}
                                         onClick={this.onMuteToggle}
                                     >
                                         <ScreenSharingIcon
