@@ -82,12 +82,18 @@
 
         const jitsi = new window.JitsiMeetExternalAPI(KMEET_DOMAIN, {
             configOverwrite,
+            interfaceConfigOverwrite: { HIDE_INVITE_MORE_HEADER: true },
             roomName: urlParams.get('channelID'),
+            userInfo: {
+                displayName: urlParams.get('username'),
+            },
         });
 
         for (const [event, callback] of Object.entries(events)) {
             jitsi.addListener(event, callback)
         }
+
+        jitsi.executeCommand('avatarUrl',urlParams.get('avatarUrl'));
 
         jitsi.on('readyToClose', () => {
             window.close()

@@ -130,6 +130,8 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                 return;
             }
         }
+        const username = 'tititoto'; // TODO: Get dynamic user display name
+        const avartarUrl = 'https://avatars0.githubusercontent.com/u/3671647'; // TODO: Get dynamic user display name
 
         if (!isDesktopApp()) {
             window.onCloseJitsi = (window) => {
@@ -158,7 +160,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
 
             const windowFeatures = 'width=1100,height=800,left=200,top=200,resizable=yes';
 
-            window.callWindow = window.open(`/static/call.html?channelID=${data.id}&channelName=${channelName !== '' ? channelName : data.id}`, 'ExpandedView', windowFeatures);
+            window.callWindow = window.open(`/static/call.html?channelID=${data.id}&channelName=${channelName !== '' ? channelName : data.id}&username=${username}&avatarUrl=${avartarUrl}`, 'ExpandedView', windowFeatures);
             window.callWindow.onbeforeunload = () => {
                 Client4.leaveMeet(data.id);
                 dispatch({
