@@ -4,13 +4,14 @@ import React from 'react';
 import moment from 'moment-timezone';
 import styled from 'styled-components';
 
+import {UserProfile} from 'mattermost-redux/types/users';
+
 import ActiveCallIcon from 'components/widgets/icons/active_call_icon';
 import CallIcon from 'components/widgets/icons/call_icon';
 import LeaveCallIcon from 'components/widgets/icons/leave_call_icon';
 import ConnectedProfiles from '../connected_profiles';
 
 import {Post} from 'mattermost-redux/types/posts';
-import {UserProfile} from 'mattermost-redux/types/users';
 import {isDesktopApp} from 'utils/user_agent';
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
@@ -31,6 +32,12 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, l
     const client = window;
 
     window.addEventListener('beforeunload', (e) => {
+        window.postMessage(
+            {
+                type: 'window-will-unloaded',
+            },
+            window.origin,
+        );
         if (hasCall && connectedID === post.props.conference_id && !post.props.end_at) {
             e.stopPropagation();
             e.preventDefault();
