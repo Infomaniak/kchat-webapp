@@ -13,14 +13,16 @@ import {
     IntlShape,
 } from 'react-intl';
 
-import {UserProfile} from 'mattermost-redux/types/users';
-import {StatusOK} from 'mattermost-redux/types/client4';
+import {UserProfile} from '@mattermost/types/users';
+import {StatusOK} from '@mattermost/types/client4';
 
 import store from 'stores/redux_store.jsx';
 
-import CollapsedReplyThreadsBetaModal from 'components/collapsed_reply_threads_beta_modal';
+// import CollapsedReplyThreadsBetaModal from 'components/collapsed_reply_threads_beta_modal';
 import {ModalData} from 'types/actions';
-import Constants, {ModalIdentifiers} from 'utils/constants';
+
+// import {ModalIdentifiers} from 'utils/constants';
+import Constants from 'utils/constants';
 import * as Utils from 'utils/utils';
 import {t} from 'utils/i18n';
 import ConfirmModal from 'components/confirm_modal';
@@ -99,7 +101,8 @@ type State = {
 
 class UserSettingsModal extends React.PureComponent<Props, State> {
     private requireConfirm: boolean;
-    private showCRTBetaModal: boolean;
+
+    // private showCRTBetaModal: boolean;
     private customConfirmAction: ((handleConfirm: () => void) => void) | null;
     private modalBodyRef: React.RefObject<Modal>;
     private afterConfirm: (() => void) | null;
@@ -117,7 +120,8 @@ class UserSettingsModal extends React.PureComponent<Props, State> {
         };
 
         this.requireConfirm = false;
-        this.showCRTBetaModal = false;
+
+        // this.showCRTBetaModal = false;
 
         // Used when settings want to override the default confirm modal with their own
         // If set by a child, it will be called in place of showing the regular confirm
@@ -156,11 +160,11 @@ class UserSettingsModal extends React.PureComponent<Props, State> {
 
         // we use the showCRTBetaModal to track change of collapsedThreads between states
         // but NOT when both prev and current collapsedThreads prop is the same
-        if (this.props.collapsedThreads && !prevProps.collapsedThreads) {
-            this.showCRTBetaModal = true;
-        } else if (!this.props.collapsedThreads && prevProps.collapsedThreads) {
-            this.showCRTBetaModal = false;
-        }
+        // if (this.props.collapsedThreads && !prevProps.collapsedThreads) {
+        //     this.showCRTBetaModal = true;
+        // } else if (!this.props.collapsedThreads && prevProps.collapsedThreads) {
+        //     this.showCRTBetaModal = false;
+        // }
     }
 
     handleKeyDown = (e: KeyboardEvent) => {
@@ -190,12 +194,13 @@ class UserSettingsModal extends React.PureComponent<Props, State> {
         });
         this.props.onExited();
 
-        if (this.showCRTBetaModal) {
-            this.props.actions.openModal({
-                modalId: ModalIdentifiers.COLLAPSED_REPLY_THREADS_BETA_MODAL,
-                dialogType: CollapsedReplyThreadsBetaModal,
-            });
-        }
+        // TODO: ask tabata if we want a modal like this and to adapt the content if yes.
+        // if (this.showCRTBetaModal) {
+        //     this.props.actions.openModal({
+        //         modalId: ModalIdentifiers.COLLAPSED_REPLY_THREADS_BETA_MODAL,
+        //         dialogType: CollapsedReplyThreadsBetaModal,
+        //     });
+        // }
     }
 
     // Called to hide the settings pane when on mobile

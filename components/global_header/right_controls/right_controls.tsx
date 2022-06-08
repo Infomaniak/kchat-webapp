@@ -15,6 +15,7 @@ import StatusDropdown from 'components/status_dropdown';
 import AtMentionsButton from './at_mentions_button/at_mentions_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';
 import SettingsButton from './settings_button';
+import CloudUpgradeButton from './cloud_upgrade_button';
 
 const RightControlsContainer = styled.div`
     display: flex;
@@ -39,6 +40,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
         <RightControlsContainer
             id={'RightControlsContainer'}
         >
+            <CloudUpgradeButton/>
             {productId === null ? (
                 <>
                     <AtMentionsButton/>
@@ -53,6 +55,8 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     pluggableId={productId}
                 />
             )}
+            {/* eslint-disable-next-line react/self-closing-comp */}
+            <module-reporting-tools-component></module-reporting-tools-component>
             <StatusDropdown/>
         </RightControlsContainer>
     );

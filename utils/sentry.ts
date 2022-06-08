@@ -48,6 +48,7 @@ export default function init({SENTRY_DSN}: Args) {
             /moz-extension/,
             'ChunkLoadError', // WebPack loading source code.
             /ResizeObserver loop/,
+            'Received invalid response from the server', // Temp fix for 403 errors.
         ],
     });
 }

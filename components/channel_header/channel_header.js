@@ -106,6 +106,7 @@ class ChannelHeader extends React.PureComponent {
             leftOffset: 0,
             topOffset: 0,
             titleMenuOpen: false,
+            showMeetBtn: true,
         };
 
         this.getHeaderMarkdownOptions = memoizeResult((channelNamesMap) => (
@@ -276,7 +277,7 @@ class ChannelHeader extends React.PureComponent {
         } = this.props;
         const {formatMessage} = this.props.intl;
         const ariaLabelChannelHeader = localizeMessage('accessibility.sections.channelHeader', 'channel header region');
-
+        this.setState({showMeetBtn: true});
         let hasGuestsText = '';
         if (hasGuests) {
             hasGuestsText = (
@@ -336,6 +337,7 @@ class ChannelHeader extends React.PureComponent {
                         }}
                     />
                 );
+                this.setState({showMeetBtn: false});
             } else {
                 channelTitle = displayUsername(dmUser, teammateNameDisplaySetting) + ' ';
             }
@@ -662,7 +664,6 @@ class ChannelHeader extends React.PureComponent {
                     }
                     {hasGuestsText}
                     {editMessage}
-                    {/* <MeetButton/> */}
                 </div>
             );
         }
@@ -795,6 +796,8 @@ class ChannelHeader extends React.PureComponent {
                     {toggleFavorite}
                 </div>
             );
+
+            this.setState({showMeetBtn: false});
         }
 
         return (
@@ -828,7 +831,9 @@ class ChannelHeader extends React.PureComponent {
                         channel={channel}
                         channelMember={channelMember}
                     />
-                    <MeetButton/>
+                    {this.state.showMeetBtn &&
+                        <MeetButton/>
+                    }
                     <ChannelInfoButton channel={channel}/>
                 </div>
             </div>

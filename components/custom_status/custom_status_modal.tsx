@@ -9,8 +9,8 @@ import moment, {Moment} from 'moment-timezone';
 import {setCustomStatus, unsetCustomStatus, removeRecentCustomStatus} from 'mattermost-redux/actions/users';
 import {setCustomStatusInitialisationState} from 'mattermost-redux/actions/preferences';
 import {Preferences} from 'mattermost-redux/constants';
-import {UserCustomStatus, CustomStatusDuration} from 'mattermost-redux/types/users';
-import {Emoji} from 'mattermost-redux/types/emojis';
+import {UserCustomStatus, CustomStatusDuration} from '@mattermost/types/users';
+import {Emoji} from '@mattermost/types/emojis';
 
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import GenericModal from 'components/generic_modal';
@@ -147,7 +147,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
         const expiresAt = calculateExpiryTime();
         const customStatus: UserCustomStatus = {
             emoji: emoji || 'speech_balloon',
-            text: text.trim(),
+            text: text ? text.trim() : '',
             duration: duration === CUSTOM_DATE_TIME ? DATE_AND_TIME : duration,
         };
         if (expiresAt) {
@@ -282,7 +282,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
 
     const showSuggestions = !isStatusSet || areSelectedAndSetStatusSame;
 
-    const disableSetStatus = !isStatusSet || text.length > CUSTOM_STATUS_TEXT_CHARACTER_LIMIT;
+    const disableSetStatus = !isStatusSet || (text && text.length > CUSTOM_STATUS_TEXT_CHARACTER_LIMIT);
 
     const showDateAndTimeField = !showSuggestions && (duration === CUSTOM_DATE_TIME || duration === DATE_AND_TIME);
 

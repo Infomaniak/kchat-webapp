@@ -275,26 +275,6 @@ function syncThreads(teamId, userId) {
     dispatch(getCountsAndThreadsSince(userId, teamId, newestThread.last_reply_at));
 }
 
-let intervalId = '';
-const SYNC_INTERVAL_MILLISECONDS = 1000 * 60 * 15; // 15 minutes
-
-export function startPeriodicSync() {
-    clearInterval(intervalId);
-
-    intervalId = setInterval(
-        () => {
-            if (getCurrentUser(getState()) != null) {
-                reconnect(false);
-            }
-        },
-        SYNC_INTERVAL_MILLISECONDS,
-    );
-}
-
-export function stopPeriodicSync() {
-    clearInterval(intervalId);
-}
-
 export function registerPluginWebSocketEvent(pluginId, event, action) {
     if (!pluginEventHandlers[pluginId]) {
         pluginEventHandlers[pluginId] = {};
@@ -503,6 +483,10 @@ export function handleEvent(msg) {
 
     case SocketEvents.PLUGIN_STATUSES_CHANGED:
         handlePluginStatusesChangedEvent(msg);
+        break;
+
+    case SocketEvents.INTEGRATIONS_USAGE_CHANGED:
+        handleIntegrationsUsageChangedEvent(msg);
         break;
 
     case SocketEvents.OPEN_DIALOG:
@@ -1366,6 +1350,10 @@ function handlePluginStatusesChangedEvent(msg) {
     store.dispatch({type: AdminTypes.RECEIVED_PLUGIN_STATUSES, data: msg.data.plugin_statuses});
 }
 
+function handleIntegrationsUsageChangedEvent(msg) {
+    store.dispatch({type: CloudTypes.RECEIVED_INTEGRATIONS_USAGE, data: msg.data.usage.enabled});
+}
+
 function handleOpenDialogEvent(msg) {
     const data = (msg.data && msg.data.dialog) || {};
     const dialog = data;
@@ -1722,17 +1710,9 @@ function handleConferenceUserConnected(msg) {
 
 function handleConferenceUserDisconnected(msg) {
     return (doDispatch, doGetState) => {
-        console.log(msg);
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
 
-        // console.log({
-        //     channelID: msg.data.channel_id,
-        //     userID: msg.data.user_id,
-        //     currentUserID: getCurrentUserId(getState()),
-        //     url: msg.data.url,
-        //     id: Object.keys(calls[msg.data.channel_id])[0],
-        // });
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
             data: {

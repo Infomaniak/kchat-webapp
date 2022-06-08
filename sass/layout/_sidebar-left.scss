@@ -1254,6 +1254,13 @@ $sidebarOpacityAnimationDuration: 0.15s;
         flex-grow: 1;
     }
 
+    .SidebarChannelLinkLabel_wrapper > div.truncated {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     .DirectChannel__profile-picture {
         height: 20px;
         margin-right: 9px;

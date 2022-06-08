@@ -3,34 +3,47 @@
 /* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-lines */
-import React, {CSSProperties} from 'react';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {Channel} from 'mattermost-redux/types/channels';
+
+import {Team} from 'mattermost-redux/types/teams';
+
+import {UserProfile} from 'mattermost-redux/types/users';
+
+import {IDMappedObjects} from 'mattermost-redux/types/utilities';
+
 import moment from 'moment-timezone';
 
-import {getUserDisplayName, isPublicChannel} from 'components/kmeet_conference/utils';
+import React, {CSSProperties} from 'react';
 
-import MutedIcon from 'components/widgets/icons/muted_icon';
-import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
-import LeaveCallIcon from 'components/widgets/icons/leave_call_icon';
-import ParticipantsIcon from 'components/widgets/icons/participants';
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+
+import {getUserDisplayName, isPublicChannel} from 'components/kmeet_conference/utils';
+import CallMutedIcon from 'components/widgets/icons/call_micro_off';
+import CallUnmutedIcon from 'components/widgets/icons/call_micro_on';
+import CallUsersIcon from 'components/widgets/icons/call_users_icon';
+import CameraOffIcon from 'components/widgets/icons/camera_off_icon';
+import CameraOnIcon from 'components/widgets/icons/camera_on_icon';
+import ChannelConvIcon from 'components/widgets/icons/channel_conv_icon';
 import CompassIcon from 'components/widgets/icons/compassIcon';
+import ExpandConvIcon from 'components/widgets/icons/expand_conv_icon';
+import LeaveConvIcon from 'components/widgets/icons/leave_conf_icon';
+import MutedIcon from 'components/widgets/icons/muted_icon';
 import PopOutIcon from 'components/widgets/icons/popout';
-import ExpandIcon from 'components/widgets/icons/expand';
 import RaisedHandIcon from 'components/widgets/icons/raised_hand';
+import ScreenSharingIcon from 'components/widgets/icons/screen_sharing_icon';
+import ShrinkConvIcon from 'components/widgets/icons/shrink_conv_icon';
+import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
+import Avatar from 'components/widgets/users/avatar';
+import Avatars from 'components/widgets/users/avatars/avatars';
+
+import {localizeMessage} from 'mattermost-redux/utils/i18n_utils';
+import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 // import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
-import {IDMappedObjects} from 'mattermost-redux/types/utilities';
-import {Team} from 'mattermost-redux/types/teams';
-import {Channel} from 'mattermost-redux/types/channels';
-import {UserProfile} from 'mattermost-redux/types/users';
 import {UserState} from 'reducers/views/calls';
-
-import './component.scss';
-import Avatar from 'components/widgets/users/avatar';
-
-import GlobeIcon from 'components/widgets/icons/globe_icon';
-
+import Constants from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
+import './component.scss';
 
 interface Props {
     theme: any;
@@ -48,12 +61,18 @@ interface Props {
         [key: string]: UserState;
     };
     callStartAt: number;
+    callID: string;
     screenSharingID: string;
     show: boolean;
+    teammateNameDisplaySetting: string;
+    getUser: (userId: string) => UserProfile;
     showExpandedView: () => void;
     hideExpandedView: () => void;
     showScreenSourceModal: () => void;
     disconnect: () => void;
+    updateAudioStatus: (callID: string, muted: boolean) => void;
+    updateCameraStatus: (callID: string, muted: boolean) => void;
+    updateScreenSharingStatus: (callID: string, muted: boolean) => void;
 }
 
 interface DraggingState {
@@ -82,6 +101,8 @@ interface State {
     showUsersJoined: string[];
     audioMuted: boolean;
     expanded: boolean;
+    cameraOn: boolean;
+    screenSharing: boolean;
 }
 
 export default class CallWidget extends React.PureComponent<Props, State> {
@@ -94,7 +115,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
     private style = {
         main: {
             position: 'fixed',
-            background: 'var(--global-header-background)',
+            background: 'var(--center-channel-bg)',
             borderRadius: '8px',
             display: 'flex',
             bottom: '12px',
@@ -104,37 +125,46 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             border: '1px solid #333',
             userSelect: 'none',
             color: 'white',
+            padding: '16px',
         },
         topBar: {
-            background: 'var(--global-header-background)',
-            padding: '0 12px',
+            background: 'var(--center-channel-bg)',
             display: 'flex',
             width: '100%',
             alignItems: 'center',
-            height: '44px',
+            marginBottom: '20px',
             cursor: 'move',
         },
         bottomBar: {
-            padding: '6px 8px',
+            padding: '6px 0 0',
             display: 'flex',
             justifyContent: 'flex-end',
             width: '100%',
             alignItems: 'center',
         },
-        mutedButton: {
+        bottomBarLeft: {
             display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '24px',
+            marginRight: 'auto',
         },
-        unmutedButton: {
+        activeButton: {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             width: '24px',
-            background: 'rgba(61, 184, 135, 0.24)',
             borderRadius: '4px',
-            color: 'rgba(61, 184, 135, 1)',
+            '&:hover': {
+                background: 'rgba(var(--center-channel-color-rgb), 0.04)',
+            },
+        },
+        unActiveButton: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '24px',
+            borderRadius: '4px',
+            '&:hover': {
+                background: 'rgba(var(--center-channel-color-rgb), 0.04)',
+            },
         },
         disconnectButton: {
             display: 'flex',
@@ -193,9 +223,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             padding: '0 8px',
             height: '28px',
             borderRadius: '4px',
-            color: '#D24B4E',
-            background: 'rgba(210, 75, 78, 0.24)',
-            marginRight: 'auto',
+            background: '#D71E04',
         },
         dotsMenu: {
             position: 'relative',
@@ -212,6 +240,16 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             right: '8px',
             top: '8px',
             margin: 0,
+        },
+        callChannelDisplay: {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: '14ch',
+            marginLeft: '5px',
+            fontWeight: 400,
+            color: 'var(--center-channel-color)',
+            fontSize: '14px',
         },
     };
 
@@ -232,8 +270,10 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             },
             expandedViewWindow: null,
             showUsersJoined: [],
-            audioMuted: true,
+            audioMuted: false,
             expanded: false,
+            cameraOn: false,
+            screenSharing: false,
         };
         this._ref = React.createRef();
         this.node = React.createRef();
@@ -244,8 +284,26 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         document.addEventListener('click', this.closeOnBlur, true);
         document.addEventListener('keyup', this.keyboardClose, true);
 
-        this.client.audioMuteStatusChanged = (data) => this.setState({audioMuted: data.muted});
+        // Events from call window
+        window.audioMuteStatusChanged = (data: { muted: boolean }) => {
+            this.props.updateAudioStatus(this.props.callID, data.muted);
+
+            this.setState({audioMuted: data.muted});
+        };
+
+        window.videoMuteStatusChanged = (data: { muted: boolean }) => {
+            this.props.updateCameraStatus(this.props.callID, data.muted);
+
+            this.setState({cameraOn: data.muted});
+        };
+
+        window.screenSharingStatusChanged = (data: { on: boolean }) => {
+            this.props.updateScreenSharingStatus(this.props.callID, data.on);
+
+            this.setState({screenSharing: data.on});
+        };
         this.client.readyToClose = () => this.props.disconnect();
+
         // This is needed to force a re-render to periodically update
         // the start time.
         const id = setInterval(() => this.forceUpdate(), 1000);
@@ -340,14 +398,73 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         });
     }
 
+    onScreenshareToggle = () => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'call-command',
+                    message: {
+                        command: 'toggleShareScreen',
+                    },
+                },
+                window.origin,
+            );
+
+            return;
+        }
+
+        this.client.executeCommand('toggleShareScreen');
+    }
+
+    onVideoToggle = () => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'call-command',
+                    message: {
+                        command: 'toggleVideo',
+                    },
+                },
+                window.origin,
+            );
+
+            return;
+        }
+
+        this.client.executeCommand('toggleVideo');
+    }
+
     onMuteToggle = () => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'call-command',
+                    message: {
+                        command: 'toggleAudio',
+                    },
+                },
+                window.origin,
+            );
+
+            return;
+        }
         this.client.executeCommand('toggleAudio');
     }
 
     onDisconnectClick = () => {
-        // if (this.state.expandedViewWindow) {
-        //     this.state.expandedViewWindow.close();
-        // }
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'call-command',
+                    message: {
+                        command: 'hangup',
+                    },
+                },
+                window.origin,
+            );
+
+            return;
+        }
 
         if (this.client.executeCommand) {
             this.client.executeCommand('hangup');
@@ -399,6 +516,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             window.callsClient.setAudioOutputDevice(device);
             const ps = [];
             for (const audioEl of this.state.audioEls) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore - setSinkId is an experimental feature
                 ps.push(audioEl.setSinkId(device.deviceId));
             }
@@ -508,12 +626,12 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                 let isSpeaking = false;
                 let isHandRaised = false;
                 if (status) {
-                    isMuted = !status.unmuted;
+                    isMuted = status.muted;
                     isSpeaking = Boolean(status.voice);
                     isHandRaised = Boolean(status.raised_hand > 0);
                 }
 
-                const MuteIcon = isMuted ? MutedIcon : UnmutedIcon;
+                const MuteIcon = isMuted ? CallMutedIcon : CallUnmutedIcon;
 
                 return (
                     <li
@@ -534,7 +652,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             }
                         </span>
 
-                        <span
+                        {/* <span
                             style={{
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -551,12 +669,11 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             }
 
                             <MuteIcon
-                                fill={isMuted ? '#C4C4C4' : '#3DB887'}
+                                fill={isMuted ? '#9F9F9F' : '#0098FF'}
                                 style={{width: '14px', height: '14px'}}
-                                stroke={isMuted ? '#C4C4C4' : '#3DB887'}
                             />
 
-                        </span>
+                        </span> */}
                     </li>
                 );
             });
@@ -671,15 +788,15 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             return null;
         }
 
-        const isMuted = this.state.audioMuted;
+        const isMuted = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].muted : true;
 
-        const MuteIcon = isMuted ? MutedIcon : UnmutedIcon;
+        const MuteIcon = isMuted ? CallMutedIcon : CallUnmutedIcon;
         const onJoinSelf = (
             <React.Fragment>
                 <span>{`You are ${isMuted ? 'muted' : 'unmuted'}. Click `}</span>
                 <MuteIcon
-                    style={{width: '11px', height: '11px', fill: isMuted ? '#333' : '#333'}}
-                    stroke={isMuted ? 'rgba(210, 75, 78, 1)' : '#3DB887'}
+                    fill={isMuted ? '#9F9F9F' : '#0098FF'}
+                    style={{width: '11px', height: '11px'}}
                 />
                 <span>{` to ${isMuted ? 'unmute' : 'mute'}.`}</span>
             </React.Fragment>
@@ -798,6 +915,7 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         if (!isDesktopApp() && window.callWindow) {
             window.callWindow.focus();
         }
+
         // if (this.state.expandedViewWindow && !this.state.expandedViewWindow.closed) {
         //     this.state.expandedViewWindow.focus();
         //     return;
@@ -881,27 +999,53 @@ export default class CallWidget extends React.PureComponent<Props, State> {
             return null;
         }
 
-        const MuteIcon = this.state.audioMuted ? MutedIcon : UnmutedIcon;
-        const muteTooltipText = this.state.audioMuted ? 'Click to unmute' : 'Click to mute';
+        const muted = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].muted : true;
+        const video = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].video : false;
+        const screen = this.props.statuses[this.props.currentUserID] ? this.props.statuses[this.props.currentUserID].screenshare : false;
+
+        const MuteIcon = muted ? CallMutedIcon : CallUnmutedIcon;
+        const muteTooltipText = muted ? 'Click to unmute' : 'Click to mute';
 
         const hasTeamSidebar = Boolean(document.querySelector('.team-sidebar'));
         const mainWidth = hasTeamSidebar ? '280px' : '216px';
 
-        const ShowIcon = window.desktop ? ExpandIcon : PopOutIcon;
+        const ShowIcon = document && document.hasFocus() ? ExpandConvIcon : ShrinkConvIcon;
+        const CameraIcon = video ? CameraOnIcon : CameraOffIcon;
+        const cameraTooltipText = video ? 'Click to disable camera' : 'Click to enable camera';
+        const screenSharingTooltipText = screen ? 'Click to share your screen' : 'Click to stop sharing your screen';
 
-        // const HandIcon = window.callsClient.isHandRaised ? UnraisedHandIcon : RaisedHandIcon;
-        // const handTooltipText = window.callsClient.isHandRaised ? 'Click to lower hand' : 'Click to raise hand';
+        let channelDisplayName = '';
+        const membersMap: string[] = []; // If we have multiples users
+        const callingUsers = Object.values(this.props.profiles).map((profile) => profile);
 
-        // const iframe = <IFrame/>;
+        switch (this.props.channel.type) {
+        case Constants.DM_CHANNEL:
 
-        // if (this.state.expanded) {
-        //     return (
-        //         <RenderInWindow>
-        //             <IFrame/>
-        //         </RenderInWindow>
-        //     );
-        // }
+            if (callingUsers) {
+                const callingDMUser = callingUsers.filter((user) => user.id !== this.props.currentUserID)[0];
+                channelDisplayName = displayUsername(this.props.getUser(callingDMUser?.id), this.props.teammateNameDisplaySetting);
+            }
+            break;
+        case Constants.GM_CHANNEL:
+            for (const user of callingUsers) {
+                if (user.id === this.props.currentUserID) {
+                    continue;
+                }
+                const userDisplayName = displayUsername(user, this.props.teammateNameDisplaySetting);
 
+                if (membersMap.indexOf(userDisplayName) === -1) {
+                    membersMap.push(userDisplayName);
+                }
+            }
+            channelDisplayName = membersMap.join(', ');
+            break;
+        default:
+            channelDisplayName = this.props.channel.display_name;
+            break;
+        }
+        if (channelDisplayName.length < 0 || channelDisplayName === localizeMessage('channel_loader.someone', 'Someone')) {
+            channelDisplayName = localizeMessage('callingWidget.waitingForUsers', 'Waiting for users');
+        }
         return (
             <React.Fragment>
                 <div
@@ -923,23 +1067,22 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                             onMouseDown={this.onMouseDown}
                         >
                             <a
-                                href={this.props.channelURL}
                                 onClick={this.onChannelLinkClick}
                                 className='calls-channel-link'
                             >
-                                {isPublicChannel(this.props.channel) ? <GlobeIcon fill='#D8D8D8'/> : <ParticipantsIcon fill='#D8D8D8'/>}
+                                {isPublicChannel(this.props.channel) ? <ChannelConvIcon fill='#9F9F9F'/> : <div className='content-body'>
+
+                                    <Avatars
+                                        userIds={Object.values(this.props.profiles).map((profile) => profile.id).filter((id) => id !== this.props.currentUserID)}
+                                        size={'md'}
+                                        totalUsers={Object.values(this.props.profiles).length - 1}
+                                    />
+
+                                </div>}
                                 <span
-                                    style={{
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap',
-                                        maxWidth: hasTeamSidebar ? '24ch' : '14ch',
-                                        marginLeft: '5px',
-                                        color: 'white',
-                                        fontWeight: 600,
-                                    }}
+                                    style={this.style.callChannelDisplay as CSSProperties}
                                 >
-                                    {this.props.channel.display_name}
+                                    {channelDisplayName}
                                 </span>
                             </a>
                             <button
@@ -949,60 +1092,83 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                 onClick={this.onExpandClick}
                             >
                                 <ShowIcon
-                                    style={{width: '14px', height: '14px'}}
-                                    fill='white'
+                                    style={{width: '16px', height: '16px'}}
                                 />
                             </button>
-
-                            {/* <div style={this.style.profiles}>
-                            {this.renderProfiles()}
-                        </div>
-                        <div style={{width: '85%'}}>
-                            {this.renderSpeaking()}
-                            <div style={this.style.callInfo}>
-                                <div style={{fontWeight: 600}}>{this.getCallDuration()}</div>
-                                {(isPublicChannel(this.props.channel) || isPrivateChannel(this.props.channel)) && this.renderChannelName(hasTeamSidebar)}
-                            </div>
-                        </div> */}
                         </div>
 
                         <div
                             className='calls-widget-bottom-bar'
                             style={this.style.bottomBar}
                         >
-                            <OverlayTrigger
-                                key='leave'
-                                placement='top'
-                                overlay={
-                                    <Tooltip id='tooltip-leave'>
-                                        {'Click to leave call'}
-                                    </Tooltip>
-                                }
+                            <div
+                                className='calls-widget-bottom-bar-left'
+                                style={this.style.bottomBarLeft}
                             >
-
-                                <button
-                                    id='calls-widget-leave-button'
-                                    className='style--none button-controls button-controls--wide'
-                                    style={this.style.leaveCallButton}
-                                    onClick={this.onDisconnectClick}
+                                <OverlayTrigger
+                                    key='mute'
+                                    placement='top'
+                                    overlay={
+                                        <Tooltip id='tooltip-mute'>
+                                            {muteTooltipText}
+                                        </Tooltip>
+                                    }
                                 >
-                                    <LeaveCallIcon
-                                        fill='#D24B4E'
-                                        style={{width: '16px', height: '16px'}}
-                                    />
-                                </button>
-                            </OverlayTrigger>
-
-                            {/* <button
-                            id='calls-widget-toggle-menu-button'
-                            className='cursor--pointer style--none button-controls'
-                            style={this.style.menuButton}
-                            onClick={this.onMenuClick}
-                        >
-                            <HorizontalDotsIcon
-                                style={{width: '16px', height: '16px'}}
-                            />
-                        </button> */}
+                                    <button
+                                        id='voice-mute-unmute'
+                                        className='cursor--pointer style--none button-controls'
+                                        style={muted ? this.style.activeButton : this.style.unActiveButton}
+                                        onClick={this.onMuteToggle}
+                                    >
+                                        <MuteIcon
+                                            fill={muted ? '#9F9F9F' : '#0098FF'}
+                                            style={{width: '16px', height: '16px'}}
+                                        />
+                                    </button>
+                                </OverlayTrigger>
+                                <OverlayTrigger
+                                    key='camera'
+                                    placement='top'
+                                    overlay={
+                                        <Tooltip id='tooltip-camera'>
+                                            {cameraTooltipText}
+                                        </Tooltip>
+                                    }
+                                >
+                                    <button
+                                        id='camera-on-off'
+                                        className='cursor--pointer style--none button-controls'
+                                        style={video ? this.style.activeButton : this.style.unActiveButton}
+                                        onClick={this.onVideoToggle}
+                                    >
+                                        <CameraIcon
+                                            fill={video ? '#0098FF' : '#9F9F9F'}
+                                            style={{width: '16px', height: '16px'}}
+                                        />
+                                    </button>
+                                </OverlayTrigger>
+                                <OverlayTrigger
+                                    key='screen-sharing'
+                                    placement='top'
+                                    overlay={
+                                        <Tooltip id='tooltip-screen-sharing'>
+                                            {screenSharingTooltipText}
+                                        </Tooltip>
+                                    }
+                                >
+                                    <button
+                                        id='screen-sharing-on-off'
+                                        className='cursor--pointer style--none button-controls'
+                                        style={screen ? this.style.activeButton : this.style.unActiveButton}
+                                        onClick={this.onScreenshareToggle}
+                                    >
+                                        <ScreenSharingIcon
+                                            fill={screen ? '#0098FF' : '#9F9F9F'}
+                                            style={{width: '16px', height: '16px'}}
+                                        />
+                                    </button>
+                                </OverlayTrigger>
+                            </div>
 
                             <OverlayTrigger
                                 key='participants'
@@ -1023,61 +1189,38 @@ export default class CallWidget extends React.PureComponent<Props, State> {
                                     }}
                                     onClick={this.onParticipantsButtonClick}
                                 >
-                                    <ParticipantsIcon
-                                        fill='white'
-                                        style={{width: '16px', height: '16px', marginRight: '4px'}}
+                                    <CallUsersIcon
+                                        style={{marginRight: '4px'}}
                                     />
-
                                     <span
-                                        style={{fontWeight: 600, color: 'white'}}
+                                        style={{fontWeight: 600, color: 'var(--center-channel-color)'}}
                                     >{Object.keys(this.props.profiles).length}</span>
                                 </button>
                             </OverlayTrigger>
 
-                            {/* { !isDMChannel(this.props.channel) &&
-                        <OverlayTrigger
-                            key='hand'
-                            placement='top'
-                            overlay={
-                                <Tooltip id='tooltip-hand'>
-                                    {handTooltipText}
-                                </Tooltip>import {UserState
-                            }
-                        >
-                            <button
-                                className='cursor--pointer style--none button-controls'
-                                onClick={this.onRaiseHandToggle}
-                                style={{background: window.callsClient.isHandRaised ? 'rgba(255, 188, 66, 0.16)' : ''}}
-                            >
-                                <HandIcon
-                                    style={{width: '16px', height: '16px', fill: window.callsClient.isHandRaised ? 'rgba(255, 188, 66, 1)' : ''}}
-                                />
-                            </button>
-
-                        </OverlayTrigger>
-                        } */}
-
                             <OverlayTrigger
-                                key='mute'
+                                key='leave'
                                 placement='top'
                                 overlay={
-                                    <Tooltip id='tooltip-mute'>
-                                        {muteTooltipText}
+                                    <Tooltip id='tooltip-leave'>
+                                        {'Click to leave call'}
                                     </Tooltip>
                                 }
                             >
+
                                 <button
-                                    id='voice-mute-unmute'
-                                    className='cursor--pointer style--none button-controls'
-                                    style={this.state.audioMuted ? this.style.mutedButton : this.style.unmutedButton}
-                                    onClick={this.onMuteToggle}
+                                    id='calls-widget-leave-button'
+                                    className='style--none button-controls button-controls--wide'
+                                    style={this.style.leaveCallButton}
+                                    onClick={this.onDisconnectClick}
                                 >
-                                    <MuteIcon
-                                        style={{width: '16px', height: '16px', fill: this.state.audioMuted ? 'rgba(61, 184, 135, 1)' : 'rgba(61, 184, 135, 1)'}}
-                                        stroke={this.state.audioMuted ? 'rgba(210, 75, 78, 1)' : ''}
+                                    <LeaveConvIcon
+                                        fill='#fff'
+                                        style={{width: '16px', height: '6px'}}
                                     />
                                 </button>
                             </OverlayTrigger>
+
                         </div>
                     </div>
                 </div>
