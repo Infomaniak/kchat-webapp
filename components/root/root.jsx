@@ -49,7 +49,6 @@ import webSocketClient from 'client/web_websocket_client.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
 const LazyErrorPage = React.lazy(() => import('components/error_page'));
-const LazyLoginController = React.lazy(() => import('components/login/login_controller'));
 
 // const LazyLoginDesktopController = React.lazy(() => import('components/login-desktop/login_desktop_controller'));
 const LazyLogin = React.lazy(() => import('components/login/login'));
@@ -74,6 +73,7 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
+import {checkIKTokenIsExpired, refreshIKToken} from '../login/utils';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -82,7 +82,6 @@ import RootRedirect from './root_redirect';
 const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const TermsOfService = makeAsyncComponent('TermsOfService', LazyTermsOfService);
-const LoginController = makeAsyncComponent('LoginController', LazyLoginController);
 
 // const LoginDesktopController = makeAsyncComponent('LoginDesktopController', LazyLoginDesktopController);
 const Login = makeAsyncComponent('LoginController', LazyLogin);
@@ -151,11 +150,16 @@ export default class Root extends React.PureComponent {
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             // Enable authHeader and set bearer token
-            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
+            if (token && tokenExpire && !checkIKTokenIsExpired()) {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
+            }
+
+            // If need to refresh the token
+            if (tokenExpire && checkIKTokenIsExpired()) {
+                refreshIKToken(true);
             }
         } else {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
@@ -388,6 +392,11 @@ export default class Root extends React.PureComponent {
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
+            }
+
+            // If need to refresh the token
+            if (tokenExpire && checkIKTokenIsExpired()) {
+                refreshIKToken(true);
             }
         }
 
