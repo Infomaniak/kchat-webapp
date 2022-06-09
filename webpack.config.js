@@ -26,6 +26,7 @@ const DEV = targetIsRun || targetIsStats || targetIsDevServer;
 
 const STANDARD_EXCLUDE = [
     path.join(__dirname, 'node_modules'),
+    path.join(__dirname, 'service-worker.js'),
 ];
 
 // react-hot-loader and development source maps require eval
@@ -311,7 +312,7 @@ var config = {
                 {from: 'images/trial-ended.png', to: 'images'},
                 {from: 'call.html', to: ''},
 
-                {from: 'service-worker.js', to: ''},
+                // {from: 'service-worker.js', to: '/'},
             ],
         }),
 
