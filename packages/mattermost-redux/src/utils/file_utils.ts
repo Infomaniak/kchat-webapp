@@ -81,7 +81,13 @@ export function getFileUrl(fileId: string): string {
 }
 
 export function getFileDownloadUrl(fileId: string): string {
-    return `${Client4.getFileRoute(fileId)}?download=1`;
+    const params: any = {};
+    params.download = 1;
+
+    if (isDesktopApp() && Client4.getToken()) {
+        params.access_token = Client4.getToken();
+    }
+    return `${Client4.getFileRoute(fileId)}${buildQueryString(params)}`;
 }
 
 export function getFileThumbnailUrl(fileId: string): string {
