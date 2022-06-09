@@ -7,8 +7,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {getInvoices} from 'mattermost-redux/actions/cloud';
 import {Client4} from 'mattermost-redux/client';
-import {Invoice} from 'mattermost-redux/types/cloud';
-import {GlobalState} from 'mattermost-redux/types/store';
+import {Invoice} from '@mattermost/types/cloud';
+import {GlobalState} from '@mattermost/types/store';
 
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
@@ -22,10 +22,6 @@ import {CloudLinks} from 'utils/constants';
 import InvoiceUserCount from './invoice_user_count';
 
 import './billing_history.scss';
-
-type Props = {
-
-};
 
 const PAGE_LENGTH = 4;
 
@@ -91,7 +87,7 @@ const getPaymentStatus = (status: string) => {
     }
 };
 
-const BillingHistory: React.FC<Props> = () => {
+const BillingHistory = () => {
     const dispatch = useDispatch();
     const invoices = useSelector((state: GlobalState) => state.entities.cloud.invoices);
 
@@ -151,75 +147,77 @@ const BillingHistory: React.FC<Props> = () => {
     const billingHistoryTable = billingHistory && (
         <>
             <table className='BillingHistory__table'>
-                <tr className='BillingHistory__table-header'>
-                    <th>
-                        <FormattedMessage
-                            id='admin.billing.history.date'
-                            defaultMessage='Date'
-                        />
-                    </th>
-                    <th>
-                        <FormattedMessage
-                            id='admin.billing.history.description'
-                            defaultMessage='Description'
-                        />
-                    </th>
-                    <th className='BillingHistory__table-headerTotal'>
-                        <FormattedMessage
-                            id='admin.billing.history.total'
-                            defaultMessage='Total'
-                        />
-                    </th>
-                    <th>
-                        <FormattedMessage
-                            id='admin.billing.history.status'
-                            defaultMessage='Status'
-                        />
-                    </th>
-                    <th>{''}</th>
-                </tr>
-                {billingHistory.map((invoice: Invoice) => (
-                    <tr
-                        className='BillingHistory__table-row'
-                        key={invoice.id}
-                    >
-                        <td>
-                            <FormattedDate
-                                value={new Date(invoice.period_start)}
-                                month='2-digit'
-                                day='2-digit'
-                                year='numeric'
-                                timeZone='UTC'
+                <tbody>
+                    <tr className='BillingHistory__table-header'>
+                        <th>
+                            <FormattedMessage
+                                id='admin.billing.history.date'
+                                defaultMessage='Date'
                             />
-                        </td>
-                        <td>
-                            <div>{invoice.current_product_name}</div>
-                            <div className='BillingHistory__table-bottomDesc'>
-                                <InvoiceUserCount invoice={invoice}/>
-                            </div>
-                        </td>
-                        <td className='BillingHistory__table-total'>
-                            <FormattedNumber
-                                value={(invoice.total / 100.0)}
-                                // eslint-disable-next-line react/style-prop-object
-                                style='currency'
-                                currency='USD'
+                        </th>
+                        <th>
+                            <FormattedMessage
+                                id='admin.billing.history.description'
+                                defaultMessage='Description'
                             />
-                        </td>
-                        <td>
-                            {getPaymentStatus(invoice.status)}
-                        </td>
-                        <td className='BillingHistory__table-invoice'>
-                            <a
-                                target='_new'
-                                rel='noopener noreferrer'
-                                href={Client4.getInvoicePdfUrl(invoice.id)}
-                            >
-                                <i className='icon icon-file-pdf-outline'/>
-                            </a>
-                        </td>
+                        </th>
+                        <th className='BillingHistory__table-headerTotal'>
+                            <FormattedMessage
+                                id='admin.billing.history.total'
+                                defaultMessage='Total'
+                            />
+                        </th>
+                        <th>
+                            <FormattedMessage
+                                id='admin.billing.history.status'
+                                defaultMessage='Status'
+                            />
+                        </th>
+                        <th>{''}</th>
                     </tr>
-                ))}
+                    {billingHistory.map((invoice: Invoice) => (
+                        <tr
+                            className='BillingHistory__table-row'
+                            key={invoice.id}
+                        >
+                            <td>
+                                <FormattedDate
+                                    value={new Date(invoice.period_start)}
+                                    month='2-digit'
+                                    day='2-digit'
+                                    year='numeric'
+                                    timeZone='UTC'
+                                />
+                            </td>
+                            <td>
+                                <div>{invoice.current_product_name}</div>
+                                <div className='BillingHistory__table-bottomDesc'>
+                                    <InvoiceUserCount invoice={invoice}/>
+                                </div>
+                            </td>
+                            <td className='BillingHistory__table-total'>
+                                <FormattedNumber
+                                    value={(invoice.total / 100.0)}
+                                    // eslint-disable-next-line react/style-prop-object
+                                    style='currency'
+                                    currency='USD'
+                                />
+                            </td>
+                            <td>
+                                {getPaymentStatus(invoice.status)}
+                            </td>
+                            <td className='BillingHistory__table-invoice'>
+                                <a
+                                    target='_self'
+                                    rel='noopener noreferrer'
+                                    href={Client4.getInvoicePdfUrl(invoice.id)}
+                                >
+                                    <i className='icon icon-file-pdf-outline'/>
+                                </a>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
             </table>
             {paging}
         </>

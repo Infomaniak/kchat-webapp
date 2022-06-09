@@ -52,9 +52,13 @@ const WebsocketEvents = {
     THREAD_FOLLOW_CHANGED: 'thread_follow_changed',
     THREAD_READ_CHANGED: 'thread_read_changed',
     FIRST_ADMIN_VISIT_MARKETPLACE_STATUS_RECEIVED: 'first_admin_visit_marketplace_status_received',
+    GROUP_MEMBER_DELETED: 'group_member_deleted',
     CONFERENCE_ADDED: 'conference_added',
     CONFERENCE_DELETED: 'conference_deleted',
     CONFERENCE_USER_CONNECTED: 'conference_user_connected',
     CONFERENCE_USER_DISCONNECTED: 'conference_user_disconnected',
+    PUSHER_MEMBER_REMOVED: 'pusher:member_removed',
+    PUSHER_PING: 'pusher:ping',
+    PUSHER_PONG: 'pusher:pong',
 };
 export default WebsocketEvents;

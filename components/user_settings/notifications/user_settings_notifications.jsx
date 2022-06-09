@@ -9,7 +9,7 @@ import {FormattedMessage} from 'react-intl';
 import semver from 'semver';
 
 import Constants, {NotificationLevels} from 'utils/constants';
-import * as Utils from 'utils/utils.jsx';
+import * as Utils from 'utils/utils';
 import SettingItemMax from 'components/setting_item_max.jsx';
 import SettingItemMin from 'components/setting_item_min';
 
@@ -1003,7 +1003,7 @@ export default class NotificationsTab extends React.PureComponent {
                         selectedSound={this.state.desktopNotificationSound}
                         isCollapsedThreadsEnabled={this.props.isCollapsedThreadsEnabled}
                     />
-                    <div className='divider-light'/>
+                    {/* <div className='divider-light'/>
                     <EmailNotificationSetting
                         activeSection={this.props.activeSection}
                         updateSection={this.handleUpdateSection}
@@ -1016,11 +1016,11 @@ export default class NotificationsTab extends React.PureComponent {
                         isCollapsedThreadsEnabled={this.props.isCollapsedThreadsEnabled}
                         setParentState={this.setStateValue}
                         threads={this.state.emailThreads}
-                    />
+                    /> */}
                     <div className='divider-light'/>
                     {pushNotificationSection}
-                    <div className='divider-light'/>
-                    {keysSection}
+                    {/* <div className='divider-light'/>
+                    {keysSection} */}
                     <div className='divider-light'/>
                     {!this.props.isCollapsedThreadsEnabled && (
                         <>

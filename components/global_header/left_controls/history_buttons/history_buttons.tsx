@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import styled from 'styled-components';
 import IconButton from '@mattermost/compass-components/components/icon-button';
 
@@ -62,7 +62,7 @@ const HistoryButtons = (): JSX.Element => {
         );
     };
 
-    const handleButtonMessage = (message: {origin: string; data: {type: string; message: {enableBack: boolean; enableForward: boolean}}}) => {
+    const handleButtonMessage = useCallback((message: {origin: string; data: {type: string; message: {enableBack: boolean; enableForward: boolean}}}) => {
         if (message.origin !== window.location.origin) {
             return;
         }
@@ -74,19 +74,19 @@ const HistoryButtons = (): JSX.Element => {
             break;
         }
         }
-    };
+    }, []);
 
     useEffect(() => {
         window.addEventListener('message', handleButtonMessage);
         return () => {
             window.removeEventListener('message', handleButtonMessage);
         };
-    }, []);
+    }, [handleButtonMessage]);
 
     return (
         <HistoryButtonsContainer>
             <OverlayTrigger
-                trigger={['hover']}
+                trigger={['hover', 'focus']}
                 delayShow={Constants.OVERLAY_TIME_DELAY}
                 placement='bottom'
                 overlay={getTooltip(KEYBOARD_SHORTCUTS.browserChannelPrev)}
@@ -102,7 +102,7 @@ const HistoryButtons = (): JSX.Element => {
                 />
             </OverlayTrigger>
             <OverlayTrigger
-                trigger={['hover']}
+                trigger={['hover', 'focus']}
                 delayShow={Constants.OVERLAY_TIME_DELAY}
                 placement='bottom'
                 overlay={getTooltip(KEYBOARD_SHORTCUTS.browserChannelNext)}

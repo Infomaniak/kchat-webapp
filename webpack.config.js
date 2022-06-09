@@ -32,6 +32,10 @@ const STANDARD_EXCLUDE = [
 // react-hot-loader and development source maps require eval
 const CSP_UNSAFE_EVAL_IF_DEV = DEV ? ' \'unsafe-eval\'' : '';
 
+const INCLUDE_PATTERN = /(\<meta name=\'hash\' content=\')(.+)(\'>?)/gi;
+// eslint-disable-next-line no-negated-condition
+const processNestedHtml = (content) => (!INCLUDE_PATTERN.test(content) ? content : content.replace(INCLUDE_PATTERN, `$1${(Math.random() + 1).toString(36).substring(7)}$3`));
+
 var MYSTATS = {
 
     // Add asset Information
@@ -224,6 +228,7 @@ var config = {
                         loader: 'html-loader',
                         options: {
                             sources: false,
+                            preprocessor: processNestedHtml,
                         },
                     },
                 ],
@@ -236,6 +241,8 @@ var config = {
             path.resolve(__dirname),
         ],
         alias: {
+            '@mattermost/client': 'packages/client/src',
+            '@mattermost/types': 'packages/types/src',
             'mattermost-redux/test': 'packages/mattermost-redux/test',
             'mattermost-redux': 'packages/mattermost-redux/src',
             reselect: 'packages/reselect/src',
@@ -245,6 +252,7 @@ var config = {
         fallback: {
             crypto: require.resolve('crypto-browserify'),
             stream: require.resolve('stream-browserify'),
+            buffer: require.resolve('buffer/'),
         },
     },
     performance: {
@@ -269,7 +277,7 @@ var config = {
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' cdn.rudderlabs.com/ js.stripe.com/v3 kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.preprod.dev.infomaniak.ch kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
                 },
             },
         }),
@@ -297,8 +305,14 @@ var config = {
                 {from: 'images/c_avatar.png', to: 'images'},
                 {from: 'images/c_download.png', to: 'images'},
                 {from: 'images/c_socket.png', to: 'images'},
-                {from: 'service-worker.js', to: '/'},
+                {from: 'images/admin-onboarding-background.jpg', to: 'images'},
+                {from: 'images/payment-method-illustration.png', to: 'images'},
+                {from: 'images/trial-ending-soon.png', to: 'images'},
+                {from: 'images/cloud-laptop.png', to: 'images'},
+                {from: 'images/trial-ended.png', to: 'images'},
                 {from: 'call.html', to: ''},
+
+                // {from: 'service-worker.js', to: '/'},
             ],
         }),
 

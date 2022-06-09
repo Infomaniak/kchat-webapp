@@ -1,42 +1,59 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import {bindActionCreators, Dispatch} from 'redux';
-import {connect} from 'react-redux';
-
 import {GlobalState} from 'mattermost-redux/types/store';
+
 import {UserProfile} from 'mattermost-redux/types/users';
+
 import {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
-import {getChannel} from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import {getTeam, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {connect} from 'react-redux';
 
+import {bindActionCreators, Dispatch} from 'redux';
+
+import {hideExpandedView, showExpandedView, updateAudioStatus, updateCameraStatus, updateScreenSharingStatus} from 'actions/calls';
 import {Client4} from 'mattermost-redux/client';
-
-import {connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelCallStartAt, expandedView} from 'selectors/calls';
-
-// import {getChannelURL, alphaSortProfiles, stateSortProfiles} from '../../utils';
-
-import {getChannelURL, alphaSortProfiles, stateSortProfiles} from '../utils';
-import {showExpandedView, hideExpandedView} from 'actions/calls';
-
-import {UserState} from 'reducers/views/calls';
-
-import {ActionTypes} from 'utils/constants';
+import {getChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
+import {connectedCallID, connectedChannelID, expandedView, voiceChannelCallStartAt, voiceConnectedChannels, voiceConnectedProfilesInChannel, voiceUsersStatuses} from 'selectors/calls';
+import {ActionTypes} from 'utils/constants';
+
+import {getChannelURL} from '../utils';
+
 import CallWidget from './component';
+import { getTeammateNameDisplaySetting } from 'mattermost-redux/selectors/entities/preferences';
 
 const mapStateToProps = (state: GlobalState) => {
     const channel = getChannel(state, connectedChannelID(state));
+    const connectedConfID = connectedCallID(state) || '';
+    const channels = voiceConnectedChannels(state);
 
-    const sortedProfiles = (profiles: UserProfile[], statuses: {[key: string]: UserState}) => {
-        return [...profiles].sort(alphaSortProfiles()).sort(stateSortProfiles(statuses, ''));
-    };
+    const profiles: UserProfile[] = [];
+    const pictures: string[] = [];
+    if (channels) {
+        let users;
+        if (channels[channel.id] && channels[channel.id][connectedConfID]) {
+            users = channels[channel.id][connectedConfID];
+        }
 
-    // const statuses = voiceUsersStatuses(state);
-    // sortedProfiles( , {});
-    const profiles = voiceConnectedProfiles(state);
+        if (users && users.length > 0) {
+            const connectedProfiles = voiceConnectedProfilesInChannel(state, channel.id, connectedConfID);
+
+            for (let i = 0; i < connectedProfiles.length; i++) {
+                const u = getUser(state, connectedProfiles[i]);
+                if (u) {
+                    profiles[u.id] = u;
+                    pictures[u.id] = Client4.getProfilePictureUrl(u.id, u.last_picture_update);
+                } else if (profiles && profiles[i]) {
+                    try {
+                        profiles.splice(i, 1);
+                    } catch {}
+                }
+            }
+        }
+    }
 
     const profilesMap: IDMappedObjects<UserProfile> = {};
     const picturesMap: {
@@ -61,9 +78,13 @@ const mapStateToProps = (state: GlobalState) => {
         profiles,
         profilesMap,
         picturesMap,
+        pictures,
+        callID: connectedConfID,
         statuses: voiceUsersStatuses(state) || {},
         callStartAt: voiceChannelCallStartAt(state, channel?.id) || 0,
         show: !expandedView(state),
+        teammateNameDisplaySetting: getTeammateNameDisplaySetting(state),
+        getUser: (userId: string) => getUser(state, userId),
     };
 };
 
@@ -84,6 +105,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     showExpandedView,
     hideExpandedView,
     disconnect,
+    updateAudioStatus,
+    updateCameraStatus,
+    updateScreenSharingStatus,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(CallWidget);

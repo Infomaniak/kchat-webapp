@@ -4,7 +4,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 
-import {CustomStatusDuration, UserProfile} from 'mattermost-redux/types/users';
+import {CustomStatusDuration, UserProfile} from '@mattermost/types/users';
 
 import {fakeDate} from 'tests/helpers/date';
 
@@ -26,6 +26,7 @@ describe('components/StatusDropdown', () => {
         setStatus: jest.fn(),
         unsetCustomStatus: jest.fn(),
         setStatusDropdown: jest.fn(),
+        savePreferences: jest.fn(),
     };
 
     const baseProps = {
@@ -47,6 +48,7 @@ describe('components/StatusDropdown', () => {
         isCustomStatusExpired: false,
         isStatusDropdownOpen: false,
         showCustomStatusPulsatingDot: false,
+        showCompleteYourProfileTour: false,
     };
 
     test('should match snapshot in default state', () => {

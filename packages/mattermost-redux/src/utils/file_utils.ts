@@ -3,9 +3,9 @@
 
 import {Files, General} from '../constants';
 import {Client4} from 'mattermost-redux/client';
-import {FileInfo} from 'mattermost-redux/types/files';
+import {FileInfo} from '@mattermost/types/files';
 import {isDesktopApp} from 'utils/user_agent';
-import {buildQueryString} from 'mattermost-redux/utils/helpers';
+import {buildQueryString} from 'packages/client/src/helpers';
 
 const mimeDB = require('mime-db');
 
@@ -81,11 +81,21 @@ export function getFileUrl(fileId: string): string {
 }
 
 export function getFileDownloadUrl(fileId: string): string {
-    return `${Client4.getFileRoute(fileId)}?download=1`;
+    const params: any = {};
+    params.download = 1;
+
+    if (isDesktopApp() && Client4.getToken()) {
+        params.access_token = Client4.getToken();
+    }
+    return `${Client4.getFileRoute(fileId)}${buildQueryString(params)}`;
 }
 
 export function getFileThumbnailUrl(fileId: string): string {
-    return `${Client4.getFileRoute(fileId)}/thumbnail`;
+    const params: any = {};
+    if (isDesktopApp() && Client4.getToken()) {
+        params.access_token = Client4.getToken();
+    }
+    return `${Client4.getFileRoute(fileId)}/thumbnail${buildQueryString(params)}`;
 }
 
 export function getFilePreviewUrl(fileId: string): string {

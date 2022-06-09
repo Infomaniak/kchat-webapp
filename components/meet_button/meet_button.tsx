@@ -1,56 +1,74 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable no-console */
 import React, {useRef} from 'react';
-import {injectIntl, IntlShape} from 'react-intl';
+import {injectIntl, IntlShape, FormattedMessage} from 'react-intl';
 
 // import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
-import CameraIcon from 'components/widgets/icons/camera_icon';
-import { useSelector } from 'react-redux';
-import { getCurrentChannelId } from 'mattermost-redux/selectors/entities/common';
+import {useSelector} from 'react-redux';
+
+import OverlayTrigger from 'components/overlay_trigger';
+import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
+
+import Tooltip from 'components/tooltip';
+
+import Constants from 'utils/constants';
+
+import {GlobalState} from 'types/store';
+
+import SvgCallComponent from './SvgCallComponent';
 
 export type Props = {
     currentChannelID: string;
-    hasCall: boolean;
+    hasCall?: boolean;
     intl: IntlShape;
-    startCallInChannel: Function;
+    startCallInChannel: (channelID: string) => void;
+    isInCall: boolean;
 }
 
-// const configOverwrite = {
-//     startWithAudioMuted: false,
-//     startWithVideoMuted: true,
-//     subject: 'toto',
-// };
+function logInfo(props: Props, connectedChannelID: string, channelID: string) {
+    console.log(props);
+    console.log('');
+    console.log('Connected voice channel Id => ', connectedChannelID);
+    console.log('Current channel Id => ', channelID);
+}
 
 function MeetButton(props: Props) {
     // const {formatMessage} = props.intl;
     const {startCallInChannel} = props;
+    const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
     const ref = useRef<HTMLButtonElement>(null);
     const channelID = useSelector(getCurrentChannelId);
-
     const onClick = React.useCallback(() => {
         startCallInChannel(channelID);
     }, [channelID]);
 
+    logInfo(props, connectedChannelID, channelID);
+
+    const tooltip = (
+        <Tooltip id='call'>
+            <FormattedMessage
+                id={props.hasCall ? 'Join Call' : 'Start Call'}
+                defaultMessage={props.hasCall ? 'Join Call' : 'Start Call'}
+            />
+        </Tooltip>
+    );
+
+    const btnClasses = `channel-header__icon channel-header__icon--call ${props.isInCall && 'channel-header__icon--calling'}`;
     return (
         <button
             type='button'
-            className='style--none channel-header__push-right'
+            className={btnClasses}
             onClick={onClick}
             ref={ref}
         >
-            <div
-                className='icon icon--attachment'
+            <OverlayTrigger
+                delayShow={Constants.OVERLAY_TIME_DELAY}
+                placement='bottom'
+                overlay={tooltip}
             >
-                <button className='channel-header__icon channel-header__icon--wide channel-header__icon--left'>
-                    <CameraIcon/>
-                    <span
-                        className='icon__text'
-                        style={{margin: '0 6px'}}
-                    >
-                        {props.hasCall ? 'Join Call' : 'Start Call'}
-                    </span>
-                </button>
-            </div>
+                <SvgCallComponent/>
+            </OverlayTrigger>
         </button>
     );
 }

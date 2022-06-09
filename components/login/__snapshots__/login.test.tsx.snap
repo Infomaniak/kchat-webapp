@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/login/Login should match snapshot 1`] = `
+<div
+  className="login-body"
+>
+  <div
+    className="login-body-content"
+  >
+    <LoadingIk
+      position="relative"
+      style={Object {}}
+    />
+  </div>
+</div>
+`;
+
+exports[`components/login/Login should match snapshot with base login 1`] = `
+<div
+  className="login-body"
+>
+  <div
+    className="login-body-content"
+  >
+    <LoadingIk
+      position="relative"
+      style={Object {}}
+    />
+  </div>
+</div>
+`;

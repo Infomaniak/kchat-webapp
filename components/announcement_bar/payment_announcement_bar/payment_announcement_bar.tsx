@@ -5,7 +5,7 @@ import React from 'react';
 
 import {isEmpty} from 'lodash';
 
-import {CloudCustomer, Subscription} from 'mattermost-redux/types/cloud';
+import {CloudCustomer, Subscription} from '@mattermost/types/cloud';
 
 import {browserHistory} from 'utils/browser_history';
 import {isCustomerCardExpired} from 'utils/cloud_utils';
@@ -13,7 +13,6 @@ import {AnnouncementBarTypes} from 'utils/constants';
 import {t} from 'utils/i18n';
 
 import AnnouncementBar from '../default_announcement_bar';
-import withGetCloudSubscription from '../../common/hocs/cloud/with_get_cloud_subscription';
 
 type Props = {
     userIsAdmin: boolean;
@@ -93,4 +92,4 @@ class PaymentAnnouncementBar extends React.PureComponent<Props> {
     }
 }
 
-export default withGetCloudSubscription(PaymentAnnouncementBar);
+export default PaymentAnnouncementBar;

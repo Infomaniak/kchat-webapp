@@ -4,6 +4,7 @@
 
 import {batchActions} from 'redux-batched-actions';
 
+
 import {
     ChannelTypes,
     EmojiTypes,
@@ -16,8 +17,10 @@ import {
     AdminTypes,
     IntegrationTypes,
     PreferenceTypes,
+    AppsTypes,
+    CloudTypes,
 } from 'mattermost-redux/action_types';
-import {WebsocketEvents, General, Permissions} from 'mattermost-redux/constants';
+import {WebsocketEvents, General, Permissions, Preferences} from 'mattermost-redux/constants';
 import {addChannelToInitialCategory, fetchMyCategories, receivedCategoryOrder} from 'mattermost-redux/actions/channel_categories';
 import {
     getChannelAndMyMember,
@@ -26,16 +29,15 @@ import {
     viewChannel,
     markChannelAsRead,
     getChannelMemberCountsByGroup,
-    getChannelMembersByIds,
 } from 'mattermost-redux/actions/channels';
-import {getCloudSubscription, getSubscriptionStats} from 'mattermost-redux/actions/cloud';
+import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 
-import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
+import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {
     getThread as fetchThread,
-    getThreads as fetchThreads,
+    getCountsAndThreadsSince,
     handleAllMarkedRead,
     handleReadChanged,
     handleFollowChanged,
@@ -45,10 +47,11 @@ import {
     decrementThreadCounts,
 } from 'mattermost-redux/actions/threads';
 
-import {setServerVersion} from 'mattermost-redux/actions/general';
+import {setServerVersion, getClientConfig} from 'mattermost-redux/actions/general';
 import {
     getCustomEmojiForReaction,
     getPosts,
+    getPostsSince,
     getPostThread,
     getProfilesAndStatusesForPosts,
     getThreadsForPosts,
@@ -56,21 +59,20 @@ import {
     receivedNewPost,
     receivedPost,
 } from 'mattermost-redux/actions/posts';
+
 import {clearErrors, logError} from 'mattermost-redux/actions/errors';
 
 import * as TeamActions from 'mattermost-redux/actions/teams';
 import {
     checkForModifiedUsers,
-    getMe,
     getMissingProfilesByIds,
     getStatusesByIds,
     getUser as loadUser,
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
-import {Client4} from 'mattermost-redux/client';
-import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 import {getMyTeams, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
-import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
+import {getConfig, getLicense, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
 import {
     getChannel,
     getChannelMembersInChannels,
@@ -81,7 +83,7 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
+import {appsFeatureFlagEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {getStandardAnalytics} from 'mattermost-redux/actions/admin';
 
 import {fetchAppBindings, fetchRHSAppsBindings} from 'mattermost-redux/actions/apps';
@@ -111,9 +113,9 @@ import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
 import DialingModal from 'components/kmeet_conference/ringing_dialog';
-import {connectedChannelID, voiceChannelCallStartAt, voiceConnectedChannels, voiceUsersStatuses} from 'selectors/calls';
+import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {startCallInChannel} from './calls';
+import {needRefreshToken, refreshIKToken} from 'components/login/utils';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -167,7 +169,7 @@ export function initialize() {
     WebSocketClient.setEventCallback(handleEvent);
     WebSocketClient.setFirstConnectCallback(handleFirstConnect);
     WebSocketClient.setReconnectCallback(() => reconnect(false));
-    WebSocketClient.setMissedEventCallback(() => reconnect(false));
+    WebSocketClient.setMissedEventCallback(restart);
     WebSocketClient.setCloseCallback(handleClose);
     WebSocketClient.initialize(connUrl, user.user_id, user.team_id);
 }
@@ -191,6 +193,13 @@ export function unregisterPluginReconnectHandler(pluginId) {
     Reflect.deleteProperty(pluginReconnectHandlers, pluginId);
 }
 
+function restart() {
+    reconnect(false);
+
+    // We fetch the client config again on the server restart.
+    dispatch(getClientConfig());
+}
+
 export function reconnect(includeWebSocket = true) {
     if (includeWebSocket) {
         reconnectWebSocket();
@@ -201,28 +210,23 @@ export function reconnect(includeWebSocket = true) {
         timestamp: Date.now(),
     });
 
-    loadPluginsIfNecessary();
-
-    Object.values(pluginReconnectHandlers).forEach((handler) => {
-        if (handler && typeof handler === 'function') {
-            handler();
-        }
-    });
-
     const state = getState();
-    const currentTeamId = state.entities.teams.currentTeamId;
+    const currentTeamId = getCurrentTeamId(state);
     if (currentTeamId) {
         const currentUserId = getCurrentUserId(state);
         const currentChannelId = getCurrentChannelId(state);
         const mostRecentId = getMostRecentPostIdInChannel(state, currentChannelId);
         const mostRecentPost = getPost(state, mostRecentId);
 
+        if (appsFeatureFlagEnabled(state)) {
+            dispatch(handleRefreshAppsBindings());
+        }
+
         dispatch(loadChannelsForCurrentUser());
-        dispatch(handleRefreshAppsBindings());
 
         if (mostRecentPost) {
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
-        } else {
+        } else if (currentChannelId) {
             // if network timed-out the first time when loading a channel
             // we can request for getPosts again when socket is connected
             dispatch(getPosts(currentChannelId));
@@ -232,9 +236,25 @@ export function reconnect(includeWebSocket = true) {
         const crtEnabled = isCollapsedThreadsEnabled(state);
         dispatch(TeamActions.getMyTeamUnreads(crtEnabled, true));
         if (crtEnabled) {
-            dispatch(fetchThreads(currentUserId, currentTeamId, {unread: true, perPage: 200}));
+            const teams = getMyTeams(state);
+            syncThreads(currentTeamId, currentUserId);
+
+            for (const team of teams) {
+                if (team.id === currentTeamId) {
+                    continue;
+                }
+                syncThreads(team.id, currentUserId);
+            }
         }
     }
+
+    loadPluginsIfNecessary();
+
+    Object.values(pluginReconnectHandlers).forEach((handler) => {
+        if (handler && typeof handler === 'function') {
+            handler();
+        }
+    });
 
     if (state.websocket.lastDisconnectAt) {
         dispatch(checkForModifiedUsers());
@@ -244,24 +264,15 @@ export function reconnect(includeWebSocket = true) {
     dispatch(clearErrors());
 }
 
-let intervalId = '';
-const SYNC_INTERVAL_MILLISECONDS = 1000 * 60 * 15; // 15 minutes
+function syncThreads(teamId, userId) {
+    const state = getState();
+    const newestThread = getNewestThreadInTeam(state, teamId);
 
-export function startPeriodicSync() {
-    clearInterval(intervalId);
-
-    intervalId = setInterval(
-        () => {
-            if (getCurrentUser(getState()) != null) {
-                reconnect(false);
-            }
-        },
-        SYNC_INTERVAL_MILLISECONDS,
-    );
-}
-
-export function stopPeriodicSync() {
-    clearInterval(intervalId);
+    // no need to sync if we have nothing yet
+    if (!newestThread) {
+        return;
+    }
+    dispatch(getCountsAndThreadsSince(userId, teamId, newestThread.last_reply_at));
 }
 
 export function registerPluginWebSocketEvent(pluginId, event, action) {
@@ -474,12 +485,24 @@ export function handleEvent(msg) {
         handlePluginStatusesChangedEvent(msg);
         break;
 
+    case SocketEvents.INTEGRATIONS_USAGE_CHANGED:
+        handleIntegrationsUsageChangedEvent(msg);
+        break;
+
     case SocketEvents.OPEN_DIALOG:
         handleOpenDialogEvent(msg);
         break;
 
     case SocketEvents.RECEIVED_GROUP:
         handleGroupUpdatedEvent(msg);
+        break;
+
+    case SocketEvents.GROUP_MEMBER_ADD:
+        dispatch(handleGroupAddedMemberEvent(msg));
+        break;
+
+    case SocketEvents.GROUP_MEMBER_DELETED:
+        dispatch(handleGroupDeletedMemberEvent(msg));
         break;
 
     case SocketEvents.RECEIVED_GROUP_ASSOCIATED_TO_TEAM:
@@ -526,6 +549,9 @@ export function handleEvent(msg) {
     case SocketEvents.CLOUD_PAYMENT_STATUS_UPDATED:
         dispatch(handleCloudPaymentStatusUpdated(msg));
         break;
+    case SocketEvents.CLOUD_SUBSCRIPTION_CHANGED:
+        dispatch(handleCloudSubscriptionChanged(msg));
+        break;
     case SocketEvents.FIRST_ADMIN_VISIT_MARKETPLACE_STATUS_RECEIVED:
         handleFirstAdminVisitMarketplaceStatusReceivedEvent(msg);
         break;
@@ -550,11 +576,21 @@ export function handleEvent(msg) {
     case SocketEvents.CONFERENCE_USER_DISCONNECTED:
         dispatch(handleConferenceUserDisconnected(msg));
         break;
-
-    case SocketEvents.APPS_FRAMEWORK_REFRESH_BINDINGS: {
-        dispatch(handleRefreshAppsBindings(msg));
+    case SocketEvents.APPS_FRAMEWORK_REFRESH_BINDINGS:
+        dispatch(handleRefreshAppsBindings());
         break;
-    }
+    case SocketEvents.APPS_FRAMEWORK_PLUGIN_ENABLED:
+        dispatch(handleAppsPluginEnabled());
+        break;
+    case SocketEvents.APPS_FRAMEWORK_PLUGIN_DISABLED:
+        dispatch(handleAppsPluginDisabled());
+        break;
+    case SocketEvents.PUSHER_MEMBER_REMOVED:
+        handlePusherMemberRemoved(msg);
+        break;
+    case SocketEvents.PUSHER_PONG:
+        handlePusherPong(msg);
+        break;
     default:
     }
 
@@ -1059,9 +1095,12 @@ export async function handleUserUpdatedEvent(msg) {
 
     if (currentUser.id === user.id) {
         if (user.update_at > currentUser.update_at) {
-            // Need to request me to make sure we don't override with sanitized fields from the
-            // websocket event
-            getMe()(dispatch, getState);
+            // update user to unsanitized user data recieved from websocket message
+            dispatch({
+                type: UserTypes.RECEIVED_ME,
+                data: user,
+            });
+            dispatch(loadRolesIfNeeded(user.roles.split(' ')));
         }
     } else {
         dispatch({
@@ -1176,10 +1215,17 @@ export function handleUserTypingEvent(msg) {
         const state = doGetState();
         const config = getConfig(state);
         const currentUserId = getCurrentUserId(state);
-        const userId = msg.data.user_id;
+        const userId = msg.data.data.user_id;
+
+        if (
+            isPerformanceDebuggingEnabled(state) &&
+            getBool(state, Preferences.CATEGORY_PERFORMANCE_DEBUGGING, Preferences.NAME_DISABLE_TYPING_MESSAGES)
+        ) {
+            return;
+        }
 
         const data = {
-            id: msg.data.channel_id + msg.data.parent_id,
+            id: msg.data.data.channel_id + msg.data.data.parent_id,
             userId,
             now: Date.now(),
         };
@@ -1212,6 +1258,9 @@ export function handleUserTypingEvent(msg) {
 }
 
 function handleStatusChangedEvent(msg) {
+    if (needRefreshToken()) {
+        refreshIKToken();
+    }
     dispatch({
         type: UserTypes.RECEIVED_STATUSES,
         data: [{user_id: msg.data.user_id, status: msg.data.status}],
@@ -1261,6 +1310,7 @@ function handleChannelViewedEvent(msg) {
 
 export function handlePluginEnabled(msg) {
     const manifest = msg.data.manifest;
+
     loadPlugin(manifest).catch((error) => {
         console.error(error.message); //eslint-disable-line no-console
     });
@@ -1300,6 +1350,10 @@ function handlePluginStatusesChangedEvent(msg) {
     store.dispatch({type: AdminTypes.RECEIVED_PLUGIN_STATUSES, data: msg.data.plugin_statuses});
 }
 
+function handleIntegrationsUsageChangedEvent(msg) {
+    store.dispatch({type: CloudTypes.RECEIVED_INTEGRATIONS_USAGE, data: msg.data.usage.enabled});
+}
+
 function handleOpenDialogEvent(msg) {
     const data = (msg.data && msg.data.dialog) || {};
     const dialog = data;
@@ -1317,16 +1371,48 @@ function handleOpenDialogEvent(msg) {
 
 function handleGroupUpdatedEvent(msg) {
     const data = msg.data.group;
-    dispatch(batchActions([
+    dispatch(
         {
-            type: GroupTypes.RECEIVED_GROUP,
+            type: GroupTypes.PATCHED_GROUP,
             data,
         },
-        {
-            type: GroupTypes.RECEIVED_MY_GROUPS,
-            data: [data],
-        },
-    ]));
+    );
+}
+
+function handleGroupAddedMemberEvent(msg) {
+    return (doDispatch, doGetState) => {
+        const state = doGetState();
+        const currentUserId = getCurrentUserId(state);
+        const data = JSON.parse(msg.data.group_member);
+
+        if (currentUserId === data.user_id) {
+            dispatch(
+                {
+                    type: GroupTypes.ADD_MY_GROUP,
+                    data,
+                    id: data.group_id,
+                },
+            );
+        }
+    };
+}
+
+function handleGroupDeletedMemberEvent(msg) {
+    return (doDispatch, doGetState) => {
+        const state = doGetState();
+        const currentUserId = getCurrentUserId(state);
+        const data = JSON.parse(msg.data.group_member);
+
+        if (currentUserId === data.user_id) {
+            dispatch(
+                {
+                    type: GroupTypes.REMOVE_MY_GROUP,
+                    data,
+                    id: data.group_id,
+                },
+            );
+        }
+    };
 }
 
 function handleGroupAssociatedToTeamEvent(msg) {
@@ -1438,7 +1524,6 @@ export function handleUserActivationStatusChange() {
             if (isCurrentUserSystemAdmin(state)) {
                 doDispatch(getStandardAnalytics());
             }
-            doDispatch(getSubscriptionStats());
         }
     };
 }
@@ -1447,12 +1532,28 @@ function handleCloudPaymentStatusUpdated() {
     return (doDispatch) => doDispatch(getCloudSubscription());
 }
 
+export function handleCloudSubscriptionChanged(msg) {
+    return (doDispatch) => {
+        if (msg.data.limits) {
+            doDispatch({
+                type: CloudTypes.RECEIVED_CLOUD_LIMITS,
+                data: msg.data.limits,
+            });
+        }
+
+        if (msg.data.subscription) {
+            doDispatch({
+                type: CloudTypes.RECEIVED_CLOUD_SUBSCRIPTION,
+                data: msg.data.subscription,
+            });
+        }
+        return {data: true};
+    };
+}
+
 function handleRefreshAppsBindings() {
     return (doDispatch, doGetState) => {
         const state = doGetState();
-        if (!appsEnabled(state)) {
-            return {data: true};
-        }
 
         doDispatch(fetchAppBindings(getCurrentChannelId(state)));
 
@@ -1481,6 +1582,18 @@ function handleRefreshAppsBindings() {
     };
 }
 
+export function handleAppsPluginEnabled() {
+    return {
+        type: AppsTypes.APPS_PLUGIN_ENABLED,
+    };
+}
+
+export function handleAppsPluginDisabled() {
+    return {
+        type: AppsTypes.APPS_PLUGIN_DISABLED,
+    };
+}
+
 function handleFirstAdminVisitMarketplaceStatusReceivedEvent(msg) {
     const receivedData = msg.data.firstAdminVisitMarketplaceStatus;
     store.dispatch({type: GeneralTypes.FIRST_ADMIN_VISIT_MARKETPLACE_STATUS_RECEIVED, data: receivedData});
@@ -1491,28 +1604,27 @@ function handleThreadReadChanged(msg) {
         if (msg.data.thread_id) {
             const state = doGetState();
             const thread = getThreads(state)?.[msg.data.thread_id];
-            if (thread) {
-                // skip marking the thread as read (when the user is viewing the thread)
-                if (!isThreadOpen(state, thread.id)) {
-                    doDispatch(updateThreadLastOpened(thread.id, msg.data.timestamp));
-                }
 
-                handleReadChanged(
-                    doDispatch,
-                    msg.data.thread_id,
-                    msg.team_id,
-                    msg.data.channel_id,
-                    {
-                        lastViewedAt: msg.data.timestamp,
-                        prevUnreadMentions: thread.unread_mentions,
-                        newUnreadMentions: msg.data.unread_mentions,
-                        prevUnreadReplies: thread.unread_replies,
-                        newUnreadReplies: msg.data.unread_replies,
-                    },
-                );
+            // skip marking the thread as read (when the user is viewing the thread)
+            if (thread && !isThreadOpen(state, thread.id)) {
+                doDispatch(updateThreadLastOpened(thread.id, msg.data.timestamp));
             }
+
+            handleReadChanged(
+                doDispatch,
+                msg.data.thread_id,
+                msg.data.team_id,
+                msg.data.channel_id,
+                {
+                    lastViewedAt: msg.data.timestamp,
+                    prevUnreadMentions: thread?.unread_mentions ?? msg.data.previous_unread_mentions,
+                    newUnreadMentions: msg.data.unread_mentions,
+                    prevUnreadReplies: thread?.unread_replies ?? msg.data.previous_unread_replies,
+                    newUnreadReplies: msg.data.unread_replies,
+                },
+            );
         } else if (msg.data.channel_id) {
-            handleAllThreadsInChannelMarkedRead(doDispatch, doGetState, msg.data.channel_id, msg.data.timestamp);
+            handleAllThreadsInChannelMarkedRead(doDispatch, doGetState, msg.channel_id, msg.data.timestamp);
         } else {
             handleAllMarkedRead(doDispatch, msg.team_id);
         }
@@ -1563,7 +1675,7 @@ function handleThreadUpdated(msg) {
             dispatch(updateThreadRead(currentUserId, currentTeamId, threadData.id, lastViewedAt));
         }
 
-        handleThreadArrived(doDispatch, doGetState, threadData, msg.team_id);
+        handleThreadArrived(doDispatch, doGetState, threadData, msg.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions);
     };
 }
 
@@ -1598,16 +1710,9 @@ function handleConferenceUserConnected(msg) {
 
 function handleConferenceUserDisconnected(msg) {
     return (doDispatch, doGetState) => {
-        console.log(msg);
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
-        console.log({
-            channelID: msg.data.channel_id,
-            userID: msg.data.user_id,
-            currentUserID: getCurrentUserId(getState()),
-            url: msg.data.url,
-            id: Object.keys(calls[msg.data.channel_id])[0],
-        });
+
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
             data: {
@@ -1615,16 +1720,15 @@ function handleConferenceUserDisconnected(msg) {
                 userID: msg.data.user_id,
                 currentUserID: getCurrentUserId(getState()),
                 url: msg.data.url,
-                id: Object.keys(calls[msg.data.channel_id])[0],
+                callID: Object.keys(calls[msg.data.channel_id])[0],
             },
         });
     };
 }
 
 function handleConferenceDeleted(msg) {
-    return (doDispatch, doGetState) => {
-        console.log(msg);
-
+    return (doDispatch, getState) => {
+        dispatch(getPostsSince(msg.data.channel_id, Date.now()));
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_DELETED,
             data: {
@@ -1639,10 +1743,17 @@ function handleIncomingConferenceCall(msg) {
     return (doDispatch, doGetState) => {
         // Pop calling modal for user to accept or deny call
         // const data = await Client4
-
+        const doGetProfilesInChannel = makeGetProfilesInChannel();
         const state = doGetState();
-        const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
+        let users = [];
+
+        // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
         const channel = getChannel(state, connectedChannelID(doGetState()));
+        users = doGetProfilesInChannel(state, msg.data.channel_id, true);
+
+        if (users.length <= 0) {
+            users.push(getUser(state, msg.data.user_id));
+        }
 
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_ADDED,
@@ -1650,6 +1761,8 @@ function handleIncomingConferenceCall(msg) {
                 id: msg.data.url.split('/').at(-1),
                 channelID: msg.data.channel_id,
                 participants: msg.data.participants,
+                userID: msg.data.user_id,
+                currentUserID: getCurrentUserId(getState()),
             },
         });
 
@@ -1658,9 +1771,19 @@ function handleIncomingConferenceCall(msg) {
                 modalId: ModalIdentifiers.INCOMING_CALL,
                 dialogType: DialingModal,
                 dialogProps: {
-                    calling: {users: inCall, channelID: msg.data.channel_id},
+                    calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
                 },
             }));
         }
     };
+}
+
+function handlePusherMemberRemoved(msg) {
+    console.log('pusher member removed', msg);
+}
+
+function handlePusherPong() {
+    if (needRefreshToken()) {
+        refreshIKToken();
+    }
 }

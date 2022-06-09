@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 /* eslint-disable react/no-string-refs */
+/* eslint-disable max-lines */
 
 import deepEqual from 'fast-deep-equal';
 import React from 'react';
@@ -9,8 +10,8 @@ import {FormattedMessage} from 'react-intl';
 
 import {Timezone} from 'timezones.json';
 
-import {PreferenceType} from 'mattermost-redux/types/preferences';
-import {UserProfile, UserTimezone} from 'mattermost-redux/types/users';
+import {PreferenceType} from '@mattermost/types/preferences';
+import {UserProfile, UserTimezone} from '@mattermost/types/users';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -92,7 +93,7 @@ type Props = {
     configTeammateNameDisplay: string;
     currentUserTimezone: string;
     enableTimezone: boolean;
-    shouldAutoUpdateTimezone: boolean;
+    shouldAutoUpdateTimezone: boolean | string;
     lockTeammateNameDisplay: boolean;
     militaryTime: string;
     teammateNameDisplay: string;
@@ -802,7 +803,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                 },
                 description: {
                     id: t('user.settings.display.collapsedReplyThreadsDescription'),
-                    message: 'When enabled, reply messages are not shown in the channel and you\'ll be notified about threads you\'re following in the "Threads" view.\nPlease review our [documentation for known issues](!https://docs.mattermost.com/help/messaging/organizing-conversations.html) and help provide feedback in our [community channel](!https://community-daily.mattermost.com/core/channels/folded-reply-threads).',
+                    message: 'When enabled, reply messages are not shown in the channel and you\'ll be notified about threads you\'re following in the "Threads" view.\nPlease review our [documentation for known issues](!https://docs.mattermost.com/messaging/organizing-conversations.html) and help provide feedback in our [community channel](!https://community-daily.mattermost.com/core/channels/folded-reply-threads).',
                 },
             });
         }
@@ -999,10 +1000,10 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     </h3>
                     <div className='divider-dark first'/>
                     {themeSection}
-                    {clockSection}
+                    {/* {clockSection}
                     {teammateNameDisplaySection}
                     {availabilityStatusOnPostsSection}
-                    {timezoneSelection}
+                    {timezoneSelection} */}
                     {linkPreviewSection}
                     {collapseSection}
                     {messageDisplaySection}
@@ -1010,7 +1011,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     {clickToReply}
                     {channelDisplayModeSection}
                     {oneClickReactionsOnPostsSection}
-                    {languagesSection}
+                    {/* {languagesSection} */}
                 </div>
             </div>
         );

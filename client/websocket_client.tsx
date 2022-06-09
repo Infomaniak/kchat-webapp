@@ -3,6 +3,9 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
+import {isDesktopApp} from 'utils/user_agent';
+import {Client4} from 'mattermost-redux/client';
+
 // import {SocketEvents} from 'utils/constants';
 
 const MAX_WEBSOCKET_FAILS = 7;
@@ -13,6 +16,7 @@ export default class WebSocketClient {
     private conn: Pusher | null;
     private teamChannel: Channel | null;
     private userChannel: Channel | null;
+    private presenceChannel: Channel | null;
     private connectionUrl: string | null;
 
     // responseSequence is the number to track a response sent
@@ -37,6 +41,7 @@ export default class WebSocketClient {
         this.conn = null;
         this.teamChannel = null;
         this.userChannel = null;
+        this.presenceChannel = null;
         this.connectionUrl = null;
         this.responseSequence = 1;
         this.serverSequence = 0;
@@ -84,17 +89,37 @@ export default class WebSocketClient {
         // Add connection id, and last_sequence_number to the query param.
         // We cannot use a cookie because it will bleed across tabs.
         // We cannot also send it as part of the auth_challenge, because the session cookie is already sent with the request.
-        this.conn = new Pusher('app-key', {
-            wsHost: connectionUrl,
-            httpHost: connectionUrl,
-            authEndpoint: '/broadcasting/auth',
-            wsPort: 443,
-            wssPort: 443,
-            httpPort: 443,
-            httpsPort: 443,
-            forceTLS: true,
-            enabledTransports: ['ws', 'wss'],
-        });
+
+        if (isDesktopApp()) {
+            this.conn = new Pusher('app-key', {
+                wsHost: connectionUrl,
+                httpHost: connectionUrl,
+                authEndpoint: '/broadcasting/auth',
+                auth: {
+                    headers: {
+                        Authorization: `Bearer ${Client4.getToken() && Client4.getToken()}`,
+                    },
+                },
+                wsPort: 443,
+                wssPort: 443,
+                httpPort: 443,
+                httpsPort: 443,
+                forceTLS: true,
+                enabledTransports: ['ws', 'wss'],
+            });
+        } else {
+            this.conn = new Pusher('app-key', {
+                wsHost: connectionUrl,
+                httpHost: connectionUrl,
+                authEndpoint: '/broadcasting/auth',
+                wsPort: 443,
+                wssPort: 443,
+                httpPort: 443,
+                httpsPort: 443,
+                forceTLS: true,
+                enabledTransports: ['ws', 'wss'],
+            });
+        }
 
         this.connectionUrl = connectionUrl;
 
@@ -170,7 +195,14 @@ export default class WebSocketClient {
     }
 
     subscribeToUserChannel(userId: number) {
-        this.userChannel = this.conn.subscribe(`private-user.${userId}`);
+        this.userChannel = this.conn.subscribe(`presence-user.${userId}`);
+    }
+
+    bindPresenceChannel(channelID: string) {
+        this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`);
+        if (this.presenceChannel) {
+            this.bindChannelGlobally(this.presenceChannel);
+        }
     }
 
     bindChannelGlobally(channel: Channel | null) {
@@ -256,12 +288,32 @@ export default class WebSocketClient {
         }
     }
 
-    userTyping(channelId: string, parentId: string, callback?: () => void) {
+    sendPresenceMessage(action: string, data: any, responseCallback?: () => void) {
+        const msg = {
+            action,
+            seq: this.responseSequence++,
+            data,
+        };
+
+        if (responseCallback) {
+            this.responseCallbacks[msg.seq] = responseCallback;
+        }
+
+        if (this.conn && this.conn.connection.state === 'connected') {
+            this.presenceChannel?.trigger(action, msg);
+        } else if (!this.conn || this.conn.connection.state === 'disconnected') {
+            this.conn = null;
+            this.bindPresenceChannel(data.channel_id);
+        }
+    }
+
+    userTyping(channelId: string, userId: string, parentId: string, callback?: () => void) {
         const data = {
             channel_id: channelId,
             parent_id: parentId,
+            user_id: userId,
         };
-        this.sendMessage('client-user_typing', data, callback);
+        this.sendPresenceMessage('client-user_typing', data, callback);
     }
 
     userUpdateActiveStatus(userIsActive: boolean, manual: boolean, callback?: () => void) {

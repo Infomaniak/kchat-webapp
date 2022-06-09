@@ -94,15 +94,26 @@ exports[`components/ChannelHeader should render active channel files 1`] = `
           className="channel-header__description light"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "delete_at": 0,
-                "id": "channel_id",
-                "name": "Test",
-                "team_id": "team_id",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -143,7 +154,7 @@ exports[`components/ChannelHeader should render active channel files 1`] = `
               onClick={[Function]}
             >
               <MemoizedFormattedMessage
-                defaultMessage="Add a channel description"
+                defaultMessage="Add a channel header"
                 id="channel_header.addChannelHeader"
               />
               <MemoizedFormattedMessage
@@ -154,7 +165,6 @@ exports[`components/ChannelHeader should render active channel files 1`] = `
               </MemoizedFormattedMessage>
             </button>
           </Connect(ChannelPermissionGate)>
-          <Connect(injectIntl(MeetButton)) />
         </div>
       </div>
     </div>
@@ -171,6 +181,17 @@ exports[`components/ChannelHeader should render active channel files 1`] = `
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "delete_at": 0,
+          "id": "channel_id",
+          "name": "Test",
+          "team_id": "team_id",
         }
       }
     />
@@ -272,15 +293,26 @@ exports[`components/ChannelHeader should render active flagged posts 1`] = `
           className="channel-header__description light"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "delete_at": 0,
-                "id": "channel_id",
-                "name": "Test",
-                "team_id": "team_id",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -321,7 +353,7 @@ exports[`components/ChannelHeader should render active flagged posts 1`] = `
               onClick={[Function]}
             >
               <MemoizedFormattedMessage
-                defaultMessage="Add a channel description"
+                defaultMessage="Add a channel header"
                 id="channel_header.addChannelHeader"
               />
               <MemoizedFormattedMessage
@@ -332,7 +364,6 @@ exports[`components/ChannelHeader should render active flagged posts 1`] = `
               </MemoizedFormattedMessage>
             </button>
           </Connect(ChannelPermissionGate)>
-          <Connect(injectIntl(MeetButton)) />
         </div>
       </div>
     </div>
@@ -349,6 +380,17 @@ exports[`components/ChannelHeader should render active flagged posts 1`] = `
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "delete_at": 0,
+          "id": "channel_id",
+          "name": "Test",
+          "team_id": "team_id",
         }
       }
     />
@@ -450,15 +492,26 @@ exports[`components/ChannelHeader should render active mentions posts 1`] = `
           className="channel-header__description light"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "delete_at": 0,
-                "id": "channel_id",
-                "name": "Test",
-                "team_id": "team_id",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -499,7 +552,7 @@ exports[`components/ChannelHeader should render active mentions posts 1`] = `
               onClick={[Function]}
             >
               <MemoizedFormattedMessage
-                defaultMessage="Add a channel description"
+                defaultMessage="Add a channel header"
                 id="channel_header.addChannelHeader"
               />
               <MemoizedFormattedMessage
@@ -510,7 +563,6 @@ exports[`components/ChannelHeader should render active mentions posts 1`] = `
               </MemoizedFormattedMessage>
             </button>
           </Connect(ChannelPermissionGate)>
-          <Connect(injectIntl(MeetButton)) />
         </div>
       </div>
     </div>
@@ -527,6 +579,17 @@ exports[`components/ChannelHeader should render active mentions posts 1`] = `
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "delete_at": 0,
+          "id": "channel_id",
+          "name": "Test",
+          "team_id": "team_id",
         }
       }
     />
@@ -628,15 +691,26 @@ exports[`components/ChannelHeader should render active pinned posts 1`] = `
           className="channel-header__description light"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "delete_at": 0,
-                "id": "channel_id",
-                "name": "Test",
-                "team_id": "team_id",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -677,7 +751,7 @@ exports[`components/ChannelHeader should render active pinned posts 1`] = `
               onClick={[Function]}
             >
               <MemoizedFormattedMessage
-                defaultMessage="Add a channel description"
+                defaultMessage="Add a channel header"
                 id="channel_header.addChannelHeader"
               />
               <MemoizedFormattedMessage
@@ -688,7 +762,6 @@ exports[`components/ChannelHeader should render active pinned posts 1`] = `
               </MemoizedFormattedMessage>
             </button>
           </Connect(ChannelPermissionGate)>
-          <Connect(injectIntl(MeetButton)) />
         </div>
       </div>
     </div>
@@ -705,6 +778,17 @@ exports[`components/ChannelHeader should render active pinned posts 1`] = `
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "delete_at": 0,
+          "id": "channel_id",
+          "name": "Test",
+          "team_id": "team_id",
         }
       }
     />
@@ -776,15 +860,26 @@ exports[`components/ChannelHeader should render archived view 1`] = `
           className="channel-header__description light"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "delete_at": 1234,
-                "id": "channel_id",
-                "name": "Test",
-                "team_id": "team_id",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -811,7 +906,6 @@ exports[`components/ChannelHeader should render archived view 1`] = `
             onClick={[Function]}
             tooltipKey="channelFiles"
           />
-          <Connect(injectIntl(MeetButton)) />
         </div>
       </div>
     </div>
@@ -828,6 +922,17 @@ exports[`components/ChannelHeader should render archived view 1`] = `
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "delete_at": 1234,
+          "id": "channel_id",
+          "name": "Test",
+          "team_id": "team_id",
         }
       }
     />
@@ -961,15 +1066,26 @@ exports[`components/ChannelHeader should render correct menu when muted 1`] = `
           className="channel-header__description light"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "delete_at": 0,
-                "id": "channel_id",
-                "name": "Test",
-                "team_id": "team_id",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -1010,7 +1126,7 @@ exports[`components/ChannelHeader should render correct menu when muted 1`] = `
               onClick={[Function]}
             >
               <MemoizedFormattedMessage
-                defaultMessage="Add a channel description"
+                defaultMessage="Add a channel header"
                 id="channel_header.addChannelHeader"
               />
               <MemoizedFormattedMessage
@@ -1021,7 +1137,6 @@ exports[`components/ChannelHeader should render correct menu when muted 1`] = `
               </MemoizedFormattedMessage>
             </button>
           </Connect(ChannelPermissionGate)>
-          <Connect(injectIntl(MeetButton)) />
         </div>
       </div>
     </div>
@@ -1038,6 +1153,17 @@ exports[`components/ChannelHeader should render correct menu when muted 1`] = `
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "delete_at": 0,
+          "id": "channel_id",
+          "name": "Test",
+          "team_id": "team_id",
         }
       }
     />
@@ -1139,15 +1265,26 @@ exports[`components/ChannelHeader should render not active channel files 1`] = `
           className="channel-header__description light"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "delete_at": 0,
-                "id": "channel_id",
-                "name": "Test",
-                "team_id": "team_id",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -1188,7 +1325,7 @@ exports[`components/ChannelHeader should render not active channel files 1`] = `
               onClick={[Function]}
             >
               <MemoizedFormattedMessage
-                defaultMessage="Add a channel description"
+                defaultMessage="Add a channel header"
                 id="channel_header.addChannelHeader"
               />
               <MemoizedFormattedMessage
@@ -1199,7 +1336,6 @@ exports[`components/ChannelHeader should render not active channel files 1`] = `
               </MemoizedFormattedMessage>
             </button>
           </Connect(ChannelPermissionGate)>
-          <Connect(injectIntl(MeetButton)) />
         </div>
       </div>
     </div>
@@ -1216,6 +1352,17 @@ exports[`components/ChannelHeader should render not active channel files 1`] = `
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "delete_at": 0,
+          "id": "channel_id",
+          "name": "Test",
+          "team_id": "team_id",
         }
       }
     />
@@ -1426,6 +1573,16 @@ exports[`components/ChannelHeader should render properly when custom status is e
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "header": "not the bot description",
+          "status": "offline",
+          "type": "D",
         }
       }
     />
@@ -1655,6 +1812,16 @@ exports[`components/ChannelHeader should render properly when custom status is s
         }
       }
     />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "header": "not the bot description",
+          "status": "offline",
+          "type": "D",
+        }
+      }
+    />
   </div>
 </div>
 `;
@@ -1759,15 +1926,26 @@ exports[`components/ChannelHeader should render properly when populated 1`] = `
           className="channel-header__description light"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "delete_at": 0,
-                "id": "channel_id",
-                "name": "Test",
-                "team_id": "team_id",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -1808,7 +1986,7 @@ exports[`components/ChannelHeader should render properly when populated 1`] = `
               onClick={[Function]}
             >
               <MemoizedFormattedMessage
-                defaultMessage="Add a channel description"
+                defaultMessage="Add a channel header"
                 id="channel_header.addChannelHeader"
               />
               <MemoizedFormattedMessage
@@ -1819,7 +1997,6 @@ exports[`components/ChannelHeader should render properly when populated 1`] = `
               </MemoizedFormattedMessage>
             </button>
           </Connect(ChannelPermissionGate)>
-          <Connect(injectIntl(MeetButton)) />
         </div>
       </div>
     </div>
@@ -1836,6 +2013,17 @@ exports[`components/ChannelHeader should render properly when populated 1`] = `
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "delete_at": 0,
+          "id": "channel_id",
+          "name": "Test",
+          "team_id": "team_id",
         }
       }
     />
@@ -1908,22 +2096,26 @@ exports[`components/ChannelHeader should render properly when populated with cha
           dir="auto"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "header": "See ~test",
-                "id": "channel_id",
-                "name": "Test",
-                "props": Object {
-                  "channel_mentions": Object {
-                    "test": Object {
-                      "display_name": "Test",
-                    },
-                  },
-                },
-                "team_id": "team_id",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -2060,6 +2252,24 @@ exports[`components/ChannelHeader should render properly when populated with cha
         }
       }
     />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "header": "See ~test",
+          "id": "channel_id",
+          "name": "Test",
+          "props": Object {
+            "channel_mentions": Object {
+              "test": Object {
+                "display_name": "Test",
+              },
+            },
+          },
+          "team_id": "team_id",
+        }
+      }
+    />
   </div>
 </div>
 `;
@@ -2164,17 +2374,26 @@ exports[`components/ChannelHeader should render shared view 1`] = `
           className="channel-header__description light"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "delete_at": 0,
-                "id": "channel_id",
-                "name": "Test",
-                "shared": true,
-                "team_id": "team_id",
-                "type": "O",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -2215,7 +2434,7 @@ exports[`components/ChannelHeader should render shared view 1`] = `
               onClick={[Function]}
             >
               <MemoizedFormattedMessage
-                defaultMessage="Add a channel description"
+                defaultMessage="Add a channel header"
                 id="channel_header.addChannelHeader"
               />
               <MemoizedFormattedMessage
@@ -2226,7 +2445,6 @@ exports[`components/ChannelHeader should render shared view 1`] = `
               </MemoizedFormattedMessage>
             </button>
           </Connect(ChannelPermissionGate)>
-          <Connect(injectIntl(MeetButton)) />
         </div>
       </div>
     </div>
@@ -2245,6 +2463,19 @@ exports[`components/ChannelHeader should render shared view 1`] = `
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "delete_at": 0,
+          "id": "channel_id",
+          "name": "Test",
+          "shared": true,
+          "team_id": "team_id",
+          "type": "O",
         }
       }
     />
@@ -2346,15 +2577,26 @@ exports[`components/ChannelHeader should render the pinned icon with the pinned 
           className="channel-header__description light"
           id="channelHeaderDescription"
         >
-          <Connect(PopoverListMembers)
-            channel={
-              Object {
-                "delete_at": 0,
-                "id": "channel_id",
-                "name": "Test",
-                "team_id": "team_id",
-              }
+          <HeaderIconWrapper
+            ariaLabel={true}
+            buttonClass="member-rhs__trigger channel-header__icon channel-header__icon--left channel-header__icon--wide"
+            buttonId="member_rhs"
+            iconComponent={
+              <React.Fragment>
+                <i
+                  aria-hidden="true"
+                  className="icon icon-account-outline channel-header__members"
+                />
+                <span
+                  className="icon__text"
+                  id="channelMemberCountText"
+                >
+                  -
+                </span>
+              </React.Fragment>
             }
+            onClick={[Function]}
+            tooltipKey="channelMembers"
           />
           <HeaderIconWrapper
             ariaLabel={true}
@@ -2403,7 +2645,7 @@ exports[`components/ChannelHeader should render the pinned icon with the pinned 
               onClick={[Function]}
             >
               <MemoizedFormattedMessage
-                defaultMessage="Add a channel description"
+                defaultMessage="Add a channel header"
                 id="channel_header.addChannelHeader"
               />
               <MemoizedFormattedMessage
@@ -2414,7 +2656,6 @@ exports[`components/ChannelHeader should render the pinned icon with the pinned 
               </MemoizedFormattedMessage>
             </button>
           </Connect(ChannelPermissionGate)>
-          <Connect(injectIntl(MeetButton)) />
         </div>
       </div>
     </div>
@@ -2431,6 +2672,17 @@ exports[`components/ChannelHeader should render the pinned icon with the pinned 
         Object {
           "channel_id": "channel_id",
           "user_id": "user_id",
+        }
+      }
+    />
+    <Connect(injectIntl(MeetButton)) />
+    <ChannelInfoButton
+      channel={
+        Object {
+          "delete_at": 0,
+          "id": "channel_id",
+          "name": "Test",
+          "team_id": "team_id",
         }
       }
     />

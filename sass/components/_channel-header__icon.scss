@@ -54,6 +54,13 @@
         }
     }
 
+    &--active-inverted,
+    &--active-inverted:hover {
+        background: v(button-bg);
+        color: v(button-color);
+        fill: v(button-color);
+    }
+
     .icon__text {
         margin: 0 2px;
         font-weight: 600;
@@ -83,6 +90,22 @@
     svg {
         width: 12px;
         height: 12px;
+    }
+}
+
+.channel-header__icon--call {
+    svg {
+        width: 20px;
+        height: 20px;
+        color: rgba(var(--center-channel-color-rgb), 0.56);
+        fill: rgba(var(--center-channel-color-rgb), 0.56);
+    }
+}
+
+.channel-header__icon--calling {
+    svg {
+        color: var(--online-indicator);
+        fill: var(--online-indicator);
     }
 }
 

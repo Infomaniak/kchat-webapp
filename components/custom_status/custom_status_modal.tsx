@@ -9,8 +9,8 @@ import moment, {Moment} from 'moment-timezone';
 import {setCustomStatus, unsetCustomStatus, removeRecentCustomStatus} from 'mattermost-redux/actions/users';
 import {setCustomStatusInitialisationState} from 'mattermost-redux/actions/preferences';
 import {Preferences} from 'mattermost-redux/constants';
-import {UserCustomStatus, CustomStatusDuration} from 'mattermost-redux/types/users';
-import {Emoji} from 'mattermost-redux/types/emojis';
+import {UserCustomStatus, CustomStatusDuration} from '@mattermost/types/users';
+import {Emoji} from '@mattermost/types/emojis';
 
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import GenericModal from 'components/generic_modal';
@@ -24,6 +24,7 @@ import {GlobalState} from 'types/store';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 import {Constants} from 'utils/constants';
 import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
 
 import CustomStatusSuggestion from 'components/custom_status/custom_status_suggestion';
 import ExpiryMenu from 'components/custom_status/expiry_menu';
@@ -130,16 +131,23 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
         dispatch(loadCustomEmojisIfNeeded(Array.from(emojisToLoad)));
     };
 
+    const handleStatusExpired = () => {
+        if (customStatusExpired && currentCustomStatus) {
+            dispatch(unsetCustomStatus());
+        }
+    };
+
     useEffect(() => {
         handleCustomStatusInitializationState();
         loadCustomEmojisForRecentStatuses();
+        handleStatusExpired();
     }, []);
 
     const handleSetStatus = () => {
         const expiresAt = calculateExpiryTime();
         const customStatus: UserCustomStatus = {
             emoji: emoji || 'speech_balloon',
-            text: text.trim(),
+            text: text ? text.trim() : '',
             duration: duration === CUSTOM_DATE_TIME ? DATE_AND_TIME : duration,
         };
         if (expiresAt) {
@@ -274,7 +282,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
 
     const showSuggestions = !isStatusSet || areSelectedAndSetStatusSame;
 
-    const disableSetStatus = !isStatusSet || text.length > CUSTOM_STATUS_TEXT_CHARACTER_LIMIT;
+    const disableSetStatus = !isStatusSet || (text && text.length > CUSTOM_STATUS_TEXT_CHARACTER_LIMIT);
 
     const showDateAndTimeField = !showSuggestions && (duration === CUSTOM_DATE_TIME || duration === DATE_AND_TIME);
 
@@ -318,8 +326,10 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
             id='custom_status_modal'
             className={'StatusModal'}
             handleConfirm={handleSetStatus}
+            handleEnterKeyPress={handleSetStatus}
             handleCancel={handleClearStatus}
             confirmButtonClassName='btn btn-primary'
+            ariaLabel={localizeMessage('custom_status.set_status', 'Set a status')}
         >
             <div className='StatusModal__body'>
                 <div className='StatusModal__input'>
