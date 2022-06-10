@@ -310,7 +310,6 @@ var config = {
                 {from: 'images/cloud-laptop.png', to: 'images'},
                 {from: 'images/trial-ended.png', to: 'images'},
                 {from: 'call.html', to: ''},
-
                 {from: 'service-worker.js', to: ''},
             ],
         }),
@@ -475,6 +474,13 @@ if (targetIsDevServer) {
     };
 }
 
+var sw = {
+    entry: ['./service-worker.js'],
+    output: {
+        filename: 'service-worker.js',
+    },
+};
+
 // Export PRODUCTION_PERF_DEBUG=1 when running webpack to enable support for the react profiler
 // even while generating production code. (Performance testing development code is typically
 // not helpful.)
@@ -491,4 +497,4 @@ if (process.env.PRODUCTION_PERF_DEBUG) { //eslint-disable-line no-process-env
     };
 }
 
-module.exports = config;
+module.exports = [sw, config];

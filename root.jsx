@@ -19,6 +19,7 @@ import {AnnouncementBarTypes} from 'utils/constants';
 import store from 'stores/redux_store.jsx';
 import App from 'components/app';
 import sentry from 'utils/sentry';
+import {Client4} from 'mattermost-redux/client';
 
 sentry({SENTRY_DSN: 'https://8a8c0ed6e4fe45eaa3f1a26bbe037a27@sentry.infomaniak.com/53'});
 
@@ -80,14 +81,17 @@ function appendOnLoadEvent(fn) {
 }
 
 appendOnLoadEvent(() => {
-    // Do the pre-render setup and call renderRootComponent when done
-    preRenderSetup(renderRootComponent);
-
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/static/service-worker.js', {scope: '/'}).then((registration) => {
+        navigator.serviceWorker.register('/service-worker.js', {scope: '/'}).then((registration) => {
             console.log('SW registered: ', registration);
+            registration.unregister();
         }).catch((registrationError) => {
             console.log('SW registration failed: ', registrationError);
         });
     }
+
+    // Do the pre-render setup and call renderRootComponent when done
+    preRenderSetup(renderRootComponent);
+
+
 });
