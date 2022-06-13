@@ -118,11 +118,13 @@ import {CompleteOnboardingRequest} from '@mattermost/types/setup';
 import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/threads';
 import {TopChannelResponse, TopReactionResponse} from '@mattermost/types/insights';
 
-import {cleanUrlForLogging} from './errors';
-import {buildQueryString} from './helpers';
 import {isDesktopApp} from 'utils/user_agent';
 
 import {IKConstants} from 'utils/constants-ik';
+
+import {cleanUrlForLogging} from './errors';
+import {buildQueryString} from './helpers';
+
 import {TelemetryHandler} from './telemetry';
 
 const HEADER_AUTH = 'Authorization';
@@ -205,6 +207,9 @@ export default class Client4 {
 
     setToken(token: string) {
         this.token = token;
+        if ('serviceWorker' in navigator) {
+            navigator?.serviceWorker?.controller?.postMessage({token});
+        }
     }
 
     setCSRF(csrfToken: string) {
@@ -774,7 +779,7 @@ export default class Client4 {
             (isDesktopApp() ? `${IKConstants.LOGIN_URL}logout` : `${this.getUsersRoute()}/logout`),
             {method: 'post'},
         );
-        console.log(response)
+        console.log(response);
         if (response.ok) {
             this.token = '';
             if (isDesktopApp()) {
@@ -4032,7 +4037,7 @@ export default class Client4 {
      * eg.  const query = JSON.stringify({query: `{license, config}`});
      *      client4.fetchWithGraphQL(query);
      */
-     fetchWithGraphQL = async <DataResponse>(query: string) => {
+    fetchWithGraphQL = async <DataResponse>(query: string) => {
         return this.doFetch<DataResponse>(this.getGraphQLUrl(), {method: 'post', body: query});
     }
 
