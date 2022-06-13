@@ -1,9 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {SyntheticEvent, useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
+import {debounce} from 'lodash';
 
 import {UserProfile} from '@mattermost/types/users';
 import {Channel, ChannelMembership} from '@mattermost/types/channels';
@@ -12,7 +13,6 @@ import MoreDirectChannels from 'components/more_direct_channels';
 import ChannelInviteModal from 'components/channel_invite_modal';
 import {ModalData} from 'types/actions';
 import {browserHistory} from 'utils/browser_history';
-import {debounce} from 'mattermost-redux/actions/helpers';
 
 import ActionBar from './action_bar';
 import Header from './header';
@@ -20,7 +20,6 @@ import MemberList from './member_list';
 import SearchBar from './search';
 
 const USERS_PER_PAGE = 100;
-
 export interface ChannelMember {
     user: UserProfile;
     membership: ChannelMembership;
@@ -34,18 +33,6 @@ const MembersContainer = styled.div`
     overflow-y: auto;
 `;
 
-const LoadMoreButton = styled.button`
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: var(--button-bg);
-    margin: 0 auto;
-    display: block;
-    &:disabled {
-        color: rgba(var(--center-channel-color-rgb),0.56);
-    }
-`;
-
 export interface Props {
     channel: Channel;
     membersCount: number;
@@ -55,6 +42,7 @@ export interface Props {
     channelMembers: ChannelMember[];
     channelAdmins: ChannelMember[];
     canManageMembers: boolean;
+    editing: boolean;
 
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
@@ -64,15 +52,23 @@ export interface Props {
         setChannelMembersRhsSearchTerm: (terms: string) => void;
         loadProfilesAndReloadChannelMembers: (page: number, perParge: number, channelId: string) => void;
         loadMyChannelMemberAndRole: (channelId: string) => void;
+        setEditChannelMembers: (active: boolean) => void;
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;
     };
 }
 
-export default function ChannelMembersRHS({channel, searchTerms, membersCount, canGoBack, teamUrl, channelAdmins, channelMembers, canManageMembers, actions}: Props) {
-    const [editing, setEditing] = useState(false);
-    const [page, setPage] = useState(0);
-    const [loadingMore, setLoadingMore] = useState(false);
-
+export default function ChannelMembersRHS({
+    channel,
+    searchTerms,
+    membersCount,
+    canGoBack,
+    teamUrl,
+    channelAdmins,
+    channelMembers,
+    canManageMembers,
+    editing = false,
+    actions,
+}: Props) {
     const searching = searchTerms !== '';
 
     // show search if there's more than 20 or if the user have an active search.
@@ -105,36 +101,23 @@ export default function ChannelMembersRHS({channel, searchTerms, membersCount, c
         }
 
         actions.setChannelMembersRhsSearchTerm('');
-        setEditing(false);
-        setPage(0);
-        setLoadingMore(false);
-
         actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id);
         actions.loadMyChannelMemberAndRole(channel.id);
     }, [channel.id, channel.type]);
 
-    const searchDebounced = debounce(
-        async () => {
-            if (searchTerms) {
-                setEditing(false);
-                setPage(0);
-                setLoadingMore(false);
-
-                await actions.searchProfilesAndChannelMembers(searchTerms, {in_team_id: channel.team_id, in_channel_id: channel.id});
-                actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id);
-                actions.loadMyChannelMemberAndRole(channel.id);
-            }
-        },
-        Constants.SEARCH_TIMEOUT_MILLISECONDS,
-    );
-
-    useEffect(() => {
-        searchDebounced();
-    }, [searchTerms]);
-
-    const doSearch = async (terms: string) => {
+    const setSearchTerms = async (terms: string) => {
         actions.setChannelMembersRhsSearchTerm(terms);
     };
+
+    const doSearch = useCallback(debounce(async (terms: string) => {
+        await actions.searchProfilesAndChannelMembers(terms, {in_team_id: channel.team_id, in_channel_id: channel.id});
+    }, Constants.SEARCH_TIMEOUT_MILLISECONDS), [actions.searchProfilesAndChannelMembers]);
+
+    useEffect(() => {
+        if (searchTerms) {
+            doSearch(searchTerms);
+        }
+    }, [searchTerms]);
 
     const inviteMembers = () => {
         if (channel.type === Constants.GM_CHANNEL) {
@@ -162,28 +145,6 @@ export default function ChannelMembersRHS({channel, searchTerms, membersCount, c
         await actions.closeRightHandSide();
     };
 
-    const loadMore = async () => {
-        const nextPage = page + 1;
-        setPage(nextPage);
-        setLoadingMore(true);
-
-        await actions.loadProfilesAndReloadChannelMembers(nextPage, USERS_PER_PAGE, channel.id);
-        await actions.loadMyChannelMemberAndRole(channel.id);
-
-        setLoadingMore(false);
-    };
-
-    const onMembersContainerSroll = (e: SyntheticEvent) => {
-        if (loadingMore) {
-            return;
-        }
-
-        // loading more when we are two "page scroll" away from the end.
-        if (e.currentTarget.scrollTop > e.currentTarget.scrollHeight - (2 * e.currentTarget.clientHeight)) {
-            loadMore();
-        }
-    };
-
     return (
         <div
             id='rhsContainer'
@@ -203,8 +164,8 @@ export default function ChannelMembersRHS({channel, searchTerms, membersCount, c
                 canManageMembers={canManageMembers}
                 editing={editing}
                 actions={{
-                    startEditing: () => setEditing(true),
-                    stopEditing: () => setEditing(false),
+                    startEditing: () => actions.setEditChannelMembers(true),
+                    stopEditing: () => actions.setEditChannelMembers(false),
                     inviteMembers,
                 }}
             />
@@ -212,13 +173,11 @@ export default function ChannelMembersRHS({channel, searchTerms, membersCount, c
             {showSearch && (
                 <SearchBar
                     terms={searchTerms}
-                    onInput={doSearch}
+                    onInput={setSearchTerms}
                 />
             )}
 
-            <MembersContainer
-                onScroll={onMembersContainerSroll}
-            >
+            <MembersContainer>
                 {channelAdmins.length > 0 && (
                     <MemberList
                         members={channelAdmins}
@@ -242,26 +201,6 @@ export default function ChannelMembersRHS({channel, searchTerms, membersCount, c
                         channel={channel}
                         actions={{openDirectMessage}}
                     />
-                )}
-
-                {(!searching && (channelAdmins.length + channelMembers.length < membersCount)) && (
-                    <LoadMoreButton
-                        onClick={loadMore}
-                        disabled={loadingMore}
-                    >
-                        {loadingMore ? (
-                            <FormattedMessage
-                                id='channel_members_rhs.list.loading'
-                                defaultMessage='Loading'
-                            />
-                        ) : (
-                            <FormattedMessage
-                                id='channel_members_rhs.list.load-more'
-                                defaultMessage='Load More'
-                            />
-
-                        )}
-                    </LoadMoreButton>
                 )}
             </MembersContainer>
         </div>

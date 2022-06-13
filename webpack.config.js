@@ -431,7 +431,6 @@ if (targetIsDevServer) {
         devServer: {
             server: 'https',
             allowedHosts: 'all',
-            hot: true,
             liveReload: true,
             proxy: [{
                 context: () => true,

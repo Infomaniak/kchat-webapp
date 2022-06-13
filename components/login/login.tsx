@@ -116,9 +116,9 @@ const Login = () => {
             }
         }
 
-        if (extraParam === Constants.SIGNIN_VERIFIED && emailParam) {
-            passwordInput.current?.focus();
-        }
+        onWindowFocus();
+
+        window.addEventListener('focus', onWindowFocus);
 
         // Determine if the user was unexpectedly logged out.
         if (LocalStorageStore.getWasLoggedIn()) {
@@ -144,7 +144,7 @@ const Login = () => {
                 closeSessionExpiredNotification.current = undefined;
             }
         };
-    });
+    }, []);
 
     if (initializing) {
         return (<LoadingScreen/>);

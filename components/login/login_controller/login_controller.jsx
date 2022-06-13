@@ -9,6 +9,8 @@ import React from 'react';
 
 import {FormattedMessage, injectIntl} from 'react-intl';
 
+import {t} from 'utils/i18n';
+
 import * as GlobalActions from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
 import LoadingScreen from 'components/loading_screen';
@@ -19,7 +21,6 @@ import LocalStorageStore from 'stores/local_storage_store';
 import {browserHistory} from 'utils/browser_history';
 import {IKConstants} from 'utils/constants-ik';
 import Constants from 'utils/constants';
-import {t} from 'utils/i18n.jsx';
 import {showNotification} from 'utils/notifications';
 import {intlShape} from 'utils/react_intl';
 import {isDesktopApp} from 'utils/user_agent';
@@ -133,6 +134,7 @@ class LoginController extends React.PureComponent {
                 this.storeTokenResponse(hash2Obj);
                 localStorage.removeItem('challenge');
                 LocalStorageStore.setWasLoggedIn(true);
+
                 // location.reload();
 
                 this.finishSignin();
