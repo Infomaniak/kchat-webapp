@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import {Link} from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -78,12 +78,14 @@ type State = {
 export default class SidebarChannelLink extends React.PureComponent<Props, State> {
     labelRef: React.RefObject<HTMLDivElement>;
     gmItemRef: React.RefObject<HTMLDivElement>;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
 
     constructor(props: Props) {
         super(props);
 
         this.labelRef = React.createRef();
         this.gmItemRef = React.createRef();
+        this.menuTriggerRef = React.createRef();
 
         this.state = {
             isMenuOpen: false,
@@ -156,7 +158,13 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
         }
     }
 
-    handleMenuToggle = (isMenuOpen: boolean): void => this.setState({isMenuOpen});
+    handleMenuToggle = (isMenuOpen: boolean, e?: SyntheticEvent): void => {
+        if (e) {
+            e.preventDefault();
+        }
+
+        this.setState({isMenuOpen});
+    };
 
     render(): JSX.Element {
         const {
@@ -252,6 +260,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                     channelLink={link}
                     isMenuOpen={this.state.isMenuOpen}
                     onToggleMenu={this.handleMenuToggle}
+                    menuTriggerRef={this.menuTriggerRef}
                 />
             </>
         );
@@ -266,13 +275,17 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 selected: isChannelSelected,
             },
         ]);
-        let element = (
+        const element = (
             <Link
                 className={className}
                 id={`sidebarItem_${channel.name}`}
                 aria-label={this.getAriaLabel()}
                 to={link}
                 onClick={this.handleChannelClick}
+                onContextMenu={(event) => {
+                    event.preventDefault();
+                    this.menuTriggerRef && this.menuTriggerRef.current?.click();
+                }}
                 tabIndex={this.props.isCollapsed ? -1 : 0}
             >
                 {content}
@@ -280,16 +293,16 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
             </Link>
         );
 
-        if (isDesktopApp()) {
-            element = (
-                <CopyUrlContextMenu
-                    link={this.props.link}
-                    menuId={channel.id}
-                >
-                    {element}
-                </CopyUrlContextMenu>
-            );
-        }
+        // if (isDesktopApp()) {
+        //     element = (
+        //         <CopyUrlContextMenu
+        //             link={this.props.link}
+        //             menuId={channel.id}
+        //         >
+        //             {element}
+        //         </CopyUrlContextMenu>
+        //     );
+        // }
 
         return element;
     }
