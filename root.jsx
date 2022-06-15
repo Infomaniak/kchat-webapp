@@ -84,7 +84,7 @@ function appendOnLoadEvent(fn) {
 appendOnLoadEvent(() => {
     if (isDesktopApp()) {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js', {scope: '/static'}).then((registration) => {
+            navigator.serviceWorker.register('/static/service-worker.js', {scope: '/static/'}).then((registration) => {
                 console.log('SW registered: ', registration);
                 registration.unregister();
             }).catch((registrationError) => {
