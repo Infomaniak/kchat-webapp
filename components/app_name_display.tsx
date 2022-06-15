@@ -6,6 +6,7 @@ import React, {ReactNode, CSSProperties} from 'react';
 import loaderkChat from 'images/logo_compact.png';
 
 import './app_name_display.scss';
+import {isDesktopApp} from 'utils/user_agent';
 type Props = {
     position: 'absolute' | 'fixed' | 'relative' | 'static' | 'inherit';
     style?: CSSProperties;
@@ -43,9 +44,11 @@ export default class AppNameDisplay extends React.PureComponent<Props> {
                     src={icon}
                     alt='kchat logo'
                 />
-                <span className='app-name__title'>
-                    {appName}
-                </span>
+                {!isDesktopApp() && (
+                    <span className='app-name__title'>
+                        {appName}
+                    </span>
+                )}
             </div>
         );
     }
