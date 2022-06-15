@@ -6,11 +6,13 @@
         min-width: 220px;
         max-width: 270px;
         max-height: 80vh;
-        padding: 8px 0;
+        // Infomaniak edit
+        padding: 4px 0;
         border-radius: 4px;
 
         ul {
-            padding: 8px 0;
+            // Infomaniak edit
+            padding: 4px 0;
             margin: 0;
         }
 
@@ -129,7 +131,8 @@
             height: 34px;
             align-items: center;
             justify-content: space-between;
-            padding: 0 15px;
+            // Infomaniak edit
+            padding: 0 10px;
             margin: 0;
         }
 
@@ -162,7 +165,8 @@
 
             a,
             button {
-                padding: 0 20px;
+                // Infomaniak edit
+                padding: 0 10px;
 
                 .icon {
                     color: rgba(var(--center-channel-color-rgb), 0.56);
