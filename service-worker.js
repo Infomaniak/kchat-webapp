@@ -7,16 +7,17 @@ self.addEventListener('message', (event) => {
     }
 });
 
-self.addEventListener('install', (evt) => {
+self.addEventListener('install', () => {
     console.log('Service worker has been installed');
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', () => {
     console.log('Claiming control');
     return self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
+    console.log("catch fetch");
     if (self.token && self.token !== null) {
         const newRequest = new Request(event.request, {
             headers: {Authorization: `Bearer ${self.token}`},
