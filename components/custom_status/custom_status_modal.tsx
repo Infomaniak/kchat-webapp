@@ -147,7 +147,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
         const expiresAt = calculateExpiryTime();
         const customStatus: UserCustomStatus = {
             emoji: emoji || 'speech_balloon',
-            text: text ? text.trim() : '',
+            text: text.trim(),
             duration: duration === CUSTOM_DATE_TIME ? DATE_AND_TIME : duration,
         };
         if (expiresAt) {
@@ -282,7 +282,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
 
     const showSuggestions = !isStatusSet || areSelectedAndSetStatusSame;
 
-    const disableSetStatus = !isStatusSet || (text && text.length > CUSTOM_STATUS_TEXT_CHARACTER_LIMIT);
+    const disableSetStatus = !isStatusSet || text.length > CUSTOM_STATUS_TEXT_CHARACTER_LIMIT;
 
     const showDateAndTimeField = !showSuggestions && (duration === CUSTOM_DATE_TIME || duration === DATE_AND_TIME);
 
