@@ -10,7 +10,7 @@ This document includes a list of open source components used in Mattermost Web A
 
 ## @mattermost/compass-components
 
-This product contains '@mattermost/compass-components' by Mattermost.
+This product contains '@infomaniak/compass-components' by Mattermost.
 
 The compass components package is the implementation of the compass design system meant (but not limited) to be used in the mattermost products: Messaging, Playbooks and Focalboard.
 
@@ -21,9 +21,9 @@ The compass components package is the implementation of the compass design syste
 
 ---
 
-## @mattermost/compass-icons
+## @infomaniak/compass-icons
 
-This product contains '@mattermost/compass-icons' by Mattermost.
+This product contains '@infomaniak/compass-icons' by Mattermost.
 
 Simple steps to adding new icons to the Compass Icons font.
 

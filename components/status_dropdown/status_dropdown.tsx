@@ -5,10 +5,10 @@ import React, {ReactNode} from 'react';
 import classNames from 'classnames';
 import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
-import StatusIcon from '@mattermost/compass-components/components/status-icon';
-import Text from '@mattermost/compass-components/components/text';
-import Icon from '@mattermost/compass-components/foundations/icon/Icon';
-import {TUserStatus} from '@mattermost/compass-components/shared';
+import StatusIcon from '@infomaniak/compass-components/components/status-icon';
+import Text from '@infomaniak/compass-components/components/text';
+import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
+import {TUserStatus} from '@infomaniak/compass-components/shared';
 
 import {PreferenceType} from '@mattermost/types/preferences';
 import {ActionFunc} from 'mattermost-redux/types/actions';

@@ -4,7 +4,7 @@ import React, {memo} from 'react';
 
 import ReactSelect, {ValueType} from 'react-select';
 
-import Icon from '@mattermost/compass-components/foundations/icon/Icon';
+import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
 
 import {TimeFrames} from '@mattermost/types/insights';
 

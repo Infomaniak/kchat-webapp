@@ -3,8 +3,8 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Icon from '@mattermost/compass-components/foundations/icon';
-import Heading from '@mattermost/compass-components/components/heading';
+import Icon from '@infomaniak/compass-components/foundations/icon';
+import Heading from '@infomaniak/compass-components/components/heading';
 
 import {useProducts, useCurrentProductId} from '../../../hooks';
 

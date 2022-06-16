@@ -8,7 +8,7 @@ import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 import {usePopper} from 'react-popper';
 import {CSSTransition} from 'react-transition-group';
-import {DotsHorizontalIcon, HelpCircleOutlineIcon} from '@mattermost/compass-icons/components';
+import {DotsHorizontalIcon, HelpCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 import Constants from 'utils/constants';
