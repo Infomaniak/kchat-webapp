@@ -78,7 +78,6 @@ export function lookupMimeType(filename: string): string {
 
 export function getFileUrl(fileId: string): string {
     const params: any = {};
-    params.download = 1;
 
     if (isDesktopApp() && Client4.getToken()) {
         params.access_token = Client4.getToken();
