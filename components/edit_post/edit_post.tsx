@@ -4,7 +4,7 @@
 import React, {ClipboardEventHandler, memo, useCallback, useEffect, useRef, useState} from 'react';
 import classNames from 'classnames';
 import {useIntl} from 'react-intl';
-import {EmoticonPlusOutlineIcon} from '@mattermost/compass-icons/components';
+import {EmoticonPlusOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {Post} from '@mattermost/types/posts';
 import {Emoji, SystemEmoji} from '@mattermost/types/emojis';

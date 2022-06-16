@@ -4,7 +4,7 @@ import React, {useRef, useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled, {css} from 'styled-components';
 
-import Icon from '@mattermost/compass-components/foundations/icon/Icon';
+import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
 import {FormattedMessage} from 'react-intl';
 
 import {useFirstAdminUser, useIsCurrentUserSystemAdmin} from 'components/global_header/hooks';

@@ -13,8 +13,8 @@ import {
     FormatQuoteOpenIcon,
     FormatListBulletedIcon,
     FormatListNumberedIcon,
-} from '@mattermost/compass-icons/components';
-import IconProps from '@mattermost/compass-icons/components/props';
+} from '@infomaniak/compass-icons/components';
+import IconProps from '@infomaniak/compass-icons/components/props';
 
 import KeyboardShortcutSequence, {
     KeyboardShortcutDescriptor,

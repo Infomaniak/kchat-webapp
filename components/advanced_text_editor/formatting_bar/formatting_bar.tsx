@@ -6,7 +6,7 @@ import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import {usePopper} from 'react-popper';
 import {CSSTransition} from 'react-transition-group';
-import {DotsHorizontalIcon} from '@mattermost/compass-icons/components';
+import {DotsHorizontalIcon} from '@infomaniak/compass-icons/components';
 
 import {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 import ToggleFormattingBar from '../toggle_formatting_bar/toggle_formatting_bar';

@@ -5,7 +5,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import classNames from 'classnames';
-import {PaperclipIcon} from '@mattermost/compass-icons/components';
+import {PaperclipIcon} from '@infomaniak/compass-icons/components';
 
 import dragster from 'utils/dragster';
 import Constants from 'utils/constants';

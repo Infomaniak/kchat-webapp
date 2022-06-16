@@ -4,7 +4,7 @@
 import React, {CSSProperties, useCallback, useRef, useState} from 'react';
 import classNames from 'classnames';
 import {useIntl} from 'react-intl';
-import {EmoticonHappyOutlineIcon} from '@mattermost/compass-icons/components';
+import {EmoticonHappyOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {Emoji} from '@mattermost/types/emojis';
 import {FileInfo} from '@mattermost/types/files';

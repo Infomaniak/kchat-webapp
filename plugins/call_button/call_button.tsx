@@ -5,8 +5,8 @@ import React, {CSSProperties, useState, useEffect, useRef} from 'react';
 import {useIntl} from 'react-intl';
 import classNames from 'classnames';
 
-import PhoneOutlineIcon from '@mattermost/compass-icons/components/phone-outline';
-import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
+import PhoneOutlineIcon from '@infomaniak/compass-icons/components/phone-outline';
+import ChevronDownIcon from '@infomaniak/compass-icons/components/chevron-down';
 
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Menu from 'components/widgets/menu/menu';

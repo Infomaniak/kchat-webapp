@@ -3,7 +3,7 @@
 
 import React, {memo} from 'react';
 import classNames from 'classnames';
-import {FormatLetterCaseIcon} from '@mattermost/compass-icons/components';
+import {FormatLetterCaseIcon} from '@infomaniak/compass-icons/components';
 import {useIntl} from 'react-intl';
 
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';

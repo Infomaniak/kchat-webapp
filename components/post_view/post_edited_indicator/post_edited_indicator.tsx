@@ -3,7 +3,7 @@
 
 import React from 'react';
 import {useIntl} from 'react-intl';
-import Icon from '@mattermost/compass-components/foundations/icon';
+import Icon from '@infomaniak/compass-components/foundations/icon';
 
 import {getDateForTimezone} from 'mattermost-redux/utils/timezone_utils';
 import {isSameDay, isWithinLastWeek, isYesterday} from 'utils/datetime';

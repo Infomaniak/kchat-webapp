@@ -4,7 +4,7 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import IconButton from '@mattermost/compass-components/components/icon-button';
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';

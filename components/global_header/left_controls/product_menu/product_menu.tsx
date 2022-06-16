@@ -5,7 +5,7 @@ import React, {useRef} from 'react';
 import styled from 'styled-components';
 import {useDispatch, useSelector} from 'react-redux';
 
-import IconButton from '@mattermost/compass-components/components/icon-button';
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
