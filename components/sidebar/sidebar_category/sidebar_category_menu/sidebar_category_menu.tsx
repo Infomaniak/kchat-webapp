@@ -22,6 +22,7 @@ type Props = {
     isMenuOpen: boolean;
     onToggleMenu: (open: boolean) => void;
     intl: IntlShape;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
         setCategoryMuted: (categoryId: string, muted: boolean) => void;
@@ -220,7 +221,7 @@ class SidebarCategoryMenu extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {intl, category} = this.props;
+        const {intl, category, menuTriggerRef} = this.props;
 
         return (
             <React.Fragment>
@@ -232,6 +233,7 @@ class SidebarCategoryMenu extends React.PureComponent<Props, State> {
                     onOpenDirectionChange={this.handleOpenDirectionChange}
                     onToggleMenu={this.onToggleMenu}
                     tooltipText={intl.formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'})}
+                    menuButtonRef={menuTriggerRef}
                 >
                     {this.renderDropdownItems()}
                 </SidebarMenu>

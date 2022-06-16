@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable no-console */
 import React, {useRef} from 'react';
 import {injectIntl, IntlShape, FormattedMessage} from 'react-intl';
 
@@ -7,13 +8,12 @@ import {injectIntl, IntlShape, FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
 import OverlayTrigger from 'components/overlay_trigger';
-import {getCurrentChannelId, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
 import Tooltip from 'components/tooltip';
 
 import Constants from 'utils/constants';
 
-import store from 'stores/redux_store.jsx';
 import {GlobalState} from 'types/store';
 
 import SvgCallComponent from './SvgCallComponent';
@@ -22,28 +22,28 @@ export type Props = {
     currentChannelID: string;
     hasCall?: boolean;
     intl: IntlShape;
-    startCallInChannel: Function;
+    startCallInChannel: (channelID: string) => void;
+    isInCall: boolean;
 }
 
-// const configOverwrite = {
-//     startWithAudioMuted: false,
-//     startWithVideoMuted: true,
-//     subject: 'toto',
-// };
+function logInfo(props: Props, connectedChannelID: string, channelID: string) {
+    console.log(props);
+    console.log('');
+    console.log('Connected voice channel Id => ', connectedChannelID);
+    console.log('Current channel Id => ', channelID);
+}
 
 function MeetButton(props: Props) {
     // const {formatMessage} = props.intl;
     const {startCallInChannel} = props;
-    const state = store.getState();
-    const connectedCallID = useSelector((state: GlobalState) => state.views.calls.connectedCallID);
+    const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
     const ref = useRef<HTMLButtonElement>(null);
     const channelID = useSelector(getCurrentChannelId);
-    const currentUserId = getCurrentUserId(state);
     const onClick = React.useCallback(() => {
         startCallInChannel(channelID);
     }, [channelID]);
 
-    const userIsInCall = connectedCallID ? props.hasCall[connectedCallID].map((u) => u).includes(currentUserId) : false;
+    logInfo(props, connectedChannelID, channelID);
 
     const tooltip = (
         <Tooltip id='call'>
@@ -54,7 +54,7 @@ function MeetButton(props: Props) {
         </Tooltip>
     );
 
-    const btnClasses = `channel-header__icon channel-header__icon--call ${userIsInCall && 'channel-header__icon--calling'}`;
+    const btnClasses = `channel-header__icon channel-header__icon--call ${props.isInCall && 'channel-header__icon--calling'}`;
     return (
         <button
             type='button'

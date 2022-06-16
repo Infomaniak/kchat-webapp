@@ -1734,17 +1734,9 @@ function handleConferenceUserConnected(msg) {
 
 function handleConferenceUserDisconnected(msg) {
     return (doDispatch, doGetState) => {
-        console.log(msg);
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
 
-        // console.log({
-        //     channelID: msg.data.channel_id,
-        //     userID: msg.data.user_id,
-        //     currentUserID: getCurrentUserId(getState()),
-        //     url: msg.data.url,
-        //     id: Object.keys(calls[msg.data.channel_id])[0],
-        // });
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
             data: {

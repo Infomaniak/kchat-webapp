@@ -32,6 +32,7 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
+    onContextMenu={[Function]}
   >
     <Connect(injectIntl(SidebarCategoryMenu))
       category={
@@ -50,6 +51,11 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
         }
       }
       isMenuOpen={false}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
       onToggleMenu={[Function]}
     />
   </SidebarCategoryHeader>
@@ -108,6 +114,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
+    onContextMenu={[Function]}
   >
     <Connect(injectIntl(SidebarCategoryMenu))
       category={
@@ -126,6 +133,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
         }
       }
       isMenuOpen={false}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
       onToggleMenu={[Function]}
     />
   </SidebarCategoryHeader>
@@ -184,6 +196,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
+    onContextMenu={[Function]}
   >
     <div
       className="SidebarCategory_newLabel"
@@ -208,6 +221,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
         }
       }
       isMenuOpen={false}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
       onToggleMenu={[Function]}
     />
   </SidebarCategoryHeader>
@@ -287,6 +305,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
+    onContextMenu={[Function]}
   >
     <Connect(injectIntl(SidebarCategorySortingMenu))
       category={
@@ -415,6 +434,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
+    onContextMenu={[Function]}
   >
     <Connect(injectIntl(SidebarCategorySortingMenu))
       category={

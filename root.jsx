@@ -6,6 +6,8 @@ import './entry.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import {isDesktopApp} from 'utils/user_agent';
+
 import {logError} from 'mattermost-redux/actions/errors';
 
 // Import our styles
@@ -80,14 +82,17 @@ function appendOnLoadEvent(fn) {
 }
 
 appendOnLoadEvent(() => {
+    if (isDesktopApp()) {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/service-worker.js', {scope: '/static/'}).then((registration) => {
+                console.log('SW registered: ', registration);
+                registration.unregister();
+            }).catch((registrationError) => {
+                console.log('SW registration failed: ', registrationError);
+            });
+        }
+    }
+
     // Do the pre-render setup and call renderRootComponent when done
     preRenderSetup(renderRootComponent);
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/static/service-worker.js', {scope: '/'}).then((registration) => {
-            console.log('SW registered: ', registration);
-        }).catch((registrationError) => {
-            console.log('SW registration failed: ', registrationError);
-        });
-    }
 });

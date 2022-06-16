@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable max-lines */
 
 import React, {ReactNode} from 'react';
 import classNames from 'classnames';
@@ -342,6 +343,11 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
         const setOffline = needsConfirm ? () => this.showStatusChangeConfirmation('offline') : this.setOffline;
         const setCustomTimedDnd = needsConfirm ? () => this.showStatusChangeConfirmation('dnd') : this.setCustomTimedDnd;
 
+        const redirectToManagerProfile = (e: Event): void => {
+            e.preventDefault();
+            window.open('https://manager.infomaniak.com/v3/ng/profile/user/dashboard', '_blank');
+        };
+
         const selectedIndicator = (
             <Icon
                 glyph={'check'}
@@ -505,12 +511,10 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                         />
                     </Menu.Group>
                     <Menu.Group>
-                        <Menu.ItemToggleModalRedux
+                        <Menu.ItemAction
                             id='accountSettings'
                             ariaLabel='Profile'
-                            modalId={ModalIdentifiers.USER_SETTINGS}
-                            dialogType={UserSettingsModal}
-                            dialogProps={{isContentProductSettings: false}}
+                            onClick={redirectToManagerProfile}
                             text={localizeMessage('navbar_dropdown.accountSettings', 'Profile')}
                             icon={(
                                 <Icon
@@ -527,7 +531,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                                     <CompleteYourProfileTour/>
                                 </div>
                             )}
-                        </Menu.ItemToggleModalRedux>
+                        </Menu.ItemAction>
                     </Menu.Group>
                     <Menu.Group>
                         <Menu.ItemAction

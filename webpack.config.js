@@ -277,7 +277,7 @@ var config = {
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' cdn.rudderlabs.com/ js.stripe.com/v3 kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.preprod.dev.infomaniak.ch kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
                 },
             },
         }),
@@ -311,18 +311,17 @@ var config = {
                 {from: 'images/cloud-laptop.png', to: 'images'},
                 {from: 'images/trial-ended.png', to: 'images'},
                 {from: 'call.html', to: ''},
-
-                // {from: 'service-worker.js', to: '/'},
+                {from: 'service-worker.js', to: ''},
             ],
         }),
 
         // Generate manifest.json, honouring any configured publicPath. This also handles injecting
         // <link rel="apple-touch-icon" ... /> and <meta name="apple-*" ... /> tags into root.html.
         new WebpackPwaManifest({
-            name: 'Mattermost',
-            short_name: 'Mattermost',
+            name: 'kChat',
+            short_name: 'kChat',
             start_url: '..',
-            description: 'Mattermost is an open source, self-hosted Slack-alternative',
+            description: 'Infomaniak kChat',
             background_color: '#ffffff',
             inject: true,
             ios: true,
@@ -475,6 +474,13 @@ if (targetIsDevServer) {
     };
 }
 
+var sw = {
+    entry: ['./service-worker.js'],
+    output: {
+        filename: 'service-worker.js',
+    },
+};
+
 // Export PRODUCTION_PERF_DEBUG=1 when running webpack to enable support for the react profiler
 // even while generating production code. (Performance testing development code is typically
 // not helpful.)
@@ -491,4 +497,4 @@ if (process.env.PRODUCTION_PERF_DEBUG) { //eslint-disable-line no-process-env
     };
 }
 
-module.exports = config;
+module.exports = [sw, config];

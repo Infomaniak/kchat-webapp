@@ -118,11 +118,13 @@ import {CompleteOnboardingRequest} from '@mattermost/types/setup';
 import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/threads';
 import {TopChannelResponse, TopReactionResponse} from '@mattermost/types/insights';
 
-import {cleanUrlForLogging} from './errors';
-import {buildQueryString} from './helpers';
 import {isDesktopApp} from 'utils/user_agent';
 
 import {IKConstants} from 'utils/constants-ik';
+
+import {cleanUrlForLogging} from './errors';
+import {buildQueryString} from './helpers';
+
 import {TelemetryHandler} from './telemetry';
 
 const HEADER_AUTH = 'Authorization';
@@ -205,6 +207,9 @@ export default class Client4 {
 
     setToken(token: string) {
         this.token = token;
+        if ('serviceWorker' in navigator) {
+            navigator?.serviceWorker?.controller?.postMessage({token});
+        }
     }
 
     setCSRF(csrfToken: string) {
@@ -774,7 +779,7 @@ export default class Client4 {
             (isDesktopApp() ? `${IKConstants.LOGIN_URL}logout` : `${this.getUsersRoute()}/logout`),
             {method: 'post'},
         );
-        console.log(response)
+        console.log(response);
         if (response.ok) {
             this.token = '';
             if (isDesktopApp()) {
@@ -4053,7 +4058,7 @@ export default class Client4 {
      * eg.  const query = JSON.stringify({query: `{license, config}`});
      *      client4.fetchWithGraphQL(query);
      */
-     fetchWithGraphQL = async <DataResponse>(query: string) => {
+    fetchWithGraphQL = async <DataResponse>(query: string) => {
         return this.doFetch<DataResponse>(this.getGraphQLUrl(), {method: 'post', body: query});
     }
 
@@ -4085,6 +4090,41 @@ export default class Client4 {
 
         if ((response.status === 401 && data?.result === 'redirect') && !isDesktopApp()) {
             window.location.href = data.uri;
+        }
+
+        if ((response.status === 403 || (response.status === 401 && data?.result === 'redirect')) && isDesktopApp()) {
+            if (url.indexOf('/commands/') === -1) {
+                const token = localStorage.getItem('IKToken');
+                const refreshToken = localStorage.getItem('IKRefreshToken');
+                const isRefreshing = localStorage.getItem('refreshingToken');
+                this.setToken('');
+                this.setCSRF('');
+
+                if (token && refreshToken && isRefreshing !== '1') {
+                    localStorage.setItem('refreshingToken', '1');
+                    this.refreshIKLoginToken(
+                        refreshToken,
+                        `${IKConstants.LOGIN_URL}`,
+                        `${IKConstants.CLIENT_ID}`,
+                    ).then((response) => {
+                        console.log('getRefreshToken from client', response);
+
+                        const d = new Date();
+                        d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
+                        localStorage.setItem('IKToken', response.access_token);
+                        localStorage.setItem('IKRefreshToken', response.refresh_token);
+                        localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
+                        localStorage.setItem('tokenExpired', '0');
+                        this.setToken(response.access_token);
+                        this.setCSRF(response.access_token);
+                        this.setAuthHeader = true;
+                        localStorage.removeItem('refreshingToken');
+                    }).catch((error) => {
+                        console.log('catch refresh error', error);
+                        localStorage.removeItem('refreshingToken');
+                    });
+                }
+            }
         }
 
         if (headers.has(HEADER_X_VERSION_ID)) {

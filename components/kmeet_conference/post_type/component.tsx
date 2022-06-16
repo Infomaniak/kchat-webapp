@@ -4,14 +4,16 @@ import React from 'react';
 import moment from 'moment-timezone';
 import styled from 'styled-components';
 
+import {UserProfile} from 'mattermost-redux/types/users';
+
 import ActiveCallIcon from 'components/widgets/icons/active_call_icon';
 import CallIcon from 'components/widgets/icons/call_icon';
 import LeaveCallIcon from 'components/widgets/icons/leave_call_icon';
 import ConnectedProfiles from '../connected_profiles';
 
 import {Post} from 'mattermost-redux/types/posts';
-import {UserProfile} from 'mattermost-redux/types/users';
 import {isDesktopApp} from 'utils/user_agent';
+import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
 interface Props {
     post: Post;
@@ -30,6 +32,12 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, l
     const client = window;
 
     window.addEventListener('beforeunload', (e) => {
+        window.postMessage(
+            {
+                type: 'window-will-unloaded',
+            },
+            window.origin,
+        );
         if (hasCall && connectedID === post.props.conference_id && !post.props.end_at) {
             e.stopPropagation();
             e.preventDefault();
@@ -71,7 +79,7 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, l
             <SubMain ended={Boolean(post.props.end_at)}>
                 <Left>
                     <CallIndicator ended={Boolean(post.props.end_at)}>
-                        {!post.props.end_at &&
+                        {/* {!post.props.end_at &&
                             <ActiveCallIcon
                                 fill='var(--center-channel-bg)'
                                 style={{width: '100%', height: '100%'}}
@@ -82,7 +90,8 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, l
                                 fill={'rgba(var(--center-channel-color-rgb), 0.56)'}
                                 style={{width: '100%', height: '100%'}}
                             />
-                        }
+                        } */}
+                        <KMeetIcon style={{width: '100%', height: '100%'}}/>
                     </CallIndicator>
                     <MessageWrapper>
                         <Message>{post.message}</Message>
@@ -157,9 +166,8 @@ const Right = styled.div`
 `;
 
 const CallIndicator = styled.div<{ ended: boolean }>`
-    background: ${(props) => (props.ended ? 'rgba(var(--center-channel-color-rgb), 0.16)' : 'var(--online-indicator)')};
     border-radius: 4px;
-    padding: 10px;
+    padding: 4px;
     width: 40px;
     height: 40px;
 `;

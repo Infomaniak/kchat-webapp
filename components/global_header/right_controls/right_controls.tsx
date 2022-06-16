@@ -55,6 +55,8 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     pluggableId={productId}
                 />
             )}
+            {/* eslint-disable-next-line react/self-closing-comp */}
+            <module-reporting-tools-component></module-reporting-tools-component>
             <StatusDropdown/>
         </RightControlsContainer>
     );

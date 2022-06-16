@@ -302,7 +302,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
 
             button {
-                padding: 1px 16px;
+                // Infomaniak edit
+                padding: 0px 10px;
             }
 
             i {
@@ -364,7 +365,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
         .dropdown-menu {
             min-width: 0;
-            padding: 8px 0;
+            // Infomaniak edit
+            padding: 3px 0;
             line-height: 20px;
 
             span {
@@ -372,7 +374,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
 
             button {
-                padding: 1px 16px;
+                // Infomaniak edit
+                padding: 0px 10px;
             }
 
             i {
@@ -1252,6 +1255,13 @@ $sidebarOpacityAnimationDuration: 0.15s;
         display: flex;
         overflow: hidden;
         flex-grow: 1;
+    }
+
+    .SidebarChannelLinkLabel_wrapper > div.truncated {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .DirectChannel__profile-picture {

@@ -217,6 +217,10 @@ export function shouldFocusMainTextbox(e: KeyboardEvent, activeElement: Element 
         return false;
     }
 
+    if (activeElement?.shadowRoot) {
+        return false;
+    }
+
     // Do not focus if we're currently focused on a textarea or input
     const keepFocusTags = ['TEXTAREA', 'INPUT'];
     if (!activeElement || keepFocusTags.includes(activeElement.tagName)) {

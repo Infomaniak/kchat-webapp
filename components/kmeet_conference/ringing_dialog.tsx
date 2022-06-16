@@ -14,7 +14,7 @@ import GenericModal from 'components/generic_modal';
 import Avatars from 'components/widgets/users/avatars';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {DispatchFunc} from 'mattermost-redux/types/actions';
-
+import ring from 'sounds/calls_incoming_ring.mp3';
 // import {Client4} from 'mattermost-redux/client';
 import {UserProfile} from 'mattermost-redux/types/users';
 
@@ -33,11 +33,16 @@ type Props = {
 }
 
 function DialingModal(props: Props) {
+    const audio = new Audio(ring);
+    audio.loop = true;
+    audio.play();
     const {users, channelID, userCalling} = props.calling;
     const dispatch = useDispatch<DispatchFunc>();
     const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
     const state = store.getState();
     const handleOnClose = () => {
+        audio.pause();
+        audio.currentTime = 0;
         if (props.onClose) {
             props.onClose();
         }
@@ -56,7 +61,6 @@ function DialingModal(props: Props) {
         e.preventDefault();
         e.stopPropagation();
         handleOnClose();
-
         // Client4.declineIncomingMeetCall(channelID);
     };
 
@@ -77,6 +81,7 @@ function DialingModal(props: Props) {
                     <Avatars
                         userIds={usersIdsNotMe}
                         size={usersIdsNotMe.length > 1 ? 'xl' : 'xxl'}
+                        totalUsers={usersIdsNotMe.length}
                     />
                 )}
             </div>

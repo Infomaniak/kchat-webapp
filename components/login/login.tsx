@@ -81,7 +81,7 @@ const Login = () => {
 
             // If need to refresh the token
             if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken();
+                refreshIKToken(true);
                 return;
             }
 
