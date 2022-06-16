@@ -326,6 +326,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
       handleOpenDirectMessagesModal={[Function]}
       isCollapsed={false}
       isMenuOpen={false}
+      menuButtonRef={
+        Object {
+          "current": null,
+        }
+      }
       onToggleMenu={[Function]}
     />
     <OverlayTrigger
@@ -455,6 +460,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
       handleOpenDirectMessagesModal={[Function]}
       isCollapsed={false}
       isMenuOpen={false}
+      menuButtonRef={
+        Object {
+          "current": null,
+        }
+      }
       onToggleMenu={[Function]}
     />
     <OverlayTrigger

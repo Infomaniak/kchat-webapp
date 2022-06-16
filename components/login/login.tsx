@@ -116,10 +116,6 @@ const Login = () => {
             }
         }
 
-        onWindowFocus();
-
-        window.addEventListener('focus', onWindowFocus);
-
         // Determine if the user was unexpectedly logged out.
         if (LocalStorageStore.getWasLoggedIn()) {
             if (extraParam === Constants.SIGNIN_CHANGE) {
