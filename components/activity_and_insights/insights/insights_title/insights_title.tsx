@@ -3,7 +3,7 @@
 import React, {memo, useCallback} from 'react';
 import {useIntl} from 'react-intl';
 
-import Icon from '@mattermost/compass-components/foundations/icon/Icon';
+import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
 
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Menu from 'components/widgets/menu/menu';

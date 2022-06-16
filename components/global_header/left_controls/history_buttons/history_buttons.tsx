@@ -3,7 +3,7 @@
 
 import React, {useEffect, useState, useCallback} from 'react';
 import styled from 'styled-components';
-import IconButton from '@mattermost/compass-components/components/icon-button';
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import * as Utils from 'utils/utils';

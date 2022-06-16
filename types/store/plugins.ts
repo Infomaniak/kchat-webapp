@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-import {TIconGlyph} from '@mattermost/compass-components/foundations/icon';
+import {TIconGlyph} from '@infomaniak/compass-components/foundations/icon';
 
 import {ClientPluginManifest} from '@mattermost/types/plugins';
 import {PluginAnalyticsRow} from '@mattermost/types/admin';

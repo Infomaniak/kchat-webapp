@@ -14,7 +14,7 @@ import {logError} from 'mattermost-redux/actions/errors';
 import 'sass/styles.scss';
 import 'katex/dist/katex.min.css';
 
-import '@mattermost/compass-icons/css/compass-icons.css';
+import '@infomaniak/compass-icons/css/compass-icons.css';
 
 import {isDevMode, setCSRFFromCookie} from 'utils/utils';
 import {AnnouncementBarTypes} from 'utils/constants';

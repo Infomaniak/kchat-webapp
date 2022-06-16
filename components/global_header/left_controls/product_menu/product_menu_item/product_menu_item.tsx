@@ -4,7 +4,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
-import Icon, {TIconGlyph} from '@mattermost/compass-components/foundations/icon';
+import Icon, {TIconGlyph} from '@infomaniak/compass-components/foundations/icon';
 
 export interface ProductMenuItemProps {
     destination: string;

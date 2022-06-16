@@ -3,7 +3,7 @@
 
 import React, {useState, useEffect} from 'react';
 
-import ThemeProvider, {lightTheme} from '@mattermost/compass-components/utilities/theme';
+import ThemeProvider, {lightTheme} from '@infomaniak/compass-components/utilities/theme';
 
 import {Theme} from 'mattermost-redux/types/themes';
 

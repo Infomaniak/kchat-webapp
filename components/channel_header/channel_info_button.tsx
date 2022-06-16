@@ -10,8 +10,6 @@ import styled from 'styled-components';
 import {Channel} from '@mattermost/types/channels';
 import {getIsRhsOpen} from 'selectors/rhs';
 
-// import {RHSStates} from 'utils/constants';
-// import {RhsState} from 'types/store/rhs';
 import {closeRightHandSide, showChannelInfo} from 'actions/views/rhs';
 
 import HeaderIconWrapper from './components/header_icon_wrapper';
@@ -33,9 +31,6 @@ const ChannelInfoButton = ({channel}: Props) => {
 
     const isRhsOpen: boolean = useSelector(getIsRhsOpen);
 
-    // const rhsState: RhsState = useSelector(getRhsState);
-    const rhsOpenOnChannelInfo = isRhsOpen; // && rhsState === RHSStates.CHANNEL_INFO;
-
     const toggleRHS = useCallback(() => {
         if (isRhsOpen) {
             dispatch(closeRightHandSide());
@@ -44,10 +39,10 @@ const ChannelInfoButton = ({channel}: Props) => {
         }
     }, [isRhsOpen, channel.id, dispatch]);
 
-    const tooltipKey = rhsOpenOnChannelInfo ? 'closeChannelInfo' : 'openChannelInfo';
+    const tooltipKey = isRhsOpen ? 'closeChannelInfo' : 'openChannelInfo';
 
     let buttonClass = 'channel-header__icon';
-    if (rhsOpenOnChannelInfo) {
+    if (isRhsOpen) {
         buttonClass += ' channel-header__icon--active-inverted';
     }
 

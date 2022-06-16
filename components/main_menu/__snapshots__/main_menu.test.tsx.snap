@@ -1,5 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/Menu should match snapshot with cloud free and team limit reached 1`] = `null`;
+
+exports[`components/Menu should match snapshot with cloud free trial 1`] = `null`;
+
 exports[`components/Menu should match snapshot with guest access disabled and no team invite permission 1`] = `
 <Menu
   ariaLabel="team menu"

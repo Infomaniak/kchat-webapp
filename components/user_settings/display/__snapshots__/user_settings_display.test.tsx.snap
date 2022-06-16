@@ -101,21 +101,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="click_to_reply"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -316,21 +301,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
           />
         }
         updateSection={[Function]}
@@ -551,21 +521,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="click_to_reply"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -776,21 +731,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="click_to_reply"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -939,21 +879,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="click_to_reply"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1077,21 +1002,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
           />
         }
         updateSection={[Function]}
@@ -1302,21 +1212,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
           />
         }
         updateSection={[Function]}
@@ -1555,21 +1450,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="click_to_reply"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1708,21 +1588,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
           />
         }
         updateSection={[Function]}
@@ -1881,21 +1746,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="click_to_reply"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -2034,21 +1884,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
           />
         }
         updateSection={[Function]}
@@ -2219,21 +2054,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="click_to_reply"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -2372,21 +2192,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapsed_reply_threads"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Collapsed Reply Threads (Beta)"
-            id="user.settings.display.collapsedReplyThreadsTitle"
           />
         }
         updateSection={[Function]}
