@@ -17,12 +17,19 @@ self.addEventListener('activate', () => {
 });
 
 self.addEventListener('fetch', (event) => {
-    console.log("catch fetch");
-    if (self.token && self.token !== null) {
-        const newRequest = new Request(event.request, {
-            headers: {Authorization: `Bearer ${self.token}`},
-            mode: 'cors',
-        });
-        return fetch(newRequest);
+    const authHeader = event.request.headers.get('Authorization');
+    if (authHeader !== null) {
+        const authHeaderSplited = authHeader.split(' ');
+
+        if (authHeaderSplited[0] === 'Bearer' && authHeaderSplited[1] && authHeaderSplited[1] !== '') {
+            return;
+        }
+        if (self.token && self.token !== null) {
+            const newRequest = new Request(event.request, {
+                headers: {Authorization: `Bearer ${self.token}`},
+                mode: 'cors',
+            });
+            return fetch(newRequest);
+        }
     }
 });
