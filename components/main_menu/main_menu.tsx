@@ -120,6 +120,11 @@ export class MainMenu extends React.PureComponent<Props> {
         }
     }
 
+    redirectToManagerProfile = (e: Event): void => {
+        e.preventDefault();
+        window.open('https://manager.infomaniak.com/v3/ng/profile/user/dashboard', '_blank');
+    };
+
     render() {
         const {
             appDownloadLink,
@@ -216,11 +221,10 @@ export class MainMenu extends React.PureComponent<Props> {
                     />
                 </Menu.Group>
                 <Menu.Group>
-                    <Menu.ItemToggleModalRedux
+                    <Menu.ItemAction
                         id='accountSettings'
-                        modalId={ModalIdentifiers.USER_SETTINGS}
-                        dialogType={UserSettingsModal}
-                        dialogProps={{isContentProductSettings: true}}
+                        ariaLabel='Profile'
+                        onClick={this.redirectToManagerProfile}
                         text={formatMessage({id: 'navbar_dropdown.accountSettings', defaultMessage: 'Profile'})}
                         icon={<i className='fa fa-cog'/>}
                     />
@@ -301,7 +305,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         />
                     </TeamPermissionGate>
                 </Menu.Group>
-                <Menu.Group>
+                {/* <Menu.Group>
                     <SystemPermissionGate permissions={[Permissions.CREATE_TEAM]}>
                         <Menu.ItemLink
                             id='createTeam'
@@ -325,7 +329,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         text={formatMessage({id: 'navbar_dropdown.leave', defaultMessage: 'Leave Team'})}
                         icon={<LeaveTeamIcon/>}
                     />
-                </Menu.Group>
+                </Menu.Group> */}
                 <Menu.Group>
                     {pluginItems}
                 </Menu.Group>
@@ -337,7 +341,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         text={formatMessage({id: 'navbar_dropdown.integrations', defaultMessage: 'Integrations'})}
                     />
                 </Menu.Group>
-                <Menu.Group>
+                {/* <Menu.Group>
                     <Menu.ItemExternalLink
                         id='helpLink'
                         show={Boolean(this.props.helpLink)}
@@ -366,7 +370,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         text={formatMessage({id: 'navbar_dropdown.about', defaultMessage: 'About {appTitle}'}, {appTitle: this.props.siteName || 'Mattermost'})}
                         icon={<i className='fa fa-info'/>}
                     />
-                </Menu.Group>
+                </Menu.Group> */}
                 <Menu.Group>
                     <Menu.ItemAction
                         id='logout'
