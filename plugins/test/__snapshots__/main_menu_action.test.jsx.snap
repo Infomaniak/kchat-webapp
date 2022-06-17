@@ -64,28 +64,15 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
-        dialogProps={
-          Object {
-            "isContentProductSettings": true,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(injectIntl(UserSettingsModal))",
-            "type": [Function],
-          }
-        }
+      <MenuItemAction
+        ariaLabel="Profile"
         icon={
           <i
             className="fa fa-cog"
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
         text="Profile"
       />
@@ -279,54 +266,6 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
       </Connect(TeamPermissionGate)>
     </MenuGroup>
     <MenuGroup>
-      <Connect(SystemPermissionGate)
-        permissions={
-          Array [
-            "create_team",
-          ]
-        }
-      >
-        <MenuItemLink
-          icon={
-            <i
-              className="fa fa-plus-square"
-            />
-          }
-          id="createTeam"
-          show={true}
-          text="Create a Team"
-          to="/create_team"
-        />
-      </Connect(SystemPermissionGate)>
-      <MenuItemLink
-        icon={
-          <i
-            className="fa fa-plus-square"
-          />
-        }
-        id="joinTeam"
-        show={true}
-        text="Join Another Team"
-        to="/select_team"
-      />
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(LeaveTeamModal)",
-            "type": [Function],
-          }
-        }
-        icon={<LeaveTeamIcon />}
-        id="leaveTeam"
-        modalId="leave_team"
-        show={false}
-        text="Leave Team"
-      />
-    </MenuGroup>
-    <MenuGroup>
       <MenuItemAction
         id="someplugin_pluginmenuitem"
         key="someplugin_pluginmenuitem"
@@ -341,59 +280,6 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
         show={false}
         text="Integrations"
         to="/somename/integrations"
-      />
-    </MenuGroup>
-    <MenuGroup>
-      <MenuItemExternalLink
-        icon={
-          <i
-            className="fa fa-question"
-          />
-        }
-        id="helpLink"
-        show={false}
-        text="Help"
-      />
-      <MenuItemExternalLink
-        icon={
-          <i
-            className="fa fa-phone"
-          />
-        }
-        id="reportLink"
-        show={false}
-        text="Report a Problem"
-      />
-      <MenuItemExternalLink
-        icon={
-          <i
-            className="fa fa-mobile"
-          />
-        }
-        id="nativeAppLink"
-        show={true}
-        text="Download Apps"
-        url=""
-      />
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(AboutBuildModal)",
-            "type": [Function],
-          }
-        }
-        icon={
-          <i
-            className="fa fa-info"
-          />
-        }
-        id="about"
-        modalId="about"
-        show={true}
-        text="About Mattermost"
       />
     </MenuGroup>
     <MenuGroup>

@@ -452,28 +452,15 @@ exports[`components/Menu should match snapshot with most of the thing disabled i
     />
   </MenuGroup>
   <MenuGroup>
-    <MenuItemToggleModalRedux
-      dialogProps={
-        Object {
-          "isContentProductSettings": true,
-        }
-      }
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(injectIntl(UserSettingsModal))",
-          "type": [Function],
-        }
-      }
+    <MenuItemAction
+      ariaLabel="Profile"
       icon={
         <i
           className="fa fa-cog"
         />
       }
       id="accountSettings"
-      modalId="user_settings"
+      onClick={[Function]}
       show={true}
       text="Profile"
     />
@@ -666,54 +653,6 @@ exports[`components/Menu should match snapshot with most of the thing disabled i
       />
     </Connect(TeamPermissionGate)>
   </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "create_team",
-        ]
-      }
-    >
-      <MenuItemLink
-        icon={
-          <i
-            className="fa fa-plus-square"
-          />
-        }
-        id="createTeam"
-        show={true}
-        text="Create a Team"
-        to="/create_team"
-      />
-    </Connect(SystemPermissionGate)>
-    <MenuItemLink
-      icon={
-        <i
-          className="fa fa-plus-square"
-        />
-      }
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
-    <MenuItemToggleModalRedux
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(LeaveTeamModal)",
-          "type": [Function],
-        }
-      }
-      icon={<LeaveTeamIcon />}
-      id="leaveTeam"
-      modalId="leave_team"
-      show={true}
-      text="Leave Team"
-    />
-  </MenuGroup>
   <MenuGroup />
   <MenuGroup>
     <MenuItemLink
@@ -721,59 +660,6 @@ exports[`components/Menu should match snapshot with most of the thing disabled i
       show={false}
       text="Integrations"
       to="/team_name/integrations"
-    />
-  </MenuGroup>
-  <MenuGroup>
-    <MenuItemExternalLink
-      icon={
-        <i
-          className="fa fa-question"
-        />
-      }
-      id="helpLink"
-      show={false}
-      text="Help"
-    />
-    <MenuItemExternalLink
-      icon={
-        <i
-          className="fa fa-phone"
-        />
-      }
-      id="reportLink"
-      show={false}
-      text="Report a Problem"
-    />
-    <MenuItemExternalLink
-      icon={
-        <i
-          className="fa fa-mobile"
-        />
-      }
-      id="nativeAppLink"
-      show={true}
-      text="Download Apps"
-      url=""
-    />
-    <MenuItemToggleModalRedux
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(AboutBuildModal)",
-          "type": [Function],
-        }
-      }
-      icon={
-        <i
-          className="fa fa-info"
-        />
-      }
-      id="about"
-      modalId="about"
-      show={true}
-      text="About Mattermost"
     />
   </MenuGroup>
   <MenuGroup>
@@ -985,28 +871,15 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
     />
   </MenuGroup>
   <MenuGroup>
-    <MenuItemToggleModalRedux
-      dialogProps={
-        Object {
-          "isContentProductSettings": true,
-        }
-      }
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(injectIntl(UserSettingsModal))",
-          "type": [Function],
-        }
-      }
+    <MenuItemAction
+      ariaLabel="Profile"
       icon={
         <i
           className="fa fa-cog"
         />
       }
       id="accountSettings"
-      modalId="user_settings"
+      onClick={[Function]}
       show={true}
       text="Profile"
     />
@@ -1199,54 +1072,6 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
       />
     </Connect(TeamPermissionGate)>
   </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "create_team",
-        ]
-      }
-    >
-      <MenuItemLink
-        icon={
-          <i
-            className="fa fa-plus-square"
-          />
-        }
-        id="createTeam"
-        show={true}
-        text="Create a Team"
-        to="/create_team"
-      />
-    </Connect(SystemPermissionGate)>
-    <MenuItemLink
-      icon={
-        <i
-          className="fa fa-plus-square"
-        />
-      }
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
-    <MenuItemToggleModalRedux
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(LeaveTeamModal)",
-          "type": [Function],
-        }
-      }
-      icon={<LeaveTeamIcon />}
-      id="leaveTeam"
-      modalId="leave_team"
-      show={true}
-      text="Leave Team"
-    />
-  </MenuGroup>
   <MenuGroup />
   <MenuGroup>
     <MenuItemLink
@@ -1254,61 +1079,6 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
       show={false}
       text="Integrations"
       to="/team_name/integrations"
-    />
-  </MenuGroup>
-  <MenuGroup>
-    <MenuItemExternalLink
-      icon={
-        <i
-          className="fa fa-question"
-        />
-      }
-      id="helpLink"
-      show={true}
-      text="Help"
-      url="test-link-help"
-    />
-    <MenuItemExternalLink
-      icon={
-        <i
-          className="fa fa-phone"
-        />
-      }
-      id="reportLink"
-      show={true}
-      text="Report a Problem"
-      url="test-report-link"
-    />
-    <MenuItemExternalLink
-      icon={
-        <i
-          className="fa fa-mobile"
-        />
-      }
-      id="nativeAppLink"
-      show={true}
-      text="Download Apps"
-      url="test"
-    />
-    <MenuItemToggleModalRedux
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(AboutBuildModal)",
-          "type": [Function],
-        }
-      }
-      icon={
-        <i
-          className="fa fa-info"
-        />
-      }
-      id="about"
-      modalId="about"
-      show={true}
-      text="About Mattermost"
     />
   </MenuGroup>
   <MenuGroup>
@@ -1535,28 +1305,15 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
     />
   </MenuGroup>
   <MenuGroup>
-    <MenuItemToggleModalRedux
-      dialogProps={
-        Object {
-          "isContentProductSettings": true,
-        }
-      }
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(injectIntl(UserSettingsModal))",
-          "type": [Function],
-        }
-      }
+    <MenuItemAction
+      ariaLabel="Profile"
       icon={
         <i
           className="fa fa-cog"
         />
       }
       id="accountSettings"
-      modalId="user_settings"
+      onClick={[Function]}
       show={true}
       text="Profile"
     />
@@ -1750,54 +1507,6 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
     </Connect(TeamPermissionGate)>
   </MenuGroup>
   <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "create_team",
-        ]
-      }
-    >
-      <MenuItemLink
-        icon={
-          <i
-            className="fa fa-plus-square"
-          />
-        }
-        id="createTeam"
-        show={true}
-        text="Create a Team"
-        to="/create_team"
-      />
-    </Connect(SystemPermissionGate)>
-    <MenuItemLink
-      icon={
-        <i
-          className="fa fa-plus-square"
-        />
-      }
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
-    <MenuItemToggleModalRedux
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(LeaveTeamModal)",
-          "type": [Function],
-        }
-      }
-      icon={<LeaveTeamIcon />}
-      id="leaveTeam"
-      modalId="leave_team"
-      show={true}
-      text="Leave Team"
-    />
-  </MenuGroup>
-  <MenuGroup>
     <MenuItemAction
       id="plugin-id-1_pluginmenuitem"
       key="plugin-id-1_pluginmenuitem"
@@ -1817,59 +1526,6 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
       show={false}
       text="Integrations"
       to="/team_name/integrations"
-    />
-  </MenuGroup>
-  <MenuGroup>
-    <MenuItemExternalLink
-      icon={
-        <i
-          className="fa fa-question"
-        />
-      }
-      id="helpLink"
-      show={false}
-      text="Help"
-    />
-    <MenuItemExternalLink
-      icon={
-        <i
-          className="fa fa-phone"
-        />
-      }
-      id="reportLink"
-      show={false}
-      text="Report a Problem"
-    />
-    <MenuItemExternalLink
-      icon={
-        <i
-          className="fa fa-mobile"
-        />
-      }
-      id="nativeAppLink"
-      show={true}
-      text="Download Apps"
-      url=""
-    />
-    <MenuItemToggleModalRedux
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(AboutBuildModal)",
-          "type": [Function],
-        }
-      }
-      icon={
-        <i
-          className="fa fa-info"
-        />
-      }
-      id="about"
-      modalId="about"
-      show={true}
-      text="About Mattermost"
     />
   </MenuGroup>
   <MenuGroup>
