@@ -4,7 +4,7 @@
 
 import {batchActions} from 'redux-batched-actions';
 
-
+import {closeModal} from 'actions/views/modals';
 import {
     ChannelTypes,
     EmojiTypes,
@@ -1729,6 +1729,9 @@ function handleConferenceUserConnected(msg) {
                 id: Object.keys(calls[msg.data.channel_id])[0],
             },
         });
+        if (msg.data.user_id === getCurrentUserId(getState())) {
+            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+        }
     };
 }
 
