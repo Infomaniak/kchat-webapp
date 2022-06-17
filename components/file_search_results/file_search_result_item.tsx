@@ -22,6 +22,8 @@ import FilePreviewModal from 'components/file_preview_modal';
 import type {PropsFromRedux, OwnProps} from './index';
 
 import './file_search_result_item.scss';
+import {isDesktopApp} from 'utils/user_agent';
+import {Client4} from 'mattermost-redux/client';
 
 type Props = OwnProps & PropsFromRedux;
 
@@ -116,6 +118,8 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
             );
         }
 
+        const fileDownloadUrl = isDesktopApp() ? `/api/v4/files/${fileInfo.id}?download=1&access_token=${Client4.getToken()}` : `/api/v4/files/${fileInfo.id}?download=1`;
+
         return (
             <div
                 data-testid='search-item-container'
@@ -186,7 +190,7 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                     >
                         <a
                             className='action-icon download-icon'
-                            href={`/api/v4/files/${fileInfo.id}?download=1`}
+                            href={fileDownloadUrl}
                             onClick={this.stopPropagation}
                         >
                             <i className='icon icon-download-outline'/>
