@@ -27,14 +27,12 @@ self.addEventListener('fetch', (event) => {
         if (self.token && self.token !== null) {
             const newRequest = new Request(event.request, {
                 headers: {Authorization: `Bearer ${self.token}`},
-                mode: 'cors',
             });
             return fetch(newRequest);
         }
     } else if (self.token && self.token !== null) {
         const newRequest = new Request(event.request, {
             headers: {Authorization: `Bearer ${self.token}`},
-            mode: 'cors',
         });
         return fetch(newRequest);
     }
