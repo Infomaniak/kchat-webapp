@@ -24,7 +24,7 @@ unit_test:
     when: on_success
     reports:
       junit:
-        - junit.xml
+        - coverage/junit.xml
       cobertura: coverage/cobertura-coverage.xml
   cache:
     key:
@@ -36,7 +36,7 @@ unit_test:
       - node_modules/
       - coverage/
   before_script:
-    - npm ci --cache .npm --prefer-offline
+    - npm ci --cache .npm
   script:
     # typescript
     # - npm run check-types
