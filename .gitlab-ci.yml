@@ -18,15 +18,25 @@ unit_test:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - when: never
+  artifacts:
+    paths:
+      - coverage/
+    when: on_success
+    reports:
+      junit:
+        - coverage/junit.xml
+      cobertura: coverage/cobertura-coverage.xml
   cache:
     key:
       files:
-        - package.json
+        - package-lock.json
       prefix: ${CI_COMMIT_REF_SLUG}
     paths:
       - .npm/
+      - node_modules/
+      - coverage/
   before_script:
-    - npm ci --cache .npm --prefer-offline
+    - npm ci --cache .npm
   script:
     # typescript
     # - npm run check-types
@@ -36,3 +46,24 @@ unit_test:
 
     # unit tests
     - npm run test-ci
+
+pages:
+  stage: test
+  needs: ['unit_test']
+  script:
+    - mkdir .public
+    - cp -r coverage/* .public
+    - mv .public public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_ID'
+      when: on_success
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: never
+  # only:
+  #   - alpha
