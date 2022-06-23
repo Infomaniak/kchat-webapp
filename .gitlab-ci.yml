@@ -53,8 +53,6 @@ unit_test:
 
 pages:
   stage: deploy
-  dependencies:
-    - test
   script:
     - mkdir .public
     - cp -r coverage/* .public
