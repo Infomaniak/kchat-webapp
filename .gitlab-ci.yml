@@ -49,8 +49,7 @@ unit_test:
 
 pages:
   stage: test
-  dependencies:
-    - unit_test
+  needs: ['unit_test']
   script:
     - mkdir .public
     - cp -r coverage/* .public
@@ -58,5 +57,6 @@ pages:
   artifacts:
     paths:
       - public
+  when: always
   # only:
   #   - alpha
