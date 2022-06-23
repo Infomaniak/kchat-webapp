@@ -29,7 +29,7 @@ unit_test:
   cache:
     key:
       files:
-        - package.json
+        - package-lock.json
       prefix: ${CI_COMMIT_REF_SLUG}
     paths:
       - .npm/

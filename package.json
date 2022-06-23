@@ -230,7 +230,8 @@
     ],
     "coverageReporters": [
       "lcov",
-      "text-summary"
+      "text-summary",
+      "cobertura"
     ],
     "moduleNameMapper": {
       "^@mattermost/(client)$": "<rootDir>/packages/$1/src",
@@ -276,8 +277,8 @@
     ]
   },
   "jest-junit": {
-    "outputDirectory": "build",
-    "outputName": "test-results.xml"
+    "outputDirectory": "coverage",
+    "outputName": "junit.xml"
   },
   "scripts": {
     "check": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --cache && stylelint \"**/*.{css,scss}\" --cache",
@@ -285,8 +286,8 @@
     "build": "cross-env NODE_ENV=production webpack",
     "run": "webpack --progress --watch",
     "dev-server": "webpack serve --mode development",
-    "test": "cross-env TZ=Etc/UTC jest --maxWorkers=50% --collectCoverage --coverageDirectory=\"./coverage\" --reporters=default --reporters=jest-junit",
-    "test-ci": "cross-env NODE_OPTIONS=--max_old_space_size=500 TZ=Etc/UTC jest --ci --collectCoverage --coverageDirectory=\"./coverage\" --reporters=default --reporters=jest-junit",
+    "test": "cross-env TZ=Etc/UTC jest --maxWorkers=50% --collectCoverage --coverageDirectory=\"./coverage\"",
+    "test-ci": "cross-env NODE_OPTIONS=--max_old_space_size=500 TZ=Etc/UTC jest --ci --collectCoverage --coverageDirectory=\"./coverage\"",
     "stats": "cross-env NODE_ENV=production webpack --profile --json > webpack_stats.json",
     "updatesnapshot": "cross-env TZ=Etc/UTC jest --updateSnapshot",
     "test:debug": "cross-env TZ=Etc/UTC jest --forceExit --detectOpenHandles",
