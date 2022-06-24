@@ -172,8 +172,9 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                 });
             };
 
+            const channel = getChannel(getState(), {id: channelID});
             const windowFeatures = 'width=1100,height=800,left=200,top=200,resizable=yes';
-            let qParams = `?channelID=${data.id}&channelName=${channelName !== '' ? channelName : data.id}`;
+            let qParams = `?channelID=${data.id}&channelName=${channel.display_name}`;
             if (currentUser) {
                 qParams = qParams.concat('', `&username=${username}&avatarUrl=${avartarUrl}`);
             }
@@ -204,6 +205,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                     id: data?.id,
                     name: channel.display_name,
                     avatar: Client4.getProfilePictureUrl(me.id, me.last_picture_update),
+                    username: me.nickname,
                 },
             },
             window.origin,
