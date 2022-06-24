@@ -914,7 +914,16 @@ export default class CallWidget extends React.PureComponent<Props, State> {
     onExpandClick = () => {
         if (!isDesktopApp() && window.callWindow) {
             window.callWindow.focus();
+            return;
         }
+
+        window.postMessage(
+            {
+                type: 'call-focus',
+                message: {},
+            },
+            window.origin,
+        );
 
         // if (this.state.expandedViewWindow && !this.state.expandedViewWindow.closed) {
         //     this.state.expandedViewWindow.focus();
@@ -922,20 +931,16 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         // }
 
         // // TODO: remove this as soon as we support opening a window from desktop app.
-        if (this.props.show) {
-            this.props.hideExpandedView();
-            this.setState({
-                expanded: false,
-            });
+        // if (this.props.show) {
+        //     this.props.hideExpandedView();
+        //     this.setState({
+        //         expanded: false,
+        //     });
 
-            return;
-        }
+        //     return;
+        // }
 
-        this.props.showExpandedView();
-
-        this.setState({
-            expanded: true,
-        });
+        // this.props.showExpandedView();
 
         // } else {
         //     const expandedViewWindow = window.open(
@@ -944,9 +949,9 @@ export default class CallWidget extends React.PureComponent<Props, State> {
         //         'resizable=yes',
         //     );
 
-        this.setState({
-            expanded: true,
-        });
+        // this.setState({
+        //     expanded: true,
+        // });
 
         // }
         // browserHistory.push(`/${this.props.team.name}/${isDMChannel(this.props.channel) ? 'messages' : 'channels'}/${this.props.channel.name}/call`);

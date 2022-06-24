@@ -193,12 +193,17 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
 
             return;
         }
+        const me = getCurrentUser(getState());
+        const channel = getChannel(getState(), {id: channelID});
+
         window.postMessage(
             {
                 type: 'call-joined',
                 message: {
                     url: data?.url,
                     id: data?.id,
+                    name: channel.display_name,
+                    avatar: Client4.getProfilePictureUrl(me.id, me.last_picture_update),
                 },
             },
             window.origin,
