@@ -100,21 +100,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
       <SettingItemMax
         containerStyle=""
         extraInfo={null}
@@ -310,83 +295,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <SettingItemMax
-        containerStyle=""
-        extraInfo={null}
-        infoPosition="bottom"
-        inputs={
-          Array [
-            <fieldset>
-              <legend
-                className="form-legend hidden-label"
-              >
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Click to open threads"
-                  id="user.settings.display.clickToReply"
-                />
-              </legend>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="click_to_replyFormatA"
-                    name="click_to_replyFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="On"
-                    id="user.settings.sidebar.on"
-                  />
-                </label>
-                <br />
-              </div>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="click_to_replyFormatB"
-                    name="click_to_replyFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Off"
-                    id="user.settings.sidebar.off"
-                  />
-                </label>
-                <br />
-              </div>
-              <div>
-                <br />
-                <injectIntl(FormattedMarkdownMessage)
-                  defaultMessage="When enabled, click anywhere on a message to open the reply thread."
-                  id="user.settings.display.clickToReplyDescription"
-                />
-              </div>
-            </fieldset>,
-          ]
-        }
-        saving={false}
-        section=""
-        submit={[Function]}
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
       <Connect(SettingItemMin)
         section="channel_display_mode"
         title={
@@ -511,21 +419,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
           />
         }
         updateSection={[Function]}
@@ -731,21 +624,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -879,21 +757,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1002,21 +865,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
           />
         }
         updateSection={[Function]}
@@ -1212,21 +1060,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
           />
         }
         updateSection={[Function]}
@@ -1450,21 +1283,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1588,21 +1406,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
           />
         }
         updateSection={[Function]}
@@ -1746,21 +1549,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1884,21 +1672,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
           />
         }
         updateSection={[Function]}
@@ -2054,21 +1827,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -2192,21 +1950,6 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Message Display"
             id="user.settings.display.messageDisplayTitle"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="click_to_reply"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Click to open threads"
-            id="user.settings.display.clickToReply"
           />
         }
         updateSection={[Function]}
