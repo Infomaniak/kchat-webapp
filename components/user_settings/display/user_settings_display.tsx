@@ -1008,7 +1008,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     {linkPreviewSection}
                     {collapseSection}
                     {messageDisplaySection}
-                    {clickToReply}
+                    {/* {clickToReply} */}
                     {channelDisplayModeSection}
                     {oneClickReactionsOnPostsSection}
                     {/* {languagesSection} */}
