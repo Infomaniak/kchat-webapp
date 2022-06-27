@@ -116,7 +116,7 @@ import {
 import {CompleteOnboardingRequest} from '@mattermost/types/setup';
 
 import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/threads';
-import {TopChannelResponse, TopReactionResponse} from '@mattermost/types/insights';
+import {TopChannelResponse, TopReactionResponse, TopThreadResponse} from '@mattermost/types/insights';
 
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -1213,6 +1213,13 @@ export default class Client4 {
         );
     }
 
+    archiveAllTeamsExcept = (teamId: string) => {
+        return this.doFetch<StatusOK>(
+            `${this.getTeamRoute(teamId)}/except`,
+            {method: 'delete'},
+        );
+    }
+
     updateTeam = (team: Team) => {
         this.trackEvent('api', 'api_teams_update_name', {team_id: team.id});
 
@@ -2218,6 +2225,20 @@ export default class Client4 {
     getMyTopChannels = (teamId: string, page: number, perPage: number, timeRange: string) => {
         return this.doFetch<TopChannelResponse>(
             `${this.getUsersRoute()}/me/top/channels${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getTopThreadsForTeam = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopThreadResponse>(
+            `${this.getTeamRoute(teamId)}/top/threads${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+
+    getMyTopThreads = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopThreadResponse>(
+            `${this.getUsersRoute()}/me/top/threads${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
             {method: 'get'},
         );
     }
@@ -3863,17 +3884,17 @@ export default class Client4 {
         );
     }
 
-    requestCloudTrial = (email = '') => {
+    requestCloudTrial = (subscriptionId: string, email = '') => {
         return this.doFetchWithResponse<CloudCustomer>(
             `${this.getCloudRoute()}/request-trial`,
-            {method: 'put', body: JSON.stringify({email})},
+            {method: 'put', body: JSON.stringify({email, subscription_id: subscriptionId})},
         );
     }
 
-    validateBusinessEmail = () => {
+    validateBusinessEmail = (email = '') => {
         return this.doFetchWithResponse<CloudCustomer>(
             `${this.getCloudRoute()}/validate-business-email`,
-            {method: 'post'},
+            {method: 'post', body: JSON.stringify({email})},
         );
     }
 
@@ -4055,7 +4076,7 @@ export default class Client4 {
 
     /**
      * @param query string query of graphQL, pass the json stringified version of the query
-     * eg.  const query = JSON.stringify({query: `{license, config}`});
+     * eg.  const query = JSON.stringify({query: `{license, config}`, operationName: 'queryForLicenseAndConfig'});
      *      client4.fetchWithGraphQL(query);
      */
     fetchWithGraphQL = async <DataResponse>(query: string) => {

@@ -33,7 +33,7 @@ import {
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 
-import {getBool, isCollapsedThreadsEnabled, cloudFreeEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {
     getThread as fetchThread,
@@ -684,6 +684,11 @@ const handleNewPostEventDebounced = debouncePostEvent(100);
 export function handleNewPostEvent(msg) {
     return (myDispatch, myGetState) => {
         const post = msg.data.post;
+
+        if (window.logPostEvents) {
+            // eslint-disable-next-line no-console
+            console.log('handleNewPostEvent - new post received', post);
+        }
         myDispatch(handleNewPost(post, msg));
 
         getProfilesAndStatusesForPosts([post], myDispatch, myGetState);
@@ -711,6 +716,11 @@ export function handleNewPostEvents(queue) {
         // Note that this method doesn't properly update the sidebar state for these posts
         const posts = queue.map((msg) => msg.data.post);
 
+        if (window.logPostEvents) {
+            // eslint-disable-next-line no-console
+            console.log('handleNewPostEvents - new posts received', posts);
+        }
+
         // Receive the posts as one continuous block since they were received within a short period
         const crtEnabled = isCollapsedThreadsEnabled(myGetState());
         const actions = posts.map((post) => receivedNewPost(post, crtEnabled));
@@ -727,6 +737,12 @@ export function handleNewPostEvents(queue) {
 export function handlePostEditEvent(msg) {
     // Store post
     const post = msg.data.post;
+
+    if (window.logPostEvents) {
+        // eslint-disable-next-line no-console
+        console.log('handlePostEditEvent - post edit received', post);
+    }
+
     const crtEnabled = isCollapsedThreadsEnabled(getState());
     dispatch(receivedPost(post, crtEnabled));
 
@@ -744,6 +760,12 @@ export function handlePostEditEvent(msg) {
 
 async function handlePostDeleteEvent(msg) {
     const post = msg.data.post;
+
+    if (window.logPostEvents) {
+        // eslint-disable-next-line no-console
+        console.log('handlePostDeleteEvent - post delete received', post);
+    }
+
     const state = getState();
     const collapsedThreads = isCollapsedThreadsEnabled(state);
 
@@ -795,8 +817,7 @@ async function handleTeamAddedEvent(msg) {
     const state = getState();
     await dispatch(TeamActions.getMyTeamUnreads(isCollapsedThreadsEnabled(state)));
     const license = getLicense(state);
-    const isCloudFreeEnabled = cloudFreeEnabled(state);
-    if (license.Cloud === 'true' && isCloudFreeEnabled) {
+    if (license.Cloud === 'true') {
         dispatch(getTeamsUsage());
     }
 }
@@ -863,8 +884,7 @@ function handleUpdateTeamEvent(msg) {
     const state = store.getState();
     const license = getLicense(state);
     dispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
-    const isCloudFreeEnabled = cloudFreeEnabled(state);
-    if (license.Cloud === 'true' && isCloudFreeEnabled) {
+    if (license.Cloud === 'true') {
         dispatch(getTeamsUsage());
     }
 }
@@ -878,8 +898,7 @@ function handleDeleteTeamEvent(msg) {
     const state = store.getState();
     const {teams} = state.entities.teams;
     const license = getLicense(state);
-    const isCloudFreeEnabled = cloudFreeEnabled(state);
-    if (license.Cloud === 'true' && isCloudFreeEnabled) {
+    if (license.Cloud === 'true') {
         dispatch(getTeamsUsage());
     }
     if (
@@ -1375,7 +1394,15 @@ function handlePluginStatusesChangedEvent(msg) {
 }
 
 function handleIntegrationsUsageChangedEvent(msg) {
-    store.dispatch({type: CloudTypes.RECEIVED_INTEGRATIONS_USAGE, data: msg.data.usage.enabled});
+    const state = store.getState();
+    const license = getLicense(state);
+
+    if (license.Cloud === 'true') {
+        store.dispatch({
+            type: CloudTypes.RECEIVED_INTEGRATIONS_USAGE,
+            data: msg.data.usage.enabled,
+        });
+    }
 }
 
 function handleOpenDialogEvent(msg) {
@@ -1557,19 +1584,24 @@ function handleCloudPaymentStatusUpdated() {
 }
 
 export function handleCloudSubscriptionChanged(msg) {
-    return (doDispatch) => {
-        if (msg.data.limits) {
-            doDispatch({
-                type: CloudTypes.RECEIVED_CLOUD_LIMITS,
-                data: msg.data.limits,
-            });
-        }
+    return (doDispatch, doGetState) => {
+        const state = doGetState();
+        const license = getLicense(state);
 
-        if (msg.data.subscription) {
-            doDispatch({
-                type: CloudTypes.RECEIVED_CLOUD_SUBSCRIPTION,
-                data: msg.data.subscription,
-            });
+        if (license.Cloud === 'true') {
+            if (msg.data.limits) {
+                doDispatch({
+                    type: CloudTypes.RECEIVED_CLOUD_LIMITS,
+                    data: msg.data.limits,
+                });
+            }
+
+            if (msg.data.subscription) {
+                doDispatch({
+                    type: CloudTypes.RECEIVED_CLOUD_SUBSCRIPTION,
+                    data: msg.data.subscription,
+                });
+            }
         }
         return {data: true};
     };

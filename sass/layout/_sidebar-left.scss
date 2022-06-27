@@ -1098,11 +1098,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
             line-height: 18px;
             text-align: justify;
             white-space: nowrap;
-
-            &.truncated {
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
         }
 
         &.expanded {
@@ -1259,8 +1254,8 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
     .SidebarChannelLinkLabel_wrapper > div.truncated {
         display: block;
-        width: 100%;
         overflow: hidden;
+        width: 100%;
         text-overflow: ellipsis;
     }
 
