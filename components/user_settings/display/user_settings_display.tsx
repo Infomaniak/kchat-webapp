@@ -1011,7 +1011,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     {/* {clickToReply} */}
                     {channelDisplayModeSection}
                     {oneClickReactionsOnPostsSection}
-                    {/* {languagesSection} */}
+                    {languagesSection}
                 </div>
             </div>
         );
