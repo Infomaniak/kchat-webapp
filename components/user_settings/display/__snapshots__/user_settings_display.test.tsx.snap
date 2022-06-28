@@ -191,6 +191,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -324,6 +340,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -449,6 +481,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
@@ -652,6 +700,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -785,6 +849,27 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
+    <div>
+      <Connect(ManageLanguage)
+        locale="en"
+        updateSection={[Function]}
+        user={
+          Object {
+            "id": "user_id",
+            "locale": "en",
+            "timezone": Object {
+              "automaticTimezone": "America/New_York",
+              "manualTimezone": "",
+              "useAutomaticTimezone": "true",
+            },
+            "username": "username",
+          }
+        }
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -895,6 +980,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
@@ -1090,6 +1191,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
@@ -1311,6 +1428,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -1436,6 +1569,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
@@ -1577,6 +1726,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -1702,6 +1867,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
@@ -1855,6 +2036,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -1980,6 +2177,22 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Quick reactions on messages"
             id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        describe="English (US)"
+        section="languages"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Language"
+            id="user.settings.display.language"
           />
         }
         updateSection={[Function]}
