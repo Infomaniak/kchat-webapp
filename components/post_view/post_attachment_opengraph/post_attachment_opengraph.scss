@@ -14,12 +14,12 @@
     display: grid;
     width: 100%;
     max-width: 700px;
-    padding: 16px;
-    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    margin: 5px 0;
-    background-color: var(--center-channel-bg);
+    padding: 13px;
+    border-left: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
+    margin: 5px 0 0 5px;
+    // background-color: var(--center-channel-bg);
     border-radius: 4px;
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
+    // box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
 
     /**
      * This is a little hacky way to say every column that gets auto-generated
@@ -33,12 +33,13 @@
     text-decoration: none !important;
     transition: box-shadow;
 
-    &:hover:not(:active) {
-        border-color: rgba(var(--center-channel-color-rgb), 0.24);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
-    }
+    // &:hover:not(:active) {
+    //     border-color: rgba(var(--center-channel-color-rgb), 0.24);
+    //     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
+    // }
 
     &:hover {
+        background-color: transparent;
         .remove-button {
             display: block;
         }
@@ -59,10 +60,10 @@
         border-radius: 4px;
         color: rgba(var(--center-channel-color-rgb), 0.56);
 
-        &:hover:not(:active) {
-            background-color: rgba(var(--center-channel-color-rgb), 0.08);
-            color: rgba(var(--center-channel-color-rgb), 0.56);
-        }
+        // &:hover:not(:active) {
+        //     background-color: rgba(var(--center-channel-color-rgb), 0.08);
+        //     color: rgba(var(--center-channel-color-rgb), 0.56);
+        // }
 
         &:active {
             background-color: rgba(var(--button-bg-rgb), 0.16);
@@ -92,6 +93,9 @@
             font-size: 14px;
             font-weight: 600;
             line-height: 20px;
+            &:hover {
+                text-decoration: underline;
+            }
         }
 
         .description {
@@ -143,7 +147,8 @@
             border-radius: 4px;
 
             img {
-                min-width: 100%;
+                width: 80%;
+                border-radius: 6px;
                 min-height: 100%;
                 object-fit: cover;
             }
