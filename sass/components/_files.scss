@@ -209,6 +209,10 @@
             border-radius: 4px;
             transition: all 0.1s linear;
 
+            .clamp {
+                max-width: max(350px, 65%);
+            }
+
             .file-preview__button {
                 display: block;
             }
