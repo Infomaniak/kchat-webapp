@@ -25,6 +25,7 @@ unit_test:
     reports:
       junit:
         - coverage/junit.xml
+  coverage: '/TOTAL.*\s+(\d+%)$/'
   cache:
     key:
       files:
