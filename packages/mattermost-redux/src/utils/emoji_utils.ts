@@ -17,7 +17,8 @@ export function isSystemEmoji(emoji: Emoji): emoji is SystemEmoji {
 export function getEmojiImageUrl(emoji: Emoji): string {
     // Add infomaniak token to emoji fetch
     const params: any = {};
-    if (isDesktopApp() && Client4.getToken()) {
+
+    if (isDesktopApp() && Client4.getToken() && !isSystemEmoji(emoji)) {
         params.access_token = Client4.getToken();
     }
 
@@ -29,7 +30,6 @@ export function getEmojiImageUrl(emoji: Emoji): string {
     if (isSystemEmoji(emoji)) {
         const emojiUnified = emoji?.unified?.toLowerCase() ?? '';
         const filename = emojiUnified || emoji.short_names[0];
-
         return Client4.getSystemEmojiImageUrl(filename);
     }
 
