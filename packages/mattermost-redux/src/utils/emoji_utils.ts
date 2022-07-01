@@ -18,9 +18,9 @@ export function getEmojiImageUrl(emoji: Emoji): string {
     // Add infomaniak token to emoji fetch
     const params: any = {};
 
-    // if (isDesktopApp() && Client4.getToken() && !isSystemEmoji(emoji)) {
-    //     params.access_token = Client4.getToken();
-    // }
+    if (isDesktopApp() && Client4.getToken() && !isSystemEmoji(emoji)) {
+        params.access_token = Client4.getToken();
+    }
 
     // If its the mattermost custom emoji
     if (!isSystemEmoji(emoji) && emoji.id === 'mattermost') {
