@@ -2800,9 +2800,9 @@ export default class Client4 {
     getCustomEmojiImageUrl = (id: string) => {
         const params: any = {};
 
-        if (isDesktopApp() && this.token) {
-            params.access_token = this.token;
-        }
+        // if (isDesktopApp() && this.token) {
+        //     params.access_token = this.token;
+        // }
         return `${this.getEmojiRoute(id)}/image${buildQueryString(params)}`;
     };
 
