@@ -31,7 +31,7 @@ exports[`components/SingleImageView permalink preview should render with permali
         style={Object {}}
       >
         <div
-          className="image-permalink"
+          className="image-permalink clamp"
         >
           <SizeAwareImage
             className="image-permalink"
@@ -105,7 +105,7 @@ exports[`components/SingleImageView should match snapshot 1`] = `
         style={Object {}}
       >
         <div
-          className=""
+          className="clamp"
         >
           <SizeAwareImage
             className=""
@@ -179,7 +179,7 @@ exports[`components/SingleImageView should match snapshot 2`] = `
         style={Object {}}
       >
         <div
-          className=""
+          className="clamp"
         >
           <SizeAwareImage
             className=""
@@ -257,7 +257,7 @@ exports[`components/SingleImageView should match snapshot, SVG image 1`] = `
         }
       >
         <div
-          className=""
+          className="clamp"
         >
           <SizeAwareImage
             className=""
@@ -335,7 +335,7 @@ exports[`components/SingleImageView should match snapshot, SVG image 2`] = `
         }
       >
         <div
-          className=""
+          className="clamp"
         >
           <SizeAwareImage
             className=""
@@ -409,7 +409,7 @@ exports[`components/SingleImageView should set loaded state on callback of onIma
         style={Object {}}
       >
         <div
-          className=""
+          className="clamp"
         >
           <SizeAwareImage
             className=""
