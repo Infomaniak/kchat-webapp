@@ -100,7 +100,7 @@ export function goBack() {
         const prevState = getPreviousRhsState(getState() as GlobalState);
         dispatch({
             type: ActionTypes.RHS_GO_BACK,
-            state: prevState,
+            state: prevState || 'channel-info',
         });
 
         return {data: true};
