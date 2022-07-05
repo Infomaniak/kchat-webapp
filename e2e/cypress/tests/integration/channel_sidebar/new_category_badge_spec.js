@@ -27,8 +27,7 @@ describe('New category badge', () => {
         cy.uiCreateSidebarCategory(categoryName).as('newCategory');
 
         cy.contains('.SidebarChannelGroup', categoryName, {matchCase: false}).within(() => {
-            // * Verify that the new category has been added to the sidebar and that it has the required badge and drop target
-            cy.get('.SidebarCategory_newLabel').should('be.visible');
+            // * Verify that the new category has been added to the sidebar and that it has the required drop target
             cy.get('.SidebarCategory_newDropBox').should('be.visible');
         });
 
@@ -36,8 +35,7 @@ describe('New category badge', () => {
         cy.uiMoveChannelToCategory('town-square', categoryName);
 
         cy.contains('.SidebarChannelGroup', categoryName, {matchCase: false}).within(() => {
-            // * Verify that the new category badge and drop target have been removed
-            cy.get('.SidebarCategory_newLabel').should('not.exist');
+            // * Verify that the new category drop target have been removed
             cy.get('.SidebarCategory_newDropBox').should('not.exist');
         });
 
@@ -48,8 +46,7 @@ describe('New category badge', () => {
             // * Verify that Town Square has moved out of the new category
             cy.get('#sidebarItem_town-square').should('not.exist');
 
-            // * Verify that the new category badge and drop target did not reappear
-            cy.get('.SidebarCategory_newLabel').should('not.exist');
+            // * Verify that the new drop target did not reappear
             cy.get('.SidebarCategory_newDropBox').should('not.exist');
         });
     });

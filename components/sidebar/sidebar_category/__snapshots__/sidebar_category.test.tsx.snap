@@ -198,14 +198,6 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
     onClick={[Function]}
     onContextMenu={[Function]}
   >
-    <div
-      className="SidebarCategory_newLabel"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="new"
-        id="sidebar_left.sidebar_category.newLabel"
-      />
-    </div>
     <Connect(injectIntl(SidebarCategoryMenu))
       category={
         Object {
