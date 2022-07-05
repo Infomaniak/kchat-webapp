@@ -260,19 +260,9 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
         const renderedChannels = channelIds.map(this.renderChannel);
 
         let categoryMenu: JSX.Element;
-        let newLabel: JSX.Element;
         let directMessagesModalButton: JSX.Element;
         let isCollapsible = true;
         if (isNewCategory) {
-            newLabel = (
-                <div className='SidebarCategory_newLabel'>
-                    <FormattedMessage
-                        id='sidebar_left.sidebar_category.newLabel'
-                        defaultMessage='new'
-                    />
-                </div>
-            );
-
             categoryMenu = (
                 <SidebarCategoryMenu
                     category={category}
@@ -413,7 +403,6 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                                     this.menuTriggerRef && this.menuTriggerRef.current?.click();
                                                 }}
                                             >
-                                                {newLabel}
                                                 {directMessagesModalButton}
                                                 {categoryMenu}
                                             </SidebarCategoryHeader>
