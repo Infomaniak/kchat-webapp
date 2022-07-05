@@ -529,24 +529,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
         }
     }
 
-    .SidebarCategory_newLabel {
-        display: flex;
-        width: 32px;
-        height: 16px;
-        align-items: center;
-        padding: 0 4px;
-        margin-right: 16px;
-        margin-left: 4px;
-        background: var(--mention-bg);
-        border-radius: 4px;
-        color: var(--mention-color);
-        font-size: 10px;
-        font-weight: 600;
-        letter-spacing: 0.01em;
-        line-height: 16px;
-        text-transform: uppercase;
-    }
-
     .SidebarCategory_newDropBox {
         padding-bottom: 6px;
         margin-bottom: -6px;
@@ -595,10 +577,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
     }
 
     .SidebarChannelGroup.a11y--active {
-        .SidebarCategory_newLabel {
-            opacity: 0;
-        }
-
         .SidebarMenu {
             display: block !important;
 
@@ -820,14 +798,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
     .SidebarChannelGroup.menuIsOpen ~ .SidebarChannelGroup .SidebarChannelGroupHeader_groupButton {
         background-color: inherit !important;
-
-        .SidebarCategory_newLabel {
-            display: none;
-        }
-    }
-
-    .SidebarChannelGroup.menuIsOpen .SidebarCategory_newLabel {
-        display: none;
     }
 
     .SidebarNavContainer.disabled .SidebarChannelGroup .SidebarChannelGroupHeader_groupButton {
@@ -843,10 +813,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
             display: block;
         }
 
-        .SidebarCategory_newLabel {
-            display: none;
-        }
-
         .SidebarChannelGroupHeader_sortButton {
             display: block;
         }
@@ -855,7 +821,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
     .SidebarNavContainer:not(.disabled) .SidebarChannelGroup:not(.dropDisabled) .SidebarChannelGroupHeader:not(.SidebarChannelGroupHeader--static) .SidebarChannelGroupHeader_groupButton:hover {
         //cursor: pointer;
 
-        > div:not(.SidebarCategory_newLabel),
         > i {
             color: var(--sidebar-text);
         }
