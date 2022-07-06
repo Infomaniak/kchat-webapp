@@ -187,19 +187,6 @@ export default class SuggestionList extends React.PureComponent {
         };
     }
 
-    renderDivider(type) {
-        return (
-            <div
-                key={type + '-divider'}
-                className='suggestion-list__divider'
-            >
-                <span>
-                    <FormattedMessage id={'suggestion.' + type}/>
-                </span>
-            </div>
-        );
-    }
-
     renderNoResults() {
         return (
             <div
@@ -219,8 +206,6 @@ export default class SuggestionList extends React.PureComponent {
     }
 
     render() {
-        const {renderDividers} = this.props;
-
         if (!this.props.open || this.props.cleared) {
             return null;
         }
@@ -235,7 +220,6 @@ export default class SuggestionList extends React.PureComponent {
             items.push(this.renderNoResults());
         }
 
-        let prevItemType = null;
         for (let i = 0; i < this.props.items.length; i++) {
             const item = this.props.items[i];
             const term = this.props.terms[i];
@@ -243,10 +227,6 @@ export default class SuggestionList extends React.PureComponent {
 
             // ReactComponent names need to be upper case when used in JSX
             const Component = this.props.components[i];
-            if ((renderDividers.includes('all') || renderDividers.includes(item.type)) && prevItemType !== item.type) {
-                items.push(this.renderDivider(item.type));
-                prevItemType = item.type;
-            }
 
             if (item.loading) {
                 items.push(<LoadingSpinner key={item.type}/>);
