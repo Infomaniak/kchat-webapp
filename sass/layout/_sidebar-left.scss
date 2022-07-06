@@ -468,11 +468,12 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
 
             .selected {
-                width: 60%;
+                width: 100%;
                 margin-top: 1px;
+                margin-left: 3px;
                 color: rgba(var(--center-channel-color-rgb), 0.56);
                 font-size: 12px;
-                text-align: right;
+                text-align: left;
                 text-transform: none;
             }
         }
