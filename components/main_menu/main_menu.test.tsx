@@ -231,28 +231,29 @@ describe('components/Menu', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should show leave team option when primary team is not set', () => {
-        const props = {...defaultProps, teamIsGroupConstrained: false, experimentalPrimaryTeam: undefined};
-        const wrapper = getMainMenuWrapper(props);
+    // Infomaniak: leave team is handled through manager.
+    // test('should show leave team option when primary team is not set', () => {
+    //     const props = {...defaultProps, teamIsGroupConstrained: false, experimentalPrimaryTeam: undefined};
+    //     const wrapper = getMainMenuWrapper(props);
 
-        // show leave team option when experimentalPrimaryTeam is not set
-        expect(wrapper.find('#leaveTeam')).toHaveLength(1);
-        expect(wrapper.find('#leaveTeam').find(Menu.ItemToggleModalRedux).props().show).toEqual(true);
-    });
+    //     // show leave team option when experimentalPrimaryTeam is not set
+    //     expect(wrapper.find('#leaveTeam')).toHaveLength(1);
+    //     expect(wrapper.find('#leaveTeam').find(Menu.ItemToggleModalRedux).props().show).toEqual(true);
+    // });
 
-    test('should hide leave team option when experimentalPrimaryTeam is same as current team', () => {
-        const props = {...defaultProps, teamIsGroupConstrained: false};
-        const wrapper = getMainMenuWrapper(props);
-        expect(wrapper.find('#leaveTeam')).toHaveLength(1);
-        expect(wrapper.find('#leaveTeam').find(Menu.ItemToggleModalRedux).props().show).toEqual(true);
-    });
+    // test('should hide leave team option when experimentalPrimaryTeam is same as current team', () => {
+    //     const props = {...defaultProps, teamIsGroupConstrained: false};
+    //     const wrapper = getMainMenuWrapper(props);
+    //     expect(wrapper.find('#leaveTeam')).toHaveLength(1);
+    //     expect(wrapper.find('#leaveTeam').find(Menu.ItemToggleModalRedux).props().show).toEqual(true);
+    // });
 
-    test('should hide leave team option when experimentalPrimaryTeam is same as current team', () => {
-        const props = {...defaultProps, teamIsGroupConstrained: false, experimentalPrimaryTeam: 'other-team'};
-        const wrapper = getMainMenuWrapper(props);
-        expect(wrapper.find('#leaveTeam')).toHaveLength(1);
-        expect(wrapper.find('#leaveTeam').find(Menu.ItemToggleModalRedux).props().show).toEqual(true);
-    });
+    // test('should hide leave team option when experimentalPrimaryTeam is same as current team', () => {
+    //     const props = {...defaultProps, teamIsGroupConstrained: false, experimentalPrimaryTeam: 'other-team'};
+    //     const wrapper = getMainMenuWrapper(props);
+    //     expect(wrapper.find('#leaveTeam')).toHaveLength(1);
+    //     expect(wrapper.find('#leaveTeam').find(Menu.ItemToggleModalRedux).props().show).toEqual(true);
+    // });
 
     test('mobile view should hide the subscribe now button when does not have permissions', () => {
         const noPermissionsState = {...defaultState};

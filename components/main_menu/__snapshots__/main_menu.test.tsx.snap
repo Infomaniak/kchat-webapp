@@ -95,27 +95,37 @@ exports[`components/Menu should match snapshot with guest access disabled and no
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
+    <Connect(TeamPermissionGate)
+      invert={true}
+      permissions={
+        Array [
+          "remove_user_from_team",
+          "manage_team_roles",
+        ]
+      }
+      teamId="team-id"
+    >
+      <MenuItemToggleModalRedux
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(TeamMembersModal)",
+            "type": [Function],
+          }
+        }
+        id="viewMembers"
+        modalId="team_members"
+        show={true}
+        text="View Members"
+      />
+    </Connect(TeamPermissionGate)>
     <MenuItemLink
       id="joinTeam"
       show={false}
       text="Join Another Team"
       to="/select_team"
-    />
-    <MenuItemToggleModalRedux
-      className="destructive"
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(LeaveTeamModal)",
-          "type": [Function],
-        }
-      }
-      id="leaveTeam"
-      modalId="leave_team"
-      show={true}
-      text="Leave Team"
     />
   </MenuGroup>
   <MenuGroup />
@@ -232,27 +242,37 @@ exports[`components/Menu should match snapshot with id 1`] = `
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
+    <Connect(TeamPermissionGate)
+      invert={true}
+      permissions={
+        Array [
+          "remove_user_from_team",
+          "manage_team_roles",
+        ]
+      }
+      teamId="team-id"
+    >
+      <MenuItemToggleModalRedux
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(TeamMembersModal)",
+            "type": [Function],
+          }
+        }
+        id="viewMembers"
+        modalId="team_members"
+        show={true}
+        text="View Members"
+      />
+    </Connect(TeamPermissionGate)>
     <MenuItemLink
       id="joinTeam"
       show={false}
       text="Join Another Team"
       to="/select_team"
-    />
-    <MenuItemToggleModalRedux
-      className="destructive"
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(LeaveTeamModal)",
-          "type": [Function],
-        }
-      }
-      id="leaveTeam"
-      modalId="leave_team"
-      show={true}
-      text="Leave Team"
     />
   </MenuGroup>
   <MenuGroup />
@@ -368,27 +388,37 @@ exports[`components/Menu should match snapshot with most of the thing disabled 1
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
+    <Connect(TeamPermissionGate)
+      invert={true}
+      permissions={
+        Array [
+          "remove_user_from_team",
+          "manage_team_roles",
+        ]
+      }
+      teamId="team-id"
+    >
+      <MenuItemToggleModalRedux
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(TeamMembersModal)",
+            "type": [Function],
+          }
+        }
+        id="viewMembers"
+        modalId="team_members"
+        show={true}
+        text="View Members"
+      />
+    </Connect(TeamPermissionGate)>
     <MenuItemLink
       id="joinTeam"
       show={false}
       text="Join Another Team"
       to="/select_team"
-    />
-    <MenuItemToggleModalRedux
-      className="destructive"
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(LeaveTeamModal)",
-          "type": [Function],
-        }
-      }
-      id="leaveTeam"
-      modalId="leave_team"
-      show={true}
-      text="Leave Team"
     />
   </MenuGroup>
   <MenuGroup />
@@ -787,27 +817,37 @@ exports[`components/Menu should match snapshot with most of the thing enabled 1`
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
+    <Connect(TeamPermissionGate)
+      invert={true}
+      permissions={
+        Array [
+          "remove_user_from_team",
+          "manage_team_roles",
+        ]
+      }
+      teamId="team-id"
+    >
+      <MenuItemToggleModalRedux
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(TeamMembersModal)",
+            "type": [Function],
+          }
+        }
+        id="viewMembers"
+        modalId="team_members"
+        show={true}
+        text="View Members"
+      />
+    </Connect(TeamPermissionGate)>
     <MenuItemLink
       id="joinTeam"
       show={false}
       text="Join Another Team"
       to="/select_team"
-    />
-    <MenuItemToggleModalRedux
-      className="destructive"
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(LeaveTeamModal)",
-          "type": [Function],
-        }
-      }
-      id="leaveTeam"
-      modalId="leave_team"
-      show={true}
-      text="Leave Team"
     />
   </MenuGroup>
   <MenuGroup />
@@ -1206,27 +1246,37 @@ exports[`components/Menu should match snapshot with plugins 1`] = `
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
+    <Connect(TeamPermissionGate)
+      invert={true}
+      permissions={
+        Array [
+          "remove_user_from_team",
+          "manage_team_roles",
+        ]
+      }
+      teamId="team-id"
+    >
+      <MenuItemToggleModalRedux
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(TeamMembersModal)",
+            "type": [Function],
+          }
+        }
+        id="viewMembers"
+        modalId="team_members"
+        show={true}
+        text="View Members"
+      />
+    </Connect(TeamPermissionGate)>
     <MenuItemLink
       id="joinTeam"
       show={false}
       text="Join Another Team"
       to="/select_team"
-    />
-    <MenuItemToggleModalRedux
-      className="destructive"
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "displayName": "Connect(LeaveTeamModal)",
-          "type": [Function],
-        }
-      }
-      id="leaveTeam"
-      modalId="leave_team"
-      show={true}
-      text="Leave Team"
     />
   </MenuGroup>
   <MenuGroup>
