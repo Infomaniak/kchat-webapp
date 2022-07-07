@@ -415,27 +415,37 @@ exports[`plugins/MainMenuActions should match snapshot in web view 1`] = `
           text="Manage Groups"
         />
       </Connect(TeamPermissionGate)>
+      <Connect(TeamPermissionGate)
+        invert={true}
+        permissions={
+          Array [
+            "remove_user_from_team",
+            "manage_team_roles",
+          ]
+        }
+        teamId="someteamid"
+      >
+        <MenuItemToggleModalRedux
+          dialogType={
+            Object {
+              "$$typeof": Symbol(react.memo),
+              "WrappedComponent": [Function],
+              "compare": null,
+              "displayName": "Connect(TeamMembersModal)",
+              "type": [Function],
+            }
+          }
+          id="viewMembers"
+          modalId="team_members"
+          show={true}
+          text="View Members"
+        />
+      </Connect(TeamPermissionGate)>
       <MenuItemLink
         id="joinTeam"
         show={true}
         text="Join Another Team"
         to="/select_team"
-      />
-      <MenuItemToggleModalRedux
-        className="destructive"
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(LeaveTeamModal)",
-            "type": [Function],
-          }
-        }
-        id="leaveTeam"
-        modalId="leave_team"
-        show={false}
-        text="Leave Team"
       />
     </MenuGroup>
     <MenuGroup>
