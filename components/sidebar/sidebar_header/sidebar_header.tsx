@@ -43,7 +43,7 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
         transform: translate(0, 0);
         margin-left: 0;
         min-width: 210px;
-        max-width: 232px;
+        max-width: 250px;
     }
 
     #SidebarContainer & .AddChannelDropdown_dropdownButton {

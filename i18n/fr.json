@@ -4203,7 +4203,7 @@
   "sidebar.types.direct_messages": "MESSAGES PERSONNELS",
   "sidebar.types.favorites": "FAVORIS",
   "sidebar.types.unreads": "NON LUS",
-  "sidebar.unreads": "Plus de messages non lus",
+  "sidebar.unreads": "Messages non lus",
   "sidebar_left.add_channel_dropdown.browseChannels": "Parcourir les canaux",
   "sidebar_left.add_channel_dropdown.browseOrCreateChannels": "Parcourir ou créer des canaux",
   "sidebar_left.add_channel_dropdown.createCategory": "Créer une catégorie",
