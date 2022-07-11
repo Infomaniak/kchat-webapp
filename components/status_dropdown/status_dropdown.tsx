@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 /* eslint-disable max-lines */
 
-import React, {ReactNode} from 'react';
+import React, {ReactNode, CSSProperties} from 'react';
 import classNames from 'classnames';
 import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
@@ -298,6 +298,13 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                 />
             );
 
+        const customStatusTextStyle: CSSProperties = {
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            width: '190px',
+        };
+
         return (
             <Menu.Group>
                 <Menu.ItemToggleModalRedux
@@ -318,6 +325,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                             className='custom_status__text'
                         />
                         <Text
+                            style={customStatusTextStyle}
                             margin='none'
                             color='disabled'
                         >
