@@ -4291,7 +4291,7 @@
   "status_dropdown.menuAriaLabel": "définir un statut",
   "status_dropdown.set_away": "Absent",
   "status_dropdown.set_custom": "Choisir un statut personnalisé",
-  "status_dropdown.set_custom_text": "Définir un texte de statut personnalisé…",
+  "status_dropdown.set_custom_text": "Définir un statut personnalisé…",
   "status_dropdown.set_dnd": "Ne pas déranger",
   "status_dropdown.set_dnd.extra": "Désactive les notifications (sauf e-mails)",
   "status_dropdown.set_offline": "Hors ligne",
