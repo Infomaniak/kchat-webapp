@@ -207,7 +207,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
     }
 
     private handleBackSpace = (e: KeyboardEvent): void => {
-        const excludedElements = ['input', 'textarea'];
+        const excludedElements = ['input', 'textarea', 'module-reporting-tools-component'];
 
         if (e.which === BACKSPACE_CHAR && !(excludedElements.includes((e.target as HTMLElement).tagName.toLowerCase()))) {
             e.preventDefault();
