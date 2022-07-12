@@ -162,7 +162,7 @@ export default class MoreChannels extends React.PureComponent<Props, State> {
     }
 
     setSearchResults = (channels: Channel[]) => {
-        this.setState({searchedChannels: this.state.shouldShowArchivedChannels ? channels.filter((c) => c.delete_at !== 0) : channels.filter((c) => c.delete_at === 0), searching: false});
+        this.setState({searchedChannels: this.state.shouldShowArchivedChannels ? channels.filter((c) => c.deleted_at !== null) : channels.filter((c) => c.deleted_at === null), searching: false});
     }
 
     toggleArchivedChannels = (shouldShowArchivedChannels: boolean) => {
