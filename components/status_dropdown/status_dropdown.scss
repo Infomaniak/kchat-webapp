@@ -104,6 +104,13 @@ button.custom_status__row {
         white-space: nowrap;
     }
 
+    &__textContent {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 190px;
+    }
+
     &__expiry {
         font-size: 12px;
         line-height: 16px;
