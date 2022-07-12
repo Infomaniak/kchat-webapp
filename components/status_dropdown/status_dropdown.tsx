@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 /* eslint-disable max-lines */
 
-import React, {ReactNode, CSSProperties} from 'react';
+import React, {ReactNode} from 'react';
 import classNames from 'classnames';
 import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
