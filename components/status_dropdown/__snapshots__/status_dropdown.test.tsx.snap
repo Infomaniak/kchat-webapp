@@ -313,7 +313,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
             tooltipDirection="bottom"
           />
           <Text
-            className='custom_status__textContent'
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           />
@@ -604,7 +604,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
             tooltipDirection="bottom"
           />
           <Text
-            className='custom_status__textContent'
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -856,7 +856,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
             tooltipDirection="bottom"
           />
           <Text
-            className='custom_status__textContent'
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -1108,7 +1108,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
             tooltipDirection="bottom"
           />
           <Text
-            className='custom_status__textContent'
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -1805,7 +1805,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
             tooltipDirection="bottom"
           />
           <Text
-            className='custom_status__textContent'
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -2066,7 +2066,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
             tooltipDirection="bottom"
           />
           <Text
-            className='custom_status__textContent'
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           />
