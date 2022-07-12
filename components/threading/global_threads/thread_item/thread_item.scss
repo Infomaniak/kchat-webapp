@@ -130,11 +130,25 @@
     }
 
     div.preview {
-        height: 40px;
+        height: 45px;
+        max-height: 55px;
         margin: 0 0 10px;
         color: rgba(var(--center-channel-color-rgb), 1);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
 
-        @include text-clamp(2, 20);
+    div.previewQuote {
+        height: 55px;
+        max-height: 55px;
+        margin: 0 0 10px;
+        color: rgba(var(--center-channel-color-rgb), 1);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
     }
 
     time {
