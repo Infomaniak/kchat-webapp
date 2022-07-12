@@ -133,7 +133,7 @@ function ThreadItem({
     let unreadTimestamp = post.edit_at || post.create_at;
 
     // Makes the space a little bit bigger for quote blocks
-    const spacingClassName = post.message.startsWith('>') ? 'previewQuote' : 'preview';
+    const spacingClassName = post.message.startsWith('>') ? 'preview quote' : 'preview normalText';
 
     // if we have the whole thread, get the posts in it, sorted from newest to oldest.
     // Last post - root post, second to last post - oldest reply. Use that timestamp
