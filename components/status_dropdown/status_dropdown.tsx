@@ -315,10 +315,10 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                         </span>
                         <CustomStatusText
                             text={customStatusText}
-                            className='custom_status__padding'
+                            className='custom_status__text'
                         />
                         <Text
-                            className='custom_status__text'
+                            className='custom_status__textContent'
                             margin='none'
                             color='disabled'
                         >
