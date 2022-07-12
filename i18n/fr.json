@@ -3985,7 +3985,7 @@
   "post_pre_header.pinned": "Epinglé",
   "postlist.toast.history": "Voir l'historique des messages",
   "postlist.toast.newMessages": "{count, number} {count, plural, one {nouveau message} other {nouveaux messages}}",
-  "postlist.toast.newMessagesSince": "{count, number} {count, plural, one {nouveau message} other {nouveaux messages}} depuis {date}",
+  "postlist.toast.newMessagesSince": "{count, number} {count, plural, one {nouveau message} other {nouveaux messages}} depuis {isWithinLastWeek, select, true {} other {le}} {date}",
   "postlist.toast.scrollToBottom": "Aller aux messages récents",
   "postlist.toast.scrollToLatest": "Aller aux nouveaux messages",
   "postlist.toast.searchHint": "Conseil : Essayez {searchShortcut} pour chercher dans ce canal",
