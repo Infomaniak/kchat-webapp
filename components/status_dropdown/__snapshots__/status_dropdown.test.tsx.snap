@@ -308,7 +308,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
             </span>
           </span>
           <CustomStatusText
-            className="custom_status__text"
+            className="custom_status__padding"
             text="In a meeting"
             tooltipDirection="bottom"
           />
@@ -598,7 +598,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
             />
           </span>
           <CustomStatusText
-            className="custom_status__text"
+            className="custom_status__padding"
             text=""
             tooltipDirection="bottom"
           />
@@ -849,7 +849,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
             />
           </span>
           <CustomStatusText
-            className="custom_status__text"
+            className="custom_status__padding"
             text=""
             tooltipDirection="bottom"
           />
@@ -1100,7 +1100,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
             />
           </span>
           <CustomStatusText
-            className="custom_status__text"
+            className="custom_status__padding"
             text=""
             tooltipDirection="bottom"
           />
@@ -1796,7 +1796,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
             />
           </span>
           <CustomStatusText
-            className="custom_status__text"
+            className="custom_status__padding"
             text=""
             tooltipDirection="bottom"
           />
@@ -2056,7 +2056,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
             </span>
           </span>
           <CustomStatusText
-            className="custom_status__text"
+            className="custom_status__padding"
             text="In a meeting"
             tooltipDirection="bottom"
           />

@@ -298,13 +298,6 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                 />
             );
 
-        const customStatusTextStyle: CSSProperties = {
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            width: '190px',
-        };
-
         return (
             <Menu.Group>
                 <Menu.ItemToggleModalRedux
@@ -322,10 +315,10 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                         </span>
                         <CustomStatusText
                             text={customStatusText}
-                            className='custom_status__text'
+                            className='custom_status__padding'
                         />
                         <Text
-                            style={customStatusTextStyle}
+                            className='custom_status__text'
                             margin='none'
                             color='disabled'
                         >
