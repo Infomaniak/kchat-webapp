@@ -146,16 +146,11 @@ export const getUnreadThreadOrderInCurrentTeam: (
     (
         threadsInTeam,
         threads,
-        selectedThreadIdInTeam,
     ) => {
         const ids = threadsInTeam.filter((id) => {
             const thread = threads[id];
             return thread.is_following && (thread.unread_replies || thread.unread_mentions);
         });
-
-        if (selectedThreadIdInTeam && !ids.includes(selectedThreadIdInTeam)) {
-            ids.push(selectedThreadIdInTeam);
-        }
 
         return sortByLastReply(ids, threads);
     },
