@@ -32,14 +32,12 @@ self.addEventListener('fetch', (event) => {
         } else if (self.token && self.token !== null) {
             const newRequest = new Request(event.request, {
                 headers: {Authorization: `Bearer ${self.token}`},
-                mode: 'cors',
             });
             event.respondWith(fetch(newRequest));
         }
     } else if (self.token && self.token !== null) {
         const newRequest = new Request(event.request, {
             headers: {Authorization: `Bearer ${self.token}`},
-            mode: 'cors',
         });
         event.respondWith(fetch(newRequest));
     }
