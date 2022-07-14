@@ -137,14 +137,12 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
-    }
-
-    div.quote {
-        height: 55px;
-    }
-
-    div.normalText {
-        height: 45px;
+        &.nomralText {
+            height: 45px;
+        }
+        &.quote {
+            height: 55px;
+        }
     }
 
     time {
