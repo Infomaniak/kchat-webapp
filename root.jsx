@@ -86,7 +86,6 @@ appendOnLoadEvent(() => {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/static/service-worker.js', {scope: '/'}).then((registration) => {
                 console.log('SW registered: ', registration);
-                registration.unregister();
             }).catch((registrationError) => {
                 console.log('SW registration failed: ', registrationError);
             });
