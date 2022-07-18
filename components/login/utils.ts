@@ -9,6 +9,9 @@ import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 
+const REFRESH_TOKEN_TIME_MARGIN = 30; // How many seconds to refresh before token expires
+const OFFLINE_ATTEMPT_INTERVAL = 2000; // In milliseconds
+
 /**
  * Store IKToken infos in localStorage and update Client
  */
@@ -118,6 +121,7 @@ export function refreshIKToken(redirectToTeam = false) {
         `${IKConstants.CLIENT_ID}`,
     ).then((resp) => {
         console.log('getRefreshToken', resp);
+        setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN));
 
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
@@ -125,8 +129,13 @@ export function refreshIKToken(redirectToTeam = false) {
             redirectUserToDefaultTeam();
         }
     }).catch((error) => {
-        console.log('catch refresh error', error);
-        clearLocalStorageToken();
-        getChallengeAndRedirectToLogin();
+        if (window.navigator.onLine) {
+            console.log('catch refresh error', error);
+            clearLocalStorageToken();
+            getChallengeAndRedirectToLogin();
+        } else {
+            console.log('Offline, waiting for connection');
+            setTimeout(refreshIKToken, OFFLINE_ATTEMPT_INTERVAL);
+        }
     });
 }
