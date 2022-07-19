@@ -284,7 +284,5 @@ describe('components/threading/channel_threads/thread_footer', () => {
         );
 
         expect(wrapper).toMatchSnapshot();
-        expect(wrapper.exists(FollowButton)).toBe(true);
-        expect(wrapper.find(FollowButton).props()).toHaveProperty('isFollowing', true);
     });
 });
