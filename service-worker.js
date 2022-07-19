@@ -28,7 +28,7 @@ self.addEventListener('fetch', (event) => {
         const authHeaderSplited = authHeader.split(' ');
 
         if (authHeaderSplited[0] === 'Bearer' && authHeaderSplited[1] && authHeaderSplited[1] !== '') {
-            event.respondWith(fetch(event.request));
+            return;
         } else if (self.token && self.token !== null) {
             const newRequest = new Request(event.request, {
                 headers: {Authorization: `Bearer ${self.token}`},
