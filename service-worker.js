@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 /* eslint-disable no-console */
+/* eslint-disable consistent-return */
 
 const routesToMatch = ['/api/v4/emoji/.*', '/api/v4/files/.*', '/api/v4/users/.*?/image'];
 self.token = null;
