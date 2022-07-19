@@ -4,7 +4,7 @@
 /* eslint-disable no-console */
 /* eslint-disable consistent-return */
 
-const routesToMatch = ['/api/v4/emoji/.*', '/api/v4/files/.*', '/api/v4/users/.*?/image'];
+const routesToMatch = ['/api/v4/emoji/.*', '/api/v4/files/.*'];
 self.token = null;
 
 function injectBearer(event) {
