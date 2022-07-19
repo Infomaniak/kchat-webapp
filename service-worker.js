@@ -3,7 +3,7 @@
 
 /* eslint-disable no-console */
 
-const routesToMatch = ['/api/v4/emoji/.*', '/api/v4/files/.*'];
+const routesToMatch = ['/api/v4/emoji/.*', '/api/v4/files/.*', '/api/v4/users/.*?/image'];
 self.token = null;
 
 function injectBearer(event) {
@@ -46,9 +46,9 @@ self.addEventListener('fetch', (event) => {
         if (authHeaderSplited[0] === 'Bearer' && authHeaderSplited[1] && authHeaderSplited[1] !== '') {
             // no need to alter request
         } else if (self.token && self.token !== null) {
-            event.respondWith(injectBearer(event));
+            return injectBearer(event);
         }
     } else if (self.token && self.token !== null && windowHost === requestHost && shouldMatchRoute) {
-        event.respondWith(injectBearer(event));
+        return injectBearer(event);
     }
 });
