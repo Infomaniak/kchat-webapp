@@ -16,6 +16,7 @@ import EmojiMap from 'utils/emoji_map';
 import Renderer from './renderer';
 
 const removeMarkdown = new RemoveMarkdown();
+const queryRegex = /(?<=http.*?\?).*?(?= |$)/g;
 
 export function format(text: string, options = {}, emojiMap?: EmojiMap) {
     return formatWithRenderer(text, new Renderer({}, options, emojiMap));
@@ -34,11 +35,12 @@ export function formatWithRenderer(text: string, renderer: marked.Renderer) {
         inlinelatex: config.EnableLatex === 'true' && config.EnableInlineLatex === 'true',
     };
 
-    if (text.startsWith('http') && text.includes('?')) {
-        const splitLink = text.split('?');
-        const location = splitLink.shift();
-        const query = fixedEncodeURIComponent(splitLink.join('?'));
-        outText = [location, query].join('?');
+    const queries = text.match(queryRegex);
+    if (queries) {
+        for (const query of queries) {
+            const urlEncodedQuery = fixedEncodeURIComponent(query);
+            outText = outText.replace(queryRegex, urlEncodedQuery);
+        }
     }
 
     return marked(outText, markdownOptions).trim();

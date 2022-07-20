@@ -124,6 +124,7 @@ export default class Renderer extends marked.Renderer {
         let outText = text;
 
         outText = decodeURIComponent(outText);
+        outHref = decodeURIComponent(outHref);
 
         if (!href.startsWith('/')) {
             const scheme = getScheme(href);
@@ -156,7 +157,6 @@ export default class Renderer extends marked.Renderer {
             }
         }
 
-        console.log(outHref);
         output += `" href="${outHref}" rel="noreferrer"`;
 
         const openInNewTab = shouldOpenInNewTab(outHref, this.formattingOptions.siteURL, this.formattingOptions.managedResourcePaths);
