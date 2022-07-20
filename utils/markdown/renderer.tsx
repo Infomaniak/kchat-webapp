@@ -121,6 +121,9 @@ export default class Renderer extends marked.Renderer {
 
     public link(href: string, title: string, text: string, isUrl = false) {
         let outHref = href;
+        let outText = text;
+
+        outText = decodeURIComponent(outText);
 
         if (!href.startsWith('/')) {
             const scheme = getScheme(href);
@@ -133,13 +136,13 @@ export default class Renderer extends marked.Renderer {
           ) !== -1;
 
                 if (!isValidUrl) {
-                    return text;
+                    return outText;
                 }
             }
         }
 
         if (!isUrlSafe(unescapeHtmlEntities(href))) {
-            return text;
+            return outText;
         }
 
         let output = '<a class="theme markdown__link';
@@ -153,6 +156,7 @@ export default class Renderer extends marked.Renderer {
             }
         }
 
+        console.log(outHref);
         output += `" href="${outHref}" rel="noreferrer"`;
 
         const openInNewTab = shouldOpenInNewTab(outHref, this.formattingOptions.siteURL, this.formattingOptions.managedResourcePaths);
@@ -171,7 +175,7 @@ export default class Renderer extends marked.Renderer {
         }
 
         // remove any links added to the text by hashtag or mention parsing since they'll break this link
-        output += '>' + text.replace(/<\/?a[^>]*>/g, '') + '</a>';
+        output += '>' + outText.replace(/<\/?a[^>]*>/g, '') + '</a>';
 
         return output;
     }

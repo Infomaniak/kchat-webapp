@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/* eslint-disable max-lines */
+
 import emojiRegex from 'emoji-regex';
 import {Renderer} from 'marked';
 
@@ -919,4 +921,10 @@ function fixedCharCodeAt(str: string, idx = 0) {
     }
 
     return code;
+}
+
+export function fixedEncodeURIComponent(str: string) {
+    return encodeURIComponent(str).replace(/[!'"()*:]/g, (c) => {
+        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+    });
 }

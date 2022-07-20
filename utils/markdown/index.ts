@@ -7,7 +7,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
 import store from 'stores/redux_store.jsx';
 
-import {convertEntityToCharacter} from 'utils/text_formatting';
+import {convertEntityToCharacter, fixedEncodeURIComponent} from 'utils/text_formatting';
 
 import RemoveMarkdown from 'utils/markdown/remove_markdown';
 
@@ -23,6 +23,7 @@ export function format(text: string, options = {}, emojiMap?: EmojiMap) {
 
 export function formatWithRenderer(text: string, renderer: marked.Renderer) {
     const config = getConfig(store.getState());
+    let outText = text;
 
     const markdownOptions = {
         renderer,
@@ -33,7 +34,14 @@ export function formatWithRenderer(text: string, renderer: marked.Renderer) {
         inlinelatex: config.EnableLatex === 'true' && config.EnableInlineLatex === 'true',
     };
 
-    return marked(text, markdownOptions).trim();
+    if (text.startsWith('http') && text.includes('?')) {
+        const splitLink = text.split('?');
+        const location = splitLink.shift();
+        const query = fixedEncodeURIComponent(splitLink.join('?'));
+        outText = [location, query].join('?');
+    }
+
+    return marked(outText, markdownOptions).trim();
 }
 
 export function stripMarkdown(text: string) {
