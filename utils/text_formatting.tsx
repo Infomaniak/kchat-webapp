@@ -928,3 +928,10 @@ export function fixedEncodeURIComponent(str: string) {
         return '%' + c.charCodeAt(0).toString(16).toUpperCase();
     });
 }
+
+export function fixedDecodeURIComponent(str: string) {
+    return str.replace(/%(2D|2E|5F|7E|3A|2F|3F|23|5B|5C|5D|40|21|24|26|27|28|29|2A|2B|2C|3B|3D)/g, (inChar) => {
+        const c = inChar.substring(1);
+        return String.fromCharCode(parseInt(c, 16));
+    });
+}

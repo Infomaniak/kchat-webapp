@@ -123,8 +123,8 @@ export default class Renderer extends marked.Renderer {
         let outHref = href;
         let outText = text;
 
-        outText = decodeURIComponent(outText);
-        outHref = decodeURIComponent(outHref);
+        outText = TextFormatting.fixedDecodeURIComponent(outText);
+        outHref = TextFormatting.fixedDecodeURIComponent(outHref);
 
         if (!href.startsWith('/')) {
             const scheme = getScheme(href);
