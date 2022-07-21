@@ -105,7 +105,7 @@ export function needRefreshToken() {
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
-export function refreshIKToken(redirectToTeam = false) {
+export function refreshIKToken(redirectToTeam = false, periodic = false) {
     const refreshToken = localStorage.getItem('IKRefreshToken');
     if (!refreshToken) {
         clearLocalStorageToken();
@@ -121,7 +121,9 @@ export function refreshIKToken(redirectToTeam = false) {
         `${IKConstants.CLIENT_ID}`,
     ).then((resp) => {
         console.log('getRefreshToken', resp);
-        setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN));
+        if (periodic) {
+            setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN), false, true);
+        }
 
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
@@ -135,7 +137,7 @@ export function refreshIKToken(redirectToTeam = false) {
             getChallengeAndRedirectToLogin();
         } else {
             console.log('Offline, waiting for connection');
-            setTimeout(refreshIKToken, OFFLINE_ATTEMPT_INTERVAL);
+            setTimeout(refreshIKToken, OFFLINE_ATTEMPT_INTERVAL, redirectToTeam, periodic);
         }
     });
 }

@@ -99,6 +99,8 @@ const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
 const Mfa = makeAsyncComponent('Mfa', LazyMfa);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 
+const REFRESH_TOKEN_TIME_MARGIN = 30000; // How many miliseconds to refresh before token expires (default is 30 seconds)
+
 const LoggedInRoute = ({component: Component, ...rest}) => (
     <Route
         {...rest}
@@ -154,8 +156,10 @@ export default class Root extends React.PureComponent {
                 LocalStorageStore.setWasLoggedIn(true);
             }
 
-            // Launch the automatic token refresh mechanism
-            refreshIKToken(tokenExpire && checkIKTokenIsExpired());
+            // If need to refresh the token
+            if (tokenExpire && checkIKTokenIsExpired()) {
+                refreshIKToken(true);
+            }
         } else {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
@@ -291,6 +295,7 @@ export default class Root extends React.PureComponent {
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
+            const tokenExpireIn = (1000 * tokenExpire) - Date.now();
 
             // Enable authHeader and set bearer token
             if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
@@ -299,6 +304,9 @@ export default class Root extends React.PureComponent {
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
             }
+
+            // Set a callback to refresh token a little while before it expires
+            setTimeout(refreshIKToken, tokenExpireIn - REFRESH_TOKEN_TIME_MARGIN, false, true);
         }
 
         Utils.applyTheme(this.props.theme);
