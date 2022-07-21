@@ -154,13 +154,8 @@ export default class Root extends React.PureComponent {
                 LocalStorageStore.setWasLoggedIn(true);
             }
 
-            // If need to refresh the token
-            // Else, launch the automatic token refresh mechanism
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
-            } else {
-                refreshIKToken();
-            }
+            // Launch the automatic token refresh mechanism
+            refreshIKToken(tokenExpire && checkIKTokenIsExpired());
         } else {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
