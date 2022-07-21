@@ -101,7 +101,7 @@ export default function ChannelMembersRHS({
         }
 
         actions.setChannelMembersRhsSearchTerm('');
-        actions.loadProfilesAndReloadChannelMembersAll(USERS_PER_PAGE, channel.id);
+        actions.loadProfilesAndReloadChannelMembersAll(membersCount, USERS_PER_PAGE, channel.id);
         actions.loadMyChannelMemberAndRole(channel.id);
     }, [channel.id, channel.type]);
 
