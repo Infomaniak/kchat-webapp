@@ -50,7 +50,7 @@ export interface Props {
         closeRightHandSide: () => void;
         goBack: () => void;
         setChannelMembersRhsSearchTerm: (terms: string) => void;
-        loadProfilesAndReloadChannelMembers: (page: number, perParge: number, channelId: string) => void;
+        loadProfilesAndReloadChannelMembersAll: (perParge: number, channelId: string) => void;
         loadMyChannelMemberAndRole: (channelId: string) => void;
         setEditChannelMembers: (active: boolean) => void;
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;
@@ -101,7 +101,7 @@ export default function ChannelMembersRHS({
         }
 
         actions.setChannelMembersRhsSearchTerm('');
-        actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id);
+        actions.loadProfilesAndReloadChannelMembersAll(USERS_PER_PAGE, channel.id);
         actions.loadMyChannelMemberAndRole(channel.id);
     }, [channel.id, channel.type]);
 

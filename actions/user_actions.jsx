@@ -76,6 +76,26 @@ export function loadProfilesAndReloadChannelMembers(page, perPage, channelId, so
     };
 }
 
+export function loadProfilesAndReloadChannelMembersAll(perPage, channelId, sort = '', options = {}) {
+    return async (doDispatch, doGetState) => {
+        const newChannelId = channelId || getCurrentChannelId(doGetState());
+        for (let page = 0; ; page++) {
+            const {data} = await doDispatch(UserActions.getProfilesInChannel(newChannelId, page, perPage, sort, options));
+
+            if (data.length === 0) {
+                break;
+            } else {
+                Promise.all([
+                    doDispatch(loadChannelMembersForProfilesList(data, newChannelId, true)),
+                    doDispatch(loadStatusesForProfilesList(data)),
+                ]);
+            }
+        }
+
+        return {data: true};
+    };
+}
+
 export function loadProfilesAndTeamMembers(page, perPage, teamId, options) {
     return async (doDispatch, doGetState) => {
         const newTeamId = teamId || getCurrentTeamId(doGetState());
