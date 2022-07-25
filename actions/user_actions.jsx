@@ -3,6 +3,8 @@
 
 import PQueue from 'p-queue';
 
+import {batchActions} from 'redux-batched-actions';
+
 import {getChannelAndMyMember, getChannelMembersByIds} from 'mattermost-redux/actions/channels';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getTeamMembersByIds} from 'mattermost-redux/actions/teams';
@@ -82,7 +84,7 @@ export function loadProfilesAndReloadChannelMembersAll(membersCount, perPage, ch
         const newChannelId = channelId || getCurrentChannelId(doGetState());
         for (let page = 0; page <= maxPages; page++) {
             doDispatch(UserActions.getProfilesInChannel(newChannelId, page, perPage, sort, options)).then(({data}) => {
-                Promise.all([
+                batchActions([
                     doDispatch(loadChannelMembersForProfilesList(data, newChannelId, true)),
                     doDispatch(loadStatusesForProfilesList(data)),
                 ]);
