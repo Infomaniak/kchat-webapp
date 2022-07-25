@@ -441,7 +441,7 @@ describe('PostUtils.shouldFocusMainTextbox', () => {
             {
                 event: {key: 'a'},
                 activeElement: {tagName: 'BODY'},
-                expected: false,
+                expected: true,
             },
             {
                 event: {key: 'a'},
@@ -456,17 +456,17 @@ describe('PostUtils.shouldFocusMainTextbox', () => {
             {
                 event: {key: '0'},
                 activeElement: {tagName: 'BODY'},
-                expected: false,
+                expected: true,
             },
             {
                 event: {key: '!'},
                 activeElement: {tagName: 'BODY'},
-                expected: false,
+                expected: true,
             },
             {
                 event: {key: ' '},
                 activeElement: {tagName: 'BODY'},
-                expected: false,
+                expected: true,
             },
             {
                 event: {key: 'BACKSPACE'},
