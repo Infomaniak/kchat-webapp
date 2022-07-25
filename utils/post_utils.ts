@@ -222,8 +222,7 @@ export function shouldFocusMainTextbox(e: KeyboardEvent, activeElement: Element 
     }
 
     // Do not focus if we're currently focused on a textarea or input
-    // body is here as sometimes it switches to body when typing fast on a thread
-    const keepFocusTags = ['TEXTAREA', 'INPUT', 'BODY'];
+    const keepFocusTags = ['TEXTAREA', 'INPUT'];
     if (!activeElement || keepFocusTags.includes(activeElement.tagName)) {
         return false;
     }
