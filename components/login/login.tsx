@@ -86,7 +86,7 @@ const Login = () => {
             }
 
             if (loginCode) {
-                const challenge = JSON.parse(localStorage.getItem('challenge'));
+                const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
                 //    Get token
                 Client4.getIKLoginToken(
@@ -130,7 +130,11 @@ const Login = () => {
                 newSearchParam.set('extra', Constants.SESSION_EXPIRED);
                 history.replace(`${pathname}?${newSearchParam}`);
             }
+
+            return;
         }
+
+        redirectUserToDefaultTeam();
     }, []);
 
     useEffect(() => {
@@ -139,11 +143,14 @@ const Login = () => {
                 closeSessionExpiredNotification.current();
                 closeSessionExpiredNotification.current = undefined;
             }
+
+            // window.removeEventListener('resize', onWindowResize);
+            // window.removeEventListener('focus', onWindowFocus);
         };
     }, []);
 
     if (initializing) {
-        return (<LoadingScreen/>);
+        return (<LoadingIk/>);
     }
 
     const finishSignin = (team?: Team) => {

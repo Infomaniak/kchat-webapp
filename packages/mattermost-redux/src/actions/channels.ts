@@ -657,7 +657,7 @@ export function leaveChannel(channelId: string): ActionFunc {
     };
 }
 
-export function joinChannel(userId: string, teamId: string, channelId: string, channelName: string): ActionFunc {
+export function joinChannel(userId: string, teamId: string, channelId: string, channelName?: string): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         if (!channelId && !channelName) {
             return {data: null};
@@ -670,7 +670,7 @@ export function joinChannel(userId: string, teamId: string, channelId: string, c
                 member = await Client4.addToChannel(userId, channelId);
                 channel = await Client4.getChannel(channelId);
             } else {
-                channel = await Client4.getChannelByName(teamId, channelName, true);
+                channel = await Client4.getChannelByName(teamId, channelName!, true);
                 if ((channel.type === General.GM_CHANNEL) || (channel.type === General.DM_CHANNEL)) {
                     member = await Client4.getChannelMember(channel.id, userId);
                 } else {
@@ -1228,12 +1228,34 @@ export function markChannelAsRead(channelId: string, prevChannelId?: string, upd
         const state = getState();
         const prevChanManuallyUnread = isManuallyUnread(state, prevChannelId);
 
+        const actions = actionsToMarkChannelAsRead(getState, channelId, prevChannelId);
+
         // Send channel last viewed at to the server
         if (updateLastViewedAt) {
-            dispatch(markChannelAsReadOnServer(channelId, prevChanManuallyUnread ? '' : prevChannelId));
-        }
+            dispatch(markChannelAsViewedOnServer(channelId, prevChanManuallyUnread ? '' : prevChannelId));
 
-        const actions = actionsToMarkChannelAsRead(getState, channelId, prevChannelId);
+            const now = Date.now();
+
+            // Don't use actionsToMarkChannelAsViewed here because that overwrites fields modified by
+            // actionsToMarkChannelAsRead
+            actions.push({
+                type: ChannelTypes.RECEIVED_LAST_VIEWED_AT,
+                data: {
+                    channel_id: channelId,
+                    last_viewed_at: now,
+                },
+            });
+
+            if (prevChannelId && !prevChanManuallyUnread) {
+                actions.push({
+                    type: ChannelTypes.RECEIVED_LAST_VIEWED_AT,
+                    data: {
+                        channel_id: prevChannelId,
+                        last_viewed_at: now,
+                    },
+                });
+            }
+        }
 
         if (actions.length > 0) {
             dispatch(batchActions(actions));
@@ -1243,7 +1265,7 @@ export function markChannelAsRead(channelId: string, prevChannelId?: string, upd
     };
 }
 
-export function markChannelAsReadOnServer(channelId: string, prevChannelId?: string): ActionFunc {
+export function markChannelAsViewedOnServer(channelId: string, prevChannelId?: string): ActionFunc {
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
         Client4.viewMyChannel(channelId, prevChannelId).then().catch((error) => {
             forceLogoutIfNecessary(error, dispatch, getState);

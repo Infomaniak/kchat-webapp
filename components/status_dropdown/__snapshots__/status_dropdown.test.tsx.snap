@@ -35,16 +35,20 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
         <Text
+          className="bold"
           margin="none"
         >
           Nev Aa
         </Text>
         <Text
+          className=""
           color="disabled"
           margin="none"
         >
@@ -174,13 +178,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
         }
         id="status-menu-offline"
         onClick={[Function]}
-        rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
-            size={16}
-          />
-        }
+        rightDecorator={false}
         show={true}
         text="Offline"
       />
@@ -253,16 +251,20 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
         <Text
+          className="bold"
           margin="none"
         >
           Nev Aa
         </Text>
         <Text
+          className=""
           color="disabled"
           margin="none"
         >
@@ -473,13 +475,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
         }
         id="status-menu-offline"
         onClick={[Function]}
-        rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
-            size={16}
-          />
-        }
+        rightDecorator={false}
         show={true}
         text="Offline"
       />
@@ -552,16 +548,20 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
         <Text
+          className="bold"
           margin="none"
         >
           Nev Aa
         </Text>
         <Text
+          className=""
           color="disabled"
           margin="none"
         >
@@ -724,13 +724,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
         }
         id="status-menu-offline"
         onClick={[Function]}
-        rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
-            size={16}
-          />
-        }
+        rightDecorator={false}
         show={true}
         text="Offline"
       />
@@ -803,16 +797,20 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
         <Text
+          className="bold"
           margin="none"
         >
           Nev Aa
         </Text>
         <Text
+          className=""
           color="disabled"
           margin="none"
         >
@@ -975,13 +973,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
         }
         id="status-menu-offline"
         onClick={[Function]}
-        rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
-            size={16}
-          />
-        }
+        rightDecorator={false}
         show={true}
         text="Offline"
       />
@@ -1054,16 +1046,20 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
         <Text
+          className="bold"
           margin="none"
         >
           Nev Aa
         </Text>
         <Text
+          className=""
           color="disabled"
           margin="none"
         >
@@ -1227,13 +1223,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
         }
         id="status-menu-offline"
         onClick={[Function]}
-        rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
-            size={16}
-          />
-        }
+        rightDecorator={false}
         show={true}
         text="Offline"
       />
@@ -1310,7 +1300,9 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <Memo(Avatar)
         size="lg"
         url="http://localhost:8065/api/v4/users/jsx5jmdiyjyuzp9rzwfaf5pwjo/image?_=1590519110944"
@@ -1319,11 +1311,13 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         className="username-wrapper"
       >
         <Text
+          className="bold"
           margin="none"
         >
           Nev Aa
         </Text>
         <Text
+          className=""
           color="disabled"
           margin="none"
         >
@@ -1453,13 +1447,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         }
         id="status-menu-offline"
         onClick={[Function]}
-        rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
-            size={16}
-          />
-        }
+        rightDecorator={false}
         show={true}
         text="Offline"
       />
@@ -1532,16 +1520,20 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
         <Text
+          className="bold"
           margin="none"
         >
           Nev Aa
         </Text>
         <Text
+          className=""
           color="disabled"
           margin="none"
         >
@@ -1671,13 +1663,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
         }
         id="status-menu-offline"
         onClick={[Function]}
-        rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
-            size={16}
-          />
-        }
+        rightDecorator={false}
         show={true}
         text="Offline"
       />
@@ -1750,16 +1736,20 @@ exports[`components/StatusDropdown should not show clear status button when cust
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
         <Text
+          className="bold"
           margin="none"
         >
           Nev Aa
         </Text>
         <Text
+          className=""
           color="disabled"
           margin="none"
         >
@@ -1922,13 +1912,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
         }
         id="status-menu-offline"
         onClick={[Function]}
-        rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
-            size={16}
-          />
-        }
+        rightDecorator={false}
         show={true}
         text="Offline"
       />
@@ -2001,16 +1985,20 @@ exports[`components/StatusDropdown should show clear status button when custom s
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <MenuHeader>
+    <MenuHeader
+      onClick={[Function]}
+    >
       <div
         className="username-wrapper"
       >
         <Text
+          className="bold"
           margin="none"
         >
           Nev Aa
         </Text>
         <Text
+          className=""
           color="disabled"
           margin="none"
         >
@@ -2221,13 +2209,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
         }
         id="status-menu-offline"
         onClick={[Function]}
-        rightDecorator={
-          <Icon
-            color="success"
-            glyph="check"
-            size={16}
-          />
-        }
+        rightDecorator={false}
         show={true}
         text="Offline"
       />
