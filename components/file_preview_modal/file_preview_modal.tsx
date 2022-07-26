@@ -282,7 +282,6 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                 content = (
                     <ImagePreview
                         fileInfo={fileInfo}
-                        canDownloadFiles={this.props.canDownloadFiles}
                     />
                 );
             } else if (fileType === FileTypes.VIDEO || fileType === FileTypes.AUDIO) {
