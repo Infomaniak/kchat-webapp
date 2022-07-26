@@ -2682,7 +2682,7 @@
   "channelHeader.removeFromFavorites": "Retirer des favoris",
   "channelHeader.unmute": "Ne plus mettre en sourdine",
   "channelHeader.viewInfo": "Voir les informations",
-  "channel_header.addChannelHeader": "Ajouter une description au canal",
+  "channel_header.addChannelHeader": "Ajouter une entête de canal",
   "channel_header.channelFiles": "Fichiers du canal",
   "channel_header.channelHasGuests": "Ce canal dispose d'utilisateurs invités",
   "channel_header.channelMembers": "Membres",

@@ -28,7 +28,7 @@ import {openModal} from 'actions/views/modals';
 import {closeRightHandSide, goBack, setEditChannelMembers} from 'actions/views/rhs';
 import {getIsEditingMembers, getPreviousRhsState} from 'selectors/rhs';
 import {setChannelMembersRhsSearchTerm} from 'actions/views/search';
-import {loadProfilesAndReloadChannelMembers, searchProfilesAndChannelMembers} from 'actions/user_actions';
+import {loadProfilesAndReloadChannelMembersAll, searchProfilesAndChannelMembers} from 'actions/user_actions';
 import {Channel, ChannelMembership} from '@mattermost/types/channels';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 import {loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
@@ -154,7 +154,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             closeRightHandSide,
             goBack,
             setChannelMembersRhsSearchTerm,
-            loadProfilesAndReloadChannelMembers,
+            loadProfilesAndReloadChannelMembersAll,
             loadMyChannelMemberAndRole,
             setEditChannelMembers,
             searchProfilesAndChannelMembers,
