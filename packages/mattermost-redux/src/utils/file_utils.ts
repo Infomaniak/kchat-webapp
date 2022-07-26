@@ -96,11 +96,11 @@ export function getFileDownloadUrl(fileId: string): string {
 }
 
 export function getFileThumbnailUrl(fileId: string): string {
-    return `${Client4.getFileRoute(fileId)}/thumbnail}`;
+    return `${Client4.getFileRoute(fileId)}/thumbnail`;
 }
 
 export function getFilePreviewUrl(fileId: string): string {
-    return `${Client4.getFileRoute(fileId)}/preview}`;
+    return `${Client4.getFileRoute(fileId)}/preview`;
 }
 
 export function sortFileInfos(fileInfos: FileInfo[] = [], locale: string = General.DEFAULT_LOCALE): FileInfo[] {
