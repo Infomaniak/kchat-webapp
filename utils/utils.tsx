@@ -1193,25 +1193,12 @@ export function displayFullAndNicknameForUser(user: UserProfile) {
     return displayName;
 }
 
-export function imageURLForUser(userId, lastPictureUpdate = 0) {
-    const params = {};
-    if (isDesktopApp() && Client4.getToken()) {
-        params.access_token = Client4.getToken();
-        return Client4.getUsersRoute() + '/' + userId + '/image?_=' + lastPictureUpdate + `&access_token=${Client4.getToken()}`;
-    }
-
-    // return Client4.getProfilePictureUrl(userId, lastPictureUpdate);
-
+export function imageURLForUser(userId: string, lastPictureUpdate = 0) {
     return Client4.getUsersRoute() + '/' + userId + '/image?_=' + lastPictureUpdate;
 }
 
-export function defaultImageURLForUser(userId) {
-    const params = {};
-    if (isDesktopApp() && Client4.getToken()) {
-        params.access_token = Client4.getToken();
-    }
-
-    return Client4.getUsersRoute() + '/' + userId + `/image/default${buildQueryString(params)}`;
+export function defaultImageURLForUser(userId: string) {
+    return Client4.getUsersRoute() + '/' + userId + '/image/default';
 }
 
 // in contrast to Client4.getTeamIconUrl, for ui logic this function returns null if last_team_icon_update is unset
