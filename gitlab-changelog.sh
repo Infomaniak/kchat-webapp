@@ -1,13 +1,8 @@
-# Considering that your app version is stored in VERSION.md file
-#
-# Example: ./gitlab-changelog.sh
-# Example: ./gitlab-changelog.sh <YOUR-GITLAB-PROJECT-ACCESS-TOKEN>
-
 #!/bin/bash
 
 latest=$(git describe --tags --abbrev=0)
 
-link=https://gitlab.infomaniak.ch/kchat/webapp/-/blob/${branch}/CHANGELOG.md
+echo "Latest: ${latest}"
 
 # You can retrieve env variables from script arguments (here 1st argument)
 GITLAB_PROJECT_ACCESS_TOKEN=$1
@@ -17,6 +12,6 @@ response=$(curl --write-out '%{http_code}' --request POST --header "PRIVATE-TOKE
 
 echo $response
 # if [ $response == 200 ]
-# then echo "Updated changelog: ${link}"
+# then echo "Updated changelog"
 # else echo "An error occurred when requesting GitLab API"
 # fi;
