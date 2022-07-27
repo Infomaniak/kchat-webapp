@@ -5,16 +5,16 @@
 
 #!/bin/bash
 
-app_version=$(cat VERSION.md)
 latest=$(git describe --tags --abbrev=0)
-branch=master
 
 link=https://gitlab.infomaniak.ch/kchat/webapp/-/blob/${branch}/CHANGELOG.md
 
 # You can retrieve env variables from script arguments (here 1st argument)
 GITLAB_PROJECT_ACCESS_TOKEN=$1
+GITLAB_PROJECT_BRANCH=$2
+GITLAB_PROJECT_TAG=$3
 
-response=$(curl --write-out '%{http_code}' --request POST --header "PRIVATE-TOKEN: ${GITLAB_PROJECT_ACCESS_TOKEN}" --data "version=${app_version}&branch=${branch}&from=${latest}&to=release" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog")
+response=$(curl --write-out '%{http_code}' --request POST --header "PRIVATE-TOKEN: ${GITLAB_PROJECT_ACCESS_TOKEN}" --data "version=${GITLAB_PROJECT_TAG}&branch=${GITLAB_PROJECT_BRANCH}&from=${latest}&to=release" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog")
 
 echo $response
 # if [ $response == 200 ]
