@@ -53,7 +53,8 @@ changelog:
   only:
     - master
   script:
-    - './.gitlab/gitlab-changelog.sh ${GITLAB_TOKEN}' # if you choose to fetch token from arguments
+    - 'chmod +x ./.gitlab/gitlab-changelog.sh'
+    - './.gitlab/gitlab-changelog.sh ${GITLAB_TOKEN}'
 
 
 pages:
