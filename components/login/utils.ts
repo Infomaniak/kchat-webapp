@@ -66,19 +66,7 @@ export async function generateCodeChallenge(codeVerifier: string) {
  * get code_challenge and redirect to IK Login
  */
 export function getChallengeAndRedirectToLogin() {
-    const codeVerifier = getCodeVerifier();
-    let codeChallenge = '';
-    generateCodeChallenge(codeVerifier).then((challenge) => {
-        codeChallenge = challenge;
-
-        // TODO: store in redux instead of localstorage
-        localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
-
-        // TODO: add env for login url and/or current server
-        window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=ktalk://auth-desktop`);
-    }).catch(() => {
-        console.log('Error redirect');
-    });
+    window.location.assign(`${IKConstants.LOGIN_URL}authorize?client_id=${IKConstants.CLIENT_ID}&access_type=offline&response_type=token&redirect_uri=ktalk://auth-desktop`);
 }
 
 /**
