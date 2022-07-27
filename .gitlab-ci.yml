@@ -57,7 +57,7 @@ changelog:
       when: never
     - when: never
   script:
-    - './gitlab-changelog.sh ${GITLAB_TOKEN} $CI_COMMIT_TAG'
+    - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
 
 
 pages:
