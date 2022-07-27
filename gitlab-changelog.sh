@@ -2,7 +2,7 @@
 
 latest=$(git describe --tags --abbrev=0)
 
-echo "Latest: ${latest}"
+# echo "Latest: ${latest}"
 
 # You can retrieve env variables from script arguments (here 1st argument)
 GITLAB_PROJECT_ACCESS_TOKEN=$1
