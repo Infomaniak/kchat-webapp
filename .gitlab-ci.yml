@@ -56,6 +56,7 @@ update-changelog:
       when: on_success
     - when: never
   script:
+    - apt-get update && apt-get install --no-install-recommends -y curl wget
     - |
       curl --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog"
 
