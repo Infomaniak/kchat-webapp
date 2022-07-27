@@ -54,9 +54,8 @@ update-changelog:
       when: on_success
     - when: never
   script:
-    - currentVersion=$(grep -oP '(?<=VERSION ")([^"]*)' version.h)
     - |
-      curl --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" --data "version=$currentVersion" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog"
+      curl --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog"
 
 pages:
   stage: test
