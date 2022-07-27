@@ -5,17 +5,17 @@
 
 /*
 
-to do:
-
+to do (in no order):
 - Clamp displacement to corners
-- Zoom to where mouse is
 - Add toolbox (zoom in, out, current zoom level...)
-- Improve zoomToFit, make dat boxed in
-- Hand cursor (open when hover, closed when dragging)
-- Prevent default drag (dont hilight)
 - Spacebar toggles dragging?
 - Investigate mobile zoom in?
 - Add rotation?
+
+doing (in order):
+- Hand cursor (open when hover, closed when dragging)
+- Prevent default drag (dont hilight)
+- Zoom to where mouse is
 
 */
 
@@ -39,7 +39,8 @@ export default function ImagePreview({fileInfo}) {
 
     const [offset, setOffset] = useState({x: 0, y: 0});
     const [zoom, setZoom] = useState(1);
-    const [draggind, setDragging] = useState(false);
+    const [dragging, setDragging] = useState(false);
+    const [cursorType, setCursorType] = useState('normal');
 
     const touch = useRef({x: 0, y: 0});
     const canvasRef = useRef(null);
@@ -88,13 +89,13 @@ export default function ImagePreview({fileInfo}) {
     const handleWheel = (event) => {
         event.persist();
         const {deltaY} = event;
-        if (!draggind) {
+        if (!dragging) {
             setZoom(clamp(zoom + (deltaY * SCROLL_SENSITIVITY * -1), MIN_ZOOM, MAX_ZOOM));
         }
     };
 
     const handleMouseMove = (event) => {
-        if (draggind) {
+        if (dragging) {
             const {x, y} = touch.current;
             const {clientX, clientY} = event;
             setOffset({
@@ -111,7 +112,16 @@ export default function ImagePreview({fileInfo}) {
         setDragging(true);
     };
 
-    const handleMouseUp = () => setDragging(false);
+    const handleMouseUp = () => {
+        setDragging(false);
+    };
+
+    useEffect(() => {
+        // Start dragging only if the image in the canvas is zoomed
+        if (zoom > MAX_CANVAS_ZOOM) {
+            setCursorType(dragging ? 'dragging' : 'hover');
+        }
+    }, [dragging]);
 
     useEffect(() => {
         observer.current = new ResizeObserver((entries) => {
@@ -167,7 +177,7 @@ export default function ImagePreview({fileInfo}) {
             const context = canvasRef.current.getContext('2d');
 
             // We have not reached the limit, we can make canvas bigger
-            if (zoom < MAX_CANVAS_ZOOM) {
+            if (zoom <= MAX_CANVAS_ZOOM) {
                 const {width, height} = background;
 
                 canvasRef.current.width = width * zoom;
@@ -175,6 +185,9 @@ export default function ImagePreview({fileInfo}) {
 
                 // Draw image
                 context.drawImage(background, 0, 0, width * zoom, height * zoom);
+
+                // Set the cursor type
+                setCursorType('normal');
             } else {
                 const {width, height} = canvasRef.current;
 
@@ -193,6 +206,11 @@ export default function ImagePreview({fileInfo}) {
 
                 // Draw image
                 context.drawImage(background, x, y);
+
+                // Set cursor type
+                if (!dragging) {
+                    setCursorType('hover');
+                }
             }
         }
     }, [zoom, offset, background]);
@@ -200,7 +218,7 @@ export default function ImagePreview({fileInfo}) {
     return (
         <div
             ref={containerRef}
-            className='image_preview__image'
+            className='image_preview_div'
         >
             <canvas
                 onMouseDown={handleMouseDown}
@@ -208,6 +226,7 @@ export default function ImagePreview({fileInfo}) {
                 onMouseMove={handleMouseMove}
                 onWheel={handleWheel}
                 ref={canvasRef}
+                className={`image_preview_canvas__${cursorType}`}
             />
         </div>
     );
