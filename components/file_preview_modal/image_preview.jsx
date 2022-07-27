@@ -13,8 +13,8 @@ to do (in no order):
 - Add rotation?
 
 doing (in order):
-- Hand cursor (open when hover, closed when dragging)
-- Prevent default drag (dont hilight)
+- Allow canvas to use up all viewport space, unround corners
+- Fix drag sticking if mouse out of canvas
 - Zoom to where mouse is
 
 */
@@ -107,6 +107,7 @@ export default function ImagePreview({fileInfo}) {
     };
 
     const handleMouseDown = (event) => {
+        event.preventDefault();
         const {clientX, clientY} = event;
         touch.current = {x: clientX, y: clientY};
         setDragging(true);
