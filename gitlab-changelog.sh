@@ -12,7 +12,7 @@ branch=master
 GITLAB_PROJECT_ACCESS_TOKEN=$1
 GITLAB_PROJECT_TAG=$2
 
-response=$(curl --write-out '%{http_code}' --request POST --header "PRIVATE-TOKEN: ${GITLAB_PROJECT_ACCESS_TOKEN}" --data "version=${GITLAB_PROJECT_TAG}&branch=${branch}&from=${latest}&to=release" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog")
+response=$(curl --write-out '%{http_code}' --request POST --header "PRIVATE-TOKEN: ${GITLAB_PROJECT_ACCESS_TOKEN}" --data "version=${GITLAB_PROJECT_TAG}&branch=${branch}&from=${latest}" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog")
 
 echo $response
 # if [ $response == 200 ]
