@@ -47,6 +47,18 @@ unit_test:
     # unit tests
     - npm run test-ci
 
+update-changelog:
+  stage: test
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_BRANCH == "alpha"'
+      when: on_success
+    - when: never
+  script:
+    - latestVersion=$(git describe --tags --abbrev=0)
+    - currentVersion=$(grep -oP '(?<=VERSION ")([^"]*)' version.h)
+    - |
+      curl --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" --data "version=$currentVersion&from=$latestVersion&to=release&branch=release" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog"
+
 pages:
   stage: test
   needs: ['unit_test']
