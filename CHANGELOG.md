@@ -1,3 +1,25 @@
-## 0.0.16 (2022-07-27)
+## 0.0.15 (2022-07-27)
 
 No changes.
+
+## 0.0.14 (2022-07-27)
+
+No changes.
+
+## 0.0.13 (2022-07-27)
+
+No changes.
+
+## 0.0.12 (2022-07-27)
+
+No changes.
+
+## 0.0.11 (2022-07-27)
+
+### Changed (1 change)
+
+- [update changelog rules and version](kchat/webapp@bc1ffc3f91bf758bc6812601c725bd2a6ac09d6e)
+
+### feature (1 change)
+
+- [add changelog job](kchat/webapp@78e5bb907afcc28a5e0845244c1ee510f7bcd4c4)

@@ -19,7 +19,7 @@
     }
 
     #status-menu-dnd {
-        padding: 4px 16px;
+        padding: 0px 10px; // problem here
 
         .dropdown-menu {
             margin: auto;
@@ -102,6 +102,13 @@ button.custom_status__row {
         line-height: 16px;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    &__textContent {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 190px;
     }
 
     &__expiry {

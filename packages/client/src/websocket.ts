@@ -124,8 +124,8 @@ export default class WebSocketClient {
         // We cannot use a cookie because it will bleed across tabs.
         // We cannot also send it as part of the auth_challenge, because the session cookie is already sent with the request.
 
-        if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
-            this.conn = new Pusher('app-key', {
+        if (isDesktopApp()) {
+            this.conn = new Pusher('kchat-key', {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,
                 authEndpoint: '/broadcasting/auth',
@@ -142,7 +142,7 @@ export default class WebSocketClient {
                 enabledTransports: ['ws', 'wss'],
             });
         } else {
-            this.conn = new Pusher('app-key', {
+            this.conn = new Pusher('kchat-key', {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,
                 authEndpoint: '/broadcasting/auth',

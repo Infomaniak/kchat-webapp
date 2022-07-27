@@ -226,7 +226,7 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
                             className={classNames('image-loaded', fadeInClass, svgClass)}
                             style={styleIfSvgWithDimensions}
                         >
-                            <div className={classNames(permalinkClass)}>
+                            <div className={classNames(permalinkClass, 'clamp')}>
                                 <SizeAwareImage
                                     onClick={this.handleImageClick}
                                     className={classNames(minPreviewClass, permalinkClass)}

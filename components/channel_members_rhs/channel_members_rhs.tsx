@@ -224,7 +224,7 @@ export default function ChannelMembersRHS({
 
             <Header
                 channel={channel}
-                canGoBack={canGoBack}
+                canGoBack={true}
                 onClose={actions.closeRightHandSide}
                 goBack={actions.goBack}
             />

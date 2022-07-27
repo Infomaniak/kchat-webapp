@@ -129,7 +129,7 @@ function mapStateToProps(state: GlobalState) {
     }
 
     const teamUrl = getCurrentRelativeTeamUrl(state);
-    const canGoBack = Boolean(getPreviousRhsState(state));
+    const hasRhsPrevState = Boolean(getPreviousRhsState(state));
     const editing = getIsEditingMembers(state);
 
     const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
@@ -140,7 +140,7 @@ function mapStateToProps(state: GlobalState) {
         membersCount,
         searchTerms,
         teamUrl,
-        canGoBack,
+        canGoBack: hasRhsPrevState,
         canManageMembers,
         channelMembers,
         editing,

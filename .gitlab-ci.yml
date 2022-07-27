@@ -25,7 +25,7 @@ unit_test:
     reports:
       junit:
         - coverage/junit.xml
-      cobertura: coverage/cobertura-coverage.xml
+  coverage: '/^\s*Lines\s*: \d+\d+.\d+\d+\%/'
   cache:
     key:
       files:
@@ -46,6 +46,21 @@ unit_test:
 
     # unit tests
     - npm run test-ci
+
+changelog:
+  stage: test
+  image: mrnonz/alpine-git-curl
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: on_success
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: never
+  script:
+    - './gitlab-changelog.sh ${GITLAB_TOKEN}'
+
 
 pages:
   stage: test

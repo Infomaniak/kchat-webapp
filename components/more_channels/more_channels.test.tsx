@@ -28,12 +28,12 @@ describe('components/MoreChannels', () => {
             id: 'channel-id-1',
             name: 'channel-name-1',
             display_name: 'Channel 1',
-            delete_at: 0,
+            deleted_at: null,
         }, {
             id: 'channel-id-2',
             name: 'archived-channel',
             display_name: 'Archived',
-            delete_at: 123,
+            deleted_at: 123,
         }],
     };
 

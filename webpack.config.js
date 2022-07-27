@@ -277,7 +277,7 @@ var config = {
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.preprod.dev.infomaniak.ch kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.infomaniak.com kmeet.infomaniak.com ' + CSP_UNSAFE_EVAL_IF_DEV,
                 },
             },
         }),
@@ -447,7 +447,7 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: 'https://kchat.preprod.dev.infomaniak.ch',
+                target: 'https://kchat.infomaniak.com',
                 changeOrigin: true,
                 xfwd: true,
                 ws: true,
@@ -456,6 +456,7 @@ if (targetIsDevServer) {
             devMiddleware: {
                 writeToDisk: false,
             },
+            headers: {'Service-Worker-Allowed': '/'},
         },
         performance: false,
         optimization: {
