@@ -20,4 +20,4 @@ echo $response
 # if [ $response == 200 ]
 # then echo "Updated changelog: ${link}"
 # else echo "An error occurred when requesting GitLab API"
-fi;
+# fi;
