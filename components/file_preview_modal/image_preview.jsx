@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-/* eslint-disable react-hooks/exhaustive-deps */
-
 /*
 
 to do (in no order):
+- update comments
 - Clamp displacement to corners
 - Add toolbox (zoom in, out, current zoom level...)
 - Spacebar toggles dragging?
@@ -13,7 +12,7 @@ to do (in no order):
 - Add rotation?
 
 doing (in order):
-- Allow canvas to use up all viewport space, unround corners
+- Starts in fullscreen mode for some reason
 - Fix drag sticking if mouse out of canvas
 - Zoom to where mouse is
 
@@ -26,7 +25,7 @@ import {getFilePreviewUrl, getFileDownloadUrl} from 'mattermost-redux/utils/file
 
 import './image_preview.scss';
 
-const HORIZONTAL_PADDING = 100;
+const HORIZONTAL_PADDING = 50;
 const VERTICAL_PADDING = 168;
 
 const SCROLL_SENSITIVITY = 0.0005;
@@ -117,18 +116,26 @@ export default function ImagePreview({fileInfo}) {
         setDragging(false);
     };
 
+    // stays here for debug for now
     useEffect(() => {
-        // Start dragging only if the image in the canvas is zoomed
+        // eslint-disable-next-line no-console
+        console.log(zoom, zoom >= MAX_CANVAS_ZOOM ? 'fullscreen' : 'normal');
+    }, [zoom]);
+
+    useEffect(() => {
+        // Start dragging only if the image in the canvas is zoomed (update this comment pls)
         if (zoom > MAX_CANVAS_ZOOM) {
             setCursorType(dragging ? 'dragging' : 'hover');
+        } else {
+            setCursorType('normal');
         }
-    }, [dragging]);
+    }, [dragging, zoom]);
 
     useEffect(() => {
         observer.current = new ResizeObserver((entries) => {
             // Request animation frame to avoid spamming console with loop warnings
             window.requestAnimationFrame(() => {
-                if (!Array.isArray(entries) || !entries.length) {
+                if (!Array.isArray(entries) || !entries.length || zoom !== MIN_ZOOM) {
                     return;
                 }
 
@@ -148,7 +155,7 @@ export default function ImagePreview({fileInfo}) {
         const currentContainer = containerRef.current;
 
         return () => observer.current.unobserve(currentContainer);
-    }, [background]);
+    }, [background, zoom]);
 
     useEffect(() => {
         background.src = previewUrl;
@@ -176,50 +183,31 @@ export default function ImagePreview({fileInfo}) {
     useEffect(() => {
         if (canvasRef.current) {
             const context = canvasRef.current.getContext('2d');
+            const {width, height} = background;
+            var x = 0;
+            var y = 0;
 
-            // We have not reached the limit, we can make canvas bigger
-            if (zoom <= MAX_CANVAS_ZOOM) {
-                const {width, height} = background;
+            canvasRef.current.width = width * zoom;
+            canvasRef.current.height = height * zoom;
 
-                canvasRef.current.width = width * zoom;
-                canvasRef.current.height = height * zoom;
-
-                // Draw image
-                context.drawImage(background, 0, 0, width * zoom, height * zoom);
-
-                // Set the cursor type
-                setCursorType('normal');
-            } else {
-                const {width, height} = canvasRef.current;
-
-                // Set canvas dimensions
-                canvasRef.current.width = width;
-                canvasRef.current.height = height;
-
+            if (zoom > MAX_CANVAS_ZOOM) {
                 // Clear canvas and scale it
                 context.translate(-offset.x, -offset.y);
-                context.scale(zoom, zoom);
-                context.clearRect(0, 0, width, height);
 
-                // Make sure we're zooming to the center
-                const x = ((context.canvas.width / zoom) - background.width) / 2;
-                const y = ((context.canvas.height / zoom) - background.height) / 2;
-
-                // Draw image
-                context.drawImage(background, x, y);
-
-                // Set cursor type
-                if (!dragging) {
-                    setCursorType('hover');
-                }
+                // Make sure we're zooming to the center, to be changed in favor of mouse
+                //x = ((context.canvas.width / zoom) - background.width) / 2;
+                //y = ((context.canvas.height / zoom) - background.height) / 2;
             }
+
+            // Draw image
+            context.drawImage(background, x, y, width * zoom, height * zoom);
         }
     }, [zoom, offset, background]);
 
     return (
         <div
             ref={containerRef}
-            className='image_preview_div'
+            className={`image_preview_div__${zoom >= MAX_CANVAS_ZOOM ? 'fullscreen' : 'normal'}`}
         >
             <canvas
                 onMouseDown={handleMouseDown}

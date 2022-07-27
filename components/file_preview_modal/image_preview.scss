@@ -1,13 +1,15 @@
 .image_preview_div {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    height: calc(100vh - 168px);
-    width: calc(100vw - 50px);
-    border-radius: 8px;
+    &__normal {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        height: calc(100vh - 168px);
+        width: calc(100vw - 50px);
+        border-radius: 8px;
+    }
 
-    @media screen and (max-width: 768px) {
-        border-radius: 0;
+    &__fullscreen {
+        border-radius: 0px;
     }
 }
 
