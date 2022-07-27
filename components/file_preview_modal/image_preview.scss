@@ -1,8 +1,12 @@
 .image_preview {
     &__image {
-        max-height: calc(100vh - 168px);
+        display: flex;
+        align-items: center;
+        text-align: center;
+        height: calc(100vh - 168px);
+        width: calc(100vw - 50px);
         border-radius: 8px;
-        cursor: default;
+        cursor: grab;
 
         @media screen and (max-width: 768px) {
             border-radius: 0;
