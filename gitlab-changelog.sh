@@ -5,7 +5,7 @@
 
 #!/bin/bash
 
-latest=$(git describe --tags --abbrev=0)
+latest=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1  --max-count=1`)
 
 # You can retrieve env variables from script arguments (here 1st argument)
 GITLAB_PROJECT_ACCESS_TOKEN=$1
