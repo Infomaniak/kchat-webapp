@@ -47,18 +47,14 @@ unit_test:
     # unit tests
     - npm run test-ci
 
-update-changelog:
+changelog:
   stage: test
-  image:
-    name: gcr.io/kaniko-project/executor:v1.7.0-debug
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_BRANCH == "alpha"'
-      when: on_success
-    - when: never
+  image: curlimages/curl:7.79.1
+  only:
+    - master
   script:
-    - apt-get update && apt-get install --no-install-recommends -y curl wget
-    - |
-      curl --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog"
+    - './.gitlab/gitlab-changelog.sh ${GITLAB_TOKEN}' # if you choose to fetch token from arguments
+
 
 pages:
   stage: test
