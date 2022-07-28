@@ -66,7 +66,7 @@ export async function generateCodeChallenge(codeVerifier: string) {
  * get code_challenge and redirect to IK Login
  */
 export function getChallengeAndRedirectToLogin() {
-    window.location.assign(`${IKConstants.LOGIN_URL}authorize?client_id=${IKConstants.CLIENT_ID}&access_type=offline&response_type=token&redirect_uri=ktalk://auth-desktop`);
+    window.location.assign(`${IKConstants.LOGIN_URL}authorize?client_id=${IKConstants.CLIENT_ID}&access_type=offline&response_type=token&redirect_uri=https://kchat.preprod.dev.infomaniak.ch`);
 }
 
 /**
