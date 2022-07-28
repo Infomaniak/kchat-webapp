@@ -4,14 +4,15 @@
 /*
 
 to do (in no order):
-- update comments
 - Add toolbox (zoom in, out, current zoom level...)
 - Spacebar toggles dragging?
 - Investigate mobile zoom in?
 - Add rotation?
 
 doing (in order):
-- Clamp displacement to corners
+- Better naming
+- cleanup
+- comments
 - Zoom to where mouse is
 
 */
@@ -38,12 +39,15 @@ export default function ImagePreview({fileInfo}) {
     const [zoom, setZoom] = useState(1);
     const [dragging, setDragging] = useState(false);
     const [cursorType, setCursorType] = useState('normal');
-    const [isMouseDown, setIsMouseDown] = useState(false);
+    const [isMouseDown, setIsMouseDown] = useState(false); // u sure u need useState?
 
     const touch = useRef({x: 0, y: 0});
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const observer = useRef(null);
+    const canvasBorder = useRef({w: 0, h: 0});
+    const horizontalFullscreen = useRef(false);
+    const verticalFullscreen = useRef(false);
 
     const background = useMemo(() => new Image(), []);
 
@@ -84,6 +88,21 @@ export default function ImagePreview({fileInfo}) {
         return MIN_ZOOM;
     };
 
+    const clampOffset = (x, y) => {
+        const {w, h} = canvasBorder.current;
+        var xPosClamp = 0;
+        var yPosClamp = 0;
+
+        if (horizontalFullscreen.current) {
+            xPosClamp = clamp(x, w, -w);
+        }
+        if (verticalFullscreen.current) {
+            yPosClamp = clamp(y, h, -h);
+        }
+
+        return {xPos: xPosClamp, yPos: yPosClamp};
+    };
+
     const handleWheel = (event) => {
         event.persist();
         const {deltaY} = event;
@@ -92,14 +111,15 @@ export default function ImagePreview({fileInfo}) {
         }
     };
 
+    // separate to a callable function
+    // have it called each time zoom is called
+    // change mode to snap to canvas when image in bounds with ((top && bottom) || (left && right))
     const handleMouseMove = (event) => {
         if (dragging) {
             const {x, y} = touch.current;
             const {clientX, clientY} = event;
-            setOffset({
-                x: offset.x + (x - clientX),
-                y: offset.y + (y - clientY),
-            });
+            const {xPos, yPos} = clampOffset(offset.x + (x - clientX), offset.y + (y - clientY)) // god these names are horrible
+            setOffset({x: xPos, y: yPos});
             touch.current = {x: clientX, y: clientY};
         }
     };
@@ -132,7 +152,7 @@ export default function ImagePreview({fileInfo}) {
     // stays here for debug for now
     useEffect(() => {
         // eslint-disable-next-line no-console
-        console.log(zoom, zoom >= MAX_CANVAS_ZOOM ? 'fullscreen' : 'normal');
+        //console.log(zoom, zoom >= MAX_CANVAS_ZOOM ? 'fullscreen' : 'normal');
     }, [zoom]);
 
     useEffect(() => {
@@ -144,6 +164,7 @@ export default function ImagePreview({fileInfo}) {
         }
     }, [dragging, zoom]);
 
+    // broken again...
     useEffect(() => {
         observer.current = new ResizeObserver((entries) => {
             // Request animation frame to avoid spamming console with loop warnings
@@ -168,15 +189,18 @@ export default function ImagePreview({fileInfo}) {
         const currentContainer = containerRef.current;
 
         return () => observer.current.unobserve(currentContainer);
-    }, [background, zoom]);
+    }, [background]);
 
     useEffect(() => {
         background.src = previewUrl;
 
         if (canvasRef.current) {
             // Better AA, could be interesting: https://stackoverflow.com/questions/17861447/html5-canvas-drawimage-how-to-apply-antialiasing
+            // imageSmoothingQuality: "low"
 
             background.onload = () => {
+                const context = canvasRef.current.getContext('2d');
+
                 // Get the image dimensions
                 const {width, height} = background;
                 const containerScale = initCanvas(width, height);
@@ -187,16 +211,26 @@ export default function ImagePreview({fileInfo}) {
                 // Initialize with the zoom at minimum.
                 setZoom(MIN_ZOOM);
 
+                // Initialize borders
+                canvasBorder.current = {w: context.canvas.offsetLeft, h: context.canvas.offsetTop - 72};
+
                 // Set image as background and scale accordingly
-                canvasRef.current.getContext('2d').drawImage(background, 0, 0, width * containerScale, height * containerScale);
+                context.drawImage(background, 0, 0, width * containerScale, height * containerScale);
             };
         }
     }, [background, previewUrl]);
 
+    // change fullscreen switching to actual fullscreen, dragging is broken otherwise... (kinda)
+    // for mouse centered zooming, center thing to mouse then clamp
     useEffect(() => {
         if (canvasRef.current) {
             const context = canvasRef.current.getContext('2d');
             const {width, height} = background;
+
+            var inBoundsTop = true;
+            var inBoundsBottom = true;
+            var inBoundsLeft = true;
+            var inBoundsRight = true;
             var x = 0;
             var y = 0;
 
@@ -204,8 +238,37 @@ export default function ImagePreview({fileInfo}) {
             canvasRef.current.height = height * zoom;
 
             if (zoom > MAX_CANVAS_ZOOM) {
-                // Clear canvas and scale it
-                context.translate(-offset.x, -offset.y);
+                // Update borders and clamp offset accordingly
+                canvasBorder.current = {w: context.canvas.offsetLeft, h: context.canvas.offsetTop - 72};
+                const {xPos, yPos} = clampOffset(offset.x, offset.y);
+
+                context.translate(-xPos, -yPos);
+
+                if (xPos < context.canvas.offsetLeft) {
+                    inBoundsLeft = false;
+                }
+                if (xPos > -context.canvas.offsetLeft) {
+                    inBoundsRight = false;
+                }
+                if (yPos < context.canvas.offsetTop - 72) {
+                    inBoundsTop = false;
+                }
+                if (yPos > -(context.canvas.offsetTop - 72)) {
+                    inBoundsBottom = false;
+                }
+
+                if (inBoundsLeft && inBoundsRight) {
+                    horizontalFullscreen.current = true;
+                } else {
+                    horizontalFullscreen.current = false;
+                }
+                if (inBoundsTop && inBoundsBottom) {
+                    verticalFullscreen.current = true;
+                } else {
+                    verticalFullscreen.current = false;
+                }
+
+                //console.log(`Top: ${inBoundsTop} | Bottom: ${inBoundsBottom} | Left: ${inBoundsLeft} | Right: ${inBoundsRight}`);
 
                 // Make sure we're zooming to the center, to be changed in favor of mouse
                 //x = ((context.canvas.width / zoom) - background.width) / 2;
@@ -225,6 +288,7 @@ export default function ImagePreview({fileInfo}) {
     return (
         <div
             ref={containerRef}
+            // change this to either fullscreens
             className={`image_preview_div__${zoom >= MAX_CANVAS_ZOOM ? 'fullscreen' : 'normal'}`}
         >
             <canvas
