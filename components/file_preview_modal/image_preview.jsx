@@ -5,15 +5,13 @@
 
 to do (in no order):
 - update comments
-- Clamp displacement to corners
 - Add toolbox (zoom in, out, current zoom level...)
 - Spacebar toggles dragging?
 - Investigate mobile zoom in?
 - Add rotation?
 
 doing (in order):
-- Starts in fullscreen mode for some reason
-- Fix drag sticking if mouse out of canvas
+- Clamp displacement to corners
 - Zoom to where mouse is
 
 */
@@ -30,7 +28,7 @@ const VERTICAL_PADDING = 168;
 
 const SCROLL_SENSITIVITY = 0.0005;
 const MAX_ZOOM = 5;
-var MAX_CANVAS_ZOOM = 1;
+var MAX_CANVAS_ZOOM = 2;
 var MIN_ZOOM = 1;
 
 export default function ImagePreview({fileInfo}) {
@@ -40,6 +38,7 @@ export default function ImagePreview({fileInfo}) {
     const [zoom, setZoom] = useState(1);
     const [dragging, setDragging] = useState(false);
     const [cursorType, setCursorType] = useState('normal');
+    const [isMouseDown, setIsMouseDown] = useState(false);
 
     const touch = useRef({x: 0, y: 0});
     const canvasRef = useRef(null);
@@ -109,11 +108,25 @@ export default function ImagePreview({fileInfo}) {
         event.preventDefault();
         const {clientX, clientY} = event;
         touch.current = {x: clientX, y: clientY};
+        setIsMouseDown(true);
         setDragging(true);
     };
 
     const handleMouseUp = () => {
+        setIsMouseDown(false);
         setDragging(false);
+    };
+
+    // Stop dragging if mouse left canvas
+    const handleMouseLeave = () => {
+        setDragging(false);
+    };
+
+    // Resume dragging if mouse stays clicked
+    const handleMouseEnter = () => {
+        if (isMouseDown) {
+            setDragging(true);
+        }
     };
 
     // stays here for debug for now
@@ -204,6 +217,11 @@ export default function ImagePreview({fileInfo}) {
         }
     }, [zoom, offset, background]);
 
+    // Global mouseup event, otherwise canvas can stay stuck on mouse when leaving canvas while dragging
+    window.addEventListener('mouseup', () => {
+        handleMouseUp();
+    });
+
     return (
         <div
             ref={containerRef}
@@ -211,8 +229,9 @@ export default function ImagePreview({fileInfo}) {
         >
             <canvas
                 onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
                 onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                onMouseEnter={handleMouseEnter}
                 onWheel={handleWheel}
                 ref={canvasRef}
                 className={`image_preview_canvas__${cursorType}`}
