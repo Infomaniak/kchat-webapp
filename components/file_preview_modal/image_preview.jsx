@@ -10,9 +10,7 @@ to do (in no order):
 - Add rotation?
 
 doing (in order):
-- Better naming
-- cleanup
-- comments
+- fix window resize handler
 - Zoom to where mouse is
 
 */
@@ -39,15 +37,14 @@ export default function ImagePreview({fileInfo}) {
     const [zoom, setZoom] = useState(1);
     const [dragging, setDragging] = useState(false);
     const [cursorType, setCursorType] = useState('normal');
-    const [isMouseDown, setIsMouseDown] = useState(false); // u sure u need useState?
+    const [isFullscreen, setIsFullscreen] = useState({horizontal: false, vertical: false});
 
     const touch = useRef({x: 0, y: 0});
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const observer = useRef(null);
     const canvasBorder = useRef({w: 0, h: 0});
-    const horizontalFullscreen = useRef(false);
-    const verticalFullscreen = useRef(false);
+    const isMouseDown = useRef(false);
 
     const background = useMemo(() => new Image(), []);
 
@@ -71,16 +68,16 @@ export default function ImagePreview({fileInfo}) {
         return {maxWidth, maxHeight};
     };
 
-    // cleanup, not pretty
+    // Calculate maximum scale for canvas to fit in viewport
     const fitCanvas = (width, height) => {
         const {maxWidth, maxHeight} = getWindowDimensions();
-
         const scaleX = maxWidth / width;
         const scaleY = maxHeight / height;
 
         return Math.min(scaleX, scaleY);
     };
 
+    // Should be revisited, try math.min(containerScale, zoom) or something
     const initCanvas = (width, height) => {
         const containerScale = fitCanvas(width, height);
         MIN_ZOOM = containerScale <= 1 ? containerScale : 1;
@@ -88,15 +85,18 @@ export default function ImagePreview({fileInfo}) {
         return MIN_ZOOM;
     };
 
+    // Clamps the offset to something that is inside canvas or window depending on zoom level
+    // Remarks: bad variable naming
     const clampOffset = (x, y) => {
         const {w, h} = canvasBorder.current;
+        const {horizontal, vertical} = isFullscreen;
         var xPosClamp = 0;
         var yPosClamp = 0;
 
-        if (horizontalFullscreen.current) {
+        if (horizontal) {
             xPosClamp = clamp(x, w, -w);
         }
-        if (verticalFullscreen.current) {
+        if (vertical) {
             yPosClamp = clamp(y, h, -h);
         }
 
@@ -111,14 +111,11 @@ export default function ImagePreview({fileInfo}) {
         }
     };
 
-    // separate to a callable function
-    // have it called each time zoom is called
-    // change mode to snap to canvas when image in bounds with ((top && bottom) || (left && right))
     const handleMouseMove = (event) => {
         if (dragging) {
             const {x, y} = touch.current;
             const {clientX, clientY} = event;
-            const {xPos, yPos} = clampOffset(offset.x + (x - clientX), offset.y + (y - clientY)) // god these names are horrible
+            const {xPos, yPos} = clampOffset(offset.x + (x - clientX), offset.y + (y - clientY));
             setOffset({x: xPos, y: yPos});
             touch.current = {x: clientX, y: clientY};
         }
@@ -128,12 +125,12 @@ export default function ImagePreview({fileInfo}) {
         event.preventDefault();
         const {clientX, clientY} = event;
         touch.current = {x: clientX, y: clientY};
-        setIsMouseDown(true);
+        isMouseDown.current = true;
         setDragging(true);
     };
 
     const handleMouseUp = () => {
-        setIsMouseDown(false);
+        isMouseDown.current = false;
         setDragging(false);
     };
 
@@ -144,20 +141,14 @@ export default function ImagePreview({fileInfo}) {
 
     // Resume dragging if mouse stays clicked
     const handleMouseEnter = () => {
-        if (isMouseDown) {
+        if (isMouseDown.current) {
             setDragging(true);
         }
     };
 
-    // stays here for debug for now
     useEffect(() => {
-        // eslint-disable-next-line no-console
-        //console.log(zoom, zoom >= MAX_CANVAS_ZOOM ? 'fullscreen' : 'normal');
-    }, [zoom]);
-
-    useEffect(() => {
-        // Start dragging only if the image in the canvas is zoomed (update this comment pls)
-        if (zoom > MAX_CANVAS_ZOOM) {
+        // Change cursor to dragging only if the image in the canvas is zoomed and draggable
+        if (isFullscreen.horizontal || isFullscreen.vertical) {
             setCursorType(dragging ? 'dragging' : 'hover');
         } else {
             setCursorType('normal');
@@ -189,7 +180,7 @@ export default function ImagePreview({fileInfo}) {
         const currentContainer = containerRef.current;
 
         return () => observer.current.unobserve(currentContainer);
-    }, [background]);
+    }, [background, zoom]);
 
     useEffect(() => {
         background.src = previewUrl;
@@ -220,56 +211,32 @@ export default function ImagePreview({fileInfo}) {
         }
     }, [background, previewUrl]);
 
-    // change fullscreen switching to actual fullscreen, dragging is broken otherwise... (kinda)
-    // for mouse centered zooming, center thing to mouse then clamp
+    // for mouse centered zooming, center offset to mouse then clamp
+    // optimize and reduce things.. (if only panning, pan only)
     useEffect(() => {
         if (canvasRef.current) {
             const context = canvasRef.current.getContext('2d');
             const {width, height} = background;
 
-            var inBoundsTop = true;
-            var inBoundsBottom = true;
-            var inBoundsLeft = true;
-            var inBoundsRight = true;
             var x = 0;
             var y = 0;
 
             canvasRef.current.width = width * zoom;
             canvasRef.current.height = height * zoom;
 
-            if (zoom > MAX_CANVAS_ZOOM) {
-                // Update borders and clamp offset accordingly
-                canvasBorder.current = {w: context.canvas.offsetLeft, h: context.canvas.offsetTop - 72};
-                const {xPos, yPos} = clampOffset(offset.x, offset.y);
+            // Update borders and clamp offset accordingly
+            canvasBorder.current = {w: context.canvas.offsetLeft, h: context.canvas.offsetTop - 72};
+            const {xPos, yPos} = clampOffset(offset.x, offset.y);
 
-                context.translate(-xPos, -yPos);
+            setIsFullscreen({
+                horizontal: xPos >= context.canvas.offsetLeft && xPos <= -context.canvas.offsetLeft,
+                vertical: yPos >= context.canvas.offsetTop - 72 && yPos <= -(context.canvas.offsetTop - 72),
+            });
 
-                if (xPos < context.canvas.offsetLeft) {
-                    inBoundsLeft = false;
-                }
-                if (xPos > -context.canvas.offsetLeft) {
-                    inBoundsRight = false;
-                }
-                if (yPos < context.canvas.offsetTop - 72) {
-                    inBoundsTop = false;
-                }
-                if (yPos > -(context.canvas.offsetTop - 72)) {
-                    inBoundsBottom = false;
-                }
+            context.translate(-xPos, -yPos);
 
-                if (inBoundsLeft && inBoundsRight) {
-                    horizontalFullscreen.current = true;
-                } else {
-                    horizontalFullscreen.current = false;
-                }
-                if (inBoundsTop && inBoundsBottom) {
-                    verticalFullscreen.current = true;
-                } else {
-                    verticalFullscreen.current = false;
-                }
-
-                //console.log(`Top: ${inBoundsTop} | Bottom: ${inBoundsBottom} | Left: ${inBoundsLeft} | Right: ${inBoundsRight}`);
-
+            if (isFullscreen.horizontal || isFullscreen.vertical) {
+                // Kept for future additions
                 // Make sure we're zooming to the center, to be changed in favor of mouse
                 //x = ((context.canvas.width / zoom) - background.width) / 2;
                 //y = ((context.canvas.height / zoom) - background.height) / 2;
@@ -288,7 +255,6 @@ export default function ImagePreview({fileInfo}) {
     return (
         <div
             ref={containerRef}
-            // change this to either fullscreens
             className={`image_preview_div__${zoom >= MAX_CANVAS_ZOOM ? 'fullscreen' : 'normal'}`}
         >
             <canvas
