@@ -176,11 +176,6 @@ export function logout(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
 
-        try {
-            await Client4.logout();
-        } catch (error) {
-            // nothing to do here
-        }
         if (isDesktopApp()) {
             clearLocalStorageToken();
         }
