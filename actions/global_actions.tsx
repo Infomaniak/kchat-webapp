@@ -250,20 +250,19 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         if (shouldSignalLogout) {
             BrowserStore.signalLogout();
         }
-
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
 
         clearUserCookie();
 
         if (isDesktopApp()) {
-            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=ktalk://login`);
+            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
         } else {
             browserHistory.push(redirectTo);
         }
     }).catch(() => {
         if (isDesktopApp()) {
-            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=ktalk://login`);
+            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
         } else {
             browserHistory.push(redirectTo);
         }
