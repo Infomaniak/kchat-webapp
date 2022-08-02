@@ -16,65 +16,64 @@ build_docker_image:
   environment:
     name: $DEPLOY_VARIABLE
 
-unit_test:
-  stage: test
-  image: node:16.14.2-bullseye
-  tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: never
-  artifacts:
-    paths:
-      - coverage/
-    when: on_success
-    reports:
-      junit:
-        - coverage/junit.xml
-  coverage: '/^\s*Lines\s*: \d+\d+.\d+\d+\%/'
-  cache:
-    key:
-      files:
-        - package-lock.json
-      prefix: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .npm/
-      - node_modules/
-      - coverage/
-  before_script:
-    - npm ci --cache .npm
-  script:
-    # typescript
-    # - npm run check-types
+# unit_test:
+#   stage: test
+#   image: node:16.14.2-bullseye
+#   tags:
+#     - docker-executor
+#     - kubernetes
+#     - shared
+#   rules:
+#     - if: $CI_COMMIT_TAG
+#       when: on_success
+#     - if: '$CI_MERGE_REQUEST_ID'
+#       when: on_success
+#     - if: $CI_PIPELINE_SOURCE == "schedule"
+#       when: never
+#     - when: never
+#   artifacts:
+#     paths:
+#       - coverage/
+#     when: on_success
+#     reports:
+#       junit:
+#         - coverage/junit.xml
+#   coverage: '/^\s*Lines\s*: \d+\d+.\d+\d+\%/'
+#   cache:
+#     key:
+#       files:
+#         - package-lock.json
+#       prefix: ${CI_COMMIT_REF_SLUG}
+#     paths:
+#       - .npm/
+#       - node_modules/
+#       - coverage/
+#   before_script:
+#     - npm ci --cache .npm
+#   script:
+#     # typescript
+#     # - npm run check-types
 
-    # lint
-    # - npm run check
+#     # lint
+#     # - npm run check
 
-    # unit tests
-    - npm run test-ci
+#     # unit tests
+#     - npm run test-ci
 
-changelog:
-  stage: test
-  image: mrnonz/alpine-git-curl
-  needs: ['unit_test']
-  rules:
-    - if: $CI_COMMIT_TAG && $CI_COMMIT_BRANCH == "master"
-      when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: never
-  script:
-    - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
+# changelog:
+#   stage: test
+#   image: mrnonz/alpine-git-curl
+#   needs: ['unit_test']
+#   rules:
+#     - if: $CI_COMMIT_TAG && $CI_COMMIT_BRANCH == "master"
+#       when: on_success
+#     - if: $CI_PIPELINE_SOURCE == "schedule"
+#       when: never
+#     - when: never
+#   script:
+#     - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
 
-
-pages:
+# pages:
   stage: test
   needs: ['unit_test']
   script:
