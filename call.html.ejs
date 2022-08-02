@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+        />
+        <meta name="robots" content="noindex, nofollow" />
+        <meta name="referrer" content="no-referrer" />
+
+        <title>Call</title>
+
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="application-name" content="Mattermost" />
+        <meta name="format-detection" content="telephone=no" />
+
+        <script src="<%= KMEET_ENDPOINT %>/external_api.js"></script>
+        <script>
+            const KMEET_DOMAIN = "<%= KMEET_ENDPOINT %>";
+            const urlParams = new URLSearchParams(window.location.search);
+            const events = {
+                'audioMuteStatusChanged': window.opener.audioMuteStatusChanged,
+                'participantJoined': window.opener.onParticipantJoined,
+                'screenSharingStatusChanged': window.opener.screenSharingStatusChanged,
+                'videoMuteStatusChanged': window.opener.videoMuteStatusChanged,
+            }
+            document.title = urlParams.get('channelName')
+    
+            const configOverwrite = {
+                startWithAudioMuted: false,
+                startWithVideoMuted: true,
+                subject: urlParams.get('channelName'),
+                prejoinConfig: {enabled: false},
+                disableDeepLinking: true,
+                feedbackPercentage: 0,
+            };
+    
+            const jitsi = new window.JitsiMeetExternalAPI(KMEET_DOMAIN, {
+                configOverwrite,
+                interfaceConfigOverwrite: { HIDE_INVITE_MORE_HEADER: true },
+                roomName: urlParams.get('channelID'),
+                userInfo: {
+                    displayName: urlParams.get('username'),
+                },
+            });
+    
+            for (const [event, callback] of Object.entries(events)) {
+                jitsi.addListener(event, callback)
+            }
+    
+            jitsi.executeCommand('avatarUrl',urlParams.get('avatarUrl'));
+    
+            jitsi.on('readyToClose', () => {
+                window.close()
+            })
+            window.onclose = () => window.opener.onclose
+    
+            window.opener.executeCommand = (command) => jitsi.executeCommand(command)
+        </script>
+
+        <link
+            rel="icon"
+            type="image/png"
+            href="/static/images/favicon/favicon-default-16x16.png"
+            sizes="16x16"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            href="/static/images/favicon/favicon-default-24x24.png"
+            sizes="24x24"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            href="/static/images/favicon/favicon-default-32x32.png"
+            sizes="32x32"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            href="/static/images/favicon/favicon-default-64x64.png"
+            sizes="64x64"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            href="/static/images/favicon/favicon-default-96x96.png"
+            sizes="96x96"
+        />
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                overflow-y: hidden;
+                height: 100vh;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+    </body>
+</html>
