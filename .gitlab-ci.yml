@@ -10,6 +10,9 @@ workflow:
     - if: $CI_COMMIT_TAG
       variables:
         DEPLOY_VARIABLE: "prod"
+    - if: '$CI_MERGE_REQUEST_ID'
+      variables:
+        DEPLOY_VARIABLE: "staging"
     - when: never
 
 build_docker_image: &build_docker_image
@@ -19,6 +22,13 @@ build_docker_image: &build_docker_image
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: ['']
+  rules:
+    - if: '$DEPLOY_VARIABLE == "prod"'
+      when: on_success
+      allow_failure: false
+    - if: '$DEPLOY_VARIABLE == "preprod"'
+      when: on_success
+    - when: never
   environment: 
     name: $DEPLOY_VARIABLE
   before_script:
@@ -46,14 +56,6 @@ unit_test:
     - shared
   environment: 
     name: $DEPLOY_VARIABLE
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: never
   artifacts:
     paths:
       - coverage/
