@@ -535,20 +535,4 @@ if (process.env.PRODUCTION_PERF_DEBUG) { //eslint-disable-line no-process-env
     };
 }
 
-function templateParametersGenerator(compilation, assets, options) {
-    return {
-        compilation,
-        webpackConfig: compilation.options,
-        htmlWebpackPlugin: {
-            files: assets,
-            options,
-            env: {
-                WEBCOMPONENT_API_ENDPOINT: env.WEBCOMPONENT_API_ENDPOINT,
-                WEBCOMPONENT_ENDPOINT: env.WEBCOMPONENT_ENDPOINT,
-                KMEET_ENDPOINT: env.KMEET_ENDPOINT,
-            },
-        },
-    };
-}
-
 module.exports = [sw, config];
