@@ -1,7 +1,5 @@
-include:
-  - project: 'docker-public/gitlab-ci-dev-scripts'
-    ref: master
-    file: '/build-docker-image.yaml'
+stages:
+  - build
 
 workflow:
   rules:
@@ -12,9 +10,25 @@ workflow:
       variables:
         DEPLOY_VARIABLE: "preprod"
 
-build_docker_image:
-  environment:
-    name: $DEPLOY_VARIABLE
+build_docker_image: &build_docker_image
+  stage: build
+  tags:
+    - kubernetes
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: ['']
+  environment: $DEPLOY_VARIABLE
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+  script:
+    - |-
+      eval "/kaniko/executor \
+        --cache \
+        --context ${CI_PROJECT_DIR} \
+        --build-arg SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
+        --build-arg ENVIRONMENT=${environment} \
+        --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
+        ${args}"
 
 # unit_test:
 #   stage: test
