@@ -258,13 +258,13 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         if (isDesktopApp()) {
             window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
         } else {
-            browserHistory.push(redirectTo);
+            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php?redirect=${window.location.origin}/login`);
         }
     }).catch(() => {
         if (isDesktopApp()) {
             window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
         } else {
-            browserHistory.push(redirectTo);
+            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php?redirect=${window.location.origin}/login`);
         }
     });
 }
