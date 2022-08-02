@@ -17,11 +17,15 @@ build_docker_image: &build_docker_image
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: ['']
-  environment: $DEPLOY_VARIABLE
+  environment: 
+    name: $DEPLOY_VARIABLE
   before_script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
   script:
     - |-
+      environment=${DEPLOY_VARIABLE}
+      args="--destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG} --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}-$(date +%s)"
+
       eval "/kaniko/executor \
         --cache \
         --context ${CI_PROJECT_DIR} \
