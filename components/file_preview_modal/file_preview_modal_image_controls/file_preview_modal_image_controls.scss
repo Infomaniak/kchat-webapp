@@ -1,0 +1,11 @@
+.file-preview-modal-image-controls {
+    position: relative;
+    color: white;
+    height: 50px;
+    background: rgb(50, 50, 50);
+
+    &__dropdown {
+        color: black;
+        width: 200px;
+    }
+}

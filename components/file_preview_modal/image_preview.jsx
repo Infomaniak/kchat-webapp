@@ -231,12 +231,12 @@ export default function ImagePreview({fileInfo}) {
             canvasRef.current.height = height * zoom;
 
             // Update borders and clamp offset accordingly
-            canvasBorder.current = {w: context.canvas.offsetLeft, h: context.canvas.offsetTop - 72};
+            canvasBorder.current = {w: context.canvas.offsetLeft, h: context.canvas.offsetTop - 72 - 50};
             const {xPos, yPos} = clampOffset(offset.x, offset.y);
 
             setIsFullscreen({
                 horizontal: xPos >= context.canvas.offsetLeft && xPos <= -context.canvas.offsetLeft,
-                vertical: yPos >= context.canvas.offsetTop - 72 && yPos <= -(context.canvas.offsetTop - 72),
+                vertical: yPos >= context.canvas.offsetTop - 72 - 50 && yPos <= -(context.canvas.offsetTop - 72 - 50),
             });
 
             context.translate(-xPos, -yPos);
