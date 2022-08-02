@@ -392,17 +392,25 @@ if (DEV) {
     // Development mode configuration
     config.mode = 'development';
     config.devtool = 'eval-cheap-module-source-map';
+    // eslint-disable-next-line global-require
+    require('dotenv').config({
+        path: '.env.development',
+    });
 } else {
     // Production mode configuration
     config.mode = 'production';
     config.devtool = 'source-map';
 }
-
 const env = {};
 if (DEV) {
     env.PUBLIC_PATH = JSON.stringify(publicPath);
     env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || ''); //eslint-disable-line no-process-env
     env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || ''); //eslint-disable-line no-process-env
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || ''); //eslint-disable-line no-process-env
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || ''); //eslint-disable-line no-process-env
+    env.LOGIN_URL = JSON.stringify(process.env.LOGIN_URL || ''); //eslint-disable-line no-process-env
+    env.MANAGER_URL = JSON.stringify(process.env.MANAGER_URL || ''); //eslint-disable-line no-process-env
     if (process.env.MM_LIVE_RELOAD) { //eslint-disable-line no-process-env
         config.plugins.push(new LiveReloadPlugin());
     }
@@ -413,6 +421,8 @@ if (DEV) {
     env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || ''); //eslint-disable-line no-process-env
     env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || ''); //eslint-disable-line no-process-env
     env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || ''); //eslint-disable-line no-process-env
+    env.LOGIN_URL = JSON.stringify(process.env.LOGIN_URL || ''); //eslint-disable-line no-process-env
+    env.MANAGER_URL = JSON.stringify(process.env.MANAGER_URL || ''); //eslint-disable-line no-process-env
 }
 
 config.plugins.push(new webpack.DefinePlugin({
