@@ -10,7 +10,6 @@ to do (in no order):
 - Add rotation?
 
 doing (in order):
-- fix window resize handler
 - Zoom to where mouse is
 
 */
@@ -27,7 +26,7 @@ const VERTICAL_PADDING = 168;
 
 const SCROLL_SENSITIVITY = 0.0005;
 const MAX_ZOOM = 5;
-var MAX_CANVAS_ZOOM = 2; // try changing to 1 after
+var MAX_CANVAS_ZOOM = 1;
 var MIN_ZOOM = 0;
 
 export default function ImagePreview({fileInfo}) {
@@ -86,21 +85,20 @@ export default function ImagePreview({fileInfo}) {
     };
 
     // Clamps the offset to something that is inside canvas or window depending on zoom level
-    // Remarks: bad variable naming, can return {xPos, yPos} instead
     const clampOffset = (x, y) => {
         const {w, h} = canvasBorder.current;
         const {horizontal, vertical} = isFullscreen;
-        var xPosClamp = 0;
-        var yPosClamp = 0;
+        var xPos = 0;
+        var yPos = 0;
 
         if (horizontal) {
-            xPosClamp = clamp(x, w, -w);
+            xPos = clamp(x, w, -w);
         }
         if (vertical) {
-            yPosClamp = clamp(y, h, -h);
+            yPos = clamp(y, h, -h);
         }
 
-        return {xPos: xPosClamp, yPos: yPosClamp};
+        return {xPos, yPos};
     };
 
     const handleWheel = (event) => {
@@ -155,7 +153,7 @@ export default function ImagePreview({fileInfo}) {
         }
     }, [dragging, zoom]);
 
-    // broken again...
+    // Resize canvas when window is resized
     useEffect(() => {
         const currentContainer = containerRef.current;
         observer.current = new ResizeObserver((entries) => {
@@ -167,7 +165,7 @@ export default function ImagePreview({fileInfo}) {
                 entries.forEach(({target}) => {
                     const {width, height} = background;
 
-                    // If width of the container is smaller than image, scale image down
+                    // If container is smaller than canvas, scale canvas down
                     if ((target.clientWidth < width || target.clientHeight < height) && zoom === MIN_ZOOM) {
                         // Calculate and apply scale
                         const scale = fitCanvas(width, height);
@@ -186,7 +184,7 @@ export default function ImagePreview({fileInfo}) {
         return () => observer.current.unobserve(currentContainer);
     }, [background]);
 
-    // update thingy, make better
+    // Initialize canvas
     useEffect(() => {
         background.src = previewUrl;
 
@@ -196,6 +194,9 @@ export default function ImagePreview({fileInfo}) {
 
             background.onload = () => {
                 const context = canvasRef.current.getContext('2d');
+
+                // Improve smoothing quality
+                context.imageSmoothingQuality = 'high';
 
                 // Get the image dimensions
                 const {width, height} = background;
@@ -242,7 +243,6 @@ export default function ImagePreview({fileInfo}) {
 
             if (isFullscreen.horizontal || isFullscreen.vertical) {
                 // Kept for future additions
-                // Make sure we're zooming to the center, to be changed in favor of mouse
                 //x = ((context.canvas.width / zoom) - background.width) / 2;
                 //y = ((context.canvas.height / zoom) - background.height) / 2;
             }
