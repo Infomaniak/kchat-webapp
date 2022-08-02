@@ -32,7 +32,7 @@ const STANDARD_EXCLUDE = [
 
 // react-hot-loader and development source maps require eval
 const CSP_UNSAFE_EVAL_IF_DEV = DEV ? ' \'unsafe-eval\'' : '';
-const CSP_UNSAFE_INLINE_IF_DEV = DEV ? ' \'unsafe-inline\'' : '';
+const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
 
 var MYSTATS = {
 
@@ -305,7 +305,7 @@ var config = {
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.infomaniak.com kmeet.infomaniak.com welcome.preprod.dev.infomaniak.ch kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_INLINE_IF_DEV + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.infomaniak.com kmeet.infomaniak.com welcome.preprod.dev.infomaniak.ch kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV,
                 },
             },
             templateParameters: {
