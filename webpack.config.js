@@ -410,6 +410,9 @@ if (DEV) {
     env.NODE_ENV = JSON.stringify('production');
     env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || ''); //eslint-disable-line no-process-env
     env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || ''); //eslint-disable-line no-process-env
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || ''); //eslint-disable-line no-process-env
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || ''); //eslint-disable-line no-process-env
 }
 
 config.plugins.push(new webpack.DefinePlugin({
@@ -449,7 +452,7 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: 'https://kchat.infomaniak.com',
+                target: process.env.BASE_URL, //eslint-disable-line no-process-env
                 changeOrigin: true,
                 xfwd: true,
                 ws: true,
