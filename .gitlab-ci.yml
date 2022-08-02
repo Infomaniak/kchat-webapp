@@ -15,12 +15,6 @@ workflow:
 build_docker_image:
   environment:
     name: $DEPLOY_VARIABLE
-  variables:
-    BUILD_DOCKER_IMAGE_ARGS: |-
-      --build-arg WEBCOMPONENT_ENDPOINT='${WEBCOMPONENT_ENDPOINT}' \
-      --build-arg WEBCOMPONENT_API_ENDPOINT='${WEBCOMPONENT_API_ENDPOINT}' \
-      --build-arg KMEET_ENDPOINT='${KMEET_ENDPOINT}'
-      --build-arg BASE_URL='${BASE_URL}'
 
 unit_test:
   stage: test
