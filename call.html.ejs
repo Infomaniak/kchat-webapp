@@ -16,7 +16,48 @@
         <meta name="application-name" content="Mattermost" />
         <meta name="format-detection" content="telephone=no" />
 
-        <script src="<%= KMEET_ENDPOINT %>/external_api.js"></script>
+        <link
+            rel="icon"
+            type="image/png"
+            href="/static/images/favicon/favicon-default-16x16.png"
+            sizes="16x16"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            href="/static/images/favicon/favicon-default-24x24.png"
+            sizes="24x24"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            href="/static/images/favicon/favicon-default-32x32.png"
+            sizes="32x32"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            href="/static/images/favicon/favicon-default-64x64.png"
+            sizes="64x64"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            href="/static/images/favicon/favicon-default-96x96.png"
+            sizes="96x96"
+        />
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                overflow-y: hidden;
+                height: 100vh;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="https://<%= KMEET_ENDPOINT %>/external_api.js"></script>
         <script>
             const KMEET_DOMAIN = "<%= KMEET_ENDPOINT %>";
             const urlParams = new URLSearchParams(window.location.search);
@@ -59,47 +100,5 @@
     
             window.opener.executeCommand = (command) => jitsi.executeCommand(command)
         </script>
-
-        <link
-            rel="icon"
-            type="image/png"
-            href="/static/images/favicon/favicon-default-16x16.png"
-            sizes="16x16"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            href="/static/images/favicon/favicon-default-24x24.png"
-            sizes="24x24"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            href="/static/images/favicon/favicon-default-32x32.png"
-            sizes="32x32"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            href="/static/images/favicon/favicon-default-64x64.png"
-            sizes="64x64"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            href="/static/images/favicon/favicon-default-96x96.png"
-            sizes="96x96"
-        />
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                overflow-y: hidden;
-                height: 100vh;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="app"></div>
     </body>
 </html>

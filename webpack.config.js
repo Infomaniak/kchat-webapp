@@ -32,6 +32,7 @@ const STANDARD_EXCLUDE = [
 
 // react-hot-loader and development source maps require eval
 const CSP_UNSAFE_EVAL_IF_DEV = DEV ? ' \'unsafe-eval\'' : '';
+const CSP_UNSAFE_INLINE_IF_DEV = DEV ? ' \'unsafe-inline\'' : '';
 
 var MYSTATS = {
 
@@ -287,7 +288,7 @@ var config = {
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.infomaniak.com welcome.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ kmeet.preprod.dev.infomaniak.ch/ ' + CSP_UNSAFE_EVAL_IF_DEV,
                 },
             },
             templateParameters: {
@@ -304,12 +305,12 @@ var config = {
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.infomaniak.com kmeet.infomaniak.com welcome.preprod.dev.infomaniak.ch kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.infomaniak.com kmeet.infomaniak.com welcome.preprod.dev.infomaniak.ch kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_INLINE_IF_DEV + CSP_UNSAFE_EVAL_IF_DEV,
                 },
             },
             templateParameters: {
                 // eslint-disable-next-line no-process-env
-                KMEET_ENDPOINT: process.env.KMEET_ENDPOINT || 'https://kmeet.infomaniak.com',
+                KMEET_ENDPOINT: process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch',
             },
         }),
         new CopyWebpackPlugin({
@@ -445,7 +446,7 @@ if (DEV) {
     env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
     env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/current'); //eslint-disable-line no-process-env
     env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com'); //eslint-disable-line no-process-env
-    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'https://kmeet.infomaniak.com'); //eslint-disable-line no-process-env
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.infomaniak.com'); //eslint-disable-line no-process-env
 }
 
 config.plugins.push(new webpack.DefinePlugin({
