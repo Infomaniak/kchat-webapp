@@ -61,7 +61,7 @@
 
     <script src="https://kmeet.infomaniak.com/external_api.js"></script>
     <script>
-        const KMEET_DOMAIN = 'kmeet.infomaniak.com';
+        const KMEET_DOMAIN = process.env.KMEET_ENDPOINT;
         const urlParams = new URLSearchParams(window.location.search);
         const events = {
             'audioMuteStatusChanged': window.opener.audioMuteStatusChanged,
