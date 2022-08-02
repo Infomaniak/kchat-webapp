@@ -1,3 +1,9 @@
+## 0.1.5 (2022-08-02)
+
+### Added (1 change)
+
+- [Use environment variables from ci](kchat/webapp@8e9394804d529434bf52bad0bfeadccf7cfb469c)
+
 ## 0.1.4 (2022-07-27)
 
 ### chore (1 change)
