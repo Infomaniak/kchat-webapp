@@ -27,8 +27,8 @@ const VERTICAL_PADDING = 168;
 
 const SCROLL_SENSITIVITY = 0.0005;
 const MAX_ZOOM = 5;
-var MAX_CANVAS_ZOOM = 2;
-var MIN_ZOOM = 1;
+var MAX_CANVAS_ZOOM = 2; // try changing to 1 after
+var MIN_ZOOM = 0;
 
 export default function ImagePreview({fileInfo}) {
     const isExternalFile = !fileInfo.id;
@@ -77,16 +77,16 @@ export default function ImagePreview({fileInfo}) {
         return Math.min(scaleX, scaleY);
     };
 
-    // Should be revisited, try math.min(containerScale, zoom) or something
+    // Should be revisited, try math.min(containerScale, zoom) or something also give better name
     const initCanvas = (width, height) => {
         const containerScale = fitCanvas(width, height);
-        MIN_ZOOM = containerScale <= 1 ? containerScale : 1;
+        MIN_ZOOM = Math.min(containerScale, 1);
         MAX_CANVAS_ZOOM = containerScale;
         return MIN_ZOOM;
     };
 
     // Clamps the offset to something that is inside canvas or window depending on zoom level
-    // Remarks: bad variable naming
+    // Remarks: bad variable naming, can return {xPos, yPos} instead
     const clampOffset = (x, y) => {
         const {w, h} = canvasBorder.current;
         const {horizontal, vertical} = isFullscreen;
@@ -157,31 +157,36 @@ export default function ImagePreview({fileInfo}) {
 
     // broken again...
     useEffect(() => {
+        const currentContainer = containerRef.current;
         observer.current = new ResizeObserver((entries) => {
             // Request animation frame to avoid spamming console with loop warnings
             window.requestAnimationFrame(() => {
-                if (!Array.isArray(entries) || !entries.length || zoom !== MIN_ZOOM) {
+                if (!Array.isArray(entries) || !entries.length) {
                     return;
                 }
-
-                entries.forEach(() => {
+                entries.forEach(({target}) => {
                     const {width, height} = background;
-                    const containerScale = initCanvas(width, height);
 
-                    canvasRef.current.width = width * containerScale;
-                    canvasRef.current.height = height * containerScale;
-                    canvasRef.current.
-                        getContext('2d').
-                        drawImage(background, 0, 0, width * containerScale, height * containerScale);
+                    // If width of the container is smaller than image, scale image down
+                    if ((target.clientWidth < width || target.clientHeight < height) && zoom === MIN_ZOOM) {
+                        // Calculate and apply scale
+                        const scale = fitCanvas(width, height);
+                        MIN_ZOOM = Math.min(scale, 1);
+                        setZoom(MIN_ZOOM);
+                    }
                 });
             });
         });
-        observer.current.observe(containerRef.current);
-        const currentContainer = containerRef.current;
 
+        if (zoom === MIN_ZOOM) {
+            observer.current.observe(containerRef.current);
+        } else {
+            observer.current.unobserve(containerRef.current);
+        }
         return () => observer.current.unobserve(currentContainer);
-    }, [background, zoom]);
+    }, [background]);
 
+    // update thingy, make better
     useEffect(() => {
         background.src = previewUrl;
 
@@ -245,7 +250,7 @@ export default function ImagePreview({fileInfo}) {
             // Draw image
             context.drawImage(background, x, y, width * zoom, height * zoom);
         }
-    }, [zoom, offset, background]);
+    }, [zoom, offset]);
 
     // Global mouseup event, otherwise canvas can stay stuck on mouse when leaving canvas while dragging
     window.addEventListener('mouseup', () => {
