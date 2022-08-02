@@ -287,7 +287,7 @@ var config = {
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.infomaniak.com kmeet.infomaniak.com ' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.infomaniak.com welcome.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
                 },
             },
             templateParameters: {
@@ -436,7 +436,6 @@ if (DEV) {
     env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/current'); //eslint-disable-line no-process-env
     env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com'); //eslint-disable-line no-process-env
     env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || ''); //eslint-disable-line no-process-env
-    env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.infomaniak.com/'); //eslint-disable-line no-process-env
     if (process.env.MM_LIVE_RELOAD) { //eslint-disable-line no-process-env
         config.plugins.push(new LiveReloadPlugin());
     }
@@ -444,8 +443,8 @@ if (DEV) {
     env.NODE_ENV = JSON.stringify('production');
     env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || ''); //eslint-disable-line no-process-env
     env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
-    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || ''); //eslint-disable-line no-process-env
-    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || ''); //eslint-disable-line no-process-env
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/current'); //eslint-disable-line no-process-env
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com'); //eslint-disable-line no-process-env
     env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'https://kmeet.infomaniak.com'); //eslint-disable-line no-process-env
 }
 
@@ -486,7 +485,7 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: env.BASE_URL, //eslint-disable-line no-process-env
+                target: process.env.BASE_URL || 'https://kchat.preprod.dev.infomaniak.ch', //eslint-disable-line no-process-env
                 changeOrigin: true,
                 xfwd: true,
                 ws: true,
