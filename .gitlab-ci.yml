@@ -33,7 +33,8 @@ build_docker_image: &build_docker_image
     name: $DEPLOY_VARIABLE
   before_script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - echo $DEPLOY_VARIABLE
+    - chmod +x ./setup_env.sh
+    - ./setup_env.sh
   script:
     - |-
       environment=${DEPLOY_VARIABLE}
