@@ -1,7 +1,41 @@
-include:
-  - project: 'docker-public/gitlab-ci-dev-scripts'
-    ref: master
-    file: '/build-docker-image.yaml'
+stages:
+  - test
+  - build
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /\-rc.*/'
+      variables:
+        DEPLOY_VARIABLE: "preprod"
+    - if: $CI_COMMIT_TAG
+      variables:
+        DEPLOY_VARIABLE: "prod"
+    - when: never
+
+build_docker_image: &build_docker_image
+  stage: build
+  tags:
+    - kubernetes
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: ['']
+  environment: 
+    name: $DEPLOY_VARIABLE
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - echo $DEPLOY_VARIABLE
+  script:
+    - |-
+      environment=${DEPLOY_VARIABLE}
+      args="--destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG} --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}-$(date +%s)"
+
+      eval "/kaniko/executor \
+        --cache \
+        --context ${CI_PROJECT_DIR} \
+        --build-arg SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
+        --build-arg ENVIRONMENT=${environment} \
+        --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
+        ${args}"
 
 unit_test:
   stage: test
@@ -10,14 +44,8 @@ unit_test:
     - docker-executor
     - kubernetes
     - shared
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: never
+  environment: 
+    name: $DEPLOY_VARIABLE
   artifacts:
     paths:
       - coverage/
@@ -51,15 +79,8 @@ changelog:
   stage: test
   image: mrnonz/alpine-git-curl
   needs: ['unit_test']
-  rules:
-    - if: $CI_COMMIT_TAG && $CI_COMMIT_BRANCH == "master"
-      when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: never
   script:
     - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
-
 
 pages:
   stage: test
@@ -71,13 +92,3 @@ pages:
   artifacts:
     paths:
       - public
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: never
-  # only:
-  #   - alpha

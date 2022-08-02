@@ -21,11 +21,10 @@
     <link rel="icon" type="image/png" href="/static/images/favicon/favicon-default-64x64.png" sizes="64x64">
     <link rel="icon" type="image/png" href="/static/images/favicon/favicon-default-96x96.png" sizes="96x96">
     <script>
-        // Temp webcomponent variables -> TODO: use webpack to inject
-        window.WEB_COMPONENT_API_ENDPOINT = 'https://welcome.preprod.dev.infomaniak.ch';
+        window.WEB_COMPONENT_API_ENDPOINT = "<%= process.env.WEBCOMPONENT_API_ENDPOINT %>";
         window.CURRENT_PROJECT = 'kchat';
     </script>
-    <script id="webComponents" src="https://web-components.storage.infomaniak.com/next/init.js?project=kchat"></script>
+    <script id="webComponents" src="<%= process.env.WEBCOMPONENT_ENDPOINT %>/init.js?project=kchat"></script>
 
     <!-- CSS Should always go first -->
     <link rel='stylesheet' class='code_theme'>
