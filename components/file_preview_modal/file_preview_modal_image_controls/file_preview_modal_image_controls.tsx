@@ -6,12 +6,14 @@
 /*
 to do:
 - ask about scales stuff
+- round button to 10
 - fix all red stuff
 - fix <option id="image-controls__custom-zoom" value="customZoom" hidden="">Actual Size Fit Width Fit Height 125% 150% 200% 300% 400% 500% 150%</option>
 */
 
 import React, {memo, SyntheticEvent, useEffect, useState} from 'react';
 
+import {MIN_ZOOM, ZOOM_EXT} from '../image_preview';
 import './file_preview_modal_image_controls.scss';
 
 interface Props {
@@ -114,14 +116,15 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
     };
 
     const handleZoomIn = () => {
-        if (typeof toolbarZoom !== 'string') {
-            setToolbarZoom(clamp(toolbarZoom + 0.1, 1, 5));
-        }
+        handleZoomButtons(0.1);
     };
     const handleZoomOut = () => {
-        if (typeof toolbarZoom !== 'string') {
-            setToolbarZoom(clamp(toolbarZoom - 0.1, 1, 5));
-        }
+        handleZoomButtons(-0.1);
+    };
+    const handleZoomButtons = (delta: number) => {
+        let newToolbarZoom = typeof toolbarZoom === 'string' ? ZOOM_EXT : toolbarZoom;
+        newToolbarZoom = Math.round(newToolbarZoom * 10) / 10;
+        setToolbarZoom(clamp(newToolbarZoom + delta, MIN_ZOOM, 5));
     };
 
     // Callbacks

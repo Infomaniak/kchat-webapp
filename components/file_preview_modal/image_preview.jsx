@@ -12,6 +12,8 @@ to do (in no order):
 - Add rotation?
 
 doing (in order):
+- if zoom === MIN_ZOOM, change toolbarZoom to 'A'
+- fix cursor being messy
 - Zoom to where mouse is
 
 */
@@ -30,6 +32,15 @@ const SCROLL_SENSITIVITY = 0.0005;
 const MAX_ZOOM = 5;
 var MAX_CANVAS_ZOOM = 1;
 var MIN_ZOOM = 0;
+var ZOOM_EXT = 1;
+
+ImagePreview.propTypes = {
+    fileInfo: PropTypes.object.isRequired,
+    toolbarZoom: PropTypes.number.isRequired | PropTypes.string.isRequired,
+    setToolbarZoom: PropTypes.func.isRequired,
+};
+
+export {MIN_ZOOM, ZOOM_EXT};
 
 export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
     const isExternalFile = !fileInfo.id;
@@ -75,7 +86,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
         const scaleX = maxWidth / width;
         const scaleY = maxHeight / height;
 
-        return Math.min(scaleX, scaleY);
+        return Math.round(Math.min(scaleX, scaleY) * 100) / 100;
     };
 
     // Should be revisited, try math.min(containerScale, zoom) or something also give better name
@@ -111,7 +122,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
         if (!dragging) {
             const newZoom = clamp(zoom + (deltaY * SCROLL_SENSITIVITY * -1), MIN_ZOOM, MAX_ZOOM);
             setZoom(newZoom);
-            setToolbarZoom(newZoom);
+            setToolbarZoom(newZoom === MIN_ZOOM ? 'A' : newZoom);
         }
     };
 
@@ -227,6 +238,8 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
     // optimize and reduce things.. (if only panning, pan only)
     useEffect(() => {
         if (canvasRef.current) {
+            ZOOM_EXT = zoom;
+
             const {width, height} = background;
             const context = canvasRef.current.getContext('2d');
 
@@ -309,9 +322,3 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
         </div>
     );
 }
-
-ImagePreview.propTypes = {
-    fileInfo: PropTypes.object.isRequired,
-    toolbarZoom: PropTypes.number.isRequired | PropTypes.string.isRequired,
-    setToolbarZoom: PropTypes.func.isRequired,
-};
