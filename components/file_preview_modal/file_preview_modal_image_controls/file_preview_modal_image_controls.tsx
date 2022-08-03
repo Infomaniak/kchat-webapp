@@ -19,7 +19,6 @@ interface Props {
     setToolbarZoom: (toolbarZoom: number | string) => void;
 }
 
-// const FilePreviewModalImageControls: React.FC<Props> = (props: Props) => {
 const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbarZoom}: Props) => {
     // Initial variables and constants
     // zoom text
@@ -109,7 +108,6 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
         if (zoomLevels.get(zoomLevel.value).type === 'scale') {
             setToolbarZoom(parseFloat(zoomLevel.value));
         } else {
-            selectItem(event.target.value);
             setToolbarZoom(zoomLevel.value);
         }
 
@@ -119,24 +117,20 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
     };
 
     const handleZoomIn = () => {
-        if (typeof toolbarZoom === 'string') {
-            setToolbarZoom(1); // prolly temp
-        } else {
-            setToolbarZoom(clamp(toolbarZoom + 0.1, 1, 5)); // maybe arrow func (toolbarZoom) => ...
+        if (typeof toolbarZoom !== 'string') {
+            setToolbarZoom(clamp(toolbarZoom + 0.1, 1, 5));
         }
     };
     const handleZoomOut = () => {
-        if (typeof toolbarZoom === 'string') {
-            setToolbarZoom(1); // prolly temp
-        } else {
-            setToolbarZoom(clamp(toolbarZoom - 0.1, 1, 5)); // maybe arrow func
+        if (typeof toolbarZoom !== 'string') {
+            setToolbarZoom(clamp(toolbarZoom - 0.1, 1, 5));
         }
     };
 
     // Callbacks
     useEffect(() => {
         if (typeof toolbarZoom === 'number') {
-            setZoomText(`${Math.round(toolbarZoom * 100)}%`); // 100% is 'Actual Size'
+            setZoomText(`${Math.round(toolbarZoom * 100)}%`);
         }
         if (zoomLevels.has(toolbarZoom.toString())) {
             selectItem(toolbarZoom.toString());

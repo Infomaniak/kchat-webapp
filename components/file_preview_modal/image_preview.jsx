@@ -259,6 +259,12 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
     }, [zoom, offset]);
 
     useEffect(() => {
+        if (!(isFullscreen.horizontal || isFullscreen.vertical)) {
+            setOffset(0, 0);
+        }
+    }, [isFullscreen]);
+
+    useEffect(() => {
         const {width, height} = background;
 
         if (typeof toolbarZoom === 'string') {
