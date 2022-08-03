@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - release
 
 workflow:
   rules:
@@ -87,18 +88,6 @@ unit_test:
     # unit tests
     - npm run test-ci
 
-changelog:
-  stage: test
-  image: mrnonz/alpine-git-curl
-  needs: ['unit_test']
-  rules:
-    - if: '$DEPLOY_VARIABLE == "prod"'
-      when: on_success
-      allow_failure: false
-    - when: never
-  script:
-    - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
-
 pages:
   stage: test
   needs: ['unit_test']
@@ -110,18 +99,33 @@ pages:
     paths:
       - public
 
-release:
-  stage: .post
+changelog:
+  stage: release
+  image: mrnonz/alpine-git-curl
+  needs: ['unit_test']
+  rules:
+    - if: '$DEPLOY_VARIABLE == "prod"'
+      when: on_success
+      allow_failure: false
+    - when: never
+  script:
+    - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
+
+git_release:
+  stage: release
   tags:
     - docker-executor
     - kubernetes
     - shared
-  image: node:16.14.2-bullseye
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  release:
+    name: '$CI_COMMIT_TAG'
+    description": '$$CHANGELOG',
+    # tag_name is a mendatory field and can not be an empty string
+    tag_name: '$CI_COMMIT_TAG'
   rules:
     - if: '$DEPLOY_VARIABLE == "prod"'
       when: on_success
     - if: '$DEPLOY_VARIABLE == "preprod"'
       when: on_success
     - when: never
-  script:
-    - npx -p @semantic-release/gitlab
