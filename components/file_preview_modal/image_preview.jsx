@@ -91,11 +91,13 @@ export default function ImagePreview({fileInfo}) {
         var xPos = 0;
         var yPos = 0;
 
-        if (horizontal) {
-            xPos = clamp(x, w, -w);
-        }
-        if (vertical) {
-            yPos = clamp(y, h, -h);
+        if (zoom > MAX_CANVAS_ZOOM) {
+            if (horizontal) {
+                xPos = clamp(x, w, -w);
+            }
+            if (vertical) {
+                yPos = clamp(y, h, -h);
+            }
         }
 
         return {xPos, yPos};
@@ -235,8 +237,8 @@ export default function ImagePreview({fileInfo}) {
             const {xPos, yPos} = clampOffset(offset.x, offset.y);
 
             setIsFullscreen({
-                horizontal: xPos >= context.canvas.offsetLeft && xPos <= -context.canvas.offsetLeft,
-                vertical: yPos >= context.canvas.offsetTop - 72 - 50 && yPos <= -(context.canvas.offsetTop - 72 - 50),
+                horizontal: xPos >= canvasBorder.current.w && xPos <= -canvasBorder.current.w,
+                vertical: yPos >= canvasBorder.current.h && yPos <= -canvasBorder.current.h,
             });
 
             context.translate(-xPos, -yPos);
