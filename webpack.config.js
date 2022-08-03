@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 /* eslint-disable max-lines */
+/* eslint-disable no-process-env */
 
 const childProcess = require('child_process');
 
@@ -136,25 +137,25 @@ if (DEV) {
 const env = {};
 if (DEV) {
     env.PUBLIC_PATH = JSON.stringify(publicPath);
-    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || ''); //eslint-disable-line no-process-env
-    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
-    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/current'); //eslint-disable-line no-process-env
-    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com'); //eslint-disable-line no-process-env
-    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch'); //eslint-disable-line no-process-env
-    env.MANAGER_URL = JSON.stringify(process.env.MANAGER_URL || 'https://manager.preprod.dev.infomaniak.ch/'); //eslint-disable-line no-process-env
-    env.LOGIN_URL = JSON.stringify(process.env.LOGIN_URL || 'https://login.preprod.dev.infomaniak.ch/'); //eslint-disable-line no-process-env
-    if (process.env.MM_LIVE_RELOAD) { //eslint-disable-line no-process-env
+    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || '');
+    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/current');
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch');
+    env.MANAGER_URL = JSON.stringify(process.env.MANAGER_URL || 'https://manager.preprod.dev.infomaniak.ch/');
+    env.LOGIN_URL = JSON.stringify(process.env.LOGIN_URL || 'https://login.preprod.dev.infomaniak.ch/');
+    if (process.env.MM_LIVE_RELOAD) {
         config.plugins.push(new LiveReloadPlugin());
     }
 } else {
     env.NODE_ENV = JSON.stringify('production');
-    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || ''); //eslint-disable-line no-process-env
-    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
-    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || ''); //eslint-disable-line no-process-env
-    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || ''); //eslint-disable-line no-process-env
-    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || ''); //eslint-disable-line no-process-env
-    env.MANAGER_URL = JSON.stringify(process.env.MANAGER_URL || ''); //eslint-disable-line no-process-env
-    env.LOGIN_URL = JSON.stringify(process.env.LOGIN_URL || ''); //eslint-disable-line no-process-env
+    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || '');
+    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || '');
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || '');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || '');
+    env.MANAGER_URL = JSON.stringify(process.env.MANAGER_URL || '');
+    env.LOGIN_URL = JSON.stringify(process.env.LOGIN_URL || '');
 }
 
 var config = {
