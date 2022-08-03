@@ -34,6 +34,9 @@ build_docker_image: &build_docker_image
     name: $DEPLOY_VARIABLE
   before_script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - echo "WEBCOMPONENT_ENDPOINT=$WEBCOMPONENT_ENDPOINT" >> .env
+    - echo "WEBCOMPONENT_API_ENDPOINT=$WEBCOMPONENT_API_ENDPOINT" >> .env
+    - echo "KMEET_ENDPOINT=$KMEET_ENDPOINT" >> .env
   script:
     - |-
       environment=${DEPLOY_VARIABLE}
@@ -43,9 +46,6 @@ build_docker_image: &build_docker_image
         --cache \
         --context ${CI_PROJECT_DIR} \
         --build-arg SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
-        --build-arg WEBCOMPONENT_ENDPOINT='${WEBCOMPONENT_ENDPOINT}' \
-        --build-arg WEBCOMPONENT_API_ENDPOINT='${WEBCOMPONENT_API_ENDPOINT}' \
-        --build-arg KMEET_ENDPOINT='${KMEET_ENDPOINT}' \
         --build-arg ENVIRONMENT=${environment} \
         --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
         ${args}"
