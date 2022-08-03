@@ -15,7 +15,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
-const Dotenv = require('dotenv-webpack');
 
 const NPM_TARGET = process.env.npm_lifecycle_event; //eslint-disable-line no-process-env
 
@@ -292,7 +291,6 @@ var config = {
     },
     target: 'web',
     plugins: [
-        new Dotenv(),
         new webpack.ProvidePlugin({
             process: 'process/browser',
         }),
