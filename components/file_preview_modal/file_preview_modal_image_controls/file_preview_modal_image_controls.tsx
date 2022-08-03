@@ -47,9 +47,10 @@ const FilePreviewModalImageControls: React.FC<Props> = ({zoom, setZoom}: Props) 
 
     // Make that intl
     const zoomLevels = new Map();
-    zoomLevels.set('A', {text: 'Actual Size', type: 'auto'});
-    zoomLevels.set('W', {text: 'Fit Width', type: 'auto'});
-    zoomLevels.set('H', {text: 'Fit Height', type: 'auto'});
+    zoomLevels.set('Fill', {text: 'Fill Viewport', type: 'auto'});
+    zoomLevels.set('Fit Width', {text: 'Fit Width', type: 'auto'});
+    zoomLevels.set('Fit Height', {text: 'Fit Height', type: 'auto'});
+    zoomLevels.set('1', {text: '100%', type: 'scale'});
     zoomLevels.set('1.25', {text: '125%', type: 'scale'});
     zoomLevels.set('1.5', {text: '150%', type: 'scale'});
     zoomLevels.set('2', {text: '200%', type: 'scale'});
@@ -67,10 +68,8 @@ const FilePreviewModalImageControls: React.FC<Props> = ({zoom, setZoom}: Props) 
         );
     }
 
-    // Dunno if thats proper nomenclature for IDs, fix later
     zoomLevelOptions.push(
         <option
-            id='image-controls__custom-zoom'
             value='customZoom'
             hidden={true}
             selected={whichSelected.custom}
