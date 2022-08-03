@@ -104,14 +104,15 @@ pages:
 
 changelog:
   stage: release
-  image: mrnonz/alpine-git-curl
+  image: makocchi/alpine-git-curl-jq
   needs: ['build_docker_image']
   rules:
     - if: '$DEPLOY_VARIABLE == "prod"'
       when: on_success
+    - if: '$DEPLOY_VARIABLE == "preprod"'
+      when: on_success
     - when: never
   script:
-    - 'curl -sS https://webinstall.dev/jq | b'
     - './gitlab-changelog.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG}'
     - './gitlab-release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3}'
 
