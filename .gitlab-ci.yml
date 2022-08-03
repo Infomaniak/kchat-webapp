@@ -111,7 +111,7 @@ changelog:
       when: on_success
     - when: never
   script:
-    - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
+    - './gitlab-changelog.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG}'
 
 git_release:
   stage: release
