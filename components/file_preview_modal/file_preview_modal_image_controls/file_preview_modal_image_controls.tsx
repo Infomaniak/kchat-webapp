@@ -1,8 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useEffect, useState} from 'react';
-import {DropdownEvent} from 'bootstrap';
+/* eslint-disable no-console */
+
+/*
+to do:
+- fix all red stuff
+- remove console allow thingy
+- fix <option id="image-controls__custom-zoom" value="customZoom" hidden="">Actual Size Fit Width Fit Height 125% 150% 200% 300% 400% 500% 150%</option>
+*/
+
+import React, {memo, SyntheticEvent, useEffect, useState} from 'react';
 
 import {FileInfo} from '@mattermost/types/files';
 import {LinkInfo} from '../types';
@@ -13,7 +21,8 @@ interface Props {
     fileInfo: FileInfo | LinkInfo;
 }
 
-const FilePreviewModalImageControls: React.FC<Props> = (props: Props) => {
+// const FilePreviewModalImageControls: React.FC<Props> = (props: Props) => {
+const FilePreviewModalImageControls: React.FC<Props> = () => {
     // Initial variables and constants
     // zoom text
     const [zoom, setZoom] = useState<number | string>('A');
@@ -32,6 +41,9 @@ const FilePreviewModalImageControls: React.FC<Props> = (props: Props) => {
         custom: false,
     });
 
+    const plusSign = '+';
+    const minusSign = '-';
+
     // Make that intl
     const zoomLevels = new Map();
     zoomLevels.set('A', {text: 'Actual Size', type: 'auto'});
@@ -49,7 +61,7 @@ const FilePreviewModalImageControls: React.FC<Props> = (props: Props) => {
         zoomLevelOptions.push(
             <option
                 value={value}
-                selected={whichSelected[value]} // find better solution?
+                selected={whichSelected[value as keyof typeof whichSelected]}
             >{zoomLevel.text}</option>,
         );
     }
@@ -85,13 +97,13 @@ const FilePreviewModalImageControls: React.FC<Props> = (props: Props) => {
             5: false,
             custom: false,
         };
-        newWhichSelected[item] = true; // seek to change?
+        newWhichSelected[item as keyof typeof newWhichSelected] = true;
         setWhichSelected(newWhichSelected);
     };
 
     // Handlers
     // change type to proper type in the future
-    const handleZoomDropdown = (event: DropdownEvent) => {
+    const handleZoomDropdown = (event: SyntheticEvent) => {
         const zoomLevel = event.target;
         setZoom(zoomLevels.get(zoomLevel.value).type === 'scale' ? parseFloat(zoomLevel.value) : zoomLevel.value);
         if (zoomLevel.value !== 'customZoom') {
@@ -124,6 +136,7 @@ const FilePreviewModalImageControls: React.FC<Props> = (props: Props) => {
         } else {
             selectItem('custom');
         }
+        console.log(zoom);
     }, [zoom]);
 
     // Elements
@@ -137,10 +150,10 @@ const FilePreviewModalImageControls: React.FC<Props> = (props: Props) => {
     );
 
     const zoomInButton = (
-        <button onClick={handleZoomIn}>+</button>
+        <button onClick={handleZoomIn}>{plusSign}</button>
     );
     const zoomOutButton = (
-        <button onClick={handleZoomOut}>-</button>
+        <button onClick={handleZoomOut}>{minusSign}</button>
     );
 
     // Render
