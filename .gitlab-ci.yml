@@ -104,7 +104,7 @@ build_docker_image: &build_docker_image
 
 changelog:
   stage: release
-  image: makocchi/alpine-git-curl-jq
+  image: registry.infomaniak.com:443/leopold.jacquot/debian-toolbox:0.0.1
   needs: ['build_docker_image']
   rules:
     - if: '$DEPLOY_VARIABLE == "prod"'
