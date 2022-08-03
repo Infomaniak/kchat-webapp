@@ -114,36 +114,24 @@ changelog:
     - './gitlab-changelog.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG}'
 
 git_release:
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
   stage: release
-  needs: ['changelog']
-  image:
-    name: registry.gitlab.com/tozd/gitlab/release/branch/main:latest-debug
-    entrypoint: [""]
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
   script:
-    - /gitlab-release
+    - echo 'running release_job'
+    - echo 'Previous Job ID is printed below'
+    - echo $GE_JOB_ID
+  when: manual
+  needs: ['changelog']
+  release:
+    name: '$CI_COMMIT_TAG'
+    description: './CHANGELOG.md'
+    # tag_name is a mendatory field and can not be an empty string
+    tag_name: '$CI_COMMIT_TAG'
   rules:
-    - if: '$GITLAB_API_TOKEN && ($DEPLOY_VARIABLE == "prod")'
+    - if: '$DEPLOY_VARIABLE == "prod"'
       when: on_success
     - when: never
-
-# git_release:
-#   stage: release
-#   tags:
-#     - docker-executor
-#     - kubernetes
-#     - shared
-#   script:
-#     - echo 'running release_job'
-#     - echo 'Previous Job ID is printed below'
-#     - echo $GE_JOB_ID
-#   image: registry.gitlab.com/gitlab-org/release-cli:latest
-#   needs: ['changelog']
-#   release:
-#     name: '$CI_COMMIT_TAG'
-#     description: './CHANGELOG.md'
-#     # tag_name is a mendatory field and can not be an empty string
-#     tag_name: '$CI_COMMIT_TAG'
-#   rules:
-#     - if: '$DEPLOY_VARIABLE == "prod"'
-#       when: on_success
-#     - when: never
