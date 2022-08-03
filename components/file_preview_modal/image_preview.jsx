@@ -6,13 +6,10 @@
 /*
 
 to do (in no order):
-- Add toolbox (zoom in, out, current zoom level...)
 - Spacebar toggles dragging?
-- Investigate mobile zoom in?
 - Add rotation?
 
 doing (in order):
-- if zoom === MIN_ZOOM, change toolbarZoom to 'A'
 - fix cursor being messy
 - Zoom to where mouse is
 
@@ -25,10 +22,10 @@ import {getFilePreviewUrl, getFileDownloadUrl} from 'mattermost-redux/utils/file
 
 import './image_preview.scss';
 
-const HORIZONTAL_PADDING = 50;
+const HORIZONTAL_PADDING = 48;
 const VERTICAL_PADDING = 168;
 
-const SCROLL_SENSITIVITY = 0.0005;
+const SCROLL_SENSITIVITY = 0.003;
 const MAX_ZOOM = 5;
 var MAX_CANVAS_ZOOM = 1;
 var MIN_ZOOM = 0;
@@ -237,9 +234,8 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
     // for mouse centered zooming, center offset to mouse then clamp
     // optimize and reduce things.. (if only panning, pan only)
     useEffect(() => {
+        ZOOM_EXT = zoom;
         if (canvasRef.current) {
-            ZOOM_EXT = zoom;
-
             const {width, height} = background;
             const context = canvasRef.current.getContext('2d');
 
@@ -250,7 +246,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
             canvasRef.current.height = height * zoom;
 
             // Update borders and clamp offset accordingly
-            canvasBorder.current = {w: context.canvas.offsetLeft, h: context.canvas.offsetTop - 72 - 50};
+            canvasBorder.current = {w: context.canvas.offsetLeft, h: context.canvas.offsetTop - 72 - 48};
             const {xPos, yPos} = clampOffset(offset.x, offset.y);
 
             setIsFullscreen({
