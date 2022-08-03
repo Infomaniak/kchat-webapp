@@ -109,3 +109,19 @@ pages:
   artifacts:
     paths:
       - public
+
+release:
+  stage: .post
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  image: node:16.14.2-bullseye
+  rules:
+    - if: '$DEPLOY_VARIABLE == "prod"'
+      when: on_success
+    - if: '$DEPLOY_VARIABLE == "preprod"'
+      when: on_success
+    - when: never
+  script:
+    - npx -p @semantic-release/gitlab
