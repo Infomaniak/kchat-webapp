@@ -26,7 +26,6 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
 
     const [whichSelected, setWhichSelected] = useState({
         A: true,
-        F: false,
         W: false,
         H: false,
         1: false,
@@ -45,7 +44,6 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
     // Make that intl
     const zoomLevels = new Map();
     zoomLevels.set('A', {text: 'Automatic', type: 'auto'});
-    zoomLevels.set('F', {text: 'Fill Viewport', type: 'auto'});
     zoomLevels.set('W', {text: 'Fit Width', type: 'auto'});
     zoomLevels.set('H', {text: 'Fit Height', type: 'auto'});
     zoomLevels.set('1', {text: '100%', type: 'scale'});
@@ -85,7 +83,6 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
         let newWhichSelected = {...whichSelected};
         newWhichSelected = {
             A: false,
-            F: false,
             W: false,
             H: false,
             1: false,
