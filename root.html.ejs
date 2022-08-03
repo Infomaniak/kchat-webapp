@@ -7,7 +7,7 @@
     <meta name='robots' content='noindex, nofollow'>
     <meta name='referrer' content='no-referrer'>
 
-    <meta name='hash' content='test'>
+    <meta name='hash' content="<%= (Math.random() + 1).toString(36).substring(7) %>">
 
     <title>kChat</title>
 
@@ -21,10 +21,10 @@
     <link rel="icon" type="image/png" href="/static/images/favicon/favicon-default-64x64.png" sizes="64x64">
     <link rel="icon" type="image/png" href="/static/images/favicon/favicon-default-96x96.png" sizes="96x96">
     <script>
-        window.WEB_COMPONENT_API_ENDPOINT = "<%= process.env.WEBCOMPONENT_API_ENDPOINT %>";
+        window.WEBCOMPONENT_API_ENDPOINT = "<%= WEBCOMPONENT_API_ENDPOINT %>";
         window.CURRENT_PROJECT = 'kchat';
     </script>
-    <script id="webComponents" src="<%= process.env.WEBCOMPONENT_ENDPOINT %>/init.js?project=kchat"></script>
+    <script id="webComponents" src="<%= WEBCOMPONENT_ENDPOINT %>/init.js?project=kchat"></script>
 
     <!-- CSS Should always go first -->
     <link rel='stylesheet' class='code_theme'>
