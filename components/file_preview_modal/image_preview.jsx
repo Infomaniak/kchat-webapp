@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/* eslint-disable react-hooks/exhaustive-deps */
+
 /*
 
 to do (in no order):
@@ -10,7 +12,6 @@ to do (in no order):
 - Add rotation?
 
 doing (in order):
-- bugfix'd issue remains :'(
 - Zoom to where mouse is
 
 */
@@ -30,13 +31,14 @@ const MAX_ZOOM = 5;
 var MAX_CANVAS_ZOOM = 1;
 var MIN_ZOOM = 0;
 
-export default function ImagePreview({fileInfo, zoom, setZoom}) {
+export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
     const isExternalFile = !fileInfo.id;
 
     const [offset, setOffset] = useState({x: 0, y: 0});
     const [dragging, setDragging] = useState(false);
     const [cursorType, setCursorType] = useState('normal');
     const [isFullscreen, setIsFullscreen] = useState({horizontal: false, vertical: false});
+    const [zoom, setZoom] = useState(1);
 
     const touch = useRef({x: 0, y: 0});
     const canvasRef = useRef(null);
@@ -107,7 +109,9 @@ export default function ImagePreview({fileInfo, zoom, setZoom}) {
         event.persist();
         const {deltaY} = event;
         if (!dragging) {
-            setZoom(clamp(zoom + (deltaY * SCROLL_SENSITIVITY * -1), MIN_ZOOM, MAX_ZOOM));
+            const newZoom = clamp(zoom + (deltaY * SCROLL_SENSITIVITY * -1), MIN_ZOOM, MAX_ZOOM);
+            setZoom(newZoom);
+            setToolbarZoom(newZoom);
         }
     };
 
@@ -222,21 +226,8 @@ export default function ImagePreview({fileInfo, zoom, setZoom}) {
     // for mouse centered zooming, center offset to mouse then clamp
     // optimize and reduce things.. (if only panning, pan only)
     useEffect(() => {
-        const {width, height} = background;
-
-        if (typeof zoom === 'string') {
-            switch (zoom) {
-            case 'Fill':
-                setZoom(MAX_CANVAS_ZOOM);
-                break;
-            case 'Fit Width':
-                setZoom(getWindowDimensions().maxWidth / width);
-                break;
-            case 'Fit Height':
-                setZoom(getWindowDimensions().maxHeight / height);
-                break;
-            }
-        } else if (canvasRef.current) {
+        if (canvasRef.current) {
+            const {width, height} = background;
             const context = canvasRef.current.getContext('2d');
 
             var x = 0;
@@ -267,6 +258,29 @@ export default function ImagePreview({fileInfo, zoom, setZoom}) {
         }
     }, [zoom, offset]);
 
+    useEffect(() => {
+        const {width, height} = background;
+
+        if (typeof toolbarZoom === 'string') {
+            switch (toolbarZoom) {
+            case 'A':
+                setZoom(MIN_ZOOM);
+                break;
+            case 'F':
+                setZoom(MAX_CANVAS_ZOOM);
+                break;
+            case 'W':
+                setZoom(getWindowDimensions().maxWidth / width);
+                break;
+            case 'H':
+                setZoom(getWindowDimensions().maxHeight / height);
+                break;
+            }
+        } else {
+            setZoom(toolbarZoom);
+        }
+    }, [toolbarZoom]);
+
     // Global mouseup event, otherwise canvas can stay stuck on mouse when leaving canvas while dragging
     window.addEventListener('mouseup', () => {
         handleMouseUp();
@@ -292,6 +306,6 @@ export default function ImagePreview({fileInfo, zoom, setZoom}) {
 
 ImagePreview.propTypes = {
     fileInfo: PropTypes.object.isRequired,
-    zoom: PropTypes.number.isRequired,
-    setZoom: PropTypes.func.isRequired,
+    toolbarZoom: PropTypes.number.isRequired | PropTypes.string.isRequired,
+    setToolbarZoom: PropTypes.func.isRequired,
 };

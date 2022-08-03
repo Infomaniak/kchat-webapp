@@ -27,14 +27,14 @@ interface Props {
     enablePublicLink: boolean;
     canDownloadFiles: boolean;
     isExternalFile: boolean;
-    zoom: number;
-    setZoom: (zoom: number) => void;
+    toolbarZoom: number | string;
+    setToolbarZoom: (toolbarZoom: number | string) => void;
     handlePrev: () => void;
     handleNext: () => void;
     handleModalClose: () => void;
 }
 
-const FilePreviewModalHeader: React.FC<Props> = ({post, totalFiles, fileIndex, zoom, setZoom, ...actionProps}: Props) => {
+const FilePreviewModalHeader: React.FC<Props> = ({post, totalFiles, fileIndex, toolbarZoom, setToolbarZoom, ...actionProps}: Props) => {
     let mainActions = (<div/>);
     if (totalFiles > 1) {
         mainActions = (
@@ -50,9 +50,8 @@ const FilePreviewModalHeader: React.FC<Props> = ({post, totalFiles, fileIndex, z
     if (actionProps.fileInfo.has_preview_image) {
         imageControls = (
             <FilePreviewModalImageControls
-                fileInfo={actionProps.fileInfo}
-                zoom={zoom}
-                setZoom={setZoom}
+                toolbarZoom={toolbarZoom}
+                setToolbarZoom={setToolbarZoom}
             />
         );
     }
