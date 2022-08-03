@@ -125,7 +125,7 @@ git_release:
   needs: ['build_docker_image']
   release:
     name: '$CI_COMMIT_TAG'
-    description": '$$CHANGELOG'
+    description: '$$CHANGELOG'
     # tag_name is a mendatory field and can not be an empty string
     tag_name: '$CI_COMMIT_TAG'
   rules:
