@@ -59,6 +59,7 @@ export type Props = {
 }
 
 type State = {
+    zoom: number;
     show: boolean;
     imageIndex: number;
     imageHeight: number | string;
@@ -81,6 +82,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
         super(props);
 
         this.state = {
+            zoom: 0,
             show: true,
             imageIndex: this.props.startIndex,
             imageHeight: '100%',
@@ -91,6 +93,10 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
             showZoomControls: false,
             scale: Utils.fillArray(ZoomSettings.DEFAULT_SCALE, this.props.fileInfos.length),
         };
+    }
+
+    setZoom = (newZoom: number) => {
+        this.setState({zoom: newZoom});
     }
 
     handleNext = () => {
@@ -282,6 +288,8 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                 content = (
                     <ImagePreview
                         fileInfo={fileInfo}
+                        zoom={this.state.zoom}
+                        setZoom={this.setZoom}
                     />
                 );
             } else if (fileType === FileTypes.VIDEO || fileType === FileTypes.AUDIO) {
@@ -395,6 +403,8 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                                     post={this.props.post}
                                     showPublicLink={showPublicLink}
                                     fileIndex={this.state.imageIndex}
+                                    zoom={this.state.zoom}
+                                    setZoom={this.setZoom}
                                     totalFiles={this.props.fileInfos?.length}
                                     filename={fileName}
                                     fileURL={fileDownloadUrl}

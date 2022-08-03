@@ -19,13 +19,14 @@ import './file_preview_modal_image_controls.scss';
 
 interface Props {
     fileInfo: FileInfo | LinkInfo;
+    zoom: number;
+    setZoom: (zoom: number) => void;
 }
 
 // const FilePreviewModalImageControls: React.FC<Props> = (props: Props) => {
-const FilePreviewModalImageControls: React.FC<Props> = () => {
+const FilePreviewModalImageControls: React.FC<Props> = ({zoom, setZoom}: Props) => {
     // Initial variables and constants
     // zoom text
-    const [zoom, setZoom] = useState<number | string>('A');
     const [zoomText, setZoomText] = useState('Actual Size');
 
     const [whichSelected, setWhichSelected] = useState({

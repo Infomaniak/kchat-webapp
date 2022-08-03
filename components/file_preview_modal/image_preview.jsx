@@ -10,6 +10,7 @@ to do (in no order):
 - Add rotation?
 
 doing (in order):
+- bugfix'd issue remains :'(
 - Zoom to where mouse is
 
 */
@@ -29,11 +30,10 @@ const MAX_ZOOM = 5;
 var MAX_CANVAS_ZOOM = 1;
 var MIN_ZOOM = 0;
 
-export default function ImagePreview({fileInfo}) {
+export default function ImagePreview({fileInfo, zoom, setZoom}) {
     const isExternalFile = !fileInfo.id;
 
     const [offset, setOffset] = useState({x: 0, y: 0});
-    const [zoom, setZoom] = useState(1);
     const [dragging, setDragging] = useState(false);
     const [cursorType, setCursorType] = useState('normal');
     const [isFullscreen, setIsFullscreen] = useState({horizontal: false, vertical: false});
@@ -58,7 +58,7 @@ export default function ImagePreview({fileInfo}) {
     }
 
     const clamp = (num, min, max) => {
-        return Math.min(Math.max(num, min), max);
+        return Math.round(Math.min(Math.max(num, min), max) * 10000) / 10000;
     };
 
     const getWindowDimensions = () => {
@@ -222,9 +222,22 @@ export default function ImagePreview({fileInfo}) {
     // for mouse centered zooming, center offset to mouse then clamp
     // optimize and reduce things.. (if only panning, pan only)
     useEffect(() => {
-        if (canvasRef.current) {
+        const {width, height} = background;
+
+        if (typeof zoom === 'string') {
+            switch (zoom) {
+            case 'Fill':
+                setZoom(MAX_CANVAS_ZOOM);
+                break;
+            case 'Fit Width':
+                setZoom(getWindowDimensions().maxWidth / width);
+                break;
+            case 'Fit Height':
+                setZoom(getWindowDimensions().maxHeight / height);
+                break;
+            }
+        } else if (canvasRef.current) {
             const context = canvasRef.current.getContext('2d');
-            const {width, height} = background;
 
             var x = 0;
             var y = 0;
@@ -279,4 +292,6 @@ export default function ImagePreview({fileInfo}) {
 
 ImagePreview.propTypes = {
     fileInfo: PropTypes.object.isRequired,
+    zoom: PropTypes.number.isRequired,
+    setZoom: PropTypes.func.isRequired,
 };
