@@ -100,40 +100,35 @@ build_docker_image: &build_docker_image
 #     paths:
 #       - public
 
-# changelog:
-#   stage: release
-#   image: mrnonz/alpine-git-curl
-#   needs: ['unit_test']
-#   rules:
-#     - if: '$DEPLOY_VARIABLE == "prod"'
-#       when: on_success
-#     - if: '$DEPLOY_VARIABLE == "preprod"'
-#       when: on_success
-#       allow_failure: false
-#     - when: never
-#   script:
-#     - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
+changelog:
+  stage: release
+  image: mrnonz/alpine-git-curl
+  needs: ['build_docker_image']
+  rules:
+    - if: '$DEPLOY_VARIABLE == "prod"'
+      when: on_success
+    - when: never
+  script:
+    - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
 
-# git_release:
-#   stage: release
-#   tags:
-#     - docker-executor
-#     - kubernetes
-#     - shared
-#   script:
-#     - echo 'running release_job'
-#     - echo 'Previous Job ID is printed below'
-#     - echo $GE_JOB_ID
-#   image: registry.gitlab.com/gitlab-org/release-cli:latest
-#   needs: ['build_docker_image']
-#   release:
-#     name: '$CI_COMMIT_TAG'
-#     description: '$$CHANGELOG'
-#     # tag_name is a mendatory field and can not be an empty string
-#     tag_name: '$CI_COMMIT_TAG'
-#   rules:
-#     - if: '$DEPLOY_VARIABLE == "prod"'
-#       when: on_success
-#     - if: '$DEPLOY_VARIABLE == "preprod"'
-#       when: on_success
-#     - when: never
+git_release:
+  stage: release
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  script:
+    - echo 'running release_job'
+    - echo 'Previous Job ID is printed below'
+    - echo $GE_JOB_ID
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs: ['build_docker_image']
+  release:
+    name: '$CI_COMMIT_TAG'
+    description: '$$CHANGELOG'
+    # tag_name is a mendatory field and can not be an empty string
+    tag_name: '$CI_COMMIT_TAG'
+  rules:
+    - if: '$DEPLOY_VARIABLE == "prod"'
+      when: on_success
+    - when: never

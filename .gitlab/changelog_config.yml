@@ -33,7 +33,7 @@ template: |
   {% else %}
   No changes.
   {% end %}
-# The tag format for infomaniak is X.Y.Z(-rcX). The -rc prefix would
+# The tag format for infomaniak is X.Y.Z(-rc.X) The -rc prefix would
 # be treated as a pre-release identifier, which can result in the wrong tag
 # being used as the starting point of a changelog commit range. The custom regex
 # here is used to ensure we find the correct tag.
