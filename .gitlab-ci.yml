@@ -37,8 +37,8 @@ build_docker_image: &build_docker_image
     - echo "WEBCOMPONENT_ENDPOINT=$WEBCOMPONENT_ENDPOINT" >> .env
     - echo "WEBCOMPONENT_API_ENDPOINT=$WEBCOMPONENT_API_ENDPOINT" >> .env
     - echo "KMEET_ENDPOINT=$KMEET_ENDPOINT" >> .env
-    - echo "LOGIN_URL=$LOGIN_URL" >> .env
-    - echo "MANAGER_URL=$MANAGER_URL" >> .env
+    - echo "LOGIN_ENDPOINT=$LOGIN_ENDPOINT" >> .env
+    - echo "MANAGER_ENDPOINT=$MANAGER_ENDPOINT" >> .env
     - cat .env
   script:
     - |-

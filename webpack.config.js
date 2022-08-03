@@ -142,8 +142,8 @@ if (DEV) {
     env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/current');
     env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com');
     env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch');
-    env.MANAGER_URL = JSON.stringify(process.env.MANAGER_URL || 'https://manager.preprod.dev.infomaniak.ch/');
-    env.LOGIN_URL = JSON.stringify(process.env.LOGIN_URL || 'https://login.preprod.dev.infomaniak.ch/');
+    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.preprod.dev.infomaniak.ch/');
+    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.preprod.dev.infomaniak.ch/');
     if (process.env.MM_LIVE_RELOAD) {
         config.plugins.push(new LiveReloadPlugin());
     }
@@ -154,8 +154,8 @@ if (DEV) {
     env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || '');
     env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || '');
     env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || '');
-    env.MANAGER_URL = JSON.stringify(process.env.MANAGER_URL || '');
-    env.LOGIN_URL = JSON.stringify(process.env.LOGIN_URL || '');
+    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || '');
+    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || '');
 }
 
 var config = {
