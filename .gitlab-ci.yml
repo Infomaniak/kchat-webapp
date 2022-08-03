@@ -111,28 +111,30 @@ changelog:
       when: on_success
     - when: never
   script:
+    - 'curl -sS https://webinstall.dev/jq | b'
     - './gitlab-changelog.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG}'
+    - './gitlab-release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3}'
 
-git_release:
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  stage: release
-  tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  script:
-    - echo 'running release_job'
-    - echo 'Previous Job ID is printed below'
-    - echo $GE_JOB_ID
-  when: manual
-  needs: ['changelog']
-  release:
-    name: $CI_COMMIT_TAG
-    milestones: ${CI_COMMIT_TAG:0:3}
-    description: './CHANGELOG.md'
-    # tag_name is a mendatory field and can not be an empty string
-    tag_name: '$CI_COMMIT_TAG'
-  rules:
-    - if: '$DEPLOY_VARIABLE == "prod"'
-      when: on_success
-    - when: never
+# git_release:
+#   image: registry.gitlab.com/gitlab-org/release-cli:latest
+#   stage: release
+#   tags:
+#     - docker-executor
+#     - kubernetes
+#     - shared
+#   script:
+#     - echo 'running release_job'
+#     - echo 'Previous Job ID is printed below'
+#     - echo $GE_JOB_ID
+#   when: manual
+#   needs: ['changelog']
+#   release:
+#     name: $CI_COMMIT_TAG
+#     milestones: ${CI_COMMIT_TAG:0:3}
+#     description: './CHANGELOG.md'
+#     # tag_name is a mendatory field and can not be an empty string
+#     tag_name: '$CI_COMMIT_TAG'
+#   rules:
+#     - if: '$DEPLOY_VARIABLE == "prod"'
+#       when: on_success
+#     - when: never
