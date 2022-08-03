@@ -127,7 +127,8 @@ git_release:
   when: manual
   needs: ['changelog']
   release:
-    name: '$CI_COMMIT_TAG'
+    name: $CI_COMMIT_TAG
+    milestones: ${CI_COMMIT_TAG:0:3}
     description: './CHANGELOG.md'
     # tag_name is a mendatory field and can not be an empty string
     tag_name: '$CI_COMMIT_TAG'
