@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - release
 
 workflow:
   rules:
@@ -33,8 +34,12 @@ build_docker_image: &build_docker_image
     name: $DEPLOY_VARIABLE
   before_script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - chmod +x ./setup_env.sh
-    - ./setup_env.sh
+    - echo "WEBCOMPONENT_ENDPOINT=$WEBCOMPONENT_ENDPOINT" >> .env
+    - echo "WEBCOMPONENT_API_ENDPOINT=$WEBCOMPONENT_API_ENDPOINT" >> .env
+    - echo "KMEET_ENDPOINT=$KMEET_ENDPOINT" >> .env
+    - echo "LOGIN_ENDPOINT=$LOGIN_ENDPOINT" >> .env
+    - echo "MANAGER_ENDPOINT=$MANAGER_ENDPOINT" >> .env
+    - cat .env
   script:
     - |-
       environment=${DEPLOY_VARIABLE}
@@ -86,18 +91,6 @@ unit_test:
     # unit tests
     - npm run test-ci
 
-changelog:
-  stage: test
-  image: mrnonz/alpine-git-curl
-  needs: ['unit_test']
-  rules:
-    - if: '$DEPLOY_VARIABLE == "prod"'
-      when: on_success
-      allow_failure: false
-    - when: never
-  script:
-    - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
-
 pages:
   stage: test
   needs: ['unit_test']
@@ -108,3 +101,36 @@ pages:
   artifacts:
     paths:
       - public
+
+changelog:
+  stage: release
+  image: mrnonz/alpine-git-curl
+  needs: ['build_docker_image']
+  rules:
+    - if: '$DEPLOY_VARIABLE == "prod"'
+      when: on_success
+    - when: never
+  script:
+    - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
+
+git_release:
+  stage: release
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  script:
+    - echo 'running release_job'
+    - echo 'Previous Job ID is printed below'
+    - echo $GE_JOB_ID
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs: ['changelog']
+  release:
+    name: '$CI_COMMIT_TAG'
+    description: '$$$$CHANGELOG'
+    # tag_name is a mendatory field and can not be an empty string
+    tag_name: '$CI_COMMIT_TAG'
+  rules:
+    - if: '$DEPLOY_VARIABLE == "prod"'
+      when: on_success
+    - when: never
