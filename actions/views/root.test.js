@@ -39,6 +39,7 @@ describe('root view actions', () => {
     afterAll(() => {
         document.cookie = origCookies;
         localStorage.setItem('was_logged_in', origWasLoggedIn);
+        global.gc();
     });
 
     describe('loadConfigAndMe', () => {
