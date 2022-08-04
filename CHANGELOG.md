@@ -28,6 +28,10 @@ No changes.
 
 - [fix changelog parsing for releases](kchat/webapp@635e635894a09d7d00d84bd8299a7b35bf85da93)
 
+## 0.1.13-rc.3 (2022-08-04)
+
+No changes.
+
 ## 0.1.12 (2022-08-03)
 
 No changes.
