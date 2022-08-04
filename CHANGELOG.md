@@ -1,3 +1,9 @@
+## 0.1.24 (2022-08-04)
+
+### chore (1 change)
+
+- [improve changelog](kchat/webapp@046ce3af5b342e8ea53512b3d5d2a0e4886baf68)
+
 ## 0.1.23 (2022-08-03)
 
 No changes.
