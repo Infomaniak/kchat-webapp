@@ -132,10 +132,6 @@ if (DEV) {
     if (siteURL) {
         publicPath = path.join(new url.URL(siteURL).pathname, 'static') + '/';
     }
-    // eslint-disable-next-line global-require
-    require('dotenv').config({
-        path: '.env.development',
-    });
 }
 
 const env = {};

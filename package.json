@@ -286,7 +286,7 @@
     "fix": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --fix --cache && stylelint \"**/*.{css,scss}\" --fix --cache",
     "build": "export $(xargs < ./.env) && cross-env NODE_ENV=production webpack",
     "run": "webpack --progress --watch",
-    "dev-server": "webpack serve --mode development",
+    "dev-server": "export $(xargs < ./.env.development) && webpack serve --mode development",
     "test": "cross-env TZ=Etc/UTC jest --maxWorkers=50% --collectCoverage --coverageDirectory=\"./coverage\"",
     "test-ci": "cross-env NODE_OPTIONS=--max_old_space_size=500 TZ=Etc/UTC jest --ci --collectCoverage --coverageDirectory=\"./coverage\"",
     "stats": "cross-env NODE_ENV=production webpack --profile --json > webpack_stats.json",
