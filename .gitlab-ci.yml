@@ -55,7 +55,7 @@ build_docker_image: &build_docker_image
 
 unit_test:
   stage: test
-  image: node:16.14.2-bullseye
+  image: node:16.10.0
   tags:
     - docker-executor
     - kubernetes
