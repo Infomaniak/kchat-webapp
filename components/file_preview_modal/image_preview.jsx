@@ -264,7 +264,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
     // Reset offset to center when unzoomed
     useEffect(() => {
         if (!(isFullscreen.horizontal || isFullscreen.vertical)) {
-            setOffset(0, 0);
+            setOffset({x: 0, y: 0});
         }
     }, [isFullscreen]);
 
