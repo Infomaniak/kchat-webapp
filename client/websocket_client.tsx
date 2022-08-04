@@ -205,6 +205,13 @@ export default class WebSocketClient {
         }
     }
 
+    unbindPresenceChannel(channelID: string) {
+        this.presenceChannel = this.conn?.unsubscribe(`presence-channel.${channelID}`);
+        if (this.presenceChannel) {
+            this.unbindChannelGlobally(this.presenceChannel);
+        }
+    }
+
     bindChannelGlobally(channel: Channel | null) {
         channel.bind_global((evt, data) => {
             // console.error(`The event ${evt} was triggered with data`);
@@ -218,6 +225,27 @@ export default class WebSocketClient {
                 // This indicates a reply to a websocket request.
                 // We ignore sequence number validation of message responses
                 // and only focus on the purely server side event stream.
+                if (data.error) {
+                    console.log(data); //eslint-disable-line no-console
+                }
+
+                if (this.responseCallbacks[data.seq_reply]) {
+                    this.responseCallbacks[data.seq_reply](data);
+                    Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
+                }
+            } else if (this.eventCallback) {
+                this.serverSequence = data.seq + 1;
+                this.eventCallback({event: evt, data});
+            }
+        });
+    }
+
+    unbindChannelGlobally(channel: Channel | null) {
+        channel.unbind_global((evt, data) => {
+            if (!data) {
+                return;
+            }
+            if (data.seq_reply) {
                 if (data.error) {
                     console.log(data); //eslint-disable-line no-console
                 }
