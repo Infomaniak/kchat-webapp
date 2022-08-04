@@ -1,5 +1,5 @@
 stages:
-  - test
+  # - test
   - build
   - release
 
@@ -53,54 +53,54 @@ build_docker_image: &build_docker_image
         --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
         ${args}"
 
-unit_test:
-  stage: test
-  image: node:16.10.0
-  tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  environment: 
-    name: $DEPLOY_VARIABLE
-  artifacts:
-    paths:
-      - coverage/
-    when: on_success
-    reports:
-      junit:
-        - coverage/junit.xml
-  coverage: '/^\s*Lines\s*: \d+\d+.\d+\d+\%/'
-  cache:
-    key:
-      files:
-        - package-lock.json
-      prefix: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .npm/
-      - node_modules/
-      - coverage/
-  before_script:
-    - npm ci --cache .npm
-  script:
-    # typescript
-    # - npm run check-types
+# unit_test:
+#   stage: test
+#   image: node:16.10.0
+#   tags:
+#     - docker-executor
+#     - kubernetes
+#     - shared
+#   environment: 
+#     name: $DEPLOY_VARIABLE
+#   artifacts:
+#     paths:
+#       - coverage/
+#     when: on_success
+#     reports:
+#       junit:
+#         - coverage/junit.xml
+#   coverage: '/^\s*Lines\s*: \d+\d+.\d+\d+\%/'
+#   cache:
+#     key:
+#       files:
+#         - package-lock.json
+#       prefix: ${CI_COMMIT_REF_SLUG}
+#     paths:
+#       - .npm/
+#       - node_modules/
+#       - coverage/
+#   before_script:
+#     - npm ci --cache .npm
+#   script:
+#     # typescript
+#     # - npm run check-types
 
-    # lint
-    # - npm run check
+#     # lint
+#     # - npm run check
 
-    # unit tests
-    - npm run test-ci
+#     # unit tests
+#     - npm run test-ci
 
-pages:
-  stage: test
-  needs: ['unit_test']
-  script:
-    - mkdir .public
-    - cp -r coverage/* .public
-    - mv .public public
-  artifacts:
-    paths:
-      - public
+# pages:
+#   stage: test
+#   needs: ['unit_test']
+#   script:
+#     - mkdir .public
+#     - cp -r coverage/* .public
+#     - mv .public public
+#   artifacts:
+#     paths:
+#       - public
 
 changelog:
   stage: release
