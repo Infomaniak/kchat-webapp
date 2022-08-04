@@ -1,0 +1,40 @@
+---
+# Settings for generating changelogs using the GitLab API. See
+# https://docs.gitlab.com/ee/api/repositories.html#generate-changelog-data for
+# more information.
+categories:
+  added: Added
+  fixed: Fixed
+  changed: Changed
+  deprecated: Deprecated
+  removed: Removed
+  security: Security
+  performance: Performance
+  other: Other
+template: |
+  {% if categories %}
+  {% each categories %}
+  ### {{ title }} ({% if single_change %}1 change{% else %}{{ count }} changes{% end %})
+
+  {% each entries %}
+  - [{{ title }}]({{ commit.reference }})\
+  {% if author.credit %} by {{ author.reference }}{% end %}\
+  {% if commit.trailers.MR %}\
+   ([merge request]({{ commit.trailers.MR }}))\
+  {% else %}\
+  {% if merge_request %}\
+   ([merge request]({{ merge_request.reference }}))\
+  {% end %}\
+  {% end %}\
+
+  {% end %}
+
+  {% end %}
+  {% else %}
+  No changes.
+  {% end %}
+# The tag format for infomaniak is X.Y.Z(-rc.X) The -rc prefix would
+# be treated as a pre-release identifier, which can result in the wrong tag
+# being used as the starting point of a changelog commit range. The custom regex
+# here is used to ensure we find the correct tag.
+# tag_regex: '^(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)$'

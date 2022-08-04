@@ -1,5 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable max-lines */
+/* eslint-disable no-process-env */
 
 const childProcess = require('child_process');
 
@@ -31,10 +33,7 @@ const STANDARD_EXCLUDE = [
 
 // react-hot-loader and development source maps require eval
 const CSP_UNSAFE_EVAL_IF_DEV = DEV ? ' \'unsafe-eval\'' : '';
-
-const INCLUDE_PATTERN = /(\<meta name=\'hash\' content=\')(.+)(\'>?)/gi;
-// eslint-disable-next-line no-negated-condition
-const processNestedHtml = (content) => (!INCLUDE_PATTERN.test(content) ? content : content.replace(INCLUDE_PATTERN, `$1${(Math.random() + 1).toString(36).substring(7)}$3`));
+const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
 
 var MYSTATS = {
 
@@ -135,8 +134,32 @@ if (DEV) {
     }
 }
 
+const env = {};
+if (DEV) {
+    env.PUBLIC_PATH = JSON.stringify(publicPath);
+    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || '');
+    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/next');
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.preprod.dev.infomaniak.ch');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch');
+    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.preprod.dev.infomaniak.ch/');
+    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.preprod.dev.infomaniak.ch/');
+    if (process.env.MM_LIVE_RELOAD) {
+        config.plugins.push(new LiveReloadPlugin());
+    }
+} else {
+    env.NODE_ENV = JSON.stringify('production');
+    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || '');
+    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || '');
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || '');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || '');
+    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || '');
+    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || '');
+}
+
 var config = {
-    entry: ['./root.jsx', 'root.html', './service-worker.js'],
+    entry: ['./root.jsx', 'root.html.ejs', './service-worker.js'],
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
@@ -228,7 +251,20 @@ var config = {
                         loader: 'html-loader',
                         options: {
                             sources: false,
-                            preprocessor: processNestedHtml,
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.ejs$/,
+                use: [
+                    {
+                        loader: 'ejs-compiled-loader',
+                        options: {
+                            htmlmin: true,
+                            htmlminOptions: {
+                                removeComments: true,
+                            },
                         },
                     },
                 ],
@@ -273,12 +309,33 @@ var config = {
         new HtmlWebpackPlugin({
             filename: 'root.html',
             inject: 'head',
-            template: 'root.html',
+            template: 'root.html.ejs',
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.preprod.dev.infomaniak.ch kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ kmeet.preprod.dev.infomaniak.ch/ ' + CSP_UNSAFE_EVAL_IF_DEV,
                 },
+            },
+            templateParameters: {
+                // eslint-disable-next-line no-process-env
+                WEBCOMPONENT_ENDPOINT: env.WEBCOMPONENT_ENDPOINT, // || 'https://web-components.storage.infomaniak.com/current',
+                // eslint-disable-next-line no-process-env
+                WEBCOMPONENT_API_ENDPOINT: env.WEBCOMPONENT_API_ENDPOINT, // || 'https://welcome.infomaniak.com',
+            },
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'call.html',
+            inject: 'head',
+            template: 'call.html.ejs',
+            meta: {
+                csp: {
+                    'http-equiv': 'Content-Security-Policy',
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com welcome.infomaniak.com kmeet.infomaniak.com welcome.preprod.dev.infomaniak.ch kmeet.preprod.dev.infomaniak.ch ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV,
+                },
+            },
+            templateParameters: {
+                // eslint-disable-next-line no-process-env
+                KMEET_ENDPOINT: env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch',
             },
         }),
         new CopyWebpackPlugin({
@@ -310,7 +367,6 @@ var config = {
                 {from: 'images/trial-ending-soon.png', to: 'images'},
                 {from: 'images/cloud-laptop.png', to: 'images'},
                 {from: 'images/trial-ended.png', to: 'images'},
-                {from: 'call.html', to: ''},
                 {from: 'service-worker.js', to: ''},
             ],
         }),
@@ -398,20 +454,6 @@ if (DEV) {
     config.devtool = 'source-map';
 }
 
-const env = {};
-if (DEV) {
-    env.PUBLIC_PATH = JSON.stringify(publicPath);
-    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || ''); //eslint-disable-line no-process-env
-    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
-    if (process.env.MM_LIVE_RELOAD) { //eslint-disable-line no-process-env
-        config.plugins.push(new LiveReloadPlugin());
-    }
-} else {
-    env.NODE_ENV = JSON.stringify('production');
-    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || ''); //eslint-disable-line no-process-env
-    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
-}
-
 config.plugins.push(new webpack.DefinePlugin({
     'process.env': env,
 }));
@@ -449,7 +491,7 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: 'https://kchat.preprod.dev.infomaniak.ch',
+                target: process.env.BASE_URL || 'https://kchat.preprod.dev.infomaniak.ch', //eslint-disable-line no-process-env
                 changeOrigin: true,
                 xfwd: true,
                 ws: true,
@@ -458,6 +500,7 @@ if (targetIsDevServer) {
             devMiddleware: {
                 writeToDisk: false,
             },
+            headers: {'Service-Worker-Allowed': '/'},
         },
         performance: false,
         optimization: {

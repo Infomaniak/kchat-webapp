@@ -1,7 +1,57 @@
-include:
-  - project: 'docker-public/gitlab-ci-dev-scripts'
-    ref: master
-    file: '/build-docker-image.yaml'
+stages:
+  - test
+  - build
+  - release
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /\-rc.*/'
+      variables:
+        DEPLOY_VARIABLE: "preprod"
+    - if: $CI_COMMIT_TAG
+      variables:
+        DEPLOY_VARIABLE: "prod"
+    - if: '$CI_MERGE_REQUEST_ID'
+      variables:
+        DEPLOY_VARIABLE: "staging"
+    - when: never
+
+build_docker_image: &build_docker_image
+  stage: build
+  tags:
+    - kubernetes
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: ['']
+  rules:
+    - if: '$DEPLOY_VARIABLE == "prod"'
+      when: on_success
+      allow_failure: false
+    - if: '$DEPLOY_VARIABLE == "preprod"'
+      when: on_success
+    - when: never
+  environment: 
+    name: $DEPLOY_VARIABLE
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - echo "WEBCOMPONENT_ENDPOINT=$WEBCOMPONENT_ENDPOINT" >> .env
+    - echo "WEBCOMPONENT_API_ENDPOINT=$WEBCOMPONENT_API_ENDPOINT" >> .env
+    - echo "KMEET_ENDPOINT=$KMEET_ENDPOINT" >> .env
+    - echo "LOGIN_ENDPOINT=$LOGIN_ENDPOINT" >> .env
+    - echo "MANAGER_ENDPOINT=$MANAGER_ENDPOINT" >> .env
+    - cat .env
+  script:
+    - |-
+      environment=${DEPLOY_VARIABLE}
+      args="--destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
+
+      eval "/kaniko/executor \
+        --cache \
+        --context ${CI_PROJECT_DIR} \
+        --build-arg SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
+        --build-arg ENVIRONMENT=${environment} \
+        --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
+        ${args}"
 
 unit_test:
   stage: test
@@ -10,14 +60,8 @@ unit_test:
     - docker-executor
     - kubernetes
     - shared
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: never
+  environment: 
+    name: $DEPLOY_VARIABLE
   artifacts:
     paths:
       - coverage/
@@ -57,13 +101,17 @@ pages:
   artifacts:
     paths:
       - public
+
+changelog:
+  stage: release
+  image: registry.infomaniak.com:443/leopold.jacquot/debian-toolbox:0.0.1
+  needs: ['build_docker_image']
   rules:
-    - if: $CI_COMMIT_TAG
+    - if: '$DEPLOY_VARIABLE == "prod"'
       when: on_success
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: '$DEPLOY_VARIABLE == "preprod"'
       when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
     - when: never
-  # only:
-  #   - alpha
+  script:
+    - 'sh ./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3}'
+
