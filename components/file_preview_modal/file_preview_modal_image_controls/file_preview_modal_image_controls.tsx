@@ -5,12 +5,10 @@
 
 /*
 to do:
-- ask about scales stuff
-- fix all red stuff
-- fix <option id="image-controls__custom-zoom" value="customZoom" hidden="">Actual Size Fit Width Fit Height 125% 150% 200% 300% 400% 500% 150%</option>, not super urgent but whatever
+- make text internat
 */
 
-import React, {memo, SyntheticEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, memo, useEffect, useState} from 'react';
 
 import {MIN_ZOOM, ZOOM_EXT} from '../image_preview';
 import './file_preview_modal_image_controls.scss';
@@ -104,16 +102,12 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
 
     // Handlers
     // change type to proper type in the future
-    const handleZoomDropdown = (event: SyntheticEvent) => {
+    const handleZoomDropdown = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const zoomLevel = event.target;
         if (zoomLevels.get(zoomLevel.value).type === 'scale') {
             setToolbarZoom(parseFloat(zoomLevel.value));
         } else {
             setToolbarZoom(zoomLevel.value);
-        }
-
-        if (zoomLevel.value !== 'customZoom') {
-            setZoomText(zoomLevel.innerText);
         }
     };
 

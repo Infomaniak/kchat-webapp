@@ -6,12 +6,11 @@
 /*
 
 to do (in no order):
+- Zoom to where mouse is
 - Spacebar toggles dragging?
 - Add rotation?
 
 doing (in order):
-- fix cursor being messy
-- Zoom to where mouse is
 
 */
 
@@ -165,7 +164,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
         } else {
             setCursorType('normal');
         }
-    }, [dragging, zoom]);
+    }, [dragging, isFullscreen]);
 
     // Resize canvas when window is resized
     useEffect(() => {
@@ -203,9 +202,6 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
         background.src = previewUrl;
 
         if (canvasRef.current) {
-            // Better AA, could be interesting: https://stackoverflow.com/questions/17861447/html5-canvas-drawimage-how-to-apply-antialiasing
-            // imageSmoothingQuality: "low"
-
             background.onload = () => {
                 const context = canvasRef.current.getContext('2d');
 
@@ -232,7 +228,6 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
     }, [background, previewUrl]);
 
     // for mouse centered zooming, center offset to mouse then clamp
-    // optimize and reduce things.. (if only panning, pan only)
     useEffect(() => {
         ZOOM_EXT = zoom;
         if (canvasRef.current) {
@@ -256,17 +251,17 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
 
             context.translate(-xPos, -yPos);
 
+            // Kept for future additions
             if (isFullscreen.horizontal || isFullscreen.vertical) {
-                // Kept for future additions
                 //x = ((context.canvas.width / zoom) - background.width) / 2;
                 //y = ((context.canvas.height / zoom) - background.height) / 2;
             }
 
-            // Draw image
             context.drawImage(background, x, y, width * zoom, height * zoom);
         }
     }, [zoom, offset]);
 
+    // Reset offset to center when unzoomed
     useEffect(() => {
         if (!(isFullscreen.horizontal || isFullscreen.vertical)) {
             setOffset(0, 0);
