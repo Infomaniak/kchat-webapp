@@ -55,7 +55,7 @@ build_docker_image: &build_docker_image
 
 unit_test:
   stage: test
-  image: node:16.14.2-bullseye
+  image: node:16.10.0
   tags:
     - docker-executor
     - kubernetes
@@ -104,33 +104,14 @@ pages:
 
 changelog:
   stage: release
-  image: mrnonz/alpine-git-curl
+  image: registry.infomaniak.com:443/leopold.jacquot/debian-toolbox:0.0.1
   needs: ['build_docker_image']
   rules:
     - if: '$DEPLOY_VARIABLE == "prod"'
       when: on_success
-    - when: never
-  script:
-    - './gitlab-changelog.sh ${GITLAB_TOKEN} ${CI_COMMIT_TAG}'
-
-git_release:
-  stage: release
-  tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  script:
-    - echo 'running release_job'
-    - echo 'Previous Job ID is printed below'
-    - echo $GE_JOB_ID
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  needs: ['changelog']
-  release:
-    name: '$CI_COMMIT_TAG'
-    description: '$$$$CHANGELOG'
-    # tag_name is a mendatory field and can not be an empty string
-    tag_name: '$CI_COMMIT_TAG'
-  rules:
-    - if: '$DEPLOY_VARIABLE == "prod"'
+    - if: '$DEPLOY_VARIABLE == "preprod"'
       when: on_success
     - when: never
+  script:
+    - 'sh ./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3}'
+
