@@ -10,6 +10,7 @@ categories:
   removed: Removed
   security: Security
   performance: Performance
+  chore: Chore
   other: Other
 template: |
   {% if categories %}
