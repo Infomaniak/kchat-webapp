@@ -1,3 +1,16 @@
+## 0.1.26-rc.4 (2022-08-04)
+
+## Changed (4 changes)
+
+- [better changelog for slack](kchat/webapp@2d5fd6c69bf8237df4c400e089f9c01e8b1b464c)
+- [use blocks for reporting changelog](kchat/webapp@4cf79b4ac6991f6da3db17e509631a7278dfca8d)
+- [do not stringify templateParameters to fix webcomponent endpoints](kchat/webapp@f6d4db3a03f96532119f9448b3a13daf365f86db)
+- [split MR ci envs so seperate mr jobs dont get cancelled](kchat/webapp@5f0d28564a98d1c57d5b62bb0fbbb732f6510450) ([merge request](kchat/webapp!83))
+
+## chore (1 change)
+
+- [disable heap log in tests](kchat/webapp@9e56ef041fbb5b932787d85e8405358fe80f476d)
+
 ## 0.1.26-rc.3 (2022-08-04)
 
 ## Changed (4 changes)
