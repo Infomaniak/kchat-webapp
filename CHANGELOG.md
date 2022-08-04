@@ -1,3 +1,9 @@
+## 0.1.25-rc.2 (2022-08-04)
+
+### Changed (1 change)
+
+- [use node 16.10 for tests](kchat/webapp@2dc973a65fb39b13da4a9339939c0ff9761320b8) ([merge request](kchat/webapp!82))
+
 ## 0.1.24 (2022-08-04)
 
 ### chore (1 change)
