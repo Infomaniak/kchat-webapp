@@ -1,3 +1,11 @@
+## 0.1.26-rc.2 (2022-08-04)
+
+### Changed (3 changes)
+
+- [use blocks for reporting changelog](kchat/webapp@4cf79b4ac6991f6da3db17e509631a7278dfca8d)
+- [do not stringify templateParameters to fix webcomponent endpoints](kchat/webapp@f6d4db3a03f96532119f9448b3a13daf365f86db)
+- [split MR ci envs so seperate mr jobs dont get cancelled](kchat/webapp@5f0d28564a98d1c57d5b62bb0fbbb732f6510450) ([merge request](kchat/webapp!83))
+
 ## 0.1.26-rc.1 (2022-08-04)
 
 ### Changed (2 changes)
