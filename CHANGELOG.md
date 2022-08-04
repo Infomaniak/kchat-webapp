@@ -1,3 +1,9 @@
+## 0.1.24 (2022-08-04)
+
+### chore (1 change)
+
+- [improve changelog](kchat/webapp@046ce3af5b342e8ea53512b3d5d2a0e4886baf68)
+
 ## 0.1.23 (2022-08-03)
 
 No changes.
@@ -27,6 +33,10 @@ No changes.
 ### Fixed (1 change)
 
 - [fix changelog parsing for releases](kchat/webapp@635e635894a09d7d00d84bd8299a7b35bf85da93)
+
+## 0.1.13-rc.3 (2022-08-04)
+
+No changes.
 
 ## 0.1.12 (2022-08-03)
 
