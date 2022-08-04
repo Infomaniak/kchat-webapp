@@ -13,7 +13,7 @@ workflow:
         DEPLOY_VARIABLE: "prod"
     - if: '$CI_MERGE_REQUEST_ID'
       variables:
-        DEPLOY_VARIABLE: "staging"
+        DEPLOY_VARIABLE: "staging/$CI_MERGE_REQUEST_ID"
     - when: never
 
 build_docker_image: &build_docker_image
