@@ -4,6 +4,7 @@
 import React, {memo} from 'react';
 
 import {FileInfo} from '@mattermost/types/files';
+import {FileTypes} from 'utils/constants';
 
 import Post from 'components/post_view/post/post';
 
@@ -27,6 +28,7 @@ interface Props {
     enablePublicLink: boolean;
     canDownloadFiles: boolean;
     isExternalFile: boolean;
+    fileType: string;
     toolbarZoom: number | string;
     setToolbarZoom: (toolbarZoom: number | string) => void;
     handlePrev: () => void;
@@ -34,7 +36,7 @@ interface Props {
     handleModalClose: () => void;
 }
 
-const FilePreviewModalHeader: React.FC<Props> = ({post, totalFiles, fileIndex, toolbarZoom, setToolbarZoom, ...actionProps}: Props) => {
+const FilePreviewModalHeader: React.FC<Props> = ({post, totalFiles, fileIndex, toolbarZoom, setToolbarZoom, fileType, ...actionProps}: Props) => {
     let mainActions = (<div/>);
     if (totalFiles > 1) {
         mainActions = (
@@ -47,7 +49,7 @@ const FilePreviewModalHeader: React.FC<Props> = ({post, totalFiles, fileIndex, t
         );
     }
     let imageControls;
-    if (actionProps.fileInfo.has_preview_image) {
+    if (fileType === FileTypes.IMAGE || fileType === FileTypes.SVG) {
         imageControls = (
             <FilePreviewModalImageControls
                 toolbarZoom={toolbarZoom}

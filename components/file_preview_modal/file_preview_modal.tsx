@@ -405,6 +405,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                                     fileIndex={this.state.imageIndex}
                                     toolbarZoom={this.state.toolbarZoom}
                                     setToolbarZoom={this.setToolbarZoom}
+                                    fileType={fileType}
                                     totalFiles={this.props.fileInfos?.length}
                                     filename={fileName}
                                     fileURL={fileDownloadUrl}
