@@ -28,7 +28,7 @@ mr_url="https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/"
 format1=${changelog//kchat\/webapp@/${commit_url}}
 format2=${format1//kchat\/webapp!/${mr_url}}
 
-slack=$(curl https://slack.com/api/files.upload -F token="${SLACK_API_TOKEN}" -F channels="C03JC0AT9UG" -F title="${GITLAB_PROJECT_TAG}" -F filetype="post" -F content="${format2}")
+slack=$(curl https://slack.com/api/files.upload -F token="${SLACK_API_TOKEN}" -F channels="C03JC0AT9UG" -F title="Webapp ${GITLAB_PROJECT_TAG} Changelog" -F filetype="post" -F content="${format2}")
 
 echo slack
 
