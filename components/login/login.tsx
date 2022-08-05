@@ -67,6 +67,7 @@ const Login = () => {
 
         if (isDesktopApp()) {
             const loginCode = (new URLSearchParams(search)).get('code');
+
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
@@ -110,8 +111,21 @@ const Login = () => {
                 return;
             }
 
+            if (hash) {
+                const hash2Obj = {};
+                // eslint-disable-next-line array-callback-return
+                hash.substring(1).split('&').map((hk) => {
+                    const temp = hk.split('=');
+                    hash2Obj[temp[0]] = temp[1];
+                });
+                storeTokenResponse(hash2Obj);
+                LocalStorageStore.setWasLoggedIn(true);
+                finishSignin();
+
+                return;
+            }
+
             if ((!token || !refreshToken || !tokenExpire) && !loginCode) {
-                // eslint-disable-next-line react/no-did-mount-set-state
                 getChallengeAndRedirectToLogin();
             }
         }

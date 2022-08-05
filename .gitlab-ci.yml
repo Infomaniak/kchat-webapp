@@ -8,12 +8,14 @@ workflow:
     - if: '$CI_COMMIT_TAG =~ /\-rc.*/'
       variables:
         DEPLOY_VARIABLE: "preprod"
+        SLACK_NOTIFY_CHANNEL: "C03BA6564NP"
     - if: $CI_COMMIT_TAG
       variables:
         DEPLOY_VARIABLE: "prod"
+        SLACK_NOTIFY_CHANNEL: "C02NHLU88MN"
     - if: '$CI_MERGE_REQUEST_ID'
       variables:
-        DEPLOY_VARIABLE: "staging"
+        DEPLOY_VARIABLE: "staging/$CI_MERGE_REQUEST_ID"
     - when: never
 
 build_docker_image: &build_docker_image
@@ -74,7 +76,6 @@ unit_test:
     key:
       files:
         - package-lock.json
-      prefix: ${CI_COMMIT_REF_SLUG}
     paths:
       - .npm/
       - node_modules/
@@ -94,6 +95,8 @@ unit_test:
 pages:
   stage: test
   needs: ['unit_test']
+  environment: 
+    name: $DEPLOY_VARIABLE
   script:
     - mkdir .public
     - cp -r coverage/* .public
@@ -106,6 +109,8 @@ changelog:
   stage: release
   image: registry.infomaniak.com:443/leopold.jacquot/debian-toolbox:0.0.1
   needs: ['build_docker_image']
+  environment: 
+    name: $DEPLOY_VARIABLE
   rules:
     - if: '$DEPLOY_VARIABLE == "prod"'
       when: on_success
@@ -113,5 +118,5 @@ changelog:
       when: on_success
     - when: never
   script:
-    - 'sh ./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3}'
+    - './release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_API_TOKEN} ${SLACK_NOTIFY_CHANNEL}'
 

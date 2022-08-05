@@ -318,9 +318,9 @@ var config = {
             },
             templateParameters: {
                 // eslint-disable-next-line no-process-env
-                WEBCOMPONENT_ENDPOINT: env.WEBCOMPONENT_ENDPOINT, // || 'https://web-components.storage.infomaniak.com/current',
+                WEBCOMPONENT_ENDPOINT: process.env.WEBCOMPONENT_ENDPOINT, // || 'https://web-components.storage.infomaniak.com/current',
                 // eslint-disable-next-line no-process-env
-                WEBCOMPONENT_API_ENDPOINT: env.WEBCOMPONENT_API_ENDPOINT, // || 'https://welcome.infomaniak.com',
+                WEBCOMPONENT_API_ENDPOINT: process.env.WEBCOMPONENT_ENDPOINT, // || 'https://welcome.infomaniak.com',
             },
         }),
         new HtmlWebpackPlugin({
@@ -335,7 +335,7 @@ var config = {
             },
             templateParameters: {
                 // eslint-disable-next-line no-process-env
-                KMEET_ENDPOINT: env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch',
+                KMEET_ENDPOINT: process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch',
             },
         }),
         new CopyWebpackPlugin({

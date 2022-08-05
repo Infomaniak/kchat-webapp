@@ -10,15 +10,16 @@ categories:
   removed: Removed
   security: Security
   performance: Performance
+  chore: Chore
   other: Other
 template: |
   {% if categories %}
   {% each categories %}
-  ### {{ title }} ({% if single_change %}1 change{% else %}{{ count }} changes{% end %})
+  ## {{ title }} ({% if single_change %}1 change{% else %}{{ count }} changes{% end %})
 
   {% each entries %}
-  - [{{ title }}]({{ commit.reference }})\
-  {% if author.credit %} by {{ author.reference }}{% end %}\
+  - [{{ title }}]({{ commit.reference }}) \
+  by {{ author.reference }}\
   {% if commit.trailers.MR %}\
    ([merge request]({{ commit.trailers.MR }}))\
   {% else %}\
