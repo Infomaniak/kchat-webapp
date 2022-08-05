@@ -6,6 +6,7 @@ GITLAB_PROJECT_ACCESS_TOKEN=$1
 GITLAB_PROJECT_TAG=$2
 MILESTONE=$3
 SLACK_API_TOKEN=$4
+SLACK_NOTIFY_CHANNEL=$5
 
 postchangelog=$(curl --write-out '%{http_code}' --request POST --header "PRIVATE-TOKEN: ${GITLAB_PROJECT_ACCESS_TOKEN}" --data "version=${GITLAB_PROJECT_TAG}" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog")
 changelog=$(curl --request GET --header "PRIVATE-TOKEN: ${GITLAB_PROJECT_ACCESS_TOKEN}" --data "version=${GITLAB_PROJECT_TAG}" "https://gitlab.infomaniak.ch/api/v4/projects/3225/repository/changelog" | jq -r '.notes')
@@ -28,7 +29,7 @@ mr_url="https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/"
 format1=${changelog//kchat\/webapp@/${commit_url}}
 format2=${format1//kchat\/webapp!/${mr_url}}
 
-slack=$(curl https://slack.com/api/files.upload -F token="${SLACK_API_TOKEN}" -F channels="C03JC0AT9UG" -F title="Webapp ${GITLAB_PROJECT_TAG} Changelog" -F filetype="post" -F content="${format2}")
+slack=$(curl https://slack.com/api/files.upload -F token="${SLACK_API_TOKEN}" -F channels="${SLACK_NOTIFY_CHANNEL}" -F title="Webapp ${GITLAB_PROJECT_TAG} Changelog" -F filetype="post" -F content="${format2}")
 
 echo slack
 
