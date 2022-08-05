@@ -101,6 +101,10 @@ pages:
   needs: ['unit_test']
   environment: 
     name: $DEPLOY_VARIABLE
+  rules:
+    - if: '$DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"'
+      when: on_success
+    - when: never
   script:
     - mkdir .public
     - cp -r coverage/* .public
