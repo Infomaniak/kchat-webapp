@@ -3,6 +3,7 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import MomentLocaleUtils from 'react-day-picker/moment';
 import {DayModifiers, NavbarElementProps} from 'react-day-picker';
 import {useIntl} from 'react-intl';
 
@@ -153,6 +154,7 @@ const DateTimeInputContainer: React.FC<Props> = (props: Props) => {
                         navbarElement: <Navbar/>,
                         fromMonth: currentTime,
                         modifiers,
+                        localeUtils: MomentLocaleUtils,
                         locale: locale.toLowerCase(),
                         disabledDays: {
                             before: currentTime,

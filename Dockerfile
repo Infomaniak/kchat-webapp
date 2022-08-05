@@ -6,6 +6,8 @@ WORKDIR /var/www/html
 
 COPY package*.json ./
 
+COPY .env ./
+
 RUN npm ci --prefer-offline --no-audit --no-fund
 
 COPY . .

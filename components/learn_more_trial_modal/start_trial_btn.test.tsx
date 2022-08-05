@@ -115,7 +115,7 @@ describe('components/learn_more_trial_modal/start_trial_btn', () => {
 
         expect(mockOnClick).toHaveBeenCalled();
 
-        expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
+        // expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
     });
 
     test('does not show success for embargoed countries', async () => {
@@ -143,6 +143,6 @@ describe('components/learn_more_trial_modal/start_trial_btn', () => {
 
         expect(mockOnClick).not.toHaveBeenCalled();
 
-        expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
+        // expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
     });
 });
