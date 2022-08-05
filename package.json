@@ -231,8 +231,7 @@
     ],
     "coverageReporters": [
       "lcov",
-      "text-summary",
-      "cobertura"
+      "text-summary"
     ],
     "moduleNameMapper": {
       "^@mattermost/(client)$": "<rootDir>/packages/$1/src",
