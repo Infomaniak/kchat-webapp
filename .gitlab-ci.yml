@@ -109,8 +109,8 @@ changelog:
   rules:
     - if: '$DEPLOY_VARIABLE == "prod"'
       when: on_success
-    - if: '$DEPLOY_VARIABLE == "preprod"'
-      when: on_success
+    # - if: '$DEPLOY_VARIABLE == "preprod"'
+    #   when: on_success
     - when: never
   script:
     - './release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_API_TOKEN}'
