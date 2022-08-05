@@ -64,6 +64,10 @@ unit_test:
     - shared
   environment: 
     name: $DEPLOY_VARIABLE
+  rules:
+    - if: '$DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"'
+      when: on_success
+    - when: never
   artifacts:
     paths:
       - coverage/
