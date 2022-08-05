@@ -1,3 +1,13 @@
+## 0.1.31-rc.1 (2022-08-05)
+
+## Changed (1 change)
+
+- [Unsubscribe from channel when leaving it, fix #53](kchat/webapp@c26c1b593e1fd46090a8dea2a64580a6a4e09f0f) by @dorian.scd ([merge request](kchat/webapp!68))
+
+## Other (1 change)
+
+- [For changelog update](kchat/webapp@58151bb02aa654d769ea670d970d1738644ad506) by @florent.glauda ([merge request](kchat/webapp!79))
+
 ## 0.1.30 (2022-08-05)
 
 ## Chore (1 change)
