@@ -95,6 +95,8 @@ unit_test:
 pages:
   stage: test
   needs: ['unit_test']
+  environment: 
+    name: $DEPLOY_VARIABLE
   script:
     - mkdir .public
     - cp -r coverage/* .public
@@ -107,6 +109,8 @@ changelog:
   stage: release
   image: registry.infomaniak.com:443/leopold.jacquot/debian-toolbox:0.0.1
   needs: ['build_docker_image']
+  environment: 
+    name: $DEPLOY_VARIABLE
   rules:
     - if: '$DEPLOY_VARIABLE == "prod"'
       when: on_success
