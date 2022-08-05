@@ -13,7 +13,7 @@ workflow:
         DEPLOY_VARIABLE: "prod"
     - if: '$CI_MERGE_REQUEST_ID'
       variables:
-        DEPLOY_VARIABLE: "staging"
+        DEPLOY_VARIABLE: "staging/$CI_MERGE_REQUEST_ID"
     - when: never
 
 build_docker_image: &build_docker_image
@@ -113,5 +113,5 @@ changelog:
       when: on_success
     - when: never
   script:
-    - 'sh ./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3}'
+    - './release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_API_TOKEN}'
 
