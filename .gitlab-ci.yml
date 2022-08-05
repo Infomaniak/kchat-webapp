@@ -74,7 +74,6 @@ unit_test:
     key:
       files:
         - package-lock.json
-      prefix: ${CI_COMMIT_REF_SLUG}
     paths:
       - .npm/
       - node_modules/
