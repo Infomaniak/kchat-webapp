@@ -591,7 +591,7 @@ export default class Root extends React.PureComponent {
                         )}
                         <ModalController/>
                         <GlobalHeader/>
-                        <OnBoardingTaskList/>
+                        {/*<OnBoardingTaskList/> */}
                         <TeamSidebar/>
                         <Switch>
                             {this.props.products?.map((product) => (
