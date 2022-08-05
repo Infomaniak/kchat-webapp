@@ -1,3 +1,9 @@
+## 0.1.30 (2022-08-05)
+
+## Chore (1 change)
+
+- [remove openHandles logger in ci to fix tests](kchat/webapp@5b825e1bd470b1da131e41b0113e46abecd6df73) by @antonbuksa ([merge request](kchat/webapp!85))
+
 ## 0.1.27 (2022-08-05)
 
 ## Changed (5 changes)
