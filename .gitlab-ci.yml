@@ -147,15 +147,5 @@ sast:
     - docker-executor
     - kubernetes
     - shared
-  rules:
-    - if: $DEPLOY_VARIABLE == "preprod"
-      when: on_success
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
-      when: on_success
-    - when: never
-  artifacts:
-    name: "sast-report"
-    paths:
-      - gl-sast-report.json
   script:
     - echo "running SAST tests"
