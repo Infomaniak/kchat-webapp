@@ -135,7 +135,7 @@ sast:
       when: on_success
     - when: never
   script:
-    - echo "running SAST"
+    - echo "running SAST tests"
 
 include:
 - template: Security/SAST.gitlab-ci.yml
