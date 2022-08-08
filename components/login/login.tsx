@@ -64,7 +64,7 @@ const Login = () => {
             redirectUserToDefaultTeam();
             return;
         }
-
+        let retry = localStorage.getItem('loginRetry') ? localStorage.getItem('loginRetry') : 0;
         if (isDesktopApp()) {
             const loginCode = (new URLSearchParams(search)).get('code');
 
@@ -86,32 +86,35 @@ const Login = () => {
                 return;
             }
 
-            if (loginCode) {
-                const challenge = JSON.parse(localStorage.getItem('challenge'));
-
-                //    Get token
-                Client4.getIKLoginToken(
-                    loginCode,
-                    challenge?.challenge,
-                    challenge?.verifier,
-                    `${IKConstants.LOGIN_URL}`,
-                    `${IKConstants.CLIENT_ID}`,
-                ).then((resp) => {
-                    console.log('get token', resp);
-
-                    storeTokenResponse(resp);
-                    localStorage.removeItem('challenge');
-                    LocalStorageStore.setWasLoggedIn(true);
-                    finishSignin();
-                }).catch((error) => {
-                    console.log('catch errror', error);
-                    clearLocalStorageToken();
-                    getChallengeAndRedirectToLogin();
-                });
-                return;
-            }
+            // if (loginCode) {
+            //     const challenge = JSON.parse(localStorage.getItem('challenge'));
+            //
+            //     // if( retry < 5) {
+            //     //    Get token
+            //     Client4.getIKLoginToken(
+            //         loginCode,
+            //         challenge?.challenge,
+            //         challenge?.verifier,
+            //         `${IKConstants.LOGIN_URL}`,
+            //         `${IKConstants.CLIENT_ID}`,
+            //     ).then((resp) => {
+            //         console.log('get token', resp);
+            //         storeTokenResponse(resp);
+            //         localStorage.removeItem('challenge');
+            //         LocalStorageStore.setWasLoggedIn(true);
+            //         finishSignin();
+            //     }).catch((error) => {
+            //         console.log('catch errror', error);
+            //         clearLocalStorageToken();
+            //         getChallengeAndRedirectToLogin();
+            //     });
+            //     return;
+            //     // }
+            //     // return;
+            // }
 
             if (hash) {
+                console.log( 'go hash');
                 const hash2Obj = {};
                 // eslint-disable-next-line array-callback-return
                 hash.substring(1).split('&').map((hk) => {
@@ -125,7 +128,7 @@ const Login = () => {
                 return;
             }
 
-            if ((!token || !refreshToken || !tokenExpire) && !loginCode) {
+            if ((!token || !refreshToken || !tokenExpire) && !hash) {
                 getChallengeAndRedirectToLogin();
             }
         }
