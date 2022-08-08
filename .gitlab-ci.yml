@@ -1,130 +1,133 @@
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-  - test
-  - build
-  - release
-
+- test
+- build
+- release
 workflow:
   rules:
-    - if: '$CI_COMMIT_TAG =~ /\-rc.*/'
-      variables:
-        DEPLOY_VARIABLE: "preprod"
-        SLACK_NOTIFY_CHANNEL: "C03BA6564NP"
-    - if: $CI_COMMIT_TAG
-      variables:
-        DEPLOY_VARIABLE: "prod"
-        SLACK_NOTIFY_CHANNEL: "C02NHLU88MN"
-    - if: '$CI_MERGE_REQUEST_ID'
-      variables:
-        DEPLOY_VARIABLE: "staging/$CI_MERGE_REQUEST_ID"
-    - when: never
-
-build_docker_image: &build_docker_image
+  - if: "$CI_COMMIT_TAG =~ /\\-rc.*/"
+    variables:
+      DEPLOY_VARIABLE: preprod
+      SLACK_NOTIFY_CHANNEL: C03BA6564NP
+  - if: "$CI_COMMIT_TAG"
+    variables:
+      DEPLOY_VARIABLE: prod
+      SLACK_NOTIFY_CHANNEL: C02NHLU88MN
+  - if: "$CI_MERGE_REQUEST_ID"
+    variables:
+      DEPLOY_VARIABLE: staging/$CI_MERGE_REQUEST_ID
+  - when: never
+build_docker_image:
   stage: build
   tags:
-    - kubernetes
+  - kubernetes
   image:
     name: gcr.io/kaniko-project/executor:debug
-    entrypoint: ['']
+    entrypoint:
+    - ''
   rules:
-    - if: '$DEPLOY_VARIABLE == "prod"'
-      when: on_success
-      allow_failure: false
-    - if: '$DEPLOY_VARIABLE == "preprod"'
-      when: on_success
-    - when: never
-  environment: 
-    name: $DEPLOY_VARIABLE
+  - if: $DEPLOY_VARIABLE == "prod"
+    when: on_success
+    allow_failure: false
+  - if: $DEPLOY_VARIABLE == "preprod"
+    when: on_success
+  - when: never
+  environment:
+    name: "$DEPLOY_VARIABLE"
   before_script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - echo "WEBCOMPONENT_ENDPOINT=$WEBCOMPONENT_ENDPOINT" >> .env
-    - echo "WEBCOMPONENT_API_ENDPOINT=$WEBCOMPONENT_API_ENDPOINT" >> .env
-    - echo "KMEET_ENDPOINT=$KMEET_ENDPOINT" >> .env
-    - echo "LOGIN_ENDPOINT=$LOGIN_ENDPOINT" >> .env
-    - echo "MANAGER_ENDPOINT=$MANAGER_ENDPOINT" >> .env
-    - cat .env
+  - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}"
+    > /kaniko/.docker/config.json
+  - echo "WEBCOMPONENT_ENDPOINT=$WEBCOMPONENT_ENDPOINT" >> .env
+  - echo "WEBCOMPONENT_API_ENDPOINT=$WEBCOMPONENT_API_ENDPOINT" >> .env
+  - echo "KMEET_ENDPOINT=$KMEET_ENDPOINT" >> .env
+  - echo "LOGIN_ENDPOINT=$LOGIN_ENDPOINT" >> .env
+  - echo "MANAGER_ENDPOINT=$MANAGER_ENDPOINT" >> .env
+  - cat .env
   script:
-    - |-
-      environment=${DEPLOY_VARIABLE}
-      args="--destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
+  - |-
+    environment=${DEPLOY_VARIABLE}
+    args="--destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
 
-      eval "/kaniko/executor \
-        --cache \
-        --context ${CI_PROJECT_DIR} \
-        --build-arg SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
-        --build-arg ENVIRONMENT=${environment} \
-        --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
-        ${args}"
-
+    eval "/kaniko/executor \
+      --cache \
+      --context ${CI_PROJECT_DIR} \
+      --build-arg SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
+      --build-arg ENVIRONMENT=${environment} \
+      --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
+      ${args}"
 unit_test:
   stage: test
   image: node:16.10.0
   tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  environment: 
-    name: $DEPLOY_VARIABLE
+  - docker-executor
+  - kubernetes
+  - shared
+  environment:
+    name: "$DEPLOY_VARIABLE"
   rules:
-    - if: '$DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"'
-      when: on_success
-    - when: never
+  - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+    when: on_success
+  - when: never
   artifacts:
     paths:
-      - coverage/
+    - coverage/
     when: on_success
     reports:
       junit:
-        - coverage/junit.xml
-  coverage: '/^\s*Lines\s*: \d+\d+.\d+\d+\%/'
+      - coverage/junit.xml
+  coverage: "/^\\s*Lines\\s*: \\d+\\d+.\\d+\\d+\\%/"
   cache:
     key:
       files:
-        - package-lock.json
+      - package-lock.json
     paths:
-      - .npm/
-      - node_modules/
-      - coverage/
+    - ".npm/"
+    - node_modules/
+    - coverage/
   before_script:
-    - npm ci --cache .npm
+  - npm ci --cache .npm
   script:
-    # typescript
-    # - npm run check-types
-
-    # lint
-    # - npm run check
-
-    # unit tests
-    - npm run test-ci
-
+  - npm run test-ci
 pages:
   stage: test
-  needs: ['unit_test']
-  environment: 
-    name: $DEPLOY_VARIABLE
+  needs:
+  - unit_test
+  environment:
+    name: "$DEPLOY_VARIABLE"
   rules:
-    - if: '$DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"'
-      when: on_success
-    - when: never
+  - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+    when: on_success
+  - when: never
   script:
-    - mkdir .public
-    - cp -r coverage/* .public
-    - mv .public public
+  - mkdir .public
+  - cp -r coverage/* .public
+  - mv .public public
   artifacts:
     paths:
-      - public
-
+    - public
 changelog:
   stage: release
   image: registry.infomaniak.com:443/leopold.jacquot/debian-toolbox:0.0.1
-  needs: ['build_docker_image']
-  environment: 
-    name: $DEPLOY_VARIABLE
+  needs:
+  - build_docker_image
+  environment:
+    name: "$DEPLOY_VARIABLE"
   rules:
-    - if: '$DEPLOY_VARIABLE == "prod"'
-      when: on_success
-    - if: '$DEPLOY_VARIABLE == "preprod"'
-      when: on_success
-    - when: never
+  - if: $DEPLOY_VARIABLE == "prod"
+    when: on_success
+  - if: $DEPLOY_VARIABLE == "preprod"
+    when: on_success
+  - when: never
   script:
-    - './release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_API_TOKEN} ${SLACK_NOTIFY_CHANNEL}'
-
+  - "./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_API_TOKEN}
+    ${SLACK_NOTIFY_CHANNEL}"
+sast:
+  stage: test
+include:
+- template: Security/SAST.gitlab-ci.yml
