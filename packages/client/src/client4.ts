@@ -918,16 +918,6 @@ export default class Client4 {
             params._ = lastPictureUpdate;
         }
 
-        // const imgFetched = await this.getProfilePictureFetched(userId, lastPictureUpdate, params);
-        // if (imgFetched) {
-        //     return imgFetched
-        // } else {
-        //     return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
-        // }
-
-        if (isDesktopApp() && this.token) {
-            params.access_token = this.token;
-        }
         return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
     };
     arrayBufferToBase64(buffer: ArrayBuffer) {
@@ -949,11 +939,7 @@ export default class Client4 {
     }
 
     getDefaultProfilePictureUrl = (userId: string) => {
-        const params: any = {};
-        if (isDesktopApp() && this.token) {
-            params.access_token = this.token;
-        }
-        return `${this.getUserRoute(userId)}/image/default${buildQueryString(params)}`;
+        return `${this.getUserRoute(userId)}/image/default`;
     };
 
     autocompleteUsers = (name: string, teamId: string, channelId: string, options = {
@@ -2798,12 +2784,7 @@ export default class Client4 {
     };
 
     getCustomEmojiImageUrl = (id: string) => {
-        const params: any = {};
-
-        // if (isDesktopApp() && this.token) {
-        //     params.access_token = this.token;
-        // }
-        return `${this.getEmojiRoute(id)}/image${buildQueryString(params)}`;
+        return `${this.getEmojiRoute(id)}/image`;
     };
 
     searchCustomEmoji = (term: string, options = {}) => {

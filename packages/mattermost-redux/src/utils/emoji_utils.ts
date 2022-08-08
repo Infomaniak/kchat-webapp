@@ -3,8 +3,6 @@
 
 import {Client4} from 'mattermost-redux/client';
 import {Emoji, SystemEmoji, CustomEmoji} from '@mattermost/types/emojis';
-import {isDesktopApp} from 'utils/user_agent';
-import {buildQueryString} from 'packages/client/src/helpers';
 
 export function isSystemEmoji(emoji: Emoji): emoji is SystemEmoji {
     if ('category' in emoji) {
@@ -15,13 +13,6 @@ export function isSystemEmoji(emoji: Emoji): emoji is SystemEmoji {
 }
 
 export function getEmojiImageUrl(emoji: Emoji): string {
-    // Add infomaniak token to emoji fetch
-    const params: any = {};
-
-    if (isDesktopApp() && Client4.getToken() && !isSystemEmoji(emoji)) {
-        params.access_token = Client4.getToken();
-    }
-
     // If its the mattermost custom emoji
     if (!isSystemEmoji(emoji) && emoji.id === 'mattermost') {
         return Client4.getSystemEmojiImageUrl('mattermost');
@@ -33,7 +24,7 @@ export function getEmojiImageUrl(emoji: Emoji): string {
         return Client4.getSystemEmojiImageUrl(filename);
     }
 
-    return Client4.getEmojiRoute(emoji.id) + `/image${buildQueryString(params)}`;
+    return Client4.getEmojiRoute(emoji.id) + '/image';
 }
 
 export function parseNeededCustomEmojisFromText(text: string, systemEmojis: Map<string, SystemEmoji>, customEmojisByName: Map<string, CustomEmoji>, nonExistentEmoji: Set<string>): Set<string> {

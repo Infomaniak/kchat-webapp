@@ -96,19 +96,11 @@ export function getFileDownloadUrl(fileId: string): string {
 }
 
 export function getFileThumbnailUrl(fileId: string): string {
-    const params: any = {};
-    if (isDesktopApp() && Client4.getToken()) {
-        params.access_token = Client4.getToken();
-    }
-    return `${Client4.getFileRoute(fileId)}/thumbnail${buildQueryString(params)}`;
+    return `${Client4.getFileRoute(fileId)}/thumbnail`;
 }
 
 export function getFilePreviewUrl(fileId: string): string {
-    const params: any = {};
-    if (isDesktopApp() && Client4.getToken()) {
-        params.access_token = Client4.getToken();
-    }
-    return `${Client4.getFileRoute(fileId)}/preview${buildQueryString(params)}`;
+    return `${Client4.getFileRoute(fileId)}/preview`;
 }
 
 export function sortFileInfos(fileInfos: FileInfo[] = [], locale: string = General.DEFAULT_LOCALE): FileInfo[] {
