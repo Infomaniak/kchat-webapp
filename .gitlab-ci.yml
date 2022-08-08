@@ -141,6 +141,8 @@ changelog:
 sast:
   stage: test
   rules:
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
     - when: never
