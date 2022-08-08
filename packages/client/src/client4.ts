@@ -4197,7 +4197,7 @@ export default class Client4 {
         formData.append('code', code);
         formData.append('code_verifier', verifier);
         formData.append('client_id', clientId);
-        formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
+        // formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
 
         return this.doFetch<any>(
 
