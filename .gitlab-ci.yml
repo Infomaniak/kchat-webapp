@@ -1,3 +1,6 @@
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
 stages:
   - test
   - build
@@ -140,14 +143,19 @@ changelog:
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 sast:
   stage: test
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
   rules:
     - if: $DEPLOY_VARIABLE == "preprod"
       when: on_success
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
     - when: never
+  artifacts:
+    name: "sast-report"
+    paths:
+      - gl-sast-report.json
   script:
     - echo "running SAST tests"
-
-include:
-- template: Security/SAST.gitlab-ci.yml
