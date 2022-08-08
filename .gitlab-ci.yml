@@ -15,7 +15,7 @@ workflow:
         SLACK_NOTIFY_CHANNEL: C02NHLU88MN
     - if: "$CI_MERGE_REQUEST_ID"
       variables:
-        DEPLOY_VARIABLE: staging/$CI_MERGE_REQUEST_ID
+        DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
     - when: never
 
 build_docker_image:
@@ -141,7 +141,7 @@ changelog:
 sast:
   stage: test
   rules:
-    - if: $DEPLOY_VARIABLE == staging/${CI_MERGE_REQUEST_ID}
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
     - when: never
   script:
