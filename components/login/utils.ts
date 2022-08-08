@@ -8,6 +8,7 @@ import {Client4} from 'mattermost-redux/client';
 import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
+import {reconnectWebSocket} from 'actions/websocket_actions';
 
 const REFRESH_TOKEN_TIME_MARGIN = 30; // How many seconds to refresh before token expires
 const OFFLINE_ATTEMPT_INTERVAL = 2000; // In milliseconds
@@ -109,9 +110,12 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         `${IKConstants.CLIENT_ID}`,
     ).then((resp) => {
         console.log('getRefreshToken', resp);
-        if (periodic) {
+        if (periodic && resp.expires_in && resp.expires_in >= parseInt(Date.now() / 1000, 10)) {
             setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN), false, true);
         }
+
+        // Refresh the websockets as we just changed Bearer Token
+        reconnectWebSocket();
 
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
