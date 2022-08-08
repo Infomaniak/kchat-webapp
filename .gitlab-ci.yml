@@ -143,6 +143,8 @@ changelog:
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 sast:
   stage: test
+  environment:
+    name: "$DEPLOY_VARIABLE"
   tags:
     - docker-executor
     - kubernetes
