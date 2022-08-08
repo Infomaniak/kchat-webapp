@@ -86,7 +86,7 @@ unit_test:
       - node_modules/
       - coverage/
   before_script:
-    - npm ci --cache .npm
+    - npm ci
   script:
     # typescript
     # - npm run check-types
