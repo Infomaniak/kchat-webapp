@@ -75,7 +75,7 @@ unit_test:
     when: on_success
     reports:
       junit:
-      - coverage/junit.xml
+        - coverage/junit.xml
   coverage: "/^\\s*Lines\\s*: \\d+\\d+.\\d+\\d+\\%/"
   cache:
     key:
@@ -88,6 +88,13 @@ unit_test:
   before_script:
     - npm ci --cache .npm
   script:
+    # typescript
+    # - npm run check-types
+
+    # lint
+    # - npm run check
+
+    # unit tests
     - npm run test-ci
 
 pages:
@@ -134,7 +141,7 @@ changelog:
 sast:
   stage: test
   rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+    - if: $DEPLOY_VARIABLE == staging/${CI_MERGE_REQUEST_ID}
       when: on_success
     - when: never
   script:
