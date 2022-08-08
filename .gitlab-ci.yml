@@ -5,35 +5,36 @@ stages:
 
 workflow:
   rules:
-    - if: '$CI_COMMIT_TAG =~ /\-rc.*/'
+    - if: "$CI_COMMIT_TAG =~ /\\-rc.*/"
       variables:
-        DEPLOY_VARIABLE: "preprod"
-        SLACK_NOTIFY_CHANNEL: "C03BA6564NP"
-    - if: $CI_COMMIT_TAG
+        DEPLOY_VARIABLE: preprod
+        SLACK_NOTIFY_CHANNEL: C03BA6564NP
+    - if: "$CI_COMMIT_TAG"
       variables:
-        DEPLOY_VARIABLE: "prod"
-        SLACK_NOTIFY_CHANNEL: "C02NHLU88MN"
-    - if: '$CI_MERGE_REQUEST_ID'
+        DEPLOY_VARIABLE: prod
+        SLACK_NOTIFY_CHANNEL: C02NHLU88MN
+    - if: "$CI_MERGE_REQUEST_ID"
       variables:
-        DEPLOY_VARIABLE: "staging/$CI_MERGE_REQUEST_ID"
+        DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
     - when: never
 
-build_docker_image: &build_docker_image
+build_docker_image:
   stage: build
   tags:
     - kubernetes
   image:
     name: gcr.io/kaniko-project/executor:debug
-    entrypoint: ['']
+    entrypoint:
+      - ''
   rules:
-    - if: '$DEPLOY_VARIABLE == "prod"'
+    - if: $DEPLOY_VARIABLE == "prod"
       when: on_success
       allow_failure: false
-    - if: '$DEPLOY_VARIABLE == "preprod"'
+    - if: $DEPLOY_VARIABLE == "preprod"
       when: on_success
     - when: never
-  environment: 
-    name: $DEPLOY_VARIABLE
+  environment:
+    name: "$DEPLOY_VARIABLE"
   before_script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - echo "WEBCOMPONENT_ENDPOINT=$WEBCOMPONENT_ENDPOINT" >> .env
@@ -62,10 +63,10 @@ unit_test:
     - docker-executor
     - kubernetes
     - shared
-  environment: 
-    name: $DEPLOY_VARIABLE
+  environment:
+    name: "$DEPLOY_VARIABLE"
   rules:
-    - if: '$DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"'
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
     - when: never
   artifacts:
@@ -75,17 +76,17 @@ unit_test:
     reports:
       junit:
         - coverage/junit.xml
-  coverage: '/^\s*Lines\s*: \d+\d+.\d+\d+\%/'
+  coverage: "/^\\s*Lines\\s*: \\d+\\d+.\\d+\\d+\\%/"
   cache:
     key:
       files:
         - package-lock.json
     paths:
-      - .npm/
+      - ".npm/"
       - node_modules/
       - coverage/
   before_script:
-    - npm ci --cache .npm
+    - npm ci
   script:
     # typescript
     # - npm run check-types
@@ -98,11 +99,12 @@ unit_test:
 
 pages:
   stage: test
-  needs: ['unit_test']
-  environment: 
-    name: $DEPLOY_VARIABLE
+  needs:
+    - unit_test
+  environment:
+    name: "$DEPLOY_VARIABLE"
   rules:
-    - if: '$DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"'
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
     - when: never
   script:
@@ -116,15 +118,34 @@ pages:
 changelog:
   stage: release
   image: registry.infomaniak.com:443/leopold.jacquot/debian-toolbox:0.0.1
-  needs: ['build_docker_image']
-  environment: 
-    name: $DEPLOY_VARIABLE
+  needs:
+    - build_docker_image
+  environment:
+    name: "$DEPLOY_VARIABLE"
   rules:
-    - if: '$DEPLOY_VARIABLE == "prod"'
+    - if: $DEPLOY_VARIABLE == "prod"
       when: on_success
-    - if: '$DEPLOY_VARIABLE == "preprod"'
+    - if: $DEPLOY_VARIABLE == "preprod"
       when: on_success
     - when: never
   script:
-    - './release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_API_TOKEN} ${SLACK_NOTIFY_CHANNEL}'
+    - "./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_API_TOKEN} ${SLACK_NOTIFY_CHANNEL}"
 
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+sast:
+  stage: test
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - when: never
+  script:
+    - echo "running SAST tests"
+
+include:
+- template: Security/SAST.gitlab-ci.yml
