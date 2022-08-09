@@ -365,8 +365,6 @@ var config = {
                 {from: 'images/admin-onboarding-background.jpg', to: 'images'},
                 {from: 'images/payment-method-illustration.png', to: 'images'},
                 {from: 'images/cloud-laptop.png', to: 'images'},
-                {from: 'call.html', to: ''},
-                {from: 'images/trial-ended.png', to: 'images'},
                 {from: 'service-worker.js', to: ''},
             ],
         }),
