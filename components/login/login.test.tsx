@@ -8,6 +8,8 @@ import {FormattedMessage, IntlProvider} from 'react-intl';
 import AlertBanner from 'components/alert_banner';
 import ExternalLoginButton from 'components/external_login_button/external_login_button';
 import LoadingScreen from 'components/loading_screen';
+import LoadingIk from 'components/loading_ik';
+
 import Login from 'components/login/login';
 import Input from 'components/widgets/inputs/input/input';
 import PasswordInput from 'components/widgets/inputs/password_input/password_input';
@@ -142,43 +144,5 @@ describe('components/login/Login', () => {
         );
 
         expect(wrapper).toMatchSnapshot();
-    });
-
-    it('should handle initializing when logout status success', () => {
-        mockState.requests.users.logout.status = RequestStatus.SUCCESS;
-
-        const intlProviderProps = {
-            defaultLocale: 'en',
-            locale: 'en',
-            messages: {},
-        };
-
-        const wrapper = mount(
-            <IntlProvider {...intlProviderProps}>
-                <Login/>
-            </IntlProvider>,
-        );
-
-        const loadingScreen = wrapper.find(LoadingScreen).first();
-        expect(loadingScreen.find(FormattedMessage).first().props().defaultMessage).toEqual('Loading');
-    });
-
-    it('should handle initializing when storage not initalized', () => {
-        mockState.storage.initialized = false;
-
-        const intlProviderProps = {
-            defaultLocale: 'en',
-            locale: 'en',
-            messages: {},
-        };
-
-        const wrapper = mount(
-            <IntlProvider {...intlProviderProps}>
-                <Login/>
-            </IntlProvider>,
-        );
-
-        const loadingScreen = wrapper.find(LoadingScreen).first();
-        expect(loadingScreen.find(FormattedMessage).first().props().defaultMessage).toEqual('Loading');
     });
 });

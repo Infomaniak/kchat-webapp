@@ -97,7 +97,6 @@ const Login = () => {
                     `${IKConstants.LOGIN_URL}`,
                     `${IKConstants.CLIENT_ID}`,
                 ).then((resp) => {
-                    console.log('get token', resp);
                     storeTokenResponse(resp);
                     localStorage.removeItem('challenge');
                     LocalStorageStore.setWasLoggedIn(true);
