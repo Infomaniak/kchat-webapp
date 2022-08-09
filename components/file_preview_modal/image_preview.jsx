@@ -33,7 +33,10 @@ var ZOOM_EXT = 1;
 
 ImagePreview.propTypes = {
     fileInfo: PropTypes.object.isRequired,
-    toolbarZoom: PropTypes.number.isRequired | PropTypes.string.isRequired,
+    toolbarZoom: PropTypes.oneOfType([
+        PropTypes.string.isRequired,
+        PropTypes.number.isRequired,
+    ]),
     setToolbarZoom: PropTypes.func.isRequired,
 };
 

@@ -25,21 +25,8 @@ interface Props {
 const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbarZoom}: Props) => {
     // Initial variables and constants
     // zoom text
-    const [zoomText, setZoomText] = useState('Actual Size');
-
-    const [whichSelected, setWhichSelected] = useState({
-        A: true,
-        W: false,
-        H: false,
-        1: false,
-        1.25: false,
-        1.5: false,
-        2: false,
-        3: false,
-        4: false,
-        5: false,
-        custom: false,
-    });
+    const [value, setValue] = useState('Actual Size');
+    const [selectedZoomValue, setSelectedZoomValue] = useState();
 
     const plusSign = <i className='icon-plus'/>;
     const minusSign = <i className='icon-minus'/>;
@@ -58,47 +45,28 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
     zoomLevels.set('5', {text: '500%', type: 'scale'});
 
     const zoomLevelOptions = [];
-    for (const [value, zoomLevel] of zoomLevels) {
+    for (const [zoomLevelKey, zoomLevel] of zoomLevels) {
         zoomLevelOptions.push(
             <option
-                value={value}
-                selected={whichSelected[value as keyof typeof whichSelected]}
+                key={zoomLevelKey}
+                value={zoomLevelKey}
             >{zoomLevel.text}</option>,
         );
     }
 
     zoomLevelOptions.push(
         <option
+            key={'customZoom'}
             value='customZoom'
             hidden={true}
-            selected={whichSelected.custom}
         >
-            {zoomText}
+            {value}
         </option>,
     );
 
     // Utils
     const clamp = (num: number, min: number, max: number) => {
         return Math.round(Math.min(Math.max(num, min), max) * 10000) / 10000; // round to avoid floating point errors
-    };
-
-    const selectItem = (item: string) => {
-        let newWhichSelected = {...whichSelected};
-        newWhichSelected = {
-            A: false,
-            W: false,
-            H: false,
-            1: false,
-            1.25: false,
-            1.5: false,
-            2: false,
-            3: false,
-            4: false,
-            5: false,
-            custom: false,
-        };
-        newWhichSelected[item as keyof typeof newWhichSelected] = true;
-        setWhichSelected(newWhichSelected);
     };
 
     // Handlers
@@ -131,7 +99,7 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
     // Callbacks
     useEffect(() => {
         if (typeof toolbarZoom === 'number') {
-            setZoomText(`${Math.round(toolbarZoom * 100)}%`);
+            setValue(`${Math.round(toolbarZoom * 100)}%`);
             zoomInButtonActive = toolbarZoom < 5;
             zoomOutButtonActive = toolbarZoom > MIN_ZOOM_EXT;
         } else if (toolbarZoom === 'A') {
@@ -140,9 +108,9 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
         }
 
         if (zoomLevels.has(toolbarZoom.toString())) {
-            selectItem(toolbarZoom.toString());
+            setSelectedZoomValue(toolbarZoom.toString());
         } else {
-            selectItem('custom');
+            setSelectedZoomValue('customZoom');
         }
     }, [toolbarZoom]);
 
@@ -151,6 +119,8 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
         <select
             onChange={handleZoomDropdown}
             className='image-controls-dropdown'
+            defaultValue={'A'}
+            value={selectedZoomValue}
         >
             {zoomLevelOptions}
         </select>
