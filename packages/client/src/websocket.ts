@@ -3,16 +3,20 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
-import {isDesktopApp} from 'utils/user_agent';
-import {Client4} from 'mattermost-redux/client';
-
-// import {SocketEvents} from 'utils/constants';
+import {Client4} from '.';
 
 const MAX_WEBSOCKET_FAILS = 7;
 const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
 const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
 
 const WEBSOCKET_HELLO = 'hello';
+
+// Fix error import
+// eslint-disable-next-line no-warning-comments
+// TODO update isDesktopApp() with callback
+function isDesktopApp(): boolean {
+    return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
+}
 
 export type MessageListener = (msg: WebSocketMessage) => void;
 export type FirstConnectListener = () => void;
