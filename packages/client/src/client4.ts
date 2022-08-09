@@ -118,14 +118,23 @@ import {CompleteOnboardingRequest} from '@mattermost/types/setup';
 import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/threads';
 import {TopChannelResponse, TopReactionResponse, TopThreadResponse} from '@mattermost/types/insights';
 
-import {isDesktopApp} from 'utils/user_agent';
-
-import {IKConstants} from 'utils/constants-ik';
-
 import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
+
+// Fix error import
+// TODO update isDesktopApp() with callback
+function isDesktopApp(): boolean {
+    return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
+}
+
+const IKConstants = {
+    LOGIN_URL: process.env.LOGIN_ENDPOINT,
+    LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`,
+    CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
+    MANAGER_URL: process.env.MANAGER_ENDPOINT,
+}
 
 const HEADER_AUTH = 'Authorization';
 const HEADER_BEARER = 'Bearer';
