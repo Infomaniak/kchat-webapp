@@ -111,7 +111,34 @@ describe('components/learn_more_trial_modal/start_trial_btn', () => {
 
         expect(mockOnClick).toHaveBeenCalled();
 
-        // expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
+        expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
+    });
+
+    test('should handle on click when rendered as button', async () => {
+        const mockOnClick = jest.fn();
+
+        let wrapper: ReactWrapper<any>;
+
+        // Mount the component
+        await act(async () => {
+            wrapper = mountWithIntl(
+                <Provider store={store}>
+                    <StartTrialBtn
+                        {...props}
+                        renderAsButton={true}
+                        onClick={mockOnClick}
+                    />
+                </Provider>,
+            );
+        });
+
+        await act(async () => {
+            wrapper.find('button').simulate('click');
+        });
+
+        expect(mockOnClick).toHaveBeenCalled();
+
+        expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
     });
 
     test('should handle on click when rendered as button', async () => {
@@ -166,6 +193,6 @@ describe('components/learn_more_trial_modal/start_trial_btn', () => {
 
         expect(mockOnClick).not.toHaveBeenCalled();
 
-        // expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
+        expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
     });
 });
