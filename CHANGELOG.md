@@ -1,3 +1,19 @@
+## 0.1.34 (2022-08-09)
+
+## Fixed (1 change)
+
+- [Update login with post call and fix refresh condition](kchat/webapp@645fba49996e38c152ee1621f5bc52f63497d8ce) by @florent.glauda
+
+## Chore (3 changes)
+
+- [enable sast](kchat/webapp@76f310c2c75ce4c67f5a76b247fbc1e8e55ef59d) by @antonbuksa
+- [bump node to 16.16 for tests](kchat/webapp@64a5ce3c83bdb61f5341a50b32f5ae04197b0972) by @antonbuksa ([merge request](kchat/webapp!87))
+- [bump jest to 27.5.1](kchat/webapp@5326d803087127f8e4ddb2db8703c5539a245113) by @antonbuksa ([merge request](kchat/webapp!87))
+
+## Other (1 change)
+
+- [add rules for sast](kchat/webapp@ad215e6284e3ce5477cc86bb54a40322d699a1a3) by @antonbuksa ([merge request](kchat/webapp!87))
+
 ## 0.1.33-rc.6 (2022-08-08)
 
 ## Chore (3 changes)
