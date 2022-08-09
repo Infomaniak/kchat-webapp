@@ -124,16 +124,17 @@ import {buildQueryString} from './helpers';
 import {TelemetryHandler} from './telemetry';
 
 // Fix error import
+// eslint-disable-next-line no-warning-comments
 // TODO update isDesktopApp() with callback
 function isDesktopApp(): boolean {
     return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
 }
 
 const IKConstants = {
-    LOGIN_URL: process.env.LOGIN_ENDPOINT,
-    LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`,
+    LOGIN_URL: process.env.LOGIN_ENDPOINT, // eslint-disable-line no-process-env
+    LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
     CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
-    MANAGER_URL: process.env.MANAGER_ENDPOINT,
+    MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
 }
 
 const HEADER_AUTH = 'Authorization';
