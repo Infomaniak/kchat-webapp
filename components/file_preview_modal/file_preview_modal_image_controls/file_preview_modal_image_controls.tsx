@@ -5,12 +5,13 @@
 
 /*
 to do:
+- buttons are still clickable when inactive, fix that
 - make text internat
 */
 
 import React, {ChangeEvent, memo, useEffect, useState} from 'react';
 
-import {MIN_ZOOM, ZOOM_EXT} from '../image_preview';
+import {MIN_ZOOM_EXT, ZOOM_EXT} from '../image_preview';
 import './file_preview_modal_image_controls.scss';
 
 let zoomInButtonActive = true;
@@ -120,11 +121,11 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
     const handleZoomButtons = (delta: number) => {
         let newToolbarZoom = typeof toolbarZoom === 'string' ? ZOOM_EXT : toolbarZoom;
         newToolbarZoom = Math.round(newToolbarZoom * 10) / 10;
-        newToolbarZoom = clamp(newToolbarZoom + delta, MIN_ZOOM, 5);
-        setToolbarZoom(newToolbarZoom === MIN_ZOOM ? 'A' : newToolbarZoom);
+        newToolbarZoom = clamp(newToolbarZoom + delta, MIN_ZOOM_EXT, 5);
+        setToolbarZoom(newToolbarZoom === MIN_ZOOM_EXT ? 'A' : newToolbarZoom);
 
         zoomInButtonActive = newToolbarZoom < 5;
-        zoomOutButtonActive = newToolbarZoom > MIN_ZOOM;
+        zoomOutButtonActive = newToolbarZoom > MIN_ZOOM_EXT;
     };
 
     // Callbacks
@@ -132,7 +133,7 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
         if (typeof toolbarZoom === 'number') {
             setZoomText(`${Math.round(toolbarZoom * 100)}%`);
             zoomInButtonActive = toolbarZoom < 5;
-            zoomOutButtonActive = toolbarZoom > MIN_ZOOM;
+            zoomOutButtonActive = toolbarZoom > MIN_ZOOM_EXT;
         } else if (toolbarZoom === 'A') {
             zoomInButtonActive = true;
             zoomOutButtonActive = false;
