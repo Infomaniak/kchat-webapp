@@ -13,8 +13,6 @@ import * as Utils from 'utils/utils';
 
 import ReactionTooltip from './reaction_tooltip';
 import './reaction.scss';
-import { isDesktopApp } from 'utils/user_agent';
-import { Client4 } from 'mattermost-redux/client';
 
 type State = {
     displayNumber: number;

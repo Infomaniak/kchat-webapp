@@ -3,8 +3,6 @@
 
 import React from 'react';
 
-import {isDesktopApp} from 'utils/user_agent';
-import {Client4} from 'mattermost-redux/client';
 interface PostEmojiProps {
     name: string;
     imageUrl: string;

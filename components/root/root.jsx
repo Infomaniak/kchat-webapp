@@ -304,7 +304,7 @@ export default class Root extends React.PureComponent {
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
 
-                // // Set a callback to refresh token a little while before it expires
+                // Set a callback to refresh token a little while before it expires
                 setTimeout(refreshIKToken, tokenExpireIn - REFRESH_TOKEN_TIME_MARGIN, false, true);
             }
         }

@@ -1193,11 +1193,11 @@ export function displayFullAndNicknameForUser(user: UserProfile) {
     return displayName;
 }
 
-export function imageURLForUser(userId: string, lastPictureUpdate = 0) {
+export function imageURLForUser(userId, lastPictureUpdate = 0) {
     return Client4.getUsersRoute() + '/' + userId + '/image?_=' + lastPictureUpdate;
 }
 
-export function defaultImageURLForUser(userId: string) {
+export function defaultImageURLForUser(userId) {
     return Client4.getUsersRoute() + '/' + userId + '/image/default';
 }
 

@@ -939,7 +939,7 @@ export default class Client4 {
     }
 
     getDefaultProfilePictureUrl = (userId: string) => {
-        return `${this.getUserRoute(userId)}/image/default}`;
+        return `${this.getUserRoute(userId)}/image/default`;
     };
 
     autocompleteUsers = (name: string, teamId: string, channelId: string, options = {
@@ -2784,8 +2784,7 @@ export default class Client4 {
     };
 
     getCustomEmojiImageUrl = (id: string) => {
-        const params: any = {};
-        return `${this.getEmojiRoute(id)}/image${buildQueryString(params)}`;
+        return `${this.getEmojiRoute(id)}/image`;
     };
 
     searchCustomEmoji = (term: string, options = {}) => {
