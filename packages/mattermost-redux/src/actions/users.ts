@@ -33,6 +33,9 @@ import {isCollapsedThreadsEnabled, isGraphQLEnabled} from 'mattermost-redux/sele
 import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 import {General} from 'mattermost-redux/constants';
+import {clearLocalStorageToken} from '../../../../components/login/utils';
+import {IKConstants} from '../../../../utils/constants-ik';
+import {isDesktopApp} from '../../../../utils/user_agent';
 
 export function checkMfa(loginId: string): ActionFunc {
     return async (dispatch: DispatchFunc) => {
@@ -255,10 +258,8 @@ export function logout(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
 
-        try {
-            await Client4.logout();
-        } catch (error) {
-            // nothing to do here
+        if (isDesktopApp()) {
+            clearLocalStorageToken();
         }
 
         dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null});

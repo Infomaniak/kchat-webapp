@@ -156,6 +156,7 @@
     "cross-env": "7.0.3",
     "css-loader": "5.2.6",
     "dotenv-webpack": "7.0.3",
+    "ejs-compiled-loader": "3.1.0",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.6",
     "enzyme-to-json": "3.6.2",
@@ -176,9 +177,9 @@
     "identity-obj-proxy": "3.0.0",
     "image-webpack-loader": "8.0.1",
     "isomorphic-fetch": "3.0.0",
-    "jest": "27.0.6",
+    "jest": "27.5.1",
     "jest-canvas-mock": "2.4.0",
-    "jest-cli": "27.0.6",
+    "jest-cli": "27.5.1",
     "jest-junit": "12.2.0",
     "jest-watch-typeahead": "0.6.4",
     "mini-css-extract-plugin": "2.0.0",
@@ -232,8 +233,7 @@
     ],
     "coverageReporters": [
       "lcov",
-      "text-summary",
-      "cobertura"
+      "text-summary"
     ],
     "moduleNameMapper": {
       "^@mattermost/(components)$": "<rootDir>/packages/$1/src",
@@ -286,11 +286,11 @@
   "scripts": {
     "check": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --cache && stylelint \"**/*.{css,scss}\" --cache",
     "fix": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --fix --cache && stylelint \"**/*.{css,scss}\" --fix --cache",
-    "build": "cross-env NODE_ENV=production webpack",
+    "build": "export $(xargs < ./.env) && cross-env NODE_ENV=production webpack",
     "run": "webpack --progress --watch",
-    "dev-server": "webpack serve --mode development",
-    "test": "cross-env TZ=Etc/UTC jest --maxWorkers=50% --collectCoverage --coverageDirectory=\"./coverage\"",
-    "test-ci": "cross-env NODE_OPTIONS=--max_old_space_size=500 TZ=Etc/UTC jest --ci --collectCoverage --coverageDirectory=\"./coverage\"",
+    "dev-server": "export $(xargs < ./.env.development) && webpack serve --mode development",
+    "test": "cross-env TZ=Etc/UTC node ./node_modules/.bin/jest --maxWorkers=50% --collectCoverage --coverageDirectory=\"./coverage\"",
+    "test-ci": "cross-env TZ=Etc/UTC jest --forceExit --ci --collectCoverage --coverageDirectory=\"./coverage\"",
     "stats": "cross-env NODE_ENV=production webpack --profile --json > webpack_stats.json",
     "updatesnapshot": "cross-env TZ=Etc/UTC jest --updateSnapshot",
     "test:debug": "cross-env TZ=Etc/UTC jest --forceExit --detectOpenHandles",

@@ -67,6 +67,7 @@ const Login = () => {
 
         if (isDesktopApp()) {
             const loginCode = (new URLSearchParams(search)).get('code');
+
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
@@ -97,21 +98,33 @@ const Login = () => {
                     `${IKConstants.CLIENT_ID}`,
                 ).then((resp) => {
                     console.log('get token', resp);
-
                     storeTokenResponse(resp);
                     localStorage.removeItem('challenge');
                     LocalStorageStore.setWasLoggedIn(true);
                     finishSignin();
                 }).catch((error) => {
-                    console.log('catch errror', error);
+                    console.log('catch error', error);
                     clearLocalStorageToken();
                     getChallengeAndRedirectToLogin();
                 });
                 return;
             }
 
+            if (hash) {
+                const hash2Obj = {};
+                // eslint-disable-next-line array-callback-return
+                hash.substring(1).split('&').map((hk) => {
+                    const temp = hk.split('=');
+                    hash2Obj[temp[0]] = temp[1];
+                });
+                storeTokenResponse(hash2Obj);
+                LocalStorageStore.setWasLoggedIn(true);
+                finishSignin();
+
+                return;
+            }
+
             if ((!token || !refreshToken || !tokenExpire) && !loginCode) {
-                // eslint-disable-next-line react/no-did-mount-set-state
                 getChallengeAndRedirectToLogin();
             }
         }

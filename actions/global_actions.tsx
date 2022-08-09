@@ -49,6 +49,8 @@ import * as Utils from 'utils/utils';
 import SubMenuModal from '../components/widgets/menu/menu_modals/submenu_modal/submenu_modal';
 
 import {openModal} from './views/modals';
+import {isDesktopApp} from '../utils/user_agent';
+import {IKConstants} from '../utils/constants-ik';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -250,15 +252,22 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         if (shouldSignalLogout) {
             BrowserStore.signalLogout();
         }
-
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
 
         clearUserCookie();
 
-        browserHistory.push(redirectTo);
+        if (isDesktopApp()) {
+            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+        } else {
+            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+        }
     }).catch(() => {
-        browserHistory.push(redirectTo);
+        if (isDesktopApp()) {
+            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+        } else {
+            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+        }
     });
 }
 
