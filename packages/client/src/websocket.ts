@@ -119,6 +119,7 @@ export default class WebSocketClient {
             console.log('websocket connecting to ' + connectionUrl); //eslint-disable-line no-console
         }
 
+        // @ts-ignore
         Pusher.Runtime.createXHR = () => {
             const xhr = new XMLHttpRequest();
             xhr.withCredentials = true;
@@ -136,6 +137,7 @@ export default class WebSocketClient {
                 authEndpoint: '/broadcasting/auth',
                 auth: {
                     headers: {
+                        // @ts-ignore
                         Authorization: `Bearer ${Client4.getToken() && Client4.getToken()}`,
                     },
                 },
@@ -162,7 +164,9 @@ export default class WebSocketClient {
 
         this.connectionUrl = connectionUrl;
 
+        // @ts-ignore
         this.subscribeToTeamChannel(teamId);
+        // @ts-ignore
         this.subscribeToUserChannel(userId || currentUserId);
 
         this.conn.connection.bind('connected', () => {
@@ -214,6 +218,7 @@ export default class WebSocketClient {
             );
         });
 
+        // @ts-ignore
         this.conn.connection.bind('error', (evt) => {
             if (this.connectFailCount <= 1) {
                 console.log('websocket error'); //eslint-disable-line no-console
@@ -229,14 +234,17 @@ export default class WebSocketClient {
     }
 
     subscribeToTeamChannel(teamId: string) {
+        // @ts-ignore
         this.teamChannel = this.conn.subscribe(`private-team.${teamId}`);
     }
 
     subscribeToUserChannel(userId: number) {
+        // @ts-ignore
         this.userChannel = this.conn.subscribe(`presence-user.${userId}`);
     }
 
     bindPresenceChannel(channelID: string) {
+        // @ts-ignore
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`);
         if (this.presenceChannel) {
             this.bindChannelGlobally(this.presenceChannel);
@@ -244,6 +252,7 @@ export default class WebSocketClient {
     }
 
     unbindPresenceChannel(channelID: string) {
+        // @ts-ignore
         this.presenceChannel = this.conn?.unsubscribe(`presence-channel.${channelID}`);
         if (this.presenceChannel) {
             this.unbindChannelGlobally(this.presenceChannel);
@@ -251,6 +260,7 @@ export default class WebSocketClient {
     }
 
     bindChannelGlobally(channel: Channel | null) {
+        // @ts-ignore
         channel.bind_global((evt, data) => {
             // console.error(`The event ${evt} was triggered with data`);
             // console.error(data);
@@ -304,13 +314,16 @@ export default class WebSocketClient {
                 }
                 this.serverSequence = data.seq + 1;
 
+                // @ts-ignore
                 this.eventCallback?.({event: evt, data});
+                // @ts-ignore
                 this.messageListeners.forEach((listener) => listener({event: evt, data}));
             }
         });
     }
 
     unbindChannelGlobally(channel: Channel | null) {
+        // @ts-ignore
         channel.unbind_global((evt, data) => {
             if (!data) {
                 return;
@@ -325,7 +338,9 @@ export default class WebSocketClient {
                     Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
                 }
             } else if (this.eventCallback) {
+                // @ts-ignore
                 this.serverSequence = data.seq + 1;
+                // @ts-ignore
                 this.eventCallback({event: evt, data});
             }
         });
@@ -448,6 +463,7 @@ export default class WebSocketClient {
             this.userChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
             this.conn = null;
+            // @ts-ignore
             this.initialize(null, null, data.channel_id);
         }
     }

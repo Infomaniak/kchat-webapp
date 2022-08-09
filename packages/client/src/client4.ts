@@ -4121,20 +4121,18 @@ export default class Client4 {
                         `${IKConstants.LOGIN_URL}`,
                         `${IKConstants.CLIENT_ID}`,
                     ).then((response) => {
-                        console.log('getRefreshToken from client', response);
-
                         const d = new Date();
                         d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
                         localStorage.setItem('IKToken', response.access_token);
                         localStorage.setItem('IKRefreshToken', response.refresh_token);
+                        // @ts-ignore
                         localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
                         localStorage.setItem('tokenExpired', '0');
                         this.setToken(response.access_token);
                         this.setCSRF(response.access_token);
                         this.setAuthHeader = true;
                         localStorage.removeItem('refreshingToken');
-                    }).catch((error) => {
-                        console.log('catch refresh error', error);
+                    }).catch(() => {
                         localStorage.removeItem('refreshingToken');
                     });
                 }

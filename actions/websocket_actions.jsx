@@ -70,7 +70,6 @@ import {
     getUser as loadUser,
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
-import {Client4} from 'mattermost-redux/client';
 import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 import {getMyTeams, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig, getLicense, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';

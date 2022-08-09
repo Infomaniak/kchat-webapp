@@ -90,6 +90,7 @@ unit_test:
       - coverage/
   before_script:
     - npm ci
+    - npm run build --workspace=packages/components
   script:
     # typescript
     # - npm run check-types
