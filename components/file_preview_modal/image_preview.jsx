@@ -11,7 +11,6 @@ to do (in no order):
 - Add rotation?
 
 doing (in order):
-- zoom issue where if zoomed in, leave, come back, start to zoom => 100%
 - fix style issue in toolbar on PDFs
 
 */
@@ -90,6 +89,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
 
     const [offset, setOffset] = useState({x: 0, y: 0});
     const [dragging, setDragging] = useState(false);
+    const [, setIsReady] = useState(false);
 
     const touch = useRef({x: 0, y: 0});
     const canvasRef = useRef(null);
@@ -182,24 +182,11 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
         window.addEventListener('mouseup', handleMouseUp);
 
         background.src = previewUrl;
-
         if (canvasRef.current) {
             background.onload = () => {
-                const context = canvasRef.current.getContext('2d');
-
-                // Improve smoothing quality
-                context.imageSmoothingQuality = 'high';
-
                 // Initialize with the zoom at minimum.
-                canvasRef.current.width = background.width * minZoom;
-                canvasRef.current.height = background.height * minZoom;
                 zoom = minZoom;
-                //setToolbarZoom('A'); fix issue here
-
-                // Initialize borders
-                canvasBorder.current = {w: context.canvas.offsetLeft, h: context.canvas.offsetTop - 72 - 48};
-
-                context.drawImage(background, 0, 0, background.width * minZoom, background.height * minZoom);
+                setIsReady(true);
             };
         }
 
@@ -208,10 +195,11 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
         };
     }, []);
 
-    // for mouse centered zooming, center offset to mouse then clamp
-    ZOOM_EXT = zoom;
     if (canvasRef.current) {
         const context = canvasRef.current.getContext('2d');
+
+        // Improve smoothing quality
+        context.imageSmoothingQuality = 'high';
 
         // Resize canvas to current zoom level
         canvasRef.current.width = width * zoom;
@@ -242,6 +230,9 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}) {
     } else {
         cursorType = 'normal';
     }
+
+    // Export current zoom level for toolbar
+    ZOOM_EXT = zoom;
 
     return (
         <div
