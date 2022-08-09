@@ -776,17 +776,12 @@ export default class Client4 {
         this.trackEvent('api', 'api_users_logout');
 
         const {response} = await this.doFetchWithResponse(
-            (isDesktopApp() ? `${IKConstants.LOGIN_URL}logout` : `${this.getUsersRoute()}/logout`),
+            `${this.getUsersRoute()}/logout`,
             {method: 'post'},
         );
-        console.log(response);
+
         if (response.ok) {
             this.token = '';
-            if (isDesktopApp()) {
-                localStorage.removeItem('IKToken');
-                localStorage.removeItem('IKRefreshToken');
-                localStorage.removeItem('IKTokenExpire');
-            }
         }
 
         this.serverVersion = '';
