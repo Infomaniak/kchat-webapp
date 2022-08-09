@@ -46,25 +46,6 @@ exports[`components/channel_header/components/UserGuideDropdown should match sna
     openUp={false}
   >
     <MenuGroup>
-      <MenuItemExternalLink
-        id="askTheCommunityLink"
-        onClick={[Function]}
-        show={true}
-        text="Ask the community"
-        url="https://mattermost.com/pl/default-ask-mattermost-community/"
-      />
-      <MenuItemExternalLink
-        id="helpResourcesLink"
-        show={true}
-        text="Help resources"
-        url="helpLink"
-      />
-      <MenuItemExternalLink
-        id="reportAProblemLink"
-        show={true}
-        text="Report a problem"
-        url="reportAProblemLink"
-      />
       <MenuItemAction
         id="keyboardShortcuts"
         onClick={[Function]}
@@ -122,18 +103,6 @@ exports[`components/channel_header/components/UserGuideDropdown should match sna
     openUp={false}
   >
     <MenuGroup>
-      <MenuItemExternalLink
-        id="helpResourcesLink"
-        show={true}
-        text="Help resources"
-        url="helpLink"
-      />
-      <MenuItemExternalLink
-        id="reportAProblemLink"
-        show={true}
-        text="Report a problem"
-        url="reportAProblemLink"
-      />
       <MenuItemAction
         id="keyboardShortcuts"
         onClick={[Function]}
@@ -191,25 +160,6 @@ exports[`components/channel_header/components/UserGuideDropdown should match sna
     openUp={false}
   >
     <MenuGroup>
-      <MenuItemExternalLink
-        id="askTheCommunityLink"
-        onClick={[Function]}
-        show={true}
-        text="Ask the community"
-        url="https://mattermost.com/pl/default-ask-mattermost-community/"
-      />
-      <MenuItemExternalLink
-        id="helpResourcesLink"
-        show={true}
-        text="Help resources"
-        url="helpLink"
-      />
-      <MenuItemExternalLink
-        id="reportAProblemLink"
-        show={true}
-        text="Report a problem"
-        url="reportAProblemLink"
-      />
       <MenuItemAction
         id="keyboardShortcuts"
         onClick={[Function]}

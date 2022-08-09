@@ -98,13 +98,12 @@ const Login = () => {
                     `${IKConstants.CLIENT_ID}`,
                 ).then((resp) => {
                     console.log('get token', resp);
-
                     storeTokenResponse(resp);
                     localStorage.removeItem('challenge');
                     LocalStorageStore.setWasLoggedIn(true);
                     finishSignin();
                 }).catch((error) => {
-                    console.log('catch errror', error);
+                    console.log('catch error', error);
                     clearLocalStorageToken();
                     getChallengeAndRedirectToLogin();
                 });
@@ -157,7 +156,7 @@ const Login = () => {
     }, []);
 
     if (initializing) {
-        return (<LoadingScreen/>);
+        return (<LoadingIk/>);
     }
 
     const finishSignin = (team?: Team) => {
