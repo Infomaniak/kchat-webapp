@@ -157,7 +157,7 @@ export function loadMeREST(): ActionFunc {
         const state = getState();
 
         // Sometimes the server version is set in one or the other
-        const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
+        const serverVersion = Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
 
         try {
@@ -192,11 +192,9 @@ export function loadMeREST(): ActionFunc {
 }
 
 export function loadMe(): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState();
-
+    return async (dispatch: DispatchFunc) => {
         // Sometimes the server version is set in one or the other
-        const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
+        const serverVersion = Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
 
         let responseData: MyDataQueryResponseType['data'] | null = null;
