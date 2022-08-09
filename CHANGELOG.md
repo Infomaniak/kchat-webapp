@@ -1,3 +1,9 @@
+## 0.1.35-rc.2 (2022-08-09)
+
+## Changed (1 change)
+
+- [Fix refresh mechanism](kchat/webapp@46cd7b4693607e625edd7238e71f7746880ff5ee) by @dorian.scd ([merge request](kchat/webapp!89))
+
 ## 0.1.35-rc.1 (2022-08-09)
 
 No changes.

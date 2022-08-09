@@ -119,6 +119,7 @@ import {needRefreshToken, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
+import {isDesktopApp} from 'utils/user_agent';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -184,7 +185,7 @@ export function close() {
     WebSocketClient.close();
 }
 
-function reconnectWebSocket() {
+export function reconnectWebSocket() {
     close();
     initialize();
 }
@@ -208,7 +209,11 @@ function restart() {
 
 export function reconnect(includeWebSocket = true) {
     if (includeWebSocket) {
-        reconnectWebSocket();
+        if (isDesktopApp()) {
+            refreshIKToken();
+        } else {
+            reconnectWebSocket();
+        }
     }
 
     dispatch({
