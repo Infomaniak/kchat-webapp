@@ -109,8 +109,7 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         `${IKConstants.LOGIN_URL}`,
         `${IKConstants.CLIENT_ID}`,
     ).then((resp) => {
-        console.log('getRefreshToken', resp);
-        if (periodic && resp.expires_in && resp.expires_in >= parseInt(Date.now() / 1000, 10)) {
+        if (periodic && resp.expires_in && resp.expires_in > 0) {
             setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN), false, true);
         }
 
