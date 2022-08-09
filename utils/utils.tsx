@@ -74,8 +74,9 @@ import {ClientConfig} from '@mattermost/types/config';
 import {GlobalState} from '@mattermost/types/store';
 import {TextboxElement} from '../components/textbox';
 
-import {joinPrivateChannelPrompt} from './channel_utils';
 import {buildQueryString} from 'packages/client/src/helpers';
+
+import {joinPrivateChannelPrompt} from './channel_utils';
 
 const CLICKABLE_ELEMENTS = [
     'a',
