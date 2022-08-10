@@ -84,9 +84,9 @@ export function loadProfilesAndReloadChannelMembers(page: number, perPage?: numb
     };
 }
 
-export function loadProfilesAndReloadChannelMembersAll(membersCount, perPage, channelId, sort = '', options = {}) {
-    const maxPages = parseInt(membersCount / perPage, 10);
-    return async (doDispatch, doGetState) => {
+export function loadProfilesAndReloadChannelMembersAll(membersCount: number, perPage: number, channelId: string, sort = '', options = {}) {
+    const maxPages = Math.floor(membersCount / perPage);
+    return async (doDispatch: DispatchFunc, doGetState: GetStateFunc) => {
         const newChannelId = channelId || getCurrentChannelId(doGetState());
         for (let page = 0; page <= maxPages; page++) {
             doDispatch(UserActions.getProfilesInChannel(newChannelId, page, perPage, sort, options)).then(({data}) => {
@@ -101,8 +101,8 @@ export function loadProfilesAndReloadChannelMembersAll(membersCount, perPage, ch
     };
 }
 
-export function loadProfilesAndTeamMembers(page, perPage, teamId, options) {
-    return async (doDispatch, doGetState) => {
+export function loadProfilesAndTeamMembers(page: number, perPage: number, teamId: string, options: Record<string, string | boolean>) {
+    return async (doDispatch: DispatchFunc, doGetState: GetStateFunc) => {
         const newTeamId = teamId || getCurrentTeamId(doGetState());
         const {data} = await doDispatch(UserActions.getProfilesInTeam(newTeamId, page, perPage, '', options));
         if (data) {
