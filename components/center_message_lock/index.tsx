@@ -5,7 +5,7 @@ import React from 'react';
 import {useIntl, FormatDateOptions} from 'react-intl';
 import {useSelector} from 'react-redux';
 
-import {EyeOffOutlineIcon} from '@mattermost/compass-icons/components';
+import {EyeOffOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {GlobalState} from '@mattermost/types/store';
 

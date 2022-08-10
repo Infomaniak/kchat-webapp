@@ -46,15 +46,6 @@ const mapStateToProps = (state: GlobalState, ownProps: Props) => {
         previousTeamLastViewedType = getPreviousTeamLastViewedType(state);
     }
 
-    const previousTeamId = getPreviousTeamId(state);
-    const team = getTeamByName(state, ownProps.match.params.team);
-
-    let previousTeamLastViewedType;
-
-    if (previousTeamId !== team?.id) {
-        previousTeamLastViewedType = getPreviousTeamLastViewedType(state);
-    }
-
     if (!channelName) {
         channelName = getRedirectChannelNameForTeam(state, team!.id);
     }
