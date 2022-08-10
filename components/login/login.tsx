@@ -67,6 +67,7 @@ const Login = () => {
 
         if (isDesktopApp()) {
             const loginCode = (new URLSearchParams(search)).get('code');
+
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
@@ -86,7 +87,7 @@ const Login = () => {
             }
 
             if (loginCode) {
-                const challenge = JSON.parse(localStorage.getItem('challenge'));
+                const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
                 //    Get token
                 Client4.getIKLoginToken(
@@ -96,22 +97,33 @@ const Login = () => {
                     `${IKConstants.LOGIN_URL}`,
                     `${IKConstants.CLIENT_ID}`,
                 ).then((resp) => {
-                    console.log('get token', resp);
-
                     storeTokenResponse(resp);
                     localStorage.removeItem('challenge');
                     LocalStorageStore.setWasLoggedIn(true);
                     finishSignin();
                 }).catch((error) => {
-                    console.log('catch errror', error);
+                    console.log('catch error', error);
                     clearLocalStorageToken();
                     getChallengeAndRedirectToLogin();
                 });
                 return;
             }
 
+            if (hash) {
+                const hash2Obj = {};
+                // eslint-disable-next-line array-callback-return
+                hash.substring(1).split('&').map((hk) => {
+                    const temp = hk.split('=');
+                    hash2Obj[temp[0]] = temp[1];
+                });
+                storeTokenResponse(hash2Obj);
+                LocalStorageStore.setWasLoggedIn(true);
+                finishSignin();
+
+                return;
+            }
+
             if ((!token || !refreshToken || !tokenExpire) && !loginCode) {
-                // eslint-disable-next-line react/no-did-mount-set-state
                 getChallengeAndRedirectToLogin();
             }
         }
@@ -130,7 +142,11 @@ const Login = () => {
                 newSearchParam.set('extra', Constants.SESSION_EXPIRED);
                 history.replace(`${pathname}?${newSearchParam}`);
             }
+
+            return;
         }
+
+        redirectUserToDefaultTeam();
     }, []);
 
     useEffect(() => {
@@ -139,11 +155,14 @@ const Login = () => {
                 closeSessionExpiredNotification.current();
                 closeSessionExpiredNotification.current = undefined;
             }
+
+            // window.removeEventListener('resize', onWindowResize);
+            // window.removeEventListener('focus', onWindowFocus);
         };
     }, []);
 
     if (initializing) {
-        return (<LoadingScreen/>);
+        return (<LoadingIk/>);
     }
 
     const finishSignin = (team?: Team) => {

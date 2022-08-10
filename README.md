@@ -58,3 +58,5 @@ services:
 ```
 
 Then go on https://ktalk.devdXXX.dev.infomaniak.ch
+
+### Changelog

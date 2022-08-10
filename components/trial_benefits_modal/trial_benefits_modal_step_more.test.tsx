@@ -60,6 +60,6 @@ describe('components/trial_benefits_modal/trial_benefits_modal_step_more', () =>
 
         expect(mockHistory.push).toHaveBeenCalledWith(props.route);
         expect(mockOnClick).toHaveBeenCalled();
-        expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'benefits_modal_section_opened_thing');
+        // expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'benefits_modal_section_opened_thing');
     });
 });
