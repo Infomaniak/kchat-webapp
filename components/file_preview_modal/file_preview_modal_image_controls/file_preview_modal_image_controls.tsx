@@ -10,6 +10,7 @@ to do:
 */
 
 import React, {ChangeEvent, memo, useEffect, useState} from 'react';
+import {clamp} from 'lodash';
 
 import {MIN_ZOOM_EXT, ZOOM_EXT} from '../image_preview';
 import './file_preview_modal_image_controls.scss';
@@ -63,11 +64,6 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
             {zoomText}
         </option>,
     );
-
-    // Utils
-    const clamp = (num: number, min: number, max: number) => {
-        return Math.round(Math.min(Math.max(num, min), max) * 10000) / 10000; // round to avoid floating point errors
-    };
 
     // Handlers
     // change type to proper type in the future
