@@ -4,12 +4,14 @@
 import {connect} from 'react-redux';
 import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import {getProfiles} from 'mattermost-redux/actions/users';
 import {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {getProfiles} from 'mattermost-redux/actions/users';
 import {getTeamByName} from 'mattermost-redux/selectors/entities/teams';
 import {getRedirectChannelNameForTeam, getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {isCollapsedThreadsEnabled, insightsAreEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+
+import {getIsMobileView} from 'selectors/views/browser';
 import {getIsRhsOpen, getIsRhsMenuOpen} from 'selectors/rhs';
 import {getIsLhsOpen} from 'selectors/lhs';
 import {connectedChannelID, expandedView} from 'selectors/calls';
@@ -44,6 +46,15 @@ const mapStateToProps = (state: GlobalState, ownProps: Props) => {
         previousTeamLastViewedType = getPreviousTeamLastViewedType(state);
     }
 
+    const previousTeamId = getPreviousTeamId(state);
+    const team = getTeamByName(state, ownProps.match.params.team);
+
+    let previousTeamLastViewedType;
+
+    if (previousTeamId !== team?.id) {
+        previousTeamLastViewedType = getPreviousTeamLastViewedType(state);
+    }
+
     if (!channelName) {
         channelName = getRedirectChannelNameForTeam(state, team!.id);
     }
@@ -67,6 +78,7 @@ const mapStateToProps = (state: GlobalState, ownProps: Props) => {
         currentUserId: getCurrentUserId(state),
         insightsAreEnabled: insightsAreEnabled(state),
         callExpandedView: expandedView(state),
+        isMobileView: getIsMobileView(state),
     };
 };
 

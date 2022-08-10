@@ -24,6 +24,7 @@ export default [
                 sourcemap: true,
                 file: packagejson.module,
                 format: 'es',
+                globals: {'styled-components': 'styled'},
             },
         ],
         plugins: [
@@ -39,6 +40,8 @@ export default [
             }),
         ],
         external: (pkg) => externals.some((external) => pkg.startsWith(external)),
-        globals: {'styled-components': 'styled'},
+        watch: {
+            clearScreen: false,
+        },
     },
 ];
