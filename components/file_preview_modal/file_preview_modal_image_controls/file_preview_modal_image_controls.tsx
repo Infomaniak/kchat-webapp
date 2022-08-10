@@ -25,8 +25,8 @@ interface Props {
 const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbarZoom}: Props) => {
     // Initial variables and constants
     // zoom text
-    const [value, setValue] = useState('Actual Size');
-    const [selectedZoomValue, setSelectedZoomValue] = useState();
+    const [zoomText, setZoomText] = useState<string>();
+    const [selectedZoomValue, setSelectedZoomValue] = useState<string>();
 
     const plusSign = <i className='icon-plus'/>;
     const minusSign = <i className='icon-minus'/>;
@@ -60,7 +60,7 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
             value='customZoom'
             hidden={true}
         >
-            {value}
+            {zoomText}
         </option>,
     );
 
@@ -99,7 +99,7 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
     // Callbacks
     useEffect(() => {
         if (typeof toolbarZoom === 'number') {
-            setValue(`${Math.round(toolbarZoom * 100)}%`);
+            setZoomText(`${Math.round(toolbarZoom * 100)}%`);
             zoomInButtonActive = toolbarZoom < 5;
             zoomOutButtonActive = toolbarZoom > MIN_ZOOM_EXT;
         } else if (toolbarZoom === 'A') {
