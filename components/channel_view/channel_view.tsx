@@ -33,7 +33,7 @@ type Props = {
     isFirstAdmin: boolean;
     isAdvancedTextEditorEnabled: boolean;
     actions: {
-        goToLastViewedChannel: () => Promise<{data: boolean}>;
+        goToLastViewedChannel: () => void;
     };
 };
 
@@ -109,6 +109,9 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             }
             if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
                 WebSocketClient.bindPresenceChannel(this.props.channelId);
+            }
+            if (prevProps.channelId) {
+                WebSocketClient.unbindPresenceChannel(prevProps.channelId);
             }
         }
     }
