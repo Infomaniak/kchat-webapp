@@ -119,6 +119,7 @@ import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
+import {Client4} from 'mattermost-redux/client';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -170,6 +171,7 @@ export function initialize() {
     }
 
     // connUrl += Client4.getUrlVersion() + '/websocket';
+    const authToken = Client4.getToken();
 
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
@@ -177,7 +179,7 @@ export function initialize() {
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
-    WebSocketClient.initialize(connUrl, user.user_id, user.team_id);
+    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, authToken);
 }
 
 export function close() {
