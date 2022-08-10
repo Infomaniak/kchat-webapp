@@ -4,7 +4,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, {ChangeEvent, memo, useEffect, useState} from 'react';
+import {useIntl} from 'react-intl';
 import {clamp} from 'lodash';
+import {t} from 'utils/i18n';
+
 
 import {MIN_ZOOM_EXT, ZOOM_EXT} from '../image_preview';
 import './file_preview_modal_image_controls.scss';
@@ -26,11 +29,16 @@ const FilePreviewModalImageControls: React.FC<Props> = ({toolbarZoom, setToolbar
     const plusSign = <i className='icon-plus'/>;
     const minusSign = <i className='icon-minus'/>;
 
-    // Make that intl
+    // Initialize dropdown values
+    const {formatMessage} = useIntl();
+    const autoText = formatMessage({id: t('imageToolbarZoomDropdown.automatic'), defaultMessage: 'Automatic'})
+    const fitWidthText = formatMessage({id: t('imageToolbarZoomDropdown.fitWidth'), defaultMessage: 'Fit width'})
+    const fitHeightText = formatMessage({id: t('imageToolbarZoomDropdown.fitHeight'), defaultMessage: 'Fit height'})
+
     const zoomLevels = new Map();
-    zoomLevels.set('A', {text: 'Automatic', type: 'auto'});
-    zoomLevels.set('W', {text: 'Fit Width', type: 'auto'});
-    zoomLevels.set('H', {text: 'Fit Height', type: 'auto'});
+    zoomLevels.set('A', {text: autoText, type: 'auto'});
+    zoomLevels.set('W', {text: fitWidthText, type: 'auto'});
+    zoomLevels.set('H', {text: fitHeightText, type: 'auto'});
     zoomLevels.set('1', {text: '100%', type: 'scale'});
     zoomLevels.set('1.25', {text: '125%', type: 'scale'});
     zoomLevels.set('1.5', {text: '150%', type: 'scale'});
