@@ -498,6 +498,7 @@ if (targetIsDevServer) {
             devMiddleware: {
                 writeToDisk: false,
             },
+            headers: {'Service-Worker-Allowed': '/'},
         },
         performance: false,
         optimization: {
