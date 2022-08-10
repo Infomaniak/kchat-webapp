@@ -3,12 +3,6 @@
 
 /* eslint-disable react-hooks/exhaustive-deps */
 
-/*
-to do:
-- buttons are still clickable when inactive, fix that
-- make text internat
-*/
-
 import React, {ChangeEvent, memo, useEffect, useState} from 'react';
 import {clamp} from 'lodash';
 
