@@ -302,16 +302,18 @@ export default class WebSocketClient {
                     this.connectionId = data.connection_id;
                 }
 
+                // TODO check if we need this
                 // Now we check for sequence number, and if it does not match,
                 // we just disconnect and reconnect.
-                if (data.seq !== this.serverSequence) {
-                    console.log('missed websocket event, act_seq=' + data.seq + ' exp_seq=' + this.serverSequence); //eslint-disable-line no-console
-                    // We are not calling this.close() because we need to auto-restart.
-                    this.connectFailCount = 0;
-                    this.responseSequence = 1;
-                    this.conn?.disconnect(); // Will auto-reconnect after MIN_WEBSOCKET_RETRY_TIME.
-                    return;
-                }
+                // if (data.seq !== this.serverSequence) {
+                //     console.log('missed websocket event, act_seq=' + data.seq + ' exp_seq=' + this.serverSequence); //eslint-disable-line no-console
+                //     // We are not calling this.close() because we need to auto-restart.
+                //     this.connectFailCount = 0;
+                //     this.responseSequence = 1;
+                //     this.conn?.disconnect(); // Will auto-reconnect after MIN_WEBSOCKET_RETRY_TIME.
+                //     return;
+                // }
+
                 this.serverSequence = data.seq + 1;
 
                 // @ts-ignore
