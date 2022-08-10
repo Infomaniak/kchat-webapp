@@ -113,6 +113,7 @@ export type ClientConfig = {
     ExperimentalTimezone: string;
     ExperimentalViewArchivedChannels: string;
     FileLevel: string;
+    FeatureFlagGraphQL: string;
     GfycatAPIKey: string;
     GfycatAPISecret: string;
     GoogleDeveloperKey: string;
@@ -122,6 +123,7 @@ export type ClientConfig = {
     IosAppDownloadLink: string;
     IosLatestVersion: string;
     IosMinVersion: string;
+    InsightsEnabled: string;
     InstallationDate: string;
     IsDefaultMarketplace: string;
     LdapFirstNameAttributeSet: string;
@@ -182,6 +184,7 @@ export type ClientConfig = {
     WebsocketURL: string;
     ExperimentalSharedChannels: string;
     EnableAppBar: string;
+    EnableComplianceExport: string;
 };
 
 export type License = {

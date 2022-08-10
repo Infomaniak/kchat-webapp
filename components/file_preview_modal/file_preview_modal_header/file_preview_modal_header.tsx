@@ -6,7 +6,7 @@ import React, {memo} from 'react';
 import {FileInfo} from '@mattermost/types/files';
 import {FileTypes} from 'utils/constants';
 
-import Post from 'components/post_view/post/post';
+import {Post} from '@mattermost/types/posts';
 
 import FilePreviewModalInfo from '../file_preview_modal_info/file_preview_modal_info';
 import FilePreviewModalMainNav from '../file_preview_modal_main_nav/file_preview_modal_main_nav';
@@ -22,7 +22,7 @@ interface Props {
     fileInfo: FileInfo | LinkInfo;
     totalFiles: number;
     filename: string;
-    post: React.ComponentProps<typeof Post>;
+    post: Post;
     fileURL: string;
     showPublicLink?: boolean;
     enablePublicLink: boolean;

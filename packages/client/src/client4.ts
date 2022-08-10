@@ -12,7 +12,7 @@ import type {AppBinding, AppCallRequest, AppCallResponse} from '@mattermost/type
 import {Audit} from '@mattermost/types/audits';
 import {UserAutocomplete, AutocompleteSuggestion} from '@mattermost/types/autocomplete';
 import {Bot, BotPatch} from '@mattermost/types/bots';
-import {Product, SubscriptionResponse, CloudCustomer, Address, CloudCustomerPatch, Invoice, Limits, IntegrationsUsage} from '@mattermost/types/cloud';
+import {Product, SubscriptionResponse, CloudCustomer, Address, CloudCustomerPatch, Invoice, Limits, IntegrationsUsage, NotifyAdminRequest} from '@mattermost/types/cloud';
 import {ChannelCategory, OrderedChannelCategories} from '@mattermost/types/channel_categories';
 import {
     Channel,
@@ -116,16 +116,26 @@ import {
 import {CompleteOnboardingRequest} from '@mattermost/types/setup';
 
 import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/threads';
-import {TopChannelResponse, TopReactionResponse} from '@mattermost/types/insights';
-
-import {isDesktopApp} from 'utils/user_agent';
-
-import {IKConstants} from 'utils/constants-ik';
+import {TopChannelResponse, TopReactionResponse, TopThreadResponse} from '@mattermost/types/insights';
 
 import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
+
+// Fix error import
+// eslint-disable-next-line no-warning-comments
+// TODO update isDesktopApp() with callback
+function isDesktopApp(): boolean {
+    return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
+}
+
+const IKConstants = {
+    LOGIN_URL: process.env.LOGIN_ENDPOINT, // eslint-disable-line no-process-env
+    LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
+    CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
+    MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
+}
 
 const HEADER_AUTH = 'Authorization';
 const HEADER_BEARER = 'Bearer';
@@ -525,7 +535,7 @@ export default class Client4 {
 
     // User Routes
 
-    createUser = (user: UserProfile, token: string, inviteId: string, redirect: string) => {
+    createUser = (user: UserProfile, token: string, inviteId: string, redirect?: string) => {
         this.trackEvent('api', 'api_users_create');
 
         const queryParams: any = {};
@@ -724,7 +734,7 @@ export default class Client4 {
         );
     }
 
-    login = async (loginId: string, password: string, token = '', deviceId = '', ldapOnly = false) => {
+    login = async (loginId: string, password: string, token = '', ldapOnly = false) => {
         this.trackEvent('api', 'api_users_login');
 
         if (ldapOnly) {
@@ -732,10 +742,10 @@ export default class Client4 {
         }
 
         const body: any = {
-            device_id: deviceId,
             login_id: loginId,
             password,
             token,
+            deviceId: '',
         };
 
         if (ldapOnly) {
@@ -757,13 +767,13 @@ export default class Client4 {
         return profile;
     };
 
-    loginById = (id: string, password: string, token = '', deviceId = '') => {
+    loginById = (id: string, password: string, token = '') => {
         this.trackEvent('api', 'api_users_login');
         const body: any = {
-            device_id: deviceId,
             id,
             password,
             token,
+            device_id: '',
         };
 
         return this.doFetch<UserProfile>(
@@ -776,17 +786,12 @@ export default class Client4 {
         this.trackEvent('api', 'api_users_logout');
 
         const {response} = await this.doFetchWithResponse(
-            (isDesktopApp() ? `${IKConstants.LOGIN_URL}logout` : `${this.getUsersRoute()}/logout`),
+            `${this.getUsersRoute()}/logout`,
             {method: 'post'},
         );
-        console.log(response);
+
         if (response.ok) {
             this.token = '';
-            if (isDesktopApp()) {
-                localStorage.removeItem('IKToken');
-                localStorage.removeItem('IKRefreshToken');
-                localStorage.removeItem('IKTokenExpire');
-            }
         }
 
         this.serverVersion = '';
@@ -1004,13 +1009,6 @@ export default class Client4 {
         );
     };
 
-    attachDevice = (deviceId: string) => {
-        return this.doFetch<StatusOK>(
-            `${this.getUsersRoute()}/sessions/device`,
-            {method: 'put', body: JSON.stringify({device_id: deviceId})},
-        );
-    };
-
     searchUsers = (term: string, options: any) => {
         this.trackEvent('api', 'api_search_users');
 
@@ -1196,6 +1194,13 @@ export default class Client4 {
         return this.doFetch<Team>(
             `${this.getTeamRoute(teamId)}/restore`,
             {method: 'post'},
+        );
+    }
+
+    archiveAllTeamsExcept = (teamId: string) => {
+        return this.doFetch<StatusOK>(
+            `${this.getTeamRoute(teamId)}/except`,
+            {method: 'delete'},
         );
     }
 
@@ -2204,6 +2209,20 @@ export default class Client4 {
     getMyTopChannels = (teamId: string, page: number, perPage: number, timeRange: string) => {
         return this.doFetch<TopChannelResponse>(
             `${this.getUsersRoute()}/me/top/channels${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getTopThreadsForTeam = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopThreadResponse>(
+            `${this.getTeamRoute(teamId)}/top/threads${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+
+    getMyTopThreads = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopThreadResponse>(
+            `${this.getUsersRoute()}/me/top/threads${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
             {method: 'get'},
         );
     }
@@ -3432,12 +3451,12 @@ export default class Client4 {
         );
     }
 
-    installMarketplacePlugin = (id: string, version: string) => {
+    installMarketplacePlugin = (id: string) => {
         this.trackEvent('api', 'api_install_marketplace_plugin');
 
         return this.doFetch<MarketplacePlugin>(
             `${this.getPluginsMarketplaceRoute()}`,
-            {method: 'post', body: JSON.stringify({id, version})},
+            {method: 'post', body: JSON.stringify({id})},
         );
     }
 
@@ -3830,6 +3849,13 @@ export default class Client4 {
         );
     }
 
+    notifyAdminToUpgrade = (req: NotifyAdminRequest) => {
+        return this.doFetchWithResponse<StatusOK>(
+            `${this.getCloudRoute()}/notify-admin-to-upgrade`,
+            {method: 'post', body: JSON.stringify(req)},
+        );
+    }
+
     confirmPaymentMethod = async (stripeSetupIntentID: string) => {
         return this.doFetch(
             `${this.getCloudRoute()}/payment/confirm`,
@@ -3844,16 +3870,23 @@ export default class Client4 {
         );
     }
 
-    requestCloudTrial = (email = '') => {
+    requestCloudTrial = (subscriptionId: string, email = '') => {
         return this.doFetchWithResponse<CloudCustomer>(
             `${this.getCloudRoute()}/request-trial`,
-            {method: 'put', body: JSON.stringify({email})},
+            {method: 'put', body: JSON.stringify({email, subscription_id: subscriptionId})},
         );
     }
 
-    validateBusinessEmail = () => {
+    validateBusinessEmail = (email = '') => {
         return this.doFetchWithResponse<CloudCustomer>(
             `${this.getCloudRoute()}/validate-business-email`,
+            {method: 'post', body: JSON.stringify({email})},
+        );
+    }
+
+    validateWorkspaceBusinessEmail = () => {
+        return this.doFetchWithResponse<CloudCustomer>(
+            `${this.getCloudRoute()}/validate-workspace-business-email`,
             {method: 'post'},
         );
     }
@@ -4036,7 +4069,7 @@ export default class Client4 {
 
     /**
      * @param query string query of graphQL, pass the json stringified version of the query
-     * eg.  const query = JSON.stringify({query: `{license, config}`});
+     * eg.  const query = JSON.stringify({query: `{license, config}`, operationName: 'queryForLicenseAndConfig'});
      *      client4.fetchWithGraphQL(query);
      */
     fetchWithGraphQL = async <DataResponse>(query: string) => {
@@ -4088,20 +4121,18 @@ export default class Client4 {
                         `${IKConstants.LOGIN_URL}`,
                         `${IKConstants.CLIENT_ID}`,
                     ).then((response) => {
-                        console.log('getRefreshToken from client', response);
-
                         const d = new Date();
                         d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
                         localStorage.setItem('IKToken', response.access_token);
                         localStorage.setItem('IKRefreshToken', response.refresh_token);
+                        // @ts-ignore
                         localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
                         localStorage.setItem('tokenExpired', '0');
                         this.setToken(response.access_token);
                         this.setCSRF(response.access_token);
                         this.setAuthHeader = true;
                         localStorage.removeItem('refreshingToken');
-                    }).catch((error) => {
-                        console.log('catch refresh error', error);
+                    }).catch(() => {
                         localStorage.removeItem('refreshingToken');
                     });
                 }

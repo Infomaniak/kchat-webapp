@@ -12,7 +12,7 @@ RUN npm ci --prefer-offline --no-audit --no-fund
 
 COPY . .
 
-RUN npm run build
+RUN make build
 
 FROM nginx:1.22.0
 

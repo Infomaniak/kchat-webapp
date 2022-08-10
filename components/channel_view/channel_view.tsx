@@ -33,7 +33,7 @@ type Props = {
     isFirstAdmin: boolean;
     isAdvancedTextEditorEnabled: boolean;
     actions: {
-        goToLastViewedChannel: () => Promise<{data: boolean}>;
+        goToLastViewedChannel: () => void;
     };
 };
 
