@@ -143,10 +143,10 @@ const Login = () => {
                 history.replace(`${pathname}?${newSearchParam}`);
             }
 
-            return;
+            // return;
         }
 
-        redirectUserToDefaultTeam();
+        // redirectUserToDefaultTeam();
     }, []);
 
     useEffect(() => {
