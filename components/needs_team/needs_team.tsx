@@ -10,7 +10,7 @@ import {Team, TeamMembership} from '@mattermost/types/teams';
 import {Group} from '@mattermost/types/groups';
 import {UserProfile, UserStatus} from '@mattermost/types/users';
 
-import {startPeriodicStatusUpdates, stopPeriodicStatusUpdates} from 'actions/status_actions.jsx';
+import {startPeriodicStatusUpdates, stopPeriodicStatusUpdates} from 'actions/status_actions';
 import {reconnect} from 'actions/websocket_actions.jsx';
 import * as GlobalActions from 'actions/global_actions';
 
@@ -104,7 +104,7 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
             const currentTime = (new Date()).getTime();
             if (currentTime > (lastTime + WAKEUP_THRESHOLD)) { // ignore small delays
                 console.log('computer woke up - fetching latest'); //eslint-disable-line no-console
-                reconnect(false);
+                reconnect(true);
             }
             lastTime = currentTime;
         }, WAKEUP_CHECK_INTERVAL);

@@ -1,9 +1,9 @@
 {
-  "name": "@mattermost/webapp",
+  "name": "mattermost-webapp",
   "browser": {
     "./client/web_client.jsx": "./client/browser_web_client.jsx"
   },
-  "version": "5.36.0-0",
+  "version": "7.0.0",
   "private": true,
   "engines": {
     "npm": ">=7.0.0",
@@ -15,6 +15,7 @@
     "@sentry/react": "7.0.0",
     "@sentry/tracing": "7.0.0",
     "@sentry/types": "7.0.0",
+    "@floating-ui/react-dom": "0.7.2",
     "@stripe/react-stripe-js": "1.6.0",
     "@stripe/stripe-js": "1.20.3",
     "@tippyjs/react": "4.2.6",
@@ -22,11 +23,14 @@
     "buffer": "6.0.3",
     "chart.js": "2.9.4",
     "classnames": "2.3.1",
-    "core-js": "3.22.7",
+    "core-js": "3.23.3",
+    "@types/color-hash": "1.0.2",
+    "color-contrast-checker": "2.1.0",
+    "color-hash": "2.0.1",
     "country-list": "2.2.0",
     "crypto-browserify": "3.12.0",
     "css-vars-ponyfill": "2.4.7",
-    "dynamic-virtualized-list": "github:mattermost/dynamic-virtualized-list#119db968c96643c7106d4d2c965f05b2e251bc83",
+    "dynamic-virtualized-list": "github:mattermost/dynamic-virtualized-list#77a0cb4c565bc239bab1ce5414b95bdd9a570963",
     "emoji-datasource": "6.1.1",
     "emoji-datasource-apple": "6.0.1",
     "emoji-regex": "10.1.0",
@@ -37,9 +41,8 @@
     "gfycat-sdk": "1.4.18",
     "highlight.js": "11.5.1",
     "hoist-non-react-statics": "3.3.2",
-    "html-to-react": "1.4.8",
+    "html-to-react": "1.5.0",
     "inobounce": "0.2.1",
-    "jasny-bootstrap": "3.1.3",
     "katex": "0.13.11",
     "key-mirror": "1.0.1",
     "localforage": "1.10.0",
@@ -75,7 +78,7 @@
     "react-transition-group": "4.4.2",
     "react-virtualized-auto-sizer": "1.0.6",
     "react-window": "1.8.7",
-    "react-window-infinite-loader": "1.0.7",
+    "react-window-infinite-loader": "1.0.8",
     "rebound": "0.1.0",
     "redux": "4.1.0",
     "redux-batched-actions": "0.5.0",
@@ -90,7 +93,6 @@
     "smooth-scroll-into-view-if-needed": "1.1.33",
     "stream-browserify": "3.0.0",
     "styled-components": "5.3.5",
-    "superagent": "6.1.0",
     "timezones.json": "1.6.1",
     "tinycolor2": "1.4.2",
     "typescript": "4.3.4",
@@ -175,14 +177,14 @@
     "identity-obj-proxy": "3.0.0",
     "image-webpack-loader": "8.0.1",
     "isomorphic-fetch": "3.0.0",
-    "jest": "27.0.6",
+    "jest": "27.5.1",
     "jest-canvas-mock": "2.4.0",
-    "jest-cli": "27.0.6",
+    "jest-cli": "27.5.1",
     "jest-junit": "12.2.0",
     "jest-watch-typeahead": "0.6.4",
     "mini-css-extract-plugin": "2.0.0",
     "mmjstool": "github:mattermost/mattermost-utilities#17ee7abdc0ccaec5d432123fcabc7fe73abe33ac",
-    "nock": "13.2.4",
+    "nock": "13.2.8",
     "prettier": "2.3.2",
     "react-router-enzyme-context": "1.2.0",
     "redux-devtools-extension": "2.13.9",
@@ -234,6 +236,7 @@
       "text-summary"
     ],
     "moduleNameMapper": {
+      "^@mattermost/(components)$": "<rootDir>/packages/$1/src",
       "^@mattermost/(client)$": "<rootDir>/packages/$1/src",
       "^@mattermost/(types)/(.*)$": "<rootDir>/packages/$1/src/$2",
       "^mattermost-redux/test/(.*)$": "<rootDir>/packages/mattermost-redux/test/$1",
@@ -287,7 +290,7 @@
     "run": "webpack --progress --watch",
     "dev-server": "export $(xargs < ./.env.development) && webpack serve --mode development",
     "test": "cross-env TZ=Etc/UTC node ./node_modules/.bin/jest --maxWorkers=50% --collectCoverage --coverageDirectory=\"./coverage\"",
-    "test-ci": "cross-env NODE_OPTIONS=--max_old_space_size=8192 TZ=Etc/UTC node ./node_modules/.bin/jest --forceExit --ci --collectCoverage --coverageDirectory=\"./coverage\"",
+    "test-ci": "cross-env TZ=Etc/UTC jest --forceExit --ci --collectCoverage --coverageDirectory=\"./coverage\"",
     "stats": "cross-env NODE_ENV=production webpack --profile --json > webpack_stats.json",
     "updatesnapshot": "cross-env TZ=Etc/UTC jest --updateSnapshot",
     "test:debug": "cross-env TZ=Etc/UTC jest --forceExit --detectOpenHandles",
@@ -303,6 +306,7 @@
   },
   "workspaces": [
     "packages/client",
-    "packages/types"
+    "packages/types",
+    "packages/components"
   ]
 }

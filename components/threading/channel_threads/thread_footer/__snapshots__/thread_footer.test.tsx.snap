@@ -33,6 +33,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
         onMouseLeave={[Function]}
       >
         <UserAvatar
+          disableProfileOverlay={false}
           key="5"
           overlayProps={
             Object {
@@ -52,6 +53,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
         >
           <OverlayTrigger
             defaultOverlayShown={false}
+            disabled={false}
             overlay={
               <Memo(Connect(injectIntl(ProfilePopover)))
                 className="user-profile-popover"
@@ -240,6 +242,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           </OverlayTrigger>
         </UserAvatar>
         <UserAvatar
+          disableProfileOverlay={false}
           key="4"
           overlayProps={
             Object {
@@ -259,6 +262,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
         >
           <OverlayTrigger
             defaultOverlayShown={false}
+            disabled={false}
             overlay={
               <Memo(Connect(injectIntl(ProfilePopover)))
                 className="user-profile-popover"
@@ -447,6 +451,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           </OverlayTrigger>
         </UserAvatar>
         <UserAvatar
+          disableProfileOverlay={false}
           key="3"
           overlayProps={
             Object {
@@ -466,6 +471,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
         >
           <OverlayTrigger
             defaultOverlayShown={false}
+            disabled={false}
             overlay={
               <Memo(Connect(injectIntl(ProfilePopover)))
                 className="user-profile-popover"
@@ -1125,6 +1131,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
         onMouseLeave={[Function]}
       >
         <UserAvatar
+          disableProfileOverlay={false}
           key="5"
           overlayProps={
             Object {
@@ -1144,6 +1151,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
         >
           <OverlayTrigger
             defaultOverlayShown={false}
+            disabled={false}
             overlay={
               <Memo(Connect(injectIntl(ProfilePopover)))
                 className="user-profile-popover"
@@ -1332,6 +1340,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           </OverlayTrigger>
         </UserAvatar>
         <UserAvatar
+          disableProfileOverlay={false}
           key="4"
           overlayProps={
             Object {
@@ -1351,6 +1360,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
         >
           <OverlayTrigger
             defaultOverlayShown={false}
+            disabled={false}
             overlay={
               <Memo(Connect(injectIntl(ProfilePopover)))
                 className="user-profile-popover"
@@ -1539,6 +1549,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           </OverlayTrigger>
         </UserAvatar>
         <UserAvatar
+          disableProfileOverlay={false}
           key="3"
           overlayProps={
             Object {
@@ -1558,6 +1569,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
         >
           <OverlayTrigger
             defaultOverlayShown={false}
+            disabled={false}
             overlay={
               <Memo(Connect(injectIntl(ProfilePopover)))
                 className="user-profile-popover"
