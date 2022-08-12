@@ -7,7 +7,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
 import store from 'stores/redux_store.jsx';
 
-import {convertEntityToCharacter} from 'utils/text_formatting';
+import {convertEntityToCharacter, fixedEncodeURIComponent} from 'utils/text_formatting';
 
 import RemoveMarkdown from 'utils/markdown/remove_markdown';
 
@@ -16,6 +16,7 @@ import EmojiMap from 'utils/emoji_map';
 import Renderer from './renderer';
 
 const removeMarkdown = new RemoveMarkdown();
+const queryRegex = /(?<=http.*?\?).*?(?=[.,] | |<|>|$|\n|\t)/g;
 
 export function format(text: string, options = {}, emojiMap?: EmojiMap) {
     return formatWithRenderer(text, new Renderer({}, options, emojiMap));
@@ -23,6 +24,7 @@ export function format(text: string, options = {}, emojiMap?: EmojiMap) {
 
 export function formatWithRenderer(text: string, renderer: marked.Renderer) {
     const config = getConfig(store.getState());
+    let outText = text;
 
     const markdownOptions = {
         renderer,
@@ -33,7 +35,15 @@ export function formatWithRenderer(text: string, renderer: marked.Renderer) {
         inlinelatex: config.EnableLatex === 'true' && config.EnableInlineLatex === 'true',
     };
 
-    return marked(text, markdownOptions).trim();
+    const queries = text.match(queryRegex);
+    if (queries) {
+        for (const query of queries) {
+            const urlEncodedQuery = fixedEncodeURIComponent(query);
+            outText = outText.replace(queryRegex, urlEncodedQuery);
+        }
+    }
+
+    return marked(outText, markdownOptions).trim();
 }
 
 export function stripMarkdown(text: string) {

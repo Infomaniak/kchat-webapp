@@ -1,11 +1,26 @@
-.image_preview {
-    &__image {
-        max-height: calc(100vh - 168px);
+.image_preview_div {
+    &__normal {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        height: calc(100vh - 218px);
+        width: calc(100vw - 50px);
         border-radius: 8px;
-        cursor: default;
+    }
 
-        @media screen and (max-width: 768px) {
-            border-radius: 0;
-        }
+    &__fullscreen {
+        border-radius: 0px;
+    }
+}
+
+.image_preview_canvas {
+    &__normal {
+        cursor: default;
+    }
+    &__hover {
+        cursor: grab;
+    }
+    &__dragging {
+        cursor: grabbing;
     }
 }
