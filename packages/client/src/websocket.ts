@@ -3,8 +3,6 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
-import {Client4} from '.';
-
 const MAX_WEBSOCKET_FAILS = 7;
 const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
 const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
@@ -98,7 +96,7 @@ export default class WebSocketClient {
     // on connect, only send auth cookie and blank state.
     // on hello, get the connectionID and store it.
     // on reconnect, send cookie, connectionID, sequence number.
-    initialize(connectionUrl = this.connectionUrl, userId?: number, teamId?: string, token?: string) {
+    initialize(connectionUrl = this.connectionUrl, userId?: number, teamId?: string, token?: string, authToken?: string) {
         let currentUserId;
 
         // Store this for onmessage reconnect
@@ -138,7 +136,7 @@ export default class WebSocketClient {
                 auth: {
                     headers: {
                         // @ts-ignore
-                        Authorization: `Bearer ${Client4.getToken() && Client4.getToken()}`,
+                        Authorization: `Bearer ${authToken}`,
                     },
                 },
                 wsPort: 443,
@@ -212,7 +210,7 @@ export default class WebSocketClient {
 
             setTimeout(
                 () => {
-                    this.initialize(connectionUrl, userId, teamId, token);
+                    this.initialize(connectionUrl, userId, teamId, token, authToken);
                 },
                 retryTime,
             );
@@ -313,7 +311,6 @@ export default class WebSocketClient {
                 //     this.conn?.disconnect(); // Will auto-reconnect after MIN_WEBSOCKET_RETRY_TIME.
                 //     return;
                 // }
-
                 this.serverSequence = data.seq + 1;
 
                 // @ts-ignore
@@ -450,7 +447,7 @@ export default class WebSocketClient {
         }
     }
 
-    sendMessage(action: string, data: any, responseCallback?: () => void) {
+    sendMessage(action: string, data: any, responseCallback?: () => void, authToken?: string) {
         const msg = {
             action,
             seq: this.responseSequence++,
@@ -466,7 +463,7 @@ export default class WebSocketClient {
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
             this.conn = null;
             // @ts-ignore
-            this.initialize(null, null, data.channel_id);
+            this.initialize(null, null, data.channel_id, null, authToken);
         }
     }
 

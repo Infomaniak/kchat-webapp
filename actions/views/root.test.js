@@ -20,7 +20,7 @@ jest.mock('mattermost-redux/actions/users', () => {
     const original = jest.requireActual('mattermost-redux/actions/users');
     return {
         ...original,
-        loadMe: () => ({type: 'MOCK_LOAD_ME'}),
+        loadMeREST: () => ({type: 'MOCK_LOAD_ME'}),
     };
 });
 
@@ -49,6 +49,7 @@ describe('root view actions', () => {
         test('loadConfigAndMe, with user logged in', async () => {
             const testStore = await mockStore({});
 
+            document.cookie = 'SASESSION=userid';
             localStorage.setItem('was_logged_in', 'true');
 
             await testStore.dispatch(Actions.loadConfigAndMe());

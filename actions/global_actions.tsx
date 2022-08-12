@@ -48,9 +48,10 @@ import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import * as Utils from 'utils/utils';
 import SubMenuModal from '../components/widgets/menu/menu_modals/submenu_modal/submenu_modal';
 
-import {openModal} from './views/modals';
 import {isDesktopApp} from '../utils/user_agent';
 import {IKConstants} from '../utils/constants-ik';
+
+import {openModal} from './views/modals';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -258,13 +259,25 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         clearUserCookie();
 
         if (isDesktopApp()) {
-            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+            if (redirectTo && redirectTo !== 'ikLogout') {
+                browserHistory.push(redirectTo);
+            } else {
+                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+            }
+        } else if (redirectTo && redirectTo !== 'ikLogout') {
+            browserHistory.push(redirectTo);
         } else {
             window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
         }
     }).catch(() => {
         if (isDesktopApp()) {
-            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+            if (redirectTo && redirectTo !== 'ikLogout') {
+                browserHistory.push(redirectTo);
+            } else {
+                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+            }
+        } else if (redirectTo && redirectTo !== 'ikLogout') {
+            browserHistory.push(redirectTo);
         } else {
             window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
         }
