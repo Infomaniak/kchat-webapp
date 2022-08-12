@@ -21,7 +21,7 @@ export function loadConfigAndMe() {
         const isGraphQLEnabled = clientConfig && clientConfig.FeatureFlagGraphQL === 'true';
 
         let isMeLoaded = false;
-        const dataFromLoadMe = await dispatch(loadMe());
+        const dataFromLoadMe = await dispatch(loadMeREST());
         isMeLoaded = dataFromLoadMe?.data ?? false;
 
         return {data: isMeLoaded};
