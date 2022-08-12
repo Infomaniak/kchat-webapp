@@ -1,14 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import thunk from 'redux-thunk';
-import configureStore from 'redux-mock-store';
-
 import {ActionTypes} from 'utils/constants';
 import * as Actions from 'actions/views/root';
 import * as i18nSelectors from 'selectors/i18n';
 
-const mockStore = configureStore([thunk]);
+import mockStore from 'tests/test_store';
 
 jest.mock('mattermost-redux/actions/general', () => {
     const original = jest.requireActual('mattermost-redux/actions/general');
@@ -23,7 +20,7 @@ jest.mock('mattermost-redux/actions/users', () => {
     const original = jest.requireActual('mattermost-redux/actions/users');
     return {
         ...original,
-        loadMe: () => ({type: 'MOCK_LOAD_ME'}),
+        loadMeREST: () => ({type: 'MOCK_LOAD_ME'}),
     };
 });
 
@@ -46,12 +43,13 @@ describe('root view actions', () => {
             const testStore = await mockStore({});
 
             await testStore.dispatch(Actions.loadConfigAndMe());
-            expect(testStore.getActions()).toEqual([{type: 'MOCK_GET_CLIENT_CONFIG'}, {type: 'MOCK_GET_LICENSE_CONFIG'}, {type: 'MOCK_LOAD_ME'}]);
+            expect(testStore.getActions()).toEqual([{type: 'MOCK_GET_CLIENT_CONFIG'}, {type: 'MOCK_GET_LICENSE_CONFIG'}]);
         });
 
         test('loadConfigAndMe, with user logged in', async () => {
             const testStore = await mockStore({});
 
+            document.cookie = 'SASESSION=userid';
             localStorage.setItem('was_logged_in', 'true');
 
             await testStore.dispatch(Actions.loadConfigAndMe());
