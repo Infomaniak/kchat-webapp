@@ -12,7 +12,9 @@ RUN npm install
 
 COPY . .
 
-RUN make build
+RUN npm run build --workspace=packages/components
+
+RUN npm run build
 
 FROM nginx:1.22.0
 
