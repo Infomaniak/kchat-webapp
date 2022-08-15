@@ -8,7 +8,7 @@ COPY package*.json ./
 
 COPY .env ./
 
-RUN npm ci --ignore-scripts
+RUN npm ci
 
 COPY . .
 
