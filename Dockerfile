@@ -8,7 +8,7 @@ COPY package*.json ./
 
 COPY .env ./
 
-RUN npm ci --prefer-offline --no-audit --no-fund
+RUN npm ci --ignore-scripts
 
 COPY . .
 
