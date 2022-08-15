@@ -226,6 +226,7 @@ export default class WebSocketClient {
             this.errorCallback?.(evt);
             this.errorListeners.forEach((listener) => listener(evt));
 
+            this.conn?.disconnect();
             this.conn = null;
             this.responseSequence = 1;
 
