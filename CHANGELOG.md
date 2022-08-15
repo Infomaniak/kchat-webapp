@@ -1,3 +1,9 @@
+## 0.1.36-rc.1 (2022-08-15)
+
+## Changed (1 change)
+
+- [add ws backoff reconnect on error](kchat/webapp@68f4f11c5b2ff2d96c9bb2f6e18c0268d2291f8f) by @antonbuksa ([merge request](kchat/webapp!97))
+
 ## 0.1.35-rc.15 (2022-08-12)
 
 ## Added (1 change)
