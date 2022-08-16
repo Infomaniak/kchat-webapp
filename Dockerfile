@@ -1,4 +1,4 @@
-FROM node:buster as vendor
+FROM node:16 as vendor
 
 LABEL maintainer="Léopold Jacquot <leopold.jacquot@infomaniak.com>"
 
