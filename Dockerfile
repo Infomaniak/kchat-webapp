@@ -10,6 +10,8 @@ COPY .env ./
 
 COPY scripts/*.sh /tmp/scripts/
 
+COPY .yarnrc.yml ./
+
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     # Install common packages, non-root user, update yarn
     && bash /tmp/scripts/node.sh
