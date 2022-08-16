@@ -45,7 +45,6 @@ build_docker_image:
     - echo "KMEET_ENDPOINT=$KMEET_ENDPOINT" >> .env
     - echo "LOGIN_ENDPOINT=$LOGIN_ENDPOINT" >> .env
     - echo "MANAGER_ENDPOINT=$MANAGER_ENDPOINT" >> .env
-    - cat .env
   script:
     - |-
       environment=${DEPLOY_VARIABLE}
