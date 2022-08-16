@@ -8,11 +8,17 @@ COPY package*.json ./
 
 COPY .env ./
 
-RUN npx yarn
+COPY scripts/*.sh /tmp/scripts/
+
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    # Install common packages, non-root user, update yarn
+    && bash /tmp/scripts/node.sh
+
+RUN export $(xargs < ./.env)
+
+RUN yarn
 
 COPY . .
-
-RUN export $(xargs < ./.env) && npx yarn run build:webapp
 
 FROM nginx:1.22.0
 
