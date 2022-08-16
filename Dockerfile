@@ -18,6 +18,8 @@ RUN yarn set version berry
 
 RUN yarn
 
+RUN yarn run build:webapp
+
 FROM nginx:1.22.0
 
 RUN apt-get update && apt-get install -y nginx-extras
