@@ -18,9 +18,10 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noEmit": true,
+    "noEmitOnError": true,
     "experimentalDecorators": true,
     "jsx": "react",
-    "baseUrl": ".",
+    // "baseUrl": ".",
     "paths": {
         // "@mattermost/client": ["packages/client/src"],
         // "@mattermost/components": ["packages/components/src"],

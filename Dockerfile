@@ -14,8 +14,6 @@ COPY . .
 
 RUN export $(xargs < ./.env)
 
-RUN yarn set version berry
-
 RUN yarn
 
 RUN yarn run build:webapp

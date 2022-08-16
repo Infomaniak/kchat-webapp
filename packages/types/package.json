@@ -19,7 +19,7 @@
     "url": "github:mattermost/mattermost-webapp",
     "directory": "packages/types"
   },
-  "peerDependencies": {
+  "devDependencies": {
     "typescript": "^4.3"
   },
   "peerDependenciesMeta": {
@@ -28,7 +28,7 @@
     }
   },
   "scripts": {
-    "build": "tsc --build --verbose",
+    "build": "tsc",
     "run": "tsc --watch --preserveWatchOutput",
     "clean": "rm -rf tsconfig.tsbuildinfo ./lib"
   }
