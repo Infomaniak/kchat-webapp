@@ -10,12 +10,15 @@
     "node": ">=16.4.0"
   },
   "dependencies": {
+    "@floating-ui/react-dom": "0.7.2",
     "@infomaniak/compass-components": "^0.5.0",
     "@infomaniak/compass-icons": "0.1.0",
+    "@mattermost/client": "workspace:packages/client",
+    "@mattermost/components": "workspace:packages/components",
+    "@mattermost/types": "workspace:packages/types",
     "@sentry/react": "7.0.0",
     "@sentry/tracing": "7.0.0",
     "@sentry/types": "7.0.0",
-    "@floating-ui/react-dom": "0.7.2",
     "@stripe/react-stripe-js": "1.6.0",
     "@stripe/stripe-js": "1.20.3",
     "@tippyjs/react": "4.2.6",
@@ -238,9 +241,6 @@
       "text-summary"
     ],
     "moduleNameMapper": {
-      "^@mattermost/(components)$": "<rootDir>/packages/$1/src",
-      "^@mattermost/(client)$": "<rootDir>/packages/$1/src",
-      "^@mattermost/(types)/(.*)$": "<rootDir>/packages/$1/src/$2",
       "^mattermost-redux/test/(.*)$": "<rootDir>/packages/mattermost-redux/test/$1",
       "^mattermost-redux/(.*)$": "<rootDir>/packages/mattermost-redux/src/$1",
       "^reselect$": "<rootDir>/packages/reselect/src",
@@ -290,7 +290,7 @@
     "check": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --cache && stylelint \"**/*.{css,scss}\" --cache",
     "fix": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --fix --cache && stylelint \"**/*.{css,scss}\" --fix --cache",
     "build": "node scripts/build",
-    "build:webapp": "export $(xargs < ./.env) && cross-env NODE_ENV=production webpack",
+    "build:webapp": "cross-env NODE_ENV=production webpack",
     "run": "node scripts/run",
     "run:webapp": "webpack --progress --watch",
     "dev-server": "node scripts/dev-server",
@@ -310,9 +310,15 @@
     "check-types": "tsc -b",
     "make-emojis": "node --experimental-json-modules build/emoji/emoji_gen.mjs"
   },
-  "workspaces": [
-    "packages/client",
-    "packages/types",
-    "packages/components"
-  ]
+  "workspaces": {
+    "packages": [
+      "packages/client",
+      "packages/types",
+      "packages/components"
+    ],
+    "nohoist": [
+      "**"
+    ]
+  },
+  "packageManager": "yarn@3.2.2"
 }

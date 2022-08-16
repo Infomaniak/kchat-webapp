@@ -1,4 +1,4 @@
-FROM node:16 as vendor
+FROM node:buster as vendor
 
 LABEL maintainer="Léopold Jacquot <leopold.jacquot@infomaniak.com>"
 
@@ -8,13 +8,11 @@ COPY package*.json ./
 
 COPY .env ./
 
-RUN npm install
+RUN npx yarn
 
 COPY . .
 
-RUN npm run build --workspace=packages/components
-
-RUN npm run build
+RUN export $(xargs < ./.env) && npx yarn run build:webapp
 
 FROM nginx:1.22.0
 

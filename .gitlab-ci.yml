@@ -61,7 +61,7 @@ build_docker_image:
 
 unit_test:
   stage: test
-  image: node:16.10.0
+  image: node:buster
   tags:
     - docker-executor
     - kubernetes
@@ -83,14 +83,13 @@ unit_test:
   cache:
     key:
       files:
-        - package-lock.json
+        - yarn.lock
     paths:
-      - ".npm/"
-      - node_modules/
+      - .yarn/cache/
       - coverage/
   before_script:
-    - npm ci
-    - npm run build --workspace=packages/components
+    - npx yarn
+    - npx yarn run build
   script:
     # typescript
     # - npm run check-types
@@ -99,7 +98,7 @@ unit_test:
     # - npm run check
 
     # unit tests
-    - npm run test-ci
+    - yarn run test-ci
 
 pages:
   stage: test
