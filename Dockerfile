@@ -14,7 +14,7 @@ COPY . .
 
 RUN export $(xargs < ./.env)
 
-RUN yarn --verbose
+RUN yarn
 
 FROM nginx:1.22.0
 
