@@ -4,23 +4,19 @@ LABEL maintainer="Léopold Jacquot <leopold.jacquot@infomaniak.com>"
 
 WORKDIR /var/www/html
 
-COPY package*.json ./
-
-COPY .env ./
-
 COPY scripts/*.sh /tmp/scripts/
-
-COPY .yarnrc.yml ./
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     # Install common packages, non-root user, update yarn
     && bash /tmp/scripts/node.sh
 
+COPY . .
+
 RUN export $(xargs < ./.env)
 
-RUN yarn
+RUN yarn set version berry
 
-COPY . .
+RUN yarn
 
 FROM nginx:1.22.0
 
