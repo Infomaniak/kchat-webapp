@@ -1,3 +1,17 @@
+## 0.2.1-rc.9 (2022-08-17)
+
+## Changed (1 change)
+
+- [add bot default icon to static assets](kchat/webapp@ef79493ad4ada9fc7a60db3023dd19b998eb28d5) by @antonbuksa
+
+## 0.2.1-rc.4 (2022-08-16)
+
+No changes.
+
+## 0.2.0-rc.12 (2022-08-16)
+
+No changes.
+
 ## 0.1.36-rc.2 (2022-08-15)
 
 ## Changed (1 change)
