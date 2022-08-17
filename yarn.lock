@@ -13495,7 +13495,7 @@ __metadata:
     marked: "github:mattermost/marked#2ef7f28cc7718e3f551c4ce9ea75fdd7580c2008"
     memoize-one: 5.2.1
     mini-css-extract-plugin: 2.0.0
-    mmjstool: "git@github.com:mattermost/mattermost-utilities.git#3b4506b0f6b14fbb402f9f8ef932370e459e3773"
+    mmjstool: "git+ssh://git@github.com:mattermost/mattermost-utilities#3b4506b0f6b14fbb402f9f8ef932370e459e3773"
     moment-timezone: 0.5.34
     nock: 13.2.8
     p-queue: 6.6.1
@@ -13991,9 +13991,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mmjstool@git@github.com:mattermost/mattermost-utilities.git#3b4506b0f6b14fbb402f9f8ef932370e459e3773":
+"mmjstool@git+ssh://git@github.com:mattermost/mattermost-utilities#3b4506b0f6b14fbb402f9f8ef932370e459e3773":
   version: 1.0.0
-  resolution: "mmjstool@git@github.com:mattermost/mattermost-utilities.git#commit=3b4506b0f6b14fbb402f9f8ef932370e459e3773"
+  resolution: "mmjstool@git+ssh://git@github.com:mattermost/mattermost-utilities#commit=3b4506b0f6b14fbb402f9f8ef932370e459e3773"
   dependencies:
     "@typescript-eslint/typescript-estree": 5.8.1
     estree-walk: 2.2.0
