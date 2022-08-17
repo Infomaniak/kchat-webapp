@@ -98,6 +98,11 @@ class LoginController extends React.PureComponent {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
+                navigator.serviceWorker.controller?.postMessage({
+                    type: 'TOKEN_REFRESHED',
+                    token: token || '',
+                });
+
                 LocalStorageStore.setWasLoggedIn(true);
                 GlobalActions.redirectUserToDefaultTeam();
             }

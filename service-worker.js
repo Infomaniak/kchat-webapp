@@ -40,7 +40,8 @@ function injectBearer(event, encodeBody = false) {
 }
 
 self.addEventListener('message', (event) => {
-    if (event.data.token && event.data.token !== '') {
+    if (event.data && event.data.type === 'TOKEN_REFRESHED' && event.data.token !== '') {
+        console.log('[SW] Token updated at ' + new Date().toISOString());
         self.token = event.data.token;
     }
 });

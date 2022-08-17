@@ -76,6 +76,11 @@ const Login = () => {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
+                navigator.serviceWorker.controller?.postMessage({
+                    type: 'TOKEN_REFRESHED',
+                    token: token || '',
+                });
+
                 LocalStorageStore.setWasLoggedIn(true);
                 GlobalActions.redirectUserToDefaultTeam();
             }
@@ -100,6 +105,10 @@ const Login = () => {
                     storeTokenResponse(resp);
                     localStorage.removeItem('challenge');
                     LocalStorageStore.setWasLoggedIn(true);
+                    navigator.serviceWorker.controller?.postMessage({
+                        type: 'TOKEN_REFRESHED',
+                        token: resp.access_token || '',
+                    });
                     finishSignin();
                 }).catch((error) => {
                     console.log('catch error', error);

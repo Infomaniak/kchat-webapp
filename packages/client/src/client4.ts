@@ -217,9 +217,6 @@ export default class Client4 {
 
     setToken(token: string) {
         this.token = token;
-        if ('serviceWorker' in navigator) {
-            navigator?.serviceWorker?.controller?.postMessage({token});
-        }
     }
 
     setCSRF(csrfToken: string) {
