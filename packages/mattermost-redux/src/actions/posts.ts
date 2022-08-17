@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/* eslint-disable max-lines */
+
 import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
@@ -36,6 +38,8 @@ import {logError} from './errors';
 import {systemEmojis, getCustomEmojiByName, getCustomEmojisByName} from './emojis';
 import {selectChannel} from './channels';
 import {decrementThreadCounts} from './threads';
+
+export let hasLimitDate: string | null;
 
 // receivedPost should be dispatched after a single post from the server. This typically happens when an existing post
 // is updated.
@@ -850,6 +854,8 @@ export function getPostsUnread(channelId: string, fetchThreads = true, collapsed
                 recentPosts = await Client4.getPosts(channelId, 0, Posts.POST_CHUNK_SIZE / 2, fetchThreads, collapsedThreadsEnabled, collapsedThreadsExtended);
             }
 
+            hasLimitDate = posts.has_limitation || posts.order[0];
+
             getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
@@ -914,6 +920,8 @@ export function getPostsBefore(channelId: string, postId: string, page = 0, perP
             dispatch(logError(error));
             return {error};
         }
+
+        hasLimitDate = posts.has_limitation || posts.order[0];
 
         dispatch(batchActions([
             receivedPosts(posts),

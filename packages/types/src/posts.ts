@@ -87,6 +87,7 @@ export type PostList = {
     posts: Record<string, Post>;
     next_post_id: string;
     prev_post_id: string;
+    has_limitation: string | null;
 };
 
 export type PaginatedPostList = PostList & {
