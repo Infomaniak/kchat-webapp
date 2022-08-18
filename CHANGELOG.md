@@ -1,3 +1,9 @@
+## 0.2.4-rc.1 (2022-08-18)
+
+## Changed (1 change)
+
+- [add more token refresh for service worker](kchat/webapp@b93d99d7c29e739b123bb2d3656a8f4d5e2afd98) by @antonbuksa
+
 ## 0.2.3 (2022-08-18)
 
 ## Fixed (1 change)
