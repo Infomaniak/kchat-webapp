@@ -59,6 +59,7 @@ self.addEventListener('activate', () => {
 });
 
 self.addEventListener('fetch', (event) => {
+    console.log('[SW] Claiming fetch');
     const authHeader = event.request.headers.get('Authorization');
     const windowHost = self.location.host;
     const requestUrlSplit = event.request.url.split('https://')[1].split('/');

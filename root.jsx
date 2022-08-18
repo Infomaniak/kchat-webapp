@@ -82,14 +82,15 @@ function appendOnLoadEvent(fn) {
     }
 }
 
-appendOnLoadEvent(() => {
+async function unregisterAllServiceWorkers() {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    return Promise.all(registrations.map((r) => r.unregister()));
+}
+
+appendOnLoadEvent(async () => {
     if (isDesktopApp()) {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then((prevRegistrations) => {
-                for (const prevRegistration of prevRegistrations) {
-                    prevRegistration.unregister();
-                }
-            });
+            await unregisterAllServiceWorkers();
 
             navigator.serviceWorker.register(
                 '/static/service-worker.js',
