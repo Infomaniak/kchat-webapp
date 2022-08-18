@@ -132,6 +132,12 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
 
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
+
+        navigator.serviceWorker.controller?.postMessage({
+            type: 'TOKEN_REFRESHED',
+            token: resp.access_token || '',
+        });
+
         if (redirectToTeam) {
             redirectUserToDefaultTeam();
         }

@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable no-console */
 
 import './entry.js';
 
@@ -81,19 +82,31 @@ function appendOnLoadEvent(fn) {
     }
 }
 
-appendOnLoadEvent(() => {
+async function unregisterAllServiceWorkers() {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    return Promise.all(registrations.map((r) => r.unregister()));
+}
+
+appendOnLoadEvent(async () => {
     if (isDesktopApp()) {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then((prevRegistrations) => {
-                for (const prevRegistration of prevRegistrations) {
-                    prevRegistration.unregister();
-                }
-            });
+            await unregisterAllServiceWorkers();
 
-            navigator.serviceWorker.register('/static/service-worker.js', {scope: '/'}).then((registration) => {
-                console.log('SW registered: ', registration);
-            }).catch((registrationError) => {
-                console.log('SW registration failed: ', registrationError);
+            navigator.serviceWorker.register(
+                '/static/service-worker.js',
+                {
+                    scope: '/',
+                },
+            ).then((registration) => {
+                if (registration.installing) {
+                    console.log('Service worker installing');
+                } else if (registration.waiting) {
+                    console.log('Service worker installed');
+                } else if (registration.active) {
+                    console.log('Service worker active');
+                }
+            }).catch((error) => {
+                console.error(`Registration failed with ${error}`);
             });
         }
     }

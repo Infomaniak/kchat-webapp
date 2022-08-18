@@ -156,6 +156,10 @@ export default class Root extends React.PureComponent {
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
+                navigator.serviceWorker.controller?.postMessage({
+                    type: 'TOKEN_REFRESHED',
+                    token: token || '',
+                });
             }
 
             // If need to refresh the token

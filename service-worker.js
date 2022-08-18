@@ -24,7 +24,6 @@ function injectBearer(event, encodeBody = false) {
             return fetch(event.request.url, {
                 method: 'POST',
                 headers: {Authorization: 'Bearer ' + self.token},
-                mode: 'cors',
                 body: newBody,
             });
         });
@@ -41,7 +40,8 @@ function injectBearer(event, encodeBody = false) {
 }
 
 self.addEventListener('message', (event) => {
-    if (event.data.token && event.data.token !== '') {
+    if (event.data && event.data.type === 'TOKEN_REFRESHED' && event.data.token !== '') {
+        console.log('[SW] Token updated at ' + new Date().toISOString());
         self.token = event.data.token;
     }
 });
@@ -75,7 +75,7 @@ self.addEventListener('fetch', (event) => {
         } else if (self.token && self.token !== null) {
             event.respondWith(injectBearer(event, encodeBody));
         }
-    } else if (self.token && self.token !== null && windowHost === requestHost && shouldMatchRoute) {
+    } else if (self.token && self.token !== null && windowHost === requestHost) {
         event.respondWith(injectBearer(event, encodeBody));
     }
 });
