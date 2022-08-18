@@ -4,39 +4,48 @@
 /* eslint-disable max-lines */
 
 import React from 'react';
+import {useDispatch} from 'react-redux';
+
+import OffersModal from 'components/offers_modal/offers_modal';
+import {openModal} from 'actions/views/modals';
+import {ModalIdentifiers} from 'utils/constants';
 
 import './channel_message_limitation_banner.scss';
+import {DispatchFunc} from 'mattermost-redux/types/actions';
 
 type Props = {
     olderMessagesDate: string;
 }
 
-export default class ChannelMessageLimitaionBanner extends React.PureComponent<Props> {
-    handleButtonClick() {
-        window.open('https://www.youtube.com/watch?v=xvFZjo5PgG0', '_blank')?.focus();
+export default function ChannelMessageLimitaionBanner(props: Props) {
+    const dispatch = useDispatch<DispatchFunc>();
+
+    const {
+        olderMessagesDate,
+    } = props;
+
+    function handleButtonClick() {
+        dispatch(openModal({
+            modalId: ModalIdentifiers.OFFERS,
+            dialogType: OffersModal,
+        }));
     }
 
-    render() {
-        const {
-            olderMessagesDate,
-        } = this.props;
-
-        return (
-            <p className='channel-limitation-banner'>
-                <span>
-                    <strong>
-                        {'This is just a placeholder:'}
-                        {' '}
-                        {olderMessagesDate}
-                    </strong>
-                    <button
-                        className='channel-limitation-banner__button'
-                        onClick={this.handleButtonClick}
-                    >
-                        {'See offers'}
-                    </button>
-                </span>
-            </p>
-        );
-    }
+    return (
+        <p className='channel-limitation-banner'>
+            <span>
+                <strong>
+                    {'This is just a placeholder:'}
+                    {' '}
+                    {olderMessagesDate}
+                </strong>
+                <button
+                    className='channel-limitation-banner__button'
+                    onClick={handleButtonClick}
+                >
+                    {'See offers'}
+                </button>
+            </span>
+        </p>
+    );
 }

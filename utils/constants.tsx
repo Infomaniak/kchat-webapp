@@ -3,9 +3,9 @@
 
 /* eslint-disable max-lines */
 
-import keyMirror from 'key-mirror'
+import keyMirror from 'key-mirror';
 
-import Permissions from 'mattermost-redux/constants/permissions'
+import Permissions from 'mattermost-redux/constants/permissions';
 
 import {CustomStatusDuration} from '@mattermost/types/users';
 
@@ -432,6 +432,7 @@ export const ModalIdentifiers = {
     FORWARD_POST_MODAL: 'forward_post_modal',
     CLOUD_SUBSCRIBE_WITH_LOADING_MODAL: 'cloud_subscribe_with_loading_modal',
     JOIN_PUBLIC_CHANNEL_MODAL: 'join_public_channel_modal',
+    OFFERS: 'offers',
 };
 
 export const UserStatuses = {
