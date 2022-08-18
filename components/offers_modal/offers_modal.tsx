@@ -72,13 +72,14 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
                             id='place.holder'
                             defaultMessage='Votre espace de stockage est plein. Débloquez plus d’applications, de fonctionnalités en boostant votre espace de stockage et optimisez le travail en collaboration avec kDrive, kChat... Souscrivez à une offre supérieure pour envoyer de nouveaux fichiers sur kChat et kDrive.'
                         />
-                        <p/>
-                        <a href='https://www.youtube.com/watch?v=xvFZjo5PgG0'>
-                            <FormattedMessage
-                                id='place.holder'
-                                defaultMessage='En savoir plus'
-                            />
-                        </a>
+                        <p className='modify-link'>
+                            <a href='https://www.youtube.com/watch?v=xvFZjo5PgG0'>
+                                <FormattedMessage
+                                    id='place.holder'
+                                    defaultMessage='En savoir plus'
+                                />
+                            </a>
+                        </p>
                     </div>
                 </div>
                 <div className='content-footer'>
