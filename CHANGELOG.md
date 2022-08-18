@@ -1,3 +1,9 @@
+## 0.2.3 (2022-08-18)
+
+## Fixed (1 change)
+
+- [fix missing import](kchat/webapp@ca37ad67dda6a3d0c8380dc5c4c58bdb2a784855) by @antonbuksa
+
 ## 0.2.2-rc.3 (2022-08-18)
 
 No changes.
