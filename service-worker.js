@@ -75,9 +75,9 @@ self.addEventListener('fetch', (event) => {
     const encodeBody = event.request.url.includes('broadcasting/auth');
 
     if (shouldMatchRoute) {
-        const authHeaderSplited = authHeader.split(' ');
+        // const authHeaderSplited = authHeader.split(' ');
 
-        if (authHeaderSplited[0] === 'Bearer' && authHeaderSplited[1] && authHeaderSplited[1] !== '') {
+        if (authHeader) {
             // no need to alter request
             return fetch(event.request);
         } else if (self.token && self.token !== null) {
