@@ -18,6 +18,7 @@ function urlEncodeBody(body) {
 }
 
 function injectBearer(event, encodeBody = false) {
+    console.log('[SW] injectBearer ', event, encodeBody);
     if (encodeBody) {
         const responsePromise = event.request.text().then((body) => {
             const newBody = urlEncodeBody(body);
@@ -31,12 +32,15 @@ function injectBearer(event, encodeBody = false) {
         return responsePromise;
     }
 
-    const newRequest = new Request(event.request, {
+    // const newRequest = new Request(event.request, {
+    //     mode: 'cors',
+    //     headers: {Authorization: 'Bearer ' + self.token},
+    // });
+
+    return fetch(event.request.url, {
         mode: 'cors',
         headers: {Authorization: 'Bearer ' + self.token},
     });
-
-    return fetch(newRequest);
 }
 
 self.addEventListener('message', (event) => {
