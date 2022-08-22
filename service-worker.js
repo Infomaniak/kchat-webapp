@@ -59,23 +59,26 @@ self.addEventListener('activate', () => {
 });
 
 self.addEventListener('fetch', (event) => {
-    const authHeader = event.request.headers.get('Authorization');
-    const windowHost = self.location.host;
-    const requestUrlSplit = event.request.url.split('https://')[1].split('/');
-    const requestHost = requestUrlSplit.shift();
-    const route = '/' + requestUrlSplit.join('/').split('?')[0];
-    const shouldMatchRoute = routesToMatch.some((rx) => route.match(rx));
-    const encodeBody = route === '/broadcasting/auth';
+    // const authHeader = event.request.headers.get('Authorization');
+    // const windowHost = self.location.host;
+    // const requestHost = requestUrlSplit.shift();
+    // const shouldMatchRoute = routesToMatch.some((rx) => route.match(rx));
+    // const requestUrlSplit = event.request.url.split('https://')[1].split('/');
+    // const route = '/' + requestUrlSplit.join('/').split('?')[0];
 
-    if (authHeader !== null && windowHost === requestHost && shouldMatchRoute) {
-        const authHeaderSplited = authHeader.split(' ');
+    const encodeBody = event.request.url.includes('broadcasting/auth');
 
-        if (authHeaderSplited[0] === 'Bearer' && authHeaderSplited[1] && authHeaderSplited[1] !== '') {
-            // no need to alter request
-        } else if (self.token && self.token !== null) {
-            event.respondWith(injectBearer(event, encodeBody));
-        }
-    } else if (self.token && self.token !== null && windowHost === requestHost) {
-        event.respondWith(injectBearer(event, encodeBody));
-    }
+    event.respondWith(injectBearer(event, encodeBody));
+
+    // if (authHeader !== null && windowHost === requestHost && shouldMatchRoute) {
+    //     const authHeaderSplited = authHeader.split(' ');
+
+    //     if (authHeaderSplited[0] === 'Bearer' && authHeaderSplited[1] && authHeaderSplited[1] !== '') {
+    //         // no need to alter request
+    //     } else if (self.token && self.token !== null) {
+    //         event.respondWith(injectBearer(event, encodeBody));
+    //     }
+    // } else if (self.token && self.token !== null && windowHost === requestHost) {
+    //     event.respondWith(injectBearer(event, encodeBody));
+    // }
 });
