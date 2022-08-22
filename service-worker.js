@@ -18,11 +18,13 @@ function urlEncodeBody(body) {
 }
 
 function injectBearer(event, encodeBody = false) {
+    console.log('[SW] injectBearer ', event, encodeBody);
     if (encodeBody) {
         const responsePromise = event.request.text().then((body) => {
             const newBody = urlEncodeBody(body);
             return fetch(event.request.url, {
                 method: 'POST',
+                mode: 'cors',
                 headers: {Authorization: 'Bearer ' + self.token},
                 body: newBody,
             });
@@ -31,12 +33,15 @@ function injectBearer(event, encodeBody = false) {
         return responsePromise;
     }
 
-    const newRequest = new Request(event.request, {
+    // const newRequest = new Request(event.request, {
+    //     mode: 'cors',
+    //     headers: {Authorization: 'Bearer ' + self.token},
+    // });
+
+    return fetch(event.request.url, {
         mode: 'cors',
         headers: {Authorization: 'Bearer ' + self.token},
     });
-
-    return fetch(newRequest);
 }
 
 self.addEventListener('message', (event) => {
@@ -60,22 +65,30 @@ self.addEventListener('activate', () => {
 
 self.addEventListener('fetch', (event) => {
     const authHeader = event.request.headers.get('Authorization');
-    const windowHost = self.location.host;
+
+    // const windowHost = self.location.host;
+    // const requestHost = requestUrlSplit.shift();
+
     const requestUrlSplit = event.request.url.split('https://')[1].split('/');
-    const requestHost = requestUrlSplit.shift();
     const route = '/' + requestUrlSplit.join('/').split('?')[0];
     const shouldMatchRoute = routesToMatch.some((rx) => route.match(rx));
-    const encodeBody = route === '/broadcasting/auth';
 
-    if (authHeader !== null && windowHost === requestHost && shouldMatchRoute) {
-        const authHeaderSplited = authHeader.split(' ');
+    const encodeBody = event.request.url.includes('broadcasting/auth');
 
-        if (authHeaderSplited[0] === 'Bearer' && authHeaderSplited[1] && authHeaderSplited[1] !== '') {
+    if (shouldMatchRoute) {
+        // const authHeaderSplited = authHeader.split(' ');
+
+        if (authHeader) {
             // no need to alter request
+            event.respondWith(() => {
+                return fetch(event.request);
+            });
         } else if (self.token && self.token !== null) {
             event.respondWith(injectBearer(event, encodeBody));
         }
-    } else if (self.token && self.token !== null && windowHost === requestHost) {
-        event.respondWith(injectBearer(event, encodeBody));
     }
+
+    // } else if (self.token && self.token !== null && windowHost === requestHost) {
+    //     event.respondWith(injectBearer(event, encodeBody));
+    // }
 });
