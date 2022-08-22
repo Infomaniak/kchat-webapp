@@ -81,10 +81,8 @@ self.addEventListener('fetch', (event) => {
             // no need to alter request
             return fetch(event.request);
         } else if (self.token && self.token !== null) {
-            return injectBearer(event, encodeBody);
+            event.respondWith(injectBearer(event, encodeBody));
         }
-
-        return fetch(event.request);
     }
 
     // } else if (self.token && self.token !== null && windowHost === requestHost) {
