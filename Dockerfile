@@ -21,7 +21,7 @@ COPY . .
 # RUN yarn workspace @mattermost/types build
 # RUN yarn workspace @mattermost/client build
 
-# RUN yarn workspace @mattermost/components build
+RUN yarn workspace @mattermost/components build
 
 # RUN yarn workspace mattermost-webapp build
 
