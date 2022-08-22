@@ -1,3 +1,9 @@
+## 0.2.7 (2022-08-22)
+
+## Changed (1 change)
+
+- [simplify fetch interceptor](kchat/webapp@525eedf0eb8950656970a81931b93af088576160) by @antonbuksa
+
 ## 0.2.6 (2022-08-22)
 
 No changes.
