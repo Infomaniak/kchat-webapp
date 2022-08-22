@@ -74,15 +74,17 @@ self.addEventListener('fetch', (event) => {
 
     const encodeBody = event.request.url.includes('broadcasting/auth');
 
-    if (authHeader !== null && shouldMatchRoute) {
+    if (shouldMatchRoute) {
         const authHeaderSplited = authHeader.split(' ');
 
         if (authHeaderSplited[0] === 'Bearer' && authHeaderSplited[1] && authHeaderSplited[1] !== '') {
             // no need to alter request
             return fetch(event.request);
         } else if (self.token && self.token !== null) {
-            event.respondWith(injectBearer(event, encodeBody));
+            return injectBearer(event, encodeBody);
         }
+
+        return fetch(event.request);
     }
 
     // } else if (self.token && self.token !== null && windowHost === requestHost) {
