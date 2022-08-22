@@ -105,17 +105,17 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
             );
         }
 
-        if (hasLimitDate && (listId === OLDER_MESSAGES_LOADER || listId === CHANNEL_INTRO_MESSAGE)) {
+        if (listId === CHANNEL_INTRO_MESSAGE) {
+            return (
+                <ChannelIntroMessage/>
+            );
+        }
+
+        if (hasLimitDate && listId === OLDER_MESSAGES_LOADER) {
             return (
                 <ChannelMessageLimitaionBanner
                     olderMessagesDate={hasLimitDate}
                 />
-            );
-        }
-
-        if (listId === CHANNEL_INTRO_MESSAGE) {
-            return (
-                <ChannelIntroMessage/>
             );
         }
 

@@ -22,6 +22,9 @@ import {closeModal} from 'actions/views/modals';
 
 import './offers_modal.scss';
 
+const LEARN_MORE_LINK = 'https://www.youtube.com/watch?v=xvFZjo5PgG0';
+const MODIFY_OFFER_LINK = 'https://www.youtube.com/watch?v=xvFZjo5PgG0';
+
 type Props = {
     onExited?: () => void;
 }
@@ -42,7 +45,7 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
     };
 
     const handleAccept = () => {
-        window.open('https://www.youtube.com/watch?v=xvFZjo5PgG0', '_blank')?.focus();
+        window.open(MODIFY_OFFER_LINK, '_blank', 'noreferrer')?.focus();
         dispatch(closeModal(ModalIdentifiers.OFFERS));
     };
 
@@ -63,20 +66,24 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
                     </div>
                     <div className='title'>
                         <FormattedMessage
-                            id='place.holder'
-                            defaultMessage='Augmentez l’espace de stockage de votre kSuite !'
+                            id='offers_modal.title'
+                            defaultMessage='Increase the storage space of your kSuite!'
                         />
                     </div>
                     <div className='subtitle'>
                         <FormattedMessage
-                            id='place.holder'
-                            defaultMessage='Votre espace de stockage est plein. Débloquez plus d’applications, de fonctionnalités en boostant votre espace de stockage et optimisez le travail en collaboration avec kDrive, kChat... Souscrivez à une offre supérieure pour envoyer de nouveaux fichiers sur kChat et kDrive.'
+                            id='offers_modal.subtitle'
+                            defaultMessage='Your storage space is full. Unlock more applications and features by boosting your storage space and maximize collaborative work with kDrive, kChat... Sign up for a premium offer to send new files to kChat and kDrive.'
                         />
                         <p className='modify-link'>
-                            <a href='https://www.youtube.com/watch?v=xvFZjo5PgG0'>
+                            <a
+                                href={LEARN_MORE_LINK}
+                                target='_blank'
+                                rel='noreferrer'
+                            >
                                 <FormattedMessage
-                                    id='place.holder'
-                                    defaultMessage='En savoir plus'
+                                    id='offers_modal.link'
+                                    defaultMessage='Learn more'
                                 />
                             </a>
                         </p>
@@ -89,8 +96,8 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
                         id='cancel-offer'
                     >
                         <FormattedMessage
-                            id='place.holder'
-                            defaultMessage='Pas pour le moment'
+                            id='offers_modal.cancel'
+                            defaultMessage='Not at the moment'
                         />
                     </button>
                     <button
@@ -99,8 +106,8 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
                         id='modify-offer'
                     >
                         <FormattedMessage
-                            id='place.holder'
-                            defaultMessage='Modifier mon offre'
+                            id='offers_modal.accept'
+                            defaultMessage='Modify my offer'
                         />
                     </button>
                 </div>

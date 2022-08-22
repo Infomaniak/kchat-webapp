@@ -854,7 +854,7 @@ export function getPostsUnread(channelId: string, fetchThreads = true, collapsed
                 recentPosts = await Client4.getPosts(channelId, 0, Posts.POST_CHUNK_SIZE / 2, fetchThreads, collapsedThreadsEnabled, collapsedThreadsExtended);
             }
 
-            hasLimitDate = posts.has_limitation || posts.order[0];
+            hasLimitDate = posts.has_limitation;
 
             getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
@@ -921,7 +921,7 @@ export function getPostsBefore(channelId: string, postId: string, page = 0, perP
             return {error};
         }
 
-        hasLimitDate = posts.has_limitation || posts.order[0];
+        hasLimitDate = posts.has_limitation;
 
         dispatch(batchActions([
             receivedPosts(posts),
