@@ -24,6 +24,7 @@ function injectBearer(event, encodeBody = false) {
             const newBody = urlEncodeBody(body);
             return fetch(event.request.url, {
                 method: 'POST',
+                mode: 'cors',
                 headers: {Authorization: 'Bearer ' + self.token},
                 body: newBody,
             });
@@ -79,7 +80,9 @@ self.addEventListener('fetch', (event) => {
 
         if (authHeader) {
             // no need to alter request
-            return fetch(event.request);
+            event.respondWith(() => {
+                return fetch(event.request);
+            });
         } else if (self.token && self.token !== null) {
             event.respondWith(injectBearer(event, encodeBody));
         }
