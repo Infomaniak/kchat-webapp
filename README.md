@@ -28,6 +28,7 @@ If you are redirected to the preprod, then check you are connected to the manage
 #### run the build
 
 ```shell
+make build
 npm run run
 ```
 
@@ -58,3 +59,5 @@ services:
 ```
 
 Then go on https://ktalk.devdXXX.dev.infomaniak.ch
+
+### Changelog

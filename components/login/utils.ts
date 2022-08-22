@@ -8,6 +8,10 @@ import {Client4} from 'mattermost-redux/client';
 import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
+import {reconnectWebSocket} from 'actions/websocket_actions';
+
+const REFRESH_TOKEN_TIME_MARGIN = 30; // How many seconds to refresh before token expires
+const OFFLINE_ATTEMPT_INTERVAL = 2000; // In milliseconds
 
 /**
  * Store IKToken infos in localStorage and update Client
@@ -66,8 +70,10 @@ export async function generateCodeChallenge(codeVerifier: string) {
  * get code_challenge and redirect to IK Login
  */
 export function getChallengeAndRedirectToLogin() {
+    const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
     const codeVerifier = getCodeVerifier();
     let codeChallenge = '';
+
     generateCodeChallenge(codeVerifier).then((challenge) => {
         codeChallenge = challenge;
 
@@ -75,7 +81,7 @@ export function getChallengeAndRedirectToLogin() {
         localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
 
         // TODO: add env for login url and/or current server
-        window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=ktalk://auth-desktop`);
+        window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
     }).catch(() => {
         console.log('Error redirect');
     });
@@ -102,7 +108,7 @@ export function needRefreshToken() {
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
-export function refreshIKToken(redirectToTeam = false) {
+export function refreshIKToken(redirectToTeam = false, periodic = false) {
     const refreshToken = localStorage.getItem('IKRefreshToken');
     if (!refreshToken) {
         clearLocalStorageToken();
@@ -117,16 +123,32 @@ export function refreshIKToken(redirectToTeam = false) {
         `${IKConstants.LOGIN_URL}`,
         `${IKConstants.CLIENT_ID}`,
     ).then((resp) => {
-        console.log('getRefreshToken', resp);
+        if (periodic && resp.expires_in && resp.expires_in > 0) {
+            setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN), false, true);
+        }
+
+        // Refresh the websockets as we just changed Bearer Token
+        reconnectWebSocket();
 
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
+
+        navigator.serviceWorker.controller?.postMessage({
+            type: 'TOKEN_REFRESHED',
+            token: resp.access_token || '',
+        });
+
         if (redirectToTeam) {
             redirectUserToDefaultTeam();
         }
     }).catch((error) => {
-        console.log('catch refresh error', error);
-        clearLocalStorageToken();
-        getChallengeAndRedirectToLogin();
+        if (window.navigator.onLine) {
+            console.log('catch refresh error', error);
+            clearLocalStorageToken();
+            getChallengeAndRedirectToLogin();
+        } else {
+            console.log('Offline, waiting for connection');
+            setTimeout(refreshIKToken, OFFLINE_ATTEMPT_INTERVAL, redirectToTeam, periodic);
+        }
     });
 }

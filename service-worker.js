@@ -4,19 +4,44 @@
 /* eslint-disable no-console */
 /* eslint-disable consistent-return */
 
-const routesToMatch = ['/api/v4/emoji/.*', '/api/v4/files/.*', '/api/v4/users/.*?/image'];
+const routesToMatch = ['/api/v4/.*', '/broadcasting/auth'];
 self.token = null;
 
-function injectBearer(event) {
+function urlEncodeBody(body) {
+    const urlencoded = new URLSearchParams();
+    const queryParameters = body.split('&');
+    for (const param of queryParameters) {
+        const splitParam = param.split('=');
+        urlencoded.append(splitParam[0], splitParam[1]);
+    }
+    return urlencoded;
+}
+
+function injectBearer(event, encodeBody = false) {
+    if (encodeBody) {
+        const responsePromise = event.request.text().then((body) => {
+            const newBody = urlEncodeBody(body);
+            return fetch(event.request.url, {
+                method: 'POST',
+                headers: {Authorization: 'Bearer ' + self.token},
+                body: newBody,
+            });
+        });
+
+        return responsePromise;
+    }
+
     const newRequest = new Request(event.request, {
         mode: 'cors',
         headers: {Authorization: 'Bearer ' + self.token},
     });
+
     return fetch(newRequest);
 }
 
 self.addEventListener('message', (event) => {
-    if (event.data.token && event.data.token !== '') {
+    if (event.data && event.data.type === 'TOKEN_REFRESHED' && event.data.token !== '') {
+        console.log('[SW] Token updated at ' + new Date().toISOString());
         self.token = event.data.token;
     }
 });
@@ -40,6 +65,7 @@ self.addEventListener('fetch', (event) => {
     const requestHost = requestUrlSplit.shift();
     const route = '/' + requestUrlSplit.join('/').split('?')[0];
     const shouldMatchRoute = routesToMatch.some((rx) => route.match(rx));
+    const encodeBody = route === '/broadcasting/auth';
 
     if (authHeader !== null && windowHost === requestHost && shouldMatchRoute) {
         const authHeaderSplited = authHeader.split(' ');
@@ -47,9 +73,9 @@ self.addEventListener('fetch', (event) => {
         if (authHeaderSplited[0] === 'Bearer' && authHeaderSplited[1] && authHeaderSplited[1] !== '') {
             // no need to alter request
         } else if (self.token && self.token !== null) {
-            return injectBearer(event);
+            event.respondWith(injectBearer(event, encodeBody));
         }
-    } else if (self.token && self.token !== null && windowHost === requestHost && shouldMatchRoute) {
-        return injectBearer(event);
+    } else if (self.token && self.token !== null && windowHost === requestHost) {
+        event.respondWith(injectBearer(event, encodeBody));
     }
 });

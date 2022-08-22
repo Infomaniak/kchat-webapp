@@ -3,7 +3,7 @@
 
 import {Client4} from 'mattermost-redux/client';
 import {getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
-import {loadMe} from 'mattermost-redux/actions/users';
+import {loadMe, loadMeREST} from 'mattermost-redux/actions/users';
 
 import {getCurrentLocale, getTranslations} from 'selectors/i18n';
 import {ActionTypes} from 'utils/constants';
@@ -13,17 +13,16 @@ const pluginTranslationSources = {};
 
 export function loadConfigAndMe() {
     return async (dispatch) => {
-        // TODO: we will check for graphql here in future
-        // eslint-disable-next-line no-unused-vars
-        const [{data: clientConfig}] = await Promise.all([
+        await Promise.all([
             dispatch(getClientConfig()),
             dispatch(getLicenseConfig()),
         ]);
 
-        let isMeLoaded = false;
-        const dataFromLoadMe = await dispatch(loadMe());
-        isMeLoaded = dataFromLoadMe?.data ?? false;
+        // const isGraphQLEnabled = clientConfig && clientConfig.FeatureFlagGraphQL === 'true';
 
+        let isMeLoaded = false;
+        const dataFromLoadMe = await dispatch(loadMeREST());
+        isMeLoaded = dataFromLoadMe?.data ?? false;
         return {data: isMeLoaded};
     };
 }
@@ -74,6 +73,21 @@ export function loadTranslations(locale, url) {
             data: {
                 locale,
                 translations,
+            },
+        });
+    };
+}
+
+export function registerCustomPostRenderer(type, component, id) {
+    return async (dispatch) => {
+        // piggyback on plugins state to register a custom post renderer
+        dispatch({
+            type: ActionTypes.RECEIVED_PLUGIN_POST_COMPONENT,
+            data: {
+                postTypeId: id,
+                pluginId: id,
+                type,
+                component,
             },
         });
     };
