@@ -80,9 +80,9 @@ self.addEventListener('fetch', (event) => {
 
         if (authHeader) {
             // no need to alter request
-            event.respondWith(() => {
-                return fetch(event.request);
-            });
+            // event.respondWith(() => {
+            //     return fetch(event.request);
+            // });
         } else if (self.token && self.token !== null) {
             event.respondWith(injectBearer(event, encodeBody));
         }
