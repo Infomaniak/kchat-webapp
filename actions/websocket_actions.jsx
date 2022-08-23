@@ -187,6 +187,7 @@ export function close() {
 }
 
 export function reconnectWebSocket() {
+    console.log("WS reconection")
     close();
     initialize();
 }
@@ -211,6 +212,7 @@ function restart() {
 export function reconnect(includeWebSocket = true) {
     if (includeWebSocket) {
         if (isDesktopApp()) {
+            console.log("app desktop refresh before reconnect")
             refreshIKToken();
         } else {
             reconnectWebSocket();

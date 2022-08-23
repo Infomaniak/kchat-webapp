@@ -71,6 +71,7 @@ export async function generateCodeChallenge(codeVerifier: string) {
  */
 export function getChallengeAndRedirectToLogin() {
     const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
+    // const redirectTo = 'ktalk://auth-desktop';
     const codeVerifier = getCodeVerifier();
     let codeChallenge = '';
 
@@ -97,6 +98,7 @@ export function checkIKTokenIsExpired() {
     if (isExpired) {
         localStorage.setItem('tokenExpired', '1');
     }
+    console.log("is token expired", isExpired);
     return isExpired;
 }
 
@@ -105,19 +107,21 @@ export function checkIKTokenIsExpired() {
  * @returns bool
  */
 export function needRefreshToken() {
+    console.log("need refresh", checkIKTokenIsExpired())
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
 export function refreshIKToken(redirectToTeam = false, periodic = false) {
     const refreshToken = localStorage.getItem('IKRefreshToken');
     if (!refreshToken) {
+        console.log("Not refresh token, go to login")
         clearLocalStorageToken();
         getChallengeAndRedirectToLogin();
         return;
     }
     Client4.setToken('');
     Client4.setCSRF('');
-
+console.log("Go refresh token")
     Client4.refreshIKLoginToken(
         refreshToken,
         `${IKConstants.LOGIN_URL}`,
@@ -126,7 +130,7 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         if (periodic && resp.expires_in && resp.expires_in > 0) {
             setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN), false, true);
         }
-
+        console.log("token refreshed")
         // Refresh the websockets as we just changed Bearer Token
         reconnectWebSocket();
 
