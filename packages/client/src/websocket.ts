@@ -129,7 +129,6 @@ export default class WebSocketClient {
         // We cannot also send it as part of the auth_challenge, because the session cookie is already sent with the request.
 
         if (isDesktopApp()) {
-            console.log("Will open WS /broadcasting/auth with token", authToken)
             this.conn = new Pusher('kchat-key', {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,

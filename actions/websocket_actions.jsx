@@ -137,7 +137,6 @@ export function initialize() {
     const config = getConfig(getState());
     const user = getCurrentUser(getState());
     if (!user) {
-        console.log("not user")
         return;
     }
 
@@ -173,7 +172,6 @@ export function initialize() {
 
     // connUrl += Client4.getUrlVersion() + '/websocket';
     const authToken = Client4.getToken();
-    console.log("token before initialize WS", authToken)
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
     WebSocketClient.addReconnectListener(() => reconnect(false));
@@ -188,7 +186,6 @@ export function close() {
 }
 
 export function reconnectWebSocket() {
-    console.log("WS reconection")
     close();
     initialize();
 }
@@ -213,7 +210,6 @@ function restart() {
 export function reconnect(includeWebSocket = true) {
     if (includeWebSocket) {
         if (isDesktopApp()) {
-            console.log("app desktop refresh before reconnect")
             refreshIKToken();
         } else {
             reconnectWebSocket();
@@ -1753,7 +1749,6 @@ function handleThreadFollowChanged(msg) {
 
 function handleConferenceUserConnected(msg) {
     return (doDispatch, doGetState) => {
-        console.log(msg);
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
         doDispatch({
@@ -1843,7 +1838,7 @@ function handleIncomingConferenceCall(msg) {
 }
 
 function handlePusherMemberRemoved(msg) {
-    console.log('pusher member removed', msg);
+    // console.log('pusher member removed', msg);
 }
 
 function handlePusherPong() {
