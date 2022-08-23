@@ -302,6 +302,17 @@ function isSearchGettingMore(state = false, action: GenericAction) {
     }
 }
 
+function hasLimitation(state: string | null = null, action: GenericAction) {
+    const {data, type} = action;
+
+    switch (type) {
+    case SearchTypes.RECEIVED_SEARCH_POSTS:
+        return data.has_limitation;
+    default:
+        return state;
+    }
+}
+
 export default combineReducers({
 
     // An ordered array with posts ids of flagged posts
@@ -331,4 +342,7 @@ export default combineReducers({
 
     // Boolean true if we are getting more search results
     isSearchGettingMore,
+
+    // Date of limitation start, present if a limit is present
+    hasLimitation,
 });

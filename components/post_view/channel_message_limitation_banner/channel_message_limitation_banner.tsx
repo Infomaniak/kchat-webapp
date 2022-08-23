@@ -25,7 +25,7 @@ type Props = {
     olderMessagesDate: string;
 }
 
-export default function ChannelMessageLimitaionBanner(props: Props) {
+export default function ChannelMessageLimitationBanner(props: Props) {
     const dispatch = useDispatch<DispatchFunc>();
 
     const {

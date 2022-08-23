@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/* eslint-disable max-lines */
+
 import React, {ChangeEvent, MouseEvent, FormEvent, useEffect, useState, useRef} from 'react';
 import {useIntl} from 'react-intl';
 import classNames from 'classnames';

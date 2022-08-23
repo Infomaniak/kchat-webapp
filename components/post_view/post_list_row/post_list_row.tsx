@@ -16,7 +16,7 @@ import Post from 'components/post_view/post';
 import DateSeparator from 'components/post_view/date_separator';
 import NewMessageSeparator from 'components/post_view/new_message_separator/new_message_separator';
 import ChannelIntroMessage from 'components/post_view/channel_intro_message/';
-import ChannelMessageLimitaionBanner from '../channel_message_limitation_banner/channel_message_limitation_banner';
+import ChannelMessageLimitationBanner from '../channel_message_limitation_banner/channel_message_limitation_banner';
 import {isIdNotPost} from 'utils/post_utils';
 import {PostListRowListIds, Locations} from 'utils/constants';
 import {hasLimitDate} from 'mattermost-redux/actions/posts';
@@ -107,7 +107,7 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
 
         if (hasLimitDate && listId === CHANNEL_INTRO_MESSAGE && !isLastPost) {
             return (
-                <ChannelMessageLimitaionBanner
+                <ChannelMessageLimitationBanner
                     olderMessagesDate={hasLimitDate}
                 />
             );
