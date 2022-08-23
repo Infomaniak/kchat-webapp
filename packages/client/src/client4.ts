@@ -217,9 +217,6 @@ export default class Client4 {
 
     setToken(token: string) {
         this.token = token;
-        if ('serviceWorker' in navigator) {
-            navigator?.serviceWorker?.controller?.postMessage({token});
-        }
     }
 
     setCSRF(csrfToken: string) {
@@ -4131,6 +4128,10 @@ export default class Client4 {
                         this.setToken(response.access_token);
                         this.setCSRF(response.access_token);
                         this.setAuthHeader = true;
+                        navigator.serviceWorker.controller?.postMessage({
+                            type: 'TOKEN_REFRESHED',
+                            token: response.access_token || '',
+                        });
                         localStorage.removeItem('refreshingToken');
                     }).catch(() => {
                         localStorage.removeItem('refreshingToken');

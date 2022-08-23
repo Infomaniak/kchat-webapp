@@ -158,7 +158,7 @@ if (DEV) {
 }
 
 var config = {
-    entry: ['./root.jsx', 'root.html.ejs', './service-worker.js'],
+    entry: ['./root.jsx', 'root.html.ejs'],
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
@@ -363,7 +363,7 @@ var config = {
                 {from: 'images/admin-onboarding-background.jpg', to: 'images'},
                 {from: 'images/payment-method-illustration.png', to: 'images'},
                 {from: 'images/cloud-laptop.png', to: 'images'},
-                {from: 'service-worker.js', to: ''},
+                {from: 'images/bot_default_icon.png', to: 'images'},
             ],
         }),
 

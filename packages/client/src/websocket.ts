@@ -170,6 +170,10 @@ export default class WebSocketClient {
         this.conn.connection.bind('connected', () => {
             if (token) {
                 this.sendMessage('authentication_challenge', {token});
+                navigator.serviceWorker.controller?.postMessage({
+                    type: 'TOKEN_REFRESHED',
+                    token: token || '',
+                });
             }
 
             if (this.connectFailCount > 0) {
