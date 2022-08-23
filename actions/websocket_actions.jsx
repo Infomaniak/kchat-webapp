@@ -172,7 +172,6 @@ export function initialize() {
 
     // connUrl += Client4.getUrlVersion() + '/websocket';
     const authToken = Client4.getToken();
-
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
     WebSocketClient.addReconnectListener(() => reconnect(false));
@@ -1750,7 +1749,6 @@ function handleThreadFollowChanged(msg) {
 
 function handleConferenceUserConnected(msg) {
     return (doDispatch, doGetState) => {
-        console.log(msg);
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
         doDispatch({
@@ -1840,7 +1838,7 @@ function handleIncomingConferenceCall(msg) {
 }
 
 function handlePusherMemberRemoved(msg) {
-    console.log('pusher member removed', msg);
+    // console.log('pusher member removed', msg);
 }
 
 function handlePusherPong() {
