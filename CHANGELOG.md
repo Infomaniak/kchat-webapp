@@ -1,3 +1,73 @@
+## 0.2.8-rc.5 (2022-08-23)
+
+No changes.
+
+## 0.2.8-rc.4 (2022-08-22)
+
+No changes.
+
+## 0.2.8-rc.3 (2022-08-22)
+
+No changes.
+
+## 0.2.7 (2022-08-22)
+
+## Changed (1 change)
+
+- [simplify fetch interceptor](kchat/webapp@525eedf0eb8950656970a81931b93af088576160) by @antonbuksa
+
+## 0.2.6 (2022-08-22)
+
+No changes.
+
+## 0.2.5-rc.7 (2022-08-22)
+
+No changes.
+
+## 0.2.5-rc.6 (2022-08-22)
+
+No changes.
+
+## 0.2.5-rc.5 (2022-08-22)
+
+No changes.
+
+## 0.2.5-rc.4 (2022-08-22)
+
+No changes.
+
+## 0.2.5-rc.3 (2022-08-22)
+
+No changes.
+
+## 0.2.5-rc.2 (2022-08-22)
+
+No changes.
+
+## 0.2.4-rc.1 (2022-08-18)
+
+## Changed (1 change)
+
+- [add more token refresh for service worker](kchat/webapp@b93d99d7c29e739b123bb2d3656a8f4d5e2afd98) by @antonbuksa
+
+## 0.2.3 (2022-08-18)
+
+## Fixed (1 change)
+
+- [fix missing import](kchat/webapp@ca37ad67dda6a3d0c8380dc5c4c58bdb2a784855) by @antonbuksa
+
+## 0.2.2-rc.3 (2022-08-18)
+
+No changes.
+
+## 0.2.2-rc.2 (2022-08-18)
+
+No changes.
+
+## 0.2.2-rc.1 (2022-08-17)
+
+No changes.
+
 ## 0.2.1-rc.9 (2022-08-17)
 
 ## Changed (1 change)
