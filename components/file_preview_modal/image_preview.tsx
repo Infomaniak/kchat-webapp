@@ -3,14 +3,15 @@
 
 import React, {useRef, useMemo, useEffect, useState} from 'react';
 import {clamp} from 'lodash';
+import classNames from 'classnames';
 
 import {getFilePreviewUrl, getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
-
-import './image_preview.scss';
 import {FileInfo} from '@mattermost/types/files';
 
 import {ZoomValue} from './file_preview_modal_image_controls/file_preview_modal_image_controls';
 import {LinkInfo} from './types';
+
+import './image_preview.scss';
 
 const HORIZONTAL_PADDING = 48;
 const VERTICAL_PADDING = 168;
@@ -163,7 +164,6 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         return () => {
             window.removeEventListener('mouseup', handleMouseUp);
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (canvasRef.current) {
@@ -204,10 +204,16 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         cursorType = 'normal';
     }
 
+    const containerClass = classNames({
+        image_preview_div: true,
+        fullscreen: zoom >= maxCanvasZoom,
+        normal: zoom < maxCanvasZoom,
+    });
+
     return (
         <div
             ref={containerRef}
-            className={`image_preview_div__${zoom >= maxCanvasZoom ? 'fullscreen' : 'normal'}`}
+            className={containerClass}
         >
             <canvas
                 onMouseDown={handleMouseDown}
