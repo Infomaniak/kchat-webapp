@@ -29,6 +29,13 @@ build_docker_image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint:
       - ''
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - .yarn/cache/
+      - .yarn/install-state.gz
   rules:
     - if: $DEPLOY_VARIABLE == "prod"
       when: on_success
@@ -85,10 +92,11 @@ unit_test:
         - yarn.lock
     paths:
       - .yarn/cache/
+      - .yarn/install-state.gz
       - coverage/
   before_script:
     - npx yarn
-    - npx yarn run build
+    - npx yarn build
   script:
     # typescript
     # - npm run check-types
@@ -97,7 +105,7 @@ unit_test:
     # - npm run check
 
     # unit tests
-    - yarn run test-ci
+    - npx yarn test-ci
 
 pages:
   stage: test
