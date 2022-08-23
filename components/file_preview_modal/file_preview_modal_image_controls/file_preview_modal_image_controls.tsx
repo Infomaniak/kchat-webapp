@@ -1,16 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {ChangeEvent, memo, useEffect, useState} from 'react';
-import {PlusIcon, MinusIcon} from '@infomaniak/compass-icons/components';
+import React, {ChangeEvent, memo, useEffect, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {clamp} from 'lodash';
 
-import {minZoom, zoom} from '../image_preview';
-import './file_preview_modal_image_controls.scss';
+import {PlusIcon, MinusIcon} from '@infomaniak/compass-icons/components';
 
-let zoomInButtonDisabled = false;
-let zoomOutButtonDisabled = true;
+import {minZoomExport, zoomExport} from '../image_preview';
+import './file_preview_modal_image_controls.scss';
 
 export type ZoomValue = 'A' | 'W' | 'H' | number;
 
@@ -25,19 +23,8 @@ const FilePreviewModalImageControls = ({toolbarZoom, setToolbarZoom}: Props) => 
     const [zoomText, setZoomText] = useState<string>();
     const [selectedZoomValue, setSelectedZoomValue] = useState<ZoomValue | 'customZoom'>();
 
-    const plusSign = (
-        <PlusIcon
-            size={16}
-            color='currentColor'
-        />
-    );
-
-    const minusSign = (
-        <MinusIcon
-            size={16}
-            color='currentColor'
-        />
-    );
+    const zoomInButtonDisabled = useRef(false);
+    const zoomOutButtonDisabled = useRef(true);
 
     // Initialize dropdown values
     const {formatMessage} = useIntl();
@@ -91,21 +78,21 @@ const FilePreviewModalImageControls = ({toolbarZoom, setToolbarZoom}: Props) => 
     };
 
     const makeZoomHandler = (delta: number) => () => {
-        let newToolbarZoom = typeof toolbarZoom === 'string' ? zoom : toolbarZoom;
+        let newToolbarZoom = typeof toolbarZoom === 'string' ? zoomExport : toolbarZoom;
         newToolbarZoom = Math.round(newToolbarZoom * 10) / 10;
-        newToolbarZoom = clamp(newToolbarZoom + delta, minZoom, 5);
-        setToolbarZoom(newToolbarZoom === minZoom ? 'A' : newToolbarZoom);
+        newToolbarZoom = clamp(newToolbarZoom + delta, minZoomExport, 5);
+        setToolbarZoom(newToolbarZoom === minZoomExport ? 'A' : newToolbarZoom);
     };
 
     // Callbacks
     useEffect(() => {
         if (typeof toolbarZoom === 'number') {
             setZoomText(`${Math.round(toolbarZoom * 100)}%`);
-            zoomInButtonDisabled = toolbarZoom >= 5;
-            zoomOutButtonDisabled = toolbarZoom <= minZoom;
+            zoomInButtonDisabled.current = toolbarZoom >= 5;
+            zoomOutButtonDisabled.current = toolbarZoom <= minZoomExport;
         } else if (toolbarZoom === 'A') {
-            zoomInButtonDisabled = false;
-            zoomOutButtonDisabled = true;
+            zoomInButtonDisabled.current = false;
+            zoomOutButtonDisabled.current = true;
         }
 
         if (zoomLevels.has(toolbarZoom)) {
@@ -113,7 +100,6 @@ const FilePreviewModalImageControls = ({toolbarZoom, setToolbarZoom}: Props) => 
         } else {
             setSelectedZoomValue('customZoom');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [toolbarZoom]);
 
     // Render
@@ -123,18 +109,24 @@ const FilePreviewModalImageControls = ({toolbarZoom, setToolbarZoom}: Props) => 
                 id={'zoomOutButton'}
                 onClick={makeZoomHandler(-0.1)}
                 className={'image-controls__button'}
-                disabled={zoomOutButtonDisabled}
+                disabled={zoomOutButtonDisabled.current}
             >
-                {minusSign}
+                <MinusIcon
+                    size={16}
+                    color='currentColor'
+                />
             </button>
 
             <button
                 id={'zoomInButton'}
                 onClick={makeZoomHandler(0.1)}
                 className={'image-controls__button'}
-                disabled={zoomInButtonDisabled}
+                disabled={zoomInButtonDisabled.current}
             >
-                {plusSign}
+                <PlusIcon
+                    size={16}
+                    color='currentColor'
+                />
             </button>
 
             <select
