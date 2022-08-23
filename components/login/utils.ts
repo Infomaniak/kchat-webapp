@@ -131,8 +131,6 @@ console.log("Go refresh token")
             setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN), false, true);
         }
         console.log("token refreshed")
-        // Refresh the websockets as we just changed Bearer Token
-        reconnectWebSocket();
 
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
@@ -141,6 +139,9 @@ console.log("Go refresh token")
             type: 'TOKEN_REFRESHED',
             token: resp.access_token || '',
         });
+
+        // Refresh the websockets as we just changed Bearer Token
+        reconnectWebSocket();
 
         if (redirectToTeam) {
             redirectUserToDefaultTeam();
