@@ -104,7 +104,7 @@ unit_test:
     # - npm run check
 
     # unit tests
-    - npx yarn test-ci
+    - npm run test-ci
 
 pages:
   stage: test
