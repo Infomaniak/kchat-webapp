@@ -96,8 +96,6 @@ unit_test:
       - coverage/
   before_script:
     - npx yarn
-    - npx yarn workspace @mattermost/components build
-    - npx yarn build
   script:
     # typescript
     # - npm run check-types
