@@ -46,7 +46,7 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
 
     const handleAccept = () => {
         window.open(MODIFY_OFFER_LINK, '_blank', 'noreferrer')?.focus();
-        dispatch(closeModal(ModalIdentifiers.OFFERS));
+        handleOnClose();
     };
 
     return (
