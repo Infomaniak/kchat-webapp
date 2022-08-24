@@ -1,3 +1,67 @@
+## 0.2.9-rc.2 (2022-08-24)
+
+## Fixed (1 change)
+
+- [Fix edit profile in popover and add env to links](kchat/webapp@1a9c238fb4f5d38c40d934dda03c80b42abf362f) by @florent.glauda ([merge request](kchat/webapp!105))
+
+## 0.2.9-rc.1 (2022-08-24)
+
+No changes.
+
+## 0.2.8-rc.13 (2022-08-24)
+
+## Fixed (1 change)
+
+- [Clear fix WS reconnection](kchat/webapp@03b90ab3841a04ed55ea60ff9780fe8bb9fd4de6) by @florent.glauda ([merge request](kchat/webapp!104))
+
+## 0.2.8-rc.12 (2022-08-24)
+
+## Fixed (1 change)
+
+- [Clear fix WS reconnection](kchat/webapp@03b90ab3841a04ed55ea60ff9780fe8bb9fd4de6) by @florent.glauda ([merge request](kchat/webapp!104))
+
+## 0.2.8-rc.11 (2022-08-23)
+
+No changes.
+
+## 0.2.8-rc.9 (2022-08-23)
+
+No changes.
+
+## 0.2.8-rc.8 (2022-08-23)
+
+No changes.
+
+## 0.2.8-rc.7 (2022-08-23)
+
+No changes.
+
+## 0.2.8-rc.5 (2022-08-23)
+
+No changes.
+
+## 0.2.8-rc.4 (2022-08-22)
+
+No changes.
+
+## 0.2.8-rc.3 (2022-08-22)
+
+No changes.
+
+## 0.2.7 (2022-08-22)
+
+## Changed (1 change)
+
+- [simplify fetch interceptor](kchat/webapp@525eedf0eb8950656970a81931b93af088576160) by @antonbuksa
+
+## 0.2.6 (2022-08-22)
+
+No changes.
+
+## 0.2.5-rc.7 (2022-08-22)
+
+No changes.
+
 ## 0.2.5-rc.6 (2022-08-22)
 
 No changes.
