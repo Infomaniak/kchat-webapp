@@ -1,3 +1,19 @@
+## 0.2.9-rc.1 (2022-08-24)
+
+No changes.
+
+## 0.2.8-rc.13 (2022-08-24)
+
+## Fixed (1 change)
+
+- [Clear fix WS reconnection](kchat/webapp@03b90ab3841a04ed55ea60ff9780fe8bb9fd4de6) by @florent.glauda ([merge request](kchat/webapp!104))
+
+## 0.2.8-rc.12 (2022-08-24)
+
+## Fixed (1 change)
+
+- [Clear fix WS reconnection](kchat/webapp@03b90ab3841a04ed55ea60ff9780fe8bb9fd4de6) by @florent.glauda ([merge request](kchat/webapp!104))
+
 ## 0.2.8-rc.11 (2022-08-23)
 
 No changes.
