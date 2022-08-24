@@ -307,7 +307,7 @@ function hasLimitation(state: string | null = null, action: GenericAction) {
 
     switch (type) {
     case SearchTypes.RECEIVED_SEARCH_POSTS:
-        return data.has_limitation;
+        return data?.has_limitation || null;
     default:
         return state;
     }

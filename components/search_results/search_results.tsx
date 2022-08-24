@@ -258,11 +258,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                     {'sidebar-expanded': isSideBarExpanded},
                 ])}
             >
-                <div>
-                    <ChannelMessageLimitationBanner
-                        olderMessagesDate={hasLimitDate}
-                    />
-                </div>
+                <ChannelMessageLimitationBanner olderMessagesDate={hasLimitDate}/>
                 <NoResultsIndicator {...noResultsProps}/>
             </div>
         );

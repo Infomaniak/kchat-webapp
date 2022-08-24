@@ -1,25 +1,17 @@
 .channel-limitation-banner {
     display: flex;
-    flex-direction: row;
     align-items: center;
     padding: 8px 16px;
     margin: 0 15px 10px;
     background: #f4f6fd;
     border-radius: 10px;
-    color: #333;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
     gap: 12px;
-    line-height: 20px;
 
     &__button {
         padding: 0 !important;
         border: none;
         background: none !important;
         color: #0098ff;
-        cursor: pointer;
-        font-family: arial, sans-serif; /* input has OS specific font-family */
     }
 
     &__button:hover {

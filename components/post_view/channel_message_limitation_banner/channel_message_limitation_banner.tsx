@@ -5,19 +5,20 @@
 
 import React from 'react';
 import {useDispatch} from 'react-redux';
-
 import {FormattedDate, FormattedMessage} from 'react-intl';
 
-import OffersModal from 'components/offers_modal/offers_modal';
+import {DispatchFunc} from 'mattermost-redux/types/actions';
+
 import {openModal} from 'actions/views/modals';
 import {ModalIdentifiers} from 'utils/constants';
-
-import './channel_message_limitation_banner.scss';
-import {DispatchFunc} from 'mattermost-redux/types/actions';
-import MaxMessagesIconSvg from 'components/common/svg_images_components/max_messages_icon_svg';
 import {getMonthLong} from 'utils/i18n';
 import {getCurrentLocale} from 'selectors/i18n';
 import store from 'stores/redux_store.jsx';
+
+import OffersModal from 'components/offers_modal/offers_modal';
+import MaxMessagesIconSvg from 'components/common/svg_images_components/max_messages_icon_svg';
+
+import './channel_message_limitation_banner.scss';
 
 const getState = store.getState;
 

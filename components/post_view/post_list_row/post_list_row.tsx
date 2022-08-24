@@ -6,6 +6,7 @@ import {FormattedMessage} from 'react-intl';
 import classNames from 'classnames';
 
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
+import {hasLimitDate} from 'mattermost-redux/actions/posts';
 
 import {Channel} from '@mattermost/types/channels';
 
@@ -19,7 +20,6 @@ import ChannelIntroMessage from 'components/post_view/channel_intro_message/';
 import ChannelMessageLimitationBanner from '../channel_message_limitation_banner/channel_message_limitation_banner';
 import {isIdNotPost} from 'utils/post_utils';
 import {PostListRowListIds, Locations} from 'utils/constants';
-import {hasLimitDate} from 'mattermost-redux/actions/posts';
 
 export type PostListRowProps = {
     channel?: Channel;

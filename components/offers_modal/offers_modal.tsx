@@ -51,9 +51,9 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
 
     return (
         <GenericModal
-            className={'ConfirmLicenseRemovalModal'}
+            className={'OffersModal'}
             show={show}
-            id='ConfirmLicenseRemovalModal'
+            id='OffersModal'
             onExited={handleOnClose}
         >
             <>
