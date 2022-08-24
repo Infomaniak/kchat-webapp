@@ -223,21 +223,6 @@ ProfilePopoverState
         );
         this.handleCloseModals();
     };
-    handleEditAccountSettings = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        if (!this.props.user) {
-            return;
-        }
-        if (this.props.hide) {
-            this.props.hide();
-        }
-        this.props.actions.openModal({
-            modalId: ModalIdentifiers.USER_SETTINGS,
-            dialogType: UserSettingsModal,
-            dialogProps: {isContentProductSettings: false},
-        });
-        this.handleCloseModals();
-    };
     showCustomStatusModal = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (this.props.hide) {
