@@ -1,3 +1,9 @@
+## 0.2.9-rc.2 (2022-08-24)
+
+## Fixed (1 change)
+
+- [Fix edit profile in popover and add env to links](kchat/webapp@1a9c238fb4f5d38c40d934dda03c80b42abf362f) by @florent.glauda ([merge request](kchat/webapp!105))
+
 ## 0.2.9-rc.1 (2022-08-24)
 
 No changes.
