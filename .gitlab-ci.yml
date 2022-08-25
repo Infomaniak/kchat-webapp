@@ -22,11 +22,18 @@ workflow:
     - when: never
   
 eslint-sast:
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
     - when: never
+
 semgrep-sast:
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
@@ -88,6 +95,9 @@ container_scanning:
     - if: $DEPLOY_VARIABLE == "preprod"
       when: on_success
     - when: never
+  artifacts:
+    reports:
+      container_scanning: gl-container-scanning-report.json
 
 unit_test:
   stage: test
