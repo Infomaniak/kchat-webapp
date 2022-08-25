@@ -4,15 +4,28 @@ LABEL maintainer="Léopold Jacquot <leopold.jacquot@infomaniak.com>"
 
 WORKDIR /var/www/html
 
-COPY package*.json ./
+COPY scripts/*.sh /tmp/scripts/
 
-COPY .env ./
-
-RUN npm ci --prefer-offline --no-audit --no-fund
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    # Install common packages, non-root user, update yarn
+    && bash /tmp/scripts/node.sh
 
 COPY . .
 
-RUN make build
+RUN export $(xargs < ./.env)
+
+RUN yarn
+
+COPY . .
+
+# RUN yarn workspace @mattermost/types build
+# RUN yarn workspace @mattermost/client build
+
+RUN yarn workspace @mattermost/components build
+
+# RUN yarn workspace mattermost-webapp build
+
+RUN yarn build
 
 FROM nginx:1.22.0
 
