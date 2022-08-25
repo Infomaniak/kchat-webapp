@@ -7926,7 +7926,7 @@ __metadata:
   peerDependencies:
     react: ^15.0.0 || ^16.0.0
     react-dom: ^15.0.0 || ^16.0.0
-  checksum: f4efa6e841c73fa88e3ac59dddc487ec487ade492805ff47e95c2fc77454a1a21a6c4cfd9b21ec9876c07a47c3ae729e65c59a4b62d5b2bd69a91f4aba7bda7a
+  checksum: ec59328307c197705ded1c7438a5feae7cb4ed5e3b4c4364860bf4b4f4b1b6dfadf89fc9fa2dbc5ae409983f2852fc64d4fd501f1eed0f8ecdb7e52f61e02605
   languageName: node
   linkType: hard
 
@@ -15927,7 +15927,7 @@ __metadata:
   peerDependencies:
     react: ^0.14.9 || >=15.3.0
     react-dom: ^0.14.9 || >=15.3.0
-  checksum: de35c8f20de36b7852a01fbe0c4c0036dbdc55bfbf06e39533f80eb69288de8bf4ccd8a0bc399a9fbe0d6644bd441f2c42e2470334ea5342e6d2ce0af57bcdaf
+  checksum: d77e00bdae61b1c9558c5f2e546a2f204afa2e3ce5bf55a33adea58fe3a8c5eb6fa5117fe4c56a0cbf360a3d08327c57e6d0a97746d50c5b0faeaaf3875876fd
   languageName: node
   linkType: hard
 
