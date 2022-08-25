@@ -1,3 +1,13 @@
+## 0.2.12 (2022-08-25)
+
+## Fixed (1 change)
+
+- [fix token expire check](kchat/webapp@cf2a1f5264452fe4f51dd4229153c20a9176c499) by @antonbuksa
+
+## Other (1 change)
+
+- [set artifact paths for reports](kchat/webapp@1764437861fa1dfc693c9ce06200ae4f5a33b8fe) by @antonbuksa
+
 ## 0.2.11-rc.4 (2022-08-25)
 
 No changes.
