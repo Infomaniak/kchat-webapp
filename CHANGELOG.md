@@ -1,3 +1,9 @@
+## 0.2.13-rc.1 (2022-08-25)
+
+## Fixed (1 change)
+
+- [fix token expire check](kchat/webapp@cf2a1f5264452fe4f51dd4229153c20a9176c499) by @antonbuksa
+
 ## 0.2.12 (2022-08-25)
 
 ## Fixed (1 change)
