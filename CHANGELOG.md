@@ -1,3 +1,10 @@
+## 0.2.10 (2022-08-25)
+
+## Fixed (2 changes)
+
+- [Add excluded routes will not matches with SW](kchat/webapp@371a8c27c8e3d452c69a4e3b24291c62be0ac34a) by @florent.glauda ([merge request](kchat/webapp!108))
+- [add user check to prevent error](kchat/webapp@25258e99a4f685bcae92d3cb83ad8d5478199ee5) by @florent.glauda ([merge request](kchat/webapp!106))
+
 ## 0.2.9-rc.3 (2022-08-25)
 
 ## Fixed (2 changes)
