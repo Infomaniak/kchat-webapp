@@ -1,5 +1,5 @@
 include:
-- template: Auto-DevOps.gitlab-ci.yml
+- template: Security/SAST.gitlab-ci.yml
 
 stages:
   - test
@@ -20,6 +20,9 @@ workflow:
       variables:
         DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
     - when: never
+
+sast:
+  stage: test
 
 build_docker_image:
   stage: build
