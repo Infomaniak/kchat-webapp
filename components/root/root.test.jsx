@@ -82,7 +82,7 @@ describe('components/Root', () => {
     });
 
     test('should load user, config, and license on mount and redirect to defaultTeam on success', (done) => {
-        document.cookie = 'MMUSERID=userid';
+        document.cookie = 'SASESSION=userid';
         localStorage.setItem('was_logged_in', 'true');
 
         const props = {
@@ -110,7 +110,7 @@ describe('components/Root', () => {
     });
 
     test('should load user, config, and license on mount and should not redirect to defaultTeam id pathname is not root', (done) => {
-        document.cookie = 'MMUSERID=userid';
+        document.cookie = 'SASESSION=userid';
         localStorage.setItem('was_logged_in', 'true');
 
         const props = {

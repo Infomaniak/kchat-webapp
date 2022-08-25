@@ -4,11 +4,9 @@
 /* eslint-disable no-process-env */
 
 const childProcess = require('child_process');
-
 const path = require('path');
 
 const url = require('url');
-
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
@@ -19,10 +17,10 @@ const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const NPM_TARGET = process.env.npm_lifecycle_event; //eslint-disable-line no-process-env
 
-const targetIsRun = NPM_TARGET === 'run';
+const targetIsRun = NPM_TARGET?.startsWith('run');
 const targetIsTest = NPM_TARGET === 'test';
 const targetIsStats = NPM_TARGET === 'stats';
-const targetIsDevServer = NPM_TARGET === 'dev-server';
+const targetIsDevServer = NPM_TARGET?.startsWith('dev-server');
 
 const DEV = targetIsRun || targetIsStats || targetIsDevServer;
 
@@ -160,7 +158,7 @@ if (DEV) {
 }
 
 var config = {
-    entry: ['./root.jsx', 'root.html.ejs', './service-worker.js'],
+    entry: ['./root.jsx', 'root.html.ejs'],
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
@@ -365,7 +363,7 @@ var config = {
                 {from: 'images/admin-onboarding-background.jpg', to: 'images'},
                 {from: 'images/payment-method-illustration.png', to: 'images'},
                 {from: 'images/cloud-laptop.png', to: 'images'},
-                {from: 'service-worker.js', to: ''},
+                {from: 'images/bot_default_icon.png', to: 'images'},
             ],
         }),
 

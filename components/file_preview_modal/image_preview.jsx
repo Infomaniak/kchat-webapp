@@ -3,18 +3,6 @@
 
 /* eslint-disable react-hooks/exhaustive-deps */
 
-/*
-
-to do (in no order):
-- Zoom to where mouse is
-- Spacebar toggles dragging?
-- Add rotation?
-
-doing (in order):
-- fix style issue in toolbar on PDFs
-
-*/
-
 import PropTypes from 'prop-types';
 import React, {useRef, useMemo, useEffect, useState} from 'react';
 import {clamp} from 'lodash';

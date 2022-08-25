@@ -71,6 +71,7 @@ export async function generateCodeChallenge(codeVerifier: string) {
  */
 export function getChallengeAndRedirectToLogin() {
     const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
+    // const redirectTo = 'ktalk://auth-desktop';
     const codeVerifier = getCodeVerifier();
     let codeChallenge = '';
 
@@ -117,7 +118,6 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
     }
     Client4.setToken('');
     Client4.setCSRF('');
-
     Client4.refreshIKLoginToken(
         refreshToken,
         `${IKConstants.LOGIN_URL}`,
@@ -127,11 +127,17 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
             setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN), false, true);
         }
 
+        storeTokenResponse(resp);
+        LocalStorageStore.setWasLoggedIn(true);
+
+        navigator.serviceWorker.controller?.postMessage({
+            type: 'TOKEN_REFRESHED',
+            token: resp.access_token || '',
+        });
+
         // Refresh the websockets as we just changed Bearer Token
         reconnectWebSocket();
 
-        storeTokenResponse(resp);
-        LocalStorageStore.setWasLoggedIn(true);
         if (redirectToTeam) {
             redirectUserToDefaultTeam();
         }
