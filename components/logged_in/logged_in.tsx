@@ -82,7 +82,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
         // Initialize websocket
         WebSocketActions.initialize();
 
-        if (this.props.enableTimezone) {
+        if (this.props.enableTimezone && this.props.currentUser) {
             this.props.actions.autoUpdateTimezone(getBrowserTimezone());
         }
 

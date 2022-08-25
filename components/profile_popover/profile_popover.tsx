@@ -31,6 +31,7 @@ import {ServerError} from '@mattermost/types/errors';
 import {ModalData} from 'types/actions';
 
 import './profile_popover.scss';
+import {IKConstants} from '../../utils/constants-ik';
 
 interface ProfilePopoverProps extends Omit<React.ComponentProps<typeof Popover>, 'id'>{
 
@@ -222,21 +223,6 @@ ProfilePopoverState
         );
         this.handleCloseModals();
     };
-    handleEditAccountSettings = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        if (!this.props.user) {
-            return;
-        }
-        if (this.props.hide) {
-            this.props.hide();
-        }
-        this.props.actions.openModal({
-            modalId: ModalIdentifiers.USER_SETTINGS,
-            dialogType: UserSettingsModal,
-            dialogProps: {isContentProductSettings: false},
-        });
-        this.handleCloseModals();
-    };
     showCustomStatusModal = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (this.props.hide) {
@@ -333,6 +319,12 @@ ProfilePopoverState
 
         return {customStatusContent, expiryContent};
     }
+
+    redirectToManagerProfile = (e: React.MouseEvent<HTMLAnchorElement>): void => {
+        e.preventDefault();
+        window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
+    };
+
     render() {
         if (!this.props.user) {
             return null;
@@ -523,7 +515,7 @@ ProfilePopoverState
                 >
                     <a
                         href='#'
-                        onClick={this.handleEditAccountSettings}
+                        onClick={this.redirectToManagerProfile}
                     >
                         <LocalizedIcon
                             className='fa fa-pencil-square-o'

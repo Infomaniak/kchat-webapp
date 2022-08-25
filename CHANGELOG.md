@@ -1,3 +1,39 @@
+## 0.2.10 (2022-08-25)
+
+## Fixed (2 changes)
+
+- [Add excluded routes will not matches with SW](kchat/webapp@371a8c27c8e3d452c69a4e3b24291c62be0ac34a) by @florent.glauda ([merge request](kchat/webapp!108))
+- [add user check to prevent error](kchat/webapp@25258e99a4f685bcae92d3cb83ad8d5478199ee5) by @florent.glauda ([merge request](kchat/webapp!106))
+
+## 0.2.9-rc.3 (2022-08-25)
+
+## Fixed (2 changes)
+
+- [add user check to prevent error](kchat/webapp@25258e99a4f685bcae92d3cb83ad8d5478199ee5) by @florent.glauda ([merge request](kchat/webapp!106))
+- [Fix edit profile in popover and add env to links](kchat/webapp@1a9c238fb4f5d38c40d934dda03c80b42abf362f) by @florent.glauda ([merge request](kchat/webapp!105))
+
+## 0.2.9-rc.2 (2022-08-24)
+
+## Fixed (1 change)
+
+- [Fix edit profile in popover and add env to links](kchat/webapp@1a9c238fb4f5d38c40d934dda03c80b42abf362f) by @florent.glauda ([merge request](kchat/webapp!105))
+
+## 0.2.9-rc.1 (2022-08-24)
+
+No changes.
+
+## 0.2.8-rc.13 (2022-08-24)
+
+## Fixed (1 change)
+
+- [Clear fix WS reconnection](kchat/webapp@03b90ab3841a04ed55ea60ff9780fe8bb9fd4de6) by @florent.glauda ([merge request](kchat/webapp!104))
+
+## 0.2.8-rc.12 (2022-08-24)
+
+## Fixed (1 change)
+
+- [Clear fix WS reconnection](kchat/webapp@03b90ab3841a04ed55ea60ff9780fe8bb9fd4de6) by @florent.glauda ([merge request](kchat/webapp!104))
+
 ## 0.2.8-rc.11 (2022-08-23)
 
 No changes.

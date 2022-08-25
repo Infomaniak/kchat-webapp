@@ -74,8 +74,9 @@ self.addEventListener('fetch', (event) => {
     const shouldMatchRoute = routesToMatch.some((rx) => route.match(rx));
 
     const encodeBody = event.request.url.includes('broadcasting/auth');
+    const excludedRoutes = event.request.url.includes('/roles/') || event.request.url.includes(('/users/status'));
 
-    if (shouldMatchRoute) {
+    if (shouldMatchRoute && !excludedRoutes) {
         // const authHeaderSplited = authHeader.split(' ');
 
         if (authHeader) {

@@ -21,6 +21,9 @@ workflow:
         DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
     - when: never
 
+sast:
+  stage: test
+
 build_docker_image:
   stage: build
   tags:
