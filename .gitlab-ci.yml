@@ -23,6 +23,10 @@ workflow:
 
 sast:
   stage: test
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - when: never
 
 build_docker_image:
   stage: build
