@@ -80,6 +80,8 @@ container_scanning:
   stage: build
   needs:
     - build_docker_image
+  variables:
+    DOCKER_IMAGE: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
   rules:
     - if: $DEPLOY_VARIABLE == "prod"
       when: on_success
