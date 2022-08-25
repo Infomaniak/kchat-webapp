@@ -1,3 +1,10 @@
+## 0.2.9-rc.3 (2022-08-25)
+
+## Fixed (2 changes)
+
+- [add user check to prevent error](kchat/webapp@25258e99a4f685bcae92d3cb83ad8d5478199ee5) by @florent.glauda ([merge request](kchat/webapp!106))
+- [Fix edit profile in popover and add env to links](kchat/webapp@1a9c238fb4f5d38c40d934dda03c80b42abf362f) by @florent.glauda ([merge request](kchat/webapp!105))
+
 ## 0.2.9-rc.2 (2022-08-24)
 
 ## Fixed (1 change)
