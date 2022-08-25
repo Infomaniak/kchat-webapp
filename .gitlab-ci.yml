@@ -31,11 +31,6 @@ semgrep-sast:
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
     - when: never
-container_scanning:
-  rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
-      when: on_success
-    - when: never
 
 build_docker_image:
   stage: build
@@ -79,6 +74,17 @@ build_docker_image:
         --build-arg ENVIRONMENT=${environment} \
         --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
         ${args}"
+
+container_scanning:
+  stage: build
+  needs:
+    - build_docker_image
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - when: never
 
 unit_test:
   stage: test
