@@ -1,6 +1,5 @@
 include:
-- template: Security/SAST.gitlab-ci.yml
-- template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
 stages:
   - test
   - build
@@ -19,15 +18,6 @@ workflow:
     - if: "$CI_MERGE_REQUEST_ID"
       variables:
         DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
-    - when: never
-
-sast:
-  stage: test
-  environment:
-    name: "$DEPLOY_VARIABLE"
-  rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
-      when: on_success
     - when: never
 
 build_docker_image:
