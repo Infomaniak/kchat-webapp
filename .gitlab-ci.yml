@@ -1,6 +1,6 @@
 include:
-- template: Security/SAST.gitlab-ci.yml
-- template: Security/Container-Scanning.gitlab-ci.yml
+- template: Auto-DevOps.gitlab-ci.yml
+
 stages:
   - test
   - build
