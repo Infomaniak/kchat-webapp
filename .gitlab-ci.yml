@@ -1,5 +1,6 @@
 include:
   - template: Security/SAST.gitlab-ci.yml
+  # - template: Security/Container-Scanning.gitlab-ci.yml
 stages:
   - test
   - build
@@ -19,6 +20,42 @@ workflow:
       variables:
         DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
     - when: never
+  
+eslint-sast:
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - when: never
+nodejs-scan-sast:
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - when: never
+semgrep-sast:
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - when: never
+security-code-scan-sast:
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - when: never
+# sobelow-sast:
+#   rules:
+#     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+#       when: on_success
+#     - when: never
+# spotbugs-sast:
+#   rules:
+#     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+#       when: on_success
+#     - when: never
+# container_scanning:
+#   rules:
+#     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+#       when: on_success
+#     - when: never
 
 build_docker_image:
   stage: build
