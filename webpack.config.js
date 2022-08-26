@@ -318,7 +318,7 @@ var config = {
                 // eslint-disable-next-line no-process-env
                 WEBCOMPONENT_ENDPOINT: process.env.WEBCOMPONENT_ENDPOINT, // || 'https://web-components.storage.infomaniak.com/current',
                 // eslint-disable-next-line no-process-env
-                WEBCOMPONENT_API_ENDPOINT: process.env.WEBCOMPONENT_ENDPOINT, // || 'https://welcome.infomaniak.com',
+                WEBCOMPONENT_API_ENDPOINT: process.env.WEBCOMPONENT_API_ENDPOINT, // || 'https://welcome.infomaniak.com',
             },
         }),
         new HtmlWebpackPlugin({
