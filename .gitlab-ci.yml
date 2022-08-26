@@ -47,13 +47,6 @@ build_docker_image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint:
       - ''
-  cache:
-    key:
-      files:
-        - yarn.lock
-    paths:
-      - .yarn/cache/
-      - .yarn/install-state.gz
   rules:
     - if: $DEPLOY_VARIABLE == "prod"
       when: on_success
