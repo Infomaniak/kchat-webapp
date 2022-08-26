@@ -6,6 +6,8 @@ WORKDIR /var/www/html
 
 COPY scripts/*.sh /tmp/scripts/
 
+COPY .env ./
+
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     # Install common packages, non-root user, update yarn
     && bash /tmp/scripts/node.sh
