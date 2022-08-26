@@ -87,7 +87,7 @@ export type PostList = {
     posts: Record<string, Post>;
     next_post_id: string;
     prev_post_id: string;
-    first_inaccessible_post_time: number;
+    has_limitation: string | null;
 };
 
 export type PaginatedPostList = PostList & {

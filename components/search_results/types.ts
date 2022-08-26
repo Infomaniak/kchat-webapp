@@ -43,6 +43,7 @@ export type StateProps = {
     isSearchAtEnd: boolean;
     isSearchFilesAtEnd: boolean;
     compactDisplay: boolean;
+    hasLimitations: string | null;
 }
 
 export type IntlProps = {

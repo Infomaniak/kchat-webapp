@@ -287,6 +287,12 @@
         }
     }
 
+    .sidebar--right__limitation-noresult {
+        width: 100%;
+        padding-top: 15px;
+        transition: width 0.25s ease-in;
+    }
+
     .suggestion-list__content {
         max-height: 120px;
     }

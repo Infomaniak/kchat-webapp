@@ -137,7 +137,7 @@ const state: GlobalState = {
             pinned: {},
             isSearchingTerm: false,
             isSearchGettingMore: false,
-            isLimitedResults: -1,
+            hasLimitation: -1,
         },
         typing: {},
         roles: {
