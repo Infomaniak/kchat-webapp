@@ -23,9 +23,7 @@ RUN yarn workspace @mattermost/components build
 
 # RUN yarn workspace mattermost-webapp build
 
-RUN cat .env
-
-RUN make build
+RUN export $(xargs < ./.env) && yarn build
 
 # COPY .yarn/cache/* .yarn/cache/
 
