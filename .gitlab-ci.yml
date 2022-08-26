@@ -80,11 +80,6 @@ build_docker_image:
         --context ${CI_PROJECT_DIR} \
         --build-arg SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
         --build-arg ENVIRONMENT=${environment} \
-        --build-arg WEBCOMPONENT_ENDPOINT=${WEBCOMPONENT_ENDPOINT} \
-        --build-arg WEBCOMPONENT_API_ENDPOINT=${WEBCOMPONENT_API_ENDPOINT} \
-        --build-arg KMEET_ENDPOINT=${KMEET_ENDPOINT} \
-        --build-arg LOGIN_ENDPOINT=${LOGIN_ENDPOINT} \
-        --build-arg MANAGER_ENDPOINT=${MANAGER_ENDPOINT} \
         --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
         ${args}"
 
