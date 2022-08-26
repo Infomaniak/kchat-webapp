@@ -150,11 +150,11 @@ if (DEV) {
     env.NODE_ENV = JSON.stringify('production');
     env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || '');
     env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
-    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || '');
-    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || '');
-    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || '');
-    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || '');
-    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || '');
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/next');
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.infomaniak.com');
+    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.infomaniak.com/');
+    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.infomaniak.com/');
 }
 
 var config = {
