@@ -1,6 +1,6 @@
 {
   "name": "@mattermost/types",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "Shared type definitions used by the Mattermost web app",
   "keywords": [
     "mattermost"
@@ -19,7 +19,7 @@
     "url": "github:mattermost/mattermost-webapp",
     "directory": "packages/types"
   },
-  "peerDependencies": {
+  "devDependencies": {
     "typescript": "^4.3"
   },
   "peerDependenciesMeta": {
@@ -28,7 +28,8 @@
     }
   },
   "scripts": {
-    "build": "tsc -b -v",
+    "build": "tsc",
+    "run": "tsc --watch --preserveWatchOutput",
     "clean": "rm -rf tsconfig.tsbuildinfo ./lib"
   }
 }

@@ -12,7 +12,7 @@ import type {AppBinding, AppCallRequest, AppCallResponse} from '@mattermost/type
 import {Audit} from '@mattermost/types/audits';
 import {UserAutocomplete, AutocompleteSuggestion} from '@mattermost/types/autocomplete';
 import {Bot, BotPatch} from '@mattermost/types/bots';
-import {Product, SubscriptionResponse, CloudCustomer, Address, CloudCustomerPatch, Invoice, Limits, IntegrationsUsage, NotifyAdminRequest} from '@mattermost/types/cloud';
+import {Product, SubscriptionResponse, CloudCustomer, Address, CloudCustomerPatch, Invoice, Limits, IntegrationsUsage, NotifyAdminRequest, Subscription, ValidBusinessEmail} from '@mattermost/types/cloud';
 import {ChannelCategory, OrderedChannelCategories} from '@mattermost/types/channel_categories';
 import {
     Channel,
@@ -217,9 +217,6 @@ export default class Client4 {
 
     setToken(token: string) {
         this.token = token;
-        if ('serviceWorker' in navigator) {
-            navigator?.serviceWorker?.controller?.postMessage({token});
-        }
     }
 
     setCSRF(csrfToken: string) {
@@ -3871,21 +3868,21 @@ export default class Client4 {
     }
 
     requestCloudTrial = (subscriptionId: string, email = '') => {
-        return this.doFetchWithResponse<CloudCustomer>(
+        return this.doFetchWithResponse<Subscription>(
             `${this.getCloudRoute()}/request-trial`,
             {method: 'put', body: JSON.stringify({email, subscription_id: subscriptionId})},
         );
     }
 
     validateBusinessEmail = (email = '') => {
-        return this.doFetchWithResponse<CloudCustomer>(
+        return this.doFetchWithResponse<ValidBusinessEmail>(
             `${this.getCloudRoute()}/validate-business-email`,
             {method: 'post', body: JSON.stringify({email})},
         );
     }
 
     validateWorkspaceBusinessEmail = () => {
-        return this.doFetchWithResponse<CloudCustomer>(
+        return this.doFetchWithResponse<ValidBusinessEmail>(
             `${this.getCloudRoute()}/validate-workspace-business-email`,
             {method: 'post'},
         );
@@ -4131,6 +4128,10 @@ export default class Client4 {
                         this.setToken(response.access_token);
                         this.setCSRF(response.access_token);
                         this.setAuthHeader = true;
+                        navigator.serviceWorker.controller?.postMessage({
+                            type: 'TOKEN_REFRESHED',
+                            token: response.access_token || '',
+                        });
                         localStorage.removeItem('refreshingToken');
                     }).catch(() => {
                         localStorage.removeItem('refreshingToken');

@@ -14,7 +14,7 @@ import {
     isCurrentChannelArchived,
 } from 'mattermost-redux/selectors/entities/channels';
 import {GlobalState} from 'types/store';
-import {Constants} from 'utils/constants';
+import {Constants, RHSStates} from 'utils/constants';
 import {getCurrentRelativeTeamUrl, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {
     getActiveProfilesInCurrentChannelWithoutSorting,
@@ -29,7 +29,7 @@ import {openModal} from 'actions/views/modals';
 import {closeRightHandSide, goBack, setEditChannelMembers} from 'actions/views/rhs';
 import {getIsEditingMembers, getPreviousRhsState} from 'selectors/rhs';
 import {setChannelMembersRhsSearchTerm} from 'actions/views/search';
-import {loadProfilesAndReloadChannelMembersAll, searchProfilesAndChannelMembers} from 'actions/user_actions';
+import {loadProfilesAndReloadChannelMembers, loadProfilesAndReloadChannelMembersAll, searchProfilesAndChannelMembers} from 'actions/user_actions';
 import {Channel, ChannelMembership} from '@mattermost/types/channels';
 import {loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
 
@@ -129,7 +129,12 @@ function mapStateToProps(state: GlobalState) {
     }
 
     const teamUrl = getCurrentRelativeTeamUrl(state);
-    const hasRhsPrevState = Boolean(getPreviousRhsState(state));
+    const prevRhsState = getPreviousRhsState(state);
+    const hasInfoPrevState = prevRhsState === RHSStates.CHANNEL_INFO ||
+        prevRhsState === RHSStates.CHANNEL_FILES ||
+        prevRhsState === RHSStates.PIN;
+
+    const canGoBack = Boolean(hasInfoPrevState);
     const editing = getIsEditingMembers(state);
 
     const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
@@ -140,7 +145,7 @@ function mapStateToProps(state: GlobalState) {
         membersCount,
         searchTerms,
         teamUrl,
-        canGoBack: hasRhsPrevState,
+        canGoBack,
         canManageMembers,
         channelMembers,
         editing,
@@ -155,6 +160,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             closeRightHandSide,
             goBack,
             setChannelMembersRhsSearchTerm,
+            loadProfilesAndReloadChannelMembers,
             loadProfilesAndReloadChannelMembersAll,
             loadMyChannelMemberAndRole,
             setEditChannelMembers,

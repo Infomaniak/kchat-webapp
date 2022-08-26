@@ -41,6 +41,7 @@ describe('components/channel_layout/CenterChannel', () => {
         },
         callExpandedView: true,
         insightsAreEnabled: true,
+        isMobileView: false,
         actions: {
             getProfiles: jest.fn,
         },

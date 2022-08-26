@@ -148,6 +148,7 @@ export default class Root extends React.PureComponent {
 
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             // Enable authHeader and set bearer token
@@ -156,11 +157,19 @@ export default class Root extends React.PureComponent {
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
+                navigator.serviceWorker.controller?.postMessage({
+                    type: 'TOKEN_REFRESHED',
+                    token: token || '',
+                });
             }
 
             // If need to refresh the token
             if (tokenExpire && checkIKTokenIsExpired()) {
                 refreshIKToken(true);
+            }
+
+            if (!token && !refreshToken) {
+                this.props.history.push('/login' + this.props.location.search);
             }
         } else {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
@@ -278,36 +287,54 @@ export default class Root extends React.PureComponent {
 
         const iosDownloadLink = getConfig(store.getState()).IosAppDownloadLink;
         const androidDownloadLink = getConfig(store.getState()).AndroidAppDownloadLink;
+        const desktopAppDownloadLink = getConfig(store.getState()).AppDownloadLink;
 
         const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
 
         // redirect to the mobile landing page if the user hasn't seen it before
-        let mobileLanding;
+        let landing;
         if (UserAgent.isAndroidWeb()) {
-            mobileLanding = androidDownloadLink;
+            landing = androidDownloadLink;
         } else if (UserAgent.isIosWeb()) {
-            mobileLanding = iosDownloadLink;
+            landing = iosDownloadLink;
+        } else {
+            landing = desktopAppDownloadLink;
         }
 
-        if (mobileLanding && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing')) {
+        if (landing && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !this.props.location.href?.includes('.test.mattermost.com') && !UserAgent.isDesktopApp()) {
             this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
             BrowserStore.setLandingPageSeen(true);
         }
 
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
             const tokenExpireIn = (1000 * tokenExpire) - Date.now();
 
             // Enable authHeader and set bearer token
-            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
+            if (token && tokenExpire && !checkIKTokenIsExpired()) {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
 
+                navigator.serviceWorker.controller?.postMessage({
+                    type: 'TOKEN_REFRESHED',
+                    token: token || '',
+                });
+
                 // Set a callback to refresh token a little while before it expires
                 setTimeout(refreshIKToken, tokenExpireIn - REFRESH_TOKEN_TIME_MARGIN, false, true);
+            }
+
+            // If need to refresh the token
+            if (tokenExpire && checkIKTokenIsExpired()) {
+                refreshIKToken(true);
+            }
+
+            if (!token && !refreshToken) {
+                this.props.history.push('/login' + this.props.location.search);
             }
         }
 
@@ -381,19 +408,28 @@ export default class Root extends React.PureComponent {
     componentDidMount() {
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             // Enable authHeader and set bearer token
-            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
+            if (token && tokenExpire && !checkIKTokenIsExpired()) {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
+                navigator.serviceWorker.controller?.postMessage({
+                    type: 'TOKEN_REFRESHED',
+                    token: token || '',
+                });
             }
 
             // If need to refresh the token
             if (tokenExpire && checkIKTokenIsExpired()) {
                 refreshIKToken(true);
+            }
+
+            if (!token && !refreshToken) {
+                this.props.history.push('/login' + this.props.location.search);
             }
         }
 
