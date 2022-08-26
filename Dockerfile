@@ -23,9 +23,9 @@ RUN yarn workspace @mattermost/components build
 
 RUN yarn build
 
-COPY .yarn/cache/* .yarn/cache/
+# COPY .yarn/cache/* .yarn/cache/
 
-COPY .yarn/install-state.gz .yarn/install-state.gz
+# COPY .yarn/install-state.gz .yarn/install-state.gz
 
 FROM nginx:1.22.0
 
