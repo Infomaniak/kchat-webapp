@@ -75,8 +75,7 @@ build: ## Builds the app
 
 	rm -rf dist
 
-	export $(xargs < ./.env)
-	NODE_ENV=production webpack
+	export $(xargs < ./.env) && yarn build
 
 run: node_modules ## Runs app
 	@echo Running mattermost Webapp for development
