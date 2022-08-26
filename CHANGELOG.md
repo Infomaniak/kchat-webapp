@@ -1,3 +1,9 @@
+## 0.2.15-rc.2 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
 ## 0.2.14 (2022-08-26)
 
 No changes.
