@@ -1,3 +1,77 @@
+## 0.2.16-rc.1 (2022-08-26)
+
+## Changed (1 change)
+
+- [uncomment advanced user settings for autoscroll opt](kchat/webapp@aa3edcf67cc09e9acae0a63ef4b836b2f4232fba) by @antonbuksa
+
+## 0.2.15-rc.15 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.15-rc.13 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.15-rc.10 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.15-rc.6 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.15-rc.5 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.15-rc.2 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.14 (2022-08-26)
+
+No changes.
+
+## 0.2.13-rc.3 (2022-08-25)
+
+## Fixed (1 change)
+
+- [fix token expire check](kchat/webapp@cf2a1f5264452fe4f51dd4229153c20a9176c499) by @antonbuksa
+
+## 0.2.13-rc.2 (2022-08-25)
+
+## Fixed (1 change)
+
+- [fix token expire check](kchat/webapp@cf2a1f5264452fe4f51dd4229153c20a9176c499) by @antonbuksa
+
+## 0.2.13-rc.1 (2022-08-25)
+
+## Fixed (1 change)
+
+- [fix token expire check](kchat/webapp@cf2a1f5264452fe4f51dd4229153c20a9176c499) by @antonbuksa
+
+## 0.2.12 (2022-08-25)
+
+## Fixed (1 change)
+
+- [fix token expire check](kchat/webapp@cf2a1f5264452fe4f51dd4229153c20a9176c499) by @antonbuksa
+
+## Other (1 change)
+
+- [set artifact paths for reports](kchat/webapp@1764437861fa1dfc693c9ce06200ae4f5a33b8fe) by @antonbuksa
+
 ## 0.2.11-rc.4 (2022-08-25)
 
 No changes.

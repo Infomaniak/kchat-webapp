@@ -6,15 +6,13 @@
 import React, {ReactNode} from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import {emitUserLoggedOutEvent} from 'actions/global_actions';
 
 import Constants, {Preferences} from 'utils/constants';
 import {t} from 'utils/i18n';
-import {isMac, localizeMessage} from 'utils/utils';
+import {isMac} from 'utils/utils';
 
 import SettingItemMax from 'components/setting_item_max.jsx';
 import SettingItemMin from 'components/setting_item_min';
-import ConfirmModal from 'components/confirm_modal';
 import BackIcon from 'components/widgets/icons/fa_back_icon';
 
 import {UserProfile} from '@mattermost/types/users';
@@ -22,7 +20,6 @@ import {PreferenceType} from '@mattermost/types/preferences';
 
 import {ActionResult} from 'mattermost-redux/types/actions';
 
-import JoinLeaveSection from './join_leave_section';
 import PerformanceDebuggingSection from './performance_debugging_section';
 
 const PreReleaseFeatures = Constants.PRE_RELEASE_FEATURES;
@@ -130,31 +127,6 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
         this.setState((prevState) => ({...prevState, ...settings}));
     }
 
-    toggleFeature = (feature: string, checked: boolean): void => {
-        const {settings} = this.state;
-        settings[Constants.FeatureTogglePrefix + feature] = String(checked);
-
-        let enabledFeatures = 0;
-        Object.keys(this.state.settings).forEach((setting) => {
-            if (setting.lastIndexOf(Constants.FeatureTogglePrefix) === 0 && this.state.settings[setting] === 'true') {
-                enabledFeatures++;
-            }
-        });
-
-        this.setState({settings, enabledFeatures});
-    }
-
-    saveEnabledFeatures = (): void => {
-        const features: string[] = [];
-        Object.keys(this.state.settings).forEach((setting) => {
-            if (setting.lastIndexOf(Constants.FeatureTogglePrefix) === 0) {
-                features.push(setting);
-            }
-        });
-
-        this.handleSubmit(features);
-    }
-
     handleSubmit = async (settings: string[]): Promise<void> => {
         const preferences: PreferenceType[] = [];
         const {actions, currentUser} = this.props;
@@ -174,38 +146,6 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
         await actions.savePreferences(userId, preferences);
 
         this.handleUpdateSection('');
-    }
-
-    handleDeactivateAccountSubmit = async (): Promise<void> => {
-        const userId = this.props.currentUser.id;
-
-        this.setState({isSaving: true});
-
-        this.props.actions.updateUserActive(userId, false).
-            then(({error}) => {
-                if (error) {
-                    this.setState({serverError: error.message});
-                }
-            });
-
-        const {data, error} = await this.props.actions.revokeAllSessionsForUser(userId);
-        if (data) {
-            emitUserLoggedOutEvent();
-        } else if (error) {
-            this.setState({serverError: error.message});
-        }
-    }
-
-    handleShowDeactivateAccountModal = (): void => {
-        this.setState({
-            showDeactivateAccountModal: true,
-        });
-    }
-
-    handleHideDeactivateAccountModal = (): void => {
-        this.setState({
-            showDeactivateAccountModal: false,
-        });
     }
 
     handleUpdateSection = (section?: string): void => {
@@ -308,88 +248,6 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
             <FormattedMessage
                 id='user.settings.advance.onForCode'
                 defaultMessage='On only for code blocks starting with ```'
-            />
-        );
-    }
-
-    renderFormattingSection = () => {
-        if (this.props.activeSection === 'formatting') {
-            return (
-                <SettingItemMax
-                    title={
-                        <FormattedMessage
-                            id='user.settings.advance.formattingTitle'
-                            defaultMessage='Enable Post Formatting'
-                        />
-                    }
-                    inputs={[
-                        <fieldset key='formattingSetting'>
-                            <legend className='form-legend hidden-label'>
-                                <FormattedMessage
-                                    id='user.settings.advance.formattingTitle'
-                                    defaultMessage='Enable Post Formatting'
-                                />
-                            </legend>
-                            <div className='radio'>
-                                <label>
-                                    <input
-                                        id='postFormattingOn'
-                                        type='radio'
-                                        name='formatting'
-                                        checked={this.state.settings.formatting !== 'false'}
-                                        onChange={this.updateSetting.bind(this, 'formatting', 'true')}
-                                    />
-                                    <FormattedMessage
-                                        id='user.settings.advance.on'
-                                        defaultMessage='On'
-                                    />
-                                </label>
-                                <br/>
-                            </div>
-                            <div className='radio'>
-                                <label>
-                                    <input
-                                        id='postFormattingOff'
-                                        type='radio'
-                                        name='formatting'
-                                        checked={this.state.settings.formatting === 'false'}
-                                        onChange={this.updateSetting.bind(this, 'formatting', 'false')}
-                                    />
-                                    <FormattedMessage
-                                        id='user.settings.advance.off'
-                                        defaultMessage='Off'
-                                    />
-                                </label>
-                                <br/>
-                            </div>
-                            <div className='mt-5'>
-                                <FormattedMessage
-                                    id='user.settings.advance.formattingDesc'
-                                    defaultMessage='If enabled, posts will be formatted to create links, show emoji, style the text, and add line breaks. By default, this setting is enabled.'
-                                />
-                            </div>
-                        </fieldset>,
-                    ]}
-                    setting={'formatting'}
-                    submit={this.handleSubmit}
-                    saving={this.state.isSaving}
-                    server_error={this.state.serverError}
-                    updateSection={this.handleUpdateSection}
-                />
-            );
-        }
-
-        return (
-            <SettingItemMin
-                title={
-                    <FormattedMessage
-                        id='user.settings.advance.formattingTitle'
-                        defaultMessage='Enable Post Formatting'
-                    />
-                }
-                describe={this.renderOnOffLabel(this.state.settings.formatting)}
-                section={'formatting'}
-                updateSection={this.handleUpdateSection}
             />
         );
     }
@@ -595,169 +453,11 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
             );
         }
 
-        const formattingSection = this.renderFormattingSection();
-        let formattingSectionDivider = null;
-        if (formattingSection) {
-            formattingSectionDivider = <div className='divider-light'/>;
-        }
-
-        let previewFeaturesSection;
-        let previewFeaturesSectionDivider;
-        if (this.state.previewFeaturesEnabled && this.state.preReleaseFeaturesKeys.length > 0) {
-            previewFeaturesSectionDivider = (
-                <div className='divider-light'/>
-            );
-
-            if (this.props.activeSection === 'advancedPreviewFeatures') {
-                const inputs = [];
-
-                this.state.preReleaseFeaturesKeys.forEach((key) => {
-                    const feature = this.state.preReleaseFeatures[key as keyof typeof PreReleaseFeatures];
-                    inputs.push(
-                        <div key={'advancedPreviewFeatures_' + feature.label}>
-                            <div className='checkbox'>
-                                <label>
-                                    <input
-                                        id={'advancedPreviewFeatures' + feature.label}
-                                        type='checkbox'
-                                        checked={this.state.settings[Constants.FeatureTogglePrefix + feature.label] === 'true'}
-                                        onChange={(e) => {
-                                            this.toggleFeature(feature.label, e.target.checked);
-                                        }}
-                                    />
-                                    {this.renderFeatureLabel(key)}
-                                </label>
-                            </div>
-                        </div>,
-                    );
-                });
-
-                inputs.push(
-                    <div key='advancedPreviewFeatures_helptext'>
-                        <br/>
-                        <FormattedMessage
-                            id='user.settings.advance.preReleaseDesc'
-                            defaultMessage="Check any pre-released features you'd like to preview.  You may also need to refresh the page before the setting will take effect."
-                        />
-                    </div>,
-                );
-                previewFeaturesSection = (
-                    <SettingItemMax
-                        title={
-                            <FormattedMessage
-                                id='user.settings.advance.preReleaseTitle'
-                                defaultMessage='Preview Pre-release Features'
-                            />
-                        }
-                        inputs={inputs}
-                        submit={this.saveEnabledFeatures}
-                        saving={this.state.isSaving}
-                        server_error={serverError}
-                        updateSection={this.handleUpdateSection}
-                    />
-                );
-            } else {
-                previewFeaturesSection = (
-                    <SettingItemMin
-                        title={localizeMessage('user.settings.advance.preReleaseTitle', 'Preview Pre-release Features')}
-                        describe={
-                            <FormattedMessage
-                                id='user.settings.advance.enabledFeatures'
-                                defaultMessage='{count, number} {count, plural, one {feature} other {features}} enabled'
-                                values={{count: this.state.enabledFeatures}}
-                            />
-                        }
-                        section={'advancedPreviewFeatures'}
-                        updateSection={this.handleUpdateSection}
-                    />
-                );
-            }
-        }
-
-        let deactivateAccountSection: ReactNode = '';
-        let makeConfirmationModal: ReactNode = '';
-        const currentUser = this.props.currentUser;
-
-        if (currentUser.auth_service === '' && this.props.enableUserDeactivation) {
-            if (this.props.activeSection === 'deactivateAccount') {
-                deactivateAccountSection = (
-                    <SettingItemMax
-                        title={
-                            <FormattedMessage
-                                id='user.settings.advance.deactivateAccountTitle'
-                                defaultMessage='Deactivate Account'
-                            />
-                        }
-                        inputs={[
-                            <div key='formattingSetting'>
-                                <div>
-                                    <br/>
-                                    <FormattedMessage
-                                        id='user.settings.advance.deactivateDesc'
-                                        defaultMessage='Deactivating your account removes your ability to log in to this server and disables all email and mobile notifications. To reactivate your account, contact your System Administrator.'
-                                    />
-                                </div>
-                            </div>,
-                        ]}
-                        saveButtonText={'Deactivate'}
-                        setting={'deactivateAccount'}
-                        submit={this.handleShowDeactivateAccountModal}
-                        saving={this.state.isSaving}
-                        server_error={this.state.serverError}
-                        updateSection={this.handleUpdateSection}
-                    />
-                );
-            } else {
-                deactivateAccountSection = (
-                    <SettingItemMin
-                        title={
-                            <FormattedMessage
-                                id='user.settings.advance.deactivateAccountTitle'
-                                defaultMessage='Deactivate Account'
-                            />
-                        }
-                        describe={
-                            <FormattedMessage
-                                id='user.settings.advance.deactivateDescShort'
-                                defaultMessage="Click 'Edit' to deactivate your account"
-                            />
-                        }
-                        section={'deactivateAccount'}
-                        updateSection={this.handleUpdateSection}
-                    />
-                );
-            }
-
-            const confirmButtonClass = 'btn btn-danger';
-            const deactivateMemberButton = (
-                <FormattedMessage
-                    id='user.settings.advance.deactivate_member_modal.deactivateButton'
-                    defaultMessage='Yes, deactivate my account'
-                />
-            );
-
-            makeConfirmationModal = (
-                <ConfirmModal
-                    show={this.state.showDeactivateAccountModal}
-                    title={
-                        <FormattedMessage
-                            id='user.settings.advance.confirmDeactivateAccountTitle'
-                            defaultMessage='Confirm Deactivation'
-                        />
-                    }
-                    message={
-                        <FormattedMessage
-                            id='user.settings.advance.confirmDeactivateDesc'
-                            defaultMessage='Are you sure you want to deactivate your account? This can only be reversed by your System Administrator.'
-                        />
-                    }
-                    confirmButtonClass={confirmButtonClass}
-                    confirmButtonText={deactivateMemberButton}
-                    onConfirm={this.handleDeactivateAccountSubmit}
-                    onCancel={this.handleHideDeactivateAccountModal}
-                />
-            );
-        }
+        // const formattingSection = this.renderFormattingSection();
+        // let formattingSectionDivider = null;
+        // if (formattingSection) {
+        //     formattingSectionDivider = <div className='divider-light'/>;
+        // }
 
         const unreadScrollPositionSection = this.renderUnreadScrollPositionSection();
         let unreadScrollPositionSectionDivider = null;
@@ -802,26 +502,26 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
                     </h3>
                     <div className='divider-dark first'/>
                     {ctrlSendSection}
-                    {formattingSectionDivider}
-                    {formattingSection}
+                    {/* {formattingSectionDivider}
+                    {formattingSection} */}
                     <div className='divider-light'/>
-                    <JoinLeaveSection
+                    {/* <JoinLeaveSection
                         activeSection={this.props.activeSection}
                         onUpdateSection={this.handleUpdateSection}
                         renderOnOffLabel={this.renderOnOffLabel}
-                    />
-                    {previewFeaturesSectionDivider}
-                    {previewFeaturesSection}
-                    {formattingSectionDivider}
+                    /> */}
+                    {/* {previewFeaturesSectionDivider} */}
+                    {/* {previewFeaturesSection} */}
+                    {/* {formattingSectionDivider} */}
                     <PerformanceDebuggingSection
                         activeSection={this.props.activeSection}
                         onUpdateSection={this.handleUpdateSection}
                     />
-                    {deactivateAccountSection}
+                    {/* {deactivateAccountSection} */}
                     {unreadScrollPositionSectionDivider}
                     {unreadScrollPositionSection}
                     <div className='divider-dark'/>
-                    {makeConfirmationModal}
+                    {/* {makeConfirmationModal} */}
                 </div>
             </div>
         );
