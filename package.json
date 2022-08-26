@@ -293,7 +293,7 @@
     "fix": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --fix --cache && stylelint \"**/*.{css,scss}\" --fix --cache",
     "build:webapp": "node scripts/build",
     "env:export": "export $(xargs < ./.env)",
-    "build": "NODE_ENV=production webpack",
+    "build": "cat .env && NODE_ENV=production webpack",
     "run": "node scripts/run",
     "run:webapp": "webpack --progress --watch",
     "dev-server": "node scripts/dev-server",
