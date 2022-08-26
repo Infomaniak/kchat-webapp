@@ -1,3 +1,9 @@
+## 0.2.16-rc.1 (2022-08-26)
+
+## Changed (1 change)
+
+- [uncomment advanced user settings for autoscroll opt](kchat/webapp@aa3edcf67cc09e9acae0a63ef4b836b2f4232fba) by @antonbuksa
+
 ## 0.2.15-rc.15 (2022-08-26)
 
 ## Changed (1 change)
