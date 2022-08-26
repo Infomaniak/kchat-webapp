@@ -12,8 +12,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 COPY . .
 
-RUN export $(xargs < ./.env)
-
 RUN yarn
 
 COPY . .
