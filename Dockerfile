@@ -14,6 +14,8 @@ COPY . .
 
 RUN yarn
 
+RUN npm run env:export
+
 COPY . .
 
 # RUN yarn workspace @mattermost/types build
