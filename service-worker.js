@@ -75,8 +75,10 @@ self.addEventListener('fetch', (event) => {
 
     const encodeBody = event.request.url.includes('broadcasting/auth');
     const excludedRoutes = event.request.url.includes('/roles/') || event.request.url.includes(('/users/status'));
-
-    if (shouldMatchRoute && !excludedRoutes) {
+    if (event.request.method === 'POST') {
+        console.log('[SW] POST request excluded');
+    }
+    if (shouldMatchRoute && !excludedRoutes && event.request.method !== 'POST') {
         // const authHeaderSplited = authHeader.split(' ');
 
         if (authHeader) {
