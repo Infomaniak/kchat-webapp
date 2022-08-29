@@ -111,7 +111,7 @@ const Login = () => {
                     });
                     finishSignin();
                 }).catch((error) => {
-                    console.log('catch error', error);
+                    console.log('[TOKEN] post token fail', error);
                     clearLocalStorageToken();
                     getChallengeAndRedirectToLogin();
                 });

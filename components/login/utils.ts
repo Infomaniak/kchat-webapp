@@ -109,7 +109,7 @@ export function checkIKTokenIsExpired() {
  * @returns bool
  */
 export function needRefreshToken() {
-    console.log(`[TOKEN] Token need to be refresh ?`)
+    console.log('[TOKEN] Token need to be refresh ?');
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
