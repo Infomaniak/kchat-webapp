@@ -1,6 +1,8 @@
 include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+
 stages:
   - test
   - build
@@ -30,10 +32,9 @@ eslint-sast:
       when: on_success
     - when: never
 
-semgrep-sast:
+code_quality:
   artifacts:
-    reports:
-      sast: gl-sast-report.json
+    paths: [gl-code-quality-report.json]
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
@@ -122,7 +123,7 @@ unit_test:
       - .yarn/install-state.gz
       - coverage/
   before_script:
-    - npx yarn
+    - yarn
   script:
     # typescript
     # - npm run check-types
