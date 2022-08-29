@@ -37,7 +37,7 @@ code_quality:
   rules:
     # - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
     #   when: on_success
-    - when: always
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 build_docker_image:
   stage: build
