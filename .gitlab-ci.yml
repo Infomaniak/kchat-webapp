@@ -48,9 +48,6 @@ workflow:
     <<: *cache-template
     policy: pull
 
-secret_detection:
-  <<: *secure-jobs-config
-
 eslint-sast:
   <<: *secure-jobs-config
   artifacts:
