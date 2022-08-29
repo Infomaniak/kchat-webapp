@@ -1,6 +1,7 @@
 include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
+
 stages:
   - test
   - build
@@ -20,24 +21,47 @@ workflow:
       variables:
         DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
     - when: never
-  
+
+.secure-jobs-config: &secure-jobs-config
+  needs: []
+  rules:
+    - when: always
+
+# This is a cache template for caching node_modules
+# As a cache key we are using a SHA of .gitlab-ci.yml and yarn.lock
+# The latter is obvious, because it updates when we update dependencies
+# The former is to invalidate caches, in case we touch our CI config, which
+# could mean changing something in our caching logic
+.cache-template: &cache-template
+  paths:
+    - node_modules/
+  key:
+    files:
+      - .gitlab-ci.yml
+      - yarn.lock
+    prefix: node_modules
+
+.yarn_install:
+  before_script:
+    - yarn install --frozen-lockfile
+  cache:
+    <<: *cache-template
+    policy: pull
+
+secret_detection:
+  <<: *secure-jobs-config
+
 eslint-sast:
+  <<: *secure-jobs-config
   artifacts:
     reports:
       sast: gl-sast-report.json
-  rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
-      when: on_success
-    - when: never
 
 semgrep-sast:
+  <<: *secure-jobs-config
   artifacts:
     reports:
       sast: gl-sast-report.json
-  rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
-      when: on_success
-    - when: never
 
 build_docker_image:
   stage: build
@@ -95,6 +119,7 @@ container_scanning:
 unit_test:
   stage: test
   image: node:16.10.0
+  extends: [.yarn_install]
   tags:
     - docker-executor
     - kubernetes
@@ -121,8 +146,6 @@ unit_test:
       - .yarn/cache/
       - .yarn/install-state.gz
       - coverage/
-  before_script:
-    - npx yarn
   script:
     # typescript
     # - npm run check-types
