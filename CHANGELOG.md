@@ -1,6 +1,29 @@
+## 0.2.17-rc.3 (2022-08-29)
+
+No changes.
+
+## 0.2.17-rc.2 (2022-08-29)
+
+No changes.
+
 ## 0.2.17-rc.1 (2022-08-29)
 
 No changes.
+
+## 0.2.16-rc.4 (2022-08-29)
+
+## Added (1 change)
+
+- [kSuite limitation message](kchat/webapp@06c9caba4fcd771c75760d01aadf415f51b832d0) by @dorian.scd ([merge request](kchat/webapp!95))
+
+## Changed (2 changes)
+
+- [clean unwanted advanced settings](kchat/webapp@bbc928dcde769026634c700e2be71891a5d86596) by @antonbuksa
+- [uncomment advanced user settings for autoscroll opt](kchat/webapp@aa3edcf67cc09e9acae0a63ef4b836b2f4232fba) by @antonbuksa
+
+## Other (1 change)
+
+- [Add log to debug](kchat/webapp@32cda6da5039d045396dd70d2e7469c6fd3b5975) by @florent.glauda
 
 ## 0.2.16-rc.3 (2022-08-26)
 

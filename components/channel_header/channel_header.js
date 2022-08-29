@@ -25,7 +25,6 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import GuestBadge from 'components/widgets/badges/guest_badge';
 import BotBadge from 'components/widgets/badges/bot_badge';
 import Popover from 'components/widgets/popover';
-import CallButton from 'plugins/call_button';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import CustomStatusText from 'components/custom_status/custom_status_text';
 import ChannelHeaderPlug from 'plugins/channel_header_plug';
@@ -106,7 +105,6 @@ class ChannelHeader extends React.PureComponent {
             leftOffset: 0,
             topOffset: 0,
             titleMenuOpen: false,
-            showMeetBtn: true,
         };
 
         this.getHeaderMarkdownOptions = memoizeResult((channelNamesMap) => (
@@ -277,8 +275,8 @@ class ChannelHeader extends React.PureComponent {
         } = this.props;
         const {formatMessage} = this.props.intl;
         const ariaLabelChannelHeader = localizeMessage('accessibility.sections.channelHeader', 'channel header region');
-        this.setState({showMeetBtn: true});
         let hasGuestsText = '';
+        let showMeetBtn = true;
         if (hasGuests) {
             hasGuestsText = (
                 <span className='has-guest-header'>
@@ -337,7 +335,7 @@ class ChannelHeader extends React.PureComponent {
                         }}
                     />
                 );
-                this.setState({showMeetBtn: false});
+                showMeetBtn = false;
             } else {
                 channelTitle = displayUsername(dmUser, teammateNameDisplaySetting) + ' ';
             }
@@ -797,7 +795,7 @@ class ChannelHeader extends React.PureComponent {
                 </div>
             );
 
-            this.setState({showMeetBtn: false});
+            showMeetBtn = false;
         }
 
         return (
@@ -831,7 +829,7 @@ class ChannelHeader extends React.PureComponent {
                         channel={channel}
                         channelMember={channelMember}
                     />
-                    {this.state.showMeetBtn &&
+                    {showMeetBtn &&
                         <MeetButton/>
                     }
                     <ChannelInfoButton channel={channel}/>
