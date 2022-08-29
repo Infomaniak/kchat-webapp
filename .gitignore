@@ -1,7 +1,6 @@
 dist
 lib
 .npminstall
-.yarninstall
 node_modules
 *.swp
 .idea
@@ -48,3 +47,13 @@ Session.vim
 .eslintcache
 .stylelintcache
 .env
+
+# Yarn
+yarn-error.log
+.yarn
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+

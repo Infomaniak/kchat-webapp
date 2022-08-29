@@ -1,6 +1,6 @@
 {
   "name": "@mattermost/client",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "JavaScript/TypeScript client for Mattermost",
   "keywords": [
     "mattermost"
@@ -20,11 +20,9 @@
     "form-data": "^4.0.0"
   },
   "devDependencies": {
+    "@mattermost/types": "workspace:packages/types",
     "jest": "*",
-    "nock": "*"
-  },
-  "peerDependencies": {
-    "@mattermost/types": "*",
+    "nock": "*",
     "typescript": "^4.3"
   },
   "peerDependenciesMeta": {
@@ -33,7 +31,8 @@
     }
   },
   "scripts": {
-    "build": "tsc -b -v",
+    "build": "tsc",
+    "run": "tsc --watch --preserveWatchOutput",
     "clean": "rm -rf tsconfig.tsbuildinfo ./lib"
   }
 }

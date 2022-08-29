@@ -428,6 +428,10 @@ export const getSearchResults: (state: GlobalState) => Post[] = createSelector(
     },
 );
 
+export function getHasLimitations(state: GlobalState) {
+    return state.entities.search.hasLimitation;
+}
+
 // Returns the matched text from the search results, if the server has provided them.
 // These matches will only be present if the server is running Mattermost 5.1 or higher
 // with Elasticsearch enabled to search posts. Otherwise, null will be returned.
@@ -559,6 +563,31 @@ export function getOldestPostsChunkInChannel(state: GlobalState, channelId: Chan
     }
 
     return postsForChannel.find((block) => block.oldest);
+}
+
+// returns timestamp of the channel's oldest post. 0 otherwise
+export function getOldestPostTimeInChannel(state: GlobalState, channelId: Channel['id']): number {
+    const postsForChannel = state.entities.posts.postsInChannel[channelId];
+
+    if (!postsForChannel) {
+        return 0;
+    }
+
+    const allPosts = getAllPosts(state);
+    const oldestPostTime = postsForChannel.reduce((acc: number, postBlock) => {
+        if (postBlock.order.length > 0) {
+            const oldestPostIdInBlock = postBlock.order[postBlock.order.length - 1];
+            const blockOldestPostTime = allPosts[oldestPostIdInBlock]?.create_at;
+            if (typeof blockOldestPostTime === 'number' && blockOldestPostTime < acc) {
+                return blockOldestPostTime;
+            }
+        }
+        return acc;
+    }, Number.MAX_SAFE_INTEGER);
+    if (oldestPostTime === Number.MAX_SAFE_INTEGER) {
+        return 0;
+    }
+    return oldestPostTime;
 }
 
 // getPostIdsInChannel returns the IDs of posts loaded at the bottom of the given channel. It does not include older
@@ -703,4 +732,8 @@ export const makeIsPostCommentMention = (): ((state: GlobalState, postId: Post['
 
 export function getExpandedLink(state: GlobalState, link: string): string {
     return state.entities.posts.expandedURLs[link];
+}
+
+export function getLimitedViews(state: GlobalState): GlobalState['entities']['posts']['limitedViews'] {
+    return state.entities.posts.limitedViews;
 }

@@ -31,6 +31,7 @@ type Props = {
     isExpanded: boolean;
     channelId: string;
     previousRhsState?: RhsState;
+    canGoBack: boolean;
     children?: React.ReactNode;
     actions: {
         closeRightHandSide: () => void;
@@ -83,15 +84,17 @@ export default class SearchResultsHeader extends React.PureComponent<Props> {
         return (
             <div className='sidebar--right__header'>
                 <span className='sidebar--right__title'>
-                    <BackButton
-                        className='sidebar--right__back'
-                        onClick={() => this.props.actions.goBack()}
-                    >
-                        <BackButtonIcon
-                            className='icon-arrow-back-ios'
-                            ariaLabel={{id: t('rhs_header.back.icon'), defaultMessage: 'Back Icon'}}
-                        />
-                    </BackButton>
+                    {this.props.canGoBack && (
+                        <BackButton
+                            className='sidebar--right__back'
+                            onClick={() => this.props.actions.goBack()}
+                        >
+                            <BackButtonIcon
+                                className='icon-arrow-back-ios'
+                                ariaLabel={{id: t('rhs_header.back.icon'), defaultMessage: 'Back Icon'}}
+                            />
+                        </BackButton>
+                    )}
                     {this.props.children}
                 </span>
 

@@ -924,7 +924,7 @@ function fixedCharCodeAt(str: string, idx = 0) {
 }
 
 export function fixedEncodeURIComponent(str: string) {
-    return str.replace(/[-._~:/?#[\]@!$&'()*+,;=]/g, (c) => {
+    return str.replace(/[-._~:/?#[\]@!$&'()*+,;=]/g, (c: string) => {
         return '%' + c.charCodeAt(0).toString(16).toUpperCase();
     });
 }

@@ -4,11 +4,9 @@
 /* eslint-disable no-process-env */
 
 const childProcess = require('child_process');
-
 const path = require('path');
 
 const url = require('url');
-
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
@@ -19,10 +17,10 @@ const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const NPM_TARGET = process.env.npm_lifecycle_event; //eslint-disable-line no-process-env
 
-const targetIsRun = NPM_TARGET === 'run';
+const targetIsRun = NPM_TARGET?.startsWith('run');
 const targetIsTest = NPM_TARGET === 'test';
 const targetIsStats = NPM_TARGET === 'stats';
-const targetIsDevServer = NPM_TARGET === 'dev-server';
+const targetIsDevServer = NPM_TARGET?.startsWith('dev-server');
 
 const DEV = targetIsRun || targetIsStats || targetIsDevServer;
 
@@ -152,11 +150,11 @@ if (DEV) {
     env.NODE_ENV = JSON.stringify('production');
     env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || '');
     env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
-    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || '');
-    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || '');
-    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || '');
-    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || '');
-    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || '');
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/next');
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.infomaniak.com');
+    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.infomaniak.com/');
+    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.infomaniak.com/');
 }
 
 var config = {
@@ -320,7 +318,7 @@ var config = {
                 // eslint-disable-next-line no-process-env
                 WEBCOMPONENT_ENDPOINT: process.env.WEBCOMPONENT_ENDPOINT, // || 'https://web-components.storage.infomaniak.com/current',
                 // eslint-disable-next-line no-process-env
-                WEBCOMPONENT_API_ENDPOINT: process.env.WEBCOMPONENT_ENDPOINT, // || 'https://welcome.infomaniak.com',
+                WEBCOMPONENT_API_ENDPOINT: process.env.WEBCOMPONENT_API_ENDPOINT, // || 'https://welcome.infomaniak.com',
             },
         }),
         new HtmlWebpackPlugin({

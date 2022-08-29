@@ -25,6 +25,7 @@ import LoadingSpinner from 'components/widgets/loading/loading_wrapper';
 import NoResultsIndicator from 'components/no_results_indicator/no_results_indicator';
 import FlagIcon from 'components/widgets/icons/flag_icon';
 import FileSearchResultItem from 'components/file_search_results';
+import ChannelMessageLimitationBanner from 'components/post_view/channel_message_limitation_banner/channel_message_limitation_banner';
 
 import {NoResultsVariant} from 'components/no_results_indicator/types';
 import {isFileAttachmentsEnabled} from 'utils/file_utils';
@@ -140,6 +141,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
     );
 
     const {
+        hasLimitDate,
         results,
         fileResults,
         searchTerms,
@@ -170,6 +172,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
 
     let contentItems;
     let loadingMorePostsComponent;
+    let limitationFooter;
 
     let sortedResults: any = results;
 
@@ -247,6 +250,19 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
             </div>
         );
         break;
+    case noResults && (searchType === DataSearchTypes.MESSAGES_SEARCH_TYPE && !isChannelFiles && hasLimitDate !== null):
+        contentItems = (
+            <div
+                className={classNames([
+                    'sidebar--right__limitation-noresult a11y__section',
+                    {'sidebar-expanded': isSideBarExpanded},
+                ])}
+            >
+                <ChannelMessageLimitationBanner olderMessagesDate={hasLimitDate}/>
+                <NoResultsIndicator {...noResultsProps}/>
+            </div>
+        );
+        break;
     case noResults && (searchType === DataSearchTypes.MESSAGES_SEARCH_TYPE && !isChannelFiles):
         contentItems = (
             <div
@@ -274,6 +290,20 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
     default:
         if (searchType === DataSearchTypes.FILES_SEARCH_TYPE || isChannelFiles) {
             sortedResults = fileResults;
+        }
+
+        if (hasLimitDate !== null && isSearchAtEnd && !noResults) {
+            limitationFooter = (
+                <>
+                    <br/>
+                    <div>
+                        <ChannelMessageLimitationBanner
+                            olderMessagesDate={hasLimitDate}
+                        />
+                    </div>
+                    <br/>
+                </>
+            );
         }
 
         contentItems = sortedResults.map((item: Post|FileSearchResultItemType, index: number) => {
@@ -380,6 +410,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                 >
                     {contentItems}
                     {loadingMorePostsComponent}
+                    {limitationFooter}
                 </div>
             </Scrollbars>
         </div>
