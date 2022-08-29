@@ -35,11 +35,7 @@ code_quality:
   artifacts:
     paths: [gl-code-quality-report.json]
   rules:
-    - if: $DEPLOY_VARIABLE == "prod"
-      when: on_success
-    - if: $DEPLOY_VARIABLE == "preprod"
-      when: on_success
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+    - if: $CI_COMMIT_BRANCH == "master"
       when: on_success
     - when: never
 
