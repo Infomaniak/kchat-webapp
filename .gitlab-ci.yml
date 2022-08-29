@@ -3,6 +3,9 @@ include:
   - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Code-Quality.gitlab-ci.yml
 
+variables:
+  SAST_DISABLED: "true"
+
 stages:
   - test
   - build
