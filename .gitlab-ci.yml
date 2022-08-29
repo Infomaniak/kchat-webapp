@@ -35,9 +35,13 @@ code_quality:
   artifacts:
     paths: [gl-code-quality-report.json]
   rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
-    - when: always
+    - when: never
 
 build_docker_image:
   stage: build
