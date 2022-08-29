@@ -1,3 +1,117 @@
+## 0.2.16-rc.3 (2022-08-26)
+
+## Added (1 change)
+
+- [kSuite limitation message](kchat/webapp@06c9caba4fcd771c75760d01aadf415f51b832d0) by @dorian.scd ([merge request](kchat/webapp!95))
+
+## Changed (2 changes)
+
+- [clean unwanted advanced settings](kchat/webapp@bbc928dcde769026634c700e2be71891a5d86596) by @antonbuksa
+- [uncomment advanced user settings for autoscroll opt](kchat/webapp@aa3edcf67cc09e9acae0a63ef4b836b2f4232fba) by @antonbuksa
+
+## 0.2.16-rc.2 (2022-08-26)
+
+## Changed (2 changes)
+
+- [clean unwanted advanced settings](kchat/webapp@bbc928dcde769026634c700e2be71891a5d86596) by @antonbuksa
+- [uncomment advanced user settings for autoscroll opt](kchat/webapp@aa3edcf67cc09e9acae0a63ef4b836b2f4232fba) by @antonbuksa
+
+## 0.2.16-rc.1 (2022-08-26)
+
+## Changed (1 change)
+
+- [uncomment advanced user settings for autoscroll opt](kchat/webapp@aa3edcf67cc09e9acae0a63ef4b836b2f4232fba) by @antonbuksa
+
+## 0.2.15-rc.15 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.15-rc.13 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.15-rc.10 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.15-rc.6 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.15-rc.5 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.15-rc.2 (2022-08-26)
+
+## Changed (1 change)
+
+- [move env export out of build cmd](kchat/webapp@ab9ede02f41206ee62b476c63ce463d6b6fcec59) by @antonbuksa
+
+## 0.2.14 (2022-08-26)
+
+No changes.
+
+## 0.2.13-rc.3 (2022-08-25)
+
+## Fixed (1 change)
+
+- [fix token expire check](kchat/webapp@cf2a1f5264452fe4f51dd4229153c20a9176c499) by @antonbuksa
+
+## 0.2.13-rc.2 (2022-08-25)
+
+## Fixed (1 change)
+
+- [fix token expire check](kchat/webapp@cf2a1f5264452fe4f51dd4229153c20a9176c499) by @antonbuksa
+
+## 0.2.13-rc.1 (2022-08-25)
+
+## Fixed (1 change)
+
+- [fix token expire check](kchat/webapp@cf2a1f5264452fe4f51dd4229153c20a9176c499) by @antonbuksa
+
+## 0.2.12 (2022-08-25)
+
+## Fixed (1 change)
+
+- [fix token expire check](kchat/webapp@cf2a1f5264452fe4f51dd4229153c20a9176c499) by @antonbuksa
+
+## Other (1 change)
+
+- [set artifact paths for reports](kchat/webapp@1764437861fa1dfc693c9ce06200ae4f5a33b8fe) by @antonbuksa
+
+## 0.2.11-rc.4 (2022-08-25)
+
+No changes.
+
+## 0.2.11-rc.3 (2022-08-25)
+
+No changes.
+
+## 0.2.10 (2022-08-25)
+
+## Fixed (2 changes)
+
+- [Add excluded routes will not matches with SW](kchat/webapp@371a8c27c8e3d452c69a4e3b24291c62be0ac34a) by @florent.glauda ([merge request](kchat/webapp!108))
+- [add user check to prevent error](kchat/webapp@25258e99a4f685bcae92d3cb83ad8d5478199ee5) by @florent.glauda ([merge request](kchat/webapp!106))
+
+## 0.2.9-rc.3 (2022-08-25)
+
+## Fixed (2 changes)
+
+- [add user check to prevent error](kchat/webapp@25258e99a4f685bcae92d3cb83ad8d5478199ee5) by @florent.glauda ([merge request](kchat/webapp!106))
+- [Fix edit profile in popover and add env to links](kchat/webapp@1a9c238fb4f5d38c40d934dda03c80b42abf362f) by @florent.glauda ([merge request](kchat/webapp!105))
+
 ## 0.2.9-rc.2 (2022-08-24)
 
 ## Fixed (1 change)

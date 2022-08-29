@@ -1,6 +1,6 @@
 include:
-- template: Security/SAST.gitlab-ci.yml
-
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
 stages:
   - test
   - build
@@ -19,6 +19,24 @@ workflow:
     - if: "$CI_MERGE_REQUEST_ID"
       variables:
         DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
+    - when: never
+  
+eslint-sast:
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - when: never
+
+semgrep-sast:
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
     - when: never
 
 build_docker_image:
@@ -45,19 +63,34 @@ build_docker_image:
     - echo "KMEET_ENDPOINT=$KMEET_ENDPOINT" >> .env
     - echo "LOGIN_ENDPOINT=$LOGIN_ENDPOINT" >> .env
     - echo "MANAGER_ENDPOINT=$MANAGER_ENDPOINT" >> .env
-    - cat .env
   script:
     - |-
       environment=${DEPLOY_VARIABLE}
       args="--destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
 
       eval "/kaniko/executor \
-        --cache \
+        --cache=true \
         --context ${CI_PROJECT_DIR} \
         --build-arg SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
         --build-arg ENVIRONMENT=${environment} \
         --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
         ${args}"
+
+container_scanning:
+  stage: build
+  needs:
+    - build_docker_image
+  variables:
+    DOCKER_IMAGE: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - when: never
+  artifacts:
+    reports:
+      container_scanning: gl-container-scanning-report.json
 
 unit_test:
   stage: test
@@ -83,14 +116,13 @@ unit_test:
   cache:
     key:
       files:
-        - package-lock.json
+        - yarn.lock
     paths:
-      - ".npm/"
-      - node_modules/
+      - .yarn/cache/
+      - .yarn/install-state.gz
       - coverage/
   before_script:
-    - npm ci
-    - npm run build --workspace=packages/components
+    - npx yarn
   script:
     # typescript
     # - npm run check-types
@@ -134,8 +166,3 @@ changelog:
     - when: never
   script:
     - "./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_API_TOKEN} ${SLACK_NOTIFY_CHANNEL}"
-
-sast:
-  stage: test
-  environment:
-    name: "$DEPLOY_VARIABLE"

@@ -136,9 +136,9 @@ function ThreadItem({
     const spacingClassName = post.message.startsWith('>') ? 'preview quote' : 'preview normalText';
 
     // if we have the whole thread, get the posts in it, sorted from newest to oldest.
-    // Last post - root post, second to last post - oldest reply. Use that timestamp
+    // First post is latest reply. Use that timestamp
     if (postsInThread.length > 1) {
-        const p = postsInThread[postsInThread.length - 2];
+        const p = postsInThread[0];
         unreadTimestamp = p.edit_at || p.create_at;
     }
 
