@@ -169,6 +169,7 @@ export default class Root extends React.PureComponent {
             }
 
             if (!token && !refreshToken) {
+                console.log('[TOKEN] No token, redirect to login 1')
                 this.props.history.push('/login' + this.props.location.search);
             }
         } else {
@@ -334,6 +335,7 @@ export default class Root extends React.PureComponent {
             }
 
             if (!token && !refreshToken) {
+                console.log('[TOKEN] No token, redirect to login 2')
                 this.props.history.push('/login' + this.props.location.search);
             }
         }
@@ -429,6 +431,7 @@ export default class Root extends React.PureComponent {
             }
 
             if (!token && !refreshToken) {
+                console.log('[TOKEN] No token, redirect to login 3')
                 this.props.history.push('/login' + this.props.location.search);
             }
         }

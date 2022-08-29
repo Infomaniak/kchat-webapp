@@ -33,6 +33,7 @@ export function storeTokenResponse(response: { expires_in?: any; access_token?: 
  * Clear IKToken informations in localStorage
  */
 export function clearLocalStorageToken() {
+    console.log('[TOKEN] Clear token storage');
     localStorage.removeItem('IKToken');
     localStorage.removeItem('IKRefreshToken');
     localStorage.removeItem('IKTokenExpire');
@@ -95,6 +96,8 @@ export function getChallengeAndRedirectToLogin() {
 export function checkIKTokenIsExpired() {
     const tokenExpire = localStorage.getItem('IKTokenExpire');
     const isExpired = tokenExpire <= parseInt(Date.now() / 1000, 10);
+    console.log(`[TOKEN] Check if token is expired => ${isExpired}, tokenExpired => ${localStorage.getItem('tokenExpired')}`);
+
     if (isExpired) {
         localStorage.setItem('tokenExpired', '1');
     }
@@ -106,6 +109,7 @@ export function checkIKTokenIsExpired() {
  * @returns bool
  */
 export function needRefreshToken() {
+    console.log(`[TOKEN] Token need to be refresh ?`)
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
@@ -143,11 +147,11 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         }
     }).catch((error) => {
         if (window.navigator.onLine) {
-            console.log('catch refresh error', error);
+            console.log('[TOKEN] Refresh token error ', error);
             clearLocalStorageToken();
             getChallengeAndRedirectToLogin();
         } else {
-            console.log('Offline, waiting for connection');
+            console.log('[TOKEN] Offline, waiting for connection ', Date.now());
             setTimeout(refreshIKToken, OFFLINE_ATTEMPT_INTERVAL, redirectToTeam, periodic);
         }
     });
