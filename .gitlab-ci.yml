@@ -2,10 +2,11 @@ include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Code-Quality.gitlab-ci.yml
+
 stages:
   - test
-  # - build
-  # - release
+  - build
+  - release
 
 workflow:
   rules:
@@ -13,7 +14,7 @@ workflow:
       variables:
         DEPLOY_VARIABLE: preprod
         SLACK_NOTIFY_CHANNEL: C03BA6564NP
-    - if: "$CI_COMMIT_BRANCH == 'master'"
+    - if: "$CI_COMMIT_TAG"
       variables:
         DEPLOY_VARIABLE: prod
         SLACK_NOTIFY_CHANNEL: C02NHLU88MN
@@ -35,62 +36,62 @@ code_quality:
   artifacts:
     paths: [gl-code-quality-report.json]
   rules:
-    - if: $DEPLOY_VARIABLE == "prod"
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
     - when: never
 
-# build_docker_image:
-#   stage: build
-#   tags:
-#     - kubernetes
-#   image:
-#     name: gcr.io/kaniko-project/executor:debug
-#     entrypoint:
-#       - ''
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "prod"
-#       when: on_success
-#       allow_failure: false
-#     - if: $DEPLOY_VARIABLE == "preprod"
-#       when: on_success
-#     - when: never
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   before_script:
-#     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-#     - echo "WEBCOMPONENT_ENDPOINT=$WEBCOMPONENT_ENDPOINT" >> .env
-#     - echo "WEBCOMPONENT_API_ENDPOINT=$WEBCOMPONENT_API_ENDPOINT" >> .env
-#     - echo "KMEET_ENDPOINT=$KMEET_ENDPOINT" >> .env
-#     - echo "LOGIN_ENDPOINT=$LOGIN_ENDPOINT" >> .env
-#     - echo "MANAGER_ENDPOINT=$MANAGER_ENDPOINT" >> .env
-#   script:
-#     - |-
-#       environment=${DEPLOY_VARIABLE}
-#       args="--destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
+build_docker_image:
+  stage: build
+  tags:
+    - kubernetes
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint:
+      - ''
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - when: never
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - echo "WEBCOMPONENT_ENDPOINT=$WEBCOMPONENT_ENDPOINT" >> .env
+    - echo "WEBCOMPONENT_API_ENDPOINT=$WEBCOMPONENT_API_ENDPOINT" >> .env
+    - echo "KMEET_ENDPOINT=$KMEET_ENDPOINT" >> .env
+    - echo "LOGIN_ENDPOINT=$LOGIN_ENDPOINT" >> .env
+    - echo "MANAGER_ENDPOINT=$MANAGER_ENDPOINT" >> .env
+  script:
+    - |-
+      environment=${DEPLOY_VARIABLE}
+      args="--destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
 
-#       eval "/kaniko/executor \
-#         --cache=true \
-#         --context ${CI_PROJECT_DIR} \
-#         --build-arg SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
-#         --build-arg ENVIRONMENT=${environment} \
-#         --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
-#         ${args}"
+      eval "/kaniko/executor \
+        --cache=true \
+        --context ${CI_PROJECT_DIR} \
+        --build-arg SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
+        --build-arg ENVIRONMENT=${environment} \
+        --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
+        ${args}"
 
-# container_scanning:
-#   stage: build
-#   needs:
-#     - build_docker_image
-#   variables:
-#     DOCKER_IMAGE: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "prod"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "preprod"
-#       when: on_success
-#     - when: never
-#   artifacts:
-#     reports:
-#       container_scanning: gl-container-scanning-report.json
+container_scanning:
+  stage: build
+  needs:
+    - build_docker_image
+  variables:
+    DOCKER_IMAGE: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - when: never
+  artifacts:
+    reports:
+      container_scanning: gl-container-scanning-report.json
 
 unit_test:
   stage: test
@@ -151,18 +152,18 @@ pages:
     paths:
       - public
 
-# changelog:
-#   stage: release
-#   image: registry.infomaniak.com:443/leopold.jacquot/debian-toolbox:0.0.1
-#   needs:
-#     - build_docker_image
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "prod"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "preprod"
-#       when: on_success
-#     - when: never
-#   script:
-#     - "./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_API_TOKEN} ${SLACK_NOTIFY_CHANNEL}"
+changelog:
+  stage: release
+  image: registry.infomaniak.com:443/leopold.jacquot/debian-toolbox:0.0.1
+  needs:
+    - build_docker_image
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - when: never
+  script:
+    - "./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_API_TOKEN} ${SLACK_NOTIFY_CHANNEL}"
