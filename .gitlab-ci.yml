@@ -4,8 +4,8 @@ include:
   - template: Code-Quality.gitlab-ci.yml
 stages:
   - test
-  - build
-  - release
+  # - build
+  # - release
 
 workflow:
   rules:
@@ -13,7 +13,7 @@ workflow:
       variables:
         DEPLOY_VARIABLE: preprod
         SLACK_NOTIFY_CHANNEL: C03BA6564NP
-    - if: "$CI_COMMIT_TAG"
+    - if: "$CI_COMMIT_BRANCH == 'master'"
       variables:
         DEPLOY_VARIABLE: prod
         SLACK_NOTIFY_CHANNEL: C02NHLU88MN
@@ -35,7 +35,7 @@ code_quality:
   artifacts:
     paths: [gl-code-quality-report.json]
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $DEPLOY_VARIABLE == "prod"
       when: on_success
     - when: never
 
