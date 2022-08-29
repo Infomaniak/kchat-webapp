@@ -123,6 +123,9 @@ unit_test:
     reports:
       junit:
         - coverage/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
   coverage: "/^\\s*Lines\\s*: \\d+\\d+.\\d+\\d+\\%/"
   cache:
     key:
