@@ -18,6 +18,9 @@ workflow:
       variables:
         DEPLOY_VARIABLE: prod
         SLACK_NOTIFY_CHANNEL: C02NHLU88MN
+    - if: $CI_COMMIT_BRANCH == "master"
+      variables:
+        DEPLOY_VARIABLE: prodsec
     - if: "$CI_MERGE_REQUEST_ID"
       variables:
         DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
@@ -30,6 +33,8 @@ eslint-sast:
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
     - when: never
 
 code_quality:
@@ -37,6 +42,8 @@ code_quality:
     paths: [gl-code-quality-report.json]
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
     - when: never
 
