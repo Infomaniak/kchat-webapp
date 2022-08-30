@@ -1,6 +1,11 @@
 include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+
+variables:
+  SAST_DISABLED: "true"
+
 stages:
   - test
   - build
@@ -16,6 +21,9 @@ workflow:
       variables:
         DEPLOY_VARIABLE: prod
         SLACK_NOTIFY_CHANNEL: C02NHLU88MN
+    - if: $CI_COMMIT_BRANCH == "master"
+      variables:
+        DEPLOY_VARIABLE: prodsec
     - if: "$CI_MERGE_REQUEST_ID"
       variables:
         DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
@@ -28,14 +36,17 @@ eslint-sast:
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
     - when: never
 
-semgrep-sast:
+code_quality:
   artifacts:
-    reports:
-      sast: gl-sast-report.json
+    paths: [gl-code-quality-report.json]
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
     - when: never
 
@@ -122,7 +133,7 @@ unit_test:
       - .yarn/install-state.gz
       - coverage/
   before_script:
-    - npx yarn
+    - yarn
   script:
     # typescript
     # - npm run check-types

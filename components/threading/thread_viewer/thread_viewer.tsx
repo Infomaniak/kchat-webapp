@@ -20,7 +20,7 @@ import ThreadViewerVirtualized from '../virtualized_thread_viewer';
 
 import './thread_viewer.scss';
 
-const DeferredThreadViewerVirt = deferComponentRender(ThreadViewerVirtualized);
+const DeferredThreadViewerVirt = deferComponentRender(ThreadViewerVirtualized); // where this is called is causing issues
 
 type Attrs = Pick<HTMLAttributes<HTMLDivElement>, 'className' | 'id'>;
 

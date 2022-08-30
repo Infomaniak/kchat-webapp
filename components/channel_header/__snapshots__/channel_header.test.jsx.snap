@@ -1576,7 +1576,6 @@ exports[`components/ChannelHeader should render properly when custom status is e
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
     <ChannelInfoButton
       channel={
         Object {
@@ -1812,7 +1811,6 @@ exports[`components/ChannelHeader should render properly when custom status is s
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
     <ChannelInfoButton
       channel={
         Object {

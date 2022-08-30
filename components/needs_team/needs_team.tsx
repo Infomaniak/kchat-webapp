@@ -230,7 +230,7 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
         // If current team is set, then this is not first load
         // The first load action pulls team unreads
         this.props.actions.getMyTeamUnreads(this.props.collapsedThreads);
-        this.props.actions.selectTeam(team);
+        this.props.actions.selectTeam(team); // this is causing a warning, maybe wrap it in a callback?
         this.props.actions.setPreviousTeamId(team.id);
 
         if (this.props.currentUser && isGuest(this.props.currentUser.roles)) {
