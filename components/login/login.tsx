@@ -71,7 +71,7 @@ const Login = () => {
             if (loginCode) {
                 console.log('[LOGIN] Login with code');
             }
-            Client4.isUnauthorized = false;
+
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
