@@ -1,14 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import AppNameDisplay from 'components/app_name_display';
 import React from 'react';
 import styled from 'styled-components';
+
+import AppNameDisplay from 'components/app_name_display';
 
 import {isDesktopApp} from 'utils/user_agent';
 
 import HistoryButtons from './history_buttons';
-import ProductMenu from './product_menu';
 
 const LeftControlsContainer = styled.div`
     display: flex;
