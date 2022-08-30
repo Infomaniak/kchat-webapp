@@ -13,17 +13,16 @@ const pluginTranslationSources = {};
 
 export function loadConfigAndMe() {
     return async (dispatch) => {
-        const [{data: clientConfig}] = await Promise.all([
+        await Promise.all([
             dispatch(getClientConfig()),
             dispatch(getLicenseConfig()),
         ]);
 
-        const isGraphQLEnabled = clientConfig && clientConfig.FeatureFlagGraphQL === 'true';
+        // const isGraphQLEnabled = clientConfig && clientConfig.FeatureFlagGraphQL === 'true';
 
         let isMeLoaded = false;
-        const dataFromLoadMe = await dispatch(loadMe());
+        const dataFromLoadMe = await dispatch(loadMeREST());
         isMeLoaded = dataFromLoadMe?.data ?? false;
-
         return {data: isMeLoaded};
     };
 }

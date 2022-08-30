@@ -8,7 +8,7 @@ import loaderkChat from 'images/logo_compact.png';
 import './app_name_display.scss';
 import {isDesktopApp} from 'utils/user_agent';
 type Props = {
-    position: 'absolute' | 'fixed' | 'relative' | 'static' | 'inherit';
+    position?: 'absolute' | 'fixed' | 'relative' | 'static' | 'inherit';
     style?: CSSProperties;
     message?: ReactNode;
 }

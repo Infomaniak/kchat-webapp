@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/* eslint-disable max-lines */
+
 import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
@@ -36,6 +38,8 @@ import {logError} from './errors';
 import {systemEmojis, getCustomEmojiByName, getCustomEmojisByName} from './emojis';
 import {selectChannel} from './channels';
 import {decrementThreadCounts} from './threads';
+
+export let hasLimitDate: string | null;
 
 // receivedPost should be dispatched after a single post from the server. This typically happens when an existing post
 // is updated.
@@ -850,6 +854,8 @@ export function getPostsUnread(channelId: string, fetchThreads = true, collapsed
                 recentPosts = await Client4.getPosts(channelId, 0, Posts.POST_CHUNK_SIZE / 2, fetchThreads, collapsedThreadsEnabled, collapsedThreadsExtended);
             }
 
+            hasLimitDate = posts.has_limitation;
+
             getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
@@ -915,6 +921,8 @@ export function getPostsBefore(channelId: string, postId: string, page = 0, perP
             return {error};
         }
 
+        hasLimitDate = posts.has_limitation;
+
         dispatch(batchActions([
             receivedPosts(posts),
             receivedPostsBefore(posts, channelId, postId, posts.prev_post_id === ''),
@@ -979,6 +987,7 @@ export function getPostsAround(channelId: string, postId: string, perPage = Post
             ],
             next_post_id: after.next_post_id,
             prev_post_id: before.prev_post_id,
+            first_inaccessible_post_time: Math.max(before.first_inaccessible_post_time, after.first_inaccessible_post_time, thread.first_inaccessible_post_time) || 0,
         };
 
         getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);

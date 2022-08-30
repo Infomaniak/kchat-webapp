@@ -70,13 +70,12 @@ package-ci: ## used in the CI to build the package and bypass the npm install
 	mv tmp/client dist
 	rmdir tmp
 
-build: node_modules ## Builds the app
+build: ## Builds the app
 	@echo Building mattermost Webapp
 
 	rm -rf dist
 
-	npm run build --workspace=packages/components
-	npm run build
+	export $(xargs < ./.env) && yarn build
 
 run: node_modules ## Runs app
 	@echo Running mattermost Webapp for development

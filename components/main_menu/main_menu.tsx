@@ -18,22 +18,19 @@ import InvitationModal from 'components/invitation_modal';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 
-import LeaveTeamIcon from 'components/widgets/icons/leave_team_icon';
 
-import LeaveTeamModal from 'components/leave_team_modal';
 import UserSettingsModal from 'components/user_settings/modal';
 import TeamMembersModal from 'components/team_members_modal';
 import TeamSettingsModal from 'components/team_settings_modal';
-import AboutBuildModal from 'components/about_build_modal';
 import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
 
 import Menu from 'components/widgets/menu/menu';
-import RestrictedIndicator from 'components/widgets/menu/menu_items/restricted_indicator';
 import TeamGroupsManageModal from 'components/team_groups_manage_modal';
 
 import {ModalData} from 'types/actions';
 import {PluginComponent} from 'types/store/plugins';
 import {UserProfile} from '@mattermost/types/users';
+import {IKConstants} from '../../utils/constants-ik';
 
 export type Props = {
     mobile: boolean;
@@ -123,7 +120,7 @@ export class MainMenu extends React.PureComponent<Props> {
 
     redirectToManagerProfile = (e: Event): void => {
         e.preventDefault();
-        window.open('https://manager.infomaniak.com/v3/ng/profile/user/dashboard', '_blank');
+        window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
     };
 
     render() {

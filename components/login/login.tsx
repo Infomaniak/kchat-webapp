@@ -60,6 +60,7 @@ const Login = () => {
     const closeSessionExpiredNotification = useRef<() => void>();
 
     useEffect(() => {
+        console.log('[LOGIN] init login component');
         if (currentUser) {
             redirectUserToDefaultTeam();
             return;
@@ -67,7 +68,10 @@ const Login = () => {
 
         if (isDesktopApp()) {
             const loginCode = (new URLSearchParams(search)).get('code');
-
+            if (loginCode) {
+                console.log('[LOGIN] Login with code');
+            }
+            Client4.isUnauthorized = false;
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
@@ -76,6 +80,11 @@ const Login = () => {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
+                navigator.serviceWorker.controller?.postMessage({
+                    type: 'TOKEN_REFRESHED',
+                    token: token || '',
+                });
+
                 LocalStorageStore.setWasLoggedIn(true);
                 GlobalActions.redirectUserToDefaultTeam();
             }
@@ -100,9 +109,13 @@ const Login = () => {
                     storeTokenResponse(resp);
                     localStorage.removeItem('challenge');
                     LocalStorageStore.setWasLoggedIn(true);
+                    navigator.serviceWorker.controller?.postMessage({
+                        type: 'TOKEN_REFRESHED',
+                        token: resp.access_token || '',
+                    });
                     finishSignin();
                 }).catch((error) => {
-                    console.log('catch error', error);
+                    console.log('[TOKEN] post token fail', error);
                     clearLocalStorageToken();
                     getChallengeAndRedirectToLogin();
                 });
@@ -124,6 +137,7 @@ const Login = () => {
             }
 
             if ((!token || !refreshToken || !tokenExpire) && !loginCode) {
+                console.log('[LOGIN] No token or code or token expired, redirect to login ik');
                 getChallengeAndRedirectToLogin();
             }
         }
@@ -143,10 +157,10 @@ const Login = () => {
                 history.replace(`${pathname}?${newSearchParam}`);
             }
 
-            return;
+            // return;
         }
 
-        redirectUserToDefaultTeam();
+        // redirectUserToDefaultTeam();
     }, []);
 
     useEffect(() => {

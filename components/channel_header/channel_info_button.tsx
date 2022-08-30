@@ -34,18 +34,20 @@ const ChannelInfoButton = ({channel}: Props) => {
 
     const rhsState: RhsState = useSelector(getRhsState);
     const isRhsOpen: boolean = useSelector(getIsRhsOpen);
-    const buttonActive = isRhsOpen &&
-        (rhsState === RHSStates.CHANNEL_INFO ||
+    const isChannelInfo = rhsState === RHSStates.CHANNEL_INFO ||
         rhsState === RHSStates.CHANNEL_MEMBERS ||
         rhsState === RHSStates.CHANNEL_FILES ||
-        rhsState === RHSStates.PIN);
+        rhsState === RHSStates.PIN;
+
+    const buttonActive = isRhsOpen && isChannelInfo;
     const toggleRHS = useCallback(() => {
         if (buttonActive) {
-            dispatch(closeRightHandSide());
+            const action = isChannelInfo ? closeRightHandSide() : showChannelInfo(channel.id);
+            dispatch(action);
         } else {
             dispatch(showChannelInfo(channel.id));
         }
-    }, [buttonActive, channel.id, dispatch]);
+    }, [buttonActive, channel.id, isChannelInfo, dispatch]);
 
     const tooltipKey = buttonActive ? 'closeChannelInfo' : 'openChannelInfo';
 

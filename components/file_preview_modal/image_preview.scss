@@ -1,12 +1,12 @@
 .image_preview_div {
-    &__normal {
+    &.normal {
         display: flex;
         align-items: center;
         text-align: center;
     }
 
-    &__fullscreen {
-        border-radius: 0px;
+    &.fullscreen {
+        border-radius: 0;
     }
 }
 
@@ -14,9 +14,11 @@
     &__normal {
         cursor: default;
     }
+
     &__hover {
         cursor: grab;
     }
+
     &__dragging {
         cursor: grabbing;
     }
