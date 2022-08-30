@@ -1984,7 +1984,7 @@ exports[`components/ChannelHeader should render not active channel files 1`] = `
         }
       }
     />
-    <Connect(CallButton) />
+    <Connect(injectIntl(MeetButton)) />
     <ChannelInfoButton
       channel={
         Object {
@@ -2276,7 +2276,6 @@ exports[`components/ChannelHeader should render properly when custom status is e
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
     <ChannelInfoButton
       channel={
         Object {
@@ -2872,6 +2871,7 @@ exports[`components/ChannelHeader should render properly when empty 1`] = `
         }
       }
     />
+    <Connect(injectIntl(MeetButton)) />
     <ChannelInfoButton
       channel={
         Object {

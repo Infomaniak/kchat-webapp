@@ -99,18 +99,3 @@ export function registerCustomPostRenderer(type: string, component: any, id: str
         return {data: true};
     };
 }
-
-export function registerCustomPostRenderer(type, component, id) {
-    return async (dispatch) => {
-        // piggyback on plugins state to register a custom post renderer
-        dispatch({
-            type: ActionTypes.RECEIVED_PLUGIN_POST_COMPONENT,
-            data: {
-                postTypeId: id,
-                pluginId: id,
-                type,
-                component,
-            },
-        });
-    };
-}

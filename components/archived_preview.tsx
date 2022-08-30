@@ -4,7 +4,7 @@
 import React from 'react';
 import {useIntl} from 'react-intl';
 
-import {ArchiveOutlineIcon} from '@mattermost/compass-icons/components';
+import {ArchiveOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {FileInfo} from '@mattermost/types/files';
 

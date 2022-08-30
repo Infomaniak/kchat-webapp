@@ -6,8 +6,6 @@ import ColorHash from 'color-hash';
 import ColorContrastChecker from 'color-contrast-checker';
 
 import {UserProfile as UserProfileType} from '@mattermost/types/users';
-import {Theme} from 'mattermost-redux/types/themes';
-
 import {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 

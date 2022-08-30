@@ -491,12 +491,6 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
             unreadScrollPositionSectionDivider = <div className='divider-light'/>;
         }
 
-        const unreadScrollPositionSection = this.renderUnreadScrollPositionSection();
-        let unreadScrollPositionSectionDivider = null;
-        if (unreadScrollPositionSection) {
-            unreadScrollPositionSectionDivider = <div className='divider-light'/>;
-        }
-
         return (
             <div>
                 <div className='modal-header'>

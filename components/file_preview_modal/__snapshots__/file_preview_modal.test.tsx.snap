@@ -123,13 +123,7 @@ exports[`components/FilePreviewModal should fall back to default preview if plug
         <div
           className="file-preview-modal__content"
           onClick={[Function]}
-        >
-          <LoadingImagePreview
-            containerClass="view-image__loading"
-            loading="Loading"
-            progress={0}
-          />
-        </div>
+        />
       </div>
     </div>
   </ModalBody>
@@ -259,13 +253,7 @@ exports[`components/FilePreviewModal should match snapshot 1`] = `
         <div
           className="file-preview-modal__content"
           onClick={[Function]}
-        >
-          <LoadingImagePreview
-            containerClass="view-image__loading"
-            loading="Loading"
-            progress={0}
-          />
-        </div>
+        />
       </div>
     </div>
   </ModalBody>
@@ -395,13 +383,7 @@ exports[`components/FilePreviewModal should match snapshot for external file 1`]
         <div
           className="file-preview-modal__content"
           onClick={[Function]}
-        >
-          <LoadingImagePreview
-            containerClass="view-image__loading"
-            loading="Loading"
-            progress={0}
-          />
-        </div>
+        />
       </div>
     </div>
   </ModalBody>
@@ -1779,26 +1761,10 @@ exports[`components/FilePreviewModal should match snapshot, loaded with other fi
           className="file-preview-modal__content"
           onClick={[Function]}
         >
-          <Connect(FileInfoPreview)
-            fileInfo={
-              Object {
-                "archived": false,
-                "clientId": "client_id",
-                "create_at": 1,
-                "delete_at": 1,
-                "extension": "other",
-                "has_preview_image": true,
-                "height": 200,
-                "id": "file_id",
-                "mime_type": "mime_type",
-                "name": "name",
-                "size": 1,
-                "update_at": 1,
-                "user_id": "user_id",
-                "width": 350,
-              }
-            }
-            fileUrl="/api/v4/files/file_id"
+          <LoadingImagePreview
+            containerClass="view-image__loading"
+            loading="Loading"
+            progress={0}
           />
         </div>
       </div>

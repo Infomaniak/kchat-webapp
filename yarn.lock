@@ -1815,12 +1815,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@floating-ui/core@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@floating-ui/core@npm:1.0.1"
+  checksum: c8a5f1a491788e5bebfe747e9372df2c7cbee0d8790ddf95e25149ac91ccf1a2cca8f768029826cfd3d687617c1d0f3241b97f1648bdf2a28d421f39e79c2eee
+  languageName: node
+  linkType: hard
+
 "@floating-ui/dom@npm:^0.5.3":
   version: 0.5.4
   resolution: "@floating-ui/dom@npm:0.5.4"
   dependencies:
     "@floating-ui/core": ^0.7.3
   checksum: 9f9d8a51a828c6be5f187204aa6d293c6c9ef70d51dcc5891a4d85683745fceebf79ff8826d0f75ae41b45c3b138367d339756f27f41be87a8770742ebc0de42
+  languageName: node
+  linkType: hard
+
+"@floating-ui/dom@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "@floating-ui/dom@npm:1.0.1"
+  dependencies:
+    "@floating-ui/core": ^1.0.1
+  checksum: 617d5b45d6454e9f2b5bba26d0181d1c5863c92960b8e867b9539763291dee0506077d338df805c116ea73330900e657da65af411df85b8ba99e8d4e5fc4e745
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react-dom-interactions@npm:0.9.1":
+  version: 0.9.1
+  resolution: "@floating-ui/react-dom-interactions@npm:0.9.1"
+  dependencies:
+    "@floating-ui/react-dom": ^1.0.0
+    aria-hidden: ^1.1.3
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 00f077547e883f3be45386a6e74c64913c02af417ae2b15cf86b10af79724b52095b820e8ba034b0bac5eba597010b1ea95095ba692c33cbc307f1df7608c54a
   languageName: node
   linkType: hard
 
@@ -1834,6 +1863,18 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: bc3f2b5557f87f6f4bbccfe3e8d097abafad61a41083d3b79f3499f27590e273bcb3dc7136c2444841ee7a8c0d2a70cc1385458c16103fa8b70eade80c24af52
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react-dom@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@floating-ui/react-dom@npm:1.0.0"
+  dependencies:
+    "@floating-ui/dom": ^1.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: d79e3c8570b0eaef5e968cd9c69de2c6bb372a5316e4e69a1cd12dae81771863ef430e81b74a0c21cefba663a2f971d8540c7294d7fb3b9807e32ba2a00c1e76
   languageName: node
   linkType: hard
 
@@ -3173,6 +3214,13 @@ __metadata:
     mkdirp: ^1.0.4
     rimraf: ^3.0.2
   checksum: 52dc02259d98da517fae4cb3a0a3850227bdae4939dda1980b788a7670636ca2b4a01b58df03dd5f65c1e3cb70c50fa8ce5762b582b3f499ec30ee5ce1fd9380
+  languageName: node
+  linkType: hard
+
+"@polka/url@npm:^1.0.0-next.20":
+  version: 1.0.0-next.21
+  resolution: "@polka/url@npm:1.0.0-next.21"
+  checksum: c7654046d38984257dd639eab3dc770d1b0340916097b2fac03ce5d23506ada684e05574a69b255c32ea6a144a957c8cd84264159b545fca031c772289d88788
   languageName: node
   linkType: hard
 
@@ -4756,6 +4804,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"acorn-walk@npm:^8.0.0":
+  version: 8.2.0
+  resolution: "acorn-walk@npm:8.2.0"
+  checksum: 1715e76c01dd7b2d4ca472f9c58968516a4899378a63ad5b6c2d668bba8da21a71976c14ec5f5b75f887b6317c4ae0b897ab141c831d741dc76024d8745f1ad1
+  languageName: node
+  linkType: hard
+
 "acorn@npm:^7.1.1, acorn@npm:^7.4.0":
   version: 7.4.1
   resolution: "acorn@npm:7.4.1"
@@ -4765,7 +4820,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.2.4, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1":
+"acorn@npm:^8.0.4, acorn@npm:^8.2.4, acorn@npm:^8.4.1, acorn@npm:^8.5.0, acorn@npm:^8.7.1":
   version: 8.8.0
   resolution: "acorn@npm:8.8.0"
   bin:
@@ -5029,6 +5084,21 @@ __metadata:
   dependencies:
     sprintf-js: ~1.0.2
   checksum: 7ca6e45583a28de7258e39e13d81e925cfa25d7d4aacbf806a382d3c02fcb13403a07fb8aeef949f10a7cfe4a62da0e2e807b348a5980554cc28ee573ef95945
+  languageName: node
+  linkType: hard
+
+"aria-hidden@npm:^1.1.3":
+  version: 1.2.1
+  resolution: "aria-hidden@npm:1.2.1"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    "@types/react": ^16.9.0 || ^17.0.0 || ^18.0.0
+    react: ^16.9.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: cd8047a0113d5ecc11bce1616ae2772abcb0a6e1da5a70cbfc3555e8da063b0416d62cced3e704b6d424cbf408c1fc21225d69723cd62c3f1f0cf3b41d674c2b
   languageName: node
   linkType: hard
 
@@ -7917,6 +7987,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"duplexer@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "duplexer@npm:0.1.2"
+  checksum: 62ba61a830c56801db28ff6305c7d289b6dc9f859054e8c982abd8ee0b0a14d2e9a8e7d086ffee12e868d43e2bbe8a964be55ddbd8c8957714c87373c7a4f9b0
+  languageName: node
+  linkType: hard
+
 "dynamic-virtualized-list@github:mattermost/dynamic-virtualized-list#77a0cb4c565bc239bab1ce5414b95bdd9a570963":
   version: 1.0.0-beta
   resolution: "dynamic-virtualized-list@https://github.com/mattermost/dynamic-virtualized-list.git#commit=77a0cb4c565bc239bab1ce5414b95bdd9a570963"
@@ -10114,6 +10191,15 @@ __metadata:
   version: 1.0.0
   resolution: "gud@npm:1.0.0"
   checksum: 3e2eb37cf794364077c18f036d6aa259c821c7fd188f2b7935cb00d589d82a41e0ebb1be809e1a93679417f62f1ad0513e745c3cf5329596e489aef8c5e5feae
+  languageName: node
+  linkType: hard
+
+"gzip-size@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "gzip-size@npm:6.0.0"
+  dependencies:
+    duplexer: ^0.1.2
+  checksum: 2df97f359696ad154fc171dcb55bc883fe6e833bca7a65e457b9358f3cb6312405ed70a8da24a77c1baac0639906cd52358dc0ce2ec1a937eaa631b934c94194
   languageName: node
   linkType: hard
 
@@ -13373,6 +13459,7 @@ __metadata:
     "@babel/preset-typescript": 7.16.0
     "@deanwhillier/jest-matchmedia-mock": 1.2.0
     "@floating-ui/react-dom": 0.7.2
+    "@floating-ui/react-dom-interactions": 0.9.1
     "@hot-loader/react-dom": 16.13.0
     "@infomaniak/compass-components": ^0.5.0
     "@infomaniak/compass-icons": 0.1.0
@@ -13558,6 +13645,7 @@ __metadata:
     tinycolor2: 1.4.2
     typescript: 4.3.4
     webpack: 5.64.2
+    webpack-bundle-analyzer: 4.6.0
     webpack-cli: 4.10.0
     webpack-dev-server: 4.5.0
     webpack-livereload-plugin: 3.0.2
@@ -14048,6 +14136,13 @@ __metadata:
   bin:
     mozjpeg: cli.js
   checksum: c2d90f55a0650d008faf45384c33abe3a5b2d7d8bdf9cf7ec0cc43824f45ac49204a0d80943faef1270e3ea5a99ea066ef780bda121a4123606069995b6882bc
+  languageName: node
+  linkType: hard
+
+"mrmime@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "mrmime@npm:1.0.1"
+  checksum: cc979da44bbbffebaa8eaf7a45117e851f2d4cb46a3ada6ceb78130466a04c15a0de9a9ce1c8b8ba6f6e1b8618866b1352992bf1757d241c0ddca558b9f28a77
   languageName: node
   linkType: hard
 
@@ -14598,6 +14693,15 @@ __metadata:
     is-docker: ^2.0.0
     is-wsl: ^2.1.1
   checksum: 3333900ec0e420d64c23b831bc3467e57031461d843c801f569b2204a1acc3cd7b3ec3c7897afc9dde86491dfa289708eb92bba164093d8bd88fb2c231843c91
+  languageName: node
+  linkType: hard
+
+"opener@npm:^1.5.2":
+  version: 1.5.2
+  resolution: "opener@npm:1.5.2"
+  bin:
+    opener: bin/opener-bin.js
+  checksum: 33b620c0d53d5b883f2abc6687dd1c5fd394d270dbe33a6356f2d71e0a2ec85b100d5bac94694198ccf5c30d592da863b2292c5539009c715a9c80c697b4f6cc
   languageName: node
   linkType: hard
 
@@ -17646,6 +17750,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sirv@npm:^1.0.7":
+  version: 1.0.19
+  resolution: "sirv@npm:1.0.19"
+  dependencies:
+    "@polka/url": ^1.0.0-next.20
+    mrmime: ^1.0.0
+    totalist: ^1.0.0
+  checksum: c943cfc61baf85f05f125451796212ec35d4377af4da90ae8ec1fa23e6d7b0b4d9c74a8fbf65af83c94e669e88a09dc6451ba99154235eead4393c10dda5b07c
+  languageName: node
+  linkType: hard
+
 "sisteransi@npm:^1.0.5":
   version: 1.0.5
   resolution: "sisteransi@npm:1.0.5"
@@ -18890,6 +19005,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"totalist@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "totalist@npm:1.1.0"
+  checksum: dfab80c7104a1d170adc8c18782d6c04b7df08352dec452191208c66395f7ef2af7537ddfa2cf1decbdcfab1a47afbbf0dec6543ea191da98c1c6e1599f86adc
+  languageName: node
+  linkType: hard
+
 "touch@npm:^2.0.1":
   version: 2.0.2
   resolution: "touch@npm:2.0.2"
@@ -19004,7 +19126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.4.0":
+"tslib@npm:^2.0.0, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.4.0":
   version: 2.4.0
   resolution: "tslib@npm:2.4.0"
   checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
@@ -19702,6 +19824,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"webpack-bundle-analyzer@npm:4.6.0":
+  version: 4.6.0
+  resolution: "webpack-bundle-analyzer@npm:4.6.0"
+  dependencies:
+    acorn: ^8.0.4
+    acorn-walk: ^8.0.0
+    chalk: ^4.1.0
+    commander: ^7.2.0
+    gzip-size: ^6.0.0
+    lodash: ^4.17.20
+    opener: ^1.5.2
+    sirv: ^1.0.7
+    ws: ^7.3.1
+  bin:
+    webpack-bundle-analyzer: lib/bin/analyzer.js
+  checksum: f2921b08cb6a7e58e5b94d2324e98039666ef5c4ce46dc29d5c13f122f12b9b5e9036336283196b70f696be793aec900f87b352712f2fc28d1beec4b7080a097
+  languageName: node
+  linkType: hard
+
 "webpack-cli@npm:4.10.0, webpack-cli@npm:^4.9.2":
   version: 4.10.0
   resolution: "webpack-cli@npm:4.10.0"
@@ -20117,7 +20258,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^7.4.6, ws@npm:^7.5.0":
+"ws@npm:^7.3.1, ws@npm:^7.4.6, ws@npm:^7.5.0":
   version: 7.5.9
   resolution: "ws@npm:7.5.9"
   peerDependencies:

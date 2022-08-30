@@ -5,7 +5,7 @@ import React, {useRef, useState, useEffect} from 'react';
 import classNames from 'classnames';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import {ArchiveOutlineIcon} from '@mattermost/compass-icons/components';
+import {ArchiveOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {getFileThumbnailUrl, getFileUrl} from 'mattermost-redux/utils/file_utils';
 import {FileInfo} from '@mattermost/types/files';
