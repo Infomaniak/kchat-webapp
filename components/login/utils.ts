@@ -37,6 +37,7 @@ export function clearLocalStorageToken() {
     localStorage.removeItem('IKToken');
     localStorage.removeItem('IKRefreshToken');
     localStorage.removeItem('IKTokenExpire');
+    localStorage.setItem('tokenExpired', '1');
 }
 
 /**
@@ -115,6 +116,7 @@ export function needRefreshToken() {
 
 export function refreshIKToken(redirectToTeam = false, periodic = false) {
     const refreshToken = localStorage.getItem('IKRefreshToken');
+
     if (!refreshToken) {
         clearLocalStorageToken();
         getChallengeAndRedirectToLogin();
@@ -133,7 +135,7 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
 
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
-
+        console.log('[TOKEN] Token refreshed');
         navigator.serviceWorker.controller?.postMessage({
             type: 'TOKEN_REFRESHED',
             token: resp.access_token || '',
