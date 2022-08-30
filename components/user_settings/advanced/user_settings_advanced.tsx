@@ -1,14 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-/* eslint-disable react/no-string-refs */
+
 /* eslint-disable max-lines */
 
 import React, {ReactNode} from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import {emitUserLoggedOutEvent} from 'actions/global_actions';
+
 import Constants, {Preferences} from 'utils/constants';
 import {t} from 'utils/i18n';
-import {isMac} from 'utils/utils';
+import {isMac, localizeMessage} from 'utils/utils';
 
 import SettingItemMax from 'components/setting_item_max.jsx';
 import SettingItemMin from 'components/setting_item_min';
@@ -124,6 +126,31 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
         settings[setting] = value;
 
         this.setState((prevState) => ({...prevState, ...settings}));
+    }
+
+    toggleFeature = (feature: string, checked: boolean): void => {
+        const {settings} = this.state;
+        settings[Constants.FeatureTogglePrefix + feature] = String(checked);
+
+        let enabledFeatures = 0;
+        Object.keys(this.state.settings).forEach((setting) => {
+            if (setting.lastIndexOf(Constants.FeatureTogglePrefix) === 0 && this.state.settings[setting] === 'true') {
+                enabledFeatures++;
+            }
+        });
+
+        this.setState((prevState) => ({...prevState, ...settings}));
+    }
+
+    saveEnabledFeatures = (): void => {
+        const features: string[] = [];
+        Object.keys(this.state.settings).forEach((setting) => {
+            if (setting.lastIndexOf(Constants.FeatureTogglePrefix) === 0) {
+                features.push(setting);
+            }
+        });
+
+        this.handleSubmit(features);
     }
 
     handleSubmit = async (settings: string[]): Promise<void> => {
@@ -464,6 +491,12 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
             unreadScrollPositionSectionDivider = <div className='divider-light'/>;
         }
 
+        const unreadScrollPositionSection = this.renderUnreadScrollPositionSection();
+        let unreadScrollPositionSectionDivider = null;
+        if (unreadScrollPositionSection) {
+            unreadScrollPositionSectionDivider = <div className='divider-light'/>;
+        }
+
         return (
             <div>
                 <div className='modal-header'>
@@ -479,6 +512,7 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
                     </button>
                     <h4
                         className='modal-title'
+                        // eslint-disable-next-line react/no-string-refs
                         ref='title'
                     >
                         <div className='modal-back'>

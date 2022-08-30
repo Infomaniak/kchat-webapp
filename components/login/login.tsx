@@ -27,6 +27,7 @@ import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
 import LocalStorageStore from 'stores/local_storage_store';
 import {GlobalState} from 'types/store';
+
 import Constants from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import {isDesktopApp} from 'utils/user_agent';
@@ -55,6 +56,8 @@ const Login = () => {
     const experimentalPrimaryTeam = useSelector((state: GlobalState) => (ExperimentalPrimaryTeam ? getTeamByName(state, ExperimentalPrimaryTeam) : undefined));
     const experimentalPrimaryTeamMember = useSelector((state: GlobalState) => getMyTeamMember(state, experimentalPrimaryTeam?.id ?? ''));
     const useCaseOnboarding = useSelector(getUseCaseOnboarding);
+    const isCloud = useSelector(isCurrentLicenseCloud);
+    const graphQLEnabled = useSelector(isGraphQLEnabled);
 
     const passwordInput = useRef<HTMLInputElement>(null);
     const closeSessionExpiredNotification = useRef<() => void>();
@@ -212,6 +215,7 @@ const Login = () => {
 
     return (
         <div className='login-body'>
+            {!isMobileView && getAlternateLink()}
             <div className='login-body-content'>
                 {getContent()}
             </div>

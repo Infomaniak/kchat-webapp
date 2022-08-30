@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
 
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
-import {getPost, makeIsPostCommentMention, makeGetCommentCountForPost} from 'mattermost-redux/selectors/entities/posts';
+import {getPost, makeIsPostCommentMention, makeGetCommentCountForPost, UserActivityPost} from 'mattermost-redux/selectors/entities/posts';
 
 import {
     get,

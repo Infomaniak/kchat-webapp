@@ -14,6 +14,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 
 const NPM_TARGET = process.env.npm_lifecycle_event; //eslint-disable-line no-process-env
 
@@ -158,11 +159,12 @@ if (DEV) {
 }
 
 var config = {
-    entry: ['./root.jsx', 'root.html.ejs'],
+    entry: ['./root.tsx', 'root.html.ejs'],
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
         chunkFilename: '[name].[contenthash].js',
+        clean: true,
     },
     module: {
         rules: [
@@ -276,8 +278,6 @@ var config = {
             path.resolve(__dirname),
         ],
         alias: {
-            '@mattermost/client': 'packages/client/src',
-            '@mattermost/types': 'packages/types/src',
             'mattermost-redux/test': 'packages/mattermost-redux/test',
             'mattermost-redux': 'packages/mattermost-redux/src',
             reselect: 'packages/reselect/src',
@@ -364,6 +364,9 @@ var config = {
                 {from: 'images/payment-method-illustration.png', to: 'images'},
                 {from: 'images/cloud-laptop.png', to: 'images'},
                 {from: 'images/bot_default_icon.png', to: 'images'},
+                {from: 'images/cloud-laptop-error.png', to: 'images'},
+                {from: 'images/cloud-laptop-warning.png', to: 'images'},
+                {from: 'images/cloud-upgrade-person-hand-to-face.png', to: 'images'},
             ],
         }),
 
@@ -433,6 +436,11 @@ var config = {
                 sizes: '96x96',
             }],
         }),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'disabled',
+            generateStatsFile: true,
+            statsFilename: 'bundlestats.json',
+        }),
     ],
 };
 
@@ -456,7 +464,7 @@ config.plugins.push(new webpack.DefinePlugin({
 
 // Test mode configuration
 if (targetIsTest) {
-    config.entry = ['./root.jsx'];
+    config.entry = ['./root.tsx'];
     config.target = 'node';
     config.externals = [nodeExternals()];
 }
