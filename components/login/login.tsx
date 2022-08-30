@@ -60,6 +60,7 @@ const Login = () => {
     const closeSessionExpiredNotification = useRef<() => void>();
 
     useEffect(() => {
+        console.log('[LOGIN] init login component');
         if (currentUser) {
             redirectUserToDefaultTeam();
             return;
@@ -67,7 +68,10 @@ const Login = () => {
 
         if (isDesktopApp()) {
             const loginCode = (new URLSearchParams(search)).get('code');
-
+            if (loginCode) {
+                console.log('[LOGIN] Login with code');
+            }
+            Client4.isUnauthorized = false;
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
@@ -111,7 +115,7 @@ const Login = () => {
                     });
                     finishSignin();
                 }).catch((error) => {
-                    console.log('catch error', error);
+                    console.log('[TOKEN] post token fail', error);
                     clearLocalStorageToken();
                     getChallengeAndRedirectToLogin();
                 });
@@ -133,6 +137,7 @@ const Login = () => {
             }
 
             if ((!token || !refreshToken || !tokenExpire) && !loginCode) {
+                console.log('[LOGIN] No token or code or token expired, redirect to login ik');
                 getChallengeAndRedirectToLogin();
             }
         }

@@ -122,6 +122,7 @@ import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
+import crypto from 'crypto';
 
 // Fix error import
 // eslint-disable-next-line no-warning-comments
@@ -4118,23 +4119,17 @@ export default class Client4 {
                         `${IKConstants.LOGIN_URL}`,
                         `${IKConstants.CLIENT_ID}`,
                     ).then((response) => {
-                        const d = new Date();
-                        d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
-                        localStorage.setItem('IKToken', response.access_token);
-                        localStorage.setItem('IKRefreshToken', response.refresh_token);
-                        // @ts-ignore
-                        localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
-                        localStorage.setItem('tokenExpired', '0');
-                        this.setToken(response.access_token);
-                        this.setCSRF(response.access_token);
-                        this.setAuthHeader = true;
+                        this.storeTokenResponse(response);
                         navigator.serviceWorker.controller?.postMessage({
                             type: 'TOKEN_REFRESHED',
                             token: response.access_token || '',
                         });
                         localStorage.removeItem('refreshingToken');
                     }).catch(() => {
+                        console.log('[TOKEN] fail refresh from client');
                         localStorage.removeItem('refreshingToken');
+                        this.clearLocalStorageToken();
+                        this.getChallengeAndRedirectToLogin();
                     });
                 }
             }
@@ -4202,7 +4197,6 @@ export default class Client4 {
         );
     };
 
-    // TODO: when is ok update with env and/or current server url (dev, preprod....)
     getIKLoginToken = (code: string, challenge: string, verifier: string, loginUrl: string, clientId: string) => {
         // Body in formData because Laravel do not manage JSON
         const formData = new FormData();
@@ -4224,7 +4218,6 @@ export default class Client4 {
         );
     }
 
-    // TODO: when is ok update with env and/or current server url (dev, preprod....)
     refreshIKLoginToken = (refresh: string, loginUrl: string, clientId: string) => {
         // Body in formData because Laravel do not manage JSON
         const formData = new FormData();
@@ -4242,6 +4235,90 @@ export default class Client4 {
             },
         );
     }
+
+    /****************************************************/
+    /*                                                  */
+    /*                IK CUSTOMS UTILS                  */
+    /*                                                  */
+    /****************************************************/
+
+    /**
+     * Store IKToken infos in localStorage and update Client
+     */
+    storeTokenResponse(response: { expires_in?: any; access_token?: any; refresh_token?: any }) {
+        // TODO: store in redux
+        const d = new Date();
+        d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
+        localStorage.setItem('IKToken', response.access_token);
+        localStorage.setItem('IKRefreshToken', response.refresh_token);
+        localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
+        localStorage.setItem('tokenExpired', '0');
+        this.setToken(response.access_token);
+        this.setCSRF(response.access_token);
+        this.setAuthHeader = true;
+    }
+
+    /**
+     * Clear IKToken informations in localStorage
+     */
+    clearLocalStorageToken() {
+        console.log('[TOKEN] Clear token storage');
+        localStorage.removeItem('IKToken');
+        localStorage.removeItem('IKRefreshToken');
+        localStorage.removeItem('IKTokenExpire');
+    }
+
+
+    /**
+     * get code_verifier for challenge
+     * @returns string
+     */
+    getCodeVerifier() {
+        const ramdonByte = crypto.randomBytes(33);
+        const hash =
+            crypto.createHash('sha256').update(ramdonByte).digest();
+        return hash.toString('base64').
+            replace(/\+/g, '-').
+            replace(/\//g, '_').
+            replace(/[=]/g, '');
+    }
+
+    /**
+     * Generate code_challenge for oauth
+     * @param codeVerifier string
+     * @returns string
+     */
+    async generateCodeChallenge(codeVerifier: string) {
+        const hash =
+            crypto.createHash('sha256').update(codeVerifier).digest();
+        return hash.toString('base64').
+            replace(/\+/g, '-').
+            replace(/\//g, '_').
+            replace(/[=]/g, '');
+    }
+
+    /**
+     * get code_challenge and redirect to IK Login
+     */
+    getChallengeAndRedirectToLogin() {
+        const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
+        // const redirectTo = 'ktalk://auth-desktop';
+        const codeVerifier = this.getCodeVerifier();
+        let codeChallenge = '';
+
+        this.generateCodeChallenge(codeVerifier).then((challenge) => {
+            codeChallenge = challenge;
+
+            // TODO: store in redux instead of localstorage
+            localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
+
+            // TODO: add env for login url and/or current server
+            window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
+        }).catch(() => {
+            console.log('Error redirect');
+        });
+    }
+
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {
