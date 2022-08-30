@@ -1,3 +1,9 @@
+## 0.2.18 (2022-08-30)
+
+## Other (1 change)
+
+- [remove non-existent var](kchat/webapp@12bc6aafa35711103ecac781ef1faed840694bb4) by @florent.glauda
+
 ## 0.2.17-rc.4 (2022-08-30)
 
 No changes.
