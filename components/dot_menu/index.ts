@@ -127,7 +127,6 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
         isFollowingThread,
         isMentionedInRootPost,
         isCollapsedThreadsEnabled: collapsedThreads,
-        isPostForwardingEnabled,
         threadReplyCount,
         isMobileView: getIsMobileView(state),
         showForwardPostNewLabel,
