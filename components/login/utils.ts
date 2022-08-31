@@ -73,6 +73,7 @@ export async function generateCodeChallenge(codeVerifier: string) {
  */
 export function getChallengeAndRedirectToLogin() {
     const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
+
     // const redirectTo = 'ktalk://auth-desktop';
     const codeVerifier = getCodeVerifier();
     let codeChallenge = '';
@@ -143,9 +144,23 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
         console.log('[TOKEN] Token refreshed');
-        navigator.serviceWorker.controller?.postMessage({
-            type: 'TOKEN_REFRESHED',
-            token: resp.access_token || '',
+        navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
+            console.log('[TOKEN / SW] SW is ready');
+            // Let's see if you have a subscription already
+            return serviceWorkerRegistration.pushManager.getSubscription();
+        }).then((subscription) => {
+            if (!subscription) {
+            // You do not have subscription
+                return;
+            }
+
+            // You have subscription.
+            // Send data to service worker
+            console.log('[TOKEN / SW] sending token to SW after refresh');
+            navigator.serviceWorker.controller?.postMessage({
+                type: 'TOKEN_REFRESHED',
+                token: resp.access_token || localStorage.getItem('IKToken'),
+            });
         });
         localStorage.removeItem('refreshingToken');
 
