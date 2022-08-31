@@ -38,6 +38,15 @@ export function clearLocalStorageToken() {
     localStorage.removeItem('IKRefreshToken');
     localStorage.removeItem('IKTokenExpire');
     localStorage.setItem('tokenExpired', '1');
+    window.postMessage(
+        {
+            type: 'token-cleared',
+            message: {
+                token: null,
+            },
+        },
+        window.origin,
+    );
 }
 
 /**
@@ -73,7 +82,6 @@ export async function generateCodeChallenge(codeVerifier: string) {
  */
 export function getChallengeAndRedirectToLogin() {
     const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
-
     // const redirectTo = 'ktalk://auth-desktop';
     const codeVerifier = getCodeVerifier();
     let codeChallenge = '';
@@ -112,7 +120,7 @@ export function checkIKTokenIsExpired() {
  */
 export function needRefreshToken() {
     console.log('[TOKEN] Token need to be refresh ?');
-    return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
+    return checkIKTokenIsExpired();
 }
 
 export function refreshIKToken(redirectToTeam = false, periodic = false) {
@@ -144,24 +152,23 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
         console.log('[TOKEN] Token refreshed');
-        navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
-            console.log('[TOKEN / SW] SW is ready');
-            // Let's see if you have a subscription already
-            return serviceWorkerRegistration.pushManager.getSubscription();
-        }).then((subscription) => {
-            if (!subscription) {
-            // You do not have subscription
-                return;
-            }
 
-            // You have subscription.
-            // Send data to service worker
-            console.log('[TOKEN / SW] sending token to SW after refresh');
-            navigator.serviceWorker.controller?.postMessage({
-                type: 'TOKEN_REFRESHED',
-                token: resp.access_token || localStorage.getItem('IKToken'),
-            });
+        window.postMessage(
+            {
+                type: 'token-refreshed',
+                message: {
+                    token: resp.access_token,
+                },
+            },
+            window.origin,
+        );
+
+        console.log('[TOKEN / SW] sending token to SW after refresh');
+        navigator.serviceWorker.controller?.postMessage({
+            type: 'TOKEN_REFRESHED',
+            token: resp.access_token || localStorage.getItem('IKToken'),
         });
+
         localStorage.removeItem('refreshingToken');
 
         // Refresh the websockets as we just changed Bearer Token
