@@ -120,7 +120,7 @@ export function checkIKTokenIsExpired() {
  */
 export function needRefreshToken() {
     console.log('[TOKEN] Token need to be refresh ?');
-    return checkIKTokenIsExpired();
+    return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
 export function refreshIKToken(redirectToTeam = false, periodic = false) {
