@@ -121,7 +121,7 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                             {insightsAreEnabled ? (
                                 <Route
                                     path='/:team/activity-and-insights'
-                                    component={ActivityAndInsights}
+                                    component={LazyActivityAndInsights}
                                 />
                             ) : null}
                             <Redirect to={lastChannelPath}/>

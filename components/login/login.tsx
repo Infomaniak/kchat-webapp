@@ -46,7 +46,8 @@ const Login = () => {
 
     const searchParam = new URLSearchParams(search);
     const extraParam = searchParam.get('extra');
-    const emailParam = searchParam.get('email');
+
+    // const emailParam = searchParam.get('email');
 
     const {
         ExperimentalPrimaryTeam,
@@ -56,10 +57,12 @@ const Login = () => {
     const experimentalPrimaryTeam = useSelector((state: GlobalState) => (ExperimentalPrimaryTeam ? getTeamByName(state, ExperimentalPrimaryTeam) : undefined));
     const experimentalPrimaryTeamMember = useSelector((state: GlobalState) => getMyTeamMember(state, experimentalPrimaryTeam?.id ?? ''));
     const useCaseOnboarding = useSelector(getUseCaseOnboarding);
-    const isCloud = useSelector(isCurrentLicenseCloud);
-    const graphQLEnabled = useSelector(isGraphQLEnabled);
 
-    const passwordInput = useRef<HTMLInputElement>(null);
+    // const isCloud = useSelector(isCurrentLicenseCloud);
+    // const graphQLEnabled = useSelector(isGraphQLEnabled);
+
+    // const passwordInput = useRef<HTMLInputElement>(null);
+
     const closeSessionExpiredNotification = useRef<() => void>();
 
     useEffect(() => {
@@ -215,7 +218,6 @@ const Login = () => {
 
     return (
         <div className='login-body'>
-            {!isMobileView && getAlternateLink()}
             <div className='login-body-content'>
                 {getContent()}
             </div>

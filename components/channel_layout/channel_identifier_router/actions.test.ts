@@ -123,56 +123,56 @@ describe('Actions', () => {
     //         expect(scope.isDone()).toBe(Boolean(statusCode));
     //     });
 
-    describe('getPathFromIdentifier', () => {
-        test('Should return channel_name if identifier is a channel name', () => {
-            const path = getPathFromIdentifier((initialState as any), 'channels', 'channelName');
-            expect(path).toEqual('channel_name');
-        });
-        test('Should return channel_id if identifier is a channel id', () => {
-            const path = getPathFromIdentifier((initialState as any), 'channels', 'pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz');
-            expect(path).toEqual('channel_id');
-        });
-        test('Should return group_id path if identifier is a group id', () => {
-            const path = getPathFromIdentifier((initialState as any), 'channels', '9c992e32cc7b3e5651f68b0ead4935fdf40d67');
-            expect(path).toEqual('group_channel_group_id');
-        });
-        test('Should return group_id path if channel exists and is type G', () => {
-            const path = getPathFromIdentifier((initialState as any), 'channels', 'some-group-channel');
-            expect(path).toEqual('group_channel_group_id');
-        });
-        test('Should return group_id path if identifier is a group id', () => {
-            const path = getPathFromIdentifier((initialState as any), 'messages', '9c992e32cc7b3e5651f68b0ead4935fdf40d67');
-            expect(path).toEqual('group_channel_group_id');
-        });
-        test('Should return direct channel path if identifier is in the format userid__userid2', () => {
-            const path = getPathFromIdentifier((initialState as any), 'channels', '3y8ujrgtbfn78ja5nfms3qm5jwna1c9mk2wy__3y8ujrgtbfn78ja5nfms3qm5jwna1c9mk2wy');
-            expect(path).toEqual('direct_channel_user_ids');
-        });
-        test('Should return channel by name path if identifier looks like a group id but matching channel is an open channel', () => {
-            const path = getPathFromIdentifier((initialState as any), 'channels', 'additional-abilities---community-systems');
-            expect(path).toEqual('channel_name');
-        });
-        test('Should return channel by name path if identifier is in the format userid--userid2', () => {
-            const path = getPathFromIdentifier((initialState as any), 'channels', '3y8ujrgtbfn78ja5nfms3qm5jwna1c9mk2wy--3y8ujrgtbfn78ja5nfms3qm5jwna1c9mk2wy');
-            expect(path).toEqual('channel_name');
-        });
-        test('Should return direct channel by username if identifier is the username', () => {
-            const path = getPathFromIdentifier((initialState as any), 'messages', '@user1');
-            expect(path).toEqual('direct_channel_username');
-        });
-        test('Should return direct channel by email if identifier is the user email', () => {
-            const path = getPathFromIdentifier((initialState as any), 'messages', 'user1@bladekick.com');
-            expect(path).toEqual('direct_channel_email');
-        });
-        test('Should return direct channel by id if identifier is the user id', () => {
-            const path = getPathFromIdentifier((initialState as any), 'messages', '3y8ujrgtbfn78ja5nfms3qm5jwna1c9mk2wy');
-            expect(path).toEqual('direct_channel_user_id');
-        });
-        test('Should return error in case the path is not right', () => {
-            const path = getPathFromIdentifier((initialState as any), 'messages', 'test');
-            expect(path).toEqual('error');
-        });
-    });
+    // describe('getPathFromIdentifier', () => {
+    //     test('Should return channel_name if identifier is a channel name', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'channels', 'channelName');
+    //         expect(path).toEqual('channel_name');
+    //     });
+    //     test('Should return channel_id if identifier is a channel id', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'channels', 'pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz');
+    //         expect(path).toEqual('channel_id');
+    //     });
+    //     test('Should return group_id path if identifier is a group id', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'channels', '9c992e32cc7b3e5651f68b0ead4935fdf40d67');
+    //         expect(path).toEqual('group_channel_group_id');
+    //     });
+    //     test('Should return group_id path if channel exists and is type G', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'channels', 'some-group-channel');
+    //         expect(path).toEqual('group_channel_group_id');
+    //     });
+    //     test('Should return group_id path if identifier is a group id', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'messages', '9c992e32cc7b3e5651f68b0ead4935fdf40d67');
+    //         expect(path).toEqual('group_channel_group_id');
+    //     });
+    //     test('Should return direct channel path if identifier is in the format userid__userid2', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'channels', '3y8ujrgtbfn78ja5nfms3qm5jwna1c9mk2wy__3y8ujrgtbfn78ja5nfms3qm5jwna1c9mk2wy');
+    //         expect(path).toEqual('direct_channel_user_ids');
+    //     });
+    //     test('Should return channel by name path if identifier looks like a group id but matching channel is an open channel', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'channels', 'additional-abilities---community-systems');
+    //         expect(path).toEqual('channel_name');
+    //     });
+    //     test('Should return channel by name path if identifier is in the format userid--userid2', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'channels', '3y8ujrgtbfn78ja5nfms3qm5jwna1c9mk2wy--3y8ujrgtbfn78ja5nfms3qm5jwna1c9mk2wy');
+    //         expect(path).toEqual('channel_name');
+    //     });
+    //     test('Should return direct channel by username if identifier is the username', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'messages', '@user1');
+    //         expect(path).toEqual('direct_channel_username');
+    //     });
+    //     test('Should return direct channel by email if identifier is the user email', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'messages', 'user1@bladekick.com');
+    //         expect(path).toEqual('direct_channel_email');
+    //     });
+    //     test('Should return direct channel by id if identifier is the user id', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'messages', '3y8ujrgtbfn78ja5nfms3qm5jwna1c9mk2wy');
+    //         expect(path).toEqual('direct_channel_user_id');
+    //     });
+    //     test('Should return error in case the path is not right', () => {
+    //         const path = getPathFromIdentifier((initialState as any), 'messages', 'test');
+    //         expect(path).toEqual('error');
+    //     });
+    // });
 
     describe('goToChannelByChannelId', () => {
         test('switch to public channel we have locally but need to join', async () => {
