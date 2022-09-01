@@ -131,8 +131,8 @@ export function sendDesktopNotification(post, msgProps) {
                     attachment.pretext ||
                     attachment.text;
             }
-            console.log('[AT] attachment debug', attachment);
-
+            console.log('[AT] All attachments debug', attachments);
+            console.log('[AT] Attachment debug', attachment);
             image |= attachment.image_url.length > 0;
         });
 
