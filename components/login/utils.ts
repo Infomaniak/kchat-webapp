@@ -38,6 +38,15 @@ export function clearLocalStorageToken() {
     localStorage.removeItem('IKRefreshToken');
     localStorage.removeItem('IKTokenExpire');
     localStorage.setItem('tokenExpired', '1');
+    window.postMessage(
+        {
+            type: 'token-cleared',
+            message: {
+                token: null,
+            },
+        },
+        window.origin,
+    );
 }
 
 /**
@@ -143,10 +152,23 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
         console.log('[TOKEN] Token refreshed');
+
+        window.postMessage(
+            {
+                type: 'token-refreshed',
+                message: {
+                    token: resp.access_token,
+                },
+            },
+            window.origin,
+        );
+
+        console.log('[TOKEN / SW] sending token to SW after refresh');
         navigator.serviceWorker.controller?.postMessage({
             type: 'TOKEN_REFRESHED',
-            token: resp.access_token || '',
+            token: resp.access_token || localStorage.getItem('IKToken'),
         });
+
         localStorage.removeItem('refreshingToken');
 
         // Refresh the websockets as we just changed Bearer Token
