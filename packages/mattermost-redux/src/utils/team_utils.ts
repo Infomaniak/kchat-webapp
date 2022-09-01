@@ -7,8 +7,10 @@ import {General} from '../constants';
 
 export function teamListToMap(teamList: Team[]): IDMappedObjects<Team> {
     const teams: Record<string, Team> = {};
-    for (let i = 0; i < teamList.length; i++) {
-        teams[teamList[i].id] = teamList[i];
+    if (teamList) {
+        for (let i = 0; i < teamList.length; i++) {
+            teams[teamList[i].id] = teamList[i];
+        }
     }
     return teams;
 }
