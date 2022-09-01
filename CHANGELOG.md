@@ -1,3 +1,27 @@
+## 0.2.20-rc.3 (2022-08-31)
+
+No changes.
+
+## 0.2.20-rc.2 (2022-08-31)
+
+No changes.
+
+## 0.2.20-rc.1 (2022-08-31)
+
+No changes.
+
+## 0.2.19 (2022-08-30)
+
+## Other (1 change)
+
+- [Update to prevent multiple token refresh](kchat/webapp@25d297878755088f5c8ed3415c53107968727382) by @florent.glauda
+
+## 0.2.18 (2022-08-30)
+
+## Other (1 change)
+
+- [remove non-existent var](kchat/webapp@12bc6aafa35711103ecac781ef1faed840694bb4) by @florent.glauda
+
 ## 0.2.17-rc.4 (2022-08-30)
 
 No changes.
