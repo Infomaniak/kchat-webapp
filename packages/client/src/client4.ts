@@ -4145,6 +4145,15 @@ export default class Client4 {
                         `${IKConstants.CLIENT_ID}`,
                     ).then((response) => {
                         this.storeTokenResponse(response);
+                        window.postMessage(
+                            {
+                                type: 'token-refreshed',
+                                message: {
+                                    token: response.access_token,
+                                },
+                            },
+                            window.origin,
+                        );
                         navigator.serviceWorker.controller?.postMessage({
                             type: 'TOKEN_REFRESHED',
                             token: response.access_token || '',
@@ -4230,6 +4239,7 @@ export default class Client4 {
         formData.append('code_verifier', verifier);
         formData.append('client_id', clientId);
         formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
+        // formData.append('redirect_uri', 'ktalk://auth-desktop' );
 
         return this.doFetch<any>(
 
@@ -4291,6 +4301,16 @@ export default class Client4 {
         localStorage.removeItem('IKToken');
         localStorage.removeItem('IKRefreshToken');
         localStorage.removeItem('IKTokenExpire');
+        localStorage.setItem('tokenExpired', '1');
+        window.postMessage(
+            {
+                type: 'token-cleared',
+                message: {
+                    token: null,
+                },
+            },
+            window.origin,
+        );
     }
 
 

@@ -124,13 +124,14 @@ export function sendDesktopNotification(post, msgProps) {
         const msgPropsPost = msgProps.post;
         const attachments = msgPropsPost && msgPropsPost.props && msgPropsPost.props.attachments ? msgPropsPost.props.attachments : [];
         let image = false;
+
         attachments.forEach((attachment) => {
             if (notifyText.length === 0) {
                 notifyText = attachment.fallback ||
                     attachment.pretext ||
                     attachment.text;
             }
-            image |= attachment.image_url.length > 0;
+            image |= attachment.image_url?.length > 0;
         });
 
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);

@@ -77,7 +77,6 @@ const Login = () => {
             if (loginCode) {
                 console.log('[LOGIN] Login with code');
             }
-            Client4.isUnauthorized = false;
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
@@ -86,6 +85,15 @@ const Login = () => {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
+                window.postMessage(
+                    {
+                        type: 'token-refreshed',
+                        message: {
+                            token,
+                        },
+                    },
+                    window.origin,
+                );
                 navigator.serviceWorker.controller?.postMessage({
                     type: 'TOKEN_REFRESHED',
                     token: token || '',
@@ -114,7 +122,17 @@ const Login = () => {
                 ).then((resp) => {
                     storeTokenResponse(resp);
                     localStorage.removeItem('challenge');
+                    localStorage.setItem('tokenExpired', '0');
                     LocalStorageStore.setWasLoggedIn(true);
+                    window.postMessage(
+                        {
+                            type: 'token-refreshed',
+                            message: {
+                                token: resp.access_token,
+                            },
+                        },
+                        window.origin,
+                    );
                     navigator.serviceWorker.controller?.postMessage({
                         type: 'TOKEN_REFRESHED',
                         token: resp.access_token || '',

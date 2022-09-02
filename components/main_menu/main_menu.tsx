@@ -160,25 +160,25 @@ export class MainMenu extends React.PureComponent<Props> {
 
         const {formatMessage} = this.props.intl;
 
-        let invitePeopleModal = null;
-        if (guestAccessEnabled || canInviteTeamMember) {
-            invitePeopleModal = (
-                <Menu.ItemToggleModalRedux
-                    id='invitePeople'
-                    modalId={ModalIdentifiers.INVITATION}
-                    dialogType={InvitationModal}
-                    text={formatMessage({
-                        id: 'navbar_dropdown.invitePeople',
-                        defaultMessage: 'Invite People',
-                    })}
-                    extraText={formatMessage({
-                        id: 'navbar_dropdown.invitePeopleExtraText',
-                        defaultMessage: 'Add people to the team',
-                    })}
-                    icon={this.props.mobile && <i className='fa fa-user-plus'/>}
-                />
-            );
-        }
+        // let invitePeopleModal = null;
+        // if (guestAccessEnabled || canInviteTeamMember) {
+        //     invitePeopleModal = (
+        //         <Menu.ItemToggleModalRedux
+        //             id='invitePeople'
+        //             modalId={ModalIdentifiers.INVITATION}
+        //             dialogType={InvitationModal}
+        //             text={formatMessage({
+        //                 id: 'navbar_dropdown.invitePeople',
+        //                 defaultMessage: 'Invite People',
+        //             })}
+        //             extraText={formatMessage({
+        //                 id: 'navbar_dropdown.invitePeopleExtraText',
+        //                 defaultMessage: 'Add people to the team',
+        //             })}
+        //             icon={this.props.mobile && <i className='fa fa-user-plus'/>}
+        //         />
+        //     );
+        // }
 
         return this.props.mobile ? (
             <Menu
@@ -240,12 +240,12 @@ export class MainMenu extends React.PureComponent<Props> {
                             icon={<i className='fa fa-user-plus'/>}
                         />
                     </TeamPermissionGate>
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.ADD_USER_TO_TEAM, Permissions.INVITE_GUEST]}
                     >
                         {invitePeopleModal}
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                 </Menu.Group>
                 <Menu.Group>
                     <TeamPermissionGate
@@ -260,7 +260,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             icon={<i className='fa fa-globe'/>}
                         />
                     </TeamPermissionGate>
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
@@ -275,8 +275,8 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.manageGroups', defaultMessage: 'Manage Groups'})}
                             icon={<i className='fa fa-user-plus'/>}
                         />
-                    </TeamPermissionGate>
-                    <TeamPermissionGate
+                    </TeamPermissionGate> */}
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
                     >
@@ -287,7 +287,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.manageMembers', defaultMessage: 'Manage Members'})}
                             icon={<i className='fa fa-users'/>}
                         />
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
@@ -334,7 +334,7 @@ export class MainMenu extends React.PureComponent<Props> {
                 <Menu.Group>
                     <Menu.ItemLink
                         id='integrations'
-                        show={showIntegrations}
+                        show={true}
                         to={'/' + this.props.teamName + '/integrations'}
                         text={formatMessage({id: 'navbar_dropdown.integrations', defaultMessage: 'Integrations'})}
                     />
@@ -396,12 +396,12 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.addGroupsToTeam', defaultMessage: 'Add Groups to Team'})}
                         />
                     </TeamPermissionGate>
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.ADD_USER_TO_TEAM, Permissions.INVITE_GUEST]}
                     >
                         {invitePeopleModal}
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
@@ -514,6 +514,14 @@ export class MainMenu extends React.PureComponent<Props> {
                 </Menu.Group> */}
                 <Menu.Group>
                     {pluginItems}
+                </Menu.Group>
+                <Menu.Group>
+                    <Menu.ItemLink
+                        id='integrations'
+                        show={showIntegrations}
+                        to={'/' + this.props.teamName + '/integrations'}
+                        text={formatMessage({id: 'navbar_dropdown.integrations', defaultMessage: 'Integrations'})}
+                    />
                 </Menu.Group>
             </Menu>
         );

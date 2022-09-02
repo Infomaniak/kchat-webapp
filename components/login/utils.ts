@@ -38,6 +38,15 @@ export function clearLocalStorageToken() {
     localStorage.removeItem('IKRefreshToken');
     localStorage.removeItem('IKTokenExpire');
     localStorage.setItem('tokenExpired', '1');
+    window.postMessage(
+        {
+            type: 'token-cleared',
+            message: {
+                token: null,
+            },
+        },
+        window.origin,
+    );
 }
 
 /**
@@ -116,14 +125,21 @@ export function needRefreshToken() {
 
 export function refreshIKToken(redirectToTeam = false, periodic = false) {
     const refreshToken = localStorage.getItem('IKRefreshToken');
+    const isRefreshing = localStorage.getItem('refreshingToken');
+
+    if (isRefreshing) {
+        return;
+    }
 
     if (!refreshToken) {
         clearLocalStorageToken();
         getChallengeAndRedirectToLogin();
         return;
     }
+
     Client4.setToken('');
     Client4.setCSRF('');
+    localStorage.setItem('refreshingToken', '1');
     Client4.refreshIKLoginToken(
         refreshToken,
         `${IKConstants.LOGIN_URL}`,
@@ -136,10 +152,24 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
         console.log('[TOKEN] Token refreshed');
+
+        window.postMessage(
+            {
+                type: 'token-refreshed',
+                message: {
+                    token: resp.access_token,
+                },
+            },
+            window.origin,
+        );
+
+        console.log('[TOKEN / SW] sending token to SW after refresh');
         navigator.serviceWorker.controller?.postMessage({
             type: 'TOKEN_REFRESHED',
-            token: resp.access_token || '',
+            token: resp.access_token || localStorage.getItem('IKToken'),
         });
+
+        localStorage.removeItem('refreshingToken');
 
         // Refresh the websockets as we just changed Bearer Token
         reconnectWebSocket();
@@ -148,13 +178,9 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
             redirectUserToDefaultTeam();
         }
     }).catch((error) => {
-        if (window.navigator.onLine) {
-            console.log('[TOKEN] Refresh token error ', error);
-            clearLocalStorageToken();
-            getChallengeAndRedirectToLogin();
-        } else {
-            console.log('[TOKEN] Offline, waiting for connection ', Date.now());
-            setTimeout(refreshIKToken, OFFLINE_ATTEMPT_INTERVAL, redirectToTeam, periodic);
-        }
+        console.log('[TOKEN] Refresh token error ', error);
+        clearLocalStorageToken();
+        localStorage.removeItem('refreshingToken');
+        getChallengeAndRedirectToLogin();
     });
 }
