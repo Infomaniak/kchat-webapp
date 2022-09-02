@@ -157,6 +157,15 @@ export default class Root extends React.PureComponent {
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
+                window.postMessage(
+                    {
+                        type: 'token-refreshed',
+                        message: {
+                            token: token,
+                        },
+                    },
+                    window.origin,
+                );
                 navigator.serviceWorker.controller?.postMessage({
                     type: 'TOKEN_REFRESHED',
                     token: token || '',
@@ -319,7 +328,15 @@ export default class Root extends React.PureComponent {
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
-
+                window.postMessage(
+                    {
+                        type: 'token-refreshed',
+                        message: {
+                            token: token,
+                        },
+                    },
+                    window.origin,
+                );
                 navigator.serviceWorker.controller?.postMessage({
                     type: 'TOKEN_REFRESHED',
                     token: token || '',
@@ -419,6 +436,15 @@ export default class Root extends React.PureComponent {
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
+                window.postMessage(
+                    {
+                        type: 'token-refreshed',
+                        message: {
+                            token: token,
+                        },
+                    },
+                    window.origin,
+                );
                 navigator.serviceWorker.controller?.postMessage({
                     type: 'TOKEN_REFRESHED',
                     token: token || '',

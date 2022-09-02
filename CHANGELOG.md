@@ -1,3 +1,30 @@
+## 0.2.21 (2022-09-02)
+
+## Added (1 change)
+
+- [add integrations link to main menu for easier access](kchat/webapp@ee32bfc5f44ac5fe26139a0277c0e2f4e7a5124a) by @antonbuksa ([merge request](kchat/webapp!114))
+
+## Fixed (2 changes)
+
+- [fix undefined image when share from slack](kchat/webapp@2e50348771cf9fdfb737a1470e8f7f9d23e2bbad) by @florent.glauda ([merge request](kchat/webapp!121))
+- [Add check to prevent error](kchat/webapp@0612ef94709419f82cf79d1e82717c1fc9293a07) by @florent.glauda ([merge request](kchat/webapp!120))
+
+## Other (1 change)
+
+- [add additionnal logs to debug random attachements errors](kchat/webapp@2e6c09d444b28a79c71664dabebb3f03876e8725) by @florent.glauda ([merge request](kchat/webapp!90))
+
+## 0.2.20-rc.3 (2022-08-31)
+
+No changes.
+
+## 0.2.20-rc.2 (2022-08-31)
+
+No changes.
+
+## 0.2.20-rc.1 (2022-08-31)
+
+No changes.
+
 ## 0.2.19 (2022-08-30)
 
 ## Other (1 change)
