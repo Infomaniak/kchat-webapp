@@ -131,9 +131,7 @@ export function sendDesktopNotification(post, msgProps) {
                     attachment.pretext ||
                     attachment.text;
             }
-            console.log('[AT] All attachments debug', attachments);
-            console.log('[AT] Attachment debug', attachment);
-            image |= attachment.image_url.length > 0;
+            image |= attachment.image_url?.length > 0;
         });
 
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);
