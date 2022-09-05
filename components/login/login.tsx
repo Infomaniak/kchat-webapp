@@ -27,6 +27,7 @@ import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
 import LocalStorageStore from 'stores/local_storage_store';
 import {GlobalState} from 'types/store';
+
 import Constants from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
 import {isDesktopApp} from 'utils/user_agent';
@@ -45,7 +46,8 @@ const Login = () => {
 
     const searchParam = new URLSearchParams(search);
     const extraParam = searchParam.get('extra');
-    const emailParam = searchParam.get('email');
+
+    // const emailParam = searchParam.get('email');
 
     const {
         ExperimentalPrimaryTeam,
@@ -56,7 +58,11 @@ const Login = () => {
     const experimentalPrimaryTeamMember = useSelector((state: GlobalState) => getMyTeamMember(state, experimentalPrimaryTeam?.id ?? ''));
     const useCaseOnboarding = useSelector(getUseCaseOnboarding);
 
-    const passwordInput = useRef<HTMLInputElement>(null);
+    // const isCloud = useSelector(isCurrentLicenseCloud);
+    // const graphQLEnabled = useSelector(isGraphQLEnabled);
+
+    // const passwordInput = useRef<HTMLInputElement>(null);
+
     const closeSessionExpiredNotification = useRef<() => void>();
 
     useEffect(() => {
@@ -74,7 +80,6 @@ const Login = () => {
             if (loginCode) {
                 console.log('[LOGIN] Login with code');
             }
-
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');

@@ -116,7 +116,7 @@ import {
 import {CompleteOnboardingRequest} from '@mattermost/types/setup';
 
 import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/threads';
-import {TopChannelResponse, TopReactionResponse, TopThreadResponse} from '@mattermost/types/insights';
+import {LeastActiveChannelsResponse, TopChannelResponse, TopReactionResponse, TopThreadResponse, TopDMsResponse} from '@mattermost/types/insights';
 
 import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
@@ -797,7 +797,7 @@ export default class Client4 {
         return response;
     };
 
-    getProfiles = (page = 0, perPage = PER_PAGE_DEFAULT, options = {}) => {
+    getProfiles = (page = 0, perPage = PER_PAGE_DEFAULT, options: Record<string, any> = {}) => {
         return this.doFetch<UserProfile[]>(
             `${this.getUsersRoute()}${buildQueryString({page, per_page: perPage, ...options})}`,
             {method: 'get'},
@@ -993,6 +993,9 @@ export default class Client4 {
         );
     };
 
+    /**
+     * @deprecated
+     */
     checkUserMfa = (loginId: string) => {
         return this.doFetch<{mfa_required: boolean}>(
             `${this.getUsersRoute()}/mfa`,
@@ -2221,6 +2224,32 @@ export default class Client4 {
     getMyTopThreads = (teamId: string, page: number, perPage: number, timeRange: string) => {
         return this.doFetch<TopThreadResponse>(
             `${this.getUsersRoute()}/me/top/threads${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getLeastActiveChannelsForTeam = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<LeastActiveChannelsResponse>(
+            `${this.getTeamRoute(teamId)}/top/inactive_channels${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+    getMyTopDMs = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopDMsResponse>(
+            `${this.getUsersRoute()}/me/top/dms${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getMyLeastActiveChannels = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<LeastActiveChannelsResponse>(
+            `${this.getUsersRoute()}/me/top/inactive_channels${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+    getNewTeamMembers = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopDMsResponse>(
+            `${this.getTeamRoute(teamId)}/top/team_members${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
             {method: 'get'},
         );
     }
@@ -3505,7 +3534,7 @@ export default class Client4 {
 
     getBoardsUsage = () => {
         return this.doFetch<BoardsUsageResponse>(
-            `/plugins/${suitePluginIds.focalboard}/api/v1/limits`,
+            `/plugins/${suitePluginIds.focalboard}/api/v2/limits`,
             {method: 'get'},
         );
     }
@@ -4092,10 +4121,6 @@ export default class Client4 {
         } catch (err) {
             throw new ClientError(this.getUrl(), {
                 message: 'Received invalid response from the server.',
-                intl: {
-                    id: 'mobile.request.invalid_response',
-                    defaultMessage: 'Received invalid response from the server.',
-                },
                 url,
             });
         }
@@ -4261,7 +4286,7 @@ export default class Client4 {
         d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
         localStorage.setItem('IKToken', response.access_token);
         localStorage.setItem('IKRefreshToken', response.refresh_token);
-        localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
+        localStorage.setItem('IKTokenExpire', (d.getTime() / 1000, 10).toString());
         localStorage.setItem('tokenExpired', '0');
         this.setToken(response.access_token);
         this.setCSRF(response.access_token);
@@ -4362,11 +4387,6 @@ export function parseAndMergeNestedHeaders(originalHeaders: any) {
 
 export class ClientError extends Error implements ServerError {
     url?: string;
-    intl?: {
-        id: string;
-        defaultMessage: string;
-        values?: any;
-    };
     server_error_id?: string;
     status_code?: number;
 
@@ -4375,7 +4395,6 @@ export class ClientError extends Error implements ServerError {
 
         this.message = data.message;
         this.url = data.url;
-        this.intl = data.intl;
         this.server_error_id = data.server_error_id;
         this.status_code = data.status_code;
 

@@ -15,7 +15,6 @@ import Input from 'components/widgets/inputs/input/input';
 import PasswordInput from 'components/widgets/inputs/password_input/password_input';
 import SaveButton from 'components/save_button';
 
-import users from 'mattermost-redux/actions/users';
 import {RequestStatus} from 'mattermost-redux/constants';
 import {ActionFunc} from 'mattermost-redux/types/actions';
 import {ClientConfig} from '@mattermost/types/config';

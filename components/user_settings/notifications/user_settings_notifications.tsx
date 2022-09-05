@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 /* eslint-disable max-lines */
 
 import React, {ChangeEvent, RefObject} from 'react';
@@ -7,16 +8,18 @@ import {FormattedMessage} from 'react-intl';
 
 import semver from 'semver';
 
-import Constants, {NotificationLevels} from 'utils/constants';
-import {localizeMessage, moveCursorToEnd} from 'utils/utils';
-import {isDesktopApp} from 'utils/user_agent';
-
-import SettingItemMax from 'components/setting_item_max.jsx';
-import SettingItemMin from 'components/setting_item_min';
-
 import {UserNotifyProps, UserProfile} from '@mattermost/types/users';
 
 import {ActionResult} from 'mattermost-redux/types/actions';
+
+import Constants, {NotificationLevels} from 'utils/constants';
+import {localizeMessage, moveCursorToEnd} from 'utils/utils';
+import {isDesktopApp} from 'utils/user_agent';
+import {t} from 'utils/i18n';
+
+import SettingItemMax from 'components/setting_item_max.jsx';
+import SettingItemMin from 'components/setting_item_min';
+import LocalizedIcon from 'components/localized_icon';
 
 import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
 import EmailNotificationSetting from './email_notification_setting';
@@ -943,6 +946,7 @@ export default class NotificationsTab extends React.PureComponent<Props, State> 
         }
 
         const pushNotificationSection = this.createPushNotificationSection();
+        const enableEmailProp = this.state.enableEmail === 'true';
 
         // const enableEmailProp = this.state.enableEmail === 'true';
 
@@ -963,18 +967,14 @@ export default class NotificationsTab extends React.PureComponent<Props, State> 
                         ref={this.drawerRef}
                     >
                         <div className='modal-back'>
-                            <FormattedMessage
-                                id='generic_icons.collapse'
-                                defaultMessage='Collapse Icon'
-                            >
-                                {(title: string[]) => (
-                                    <i
-                                        className='fa fa-angle-left'
-                                        title={title[0]}
-                                        onClick={this.props.collapseModal}
-                                    />
-                                )}
-                            </FormattedMessage>
+                            <LocalizedIcon
+                                className='fa fa-angle-left'
+                                ariaLabel={{
+                                    id: t('generic_icons.collapse'),
+                                    defaultMessage: 'Collapse Icon',
+                                }}
+                                onClick={this.props.collapseModal}
+                            />
                         </div>
                         <FormattedMessage
                             id='user.settings.notifications.title'
@@ -1022,8 +1022,8 @@ export default class NotificationsTab extends React.PureComponent<Props, State> 
                         serverError={this.state.serverError}
                         isCollapsedThreadsEnabled={this.props.isCollapsedThreadsEnabled}
                         setParentState={this.setStateValue}
-                        threads={this.state.emailThreads}
-                    /> */}
+                        threads={this.state.emailThreads || ''}
+                    />
                     <div className='divider-light'/>
                     {pushNotificationSection}
                     {/* <div className='divider-light'/>

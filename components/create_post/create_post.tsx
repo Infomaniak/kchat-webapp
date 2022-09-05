@@ -2,6 +2,8 @@
 // See LICENSE.txt for license information.
 /* eslint-disable max-lines */
 
+/* eslint-disable max-lines */
+
 import React, {CSSProperties, SyntheticEvent} from 'react';
 import classNames from 'classnames';
 import {injectIntl, IntlShape} from 'react-intl';
@@ -964,7 +966,7 @@ class CreatePost extends React.PureComponent<Props, State> {
         this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft);
     }
 
-    handleUploadError = (err: string | ServerError, clientId: string, channelId: string) => {
+    handleUploadError = (err: string | ServerError, clientId = '', channelId = '') => {
         const draft = {...this.draftsForChannel[channelId]!};
 
         let serverError = err;

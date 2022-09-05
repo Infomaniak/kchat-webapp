@@ -88,6 +88,8 @@ export type PostList = {
     next_post_id: string;
     prev_post_id: string;
     has_limitation: string | null;
+    // mattermost limitations
+    // first_inaccessible_post_time: number;
 };
 
 export type PaginatedPostList = PostList & {
