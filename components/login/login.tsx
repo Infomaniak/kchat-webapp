@@ -61,7 +61,10 @@ const Login = () => {
 
     useEffect(() => {
         console.log('[LOGIN] init login component');
+        console.log('[LOGIN] get was logged in => ', LocalStorageStore.getWasLoggedIn());
+
         if (currentUser) {
+            console.log('[LOGIN] Current user is ok');
             redirectUserToDefaultTeam();
             return;
         }
