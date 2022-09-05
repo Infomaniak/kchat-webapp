@@ -24,11 +24,6 @@
     "nock": "*",
     "typescript": "^4.3"
   },
-  "peerDependenciesMeta": {
-    "typescript": {
-      "optional": true
-    }
-  },
   "scripts": {
     "build": "tsc --build --verbose",
     "run": "tsc --watch --preserveWatchOutput",
