@@ -1,3 +1,9 @@
+## 0.3.0-rc.2 (2022-09-05)
+
+## Fixed (1 change)
+
+- [Update switch channel to prevent crashes](kchat/webapp@75975cc0d48edbec8159645f6845ba00895e5182) by @florent.glauda ([merge request](kchat/webapp!122))
+
 ## 0.2.21 (2022-09-02)
 
 ## Added (1 change)
