@@ -319,8 +319,7 @@
       "packages/client",
       "packages/types",
       "packages/components"
-    ],
-    "nohoist": "**/*"
+    ]
   },
   "packageManager": "yarn@3.2.2"
 }

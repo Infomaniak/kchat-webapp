@@ -3148,7 +3148,7 @@ __metadata:
 "@mattermost/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@mattermost/types@workspace:packages/types"
-  dependencies:
+  peerDependencies:
     typescript: ^4.3
   peerDependenciesMeta:
     typescript:

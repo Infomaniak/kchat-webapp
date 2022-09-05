@@ -19,7 +19,7 @@
     "url": "github:mattermost/mattermost-webapp",
     "directory": "packages/types"
   },
-  "devDependencies": {
+  "peerDependencies": {
     "typescript": "^4.3"
   },
   "peerDependenciesMeta": {
