@@ -3082,7 +3082,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@mattermost/client@workspace:packages/client"
   dependencies:
-    "@mattermost/types": "workspace:packages/types"
     form-data: ^4.0.0
     jest: "*"
     nock: "*"

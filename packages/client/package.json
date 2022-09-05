@@ -20,7 +20,6 @@
     "form-data": "^4.0.0"
   },
   "devDependencies": {
-    "@mattermost/types": "workspace:packages/types",
     "jest": "*",
     "nock": "*",
     "typescript": "^4.3"

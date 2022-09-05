@@ -4286,7 +4286,7 @@ export default class Client4 {
         d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
         localStorage.setItem('IKToken', response.access_token);
         localStorage.setItem('IKRefreshToken', response.refresh_token);
-        localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
+        localStorage.setItem('IKTokenExpire', (d.getTime() / 1000, 10).toString());
         localStorage.setItem('tokenExpired', '0');
         this.setToken(response.access_token);
         this.setCSRF(response.access_token);
