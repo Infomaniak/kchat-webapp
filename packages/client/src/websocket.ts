@@ -265,6 +265,7 @@ export default class WebSocketClient {
 
         this.bindChannelGlobally(this.teamChannel);
         this.bindChannelGlobally(this.userChannel);
+        this.bindChannelGlobally(this.presenceChannel);
     }
 
     subscribeToTeamChannel(teamId: string) {
