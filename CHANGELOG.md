@@ -1,3 +1,10 @@
+## 0.3.2-rc.3 (2022-09-06)
+
+## Fixed (2 changes)
+
+- [fix typing event parsing in new useWebsocket hook](kchat/webapp@8326eb103248fd68140e7ed368beacf6f417df51) by @antonbuksa
+- [fix typing events names](kchat/webapp@aefdbaa64e577ee60893be09903be75446386446) by @antonbuksa
+
 ## 0.3.2-rc.2 (2022-09-06)
 
 ## Fixed (2 changes)
