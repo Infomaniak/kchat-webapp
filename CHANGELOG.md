@@ -1,3 +1,9 @@
+## 0.3.2-rc.1 (2022-09-06)
+
+## Fixed (1 change)
+
+- [fix typing events names](kchat/webapp@aefdbaa64e577ee60893be09903be75446386446) by @antonbuksa
+
 ## 0.3.1 (2022-09-05)
 
 ## mattermost (80 changes)
