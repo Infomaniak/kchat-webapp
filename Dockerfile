@@ -16,8 +16,9 @@ COPY . .
 
 RUN yarn
 
-# RUN yarn workspace @mattermost/types build
-# RUN yarn workspace @mattermost/client build
+RUN yarn workspace @mattermost/types build
+
+RUN yarn workspace @mattermost/client build
 
 RUN yarn workspace @mattermost/components build
 

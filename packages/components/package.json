@@ -2,7 +2,6 @@
   "name": "@mattermost/components",
   "module": "dist/index.esm.js",
   "types": "dist/index.esm.d.ts",
-  "main": "src/index.tsx",
   "scripts": {
     "build": "rollup -c",
     "run": "rollup -c --watch",

@@ -111,6 +111,13 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
             );
         }
 
+        // mattermost version
+        // if (this.props.exceededLimitChannelId) {
+        //     return (
+        //         <CenterMessageLock
+        //             channelId={this.props.exceededLimitChannelId}
+        //             firstInaccessiblePostTime={this.props.firstInaccessiblePostTime}
+
         if (hasLimitDate && listId === CHANNEL_INTRO_MESSAGE && !isLastPost) {
             return (
                 <ChannelMessageLimitationBanner
