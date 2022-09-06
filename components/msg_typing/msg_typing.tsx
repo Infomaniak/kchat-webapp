@@ -30,7 +30,7 @@ export default function MsgTyping(props: Props) {
                     userStartedTyping(userId, channelId, rootId, Date.now());
                 }
             } else if (msg.event === SocketEvents.POSTED) {
-                const post = JSON.parse(msg.data.post);
+                const post = msg.data.post;
 
                 const channelId = post.channel_id;
                 const rootId = post.root_id;
