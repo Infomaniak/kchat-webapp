@@ -265,7 +265,6 @@ export default class WebSocketClient {
 
         this.bindChannelGlobally(this.teamChannel);
         this.bindChannelGlobally(this.userChannel);
-        this.bindChannelGlobally(this.presenceChannel);
     }
 
     subscribeToTeamChannel(teamId: string) {
@@ -518,10 +517,9 @@ export default class WebSocketClient {
             this.responseCallbacks[msg.seq] = responseCallback;
         }
 
-        if (this.conn && this.conn.connection.state === 'connected') {
+        if (this.conn && this.presenceChannel && this.conn.connection.state === 'connected') {
             this.presenceChannel?.trigger(action, msg);
-        } else if (!this.conn || this.conn.connection.state === 'disconnected') {
-            this.conn = null;
+        } else if (!this.conn || this.conn.connection.state === 'disconnected' || !this.presenceChannel) {
             this.bindPresenceChannel(data.channel_id);
         }
     }
