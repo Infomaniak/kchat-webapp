@@ -1,3 +1,11 @@
+## 0.3.2-rc.7 (2022-09-06)
+
+## Fixed (3 changes)
+
+- [rebind presence on ws error](kchat/webapp@de8669819c6d7feb5dfa9c74d9827f37c04cc22d) by @antonbuksa
+- [fix typing event parsing in new useWebsocket hook](kchat/webapp@8326eb103248fd68140e7ed368beacf6f417df51) by @antonbuksa
+- [fix typing events names](kchat/webapp@aefdbaa64e577ee60893be09903be75446386446) by @antonbuksa
+
 ## 0.3.2-rc.6 (2022-09-06)
 
 ## Fixed (3 changes)
