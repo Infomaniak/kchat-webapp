@@ -135,6 +135,7 @@ export function initialize() {
 
     const config = getConfig(getState());
     const user = getCurrentUser(getState());
+    const currentChannelId = getCurrentChannelId(getState());
     if (!user) {
         return;
     }
@@ -177,7 +178,7 @@ export function initialize() {
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
-    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, authToken);
+    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, authToken, currentChannelId);
 }
 
 export function close() {
