@@ -77,7 +77,7 @@ function makeMapStateToProps() {
             enableEmojiPicker,
             isReadOnly: channelIsArchived,
             shouldShowDotMenu: shouldShowDotMenu(state, ownProps.post, channel),
-            shouldShowActionsMenu: shouldShowActionsMenu(state, ownProps.post),
+            shouldShowActionsMenu: false, //shouldShowActionsMenu(state, ownProps.post),
             shortcutReactToLastPostEmittedFrom,
             collapsedThreadsEnabled: isCollapsedThreadsEnabled(state),
             hasReplies: getReplyCount(state, ownProps.post) > 0,

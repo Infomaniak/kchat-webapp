@@ -70,7 +70,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         compactDisplay: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.MESSAGE_DISPLAY, Preferences.MESSAGE_DISPLAY_DEFAULT) === Preferences.MESSAGE_DISPLAY_COMPACT,
         colorizeUsernames: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.COLORIZE_USERNAMES, Preferences.COLORIZE_USERNAMES_DEFAULT) === 'true',
         shortcutReactToLastPostEmittedFrom,
-        shouldShowActionsMenu: shouldShowActionsMenu(state, ownProps.post),
+        shouldShowActionsMenu: false, //shouldShowActionsMenu(state, ownProps.post),
         showActionsMenuPulsatingDot,
         collapsedThreadsEnabled: isCollapsedThreadsEnabled(state),
         oneClickReactionsEnabled,
