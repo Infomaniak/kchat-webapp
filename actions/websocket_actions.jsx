@@ -209,11 +209,12 @@ function restart() {
 
 export function reconnect(includeWebSocket = true) {
     if (includeWebSocket) {
-        if (isDesktopApp()) {
-            refreshIKToken();
-        } else {
-            reconnectWebSocket();
-        }
+        // if (isDesktopApp()) {
+        // refreshIKToken();
+        // } else {
+        reconnectWebSocket();
+
+        // }
     }
 
     dispatch({
