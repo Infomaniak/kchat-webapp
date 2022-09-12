@@ -210,7 +210,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
             return (
                 <TeamButton
                     key={'switch_team_' + team.name}
-                    url={`/${team.name}`}
+                    url={team.url}
                     tip={team.display_name}
                     active={team.id === this.props.currentTeamId}
                     displayName={team.display_name}
