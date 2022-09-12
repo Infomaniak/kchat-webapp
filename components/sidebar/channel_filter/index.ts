@@ -4,7 +4,7 @@
 import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
 
-import {getMyTeams} from 'mattermost-redux/selectors/entities/teams';
+import {getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {setUnreadFilterEnabled} from 'actions/views/channel_sidebar';
@@ -14,7 +14,7 @@ import {GlobalState} from 'types/store';
 import ChannelFilter from './channel_filter';
 
 function mapStateToProps(state: GlobalState) {
-    const teams = getMyTeams(state);
+    const teams = getMyKSuites(state);
 
     return {
         hasMultipleTeams: teams && teams.length > 1,

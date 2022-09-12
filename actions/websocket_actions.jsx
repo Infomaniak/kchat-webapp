@@ -71,7 +71,7 @@ import {
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
 import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 import {Client4} from 'mattermost-redux/client';
-import {getMyTeams, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getMyKSuites, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {
     getChannel,
@@ -248,7 +248,7 @@ export function reconnect(includeWebSocket = true) {
         const crtEnabled = isCollapsedThreadsEnabled(state);
         dispatch(TeamActions.getMyTeamUnreads(crtEnabled, true));
         if (crtEnabled) {
-            const teams = getMyTeams(state);
+            const teams = getMyKSuites(state);
             syncThreads(currentTeamId, currentUserId);
 
             for (const team of teams) {
@@ -924,7 +924,7 @@ function handleDeleteTeamEvent(msg) {
             deletedTeam.id === teamMember.team_id
         ) {
             const myTeams = {};
-            getMyTeams(state).forEach((t) => {
+            getMyKSuites(state).forEach((t) => {
                 myTeams[t.id] = t;
             });
 

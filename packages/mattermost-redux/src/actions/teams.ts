@@ -76,6 +76,15 @@ export function getMyTeams(): ActionFunc {
     });
 }
 
+export function getMyKSuites(): ActionFunc {
+    return bindClientFunc({
+        clientFunc: Client4.getMyKSuites,
+        onRequest: TeamTypes.MY_TEAMS_REQUEST,
+        onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, TeamTypes.MY_TEAMS_SUCCESS],
+        onFailure: TeamTypes.MY_TEAMS_FAILURE,
+    });
+}
+
 // The argument skipCurrentTeam is a (not ideal) workaround for CRT mention counts. Unread mentions are stored in the reducer per
 // team but we do not track unread mentions for DMs/GMs independently. This results in a bit of funky logic and edge case bugs
 // that need workarounds like this. In the future we should fix the root cause with better APIs and redux state.
@@ -129,6 +138,45 @@ export function getTeamByName(teamName: string): ActionFunc {
             teamName,
         ],
     });
+}
+
+export function getKSuites(page = 0, perPage: number = General.TEAMS_CHUNK_SIZE, includeTotalCount = false, excludePolicyConstrained = false): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let data;
+
+        dispatch({type: TeamTypes.GET_TEAMS_REQUEST, data});
+
+        try {
+            data = await Client4.getKSuites(page, perPage, includeTotalCount, excludePolicyConstrained) as TeamsWithCount;
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch({type: TeamTypes.GET_TEAMS_FAILURE, data});
+            dispatch(logError(error));
+            return {error};
+        }
+
+        const actions: AnyAction[] = [
+            {
+                type: TeamTypes.RECEIVED_TEAMS_LIST,
+                data: includeTotalCount ? data.teams : data,
+            },
+            {
+                type: TeamTypes.GET_TEAMS_SUCCESS,
+                data,
+            },
+        ];
+
+        // if (includeTotalCount) {
+        //     actions.push({
+        //         type: TeamTypes.RECEIVED_TOTAL_TEAM_COUNT,
+        //         data: data.total_count,
+        //     });
+        // }
+
+        dispatch(batchActions(actions));
+
+        return {data};
+    };
 }
 
 export function getTeams(page = 0, perPage: number = General.TEAMS_CHUNK_SIZE, includeTotalCount = false, excludePolicyConstrained = false): ActionFunc {
