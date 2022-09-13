@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 /* eslint-disable max-lines */
 
 import {batchActions} from 'redux-batched-actions';
@@ -20,7 +21,7 @@ import {
     AppsTypes,
     CloudTypes,
 } from 'mattermost-redux/action_types';
-import {WebsocketEvents, General, Permissions, Preferences} from 'mattermost-redux/constants';
+import {General, Permissions} from 'mattermost-redux/constants';
 import {addChannelToInitialCategory, fetchMyCategories, receivedCategoryOrder} from 'mattermost-redux/actions/channel_categories';
 import {
     getChannelAndMyMember,
@@ -33,7 +34,7 @@ import {
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 
-import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {
     getThread as fetchThread,
@@ -65,14 +66,13 @@ import {clearErrors, logError} from 'mattermost-redux/actions/errors';
 import * as TeamActions from 'mattermost-redux/actions/teams';
 import {
     checkForModifiedUsers,
-    getMissingProfilesByIds,
-    getStatusesByIds,
     getUser as loadUser,
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
 import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
+import {Client4} from 'mattermost-redux/client';
 import {getMyTeams, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
-import {getConfig, getLicense, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
+import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {
     getChannel,
     getChannelMembersInChannels,
@@ -119,7 +119,6 @@ import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
-import {Client4} from 'mattermost-redux/client';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -136,6 +135,7 @@ export function initialize() {
 
     const config = getConfig(getState());
     const user = getCurrentUser(getState());
+    const currentChannelId = getCurrentChannelId(getState());
     if (!user) {
         return;
     }
@@ -178,7 +178,7 @@ export function initialize() {
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
-    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, authToken);
+    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, authToken, currentChannelId);
 }
 
 export function close() {
@@ -209,11 +209,12 @@ function restart() {
 
 export function reconnect(includeWebSocket = true) {
     if (includeWebSocket) {
-        if (isDesktopApp()) {
-            refreshIKToken();
-        } else {
-            reconnectWebSocket();
-        }
+        // if (isDesktopApp()) {
+        // refreshIKToken();
+        // } else {
+        reconnectWebSocket();
+
+        // }
     }
 
     dispatch({
@@ -442,10 +443,6 @@ export function handleEvent(msg) {
 
     case SocketEvents.PREFERENCES_DELETED:
         handlePreferencesDeletedEvent(msg);
-        break;
-
-    case SocketEvents.TYPING:
-        dispatch(handleUserTypingEvent(msg));
         break;
 
     case SocketEvents.STATUS_CHANGED:
@@ -1667,18 +1664,20 @@ function handleThreadReadChanged(msg) {
                 doDispatch(updateThreadLastOpened(thread.id, msg.data.timestamp));
             }
 
-            handleReadChanged(
-                doDispatch,
-                msg.data.thread_id,
-                msg.data.team_id,
-                msg.data.channel_id,
-                {
-                    lastViewedAt: msg.data.timestamp,
-                    prevUnreadMentions: thread?.unread_mentions ?? msg.data.previous_unread_mentions,
-                    newUnreadMentions: msg.data.unread_mentions,
-                    prevUnreadReplies: thread?.unread_replies ?? msg.data.previous_unread_replies,
-                    newUnreadReplies: msg.data.unread_replies,
-                },
+            doDispatch(
+                handleReadChanged(
+                    doDispatch,
+                    msg.data.thread_id,
+                    msg.data.team_id,
+                    msg.data.channel_id,
+                    {
+                        lastViewedAt: msg.data.timestamp,
+                        prevUnreadMentions: thread?.unread_mentions ?? msg.data.previous_unread_mentions,
+                        newUnreadMentions: msg.data.unread_mentions,
+                        prevUnreadReplies: thread?.unread_replies ?? msg.data.previous_unread_replies,
+                        newUnreadReplies: msg.data.unread_replies,
+                    },
+                ),
             );
         } else if (msg.data.channel_id) {
             handleAllThreadsInChannelMarkedRead(doDispatch, doGetState, msg.channel_id, msg.data.timestamp);

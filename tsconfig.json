@@ -22,14 +22,6 @@
     "experimentalDecorators": true,
     "jsx": "react",
     "baseUrl": ".",
-    "paths": {
-        "@mattermost/client": ["packages/client/src"],
-        "@mattermost/components": ["packages/components/src"],
-        "@mattermost/types/*": ["packages/types/src/*"],
-        "mattermost-redux/*": ["packages/mattermost-redux/src/*"],
-        "reselect": ["packages/reselect/src"],
-        "!!file-loader*": ["utils/empty-string"]
-    }
   },
   "include": [
     "./**/*"
@@ -37,12 +29,10 @@
   "exclude": [
     "dist",
     "e2e",
-    "!node_modules/@types",
+    "node_modules",
     "coverage",
-    "packages/matermost-components"
+    "packages/components",
+    "packages/**/dist/**",
+    "packages/**/lib/**",
   ],
-  "references": [
-    {"path": "./packages/client"},
-    {"path": "./packages/types"}
-  ]
 }

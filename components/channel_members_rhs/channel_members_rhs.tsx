@@ -55,6 +55,7 @@ export interface Props {
         goBack: () => void;
         setChannelMembersRhsSearchTerm: (terms: string) => void;
         loadProfilesAndReloadChannelMembersAll: (membersCount: number, perParge: number, channelId: string) => void;
+        // loadProfilesAndReloadChannelMembers: (page: number, perParge: number, channelId: string, sort: string) => void;
         loadMyChannelMemberAndRole: (channelId: string) => void;
         setEditChannelMembers: (active: boolean) => void;
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;

@@ -6,6 +6,7 @@ import Pusher, {Channel} from 'pusher-js';
 const MAX_WEBSOCKET_FAILS = 7;
 const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
 const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
+const JITTER_RANGE = 2000; // 2 sec
 
 const WEBSOCKET_HELLO = 'hello';
 
@@ -96,12 +97,17 @@ export default class WebSocketClient {
     // on connect, only send auth cookie and blank state.
     // on hello, get the connectionID and store it.
     // on reconnect, send cookie, connectionID, sequence number.
-    initialize(connectionUrl = this.connectionUrl, userId?: number, teamId?: string, token?: string, authToken?: string) {
+    initialize(connectionUrl = this.connectionUrl, userId?: number, teamId?: string, token?: string, authToken?: string, presenceChannelId?: string) {
         let currentUserId;
+        let currentPresenceChannelId;
 
         // Store this for onmessage reconnect
         if (userId) {
             currentUserId = userId;
+        }
+
+        if (presenceChannelId) {
+            currentPresenceChannelId = presenceChannelId;
         }
 
         if (this.conn) {
@@ -135,6 +141,7 @@ export default class WebSocketClient {
                 authEndpoint: '/broadcasting/auth',
                 auth: {
                     headers: {
+
                         // @ts-ignore
                         Authorization: `Bearer ${authToken}`,
                     },
@@ -164,8 +171,14 @@ export default class WebSocketClient {
 
         // @ts-ignore
         this.subscribeToTeamChannel(teamId);
+
         // @ts-ignore
         this.subscribeToUserChannel(userId || currentUserId);
+
+        if (presenceChannelId || currentPresenceChannelId) {
+            // @ts-ignore
+            this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
+        }
 
         this.conn.connection.bind('connected', () => {
             if (token) {
@@ -212,9 +225,12 @@ export default class WebSocketClient {
                 }
             }
 
+            // Applying jitter to avoid thundering herd problems.
+            retryTime += Math.random() * JITTER_RANGE;
+
             setTimeout(
                 () => {
-                    this.initialize(connectionUrl, userId, teamId, token, authToken);
+                    this.initialize(connectionUrl, userId, teamId, token, authToken, presenceChannelId);
                 },
                 retryTime,
             );
@@ -251,7 +267,7 @@ export default class WebSocketClient {
 
             setTimeout(
                 () => {
-                    this.initialize(connectionUrl, userId, teamId, token, authToken);
+                    this.initialize(connectionUrl, userId, teamId, token, authToken, presenceChannelId);
                 },
                 retryTime,
             );
@@ -269,6 +285,11 @@ export default class WebSocketClient {
     subscribeToUserChannel(userId: number) {
         // @ts-ignore
         this.userChannel = this.conn.subscribe(`presence-user.${userId}`);
+    }
+
+    subscribeToPresenceChannel(channelID: string) {
+        // @ts-ignore
+        this.presenceChannel = this.conn.subscribe(`presence-channel.${channelID}`);
     }
 
     bindPresenceChannel(channelID: string) {
@@ -345,6 +366,7 @@ export default class WebSocketClient {
 
                 // @ts-ignore
                 this.eventCallback?.({event: evt, data});
+
                 // @ts-ignore
                 this.messageListeners.forEach((listener) => listener({event: evt, data}));
             }
@@ -369,6 +391,7 @@ export default class WebSocketClient {
             } else if (this.eventCallback) {
                 // @ts-ignore
                 this.serverSequence = data.seq + 1;
+
                 // @ts-ignore
                 this.eventCallback({event: evt, data});
             }
@@ -492,6 +515,7 @@ export default class WebSocketClient {
             this.userChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
             this.conn = null;
+
             // @ts-ignore
             this.initialize(null, null, data.channel_id, null, authToken);
         }
@@ -508,10 +532,9 @@ export default class WebSocketClient {
             this.responseCallbacks[msg.seq] = responseCallback;
         }
 
-        if (this.conn && this.conn.connection.state === 'connected') {
+        if (this.conn && this.presenceChannel && this.conn.connection.state === 'connected') {
             this.presenceChannel?.trigger(action, msg);
-        } else if (!this.conn || this.conn.connection.state === 'disconnected') {
-            this.conn = null;
+        } else if (!this.conn || this.conn.connection.state === 'disconnected' || !this.presenceChannel) {
             this.bindPresenceChannel(data.channel_id);
         }
     }
