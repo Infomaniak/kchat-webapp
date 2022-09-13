@@ -548,11 +548,14 @@ export function openRHSSearch() {
 }
 
 export function openAtPrevious(previous: any) { // TODO Could not find the proper type. Seems to be in several props around
+    console.log('previous', previous)
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
         if (!previous) {
             return openRHSSearch()(dispatch);
         }
-
+        if (previous.isSettings) {
+            return showSettingss()(dispatch, getState);
+        }
         if (previous.isChannelInfo) {
             const currentChannelId = getCurrentChannelId(getState());
             return showChannelInfo(currentChannelId)(dispatch);

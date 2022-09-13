@@ -57,6 +57,7 @@ const SettingsButton = (props: Props): JSX.Element | null => {
             <IconButton
                 size={'sm'}
                 icon={'settings-outline'}
+                toggled={rhsState === RHSStates.SETTINGS}
                 onClick={settingButtonClick}
 
                 // onClick={(): void => {

@@ -6,7 +6,17 @@ import {bindActionCreators, Dispatch} from 'redux';
 
 import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 
-import {setRhsExpanded, showChannelInfo, showPinnedPosts, showChannelFiles, openRHSSearch, closeRightHandSide, openAtPrevious, updateSearchTerms} from 'actions/views/rhs';
+import {
+    setRhsExpanded,
+    showChannelInfo,
+    showPinnedPosts,
+    showChannelFiles,
+    openRHSSearch,
+    closeRightHandSide,
+    openAtPrevious,
+    updateSearchTerms,
+    showSettingss,
+} from 'actions/views/rhs';
 import {
     getIsRhsExpanded,
     getIsRhsOpen,
@@ -35,7 +45,7 @@ function mapStateToProps(state: GlobalState) {
         channel,
         postRightVisible: Boolean(selectedPostId),
         postCardVisible: Boolean(selectedPostCardId),
-        searchVisible: Boolean(rhsState) && rhsState !== RHSStates.PLUGIN,
+        searchVisible: Boolean(rhsState) && rhsState !== RHSStates.PLUGIN && rhsState !== RHSStates.SETTINGS,
         previousRhsState: getPreviousRhsState(state),
         isPinnedPosts: rhsState === RHSStates.PIN,
         isChannelFiles: rhsState === RHSStates.CHANNEL_FILES,
@@ -60,6 +70,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             updateSearchTerms,
             showChannelFiles,
             showChannelInfo,
+            showSettingss,
         }, dispatch),
     };
 }

@@ -2,48 +2,20 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch} from 'redux';
 
-import {makeGetPostsForThread} from 'mattermost-redux/selectors/entities/posts';
-import {removePost, getPostThread} from 'mattermost-redux/actions/posts';
-import {GenericAction} from 'mattermost-redux/types/actions';
-import {Post} from '@mattermost/types/posts';
-
-import {getSelectedChannel, getSelectedPost} from 'selectors/rhs';
-import {selectPostCard} from 'actions/views/rhs';
 import {GlobalState} from 'types/store';
 
-import RhsThread from './rhs_thread';
+import {getIsMobileView} from '../../selectors/views/browser';
+
 import RhsSettings from './rhs_settings';
+import {DispatchProps, OwnProps, StateProps} from '../search/types';
 
-function makeMapStateToProps() {
-    const getPostsForThread = makeGetPostsForThread();
-
-    return function mapStateToProps(state: GlobalState) {
-        const selected = getSelectedPost(state);
-
-        const channel = getSelectedChannel(state);
-        let posts: Post[] = [];
-        if (selected) {
-            posts = getPostsForThread(state, selected.id);
-        }
-
-        return {
-            selected,
-            channel,
-            posts,
-        };
-    };
-}
-
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapStateToProps(state: GlobalState) {
+    const isMobile = getIsMobileView(state);
+    console.log('mobile', isMobile);
     return {
-        actions: bindActionCreators({
-            removePost,
-            selectPostCard,
-            getPostThread,
-        }, dispatch),
+        isMobile,
     };
 }
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(RhsSettings);
+export default connect<StateProps, DispatchProps, OwnProps, GlobalState>(mapStateToProps)(RhsSettings);
