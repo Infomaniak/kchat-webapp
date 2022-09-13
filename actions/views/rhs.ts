@@ -603,3 +603,19 @@ export function setEditChannelMembers(active: boolean) {
         return {data: true};
     };
 }
+
+export function showSettingss() {
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+
+        // trackEvent('api', 'api_posts_search_mention');
+
+        dispatch(
+            {
+                type: ActionTypes.UPDATE_RHS_STATE,
+                state: RHSStates.SETTINGS,
+            },
+        );
+
+        return {data: true};
+    };
+}

@@ -19,6 +19,7 @@ import RhsPlugin from 'plugins/rhs_plugin';
 
 import {Channel} from '@mattermost/types/channels';
 import {RhsState} from 'types/store/rhs';
+import RhsSettings from '../rhs_settings/rhs_settings';
 
 type Props = {
     isExpanded: boolean;
@@ -32,6 +33,7 @@ type Props = {
     isChannelInfo: boolean;
     isChannelMembers: boolean;
     isPluginView: boolean;
+    isSettings: boolean;
     previousRhsState: RhsState;
     rhsChannel: Channel;
     selectedPostId: string;
@@ -77,6 +79,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             isChannelFiles: this.props.isChannelFiles,
             isChannelInfo: this.props.isChannelInfo,
             isChannelMembers: this.props.isChannelMembers,
+            isSettings: this.props.isSettings,
             selectedPostId: this.props.selectedPostId,
             selectedPostCardId: this.props.selectedPostCardId,
             previousRhsState: this.props.previousRhsState,
@@ -207,6 +210,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             previousRhsState,
             searchVisible,
             isPluginView,
+            isSettings,
             isOpen,
             isChannelInfo,
             isChannelMembers,
@@ -214,7 +218,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         } = this.props;
 
         let content = null;
-        const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || searchVisible) && isExpanded;
+        const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || isSettings || searchVisible) && isExpanded;
 
         switch (true) {
         case postRightVisible:
@@ -239,6 +243,11 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         case isChannelMembers:
             content = (
                 <ChannelMembersRhs/>
+            );
+            break;
+        case isSettings:
+            content = (
+                <RhsSettings previousRhsState={previousRhsState}/>
             );
             break;
         }

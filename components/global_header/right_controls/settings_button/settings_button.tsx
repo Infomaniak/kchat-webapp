@@ -6,13 +6,18 @@ import {FormattedMessage} from 'react-intl';
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
 
+import {useDispatch, useSelector} from 'react-redux';
+
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import UserSettingsModal from 'components/user_settings/modal';
 
 import {ModalData} from 'types/actions';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
+import Constants, {ModalIdentifiers, RHSStates} from 'utils/constants';
+import {GlobalState} from '../../../../types/store';
+import {getRhsState} from '../../../../selectors/rhs';
+import {closeRightHandSide, showMentions, showSettingss} from '../../../../actions/views/rhs';
 
 type Props = {
     actions: {
@@ -21,6 +26,18 @@ type Props = {
 };
 
 const SettingsButton = (props: Props): JSX.Element | null => {
+    const dispatch = useDispatch();
+    const rhsState = useSelector((state: GlobalState) => getRhsState(state));
+
+    const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        if (rhsState === RHSStates.SETTINGS) {
+            dispatch(closeRightHandSide());
+        } else {
+            dispatch(showSettingss());
+        }
+    };
+
     const tooltip = (
         <Tooltip id='productSettings'>
             <FormattedMessage
@@ -40,9 +57,10 @@ const SettingsButton = (props: Props): JSX.Element | null => {
             <IconButton
                 size={'sm'}
                 icon={'settings-outline'}
-                onClick={(): void => {
-                    props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}});
-                }}
+                onClick={settingButtonClick}
+
+                // onClick={(): void => {
+                //     props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}});}}
                 inverted={true}
                 compact={true}
                 aria-label='Select to open the settings modal.' // proper wording and translation needed
