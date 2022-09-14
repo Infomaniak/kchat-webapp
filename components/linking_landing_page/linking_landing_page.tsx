@@ -45,7 +45,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
             rememberChecked: false,
             redirectPage: false,
             location,
-            nativeLocation: location.replace(/^(https|http)/, 'mattermost'),
+            nativeLocation: location.replace(/^(https|http)/, 'kchat'),
             brandImageError: false,
             navigating: false,
         };
@@ -177,6 +177,12 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
             return this.props.iosAppLink;
         } else if (UserAgent.isAndroidWeb()) {
             return this.props.androidAppLink;
+        } else if (UserAgent.isMac()) {
+            return 'https://download.storage5.infomaniak.com/kchat/kchat-desktop-1.1.1-mac-x64.dmg';
+        } else if (UserAgent.isWindows()) {
+            return 'https://download.storage5.infomaniak.com/kchat/kchat-desktop-setup-1.1.1-win.exe';
+        } else if (UserAgent.isLinux()) {
+            return 'https://download.storage5.infomaniak.com/kchat/kchat-desktop-1.1.1-linux-x86_64.AppImage';
         }
 
         return this.props.desktopAppLink;
@@ -315,7 +321,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
                 id='get_app.ifNothingPrompts'
                 defaultMessage='You can view {siteName} in the desktop app or continue in your web browser.'
                 values={{
-                    siteName: this.props.enableCustomBrand ? '' : ' Mattermost',
+                    siteName: this.props.enableCustomBrand ? '' : ' kChat',
                 }}
             />
         );
@@ -325,7 +331,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
                     id='get_app.ifNothingPromptsMobile'
                     defaultMessage='You can view {siteName} in the mobile app or continue in your web browser.'
                     values={{
-                        siteName: this.props.enableCustomBrand ? '' : ' Mattermost',
+                        siteName: this.props.enableCustomBrand ? '' : ' kChat',
                     }}
                 />
             );
@@ -444,12 +450,13 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
             <div className='get-app'>
                 {this.renderHeader()}
                 <div className='get-app__dialog'>
+
+                    {this.renderDialogBody()}
                     <div
                         className={`get-app__graphic ${isMobile ? 'mobile' : ''}`}
                     >
                         {this.renderGraphic()}
                     </div>
-                    {this.renderDialogBody()}
                 </div>
             </div>
         );
