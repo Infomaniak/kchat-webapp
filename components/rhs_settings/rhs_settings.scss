@@ -1,0 +1,41 @@
+// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
+// See LICENSE.txt for license information.
+
+@import 'utils/mixins';
+@import 'utils/variables';
+
+.accountSettingRhs {
+    margin-top: 50px;
+    .settings-tabs {
+
+        ul.nav.nav-tabs {
+            border-bottom: 1px solid var(--sidebar-text);
+            li {
+                margin: 0;
+                padding: 10px 20px 0;
+                > a {
+                    border: none;
+                    border-bottom: 4px solid transparent;
+                    padding-bottom: 10px;
+
+                    &:hover {
+                        border: none;
+                        border-bottom: 4px solid transparent;
+                    }
+                }
+                &.active {
+                    > a {
+                        background: none;
+                        border: none;
+                        border-bottom: 4px solid $primary-color !important;
+                        &:hover {
+                            border: none;
+                            border-bottom: 4px solid transparent;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

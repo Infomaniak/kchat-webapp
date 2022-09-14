@@ -6,16 +6,17 @@ import {connect} from 'react-redux';
 import {GlobalState} from 'types/store';
 
 import {getIsMobileView} from '../../selectors/views/browser';
+import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
-import RhsSettings from './rhs_settings';
-import {DispatchProps, OwnProps, StateProps} from '../search/types';
+import RhsSettings, {Props} from './rhs_settings';
 
 function mapStateToProps(state: GlobalState) {
     const isMobile = getIsMobileView(state);
-    console.log('mobile', isMobile);
+    const currentUser = getCurrentUser(state);
     return {
         isMobile,
-    };
+        currentUser,
+    } as unknown as Props;
 }
 
-export default connect<StateProps, DispatchProps, OwnProps, GlobalState>(mapStateToProps)(RhsSettings);
+export default connect(mapStateToProps)(RhsSettings);

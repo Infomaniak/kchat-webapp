@@ -19,7 +19,7 @@ import RhsPlugin from 'plugins/rhs_plugin';
 
 import {Channel} from '@mattermost/types/channels';
 import {RhsState} from 'types/store/rhs';
-import RhsSettings from '../rhs_settings/rhs_settings';
+import RhsSettings from 'components/rhs_settings';
 
 type Props = {
     isExpanded: boolean;
@@ -62,7 +62,6 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        console.log('props', props);
         this.sidebarRight = React.createRef();
         this.state = {
             isOpened: false,
@@ -204,7 +203,6 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
     }
 
     render() {
-        console.log(this.props);
         const {
             rhsChannel,
             postRightVisible,
@@ -220,8 +218,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         } = this.props;
 
         let content = null;
-        console.log('isSetting', isSettings);
-        const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || isSettings || searchVisible) && isExpanded;
+        const isSidebarRightExpanded = ((postRightVisible || postCardVisible || isPluginView || searchVisible) && isExpanded) || isSettings;
 
         switch (true) {
         case postRightVisible:
@@ -249,7 +246,6 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             );
             break;
         case isSettings:
-            console.log('case setting');
             content = (
                 <RhsSettings/>
             );
