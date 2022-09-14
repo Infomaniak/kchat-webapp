@@ -143,16 +143,16 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         }
     }
 
-    componentDidMount() {
-        this.props.actions.getTeams(0, 200);
-        document.addEventListener('keydown', this.handleKeyDown);
-        document.addEventListener('keyup', this.handleKeyUp);
-    }
+    // componentDidMount() {
+    //     this.props.actions.getTeams(0, 200);
+    //     document.addEventListener('keydown', this.handleKeyDown);
+    //     document.addEventListener('keyup', this.handleKeyUp);
+    // }
 
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.handleKeyDown);
-        document.removeEventListener('keyup', this.handleKeyUp);
-    }
+    // componentWillUnmount() {
+    //     document.removeEventListener('keydown', this.handleKeyDown);
+    //     document.removeEventListener('keyup', this.handleKeyUp);
+    // }
 
     onDragEnd = (result: DropResult) => {
         const {
