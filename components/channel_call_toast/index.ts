@@ -29,9 +29,9 @@ const mapStateToProps = (state: GlobalState) => {
     const pictures = [];
     if (channels) {
         let users;
-        if (channels[currentID] && channels[currentID][connectedConfID]) {
+        if (channels[currentID]) {
             hasCall = true;
-            users = channels[currentID][connectedConfID];
+            users = channels[currentID][connectedConfID] || [];
         }
 
         if (users && users.length > 0) {
