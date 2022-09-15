@@ -3,7 +3,7 @@
 /* eslint-disable react/no-string-refs */
 /* eslint-disable max-lines */
 import React from 'react';
-import {Form} from 'react-bootstrap';
+import {ToggleButton} from 'react-bootstrap';
 import deepEqual from 'fast-deep-equal';
 
 import {FormattedMessage} from 'react-intl';
@@ -26,6 +26,10 @@ import SettingItemMax from 'components/setting_item_max.jsx';
 import SettingItemMin from 'components/setting_item_min';
 import ThemeSetting from 'components/user_settings/display/user_settings_theme';
 import BackIcon from 'components/widgets/icons/fa_back_icon';
+
+import Toggle from '../../toggle';
+
+import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
 
 import ManageTimezones from './manage_timezones';
 import ManageLanguages from './manage_languages';
@@ -145,7 +149,7 @@ type State = {
     serverError?: string;
 }
 
-export default class UserSettingsDisplay extends React.PureComponent<Props, State> {
+export default class RhsSettingsDisplay extends React.PureComponent<Props, State> {
     public prevSections: {
         theme: string;
 
@@ -333,11 +337,15 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
     }
 
     handleOnChange(display: {[key: string]: any}) {
-        this.setState({...display});
+        console.log(display);
+        this.setState({...display}, () => {
+            this.handleSubmit();
+            console.log('after submit');
+        });
     }
 
     updateSection = (section: string) => {
-        console.log(section)
+        console.log(section);
         this.updateState();
         this.props.updateSection(section);
     }
@@ -431,7 +439,8 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             />
         );
 
-        if (this.props.activeSection === section) {
+        if (true) {
+            // if (this.props.activeSection === section) {
             const format = [false, false, false];
             let childOptionToShow: ChildOption | undefined;
             if (value === firstOption.value) {
@@ -485,18 +494,8 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             if (childOptionToShow) {
                 const childDisplay = childOptionToShow.display;
                 childOptionSection = (
-                    <div className='checkbox'>
-                        <hr/>
-                        <label>
-                            <input
-                                id={name + 'childOption'}
-                                type='checkbox'
-                                name={childOptionToShow.id}
-                                checked={childOptionToShow.value === 'true'}
-                                onChange={(e) => {
-                                    this.handleOnChange({[childDisplay]: e.target.checked ? 'true' : 'false'});
-                                }}
-                            />
+                    <>
+                        <div>
                             <FormattedMessage
                                 id={childOptionToShow.id}
                                 defaultMessage={childOptionToShow.message}
@@ -508,54 +507,39 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                                     defaultMessage={childOptionToShow.moreMessage}
                                 />
                             </span>
-                        </label>
-                        <br/>
-                    </div>
+                        </div>
+                        <Toggle
+                            id={name + 'childOption'}
+                            onToggle={() => {
+                                this.handleOnChange({[childDisplay]: childOptionToShow?.value === 'false' ? 'true' : 'false'});
+                            }}
+                            toggled={childOptionToShow.value === 'true'}
+                        />
+                    </>
                 );
             }
 
             let inputs = [
-                <fieldset key={key}>
-                    <legend className='form-legend hidden-label'>
-                        {messageTitle}
-                    </legend>
-                    <div className='radio'>
-                        <label>
-                            <input
-                                id={name + 'A'}
-                                type='radio'
-                                name={name}
-                                checked={format[0]}
-                                onChange={() => this.handleOnChange(firstDisplay)}
-                            />
-                            {firstMessage}
-                            {moreColon}
-                            {firstMessageMore}
-                        </label>
-                        <br/>
-                    </div>
-                    <div className='radio'>
-                        <label>
-                            <input
-                                id={name + 'B'}
-                                type='radio'
-                                name={name}
-                                checked={format[1]}
-                                onChange={() => this.handleOnChange(secondDisplay)}
-                            />
-                            {secondMessage}
-                            {moreColon}
-                            {secondMessageMore}
-                        </label>
-                        <br/>
-                    </div>
-                    {thirdSection}
-                    <div>
-                        <br/>
-                        {messageDesc}
-                    </div>
-                    {childOptionSection}
-                </fieldset>,
+                <>
+                    <Toggle
+                        id={name + 'A'}
+                        onToggle={() => this.handleOnChange(format[0] ? secondDisplay : firstDisplay)}
+                        toggled={Boolean(format[0])}
+
+                    />
+                    {/*<fieldset key={key}>
+
+                        <legend className='form-legend hidden-label'>
+                            {messageTitle}
+                        </legend>
+                        {thirdSection}
+                        <div>
+                            <br/>
+                            {messageDesc}
+                        </div>*/}
+                    {/*</fieldset>*/}
+                </>,
+
             ];
 
             if (display === 'teammateNameDisplay' && disabled) {
@@ -570,42 +554,21 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                 submit = null;
                 inputs = [];
             }
+
             return (
-                <div>
-                    <SettingItemMax
-                        title={messageTitle}
-                        inputs={inputs}
-                        submit={submit}
-                        saving={this.state.isSaving}
-                        server_error={this.state.serverError}
-                        updateSection={this.updateSection}
-                        extraInfo={extraInfo}
-                    />
-                    <div className='divider-dark'/>
-                </div>
+                <RhsSettingsItem
+                    title={messageTitle}
+                    inputs={inputs}
+                    submit={submit}
+                    saving={this.state.isSaving}
+                    server_error={this.state.serverError}
+                    updateSection={this.updateSection}
+                    extraInfo={extraInfo}
+                    messageDesc={messageDesc}
+                    childOptionSection={childOptionSection}
+                />
             );
         }
-
-        let describe;
-        if (value === firstOption.value) {
-            describe = firstMessage;
-        } else if (value === secondOption.value) {
-            describe = secondMessage;
-        } else {
-            describe = thirdMessage;
-        }
-
-        return (
-            <div>
-                <SettingItemMin
-                    title={messageTitle}
-                    describe={describe}
-                    section={section}
-                    updateSection={this.updateSection}
-                />
-                <div className='divider-dark'/>
-            </div>
-        );
     }
 
     render() {
@@ -715,68 +678,6 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             },
         });
 
-        let collapsedReplyThreads;
-
-        if (this.props.collapsedReplyThreadsAllowUserPreference) {
-            collapsedReplyThreads = this.createSection({
-                section: Preferences.COLLAPSED_REPLY_THREADS,
-                display: 'collapsedReplyThreads',
-                value: this.state.collapsedReplyThreads,
-                defaultDisplay: Preferences.COLLAPSED_REPLY_THREADS_FALLBACK_DEFAULT,
-                title: {
-                    id: t('user.settings.display.collapsedReplyThreadsTitle'),
-                    message: 'Collapsed Reply Threads',
-                },
-                firstOption: {
-                    value: Preferences.COLLAPSED_REPLY_THREADS_ON,
-                    radionButtonText: {
-                        id: t('user.settings.display.collapsedReplyThreadsOn'),
-                        message: 'On',
-                    },
-                },
-                secondOption: {
-                    value: Preferences.COLLAPSED_REPLY_THREADS_OFF,
-                    radionButtonText: {
-                        id: t('user.settings.display.collapsedReplyThreadsOff'),
-                        message: 'Off',
-                    },
-                },
-                description: {
-                    id: t('user.settings.display.collapsedReplyThreadsDescription'),
-                    message: 'When enabled, reply messages are not shown in the channel and you\'ll be notified about threads you\'re following in the "Threads" view.',
-                },
-            });
-        }
-
-        const clickToReply = this.createSection({
-            section: Preferences.CLICK_TO_REPLY,
-            display: 'clickToReply',
-            value: this.state.clickToReply,
-            defaultDisplay: 'true',
-            title: {
-                id: t('user.settings.display.clickToReply'),
-                message: 'Click to open threads',
-            },
-            firstOption: {
-                value: 'true',
-                radionButtonText: {
-                    id: t('user.settings.sidebar.on'),
-                    message: 'On',
-                },
-            },
-            secondOption: {
-                value: 'false',
-                radionButtonText: {
-                    id: t('user.settings.sidebar.off'),
-                    message: 'Off',
-                },
-            },
-            description: {
-                id: t('user.settings.display.clickToReplyDescription'),
-                message: 'When enabled, click anywhere on a message to open the reply thread.',
-            },
-        });
-
         const channelDisplayModeSection = this.createSection({
             section: Preferences.CHANNEL_DISPLAY_MODE,
             display: 'channelDisplayMode',
@@ -805,52 +706,6 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                 message: 'Select the width of the center channel.',
             },
         });
-
-        let languagesSection;
-        let userLocale = this.props.user.locale;
-        if (this.props.activeSection === 'languages') {
-            if (!I18n.isLanguageAvailable(userLocale)) {
-                userLocale = this.props.defaultClientLocale;
-            }
-            languagesSection = (
-                <div>
-                    <ManageLanguages
-                        user={this.props.user}
-                        locale={userLocale}
-                        updateSection={this.updateSection}
-                    />
-                    <div className='divider-dark'/>
-                </div>
-            );
-        } else {
-            let locale;
-            if (I18n.isLanguageAvailable(userLocale)) {
-                locale = I18n.getLanguageInfo(userLocale).name;
-            } else {
-                locale = I18n.getLanguageInfo(this.props.defaultClientLocale).name;
-            }
-
-            languagesSection = (
-                <div>
-                    <SettingItemMin
-                        title={
-                            <FormattedMessage
-                                id='user.settings.display.language'
-                                defaultMessage='Language'
-                            />
-                        }
-                        describe={locale}
-                        section={'languages'}
-                        updateSection={this.updateSection}
-                    />
-                    <div className='divider-dark'/>
-                </div>
-            );
-        }
-
-        if (Object.keys(I18n.getLanguages()).length === 1) {
-            languagesSection = null;
-        }
 
         let themeSection;
         if (this.props.enableThemeSelection) {
@@ -902,56 +757,16 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
 
         return (
             <div id='displaySettings'>
-                <div className='modal-header'>
-                    <button
-                        id='closeButton'
-                        type='button'
-                        className='close'
-                        data-dismiss='modal'
-                        aria-label='Close'
-                        onClick={this.props.closeModal}
-                    >
-                        <span aria-hidden='true'>{'×'}</span>
-                    </button>
-                    <h4
-                        className='modal-title'
-                        ref='title'
-                    >
-                        <div className='modal-back'>
-                            <span onClick={this.props.collapseModal}>
-                                <BackIcon/>
-                            </span>
-                        </div>
-                        <FormattedMessage
-                            id='user.settings.display.title'
-                            defaultMessage='Display Settings'
-                        />
-                    </h4>
-                </div>
-                <div className='user-settings'>
-                    <h3
-                        id='displaySettingsTitle'
-                        className='tab-header'
-                    >
-                        <FormattedMessage
-                            id='user.settings.display.title'
-                            defaultMessage='Display Settings'
-                        />
-                    </h3>
+                <div className='user-settings user-rhs-container container'>
                     <div className='divider-dark first'/>
+                    {/*
                     {themeSection}
-                    {/* {collapsedReplyThreads}
-                    {clockSection}
-                    {teammateNameDisplaySection}
-                    {availabilityStatusOnPostsSection}
-                    {timezoneSelection} */}
+*/}
                     {linkPreviewSection}
                     {collapseSection}
                     {messageDisplaySection}
-                    {/* {clickToReply} */}
                     {channelDisplayModeSection}
                     {oneClickReactionsOnPostsSection}
-                    {/* {languagesSection} */}
                 </div>
             </div>
         );

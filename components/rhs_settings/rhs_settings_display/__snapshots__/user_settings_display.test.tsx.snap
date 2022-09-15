@@ -1,0 +1,1993 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, channel display mode section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <SettingItemMax
+        containerStyle=""
+        extraInfo={null}
+        infoPosition="bottom"
+        inputs={
+          Array [
+            <fieldset>
+              <legend
+                className="form-legend hidden-label"
+              >
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="Channel Display"
+                  id="user.settings.display.channelDisplayTitle"
+                />
+              </legend>
+              <div
+                className="radio"
+              >
+                <label>
+                  <input
+                    checked={false}
+                    id="channel_display_modeFormatA"
+                    name="channel_display_modeFormat"
+                    onChange={[Function]}
+                    type="radio"
+                  />
+                  <Memo(MemoizedFormattedMessage)
+                    defaultMessage="Full width"
+                    id="user.settings.display.fullScreen"
+                  />
+                </label>
+                <br />
+              </div>
+              <div
+                className="radio"
+              >
+                <label>
+                  <input
+                    checked={false}
+                    id="channel_display_modeFormatB"
+                    name="channel_display_modeFormat"
+                    onChange={[Function]}
+                    type="radio"
+                  />
+                  <Memo(MemoizedFormattedMessage)
+                    defaultMessage="Fixed width, centered"
+                    id="user.settings.display.fixedWidthCentered"
+                  />
+                </label>
+                <br />
+              </div>
+              <div>
+                <br />
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="Select the width of the center channel."
+                  id="user.settings.display.channeldisplaymode"
+                />
+              </div>
+            </fieldset>,
+          ]
+        }
+        saving={false}
+        section=""
+        submit={[Function]}
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, clickToReply section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, clock section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, collapse section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <SettingItemMax
+        containerStyle=""
+        extraInfo={null}
+        infoPosition="bottom"
+        inputs={
+          Array [
+            <fieldset>
+              <legend
+                className="form-legend hidden-label"
+              >
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="Default Appearance of Image Previews"
+                  id="user.settings.display.collapseDisplay"
+                />
+              </legend>
+              <div
+                className="radio"
+              >
+                <label>
+                  <input
+                    checked={false}
+                    id="collapseFormatA"
+                    name="collapseFormat"
+                    onChange={[Function]}
+                    type="radio"
+                  />
+                  <Memo(MemoizedFormattedMessage)
+                    defaultMessage="On"
+                    id="user.settings.display.collapseOn"
+                  />
+                </label>
+                <br />
+              </div>
+              <div
+                className="radio"
+              >
+                <label>
+                  <input
+                    checked={false}
+                    id="collapseFormatB"
+                    name="collapseFormat"
+                    onChange={[Function]}
+                    type="radio"
+                  />
+                  <Memo(MemoizedFormattedMessage)
+                    defaultMessage="Off"
+                    id="user.settings.display.collapseOff"
+                  />
+                </label>
+                <br />
+              </div>
+              <div>
+                <br />
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+                  id="user.settings.display.collapseDesc"
+                />
+              </div>
+            </fieldset>,
+          ]
+        }
+        saving={false}
+        section=""
+        submit={[Function]}
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, languages section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, link preview section with EnableLinkPreviews is false 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, link preview section with EnableLinkPreviews is true 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <SettingItemMax
+        containerStyle=""
+        extraInfo={null}
+        infoPosition="bottom"
+        inputs={
+          Array [
+            <fieldset>
+              <legend
+                className="form-legend hidden-label"
+              >
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="Website Link Previews"
+                  id="user.settings.display.linkPreviewDisplay"
+                />
+              </legend>
+              <div
+                className="radio"
+              >
+                <label>
+                  <input
+                    checked={false}
+                    id="linkpreviewFormatA"
+                    name="linkpreviewFormat"
+                    onChange={[Function]}
+                    type="radio"
+                  />
+                  <Memo(MemoizedFormattedMessage)
+                    defaultMessage="On"
+                    id="user.settings.display.linkPreviewOn"
+                  />
+                </label>
+                <br />
+              </div>
+              <div
+                className="radio"
+              >
+                <label>
+                  <input
+                    checked={false}
+                    id="linkpreviewFormatB"
+                    name="linkpreviewFormat"
+                    onChange={[Function]}
+                    type="radio"
+                  />
+                  <Memo(MemoizedFormattedMessage)
+                    defaultMessage="Off"
+                    id="user.settings.display.linkPreviewOff"
+                  />
+                </label>
+                <br />
+              </div>
+              <div>
+                <br />
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+                  id="user.settings.display.linkPreviewDesc"
+                />
+              </div>
+            </fieldset>,
+          ]
+        }
+        saving={false}
+        section=""
+        submit={[Function]}
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, message display section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <SettingItemMax
+        containerStyle=""
+        extraInfo={null}
+        infoPosition="bottom"
+        inputs={
+          Array [
+            <fieldset>
+              <legend
+                className="form-legend hidden-label"
+              >
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="Message Display"
+                  id="user.settings.display.messageDisplayTitle"
+                />
+              </legend>
+              <div
+                className="radio"
+              >
+                <label>
+                  <input
+                    checked={false}
+                    id="message_displayFormatA"
+                    name="message_displayFormat"
+                    onChange={[Function]}
+                    type="radio"
+                  />
+                  <Memo(MemoizedFormattedMessage)
+                    defaultMessage="Standard"
+                    id="user.settings.display.messageDisplayClean"
+                  />
+                  : 
+                  <span
+                    className="font-weight--normal"
+                  >
+                    <Memo(MemoizedFormattedMessage)
+                      defaultMessage="Easy to scan and read."
+                      id="user.settings.display.messageDisplayCleanDes"
+                    />
+                  </span>
+                </label>
+                <br />
+              </div>
+              <div
+                className="radio"
+              >
+                <label>
+                  <input
+                    checked={false}
+                    id="message_displayFormatB"
+                    name="message_displayFormat"
+                    onChange={[Function]}
+                    type="radio"
+                  />
+                  <Memo(MemoizedFormattedMessage)
+                    defaultMessage="Compact"
+                    id="user.settings.display.messageDisplayCompact"
+                  />
+                  : 
+                  <span
+                    className="font-weight--normal"
+                  >
+                    <Memo(MemoizedFormattedMessage)
+                      defaultMessage="Fit as many messages on the screen as we can."
+                      id="user.settings.display.messageDisplayCompactDes"
+                    />
+                  </span>
+                </label>
+                <br />
+              </div>
+              <div>
+                <br />
+                <Memo(MemoizedFormattedMessage)
+                  defaultMessage="Select how messages in a channel should be displayed."
+                  id="user.settings.display.messageDisplayDescription"
+                />
+              </div>
+            </fieldset>,
+          ]
+        }
+        saving={false}
+        section=""
+        submit={[Function]}
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, no active section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, teammate name display section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, theme section with EnableThemeSelection is false 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, theme section with EnableThemeSelection is true 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(ThemeSetting)
+        allowCustomThemes={true}
+        selected={true}
+        setEnforceFocus={[MockFunction]}
+        setRequireConfirm={[MockFunction]}
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should match snapshot, timezone section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
+    <div>
+      <Connect(SettingItemMin)
+        section="linkpreview"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Website Link Previews"
+            id="user.settings.display.linkPreviewDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="collapse"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Default Appearance of Image Previews"
+            id="user.settings.display.collapseDisplay"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="message_display"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Message Display"
+            id="user.settings.display.messageDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="channel_display_mode"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+    <div>
+      <Connect(SettingItemMin)
+        section="one_click_reactions_enabled"
+        title={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
+          />
+        }
+        updateSection={[Function]}
+      />
+      <div
+        className="divider-dark"
+      />
+    </div>
+  </div>
+</div>
+`;

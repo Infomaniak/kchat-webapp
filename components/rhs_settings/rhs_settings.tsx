@@ -12,15 +12,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {Tab, Tabs} from 'react-bootstrap';
 
-import {formatMessage} from '@formatjs/intl';
+import ReactDOM from 'react-dom';
 
-import {Channel} from '@mattermost/types/channels';
-import {Post} from '@mattermost/types/posts';
-
-import {FakePost, RhsState} from 'types/store/rhs';
-
-import RhsHeaderPost from 'components/rhs_header_post';
-import ThreadViewer from 'components/threading/thread_viewer';
 import OverlayTrigger from '../overlay_trigger';
 import Constants, {RHSStates} from '../../utils/constants';
 import LocalizedIcon from '../localized_icon';
@@ -36,10 +29,10 @@ import * as Utils from '../../utils/utils';
 import GeneralTab from '../user_settings/general';
 import SecurityTab from '../user_settings/security';
 import NotificationsTab from '../user_settings/notifications';
-import DisplayTab from '../user_settings/display';
-import ReactDOM from 'react-dom';
+import DisplayTab from './rhs_settings_display';
 
 import './rhs_settings.scss';
+import RhsSettingsHeader from './rhs_settings_header/rhs_settings_header';
 
 const holders = defineMessages({
     profile: {
@@ -115,7 +108,7 @@ export default function RhsSettings({
     tabs.push({name: 'advanced', uiName: intl.formatMessage(holders.advanced), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Advanced Settings Icon')});
     const [activeTab, setActiveTab] = React.useState(tabs[0].name);
 
-    console.log(currentUser)
+    console.log(currentUser);
     const onClose = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         if (rhsState === RHSStates.SETTINGS) {
@@ -138,7 +131,7 @@ export default function RhsSettings({
             active_tab: '',
             active_section: '',
         });
-    }
+    };
 
     // TODO: check for remove
     const closeModal = () => {
@@ -150,8 +143,8 @@ export default function RhsSettings({
     };
 
     const updateSection = (section?: string, skipConfirm?: boolean) => {
-        console.log(section)
-    }
+        console.log(section);
+    };
 
     const closeSidebarTooltip = (
         <Tooltip id='closeSidebarTooltip'>
@@ -168,51 +161,9 @@ export default function RhsSettings({
                 id='rhsContainer'
                 className='sidebar-right__body'
             >
-                <div className='sidebar--right__header'>
-                    <span className='sidebar--right__title'>
-
-                        {isMobile && (
-                            <BackButton
-                                className='sidebar--right__back'
-                                onClick={onClose}
-                            >
-                                <i
-                                    className='icon icon-arrow-back-ios'
-                                    aria-label='Back Icon'
-                                />
-                            </BackButton>
-                        )}
-
-                        <HeaderTitle>
-                            <FormattedMessage
-                                id='global_header.productSettings'
-                                defaultMessage='Settings'
-                            />
-                        </HeaderTitle>
-
-                    </span>
-
-                    <OverlayTrigger
-                        delayShow={Constants.OVERLAY_TIME_DELAY}
-                        placement='top'
-                        overlay={closeSidebarTooltip}
-                    >
-                        <button
-                            id='rhsCloseButton'
-                            type='button'
-                            className='sidebar--right__close btn-icon'
-                            aria-label='Close'
-                            onClick={onClose}
-                        >
-                            <LocalizedIcon
-                                className='icon icon-close'
-                                ariaLabel={{id: t('rhs_header.closeTooltip.icon'), defaultMessage: 'Close Sidebar Icon'}}
-                            />
-                        </button>
-                    </OverlayTrigger>
-                </div>
+                <RhsSettingsHeader isMobile={isMobile}/>
                 {/*    end of header  */}
-                <div className="accountSettingRhs">
+                <div className='accountSettingRhs'>
                     <Tabs
                         defaultActiveKey={activeTab}
                         onSelect={handleUpdateActiveTab}
@@ -275,7 +226,5 @@ export default function RhsSettings({
             </div>
         </div>
     );
-};
-
-
+}
 
