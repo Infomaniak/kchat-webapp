@@ -4,7 +4,9 @@ import {connect} from 'react-redux';
 
 import {GlobalState} from 'mattermost-redux/types/store';
 
-import {bindActionCreators, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
+
+import {Action} from 'mattermost-redux/types/actions';
 
 import {getUser} from 'mattermost-redux/selectors/entities/users';
 
@@ -60,7 +62,7 @@ const mapStateToProps = (state: GlobalState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators<ActionCreatorsMapObject<Action>, any>({
     onJoinCall: startOrJoinCallInChannel,
 }, dispatch);
 
