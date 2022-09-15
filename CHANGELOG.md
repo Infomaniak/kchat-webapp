@@ -1,3 +1,9 @@
+## 0.3.6-rc.5 (2022-09-15)
+
+## Added (1 change)
+
+- [new call toast component for more call visibility](kchat/webapp@56a1540dac733e289d4d8d5619ac06fca9ef133b) by @antonbuksa ([merge request](kchat/webapp!129))
+
 ## 0.3.6-rc.4 (2022-09-15)
 
 No changes.
