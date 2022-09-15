@@ -22,8 +22,9 @@ import {ActionTypes} from 'utils/constants';
 
 import {getChannelURL} from '../utils';
 
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+
 import CallWidget from './component';
-import { getTeammateNameDisplaySetting } from 'mattermost-redux/selectors/entities/preferences';
 
 const mapStateToProps = (state: GlobalState) => {
     const channel = getChannel(state, connectedChannelID(state));
