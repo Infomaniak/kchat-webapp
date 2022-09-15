@@ -1285,12 +1285,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
     .status-dnd {
         color: var(--dnd-indicator);
     }
-
-    ~ .inner-wrap {
-        #app-content {
-            margin-left: 240px;
-        }
-    }
 }
 
 .multi-teams {
@@ -1298,7 +1292,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
         left: 65px;
 
         + .inner-wrap #app-content {
-            margin-left: 305px;
+            margin-left: 305px !important;
         }
     }
 }
