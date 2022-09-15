@@ -1,3 +1,9 @@
+## 0.3.7 (2022-09-15)
+
+## Fixed (1 change)
+
+- [minor channel layout css fix](kchat/webapp@c8e7c6e8cbb9b4492b36144d34b0a50946363c6b) by @antonbuksa
+
 ## 0.3.6-rc.5 (2022-09-15)
 
 ## Added (1 change)
