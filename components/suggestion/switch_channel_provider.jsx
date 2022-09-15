@@ -26,7 +26,7 @@ import {getMyPreferences, isGroupChannelManuallyVisible, isCollapsedThreadsEnabl
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {
     getCurrentTeamId,
-    getMyTeams,
+    getMyKSuites,
     getTeam,
 } from 'mattermost-redux/selectors/entities/teams';
 import {
@@ -267,7 +267,7 @@ function mapStateToPropsForSwitchChannelSuggestion(state, ownProps) {
     const status = getStatusForUserId(state, channel.userId);
     const collapsedThreads = isCollapsedThreadsEnabled(state);
     const team = getTeam(state, channel.team_id);
-    const isPartOfOnlyOneTeam = getMyTeams(state).length === 1;
+    const isPartOfOnlyOneTeam = getMyKSuites(state).length === 1;
 
     if (channel && !dmChannelTeammate) {
         dmChannelTeammate = getUser(state, channel.userId);

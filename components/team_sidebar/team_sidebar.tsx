@@ -143,16 +143,16 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         }
     }
 
-    componentDidMount() {
-        this.props.actions.getTeams(0, 200);
-        document.addEventListener('keydown', this.handleKeyDown);
-        document.addEventListener('keyup', this.handleKeyUp);
-    }
+    // componentDidMount() {
+    //     this.props.actions.getTeams(0, 200);
+    //     document.addEventListener('keydown', this.handleKeyDown);
+    //     document.addEventListener('keyup', this.handleKeyUp);
+    // }
 
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.handleKeyDown);
-        document.removeEventListener('keyup', this.handleKeyUp);
-    }
+    // componentWillUnmount() {
+    //     document.removeEventListener('keydown', this.handleKeyDown);
+    //     document.removeEventListener('keyup', this.handleKeyUp);
+    // }
 
     onDragEnd = (result: DropResult) => {
         const {
@@ -210,7 +210,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
             return (
                 <TeamButton
                     key={'switch_team_' + team.name}
-                    url={`/${team.name}`}
+                    url={team.url}
                     tip={team.display_name}
                     active={team.id === this.props.currentTeamId}
                     displayName={team.display_name}
@@ -230,51 +230,51 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
 
         const joinableTeams = [];
 
-        const plusIcon = (
-            <i
-                className='icon icon-plus'
-                role={'img'}
-                aria-label={Utils.localizeMessage('sidebar.team_menu.button.plusIcon', 'Plus Icon')}
-            />
-        );
+        // const plusIcon = (
+        //     <i
+        //         className='icon icon-plus'
+        //         role={'img'}
+        //         aria-label={Utils.localizeMessage('sidebar.team_menu.button.plusIcon', 'Plus Icon')}
+        //     />
+        // );
 
-        if (this.props.moreTeamsToJoin && !this.props.experimentalPrimaryTeam) {
-            joinableTeams.push(
-                <TeamButton
-                    btnClass='team-btn__add'
-                    key='more_teams'
-                    url='/select_team'
-                    tip={
-                        <FormattedMessage
-                            id='team_sidebar.join'
-                            defaultMessage='Other teams you can join'
-                        />
-                    }
-                    content={plusIcon}
-                    switchTeam={this.props.actions.switchTeam}
-                />,
-            );
-        } else {
-            joinableTeams.push(
-                <SystemPermissionGate
-                    permissions={[Permissions.CREATE_TEAM]}
-                    key='more_teams'
-                >
-                    <TeamButton
-                        btnClass='team-btn__add'
-                        url='/create_team'
-                        tip={
-                            <FormattedMessage
-                                id='navbar_dropdown.create'
-                                defaultMessage='Create a Team'
-                            />
-                        }
-                        content={plusIcon}
-                        switchTeam={this.props.actions.switchTeam}
-                    />
-                </SystemPermissionGate>,
-            );
-        }
+        // if (this.props.moreTeamsToJoin && !this.props.experimentalPrimaryTeam) {
+        //     joinableTeams.push(
+        //         <TeamButton
+        //             btnClass='team-btn__add'
+        //             key='more_teams'
+        //             url='/select_team'
+        //             tip={
+        //                 <FormattedMessage
+        //                     id='team_sidebar.join'
+        //                     defaultMessage='Other teams you can join'
+        //                 />
+        //             }
+        //             content={plusIcon}
+        //             switchTeam={this.props.actions.switchTeam}
+        //         />,
+        //     );
+        // } else {
+        // joinableTeams.push(
+        //     <SystemPermissionGate
+        //         permissions={[Permissions.CREATE_TEAM]}
+        //         key='more_teams'
+        //     >
+        //         <TeamButton
+        //             btnClass='team-btn__add'
+        //             url='/create_team'
+        //             tip={
+        //                 <FormattedMessage
+        //                     id='navbar_dropdown.create'
+        //                     defaultMessage='Create a Team'
+        //                 />
+        //             }
+        //             content={plusIcon}
+        //             switchTeam={this.props.actions.switchTeam}
+        //         />
+        //     </SystemPermissionGate>,
+        // );
+        // }
 
         // Disable team sidebar pluggables in products until proper support can be provided.
         const isNonChannelsProduct = !currentProduct;

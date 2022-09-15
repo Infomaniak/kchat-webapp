@@ -13,7 +13,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {
     getCurrentTeamId,
     getJoinableTeamIds,
-    getMyTeams,
+    getMyKSuites,
 } from 'mattermost-redux/selectors/entities/teams';
 import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {getTeamsUnreadStatuses} from 'mattermost-redux/selectors/entities/channels';
@@ -40,10 +40,12 @@ function mapStateToProps(state: GlobalState) {
     const products = state.plugins.components.Product || [];
 
     const [unreadTeamsSet, mentionsInTeamMap] = getTeamsUnreadStatuses(state);
+    const a = getMyKSuites(state);
+    console.log(a)
 
     return {
         currentTeamId: getCurrentTeamId(state),
-        myTeams: getMyTeams(state),
+        myTeams: getMyKSuites(state),
         isOpen: getIsLhsOpen(state),
         experimentalPrimaryTeam,
         locale: getCurrentLocale(state),
