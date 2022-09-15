@@ -149,11 +149,16 @@
     }
 
     .app__content {
-        margin-left: 285px;
+        margin-left: 305px;
     }
 
     .product-wrapper {
         width: calc(100% - 65px);
+    }
+
+    #calls-widget {
+        margin-left: 60px;
+        width: 225px !important;
     }
 }
 

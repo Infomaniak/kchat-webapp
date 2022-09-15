@@ -25,6 +25,8 @@ import ToastWrapper from 'components/toast_wrapper';
 
 import Pluggable from 'plugins/pluggable';
 
+import ChannelCallToast from 'components/channel_call_toast';
+
 import LatestPostReader from './latest_post_reader';
 
 const OVERSCAN_COUNT_BACKWARD = 80;
@@ -685,7 +687,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                                             <Pluggable
                                                 pluggableName='ChannelToast'
                                             />
-
+                                            <ChannelCallToast/>
                                             {this.renderToasts(width)}
                                         </div>
 
