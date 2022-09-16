@@ -29,10 +29,14 @@ import * as Utils from '../../utils/utils';
 import GeneralTab from '../user_settings/general';
 import SecurityTab from '../user_settings/security';
 import NotificationsTab from '../user_settings/notifications';
+import SidebarTab from '../rhs_settings/rhs_settings_sidebar';
+import AdvancedTab from '../user_settings/advanced';
+
 import DisplayTab from './rhs_settings_display';
 
 import './rhs_settings.scss';
 import RhsSettingsHeader from './rhs_settings_header/rhs_settings_header';
+
 
 const holders = defineMessages({
     profile: {
@@ -179,26 +183,23 @@ export default function RhsSettings({
                     </Tabs>
                     {activeTab === 'profile' && (
                         <div>
-                            {/*<GeneralTab*/}
-                            {/*    user={currentUser}*/}
-                            {/*    activeSection={this.props.activeSection}*/}
-                            {/*    updateSection={this.props.updateSection}*/}
-                            {/*    updateTab={handleUpdateActiveTab}*/}
-                            {/*    closeModal={closeModal}*/}
-                            {/*    collapseModal={collapseModal}*/}
-                            {/*/>*/}
+                            <GeneralTab
+                                user={currentUser}
+                                updateTab={handleUpdateActiveTab}
+                                updateSection={updateSection}
+                                closeModal={closeModal}
+                                collapseModal={collapseModal}
+                            />
                         </div>
                     )}
                     {activeTab === 'security' && (
                         <div>
-                            {/*<SecurityTab*/}
-                            {/*    user={currentUser}*/}
-                            {/*    activeSection={this.props.activeSection}*/}
-                            {/*    updateSection={this.props.updateSection}*/}
-                            {/*    closeModal={closeModal}*/}
-                            {/*    collapseModal={collapseModal}*/}
-                            {/*    setRequireConfirm={this.props.setRequireConfirm}*/}
-                            {/*/>*/}
+                            <SecurityTab
+                                user={currentUser}
+                                closeModal={closeModal}
+                                collapseModal={collapseModal}
+                                setRequireConfirm={false}
+                            />
                         </div>
 
                     )}
@@ -216,6 +217,24 @@ export default function RhsSettings({
                         <div>
                             <DisplayTab
                                 user={currentUser}
+                                updateSection={updateSection}
+                                closeModal={closeModal}
+                                collapseModal={collapseModal}
+                            />
+                        </div>
+                    )}
+                    {activeTab === 'sidebar' && (
+                        <div>
+                            <SidebarTab
+                                updateSection={updateSection}
+                                closeModal={closeModal}
+                                collapseModal={collapseModal}
+                            />
+                        </div>
+                    )}
+                    {activeTab === 'advanced' && (
+                        <div>
+                            <AdvancedTab
                                 updateSection={updateSection}
                                 closeModal={closeModal}
                                 collapseModal={collapseModal}
