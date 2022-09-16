@@ -1,3 +1,55 @@
+## 0.3.7 (2022-09-15)
+
+## Fixed (1 change)
+
+- [minor channel layout css fix](kchat/webapp@c8e7c6e8cbb9b4492b36144d34b0a50946363c6b) by @antonbuksa
+
+## 0.3.6-rc.5 (2022-09-15)
+
+## Added (1 change)
+
+- [new call toast component for more call visibility](kchat/webapp@56a1540dac733e289d4d8d5619ac06fca9ef133b) by @antonbuksa ([merge request](kchat/webapp!129))
+
+## 0.3.6-rc.4 (2022-09-15)
+
+No changes.
+
+## 0.3.6-rc.2 (2022-09-15)
+
+No changes.
+
+## 0.3.6-rc.1 (2022-09-14)
+
+No changes.
+
+## 0.3.5-rc.2 (2022-09-14)
+
+No changes.
+
+## 0.3.5-rc.1 (2022-09-12)
+
+No changes.
+
+## 0.3.4 (2022-09-12)
+
+No changes.
+
+## 0.3.3-rc.2 (2022-09-07)
+
+No changes.
+
+## 0.3.3-rc.1 (2022-09-07)
+
+No changes.
+
+## 0.3.2-rc.7 (2022-09-06)
+
+## Fixed (3 changes)
+
+- [rebind presence on ws error](kchat/webapp@de8669819c6d7feb5dfa9c74d9827f37c04cc22d) by @antonbuksa
+- [fix typing event parsing in new useWebsocket hook](kchat/webapp@8326eb103248fd68140e7ed368beacf6f417df51) by @antonbuksa
+- [fix typing events names](kchat/webapp@aefdbaa64e577ee60893be09903be75446386446) by @antonbuksa
+
 ## 0.3.2-rc.6 (2022-09-06)
 
 ## Fixed (3 changes)

@@ -5,8 +5,9 @@ import moment from 'moment-timezone';
 
 import {UserProfile} from 'mattermost-redux/types/users';
 
-// import ActiveCallIcon from '../../components/icons/active_call_icon';
-import ConnectedProfiles from '../connected_profiles';
+import ActiveCallIcon from './active_call_icon';
+
+import ConnectedProfiles from './connected_profiles';
 
 interface Props {
     currChannelID: string;
@@ -15,6 +16,7 @@ interface Props {
     startAt?: number;
     pictures: string[];
     profiles: UserProfile[];
+    onJoinCall: Function;
 }
 
 interface State {
@@ -51,7 +53,10 @@ export default class ChannelCallToast extends React.PureComponent<Props, State> 
         if (this.props.connectedID) {
             return;
         }
-        window.postMessage({type: 'connectCall', channelID: this.props.currChannelID}, window.origin);
+
+        // window.postMessage({type: 'connectCall', channelID: this.props.currChannelID}, window.origin);
+
+        this.props.onJoinCall(this.props.currChannelID);
     }
 
     onDismissClick = () => {
@@ -74,10 +79,10 @@ export default class ChannelCallToast extends React.PureComponent<Props, State> 
                     onClick={this.onJoinCallClick}
                 >
                     <div style={{position: 'absolute'}}>
-                        {/* <ActiveCallIcon
+                        <ActiveCallIcon
                             fill='white'
                             style={{margin: '0 4px'}}
-                        /> */}
+                        />
                         <span style={{margin: '0 4px'}}>{'Join Call'}</span>
                         <span style={{opacity: '0.80', margin: '0 4px'}}>{`Started ${moment(this.props.startAt).fromNow()}`}</span>
                         <div/>
@@ -97,7 +102,7 @@ export default class ChannelCallToast extends React.PureComponent<Props, State> 
                     <ConnectedProfiles
                         profiles={this.props.profiles}
                         pictures={this.props.pictures}
-                        size='md'
+                        border={false}
                         maxShowedProfiles={2}
                     />
                 </div>
