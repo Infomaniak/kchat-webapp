@@ -15,9 +15,12 @@ const LeftControlsContainer = styled.div`
     align-items: center;
     height: 40px;
     flex-shrink: 0;
+    width: 240px;
+    background: var(--sidebar-bg);
+    border-bottom: solid 1px rgba(var(--sidebar-text-rgb), 0.25);
 
     > * + * {
-        margin-left: 12px;
+        margin-left: 10px;
     }
 `;
 

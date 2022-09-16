@@ -1,3 +1,23 @@
+## 0.3.7 (2022-09-15)
+
+## Fixed (1 change)
+
+- [minor channel layout css fix](kchat/webapp@c8e7c6e8cbb9b4492b36144d34b0a50946363c6b) by @antonbuksa
+
+## 0.3.6-rc.5 (2022-09-15)
+
+## Added (1 change)
+
+- [new call toast component for more call visibility](kchat/webapp@56a1540dac733e289d4d8d5619ac06fca9ef133b) by @antonbuksa ([merge request](kchat/webapp!129))
+
+## 0.3.6-rc.4 (2022-09-15)
+
+No changes.
+
+## 0.3.6-rc.2 (2022-09-15)
+
+No changes.
+
 ## 0.3.6-rc.1 (2022-09-14)
 
 No changes.
