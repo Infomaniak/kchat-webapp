@@ -44,6 +44,7 @@ const SavedPostsButton = (): JSX.Element | null => {
             overlay={tooltip}
         >
             <IconButton
+                className='grey'
                 size={'sm'}
                 icon={'bookmark-outline'}
                 toggled={rhsState === RHSStates.FLAG}
