@@ -17,7 +17,7 @@ const GlobalHeaderContainer = styled.header`
     flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
-    height: 40px;
+    height: 46px;
     background: var(--global-header-background);
     color: rgba(var(--global-header-text-rgb), 0.64);
     z-index: 99;
@@ -36,6 +36,9 @@ const GlobalHeaderContainer = styled.header`
 
     @media screen and (max-width: 768px) {
         display: none;
+    }
+    .multi-teams & {
+        margin-left: 65px;
     }
 `;
 

@@ -25,6 +25,83 @@ $sidebarOpacityAnimationDuration: 0.15s;
     }
 }
 
+.AddChannelDropdown_dropdownButton {
+    background-color: rgba(var(--sidebar-text-rgb), 0.08);
+    color: rgba(var(--sidebar-text-rgb), 0.72);
+}
+
+.AddChannelDropdown_dropdownButton:hover,
+.AddChannelDropdown_dropdownButton:active,
+.AddChannelDropdown_dropdownButton:focus {
+    background-color: rgba(var(--sidebar-text-rgb), 0.16);
+    color: var(--sidebar-text);
+    cursor: pointer;
+}
+
+.AddChannelDropdown_dropdownButton:focus {
+    outline-style: none;
+}
+.AddChannelDropdown_dropdownButton {
+    z-index: 1;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    color: rgba(var(--sidebar-text-rgb), 0.8);
+    font-size: 20px;
+}
+
+.AddChannelDropdown {
+    height: 30px;
+
+    .dropdown-menu {
+        min-width: 0;
+        margin-top: 0;
+        line-height: 19px;
+
+        span {
+            color: rgba(var(--center-channel-color-rgb), 0.9);
+            white-space: nowrap;
+        }
+
+        button {
+            // Infomaniak edit
+            padding: 0px 10px;
+        }
+
+        i {
+            color: rgba(var(--center-channel-color-rgb), 0.72);
+            font-size: 16px;
+            line-height: 16px;
+        }
+    }
+}
+
+.AddChannelDropdown_dropdownButton {
+    min-width: 28px;
+    height: 28px;
+    border: 0;
+    color: rgba(var(--sidebar-text-rgb), 0.72);
+    font-size: 18px;
+    vertical-align: middle;
+
+    &.disabled {
+        background: rgba(255, 255, 255, 0.08);
+    }
+}
+
+.AddChannelDropdown_dropdownButton {
+    margin: 0 2px;
+    background: rgba(var(--sidebar-text-rgb), 0.08);
+
+    &:hover:not(.active) {
+        background: rgba(var(--sidebar-text-rgb), 0.16);
+        color: var(--sidebar-text);
+    }
+}
+
 #SidebarContainer {
     position: fixed;
     z-index: 16;
@@ -35,6 +112,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
     flex-direction: column;
     border-right: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
     background-color: var(--sidebar-bg);
+    padding-top: 20px;
 
     h1,
     h2,
@@ -171,7 +249,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
         &.webapp {
             display: flex;
 
-            .AddChannelDropdown_dropdownButton,
             .SidebarChannelNavigator_inviteUsers,
             .SidebarChannelNavigator_jumpToButton,
             .SidebarFilters_filterButton {
@@ -185,7 +262,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
         }
 
-        .AddChannelDropdown_dropdownButton,
         .SidebarChannelNavigator_inviteUsers,
         .SidebarChannelNavigator_jumpToButton,
         .SidebarFilters_filterButtontton,
@@ -288,33 +364,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
         color: var(--sidebar-bg);
     }
 
-    .AddChannelDropdown {
-        height: 30px;
-
-        .dropdown-menu {
-            min-width: 0;
-            margin-top: 0;
-            line-height: 19px;
-
-            span {
-                color: rgba(var(--center-channel-color-rgb), 0.9);
-                white-space: nowrap;
-            }
-
-            button {
-                // Infomaniak edit
-                padding: 0px 10px;
-            }
-
-            i {
-                color: rgba(var(--center-channel-color-rgb), 0.72);
-                font-size: 16px;
-                line-height: 16px;
-            }
-        }
-    }
-
-    .AddChannelDropdown_dropdownButton,
     .SidebarChannelNavigator_inviteUsers {
         z-index: 1;
         width: 28px;
@@ -325,18 +374,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
         border-radius: 4px;
         color: rgba(var(--sidebar-text-rgb), 0.8);
         font-size: 20px;
-    }
-
-    .AddChannelDropdown_dropdownButton:hover,
-    .AddChannelDropdown_dropdownButton:active,
-    .AddChannelDropdown_dropdownButton:focus {
-        background-color: rgba(var(--sidebar-text-rgb), 0.16);
-        color: var(--sidebar-text);
-        cursor: pointer;
-    }
-
-    .AddChannelDropdown_dropdownButton:focus {
-        outline-style: none;
     }
 
     .SidebarHeaderMenuWrapper {
@@ -353,11 +390,6 @@ $sidebarOpacityAnimationDuration: 0.15s;
         &.MenuWrapper--open {
             background-color: rgba(var(--sidebar-text-rgb), 0.16);
         }
-    }
-
-    .AddChannelDropdown_dropdownButton {
-        background-color: rgba(var(--sidebar-text-rgb), 0.08);
-        color: rgba(var(--sidebar-text-rgb), 0.72);
     }
 
     .SidebarMenu {
