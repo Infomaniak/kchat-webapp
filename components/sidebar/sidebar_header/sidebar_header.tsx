@@ -35,7 +35,8 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
     justify: 'space-between',
     alignment: 'center',
 }))<SidebarHeaderContainerProps>`
-    height: 52px;
+    height: 46px;
+    width: 100%;
     padding: 0 16px;
 
     .dropdown-menu {

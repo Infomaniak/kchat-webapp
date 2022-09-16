@@ -20,15 +20,16 @@ import {isDesktopApp} from 'utils/user_agent';
 import AtMentionsButton from './at_mentions_button/at_mentions_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';
 import SettingsButton from './settings_button';
-import PlanUpgradeButton from './plan_upgrade_button';
+
+// import PlanUpgradeButton from './plan_upgrade_button';
 
 const RightControlsContainer = styled.div`
     display: flex;
     align-items: center;
-    height: 40px;
+    height: 46px;
     flex-shrink: 0;
     position: relative;
-    margin-right: 10px;
+    padding-right: 10px;
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
 
     > * + * {

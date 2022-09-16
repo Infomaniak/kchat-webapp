@@ -25,8 +25,9 @@ import KeyboardShortcutsModal from '../keyboard_shortcuts/keyboard_shortcuts_mod
 
 import ChannelNavigator from './channel_navigator';
 import SidebarChannelList from './sidebar_channel_list';
-import SidebarHeader from './sidebar_header';
-import MobileSidebarHeader from './mobile_sidebar_header';
+
+// import SidebarHeader from './sidebar_header';
+// import MobileSidebarHeader from './mobile_sidebar_header';
 
 type Props = {
     teamId: string;
@@ -229,7 +230,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                     dragging: this.state.isDragging,
                 })}
             >
-                {this.props.isMobileView ? <MobileSidebarHeader/> : (
+                {/* {this.props.isMobileView ? <MobileSidebarHeader/> : (
                     <SidebarHeader
                         showNewChannelModal={this.showNewChannelModal}
                         showMoreChannelsModal={this.showMoreChannelsModal}
@@ -243,7 +244,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                         userGroupsEnabled={this.props.userGroupsEnabled}
                         canCreateCustomGroups={this.props.canCreateCustomGroups}
                     />
-                )}
+                )} */}
                 <div
                     id='lhsNavigator'
                     role='application'
