@@ -38,6 +38,7 @@ const SettingsButton = (props: Props): JSX.Element | null => {
             overlay={tooltip}
         >
             <IconButton
+                className='grey'
                 size={'sm'}
                 icon={'settings-outline'}
                 onClick={(): void => {

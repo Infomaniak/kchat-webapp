@@ -25,6 +25,7 @@ import KeyboardShortcutsModal from '../keyboard_shortcuts/keyboard_shortcuts_mod
 
 import ChannelNavigator from './channel_navigator';
 import SidebarChannelList from './sidebar_channel_list';
+
 import SidebarHeader from './sidebar_header';
 import MobileSidebarHeader from './mobile_sidebar_header';
 
