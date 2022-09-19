@@ -218,7 +218,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         } = this.props;
 
         let content = null;
-        const isSidebarRightExpanded = ((postRightVisible || postCardVisible || isPluginView || searchVisible) && isExpanded) || isSettings;
+        const isSidebarRightExpanded = ((postRightVisible || postCardVisible || isPluginView || isSettings || searchVisible) && isExpanded)
 
         switch (true) {
         case postRightVisible:

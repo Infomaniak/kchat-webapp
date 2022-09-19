@@ -29,14 +29,15 @@ import * as Utils from '../../utils/utils';
 import GeneralTab from '../user_settings/general';
 import SecurityTab from '../user_settings/security';
 import NotificationsTab from '../user_settings/notifications';
-import SidebarTab from '../rhs_settings/rhs_settings_sidebar';
-import AdvancedTab from '../user_settings/advanced';
 
-import DisplayTab from './rhs_settings_display';
+import AdvancedTab from 'components/rhs_settings/rhs_settings_advanced';
+
+import DisplayTab from 'components/rhs_settings/rhs_settings_display';
+
+import SidebarTab from 'components/rhs_settings/rhs_settings_sidebar';
 
 import './rhs_settings.scss';
-import RhsSettingsHeader from './rhs_settings_header/rhs_settings_header';
-
+import RhsSettingsHeader from 'components/rhs_settings/rhs_settings_header/rhs_settings_header';
 
 const holders = defineMessages({
     profile: {

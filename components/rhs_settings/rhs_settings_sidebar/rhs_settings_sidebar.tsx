@@ -13,7 +13,7 @@ import LimitVisibleGMsDMs from './limit_visible_gms_dms';
 
 export interface Props {
     updateSection: (section: string) => void;
-    activeSection: string;
+    activeSection?: string;
     closeModal: () => void;
     collapseModal: () => void;
 }

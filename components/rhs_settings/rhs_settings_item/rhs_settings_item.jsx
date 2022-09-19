@@ -113,6 +113,8 @@ export default class RhsSettingsItem extends React.PureComponent {
         messageDesc: PropTypes.string,
 
         childOptionSection: PropTypes.node,
+
+        isSelect: PropTypes.bool,
     }
 
     constructor(props) {
@@ -224,13 +226,13 @@ export default class RhsSettingsItem extends React.PureComponent {
         let title;
         if (this.props.title) {
             title = (
-                <div className='title-toggle col-sm-12'>
-                    <h4
+                <div className={`col-sm-12 ${this.props.isSelect ? 'title-select' : 'title-toggle'}`}>
+                    <h5
                         id='settingTitle'
-                        className='section-title'
+                        className='settings-title'
                     >
                         {this.props.title}
-                    </h4>
+                    </h5>
                     {inputs}
                 </div>
             );
@@ -248,7 +250,7 @@ export default class RhsSettingsItem extends React.PureComponent {
         let listContent = (
             <div className='setting-list-item'>
                 <div className='mt-2'>
-                    {messageDesc}
+                    <p className='settings-desc'>{messageDesc}</p>
                     {extraInfo}
                 </div>
                 {childOptionSection}
