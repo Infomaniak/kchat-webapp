@@ -1,3 +1,15 @@
+## 0.3.8-rc.7 (2022-09-20)
+
+## Added (3 changes)
+
+- [first implementation of infomaniak main header and add products webcompo in browser](kchat/webapp@dddfa091628cd77ed6272b4c42d5855b2a253186) by @antonbuksa ([merge request](kchat/webapp!130))
+- [plug team sidebar to redirect to ksuite urls](kchat/webapp@3b207220a8ea83a669156a4fb0e90d527d0d93dd) by @antonbuksa ([merge request](kchat/webapp!126))
+- [multi team: implement servers api route & plug into existing teams store](kchat/webapp@da39223abc39ab5e5bfea99ce4ba385efe3fec04) by @antonbuksa ([merge request](kchat/webapp!126))
+
+## Changed (1 change)
+
+- [remove add team action from teams sidebar](kchat/webapp@67f62ae6d3c8f1faa06dc328efde60f4e03542aa) by @antonbuksa ([merge request](kchat/webapp!126))
+
 ## 0.3.8-rc.6 (2022-09-20)
 
 ## Added (1 change)
