@@ -28,7 +28,7 @@ import {closeRightHandSide, showSettingss} from '../../actions/views/rhs';
 import * as Utils from '../../utils/utils';
 import GeneralTab from '../user_settings/general';
 import SecurityTab from '../user_settings/security';
-import NotificationsTab from '../user_settings/notifications';
+import NotificationsTab from 'components/rhs_settings/rhs_settings_notifications';
 
 import AdvancedTab from 'components/rhs_settings/rhs_settings_advanced';
 
@@ -86,18 +86,6 @@ export interface Props {
     isMobile?: boolean;
     currentUser: UserProfile;
 }
-const Icon = styled.i`
-    font-size:12px;
-`;
-
-const BackButton = styled.button`
-    border: 0px;
-    background: transparent;
-`;
-
-const HeaderTitle = styled.span`
-    line-height: 2.4rem;
-`;
 
 export default function RhsSettings({
     isMobile,
@@ -112,16 +100,6 @@ export default function RhsSettings({
     tabs.push({name: 'sidebar', uiName: intl.formatMessage(holders.sidebar), icon: 'icon fa fa-columns', iconTitle: Utils.localizeMessage('user.settings.sidebar.icon', 'Sidebar Settings Icon')});
     tabs.push({name: 'advanced', uiName: intl.formatMessage(holders.advanced), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Advanced Settings Icon')});
     const [activeTab, setActiveTab] = React.useState(tabs[0].name);
-
-    console.log(currentUser);
-    const onClose = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        if (rhsState === RHSStates.SETTINGS) {
-            dispatch(closeRightHandSide());
-        } else {
-            dispatch(showSettingss());
-        }
-    };
 
     const handleUpdateActiveTab = (e) => {
         setActiveTab(e);
@@ -150,15 +128,6 @@ export default function RhsSettings({
     const updateSection = (section?: string, skipConfirm?: boolean) => {
         console.log(section);
     };
-
-    const closeSidebarTooltip = (
-        <Tooltip id='closeSidebarTooltip'>
-            <FormattedMessage
-                id='rhs_header.closeSidebarTooltip'
-                defaultMessage='Close'
-            />
-        </Tooltip>
-    );
 
     return (
         <div className='sidebar--right__content'>

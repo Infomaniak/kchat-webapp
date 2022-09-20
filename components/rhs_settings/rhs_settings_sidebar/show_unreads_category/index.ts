@@ -9,7 +9,7 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {GlobalState} from 'types/store';
 
-import ShowUnreadsCategory from './show_unreads_category';
+import RhsShowUnreadsCategory from './show_unreads_category';
 
 function mapStateToProps(state: GlobalState) {
     return {
@@ -22,4 +22,4 @@ const mapDispatchToProps = {
     savePreferences,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShowUnreadsCategory);
+export default connect(mapStateToProps, mapDispatchToProps)(RhsShowUnreadsCategory);

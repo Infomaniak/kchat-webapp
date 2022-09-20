@@ -11,9 +11,9 @@ import Toggle from 'components/toggle';
 
 type Props = {
     active: boolean;
-    currentUserId: string;
-    savePreferences: (userId: string, preferences: PreferenceType[]) => Promise<{data: boolean}>;
-    showUnreadsCategory: boolean;
+    currentUserId?: string;
+    savePreferences?: (userId: string, preferences: PreferenceType[]) => Promise<{data: boolean}>;
+    showUnreadsCategory?: boolean;
     updateSection: (section: string) => void;
 }
 
@@ -23,7 +23,7 @@ type State = {
     isSaving: boolean;
 }
 
-export default class ShowUnreadsCategory extends React.PureComponent<Props, State> {
+export default class RhsShowUnreadsCategory extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 

@@ -23,11 +23,6 @@ export default function RhsSettingsSidebar(props: Props): JSX.Element {
         <div id='displaySettings'>
             <div className='user-settings user-rhs-container container'>
                 <div className='divider-dark first'/>
-
-                <ShowUnreadsCategory
-                    active={props.activeSection === 'showUnreadsCategory'}
-                    updateSection={props.updateSection}
-                />
                 <div className='divider-dark'/>
                 <LimitVisibleGMsDMs
                     active={props.activeSection === 'limitVisibleGMsDMs'}

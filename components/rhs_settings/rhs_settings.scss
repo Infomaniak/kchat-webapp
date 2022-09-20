@@ -12,11 +12,13 @@
             border-bottom: 1px solid var(--sidebar-text);
             li {
                 margin: 0;
-                padding: 10px 20px 0;
+                padding: 10px 10px 0;
                 > a {
                     border: none;
                     border-bottom: 4px solid transparent;
+                    padding: 7px 5px;
                     padding-bottom: 10px;
+                    font-size: 14px;
 
                     &:hover {
                         border: none;

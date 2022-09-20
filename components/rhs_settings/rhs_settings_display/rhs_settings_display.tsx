@@ -21,12 +21,14 @@ import {getBrowserTimezone} from 'utils/timezone.jsx';
 
 import * as I18n from 'i18n/i18n.jsx';
 import {t} from 'utils/i18n';
-
+import {localizeMessage} from 'utils/utils';
 import ThemeSetting from 'components/user_settings/display/user_settings_theme';
 
 import Toggle from '../../toggle';
 
 import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
+import RhsShowUnreadsCategory from '../rhs_settings_sidebar/show_unreads_category/show_unreads_category';
+import ReactSelect from 'react-select';
 
 const Preferences = Constants.Preferences;
 
@@ -43,6 +45,8 @@ function getDisplayStateFromProps(props: Props) {
         linkPreviewDisplay: props.linkPreviewDisplay,
         oneClickReactionsOnPosts: props.oneClickReactionsOnPosts,
         clickToReply: props.clickToReply,
+        showUnreadsCategory: props.showUnreadsCategory,
+        unreadScrollPosition: props.unreadScrollPosition,
     };
 }
 
@@ -70,7 +74,7 @@ type SectionProps ={
     section: string;
     display: string;
     defaultDisplay: string;
-    value: string;
+    value: string | boolean;
     title: {
         id: string;
         message: string;
@@ -79,6 +83,24 @@ type SectionProps ={
     secondOption: Option;
     thirdOption?: Option;
     description: {
+        id: string;
+        message: string;
+        values?: Record<string, React.ReactNode | PrimitiveType | FormatXMLElementFn<React.ReactNode, React.ReactNode>>;
+    };
+    disabled?: boolean;
+}
+
+type SelectProps ={
+    section: string;
+    display: string;
+    defaultDisplay: string;
+    value: string | boolean;
+    title: {
+        id: string;
+        message: string;
+    };
+    options: any;
+    description?: {
         id: string;
         message: string;
         values?: Record<string, React.ReactNode | PrimitiveType | FormatXMLElementFn<React.ReactNode, React.ReactNode>>;
@@ -119,6 +141,8 @@ type Props = {
     oneClickReactionsOnPosts: string;
     emojiPickerEnabled: boolean;
     timezoneLabel: string;
+    showUnreadsCategory: string;
+    unreadScrollPosition: string;
     actions: {
         savePreferences: (userId: string, preferences: PreferenceType[]) => void;
         autoUpdateTimezone: (deviceTimezone: string) => void;
@@ -139,6 +163,8 @@ type State = {
     linkPreviewDisplay: string;
     oneClickReactionsOnPosts: string;
     clickToReply: string;
+    showUnreadsCategory: string;
+    unreadScrollPosition: string;
     handleSubmit?: () => void;
     serverError?: string;
 }
@@ -200,11 +226,11 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
     handleSubmit = async () => {
         const userId = this.props.user.id;
 
-        const timePreference = {
+        const collapseDisplayPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
-            name: Preferences.USE_MILITARY_TIME,
-            value: this.state.militaryTime,
+            name: Preferences.COLLAPSE_DISPLAY,
+            value: this.state.collapseDisplay,
         };
         const availabilityStatusOnPostsPreference = {
             user_id: userId,
@@ -236,12 +262,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             name: Preferences.COLORIZE_USERNAMES,
             value: this.state.colorizeUsernames,
         };
-        const collapseDisplayPreference = {
-            user_id: userId,
-            category: Preferences.CATEGORY_DISPLAY_SETTINGS,
-            name: Preferences.COLLAPSE_DISPLAY,
-            value: this.state.collapseDisplay,
-        };
         const collapsedReplyThreadsPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
@@ -267,19 +287,34 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             value: this.state.clickToReply,
         };
 
+        const showUnreadPreference = {
+            user_id: userId,
+            category: Preferences.CATEGORY_SIDEBAR_SETTINGS,
+            name: 'show_unread_section',
+            value: this.state.showUnreadsCategory,
+        };
+
+        const unreadScrollPositionPreference = {
+            user_id: userId,
+            category: Preferences.CATEGORY_ADVANCED_SETTINGS,
+            name: Preferences.UNREAD_SCROLL_POSITION,
+            value: this.state.unreadScrollPosition,
+        };
+
         this.setState({isSaving: true});
 
         const preferences = [
-            timePreference,
+            collapseDisplayPreference,
+            linkPreviewDisplayPreference,
+            oneClickReactionsOnPostsPreference,
+            showUnreadPreference,
             channelDisplayModePreference,
+            unreadScrollPositionPreference,
             messageDisplayPreference,
             collapsedReplyThreadsPreference,
             clickToReplyPreference,
-            collapseDisplayPreference,
-            linkPreviewDisplayPreference,
             teammateNameDisplayPreference,
             availabilityStatusOnPostsPreference,
-            oneClickReactionsOnPostsPreference,
             colorizeUsernamesPreference,
         ];
 
@@ -290,56 +325,13 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         this.updateSection('');
     }
 
-    handleClockRadio = (militaryTime: string) => {
-        this.setState({militaryTime});
-    }
-
-    handleTeammateNameDisplayRadio = (teammateNameDisplay: string) => {
-        this.setState({teammateNameDisplay});
-    }
-
-    handleAvailabilityStatusRadio = (availabilityStatusOnPosts: string) => {
-        this.setState({availabilityStatusOnPosts});
-    }
-
-    handleChannelDisplayModeRadio(channelDisplayMode: string) {
-        this.setState({channelDisplayMode});
-    }
-
-    handlemessageDisplayRadio(messageDisplay: string) {
-        this.setState({messageDisplay});
-    }
-
-    handleCollapseRadio(collapseDisplay: string) {
-        this.setState({collapseDisplay});
-    }
-
-    handleCollapseReplyThreadsRadio(collapsedReplyThreads: string) {
-        this.setState({collapsedReplyThreads});
-    }
-
-    handleLinkPreviewRadio(linkPreviewDisplay: string) {
-        this.setState({linkPreviewDisplay});
-    }
-
-    handleOneClickReactionsRadio = (oneClickReactionsOnPosts: string) => {
-        this.setState({oneClickReactionsOnPosts});
-    }
-
-    handleClickToReplyRadio = (clickToReply: string) => {
-        this.setState({clickToReply});
-    }
-
     handleOnChange(display: {[key: string]: any}) {
-        console.log(display);
         this.setState({...display}, () => {
             this.handleSubmit();
-            console.log('after submit');
         });
     }
 
     updateSection = (section: string) => {
-        console.log(section);
         this.updateState();
         this.props.updateSection(section);
     }
@@ -368,45 +360,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         let extraInfo = null;
         let submit: (() => Promise<void>) | null = this.handleSubmit;
 
-        const firstMessage = (
-            <FormattedMessage
-                id={firstOption.radionButtonText.id}
-                defaultMessage={firstOption.radionButtonText.message}
-            />
-        );
-
         let moreColon;
-        let firstMessageMore;
-        if (firstOption.radionButtonText.moreId) {
-            moreColon = ': ';
-            firstMessageMore = (
-                <span className='font-weight--normal'>
-                    <FormattedMessage
-                        id={firstOption.radionButtonText.moreId}
-                        defaultMessage={firstOption.radionButtonText.moreMessage}
-                    />
-                </span>
-            );
-        }
-
-        const secondMessage = (
-            <FormattedMessage
-                id={secondOption.radionButtonText.id}
-                defaultMessage={secondOption.radionButtonText.message}
-            />
-        );
-
-        let secondMessageMore;
-        if (secondOption.radionButtonText.moreId) {
-            secondMessageMore = (
-                <span className='font-weight--normal'>
-                    <FormattedMessage
-                        id={secondOption.radionButtonText.moreId}
-                        defaultMessage={secondOption.radionButtonText.moreMessage}
-                    />
-                </span>
-            );
-        }
 
         let thirdMessage;
         if (thirdOption) {
@@ -433,136 +387,171 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             />
         );
 
-        if (true) {
-            // if (this.props.activeSection === section) {
-            const format = [false, false, false];
-            let childOptionToShow: ChildOption | undefined;
-            if (value === firstOption.value) {
-                format[0] = true;
-                childOptionToShow = firstOption.childOption;
-            } else if (value === secondOption.value) {
-                format[1] = true;
-                childOptionToShow = secondOption.childOption;
-            } else {
-                format[2] = true;
-                if (thirdOption) {
-                    childOptionToShow = thirdOption.childOption;
-                }
+        const format = [false, false, false];
+        let childOptionToShow: ChildOption | undefined;
+        if (value === firstOption.value) {
+            format[0] = true;
+            childOptionToShow = firstOption.childOption;
+        } else if (value === secondOption.value) {
+            format[1] = true;
+            childOptionToShow = secondOption.childOption;
+        } else {
+            format[2] = true;
+            if (thirdOption) {
+                childOptionToShow = thirdOption.childOption;
             }
+        }
 
-            const name = section + 'Format';
-            const key = section + 'UserDisplay';
+        const name = section + 'Format';
+        const key = section + 'UserDisplay';
 
-            const firstDisplay = {
-                [display]: firstOption.value,
+        const firstDisplay = {
+            [display]: firstOption.value,
+        };
+
+        const secondDisplay = {
+            [display]: secondOption.value,
+        };
+
+        let thirdSection;
+        if (thirdOption && thirdMessage) {
+            const thirdDisplay = {
+                [display]: thirdOption.value,
             };
 
-            const secondDisplay = {
-                [display]: secondOption.value,
-            };
-
-            let thirdSection;
-            if (thirdOption && thirdMessage) {
-                const thirdDisplay = {
-                    [display]: thirdOption.value,
-                };
-
-                thirdSection = (
-                    <div className='radio'>
-                        <label>
-                            <input
-                                id={name + 'C'}
-                                type='radio'
-                                name={name}
-                                checked={format[2]}
-                                onChange={() => this.handleOnChange(thirdDisplay)}
-                            />
-                            {thirdMessage}
-                        </label>
-                        <br/>
-                    </div>
-                );
-            }
-
-            let childOptionSection;
-            if (childOptionToShow) {
-                const childDisplay = childOptionToShow.display;
-                childOptionSection = (
-                    <>
-                        <div>
-                            <FormattedMessage
-                                id={childOptionToShow.id}
-                                defaultMessage={childOptionToShow.message}
-                            />
-                            {moreColon}
-                            <span className='font-weight--normal'>
-                                <FormattedMessage
-                                    id={childOptionToShow.moreId}
-                                    defaultMessage={childOptionToShow.moreMessage}
-                                />
-                            </span>
-                        </div>
-                        <Toggle
-                            id={name + 'childOption'}
-                            onToggle={() => {
-                                this.handleOnChange({[childDisplay]: childOptionToShow?.value === 'false' ? 'true' : 'false'});
-                            }}
-                            toggled={childOptionToShow.value === 'true'}
+            thirdSection = (
+                <div className='radio'>
+                    <label>
+                        <input
+                            id={name + 'C'}
+                            type='radio'
+                            name={name}
+                            checked={format[2]}
+                            onChange={() => this.handleOnChange(thirdDisplay)}
                         />
-                    </>
-                );
-            }
+                        {thirdMessage}
+                    </label>
+                    <br/>
+                </div>
+            );
+        }
 
-            let inputs = [
+        let childOptionSection;
+        if (childOptionToShow) {
+            const childDisplay = childOptionToShow.display;
+            childOptionSection = (
                 <>
-                    <Toggle
-                        id={name + 'A'}
-                        onToggle={() => this.handleOnChange(format[0] ? secondDisplay : firstDisplay)}
-                        toggled={Boolean(format[0])}
-
-                    />
-                    {/*<fieldset key={key}>
-
-                        <legend className='form-legend hidden-label'>
-                            {messageTitle}
-                        </legend>
-                        {thirdSection}
-                        <div>
-                            <br/>
-                            {messageDesc}
-                        </div>*/}
-                    {/*</fieldset>*/}
-                </>,
-
-            ];
-
-            if (display === 'teammateNameDisplay' && disabled) {
-                extraInfo = (
-                    <span>
+                    <div>
                         <FormattedMessage
-                            id='user.settings.display.teammateNameDisplay'
-                            defaultMessage='This field is handled through your System Administrator. If you want to change it, you need to do so through your System Administrator.'
+                            id={childOptionToShow.id}
+                            defaultMessage={childOptionToShow.message}
                         />
-                    </span>
-                );
-                submit = null;
-                inputs = [];
-            }
+                        {moreColon}
+                        <span className='font-weight--normal'>
+                            <FormattedMessage
+                                id={childOptionToShow.moreId}
+                                defaultMessage={childOptionToShow.moreMessage}
+                            />
+                        </span>
+                    </div>
+                    <Toggle
+                        id={name + 'childOption'}
+                        onToggle={() => {
+                            this.handleOnChange({[childDisplay]: childOptionToShow?.value === 'false' ? 'true' : 'false'});
+                        }}
+                        toggled={childOptionToShow.value === 'true'}
+                    />
+                </>
+            );
+        }
 
-            return (
-                <RhsSettingsItem
-                    title={messageTitle}
-                    inputs={inputs}
-                    submit={submit}
-                    saving={this.state.isSaving}
-                    server_error={this.state.serverError}
-                    updateSection={this.updateSection}
-                    extraInfo={extraInfo}
-                    messageDesc={messageDesc}
-                    childOptionSection={childOptionSection}
+        let inputs = [
+            <>
+                <Toggle
+                    id={name + 'A'}
+                    onToggle={() => this.handleOnChange(format[0] ? secondDisplay : firstDisplay)}
+                    toggled={Boolean(format[0])}
+
+                />
+            </>,
+
+        ];
+
+        if (display === 'teammateNameDisplay' && disabled) {
+            extraInfo = (
+                <span>
+                    <FormattedMessage
+                        id='user.settings.display.teammateNameDisplay'
+                        defaultMessage='This field is handled through your System Administrator. If you want to change it, you need to do so through your System Administrator.'
+                    />
+                </span>
+            );
+            submit = null;
+            inputs = [];
+        }
+
+        return (
+            <RhsSettingsItem
+                title={messageTitle}
+                inputs={inputs}
+                submit={submit}
+                saving={this.state.isSaving}
+                server_error={this.state.serverError}
+                updateSection={this.updateSection}
+                extraInfo={extraInfo}
+                messageDesc={messageDesc}
+                childOptionSection={childOptionSection}
+            />
+        );
+    }
+
+    createSelect(props: SelectProps) {
+        const {
+            section,
+            display,
+            value,
+            title,
+            options,
+            description,
+        } = props;
+
+        const messageTitle = (
+            <FormattedMessage
+                id={title.id}
+                defaultMessage={title.message}
+            />
+        );
+        let messageDesc = '';
+        if (description) {
+            messageDesc = (
+                <FormattedMessage
+                    id={description.id}
+                    defaultMessage={description.message}
+                    values={description.values}
                 />
             );
         }
+        return (
+            <RhsSettingsItem
+                title={messageTitle}
+                inputs={
+                    <ReactSelect
+                        className='react-select settings-select advanced-select'
+                        classNamePrefix='react-select'
+                        id={display}
+                        options={options}
+                        clearable={false}
+                        onChange={(e) => this.handleOnChange({[display]: e.value})}
+                        value={options.filter((opt: { value: string | boolean }) => opt.value === value)}
+                        isSearchable={false}
+                        menuPortalTarget={document.body}
+                        styles={reactStyles}
+                    />
+                }
+                saving={this.state.isSaving}
+                updateSection={this.props.updateSection}
+            />
+        );
     }
 
     render() {
@@ -672,7 +661,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             },
         });
 
-        const channelDisplayModeSection = this.createSection({
+        const channelDisplayModeSection = this.createSelect({
             section: Preferences.CHANNEL_DISPLAY_MODE,
             display: 'channelDisplayMode',
             value: this.state.channelDisplayMode,
@@ -681,23 +670,57 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 id: t('user.settings.display.channelDisplayTitle'),
                 message: 'Channel Display',
             },
+            options: [
+                {value: Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN, label: localizeMessage('user.settings.display.fullScreen', 'Full width')},
+                {value: Preferences.CHANNEL_DISPLAY_MODE_CENTERED, label: localizeMessage('user.settings.display.fixedWidthCentered', 'Fixed width, centered')},
+            ],
+            description: {
+                id: t('user.settings.display.channeldisplaymode'),
+                message: 'Select the width of the center channel.',
+            },
+        });
+
+        const UnreadScrollPositionSection = this.createSelect({
+            section: Preferences.CHANNEL_DISPLAY_MODE,
+            display: 'unreadScrollPosition',
+            value: this.state.unreadScrollPosition,
+            defaultDisplay: Preferences.UNREAD_SCROLL_POSITION,
+            title: {
+                id: t('user.settings.advance.unreadScrollPositionTitle'),
+                message: 'Scroll position when viewing an unread channel',
+            },
+            options: [
+                {value: Preferences.UNREAD_SCROLL_POSITION_START_FROM_LEFT, label: localizeMessage('user.settings.advance.startFromLeftOff', 'Start me where I left off')},
+                {value: Preferences.UNREAD_SCROLL_POSITION_START_FROM_NEWEST, label: localizeMessage('user.settings.advance.startFromNewest', 'Start me at the newest message')},
+            ],
+        });
+
+        const showUnreadSection = this.createSection({
+            section: 'show_unread_section',
+            display: 'showUnreadsCategory',
+            value: this.state.showUnreadsCategory,
+            defaultDisplay: 'true',
+            title: {
+                id: t('user.settings.sidebar.showUnreadsCategoryTitle'),
+                message: 'Group unread channels separately',
+            },
             firstOption: {
-                value: Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
+                value: 'true',
                 radionButtonText: {
                     id: t('user.settings.display.fullScreen'),
                     message: 'Full width',
                 },
             },
             secondOption: {
-                value: Preferences.CHANNEL_DISPLAY_MODE_CENTERED,
+                value: 'false',
                 radionButtonText: {
                     id: t('user.settings.display.fixedWidthCentered'),
                     message: 'Fixed width, centered',
                 },
             },
             description: {
-                id: t('user.settings.display.channeldisplaymode'),
-                message: 'Select the width of the center channel.',
+                id: t('user.settings.sidebar.showUnreadsCategoryDesc'),
+                message: 'When enabled, all unread channels and direct messages will be grouped together in the sidebar.',
             },
         });
 
@@ -729,14 +752,14 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     message: 'Quick reactions on messages',
                 },
                 firstOption: {
-                    value: 'true',
+                    value: 'false',
                     radionButtonText: {
                         id: t('user.settings.sidebar.on'),
                         message: 'On',
                     },
                 },
                 secondOption: {
-                    value: 'false',
+                    value: 'true',
                     radionButtonText: {
                         id: t('user.settings.sidebar.off'),
                         message: 'Off',
@@ -756,14 +779,25 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     {/*
                     {themeSection}
 */}
-                    {linkPreviewSection}
                     {collapseSection}
-                    {messageDisplaySection}
-                    {channelDisplayModeSection}
+                    {linkPreviewSection}
                     {oneClickReactionsOnPostsSection}
+                    {showUnreadSection}
+{/* Compact mode
+                    {messageDisplaySection}
+*/}
+                    {channelDisplayModeSection}
+                    {UnreadScrollPositionSection}
                 </div>
             </div>
         );
     }
 }
 /* eslint-enable react/no-string-refs */
+const reactStyles = {
+    menuPortal: (provided: React.CSSProperties) => ({
+        ...provided,
+        zIndex: 9999,
+        cursor: 'pointer',
+    }),
+};

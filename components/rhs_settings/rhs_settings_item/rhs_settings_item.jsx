@@ -271,7 +271,7 @@ export default class RhsSettingsItem extends React.PureComponent {
 
         return (
             <section
-                className={`row pt-4 rhs-settings-section ${this.props.containerStyle}`}
+                className={`row rhs-settings-section ${this.props.containerStyle}`}
             >
                 {title}
                 <div className='col-sm-12'>

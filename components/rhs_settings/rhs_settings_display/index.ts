@@ -23,6 +23,10 @@ import {Preferences} from 'utils/constants';
 import {CollapsedThreads} from '@mattermost/types/config';
 
 import RhsSettingsDisplay from './rhs_settings_display';
+import {
+    getUnreadScrollPositionPreference,
+    shouldShowUnreadsCategory,
+} from '../../../packages/mattermost-redux/src/selectors/entities/preferences';
 
 export function makeMapStateToProps() {
     const getUserTimezone = makeGetUserTimezone();
@@ -69,6 +73,8 @@ export function makeMapStateToProps() {
             linkPreviewDisplay: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.LINK_PREVIEW_DISPLAY, Preferences.LINK_PREVIEW_DISPLAY_DEFAULT),
             oneClickReactionsOnPosts: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.ONE_CLICK_REACTIONS_ENABLED, Preferences.ONE_CLICK_REACTIONS_ENABLED_DEFAULT),
             emojiPickerEnabled,
+            showUnreadsCategory: get(state, Preferences.CATEGORY_SIDEBAR_SETTINGS, 'show_unread_section'),
+            unreadScrollPosition: get(state, Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.UNREAD_SCROLL_POSITION),
         };
     };
 }
