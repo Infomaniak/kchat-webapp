@@ -21,7 +21,7 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentRelativeTeamUrl, getCurrentTeamId, getMyTeams} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentRelativeTeamUrl, getCurrentTeamId, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 import {
     getCurrentUser,
     getUser,
@@ -60,7 +60,7 @@ function makeMapStateToProps() {
     return function mapStateToProps(state: GlobalState) {
         const channel = getCurrentChannel(state) || EMPTY_CHANNEL;
         const user = getCurrentUser(state);
-        const teams = getMyTeams(state);
+        const teams = getMyKSuites(state);
         const hasMoreThanOneTeam = teams.length > 1;
         const config = getConfig(state);
 

@@ -283,6 +283,10 @@ export default class Client4 {
         return `${this.getBaseRoute()}/teams`;
     }
 
+    getKSuiteRoute() {
+        return `${this.getBaseRoute()}/servers`;
+    }
+
     getTeamRoute(teamId: string) {
         return `${this.getTeamsRoute()}/${teamId}`;
     }
@@ -1252,6 +1256,13 @@ export default class Client4 {
 
     getTeams = (page = 0, perPage = PER_PAGE_DEFAULT, includeTotalCount = false, excludePolicyConstrained = false) => {
         return this.doFetch<Team[] | TeamsWithCount>(
+            `${this.getKSuiteRoute()}${buildQueryString({page, per_page: perPage, include_total_count: includeTotalCount, exclude_policy_constrained: excludePolicyConstrained})}`,
+            {method: 'get'},
+        );
+    };
+
+    getKSuites = (page = 0, perPage = PER_PAGE_DEFAULT, includeTotalCount = false, excludePolicyConstrained = false) => {
+        return this.doFetch<Team[] | TeamsWithCount>(
             `${this.getTeamsRoute()}${buildQueryString({page, per_page: perPage, include_total_count: includeTotalCount, exclude_policy_constrained: excludePolicyConstrained})}`,
             {method: 'get'},
         );
@@ -1288,6 +1299,13 @@ export default class Client4 {
             {method: 'get'},
         );
     };
+
+    getMyKSuites = () => {
+        return this.doFetch<Team[]>(
+            `${this.getUserRoute('me')}/servers`,
+            {method: 'get'},
+        );
+    }
 
     getTeamsForUser = (userId: string) => {
         return this.doFetch<Team[]>(
