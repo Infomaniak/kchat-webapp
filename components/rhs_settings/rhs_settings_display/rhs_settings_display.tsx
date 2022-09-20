@@ -11,6 +11,8 @@ import {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
 
 import {Timezone} from 'timezones.json';
 
+import ReactSelect from 'react-select';
+
 import {PreferenceType} from '@mattermost/types/preferences';
 import {UserProfile, UserTimezone} from '@mattermost/types/users';
 
@@ -22,13 +24,12 @@ import {getBrowserTimezone} from 'utils/timezone.jsx';
 import * as I18n from 'i18n/i18n.jsx';
 import {t} from 'utils/i18n';
 import {localizeMessage} from 'utils/utils';
-import ThemeSetting from 'components/user_settings/display/user_settings_theme';
+import RhsThemeSetting from 'components/rhs_settings/rhs_settings_theme/rhs_settings_theme';
 
 import Toggle from '../../toggle';
 
-import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
+import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_settings_item';
 import RhsShowUnreadsCategory from '../rhs_settings_sidebar/show_unreads_category/show_unreads_category';
-import ReactSelect from 'react-select';
 
 const Preferences = Constants.Preferences;
 
@@ -727,16 +728,13 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         let themeSection;
         if (this.props.enableThemeSelection) {
             themeSection = (
-                <div>
-                    <ThemeSetting
-                        selected={this.props.activeSection === 'theme'}
-                        updateSection={this.updateSection}
-                        setRequireConfirm={this.props.setRequireConfirm}
-                        setEnforceFocus={this.props.setEnforceFocus}
-                        allowCustomThemes={this.props.allowCustomThemes}
-                    />
-                    <div className='divider-dark'/>
-                </div>
+                <RhsThemeSetting
+                    selected={this.props.activeSection === 'theme'}
+                    updateSection={this.updateSection}
+                    setRequireConfirm={this.props.setRequireConfirm}
+                    setEnforceFocus={this.props.setEnforceFocus}
+                    allowCustomThemes={this.props.allowCustomThemes}
+                />
             );
         }
 
@@ -776,14 +774,14 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             <div id='displaySettings'>
                 <div className='user-settings user-rhs-container container'>
                     <div className='divider-dark first'/>
-                    {/*
+
                     {themeSection}
-*/}
+
                     {collapseSection}
                     {linkPreviewSection}
                     {oneClickReactionsOnPostsSection}
                     {showUnreadSection}
-{/* Compact mode
+                    {/* Compact mode
                     {messageDisplaySection}
 */}
                     {channelDisplayModeSection}
