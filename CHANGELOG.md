@@ -1,3 +1,9 @@
+## 0.3.9-rc.1 (2022-09-20)
+
+## Fixed (1 change)
+
+- [fix styling for product-module trigger](kchat/webapp@29ddede38fcc3021a36a3c9be031316109ebae64) by @antonbuksa
+
 ## 0.3.8-rc.7 (2022-09-20)
 
 ## Added (3 changes)
