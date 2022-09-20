@@ -27,7 +27,7 @@ const GlobalHeaderContainer = styled.header`
     }
 
     & .grey {
-        color: #7B7B7B;
+        color: rgba(var(--center-channel-color-rgb), 0.785);
         background: transparent;
         &:hover {
             background: var(--sidebar-text-08);

@@ -2071,11 +2071,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@infomaniak/compass-components@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@infomaniak/compass-components@npm:0.5.0"
+"@infomaniak/compass-components@npm:0.9.0":
+  version: 0.9.0
+  resolution: "@infomaniak/compass-components@npm:0.9.0"
   dependencies:
-    "@infomaniak/compass-icons": ^0.4.0
+    "@infomaniak/compass-icons": 0.8.0
     "@popperjs/core": ^2.9.2
     clsx: ^1.1.1
     color-blend: ^3.0.1
@@ -2089,13 +2089,13 @@ __metadata:
   peerDependencies:
     react: 16.13.1 || ^17.0.1
     react-dom: 16.13.1 || ^17.0.1
-  checksum: 99c58d21f3a8cab6a63b012ff04b34e60d54bac49cee2fb71a8e4b71159a92fcbb3e8b3785cdcb9a81e3004fbb7434c8702e15eb324f01bc45b4adfaef33490e
+  checksum: 983a05e501e69389feddaec34e1bf853726e38624357130b7b63c18b3a00733638e358370aa4027900176ea3ebc47ffefbf1a1cc011fdcb2c9640d1a2a97ed59
   languageName: node
   linkType: hard
 
-"@infomaniak/compass-icons@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@infomaniak/compass-icons@npm:0.1.0"
+"@infomaniak/compass-icons@npm:0.8.0":
+  version: 0.8.0
+  resolution: "@infomaniak/compass-icons@npm:0.8.0"
   dependencies:
     esm: 3.2.25
     fontello-batch-cli: 4.0.0
@@ -2106,24 +2106,7 @@ __metadata:
     svgpath: 2.5.0
     unzip: 0.1.11
     xmldom: 0.6.0
-  checksum: ff175d731352d7ad7ce13e3c07c42c243d3edc0b691865a662813fa6245e758b8bb24a94b23fefc7a180949a82ff21a42ebc98e58975cb0e4c1ae20de588ea7e
-  languageName: node
-  linkType: hard
-
-"@infomaniak/compass-icons@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@infomaniak/compass-icons@npm:0.4.0"
-  dependencies:
-    esm: 3.2.25
-    fontello-batch-cli: 4.0.0
-    fontello-cli: 0.6.2
-    lodash: 4.17.21
-    needle: 3.0.0
-    open: 8.4.0
-    svgpath: 2.5.0
-    unzip: 0.1.11
-    xmldom: 0.6.0
-  checksum: a153cf2e0c49522f8e6c83b7c3d459b92d00e680e1ab229f8e193f2703475c7e6325e7fbf934a2c6871a6833f91513d391c8cadbf7b4dfeecf9affc6368a4250
+  checksum: 3b57bf2b1cb653c62cab5090e248b65505e49c1f832e972c0cb97a9f0dc2c1cb671b6b7ac58cc2220ff715680c2b8ac87d9c89e8d3abdea057be4a4f80111854
   languageName: node
   linkType: hard
 
@@ -13454,8 +13437,8 @@ __metadata:
     "@floating-ui/react-dom": 0.7.2
     "@floating-ui/react-dom-interactions": 0.9.1
     "@hot-loader/react-dom": 16.13.0
-    "@infomaniak/compass-components": ^0.5.0
-    "@infomaniak/compass-icons": 0.1.0
+    "@infomaniak/compass-components": 0.9.0
+    "@infomaniak/compass-icons": 0.8.0
     "@mattermost/client": "workspace:packages/client"
     "@mattermost/components": "workspace:packages/components"
     "@mattermost/types": "workspace:packages/types"
