@@ -1,3 +1,9 @@
+## 0.3.8-rc.6 (2022-09-20)
+
+## Added (1 change)
+
+- [first implementation of infomaniak main header and add products webcompo in browser](kchat/webapp@dddfa091628cd77ed6272b4c42d5855b2a253186) by @antonbuksa ([merge request](kchat/webapp!130))
+
 ## 0.3.8-rc.5 (2022-09-19)
 
 ## Added (1 change)
