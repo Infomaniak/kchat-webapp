@@ -17,7 +17,7 @@ import {localizeMessage, moveCursorToEnd} from 'utils/utils';
 import {isDesktopApp} from 'utils/user_agent';
 import {t} from 'utils/i18n';
 
-import SettingItemMax from 'components/setting_item_max.jsx';
+import RhsSettingsItem from 'components/setting_item_max.jsx';
 import SettingItemMin from 'components/setting_item_min';
 import LocalizedIcon from 'components/localized_icon';
 
@@ -175,7 +175,7 @@ function getNotificationsStateFromProps(props: Props): State {
     };
 }
 
-export default class NotificationsTab extends React.PureComponent<Props, State> {
+export default class RhsNotificationsTab extends React.PureComponent<Props, State> {
     customCheckRef: RefObject<HTMLInputElement>;
     customMentionsRef: RefObject<HTMLInputElement>;
     drawerRef: RefObject<HTMLHeadingElement>;
@@ -517,7 +517,7 @@ export default class NotificationsTab extends React.PureComponent<Props, State> 
             }
 
             return (
-                <SettingItemMax
+                <RhsSettingsItem
                     title={localizeMessage('user.settings.notifications.push', 'Mobile Push Notifications')}
                     inputs={inputs}
                     submit={submit}
@@ -720,7 +720,7 @@ export default class NotificationsTab extends React.PureComponent<Props, State> 
             );
 
             keysSection = (
-                <SettingItemMax
+                <RhsSettingsItem
                     title={localizeMessage('user.settings.notifications.wordsTrigger', 'Words That Trigger Mentions')}
                     inputs={inputs}
                     submit={this.handleSubmit}
@@ -854,7 +854,7 @@ export default class NotificationsTab extends React.PureComponent<Props, State> 
             );
 
             commentsSection = (
-                <SettingItemMax
+                <RhsSettingsItem
                     title={localizeMessage('user.settings.notifications.comments', 'Reply notifications')}
                     extraInfo={extraInfo}
                     inputs={inputs}
@@ -952,50 +952,10 @@ export default class NotificationsTab extends React.PureComponent<Props, State> 
 
         return (
             <div id='notificationSettings'>
-                <div className='modal-header'>
-                    <button
-                        id='closeButton'
-                        type='button'
-                        className='close'
-                        data-dismiss='modal'
-                        onClick={this.props.closeModal}
-                    >
-                        <span aria-hidden='true'>{'×'}</span>
-                    </button>
-                    <h4
-                        className='modal-title'
-                        ref={this.drawerRef}
-                    >
-                        <div className='modal-back'>
-                            <LocalizedIcon
-                                className='fa fa-angle-left'
-                                ariaLabel={{
-                                    id: t('generic_icons.collapse'),
-                                    defaultMessage: 'Collapse Icon',
-                                }}
-                                onClick={this.props.collapseModal}
-                            />
-                        </div>
-                        <FormattedMessage
-                            id='user.settings.notifications.title'
-                            defaultMessage='Notification Settings'
-                        />
-                    </h4>
-                </div>
-                <div
-                    ref={this.wrapperRef}
-                    className='user-settings'
-                >
-                    <h3
-                        id='notificationSettingsTitle'
-                        className='tab-header'
-                    >
-                        <FormattedMessage
-                            id='user.settings.notifications.header'
-                            defaultMessage='Notifications'
-                        />
-                    </h3>
+
+                <div className='user-settings user-rhs-container container'>
                     <div className='divider-dark first'/>
+
                     <DesktopNotificationSettings
                         activity={this.state.desktopActivity}
                         threads={this.state.desktopThreads}

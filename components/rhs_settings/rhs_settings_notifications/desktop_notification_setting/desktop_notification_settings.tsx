@@ -10,7 +10,7 @@ import semver from 'semver';
 import {NotificationLevels} from 'utils/constants';
 import * as Utils from 'utils/utils';
 import {t} from 'utils/i18n';
-import SettingItemMax from 'components/setting_item_max.jsx';
+import RhsSettingsItem from 'components/setting_item_max.jsx';
 import SettingItemMin from 'components/setting_item_min';
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -320,7 +320,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         );
 
         return (
-            <SettingItemMax
+            <RhsSettingsItem
                 title={Utils.localizeMessage('user.settings.notifications.desktop.title', 'Desktop Notifications')}
                 inputs={inputs}
                 submit={this.props.submit}
@@ -331,69 +331,11 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         );
     }
 
-    buildMinimizedSetting = () => {
-        let formattedMessageProps;
-        const hasSoundOption = Utils.hasSoundOptions();
-        if (this.props.activity === NotificationLevels.MENTION) {
-            if (hasSoundOption && this.props.sound !== 'false') {
-                formattedMessageProps = {
-                    id: t('user.settings.notifications.desktop.mentionsSound'),
-                    defaultMessage: 'For mentions and direct messages, with sound',
-                };
-            } else if (hasSoundOption && this.props.sound === 'false') {
-                formattedMessageProps = {
-                    id: t('user.settings.notifications.desktop.mentionsNoSound'),
-                    defaultMessage: 'For mentions and direct messages, without sound',
-                };
-            } else {
-                formattedMessageProps = {
-                    id: t('user.settings.notifications.desktop.mentionsSoundHidden'),
-                    defaultMessage: 'For mentions and direct messages',
-                };
-            }
-        } else if (this.props.activity === NotificationLevels.NONE) {
-            formattedMessageProps = {
-                id: t('user.settings.notifications.off'),
-                defaultMessage: 'Off',
-            };
-        } else {
-            if (hasSoundOption && this.props.sound !== 'false') { //eslint-disable-line no-lonely-if
-                formattedMessageProps = {
-                    id: t('user.settings.notifications.desktop.allSound'),
-                    defaultMessage: 'For all activity, with sound',
-                };
-            } else if (hasSoundOption && this.props.sound === 'false') {
-                formattedMessageProps = {
-                    id: t('user.settings.notifications.desktop.allNoSound'),
-                    defaultMessage: 'For all activity, without sound',
-                };
-            } else {
-                formattedMessageProps = {
-                    id: t('user.settings.notifications.desktop.allSoundHidden'),
-                    defaultMessage: 'For all activity',
-                };
-            }
-        }
-
-        return (
-            <SettingItemMin
-                title={Utils.localizeMessage('user.settings.notifications.desktop.title', 'Desktop Notifications')}
-                describe={<FormattedMessage {...formattedMessageProps}/>}
-                section={'desktop'}
-                updateSection={this.handleMinUpdateSection}
-            />
-        );
-    }
-
     componentDidUpdate() {
         this.blurDropdown();
     }
 
     render() {
-        if (this.props.active) {
-            return this.buildMaximizedSetting();
-        }
-
-        return this.buildMinimizedSetting();
+        return this.buildMaximizedSetting();
     }
 }

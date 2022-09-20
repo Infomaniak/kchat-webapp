@@ -11,7 +11,7 @@ import {ActionFunc} from 'mattermost-redux/types/actions';
 
 import {GlobalState} from 'types/store';
 
-import UserSettingsNotifications, {Props} from './user_settings_notifications';
+import RhsSettingsNotifications, {Props} from './rhs_settings_notifications';
 
 function mapStateToProps(state: GlobalState) {
     const config = getConfig(state);
@@ -34,4 +34,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserSettingsNotifications);
+export default connect(mapStateToProps, mapDispatchToProps)(RhsSettingsNotifications);
