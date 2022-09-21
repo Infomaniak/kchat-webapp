@@ -58,6 +58,10 @@ const RightControlsContainer = styled.div`
             }
         }
     }
+    .reporting-tools-logo img.without-custom-size {
+        height: 25px;
+        background: #7974B4;
+    }
 `;
 
 export type Props = {
