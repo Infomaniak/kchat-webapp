@@ -5,7 +5,7 @@ import React from 'react';
 import {FormattedMessage, injectIntl, IntlShape} from 'react-intl';
 import classNames from 'classnames';
 
-import {CloseIcon} from '@mattermost/compass-icons/components';
+import {CloseIcon} from '@infomaniak/compass-icons/components';
 
 import {Constants} from 'utils/constants';
 import * as Emoji from 'utils/emoji.jsx';

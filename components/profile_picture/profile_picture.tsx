@@ -21,7 +21,9 @@ type Props = {
     isEmoji?: boolean;
     isRHS?: boolean;
     profileSrc?: string;
+    // profileSrc?: Promise<string> | string;
     size?: ComponentProps<typeof Avatar>['size'];
+    // src: Promise<string> | string;
     src: string;
     status?: string;
     userId?: string;

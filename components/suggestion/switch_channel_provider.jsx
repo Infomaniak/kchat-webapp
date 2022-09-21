@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 /* eslint-disable max-lines */
 
 import React from 'react';
@@ -25,7 +26,7 @@ import {getMyPreferences, isGroupChannelManuallyVisible, isCollapsedThreadsEnabl
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {
     getCurrentTeamId,
-    getMyTeams,
+    getMyKSuites,
     getTeam,
 } from 'mattermost-redux/selectors/entities/teams';
 import {
@@ -174,31 +175,33 @@ class SwitchChannelSuggestion extends Suggestion {
                 </React.Fragment>
             );
 
-            customStatus = (
-                <CustomStatusEmoji
-                    showTooltip={true}
-                    userID={userItem.id}
-                    emojiStyle={{
-                        marginBottom: 2,
-                        marginLeft: 8,
-                    }}
-                />
-            );
+            if (userItem) {
+                customStatus = (
+                    <CustomStatusEmoji
+                        showTooltip={true}
+                        userID={userItem.id}
+                        emojiStyle={{
+                            marginBottom: 2,
+                            marginLeft: 8,
+                        }}
+                    />
+                );
 
-            let deactivated = '';
-            if (userItem.delete_at) {
-                deactivated = (' - ' + Utils.localizeMessage('channel_switch_modal.deactivated', 'Deactivated'));
-            }
-
-            if (channel.display_name && !(teammate && teammate.is_bot)) {
-                description = '@' + userItem.username + deactivated;
-            } else {
-                name = userItem.username;
-                const currentUserId = getCurrentUserId(getState());
-                if (userItem.id === currentUserId) {
-                    name += (' ' + Utils.localizeMessage('suggestion.user.isCurrent', '(you)'));
+                let deactivated = '';
+                if (userItem.delete_at) {
+                    deactivated = (' - ' + Utils.localizeMessage('channel_switch_modal.deactivated', 'Deactivated'));
                 }
-                description = deactivated;
+
+                if (channel.display_name && !(teammate && teammate.is_bot)) {
+                    description = '@' + userItem.username + deactivated;
+                } else {
+                    name = userItem.username;
+                    const currentUserId = getCurrentUserId(getState());
+                    if (userItem.id === currentUserId) {
+                        name += (' ' + Utils.localizeMessage('suggestion.user.isCurrent', '(you)'));
+                    }
+                    description = deactivated;
+                }
             }
         } else if (channel.type === Constants.GM_CHANNEL) {
             // remove the slug from the option
@@ -264,7 +267,7 @@ function mapStateToPropsForSwitchChannelSuggestion(state, ownProps) {
     const status = getStatusForUserId(state, channel.userId);
     const collapsedThreads = isCollapsedThreadsEnabled(state);
     const team = getTeam(state, channel.team_id);
-    const isPartOfOnlyOneTeam = getMyTeams(state).length === 1;
+    const isPartOfOnlyOneTeam = getMyKSuites(state).length === 1;
 
     if (channel && !dmChannelTeammate) {
         dmChannelTeammate = getUser(state, channel.userId);
@@ -584,7 +587,6 @@ export default class SwitchChannelProvider extends Provider {
                 } else if (newChannel.type === Constants.DM_CHANNEL) {
                     const userId = Utils.getUserIdFromChannelId(newChannel.name);
                     const user = users.find((u) => u.id === userId);
-
                     if (user) {
                         completedChannels[user.id] = true;
                         wrappedChannel = this.userWrappedChannel(
@@ -617,22 +619,22 @@ export default class SwitchChannelProvider extends Provider {
 
             const channelName = Utils.getDirectChannelName(currentUserId, user.id);
             const channel = getChannelByName(state, channelName);
+            if (channel) {
+                const wrappedChannel = this.userWrappedChannel(user, channel);
+                if (channel && members[channel.id]) {
+                    wrappedChannel.last_viewed_at = members[channel.id].last_viewed_at;
+                } else if (skipNotMember) {
+                    continue;
+                }
 
-            const wrappedChannel = this.userWrappedChannel(user, channel);
+                const unread = allUnreadChannelIdsSet.has(channel?.id);
+                if (unread) {
+                    wrappedChannel.unread = true;
+                }
 
-            if (channel && members[channel.id]) {
-                wrappedChannel.last_viewed_at = members[channel.id].last_viewed_at;
-            } else if (skipNotMember) {
-                continue;
+                completedChannels[user.id] = true;
+                channels.push(wrappedChannel);
             }
-
-            const unread = allUnreadChannelIdsSet.has(channel?.id);
-            if (unread) {
-                wrappedChannel.unread = true;
-            }
-
-            completedChannels[user.id] = true;
-            channels.push(wrappedChannel);
         }
 
         const channelNames = channels.

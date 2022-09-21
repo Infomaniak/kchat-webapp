@@ -25,6 +25,7 @@ type Props = {
     onToggleMenu: (isMenuOpen: boolean) => void;
     currentUserId: string;
     selectedDmNumber: number;
+    menuButtonRef: React.RefObject<HTMLButtonElement>;
     actions: {
         setCategorySorting: (categoryId: string, sorting: CategorySorting) => void;
         savePreferences: (userId: string, preferences: PreferenceType[]) => void;
@@ -162,6 +163,7 @@ export class SidebarCategorySortingMenu extends React.PureComponent<Props, State
             intl,
             isCollapsed,
             isMenuOpen,
+            menuButtonRef,
         } = this.props;
 
         return (
@@ -175,6 +177,7 @@ export class SidebarCategorySortingMenu extends React.PureComponent<Props, State
                 tooltipText={intl.formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'})}
                 tabIndex={isCollapsed ? -1 : 0}
                 additionalClass='additionalClass'
+                menuButtonRef={menuButtonRef}
             >
                 {this.renderDropdownItems()}
             </SidebarMenu>

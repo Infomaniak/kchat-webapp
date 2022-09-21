@@ -27,7 +27,6 @@ type Props = {
     currentRelativeTeamUrl?: string;
 
     inGlobalThreads?: boolean;
-    inDrafts?: boolean;
     isMobileView: boolean;
     isMuted?: boolean;
     isReadOnly?: boolean;
@@ -58,14 +57,14 @@ export default class ChannelHeaderMobile extends React.PureComponent<Props> {
             const target = e.target as HTMLElement | undefined;
 
             if (target && target.className !== 'navbar-toggle' && target.className !== 'icon-bar') {
-                this.props.actions.closeLhs();
-                this.props.actions.closeRhsMenu();
+                // this.props.actions.closeLhs();
+                // this.props.actions.closeRhsMenu();
             }
         }
     }
 
     render() {
-        const {user, channel, isMuted, inGlobalThreads, inDrafts} = this.props;
+        const {user, channel, isMuted, inGlobalThreads} = this.props;
 
         let heading;
         if (inGlobalThreads) {
@@ -73,13 +72,6 @@ export default class ChannelHeaderMobile extends React.PureComponent<Props> {
                 <FormattedMessage
                     id='globalThreads.heading'
                     defaultMessage='Followed threads'
-                />
-            );
-        } else if (inDrafts) {
-            heading = (
-                <FormattedMessage
-                    id='drafts.heading'
-                    defaultMessage='Drafts'
                 />
             );
         } else if (channel) {

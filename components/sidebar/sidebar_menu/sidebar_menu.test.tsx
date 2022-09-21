@@ -15,6 +15,9 @@ describe('components/sidebar/sidebar_menu', () => {
         ariaLabel: 'some other aria label',
         draggingState: {},
         isMenuOpen: false,
+        menuButtonRef: {
+            current: null,
+        },
         onOpenDirectionChange: jest.fn(),
         onToggleMenu: jest.fn(),
     };
@@ -69,36 +72,40 @@ describe('components/sidebar/sidebar_menu', () => {
             innerHeight: 456,
         }));
 
+        const props = {
+            ...baseProps,
+        };
+
         const wrapper = shallow<SidebarMenu>(
-            <SidebarMenu {...baseProps}/>,
+            <SidebarMenu {...props}/>,
         );
 
         // The menu should open downwards to start
-        wrapper.instance().menuButtonRef = {
+        wrapper.setProps({menuButtonRef: {
             current: {
                 getBoundingClientRect: jest.fn(() => ({
                     top: 20,
                     y: 20,
                 })) as any,
             } as any,
-        };
+        }});
 
         wrapper.setProps({
             isMenuOpen: true,
         });
 
         expect(wrapper.state('openUp')).toBe(false);
-        expect(baseProps.onOpenDirectionChange).toHaveBeenCalledTimes(0);
+        expect(props.onOpenDirectionChange).toHaveBeenCalledTimes(0);
 
         // And then it should go upwards
-        wrapper.instance().menuButtonRef = {
+        wrapper.setProps({menuButtonRef: {
             current: {
                 getBoundingClientRect: jest.fn(() => ({
                     top: 400,
                     y: 400,
                 })) as any,
             } as any,
-        };
+        }});
 
         wrapper.setProps({
             isMenuOpen: false,
@@ -107,19 +114,20 @@ describe('components/sidebar/sidebar_menu', () => {
             isMenuOpen: true,
         });
 
+        // Failing for some reason
         expect(wrapper.state('openUp')).toBe(true);
-        expect(baseProps.onOpenDirectionChange).toHaveBeenCalledTimes(1);
-        expect(baseProps.onOpenDirectionChange).toHaveBeenLastCalledWith(true);
+        expect(props.onOpenDirectionChange).toHaveBeenCalledTimes(1);
+        expect(props.onOpenDirectionChange).toHaveBeenLastCalledWith(true);
 
         // And finally back downwards again
-        wrapper.instance().menuButtonRef = {
+        wrapper.setProps({menuButtonRef: {
             current: {
                 getBoundingClientRect: jest.fn(() => ({
                     top: 20,
                     y: 20,
                 })) as any,
             } as any,
-        };
+        }});
 
         wrapper.setProps({
             isMenuOpen: false,
@@ -128,9 +136,10 @@ describe('components/sidebar/sidebar_menu', () => {
             isMenuOpen: true,
         });
 
+        // Failing for some reason
         expect(wrapper.state('openUp')).toBe(false);
-        expect(baseProps.onOpenDirectionChange).toHaveBeenCalledTimes(2);
-        expect(baseProps.onOpenDirectionChange).toHaveBeenLastCalledWith(false);
+        expect(props.onOpenDirectionChange).toHaveBeenCalledTimes(2);
+        expect(props.onOpenDirectionChange).toHaveBeenLastCalledWith(false);
 
         windowSpy.mockRestore();
     });

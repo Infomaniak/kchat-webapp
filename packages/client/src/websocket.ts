@@ -1,11 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import Pusher, {Channel} from 'pusher-js';
+
 const MAX_WEBSOCKET_FAILS = 7;
 const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
 const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
+const JITTER_RANGE = 2000; // 2 sec
 
 const WEBSOCKET_HELLO = 'hello';
+
+// Fix error import
+// eslint-disable-next-line no-warning-comments
+// TODO update isDesktopApp() with callback
+function isDesktopApp(): boolean {
+    return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
+}
 
 export type MessageListener = (msg: WebSocketMessage) => void;
 export type FirstConnectListener = () => void;
@@ -15,7 +25,10 @@ export type ErrorListener = (event: Event) => void;
 export type CloseListener = (connectFailCount: number) => void;
 
 export default class WebSocketClient {
-    private conn: WebSocket | null;
+    private conn: Pusher | null;
+    private teamChannel: Channel | null;
+    private userChannel: Channel | null;
+    private presenceChannel: Channel | null;
     private connectionUrl: string | null;
 
     // responseSequence is the number to track a response sent
@@ -70,6 +83,9 @@ export default class WebSocketClient {
 
     constructor() {
         this.conn = null;
+        this.teamChannel = null;
+        this.userChannel = null;
+        this.presenceChannel = null;
         this.connectionUrl = null;
         this.responseSequence = 1;
         this.serverSequence = 0;
@@ -81,7 +97,19 @@ export default class WebSocketClient {
     // on connect, only send auth cookie and blank state.
     // on hello, get the connectionID and store it.
     // on reconnect, send cookie, connectionID, sequence number.
-    initialize(connectionUrl = this.connectionUrl, token?: string) {
+    initialize(connectionUrl = this.connectionUrl, userId?: number, teamId?: string, token?: string, authToken?: string, presenceChannelId?: string) {
+        let currentUserId;
+        let currentPresenceChannelId;
+
+        // Store this for onmessage reconnect
+        if (userId) {
+            currentUserId = userId;
+        }
+
+        if (presenceChannelId) {
+            currentPresenceChannelId = presenceChannelId;
+        }
+
         if (this.conn) {
             return;
         }
@@ -95,15 +123,70 @@ export default class WebSocketClient {
             console.log('websocket connecting to ' + connectionUrl); //eslint-disable-line no-console
         }
 
+        // @ts-ignore
+        Pusher.Runtime.createXHR = () => {
+            const xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+            return xhr;
+        };
+
         // Add connection id, and last_sequence_number to the query param.
         // We cannot use a cookie because it will bleed across tabs.
         // We cannot also send it as part of the auth_challenge, because the session cookie is already sent with the request.
-        this.conn = new WebSocket(`${connectionUrl}?connection_id=${this.connectionId}&sequence_number=${this.serverSequence}`);
+
+        if (isDesktopApp()) {
+            this.conn = new Pusher('kchat-key', {
+                wsHost: connectionUrl,
+                httpHost: connectionUrl,
+                authEndpoint: '/broadcasting/auth',
+                auth: {
+                    headers: {
+
+                        // @ts-ignore
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                },
+                wsPort: 443,
+                wssPort: 443,
+                httpPort: 443,
+                httpsPort: 443,
+                forceTLS: true,
+                enabledTransports: ['ws', 'wss'],
+            });
+        } else {
+            this.conn = new Pusher('kchat-key', {
+                wsHost: connectionUrl,
+                httpHost: connectionUrl,
+                authEndpoint: '/broadcasting/auth',
+                wsPort: 443,
+                wssPort: 443,
+                httpPort: 443,
+                httpsPort: 443,
+                forceTLS: true,
+                enabledTransports: ['ws', 'wss'],
+            });
+        }
+
         this.connectionUrl = connectionUrl;
 
-        this.conn.onopen = (ev) => {
+        // @ts-ignore
+        this.subscribeToTeamChannel(teamId);
+
+        // @ts-ignore
+        this.subscribeToUserChannel(userId || currentUserId);
+
+        if (presenceChannelId || currentPresenceChannelId) {
+            // @ts-ignore
+            this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
+        }
+
+        this.conn.connection.bind('connected', () => {
             if (token) {
                 this.sendMessage('authentication_challenge', {token});
+                navigator.serviceWorker.controller?.postMessage({
+                    type: 'TOKEN_REFRESHED',
+                    token: token || '',
+                });
             }
 
             if (this.connectFailCount > 0) {
@@ -117,9 +200,9 @@ export default class WebSocketClient {
             }
 
             this.connectFailCount = 0;
-        };
+        });
 
-        this.conn.onclose = () => {
+        this.conn.connection.bind('disconnected', () => {
             this.conn = null;
             this.responseSequence = 1;
 
@@ -142,15 +225,19 @@ export default class WebSocketClient {
                 }
             }
 
+            // Applying jitter to avoid thundering herd problems.
+            retryTime += Math.random() * JITTER_RANGE;
+
             setTimeout(
                 () => {
-                    this.initialize(connectionUrl, token);
+                    this.initialize(connectionUrl, userId, teamId, token, authToken, presenceChannelId);
                 },
                 retryTime,
             );
-        };
+        });
 
-        this.conn.onerror = (evt) => {
+        // @ts-ignore
+        this.conn.connection.bind('error', (evt) => {
             if (this.connectFailCount <= 1) {
                 console.log('websocket error'); //eslint-disable-line no-console
                 console.log(evt); //eslint-disable-line no-console
@@ -158,30 +245,99 @@ export default class WebSocketClient {
 
             this.errorCallback?.(evt);
             this.errorListeners.forEach((listener) => listener(evt));
-        };
 
-        this.conn.onmessage = (evt) => {
-            const msg = JSON.parse(evt.data);
-            if (msg.seq_reply) {
+            this.conn?.disconnect();
+            this.conn = null;
+            this.responseSequence = 1;
+
+            this.connectFailCount++;
+
+            this.closeCallback?.(this.connectFailCount);
+            this.closeListeners.forEach((listener) => listener(this.connectFailCount));
+
+            let retryTime = MIN_WEBSOCKET_RETRY_TIME;
+
+            // If we've failed a bunch of connections then start backing off
+            if (this.connectFailCount > MAX_WEBSOCKET_FAILS) {
+                retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount * this.connectFailCount;
+                if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
+                    retryTime = MAX_WEBSOCKET_RETRY_TIME;
+                }
+            }
+
+            setTimeout(
+                () => {
+                    this.initialize(connectionUrl, userId, teamId, token, authToken, presenceChannelId);
+                },
+                retryTime,
+            );
+        });
+
+        this.bindChannelGlobally(this.teamChannel);
+        this.bindChannelGlobally(this.userChannel);
+    }
+
+    subscribeToTeamChannel(teamId: string) {
+        // @ts-ignore
+        this.teamChannel = this.conn.subscribe(`private-team.${teamId}`);
+    }
+
+    subscribeToUserChannel(userId: number) {
+        // @ts-ignore
+        this.userChannel = this.conn.subscribe(`presence-user.${userId}`);
+    }
+
+    subscribeToPresenceChannel(channelID: string) {
+        // @ts-ignore
+        this.presenceChannel = this.conn.subscribe(`presence-channel.${channelID}`);
+    }
+
+    bindPresenceChannel(channelID: string) {
+        // @ts-ignore
+        this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`);
+        if (this.presenceChannel) {
+            this.bindChannelGlobally(this.presenceChannel);
+        }
+    }
+
+    unbindPresenceChannel(channelID: string) {
+        // @ts-ignore
+        this.presenceChannel = this.conn?.unsubscribe(`presence-channel.${channelID}`);
+        if (this.presenceChannel) {
+            this.unbindChannelGlobally(this.presenceChannel);
+        }
+    }
+
+    bindChannelGlobally(channel: Channel | null) {
+        // @ts-ignore
+        channel.bind_global((evt, data) => {
+            // console.error(`The event ${evt} was triggered with data`);
+            // console.error(data);
+
+            if (!data) {
+                return;
+            }
+
+            if (data.seq_reply) {
                 // This indicates a reply to a websocket request.
                 // We ignore sequence number validation of message responses
                 // and only focus on the purely server side event stream.
-                if (msg.error) {
-                    console.log(msg); //eslint-disable-line no-console
+                if (data.error) {
+                    console.log(data); //eslint-disable-line no-console
                 }
 
-                if (this.responseCallbacks[msg.seq_reply]) {
-                    this.responseCallbacks[msg.seq_reply](msg);
-                    Reflect.deleteProperty(this.responseCallbacks, msg.seq_reply);
+                if (this.responseCallbacks[data.seq_reply]) {
+                    this.responseCallbacks[data.seq_reply](data);
+                    Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
                 }
             } else if (this.eventCallback || this.messageListeners.size > 0) {
                 // We check the hello packet, which is always the first packet in a stream.
-                if (msg.event === WEBSOCKET_HELLO && (this.missedEventCallback || this.missedMessageListeners.size > 0)) {
-                    console.log('got connection id ', msg.data.connection_id); //eslint-disable-line no-console
+                if (evt === WEBSOCKET_HELLO && (this.missedEventCallback || this.missedMessageListeners.size > 0)) {
+                    console.log('got connection id ', data.connection_id); //eslint-disable-line no-console
                     // If we already have a connectionId present, and server sends a different one,
                     // that means it's either a long timeout, or server restart, or sequence number is not found.
                     // Then we do the sync calls, and reset sequence number to 0.
-                    if (this.connectionId !== '' && this.connectionId !== msg.data.connection_id) {
+                    if (this.connectionId !== '' && this.connectionId !== data.connection_id) {
                         console.log('long timeout, or server restart, or sequence number is not found.'); //eslint-disable-line no-console
 
                         this.missedEventCallback?.();
@@ -192,25 +348,54 @@ export default class WebSocketClient {
 
                     // If it's a fresh connection, we have to set the connectionId regardless.
                     // And if it's an existing connection, setting it again is harmless, and keeps the code simple.
-                    this.connectionId = msg.data.connection_id;
+                    this.connectionId = data.connection_id;
                 }
 
+                // TODO check if we need this
                 // Now we check for sequence number, and if it does not match,
                 // we just disconnect and reconnect.
-                if (msg.seq !== this.serverSequence) {
-                    console.log('missed websocket event, act_seq=' + msg.seq + ' exp_seq=' + this.serverSequence); //eslint-disable-line no-console
-                    // We are not calling this.close() because we need to auto-restart.
-                    this.connectFailCount = 0;
-                    this.responseSequence = 1;
-                    this.conn?.close(); // Will auto-reconnect after MIN_WEBSOCKET_RETRY_TIME.
-                    return;
-                }
-                this.serverSequence = msg.seq + 1;
+                // if (data.seq !== this.serverSequence) {
+                //     console.log('missed websocket event, act_seq=' + data.seq + ' exp_seq=' + this.serverSequence); //eslint-disable-line no-console
+                //     // We are not calling this.close() because we need to auto-restart.
+                //     this.connectFailCount = 0;
+                //     this.responseSequence = 1;
+                //     this.conn?.disconnect(); // Will auto-reconnect after MIN_WEBSOCKET_RETRY_TIME.
+                //     return;
+                // }
+                this.serverSequence = data.seq + 1;
 
-                this.eventCallback?.(msg);
-                this.messageListeners.forEach((listener) => listener(msg));
+                // @ts-ignore
+                this.eventCallback?.({event: evt, data});
+
+                // @ts-ignore
+                this.messageListeners.forEach((listener) => listener({event: evt, data}));
             }
-        };
+        });
+    }
+
+    unbindChannelGlobally(channel: Channel | null) {
+        // @ts-ignore
+        channel.unbind_global((evt, data) => {
+            if (!data) {
+                return;
+            }
+            if (data.seq_reply) {
+                if (data.error) {
+                    console.log(data); //eslint-disable-line no-console
+                }
+
+                if (this.responseCallbacks[data.seq_reply]) {
+                    this.responseCallbacks[data.seq_reply](data);
+                    Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
+                }
+            } else if (this.eventCallback) {
+                // @ts-ignore
+                this.serverSequence = data.seq + 1;
+
+                // @ts-ignore
+                this.eventCallback({event: evt, data});
+            }
+        });
     }
 
     /**
@@ -306,15 +491,16 @@ export default class WebSocketClient {
     close() {
         this.connectFailCount = 0;
         this.responseSequence = 1;
-        if (this.conn && this.conn.readyState === WebSocket.OPEN) {
-            this.conn.onclose = () => {}; //eslint-disable-line no-empty-function
-            this.conn.close();
+        if (this.conn && this.conn.connection.state === 'connected') {
+            this.conn.connection.bind('disconnected', () => {
+            });
+            this.conn.disconnect();
             this.conn = null;
             console.log('websocket closed'); //eslint-disable-line no-console
         }
     }
 
-    sendMessage(action: string, data: any, responseCallback?: () => void) {
+    sendMessage(action: string, data: any, responseCallback?: () => void, authToken?: string) {
         const msg = {
             action,
             seq: this.responseSequence++,
@@ -325,20 +511,41 @@ export default class WebSocketClient {
             this.responseCallbacks[msg.seq] = responseCallback;
         }
 
-        if (this.conn && this.conn.readyState === WebSocket.OPEN) {
-            this.conn.send(JSON.stringify(msg));
-        } else if (!this.conn || this.conn.readyState === WebSocket.CLOSED) {
+        if (this.conn && this.conn.connection.state === 'connected') {
+            this.userChannel?.trigger(action, msg);
+        } else if (!this.conn || this.conn.connection.state === 'disconnected') {
             this.conn = null;
-            this.initialize();
+
+            // @ts-ignore
+            this.initialize(null, null, data.channel_id, null, authToken);
         }
     }
 
-    userTyping(channelId: string, parentId: string, callback?: () => void) {
+    sendPresenceMessage(action: string, data: any, responseCallback?: () => void) {
+        const msg = {
+            action,
+            seq: this.responseSequence++,
+            data,
+        };
+
+        if (responseCallback) {
+            this.responseCallbacks[msg.seq] = responseCallback;
+        }
+
+        if (this.conn && this.presenceChannel && this.conn.connection.state === 'connected') {
+            this.presenceChannel?.trigger(action, msg);
+        } else if (!this.conn || this.conn.connection.state === 'disconnected' || !this.presenceChannel) {
+            this.bindPresenceChannel(data.channel_id);
+        }
+    }
+
+    userTyping(channelId: string, userId: string, parentId: string, callback?: () => void) {
         const data = {
             channel_id: channelId,
             parent_id: parentId,
+            user_id: userId,
         };
-        this.sendMessage('user_typing', data, callback);
+        this.sendPresenceMessage('client-user_typing', data, callback);
     }
 
     userUpdateActiveStatus(userIsActive: boolean, manual: boolean, callback?: () => void) {
@@ -346,18 +553,18 @@ export default class WebSocketClient {
             user_is_active: userIsActive,
             manual,
         };
-        this.sendMessage('user_update_active_status', data, callback);
+        this.sendMessage('client-user_update_active_status', data, callback);
     }
 
     getStatuses(callback?: () => void) {
-        this.sendMessage('get_statuses', null, callback);
+        this.sendMessage('client-get_statuses', null, callback);
     }
 
     getStatusesByIds(userIds: string[], callback?: () => void) {
         const data = {
             user_ids: userIds,
         };
-        this.sendMessage('get_statuses_by_ids', data, callback);
+        this.sendMessage('client-get_statuses_by_ids', data, callback);
     }
 }
 

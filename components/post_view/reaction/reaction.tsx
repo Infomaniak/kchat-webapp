@@ -209,6 +209,7 @@ export default class Reaction extends React.PureComponent<Props, State> {
         if (currentUserReacted && canRemoveReactions) {
             ariaLabelEmoji = `${Utils.localizeMessage('reaction.removeReact.ariaLabel', 'remove reaction')} ${emojiNameWithSpaces}`;
         }
+        const emojiUrl = this.props.emojiImageUrl;
 
         return (
             <OverlayTrigger
@@ -238,7 +239,7 @@ export default class Reaction extends React.PureComponent<Props, State> {
                     <span className='d-flex align-items-center'>
                         <span
                             className='Reaction__emoji emoticon'
-                            style={{backgroundImage: 'url(' + this.props.emojiImageUrl + ')'}}
+                            style={{backgroundImage: 'url(' + emojiUrl + ')'}}
                         />
                         <span
                             ref={this.reactionCountRef}

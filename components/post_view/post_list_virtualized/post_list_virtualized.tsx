@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 /* eslint-disable max-lines */
+
 import React from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {DynamicSizeList, OnItemsRenderedArgs} from 'dynamic-virtualized-list';
@@ -23,6 +24,8 @@ import ScrollToBottomArrows from 'components/post_view/scroll_to_bottom_arrows';
 import ToastWrapper from 'components/toast_wrapper';
 
 import Pluggable from 'plugins/pluggable';
+
+import ChannelCallToast from 'components/channel_call_toast';
 
 import LatestPostReader from './latest_post_reader';
 
@@ -684,7 +687,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                                             <Pluggable
                                                 pluggableName='ChannelToast'
                                             />
-
+                                            <ChannelCallToast/>
                                             {this.renderToasts(width)}
                                         </div>
 

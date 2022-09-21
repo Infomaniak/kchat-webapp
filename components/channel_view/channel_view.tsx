@@ -12,6 +12,7 @@ import FileUploadOverlay from 'components/file_upload_overlay';
 import PostView from 'components/post_view';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
+import WebSocketClient from 'client/web_websocket_client';
 import AdvancedCreatePost from 'components/advanced_create_post';
 
 type Props = {
@@ -105,6 +106,12 @@ export default class ChannelView extends React.PureComponent<Props, State> {
         if (prevProps.channelId !== this.props.channelId || prevProps.channelIsArchived !== this.props.channelIsArchived) {
             if (this.props.channelIsArchived && !this.props.viewArchivedChannels) {
                 this.props.actions.goToLastViewedChannel();
+            }
+            if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
+                WebSocketClient.bindPresenceChannel(this.props.channelId);
+            }
+            if (prevProps.channelId) {
+                WebSocketClient.unbindPresenceChannel(prevProps.channelId);
             }
         }
     }

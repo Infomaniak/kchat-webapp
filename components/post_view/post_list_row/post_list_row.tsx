@@ -6,6 +6,7 @@ import {FormattedMessage} from 'react-intl';
 import classNames from 'classnames';
 
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
+import {hasLimitDate} from 'mattermost-redux/actions/posts';
 
 import {CloudUsage, Limits} from '@mattermost/types/cloud';
 
@@ -16,6 +17,7 @@ import Post from 'components/post_view/post';
 import DateSeparator from 'components/post_view/date_separator';
 import NewMessageSeparator from 'components/post_view/new_message_separator/new_message_separator';
 import ChannelIntroMessage from 'components/post_view/channel_intro_message/';
+import ChannelMessageLimitationBanner from '../channel_message_limitation_banner/channel_message_limitation_banner';
 import {isIdNotPost} from 'utils/post_utils';
 import {PostListRowListIds, Locations} from 'utils/constants';
 import CenterMessageLock from 'components/center_message_lock';
@@ -83,7 +85,7 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
     }
 
     render() {
-        const {listId, previousListId, loadingOlderPosts, loadingNewerPosts} = this.props;
+        const {listId, previousListId, loadingOlderPosts, loadingNewerPosts, isLastPost} = this.props;
         const {
             OLDER_MESSAGES_LOADER,
             NEWER_MESSAGES_LOADER,
@@ -109,11 +111,17 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
             );
         }
 
-        if (this.props.exceededLimitChannelId) {
+        // mattermost version
+        // if (this.props.exceededLimitChannelId) {
+        //     return (
+        //         <CenterMessageLock
+        //             channelId={this.props.exceededLimitChannelId}
+        //             firstInaccessiblePostTime={this.props.firstInaccessiblePostTime}
+
+        if (hasLimitDate && listId === CHANNEL_INTRO_MESSAGE && !isLastPost) {
             return (
-                <CenterMessageLock
-                    channelId={this.props.exceededLimitChannelId}
-                    firstInaccessiblePostTime={this.props.firstInaccessiblePostTime}
+                <ChannelMessageLimitationBanner
+                    olderMessagesDate={hasLimitDate}
                 />
             );
         }

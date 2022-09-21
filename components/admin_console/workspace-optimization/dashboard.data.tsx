@@ -12,7 +12,7 @@ import {
     TuneIcon,
     LockOutlineIcon,
     AccountMultipleOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 

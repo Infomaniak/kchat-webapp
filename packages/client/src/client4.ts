@@ -3,6 +3,8 @@
 
 /* eslint-disable max-lines */
 
+import crypto from 'crypto';
+
 import {PreferenceType} from '@mattermost/types/preferences';
 import FormData from 'form-data';
 
@@ -117,19 +119,35 @@ import {
 import {CompleteOnboardingRequest} from '@mattermost/types/setup';
 
 import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/threads';
-import {TopChannelResponse, TopReactionResponse, TopThreadResponse} from '@mattermost/types/insights';
+import {LeastActiveChannelsResponse, TopChannelResponse, TopReactionResponse, TopThreadResponse, TopDMsResponse} from '@mattermost/types/insights';
 
 import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
+
 import {TelemetryHandler} from './telemetry';
 
+// Fix error import
+// eslint-disable-next-line no-warning-comments
+// TODO update isDesktopApp() with callback
+function isDesktopApp(): boolean {
+    return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
+}
+
+const IKConstants = {
+    LOGIN_URL: process.env.LOGIN_ENDPOINT, // eslint-disable-line no-process-env
+    LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
+    CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
+    MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
+};
+
 const HEADER_AUTH = 'Authorization';
-const HEADER_BEARER = 'BEARER';
+const HEADER_BEARER = 'Bearer';
 const HEADER_CONTENT_TYPE = 'Content-Type';
 const HEADER_REQUESTED_WITH = 'X-Requested-With';
 const HEADER_USER_AGENT = 'User-Agent';
 export const HEADER_X_CLUSTER_ID = 'X-Cluster-Id';
 const HEADER_X_CSRF_TOKEN = 'X-CSRF-Token';
+const HEADER_X_XSRF_TOKEN = 'X-XSRF-Token';
 export const HEADER_X_VERSION_ID = 'X-Version-Id';
 
 const AUTOCOMPLETE_LIMIT_DEFAULT = 25;
@@ -265,6 +283,10 @@ export default class Client4 {
 
     getTeamsRoute() {
         return `${this.getBaseRoute()}/teams`;
+    }
+
+    getKSuiteRoute() {
+        return `${this.getBaseRoute()}/servers`;
     }
 
     getTeamRoute(teamId: string) {
@@ -486,6 +508,7 @@ export default class Client4 {
 
         if (this.setAuthHeader && this.token) {
             headers[HEADER_AUTH] = `${HEADER_BEARER} ${this.token}`;
+            headers[HEADER_X_XSRF_TOKEN] = this.token;
         }
 
         const csrfToken = this.csrf || this.getCSRFFromCookie();
@@ -784,7 +807,7 @@ export default class Client4 {
         return response;
     };
 
-    getProfiles = (page = 0, perPage = PER_PAGE_DEFAULT, options = {}) => {
+    getProfiles = (page = 0, perPage = PER_PAGE_DEFAULT, options: Record<string, any> = {}) => {
         return this.doFetch<UserProfile[]>(
             `${this.getUsersRoute()}${buildQueryString({page, per_page: perPage, ...options})}`,
             {method: 'get'},
@@ -910,6 +933,23 @@ export default class Client4 {
 
         return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
     };
+    arrayBufferToBase64(buffer: ArrayBuffer) {
+        return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+    }
+
+    getProfilePictureFetched = async (userId: string, lastPictureUpdate: number, params: any) => {
+        const response = await fetch(`${this.getUserRoute(userId)}/image${buildQueryString(params)}`, this.getOptions({}));
+
+        // Convert the data to Base64 and build a data URL.
+        const binaryData = await response.arrayBuffer();
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(binaryData)));
+        const dataUrl = `data:image/png;base64,${base64}`;
+        return dataUrl;
+    }
+
+    getBasicProfilePictureUrl = (userId: string, lastPictureUpdate: number, params: any) => {
+        return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
+    }
 
     getDefaultProfilePictureUrl = (userId: string) => {
         return `${this.getUserRoute(userId)}/image/default`;
@@ -963,6 +1003,9 @@ export default class Client4 {
         );
     };
 
+    /**
+     * @deprecated
+     */
     checkUserMfa = (loginId: string) => {
         return this.doFetch<{mfa_required: boolean}>(
             `${this.getUsersRoute()}/mfa`,
@@ -1219,6 +1262,13 @@ export default class Client4 {
 
     getTeams = (page = 0, perPage = PER_PAGE_DEFAULT, includeTotalCount = false, excludePolicyConstrained = false) => {
         return this.doFetch<Team[] | TeamsWithCount>(
+            `${this.getKSuiteRoute()}${buildQueryString({page, per_page: perPage, include_total_count: includeTotalCount, exclude_policy_constrained: excludePolicyConstrained})}`,
+            {method: 'get'},
+        );
+    };
+
+    getKSuites = (page = 0, perPage = PER_PAGE_DEFAULT, includeTotalCount = false, excludePolicyConstrained = false) => {
+        return this.doFetch<Team[] | TeamsWithCount>(
             `${this.getTeamsRoute()}${buildQueryString({page, per_page: perPage, include_total_count: includeTotalCount, exclude_policy_constrained: excludePolicyConstrained})}`,
             {method: 'get'},
         );
@@ -1255,6 +1305,13 @@ export default class Client4 {
             {method: 'get'},
         );
     };
+
+    getMyKSuites = () => {
+        return this.doFetch<Team[]>(
+            `${this.getUserRoute('me')}/servers`,
+            {method: 'get'},
+        );
+    }
 
     getTeamsForUser = (userId: string) => {
         return this.doFetch<Team[]>(
@@ -2191,6 +2248,32 @@ export default class Client4 {
     getMyTopThreads = (teamId: string, page: number, perPage: number, timeRange: string) => {
         return this.doFetch<TopThreadResponse>(
             `${this.getUsersRoute()}/me/top/threads${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getLeastActiveChannelsForTeam = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<LeastActiveChannelsResponse>(
+            `${this.getTeamRoute(teamId)}/top/inactive_channels${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+    getMyTopDMs = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopDMsResponse>(
+            `${this.getUsersRoute()}/me/top/dms${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getMyLeastActiveChannels = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<LeastActiveChannelsResponse>(
+            `${this.getUsersRoute()}/me/top/inactive_channels${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+    getNewTeamMembers = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopDMsResponse>(
+            `${this.getTeamRoute(teamId)}/top/team_members${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
             {method: 'get'},
         );
     }
@@ -3475,7 +3558,7 @@ export default class Client4 {
 
     getBoardsUsage = () => {
         return this.doFetch<BoardsUsageResponse>(
-            `/plugins/${suitePluginIds.focalboard}/api/v1/limits`,
+            `/plugins/${suitePluginIds.focalboard}/api/v2/limits`,
             {method: 'get'},
         );
     }
@@ -3987,6 +4070,54 @@ export default class Client4 {
         );
     }
 
+    getMeets = () => {
+        return this.doFetch<Array<{
+            channel_id: string;
+            create_at: number;
+            id: string;
+            url: string;
+            user_id: string;
+        }>>(
+            `${this.getBaseRoute()}/conferences`,
+            {method: 'get'},
+        );
+    }
+
+    startMeet = (channelID: string) => {
+        return this.doFetch<{
+            channel_id: string;
+            created_at: string;
+            id: string;
+            team_user: Object;
+            team_user_id: string;
+            updated_at: string;
+            url: string;
+        }>(
+            `${this.getBaseRoute()}/conferences`,
+            {method: 'post', body: JSON.stringify({channel_id: channelID})},
+        );
+    }
+    leaveMeet = (callID: string) => {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${callID}/leave`,
+            {method: 'post'},
+        );
+    }
+
+    acceptIncomingMeetCall(callID: string) {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${callID}/answer`,
+            {method: 'post'},
+        );
+    }
+
+    declineIncomingMeetCall(callID: string) {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${callID}/deny`,
+            {method: 'post'},
+        );
+    }
+
     /**
      * @param query string query of graphQL, pass the json stringified version of the query
      * eg.  const query = JSON.stringify({query: `{license, config}`, operationName: 'queryForLicenseAndConfig'});
@@ -4014,16 +4145,57 @@ export default class Client4 {
         } catch (err) {
             throw new ClientError(this.getUrl(), {
                 message: 'Received invalid response from the server.',
-                intl: {
-                    id: 'mobile.request.invalid_response',
-                    defaultMessage: 'Received invalid response from the server.',
-                },
                 url,
             });
         }
 
-        if (headers.has(HEADER_X_VERSION_ID) && !headers.get('Cache-Control')) {
+        if ((response.status === 401 && data?.result === 'redirect') && !isDesktopApp()) {
+            window.location.href = data.uri;
+        }
+
+        if ((response.status === 403 || (response.status === 401 && data?.result === 'redirect')) && isDesktopApp()) {
+            if (url.indexOf('/commands/') === -1) {
+                const token = localStorage.getItem('IKToken');
+                const refreshToken = localStorage.getItem('IKRefreshToken');
+                const isRefreshing = localStorage.getItem('refreshingToken');
+                this.setToken('');
+                this.setCSRF('');
+
+                if (token && refreshToken && isRefreshing !== '1') {
+                    localStorage.setItem('refreshingToken', '1');
+                    this.refreshIKLoginToken(
+                        refreshToken,
+                        `${IKConstants.LOGIN_URL}`,
+                        `${IKConstants.CLIENT_ID}`,
+                    ).then((response) => {
+                        this.storeTokenResponse(response);
+                        window.postMessage(
+                            {
+                                type: 'token-refreshed',
+                                message: {
+                                    token: response.access_token,
+                                },
+                            },
+                            window.origin,
+                        );
+                        navigator.serviceWorker.controller?.postMessage({
+                            type: 'TOKEN_REFRESHED',
+                            token: response.access_token || '',
+                        });
+                        localStorage.removeItem('refreshingToken');
+                    }).catch(() => {
+                        console.log('[TOKEN] fail refresh from client');
+                        localStorage.removeItem('refreshingToken');
+                        this.clearLocalStorageToken();
+                        this.getChallengeAndRedirectToLogin();
+                    });
+                }
+            }
+        }
+
+        if (headers.has(HEADER_X_VERSION_ID)) {
             const serverVersion = headers.get(HEADER_X_VERSION_ID);
+
             if (serverVersion && this.serverVersion !== serverVersion) {
                 this.serverVersion = serverVersion;
             }
@@ -4092,6 +4264,19 @@ export default class Client4 {
         );
     };
 
+    /****************************************************/
+    /*                                                  */
+    /*                IK CUSTOMS CALLS                  */
+    /*                                                  */
+    /****************************************************/
+
+    getIKLogin = (challenge: string) => {
+        return this.doFetch<any>(
+            `${this.getBaseRoute()}/desktop-login?challenge=${challenge}`,
+            {method: 'get'},
+        );
+    };
+
     deleteDraft = (channelId: Channel['id'], rootId = '', connectionId: string) => {
         let endpoint = `${this.getUserRoute('me')}/channels/${channelId}/drafts`;
         if (rootId !== '') {
@@ -4108,6 +4293,140 @@ export default class Client4 {
             },
         );
     };
+
+    getIKLoginToken = (code: string, challenge: string, verifier: string, loginUrl: string, clientId: string) => {
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('grant_type', 'authorization_code');
+        formData.append('code', code);
+        formData.append('code_verifier', verifier);
+        formData.append('client_id', clientId);
+        formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
+
+        // formData.append('redirect_uri', 'ktalk://auth-desktop' );
+
+        return this.doFetch<any>(
+
+            `${loginUrl}token`,
+            {
+                method: 'post',
+
+                // mode: 'no-cors',
+                body: formData,
+            },
+        );
+    }
+
+    refreshIKLoginToken = (refresh: string, loginUrl: string, clientId: string) => {
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('grant_type', 'refresh_token');
+        formData.append('refresh_token', refresh);
+        formData.append('client_id', clientId);
+
+        return this.doFetch<any>(
+
+            // `${this.getBaseRoute()}/token`,
+            `${loginUrl}token`,
+            {
+                method: 'post',
+                body: formData,
+            },
+        );
+    }
+
+    /****************************************************/
+    /*                                                  */
+    /*                IK CUSTOMS UTILS                  */
+    /*                                                  */
+    /****************************************************/
+
+    /**
+     * Store IKToken infos in localStorage and update Client
+     */
+    storeTokenResponse(response: { expires_in?: any; access_token?: any; refresh_token?: any }) {
+        // TODO: store in redux
+        const d = new Date();
+        d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
+        localStorage.setItem('IKToken', response.access_token);
+        localStorage.setItem('IKRefreshToken', response.refresh_token);
+        localStorage.setItem('IKTokenExpire', (d.getTime() / 1000, 10).toString());
+        localStorage.setItem('tokenExpired', '0');
+        this.setToken(response.access_token);
+        this.setCSRF(response.access_token);
+        this.setAuthHeader = true;
+    }
+
+    /**
+     * Clear IKToken informations in localStorage
+     */
+    clearLocalStorageToken() {
+        console.log('[TOKEN] Clear token storage');
+        localStorage.removeItem('IKToken');
+        localStorage.removeItem('IKRefreshToken');
+        localStorage.removeItem('IKTokenExpire');
+        localStorage.setItem('tokenExpired', '1');
+        window.postMessage(
+            {
+                type: 'token-cleared',
+                message: {
+                    token: null,
+                },
+            },
+            window.origin,
+        );
+    }
+
+    /**
+     * get code_verifier for challenge
+     * @returns string
+     */
+    getCodeVerifier() {
+        const ramdonByte = crypto.randomBytes(33);
+        const hash =
+            crypto.createHash('sha256').update(ramdonByte).digest();
+        return hash.toString('base64').
+            replace(/\+/g, '-').
+            replace(/\//g, '_').
+            replace(/[=]/g, '');
+    }
+
+    /**
+     * Generate code_challenge for oauth
+     * @param codeVerifier string
+     * @returns string
+     */
+    async generateCodeChallenge(codeVerifier: string) {
+        const hash =
+            crypto.createHash('sha256').update(codeVerifier).digest();
+        return hash.toString('base64').
+            replace(/\+/g, '-').
+            replace(/\//g, '_').
+            replace(/[=]/g, '');
+    }
+
+    /**
+     * get code_challenge and redirect to IK Login
+     */
+    getChallengeAndRedirectToLogin() {
+        const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
+
+        // const redirectTo = 'ktalk://auth-desktop';
+        const codeVerifier = this.getCodeVerifier();
+        let codeChallenge = '';
+
+        this.generateCodeChallenge(codeVerifier).then((challenge) => {
+            codeChallenge = challenge;
+
+            // TODO: store in redux instead of localstorage
+            localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
+
+            // TODO: add env for login url and/or current server
+            window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
+        }).catch(() => {
+            console.log('Error redirect');
+        });
+    }
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {
@@ -4131,11 +4450,6 @@ export function parseAndMergeNestedHeaders(originalHeaders: any) {
 
 export class ClientError extends Error implements ServerError {
     url?: string;
-    intl?: {
-        id: string;
-        defaultMessage: string;
-        values?: any;
-    };
     server_error_id?: string;
     status_code?: number;
 
@@ -4144,7 +4458,6 @@ export class ClientError extends Error implements ServerError {
 
         this.message = data.message;
         this.url = data.url;
-        this.intl = data.intl;
         this.server_error_id = data.server_error_id;
         this.status_code = data.status_code;
 

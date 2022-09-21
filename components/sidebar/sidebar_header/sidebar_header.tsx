@@ -5,8 +5,8 @@ import React, {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import Flex from '@mattermost/compass-components/utilities/layout/Flex';
-import Heading from '@mattermost/compass-components/components/heading';
+import Flex from '@infomaniak/compass-components/utilities/layout/Flex';
+import Heading from '@infomaniak/compass-components/components/heading';
 
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {GlobalState} from 'types/store';
@@ -35,7 +35,8 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
     justify: 'space-between',
     alignment: 'center',
 }))<SidebarHeaderContainerProps>`
-    height: 52px;
+    height: 46px;
+    width: 100%;
     padding: 0 16px;
 
     .dropdown-menu {
@@ -43,7 +44,7 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
         transform: translate(0, 0);
         margin-left: 0;
         min-width: 210px;
-        max-width: 232px;
+        max-width: 250px;
     }
 
     #SidebarContainer & .AddChannelDropdown_dropdownButton {

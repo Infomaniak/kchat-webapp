@@ -4,25 +4,31 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import AppNameDisplay from 'components/app_name_display';
+
 import {isDesktopApp} from 'utils/user_agent';
 
 import HistoryButtons from './history_buttons';
-import ProductMenu from './product_menu';
 
 const LeftControlsContainer = styled.div`
     display: flex;
     align-items: center;
-    height: 40px;
+    height: 46px;
     flex-shrink: 0;
+    width: 240px;
+    background: var(--sidebar-bg);
+    border-bottom: solid 1px rgba(var(--sidebar-text-rgb), 0.25);
+    padding-left: 10px;
 
     > * + * {
-        margin-left: 12px;
+        margin-left: 10px;
     }
 `;
 
 const LeftControls = (): JSX.Element => (
     <LeftControlsContainer>
-        <ProductMenu/>
+        {/* <ProductMenu/> */}
+        <AppNameDisplay/>
         {isDesktopApp() && <HistoryButtons/>}
     </LeftControlsContainer>
 );

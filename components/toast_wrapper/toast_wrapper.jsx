@@ -9,7 +9,7 @@ import Toast from 'components/toast/toast';
 import Timestamp, {RelativeRanges} from 'components/timestamp';
 import {isIdNotPost, getNewMessageIndex} from 'utils/post_utils';
 import * as Utils from 'utils/utils';
-import {isToday} from 'utils/datetime';
+import {isToday, isWithinLastWeek} from 'utils/datetime';
 import Constants from 'utils/constants';
 import {browserHistory} from 'utils/browser_history';
 import {SearchShortcut} from 'components/search_shortcut';
@@ -285,6 +285,7 @@ class ToastWrapper extends React.PureComponent {
                     values={{
                         count,
                         isToday: isToday(new Date(since)).toString(),
+                        isWithinLastWeek: isWithinLastWeek(new Date(since)).toString(),
                         date: (
                             <Timestamp
                                 value={since}

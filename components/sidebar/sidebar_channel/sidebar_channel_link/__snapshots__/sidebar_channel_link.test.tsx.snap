@@ -6,6 +6,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   className="SidebarLink"
   id="sidebarItem_"
   onClick={[Function]}
+  onContextMenu={[Function]}
   tabIndex={0}
   to="http://a.fake.link"
 >
@@ -74,6 +75,11 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
     isCollapsed={false}
     isMenuOpen={false}
     isUnread={false}
+    menuTriggerRef={
+      Object {
+        "current": null,
+      }
+    }
     onToggleMenu={[Function]}
   />
 </Link>
@@ -85,6 +91,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   className="SidebarLink"
   id="sidebarItem_"
   onClick={[Function]}
+  onContextMenu={[Function]}
   tabIndex={0}
   to="http://a.fake.link"
 >
@@ -153,6 +160,11 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
     isCollapsed={false}
     isMenuOpen={false}
     isUnread={false}
+    menuTriggerRef={
+      Object {
+        "current": null,
+      }
+    }
     onToggleMenu={[Function]}
   />
 </Link>
@@ -164,6 +176,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   className="SidebarLink"
   id="sidebarItem_"
   onClick={[Function]}
+  onContextMenu={[Function]}
   tabIndex={0}
   to="http://a.fake.link"
 >
@@ -256,6 +269,11 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
     isCollapsed={false}
     isMenuOpen={false}
     isUnread={false}
+    menuTriggerRef={
+      Object {
+        "current": null,
+      }
+    }
     onToggleMenu={[Function]}
   />
 </Link>
@@ -267,6 +285,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   className="SidebarLink unread-title"
   id="sidebarItem_"
   onClick={[Function]}
+  onContextMenu={[Function]}
   tabIndex={0}
   to="http://a.fake.link"
 >
@@ -335,6 +354,11 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
     isCollapsed={false}
     isMenuOpen={false}
     isUnread={true}
+    menuTriggerRef={
+      Object {
+        "current": null,
+      }
+    }
     onToggleMenu={[Function]}
   />
 </Link>

@@ -145,6 +145,10 @@ export function isWindows7(): boolean {
     return (/\bWindows NT 6\.1\b/).test(appVersion);
 }
 
+export function isLinux(): boolean {
+    return userAgent().indexOf('Linux') !== -1;
+}
+
 export function getDesktopVersion(): string {
     // use if the value window.desktop.version is not set yet
     const regex = /Mattermost\/(\d+\.\d+\.\d+)/gm;

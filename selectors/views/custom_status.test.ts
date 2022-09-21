@@ -40,7 +40,7 @@ describe('getCustomStatus', () => {
     it('should return customStatus object when there is custom status set', async () => {
         const store = await configureStore();
         const newUser = {...user};
-        newUser.props.customStatus = JSON.stringify(customStatus);
+        newUser.props.customStatus = customStatus;
         (UserSelectors.getCurrentUser as jest.Mock).mockReturnValue(newUser);
         expect(getCustomStatus(store.getState())).toStrictEqual(customStatus);
     });

@@ -1,5 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable max-lines */
+
+/* eslint-disable max-lines */
 
 /* eslint-disable max-lines */
 
@@ -33,6 +36,8 @@ import {PreferenceType} from '@mattermost/types/preferences';
 
 import {getChannelsIdForTeam, getChannelByName} from 'mattermost-redux/utils/channel_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
+
+import {ActionTypes} from 'utils/constants';
 
 import {addChannelToInitialCategory, addChannelToCategory} from './channel_categories';
 import {logError} from './errors';
@@ -474,10 +479,10 @@ export function fetchMyChannelsAndMembers(teamId: string): ActionFunc {
         const state = getState();
         const shouldFetchArchived = isMinimumServerVersion(getServerVersion(state), 5, 21);
         try {
-            const channelRequest = Client4.getMyChannels(teamId, shouldFetchArchived);
-            const memberRequest = Client4.getMyChannelMembers(teamId);
-            channels = await channelRequest;
-            channelMembers = await memberRequest;
+            [channels, channelMembers] = await Promise.all([
+                Client4.getMyChannels(teamId, shouldFetchArchived),
+                Client4.getMyChannelMembers(teamId),
+            ]);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch({type: ChannelTypes.CHANNELS_FAILURE, error});
@@ -550,6 +555,17 @@ export function fetchAllMyTeamsChannelsAndChannelMembers(): ActionFunc {
         } while (allMembers && page <= 2);
         try {
             channels = await Client4.getAllTeamsChannels();
+            const conferences = await Client4.getMeets();
+            for (let i = 0; i < conferences.length; i++) {
+                dispatch({
+                    type: ActionTypes.VOICE_CHANNEL_USERS_CONNECTED,
+                    data: {
+                        channelID: conferences[i].channel_id,
+                        id: conferences[i].id,
+                        users: conferences[i].participants,
+                    },
+                });
+            }
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));

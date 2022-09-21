@@ -52,6 +52,7 @@ type State = {
 export default class SidebarCategory extends React.PureComponent<Props, State> {
     categoryTitleRef: React.RefObject<HTMLButtonElement>;
     newDropBoxRef: React.RefObject<HTMLDivElement>;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
 
     a11yKeyDownRegistered: boolean;
 
@@ -60,6 +61,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
 
         this.categoryTitleRef = React.createRef();
         this.newDropBoxRef = React.createRef();
+        this.menuTriggerRef = React.createRef();
 
         this.state = {
             isMenuOpen: false,
@@ -258,24 +260,15 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
         const renderedChannels = channelIds.map(this.renderChannel);
 
         let categoryMenu: JSX.Element;
-        let newLabel: JSX.Element;
         let directMessagesModalButton: JSX.Element;
         let isCollapsible = true;
         if (isNewCategory) {
-            newLabel = (
-                <div className='SidebarCategory_newLabel'>
-                    <FormattedMessage
-                        id='sidebar_left.sidebar_category.newLabel'
-                        defaultMessage='new'
-                    />
-                </div>
-            );
-
             categoryMenu = (
                 <SidebarCategoryMenu
                     category={category}
                     isMenuOpen={this.state.isMenuOpen}
                     onToggleMenu={this.handleMenuToggle}
+                    menuTriggerRef={this.menuTriggerRef}
                 />
             );
         } else if (category.type === CategoryTypes.DIRECT_MESSAGES) {
@@ -303,6 +296,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                         isCollapsed={category.collapsed}
                         isMenuOpen={this.state.isMenuOpen}
                         onToggleMenu={this.handleMenuToggle}
+                        menuButtonRef={this.menuTriggerRef}
                     />
                     <OverlayTrigger
                         delayShow={500}
@@ -329,6 +323,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                     category={category}
                     isMenuOpen={this.state.isMenuOpen}
                     onToggleMenu={this.handleMenuToggle}
+                    menuTriggerRef={this.menuTriggerRef}
                 />
             );
         }
@@ -403,8 +398,11 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                                 isDraggingOver={droppableSnapshot.isDraggingOver}
                                                 muted={category.muted}
                                                 onClick={this.handleCollapse}
+                                                onContextMenu={(event) => {
+                                                    event.preventDefault();
+                                                    this.menuTriggerRef && this.menuTriggerRef.current?.click();
+                                                }}
                                             >
-                                                {newLabel}
                                                 {directMessagesModalButton}
                                                 {categoryMenu}
                                             </SidebarCategoryHeader>

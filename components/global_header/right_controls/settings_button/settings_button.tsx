@@ -4,7 +4,7 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import IconButton from '@mattermost/compass-components/components/icon-button';
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
@@ -38,8 +38,9 @@ const SettingsButton = (props: Props): JSX.Element | null => {
             overlay={tooltip}
         >
             <IconButton
+                className='grey'
                 size={'sm'}
-                icon={'settings-outline'}
+                icon={'cog'}
                 onClick={(): void => {
                     props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}});
                 }}

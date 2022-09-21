@@ -29,7 +29,7 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
-import {getBool, getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import {getBool, getTeammateNameDisplaySetting, Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {blendColors, changeOpacity} from 'mattermost-redux/utils/theme_utils';
 import {displayUsername, isSystemAdmin} from 'mattermost-redux/utils/user_utils';
@@ -61,16 +61,20 @@ import {getIsMobileView} from 'selectors/views/browser';
 import PurchaseLink from 'components/announcement_bar/purchase_link/purchase_link';
 import ContactUsButton from 'components/announcement_bar/contact_sales/contact_us';
 
+import {isDesktopApp} from 'utils/user_agent';
+
 import {FileInfo} from '@mattermost/types/files';
 import {Team} from '@mattermost/types/teams';
 import {Post} from '@mattermost/types/posts';
 import {UserProfile} from '@mattermost/types/users';
 import {Channel} from '@mattermost/types/channels';
-import {Theme} from 'mattermost-redux/types/themes';
+
 import {ClientConfig} from '@mattermost/types/config';
 
 import {GlobalState} from '@mattermost/types/store';
 import {TextboxElement} from '../components/textbox';
+
+import {buildQueryString} from 'packages/client/src/helpers';
 
 import {joinPrivateChannelPrompt} from './channel_utils';
 
@@ -705,7 +709,7 @@ export function applyTheme(theme: Theme) {
 }
 
 export function resetTheme() {
-    applyTheme(Preferences.THEMES.denim);
+    applyTheme(Preferences.THEMES.ik);
 }
 
 function changeCss(className: string, classValue: string) {
@@ -1019,6 +1023,9 @@ export function loadImage(
     const request = new XMLHttpRequest();
 
     request.open('GET', url, true);
+    if (isDesktopApp() && Client4.getToken()) {
+        request.setRequestHeader('Authorization', `Bearer ${Client4.getToken()}`);
+    }
     request.responseType = 'arraybuffer';
     request.onload = onLoad;
     request.onprogress = (e) => {
@@ -1187,11 +1194,11 @@ export function displayFullAndNicknameForUser(user: UserProfile) {
     return displayName;
 }
 
-export function imageURLForUser(userId: UserProfile['id'], lastPictureUpdate = 0) {
+export function imageURLForUser(userId, lastPictureUpdate = 0) {
     return Client4.getUsersRoute() + '/' + userId + '/image?_=' + lastPictureUpdate;
 }
 
-export function defaultImageURLForUser(userId: UserProfile['id']) {
+export function defaultImageURLForUser(userId) {
     return Client4.getUsersRoute() + '/' + userId + '/image/default';
 }
 
@@ -1281,11 +1288,11 @@ export function isFeatureEnabled(feature: {label: string}, state: GlobalState) {
     return getBool(state, Constants.Preferences.CATEGORY_ADVANCED_SETTINGS, Constants.FeatureTogglePrefix + feature.label);
 }
 
-export function fillArray<T>(value: T, length: number) {
-    const arr = [];
+export function fillRecord<T>(value: T, length: number): Record<number, T> {
+    const arr: Record<number, T> = {};
 
     for (let i = 0; i < length; i++) {
-        arr.push(value);
+        arr[i] = value;
     }
 
     return arr;
@@ -1637,8 +1644,8 @@ export function setCSRFFromCookie() {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            if (cookie.startsWith('MMCSRF=')) {
-                Client4.setCSRF(cookie.replace('MMCSRF=', ''));
+            if (cookie.startsWith('x-xsrf-token=')) {
+                Client4.setCSRF(cookie.replace('x-xsrf-token=', ''));
                 break;
             }
         }

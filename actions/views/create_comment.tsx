@@ -32,9 +32,9 @@ import {getPostDraft} from 'selectors/rhs';
 
 import * as Utils from 'utils/utils';
 import {Constants, StoragePrefixes} from 'utils/constants';
-import type {PostDraft} from 'types/store/draft';
-import type {GlobalState} from 'types/store';
-import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import {PostDraft} from 'types/store/draft';
+import {GlobalState} from 'types/store';
+import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 export function clearCommentDraftUploads() {
     return actionOnGlobalItemsWithPrefix(StoragePrefixes.COMMENT_DRAFT, (_key: string, draft: PostDraft) => {

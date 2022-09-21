@@ -1,12 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable max-lines */
+/* eslint-disable no-process-env */
 
 const childProcess = require('child_process');
-
 const path = require('path');
 
 const url = require('url');
-
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
@@ -14,23 +14,26 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 
 const NPM_TARGET = process.env.npm_lifecycle_event; //eslint-disable-line no-process-env
 
-const targetIsRun = NPM_TARGET === 'run';
+const targetIsRun = NPM_TARGET?.startsWith('run');
 const targetIsTest = NPM_TARGET === 'test';
 const targetIsStats = NPM_TARGET === 'stats';
-const targetIsDevServer = NPM_TARGET === 'dev-server';
+const targetIsDevServer = NPM_TARGET?.startsWith('dev-server');
 
 const DEV = targetIsRun || targetIsStats || targetIsDevServer;
 
 const STANDARD_EXCLUDE = [
     path.join(__dirname, 'node_modules'),
+    path.join(__dirname, 'service-worker.js'),
     path.join(__dirname, 'packages/components'),
 ];
 
 // react-hot-loader and development source maps require eval
-const CSP_UNSAFE_EVAL_IF_DEV = DEV ? ' \'unsafe-eval\'' : '';
+const CSP_UNSAFE_EVAL_IF_DEV = ' \'unsafe-eval\''; // DEV ? ' \'unsafe-eval\'' : '';
+const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
 
 var MYSTATS = {
 
@@ -131,12 +134,37 @@ if (DEV) {
     }
 }
 
+const env = {};
+if (DEV) {
+    env.PUBLIC_PATH = JSON.stringify(publicPath);
+    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || '');
+    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/next');
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.preprod.dev.infomaniak.ch');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch');
+    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.preprod.dev.infomaniak.ch/');
+    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.preprod.dev.infomaniak.ch/');
+    if (process.env.MM_LIVE_RELOAD) {
+        config.plugins.push(new LiveReloadPlugin());
+    }
+} else {
+    env.NODE_ENV = JSON.stringify('production');
+    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || '');
+    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/next');
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.infomaniak.com');
+    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.infomaniak.com/');
+    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.infomaniak.com/');
+}
+
 var config = {
-    entry: ['./root.jsx', 'root.html'],
+    entry: ['./root.tsx', 'root.html.ejs'],
     output: {
         publicPath,
         filename: '[name].[contenthash].js',
         chunkFilename: '[name].[contenthash].js',
+        clean: true,
     },
     module: {
         rules: [
@@ -228,6 +256,20 @@ var config = {
                     },
                 ],
             },
+            {
+                test: /\.ejs$/,
+                use: [
+                    {
+                        loader: 'ejs-compiled-loader',
+                        options: {
+                            htmlmin: true,
+                            htmlminOptions: {
+                                removeComments: true,
+                            },
+                        },
+                    },
+                ],
+            },
         ],
     },
     resolve: {
@@ -236,8 +278,6 @@ var config = {
             path.resolve(__dirname),
         ],
         alias: {
-            '@mattermost/client': 'packages/client/src',
-            '@mattermost/types': 'packages/types/src',
             'mattermost-redux/test': 'packages/mattermost-redux/test',
             'mattermost-redux': 'packages/mattermost-redux/src',
             reselect: 'packages/reselect/src',
@@ -267,12 +307,33 @@ var config = {
         new HtmlWebpackPlugin({
             filename: 'root.html',
             inject: 'head',
-            template: 'root.html',
+            template: 'root.html.ejs',
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' cdn.rudderlabs.com/ js.stripe.com/v3 ' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ kmeet.preprod.dev.infomaniak.ch/ ' + CSP_UNSAFE_EVAL_IF_DEV,
                 },
+            },
+            templateParameters: {
+                // eslint-disable-next-line no-process-env
+                WEBCOMPONENT_ENDPOINT: process.env.WEBCOMPONENT_ENDPOINT, // || 'https://web-components.storage.infomaniak.com/current',
+                // eslint-disable-next-line no-process-env
+                WEBCOMPONENT_API_ENDPOINT: process.env.WEBCOMPONENT_API_ENDPOINT, // || 'https://welcome.infomaniak.com',
+            },
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'call.html',
+            inject: 'head',
+            template: 'call.html.ejs',
+            meta: {
+                csp: {
+                    'http-equiv': 'Content-Security-Policy',
+                    content: 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.preprod.dev.infomaniak.ch/ ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV,
+                },
+            },
+            templateParameters: {
+                // eslint-disable-next-line no-process-env
+                KMEET_ENDPOINT: process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch',
             },
         }),
         new CopyWebpackPlugin({
@@ -302,16 +363,20 @@ var config = {
                 {from: 'images/admin-onboarding-background.jpg', to: 'images'},
                 {from: 'images/payment-method-illustration.png', to: 'images'},
                 {from: 'images/cloud-laptop.png', to: 'images'},
+                {from: 'images/bot_default_icon.png', to: 'images'},
+                {from: 'images/cloud-laptop-error.png', to: 'images'},
+                {from: 'images/cloud-laptop-warning.png', to: 'images'},
+                {from: 'images/cloud-upgrade-person-hand-to-face.png', to: 'images'},
             ],
         }),
 
         // Generate manifest.json, honouring any configured publicPath. This also handles injecting
         // <link rel="apple-touch-icon" ... /> and <meta name="apple-*" ... /> tags into root.html.
         new WebpackPwaManifest({
-            name: 'Mattermost',
-            short_name: 'Mattermost',
+            name: 'kChat',
+            short_name: 'kChat',
             start_url: '..',
-            description: 'Mattermost is an open source, self-hosted Slack-alternative',
+            description: 'Infomaniak kChat',
             background_color: '#ffffff',
             inject: true,
             ios: true,
@@ -371,6 +436,11 @@ var config = {
                 sizes: '96x96',
             }],
         }),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'disabled',
+            generateStatsFile: true,
+            statsFilename: 'bundlestats.json',
+        }),
     ],
 };
 
@@ -388,27 +458,13 @@ if (DEV) {
     config.devtool = 'source-map';
 }
 
-const env = {};
-if (DEV) {
-    env.PUBLIC_PATH = JSON.stringify(publicPath);
-    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || ''); //eslint-disable-line no-process-env
-    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
-    if (process.env.MM_LIVE_RELOAD) { //eslint-disable-line no-process-env
-        config.plugins.push(new LiveReloadPlugin());
-    }
-} else {
-    env.NODE_ENV = JSON.stringify('production');
-    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || ''); //eslint-disable-line no-process-env
-    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
-}
-
 config.plugins.push(new webpack.DefinePlugin({
     'process.env': env,
 }));
 
 // Test mode configuration
 if (targetIsTest) {
-    config.entry = ['./root.jsx'];
+    config.entry = ['./root.tsx'];
     config.target = 'node';
     config.externals = [nodeExternals()];
 }
@@ -418,6 +474,8 @@ if (targetIsDevServer) {
         ...config,
         devtool: 'eval-cheap-module-source-map',
         devServer: {
+            server: 'https',
+            allowedHosts: 'all',
             liveReload: true,
             proxy: [{
                 context: () => true,
@@ -425,6 +483,7 @@ if (targetIsDevServer) {
                     if (req.url.indexOf('/api') === 0 ||
                         req.url.indexOf('/plugins') === 0 ||
                         req.url.indexOf('/static/plugins/') === 0 ||
+                        req.url.indexOf('/broadcasting/auth') === 0 ||
                         req.url.indexOf('/sockjs-node/') !== -1) {
                         return null; // send through proxy to the server
                     }
@@ -436,7 +495,8 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: 'http://localhost:8065',
+                target: process.env.BASE_URL || 'https://kchat.preprod.dev.infomaniak.ch', //eslint-disable-line no-process-env
+                changeOrigin: true,
                 xfwd: true,
                 ws: true,
             }],
@@ -444,6 +504,7 @@ if (targetIsDevServer) {
             devMiddleware: {
                 writeToDisk: false,
             },
+            headers: {'Service-Worker-Allowed': '/'},
         },
         performance: false,
         optimization: {
@@ -459,6 +520,13 @@ if (targetIsDevServer) {
         },
     };
 }
+
+var sw = {
+    entry: ['./service-worker.js'],
+    output: {
+        filename: 'service-worker.js',
+    },
+};
 
 // Export PRODUCTION_PERF_DEBUG=1 when running webpack to enable support for the react profiler
 // even while generating production code. (Performance testing development code is typically
@@ -476,4 +544,4 @@ if (process.env.PRODUCTION_PERF_DEBUG) { //eslint-disable-line no-process-env
     };
 }
 
-module.exports = config;
+module.exports = [sw, config];

@@ -2,12 +2,17 @@
 // See LICENSE.txt for license information.
 
 import {getScheme} from 'utils/url';
+import {fixedDecodeURIComponent} from 'utils/text_formatting';
 
 import RemoveMarkdown from './remove_markdown';
 
 export default class LinkOnlyRenderer extends RemoveMarkdown {
     public link(href: string, title: string, text: string) {
         let outHref = href;
+        let outText = text;
+
+        outHref = fixedDecodeURIComponent(outHref);
+        outText = fixedDecodeURIComponent(outText);
 
         if (!getScheme(href)) {
             outHref = `http://${outHref}`;
@@ -19,7 +24,7 @@ export default class LinkOnlyRenderer extends RemoveMarkdown {
             output += ' title="' + title + '"';
         }
 
-        output += `>${text}</a>`;
+        output += `>${outText}</a>`;
 
         return output;
     }

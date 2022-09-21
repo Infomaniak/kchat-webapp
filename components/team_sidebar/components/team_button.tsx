@@ -162,15 +162,15 @@ class TeamButton extends React.PureComponent<Props> {
         );
 
         let teamButton = (
-            <Link
+            <a
                 id={`${this.props.url.slice(1)}TeamButton`}
                 aria-label={ariaLabel}
                 className={disabled}
-                to={this.props.url}
-                onClick={handleClick}
+                href={this.props.url}
+                // onClick={handleClick}
             >
                 {btn}
-            </Link>
+            </a>
         );
 
         if (isDesktopApp()) {

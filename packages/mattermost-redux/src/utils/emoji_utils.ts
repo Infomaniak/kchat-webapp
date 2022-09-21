@@ -21,14 +21,13 @@ export function getEmojiImageUrl(emoji: Emoji): string {
     if (isSystemEmoji(emoji)) {
         const emojiUnified = emoji?.unified?.toLowerCase() ?? '';
         const filename = emojiUnified || emoji.short_names[0];
-
         return Client4.getSystemEmojiImageUrl(filename);
     }
 
     return Client4.getEmojiRoute(emoji.id) + '/image';
 }
 
-export function parseNeededCustomEmojisFromText(text: string, systemEmojis: Map<string, SystemEmoji>, customEmojisByName: Map<string, CustomEmoji>, nonExistentEmoji: Set<string>): Set<string> {
+export function parseNeededCustomEmojisFromText(text: string, systemEmojis: Set<string>, customEmojisByName: Map<string, CustomEmoji>, nonExistentEmoji: Set<string>): Set<string> {
     if (!text.includes(':')) {
         return new Set();
     }

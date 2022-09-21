@@ -55,7 +55,7 @@ function makeMapStateToProps() {
         const selectedCard = getSelectedPostCard(state);
         const config = getConfig(state);
         const channel = state.entities.channels.channels[ownProps.post.channel_id];
-        const channelIsArchived = channel ? channel.delete_at !== 0 : null;
+        const channelIsArchived = channel ? channel.delete_at !== 0 : undefined;
         const enableEmojiPicker = config.EnableEmojiPicker === 'true' && !channelIsArchived;
         const teamId = getCurrentTeamId(state);
         const shortcutReactToLastPostEmittedFrom = getShortcutReactToLastPostEmittedFrom(state);
@@ -77,7 +77,7 @@ function makeMapStateToProps() {
             enableEmojiPicker,
             isReadOnly: channelIsArchived,
             shouldShowDotMenu: shouldShowDotMenu(state, ownProps.post, channel),
-            shouldShowActionsMenu: shouldShowActionsMenu(state, ownProps.post),
+            shouldShowActionsMenu: false, //shouldShowActionsMenu(state, ownProps.post),
             shortcutReactToLastPostEmittedFrom,
             collapsedThreadsEnabled: isCollapsedThreadsEnabled(state),
             hasReplies: getReplyCount(state, ownProps.post) > 0,

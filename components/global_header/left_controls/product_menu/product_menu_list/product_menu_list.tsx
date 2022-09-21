@@ -4,7 +4,7 @@
 import React from 'react';
 import {useIntl} from 'react-intl';
 
-import Icon from '@mattermost/compass-components/foundations/icon';
+import Icon from '@infomaniak/compass-components/foundations/icon';
 
 import {UserProfile} from '@mattermost/types/users';
 import {Permissions} from 'mattermost-redux/constants';

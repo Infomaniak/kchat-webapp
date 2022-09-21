@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 import React from 'react';
 import {shallow} from 'enzyme';
-import Icon from '@mattermost/compass-components/foundations/icon';
+import Icon from '@infomaniak/compass-components/foundations/icon';
 
 import {TopLevelProducts} from 'utils/constants';
 

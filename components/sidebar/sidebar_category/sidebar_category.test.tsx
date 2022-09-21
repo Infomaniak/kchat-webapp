@@ -33,6 +33,9 @@ describe('components/sidebar/sidebar_category', () => {
         limitVisibleDMsGMs: 10000,
         touchedInviteMembersButton: false,
         currentUserId: '',
+        menuButtonRef: {
+            current: null,
+        },
         actions: {
             setCategoryCollapsed: jest.fn(),
             setCategorySorting: jest.fn(),
@@ -88,7 +91,6 @@ describe('components/sidebar/sidebar_category', () => {
             droppableChildren({}, {}),
         );
         expect(droppableInner).toMatchSnapshot();
-        expect(droppableInner.find('.SidebarCategory_newLabel')).toHaveLength(1);
         expect(droppableInner.find('.SidebarCategory_newDropBox')).toHaveLength(1);
     });
 

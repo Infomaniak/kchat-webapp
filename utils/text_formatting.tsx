@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/* eslint-disable max-lines */
+
 import emojiRegex from 'emoji-regex';
 import {Renderer} from 'marked';
 
@@ -239,9 +241,16 @@ export function formatText(
              * the Markdown.format function removes all duplicate line-breaks beforehand, so it is safe to just
              * replace occurrences which are not followed by opening <p> tags to prevent duplicate line-breaks
              *
-             * @link to regex101.com: https://regex101.com/r/iPZ02c/1
+             * The data-codeblock-code part is a fix for MM-45349 - do not replace newlines with `<br/>`
+             * in code blocks, as they become visible in the message
              */
-            output = output.replace(/[\r\n]+(?!(<p>))/g, '<br/>');
+            output = output.replace(/data-codeblock-code="[^"]+"|[\r\n]+(?!(<p>))/g, (match: string) => {
+                if (match.includes('data-codeblock-code')) {
+                    return match;
+                }
+
+                return '<br/>';
+            });
 
             /*
              * the replacer is not ideal, since it replaces every occurence with a new div
@@ -919,4 +928,17 @@ function fixedCharCodeAt(str: string, idx = 0) {
     }
 
     return code;
+}
+
+export function fixedEncodeURIComponent(str: string) {
+    return str.replace(/[-._~:/?#[\]@!$&'()*+,;=]/g, (c: string) => {
+        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+    });
+}
+
+export function fixedDecodeURIComponent(str: string) {
+    return str.replace(/%(2D|2E|5F|7E|3A|2F|3F|23|5B|5C|5D|40|21|24|26|27|28|29|2A|2B|2C|3B|3D)/g, (inChar) => {
+        const c = inChar.substring(1);
+        return String.fromCharCode(parseInt(c, 16));
+    });
 }

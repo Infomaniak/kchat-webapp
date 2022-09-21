@@ -4,8 +4,8 @@
     .video-div {
         position: relative;
         overflow: hidden;
-        max-width: 480px;
-        height: 360px;
+        max-width: 380px;
+        height: 290px;
         margin-bottom: 8px;
         border-radius: 4px;
 
@@ -83,8 +83,8 @@
 
     .img-div {
         position: relative;
-        max-width: 480px;
-        max-height: 350px;
+        max-width: 380px;
+        max-height: 290px;
         margin-bottom: 8px;
         border-radius: 4px;
         -moz-force-broken-image-icon: 1;
@@ -95,7 +95,7 @@
         }
 
         &.placeholder {
-            height: 350px;
+            height: 290px;
         }
 
         .sidebar--right & {
@@ -109,7 +109,7 @@
 
     .video-div__placeholder {
         display: flex;
-        height: 360px;
+        height: 290px;
         align-items: center;
         background-color: black;
     }

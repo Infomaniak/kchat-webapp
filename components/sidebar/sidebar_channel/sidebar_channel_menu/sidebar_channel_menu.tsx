@@ -33,6 +33,7 @@ type Props = {
     isCollapsed: boolean;
     isMenuOpen: boolean;
     onToggleMenu: (isMenuOpen: boolean) => void;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
     actions: {
         markChannelAsRead: (channelId: string) => void;
         favoriteChannel: (channelId: string) => void;
@@ -262,6 +263,7 @@ export class SidebarChannelMenu extends React.PureComponent<Props, State> {
             intl,
             isCollapsed,
             isMenuOpen,
+            menuTriggerRef,
         } = this.props;
 
         return (
@@ -274,6 +276,7 @@ export class SidebarChannelMenu extends React.PureComponent<Props, State> {
                 onToggleMenu={this.onToggleMenu}
                 tooltipText={intl.formatMessage({id: 'sidebar_left.sidebar_channel_menu.editChannel', defaultMessage: 'Channel options'})}
                 tabIndex={isCollapsed ? -1 : 0}
+                menuButtonRef={menuTriggerRef}
             >
                 {isMenuOpen && this.renderDropdownItems()}
             </SidebarMenu>

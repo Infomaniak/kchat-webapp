@@ -5,15 +5,19 @@ import React from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import classNames from 'classnames';
 
-import {ActionFunc} from 'mattermost-redux/types/actions';
-
 import LoadingScreen from 'components/loading_screen';
 import PermalinkView from 'components/permalink_view';
-import ChannelHeaderMobile from 'components/channel_header_mobile';
 import ChannelIdentifierRouter from 'components/channel_layout/channel_identifier_router';
 import PlaybookRunner from 'components/channel_layout/playbook_runner';
-import ActivityAndInsights from 'components/activity_and_insights/activity_and_insights';
 import {makeAsyncComponent} from 'components/async_load';
+import MeetWidget from 'components/kmeet_conference/call_widget';
+
+import type {OwnProps, PropsFromRedux} from './index';
+
+const LazyChannelHeaderMobile = makeAsyncComponent(
+    'LazyChannelHeaderMobile',
+    React.lazy(() => import('components/channel_header_mobile')),
+);
 
 const LazyGlobalThreads = makeAsyncComponent(
     'LazyGlobalThreads',
@@ -35,25 +39,17 @@ const LazyDrafts = makeAsyncComponent(
     ),
 );
 
-type Props = {
-    match: {
-        url: string;
-    };
-    location: {
-        pathname: string;
-    };
-    lastChannelPath: string;
-    lhsOpen: boolean;
-    rhsOpen: boolean;
-    rhsMenuOpen: boolean;
-    isCollapsedThreadsEnabled: boolean;
-    currentUserId: string;
-    insightsAreEnabled: boolean;
-    isMobileView: boolean;
-    actions: {
-        getProfiles: (page?: number, perPage?: number, options?: Record<string, string | boolean>) => ActionFunc;
-    };
-};
+const LazyActivityAndInsights = makeAsyncComponent(
+    'LazyActivityAndInsights',
+    React.lazy(() => import('components/activity_and_insights/activity_and_insights')),
+    (
+        <div className='app__content'>
+            <LoadingScreen/>
+        </div>
+    ),
+);
+
+type Props = PropsFromRedux & OwnProps;
 
 type State = {
     returnTo: string;
@@ -89,61 +85,64 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
         const url = this.props.match.url;
 
         return (
-            <div
-                key='inner-wrap'
-                className={classNames('inner-wrap', 'channel__wrap', {
-                    'move--right': this.props.lhsOpen,
-                    'move--left': this.props.rhsOpen,
-                    'move--left-small': this.props.rhsMenuOpen,
-                })}
-            >
-                {isMobileView && (
-                    <div className='row header'>
-                        <div id='navbar_wrapper'>
-                            <ChannelHeaderMobile/>
+            <React.Fragment>
+                {this.props.callChannel && <MeetWidget/>}
+                <div
+                    key='inner-wrap'
+                    className={classNames('inner-wrap', 'channel__wrap', {
+                        'move--right': this.props.lhsOpen,
+                        'move--left': this.props.rhsOpen,
+                        'move--left-small': this.props.rhsMenuOpen,
+                    })}
+                >
+                    {isMobileView && (
+                        <div className='row header'>
+                            <div id='navbar_wrapper'>
+                                <LazyChannelHeaderMobile/>
+                            </div>
                         </div>
-                    </div>
-                )}
-                <div className='row main'>
-                    <Switch>
-                        <Route
-                            path={`${url}/pl/:postid`}
-                            render={(props) => (
-                                <PermalinkView
-                                    {...props}
-                                    returnTo={this.state.returnTo}
+                    )}
+                    <div className='row main'>
+                        <Switch>
+                            <Route
+                                path={`${url}/pl/:postid`}
+                                render={(props) => (
+                                    <PermalinkView
+                                        {...props}
+                                        returnTo={this.state.returnTo}
+                                    />
+                                )}
+                            />
+                            <Route
+                                path='/:team/:path(channels|messages)/:identifier/:postid?'
+                                component={ChannelIdentifierRouter}
+                            />
+                            <Route
+                                path='/:team/_playbooks/:playbookId/run'
+                            >
+                                <PlaybookRunner/>
+                            </Route>
+                            {isCollapsedThreadsEnabled ? (
+                                <Route
+                                    path='/:team/threads/:threadIdentifier?'
+                                    component={LazyGlobalThreads}
                                 />
-                            )}
-                        />
-                        <Route
-                            path='/:team/:path(channels|messages)/:identifier/:postid?'
-                            component={ChannelIdentifierRouter}
-                        />
-                        <Route
-                            path='/:team/_playbooks/:playbookId/run'
-                        >
-                            <PlaybookRunner/>
-                        </Route>
-                        {isCollapsedThreadsEnabled ? (
+                            ) : null}
                             <Route
-                                path='/:team/threads/:threadIdentifier?'
-                                component={LazyGlobalThreads}
+                                path='/:team/drafts'
+                                component={LazyDrafts}
                             />
-                        ) : null}
-                        <Route
-                            path='/:team/drafts'
-                            component={LazyDrafts}
-                        />
-                        {insightsAreEnabled ? (
-                            <Route
-                                path='/:team/activity-and-insights'
-                                component={ActivityAndInsights}
-                            />
-                        ) : null}
-                        <Redirect to={lastChannelPath}/>
-                    </Switch>
+                            {insightsAreEnabled ? (
+                                <Route
+                                    path='/:team/activity-and-insights'
+                                    component={LazyActivityAndInsights}
+                                />
+                            ) : null}
+                            <Redirect to={lastChannelPath}/>
+                        </Switch>
+                    </div>
                 </div>
-            </div>
+            </React.Fragment>
         );
     }
 }

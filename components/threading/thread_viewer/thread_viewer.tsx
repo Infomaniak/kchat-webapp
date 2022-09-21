@@ -1,8 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-/* eslint-disable max-lines */
-
 import React, {HTMLAttributes} from 'react';
 import classNames from 'classnames';
 
@@ -20,7 +18,7 @@ import ThreadViewerVirtualized from '../virtualized_thread_viewer';
 
 import './thread_viewer.scss';
 
-const DeferredThreadViewerVirt = deferComponentRender(ThreadViewerVirtualized);
+const DeferredThreadViewerVirt = deferComponentRender(ThreadViewerVirtualized); // where this is called is causing issues
 
 type Attrs = Pick<HTMLAttributes<HTMLDivElement>, 'className' | 'id'>;
 

@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Redirect} from 'react-router';
+import {Redirect} from 'react-router-dom';
 
 import semver from 'semver';
 
@@ -82,7 +82,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
         // Initialize websocket
         WebSocketActions.initialize();
 
-        if (this.props.enableTimezone) {
+        if (this.props.enableTimezone && this.props.currentUser) {
             this.props.actions.autoUpdateTimezone(getBrowserTimezone());
         }
 
@@ -207,7 +207,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
     }
 
     private handleBackSpace = (e: KeyboardEvent): void => {
-        const excludedElements = ['input', 'textarea'];
+        const excludedElements = ['input', 'textarea', 'module-reporting-tools-component'];
 
         if (e.which === BACKSPACE_CHAR && !(excludedElements.includes((e.target as HTMLElement).tagName.toLowerCase()))) {
             e.preventDefault();
@@ -217,9 +217,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
     private handleBeforeUnload = (): void => {
         // remove the event listener to prevent getting stuck in a loop
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
-        if (document.cookie.indexOf('MMUSERID=') > -1) {
-            viewChannel('', this.props.currentChannelId || '')(dispatch, getState);
-        }
+        viewChannel('', this.props.currentChannelId || '')(dispatch, getState);
         WebSocketActions.close();
     }
 }

@@ -13,6 +13,7 @@ import posts from './posts';
 import modals from './modals';
 import emoji from './emoji';
 import i18n from './i18n';
+import ik from './ik';
 import lhs from './lhs';
 import search from './search';
 import notice from './notice';
@@ -26,6 +27,7 @@ import textbox from './textbox';
 import statusDropdown from './status_dropdown';
 import addChannelDropdown from './add_channel_dropdown';
 import threads from './threads';
+import calls from './calls';
 import onboardingTasks from './onboarding_tasks';
 
 export default combineReducers({
@@ -39,6 +41,7 @@ export default combineReducers({
     modals,
     emoji,
     i18n,
+    ik,
     lhs,
     search,
     notice,
@@ -53,4 +56,5 @@ export default combineReducers({
     onboardingTasks,
     threads,
     productMenu,
+    calls,
 });

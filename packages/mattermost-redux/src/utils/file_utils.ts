@@ -4,8 +4,8 @@
 import {Files, General} from '../constants';
 import {Client4} from 'mattermost-redux/client';
 import {FileInfo} from '@mattermost/types/files';
-
-const mimeDB = require('mime-db');
+import {isDesktopApp} from 'utils/user_agent';
+import {buildQueryString} from 'packages/client/src/helpers';
 
 export function getFormattedFileSize(file: FileInfo): string {
     const bytes = file.size;
@@ -52,34 +52,23 @@ export function getFileType(file: FileInfo): string {
     }) || 'other';
 }
 
-let extToMime: Record<string, string>;
-function buildExtToMime() {
-    extToMime = {};
-    Object.keys(mimeDB).forEach((key) => {
-        const mime = mimeDB[key];
-        if (mime.extensions) {
-            mime.extensions.forEach((ext: string) => {
-                extToMime[ext] = key;
-            });
-        }
-    });
-}
-
-export function lookupMimeType(filename: string): string {
-    if (!extToMime) {
-        buildExtToMime();
-    }
-
-    const ext = filename.split('.').pop()!.toLowerCase();
-    return extToMime[ext] || 'application/octet-stream';
-}
-
 export function getFileUrl(fileId: string): string {
-    return Client4.getFileRoute(fileId);
+    const params: any = {};
+
+    if (isDesktopApp() && Client4.getToken()) {
+        params.access_token = Client4.getToken();
+    }
+    return `${Client4.getFileRoute(fileId)}${buildQueryString(params)}`;
 }
 
 export function getFileDownloadUrl(fileId: string): string {
-    return `${Client4.getFileRoute(fileId)}?download=1`;
+    const params: any = {};
+    params.download = 1;
+
+    if (isDesktopApp() && Client4.getToken()) {
+        params.access_token = Client4.getToken();
+    }
+    return `${Client4.getFileRoute(fileId)}${buildQueryString(params)}`;
 }
 
 export function getFileThumbnailUrl(fileId: string): string {

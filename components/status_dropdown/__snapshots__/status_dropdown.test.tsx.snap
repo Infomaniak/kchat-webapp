@@ -184,22 +184,8 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(injectIntl(UserSettingsModal))",
-            "type": [Function],
-          }
-        }
         icon={
           <Icon
             glyph="account-outline"
@@ -207,7 +193,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
         text="Profile"
       />
@@ -329,6 +315,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           />
@@ -495,22 +482,8 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(injectIntl(UserSettingsModal))",
-            "type": [Function],
-          }
-        }
         icon={
           <Icon
             glyph="account-outline"
@@ -518,7 +491,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
         text="Profile"
       />
@@ -631,6 +604,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -758,22 +732,8 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(injectIntl(UserSettingsModal))",
-            "type": [Function],
-          }
-        }
         icon={
           <Icon
             glyph="account-outline"
@@ -781,7 +741,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
         text="Profile"
       />
@@ -894,6 +854,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -1021,22 +982,8 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(injectIntl(UserSettingsModal))",
-            "type": [Function],
-          }
-        }
         icon={
           <Icon
             glyph="account-outline"
@@ -1044,7 +991,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
         text="Profile"
       />
@@ -1157,6 +1104,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -1285,22 +1233,8 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(injectIntl(UserSettingsModal))",
-            "type": [Function],
-          }
-        }
         icon={
           <Icon
             glyph="account-outline"
@@ -1308,7 +1242,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
         text="Profile"
       />
@@ -1523,22 +1457,8 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(injectIntl(UserSettingsModal))",
-            "type": [Function],
-          }
-        }
         icon={
           <Icon
             glyph="account-outline"
@@ -1546,7 +1466,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
         text="Profile"
       />
@@ -1753,22 +1673,8 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(injectIntl(UserSettingsModal))",
-            "type": [Function],
-          }
-        }
         icon={
           <Icon
             glyph="account-outline"
@@ -1776,7 +1682,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
         text="Profile"
       />
@@ -1889,6 +1795,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -2016,22 +1923,8 @@ exports[`components/StatusDropdown should not show clear status button when cust
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(injectIntl(UserSettingsModal))",
-            "type": [Function],
-          }
-        }
         icon={
           <Icon
             glyph="account-outline"
@@ -2039,7 +1932,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
         text="Profile"
       />
@@ -2161,6 +2054,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           />
@@ -2327,22 +2221,8 @@ exports[`components/StatusDropdown should show clear status button when custom s
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(injectIntl(UserSettingsModal))",
-            "type": [Function],
-          }
-        }
         icon={
           <Icon
             glyph="account-outline"
@@ -2350,7 +2230,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
         text="Profile"
       />

@@ -12,7 +12,7 @@ import {
 import {logout, loadMe, loadMeREST} from 'mattermost-redux/actions/users';
 import {Preferences} from 'mattermost-redux/constants';
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentTeamId, getMyTeams, getTeam, getMyTeamMember, getTeamMemberships} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTeamId, getMyKSuites, getTeam, getMyTeamMember, getTeamMemberships} from 'mattermost-redux/selectors/entities/teams';
 import {getBool, isCollapsedThreadsEnabled, isGraphQLEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedirectChannelNameForTeam, getChannelsNameMapInTeam, getAllDirectChannels, getChannelMessageCount} from 'mattermost-redux/selectors/entities/channels';
@@ -47,6 +47,9 @@ import {ActionTypes, PostTypes, RHSStates, ModalIdentifiers, PreviousViewedTypes
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import * as Utils from 'utils/utils';
 import SubMenuModal from '../components/widgets/menu/menu_modals/submenu_modal/submenu_modal';
+
+import {isDesktopApp} from '../utils/user_agent';
+import {IKConstants} from '../utils/constants-ik';
 
 import {openModal} from './views/modals';
 
@@ -221,6 +224,7 @@ export function emitLocalUserTypingEvent(channelId: string, parentPostId: string
 
         const t = Date.now();
         const stats = getCurrentChannelStats(state);
+        const userId = getCurrentUserId(state);
         const membersInChannel = stats ? stats.member_count : 0;
 
         const timeBetweenUserTypingUpdatesMilliseconds = Utils.stringToNumber(config.TimeBetweenUserTypingUpdatesMilliseconds);
@@ -228,7 +232,7 @@ export function emitLocalUserTypingEvent(channelId: string, parentPostId: string
 
         if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
             (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
-            WebSocketClient.userTyping(channelId, parentPostId);
+            WebSocketClient.userTyping(channelId, userId, parentPostId);
             lastTimeTypingSent = t;
         }
 
@@ -249,15 +253,34 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         if (shouldSignalLogout) {
             BrowserStore.signalLogout();
         }
-
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
 
         clearUserCookie();
 
-        browserHistory.push(redirectTo);
+        if (isDesktopApp()) {
+            if (redirectTo && redirectTo !== 'ikLogout') {
+                browserHistory.push(redirectTo);
+            } else {
+                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+            }
+        } else if (redirectTo && redirectTo !== 'ikLogout') {
+            browserHistory.push(redirectTo);
+        } else {
+            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+        }
     }).catch(() => {
-        browserHistory.push(redirectTo);
+        if (isDesktopApp()) {
+            if (redirectTo && redirectTo !== 'ikLogout') {
+                browserHistory.push(redirectTo);
+            } else {
+                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+            }
+        } else if (redirectTo && redirectTo !== 'ikLogout') {
+            browserHistory.push(redirectTo);
+        } else {
+            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+        }
     });
 }
 
@@ -351,7 +374,7 @@ export async function redirectUserToDefaultTeam() {
     const locale = getCurrentLocale(state);
     const teamId = LocalStorageStore.getPreviousTeamId(user.id);
 
-    let myTeams = getMyTeams(state);
+    let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
         browserHistory.push('/select_team');
         return;

@@ -4,7 +4,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 
-import IconButton from '@mattermost/compass-components/components/icon-button';
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {GlobalState} from 'types/store';
 

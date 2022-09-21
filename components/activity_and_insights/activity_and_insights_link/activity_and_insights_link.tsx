@@ -6,7 +6,7 @@ import {Link, useRouteMatch, useLocation, matchPath} from 'react-router-dom';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import classNames from 'classnames';
-import Icon from '@mattermost/compass-components/foundations/icon';
+import Icon from '@infomaniak/compass-components/foundations/icon';
 
 import {insightsAreEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {t} from 'utils/i18n';

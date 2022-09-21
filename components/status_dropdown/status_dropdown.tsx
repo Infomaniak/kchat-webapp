@@ -1,14 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable max-lines */
 
 import React, {ReactNode} from 'react';
 import classNames from 'classnames';
 import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
-import StatusIcon from '@mattermost/compass-components/components/status-icon';
-import Text from '@mattermost/compass-components/components/text';
-import Icon from '@mattermost/compass-components/foundations/icon/Icon';
-import {TUserStatus} from '@mattermost/compass-components/shared';
+import StatusIcon from '@infomaniak/compass-components/components/status-icon';
+import Text from '@infomaniak/compass-components/components/text';
+import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
+import {TUserStatus} from '@infomaniak/compass-components/shared';
 
 import {PreferenceType} from '@mattermost/types/preferences';
 import {ActionFunc} from 'mattermost-redux/types/actions';
@@ -22,7 +23,6 @@ import ExpiryTime from 'components/custom_status/expiry_time';
 import DndCustomTimePicker from 'components/dnd_custom_time_picker_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import ResetStatusModal from 'components/reset_status_modal';
-import UserSettingsModal from 'components/user_settings/modal';
 import EmojiIcon from 'components/widgets/icons/emoji_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
@@ -44,6 +44,7 @@ type Props = {
     status?: string;
     userId: string;
     profilePicture: string;
+    // profilePicture: Promise<string> | string;
     autoResetPref?: string;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
@@ -193,7 +194,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
     };
 
     handleEmitUserLoggedOutEvent = (): void => {
-        GlobalActions.emitUserLoggedOutEvent();
+        GlobalActions.emitUserLoggedOutEvent('ikLogout');
     }
 
     onToggle = (open: boolean): void => {
@@ -323,6 +324,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                             className='custom_status__text'
                         />
                         <Text
+                            className='custom_status__textContent'
                             margin='none'
                             color='disabled'
                         >
@@ -347,6 +349,11 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
         const setAway = needsConfirm ? () => this.showStatusChangeConfirmation('away') : this.setAway;
         const setOffline = needsConfirm ? () => this.showStatusChangeConfirmation('offline') : this.setOffline;
         const setCustomTimedDnd = needsConfirm ? () => this.showStatusChangeConfirmation('dnd') : this.setCustomTimedDnd;
+
+        const redirectToManagerProfile = (e: Event): void => {
+            e.preventDefault();
+            window.open('https://manager.infomaniak.com/v3/ng/profile/user/dashboard', '_blank');
+        };
 
         const selectedIndicator = (
             <Icon
@@ -515,12 +522,10 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                         />
                     </Menu.Group>
                     <Menu.Group>
-                        <Menu.ItemToggleModalRedux
+                        <Menu.ItemAction
                             id='accountSettings'
                             ariaLabel='Profile'
-                            modalId={ModalIdentifiers.USER_SETTINGS}
-                            dialogType={UserSettingsModal}
-                            dialogProps={{isContentProductSettings: false}}
+                            onClick={redirectToManagerProfile}
                             text={localizeMessage('navbar_dropdown.accountSettings', 'Profile')}
                             icon={(
                                 <Icon
@@ -537,7 +542,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                                     <CompleteYourProfileTour/>
                                 </div>
                             )}
-                        </Menu.ItemToggleModalRedux>
+                        </Menu.ItemAction>
                     </Menu.Group>
                     <Menu.Group>
                         <Menu.ItemAction

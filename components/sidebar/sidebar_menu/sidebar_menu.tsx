@@ -25,6 +25,7 @@ type Props = {
     draggingState: DraggingState;
     tabIndex?: number;
     additionalClass?: string;
+    menuButtonRef: React.RefObject<HTMLButtonElement>;
 };
 
 type State = {
@@ -34,7 +35,7 @@ type State = {
 export default class SidebarMenu extends React.PureComponent<Props, State> {
     menuWrapperRef: React.RefObject<MenuWrapper>;
     menuRef?: Menu;
-    menuButtonRef: React.RefObject<HTMLButtonElement>;
+    // menuButtonRef: React.RefObject<HTMLButtonElement>;
 
     constructor(props: Props) {
         super(props);
@@ -44,7 +45,7 @@ export default class SidebarMenu extends React.PureComponent<Props, State> {
         };
 
         this.menuWrapperRef = React.createRef();
-        this.menuButtonRef = React.createRef();
+        // this.menuButtonRef = React.createRef();
     }
 
     componentDidUpdate(prevProps: Props) {
@@ -79,11 +80,11 @@ export default class SidebarMenu extends React.PureComponent<Props, State> {
     }
 
     setMenuPosition = () => {
-        if (!this.menuButtonRef.current) {
+        if (!this.props.menuButtonRef.current) {
             return;
         }
 
-        const buttonRect = this.menuButtonRef.current?.getBoundingClientRect();
+        const buttonRect = this.props.menuButtonRef.current?.getBoundingClientRect();
         const y = typeof buttonRect?.y === 'undefined' ? buttonRect?.top : buttonRect.y;
         const windowHeight = window.innerHeight;
 
@@ -103,8 +104,8 @@ export default class SidebarMenu extends React.PureComponent<Props, State> {
 
         if (this.menuRef) {
             const menuRef = this.menuRef.node.current?.parentElement as HTMLDivElement;
-            const openUpOffset = openUp ? -this.menuButtonRef.current.getBoundingClientRect().height : 0;
-            menuRef.style.top = `${window.scrollY + this.menuButtonRef.current.getBoundingClientRect().top + this.menuButtonRef.current.clientHeight + openUpOffset}px`;
+            const openUpOffset = openUp ? -this.props.menuButtonRef.current.getBoundingClientRect().height : 0;
+            menuRef.style.top = `${window.scrollY + this.props.menuButtonRef.current.getBoundingClientRect().top + this.props.menuButtonRef.current.clientHeight + openUpOffset}px`;
         }
     }
 
@@ -144,7 +145,7 @@ export default class SidebarMenu extends React.PureComponent<Props, State> {
                     disabled={isMenuOpen}
                 >
                     <button
-                        ref={this.menuButtonRef}
+                        ref={this.props.menuButtonRef}
                         className={classNames(['SidebarMenu_menuButton', {additionalClass}])}
                         aria-label={buttonAriaLabel}
                         tabIndex={this.props.tabIndex}

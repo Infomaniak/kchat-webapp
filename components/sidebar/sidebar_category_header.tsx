@@ -37,6 +37,7 @@ type Props = StaticProps & {
     isDraggingOver?: boolean;
     muted: boolean;
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
+    onContextMenu: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 export const SidebarCategoryHeader = React.forwardRef((props: Props, ref?: React.Ref<HTMLButtonElement>) => {
@@ -46,6 +47,7 @@ export const SidebarCategoryHeader = React.forwardRef((props: Props, ref?: React
                 muted: props.muted,
                 dragging: props.isDragging,
             })}
+            onContextMenu={props.onContextMenu}
         >
             <button
                 ref={ref}

@@ -48,12 +48,12 @@ export function sendDesktopNotification(post, msgProps) {
 
         let mentions = [];
         if (msgProps.mentions) {
-            mentions = JSON.parse(msgProps.mentions);
+            mentions = msgProps.mentions;
         }
 
         let followers = [];
         if (msgProps.followers) {
-            followers = JSON.parse(msgProps.followers);
+            followers = msgProps.followers;
             mentions = [...new Set([...followers, ...mentions])];
         }
 
@@ -77,7 +77,7 @@ export function sendDesktopNotification(post, msgProps) {
 
         if (notifyLevel === NotificationLevels.NONE) {
             return;
-        } else if (notifyLevel === NotificationLevels.MENTION && mentions.indexOf(user.id) === -1 && msgProps.channel_type !== Constants.DM_CHANNEL) {
+        } else if (notifyLevel === NotificationLevels.MENTION && Array.isArray(mentions) && mentions.indexOf(user.id) === -1 && msgProps.channel_type !== Constants.DM_CHANNEL) {
             return;
         } else if (isCrtReply && notifyLevel === NotificationLevels.ALL && followers.indexOf(currentUserId) === -1) {
             // if user is not following the thread don't notify
@@ -121,16 +121,17 @@ export function sendDesktopNotification(post, msgProps) {
 
         let notifyText = post.message;
 
-        const msgPropsPost = JSON.parse(msgProps.post);
+        const msgPropsPost = msgProps.post;
         const attachments = msgPropsPost && msgPropsPost.props && msgPropsPost.props.attachments ? msgPropsPost.props.attachments : [];
         let image = false;
+
         attachments.forEach((attachment) => {
             if (notifyText.length === 0) {
                 notifyText = attachment.fallback ||
                     attachment.pretext ||
                     attachment.text;
             }
-            image |= attachment.image_url.length > 0;
+            image |= attachment.image_url?.length > 0;
         });
 
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);
@@ -182,7 +183,7 @@ export function sendDesktopNotification(post, msgProps) {
             dispatch(notifyMe(title, body, channel, teamId, !sound, soundName, url));
 
             //Don't add extra sounds on native desktop clients
-            if (sound && !isDesktopApp() && !isMobileApp()) {
+            if (sound && !isDesktopApp() && !isMobileApp() && (post && post.type !== 'custom_call')) {
                 Utils.ding(soundName);
             }
         }

@@ -3,7 +3,7 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import {CheckIcon, ExclamationThickIcon} from '@mattermost/compass-icons/components';
+import {CheckIcon, ExclamationThickIcon} from '@infomaniak/compass-icons/components';
 
 import CircularChart from 'components/common/circular_chart/circular_chart';
 

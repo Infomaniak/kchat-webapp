@@ -11,6 +11,7 @@ import {I18nState} from './i18n';
 import {RhsViewState} from './rhs';
 
 import {DraggingState} from '.';
+import { UserProfile } from 'mattermost-redux/types/users';
 
 export type ModalFilters = {
     roles?: string[];
@@ -25,6 +26,7 @@ export type ViewsState = {
             onNavigationConfirmed: () => void;
             showNavigationPrompt: boolean;
         };
+        needsLoggedInLimitReachedCheck: boolean;
     };
 
     announcementBar: {
@@ -58,6 +60,23 @@ export type ViewsState = {
             [channelId: string]: string;
         };
         toastStatus: boolean;
+    };
+
+    calls: {
+        voiceConnectedProfiles: {
+            [channelId: string]: UserProfile[];
+        };
+        voiceUsersStatuses: {
+            [channelId: string]: Object;
+        };
+        callStartAt: {
+            [channelId: string]: number;
+        };
+        expandedView: boolean;
+        switchCallModal: boolean;
+        connectedChannelID: string;
+        connectedCallID: string;
+        voiceConnectedChannels: any;
     };
 
     rhs: RhsViewState;
@@ -97,6 +116,8 @@ export type ViewsState = {
     };
 
     i18n: I18nState;
+
+    ik: { accessToken: string; refreshToken: string };
 
     lhs: {
         isOpen: boolean;

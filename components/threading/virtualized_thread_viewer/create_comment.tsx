@@ -4,7 +4,7 @@
 import React, {memo, forwardRef, useMemo} from 'react';
 import {useSelector} from 'react-redux';
 
-import {ArchiveOutlineIcon} from '@mattermost/compass-icons/components';
+import {ArchiveOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {getIsAdvancedTextEditorEnabled} from 'mattermost-redux/selectors/entities/preferences';
 

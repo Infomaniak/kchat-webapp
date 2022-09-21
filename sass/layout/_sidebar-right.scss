@@ -117,7 +117,7 @@
             padding: 5px 15px 60px 15px;
         }
 
-        .scrollbar--view {
+        .post-right__content {
             .emoji-picker--active & {
                 pointer-events: none;
             }
@@ -285,6 +285,12 @@
         &.sidebar-expanded {
             width: 52%;
         }
+    }
+
+    .sidebar--right__limitation-noresult {
+        width: 100%;
+        padding-top: 15px;
+        transition: width 0.25s ease-in;
     }
 
     .suggestion-list__content {

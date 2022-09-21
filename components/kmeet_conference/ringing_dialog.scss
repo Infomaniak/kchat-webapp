@@ -1,0 +1,53 @@
+.modal .GenericModal{
+
+    &__body {
+        padding: 0;
+    }
+
+    &.modal-dialog.CallRingingModal {
+        max-width: 270px;
+        .modal-content {
+            background: #fff;
+            padding: 15px;
+        }
+        .modal-footer {
+            display: none;
+        }
+        .content-body {
+            display: flex;
+            justify-content: center;
+            padding-top: 40px;
+        }
+        .content-calling {
+            text-align: center;
+            padding: 15px;
+
+            &__user {
+                color: #333333;
+                font-weight: 600;
+            }
+            &__info {
+                color: #666666;
+            }
+        }
+        .content-actions {
+            padding: 0;
+            padding-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            button {
+                flex: auto;
+                min-height: 44px;
+                color: white;
+                &.accept {
+                    background: var(--online-indicator);
+                }
+                &.decline {
+                    background: var(--dnd-indicator);
+                }
+            }
+        }
+    }
+}

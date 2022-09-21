@@ -3,7 +3,7 @@
 
 import React, {memo, useRef} from 'react';
 import classNames from 'classnames';
-import {CloseIcon, MenuDownIcon, MenuRightIcon} from '@mattermost/compass-icons/components';
+import {CloseIcon, MenuDownIcon, MenuRightIcon} from '@infomaniak/compass-icons/components';
 
 import {useIntl} from 'react-intl';
 

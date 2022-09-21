@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 import React from 'react';
 import styled from 'styled-components';
-import StatusIcon from '@mattermost/compass-components/components/status-icon';
+import StatusIcon from '@infomaniak/compass-components/components/status-icon';
 
 const Animation = styled.div`
     position: absolute;

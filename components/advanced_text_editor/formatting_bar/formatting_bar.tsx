@@ -7,7 +7,7 @@ import {useIntl} from 'react-intl';
 import styled from 'styled-components';
 import {useFloating, offset} from '@floating-ui/react-dom';
 import {CSSTransition} from 'react-transition-group';
-import {DotsHorizontalIcon} from '@mattermost/compass-icons/components';
+import {DotsHorizontalIcon} from '@infomaniak/compass-icons/components';
 
 import {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 import ToggleFormattingBar from '../toggle_formatting_bar/toggle_formatting_bar';

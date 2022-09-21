@@ -104,7 +104,7 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
             const currentTime = (new Date()).getTime();
             if (currentTime > (lastTime + WAKEUP_THRESHOLD)) { // ignore small delays
                 console.log('computer woke up - fetching latest'); //eslint-disable-line no-console
-                reconnect(false);
+                reconnect(true);
             }
             lastTime = currentTime;
         }, WAKEUP_CHECK_INTERVAL);
@@ -230,7 +230,7 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
         // If current team is set, then this is not first load
         // The first load action pulls team unreads
         this.props.actions.getMyTeamUnreads(this.props.collapsedThreads);
-        this.props.actions.selectTeam(team);
+        this.props.actions.selectTeam(team); // this is causing a warning, maybe wrap it in a callback?
         this.props.actions.setPreviousTeamId(team.id);
 
         if (this.props.currentUser && isGuest(this.props.currentUser.roles)) {

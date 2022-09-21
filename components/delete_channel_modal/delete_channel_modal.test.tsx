@@ -13,7 +13,7 @@ import DeleteChannelModal, {Props} from 'components/delete_channel_modal/delete_
 
 describe('components/delete_channel_modal', () => {
     const channel: Channel = {
-        id: 'owsyt8n43jfxjpzh9np93mx1wa',
+        id: 'pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz',
         create_at: 1508265709607,
         update_at: 1508265709607,
         delete_at: 0,
