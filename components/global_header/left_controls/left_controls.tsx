@@ -15,13 +15,17 @@ const LeftControlsContainer = styled.div`
     align-items: center;
     height: 46px;
     flex-shrink: 0;
-    width: 240px;
+    width: 320px;
     background: var(--sidebar-bg);
     border-bottom: solid 1px rgba(var(--sidebar-text-rgb), 0.25);
     padding-left: 10px;
 
     > * + * {
         margin-left: 10px;
+    }
+
+    .multi-teams & {
+        width: 255px
     }
 `;
 
