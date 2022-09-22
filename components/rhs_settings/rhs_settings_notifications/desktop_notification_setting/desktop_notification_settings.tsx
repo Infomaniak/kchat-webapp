@@ -1,0 +1,339 @@
+// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
+// See LICENSE.txt for license information.
+
+import React, {ChangeEvent, RefObject} from 'react';
+import ReactSelect, {ValueType} from 'react-select';
+import {FormattedMessage} from 'react-intl';
+
+import semver from 'semver';
+
+import {NotificationLevels} from 'utils/constants';
+import * as Utils from 'utils/utils';
+import {t} from 'utils/i18n';
+import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_settings_item';
+import SettingItemMin from 'components/setting_item_min';
+import {isDesktopApp} from 'utils/user_agent';
+import {localizeMessage} from 'utils/utils';
+import Toggle from '../../../toggle';
+
+type SelectedOption = {
+    label: string;
+    value: string;
+};
+
+type Props = {
+    activity: string;
+    threads?: string;
+    sound: string;
+    updateSection: (section: string) => void;
+    setParentState: (key: string, value: string | boolean) => void;
+    submit: () => void;
+    cancel: () => void;
+    error: string;
+    active: boolean;
+    saving: boolean;
+    selectedSound: string;
+    isCollapsedThreadsEnabled: boolean;
+};
+
+type State = {
+    selectedOption: SelectedOption;
+    blurDropdown: boolean;
+};
+
+export default class DesktopNotificationSettings extends React.PureComponent<Props, State> {
+    dropdownSoundRef: RefObject<ReactSelect>;
+
+    constructor(props: Props) {
+        super(props);
+        const selectedOption = {value: props.selectedSound, label: props.selectedSound};
+        this.state = {
+            selectedOption,
+            blurDropdown: false,
+        };
+        this.dropdownSoundRef = React.createRef();
+    }
+
+    handleMinUpdateSection = (section: string): void => {
+        this.props.updateSection(section);
+        this.props.cancel();
+    }
+
+    handleMaxUpdateSection = (section: string): void => this.props.updateSection(section);
+
+    handleOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        const key = e.currentTarget.getAttribute('data-key');
+        const value = e.currentTarget.getAttribute('data-value');
+        if (key && value) {
+            this.props.setParentState(key, value);
+        }
+    }
+
+    handleOnSelectChange = (key, value): void => {
+        console.log(key, value);
+        if (key && value) {
+            this.props.setParentState(key, value);
+        }
+    }
+
+    handleThreadsOnChange = (value: 'mention' | 'all'): void => {
+        console.log(value)
+        this.props.setParentState('desktopThreads', value);
+    }
+
+    setDesktopNotificationSound: ReactSelect['onChange'] = (selectedOption: ValueType<SelectedOption>): void => {
+        if (selectedOption && 'value' in selectedOption) {
+            this.props.setParentState('desktopNotificationSound', selectedOption.value);
+            this.setState({selectedOption});
+            Utils.tryNotificationSound(selectedOption.value);
+        }
+    }
+
+    blurDropdown(): void {
+        if (!this.state.blurDropdown) {
+            this.setState({blurDropdown: true});
+            if (this.dropdownSoundRef.current) {
+                this.dropdownSoundRef.current.blur();
+            }
+        }
+    }
+
+    buildMaximizedSetting = (): JSX.Element => {
+        const inputs = [];
+
+        const activityRadio = [false, false, false];
+        if (this.props.activity === NotificationLevels.MENTION) {
+            activityRadio[1] = true;
+        } else if (this.props.activity === NotificationLevels.NONE) {
+            activityRadio[2] = true;
+        } else {
+            activityRadio[0] = true;
+        }
+
+        let soundSection;
+        let notificationSelection;
+        let threadsNotificationSelection;
+        if (this.props.activity !== NotificationLevels.NONE) {
+            const soundRadio = [false, false];
+            if (this.props.sound === 'false') {
+                soundRadio[1] = true;
+            } else {
+                soundRadio[0] = true;
+            }
+
+            if (this.props.sound === 'true') {
+                const sounds = Array.from(Utils.notificationSounds.keys());
+                const options = sounds.map((sound) => {
+                    return {value: sound, label: sound};
+                });
+
+                if (!isDesktopApp() || (window.desktop && semver.gte(window.desktop.version || '', '4.6.0'))) {
+                    notificationSelection = (<div className='pt-2'>
+                        <ReactSelect
+                            className='react-select notification-sound-dropdown'
+                            classNamePrefix='react-select'
+                            id='displaySoundNotification'
+                            options={options}
+                            clearable={false}
+                            onChange={this.setDesktopNotificationSound}
+                            value={this.state.selectedOption}
+                            isSearchable={false}
+                            ref={this.dropdownSoundRef}
+                        /></div>);
+                }
+            }
+
+            if (Utils.hasSoundOptions()) {
+                soundSection = (
+                    <fieldset>
+                        {notificationSelection}
+                        <div className='mt-5'>
+                            <FormattedMessage
+                                id='user.settings.notifications.sounds_info'
+                                defaultMessage='Notification sounds are available on Firefox, Edge, Safari, Chrome and Mattermost Desktop Apps.'
+                            />
+                        </div>
+                    </fieldset>
+                );
+            } else {
+                soundSection = (
+                    <fieldset>
+                        <legend className='form-legend'>
+                            <FormattedMessage
+                                id='user.settings.notifications.desktop.sound'
+                                defaultMessage='Notification sound'
+                            />
+                        </legend>
+                        <br/>
+                        <FormattedMessage
+                            id='user.settings.notifications.soundConfig'
+                            defaultMessage='Please configure notification sounds in your browser settings'
+                        />
+                    </fieldset>
+                );
+            }
+        }
+
+        inputs.push(
+            <div key='userNotificationLevelOption'>
+                <hr/>
+                {soundSection}
+            </div>,
+        );
+
+        return (
+            <>
+                <RhsSettingsItem
+                    title={Utils.localizeMessage('user.settings.notifications.desktop.title', 'Desktop Notifications')}
+                    inputs={inputs}
+                    submit={this.props.submit}
+                    saving={this.props.saving}
+                    server_error={this.props.error}
+                    updateSection={this.handleMaxUpdateSection}
+                />
+            </>
+        );
+    }
+
+    createNotificationsSelect = (): JSX.Element => {
+        const options = [
+            {
+                value: NotificationLevels.ALL,
+                label: localizeMessage('user.settings.notifications.allActivity', 'For all activity'),
+            },
+            {
+                value: NotificationLevels.MENTION,
+                label: localizeMessage('user.settings.notifications.onlyMentions', 'Only for mentions and direct messages'),
+            },
+            {value: NotificationLevels.NONE, label: localizeMessage('user.settings.notifications.never', 'Never')},
+        ];
+
+        return (
+            <RhsSettingsItem
+                title={
+                    <FormattedMessage
+                        id='user.settings.notifications.desktop'
+                        defaultMessage='Send desktop notifications'
+                    />
+                }
+                inputs={
+                    <ReactSelect
+                        className='react-select settings-select advanced-select'
+                        classNamePrefix='react-select'
+                        id='desktopNotificationLevel'
+                        options={options}
+                        clearable={false}
+                        onChange={(e) => this.handleOnSelectChange('desktopActivity', e.value)}
+                        value={options.filter((opt: { value: string | boolean }) => opt.value === this.props.activity)}
+                        isSearchable={false}
+                        menuPortalTarget={document.body}
+                        styles={reactStyles}
+                    />
+                }
+                updateSection={
+                    this.props.updateSection
+                }
+            />
+        );
+    }
+
+    createNotificationsForThread = (): JSX.Element | undefined => {
+        if (this.props.isCollapsedThreadsEnabled && NotificationLevels.MENTION === this.props.activity) {
+            const inputs = [
+                <>
+                    <Toggle
+                        id={name + 'childOption'}
+                        onToggle={() => this.handleThreadsOnChange(this.props.threads === NotificationLevels.ALL ? NotificationLevels.MENTION : NotificationLevels.ALL)}
+                        toggled={this.props.threads === NotificationLevels.ALL}
+                    />
+                </>,
+
+            ];
+
+            return (
+                <RhsSettingsItem
+                    title={
+                        <FormattedMessage
+                            id='user.settings.notifications.threads.desktop'
+                            defaultMessage='Thread reply notifications'
+                        />
+                    }
+                    inputs={inputs}
+                    submit={this.props.submit}
+                    saving={this.props.saving}
+                    server_error={this.props.error}
+                    updateSection={this.handleMaxUpdateSection}
+                    messageDesc={
+                        <FormattedMessage
+                            id='user.settings.notifications.threads'
+                            defaultMessage={'When enabled, any reply to a thread you\'re following will send a desktop notification.'}
+                        />
+                    }
+                />
+            );
+        }
+        return undefined;
+    }
+
+    createSoundToggleSection = (): JSX.Element | undefined => {
+        if (this.props.activity !== NotificationLevels.NONE) {
+            const inputs = [
+                <>
+                    <Toggle
+                        id={name + 'childOption'}
+                        onToggle={() => this.handleOnSelectChange('desktopSound', this.props.sound === 'false' ? 'true' : 'false')}
+                        toggled={this.props.sound === 'true'}
+                    />
+                </>,
+
+            ];
+
+            return (
+                <RhsSettingsItem
+                    title={
+                        <FormattedMessage
+                            id='user.settings.notifications.desktop.sound'
+                            defaultMessage='Notification sound'
+                        />
+                    }
+                    inputs={inputs}
+                    submit={this.props.submit}
+                    saving={this.props.saving}
+                    server_error={this.props.error}
+                    updateSection={this.handleMaxUpdateSection}
+                />
+            );
+        }
+        return undefined;
+    }
+
+    componentDidUpdate() {
+        this.blurDropdown();
+    }
+
+    render() {
+        const notificationsSelect = this.createNotificationsSelect();
+        const threadNotifications = this.createNotificationsForThread();
+        const soundToggle = this.createSoundToggleSection();
+        const others = this.buildMaximizedSetting();
+        return (
+            <>
+
+                {notificationsSelect}
+                {threadNotifications}
+                {soundToggle}
+                {others}</>
+
+        );
+    }
+}
+
+/* eslint-enable react/no-string-refs */
+
+const reactStyles = {
+    menuPortal: (provided: React.CSSProperties) => ({
+        ...provided,
+        zIndex: 9999,
+        cursor: 'pointer',
+    }),
+};

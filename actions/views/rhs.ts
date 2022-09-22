@@ -548,11 +548,14 @@ export function openRHSSearch() {
 }
 
 export function openAtPrevious(previous: any) { // TODO Could not find the proper type. Seems to be in several props around
+    console.log('previous', previous)
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
         if (!previous) {
             return openRHSSearch()(dispatch);
         }
-
+        if (previous.isSettings) {
+            return showSettingss()(dispatch, getState);
+        }
         if (previous.isChannelInfo) {
             const currentChannelId = getCurrentChannelId(getState());
             return showChannelInfo(currentChannelId)(dispatch);
@@ -600,6 +603,22 @@ export function setEditChannelMembers(active: boolean) {
             type: ActionTypes.SET_EDIT_CHANNEL_MEMBERS,
             active,
         });
+        return {data: true};
+    };
+}
+
+export function showSettingss() {
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+
+        // trackEvent('api', 'api_posts_search_mention');
+
+        dispatch(
+            {
+                type: ActionTypes.UPDATE_RHS_STATE,
+                state: RHSStates.SETTINGS,
+            },
+        );
+
         return {data: true};
     };
 }
