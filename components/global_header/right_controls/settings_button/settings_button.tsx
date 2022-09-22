@@ -55,8 +55,9 @@ const SettingsButton = (props: Props): JSX.Element | null => {
             overlay={tooltip}
         >
             <IconButton
+                className='grey'
                 size={'sm'}
-                icon={'settings-outline'}
+                icon={'cog'}
                 toggled={rhsState === RHSStates.SETTINGS}
                 onClick={settingButtonClick}
                 inverted={true}
@@ -80,8 +81,7 @@ const SettingsButton = (props: Props): JSX.Element | null => {
             compact={true}
             aria-label="Select to open the settings modal." // proper wording and translation needed
         /></>
-
-);
+    );
 };
 
 export default SettingsButton;

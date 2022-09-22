@@ -13,11 +13,15 @@ import HistoryButtons from './history_buttons';
 const LeftControlsContainer = styled.div`
     display: flex;
     align-items: center;
-    height: 40px;
+    height: 46px;
     flex-shrink: 0;
+    width: 240px;
+    background: var(--sidebar-bg);
+    border-bottom: solid 1px rgba(var(--sidebar-text-rgb), 0.25);
+    padding-left: 10px;
 
     > * + * {
-        margin-left: 12px;
+        margin-left: 10px;
     }
 `;
 

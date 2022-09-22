@@ -11,7 +11,7 @@ import {UserProfile, UserStatus, GetFilteredUsersStatsOpts, UsersStats, UserCust
 import {UserTypes, AdminTypes, GeneralTypes, PreferenceTypes, TeamTypes, RoleTypes} from 'mattermost-redux/action_types';
 
 import {setServerVersion, getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
-import {getMyTeams, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
+import {getMyKSuites, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 import {bindClientFunc, forceLogoutIfNecessary, debounce} from 'mattermost-redux/actions/helpers';
 import {logError} from 'mattermost-redux/actions/errors';
@@ -34,7 +34,6 @@ import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 import {General} from 'mattermost-redux/constants';
 import {clearLocalStorageToken} from '../../../../components/login/utils';
-import {IKConstants} from '../../../../utils/constants-ik';
 import {isDesktopApp} from '../../../../utils/user_agent';
 
 export function generateMfaSecret(userId: string): ActionFunc {
@@ -84,7 +83,7 @@ export function loadMeREST(): ActionFunc {
                 dispatch(getLicenseConfig()),
                 dispatch(getMe()),
                 dispatch(getMyPreferences()),
-                dispatch(getMyTeams()),
+                dispatch(getMyKSuites()),
                 dispatch(getMyTeamMembers()),
             ]);
 

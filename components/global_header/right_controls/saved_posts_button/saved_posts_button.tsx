@@ -44,8 +44,9 @@ const SavedPostsButton = (): JSX.Element | null => {
             overlay={tooltip}
         >
             <IconButton
+                className='grey'
                 size={'sm'}
-                icon={'bookmark-outline'}
+                icon={'bookmark-alt'}
                 toggled={rhsState === RHSStates.FLAG}
                 onClick={savedPostsButtonClick}
                 inverted={true}

@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-import {getMyTeams, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getMyKSuites, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {haveITeamPermission, haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
 import {Permissions} from 'mattermost-redux/constants';
@@ -27,7 +27,7 @@ function mapStateToProps(state) {
 
     let canCreateOrDeleteCustomEmoji = (haveISystemPermission(state, {permission: Permissions.CREATE_EMOJIS}) || haveISystemPermission(state, {permission: Permissions.DELETE_EMOJIS}));
     if (!canCreateOrDeleteCustomEmoji) {
-        for (const t of getMyTeams(state)) {
+        for (const t of getMyKSuites(state)) {
             if (haveITeamPermission(state, t.id, Permissions.CREATE_EMOJIS) || haveITeamPermission(state, t.id, Permissions.DELETE_EMOJIS)) {
                 canCreateOrDeleteCustomEmoji = true;
                 break;

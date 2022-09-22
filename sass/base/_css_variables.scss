@@ -38,7 +38,7 @@
     --button-bg-rgb: 0, 152, 255;
     --button-color-rgb: 255, 255, 255;
     --center-channel-bg-rgb: 255, 255, 255;
-    --center-channel-color-rgb: 61, 60, 64;
+    --center-channel-color-rgb: 60, 60, 60;
     --dnd-indicator-rgb: 244, 67, 54;
     --error-text-color-rgb: 244, 67, 54;
     --link-color-rgb: 0, 152, 215;
@@ -77,10 +77,12 @@
     --elevation-6: 0 20px 32px 0 rgba(0, 0, 0, 0.12);
 
     // Global Header variables
-    --global-header-background: var(--sidebar-teambar-bg);
+    --global-header-background: var(--center-channel-bg);
+    // --global-header-background: var(--sidebar-teambar-bg);
     --global-header-text: var(--sidebar-header-text-color);
     --global-header-background-rgb: var(--sidebar-teambar-bg-rgb);
-    --global-header-text-rgb: var(--sidebar-header-text-color-rgb);
+    --global-header-background-rgb: var(--sidebar-teambar-bg-rgb);
+    --global-header-text-rgb: var(--center-channel-text-rgb);
 
     // semantic colors
     // not to be overwritten, since they are shared among themes

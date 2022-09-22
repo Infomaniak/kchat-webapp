@@ -19,6 +19,16 @@ function getMyTeams(state: RequestStatusType = initialRequestState(), action: Ge
     );
 }
 
+function getMyKSuites(state: RequestStatusType = initialRequestState(), action: GenericAction): RequestStatusType {
+    return handleRequest(
+        TeamTypes.MY_TEAMS_REQUEST,
+        TeamTypes.MY_TEAMS_SUCCESS,
+        TeamTypes.MY_TEAMS_FAILURE,
+        state,
+        action,
+    );
+}
+
 function getTeams(state: RequestStatusType = initialRequestState(), action: GenericAction): RequestStatusType {
     return handleRequest(
         TeamTypes.GET_TEAMS_REQUEST,
@@ -41,6 +51,7 @@ function joinTeam(state: RequestStatusType = initialRequestState(), action: Gene
 
 export default (combineReducers({
     getTeams,
+    getMyKSuites,
     getMyTeams,
     joinTeam,
 }) as (b: TeamsRequestsStatuses, a: GenericAction) => TeamsRequestsStatuses);
