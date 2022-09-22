@@ -343,7 +343,6 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                 <div className='user-settings user-rhs-container container'>
                     <div className='divider-dark first'/>
                     {ctrlSendSection}
-                    {unreadScrollPositionSection}
                 </div>
             </div>
         );
