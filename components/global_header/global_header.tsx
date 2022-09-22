@@ -29,8 +29,18 @@ const GlobalHeaderContainer = styled.header`
     & .grey {
         color: rgba(var(--center-channel-color-rgb), 0.785);
         background: transparent;
+        padding-top: 0;
+        padding-bottom: 0;
+        height: 100%;
+        border-radius: unset;
+        width: 42px;
         &:hover {
-            background: var(--sidebar-text-08);
+            color: rgba(var(--center-channel-color-rgb), 0.84);
+            background: rgba(var(--center-channel-color-rgb), 0.08);
+        }
+        &.active {
+            color: rgba(var(--center-channel-color-rgb), 0.84);
+            background: rgba(var(--center-channel-color-rgb), 0.08);
         }
     }
 

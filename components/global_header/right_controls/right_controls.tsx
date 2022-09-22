@@ -32,10 +32,6 @@ const RightControlsContainer = styled.div`
     padding-right: 10px;
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
 
-    > * + * {
-        margin-left: 16px;
-    }
-
     .header-icon {
         transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
         margin-left: auto;
@@ -75,6 +71,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
         <span
             className='header-icon'
             slot='trigger'
+            style={{height: 45, display: 'flex'}}
         >
             <IconButton
                 className='grey'
@@ -96,7 +93,10 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                 <div style={{position: 'relative'}}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
-                    <module-products-component position='right'>
+                    <module-products-component
+                        position='right'
+                        style={{height: '100%'}}
+                    >
                         {trigger}
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                         {/* @ts-ignore */}
