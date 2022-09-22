@@ -30,6 +30,9 @@ import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_setti
 import RhsThemeSetting from 'components/rhs_settings/rhs_settings_theme';
 
 import Toggle from 'components/toggle';
+import SvgNoCompactIcon from '../rhs_settings_compact/assets/SvgNoCompactIcon';
+import SvgCompactIcon from '../rhs_settings_compact/assets/SvgCompactIcon';
+import RhsLimitVisibleGMsDMs from 'components/rhs_settings/rhs_settings_sidebar/limit_visible_gms_dms';
 
 const Preferences = Constants.Preferences;
 
@@ -107,6 +110,21 @@ type SelectProps ={
         values?: Record<string, React.ReactNode | PrimitiveType | FormatXMLElementFn<React.ReactNode, React.ReactNode>>;
     };
     disabled?: boolean;
+}
+
+type CustomBtnSelectProps ={
+    display?: string;
+    defaultDisplay?: string;
+    value: string | boolean;
+    options: any;
+    childOption?: ChildOption;
+    description?: {
+        id: string;
+        message: string;
+        values?: Record<string, React.ReactNode | PrimitiveType | FormatXMLElementFn<React.ReactNode, React.ReactNode>>;
+    };
+    disabled?: boolean;
+    hasBottomBorder?: boolean;
 }
 
 type Props = {
@@ -327,6 +345,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
     }
 
     handleOnChange(display: {[key: string]: any}) {
+        console.log(display);
         this.setState({...display}, () => {
             this.handleSubmit();
         });
@@ -532,6 +551,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 />
             );
         }
+
         return (
             <RhsSettingsItem
                 title={messageTitle}
@@ -551,6 +571,79 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 }
                 saving={this.state.isSaving}
                 updateSection={this.props.updateSection}
+            />
+        );
+    }
+
+    createCustomBtnSelect(props: CustomBtnSelectProps) {
+        const {
+            display,
+            value,
+            options,
+            hasBottomBorder,
+        } = props;
+
+        const inputs: JSX.Element[] = [];
+
+        const col = (12 / options.length);
+
+        let childOptionSection;
+
+        options.forEach((option: CustomBtnSelectProps, key: number) => {
+            if (option.childOption && option.value === value) {
+                const childDisplay = option.childOption.display;
+                childOptionSection = (
+                    <div className={'col-sm-12 title-toggle pt-4'}>
+                        <h5
+                            id='settingTitle'
+                            className='settings-title'
+                        >
+                            <FormattedMessage
+                                id={option.childOption.moreId}
+                                defaultMessage={option.childOption.moreMessage}
+                            />
+                        </h5>
+
+                        <Toggle
+                            id={name + 'childOption'}
+                            onToggle={() => {
+                                this.handleOnChange({[childDisplay]: option.childOption?.value === 'false' ? 'true' : 'false'});
+                            }}
+                            toggled={option.childOption.value === 'true'}
+                        />
+                    </div>
+                );
+            }
+
+            let activeClass = '';
+            if (value === option.value) {
+                activeClass = 'active';
+            }
+
+            inputs.push(
+                <div className={`col-xs-6 col-sm-${col} rhs-btns text-center`}>
+                    <div
+                        id={`rhsCustomBtnSelect${key}`}
+                        className={`rhs-custom-btn ${activeClass}`}
+                        onClick={() => this.handleOnChange({[display]: option.value})}
+                    >
+                        <label>
+                            {option.icon}
+                            <div className='rhs-custom-btn-label'>{option.label}</div>
+                        </label>
+                    </div>
+                </div>,
+            );
+        });
+
+        return (
+            <RhsSettingsItem
+                inputs={inputs}
+                saving={this.state.isSaving}
+                updateSection={this.props.updateSection}
+                isCustomBtn={true}
+                childOptionSection={childOptionSection}
+                containerStyle={hasBottomBorder ? 'rhs-custom-bb' : ''}
             />
         );
     }
@@ -621,45 +714,35 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             this.prevSections.message_display = this.prevSections.linkpreview;
         }
 
-        const messageDisplaySection = this.createSection({
-            section: Preferences.MESSAGE_DISPLAY,
+        const messageDisplaySection = this.createCustomBtnSelect({
             display: 'messageDisplay',
             value: this.state.messageDisplay,
             defaultDisplay: Preferences.MESSAGE_DISPLAY_CLEAN,
-            title: {
-                id: t('user.settings.display.messageDisplayTitle'),
-                message: 'Message Display',
-            },
-            firstOption: {
-                value: Preferences.MESSAGE_DISPLAY_CLEAN,
-                radionButtonText: {
-                    id: t('user.settings.display.messageDisplayClean'),
-                    message: 'Standard',
-                    moreId: t('user.settings.display.messageDisplayCleanDes'),
-                    moreMessage: 'Easy to scan and read.',
+            options: [
+                {
+                    value: Preferences.MESSAGE_DISPLAY_CLEAN,
+                    label: localizeMessage('user.settings.display.messageDisplayClean', 'Standard'),
+                    icon: <SvgNoCompactIcon/>},
+                {
+                    value: Preferences.MESSAGE_DISPLAY_COMPACT,
+                    label: localizeMessage('user.settings.display.messageDisplayCompact', 'Compact'),
+                    icon: <SvgCompactIcon/>,
+                    childOption: {
+                        id: t('user.settings.display.colorize'),
+                        value: this.state.colorizeUsernames,
+                        display: 'colorizeUsernames',
+                        message: 'Colorize usernames',
+                        moreId: t('user.settings.display.colorizeDes'),
+                        moreMessage: 'Use colors to distinguish users in compact mode',
+                    },
                 },
-            },
-            secondOption: {
-                value: Preferences.MESSAGE_DISPLAY_COMPACT,
-                radionButtonText: {
-                    id: t('user.settings.display.messageDisplayCompact'),
-                    message: 'Compact',
-                    moreId: t('user.settings.display.messageDisplayCompactDes'),
-                    moreMessage: 'Fit as many messages on the screen as we can.',
-                },
-                childOption: {
-                    id: t('user.settings.display.colorize'),
-                    value: this.state.colorizeUsernames,
-                    display: 'colorizeUsernames',
-                    message: 'Colorize usernames',
-                    moreId: t('user.settings.display.colorizeDes'),
-                    moreMessage: 'Use colors to distinguish users in compact mode',
-                },
-            },
+            ],
+
             description: {
                 id: t('user.settings.display.messageDisplayDescription'),
                 message: 'Select how messages in a channel should be displayed.',
             },
+            hasBottomBorder: true,
         });
 
         const channelDisplayModeSection = this.createSelect({
@@ -776,16 +859,16 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     <div className='divider-dark first'/>
 
                     {themeSection}
+                    {messageDisplaySection}
 
                     {collapseSection}
                     {linkPreviewSection}
                     {oneClickReactionsOnPostsSection}
                     {showUnreadSection}
-                    {/* Compact mode
-                    {messageDisplaySection}
-*/}
+
                     {channelDisplayModeSection}
                     {UnreadScrollPositionSection}
+                    <RhsLimitVisibleGMsDMs/>
                 </div>
             </div>
         );

@@ -115,6 +115,8 @@ export default class RhsSettingsItem extends React.PureComponent {
         childOptionSection: PropTypes.node,
 
         isSelect: PropTypes.bool,
+
+        isCustomBtn: PropTypes.bool,
     }
 
     constructor(props) {
@@ -240,11 +242,7 @@ export default class RhsSettingsItem extends React.PureComponent {
 
         let childOptionSection;
         if (this.props.childOptionSection) {
-            childOptionSection = (
-                <div className='col-sm-11 col-lg-offset-1 align-items-center d-flex justify-content-between px-0 pt-2'>
-                    {this.props.childOptionSection}
-                </div>
-            );
+            childOptionSection = this.props.childOptionSection;
         }
 
         let listContent = (
@@ -266,6 +264,24 @@ export default class RhsSettingsItem extends React.PureComponent {
                     </div>
                     {childOptionSection}
                 </div>
+            );
+        }
+
+        if (this.props.isCustomBtn) {
+            return (
+                <section
+                    className={`row rhs-settings-section ${this.props.containerStyle}  pb-4`}
+                >
+                    <div className='clearfix'>
+                        {inputs}
+                    </div>
+                    {childOptionSection}
+                    <div className='setting-list-item'>
+                        {this.props.submitExtra}
+                        {serverError}
+                        {clientError}
+                    </div>
+                </section>
             );
         }
 

@@ -72,19 +72,19 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
 
             premadeThemes.push(
                 <div
-                    className='col-xs-6 col-sm-4 rhs-theme text-center'
-                    key={'rhs-theme-key' + k}
+                    className='col-xs-6 col-sm-4 rhs-btns text-center'
+                    key={'rhs-custom-btn-key' + k}
                 >
                     <div
                         id={`rhsTheme${premadeTheme.type?.replace(' ', '')}`}
-                        className={`rhs-theme-btn ${activeClass}`}
+                        className={`rhs-custom-btn ${activeClass}`}
                         onClick={() => updateTheme(premadeTheme)}
                     >
                         <label>
                             {(premadeTheme.type === 'Indigo' || premadeTheme.type === 'Onyx') && (<SvgDarkThemeIcon/>)}
                             {premadeTheme.type === 'Quartz' && (<SvgLightThemeIcon/>)}
                             {premadeTheme.type === 'Infomaniak' && (<SvgMediumThemeIcon/>)}
-                            <div className='rhs-theme-label'>{
+                            <div className='rhs-custom-btn-label'>{
                                 getThemeLabel(premadeTheme)
                             }</div>
                         </label>
@@ -95,7 +95,7 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
     }
 
     return (
-        <section className='row rhs-settings-section'>
+        <section className='row rhs-settings-section pb-8'>
             <div className='clearfix'>
                 {premadeThemes}
             </div>

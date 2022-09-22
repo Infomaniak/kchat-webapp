@@ -10,7 +10,7 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {GlobalState} from 'types/store';
 
-import LimitVisibleGMsDMs from './limit_visible_gms_dms';
+import RhsLimitVisibleGMsDMs from './limit_visible_gms_dms';
 
 function mapStateToProps(state: GlobalState) {
     return {
@@ -23,4 +23,4 @@ const mapDispatchToProps = {
     savePreferences,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LimitVisibleGMsDMs);
+export default connect(mapStateToProps, mapDispatchToProps)(RhsLimitVisibleGMsDMs);

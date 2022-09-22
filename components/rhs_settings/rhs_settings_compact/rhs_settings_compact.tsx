@@ -2,141 +2,149 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import {FormattedMessage} from 'react-intl';
 
-import {Theme} from 'mattermost-redux/selectors/entities/preferences';
-
-import {Constants} from 'utils/constants';
-import {applyTheme} from 'utils/utils';
-
-import PremadeThemeChooser from './premade_theme_chooser';
+import {Preferences} from 'mattermost-redux/constants';
+import {PreferenceType} from '@mattermost/types/preferences';
+import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_settings_item';
+import Toggle from 'components/toggle';
+import {t} from '../../../utils/i18n';
 
 type Props = {
-    currentTeamId: string;
-    theme: Theme;
-    selected: boolean;
-    updateSection: (section: string) => void;
-    setRequireConfirm?: (requireConfirm: boolean) => void;
-    setEnforceFocus?: (enforceFocus: boolean) => void;
-    allowCustomThemes: boolean;
-    actions: {
-        saveTheme: (teamId: string, theme: Theme) => void;
-        deleteTeamSpecificThemes: () => void;
-    };
-};
+    active: boolean;
+    currentUserId?: string;
+    savePreferences?: (userId: string, preferences: PreferenceType[]) => Promise<{data: boolean}>;
+    messageDisplay: string;
+    colorizeUsernames: string;
+}
 
 type State = {
+    active: boolean;
+    checked: boolean;
     isSaving: boolean;
-    type: string;
-    serverError: string;
-    theme: Theme;
-};
+}
 
-export default class RhsThemeSetting extends React.PureComponent<Props, State> {
-    originalTheme: Theme;
+export default class RhsSettingsCompact extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
         this.state = {
-            ...this.getStateFromProps(props),
-            isSaving: false,
-            serverError: '',
-        };
-
-        this.originalTheme = Object.assign({}, this.state.theme);
-    }
-
-    componentDidUpdate(prevProps: Props) {
-        if (prevProps.selected && !this.props.selected) {
-            this.resetFields();
-        }
-    }
-
-    componentWillUnmount() {
-        if (this.props.selected) {
-            applyTheme(this.props.theme);
-        }
-    }
-
-    getStateFromProps(props = this.props): State {
-        const theme = {...props.theme};
-        if (!theme.codeTheme) {
-            theme.codeTheme = Constants.DEFAULT_CODE_THEME;
-        }
-
-        return {
-            theme,
-            type: theme.type || 'premade',
-            serverError: '',
+            active: false,
+            checked: false,
             isSaving: false,
         };
     }
 
-    submitTheme = async (): Promise<void> => {
-        const teamId = this.props.currentTeamId;
-
-        this.setState({isSaving: true});
-console.log('submit theme', this.props)
-        await this.props.actions.saveTheme(teamId, this.state.theme);
-
-        this.props.setRequireConfirm?.(false);
-        this.originalTheme = Object.assign({}, this.state.theme);
-        this.props.updateSection('');
-        this.setState({isSaving: false});
-    };
-
-    updateTheme = (theme: Theme): void => {
-        let themeChanged = this.state.theme.length === theme.length;
-        if (!themeChanged) {
-            for (const field in theme) {
-                if (theme.hasOwnProperty(field)) {
-                    if (this.state.theme[field] !== theme[field]) {
-                        themeChanged = true;
-                        break;
-                    }
-                }
+    static getDerivedStateFromProps(props: Props, state: State) {
+        if (props.active !== state.active) {
+            if (props.active && !state.active) {
+                return {
+                    checked: props.messageDisplay,
+                    active: props.active,
+                };
             }
+
+            return {
+                active: props.active,
+            };
         }
 
-        this.props.setRequireConfirm?.(themeChanged);
+        return null;
+    }
 
-        this.setState({theme}, () => {
-            this.submitTheme();
+    const messageDisplaySection = this.createSection({
+        section: Preferences.MESSAGE_DISPLAY,
+        display: 'messageDisplay',
+        value: this.state.messageDisplay,
+        defaultDisplay: Preferences.MESSAGE_DISPLAY_CLEAN,
+        title: {
+            id: t('user.settings.display.messageDisplayTitle'),
+            message: 'Message Display',
+        },
+        firstOption: {
+            value: Preferences.MESSAGE_DISPLAY_CLEAN,
+            radionButtonText: {
+                id: t('user.settings.display.messageDisplayClean'),
+                message: 'Standard',
+                moreId: t('user.settings.display.messageDisplayCleanDes'),
+                moreMessage: 'Easy to scan and read.',
+            },
+        },
+        secondOption: {
+            value: Preferences.MESSAGE_DISPLAY_COMPACT,
+            radionButtonText: {
+                id: t('user.settings.display.messageDisplayCompact'),
+                message: 'Compact',
+                moreId: t('user.settings.display.messageDisplayCompactDes'),
+                moreMessage: 'Fit as many messages on the screen as we can.',
+            },
+            childOption: {
+                id: t('user.settings.display.colorize'),
+                value: this.state.colorizeUsernames,
+                display: 'colorizeUsernames',
+                message: 'Colorize usernames',
+                moreId: t('user.settings.display.colorizeDes'),
+                moreMessage: 'Use colors to distinguish users in compact mode',
+            },
+        },
+        description: {
+            id: t('user.settings.display.messageDisplayDescription'),
+            message: 'Select how messages in a channel should be displayed.',
+        },
+    });
+
+    handleOnChange(checked: any) {
+        this.setState(checked, () => {
+            this.handleSubmit();
         });
-        applyTheme(theme);
-    };
+    }
 
-    updateType = (type: string): void => this.setState({type});
+    handleSubmit = async () => {
+        this.setState({isSaving: true});
 
-    resetFields = (): void => {
-        const state = this.getStateFromProps();
-        state.serverError = '';
-        this.setState(state);
+        await this.props.savePreferences(this.props.currentUserId, [{
+            user_id: this.props.currentUserId,
+            category: Preferences.CATEGORY_SIDEBAR_SETTINGS,
+            name: Preferences.SHOW_UNREAD_SECTION,
+            value: this.state.checked.toString(),
+        }]);
 
-        applyTheme(state.theme);
+        this.setState({isSaving: false});
 
-        this.props.setRequireConfirm?.(false);
-    };
-
-    handleUpdateSection = (section: string): void => this.props.updateSection(section);
+        this.props.updateSection('');
+    }
 
     render() {
-        let serverError;
-        if (this.state.serverError) {
-            serverError = this.state.serverError;
-        }
-
-        const premade = (
-            <PremadeThemeChooser
-                theme={this.state.theme}
-                updateTheme={this.updateTheme}
+        const title = (
+            <FormattedMessage
+                id='user.settings.sidebar.showUnreadsCategoryTitle'
+                defaultMessage='Group unread channels separately'
             />
         );
 
-        const inputs = [];
-        inputs.push(premade);
-
-        return (inputs);
+        return (
+            <section className='row rhs-settings-section'>
+                <div className='clearfix'>
+                    <div
+                        className='col-xs-6 col-sm-4 rhs-compact text-center'
+                        key={'rhs-compact-key' + k}
+                    >
+                        <div
+                            className={`rhs-compact-btn ${activeClass}`}
+                            onClick={() => updateCompact(premadeTheme)}
+                        >
+                            <label>
+                                {(premadeTheme.type === 'Indigo' || premadeTheme.type === 'Onyx') && (<SvgDarkThemeIcon/>)}
+                                {premadeTheme.type === 'Quartz' && (<SvgLightThemeIcon/>)}
+                                {premadeTheme.type === 'Infomaniak' && (<SvgMediumThemeIcon/>)}
+                                <div className='rhs-compact-label'>{
+                                    getThemeLabel(premadeTheme)
+                                }</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
     }
 }

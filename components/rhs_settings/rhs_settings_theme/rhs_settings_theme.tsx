@@ -77,7 +77,6 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
         const teamId = this.props.currentTeamId;
 
         this.setState({isSaving: true});
-console.log('submit theme', this.props)
         await this.props.actions.saveTheme(teamId, this.state.theme);
 
         this.props.setRequireConfirm?.(false);

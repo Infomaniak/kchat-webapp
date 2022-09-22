@@ -2,39 +2,28 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import {getTheme, makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTeamId, getMyTeamsCount} from 'mattermost-redux/selectors/entities/teams';
+import {savePreferences} from 'mattermost-redux/actions/preferences';
 
-import {saveTheme, deleteTeamSpecificThemes} from 'mattermost-redux/actions/preferences';
-
-import {Preferences} from 'utils/constants';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {get} from 'mattermost-redux/selectors/entities/preferences';
 
 import {GlobalState} from 'types/store';
 
-import RhsSettingsTheme from './rhs_settings_theme';
+import {Preferences} from '../../../utils/constants';
 
-function makeMapStateToProps() {
-    const getThemeCategory = makeGetCategory();
+import RhsSettingsCompact from './rhs_settings_compact';
 
-    return (state: GlobalState) => {
-        return {
-            currentTeamId: getCurrentTeamId(state),
-            theme: getTheme(state),
-            applyToAllTeams: getThemeCategory(state, Preferences.CATEGORY_THEME).length <= 1,
-            showAllTeamsCheckbox: getMyTeamsCount(state) > 1,
-        };
-    };
-}
-
-function mapDispatchToProps(dispatch: Dispatch) {
+function mapStateToProps(state: GlobalState) {
     return {
-        actions: bindActionCreators({
-            saveTheme,
-            deleteTeamSpecificThemes,
-        }, dispatch),
+        currentUserId: getCurrentUserId(state),
+        messageDisplay: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.MESSAGE_DISPLAY, Preferences.MESSAGE_DISPLAY_DEFAULT),
+        colorizeUsernames: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.COLORIZE_USERNAMES, Preferences.COLORIZE_USERNAMES_DEFAULT),
     };
 }
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(RhsSettingsTheme);
+const mapDispatchToProps = {
+    savePreferences,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RhsSettingsCompact);

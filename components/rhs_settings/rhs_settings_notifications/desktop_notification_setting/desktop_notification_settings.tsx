@@ -245,6 +245,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         }
 
         inputs.push(
+            
             <div key='userNotificationLevelOption'>
                 <fieldset>
                     <legend className='form-legend'>
@@ -305,12 +306,6 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
                                 defaultMessage='Never'
                             />
                         </label>
-                    </div>
-                    <div className='mt-5'>
-                        <FormattedMessage
-                            id='user.settings.notifications.info'
-                            defaultMessage='Desktop notifications are available on Edge, Firefox, Safari, Chrome and Mattermost Desktop Apps.'
-                        />
                     </div>
                 </fieldset>
                 <hr/>

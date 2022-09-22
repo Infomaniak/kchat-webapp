@@ -38,7 +38,7 @@ const limits: Limit[] = [
     {value: 40, label: '40'},
 ];
 
-export default class LimitVisibleGMsDMs extends React.PureComponent<Props, State> {
+export default class RhsLimitVisibleGMsDMs extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 

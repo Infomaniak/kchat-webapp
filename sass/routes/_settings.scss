@@ -78,11 +78,12 @@
     }
 
     .settings-title {
-        font-weight: 500;
+        font-weight: 600;
     }
 
     .settings-desc {
         font-size: 12px;
+        color: rgba(var(--center-channel-color-rgb),0.785)
     }
     .title-select {
         display: flex;

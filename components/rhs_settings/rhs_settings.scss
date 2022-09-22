@@ -5,11 +5,11 @@
 @import 'utils/variables';
 
 .accountSettingRhs {
-    margin-top: 50px;
+    margin-top: 30px;
     .settings-tabs {
 
         ul.nav.nav-tabs {
-            border-bottom: 1px solid var(--sidebar-text);
+            border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
             li {
                 margin: 0;
                 padding: 10px 10px 0;
@@ -40,8 +40,8 @@
         }
     }
 
-    .rhs-theme {
-        .rhs-theme-btn {
+    .rhs-btns {
+        .rhs-custom-btn {
             border-radius: 8px;
             padding: 8px 10px;
             &.active, &:hover {
@@ -50,11 +50,17 @@
                 & > * {
                     cursor: pointer;
                 }
-                .rhs-theme-label {
-                    color: #666666;
+                .rhs-custom-btn-label, label {
+                    color: #333333;
+                    margin: 0;
                 }
             }
         }
+    }
+
+    .rhs-custom-bb {
+        margin-bottom: 16px;
+        border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.12)
     }
 }
 

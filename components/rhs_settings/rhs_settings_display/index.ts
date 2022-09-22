@@ -23,10 +23,6 @@ import {Preferences} from 'utils/constants';
 import {CollapsedThreads} from '@mattermost/types/config';
 
 import RhsSettingsDisplay from './rhs_settings_display';
-import {
-    getUnreadScrollPositionPreference,
-    shouldShowUnreadsCategory,
-} from '../../../packages/mattermost-redux/src/selectors/entities/preferences';
 
 export function makeMapStateToProps() {
     const getUserTimezone = makeGetUserTimezone();

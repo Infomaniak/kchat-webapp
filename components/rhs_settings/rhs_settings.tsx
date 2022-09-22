@@ -1,40 +1,28 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo} from 'react';
+import React from 'react';
 /* eslint-disable react/no-string-refs */
 
-import {defineMessages, FormattedMessage, useIntl} from 'react-intl';
+import {defineMessages, useIntl} from 'react-intl';
 
-import styled from 'styled-components';
 
-import {useDispatch, useSelector} from 'react-redux';
 
 import {Tab, Tabs} from 'react-bootstrap';
 
 import ReactDOM from 'react-dom';
 
-import OverlayTrigger from '../overlay_trigger';
-import Constants, {RHSStates} from '../../utils/constants';
-import LocalizedIcon from '../localized_icon';
 import {t} from '../../utils/i18n';
 
-import Tooltip from '../tooltip';
 import {UserProfile} from '@mattermost/types/users';
 
-import {GlobalState} from '../../types/store';
-import {getRhsState} from '../../selectors/rhs';
-import {closeRightHandSide, showSettingss} from '../../actions/views/rhs';
 import * as Utils from '../../utils/utils';
-import GeneralTab from '../user_settings/general';
-import SecurityTab from '../user_settings/security';
+
 import NotificationsTab from 'components/rhs_settings/rhs_settings_notifications';
 
 import AdvancedTab from 'components/rhs_settings/rhs_settings_advanced';
 
 import DisplayTab from 'components/rhs_settings/rhs_settings_display';
-
-import SidebarTab from 'components/rhs_settings/rhs_settings_sidebar';
 
 import './rhs_settings.scss';
 import RhsSettingsHeader from 'components/rhs_settings/rhs_settings_header/rhs_settings_header';
@@ -92,12 +80,9 @@ export default function RhsSettings({
     currentUser,
 }: Props) {
     const intl = useIntl();
-    const dispatch = useDispatch();
-    const rhsState = useSelector((state: GlobalState) => getRhsState(state));
     const tabs = [];
     tabs.push({name: 'display', uiName: intl.formatMessage(holders.display), icon: 'icon fa fa-eye', iconTitle: Utils.localizeMessage('user.settings.display.icon', 'Display Settings Icon')});
     tabs.push({name: 'notifications', uiName: intl.formatMessage(holders.notifications), icon: 'icon fa fa-exclamation-circle', iconTitle: Utils.localizeMessage('user.settings.notifications.icon', 'Notification Settings Icon')});
-    tabs.push({name: 'sidebar', uiName: intl.formatMessage(holders.sidebar), icon: 'icon fa fa-columns', iconTitle: Utils.localizeMessage('user.settings.sidebar.icon', 'Sidebar Settings Icon')});
     tabs.push({name: 'advanced', uiName: intl.formatMessage(holders.advanced), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Advanced Settings Icon')});
     const [activeTab, setActiveTab] = React.useState(tabs[0].name);
 
@@ -125,7 +110,7 @@ export default function RhsSettings({
         handleCollapse();
     };
 
-    const updateSection = (section?: string, skipConfirm?: boolean) => {
+    const updateSection = (section?: string) => {
         console.log(section);
     };
 
@@ -151,28 +136,6 @@ export default function RhsSettings({
                             />
                         ))}
                     </Tabs>
-                    {activeTab === 'profile' && (
-                        <div>
-                            <GeneralTab
-                                user={currentUser}
-                                updateTab={handleUpdateActiveTab}
-                                updateSection={updateSection}
-                                closeModal={closeModal}
-                                collapseModal={collapseModal}
-                            />
-                        </div>
-                    )}
-                    {activeTab === 'security' && (
-                        <div>
-                            <SecurityTab
-                                user={currentUser}
-                                closeModal={closeModal}
-                                collapseModal={collapseModal}
-                                setRequireConfirm={false}
-                            />
-                        </div>
-
-                    )}
                     {activeTab === 'notifications' && (
                         <div>
                             <NotificationsTab
@@ -187,15 +150,6 @@ export default function RhsSettings({
                         <div>
                             <DisplayTab
                                 user={currentUser}
-                                updateSection={updateSection}
-                                closeModal={closeModal}
-                                collapseModal={collapseModal}
-                            />
-                        </div>
-                    )}
-                    {activeTab === 'sidebar' && (
-                        <div>
-                            <SidebarTab
                                 updateSection={updateSection}
                                 closeModal={closeModal}
                                 collapseModal={collapseModal}
