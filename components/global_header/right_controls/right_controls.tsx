@@ -31,7 +31,6 @@ const RightControlsContainer = styled.div`
     position: relative;
     padding-right: 10px;
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
-    overflow: hidden;
 
     .header-icon {
         transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -114,10 +113,10 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     pluggableId={productId}
                 />
             )}
-            <div style={{background: '#7974B4', margin: '0 5px'}}>
+            <div style={{height: 46, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
-                <module-reporting-tools-component></module-reporting-tools-component>
+                <module-reporting-tools-component style={{transform: 'scale(0.8)'}}></module-reporting-tools-component>
             </div>
             <StatusDropdown/>
         </RightControlsContainer>
