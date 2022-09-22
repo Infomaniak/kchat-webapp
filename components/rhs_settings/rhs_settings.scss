@@ -5,7 +5,10 @@
 @import 'utils/variables';
 
 .accountSettingRhs {
-    margin-top: 30px;
+    position: relative;
+    overflow-y: scroll;
+    width: 100%;
+    min-height: calc(100% - 63px);
     .settings-tabs {
 
         ul.nav.nav-tabs {
@@ -52,7 +55,7 @@
                 }
                 .rhs-custom-btn-label, label {
                     color: #333333;
-                    margin: 0;
+                    // margin: 0;
                 }
             }
         }
