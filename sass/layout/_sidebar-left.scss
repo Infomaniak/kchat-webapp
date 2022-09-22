@@ -1304,6 +1304,26 @@ $sidebarOpacityAnimationDuration: 0.15s;
     }
 }
 
+.no-webcomponents {
+    #SidebarContainer {
+        width: 255px;
+
+        + .inner-wrap #app-content {
+            margin-left: 255px !important;
+        }
+    }
+}
+
+.multi-teams.no-webcomponents {
+    #SidebarContainer {
+        width: 255px;
+
+        + .inner-wrap #app-content {
+            margin-left: 320px !important;
+        }
+    }
+}
+
 /* context menu shown when right-clicking on a channel in the LHS when using the desktop app */
 .react-contextmenu--visible {
     z-index: 100;
