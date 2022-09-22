@@ -107,7 +107,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
     z-index: 16;
     left: 0;
     display: flex;
-    width: 240px;
+    width: 320px;
     height: 100%;
     flex-direction: column;
     border-right: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
@@ -1130,7 +1130,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
     .SidebarChannel .SidebarLink {
         position: relative;
         display: flex;
-        width: 240px;
+        width: 320px;
         height: 32px;
         align-items: center;
         padding: 7px 16px 7px 19px;
@@ -1320,7 +1320,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
     ~ .inner-wrap {
         #app-content {
-            margin-left: 240px;
+            margin-left: 320px;
         }
     }
 }
@@ -1328,9 +1328,30 @@ $sidebarOpacityAnimationDuration: 0.15s;
 .multi-teams {
     #SidebarContainer {
         left: 65px;
+        width: 255px;
 
         + .inner-wrap #app-content {
-            margin-left: 305px !important;
+            margin-left: 320px !important;
+        }
+    }
+}
+
+.no-webcomponents {
+    #SidebarContainer {
+        width: 255px;
+
+        + .inner-wrap #app-content {
+            margin-left: 255px !important;
+        }
+    }
+}
+
+.multi-teams.no-webcomponents {
+    #SidebarContainer {
+        width: 255px;
+
+        + .inner-wrap #app-content {
+            margin-left: 320px !important;
         }
     }
 }

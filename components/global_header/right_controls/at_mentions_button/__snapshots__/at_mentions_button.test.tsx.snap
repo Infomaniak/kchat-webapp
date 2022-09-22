@@ -40,7 +40,7 @@ exports[`components/global/AtMentionsButton should match snapshot 1`] = `
 >
   <ForwardRef
     aria-label="Select to toggle a list of recent mentions."
-    className="grey"
+    className="grey "
     compact={true}
     icon="mentions"
     inverted={true}
