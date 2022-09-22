@@ -29,7 +29,6 @@ const RightControlsContainer = styled.div`
     height: 46px;
     flex-shrink: 0;
     position: relative;
-    padding-right: 10px;
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
 
     .header-icon {
@@ -113,7 +112,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     pluggableId={productId}
                 />
             )}
-            <div style={{height: 46, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <div style={{height: 46, width: 42, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
                 <module-reporting-tools-component size='26'></module-reporting-tools-component>
