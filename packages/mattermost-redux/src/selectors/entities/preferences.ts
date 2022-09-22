@@ -111,11 +111,11 @@ const getThemePreference = createSelector(
     },
 );
 
-export type ThemeKey = 'denim' | 'sapphire' | 'quartz' | 'indigo' | 'onyx';
+export type ThemeKey = 'denim' | 'sapphire' | 'quartz' | 'indigo' | 'onyx' | 'infomaniak';
 
 export type LegacyThemeType = 'Mattermost' | 'Organization' | 'Mattermost Dark' | 'Windows Dark';
 
-export type ThemeType = 'Denim' | 'Sapphire' | 'Quartz' | 'Indigo' | 'Onyx';
+export type ThemeType = 'Denim' | 'Sapphire' | 'Quartz' | 'Indigo' | 'Onyx' | 'Infomaniak';
 
 export type Theme = {
     [key: string]: string | undefined;

@@ -130,7 +130,7 @@ const themeTypeMap: ThemeTypeMap = {
     // Sapphire: 'sapphire',
     Quartz: 'quartz',
     Indigo: 'indigo',
-    // Onyx: 'onyx',
+    Onyx: 'onyx',
 };
 
 // setThemeDefaults will set defaults on the theme for any unset properties.

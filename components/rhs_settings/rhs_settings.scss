@@ -43,11 +43,13 @@
     .rhs-theme {
         .rhs-theme-btn {
             border-radius: 8px;
-            padding: 8px 16px;
+            padding: 8px 10px;
             &.active, &:hover {
                 cursor: pointer;
                 background: #f4f6fd;
-
+                & > * {
+                    cursor: pointer;
+                }
                 .rhs-theme-label {
                     color: #666666;
                 }

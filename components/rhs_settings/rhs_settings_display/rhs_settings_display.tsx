@@ -3,33 +3,33 @@
 /* eslint-disable react/no-string-refs */
 /* eslint-disable max-lines */
 import React from 'react';
-import {ToggleButton} from 'react-bootstrap';
+
 import deepEqual from 'fast-deep-equal';
 
 import {FormattedMessage} from 'react-intl';
+
 import {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
 
 import {Timezone} from 'timezones.json';
 
 import ReactSelect from 'react-select';
 
+import {getBrowserTimezone} from 'utils/timezone.jsx';
+import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
+
 import {PreferenceType} from '@mattermost/types/preferences';
+
 import {UserProfile, UserTimezone} from '@mattermost/types/users';
 
 import {trackEvent} from 'actions/telemetry_actions';
-
 import Constants from 'utils/constants';
-import {getBrowserTimezone} from 'utils/timezone.jsx';
-
-import * as I18n from 'i18n/i18n.jsx';
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
-import RhsThemeSetting from 'components/rhs_settings/rhs_settings_theme/rhs_settings_theme';
-
-import Toggle from '../../toggle';
 
 import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_settings_item';
-import RhsShowUnreadsCategory from '../rhs_settings_sidebar/show_unreads_category/show_unreads_category';
+
+import RhsThemeSetting from 'components/rhs_settings/rhs_settings_theme';
+
+import Toggle from 'components/toggle';
 
 const Preferences = Constants.Preferences;
 
