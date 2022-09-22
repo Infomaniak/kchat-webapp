@@ -51,7 +51,7 @@ const AtMentionsButton = (): JSX.Element => {
             <IconButton
                 className='grey'
                 size={'sm'}
-                icon={'at'}
+                icon={'mentions'}
                 toggled={rhsState === RHSStates.MENTION}
                 onClick={mentionButtonClick}
                 inverted={true}

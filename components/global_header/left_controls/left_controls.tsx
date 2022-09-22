@@ -44,6 +44,7 @@ const LeftControlsContainer = styled.div`
     width: 240px;
     background: var(--sidebar-bg);
     border-bottom: solid 1px rgba(var(--sidebar-text-rgb), 0.25);
+    padding-left: 10px;
 
     > * + * {
         margin-left: 10px;

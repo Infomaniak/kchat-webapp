@@ -26,9 +26,6 @@ import KeyboardShortcutsModal from '../keyboard_shortcuts/keyboard_shortcuts_mod
 import ChannelNavigator from './channel_navigator';
 import SidebarChannelList from './sidebar_channel_list';
 
-// import SidebarHeader from './sidebar_header';
-// import MobileSidebarHeader from './mobile_sidebar_header';
-
 type Props = {
     teamId: string;
     canCreatePublicChannel: boolean;
@@ -230,21 +227,6 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                     dragging: this.state.isDragging,
                 })}
             >
-                {/* {this.props.isMobileView ? <MobileSidebarHeader/> : (
-                    <SidebarHeader
-                        showNewChannelModal={this.showNewChannelModal}
-                        showMoreChannelsModal={this.showMoreChannelsModal}
-                        showCreateUserGroupModal={this.showCreateUserGroupModal}
-                        invitePeopleModal={this.invitePeopleModal}
-                        showCreateCategoryModal={this.showCreateCategoryModal}
-                        canCreateChannel={this.props.canCreatePrivateChannel || this.props.canCreatePublicChannel}
-                        canJoinPublicChannel={this.props.canJoinPublicChannel}
-                        handleOpenDirectMessagesModal={this.handleOpenMoreDirectChannelsModal}
-                        unreadFilterEnabled={this.props.unreadFilterEnabled}
-                        userGroupsEnabled={this.props.userGroupsEnabled}
-                        canCreateCustomGroups={this.props.canCreateCustomGroups}
-                    />
-                )} */}
                 <div
                     id='lhsNavigator'
                     role='application'

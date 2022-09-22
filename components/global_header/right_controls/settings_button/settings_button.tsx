@@ -40,7 +40,7 @@ const SettingsButton = (props: Props): JSX.Element | null => {
             <IconButton
                 className='grey'
                 size={'sm'}
-                icon={'settings-outline'}
+                icon={'cog'}
                 onClick={(): void => {
                     props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}});
                 }}

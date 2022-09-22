@@ -33,7 +33,7 @@ const RightControlsContainer = styled.div`
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
 
     > * + * {
-        margin-left: 8px;
+        margin-left: 16px;
     }
 
     .header-icon {
@@ -67,6 +67,22 @@ export type Props = {
 const RightControls = ({productId = null}: Props): JSX.Element => {
     const showCustomizeTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CUSTOMIZE_EXPERIENCE);
 
+    const trigger = (
+        <span
+            className='header-icon'
+            slot='trigger'
+        >
+            <IconButton
+                className='grey'
+                size={'sm'}
+                icon={'layout-module'}
+                inverted={true}
+                compact={true}
+                aria-label='Switch products' // proper wording and translation needed
+            />
+        </span>
+    );
+
     return (
         <RightControlsContainer
             id={'RightControlsContainer'}
@@ -77,20 +93,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
                     <module-products-component position='right'>
-                        <span
-                            className='header-icon'
-                            slot='trigger'
-                        >
-                            {/* <i className='icon icon-chevron-down'/> */}
-                            <IconButton
-                                className='grey'
-                                size={'sm'}
-                                icon={'apps'}
-                                inverted={true}
-                                compact={true}
-                                aria-label='Switch products' // proper wording and translation needed
-                            />
-                        </span>
+                        {trigger}
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                         {/* @ts-ignore */}
                     </module-products-component>
