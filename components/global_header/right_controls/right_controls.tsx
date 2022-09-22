@@ -116,7 +116,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
             <div style={{height: 46, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
-                <module-reporting-tools-component style={{transform: 'scale(0.8)'}}></module-reporting-tools-component>
+                <module-reporting-tools-component size='26'></module-reporting-tools-component>
             </div>
             <StatusDropdown/>
         </RightControlsContainer>
