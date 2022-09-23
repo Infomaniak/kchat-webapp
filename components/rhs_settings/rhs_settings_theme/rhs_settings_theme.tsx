@@ -3,8 +3,6 @@
 
 import React from 'react';
 
-import {FormattedMessage} from 'react-intl';
-
 import {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {Constants} from 'utils/constants';
@@ -106,7 +104,6 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
         applyTheme(theme);
     };
 
-    updateType = (type: string): void => this.setState({type});
 
     resetFields = (): void => {
         const state = this.getStateFromProps();
@@ -121,21 +118,11 @@ export default class RhsThemeSetting extends React.PureComponent<Props, State> {
     handleUpdateSection = (section: string): void => this.props.updateSection(section);
 
     render() {
-        let serverError;
-        if (this.state.serverError) {
-            serverError = this.state.serverError;
-        }
-
-        const premade = (
+        return (
             <PremadeThemeChooser
                 theme={this.state.theme}
                 updateTheme={this.updateTheme}
             />
         );
-
-        const inputs = [];
-        inputs.push(premade);
-
-        return (inputs);
     }
 }

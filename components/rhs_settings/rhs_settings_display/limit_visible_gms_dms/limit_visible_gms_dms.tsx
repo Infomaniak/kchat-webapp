@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect} from 'react';
+import React from 'react';
 import ReactSelect, {ValueType} from 'react-select';
 import {FormattedMessage} from 'react-intl';
 
@@ -17,11 +17,9 @@ type Limit = {
 };
 
 type Props = {
-    active: boolean;
     currentUserId: string;
     savePreferences: (userId: string, preferences: PreferenceType[]) => Promise<{data: boolean}>;
     dmGmLimit: number;
-    updateSection: (section: string) => void;
 }
 
 type State = {
@@ -50,24 +48,14 @@ export default class RhsLimitVisibleGMsDMs extends React.PureComponent<Props, St
     }
 
     static getDerivedStateFromProps(props: Props, state: State) {
-        if (props.active !== state.active) {
-            if (props.active && !state.active) {
-                return {
-                    limit: limits.find((l) => l.value === props.dmGmLimit),
-                    active: props.active,
-                };
-            }
-
+        if (state.active) {
             return {
-                active: props.active,
-            };
-        } else if (!props.active) {
-            return {
-                limit: limits.find((l) => l.value === props.dmGmLimit),
+                active: null,
             };
         }
-
-        return null;
+        return {
+            limit: limits.find((l) => l.value === props.dmGmLimit),
+        };
     }
 
     handleChange = (selected: ValueType<Limit>) => {
@@ -89,8 +77,6 @@ export default class RhsLimitVisibleGMsDMs extends React.PureComponent<Props, St
 
         this.setState({isSaving: false});
         this.setState({active: false});
-
-        this.props.updateSection('');
     }
 
     render() {
@@ -100,9 +86,10 @@ export default class RhsLimitVisibleGMsDMs extends React.PureComponent<Props, St
                 defaultMessage='Number of direct messages to show'
             />
         );
-        const parent: HTMLElement | null = document.body.querySelector('.accountSettingRhs');
+        const parent: HTMLElement | null = document.body.querySelector('#displaySettings');
         return (
             <RhsSettingsItem
+                key='limitVisibleGMsDMs'
                 title={title}
                 inputs={
                     <ReactSelect
@@ -118,14 +105,7 @@ export default class RhsLimitVisibleGMsDMs extends React.PureComponent<Props, St
                         styles={reactStyles}
                     />
                 }
-                messageDesc={
-                    <FormattedMessage
-                        id='user.settings.sidebar.limitVisibleGMsDMsDesc'
-                        defaultMessage='You can also change these settings in the direct messages sidebar menu.'
-                    />
-                }
                 saving={this.state.isSaving}
-                updateSection={this.props.updateSection}
             />
         );
     }

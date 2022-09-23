@@ -109,6 +109,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
 
         return (
             <RhsSettingsItem
+                key='desktopNotifications'
                 title={
                     <FormattedMessage
                         id='user.settings.notifications.desktop'
@@ -120,6 +121,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
                         className='react-select settings-select advanced-select'
                         classNamePrefix='react-select'
                         id='desktopNotificationLevel'
+                        key='desktopNotificationLevel'
                         options={options}
                         clearable={false}
                         onChange={(e) => this.handleOnSelectChange('desktopActivity', e.value)}
@@ -151,6 +153,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
 
             return (
                 <RhsSettingsItem
+                    id='desktopNotificationThread'
                     title={
                         <FormattedMessage
                             id='user.settings.notifications.threads.desktop'
@@ -165,7 +168,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
                     messageDesc={
                         <FormattedMessage
                             id='user.settings.notifications.threads'
-                            defaultMessage={'When enabled, any reply to a thread you\'re following will send a desktop notification.'}
+                            defaultMessage="When enabled, any reply to a thread you're following will send a desktop notification."
                         />
                     }
                 />
@@ -189,6 +192,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
 
             return (
                 <RhsSettingsItem
+                    id='desktopNotificationSoundToggle'
                     title={
                         <FormattedMessage
                             id='user.settings.notifications.desktop.sound'

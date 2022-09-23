@@ -110,7 +110,11 @@ export default class RhsSettingsItem extends React.PureComponent {
          */
         saveButtonText: PropTypes.string,
 
-        messageDesc: PropTypes.string | PropTypes.node,
+        messageDesc: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.node,
+            PropTypes.func,
+        ]),
 
         childOptionSection: PropTypes.node,
 
@@ -248,7 +252,7 @@ export default class RhsSettingsItem extends React.PureComponent {
         let listContent = (
             <div className='setting-list-item'>
                 <div className='mt-2'>
-                    <p className='settings-desc'>{messageDesc}</p>
+                    <div className='settings-desc'>{messageDesc}</div>
                     {extraInfo}
                 </div>
                 {childOptionSection}

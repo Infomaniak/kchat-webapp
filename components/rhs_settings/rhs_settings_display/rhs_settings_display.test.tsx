@@ -223,63 +223,6 @@ describe('components/rhs_settings/rhs_settings_display/RhsSettingsDisplay', () =
         expect(updateSection).toHaveBeenCalledWith('linkpreview');
     });
 
-    test('should have called closeModal', () => {
-        const closeModal = jest.fn();
-        const props = {...requiredProps, closeModal};
-        const wrapper = mountWithIntl(
-            <Provider store={store}>
-                <RhsSettingsDisplay {...props}/>
-            </Provider>,
-        ).find(RhsSettingsDisplay);
-
-        wrapper.find('#closeButton').simulate('click');
-        expect(closeModal).toHaveBeenCalled();
-    });
-
-    test('should have called collapseModal', () => {
-        const collapseModal = jest.fn();
-        const props = {...requiredProps, collapseModal};
-        const wrapper = mountWithIntl(
-            <Provider store={store}>
-                <RhsSettingsDisplay {...props}/>
-            </Provider>,
-        ).find(RhsSettingsDisplay);
-
-        wrapper.find('.fa-angle-left').simulate('click');
-        expect(collapseModal).toHaveBeenCalled();
-    });
-
-    test('should update militaryTime state', () => {
-        const wrapper = mountWithIntl(
-            <Provider store={store}>
-                <RhsSettingsDisplay {...requiredProps}/>
-            </Provider>,
-        ).find(RhsSettingsDisplay);
-
-        (wrapper.instance() as RhsSettingsDisplay).handleClockRadio('false');
-        expect(wrapper.state('militaryTime')).toBe('false');
-
-        (wrapper.instance() as RhsSettingsDisplay).handleClockRadio('true');
-        expect(wrapper.state('militaryTime')).toBe('true');
-    });
-
-    test('should update teammateNameDisplay state', () => {
-        const wrapper = mountWithIntl(
-            <Provider store={store}>
-                <RhsSettingsDisplay {...requiredProps}/>
-            </Provider>,
-        ).find(RhsSettingsDisplay);
-
-        (wrapper.instance() as RhsSettingsDisplay).handleTeammateNameDisplayRadio('username');
-        expect(wrapper.state('teammateNameDisplay')).toBe('username');
-
-        (wrapper.instance() as RhsSettingsDisplay).handleTeammateNameDisplayRadio('nickname_full_name');
-        expect(wrapper.state('teammateNameDisplay')).toBe('nickname_full_name');
-
-        (wrapper.instance() as RhsSettingsDisplay).handleTeammateNameDisplayRadio('full_name');
-        expect(wrapper.state('teammateNameDisplay')).toBe('full_name');
-    });
-
     test('should update channelDisplayMode state', () => {
         const wrapper = mountWithIntl(
             <Provider store={store}>
@@ -287,10 +230,10 @@ describe('components/rhs_settings/rhs_settings_display/RhsSettingsDisplay', () =
             </Provider>,
         ).find(RhsSettingsDisplay);
 
-        (wrapper.instance() as RhsSettingsDisplay).handleChannelDisplayModeRadio('full');
+        (wrapper.instance() as RhsSettingsDisplay).handleOnChange({channelDisplayMode: 'full'});
         expect(wrapper.state('channelDisplayMode')).toBe('full');
 
-        (wrapper.instance() as RhsSettingsDisplay).handleChannelDisplayModeRadio('centered');
+        (wrapper.instance() as RhsSettingsDisplay).handleOnChange({channelDisplayMode: 'centered'});
         expect(wrapper.state('channelDisplayMode')).toBe('centered');
     });
 
@@ -301,10 +244,10 @@ describe('components/rhs_settings/rhs_settings_display/RhsSettingsDisplay', () =
             </Provider>,
         ).find(RhsSettingsDisplay);
 
-        (wrapper.instance() as RhsSettingsDisplay).handlemessageDisplayRadio('clean');
+        (wrapper.instance() as RhsSettingsDisplay).handleOnChange({messageDisplay: 'clean'});
         expect(wrapper.state('messageDisplay')).toBe('clean');
 
-        (wrapper.instance() as RhsSettingsDisplay).handlemessageDisplayRadio('compact');
+        (wrapper.instance() as RhsSettingsDisplay).handleOnChange({messageDisplay: 'compact'});
         expect(wrapper.state('messageDisplay')).toBe('compact');
     });
 
@@ -315,10 +258,10 @@ describe('components/rhs_settings/rhs_settings_display/RhsSettingsDisplay', () =
             </Provider>,
         ).find(RhsSettingsDisplay);
 
-        (wrapper.instance() as RhsSettingsDisplay).handleCollapseRadio('false');
+        (wrapper.instance() as RhsSettingsDisplay).handleOnChange({collapseDisplay: 'false'});
         expect(wrapper.state('collapseDisplay')).toBe('false');
 
-        (wrapper.instance() as RhsSettingsDisplay).handleCollapseRadio('true');
+        (wrapper.instance() as RhsSettingsDisplay).handleOnChange({collapseDisplay: 'true'});
         expect(wrapper.state('collapseDisplay')).toBe('true');
     });
 
@@ -329,10 +272,10 @@ describe('components/rhs_settings/rhs_settings_display/RhsSettingsDisplay', () =
             </Provider>,
         ).find(RhsSettingsDisplay);
 
-        (wrapper.instance() as RhsSettingsDisplay).handleLinkPreviewRadio('false');
+        (wrapper.instance() as RhsSettingsDisplay).handleOnChange({linkPreviewDisplay: 'false'});
         expect(wrapper.state('linkPreviewDisplay')).toBe('false');
 
-        (wrapper.instance() as RhsSettingsDisplay).handleLinkPreviewRadio('true');
+        (wrapper.instance() as RhsSettingsDisplay).handleOnChange({linkPreviewDisplay: 'true'});
         expect(wrapper.state('linkPreviewDisplay')).toBe('true');
     });
 
@@ -357,10 +300,10 @@ describe('components/rhs_settings/rhs_settings_display/RhsSettingsDisplay', () =
             </Provider>,
         ).find(RhsSettingsDisplay);
 
-        (wrapper.instance() as RhsSettingsDisplay).handleCollapseReplyThreadsRadio('off');
+        (wrapper.instance() as RhsSettingsDisplay).handleOnChange({collapsedReplyThreads: 'off'});
         expect(wrapper.state('collapsedReplyThreads')).toBe('off');
 
-        (wrapper.instance() as RhsSettingsDisplay).handleCollapseReplyThreadsRadio('on');
+        (wrapper.instance() as RhsSettingsDisplay).handleOnChange({collapsedReplyThreads: 'on'});
         expect(wrapper.state('collapsedReplyThreads')).toBe('on');
     });
 });

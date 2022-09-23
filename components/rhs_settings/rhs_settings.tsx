@@ -101,17 +101,7 @@ export default function RhsSettings({
         });
     };
 
-    // TODO: check for remove
-    const closeModal = () => {
-        return false;
-    };
-
-    const collapseModal = () => {
-        handleCollapse();
-    };
-
     const updateSection = (section?: string) => {
-        console.log(section);
     };
 
     return (
@@ -127,6 +117,7 @@ export default function RhsSettings({
                         defaultActiveKey={activeTab}
                         onSelect={handleUpdateActiveTab}
                         className='settings-tabs'
+                        id='settingsTabs'
                     >
                         {tabs && tabs.map((tab, i) => (
                             <Tab
@@ -141,8 +132,6 @@ export default function RhsSettings({
                             <NotificationsTab
                                 user={currentUser}
                                 updateSection={updateSection}
-                                closeModal={closeModal}
-                                collapseModal={collapseModal}
                             />
                         </div>
                     )}
@@ -151,8 +140,6 @@ export default function RhsSettings({
                             <DisplayTab
                                 user={currentUser}
                                 updateSection={updateSection}
-                                closeModal={closeModal}
-                                collapseModal={collapseModal}
                             />
                         </div>
                     )}
@@ -160,8 +147,6 @@ export default function RhsSettings({
                         <div>
                             <AdvancedTab
                                 updateSection={updateSection}
-                                closeModal={closeModal}
-                                collapseModal={collapseModal}
                             />
                         </div>
                     )}

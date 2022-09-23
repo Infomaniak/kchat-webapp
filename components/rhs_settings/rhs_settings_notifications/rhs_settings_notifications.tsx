@@ -3,8 +3,7 @@
 
 /* eslint-disable max-lines */
 
-import React, {ChangeEvent, RefObject} from 'react';
-import {FormattedMessage} from 'react-intl';
+import React, {RefObject} from 'react';
 
 import semver from 'semver';
 
@@ -13,24 +12,15 @@ import {UserNotifyProps, UserProfile} from '@mattermost/types/users';
 import {ActionResult} from 'mattermost-redux/types/actions';
 
 import Constants, {NotificationLevels} from 'utils/constants';
-import {localizeMessage, moveCursorToEnd} from 'utils/utils';
+import {localizeMessage} from 'utils/utils';
 import {isDesktopApp} from 'utils/user_agent';
-import {t} from 'utils/i18n';
-
-import RhsSettingsItem from 'components/setting_item_max.jsx';
-import SettingItemMin from 'components/setting_item_min';
-import LocalizedIcon from 'components/localized_icon';
 
 import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
-import EmailNotificationSetting from './email_notification_setting';
-import ManageAutoResponder from './manage_auto_responder/manage_auto_responder';
 
 export type Props = {
     user: UserProfile;
     updateSection: (section: string) => void;
     activeSection: string;
-    closeModal: () => void;
-    collapseModal: () => void;
     sendPushNotifications: boolean;
     enableAutoResponder: boolean;
     actions: {

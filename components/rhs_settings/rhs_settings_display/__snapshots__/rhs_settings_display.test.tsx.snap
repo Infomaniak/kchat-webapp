@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, channel display mode section 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, channel display mode section 1`] = `
 <div
   id="displaySettings"
 >
@@ -64,15 +64,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -97,15 +93,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -130,15 +122,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -163,15 +151,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -288,7 +272,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, clickToReply section 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, clickToReply section 1`] = `
 <div
   id="displaySettings"
 >
@@ -352,15 +336,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -385,15 +365,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -418,15 +394,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -451,15 +423,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -576,7 +544,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, clock section 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, clock section 1`] = `
 <div
   id="displaySettings"
 >
@@ -640,15 +608,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -673,15 +637,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -706,15 +666,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -739,15 +695,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -864,7 +816,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, collapse section 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, collapse section 1`] = `
 <div
   id="displaySettings"
 >
@@ -928,15 +880,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -961,15 +909,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -994,15 +938,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -1027,15 +967,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -1152,7 +1088,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, languages section 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, languages section 1`] = `
 <div
   id="displaySettings"
 >
@@ -1216,15 +1152,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -1249,15 +1181,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -1282,15 +1210,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -1315,15 +1239,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -1440,7 +1360,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, link preview section with EnableLinkPreviews is false 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, link preview section with EnableLinkPreviews is false 1`] = `
 <div
   id="displaySettings"
 >
@@ -1504,15 +1424,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -1537,15 +1453,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -1570,15 +1482,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -1695,7 +1603,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, link preview section with EnableLinkPreviews is true 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, link preview section with EnableLinkPreviews is true 1`] = `
 <div
   id="displaySettings"
 >
@@ -1759,15 +1667,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -1792,15 +1696,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -1825,15 +1725,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -1858,15 +1754,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -1983,7 +1875,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, message display section 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, message display section 1`] = `
 <div
   id="displaySettings"
 >
@@ -2047,15 +1939,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -2080,15 +1968,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -2113,15 +1997,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -2146,15 +2026,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -2271,7 +2147,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, no active section 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, no active section 1`] = `
 <div
   id="displaySettings"
 >
@@ -2335,15 +2211,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -2368,15 +2240,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -2401,15 +2269,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -2434,15 +2298,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -2559,7 +2419,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, teammate name display section 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, teammate name display section 1`] = `
 <div
   id="displaySettings"
 >
@@ -2623,15 +2483,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -2656,15 +2512,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -2689,15 +2541,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -2722,15 +2570,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -2847,7 +2691,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, theme section with EnableThemeSelection is false 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, theme section with EnableThemeSelection is false 1`] = `
 <div
   id="displaySettings"
 >
@@ -2911,15 +2755,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -2944,15 +2784,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -2977,15 +2813,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -3010,15 +2842,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -3135,7 +2963,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, theme section with EnableThemeSelection is true 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, theme section with EnableThemeSelection is true 1`] = `
 <div
   id="displaySettings"
 >
@@ -3206,15 +3034,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -3239,15 +3063,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -3272,15 +3092,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -3305,15 +3121,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={
@@ -3430,7 +3242,7 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
 </div>
 `;
 
-exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapshot, timezone section 1`] = `
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, timezone section 1`] = `
 <div
   id="displaySettings"
 >
@@ -3494,15 +3306,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="collapseFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="collapseDisplay"
       messageDesc={
@@ -3527,15 +3335,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="linkpreviewFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="linkPreviewDisplay"
       messageDesc={
@@ -3560,15 +3364,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="one_click_reactions_enabledFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="oneClickReactionsOnPosts"
       messageDesc={
@@ -3593,15 +3393,11 @@ exports[`components/rhs_settings/display/RhsSettingsDisplay should match snapsho
       extraInfo={null}
       infoPosition="bottom"
       inputs={
-        Array [
-          <React.Fragment>
-            <Toggle
-              id="show_unread_sectionFormatA"
-              onToggle={[Function]}
-              toggled={false}
-            />
-          </React.Fragment>,
-        ]
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={false}
+        />
       }
       key="showUnreadsCategory"
       messageDesc={

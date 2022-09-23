@@ -73,7 +73,7 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
             premadeThemes.push(
                 <div
                     className='col-xs-6 col-sm-4 rhs-btns text-center'
-                    key={'rhs-custom-btn-key' + k}
+                    key={premadeTheme.type}
                 >
                     <div
                         id={`rhsTheme${premadeTheme.type?.replace(' ', '')}`}
@@ -95,10 +95,8 @@ const PremadeThemeChooser = ({theme, updateTheme, allowedThemes = []}: Props) =>
     }
 
     return (
-        <section className='row rhs-settings-section pb-8'>
-            <div className='clearfix'>
-                {premadeThemes}
-            </div>
+        <section className='row rhs-settings-section pb-8' key='txdfuyguhijok'>
+            {premadeThemes}
         </section>
     );
 };

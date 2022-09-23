@@ -3,8 +3,8 @@
 
 /* eslint-disable max-lines */
 
-import React, {ReactNode} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import React from 'react';
+import {FormattedMessage} from 'react-intl';
 
 import ReactSelect, {ValueType} from 'react-select';
 
@@ -43,9 +43,6 @@ export type Props = {
     joinLeave: string;
     unreadScrollPosition: string;
     updateSection: (section?: string) => void;
-    activeSection: string;
-    closeModal: () => void;
-    collapseModal: () => void;
     enablePreviewFeatures: boolean;
     enableUserDeactivation: boolean;
     actions: {

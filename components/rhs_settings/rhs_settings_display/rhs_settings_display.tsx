@@ -32,7 +32,7 @@ import RhsThemeSetting from 'components/rhs_settings/rhs_settings_theme';
 import Toggle from 'components/toggle';
 import SvgNoCompactIcon from '../rhs_settings_compact/assets/SvgNoCompactIcon';
 import SvgCompactIcon from '../rhs_settings_compact/assets/SvgCompactIcon';
-import RhsLimitVisibleGMsDMs from 'components/rhs_settings/rhs_settings_sidebar/limit_visible_gms_dms';
+import RhsLimitVisibleGMsDMs from 'components/rhs_settings/rhs_settings_display/limit_visible_gms_dms';
 
 const Preferences = Constants.Preferences;
 
@@ -345,7 +345,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
     }
 
     handleOnChange(display: {[key: string]: any}) {
-        console.log(display);
         this.setState({...display}, () => {
             this.handleSubmit();
         });
@@ -375,22 +374,9 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             secondOption,
             thirdOption,
             description,
-            disabled,
         } = props;
-        let extraInfo = null;
-        let submit: (() => Promise<void>) | null = this.handleSubmit;
-
-        let moreColon;
-
-        let thirdMessage;
-        if (thirdOption) {
-            thirdMessage = (
-                <FormattedMessage
-                    id={thirdOption.radionButtonText.id}
-                    defaultMessage={thirdOption.radionButtonText.message}
-                />
-            );
-        }
+        const extraInfo = null;
+        const submit: (() => Promise<void>) | null = this.handleSubmit;
 
         const messageTitle = (
             <FormattedMessage
@@ -442,7 +428,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                             id={childOptionToShow.id}
                             defaultMessage={childOptionToShow.message}
                         />
-                        {moreColon}
                         <span className='font-weight--normal'>
                             <FormattedMessage
                                 id={childOptionToShow.moreId}
@@ -461,30 +446,14 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             );
         }
 
-        let inputs = [
-            <>
-                <Toggle
-                    id={name + 'A'}
-                    onToggle={() => this.handleOnChange(format[0] ? secondDisplay : firstDisplay)}
-                    toggled={Boolean(format[0])}
+        const inputs = (
+            <Toggle
+                id={name + 'A'}
+                onToggle={() => this.handleOnChange(format[0] ? secondDisplay : firstDisplay)}
+                toggled={Boolean(format[0])}
 
-                />
-            </>,
-
-        ];
-
-        if (display === 'teammateNameDisplay' && disabled) {
-            extraInfo = (
-                <span>
-                    <FormattedMessage
-                        id='user.settings.display.teammateNameDisplay'
-                        defaultMessage='This field is handled through your System Administrator. If you want to change it, you need to do so through your System Administrator.'
-                    />
-                </span>
-            );
-            submit = null;
-            inputs = [];
-        }
+            />
+        );
 
         return (
             <RhsSettingsItem
@@ -559,7 +528,9 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             if (option.childOption && option.value === value) {
                 const childDisplay = option.childOption.display;
                 childOptionSection = (
-                    <div className={'col-sm-12 title-toggle pt-4'}>
+                    <div
+                        className={'col-sm-12 title-toggle pt-4'}
+                    >
                         <h5
                             id='settingTitle'
                             className='settings-title'
@@ -587,7 +558,10 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             }
 
             inputs.push(
-                <div className={`col-xs-6 col-sm-${col} rhs-btns text-center`}>
+                <div
+                    className={`col-xs-6 col-sm-${col} rhs-btns text-center`}
+                    key={key}
+                >
                     <div
                         id={`rhsCustomBtnSelect${key}`}
                         className={`rhs-custom-btn ${activeClass}`}
@@ -824,15 +798,12 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             <div id='displaySettings'>
                 <div className='user-settings user-rhs-container container'>
                     <div className='divider-dark first'/>
-
                     {themeSection}
                     {messageDisplaySection}
-
                     {collapseSection}
                     {linkPreviewSection}
                     {oneClickReactionsOnPostsSection}
                     {showUnreadSection}
-
                     {channelDisplayModeSection}
                     {UnreadScrollPositionSection}
                     <RhsLimitVisibleGMsDMs/>
