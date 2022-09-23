@@ -18,7 +18,7 @@ import Tooltip from 'components/tooltip';
 
 import {GlobalState} from 'types/store';
 import {getRhsState} from 'selectors/rhs';
-import {closeRightHandSide, showSettingss} from 'actions/views/rhs';
+import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 
 export interface Props {
     isMobile?: boolean;
@@ -44,7 +44,7 @@ export default function RhsSettingsHeader({
         if (rhsState === RHSStates.SETTINGS) {
             dispatch(closeRightHandSide());
         } else {
-            dispatch(showSettingss());
+            dispatch(showSettings());
         }
     };
 

@@ -20,7 +20,7 @@ import {
     setRhsExpanded,
     openRHSSearch,
     filterFilesSearchByExt,
-    updateSearchType, showSettingss,
+    updateSearchType, showSettings,
 } from 'actions/views/rhs';
 import {autocompleteChannelsForSearch} from 'actions/channel_actions';
 import {autocompleteUsersInTeam} from 'actions/user_actions';
@@ -82,7 +82,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             openRHSSearch,
             getMoreFilesForSearch,
             filterFilesSearchByExt,
-            showSettingss,
+            showSettings,
         }, dispatch),
     };
 }

@@ -16,7 +16,7 @@ import {ModalData} from 'types/actions';
 import Constants, {RHSStates} from 'utils/constants';
 import {GlobalState} from 'types/store';
 import {getRhsState} from 'selectors/rhs';
-import {closeRightHandSide, showSettingss} from 'actions/views/rhs';
+import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 
 // import UserSettingsModal from 'components/user_settings/modal';
 
@@ -35,7 +35,7 @@ const SettingsButton = (props: Props): JSX.Element | null => {
         if (rhsState === RHSStates.SETTINGS) {
             dispatch(closeRightHandSide());
         } else {
-            dispatch(showSettingss());
+            dispatch(showSettings());
         }
     };
 
