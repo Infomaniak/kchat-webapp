@@ -52,47 +52,6 @@ export default class RhsSettingsCompact extends React.PureComponent<Props, State
         return null;
     }
 
-    const messageDisplaySection = this.createSection({
-        section: Preferences.MESSAGE_DISPLAY,
-        display: 'messageDisplay',
-        value: this.state.messageDisplay,
-        defaultDisplay: Preferences.MESSAGE_DISPLAY_CLEAN,
-        title: {
-            id: t('user.settings.display.messageDisplayTitle'),
-            message: 'Message Display',
-        },
-        firstOption: {
-            value: Preferences.MESSAGE_DISPLAY_CLEAN,
-            radionButtonText: {
-                id: t('user.settings.display.messageDisplayClean'),
-                message: 'Standard',
-                moreId: t('user.settings.display.messageDisplayCleanDes'),
-                moreMessage: 'Easy to scan and read.',
-            },
-        },
-        secondOption: {
-            value: Preferences.MESSAGE_DISPLAY_COMPACT,
-            radionButtonText: {
-                id: t('user.settings.display.messageDisplayCompact'),
-                message: 'Compact',
-                moreId: t('user.settings.display.messageDisplayCompactDes'),
-                moreMessage: 'Fit as many messages on the screen as we can.',
-            },
-            childOption: {
-                id: t('user.settings.display.colorize'),
-                value: this.state.colorizeUsernames,
-                display: 'colorizeUsernames',
-                message: 'Colorize usernames',
-                moreId: t('user.settings.display.colorizeDes'),
-                moreMessage: 'Use colors to distinguish users in compact mode',
-            },
-        },
-        description: {
-            id: t('user.settings.display.messageDisplayDescription'),
-            message: 'Select how messages in a channel should be displayed.',
-        },
-    });
-
     handleOnChange(checked: any) {
         this.setState(checked, () => {
             this.handleSubmit();
