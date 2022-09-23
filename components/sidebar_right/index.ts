@@ -15,7 +15,7 @@ import {
     closeRightHandSide,
     openAtPrevious,
     updateSearchTerms,
-    showSettingss,
+    showSettings,
 } from 'actions/views/rhs';
 import {
     getIsRhsExpanded,
@@ -70,7 +70,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             updateSearchTerms,
             showChannelFiles,
             showChannelInfo,
-            showSettingss,
+            showSettings,
         }, dispatch),
     };
 }
