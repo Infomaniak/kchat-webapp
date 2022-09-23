@@ -49,8 +49,8 @@ const holders = defineMessages({
         defaultMessage: 'Sidebar',
     },
     advanced: {
-        id: t('user.settings.modal.advanced'),
-        defaultMessage: 'Advanced',
+        id: t('user.settings.advance.shortcuts'),
+        defaultMessage: 'Shortcuts',
     },
     checkEmail: {
         id: 'user.settings.general.checkEmail',

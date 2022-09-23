@@ -4898,6 +4898,7 @@
   "user.settings.advance.startFromLeftOff": "Beginne, wo ich aufgehört habe",
   "user.settings.advance.startFromNewest": "Beginne mit der neusten Nachricht",
   "user.settings.advance.title": "Erweiterte Einstellungen",
+  "user.settings.advance.shortcuts": "Kürzel",
   "user.settings.advance.unreadScrollPositionDesc": "Wähle deine Scroll Position, wenn du einen ungelesenen Kanal betrachtest. Kanäle werden immer als Gelesen markiert, wenn sie betrachtet wurden.",
   "user.settings.advance.unreadScrollPositionTitle": "Scroll Position, wenn ein ungelesener Kanal betrachtet wird",
   "user.settings.custom_theme.awayIndicator": "Abwesend-Anzeige",

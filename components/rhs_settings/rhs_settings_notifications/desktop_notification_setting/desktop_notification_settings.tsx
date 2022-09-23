@@ -68,14 +68,12 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
     }
 
     handleOnSelectChange = (key, value): void => {
-        console.log(key, value);
         if (key && value) {
             this.props.setParentState(key, value);
         }
     }
 
     handleThreadsOnChange = (value: 'mention' | 'all'): void => {
-        console.log(value);
         this.props.setParentState('desktopThreads', value);
     }
 

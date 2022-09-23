@@ -4077,6 +4077,7 @@
   "user.settings.advance.sendTitle": "Enviar mensajes con CTRL+RETORNO",
   "user.settings.advance.sendTitle.mac": "Enviar mensajes con ⌘+RETORNO",
   "user.settings.advance.title": "Configuración Avanzada",
+  "user.settings.advance.shortcuts": "Atajos",
   "user.settings.custom_theme.awayIndicator": "Indicador Ausente",
   "user.settings.custom_theme.buttonBg": "Fondo Botón",
   "user.settings.custom_theme.buttonColor": "Texto del Botón",

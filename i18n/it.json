@@ -3451,6 +3451,7 @@
   "user.settings.advance.sendTitle": "Invia messaggi con CTRL+INVIO",
   "user.settings.advance.sendTitle.mac": "Invia messaggi con ⌘+INVIO",
   "user.settings.advance.title": "Impostazioni avanzate",
+  "user.settings.advance.shortcuts": "Scorciatoie",
   "user.settings.custom_theme.awayIndicator": "Indicatore di assenza",
   "user.settings.custom_theme.buttonBg": "BG Pulsante",
   "user.settings.custom_theme.buttonColor": "Testo del pulsante",

@@ -22,7 +22,7 @@
                     padding: 7px 5px;
                     padding-bottom: 10px;
                     font-size: 14px;
-
+                    color: rgba(var(--center-channel-color-rgb),0.785);
                     &:hover {
                         border: none;
                         border-bottom: 4px solid transparent;
@@ -33,6 +33,9 @@
                         background: none;
                         border: none;
                         border-bottom: 4px solid $primary-color !important;
+                        color: rgba(var(--center-channel-color-rgb), 1);
+                        font-weight: 600;
+
                         &:hover {
                             border: none;
                             border-bottom: 4px solid transparent;
@@ -64,6 +67,12 @@
     .rhs-custom-bb {
         margin-bottom: 16px;
         border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.12)
+    }
+
+    .rhs-settings-section {
+        .shortcut-line {
+            color: rgba(var(--center-channel-color-rgb),0.785);
+        }
     }
 }
 
