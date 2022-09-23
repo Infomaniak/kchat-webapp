@@ -6,8 +6,8 @@ const SvgNoCompactIcon = (props) => (
     <>
         <svg
             width={32}
-            height={22}
-            viewBox='0 0 32 22'
+            height={24}
+            viewBox='0 0 32 24'
             fill='none'
             xmlns='http://www.w3.org/2000/svg'
             {...props}
