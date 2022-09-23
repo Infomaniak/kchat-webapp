@@ -11,22 +11,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
-import {ModalData} from 'types/actions';
-
 import Constants, {RHSStates} from 'utils/constants';
 import {GlobalState} from 'types/store';
 import {getRhsState} from 'selectors/rhs';
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 
-// import UserSettingsModal from 'components/user_settings/modal';
-
-type Props = {
-    actions: {
-        openModal: <P>(modalData: ModalData<P>) => void;
-    };
-};
-
-const SettingsButton = (props: Props): JSX.Element | null => {
+const SettingsButton = (): JSX.Element | null => {
     const dispatch = useDispatch();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
 
