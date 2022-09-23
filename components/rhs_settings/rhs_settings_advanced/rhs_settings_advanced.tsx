@@ -293,7 +293,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                     <div className='rhs-settings-section rhs-custom-bb'>
                         <div>
                             <h5 className='section-title mb-8'><strong>{localizeMessage('shortcuts.msgs.header', 'Messages')}</strong></h5>
-                            <h5 className='section-title mb-4'><strong>{localizeMessage('shortcuts.msgs.input.header', 'Works inside an empty input field' )}</strong></h5>
+                            <h5 className='section-title mb-4'><strong>{localizeMessage('shortcuts.msgs.input.header', 'Works inside an empty input field')}</strong></h5>
                             <div className='subsection mt-4'>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgEdit}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReply}/>

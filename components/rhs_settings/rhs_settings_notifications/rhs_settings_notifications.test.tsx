@@ -8,14 +8,14 @@ import {TestHelper} from 'utils/test_helper';
 
 import {UserNotifyProps} from '@mattermost/types/users';
 
-import UserSettingsNotifications from './user_settings_notifications';
+import RhsSettingsNotifications from './rhs_settings_notifications';
 
-describe('components/user_settings/display/UserSettingsDisplay', () => {
+describe('components/rhs_settings/rhs_settings_display/RhsSettingsDisplay', () => {
     const user = TestHelper.getUserMock({
         id: 'user_id',
     });
 
-    const requiredProps: ComponentProps<typeof UserSettingsNotifications> = {
+    const requiredProps: ComponentProps<typeof RhsSettingsNotifications> = {
         user,
         updateSection: jest.fn(),
         activeSection: '',
@@ -31,8 +31,8 @@ describe('components/user_settings/display/UserSettingsDisplay', () => {
 
     test('should have called handleSubmit', async () => {
         const props = {...requiredProps, actions: {...requiredProps.actions}};
-        const wrapper = shallow<UserSettingsNotifications>(
-            <UserSettingsNotifications {...props}/>,
+        const wrapper = shallow<RhsSettingsNotifications>(
+            <RhsSettingsNotifications {...props}/>,
         );
 
         await wrapper.instance().handleSubmit();
@@ -43,8 +43,8 @@ describe('components/user_settings/display/UserSettingsDisplay', () => {
         const updateMe = jest.fn(() => Promise.resolve({data: true}));
 
         const props = {...requiredProps, actions: {...requiredProps.actions, updateMe}};
-        const wrapper = shallow<UserSettingsNotifications>(
-            <UserSettingsNotifications {...props}/>,
+        const wrapper = shallow<RhsSettingsNotifications>(
+            <RhsSettingsNotifications {...props}/>,
         );
 
         await wrapper.instance().handleSubmit();
@@ -56,8 +56,8 @@ describe('components/user_settings/display/UserSettingsDisplay', () => {
         const newUpdateSection = jest.fn();
         const updateArg = 'unreadChannels';
         const props = {...requiredProps, updateSection: newUpdateSection, user: {...user, notify_props: {desktop: 'on'} as unknown as UserNotifyProps}};
-        const wrapper = shallow<UserSettingsNotifications>(
-            <UserSettingsNotifications {...props}/>,
+        const wrapper = shallow<RhsSettingsNotifications>(
+            <RhsSettingsNotifications {...props}/>,
         );
 
         wrapper.setState({isSaving: true, desktopActivity: 'off' as unknown as UserNotifyProps['desktop']});
@@ -66,22 +66,5 @@ describe('components/user_settings/display/UserSettingsDisplay', () => {
         expect(wrapper.state('isSaving')).toEqual(false);
         expect(wrapper.state('desktopActivity')).toEqual('on');
         expect(newUpdateSection).toHaveBeenCalledTimes(1);
-    });
-
-    test('should show reply notifications section when CRT off', () => {
-        const wrapper = shallow<UserSettingsNotifications>(
-            <UserSettingsNotifications {...requiredProps}/>,
-        );
-        expect(wrapper.exists('Connect(SettingItemMin)[section="comments"]')).toBe(true);
-    });
-
-    test('should not show reply notifications section when CRT on', () => {
-        const wrapper = shallow<UserSettingsNotifications>(
-            <UserSettingsNotifications
-                {...requiredProps}
-                isCollapsedThreadsEnabled={true}
-            />,
-        );
-        expect(wrapper.exists('Connect(SettingItemMin)[section="comments"]')).toBe(false);
     });
 });

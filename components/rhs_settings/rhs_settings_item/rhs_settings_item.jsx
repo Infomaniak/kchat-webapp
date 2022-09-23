@@ -110,7 +110,7 @@ export default class RhsSettingsItem extends React.PureComponent {
          */
         saveButtonText: PropTypes.string,
 
-        messageDesc: PropTypes.string,
+        messageDesc: PropTypes.string | PropTypes.node,
 
         childOptionSection: PropTypes.node,
 

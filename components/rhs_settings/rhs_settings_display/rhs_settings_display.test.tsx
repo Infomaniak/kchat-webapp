@@ -13,7 +13,7 @@ import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import RhsSettingsDisplay from './rhs_settings_display';
 
-describe('components/user_settings/display/RhsSettingsDisplay', () => {
+describe('components/rhs_settings/rhs_settings_display/RhsSettingsDisplay', () => {
     const user = {
         id: 'user_id',
         username: 'username',

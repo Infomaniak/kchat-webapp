@@ -10,7 +10,7 @@ import {Preferences} from 'mattermost-redux/constants';
 
 describe('components/user_settings/display/CustomThemeChooser', () => {
     const baseProps = {
-        theme: Preferences.THEMES.denim,
+        theme: Preferences.THEMES.ik,
         updateTheme: jest.fn(),
     };
 

@@ -488,6 +488,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
 
         return (
             <RhsSettingsItem
+                key={display}
                 title={messageTitle}
                 inputs={inputs}
                 submit={submit}
@@ -518,6 +519,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
 
         return (
             <RhsSettingsItem
+                key={display}
                 title={messageTitle}
                 inputs={
                     <ReactSelect
@@ -602,6 +604,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
 
         return (
             <RhsSettingsItem
+                key={display}
                 inputs={inputs}
                 saving={this.state.isSaving}
                 updateSection={this.props.updateSection}
