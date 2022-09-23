@@ -261,7 +261,9 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
     setStateValue = (key: string, value: string | boolean): void => {
         const data: {[key: string]: string | boolean } = {};
         data[key] = value;
-        this.setState((prevState) => ({...prevState, ...data}));
+        this.setState((prevState) => ({...prevState, ...data}), () => {
+            this.handleSubmit();
+        });
     }
 
     render() {

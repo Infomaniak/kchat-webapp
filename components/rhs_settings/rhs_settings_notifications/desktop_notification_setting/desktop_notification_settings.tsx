@@ -9,12 +9,10 @@ import semver from 'semver';
 
 import {NotificationLevels} from 'utils/constants';
 import * as Utils from 'utils/utils';
-import {t} from 'utils/i18n';
 import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_settings_item';
-import SettingItemMin from 'components/setting_item_min';
 import {isDesktopApp} from 'utils/user_agent';
 import {localizeMessage} from 'utils/utils';
-import Toggle from '../../../toggle';
+import Toggle from 'components/toggle';
 
 type SelectedOption = {
     label: string;
@@ -70,14 +68,12 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
     }
 
     handleOnSelectChange = (key, value): void => {
-        console.log(key, value);
         if (key && value) {
             this.props.setParentState(key, value);
         }
     }
 
     handleThreadsOnChange = (value: 'mention' | 'all'): void => {
-        console.log(value)
         this.props.setParentState('desktopThreads', value);
     }
 
@@ -96,103 +92,6 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
                 this.dropdownSoundRef.current.blur();
             }
         }
-    }
-
-    buildMaximizedSetting = (): JSX.Element => {
-        const inputs = [];
-
-        const activityRadio = [false, false, false];
-        if (this.props.activity === NotificationLevels.MENTION) {
-            activityRadio[1] = true;
-        } else if (this.props.activity === NotificationLevels.NONE) {
-            activityRadio[2] = true;
-        } else {
-            activityRadio[0] = true;
-        }
-
-        let soundSection;
-        let notificationSelection;
-        let threadsNotificationSelection;
-        if (this.props.activity !== NotificationLevels.NONE) {
-            const soundRadio = [false, false];
-            if (this.props.sound === 'false') {
-                soundRadio[1] = true;
-            } else {
-                soundRadio[0] = true;
-            }
-
-            if (this.props.sound === 'true') {
-                const sounds = Array.from(Utils.notificationSounds.keys());
-                const options = sounds.map((sound) => {
-                    return {value: sound, label: sound};
-                });
-
-                if (!isDesktopApp() || (window.desktop && semver.gte(window.desktop.version || '', '4.6.0'))) {
-                    notificationSelection = (<div className='pt-2'>
-                        <ReactSelect
-                            className='react-select notification-sound-dropdown'
-                            classNamePrefix='react-select'
-                            id='displaySoundNotification'
-                            options={options}
-                            clearable={false}
-                            onChange={this.setDesktopNotificationSound}
-                            value={this.state.selectedOption}
-                            isSearchable={false}
-                            ref={this.dropdownSoundRef}
-                        /></div>);
-                }
-            }
-
-            if (Utils.hasSoundOptions()) {
-                soundSection = (
-                    <fieldset>
-                        {notificationSelection}
-                        <div className='mt-5'>
-                            <FormattedMessage
-                                id='user.settings.notifications.sounds_info'
-                                defaultMessage='Notification sounds are available on Firefox, Edge, Safari, Chrome and Mattermost Desktop Apps.'
-                            />
-                        </div>
-                    </fieldset>
-                );
-            } else {
-                soundSection = (
-                    <fieldset>
-                        <legend className='form-legend'>
-                            <FormattedMessage
-                                id='user.settings.notifications.desktop.sound'
-                                defaultMessage='Notification sound'
-                            />
-                        </legend>
-                        <br/>
-                        <FormattedMessage
-                            id='user.settings.notifications.soundConfig'
-                            defaultMessage='Please configure notification sounds in your browser settings'
-                        />
-                    </fieldset>
-                );
-            }
-        }
-
-        inputs.push(
-            <div key='userNotificationLevelOption'>
-                <hr/>
-                {soundSection}
-            </div>,
-        );
-
-        return (
-            <>
-                <RhsSettingsItem
-                    title={Utils.localizeMessage('user.settings.notifications.desktop.title', 'Desktop Notifications')}
-                    inputs={inputs}
-                    submit={this.props.submit}
-                    saving={this.props.saving}
-                    server_error={this.props.error}
-                    updateSection={this.handleMaxUpdateSection}
-                />
-            </>
-        );
     }
 
     createNotificationsSelect = (): JSX.Element => {
@@ -307,6 +206,44 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         return undefined;
     }
 
+    createnotificationSelectionSection = (): JSX.Element | undefined => {
+        let notificationSelection;
+
+        if (this.props.activity !== NotificationLevels.NONE) {
+            if (this.props.sound === 'true') {
+                const sounds = Array.from(Utils.notificationSounds.keys());
+                const options = sounds.map((sound) => {
+                    return {value: sound, label: sound};
+                });
+                if (!isDesktopApp() || (window.desktop && semver.gte(window.desktop.version || '', '4.6.0'))) {
+                    notificationSelection = (
+                        <ReactSelect
+                            className='react-select notification-sound-dropdown'
+                            classNamePrefix='react-select'
+                            id='displaySoundNotification'
+                            options={options}
+                            clearable={false}
+                            onChange={this.setDesktopNotificationSound}
+                            value={this.state.selectedOption}
+                            isSearchable={false}
+                            ref={this.dropdownSoundRef}
+                        />);
+                }
+            }
+
+            return (
+                <section className='row rhs-settings-section'>
+                    <div className='col-sm-12'>
+                        <div className='setting-list' >
+                            {notificationSelection}
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+        return undefined;
+    }
+
     componentDidUpdate() {
         this.blurDropdown();
     }
@@ -315,15 +252,15 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         const notificationsSelect = this.createNotificationsSelect();
         const threadNotifications = this.createNotificationsForThread();
         const soundToggle = this.createSoundToggleSection();
-        const others = this.buildMaximizedSetting();
+        const notificationSelection = this.createnotificationSelectionSection();
         return (
             <>
 
                 {notificationsSelect}
                 {threadNotifications}
                 {soundToggle}
-                {others}</>
-
+                {notificationSelection}
+            </>
         );
     }
 }

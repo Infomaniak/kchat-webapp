@@ -4,7 +4,7 @@
 /* eslint-disable max-lines */
 
 import React, {ReactNode} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import ReactSelect, {ValueType} from 'react-select';
 
@@ -18,6 +18,8 @@ import {PreferenceType} from '@mattermost/types/preferences';
 import {ActionResult} from 'mattermost-redux/types/actions';
 
 import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
+import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from '../../keyboard_shortcuts/keyboard_shortcuts_sequence';
+import * as Utils from '../../../utils/utils';
 
 const PreReleaseFeatures = Constants.PRE_RELEASE_FEATURES;
 
@@ -137,14 +139,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
         };
     }
 
-    updateSetting = (setting: string, value: string | number): void => {
-        console.log(setting, value);
-
-        const settings = this.state.settings;
-        settings[setting] = value;
-
-        this.setState((prevState) => ({...prevState, ...settings}));
-    }
+    isLinux = Utils.isLinux();
 
     handleSubmit = async (settings: string[]): Promise<void> => {
         const preferences: PreferenceType[] = [];
@@ -164,7 +159,6 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
         this.setState({isSaving: true});
 
         await actions.savePreferences(userId, preferences);
-
     }
 
     // This function changes ctrl to cmd when OS is mac
@@ -199,72 +193,6 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
             ctrlSendTitle: title.default,
             ctrlSendDesc: description.default,
         };
-    }
-
-    renderUnreadScrollPositionSection = () => {
-        const handleUnreadSelectChange = (selected: ValueType<any>) => {
-            const settings = this.state.settings;
-
-            switch (selected.value) {
-            case 0: {
-                settings.unread_scroll_position = Preferences.UNREAD_SCROLL_POSITION_START_FROM_LEFT;
-                settings.unreadSelect = 0;
-                break;
-            }
-            case 1: {
-                settings.unread_scroll_position = Preferences.UNREAD_SCROLL_POSITION_START_FROM_NEWEST;
-                settings.unreadSelect = 1;
-                break;
-            }
-            }
-
-            this.setState((prevState) => ({...prevState, ...settings}),
-                () => {
-                    this.handleSubmit([Preferences.UNREAD_SCROLL_POSITION]);
-                });
-        };
-        const unreadScrollPositionLabels = [
-            {value: 0, label: localizeMessage('user.settings.advance.startFromLeftOff', 'Start me where I left off')},
-            {value: 1, label: localizeMessage('user.settings.advance.startFromNewest', 'Start me at the newest message')},
-        ];
-
-        const inputs = [
-            <ReactSelect
-                key={unreadScrollPositionLabels[this.state.settings.unreadSelect].value}
-                className='react-select settings-select advanced-select'
-                classNamePrefix='react-select'
-                id='limitVisibleGMsDMs'
-                options={unreadScrollPositionLabels}
-                clearable={false}
-                onChange={(e) => handleUnreadSelectChange(e)}
-                value={unreadScrollPositionLabels[this.state.settings.unreadSelect]}
-                isSearchable={false}
-                menuPortalTarget={document.body}
-                styles={reactStyles}
-            />,
-        ];
-        return (
-            <RhsSettingsItem
-                title={
-                    <FormattedMessage
-                        id='user.settings.advance.unreadScrollPositionTitle'
-                        defaultMessage='Scroll position when viewing an unread channel'
-                    />
-                }
-                inputs={inputs}
-                messageDesc={
-                    <FormattedMessage
-                        id='user.settings.advance.unreadScrollPositionDesc'
-                        defaultMessage='Choose your scroll position when you view an unread channel. Channels will always be marked as read when viewed.'
-                    />
-                }
-                setting={Preferences.UNREAD_SCROLL_POSITION}
-                submit={this.handleSubmit}
-                saving={this.state.isSaving}
-                server_error={this.state.serverError}
-                isSelect={true}
-            />
-        );
     }
 
     render() {
@@ -333,16 +261,83 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                 saving={this.state.isSaving}
                 server_error={serverError}
                 isSelect={true}
+                containerStyle='rhs-custom-bb'
             />
         );
-
-        const unreadScrollPositionSection = this.renderUnreadScrollPositionSection();
 
         return (
             <div id='displaySettings'>
                 <div className='user-settings user-rhs-container container'>
                     <div className='divider-dark first'/>
                     {ctrlSendSection}
+                    <div className='rhs-settings-section rhs-custom-bb'>
+                        <div>
+                            <h5 className='section-title mb-8'><strong>{localizeMessage('shortcuts.nav.header', 'Navigation')}</strong></h5>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navPrev}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navNext}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navUnreadPrev}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navUnreadNext}/>
+                            {!this.isLinux && <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.teamNavPrev}/>}
+                            {!this.isLinux && <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.teamNavNext}/>}
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.teamNavSwitcher}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navSwitcher}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navDMMenu}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navSettings}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navMentions}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navFocusCenter}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navOpenCloseSidebar}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navExpandSidebar}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.navOpenChannelInfo}/>
+                        </div>
+                    </div>
+                    <div className='rhs-settings-section rhs-custom-bb'>
+                        <div>
+                            <h5 className='section-title mb-8'><strong>{localizeMessage('shortcuts.msgs.header', 'Messages')}</strong></h5>
+                            <h5 className='section-title mb-4'><strong>{localizeMessage('shortcuts.msgs.input.header', 'Works inside an empty input field' )}</strong></h5>
+                            <div className='subsection mt-4'>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgEdit}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReply}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgLastReaction}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReprintPrev}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReprintNext}/>
+                            </div>
+                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage('shortcuts.msgs.comp.header', 'Autocomplete')}</strong></h5>
+                            <div className='subsection mt-4'>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgCompUsername}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgCompChannel}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgCompEmoji}/>
+                            </div>
+                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage('shortcuts.msgs.markdown.header', 'Formatting')}</strong></h5>
+                            <div className='subsection mt-4'>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgMarkdownBold}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgMarkdownItalic}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgMarkdownLink}/>
+                            </div>
+                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage('shortcuts.msgs.search.header', 'Searching')}</strong></h5>
+                            <div className='subsection mt-4'>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgSearchChannel}/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='rhs-settings-section mb-8'>
+                        <div>
+                            <h5 className='section-title mb-4'><strong>{localizeMessage('shortcuts.files.header', 'Files')}</strong></h5>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.filesUpload}/>
+                        </div>
+                        <div className='section--lower'>
+                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage('shortcuts.browser.header', 'Built-in Browser Commands')}</strong></h5>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserChannelPrev}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserChannelNext}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserFontIncrease}/>
+                            <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserFontDecrease}/>
+                            <h5 className='section-title mb-4 mt-8'><strong>{localizeMessage('shortcuts.browser.input.header', 'Works inside an input field')}</strong></h5>
+                            <div className='subsection'>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserHighlightPrev}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserHighlightNext}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserNewline}/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );

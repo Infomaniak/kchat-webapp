@@ -4934,6 +4934,7 @@
   "user.settings.advance.startFromLeftOff": "Start me where I left off",
   "user.settings.advance.startFromNewest": "Start me at the newest message",
   "user.settings.advance.title": "Advanced Settings",
+  "user.settings.advance.shortcuts": "Shortcuts",
   "user.settings.advance.unreadScrollPositionDesc": "Choose your scroll position when you view an unread channel. Channels will always be marked as read when viewed.",
   "user.settings.advance.unreadScrollPositionTitle": "Scroll position when viewing an unread channel",
   "user.settings.custom_theme.awayIndicator": "Away Indicator",
