@@ -19,6 +19,7 @@ import RhsPlugin from 'plugins/rhs_plugin';
 
 import {Channel} from '@mattermost/types/channels';
 import {RhsState} from 'types/store/rhs';
+import RhsSettings from 'components/rhs_settings';
 
 type Props = {
     isExpanded: boolean;
@@ -32,6 +33,7 @@ type Props = {
     isChannelInfo: boolean;
     isChannelMembers: boolean;
     isPluginView: boolean;
+    isSettings: boolean;
     previousRhsState: RhsState;
     rhsChannel: Channel;
     selectedPostId: string;
@@ -45,6 +47,7 @@ type Props = {
         updateSearchTerms: (terms: string) => void;
         showChannelFiles: (channelId: string) => void;
         showChannelInfo: (channelId: string) => void;
+        showSettings: () => void;
     };
 }
 
@@ -59,7 +62,6 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
-
         this.sidebarRight = React.createRef();
         this.state = {
             isOpened: false,
@@ -77,6 +79,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             isChannelFiles: this.props.isChannelFiles,
             isChannelInfo: this.props.isChannelInfo,
             isChannelMembers: this.props.isChannelMembers,
+            isSettings: this.props.isSettings,
             selectedPostId: this.props.selectedPostId,
             selectedPostCardId: this.props.selectedPostCardId,
             previousRhsState: this.props.previousRhsState,
@@ -207,6 +210,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             previousRhsState,
             searchVisible,
             isPluginView,
+            isSettings,
             isOpen,
             isChannelInfo,
             isChannelMembers,
@@ -214,7 +218,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         } = this.props;
 
         let content = null;
-        const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || searchVisible) && isExpanded;
+        const isSidebarRightExpanded = ((postRightVisible || postCardVisible || isPluginView || isSettings || searchVisible) && isExpanded)
 
         switch (true) {
         case postRightVisible:
@@ -241,6 +245,11 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                 <ChannelMembersRhs/>
             );
             break;
+        case isSettings:
+            content = (
+                <RhsSettings/>
+            );
+            break;
         }
         const channelDisplayName = rhsChannel ? rhsChannel.display_name : '';
         const containerClassName = classNames('sidebar--right', {
@@ -261,14 +270,19 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                     className='sidebar--right__bg'
                 />
                 <div className='sidebar-right-container'>
-                    <Search
+                    { isSettings ? (
+                        <>
+                            {isOpen && content}
+                        </>
+                    ) : <Search
                         isSideBarRight={true}
                         isSideBarRightOpen={this.state.isOpened}
                         getFocus={this.getSearchBarFocus}
                         channelDisplayName={channelDisplayName}
-                    >
-                        {isOpen && content}
-                    </Search>
+                        >
+                            {isOpen && content}
+                        </Search>
+                    }
                 </div>
             </div>
         );

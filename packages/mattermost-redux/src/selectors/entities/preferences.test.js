@@ -437,13 +437,13 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            }).mentionHighlightLink, Preferences.THEMES.denim.mentionHighlightLink);
+            }).mentionHighlightLink, Preferences.THEMES.ik.mentionHighlightLink);
         });
 
         it('system theme with missing colours', () => {
             const currentTeamId = '1234';
             const theme = {
-                type: Preferences.THEMES.indigo.type,
+                type: Preferences.THEMES.ik.type,
                 sidebarBg: '#ff0000',
             };
 
@@ -465,13 +465,13 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            }).sidebarText, Preferences.THEMES.indigo.sidebarText);
+            }).sidebarText, Preferences.THEMES.ik.sidebarText);
         });
 
         it('non-default system theme', () => {
             const currentTeamId = '1234';
             const theme = {
-                type: Preferences.THEMES.indigo.type,
+                type: Preferences.THEMES.ik.type,
             };
 
             assert.equal(Selectors.getTheme({
@@ -492,7 +492,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            }).codeTheme, Preferences.THEMES.indigo.codeTheme);
+            }).codeTheme, Preferences.THEMES.ik.codeTheme);
         });
 
         it('should return the server-configured theme by default', () => {
@@ -500,7 +500,7 @@ describe('Selectors.Preferences', () => {
                 entities: {
                     general: {
                         config: {
-                            DefaultTheme: 'indigo',
+                            DefaultTheme: 'ik',
                         },
                     },
                     teams: {
@@ -512,14 +512,14 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            }).codeTheme, Preferences.THEMES.indigo.codeTheme);
+            }).codeTheme, Preferences.THEMES.ik.codeTheme);
 
             // Opposite case
             assert.notEqual(Selectors.getTheme({
                 entities: {
                     general: {
                         config: {
-                            DefaultTheme: 'denim',
+                            DefaultTheme: 'onyx',
                         },
                     },
                     teams: {
@@ -531,7 +531,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            }).codeTheme, Preferences.THEMES.indigo.codeTheme);
+            }).codeTheme, Preferences.THEMES.ik.codeTheme);
         });
 
         it('returns the "default" theme if the server-configured value is not present', () => {
@@ -551,7 +551,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            }).codeTheme, Preferences.THEMES.denim.codeTheme);
+            }).codeTheme, Preferences.THEMES.ik.codeTheme);
         });
     });
 

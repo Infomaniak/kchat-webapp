@@ -20,7 +20,7 @@ import {
     setRhsExpanded,
     openRHSSearch,
     filterFilesSearchByExt,
-    updateSearchType,
+    updateSearchType, showSettings,
 } from 'actions/views/rhs';
 import {autocompleteChannelsForSearch} from 'actions/channel_actions';
 import {autocompleteUsersInTeam} from 'actions/user_actions';
@@ -58,6 +58,7 @@ function mapStateToProps(state: GlobalState) {
         isFlaggedPosts: rhsState === RHSStates.FLAG,
         isPinnedPosts: rhsState === RHSStates.PIN,
         isChannelFiles: rhsState === RHSStates.CHANNEL_FILES,
+        isSettings: rhsState === RHSStates.SETTINGS,
         isMobileView,
     };
 }
@@ -81,6 +82,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             openRHSSearch,
             getMoreFilesForSearch,
             filterFilesSearchByExt,
+            showSettings,
         }, dispatch),
     };
 }
