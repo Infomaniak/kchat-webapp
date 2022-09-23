@@ -166,6 +166,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
         }
       />
     }
+    key="desktopNotifications"
     saving={false}
     section=""
     title={
@@ -178,6 +179,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
   />
   <RhsSettingsItem
     containerStyle=""
+    id="desktopNotificationSoundToggle"
     infoPosition="bottom"
     inputs={
       Array [
@@ -264,6 +266,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
         }
       />
     }
+    key="desktopNotifications"
     saving={false}
     section=""
     title={
@@ -276,6 +279,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
   />
   <RhsSettingsItem
     containerStyle=""
+    id="desktopNotificationSoundToggle"
     infoPosition="bottom"
     inputs={
       Array [
@@ -408,6 +412,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
         }
       />
     }
+    key="desktopNotifications"
     saving={false}
     section=""
     title={
@@ -420,6 +425,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
   />
   <RhsSettingsItem
     containerStyle=""
+    id="desktopNotificationSoundToggle"
     infoPosition="bottom"
     inputs={
       Array [
