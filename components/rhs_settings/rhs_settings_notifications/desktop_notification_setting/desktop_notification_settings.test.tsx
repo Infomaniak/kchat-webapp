@@ -58,25 +58,6 @@ describe('components/user_settings/notifications/DesktopNotificationSettings', (
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should call props.updateSection and props.cancel on handleMinUpdateSection', () => {
-        const props = {...baseProps, updateSection: jest.fn(), cancel: jest.fn()};
-        const wrapper = shallow<DesktopNotificationSettings>(
-            <DesktopNotificationSettings {...props}/>,
-        );
-
-        wrapper.instance().handleMinUpdateSection('');
-        expect(props.updateSection).toHaveBeenCalledTimes(1);
-        expect(props.updateSection).toHaveBeenCalledWith('');
-        expect(props.cancel).toHaveBeenCalledTimes(1);
-        expect(props.cancel).toHaveBeenCalledWith();
-
-        wrapper.instance().handleMinUpdateSection('desktop');
-        expect(props.updateSection).toHaveBeenCalledTimes(2);
-        expect(props.updateSection).toHaveBeenCalledWith('desktop');
-        expect(props.cancel).toHaveBeenCalledTimes(2);
-        expect(props.cancel).toHaveBeenCalledWith();
-    });
-
     test('should call props.updateSection on handleMaxUpdateSection', () => {
         const props = {...baseProps, updateSection: jest.fn()};
         const wrapper = shallow<DesktopNotificationSettings>(
@@ -108,25 +89,14 @@ describe('components/user_settings/notifications/DesktopNotificationSettings', (
         expect(props.setParentState).toHaveBeenCalledWith('dataKey', 'dataValue');
     });
 
-    test('should match snapshot, on buildMaximizedSetting', () => {
+    test('should match snapshot, on createNotificationsSelect', () => {
         const wrapper = shallow<DesktopNotificationSettings>(
             <DesktopNotificationSettings {...baseProps}/>,
         );
 
-        expect(wrapper.instance().buildMaximizedSetting()).toMatchSnapshot();
+        expect(wrapper.instance().createNotificationsSelect()).toMatchSnapshot();
 
         wrapper.setProps({activity: NotificationLevels.NONE});
-        expect(wrapper.instance().buildMaximizedSetting()).toMatchSnapshot();
-    });
-
-    test('should match snapshot, on buildMinimizedSetting', () => {
-        const wrapper = shallow<DesktopNotificationSettings>(
-            <DesktopNotificationSettings {...baseProps}/>,
-        );
-
-        expect(wrapper.instance().buildMinimizedSetting()).toMatchSnapshot();
-
-        wrapper.setProps({activity: NotificationLevels.NONE});
-        expect(wrapper.instance().buildMinimizedSetting()).toMatchSnapshot();
+        expect(wrapper.instance().createNotificationsSelect()).toMatchSnapshot();
     });
 });

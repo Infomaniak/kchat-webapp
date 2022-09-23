@@ -437,7 +437,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            }).mentionHighlightLink, Preferences.THEMES.denim.mentionHighlightLink);
+            }).mentionHighlightLink, Preferences.THEMES.onyx.mentionHighlightLink);
         });
 
         it('system theme with missing colours', () => {
@@ -519,7 +519,7 @@ describe('Selectors.Preferences', () => {
                 entities: {
                     general: {
                         config: {
-                            DefaultTheme: 'denim',
+                            DefaultTheme: 'onyx',
                         },
                     },
                     teams: {
@@ -551,7 +551,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            }).codeTheme, Preferences.THEMES.denim.codeTheme);
+            }).codeTheme, Preferences.THEMES.onyx.codeTheme);
         });
     });
 

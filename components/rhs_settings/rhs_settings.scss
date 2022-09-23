@@ -52,14 +52,13 @@
             padding: 8px 10px;
             &.active, &:hover {
                 cursor: pointer;
-                background: #f4f6fd;
+                background: rgba(var(--center-channel-color-rgb),0.08);
                 & > * {
                     cursor: pointer;
                 }
-                .rhs-custom-btn-label, label {
-                    color: #333333;
-                    // margin: 0;
-                }
+            }
+            .rhs-custom-btn-label, label {
+                margin: 0;
             }
         }
     }

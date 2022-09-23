@@ -47,7 +47,7 @@ type Props = {
         updateSearchTerms: (terms: string) => void;
         showChannelFiles: (channelId: string) => void;
         showChannelInfo: (channelId: string) => void;
-        showSettingss: () => void;
+        showSettings: () => void;
     };
 }
 

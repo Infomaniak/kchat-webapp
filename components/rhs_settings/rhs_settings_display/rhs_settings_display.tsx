@@ -423,7 +423,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         }
 
         const name = section + 'Format';
-        const key = section + 'UserDisplay';
 
         const firstDisplay = {
             [display]: firstOption.value,
@@ -432,29 +431,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         const secondDisplay = {
             [display]: secondOption.value,
         };
-
-        let thirdSection;
-        if (thirdOption && thirdMessage) {
-            const thirdDisplay = {
-                [display]: thirdOption.value,
-            };
-
-            thirdSection = (
-                <div className='radio'>
-                    <label>
-                        <input
-                            id={name + 'C'}
-                            type='radio'
-                            name={name}
-                            checked={format[2]}
-                            onChange={() => this.handleOnChange(thirdDisplay)}
-                        />
-                        {thirdMessage}
-                    </label>
-                    <br/>
-                </div>
-            );
-        }
 
         let childOptionSection;
         if (childOptionToShow) {
@@ -527,12 +503,10 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
 
     createSelect(props: SelectProps) {
         const {
-            section,
             display,
             value,
             title,
             options,
-            description,
         } = props;
 
         const messageTitle = (
@@ -541,16 +515,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 defaultMessage={title.message}
             />
         );
-        let messageDesc = '';
-        if (description) {
-            messageDesc = (
-                <FormattedMessage
-                    id={description.id}
-                    defaultMessage={description.message}
-                    values={description.values}
-                />
-            );
-        }
 
         return (
             <RhsSettingsItem
@@ -833,14 +797,14 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     message: 'Quick reactions on messages',
                 },
                 firstOption: {
-                    value: 'false',
+                    value: 'true',
                     radionButtonText: {
                         id: t('user.settings.sidebar.on'),
                         message: 'On',
                     },
                 },
                 secondOption: {
-                    value: 'true',
+                    value: 'false',
                     radionButtonText: {
                         id: t('user.settings.sidebar.off'),
                         message: 'Off',
