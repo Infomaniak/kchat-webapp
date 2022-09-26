@@ -1301,6 +1301,9 @@ $sidebarOpacityAnimationDuration: 0.15s;
         + .inner-wrap #app-content {
             margin-left: 320px !important;
         }
+        + #calls-widget #app-content {
+            margin-left: 320px !important;
+        }
     }
 }
 
@@ -1312,6 +1315,9 @@ $sidebarOpacityAnimationDuration: 0.15s;
         width: 255px;
 
         + .inner-wrap #app-content {
+            margin-left: 255px !important;
+        }
+        + #calls-widget #app-content {
             margin-left: 255px !important;
         }
     }
