@@ -1,3 +1,9 @@
+## 0.3.11 (2022-09-26)
+
+## Fixed (1 change)
+
+- [Fix preferences values not initialized error & clean](kchat/webapp@220487f262945c83959b3c3282771866de0122c1) by @florent.glauda ([merge request](kchat/webapp!132))
+
 ## 0.3.10-rc.14 (2022-09-23)
 
 No changes.
