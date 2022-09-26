@@ -19,7 +19,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -67,7 +67,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -96,7 +96,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -125,7 +125,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -154,7 +154,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -207,7 +207,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -291,7 +298,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -339,7 +346,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -368,7 +375,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -397,7 +404,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -426,7 +433,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -479,7 +486,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -563,7 +577,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -611,7 +625,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -640,7 +654,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -669,7 +683,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -698,7 +712,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -751,7 +765,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -835,7 +856,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -883,7 +904,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -912,7 +933,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -941,7 +962,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -970,7 +991,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -1023,7 +1044,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -1107,7 +1135,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -1155,7 +1183,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -1184,7 +1212,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -1213,7 +1241,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -1242,7 +1270,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -1295,7 +1323,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -1379,7 +1414,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -1427,7 +1462,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -1456,7 +1491,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -1485,7 +1520,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -1538,7 +1573,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -1622,7 +1664,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -1670,7 +1712,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -1699,7 +1741,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -1728,7 +1770,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -1757,7 +1799,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -1810,7 +1852,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -1894,7 +1943,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -1942,7 +1991,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -1971,7 +2020,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -2000,7 +2049,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -2029,7 +2078,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -2082,7 +2131,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -2166,7 +2222,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -2214,7 +2270,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -2243,7 +2299,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -2272,7 +2328,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -2301,7 +2357,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -2354,7 +2410,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -2438,7 +2501,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -2486,7 +2549,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -2515,7 +2578,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -2544,7 +2607,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -2573,7 +2636,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -2626,7 +2689,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -2710,7 +2780,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -2758,7 +2828,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -2787,7 +2857,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -2816,7 +2886,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -2845,7 +2915,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -2898,7 +2968,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -2989,7 +3066,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -3037,7 +3114,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -3066,7 +3143,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -3095,7 +3172,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -3124,7 +3201,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -3177,7 +3254,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"
@@ -3261,7 +3345,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
             className="col-xs-6 col-sm-6 rhs-btns text-center"
           >
             <div
-              className="rhs-custom-btn "
+              className="rhs-custom-btn active"
               id="rhsCustomBtnSelect0"
               onClick={[Function]}
             >
@@ -3309,7 +3393,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="collapseFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="collapseDisplay"
@@ -3338,7 +3422,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="linkpreviewFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="linkPreviewDisplay"
@@ -3367,7 +3451,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="one_click_reactions_enabledFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="oneClickReactionsOnPosts"
@@ -3396,7 +3480,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
         <Toggle
           id="show_unread_sectionFormatA"
           onToggle={[Function]}
-          toggled={false}
+          toggled={true}
         />
       }
       key="showUnreadsCategory"
@@ -3449,7 +3533,14 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
               "menuPortal": [Function],
             }
           }
-          value={Array []}
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
         />
       }
       key="channelDisplayMode"

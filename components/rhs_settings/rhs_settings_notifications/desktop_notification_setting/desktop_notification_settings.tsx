@@ -140,16 +140,13 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
 
     createNotificationsForThread = (): JSX.Element | undefined => {
         if (this.props.isCollapsedThreadsEnabled && NotificationLevels.MENTION === this.props.activity) {
-            const inputs = [
-                <>
-                    <Toggle
-                        id={name + 'childOption'}
-                        onToggle={() => this.handleThreadsOnChange(this.props.threads === NotificationLevels.ALL ? NotificationLevels.MENTION : NotificationLevels.ALL)}
-                        toggled={this.props.threads === NotificationLevels.ALL}
-                    />
-                </>,
-
-            ];
+            const inputs = (
+                <Toggle
+                    id={name + 'childOption'}
+                    onToggle={() => this.handleThreadsOnChange(this.props.threads === NotificationLevels.ALL ? NotificationLevels.MENTION : NotificationLevels.ALL)}
+                    toggled={this.props.threads === NotificationLevels.ALL}
+                />
+            );
 
             return (
                 <RhsSettingsItem
@@ -179,16 +176,13 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
 
     createSoundToggleSection = (): JSX.Element | undefined => {
         if (this.props.activity !== NotificationLevels.NONE) {
-            const inputs = [
-                <>
-                    <Toggle
-                        id={name + 'childOption'}
-                        onToggle={() => this.handleOnSelectChange('desktopSound', this.props.sound === 'false' ? 'true' : 'false')}
-                        toggled={this.props.sound === 'true'}
-                    />
-                </>,
-
-            ];
+            const inputs = (
+                <Toggle
+                    id={name + 'childOption'}
+                    onToggle={() => this.handleOnSelectChange('desktopSound', this.props.sound === 'false' ? 'true' : 'false')}
+                    toggled={this.props.sound === 'true'}
+                />
+            );
 
             return (
                 <RhsSettingsItem
@@ -259,7 +253,6 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         const notificationSelection = this.createnotificationSelectionSection();
         return (
             <>
-
                 {notificationsSelect}
                 {threadNotifications}
                 {soundToggle}

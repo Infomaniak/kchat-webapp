@@ -10,8 +10,6 @@ import {FormattedMessage} from 'react-intl';
 
 import {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
 
-import {Timezone} from 'timezones.json';
-
 import ReactSelect from 'react-select';
 
 import {getBrowserTimezone} from 'utils/timezone.jsx';
@@ -38,19 +36,16 @@ const Preferences = Constants.Preferences;
 
 function getDisplayStateFromProps(props: Props) {
     return {
-        militaryTime: props.militaryTime,
         teammateNameDisplay: props.teammateNameDisplay,
         availabilityStatusOnPosts: props.availabilityStatusOnPosts,
-        channelDisplayMode: props.channelDisplayMode,
-        messageDisplay: props.messageDisplay,
-        colorizeUsernames: props.colorizeUsernames,
-        collapseDisplay: props.collapseDisplay,
-        collapsedReplyThreads: props.collapsedReplyThreads,
-        linkPreviewDisplay: props.linkPreviewDisplay,
-        oneClickReactionsOnPosts: props.oneClickReactionsOnPosts,
-        clickToReply: props.clickToReply,
-        showUnreadsCategory: props.showUnreadsCategory,
-        unreadScrollPosition: props.unreadScrollPosition,
+        channelDisplayMode: props.channelDisplayMode ? props.channelDisplayMode : Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
+        messageDisplay: props.messageDisplay ? props.messageDisplay : Preferences.MESSAGE_DISPLAY_CLEAN,
+        colorizeUsernames: props.colorizeUsernames ? props.colorizeUsernames : 'true',
+        collapseDisplay: props.collapseDisplay ? props.collapseDisplay : 'false',
+        linkPreviewDisplay: props.linkPreviewDisplay ? props.linkPreviewDisplay : 'true',
+        oneClickReactionsOnPosts: props.oneClickReactionsOnPosts ? props.oneClickReactionsOnPosts : 'true',
+        showUnreadsCategory: props.showUnreadsCategory ? props.showUnreadsCategory : 'true',
+        unreadScrollPosition: props.unreadScrollPosition ? props.unreadScrollPosition : Preferences.UNREAD_SCROLL_POSITION,
     };
 }
 
@@ -135,7 +130,6 @@ type Props = {
     collapseModal?: () => void;
     setRequireConfirm?: () => void;
     setEnforceFocus?: () => void;
-    timezones: Timezone[];
     userTimezone: UserTimezone;
     allowCustomThemes: boolean;
     enableLinkPreviews: boolean;
@@ -146,16 +140,12 @@ type Props = {
     enableTimezone: boolean;
     shouldAutoUpdateTimezone: boolean | string;
     lockTeammateNameDisplay: boolean;
-    militaryTime: string;
     teammateNameDisplay: string;
     availabilityStatusOnPosts: string;
     channelDisplayMode: string;
     messageDisplay: string;
     colorizeUsernames: string;
     collapseDisplay: string;
-    collapsedReplyThreads: string;
-    collapsedReplyThreadsAllowUserPreference: boolean;
-    clickToReply: string;
     linkPreviewDisplay: string;
     oneClickReactionsOnPosts: string;
     emojiPickerEnabled: boolean;
@@ -171,17 +161,14 @@ type Props = {
 type State = {
     [key: string]: any;
     isSaving: boolean;
-    militaryTime: string;
     teammateNameDisplay: string;
     availabilityStatusOnPosts: string;
     channelDisplayMode: string;
     messageDisplay: string;
     colorizeUsernames: string;
     collapseDisplay: string;
-    collapsedReplyThreads: string;
     linkPreviewDisplay: string;
     oneClickReactionsOnPosts: string;
-    clickToReply: string;
     showUnreadsCategory: string;
     unreadScrollPosition: string;
     handleSubmit?: () => void;
@@ -191,7 +178,6 @@ type State = {
 export default class RhsSettingsDisplay extends React.PureComponent<Props, State> {
     public prevSections: {
         theme: string;
-
         clock: string;
         linkpreview: string;
         message_display: string;
@@ -281,12 +267,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             name: Preferences.COLORIZE_USERNAMES,
             value: this.state.colorizeUsernames,
         };
-        const collapsedReplyThreadsPreference = {
-            user_id: userId,
-            category: Preferences.CATEGORY_DISPLAY_SETTINGS,
-            name: Preferences.COLLAPSED_REPLY_THREADS,
-            value: this.state.collapsedReplyThreads,
-        };
         const linkPreviewDisplayPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
@@ -298,12 +278,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
             name: Preferences.ONE_CLICK_REACTIONS_ENABLED,
             value: this.state.oneClickReactionsOnPosts,
-        };
-        const clickToReplyPreference = {
-            user_id: userId,
-            category: Preferences.CATEGORY_DISPLAY_SETTINGS,
-            name: Preferences.CLICK_TO_REPLY,
-            value: this.state.clickToReply,
         };
 
         const showUnreadPreference = {
@@ -330,14 +304,10 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             channelDisplayModePreference,
             unreadScrollPositionPreference,
             messageDisplayPreference,
-            collapsedReplyThreadsPreference,
-            clickToReplyPreference,
             teammateNameDisplayPreference,
             availabilityStatusOnPostsPreference,
             colorizeUsernamesPreference,
         ];
-
-        this.trackChangeIfNecessary(collapsedReplyThreadsPreference, this.props.collapsedReplyThreads);
 
         await this.props.actions.savePreferences(userId, preferences);
 

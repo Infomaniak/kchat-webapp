@@ -182,15 +182,11 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
     id="desktopNotificationSoundToggle"
     infoPosition="bottom"
     inputs={
-      Array [
-        <React.Fragment>
-          <Toggle
-            id="childOption"
-            onToggle={[Function]}
-            toggled={false}
-          />
-        </React.Fragment>,
-      ]
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={false}
+      />
     }
     saving={false}
     section=""
@@ -282,15 +278,11 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
     id="desktopNotificationSoundToggle"
     infoPosition="bottom"
     inputs={
-      Array [
-        <React.Fragment>
-          <Toggle
-            id="childOption"
-            onToggle={[Function]}
-            toggled={true}
-          />
-        </React.Fragment>,
-      ]
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={true}
+      />
     }
     saving={false}
     section=""
@@ -428,15 +420,11 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
     id="desktopNotificationSoundToggle"
     infoPosition="bottom"
     inputs={
-      Array [
-        <React.Fragment>
-          <Toggle
-            id="childOption"
-            onToggle={[Function]}
-            toggled={false}
-          />
-        </React.Fragment>,
-      ]
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={false}
+      />
     }
     saving={false}
     section=""
