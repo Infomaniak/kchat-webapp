@@ -1,3 +1,9 @@
+## 0.3.13-rc.1 (2022-09-26)
+
+## Fixed (1 change)
+
+- [fix calls widget moving app content](kchat/webapp@38d77a4b48bf6ddaae021142316f7f0200e58c0c) by @antonbuksa
+
 ## 0.3.12-rc.5 (2022-09-26)
 
 ## Fixed (2 changes)
