@@ -1298,11 +1298,10 @@ $sidebarOpacityAnimationDuration: 0.15s;
         left: 65px;
         width: 255px;
 
-        + .inner-wrap #app-content {
-            margin-left: 320px !important;
-        }
-        + #calls-widget #app-content {
-            margin-left: 320px !important;
+        ~ .inner-wrap {
+            #app-content {
+                margin-left: 320px;
+            }
         }
     }
 }
@@ -1314,11 +1313,10 @@ $sidebarOpacityAnimationDuration: 0.15s;
         }
         width: 255px;
 
-        + .inner-wrap #app-content {
-            margin-left: 255px !important;
-        }
-        + #calls-widget #app-content {
-            margin-left: 255px !important;
+        ~ .inner-wrap {
+            #app-content {
+                margin-left: 255px;
+            }
         }
     }
 }
@@ -1327,8 +1325,10 @@ $sidebarOpacityAnimationDuration: 0.15s;
     #SidebarContainer {
         width: 255px;
 
-        + .inner-wrap #app-content {
-            margin-left: 320px !important;
+        ~ .inner-wrap {
+            #app-content {
+                margin-left: 320px;
+            }
         }
     }
 }
