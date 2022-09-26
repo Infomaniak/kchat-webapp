@@ -1,3 +1,9 @@
+## 0.3.12-rc.4 (2022-09-26)
+
+## Fixed (1 change)
+
+- [fix issue with lhs sidebar items too big when no webcomponents](kchat/webapp@68fd5bb3ef4e1ce622c47b6d7d25fc239b85d6d2) by @antonbuksa
+
 ## 0.3.12-rc.3 (2022-09-26)
 
 No changes.
