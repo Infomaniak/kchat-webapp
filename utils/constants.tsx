@@ -411,6 +411,7 @@ export const ModalIdentifiers = {
     SUCCESS_MODAL: 'success_modal',
     ERROR_MODAL: 'error_modal',
     DND_CUSTOM_TIME_PICKER: 'dnd_custom_time_picker',
+    POST_REMINDER_CUSTOM_TIME_PICKER: 'post_reminder_custom_time_picker',
     CUSTOM_STATUS: 'custom_status',
     COMMERCIAL_SUPPORT: 'commercial_support',
     NO_INTERNET_CONNECTION: 'no_internet_connection',
@@ -735,6 +736,7 @@ export const PostTypes = {
     EPHEMERAL_ADD_TO_CHANNEL: 'system_ephemeral_add_to_channel' as const,
     REMOVE_LINK_PREVIEW: 'remove_link_preview' as const,
     ME: 'me' as const,
+    REMINDER_ACK: 'reminder' as const,
 };
 
 export const StatTypes = keyMirror({

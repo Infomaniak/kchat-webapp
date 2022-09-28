@@ -36,6 +36,7 @@ describe('components/dot_menu/DotMenu', () => {
             markPostAsUnread: jest.fn(),
             postEphemeralCallResponseForPost: jest.fn(),
             setThreadFollow: jest.fn(),
+            addPostReminder: jest.fn(),
             setGlobalItem: jest.fn(),
         },
         canEdit: false,
@@ -48,7 +49,9 @@ describe('components/dot_menu/DotMenu', () => {
         threadId: 'post_id_1',
         threadReplyCount: 0,
         userId: 'user_id_1',
+        isMilitaryTime: false,
         showForwardPostNewLabel: false,
+        isPostForwardingEnabled: true,
     };
 
     test('should match snapshot, on Center', () => {

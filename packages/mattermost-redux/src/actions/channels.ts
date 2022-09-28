@@ -4,6 +4,8 @@
 
 /* eslint-disable max-lines */
 
+/* eslint-disable max-lines */
+
 import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 

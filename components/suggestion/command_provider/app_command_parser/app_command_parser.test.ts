@@ -3,6 +3,8 @@
 
 import mockStore from 'tests/test_store';
 
+import mockStore from 'tests/test_store';
+
 import {
     Client4,
     AppBinding,
