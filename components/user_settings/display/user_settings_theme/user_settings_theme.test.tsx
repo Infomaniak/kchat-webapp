@@ -13,8 +13,6 @@ import UserSettingsTheme from 'components/user_settings/display/user_settings_th
 
 import mockStore from 'tests/test_store';
 
-import mockStore from 'tests/test_store';
-
 jest.mock('utils/utils', () => ({
     applyTheme: jest.fn(),
     toTitleCase: jest.fn(),
