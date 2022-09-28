@@ -1450,7 +1450,7 @@ function handleGroupAddedMemberEvent(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const data = JSON.parse(msg.data.group_member);
+        const data = msg.data.group_member;
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1468,7 +1468,7 @@ function handleGroupDeletedMemberEvent(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const data = JSON.parse(msg.data.group_member);
+        const data = msg.data.group_member;
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1766,7 +1766,7 @@ function handleThreadFollowChanged(msg) {
 
 function handleUpsertDraftEvent(msg) {
     return async (doDispatch) => {
-        const draft = JSON.parse(msg.data.draft);
+        const draft = msg.data.draft;
         const {key, value} = transformServerDraft(draft);
         value.show = true;
         value.remote = true;
@@ -1778,7 +1778,7 @@ function handleUpsertDraftEvent(msg) {
 
 function handleDeleteDraftEvent(msg) {
     return async (doDispatch) => {
-        const draft = JSON.parse(msg.data.draft);
+        const draft = msg.data.draft;
         const {key} = transformServerDraft(draft);
 
         localStorage.removeItem(key);
