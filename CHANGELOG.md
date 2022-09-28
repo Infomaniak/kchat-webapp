@@ -1,3 +1,9 @@
+## 0.3.14-rc.6 (2022-09-28)
+
+## Fixed (1 change)
+
+- [fix pdf preview](kchat/webapp@321847fca01250524c863e14d86cae9d2d7f48d1) by @antonbuksa
+
 ## 0.3.14-rc.5 (2022-09-28)
 
 ## Fixed (1 change)
