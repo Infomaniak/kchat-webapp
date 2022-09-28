@@ -959,6 +959,7 @@ export const RHSStates = {
     CHANNEL_FILES: 'channel-files',
     CHANNEL_INFO: 'channel-info',
     CHANNEL_MEMBERS: 'channel-members',
+    SETTINGS: 'settings',
 };
 
 export const UploadStatuses = {

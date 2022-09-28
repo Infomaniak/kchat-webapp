@@ -32,7 +32,7 @@ const STANDARD_EXCLUDE = [
 ];
 
 // react-hot-loader and development source maps require eval
-const CSP_UNSAFE_EVAL_IF_DEV = ' \'unsafe-eval\''; // DEV ? ' \'unsafe-eval\'' : '';
+const CSP_UNSAFE_EVAL_IF_DEV = DEV ? ' \'unsafe-eval\'' : '';
 const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
 
 var MYSTATS = {

@@ -41,7 +41,6 @@ function mapStateToProps(state: GlobalState) {
 
     const [unreadTeamsSet, mentionsInTeamMap] = getTeamsUnreadStatuses(state);
     const a = getMyKSuites(state);
-    console.log(a)
 
     return {
         currentTeamId: getCurrentTeamId(state),

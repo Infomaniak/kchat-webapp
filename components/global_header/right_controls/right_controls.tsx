@@ -29,12 +29,7 @@ const RightControlsContainer = styled.div`
     height: 46px;
     flex-shrink: 0;
     position: relative;
-    padding-right: 10px;
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
-
-    > * + * {
-        margin-left: 16px;
-    }
 
     .header-icon {
         transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -71,6 +66,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
         <span
             className='header-icon'
             slot='trigger'
+            style={{height: 45, display: 'flex'}}
         >
             <IconButton
                 className='grey'
@@ -92,7 +88,10 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                 <div style={{position: 'relative'}}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
-                    <module-products-component position='right'>
+                    <module-products-component
+                        position='right'
+                        style={{height: '100%'}}
+                    >
                         {trigger}
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                         {/* @ts-ignore */}
@@ -113,9 +112,13 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     pluggableId={productId}
                 />
             )}
-            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-            {/* @ts-ignore */}
-            <module-reporting-tools-component></module-reporting-tools-component>
+            {!isDesktopApp() && (
+                <div style={{height: 46, width: 42, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
+                    <module-reporting-tools-component size='26'></module-reporting-tools-component>
+                </div>
+            )}
             <StatusDropdown/>
         </RightControlsContainer>
     );

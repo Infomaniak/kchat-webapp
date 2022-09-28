@@ -1,3 +1,76 @@
+## 0.3.13-rc.1 (2022-09-26)
+
+## Fixed (1 change)
+
+- [fix calls widget moving app content](kchat/webapp@38d77a4b48bf6ddaae021142316f7f0200e58c0c) by @antonbuksa
+
+## 0.3.12-rc.5 (2022-09-26)
+
+## Fixed (2 changes)
+
+- [fix call widget moving app-content](kchat/webapp@1eb249c66b75f3842937cde5ac118c9b66d06a59) by @antonbuksa
+- [fix issue with lhs sidebar items too big when no webcomponents](kchat/webapp@68fd5bb3ef4e1ce622c47b6d7d25fc239b85d6d2) by @antonbuksa
+
+## 0.3.12-rc.4 (2022-09-26)
+
+## Fixed (1 change)
+
+- [fix issue with lhs sidebar items too big when no webcomponents](kchat/webapp@68fd5bb3ef4e1ce622c47b6d7d25fc239b85d6d2) by @antonbuksa
+
+## 0.3.12-rc.3 (2022-09-26)
+
+No changes.
+
+## 0.3.12-rc.2 (2022-09-26)
+
+No changes.
+
+## 0.3.12-rc.1 (2022-09-26)
+
+No changes.
+
+## 0.3.11 (2022-09-26)
+
+## Fixed (1 change)
+
+- [Fix preferences values not initialized error & clean](kchat/webapp@220487f262945c83959b3c3282771866de0122c1) by @florent.glauda ([merge request](kchat/webapp!132))
+
+## 0.3.10-rc.14 (2022-09-23)
+
+No changes.
+
+## 0.3.10-rc.13 (2022-09-23)
+
+No changes.
+
+## 0.3.10-rc.12 (2022-09-22)
+
+No changes.
+
+## 0.3.10-rc.11 (2022-09-22)
+
+No changes.
+
+## 0.3.10-rc.10 (2022-09-22)
+
+No changes.
+
+## 0.3.10-rc.9 (2022-09-22)
+
+No changes.
+
+## 0.3.10-rc.6 (2022-09-22)
+
+No changes.
+
+## 0.3.10-rc.5 (2022-09-21)
+
+No changes.
+
+## 0.3.10-rc.4 (2022-09-21)
+
+No changes.
+
 ## 0.3.10-rc.3 (2022-09-20)
 
 No changes.

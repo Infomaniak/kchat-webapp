@@ -3,7 +3,7 @@
 /* eslint-disable react/no-string-refs */
 /* eslint-disable max-lines */
 import React from 'react';
-
+import {Form} from 'react-bootstrap';
 import deepEqual from 'fast-deep-equal';
 
 import {FormattedMessage} from 'react-intl';
@@ -337,6 +337,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
     }
 
     updateSection = (section: string) => {
+        console.log(section)
         this.updateState();
         this.props.updateSection(section);
     }
@@ -671,137 +672,6 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             this.prevSections.message_display = 'linkpreview';
         } else {
             this.prevSections.message_display = this.prevSections.linkpreview;
-        }
-
-        const clockSection = this.createSection({
-            section: 'clock',
-            display: 'militaryTime',
-            value: this.state.militaryTime,
-            defaultDisplay: 'false',
-            title: {
-                id: t('user.settings.display.clockDisplay'),
-                message: 'Clock Display',
-            },
-            firstOption: {
-                value: 'false',
-                radionButtonText: {
-                    id: t('user.settings.display.normalClock'),
-                    message: '12-hour clock (example: 4:00 PM)',
-                },
-            },
-            secondOption: {
-                value: 'true',
-                radionButtonText: {
-                    id: t('user.settings.display.militaryClock'),
-                    message: '24-hour clock (example: 16:00)',
-                },
-            },
-            description: {
-                id: t('user.settings.display.preferTime'),
-                message: 'Select how you prefer time displayed.',
-            },
-        });
-
-        const teammateNameDisplaySection = this.createSection({
-            section: Preferences.NAME_NAME_FORMAT,
-            display: 'teammateNameDisplay',
-            value: this.props.lockTeammateNameDisplay ? this.props.configTeammateNameDisplay : this.state.teammateNameDisplay,
-            defaultDisplay: this.props.configTeammateNameDisplay,
-            title: {
-                id: t('user.settings.display.teammateNameDisplayTitle'),
-                message: 'Teammate Name Display',
-            },
-            firstOption: {
-                value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME,
-                radionButtonText: {
-                    id: t('user.settings.display.teammateNameDisplayUsername'),
-                    message: 'Show username',
-                },
-            },
-            secondOption: {
-                value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME,
-                radionButtonText: {
-                    id: t('user.settings.display.teammateNameDisplayNicknameFullname'),
-                    message: 'Show nickname if one exists, otherwise show first and last name',
-                },
-            },
-            thirdOption: {
-                value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME,
-                radionButtonText: {
-                    id: t('user.settings.display.teammateNameDisplayFullname'),
-                    message: 'Show first and last name',
-                },
-            },
-            description: {
-                id: t('user.settings.display.teammateNameDisplayDescription'),
-                message: 'Set how to display other user\'s names in posts and the Direct Messages list.',
-            },
-            disabled: this.props.lockTeammateNameDisplay,
-        });
-
-        const availabilityStatusOnPostsSection = this.createSection({
-            section: 'availabilityStatus',
-            display: 'availabilityStatusOnPosts',
-            value: this.state.availabilityStatusOnPosts,
-            defaultDisplay: 'true',
-            title: {
-                id: t('user.settings.display.availabilityStatusOnPostsTitle'),
-                message: 'Show user availability on posts',
-            },
-            firstOption: {
-                value: 'true',
-                radionButtonText: {
-                    id: t('user.settings.sidebar.on'),
-                    message: 'On',
-                },
-            },
-            secondOption: {
-                value: 'false',
-                radionButtonText: {
-                    id: t('user.settings.sidebar.off'),
-                    message: 'Off',
-                },
-            },
-            description: {
-                id: t('user.settings.display.availabilityStatusOnPostsDescription'),
-                message: 'When enabled, online availability is displayed on profile images in the message list.',
-            },
-        });
-
-        let timezoneSelection;
-        if (this.props.enableTimezone && !this.props.shouldAutoUpdateTimezone) {
-            const userTimezone = this.props.userTimezone;
-            if (this.props.activeSection === 'timezone') {
-                timezoneSelection = (
-                    <div>
-                        <ManageTimezones
-                            user={this.props.user}
-                            useAutomaticTimezone={Boolean(userTimezone.useAutomaticTimezone)}
-                            automaticTimezone={userTimezone.automaticTimezone}
-                            manualTimezone={userTimezone.manualTimezone}
-                            updateSection={this.updateSection}
-                        />
-                        <div className='divider-dark'/>
-                    </div>
-                );
-            } else {
-                timezoneSelection = (
-                    <div>
-                        <SettingItemMin
-                            title={
-                                <FormattedMessage
-                                    id='user.settings.display.timezone'
-                                    defaultMessage='Timezone'
-                                />
-                            }
-                            describe={this.props.timezoneLabel}
-                            section={'timezone'}
-                            updateSection={this.updateSection}
-                        />
-                        <div className='divider-dark'/>
-                    </div>
-                );
-            }
         }
 
         const messageDisplaySection = this.createSection({

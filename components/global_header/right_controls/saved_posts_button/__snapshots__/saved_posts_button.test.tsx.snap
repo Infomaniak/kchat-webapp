@@ -24,7 +24,7 @@ exports[`components/global/AtMentionsButton should match snapshot 1`] = `
 >
   <ForwardRef
     aria-label="Select to toggle a list of saved posts."
-    className="grey"
+    className="grey "
     compact={true}
     icon="bookmark-alt"
     inverted={true}

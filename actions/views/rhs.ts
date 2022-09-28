@@ -552,7 +552,9 @@ export function openAtPrevious(previous: any) { // TODO Could not find the prope
         if (!previous) {
             return openRHSSearch()(dispatch);
         }
-
+        if (previous.isSettings) {
+            return showSettings()(dispatch);
+        }
         if (previous.isChannelInfo) {
             const currentChannelId = getCurrentChannelId(getState());
             return showChannelInfo(currentChannelId)(dispatch);
@@ -600,6 +602,19 @@ export function setEditChannelMembers(active: boolean) {
             type: ActionTypes.SET_EDIT_CHANNEL_MEMBERS,
             active,
         });
+        return {data: true};
+    };
+}
+
+export function showSettings() {
+    return (dispatch: DispatchFunc) => {
+        dispatch(
+            {
+                type: ActionTypes.UPDATE_RHS_STATE,
+                state: RHSStates.SETTINGS,
+            },
+        );
+
         return {data: true};
     };
 }
