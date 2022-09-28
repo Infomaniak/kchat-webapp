@@ -10,7 +10,7 @@ import {Post} from '@mattermost/types/posts.js';
 
 import {FileInfo} from '@mattermost/types/files.js';
 
-import {ActionResult} from 'mattermost-redux/types/actions.js';
+import {ActionResult, GetStateFunc, DispatchFunc} from 'mattermost-redux/types/actions.js';
 
 import {CommandArgs} from '@mattermost/types/integrations.js';
 
@@ -21,7 +21,7 @@ import {PostDraft} from 'types/store/draft';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
-import {getCurrentChannel, getCurrentChannelStats, getChannelMemberCountsByGroup as selectChannelMemberCountsByGroup} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentChannelId, getCurrentChannel, getCurrentChannelStats, getChannelMemberCountsByGroup as selectChannelMemberCountsByGroup} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId, getStatusForUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 import {haveICurrentChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getChannelTimezones, getChannelMemberCountsByGroup} from 'mattermost-redux/actions/channels';
@@ -41,6 +41,7 @@ import {
     removeReaction,
 } from 'mattermost-redux/actions/posts';
 import {Permissions, Posts, Preferences as PreferencesRedux} from 'mattermost-redux/constants';
+import {updateDraft} from 'actions/views/drafts';
 
 import {connectionErrorCount} from 'selectors/views/system';
 
@@ -54,7 +55,7 @@ import {getPostDraft, getIsRhsExpanded} from 'selectors/rhs';
 import {showPreviewOnCreatePost} from 'selectors/views/textbox';
 import {getCurrentLocale} from 'selectors/i18n';
 import {getEmojiMap, getShortcutReactToLastPostEmittedFrom} from 'selectors/emojis';
-import {setGlobalItem, actionOnGlobalItemsWithPrefix} from 'actions/storage';
+import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
 import {openModal} from 'actions/views/modals';
 import {Constants, Preferences, StoragePrefixes, UserStatuses} from 'utils/constants';
 import {canUploadFiles} from 'utils/file_utils';
@@ -166,12 +167,20 @@ type Actions = {
 // Temporarily store draft manually in localStorage since the current version of redux-persist
 // we're on will not save the draft quickly enough on page unload.
 function setDraft(key: string, value: PostDraft) {
-    if (value) {
-        localStorage.setItem(key, JSON.stringify(value));
-    } else {
-        localStorage.removeItem(key);
-    }
-    return setGlobalItem(key, value);
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let updatedValue = null;
+        if (value) {
+            updatedValue = {...value};
+            const channelId = getCurrentChannelId(getState());
+            updatedValue = {
+                ...value,
+                channelId,
+                remote: false,
+            };
+        }
+
+        return dispatch(updateDraft(key, updatedValue));
+    };
 }
 
 function clearDraftUploads() {

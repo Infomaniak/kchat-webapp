@@ -9,4 +9,10 @@ export type PostDraft = {
     uploadsInProgress: string[];
     props?: any;
     caretPosition?: number;
+    channelId: string;
+    rootId: string;
+    createAt: number;
+    updateAt: number;
+    show?: boolean;
+    remote?: boolean;
 };

@@ -325,7 +325,7 @@ export class CreateComment extends React.PureComponent<Props, State> {
 
         document.addEventListener('paste', this.pasteHandler);
         document.addEventListener('keydown', this.focusTextboxIfNecessary);
-        window.addEventListener('beforeunload', this.saveDraft);
+        window.addEventListener('beforeunload', this.saveDraftWithShow);
         if (useLDAPGroupMentions) {
             getChannelMemberCountsByGroup(channelId);
         }
@@ -342,8 +342,8 @@ export class CreateComment extends React.PureComponent<Props, State> {
         this.props.resetCreatePostRequest?.();
         document.removeEventListener('paste', this.pasteHandler);
         document.removeEventListener('keydown', this.focusTextboxIfNecessary);
-        window.removeEventListener('beforeunload', this.saveDraft);
-        this.saveDraft();
+        window.removeEventListener('beforeunload', this.saveDraftWithShow);
+        this.saveDraftWithShow();
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
@@ -378,6 +378,23 @@ export class CreateComment extends React.PureComponent<Props, State> {
         if (this.props.createPostErrorId === 'api.post.create_post.root_id.app_error' && this.props.createPostErrorId !== prevProps.createPostErrorId) {
             this.showPostDeletedModal();
         }
+    }
+
+    saveDraftWithShow = () => {
+        this.setState((prev) => {
+            if (prev.draft) {
+                return {
+                    draft: {
+                        ...prev.draft,
+                        show: !this.isDraftEmpty(prev.draft),
+                    } as PostDraft,
+                };
+            }
+
+            return {
+                draft: prev.draft,
+            };
+        }, this.saveDraft);
     }
 
     saveDraft = () => {
@@ -782,6 +799,10 @@ export class CreateComment extends React.PureComponent<Props, State> {
         GlobalActions.emitLocalUserTypingEvent(channelId, rootId);
     }
 
+    isDraftEmpty = (draft: PostDraft): boolean => {
+        return !draft || (!draft.message && draft.fileInfos.length === 0);
+    }
+
     handleChange = (e: React.ChangeEvent<TextboxElement>) => {
         const message = e.target.value;
 
@@ -791,7 +812,8 @@ export class CreateComment extends React.PureComponent<Props, State> {
         }
 
         const draft = this.state.draft!;
-        const updatedDraft = {...draft, message};
+        const show = this.isDraftEmpty(draft) ? false : draft.show;
+        const updatedDraft = {...draft, message, show};
 
         if (this.saveDraftFrame) {
             clearTimeout(this.saveDraftFrame);
@@ -978,6 +1000,7 @@ export class CreateComment extends React.PureComponent<Props, State> {
             ...draft,
             fileInfos: newFileInfos,
             uploadsInProgress,
+            show: true,
         };
         this.props.updateCommentDraftWithRootId(rootId, modifiedDraft);
         this.draftsForPost[rootId] = modifiedDraft;
@@ -1099,6 +1122,7 @@ export class CreateComment extends React.PureComponent<Props, State> {
     }
 
     handleBlur = () => {
+        this.saveDraftWithShow();
         this.lastBlurAt = Date.now();
     }
 

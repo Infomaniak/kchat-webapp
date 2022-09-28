@@ -23,6 +23,7 @@ import {Emoji} from '@mattermost/types/emojis';
 import {Group} from '@mattermost/types/groups';
 import {ChannelMemberCountByGroup, ChannelMemberCountsByGroup} from '@mattermost/types/channels';
 import {ServerError} from '@mattermost/types/errors';
+import {PostDraft} from 'types/store/draft';
 
 describe('components/CreateComment', () => {
     jest.useFakeTimers();
@@ -48,7 +49,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: [],
             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-        },
+        } as unknown as PostDraft,
         enableAddButton: true,
         ctrlSend: false,
         latestPostId,
@@ -91,7 +92,7 @@ describe('components/CreateComment', () => {
             message: '',
             uploadsInProgress: [],
             fileInfos: [],
-        };
+        } as unknown as PostDraft;
         const enableAddButton = false;
         const ctrlSend = true;
         const props = {...baseProps, draft, enableAddButton, ctrlSend};
@@ -111,7 +112,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: [],
             fileInfos: [],
-        };
+        } as unknown as PostDraft;
         const ctrlSend = true;
         const props = {...baseProps, ctrlSend, draft, clearCommentDraftUploads, onResetHistoryIndex, getChannelMemberCountsByGroup};
 
@@ -149,7 +150,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: [{}],
             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-        };
+        } as unknown as PostDraft;
 
         const wrapper = shallowWithIntl(
             <CreateComment {...baseProps}/>,
@@ -186,7 +187,7 @@ describe('components/CreateComment', () => {
             message: '',
             uploadsInProgress: [],
             fileInfos: [],
-        };
+        } as unknown as PostDraft;
         const enableAddButton = false;
         const props = {...baseProps, draft, onUpdateCommentDraft, enableAddButton};
 
@@ -266,7 +267,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: ['1', '2', '3'],
             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-        };
+        } as unknown as PostDraft;
         const props = {...baseProps, draft, updateCommentDraftWithRootId};
 
         const wrapper = shallowWithIntl(
@@ -327,7 +328,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: ['1', '2', '3'],
             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-        };
+        } as unknown as PostDraft;
         const props = {...baseProps, onUpdateCommentDraft, draft};
 
         const wrapper = shallowWithIntl(
@@ -355,7 +356,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: ['1', '2', '3'],
             fileInfos,
-        };
+        } as unknown as PostDraft;
         const props = {...baseProps, updateCommentDraftWithRootId, draft};
 
         const wrapper = shallowWithIntl(
@@ -396,7 +397,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: ['1', '2', '3'],
             fileInfos: [{id: '1', name: 'aaa', create_at: 100} as FileInfo, {id: '2', name: 'bbb', create_at: 200} as FileInfo],
-        };
+        } as unknown as PostDraft;
         const props = {...baseProps, onUpdateCommentDraft, draft};
 
         const wrapper = shallowWithIntl(
@@ -417,7 +418,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: ['1', '2', '3'],
             fileInfos: [{id: '1', name: 'aaa', create_at: 100} as FileInfo, {id: '2', name: 'bbb', create_at: 200} as FileInfo],
-        };
+        } as unknown as PostDraft;
         const props = {...baseProps, onUpdateCommentDraft, draft};
 
         const wrapper = shallowWithIntl(
@@ -438,7 +439,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: ['1', '2', '3'],
             fileInfos: [{id: '1', name: 'aaa', create_at: 100} as FileInfo, {id: '2', name: 'bbb', create_at: 200} as FileInfo],
-        };
+        } as unknown as PostDraft;
 
         it('is called when rootId changes', () => {
             const props = {...baseProps, draft};
@@ -508,7 +509,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: ['1', '2', '3'],
             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-        };
+        } as unknown as PostDraft;
         const scrollToBottom = jest.fn();
         const props = {...baseProps, draft, scrollToBottom};
 
@@ -545,7 +546,7 @@ describe('components/CreateComment', () => {
             message: '/fakecommand other text',
             uploadsInProgress: ['1', '2', '3'],
             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-        };
+        } as unknown as PostDraft;
         const props = {...baseProps, onUpdateCommentDraft, draft, onSubmit};
 
         const wrapper = shallowWithIntl(
@@ -578,7 +579,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: ['1', '2', '3'],
             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-        };
+        } as unknown as PostDraft;
         const scrollToBottom = jest.fn();
         const props = {...baseProps, draft, scrollToBottom};
 
@@ -598,7 +599,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: [],
             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-        };
+        } as unknown as PostDraft;
         const props = {...baseProps, draft, onSubmit};
 
         const wrapper = shallowWithIntl(
@@ -629,7 +630,7 @@ describe('components/CreateComment', () => {
                             message: `Test message @${mention}`,
                             uploadsInProgress: [],
                             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                        },
+                        } as unknown as PostDraft,
                         onSubmit,
                         channelMembersCount: 1,
                         enableConfirmNotificationsToChannel: true,
@@ -652,7 +653,7 @@ describe('components/CreateComment', () => {
                             message: `Test message @${mention}`,
                             uploadsInProgress: [],
                             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                        },
+                        } as unknown as PostDraft,
                         onSubmit,
                         channelMembersCount: 8,
                         enableConfirmNotificationsToChannel: false,
@@ -675,7 +676,7 @@ describe('components/CreateComment', () => {
                             message: `Test message ${mention}`,
                             uploadsInProgress: [],
                             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                        },
+                        } as unknown as PostDraft,
                         onSubmit,
                         channelMembersCount: 8,
                         enableConfirmNotificationsToChannel: true,
@@ -699,7 +700,7 @@ describe('components/CreateComment', () => {
                             message: `Test message @${mention}`,
                             uploadsInProgress: [],
                             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                        },
+                        } as unknown as PostDraft,
                         onSubmit,
                         channelMembersCount: 8,
                         enableConfirmNotificationsToChannel: true,
@@ -723,7 +724,7 @@ describe('components/CreateComment', () => {
                         message: `Test message @${mention}`,
                         uploadsInProgress: [],
                         fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                    },
+                    } as unknown as PostDraft,
                     onSubmit,
                     channelMembersCount: 8,
                     enableConfirmNotificationsToChannel: true,
@@ -746,7 +747,7 @@ describe('components/CreateComment', () => {
                         message: `Test message @${mention}`,
                         uploadsInProgress: [],
                         fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                    },
+                    } as unknown as PostDraft,
                     onSubmit,
                     isTimezoneEnabled: true,
                     channelMembersCount: 8,
@@ -774,7 +775,7 @@ describe('components/CreateComment', () => {
                         message: `Test message @${mention}`,
                         uploadsInProgress: [],
                         fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                    },
+                    } as unknown as PostDraft,
                     onSubmit,
                     isTimezoneEnabled: true,
                     channelMembersCount: 8,
@@ -803,7 +804,7 @@ describe('components/CreateComment', () => {
                     message: 'Test message @developers',
                     uploadsInProgress: [],
                     fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                },
+                } as unknown as PostDraft,
                 groupsWithAllowReference: new Map([
                     ['@developers', {
                         id: 'developers',
@@ -844,7 +845,7 @@ describe('components/CreateComment', () => {
                     message: 'Test message @developers @boss @love @you @software-developers',
                     uploadsInProgress: [],
                     fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                },
+                } as unknown as PostDraft,
                 groupsWithAllowReference: new Map([
                     ['@developers', {
                         id: 'developers',
@@ -918,7 +919,7 @@ describe('components/CreateComment', () => {
                     message: 'Test message @developers',
                     uploadsInProgress: [],
                     fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                },
+                } as unknown as PostDraft,
                 groupsWithAllowReference: new Map([
                     ['@developers', {
                         id: 'developers',
@@ -964,7 +965,7 @@ describe('components/CreateComment', () => {
                     message: '/fakecommand other text',
                     uploadsInProgress: [],
                     fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                },
+                } as unknown as PostDraft,
                 onSubmit: onSubmitWithError,
             };
 
@@ -1003,7 +1004,7 @@ describe('components/CreateComment', () => {
                     message: '/fakecommand other text',
                     uploadsInProgress: [],
                     fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                },
+                } as unknown as PostDraft,
                 onSubmit: onSubmitWithError,
             };
 
@@ -1027,7 +1028,7 @@ describe('components/CreateComment', () => {
                         message: `Test message @${mention}`,
                         uploadsInProgress: [],
                         fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                    },
+                    } as unknown as PostDraft,
                     onSubmit,
                 };
 
@@ -1049,7 +1050,7 @@ describe('components/CreateComment', () => {
                         message: `Test message @${mention}`,
                         uploadsInProgress: [],
                         fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                    },
+                    } as unknown as PostDraft,
                     onSubmit,
                 };
 
@@ -1071,7 +1072,7 @@ describe('components/CreateComment', () => {
                     message: 'Test message',
                     uploadsInProgress: [],
                     fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-                },
+                } as unknown as PostDraft,
                 onSubmit,
             };
 
@@ -1091,7 +1092,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: ['4', '5', '6'],
             fileInfos: [{id: '1'} as FileInfo, {id: '2'} as FileInfo, {id: '3'} as FileInfo],
-        };
+        } as unknown as PostDraft;
         const props = {...baseProps, draft, onUpdateCommentDraft};
 
         const wrapper = shallowWithIntl(
@@ -1119,7 +1120,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: [],
             fileInfos: [{} as FileInfo, {} as FileInfo, {} as FileInfo],
-        };
+        } as unknown as PostDraft;
 
         const wrapper = shallowWithIntl(
             <CreateComment {...baseProps}/>,
@@ -1136,7 +1137,7 @@ describe('components/CreateComment', () => {
             message: 'Test message',
             uploadsInProgress: ['4', '5', '6'],
             fileInfos: [{id: '1'}, {id: '2'}, {id: '3'}],
-        };
+        } as unknown as PostDraft;
 
         const wrapper = shallowWithIntl(
             <CreateComment {...baseProps}/>,
@@ -1281,7 +1282,7 @@ describe('components/CreateComment', () => {
             message: '',
             uploadsInProgress: [],
             fileInfos: [],
-        };
+        } as unknown as PostDraft;
 
         const scrollToBottom = jest.fn();
         const wrapper = shallowWithIntl(
@@ -1310,7 +1311,7 @@ describe('components/CreateComment', () => {
             message: '',
             uploadsInProgress: [],
             fileInfos: [],
-        };
+        } as unknown as PostDraft;
 
         const scrollToBottom = jest.fn();
         const wrapper = shallowWithIntl(
@@ -1338,7 +1339,7 @@ describe('components/CreateComment', () => {
             message: '',
             uploadsInProgress: [],
             fileInfos: [],
-        };
+        } as unknown as PostDraft;
 
         const wrapper = shallowWithIntl(
             <CreateComment
@@ -1391,7 +1392,7 @@ describe('components/CreateComment', () => {
             message: '',
             uploadsInProgress: [],
             fileInfos: [],
-        };
+        } as unknown as PostDraft;
 
         const wrapper = shallowWithIntl(
             <CreateComment
@@ -1448,7 +1449,7 @@ describe('components/CreateComment', () => {
             message: '',
             uploadsInProgress: [],
             fileInfos: [],
-        };
+        } as unknown as PostDraft;
 
         const wrapper = shallowWithIntl(
             <CreateComment
@@ -1480,7 +1481,7 @@ describe('components/CreateComment', () => {
             draft: {
                 ...draft,
                 message: 'test',
-            },
+            } as unknown as PostDraft,
             caretPosition: 'test'.length, // cursor is at the end
         });
 

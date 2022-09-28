@@ -3,6 +3,8 @@
 
 /* eslint-disable max-lines */
 
+import crypto from 'crypto';
+
 import {PreferenceType} from '@mattermost/types/preferences';
 import FormData from 'form-data';
 
@@ -78,6 +80,7 @@ import type {
     MarketplacePlugin,
 } from '@mattermost/types/marketplace';
 import {Post, PostList, PostSearchResults, OpenGraphMetadata, PostsUsageResponse, TeamsUsageResponse, PaginatedPostList, FilesUsageResponse} from '@mattermost/types/posts';
+import {Draft} from '@mattermost/types/drafts';
 import {BoardsUsageResponse} from '@mattermost/types/boards';
 import {Reaction} from '@mattermost/types/reactions';
 import {Role} from '@mattermost/types/roles';
@@ -122,7 +125,6 @@ import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
-import crypto from 'crypto';
 
 // Fix error import
 // eslint-disable-next-line no-warning-comments
@@ -136,7 +138,7 @@ const IKConstants = {
     LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
     CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
     MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
-}
+};
 
 const HEADER_AUTH = 'Authorization';
 const HEADER_BEARER = 'Bearer';
@@ -477,6 +479,10 @@ export default class Client4 {
 
     getSystemRoute(): string {
         return `${this.getBaseRoute()}/system`;
+    }
+
+    getDraftsRoute() {
+        return `${this.getBaseRoute()}/drafts`;
     }
 
     getCSRFFromCookie() {
@@ -4245,6 +4251,28 @@ export default class Client4 {
         }
     }
 
+    upsertDraft = async (draft: Draft, connectionId: string) => {
+        const result = await this.doFetch<Draft>(
+            `${this.getDraftsRoute()}`,
+            {
+                method: 'post',
+                body: JSON.stringify(draft),
+                headers: {
+                    'Connection-Id': `${connectionId}`,
+                },
+            },
+        );
+
+        return result;
+    };
+
+    getUserDrafts = (teamId: Team['id']) => {
+        return this.doFetch<Draft[]>(
+            `${this.getUserRoute('me')}/teams/${teamId}/drafts`,
+            {method: 'get'},
+        );
+    };
+
     /****************************************************/
     /*                                                  */
     /*                IK CUSTOMS CALLS                  */
@@ -4258,6 +4286,23 @@ export default class Client4 {
         );
     };
 
+    deleteDraft = (channelId: Channel['id'], rootId = '', connectionId: string) => {
+        let endpoint = `${this.getUserRoute('me')}/channels/${channelId}/drafts`;
+        if (rootId !== '') {
+            endpoint += `/${rootId}`;
+        }
+
+        return this.doFetch<null>(
+            endpoint,
+            {
+                method: 'delete',
+                headers: {
+                    'Connection-Id': `${connectionId}`,
+                },
+            },
+        );
+    };
+
     getIKLoginToken = (code: string, challenge: string, verifier: string, loginUrl: string, clientId: string) => {
         // Body in formData because Laravel do not manage JSON
         const formData = new FormData();
@@ -4266,6 +4311,7 @@ export default class Client4 {
         formData.append('code_verifier', verifier);
         formData.append('client_id', clientId);
         formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
+
         // formData.append('redirect_uri', 'ktalk://auth-desktop' );
 
         return this.doFetch<any>(
@@ -4340,7 +4386,6 @@ export default class Client4 {
         );
     }
 
-
     /**
      * get code_verifier for challenge
      * @returns string
@@ -4374,6 +4419,7 @@ export default class Client4 {
      */
     getChallengeAndRedirectToLogin() {
         const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
+
         // const redirectTo = 'ktalk://auth-desktop';
         const codeVerifier = this.getCodeVerifier();
         let codeChallenge = '';
@@ -4390,7 +4436,6 @@ export default class Client4 {
             console.log('Error redirect');
         });
     }
-
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {

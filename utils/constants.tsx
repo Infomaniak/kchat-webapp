@@ -432,6 +432,8 @@ export const ModalIdentifiers = {
     GET_PUBLIC_LINK_MODAL: 'get_public_link_modal',
     KEYBOARD_SHORTCUTS_MODAL: 'keyboar_shortcuts_modal',
     USERS_TO_BE_REMOVED: 'users_to_be_removed',
+    DELETE_DRAFT: 'delete_draft_modal',
+    SEND_DRAFT: 'send_draft_modal',
     UPLOAD_LICENSE: 'upload_license',
     INCOMING_CALL: 'incoming_call',
     INSIGHTS: 'insights',
@@ -594,6 +596,9 @@ export const SocketEvents = {
     PUSHER_MEMBER_REMOVED: 'pusher:member_removed',
     PUSHER_PING: 'pusher:ping',
     PUSHER_PONG: 'pusher:pong',
+    DRAFT_CREATED: 'draft_created',
+    DRAFT_UPDATED: 'draft_updated',
+    DRAFT_DELETED: 'draft_deleted',
 };
 
 export const TutorialSteps = {

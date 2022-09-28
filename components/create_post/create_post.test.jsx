@@ -297,7 +297,10 @@ describe('components/create_post', () => {
         postTextbox.simulate('change', {target: {value: 'change'}});
         expect(setDraft).not.toHaveBeenCalled();
         jest.runAllTimers();
-        expect(setDraft).toHaveBeenCalledWith(StoragePrefixes.DRAFT + currentChannelProp.id, draft);
+        expect(setDraft).toHaveBeenCalledWith(StoragePrefixes.DRAFT + currentChannelProp.id, {
+            ...draft,
+            show: false,
+        });
     });
 
     it('onKeyPress textbox should call emitLocalUserTypingEvent', () => {

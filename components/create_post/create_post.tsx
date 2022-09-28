@@ -2,8 +2,7 @@
 // See LICENSE.txt for license information.
 /* eslint-disable max-lines */
 
-/* eslint-disable max-lines */
-
+import isEqual from 'lodash/isEqual';
 import React, {CSSProperties, SyntheticEvent} from 'react';
 import classNames from 'classnames';
 import {injectIntl, IntlShape} from 'react-intl';
@@ -332,7 +331,10 @@ class CreatePost extends React.PureComponent<Props, State> {
 
     static getDerivedStateFromProps(props: Props, state: State): Partial<State> {
         let updatedState: Partial<State> = {currentChannel: props.currentChannel};
-        if (props.currentChannel.id !== state.currentChannel.id) {
+        if (
+            props.currentChannel.id !== state.currentChannel.id ||
+            (props.draft.remote && props.draft.message !== state.message)
+        ) {
             updatedState = {
                 ...updatedState,
                 message: props.draft.message,
@@ -385,7 +387,7 @@ class CreatePost extends React.PureComponent<Props, State> {
         if (prevProps.currentChannel.id !== currentChannel.id) {
             this.lastChannelSwitchAt = Date.now();
             this.focusTextbox();
-            this.saveDraft(prevProps);
+            this.saveDraftWithShow(prevProps);
             if (useLDAPGroupMentions) {
                 actions.getChannelMemberCountsByGroup(currentChannel.id, isTimezoneEnabled);
             }
@@ -406,11 +408,31 @@ class CreatePost extends React.PureComponent<Props, State> {
         document.removeEventListener('keydown', this.documentKeyHandler);
         window.removeEventListener('beforeunload', this.unloadHandler);
         this.removeOrientationListeners();
-        this.saveDraft();
+        this.saveDraftWithShow();
     }
 
     unloadHandler = () => {
-        this.saveDraft();
+        this.saveDraftWithShow();
+    }
+
+    isDraftEmpty = (draft: PostDraft): boolean => {
+        return !draft || (!draft.message && draft.fileInfos.length === 0);
+    }
+
+    saveDraftWithShow = (props = this.props) => {
+        if (this.saveDraftFrame && props.currentChannel) {
+            const channelId = props.currentChannel.id;
+            const draft = this.draftsForChannel[channelId];
+
+            if (draft) {
+                this.draftsForChannel[channelId] = {
+                    ...draft,
+                    show: !this.isDraftEmpty(draft),
+                } as PostDraft;
+            }
+        }
+
+        this.saveDraft(props);
     }
 
     saveDraft = (props = this.props) => {
@@ -872,9 +894,11 @@ class CreatePost extends React.PureComponent<Props, State> {
             serverError,
         });
 
+        const show = this.isDraftEmpty(this.props.draft) ? false : this.props.draft!.show;
         const draft = {
             ...this.props.draft,
             message,
+            show,
         };
         if (this.saveDraftFrame) {
             clearTimeout(this.saveDraftFrame);
@@ -962,7 +986,11 @@ class CreatePost extends React.PureComponent<Props, State> {
             draft.fileInfos = sortFileInfos(draft.fileInfos.concat(fileInfos), this.props.locale);
         }
 
-        this.draftsForChannel[channelId] = draft;
+        this.draftsForChannel[channelId] = {
+            ...draft,
+            show: true,
+        };
+
         this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft);
     }
 
@@ -1217,6 +1245,7 @@ class CreatePost extends React.PureComponent<Props, State> {
 
     handleBlur = () => {
         this.lastBlurAt = Date.now();
+        this.saveDraftWithShow();
     }
 
     handleEmojiClose = () => {
