@@ -1,3 +1,9 @@
+## 0.3.15-rc.2 (2022-09-29)
+
+## Changed (1 change)
+
+- [hard hide bot accounts in admin definitions](kchat/webapp@b2467af64b6886e5aa452bcc0adfbf3641962ac8) by @antonbuksa
+
 ## 0.3.15-rc.1 (2022-09-28)
 
 No changes.
