@@ -90,7 +90,7 @@ type State = {
 
 export class InvitationModal extends React.PureComponent<Props, State> {
     defaultState: State = deepFreeze({
-        view: View.INVITE,
+        view: InviteType.GUEST,
         termWithoutResults: null,
         invite: initializeInviteState(this.props.initialValue || '', this.props.inviteAsGuest),
         result: defaultResultState,
@@ -105,7 +105,7 @@ export class InvitationModal extends React.PureComponent<Props, State> {
             ...this.defaultState,
             invite: {
                 ...this.defaultState.invite,
-                inviteType: (!props.canAddUsers && props.canInviteGuests) ? InviteType.GUEST : this.defaultState.invite.inviteType,
+                inviteType: InviteType.GUEST,
                 inviteChannels: {
                     ...this.defaultState.invite.inviteChannels,
                     channels: props.channelToInvite ? [...defaultStateChannels, props.channelToInvite] : defaultStateChannels,
@@ -395,14 +395,15 @@ export class InvitationModal extends React.PureComponent<Props, State> {
                 />
             );
         }
-        if (!this.props.canInviteGuests && !this.props.canAddUsers) {
-            view = (
-                <NoPermissionsView
-                    footerClass='InvitationModal__footer'
-                    onDone={this.handleHide}
-                />
-            );
-        }
+
+        // if (!this.props.canInviteGuests && !this.props.canAddUsers) {
+        //     view = (
+        //         <NoPermissionsView
+        //             footerClass='InvitationModal__footer'
+        //             onDone={this.handleHide}
+        //         />
+        //     );
+        // }
 
         return (
             <Modal

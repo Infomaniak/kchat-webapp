@@ -160,25 +160,25 @@ export class MainMenu extends React.PureComponent<Props> {
 
         const {formatMessage} = this.props.intl;
 
-        // let invitePeopleModal = null;
-        // if (guestAccessEnabled || canInviteTeamMember) {
-        //     invitePeopleModal = (
-        //         <Menu.ItemToggleModalRedux
-        //             id='invitePeople'
-        //             modalId={ModalIdentifiers.INVITATION}
-        //             dialogType={InvitationModal}
-        //             text={formatMessage({
-        //                 id: 'navbar_dropdown.invitePeople',
-        //                 defaultMessage: 'Invite People',
-        //             })}
-        //             extraText={formatMessage({
-        //                 id: 'navbar_dropdown.invitePeopleExtraText',
-        //                 defaultMessage: 'Add people to the team',
-        //             })}
-        //             icon={this.props.mobile && <i className='fa fa-user-plus'/>}
-        //         />
-        //     );
-        // }
+        let invitePeopleModal = null;
+        if (guestAccessEnabled || canInviteTeamMember) {
+            invitePeopleModal = (
+                <Menu.ItemToggleModalRedux
+                    id='invitePeople'
+                    modalId={ModalIdentifiers.INVITATION}
+                    dialogType={InvitationModal}
+                    text={formatMessage({
+                        id: 'navbar_dropdown.invitePeople',
+                        defaultMessage: 'Invite People',
+                    })}
+                    extraText={formatMessage({
+                        id: 'navbar_dropdown.invitePeopleExtraText',
+                        defaultMessage: 'Add people to the team',
+                    })}
+                    icon={this.props.mobile && <i className='fa fa-user-plus'/>}
+                />
+            );
+        }
 
         return this.props.mobile ? (
             <Menu
@@ -240,15 +240,15 @@ export class MainMenu extends React.PureComponent<Props> {
                             icon={<i className='fa fa-user-plus'/>}
                         />
                     </TeamPermissionGate>
-                    {/* <TeamPermissionGate
+                    <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.ADD_USER_TO_TEAM, Permissions.INVITE_GUEST]}
                     >
                         {invitePeopleModal}
-                    </TeamPermissionGate> */}
+                    </TeamPermissionGate>
                 </Menu.Group>
                 <Menu.Group>
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
@@ -259,7 +259,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.teamSettings', defaultMessage: 'Team Settings'})}
                             icon={<i className='fa fa-globe'/>}
                         />
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                     {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}

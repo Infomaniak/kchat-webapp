@@ -91,7 +91,7 @@ export default function InviteView(props: Props) {
             onClick={copyText.onClick}
             data-testid='InviteView__copyInviteLink'
             aria-label='team invite link'
-            className='InviteView__copyLink'
+            className='InviteView__copyLink secondary'
         >
             {!copyText.copiedRecently && (
                 <>
@@ -186,7 +186,7 @@ export default function InviteView(props: Props) {
                 </h1>
                 <button
                     id='closeIcon'
-                    className='icon icon-close'
+                    className='icon icon-close close'
                     aria-label='Close'
                     title='Close'
                     onClick={props.onClose}
@@ -229,7 +229,7 @@ export default function InviteView(props: Props) {
                     titleClass='InviteView__sectionTitle'
                 />
                 }
-                {(props.inviteType === InviteType.GUEST || (props.inviteType === InviteType.MEMBER && props.channelToInvite)) && (
+                {/* {(props.inviteType === InviteType.GUEST || (props.inviteType === InviteType.MEMBER && props.channelToInvite)) && ( */}
                     <AddToChannels
                         setCustomMessage={props.setCustomMessage}
                         toggleCustomMessage={props.toggleCustomMessage}
@@ -244,7 +244,7 @@ export default function InviteView(props: Props) {
                         channelToInvite={props.channelToInvite}
                         inviteType={props.inviteType}
                     />
-                )}
+                {/* )} */}
             </Modal.Body>
             <Modal.Footer className={'InviteView__footer ' + props.footerClass}>
                 {copyButton}

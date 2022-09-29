@@ -69,7 +69,7 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
         return haveIChannelPermission(state, currentTeam.id, channel.id, Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS);
     });
     const guestAccountsEnabled = config.EnableGuestAccounts === 'true';
-    const emailInvitationsEnabled = config.EnableEmailInvitations === 'true';
+    const emailInvitationsEnabled = true; // config.EnableEmailInvitations === 'true';
     const isLicensed = license && license.IsLicensed === 'true';
     const isGroupConstrained = Boolean(currentTeam.group_constrained);
     const canInviteGuests = !isGroupConstrained && isLicensed && guestAccountsEnabled && haveICurrentTeamPermission(state, Permissions.INVITE_GUEST);

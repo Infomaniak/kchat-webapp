@@ -1487,7 +1487,7 @@ export default class Client4 {
 
         return this.doFetch<TeamInviteWithError>(
             `${this.getTeamRoute(teamId)}/invite/email?graceful=true`,
-            {method: 'post', body: JSON.stringify(emails)},
+            {method: 'post', body: JSON.stringify({emails})},
         );
     };
 
@@ -1509,8 +1509,8 @@ export default class Client4 {
         this.trackEvent('api', 'api_teams_invite_guests', {team_id: teamId, channel_ids: channelIds});
 
         return this.doFetch<TeamInviteWithError>(
-            `${this.getTeamRoute(teamId)}/invite-guests/email?graceful=true`,
-            {method: 'post', body: JSON.stringify({emails, channels: channelIds, message})},
+            `${this.getTeamRoute(teamId)}/invite/email?graceful=true`,
+            {method: 'post', body: JSON.stringify({emails, channelIds, message})},
         );
     };
 
