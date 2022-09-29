@@ -5892,9 +5892,13 @@ const AdminDefinition = {
             url: 'integrations/bot_accounts',
             title: t('admin.integrations.botAccounts'),
             title_default: 'Bot Accounts',
-            isHidden: it.all(
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.BOT_ACCOUNTS)),
-            ),
+            isHidden: () => {
+                return true;
+            },
+
+            // it.all(
+            //     it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.BOT_ACCOUNTS)),
+            // ),
             schema: {
                 id: 'BotAccountSettings',
                 name: t('admin.integrations.botAccounts.title'),
