@@ -1684,7 +1684,6 @@ function handleThreadReadChanged(msg) {
 
             doDispatch(
                 handleReadChanged(
-                    doDispatch,
                     msg.data.thread_id,
                     msg.data.team_id,
                     msg.data.channel_id,
@@ -1749,7 +1748,7 @@ function handleThreadUpdated(msg) {
             dispatch(updateThreadRead(currentUserId, currentTeamId, threadData.id, lastViewedAt));
         }
 
-        handleThreadArrived(doDispatch, doGetState, threadData, msg.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions);
+        handleThreadArrived(doDispatch, doGetState, threadData, msg.data.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions);
     };
 }
 
