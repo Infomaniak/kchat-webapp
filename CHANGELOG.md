@@ -1,3 +1,13 @@
+## 0.3.15-rc.5 (2022-09-30)
+
+## Fixed (1 change)
+
+- [fix threads not being marked as read](kchat/webapp@8d758298333c88121875fb3c5a1d663559311f46) by @antonbuksa
+
+## Changed (1 change)
+
+- [hard hide bot accounts in admin definitions](kchat/webapp@b2467af64b6886e5aa452bcc0adfbf3641962ac8) by @antonbuksa
+
 ## 0.3.15-rc.4 (2022-09-30)
 
 ## Changed (1 change)
