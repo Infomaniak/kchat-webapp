@@ -1,3 +1,9 @@
+## 0.3.16-rc.1 (2022-10-03)
+
+## Changed (1 change)
+
+- [limit insights to admins only](kchat/webapp@e41f44d8803adbc20bf8f35c6434713321ac502a) by @antonbuksa ([merge request](kchat/webapp!137))
+
 ## 0.3.15-rc.5 (2022-09-30)
 
 ## Fixed (1 change)
