@@ -7,7 +7,7 @@ import {General, Preferences} from 'mattermost-redux/constants';
 
 import {getConfig, getFeatureFlagValue, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-import {isGuest} from 'mattermost-redux/utils/user_utils';
+import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {PreferenceType} from '@mattermost/types/preferences';
 import {GlobalState} from '@mattermost/types/store';
@@ -259,8 +259,8 @@ export function getUseCaseOnboarding(state: GlobalState): boolean {
 export function insightsAreEnabled(state: GlobalState): boolean {
     const isConfiguredForFeature = getConfig(state).InsightsEnabled === 'true';
     const featureIsEnabled = getFeatureFlagValue(state, 'InsightsEnabled') === 'true';
-    const currentUserIsGuest = isGuest(getCurrentUser(state).roles);
-    return featureIsEnabled && isConfiguredForFeature && !currentUserIsGuest;
+    const currentUserIsAdmin = isAdmin(getCurrentUser(state).roles);
+    return featureIsEnabled && isConfiguredForFeature && currentUserIsAdmin;
 }
 
 export function isGraphQLEnabled(state: GlobalState): boolean {
