@@ -1,3 +1,9 @@
+## 0.3.17-rc.1 (2022-10-04)
+
+## Changed (1 change)
+
+- [update product icon in header](kchat/webapp@82068385639be520257b176e991f533d8a845751) by @antonbuksa
+
 ## 0.3.16-rc.1 (2022-10-03)
 
 ## Changed (1 change)
