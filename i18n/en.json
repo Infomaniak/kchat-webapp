@@ -4344,7 +4344,7 @@
   "reaction.clickToRemove": "(click to remove)",
   "reaction.container.ariaLabel": "reactions",
   "reaction.othersReacted": "{otherUsers, number} {otherUsers, plural, one {user} other {users}}",
-  "reaction.reacted": "{users} {reactionVerb} with {emoji}",
+  "reaction.reacted": "{emojiImage}{users} {reactionVerb} with {emoji}",
   "reaction.reactionVerb.user": "reacted",
   "reaction.reactionVerb.users": "reacted",
   "reaction.reactionVerb.you": "reacted",

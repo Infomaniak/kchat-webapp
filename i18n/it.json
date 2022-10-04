@@ -3127,7 +3127,7 @@
   "reaction.container.ariaLabel": "reazioni",
   "reaction.othersReacted": "{otherUsers, number} {otherUsers, plural, one {user} other {users}}",
   "reaction.reactWidth.ariaLabel": "reagisci con",
-  "reaction.reacted": "{users} {reactionVerb} con {emoji}",
+  "reaction.reacted": "{emojiImage}{users} {reactionVerb} con {emoji}",
   "reaction.reactionVerb.user": "reagito",
   "reaction.reactionVerb.users": "reagito",
   "reaction.reactionVerb.you": "reagito",

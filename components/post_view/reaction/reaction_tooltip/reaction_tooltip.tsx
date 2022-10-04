@@ -5,6 +5,7 @@ import * as React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {Reaction as ReactionType} from '@mattermost/types/reactions';
+import RenderEmoji from 'components/emoji/render_emoji';
 
 type Props = {
     canAddReactions: boolean;
@@ -102,11 +103,12 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
     const tooltip = (
         <FormattedMessage
             id='reaction.reacted'
-            defaultMessage='{users} {reactionVerb} with {emoji}'
+            defaultMessage='{emojiImage}{reactionVerb} with {emoji}'
             values={{
                 users: <b>{names}</b>,
                 reactionVerb,
                 emoji: <b>{':' + emojiName + ':'}</b>,
+                emojiImage: <><RenderEmoji emojiName={emojiName} size={50} emojiStyle={{backgroundColor: 'white', borderRadius: '3px', backgroundSize: '45px'}}/><br/></>,
             }}
         />
     );

@@ -4062,7 +4062,7 @@
   "reaction.container.ariaLabel": "réactions",
   "reaction.othersReacted": "{otherUsers, number} {otherUsers, plural, one {utilisateur} other {utilisateurs}}",
   "reaction.reactWidth.ariaLabel": "réagir avec",
-  "reaction.reacted": "{users} {reactionVerb} avec {emoji}",
+  "reaction.reacted": "{emojiImage}{users} {reactionVerb} avec {emoji}",
   "reaction.reactionVerb.user": "a réagi",
   "reaction.reactionVerb.users": "a réagi",
   "reaction.reactionVerb.you": "a réagi",
