@@ -1,3 +1,57 @@
+## 0.3.16-rc.1 (2022-10-03)
+
+## Changed (1 change)
+
+- [limit insights to admins only](kchat/webapp@e41f44d8803adbc20bf8f35c6434713321ac502a) by @antonbuksa ([merge request](kchat/webapp!137))
+
+## 0.3.15-rc.5 (2022-09-30)
+
+## Fixed (1 change)
+
+- [fix threads not being marked as read](kchat/webapp@8d758298333c88121875fb3c5a1d663559311f46) by @antonbuksa
+
+## Changed (1 change)
+
+- [hard hide bot accounts in admin definitions](kchat/webapp@b2467af64b6886e5aa452bcc0adfbf3641962ac8) by @antonbuksa
+
+## 0.3.15-rc.4 (2022-09-30)
+
+## Changed (1 change)
+
+- [hard hide bot accounts in admin definitions](kchat/webapp@b2467af64b6886e5aa452bcc0adfbf3641962ac8) by @antonbuksa
+
+## 0.3.15-rc.3 (2022-09-29)
+
+## Changed (1 change)
+
+- [hard hide bot accounts in admin definitions](kchat/webapp@b2467af64b6886e5aa452bcc0adfbf3641962ac8) by @antonbuksa
+
+## 0.3.15-rc.2 (2022-09-29)
+
+## Changed (1 change)
+
+- [hard hide bot accounts in admin definitions](kchat/webapp@b2467af64b6886e5aa452bcc0adfbf3641962ac8) by @antonbuksa
+
+## 0.3.15-rc.1 (2022-09-28)
+
+No changes.
+
+## 0.3.14-rc.6 (2022-09-28)
+
+## Fixed (1 change)
+
+- [fix pdf preview](kchat/webapp@321847fca01250524c863e14d86cae9d2d7f48d1) by @antonbuksa
+
+## 0.3.14-rc.5 (2022-09-28)
+
+## Fixed (1 change)
+
+- [fix pdf preview](kchat/webapp@321847fca01250524c863e14d86cae9d2d7f48d1) by @antonbuksa
+
+## 0.3.14-rc.4 (2022-09-28)
+
+No changes.
+
 ## 0.3.14-rc.3 (2022-09-28)
 
 No changes.

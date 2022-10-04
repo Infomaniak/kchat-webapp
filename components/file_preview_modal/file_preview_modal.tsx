@@ -306,7 +306,6 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                     />
                 );
             } else if (fileType === FileTypes.PDF) {
-                modalImageClass = ' file-preview-modal__content-scrollable';
                 content = (
                     <div
                         className='file-preview-modal__scrollable'
