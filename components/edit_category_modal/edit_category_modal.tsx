@@ -128,6 +128,8 @@ export default class EditCategoryModal extends React.PureComponent<Props, State>
                 handleEnterKeyPress={this.handleConfirm}
                 handleCancel={this.handleCancel}
                 confirmButtonText={editButtonText}
+                cancelButtonClassName='secondary'
+                compassDesign={true}
                 isConfirmDisabled={this.isConfirmDisabled()}
                 id='editCategoryModal'
             >
