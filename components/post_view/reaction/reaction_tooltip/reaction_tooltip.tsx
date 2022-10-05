@@ -101,16 +101,19 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
     }
 
     const tooltip = (
+        <>
+        <RenderEmoji emojiName={emojiName} size={50} emojiStyle={{backgroundColor: 'white', borderRadius: '3px', backgroundSize: '45px'}}/>
+        <br/>
         <FormattedMessage
             id='reaction.reacted'
-            defaultMessage='{emojiImage}{reactionVerb} with {emoji}'
+            defaultMessage='{reactionVerb} with {emoji}'
             values={{
                 users: <b>{names}</b>,
                 reactionVerb,
                 emoji: <b>{':' + emojiName + ':'}</b>,
-                emojiImage: <><RenderEmoji emojiName={emojiName} size={50} emojiStyle={{backgroundColor: 'white', borderRadius: '3px', backgroundSize: '45px'}}/><br/></>,
             }}
         />
+        </>
     );
 
     let clickTooltip: React.ReactNode;

@@ -4346,7 +4346,7 @@
   "reaction.container.ariaLabel": "Reaktionen",
   "reaction.othersReacted": "{otherUsers, number} {otherUsers, plural, one {Benutzer} other {Benutzer}}",
   "reaction.reactWidth.ariaLabel": "reagieren mit",
-  "reaction.reacted": "{emojiImage}{users} {reactionVerb} mit {emoji}",
+  "reaction.reacted": "{users} {reactionVerb} mit {emoji}",
   "reaction.reactionVerb.user": "reagierte",
   "reaction.reactionVerb.users": "reagierten",
   "reaction.reactionVerb.you": "reagierten",
