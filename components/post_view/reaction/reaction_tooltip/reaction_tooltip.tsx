@@ -106,7 +106,7 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
         <br/>
         <FormattedMessage
             id='reaction.reacted'
-            defaultMessage='{reactionVerb} with {emoji}'
+            defaultMessage='{users} {reactionVerb} with {emoji}'
             values={{
                 users: <b>{names}</b>,
                 reactionVerb,
