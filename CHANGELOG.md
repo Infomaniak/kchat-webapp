@@ -1,3 +1,14 @@
+## 0.3.17-rc.3 (2022-10-05)
+
+## Fixed (2 changes)
+
+- [improve styles of old mattermost modals](kchat/webapp@7e76d4d648dbda972b3d61d0d0a914a0a83f9e5b) by @antonbuksa
+- [update reactions style](kchat/webapp@33623137c42df5eaf5b51f9fbc73ea7e52332364) by @leonard.jouve
+
+## Changed (1 change)
+
+- [update product icon in header](kchat/webapp@82068385639be520257b176e991f533d8a845751) by @antonbuksa
+
 ## 0.3.17-rc.2 (2022-10-05)
 
 ## Fixed (2 changes)
