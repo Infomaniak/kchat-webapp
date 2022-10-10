@@ -97,7 +97,7 @@ import {syncPostsInChannel} from 'actions/views/channel';
 import {updateThreadLastOpened} from 'actions/views/threads';
 
 import {browserHistory} from 'utils/browser_history';
-import {loadChannelsForCurrentUser} from 'actions/channel_actions.jsx';
+import {loadChannelsForCurrentUser} from 'actions/channel_actions';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import {handleNewPost} from 'actions/post_actions';
@@ -993,7 +993,7 @@ function handleUserAddedEvent(msg) {
                 type: UserTypes.RECEIVED_PROFILE_IN_CHANNEL,
                 data: {id: msg.data.channel_id, user_id: msg.data.user_id},
             });
-            if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true') {
+            if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
                 doDispatch(getChannelMemberCountsByGroup(currentChannelId, isTimezoneEnabled));
             }
         }
@@ -1080,7 +1080,7 @@ export function handleUserRemovedEvent(msg) {
             type: UserTypes.RECEIVED_PROFILE_NOT_IN_CHANNEL,
             data: {id: msg.data.channel_id, user_id: msg.data.user_id},
         });
-        if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true') {
+        if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
             dispatch(getChannelMemberCountsByGroup(currentChannel.id, isTimezoneEnabled));
         }
     }
@@ -1351,6 +1351,7 @@ function handleChannelViewedEvent(msg) {
 
 export function handlePluginEnabled(msg) {
     const manifest = msg.data.manifest;
+    dispatch({type: ActionTypes.RECEIVED_WEBAPP_PLUGIN, data: manifest});
 
     loadPlugin(manifest).catch((error) => {
         console.error(error.message); //eslint-disable-line no-console

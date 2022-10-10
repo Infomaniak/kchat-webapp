@@ -3,7 +3,7 @@
   "browser": {
     "./client/web_client.jsx": "./client/browser_web_client.jsx"
   },
-  "version": "7.0.0",
+  "version": "7.3.0",
   "private": true,
   "engines": {
     "npm": ">=7.0.0",
@@ -57,7 +57,7 @@
     "marked": "github:mattermost/marked#2ef7f28cc7718e3f551c4ce9ea75fdd7580c2008",
     "memoize-one": "5.2.1",
     "moment-timezone": "0.5.34",
-    "p-queue": "6.6.1",
+    "p-queue": "7.1.0",
     "pdfjs-dist": "2.15.349",
     "popper.js": "1.16.1",
     "process": "0.11.10",
@@ -65,7 +65,7 @@
     "pusher-js": "7.0.6",
     "react": "16.13.1",
     "react-beautiful-dnd": "13.1.0",
-    "react-bootstrap": "github:mattermost/react-bootstrap#c6957962364e0818a51bbfd13e89919903b422d6",
+    "react-bootstrap": "github:mattermost/react-bootstrap#d821e2b1db1059bd36112d7587fd1b0912b27626",
     "react-color": "2.19.3",
     "react-contextmenu": "2.14.0",
     "react-custom-scrollbars": "4.2.1",
@@ -74,10 +74,10 @@
     "react-hot-loader": "4.13.0",
     "react-intl": "5.20.10",
     "react-is": "16.13.1",
-    "react-overlays": "1.2.0",
+    "react-overlays": "0.9.3",
     "react-popper": "2.2.5",
     "react-redux": "7.2.4",
-    "react-router-dom": "5.2.0",
+    "react-router-dom": "5.3.3",
     "react-select": "2.4.4",
     "react-transition-group": "4.4.2",
     "react-virtualized-auto-sizer": "1.0.6",
@@ -270,7 +270,7 @@
       "jest-junit"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!react-native|react-router|@infomaniak/compass-components|@infomaniak/compass-icons)"
+      "node_modules/(?!react-native|react-router|p-queue|p-timeout|@infomaniak/compass-components|@infomaniak/compass-icons)"
     ],
     "setupFiles": [
       "jest-canvas-mock"
@@ -291,10 +291,11 @@
     "outputName": "junit.xml"
   },
   "scripts": {
+    "postinstall": "npm run build --workspaces",
     "check": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --cache && stylelint \"**/*.{css,scss}\" --cache",
     "fix": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --fix --cache && stylelint \"**/*.{css,scss}\" --fix --cache",
-    "build:webapp": "node scripts/build",
-    "build": "NODE_ENV=production webpack",
+    "build": "node scripts/build",
+    "build:webapp": "cross-env NODE_ENV=production webpack",
     "run": "node scripts/run",
     "run:webapp": "webpack --progress --watch",
     "dev-server": "node scripts/dev-server",
