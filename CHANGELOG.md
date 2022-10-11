@@ -1,3 +1,9 @@
+## 0.4.1-rc.1 (2022-10-11)
+
+## Fixed (1 change)
+
+- [fix missing message priority crash](kchat/webapp@35ecc40c42ee6e775b19c18fa6e958e9fc974c23) by @antonbuksa
+
 ## 0.4.0-rc.3 (2022-10-11)
 
 ## Fixed (2 changes)
