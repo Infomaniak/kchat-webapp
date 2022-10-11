@@ -3,7 +3,7 @@
 
 import {connect, ConnectedProps} from 'react-redux';
 import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
-import {RouteComponentProps} from 'react-router-dom';
+import {RouteComponentProps, withRouter} from 'react-router-dom';
 
 import {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {getProfiles} from 'mattermost-redux/actions/users';
@@ -34,7 +34,6 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     const lastViewedType = getLastViewedTypeByTeamName(state, ownProps.match.params.team);
     let channelName = getLastViewedChannelNameByTeamName(state, ownProps.match.params.team);
     const callChannel = getChannel(state, connectedChannelID(state));
-
     const previousTeamId = getPreviousTeamId(state);
     const team = getTeamByName(state, ownProps.match.params.team);
 
@@ -87,5 +86,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(CenterChannel);
-
+export default withRouter(connector(CenterChannel));

@@ -948,8 +948,6 @@ export default class NotificationsTab extends React.PureComponent<Props, State> 
         const pushNotificationSection = this.createPushNotificationSection();
         const enableEmailProp = this.state.enableEmail === 'true';
 
-        // const enableEmailProp = this.state.enableEmail === 'true';
-
         return (
             <div id='notificationSettings'>
                 <div className='modal-header'>

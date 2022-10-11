@@ -12,7 +12,7 @@ import {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
 
 import ReactSelect from 'react-select';
 
-import {getBrowserTimezone} from 'utils/timezone.jsx';
+import {getBrowserTimezone} from 'utils/timezone';
 import {t} from 'utils/i18n';
 import {localizeMessage} from 'utils/utils';
 

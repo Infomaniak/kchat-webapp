@@ -17,7 +17,9 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       totalFiles={3}
     />
     <Memo(FilePreviewModalMainActions)
+      canCopyContent={true}
       canDownloadFiles={true}
+      content=""
       enablePublicLink={false}
       fileInfo={
         Object {
@@ -63,7 +65,9 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
     className="file-preview-modal-header"
   >
     <Memo(FilePreviewModalMainActions)
+      canCopyContent={true}
       canDownloadFiles={true}
+      content=""
       enablePublicLink={false}
       fileInfo={
         Object {
@@ -126,7 +130,9 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       totalFiles={3}
     />
     <Memo(FilePreviewModalMainActions)
+      canCopyContent={true}
       canDownloadFiles={true}
+      content=""
       enablePublicLink={false}
       fileInfo={
         Object {
@@ -183,7 +189,9 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       totalFiles={3}
     />
     <Memo(FilePreviewModalMainActions)
+      canCopyContent={true}
       canDownloadFiles={true}
+      content=""
       enablePublicLink={false}
       fileInfo={
         Object {
@@ -240,7 +248,9 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       totalFiles={3}
     />
     <Memo(FilePreviewModalMainActions)
+      canCopyContent={true}
       canDownloadFiles={true}
+      content=""
       enablePublicLink={false}
       fileInfo={
         Object {
@@ -297,7 +307,9 @@ exports[`components/file_preview_modal/file_preview_modal_header/FilePreviewModa
       totalFiles={3}
     />
     <Memo(FilePreviewModalMainActions)
+      canCopyContent={true}
       canDownloadFiles={true}
+      content=""
       enablePublicLink={false}
       fileInfo={
         Object {
