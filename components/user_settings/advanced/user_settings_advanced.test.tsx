@@ -41,10 +41,6 @@ describe('components/user_settings/display/UserSettingsDisplay', () => {
         formatting: '',
         joinLeave: '',
         unreadScrollPosition: Preferences.UNREAD_SCROLL_POSITION_START_FROM_LEFT,
-<<<<<<< HEAD:components/rhs_settings/rhs_settings_advanced/rhs_settings_advanced.test.tsx
-        isAdvancedTextEditorEnabled: false,
-=======
->>>>>>> mattermost/master:components/user_settings/advanced/user_settings_advanced.test.tsx
         codeBlockOnCtrlEnter: 'false',
         enablePreviewFeatures: false,
         enableUserDeactivation: false,
@@ -72,38 +68,6 @@ describe('components/user_settings/display/UserSettingsDisplay', () => {
         expect(updateSection).toHaveBeenCalledWith('linkpreview');
     });
 
-<<<<<<< HEAD:components/rhs_settings/rhs_settings_advanced/rhs_settings_advanced.test.tsx
-=======
-    test('should have called updateUserActive', () => {
-        const updateUserActive = jest.fn(() => Promise.resolve({}));
-        const props = {...requiredProps, actions: {...requiredProps.actions, updateUserActive}};
-        const wrapper = shallow<AdvancedSettingsDisplay>(<AdvancedSettingsDisplay {...props}/>);
-
-        wrapper.instance().handleDeactivateAccountSubmit();
-        expect(updateUserActive).toHaveBeenCalled();
-        expect(updateUserActive).toHaveBeenCalledWith(requiredProps.currentUser.id, false);
-    });
-
-    test('handleDeactivateAccountSubmit() should have called revokeAllSessions', () => {
-        const wrapper = shallow<AdvancedSettingsDisplay>(<AdvancedSettingsDisplay {...requiredProps}/>);
-
-        wrapper.instance().handleDeactivateAccountSubmit();
-        expect(requiredProps.actions.revokeAllSessionsForUser).toHaveBeenCalled();
-        expect(requiredProps.actions.revokeAllSessionsForUser).toHaveBeenCalledWith(requiredProps.currentUser.id);
-    });
-
-    test('handleDeactivateAccountSubmit() should have updated state.serverError', async () => {
-        const error = {message: 'error'};
-        const revokeAllSessionsForUser = () => Promise.resolve({error});
-        const props = {...requiredProps, actions: {...requiredProps.actions, revokeAllSessionsForUser}};
-        const wrapper = shallow<AdvancedSettingsDisplay>(<AdvancedSettingsDisplay {...props}/>);
-
-        await wrapper.instance().handleDeactivateAccountSubmit();
-
-        expect(wrapper.state().serverError).toEqual(error.message);
-    });
-
->>>>>>> mattermost/master:components/user_settings/advanced/user_settings_advanced.test.tsx
     test('function getCtrlSendText should return correct value for Mac', () => {
         (isMac as jest.Mock).mockReturnValue(true);
         const props = {...requiredProps};
