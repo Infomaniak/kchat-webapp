@@ -639,13 +639,6 @@ if (targetIsDevServer) {
     };
 }
 
-var sw = {
-    entry: ['./service-worker.js'],
-    output: {
-        filename: 'service-worker.js',
-    },
-};
-
 // Export PRODUCTION_PERF_DEBUG=1 when running webpack to enable support for the react profiler
 // even while generating production code. (Performance testing development code is typically
 // not helpful.)
@@ -662,14 +655,4 @@ if (process.env.PRODUCTION_PERF_DEBUG) {
     };
 }
 
-if (targetIsEslint) {
-    // ESLint can't handle setting an async config, so just skip the async part
-    module.exports = config;
-} else {
-    module.exports = async () => {
-        // Do this asynchronously so we can determine whether which remote modules are available
-        await initializeModuleFederation();
-
-        return config;
-    };
-}
+module.exports = config;

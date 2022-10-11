@@ -9,7 +9,7 @@ import SystemNotice from 'components/system_notice';
 import ResetStatusModal from 'components/reset_status_modal';
 import SidebarRight from 'components/sidebar_right';
 import SidebarRightMenu from 'components/sidebar_right_menu';
-import AppBar from 'components/app_bar/app_bar';
+// import AppBar from 'components/app_bar/app_bar';
 import Sidebar from 'components/sidebar';
 import CenterChannel from 'components/channel_layout/center_channel';
 import LoadingScreen from 'components/loading_screen';
@@ -55,7 +55,7 @@ export default function ChannelController({shouldShowAppBar, fetchingChannels}: 
                 <Pluggable pluggableName='Root'/>
                 <ResetStatusModal/>
             </div>
-            <AppBar/>
+            {/* <AppBar/> */}
         </div>
     );
 }

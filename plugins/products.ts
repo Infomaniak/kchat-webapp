@@ -32,13 +32,13 @@ export function initializeProducts() {
          * }>;
          */
         const products = [
-            {
-                id: 'focalboard',
-                load: () => ({
-                    index: import('focalboard'),
-                    manifest: import('focalboard/manifest'),
-                }),
-            },
+            // {
+            //     id: 'focalboard',
+            //     load: () => ({
+            //         index: import('focalboard'),
+            //         manifest: import('focalboard/manifest'),
+            //     }),
+            // },
         ];
 
         await Promise.all(products.map(async (product) => {
