@@ -1,3 +1,9 @@
+## 0.4.3-rc.1 (2022-10-11)
+
+## Changed (1 change)
+
+- [remove new product initalizer](kchat/webapp@a104be65cce5386625c6ce45220501cd6010cdae) by @antonbuksa
+
 ## 0.4.2-rc.1 (2022-10-11)
 
 ## Changed (1 change)
