@@ -1,3 +1,9 @@
+## 0.4.2-rc.1 (2022-10-11)
+
+## Changed (1 change)
+
+- [disable module federation feature for now](kchat/webapp@06984d551257a6288a2a60632fd9587137ef1093) by @antonbuksa
+
 ## 0.4.1-rc.1 (2022-10-11)
 
 ## Fixed (1 change)
