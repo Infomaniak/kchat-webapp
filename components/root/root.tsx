@@ -309,10 +309,7 @@ export default class Root extends React.PureComponent<Props, State> {
             this.props.history.push('/signup_user_complete');
         }
 
-        Promise.all([
-            this.props.actions.initializeProducts(),
-            initializePlugins(),
-        ]).then(() => {
+        initializePlugins().then(() => {
             if (this.mounted) {
                 // supports enzyme tests, set state if and only if
                 // the component is still mounted on screen
