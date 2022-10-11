@@ -1,3 +1,15 @@
+## 0.4.0-rc.2 (2022-10-11)
+
+## Fixed (2 changes)
+
+- [improve styles of old mattermost modals](kchat/webapp@447978341761946c6d746fc22e66872e80efc4f7) by @antonbuksa
+- [update reactions style](kchat/webapp@afc027680aaf34a885b769d8d989a88bed4799ca) by @leonard.jouve
+
+## Changed (2 changes)
+
+- [update product icon in header](kchat/webapp@4a348ae7c3685fbb9625060e1423144e2500ee36) by @antonbuksa
+- [show preview of emoji in tooltip for reactions](kchat/webapp@09bae7e1810ae955167ae87c60ad9c4e61d67550) by @leonard.jouve
+
 ## 0.3.17-rc.4 (2022-10-05)
 
 ## Fixed (2 changes)
