@@ -1,3 +1,13 @@
+## 0.4.3-rc.3 (2022-10-14)
+
+## Fixed (1 change)
+
+- [fix shortcuts in prefs](kchat/webapp@50b85c4f25a589015993898d143ada12b288f733) by @antonbuksa
+
+## Changed (1 change)
+
+- [remove new product initalizer](kchat/webapp@a104be65cce5386625c6ce45220501cd6010cdae) by @antonbuksa
+
 ## 0.4.3-rc.2 (2022-10-12)
 
 ## Changed (1 change)
