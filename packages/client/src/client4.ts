@@ -18,6 +18,7 @@ import {
     Channel,
     ChannelMemberCountsByGroup,
     ChannelMembership,
+    ChannelInvite,
     ChannelModeration,
     ChannelModerationPatch,
     ChannelStats,
@@ -4001,6 +4002,13 @@ export default class Client4 {
         const query = `group_ids=${groupIDs.join(',')}&page=${page}&per_page=${perPage}`;
         return this.doFetch<UsersWithGroupsAndCount>(
             `${this.getChannelRoute(channelID)}/members_minus_group_members?${query}`,
+            {method: 'get'},
+        );
+    }
+
+    getChannelPendingGuests = (channelID: string) => {
+        return this.doFetch<ChannelInvite>(
+            `${this.getChannelRoute(channelID)}/members/pending_guest`,
             {method: 'get'},
         );
     }

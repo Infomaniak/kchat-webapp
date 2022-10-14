@@ -72,6 +72,20 @@ function currentChannelId(state = '', action: GenericAction) {
     }
 }
 
+function channelPendingGuests(state = {}, action: GenericAction) {
+    switch (action.type) {
+    case ChannelTypes.RECEIVED_CHANNEL_PENDING_GUESTS: {
+        const {channelID, pendingGuests} = action.data;
+        return {
+            ...state,
+            [channelID]: pendingGuests,
+        };
+    }
+    default:
+        return state;
+    }
+}
+
 function channels(state: IDMappedObjects<Channel> = {}, action: GenericAction) {
     switch (action.type) {
     case ChannelTypes.RECEIVED_CHANNEL: {
@@ -955,4 +969,6 @@ export default combineReducers({
 
     // object where every key is the channel id mapping to an object containing the number of messages in the channel
     messageCounts,
+
+    channelPendingGuests,
 });

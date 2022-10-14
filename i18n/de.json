@@ -2853,6 +2853,8 @@
   "channel_members_rhs.header.title": "Mitglieder",
   "channel_members_rhs.list.channel_admin_title": "KANAL ADMINISTRATOREN",
   "channel_members_rhs.list.channel_members_title": "MITGLIEDER",
+  "channel_members_rhs.list.channel_guests_title": "GÄSTE",
+  "channel_members_rhs.list.channel_pendings_title": "ANHÄNGIG",
   "channel_members_rhs.member.select_role_channel_admin": "Administrator",
   "channel_members_rhs.member.select_role_channel_member": "Mitglied",
   "channel_members_rhs.member.select_role_guest": "Gast",

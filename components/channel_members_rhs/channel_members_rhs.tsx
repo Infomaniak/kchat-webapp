@@ -16,6 +16,7 @@ import {ModalData} from 'types/actions';
 import {browserHistory} from 'utils/browser_history';
 
 import {ProfilesInChannelSortBy} from 'mattermost-redux/actions/users';
+import {ChannelInvite} from 'packages/types/src/channels';
 
 import AlertBanner from 'components/alert_banner';
 
@@ -47,6 +48,7 @@ export interface Props {
     channelMembers: ChannelMember[];
     canManageMembers: boolean;
     editing: boolean;
+    pendingGuests: ChannelInvite[];
 
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
@@ -59,6 +61,7 @@ export interface Props {
         loadMyChannelMemberAndRole: (channelId: string) => void;
         setEditChannelMembers: (active: boolean) => void;
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;
+        loadChannelPendingGuests: (channelId: string) => void;
     };
 }
 
@@ -84,6 +87,7 @@ export default function ChannelMembersRHS({
     canManageMembers,
     editing = false,
     actions,
+    pendingGuests,
 }: Props) {
     const [list, setList] = useState<ListItem[]>([]);
 
@@ -107,6 +111,7 @@ export default function ChannelMembersRHS({
     useEffect(() => {
         const listcp: ListItem[] = [];
         let memberDone = false;
+        let guestDone = false;
 
         for (let i = 0; i < channelMembers.length; i++) {
             const member = channelMembers[i];
@@ -119,7 +124,7 @@ export default function ChannelMembersRHS({
                             defaultMessage='CHANNEL ADMINS'
                         />
                     );
-                } else {
+                } else if (member.membership?.scheme_user === true) {
                     text = (
                         <FormattedMessage
                             id='channel_members_rhs.list.channel_members_title'
@@ -127,27 +132,80 @@ export default function ChannelMembersRHS({
                         />
                     );
                     memberDone = true;
+                } else {
+                    text = (
+                        <FormattedMessage
+                            id='channel_members_rhs.list.channel_guests_title'
+                            defaultMessage='GUESTS'
+                        />
+                    );
+                    guestDone = true;
                 }
 
                 listcp.push({
                     type: ListItemType.FirstSeparator,
                     data: <FirstMemberListSeparator>{text}</FirstMemberListSeparator>,
                 });
-            } else if (!memberDone && member.membership?.scheme_admin === false) {
-                listcp.push({
-                    type: ListItemType.Separator,
-                    data: <MemberListSeparator>
-                        <FormattedMessage
-                            id='channel_members_rhs.list.channel_members_title'
-                            defaultMessage='MEMBERS'
-                        />
-                    </MemberListSeparator>,
-                });
-                memberDone = true;
+            } else if (member.membership?.scheme_admin === false) {
+                if (!memberDone && member.membership?.scheme_user === true) {
+                    listcp.push({
+                        type: ListItemType.Separator,
+                        data: <MemberListSeparator>
+                            <FormattedMessage
+                                id='channel_members_rhs.list.channel_members_title'
+                                defaultMessage='MEMBERS'
+                            />
+                        </MemberListSeparator>,
+                    });
+                    memberDone = true;
+                } else if (!guestDone && member.membership?.scheme_guest === true) {
+                    listcp.push({
+                        type: ListItemType.Separator,
+                        data: <MemberListSeparator>
+                            <FormattedMessage
+                                id='channel_members_rhs.list.channel_guests_title'
+                                defaultMessage='GUESTS'
+                            />
+                        </MemberListSeparator>,
+                    });
+                    guestDone = true;
+                }
             }
-
             listcp.push({type: ListItemType.Member, data: member});
         }
+
+        if (pendingGuests) {
+            const guests = [...pendingGuests];
+            guests.sort((a, b) => {
+                if (a.email) {
+                    return a.email.localeCompare(b.email);
+                }
+                return 1;
+            });
+            for (let i = 0; i < guests.length; i++) {
+                const guest = guests[i];
+                if (i === 0) {
+                    listcp.push({
+                        type: ListItemType.Separator,
+                        data: <MemberListSeparator>{(
+                            <FormattedMessage
+                                id='channel_members_rhs.list.channel_pendings_title'
+                                defaultMessage='PENDINGS'
+                            />
+                        )}</MemberListSeparator>,
+                    });
+                }
+                listcp.push({type: ListItemType.Member,
+                    data: {
+                        user: guest,
+                        membership: {},
+                        status: guest.status,
+                        displayName: guest.email,
+                    },
+                });
+            }
+        }
+
         setList(listcp);
     }, [channelMembers]);
 
@@ -166,6 +224,7 @@ export default function ChannelMembersRHS({
         actions.setChannelMembersRhsSearchTerm('');
         actions.loadProfilesAndReloadChannelMembersAll(membersCount, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
         actions.loadMyChannelMemberAndRole(channel.id);
+        actions.loadChannelPendingGuests(channel.id);
     }, [channel.id, channel.type]);
 
     const setSearchTerms = async (terms: string) => {

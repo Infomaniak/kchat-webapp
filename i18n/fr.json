@@ -2781,6 +2781,8 @@
   "channel_members_rhs.header.title": "Membres",
   "channel_members_rhs.list.channel_admin_title": "ADMINS DU CANAL",
   "channel_members_rhs.list.channel_members_title": "MEMBRES",
+  "channel_members_rhs.list.channel_guests_title": "INVITÉS",
+  "channel_members_rhs.list.channel_pendings_title": "EN ATTENTE",
   "channel_members_rhs.member.select_role_channel_admin": "Admin",
   "channel_members_rhs.member.select_role_channel_member": "Membre",
   "channel_members_rhs.member.select_role_guest": "Utilisateur invité",

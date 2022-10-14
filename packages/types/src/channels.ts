@@ -112,6 +112,30 @@ export type ChannelMembership = {
     post_root_id?: string;
 };
 
+export type ChannelInvite = {
+    id: number;
+    key: string;
+    type: string;
+    status: string;
+    invited_by_id: number;
+    account_id: number;
+    user_id: number;
+    email: string;
+    sms: string;
+    force_ling: boolean;
+    expires_at: number;
+    created_at: number;
+    updated_at: number;
+    deleted_at: number;
+    data: {
+        team_id: string;
+        channel_ids: [
+            string
+        ];
+        product_id: number;
+    };
+};
+
 export type ChannelUnread = {
     channel_id: string;
     user_id: string;

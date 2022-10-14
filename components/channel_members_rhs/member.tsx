@@ -19,6 +19,7 @@ import Constants from 'utils/constants';
 
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import GuestBadge from 'components/widgets/badges/guest_badge';
+import MailIcon from 'components/widgets/icons/mail_icon';
 
 import {ChannelMember} from './channel_members_rhs';
 
@@ -86,6 +87,25 @@ const RoleChooser = styled.div`
     }
 `;
 
+const Icon = styled(MailIcon)`
+    flex-basis: fit-content;
+    flex-shrink: 0;
+
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-top: 4px;
+    border-radius: 15px;
+    background: var(--button-bg);
+
+    svg {
+        margin: 3px;
+        width: 18px;
+        height: 18px;
+        fill: var(--button-color);
+    }
+`;
+
 interface Props {
     className?: string;
     channel: Channel;
@@ -99,6 +119,21 @@ interface Props {
 }
 
 const Member = ({className, channel, member, index, totalUsers, editing, actions}: Props) => {
+    if (member.status === 'pending') {
+        return (
+            <div
+                className={className}
+                data-testid={`memberline-${member.user.id}`}
+            >
+                <Icon/>
+                <UserInfo>
+                    <DisplayName>
+                        {member.displayName}
+                    </DisplayName>
+                </UserInfo>
+            </div>
+        );
+    }
     return (
         <div
             className={className}

@@ -1597,6 +1597,26 @@ export function getChannelMemberCountsByGroup(channelId: string, includeTimezone
     });
 }
 
+export function getChannelPendingGuests(channelID: string): ActionFunc {
+    return bindClientFunc({
+        clientFunc: async () => {
+            const pendingGuests = await Client4.getChannelPendingGuests(channelID);
+            return {channelID, pendingGuests};
+        },
+        onSuccess: ChannelTypes.RECEIVED_CHANNEL_PENDING_GUESTS,
+        params: [
+            channelID,
+        ],
+    });
+}
+
+export function loadChannelPendingGuests(channelId: string) {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        await getChannelPendingGuests(channelId)(dispatch, getState) as ActionResult;
+        return {data: true};
+    };
+}
+
 export default {
     selectChannel,
     createChannel,
@@ -1631,4 +1651,5 @@ export default {
     membersMinusGroupMembers,
     getChannelModerations,
     getChannelMemberCountsByGroup,
+    getChannelPendingGuests,
 };

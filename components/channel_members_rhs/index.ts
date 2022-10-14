@@ -12,6 +12,7 @@ import {
     getMembersInCurrentChannel,
     getMyCurrentChannelMembership,
     isCurrentChannelArchived,
+    getChannelPendingGuests,
 } from 'mattermost-redux/selectors/entities/channels';
 import {GlobalState} from 'types/store';
 import {Constants, RHSStates} from 'utils/constants';
@@ -31,7 +32,7 @@ import {getIsEditingMembers, getPreviousRhsState} from 'selectors/rhs';
 import {setChannelMembersRhsSearchTerm} from 'actions/views/search';
 import {loadProfilesAndReloadChannelMembers, loadProfilesAndReloadChannelMembersAll, searchProfilesAndChannelMembers} from 'actions/user_actions';
 import {Channel, ChannelMembership} from '@mattermost/types/channels';
-import {loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
+import {loadMyChannelMemberAndRole, loadChannelPendingGuests} from 'mattermost-redux/actions/channels';
 
 import {UserProfile} from '@mattermost/types/users';
 import {RelationOneToOne} from '@mattermost/types/utilities';
@@ -59,13 +60,18 @@ const buildProfileList = (
     });
 
     channelMembers.sort((a, b) => {
-        if (a.membership?.scheme_admin === b.membership?.scheme_admin) {
+        if ((a.membership?.scheme_admin && b.membership?.scheme_admin) || (a.membership?.scheme_user && b.membership?.scheme_user && !a.membership?.scheme_admin && !b.membership?.scheme_admin) || (a.membership?.scheme_guest && b.membership?.scheme_guest)) {
             return a.displayName.localeCompare(b.displayName);
         }
 
         if (a.membership?.scheme_admin === true) {
             return -1;
         }
+
+        if (a.membership?.scheme_user === true && b.membership?.scheme_guest === true) {
+            return -1;
+        }
+
         return 1;
     });
 
@@ -91,6 +97,7 @@ const searchProfiles = createSelector(
 );
 
 function mapStateToProps(state: GlobalState) {
+    const pendingGuests = getChannelPendingGuests(state);
     const channel = getCurrentChannel(state);
     const currentTeam = getCurrentTeam(state);
     const currentUser = getMyCurrentChannelMembership(state);
@@ -149,6 +156,7 @@ function mapStateToProps(state: GlobalState) {
         canManageMembers,
         channelMembers,
         editing,
+        pendingGuests,
     } as Props;
 }
 
@@ -165,6 +173,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             loadMyChannelMemberAndRole,
             setEditChannelMembers,
             searchProfilesAndChannelMembers,
+            loadChannelPendingGuests,
         }, dispatch),
     };
 }

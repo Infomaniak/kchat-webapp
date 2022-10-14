@@ -41,6 +41,7 @@ import {
     ChannelModeration,
     ChannelSearchOpts,
     ChannelStats,
+    ChannelInvite,
 } from '@mattermost/types/channels';
 import {GlobalState} from '@mattermost/types/store';
 import {Team} from '@mattermost/types/teams';
@@ -1310,3 +1311,16 @@ export function getDirectTeammate(state: GlobalState, channelId: string): UserPr
 
     return undefined;
 }
+
+export function getPendingGuests(state: GlobalState): RelationOneToOne<Channel, Record<string, ChannelMembership>> {
+    return state.entities.channels.channelPendingGuests;
+}
+
+export const getChannelPendingGuests: (state: GlobalState) => ChannelInvite[] = createSelector(
+    'getChannelPendingGuests',
+    getCurrentChannelId,
+    getPendingGuests,
+    (channelId: string, pendingGuests: RelationOneToOne<Channel, Record<string, ChannelMembership>>): ChannelInvite[] => {
+        return pendingGuests[channelId];
+    },
+);
