@@ -124,14 +124,17 @@ export function needRefreshToken() {
 }
 
 export function refreshIKToken(redirectToTeam = false, periodic = false) {
+    console.log('[TOKEN] Token is refreshing');
     const refreshToken = localStorage.getItem('IKRefreshToken');
     const isRefreshing = localStorage.getItem('refreshingToken');
 
     if (isRefreshing) {
+        console.log('[TOKEN] Token is already refreshing');
         return;
     }
 
     if (!refreshToken) {
+        console.log('[TOKEN] No refresh Token, clear storage and redirect to login');
         clearLocalStorageToken();
         getChallengeAndRedirectToLogin();
         return;

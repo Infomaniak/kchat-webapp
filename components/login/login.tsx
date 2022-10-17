@@ -85,6 +85,7 @@ const Login = () => {
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             if (token && tokenExpire && !checkIKTokenIsExpired()) {
+                console.log('[LOGIN] Token is ok. Store & redirect to main team');
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
@@ -108,11 +109,13 @@ const Login = () => {
 
             // If need to refresh the token
             if (tokenExpire && checkIKTokenIsExpired()) {
+                console.log('[LOGIN] Token is expired. Go refresh');
                 refreshIKToken(true);
                 return;
             }
 
             if (loginCode) {
+                console.log('[LOGIN] Has code, get token');
                 const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
                 //    Get token
@@ -142,7 +145,7 @@ const Login = () => {
                     });
                     finishSignin();
                 }).catch((error) => {
-                    console.log('[TOKEN] post token fail', error);
+                    console.log('[LOGIN] post token fail', error);
                     clearLocalStorageToken();
                     getChallengeAndRedirectToLogin();
                 });
