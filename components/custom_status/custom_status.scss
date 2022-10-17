@@ -40,6 +40,9 @@
         }
 
         &__button {
+            margin-right: 10px;
+            vertical-align: middle;
+
             &.btn:disabled,
             &.btn:disabled:hover {
                 background: rgba(var(--center-channel-color-rgb), 0.08);
