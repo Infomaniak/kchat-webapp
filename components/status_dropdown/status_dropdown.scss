@@ -150,7 +150,7 @@ button.custom_status__row {
     height: 100%;
     display: flex;
     justify-content: center;
-    width: 50px;
+    min-width: 50px;
 
     .icon > i:not(.status-icon) {
         color: rgba(var(--center-channel-color-rgb), 0.56);

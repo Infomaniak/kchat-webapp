@@ -36,7 +36,6 @@ type Settings = {
 export type Props = {
     currentUser: UserProfile;
     advancedSettingsCategory: PreferenceType[];
-    isAdvancedTextEditorEnabled: boolean;
     sendOnCtrlEnter: string;
     codeBlockOnCtrlEnter: string;
     formatting: string;
@@ -99,9 +98,6 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
         };
 
         const PreReleaseFeaturesLocal = JSON.parse(JSON.stringify(PreReleaseFeatures));
-        if (this.props.isAdvancedTextEditorEnabled) {
-            delete PreReleaseFeaturesLocal.MARKDOWN_PREVIEW;
-        }
         const preReleaseFeaturesKeys = Object.keys(PreReleaseFeaturesLocal);
 
         let enabledFeatures = 0;

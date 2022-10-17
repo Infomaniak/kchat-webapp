@@ -81,14 +81,13 @@
     // --global-header-background: var(--sidebar-teambar-bg);
     --global-header-text: var(--sidebar-header-text-color);
     --global-header-background-rgb: var(--sidebar-teambar-bg-rgb);
-    --global-header-background-rgb: var(--sidebar-teambar-bg-rgb);
     --global-header-text-rgb: var(--center-channel-text-rgb);
 
     // semantic colors
     // not to be overwritten, since they are shared among themes
     --semantic-color-general: var(--center-channel-color-rgb);
-    --semantic-color-info: 87, 158, 255;
+    --semantic-color-info: 93, 137, 234;
     --semantic-color-success: 61, 184, 135;
-    --semantic-color-warning: 255, 188, 31;
-    --semantic-color-danger: 247, 67, 67;
+    --semantic-color-warning: 245, 171, 0;
+    --semantic-color-danger: 210, 75, 78;
 }

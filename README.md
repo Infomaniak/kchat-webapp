@@ -1,5 +1,11 @@
 # ktalk-webapp
 
+HALL OF FAME
+
+> Jsais pas, essaye un window.location = 'kchat.infomaniak.com'
+
+Leopold Jacquot, 2022 🏆
+
 ## install + watch
 
 ```shell
