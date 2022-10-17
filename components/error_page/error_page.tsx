@@ -10,15 +10,20 @@ import {Link} from 'react-router-dom';
 import {ErrorPageTypes, Constants} from 'utils/constants';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
 
+import MattermostLogoSvg from '../../images/logo.svg';
+
 import ErrorTitle from './error_title';
 import ErrorMessage from './error_message';
+import SvgIlluErrorQuestion from './assets/SvgIlluErrorQuestion';
+import SvgIlluErrorWarning from './assets/SvgIlluErrorWarning';
+import SvgIlluErrorTool from './assets/SvgIlluErrorTool';
 
 type Location = {
     search: string;
 }
 
 type Props = {
-    location: Location;
+    location?: Location;
     asymmetricSigningPublicKey?: string;
     siteName?: string;
     isGuest?: boolean;
@@ -32,10 +37,22 @@ export default class ErrorPage extends React.PureComponent<Props> {
     public componentWillUnmount() {
         document.body.removeAttribute('class');
     }
+    public renderHeader = () => {
+        const header = (
+            <div className='error-header'>
+                <img
+                    src={MattermostLogoSvg}
+                    className='error-header__logo'
+                />
+            </div>
+        );
+
+        return header;
+    }
 
     public render() {
         const {isGuest} = this.props;
-        const params: URLSearchParams = new URLSearchParams(this.props.location.search);
+        const params: URLSearchParams = new URLSearchParams(this.props.location ? this.props.location.search : '');
         const signature = params.get('s');
 
         let trustParams = false;
@@ -59,7 +76,10 @@ export default class ErrorPage extends React.PureComponent<Props> {
         let backButton;
         if (type === ErrorPageTypes.PERMALINK_NOT_FOUND && returnTo) {
             backButton = (
-                <Link to={returnTo}>
+                <Link
+                    className='btn btn-primary'
+                    to={returnTo}
+                >
                     <FormattedMessage
                         id='error.generic.link'
                         defaultMessage='Back to Mattermost'
@@ -68,7 +88,10 @@ export default class ErrorPage extends React.PureComponent<Props> {
             );
         } else if (type === ErrorPageTypes.TEAM_NOT_FOUND) {
             backButton = (
-                <Link to='/'>
+                <Link
+                    className='btn btn-primary'
+                    to='/'
+                >
                     <FormattedMessage
                         id='error.generic.link'
                         defaultMessage='Back to {siteName}'
@@ -80,7 +103,10 @@ export default class ErrorPage extends React.PureComponent<Props> {
             );
         } else if (type === ErrorPageTypes.CHANNEL_NOT_FOUND && isGuest) {
             backButton = (
-                <Link to='/'>
+                <Link
+                    className='btn btn-primary'
+                    to='/'
+                >
                     <FormattedMessage
                         id='error.channelNotFound.guest_link'
                         defaultMessage='Back'
@@ -89,7 +115,10 @@ export default class ErrorPage extends React.PureComponent<Props> {
             );
         } else if (type === ErrorPageTypes.CHANNEL_NOT_FOUND) {
             backButton = (
-                <Link to={params.get('returnTo') as string}>
+                <Link
+                    className='btn btn-primary'
+                    to={params.get('returnTo') as string}
+                >
                     <FormattedMessage
                         id='error.channelNotFound.link'
                         defaultMessage='Back to {defaultChannelName}'
@@ -101,7 +130,10 @@ export default class ErrorPage extends React.PureComponent<Props> {
             );
         } else if (type === ErrorPageTypes.OAUTH_ACCESS_DENIED || type === ErrorPageTypes.OAUTH_MISSING_CODE) {
             backButton = (
-                <Link to='/'>
+                <Link
+                    className='btn btn-primary'
+                    to='/'
+                >
                     <FormattedMessage
                         id='error.generic.link_login'
                         defaultMessage='Back to Login Page'
@@ -112,38 +144,48 @@ export default class ErrorPage extends React.PureComponent<Props> {
             backButton = null;
         } else {
             backButton = (
-                <Link to='/'>
+                <a
+                    className='btn btn-primary'
+                    onClick={() => window.location.reload()}
+                >
                     <FormattedMessage
-                        id='error.generic.link'
-                        defaultMessage='Back to {siteName}'
-                        values={{
-                            siteName: this.props.siteName,
-                        }}
+                        id='error.generic.reload'
+                        defaultMessage='Rafraîchir la page'
+
                     />
-                </Link>
+                </a>
             );
         }
 
         const errorPage = (
-            <div className='container-fluid'>
-                <div className='error__container'>
-                    <div className='error__icon'>
-                        <WarningIcon/>
-                    </div>
-                    <h2 data-testid='errorMessageTitle'>
-                        <ErrorTitle
+            <div className='error-page'>
+                {this.renderHeader()}
+                <div className='error__dialog'>
+                    <div className='error__dialog-body'>
+                        <h1
+                            data-testid='errorMessageTitle'
+                            className='error__dialog-title mb-4'
+                        >
+                            <ErrorTitle
+                                type={type}
+                                title={title}
+                            />
+                        </h1>
+                        <ErrorMessage
                             type={type}
-                            title={title}
+                            message={message}
+                            service={service}
+                            isGuest={isGuest}
                         />
-                    </h2>
-                    <ErrorMessage
-                        type={type}
-                        message={message}
-                        service={service}
-                        isGuest={isGuest}
-                    />
-                    {backButton}
+                        <div className='error__dialog-btns mt-8'>
+                            {backButton}
+                        </div>
+                    </div>
+                    <div className='error__graphic'>
+                        <SvgIlluErrorQuestion/>
+                    </div>
                 </div>
+
             </div>
         );
 

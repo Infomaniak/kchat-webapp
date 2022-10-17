@@ -25,7 +25,7 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                 <div>
                     <FormattedMessage
                         id='error.local_storage.message'
-                        defaultMessage='Mattermost was unable to load because a setting in your browser prevents the use of its local storage features. To allow Mattermost to load, try the following actions:'
+                        defaultMessage='kChat was unable to load because a setting in your browser prevents the use of its local storage features. To allow kChat to load, try the following actions:'
                     />
                     <ul>
                         <li>
@@ -118,7 +118,7 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                     <p>
                         <FormattedMessage
                             id='error.oauth_missing_code.office365'
-                            defaultMessage='For {link} make sure the administrator of your Microsoft organization has enabled the Mattermost app.'
+                            defaultMessage='For {link} make sure the administrator of your Microsoft organization has enabled the kChat app.'
                             values={{
                                 link: (
                                     <ErrorLink
@@ -168,7 +168,7 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                 <p>
                     <FormattedMessage
                         id='error.oauth_access_denied'
-                        defaultMessage='You must authorize Mattermost to log in with {service}.'
+                        defaultMessage='You must authorize kChat to log in with {service}.'
                         values={{
                             service,
                         }}
@@ -190,7 +190,7 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                 <p>
                     <FormattedMessage
                         id='error.not_found.message'
-                        defaultMessage='The page you were trying to reach does not exist'
+                        defaultMessage="Ce lien n'a peut-être jamais existé. Si ce lien existe, veuillez contacter la personne qui vous a partagé ce lien afin qu’elle vous donne les droits d’accès."
                     />
                 </p>
             );
@@ -206,7 +206,7 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
             <p>
                 <FormattedMessage
                     id='error.generic.message'
-                    defaultMessage='An error has occurred.'
+                    defaultMessage='Veuillez réessayer ultérieurement ou essayer de rafraîchir la page. Si le problème persiste, veuillez contacter le support.'
                 />
             </p>
         );

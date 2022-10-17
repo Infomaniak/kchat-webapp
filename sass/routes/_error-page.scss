@@ -1,35 +1,73 @@
 @charset 'UTF-8';
+@import 'utils/variables';
 
 body {
     &.error {
-        .container-fluid {
-            display: table;
-            height: 90%;
-        }
+        .error-page {
+            min-height: 100vh;
+            background-color: var(--center-channel-bg);;
 
-        .error__container {
-            display: table-cell;
-            max-width: 800px;
-            padding: 5em 0;
-            margin: 0 auto;
-            color: #555;
-            text-align: left;
-            vertical-align: top;
-        }
+            .error-header {
+                display: flex;
+                width: 100%;
+                height: 102px;
+                box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+                background: var(--global-header-background);
 
-        .error__icon {
-            color: #ccc;
-            font-size: 4em;
-        }
+                .error-header__logo {
+                    width: 255px;
+                    height: auto;
+                    margin: 30px 40px;
+                }
 
-        h2 {
-            margin: 0.8em 0 0.5em;
-            font-size: 1.5em;
-            font-weight: 600;
-        }
+            }
 
-        p {
-            font-size: 1.2em;
+                .error__dialog {
+                    display: flex;
+                    width: 1280px;
+                    justify-content: center;
+                    margin: 0 auto;
+                    align-items: center;
+                    margin-top: 20vh;
+
+                    &-body {
+                        flex: 0 1 600px;
+                        margin-right: 30px;
+                        margin-left: 30px;
+                        color: rgba(var(--center-channel-color-rgb),0.785);
+                        font-size: 14px;
+                        line-height: 20px;
+                    }
+
+                    &-title {
+                        color: var(--center-channel-color);
+                    }
+
+                .error__graphic {
+                    flex: 0 0 600px;
+                    background-color: transparent;
+
+                    &.mobile {
+                        flex: 0 1 300px;
+                    }
+
+                    > img {
+                        max-width: 100%;
+                    }
+                }
+
+
+            }
+
+            h2 {
+                margin: 0.8em 0 0.5em;
+                font-size: 1.5em;
+                font-weight: 600;
+            }
+
+            p {
+                font-size: 1.2em;
+            }
         }
     }
 }
