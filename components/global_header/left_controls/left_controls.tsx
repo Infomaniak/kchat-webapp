@@ -42,7 +42,7 @@ const HeaderIcon = styled.span`
     padding-right: 6px;
     > i {
         cursor: pointer;
-        background-color: #000;
+        background-color: rgba(var(--sidebar-text-rgb), 0.08);
         color: rgba(var(--sidebar-text-rgb), 0.72);
         border-radius: 50%;
         width: 30px;
