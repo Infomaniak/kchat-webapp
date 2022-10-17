@@ -125,7 +125,7 @@ exports[`components/GenericModal should match snapshot with both buttons 1`] = `
       componentClass="div"
     >
       <button
-        className="GenericModal__button cancel"
+        className="GenericModal__button cancel secondary"
         onClick={[Function]}
         type="button"
       >
