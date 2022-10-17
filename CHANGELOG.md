@@ -1,3 +1,11 @@
+## 0.4.4 (2022-10-17)
+
+## Fixed (3 changes)
+
+- [fix style header btns](kchat/webapp@785066cdc0f2a19f1e0d07fae61c0447b30b75ff) by @leonard.jouve
+- [fix status modal style](kchat/webapp@b7396c8ffdf1642885b73cfb99681f11c9593638) by @leonard.jouve
+- [fix status btn active color](kchat/webapp@42069e3d2618e192d95e5327285c870149b032a2) by @leonard.jouve
+
 ## 0.4.3-rc.3 (2022-10-14)
 
 ## Fixed (1 change)
