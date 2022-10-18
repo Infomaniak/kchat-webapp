@@ -383,7 +383,6 @@ export default class SidebarChannelList extends React.PureComponent<Props, State
                 handleOpenMoreDirectChannelsModal={this.props.handleOpenMoreDirectChannelsModal}
                 getChannelRef={this.getChannelRef}
                 isNewCategory={this.props.newCategoryIds.includes(category.id)}
-                isLastCategory={category.isLastCategory}
             />
         );
     }

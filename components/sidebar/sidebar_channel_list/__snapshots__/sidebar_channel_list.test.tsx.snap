@@ -99,6 +99,7 @@ exports[`SidebarChannelList should match snapshot 2`] = `
         "collapsed": false,
         "display_name": "custom_category_1",
         "id": "category1",
+        "isLastCategory": true,
         "muted": false,
         "sorting": "alpha",
         "team_id": "team1",

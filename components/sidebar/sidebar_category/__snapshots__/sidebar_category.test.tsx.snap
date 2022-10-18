@@ -60,7 +60,7 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
     />
   </SidebarCategoryHeader>
   <div
-    className="SidebarChannelGroup_content"
+    className="SidebarChannelGroup_content hasFollowingSibling"
   >
     <ul
       className="NavGroupContent"
@@ -142,7 +142,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
     />
   </SidebarCategoryHeader>
   <div
-    className="SidebarChannelGroup_content"
+    className="SidebarChannelGroup_content hasFollowingSibling"
   >
     <ul
       className="NavGroupContent"
@@ -222,7 +222,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
     />
   </SidebarCategoryHeader>
   <div
-    className="SidebarChannelGroup_content"
+    className="SidebarChannelGroup_content hasFollowingSibling"
   >
     <ul
       className="NavGroupContent"
