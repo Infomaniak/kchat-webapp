@@ -65,7 +65,7 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                 <p>
                     <FormattedMessage
                         id='error.team_not_found.message'
-                        defaultMessage="The team you're requesting is private or does not exist. Please contact your Administrator for an invitation."
+                        defaultMessage="The team you're requesting is private or does not exist."
                     />
                 </p>
             );

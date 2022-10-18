@@ -17,6 +17,7 @@ import ErrorMessage from './error_message';
 import SvgIlluErrorQuestion from './assets/SvgIlluErrorQuestion';
 import SvgIlluErrorWarning from './assets/SvgIlluErrorWarning';
 import SvgIlluErrorTool from './assets/SvgIlluErrorTool';
+import {browserHistory} from '../../utils/browser_history';
 
 type Location = {
     search: string;
@@ -37,6 +38,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
     public componentWillUnmount() {
         document.body.removeAttribute('class');
     }
+
     public renderHeader = () => {
         const header = (
             <div className='error-header'>
@@ -54,6 +56,11 @@ export default class ErrorPage extends React.PureComponent<Props> {
         const {isGuest} = this.props;
         const params: URLSearchParams = new URLSearchParams(this.props.location ? this.props.location.search : '');
         const signature = params.get('s');
+        const reloadPage = () => {
+            if (window && window.location) {
+                window.location.assign(window.location.origin);
+            }
+        };
 
         let trustParams = false;
         if (signature) {
@@ -88,18 +95,18 @@ export default class ErrorPage extends React.PureComponent<Props> {
             );
         } else if (type === ErrorPageTypes.TEAM_NOT_FOUND) {
             backButton = (
-                <Link
+                <a
                     className='btn btn-primary'
-                    to='/'
+                    href='https://infomaniak.com/ksuite'
                 >
                     <FormattedMessage
-                        id='error.generic.link'
-                        defaultMessage='Back to {siteName}'
+                        id='error.generic.link_ksuite'
+                        defaultMessage='Add kSuite'
                         values={{
                             siteName: this.props.siteName,
                         }}
                     />
-                </Link>
+                </a>
             );
         } else if (type === ErrorPageTypes.CHANNEL_NOT_FOUND && isGuest) {
             backButton = (
@@ -146,11 +153,11 @@ export default class ErrorPage extends React.PureComponent<Props> {
             backButton = (
                 <a
                     className='btn btn-primary'
-                    onClick={() => window.location.reload()}
+                    onClick={() => reloadPage()}
                 >
                     <FormattedMessage
                         id='error.generic.reload'
-                        defaultMessage='Rafraîchir la page'
+                        defaultMessage='Reload page'
 
                     />
                 </a>

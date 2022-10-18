@@ -24,19 +24,30 @@ body {
 
                 .error__dialog {
                     display: flex;
-                    width: 1280px;
+                    width: 100%;
                     justify-content: center;
                     margin: 0 auto;
                     align-items: center;
                     margin-top: 20vh;
 
+                    @media screen and (min-width: 1300px) {
+                        width: 1280px;
+                    }
+
+                    @media screen and (max-width: 768px) {
+                        flex-direction: column-reverse;
+                    }
+
                     &-body {
-                        flex: 0 1 600px;
                         margin-right: 30px;
                         margin-left: 30px;
                         color: rgba(var(--center-channel-color-rgb),0.785);
                         font-size: 14px;
                         line-height: 20px;
+
+                        @media screen and (max-width: 768px) {
+                            text-align: center;
+                        }
                     }
 
                     &-title {
@@ -44,12 +55,9 @@ body {
                     }
 
                 .error__graphic {
-                    flex: 0 0 600px;
+                    margin-right: 30px;
+                    margin-left: 30px;
                     background-color: transparent;
-
-                    &.mobile {
-                        flex: 0 1 300px;
-                    }
 
                     > img {
                         max-width: 100%;

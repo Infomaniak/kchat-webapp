@@ -4,8 +4,14 @@
 import React from 'react';
 import ErrorPage from './index';
 
+
+type Location = {
+    search: string;
+}
+
 type Props = {
     children?: React.ReactNode;
+    location?: Location;
 }
 
 type State = {
