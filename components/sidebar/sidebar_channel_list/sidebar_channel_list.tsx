@@ -374,6 +374,8 @@ export default class SidebarChannelList extends React.PureComponent<Props, State
     };
 
     renderCategory = (category: ChannelCategory, index: number) => {
+        const {categories} = this.props;
+        const isLastCategory = index === categories.length - 1;
         return (
             <SidebarCategory
                 key={category.id}
@@ -383,6 +385,7 @@ export default class SidebarChannelList extends React.PureComponent<Props, State
                 handleOpenMoreDirectChannelsModal={this.props.handleOpenMoreDirectChannelsModal}
                 getChannelRef={this.getChannelRef}
                 isNewCategory={this.props.newCategoryIds.includes(category.id)}
+                isLastCategory={isLastCategory}
             />
         );
     }

@@ -24,6 +24,7 @@ describe('components/sidebar/sidebar_category', () => {
         },
         channelIds: ['channel_id'],
         categoryIndex: 0,
+        isLastCategory: true,
         draggingState: {},
         setChannelRef: jest.fn(),
         getChannelRef: jest.fn(),

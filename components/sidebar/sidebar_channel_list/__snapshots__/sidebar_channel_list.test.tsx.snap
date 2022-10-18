@@ -109,6 +109,7 @@ exports[`SidebarChannelList should match snapshot 2`] = `
     categoryIndex={0}
     getChannelRef={[Function]}
     handleOpenMoreDirectChannelsModal={[MockFunction]}
+    isLastCategory={true}
     isNewCategory={false}
     key="category1"
     setChannelRef={[Function]}
