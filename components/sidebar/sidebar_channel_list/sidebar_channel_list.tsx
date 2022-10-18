@@ -383,6 +383,7 @@ export default class SidebarChannelList extends React.PureComponent<Props, State
                 handleOpenMoreDirectChannelsModal={this.props.handleOpenMoreDirectChannelsModal}
                 getChannelRef={this.getChannelRef}
                 isNewCategory={this.props.newCategoryIds.includes(category.id)}
+                isLastCategory={category.isLastCategory}
             />
         );
     }
@@ -459,7 +460,14 @@ export default class SidebarChannelList extends React.PureComponent<Props, State
     }
 
     render() {
-        const {categories} = this.props;
+        const categories = [];
+        this.props.categories.forEach((category) => {
+            if (category === this.props.categories[this.props.categories.length - 1]) {
+                categories.push({...category, isLastCategory: true});
+                return;
+            }
+            categories.push({...category, isLastCategory: false});
+        });
 
         let channelList: React.ReactNode;
         if (this.props.isUnreadFilterEnabled) {

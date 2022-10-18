@@ -35,6 +35,7 @@ type Props = {
     handleOpenMoreDirectChannelsModal: (e: Event) => void;
     getChannelRef: (channelId: string) => HTMLLIElement | undefined;
     isNewCategory: boolean;
+    isLastCategory: boolean;
     draggingState: DraggingState;
     currentUserId: string;
     touchedInviteMembersButton: boolean;
@@ -408,7 +409,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                             </SidebarCategoryHeader>
                                             <div
                                                 className={classNames('SidebarChannelGroup_content', {
-                                                    hasFollowingSibling: category.type === CategoryTypes.DIRECT_MESSAGES,
+                                                    hasFollowingSibling: !this.props.isLastCategory,
                                                 })}
                                             >
                                                 <ul
