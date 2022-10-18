@@ -1,3 +1,10 @@
+## 0.4.5-rc.3 (2022-10-18)
+
+## Fixed (2 changes)
+
+- [add unsafe-eval to prod script-src for webcomponents firefox](kchat/webapp@5b428742073bc33144783ca12f390c99bbb7ae51) by @antonbuksa
+- [fix channel sidebar categories](kchat/webapp@08f9a140342f13b997e53eb14871345eb92e297c) by @leonard.jouve ([merge request](kchat/webapp!152))
+
 ## 0.4.5-rc.2 (2022-10-18)
 
 No changes.
