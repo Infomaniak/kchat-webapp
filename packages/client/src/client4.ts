@@ -4219,7 +4219,7 @@ export default class Client4 {
         throw new ClientError(this.getUrl(), {
             message: msg,
             server_error_id: data.id,
-            status_code: data.status_code,
+            status_code: data.status_code ? data.status_code : response.status,
             url,
         });
     };

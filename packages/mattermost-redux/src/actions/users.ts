@@ -33,6 +33,7 @@ import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/pre
 import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 import {General} from 'mattermost-redux/constants';
+import {browserHistory} from 'utils/browser_history';
 import {clearLocalStorageToken} from '../../../../components/login/utils';
 import {isDesktopApp} from '../../../../utils/user_agent';
 
@@ -518,8 +519,10 @@ export function getMe(): ActionFunc {
             onSuccess: UserTypes.RECEIVED_ME,
         });
         const me = await getMeFunc(dispatch, getState);
-
         if ('error' in me) {
+            if (me.error?.status_code && me.error?.status_code === 404) {
+                browserHistory.push('/error?type=team_not_found');
+            }
             return me;
         }
         if ('data' in me) {
