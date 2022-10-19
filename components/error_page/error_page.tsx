@@ -12,12 +12,13 @@ import WarningIcon from 'components/widgets/icons/fa_warning_icon';
 
 import MattermostLogoSvg from '../../images/logo.svg';
 
+import {browserHistory} from '../../utils/browser_history';
+
 import ErrorTitle from './error_title';
 import ErrorMessage from './error_message';
 import SvgIlluErrorQuestion from './assets/SvgIlluErrorQuestion';
 import SvgIlluErrorWarning from './assets/SvgIlluErrorWarning';
 import SvgIlluErrorTool from './assets/SvgIlluErrorTool';
-import {browserHistory} from '../../utils/browser_history';
 
 type Location = {
     search: string;
@@ -81,6 +82,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
         const returnTo = (trustParams && params.get('returnTo')) || '';
 
         let backButton;
+        const illustration = <SvgIlluErrorQuestion/>;
         if (type === ErrorPageTypes.PERMALINK_NOT_FOUND && returnTo) {
             backButton = (
                 <Link
@@ -189,7 +191,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
                         </div>
                     </div>
                     <div className='error__graphic'>
-                        <SvgIlluErrorQuestion/>
+                        {illustration}
                     </div>
                 </div>
 
