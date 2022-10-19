@@ -54,7 +54,7 @@ build_docker_image:
   stage: build
   tags:
     - kubernetes
-  image: node:16
+  image: node:16.14
   rules:
     - if: $DEPLOY_VARIABLE == "prod"
       when: on_success
@@ -73,12 +73,12 @@ build_docker_image:
   script:
     - export DEBIAN_FRONTEND=noninteractive
     - export ENVIRONMENT=${DEPLOY_VARIABLE}
-    - bash scripts/node.sh
-    - yarn
-    - yarn workspace @mattermost/types build
-    - yarn workspace @mattermost/client build
-    - yarn workspace @mattermost/components build
-    - yarn build
+    # - bash scripts/node.sh
+    - npx yarn
+    - npx yarn workspace @mattermost/types build
+    - npx yarn workspace @mattermost/client build
+    - npx yarn workspace @mattermost/components build
+    - npx yarn build
 
 container_scanning:
   stage: build
