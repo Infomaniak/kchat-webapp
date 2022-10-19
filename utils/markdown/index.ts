@@ -16,7 +16,8 @@ import EmojiMap from 'utils/emoji_map';
 import Renderer from './renderer';
 
 const removeMarkdown = new RemoveMarkdown();
-const queryRegex = /(?<=http.*?\?).*?(?=[.,] | |<|>|$|\n|\t)/g;
+
+const queryRegex = /(?:http.*?\?).*?(?=[.,] | |<|>|$|\n|\t)/g;
 
 export function format(text: string, options = {}, emojiMap?: EmojiMap) {
     return formatWithRenderer(text, new Renderer({}, options, emojiMap));
