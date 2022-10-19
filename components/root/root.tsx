@@ -80,6 +80,8 @@ import {UserProfile} from '@mattermost/types/users';
 
 import {ActionResult} from 'mattermost-redux/types/actions';
 
+import ErrorBoundary from '../error_page/error-boudaries';
+
 import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
@@ -681,58 +683,62 @@ export default class Root extends React.PureComponent<Props, State> {
                         to={`/${this.props.permalinkRedirectTeamName}/pl/:postid`}
                     />
                     <CompassThemeProvider theme={this.props.theme}>
-                        {(this.props.showLaunchingWorkspace && !this.props.location.pathname.includes('/preparing-workspace') &&
-                            <LaunchingWorkspace
-                                fullscreen={true}
-                                zIndex={LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX}
-                                show={true}
-                                onPageView={noop}
-                                transitionDirection={Animations.Reasons.EnterFromBefore}
-                            />
-                        )}
-                        <ModalController/>
-                        <GlobalHeader/>
-                        {/* <CloudEffects/>
+                        <ErrorBoundary>
+
+                            {(this.props.showLaunchingWorkspace && !this.props.location.pathname.includes('/preparing-workspace') &&
+                                <LaunchingWorkspace
+                                    fullscreen={true}
+                                    zIndex={LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX}
+                                    show={true}
+                                    onPageView={noop}
+                                    transitionDirection={Animations.Reasons.EnterFromBefore}
+                                />
+                            )}
+                            <ModalController/>
+                            <GlobalHeader/>
+                            {/* <CloudEffects/>
                         <OnBoardingTaskList/> */}
-                        <TeamSidebar/>
-                        <Switch>
-                            {this.props.products?.map((product) => (
-                                <Route
-                                    key={product.id}
-                                    path={product.baseURL}
-                                    render={(props) => (
-                                        <LoggedIn {...props}>
-                                            <div className={classNames(['product-wrapper', {wide: !product.showTeamSidebar}])}>
-                                                <Pluggable
-                                                    pluggableName={'Product'}
-                                                    subComponentName={'mainComponent'}
-                                                    pluggableId={product.id}
-                                                    webSocketClient={webSocketClient}
-                                                />
-                                            </div>
-                                        </LoggedIn>
-                                    )}
+                            <TeamSidebar/>
+                            <Switch>
+                                {this.props.products?.map((product) => (
+                                    <Route
+                                        key={product.id}
+                                        path={product.baseURL}
+                                        render={(props) => (
+                                            <LoggedIn {...props}>
+                                                <div className={classNames(['product-wrapper', {wide: !product.showTeamSidebar}])}>
+                                                    <Pluggable
+                                                        pluggableName={'Product'}
+                                                        subComponentName={'mainComponent'}
+                                                        pluggableId={product.id}
+                                                        webSocketClient={webSocketClient}
+                                                    />
+                                                </div>
+                                            </LoggedIn>
+                                        )}
+                                    />
+                                ))}
+                                {this.props.plugins?.map((plugin) => (
+                                    <Route
+                                        key={plugin.id}
+                                        path={'/plug/' + (plugin as any).route}
+                                        render={() => (
+                                            <Pluggable
+                                                pluggableName={'CustomRouteComponent'}
+                                                pluggableId={plugin.id}
+                                            />
+                                        )}
+                                    />
+                                ))}
+                                <LoggedInRoute
+                                    path={'/:team'}
+                                    component={NeedsTeam}
                                 />
-                            ))}
-                            {this.props.plugins?.map((plugin) => (
-                                <Route
-                                    key={plugin.id}
-                                    path={'/plug/' + (plugin as any).route}
-                                    render={() => (
-                                        <Pluggable
-                                            pluggableName={'CustomRouteComponent'}
-                                            pluggableId={plugin.id}
-                                        />
-                                    )}
-                                />
-                            ))}
-                            <LoggedInRoute
-                                path={'/:team'}
-                                component={NeedsTeam}
-                            />
-                            <RootRedirect/>
-                        </Switch>
-                        <Pluggable pluggableName='Global'/>
+                                <RootRedirect/>
+                            </Switch>
+                            <Pluggable pluggableName='Global'/>
+                        </ErrorBoundary>
+
                     </CompassThemeProvider>
                 </Switch>
             </RootProvider>
