@@ -138,37 +138,6 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
           text="Team Settings"
         />
       </Connect(TeamPermissionGate)>
-      <Connect(TeamPermissionGate)
-        invert={true}
-        permissions={
-          Array [
-            "remove_user_from_team",
-            "manage_team_roles",
-          ]
-        }
-        teamId="someteamid"
-      >
-        <MenuItemToggleModalRedux
-          dialogType={
-            Object {
-              "$$typeof": Symbol(react.memo),
-              "WrappedComponent": [Function],
-              "compare": null,
-              "displayName": "Connect(TeamMembersModal)",
-              "type": [Function],
-            }
-          }
-          icon={
-            <i
-              className="fa fa-users"
-            />
-          }
-          id="viewMembers"
-          modalId="team_members"
-          show={true}
-          text="View Members"
-        />
-      </Connect(TeamPermissionGate)>
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
