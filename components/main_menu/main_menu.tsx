@@ -11,8 +11,9 @@ import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
 import {Constants, LicenseSkus, ModalIdentifiers, PaidFeatures} from 'utils/constants';
 import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
 import {makeUrlSafe} from 'utils/url';
-import * as UserAgent from 'utils/user_agent';
-import InvitationModal from 'components/invitation_modal';
+
+// import * as UserAgent from 'utils/user_agent';
+// import InvitationModal from 'components/invitation_modal';
 
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
@@ -288,7 +289,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             icon={<i className='fa fa-users'/>}
                         />
                     </TeamPermissionGate> */}
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
                         invert={true}
@@ -300,7 +301,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.viewMembers', defaultMessage: 'View Members'})}
                             icon={<i className='fa fa-users'/>}
                         />
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                 </Menu.Group>
                 {/* <Menu.Group>
                     <SystemPermissionGate permissions={[Permissions.CREATE_TEAM]}>
@@ -354,6 +355,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         text={formatMessage({id: 'navbar_dropdown.report', defaultMessage: 'Report a Problem'})}
                         icon={<i className='fa fa-phone'/>}
                     />
+                    // TODO: plug this
                     <Menu.ItemExternalLink
                         id='nativeAppLink'
                         show={this.props.appDownloadLink && !UserAgent.isMobileApp()}
