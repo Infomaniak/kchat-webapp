@@ -305,6 +305,7 @@ var config = {
     plugins: [
         new webpack.ProvidePlugin({
             process: 'process/browser',
+            crypto: 'crypto-browserify',
         }),
         new webpack.DefinePlugin({
             COMMIT_HASH: JSON.stringify(childProcess.execSync('git rev-parse HEAD || echo dev').toString()),
