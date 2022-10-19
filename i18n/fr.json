@@ -4543,6 +4543,8 @@
   "user.settings.display.collapsedReplyThreadsOff": "Désactivé",
   "user.settings.display.collapsedReplyThreadsOn": "Activé",
   "user.settings.display.collapsedReplyThreadsTitle": "Fils de discussion repliables (Beta)",
+  "user.settings.display.colorize": "Colorer les noms d'utilisateur",
+  "user.settings.display.colorizeDes": "Utilisez des couleurs pour distinguer les utilisateurs en mode compact",
   "user.settings.display.fixedWidthCentered": "Largeur fixe, centré",
   "user.settings.display.fullScreen": "Largeur pleine",
   "user.settings.display.icon": "Icône de paramètres d'affichage",

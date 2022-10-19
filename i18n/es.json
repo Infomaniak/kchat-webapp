@@ -4129,6 +4129,8 @@
   "user.settings.display.collapsedReplyThreadsOff": "Apagado",
   "user.settings.display.collapsedReplyThreadsOn": "Encendido",
   "user.settings.display.collapsedReplyThreadsTitle": "Hilos de Respuesta Colapsados (Beta)",
+  "user.settings.display.colorize": "Colorear los nombres de usuario",
+  "user.settings.display.colorizeDes": "Utilizar colores para distinguir a los usuarios en el modo compacto",
   "user.settings.display.fixedWidthCentered": "De ancho fijo, centrado",
   "user.settings.display.fullScreen": "De ancho total",
   "user.settings.display.icon": "Icono de Configuración de Visualización",

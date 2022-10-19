@@ -3489,6 +3489,8 @@
   "user.settings.display.collapseDisplay": "Formato di default per l'anteprima dei collegamenti a un'immagine",
   "user.settings.display.collapseOff": "Contratto",
   "user.settings.display.collapseOn": "Espanso",
+  "user.settings.display.colorize": "Colorare i nomi utente",
+  "user.settings.display.colorizeDes": "Utilizzare i colori per distinguere gli utenti in modalità compatta",
   "user.settings.display.fixedWidthCentered": "Larghezza fissa, centrato",
   "user.settings.display.fullScreen": "A tutta larghezza",
   "user.settings.display.icon": "Icona Impostazioni aspetto",
