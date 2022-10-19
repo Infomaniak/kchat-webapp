@@ -71,7 +71,8 @@ build_docker_image:
     - echo "LOGIN_ENDPOINT=$LOGIN_ENDPOINT" >> .env
     - echo "MANAGER_ENDPOINT=$MANAGER_ENDPOINT" >> .env
   script:
-    - ENVIRONMENT=${DEPLOY_VARIABLE}
+    - export DEBIAN_FRONTEND=noninteractive
+    - export ENVIRONMENT=${DEPLOY_VARIABLE}
     - bash scripts/node.sh
     - yarn
     - yarn workspace @mattermost/types build
