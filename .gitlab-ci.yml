@@ -52,10 +52,9 @@ code_quality:
 
 build_front:
   stage: build
+  image: node:16.10.0
   tags:
     - kubernetes
-  image:
-    name: node:16
   rules:
     - if: $DEPLOY_VARIABLE == "prod"
       when: on_success
@@ -74,6 +73,13 @@ build_front:
     - yarn workspace @mattermost/client build
     - yarn workspace @mattermost/components build
     - yarn build:webapp
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - .yarn/cache/
+      - .yarn/install-state.gz
   artifacts:
     paths:
       - dist
@@ -99,7 +105,7 @@ publish_front:
   before_script:
     - mc config host add $S3_BUCKET $S3_HOST $S3_KEY $S3_PASSWORD --api s3v4
   script:
-    - mc cp --recursive dist $S3_BUCKET/$S3_BUCKET/kchat
+    - mc cp --recursive dist $S3_BUCKET/kchat
   artifacts:
     paths:
       - dist
