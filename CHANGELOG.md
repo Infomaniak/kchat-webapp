@@ -4,6 +4,21 @@
 
 - [remove call dialing for now](kchat/webapp@4de4edb060ca28613224872ed7d3f3d040485ee1) by @antonbuksa
 
+## 0.4.6-rc.13 (2022-10-20)
+
+## Added (2 changes)
+
+- [add settings translation](kchat/webapp@567151a4da3350bc2cbc53454eb4c1e142f89ebe) by @leonard.jouve ([merge request](kchat/webapp!156))
+- [Add errors and no team  pages](kchat/webapp@07af3ef7dcdd5bac976269f993097ecb2568160b) by @florent.glauda ([merge request](kchat/webapp!133))
+
+## Fixed (5 changes)
+
+- [remove call dialing for now](kchat/webapp@4de4edb060ca28613224872ed7d3f3d040485ee1) by @antonbuksa
+- [remove old view members dialog](kchat/webapp@aa9260f625daeee8c1ef8b983b0e5b7096189388) by @antonbuksa
+- [fix tooltip opacity on reactions](kchat/webapp@385a0067edbdd4b49a53e95cdd105fc6304b6dcf) by @leonard.jouve
+- [fix do not disturb modal](kchat/webapp@69357689e9bf24ec8adc6871bb7c5bd985e5014e) by @leonard.jouve ([merge request](kchat/webapp!155))
+- [improve mark as unread](kchat/webapp@838075bc6967ea907c842e93ac884934db146b2b) by @leonard.jouve ([merge request](kchat/webapp!154))
+
 ## 0.4.6-rc.12 (2022-10-20)
 
 ## Added (2 changes)
