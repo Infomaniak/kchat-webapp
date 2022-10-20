@@ -111,14 +111,14 @@ import {getSiteURL} from 'utils/url';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
-import DialingModal from 'components/kmeet_conference/ringing_dialog';
+// import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
 import {needRefreshToken, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
-import {isDesktopApp} from 'utils/user_agent';
+// import {isDesktopApp} from 'utils/user_agent';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -1824,15 +1824,15 @@ function handleIncomingConferenceCall(msg) {
             },
         });
 
-        if (!channel || channel.id !== msg.data.channel_id) {
-            doDispatch(openModal({
-                modalId: ModalIdentifiers.INCOMING_CALL,
-                dialogType: DialingModal,
-                dialogProps: {
-                    calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
-                },
-            }));
-        }
+        // if (!channel || channel.id !== msg.data.channel_id) {
+        //     doDispatch(openModal({
+        //         modalId: ModalIdentifiers.INCOMING_CALL,
+        //         dialogType: DialingModal,
+        //         dialogProps: {
+        //             calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
+        //         },
+        //     }));
+        // }
     };
 }
 
