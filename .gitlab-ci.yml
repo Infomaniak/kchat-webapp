@@ -105,7 +105,7 @@ publish_front:
   before_script:
     - mc config host add $S3_BUCKET $S3_HOST $S3_KEY $S3_PASSWORD --api s3v4
   script:
-    - mc cp --recursive dist $S3_BUCKET/$S3_BUCKET/kchat
+    - mc cp --recursive dist/ $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE
   artifacts:
     paths:
       - dist
