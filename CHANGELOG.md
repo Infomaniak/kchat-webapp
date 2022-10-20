@@ -1,3 +1,9 @@
+## 0.4.7-rc.1 (2022-10-20)
+
+## Fixed (1 change)
+
+- [remove call dialing for now](kchat/webapp@4de4edb060ca28613224872ed7d3f3d040485ee1) by @antonbuksa
+
 ## 0.4.6-rc.5 (2022-10-19)
 
 ## Added (2 changes)
