@@ -74,7 +74,7 @@ build_docker_image:
     - yarn workspace @mattermost/types build
     - yarn workspace @mattermost/client build
     - yarn workspace @mattermost/components build
-    - yarn build
+    - yarn build:webapp
 
 container_scanning:
   stage: build
