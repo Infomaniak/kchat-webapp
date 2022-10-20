@@ -1,3 +1,9 @@
+## 0.4.9-rc.1 (2022-10-20)
+
+## Fixed (1 change)
+
+- [remove unsupported regex for link stitching](kchat/webapp@9703205e232af2e291ddf2f264b443cbe4e0bac3) by @antonbuksa
+
 ## 0.4.8 (2022-10-20)
 
 ## Added (1 change)
