@@ -68,7 +68,7 @@ build_docker_image:
   before_script:
     - export DEBIAN_FRONTEND=noninteractive
     - export ENVIRONMENT=${DEPLOY_VARIABLE}
-    - bash scripts/node.sh
+    - npx yarn
   script:
     - yarn
     - yarn workspace @mattermost/types build
