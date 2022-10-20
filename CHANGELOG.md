@@ -1,3 +1,9 @@
+## 0.4.8 (2022-10-20)
+
+## Added (1 change)
+
+- [deploy webapp assets to s3](kchat/webapp@196c456c1a033da71b5f2477c57326292851136d) by @leopold.jacquot
+
 ## 0.4.7-rc.1 (2022-10-20)
 
 ## Fixed (1 change)
