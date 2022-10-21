@@ -4166,12 +4166,14 @@ export default class Client4 {
                 this.setCSRF('');
 
                 if (token && refreshToken && isRefreshing !== '1') {
+                    console.log('[LOGIN CLIENT] start refreshing token');
                     localStorage.setItem('refreshingToken', '1');
                     this.refreshIKLoginToken(
                         refreshToken,
                         `${IKConstants.LOGIN_URL}`,
                         `${IKConstants.CLIENT_ID}`,
                     ).then((response) => {
+                        console.log('[LOGIN CLIENT] token refreshed');
                         this.storeTokenResponse(response);
                         window.postMessage(
                             {
