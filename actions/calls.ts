@@ -150,7 +150,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
         if (!isDesktopApp()) {
             window.onCloseJitsi = (window) => {
                 window.close();
-                Client4.leaveMeet(data.id);
+                // Client4.leaveMeet(data.id);
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
                     data: {
@@ -180,7 +180,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             }
             window.callWindow = window.open(`/static/call.html${qParams}`, 'ExpandedView', windowFeatures);
             window.callWindow.onbeforeunload = () => {
-                Client4.leaveMeet(data.id);
+                // Client4.leaveMeet(data.id);
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
                     data: {
@@ -218,7 +218,9 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
 
             switch (type) {
             case 'call-closed': {
-                Client4.leaveMeet(message.id);
+                if (connectedCallID(getState())) {
+                    Client4.leaveMeet(message.id);
+                }
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
                     data: {
