@@ -1,3 +1,11 @@
+## 0.4.9-rc.3 (2022-10-21)
+
+## Fixed (3 changes)
+
+- [remove unsupported regex for link stitching](kchat/webapp@9703205e232af2e291ddf2f264b443cbe4e0bac3) by @antonbuksa
+- [fix threads list mentions](kchat/webapp@bfd420cd9f31b3716a3eb7ac58c19c636ee23713) by @leonard.jouve ([merge request](kchat/webapp!162))
+- [fix status suggestion translation](kchat/webapp@39009eacde53c844d0e1e9cc588ffcfc4cbde9a0) by @leonard.jouve ([merge request](kchat/webapp!161))
+
 ## 0.4.9-rc.2 (2022-10-21)
 
 ## Fixed (3 changes)
