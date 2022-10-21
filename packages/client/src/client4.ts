@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-/* eslint-disable max-lines */
+/* eslint-disable max-lines,no-console */
 
 import {PreferenceType} from '@mattermost/types/preferences';
 import FormData from 'form-data';
@@ -188,6 +188,7 @@ export default class Client4 {
     };
     userRoles = '';
     telemetryHandler?: TelemetryHandler;
+    blockRequest = false;
 
     getUrl() {
         return this.url;
@@ -4129,7 +4130,13 @@ export default class Client4 {
         return data;
     };
 
-    private doFetchWithResponse = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse>> => {
+    private doFetchWithResponse = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse> | any> => {
+        const isRefreshing = localStorage.getItem('refreshingToken');
+        if (this.blockRequest || isRefreshing) {
+            console.log('[LOGIN CLIENT] request blocked');
+            return false;
+        }
+
         const response = await fetch(url, this.getOptions(options));
         const headers = parseAndMergeNestedHeaders(response.headers);
 
@@ -4148,10 +4155,13 @@ export default class Client4 {
         }
 
         if ((response.status === 403 || (response.status === 401 && data?.result === 'redirect')) && isDesktopApp()) {
+            console.log('[LOGIN CLIENT] request failed');
+            this.blockRequest = true;
             if (url.indexOf('/commands/') === -1) {
                 const token = localStorage.getItem('IKToken');
                 const refreshToken = localStorage.getItem('IKRefreshToken');
                 const isRefreshing = localStorage.getItem('refreshingToken');
+                const tokenExpire = localStorage.getItem('IKTokenExpire');
                 this.setToken('');
                 this.setCSRF('');
 
@@ -4178,11 +4188,18 @@ export default class Client4 {
                         });
                         localStorage.removeItem('refreshingToken');
                     }).catch(() => {
+                        this.blockRequest = false;
                         console.log('[TOKEN] fail refresh from client');
                         localStorage.removeItem('refreshingToken');
                         this.clearLocalStorageToken();
                         this.getChallengeAndRedirectToLogin();
+                    }).finally(() => {
+                        this.blockRequest = false;
+                        localStorage.removeItem('refreshingToken');
                     });
+                } else if (!token || !refreshToken || !tokenExpire) {
+                    console.log('[LOGIN CLIENT] No token or code or token expired, redirect to login ik');
+                    this.getChallengeAndRedirectToLogin();
                 }
             }
         }
@@ -4219,7 +4236,7 @@ export default class Client4 {
         throw new ClientError(this.getUrl(), {
             message: msg,
             server_error_id: data.id,
-            status_code: data.status_code,
+            status_code: data.status_code ? data.status_code : response.status,
             url,
         });
     };
