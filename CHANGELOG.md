@@ -1,3 +1,9 @@
+## 0.4.11-rc.3 (2022-10-21)
+
+## Fixed (1 change)
+
+- [dont call /leave on web beforeunload to fix rate limiting](kchat/webapp@7fe82683c4be03439337f740c0985f5af6586c19) by @antonbuksa
+
 ## 0.4.11-rc.2 (2022-10-21)
 
 No changes.
