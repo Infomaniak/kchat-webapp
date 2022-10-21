@@ -150,7 +150,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
         if (!isDesktopApp()) {
             window.onCloseJitsi = (window) => {
                 window.close();
-                // Client4.leaveMeet(data.id);
+                Client4.leaveMeet(data.id);
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
                     data: {
@@ -162,7 +162,6 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                 });
             };
             window.onParticipantJoined = (msg: {id: string; displayName: string}) => {
-                // console.log(msg);
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_PROFILE_CONNECTED,
                     data: {
@@ -180,7 +179,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             }
             window.callWindow = window.open(`/static/call.html${qParams}`, 'ExpandedView', windowFeatures);
             window.callWindow.onbeforeunload = () => {
-                // Client4.leaveMeet(data.id);
+                Client4.leaveMeet(data.id);
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
                     data: {
