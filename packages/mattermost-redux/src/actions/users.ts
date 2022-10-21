@@ -520,9 +520,11 @@ export function getMe(): ActionFunc {
         });
         const me = await getMeFunc(dispatch, getState);
         if ('error' in me) {
+/*
             if (me.error?.status_code && me.error?.status_code === 404 && (window && !window.location.pathname.includes('static/call'))) {
                 browserHistory.push('/error?type=team_not_found');
             }
+*/
             return me;
         }
         if ('data' in me) {
