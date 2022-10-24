@@ -4181,7 +4181,8 @@ export default class Client4 {
                         console.log('[TOKEN] fail refresh from client');
                         localStorage.removeItem('refreshingToken');
                         this.clearLocalStorageToken();
-                        this.getChallengeAndRedirectToLogin();
+
+                        // this.getChallengeAndRedirectToLogin();
                     });
                 }
             }

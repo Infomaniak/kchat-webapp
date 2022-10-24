@@ -196,10 +196,11 @@ export default class Root extends React.PureComponent<Props, State> {
                     },
                     window.origin,
                 );
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
+
+                // navigator.serviceWorker.controller?.postMessage({
+                //     type: 'TOKEN_REFRESHED',
+                //     token: token || '',
+                // });
             }
 
             // If need to refresh the token
