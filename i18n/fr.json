@@ -3049,7 +3049,7 @@
   "edit_command.update": "Mettre à jour",
   "edit_command.updating": "Mise à jour en cours...",
   "edit_post.editPost": "Modifier le message...",
-  "edit_post.helper_text": "**{key}Entrée** pour enregistrer, **Échap** pour annuler",
+  "edit_post.helper_text": "<strong>{key}Entrée</strong> pour enregistrer, <strong>Échap</strong> pour annuler",
   "edit_post.time_limit_button.for_n_seconds": "Pour {n} secondes",
   "edit_post.time_limit_button.no_limit": "N'importe quand",
   "edit_post.time_limit_modal.description": "Définir un délai **s'applique à tous les utilisateurs** qui ont la permission d'« Éditer des messages » et ce, quelque soit le schéma de permissions.",
