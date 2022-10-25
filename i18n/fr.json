@@ -126,7 +126,7 @@
   "add_emoji.imageTooLarge": "Impossible de créer l'émoticône. L'image doit faire moins de 1 Mio.",
   "add_emoji.name": "Nom",
   "add_emoji.name.help": "Spécifie un nom d'émoticône jusqu'à 64 caractères. Il peut contenir des lettres minuscules, des chiffres et les caractères « - », « + » et « _ ».",
-  "add_emoji.nameInvalid": "Un nom d'émoticône ne peut contenir que des lettres minuscules, des nombres et les caractères « - » et « _ ».",
+  "add_emoji.nameInvalid": "Un nom d'émoticône ne peut contenir que des lettres minuscules, des nombres et les caractères « - », « + » et « _ ».",
   "add_emoji.nameRequired": "Un nom est requis pour l'émoticône",
   "add_emoji.nameTaken": "Ce nom est déjà utilisé pour une émoticône système. Veuillez spécifier un autre nom.",
   "add_emoji.preview": "Aperçu",
