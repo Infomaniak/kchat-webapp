@@ -1,3 +1,13 @@
+## 0.5.1 (2022-10-25)
+
+## Added (1 change)
+
+- [add user report button](kchat/webapp@2da5eded78b1db3a266ae23d54e9065b52abedf0) by @antonbuksa ([merge request](kchat/webapp!170))
+
+## Changed (1 change)
+
+- [change release script to send changelog to kchat instead of slack](kchat/webapp@40663bf88c9b331975babebbf6e6e49b292fd337) by @antonbuksa
+
 ## 0.5.0 (2022-10-25)
 
 ## Added (1 change)
