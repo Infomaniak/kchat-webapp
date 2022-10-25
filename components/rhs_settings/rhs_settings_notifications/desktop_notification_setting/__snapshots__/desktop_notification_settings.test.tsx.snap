@@ -179,6 +179,35 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
   />
   <RhsSettingsItem
     containerStyle=""
+    id="desktopNotificationThread"
+    infoPosition="bottom"
+    inputs={
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={true}
+      />
+    }
+    messageDesc={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="When enabled, any reply to a thread you're following will send a desktop notification."
+        id="user.settings.notifications.threads"
+      />
+    }
+    saving={false}
+    section=""
+    server_error=""
+    submit={[MockFunction]}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Thread reply notifications"
+        id="user.settings.notifications.threads.desktop"
+      />
+    }
+    updateSection={[Function]}
+  />
+  <RhsSettingsItem
+    containerStyle=""
     id="desktopNotificationSoundToggle"
     infoPosition="bottom"
     inputs={
@@ -272,6 +301,35 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
       />
     }
     updateSection={[MockFunction]}
+  />
+  <RhsSettingsItem
+    containerStyle=""
+    id="desktopNotificationThread"
+    infoPosition="bottom"
+    inputs={
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={true}
+      />
+    }
+    messageDesc={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="When enabled, any reply to a thread you're following will send a desktop notification."
+        id="user.settings.notifications.threads"
+      />
+    }
+    saving={false}
+    section=""
+    server_error=""
+    submit={[MockFunction]}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Thread reply notifications"
+        id="user.settings.notifications.threads.desktop"
+      />
+    }
+    updateSection={[Function]}
   />
   <RhsSettingsItem
     containerStyle=""
@@ -414,6 +472,35 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
       />
     }
     updateSection={[MockFunction]}
+  />
+  <RhsSettingsItem
+    containerStyle=""
+    id="desktopNotificationThread"
+    infoPosition="bottom"
+    inputs={
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={true}
+      />
+    }
+    messageDesc={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="When enabled, any reply to a thread you're following will send a desktop notification."
+        id="user.settings.notifications.threads"
+      />
+    }
+    saving={false}
+    section=""
+    server_error=""
+    submit={[MockFunction]}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Thread reply notifications"
+        id="user.settings.notifications.threads.desktop"
+      />
+    }
+    updateSection={[Function]}
   />
   <RhsSettingsItem
     containerStyle=""
