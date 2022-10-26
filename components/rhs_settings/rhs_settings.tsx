@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect} from 'react';
+import React from 'react';
 /* eslint-disable react/no-string-refs */
 
 import {defineMessages, useIntl} from 'react-intl';
@@ -112,9 +112,7 @@ export default function RhsSettings({
             >
                 <RhsSettingsHeader isMobile={isMobile}/>
                 {/*    end of header  */}
-                <div
-                    className='accountSettingRhs'
-                >
+                <div className='accountSettingRhs'>
                     <Tabs
                         defaultActiveKey={activeTab}
                         onSelect={handleUpdateActiveTab}
