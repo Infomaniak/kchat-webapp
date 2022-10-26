@@ -85,14 +85,6 @@ export default function RhsSettings({
     tabs.push({name: 'notifications', uiName: intl.formatMessage(holders.notifications), icon: 'icon fa fa-exclamation-circle', iconTitle: Utils.localizeMessage('user.settings.notifications.icon', 'Notification Settings Icon')});
     tabs.push({name: 'advanced', uiName: intl.formatMessage(holders.advanced), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Advanced Settings Icon')});
     const [activeTab, setActiveTab] = React.useState(tabs[0].name);
-    const settingsRef = React.useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (settingsRef.current) {
-            settingsRef.current.scrollTop = 0;
-        }
-    }
-    , []);
 
     const handleUpdateActiveTab = (e) => {
         setActiveTab(e);
@@ -122,7 +114,6 @@ export default function RhsSettings({
                 {/*    end of header  */}
                 <div
                     className='accountSettingRhs'
-                    ref={settingsRef}
                 >
                     <Tabs
                         defaultActiveKey={activeTab}
