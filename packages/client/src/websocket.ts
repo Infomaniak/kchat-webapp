@@ -152,6 +152,9 @@ export default class WebSocketClient {
                 httpsPort: 443,
                 forceTLS: true,
                 enabledTransports: ['ws', 'wss'],
+                enableStats: false,
+                activityTimeout: 10000,
+                pongTimeout: 30000,
             });
         } else {
             this.conn = new Pusher('kchat-key', {
@@ -164,6 +167,9 @@ export default class WebSocketClient {
                 httpsPort: 443,
                 forceTLS: true,
                 enabledTransports: ['ws', 'wss'],
+                enableStats: false,
+                activityTimeout: 10000,
+                pongTimeout: 30000,
             });
         }
 
