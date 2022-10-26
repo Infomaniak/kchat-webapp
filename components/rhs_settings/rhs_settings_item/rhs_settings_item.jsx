@@ -133,8 +133,6 @@ export default class RhsSettingsItem extends React.PureComponent {
             const focusableElements = this.settingList.current.querySelectorAll('.btn:not(.save-button):not(.btn-cancel), input.form-control, select, textarea, [tabindex]:not([tabindex="-1"])');
             if (focusableElements.length > 0) {
                 focusableElements[0].focus();
-            } else {
-                this.settingList.current.focus();
             }
         }
 
