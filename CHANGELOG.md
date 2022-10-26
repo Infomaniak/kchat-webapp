@@ -1,3 +1,43 @@
+## 0.5.1 (2022-10-25)
+
+## Added (1 change)
+
+- [add user report button](kchat/webapp@2da5eded78b1db3a266ae23d54e9065b52abedf0) by @antonbuksa ([merge request](kchat/webapp!170))
+
+## Changed (1 change)
+
+- [change release script to send changelog to kchat instead of slack](kchat/webapp@40663bf88c9b331975babebbf6e6e49b292fd337) by @antonbuksa
+
+## 0.5.0 (2022-10-25)
+
+## Added (1 change)
+
+- [migrate mobile push notification settings to rhs](kchat/webapp@8ba1da9fa1b91350bc7ad9354aa0d6796803e024) by @antonbuksa ([merge request](kchat/webapp!168))
+
+## Fixed (3 changes)
+
+- [fix edit message translation](kchat/webapp@bdc641f95622604586edcce0435eed1745a8a528) by @leonard.jouve ([merge request](kchat/webapp!167))
+- [Fix select item settings](kchat/webapp@ab6a2772d2f078be0102bdd80f97c1751e59015b) by @leonard.jouve ([merge request](kchat/webapp!164))
+- [autofocus set status modal](kchat/webapp@0e06be40683a27a8461312a47a43f85f44b184a9) by @leonard.jouve ([merge request](kchat/webapp!163))
+
+## 0.4.12-rc.3 (2022-10-24)
+
+No changes.
+
+## 0.4.12-rc.2 (2022-10-24)
+
+No changes.
+
+## 0.4.12-rc.1 (2022-10-24)
+
+No changes.
+
+## 0.4.11-rc.3 (2022-10-21)
+
+## Fixed (1 change)
+
+- [dont call /leave on web beforeunload to fix rate limiting](kchat/webapp@7fe82683c4be03439337f740c0985f5af6586c19) by @antonbuksa
+
 ## 0.4.11-rc.2 (2022-10-21)
 
 No changes.

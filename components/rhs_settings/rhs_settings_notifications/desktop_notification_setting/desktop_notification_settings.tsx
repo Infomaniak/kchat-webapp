@@ -31,7 +31,6 @@ type Props = {
     active: boolean;
     saving: boolean;
     selectedSound: string;
-    isCollapsedThreadsEnabled: boolean;
 };
 
 type State = {
@@ -139,39 +138,40 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
     }
 
     createNotificationsForThread = (): JSX.Element | undefined => {
-        if (this.props.isCollapsedThreadsEnabled && NotificationLevels.MENTION === this.props.activity) {
-            const inputs = (
-                <Toggle
-                    id={name + 'childOption'}
-                    onToggle={() => this.handleThreadsOnChange(this.props.threads === NotificationLevels.ALL ? NotificationLevels.MENTION : NotificationLevels.ALL)}
-                    toggled={this.props.threads === NotificationLevels.ALL}
-                />
-            );
+        // if (NotificationLevels.MENTION === this.props.activity) {
+        const inputs = (
+            <Toggle
+                id={name + 'childOption'}
+                onToggle={() => this.handleThreadsOnChange(this.props.threads === NotificationLevels.ALL ? NotificationLevels.MENTION : NotificationLevels.ALL)}
+                toggled={this.props.threads === NotificationLevels.ALL}
+            />
+        );
 
-            return (
-                <RhsSettingsItem
-                    id='desktopNotificationThread'
-                    title={
-                        <FormattedMessage
-                            id='user.settings.notifications.threads.desktop'
-                            defaultMessage='Thread reply notifications'
-                        />
-                    }
-                    inputs={inputs}
-                    submit={this.props.submit}
-                    saving={this.props.saving}
-                    server_error={this.props.error}
-                    updateSection={this.handleMaxUpdateSection}
-                    messageDesc={
-                        <FormattedMessage
-                            id='user.settings.notifications.threads'
-                            defaultMessage="When enabled, any reply to a thread you're following will send a desktop notification."
-                        />
-                    }
-                />
-            );
-        }
-        return undefined;
+        return (
+            <RhsSettingsItem
+                id='desktopNotificationThread'
+                title={
+                    <FormattedMessage
+                        id='user.settings.notifications.threads.desktop'
+                        defaultMessage='Thread reply notifications'
+                    />
+                }
+                inputs={inputs}
+                submit={this.props.submit}
+                saving={this.props.saving}
+                server_error={this.props.error}
+                updateSection={this.handleMaxUpdateSection}
+                messageDesc={
+                    <FormattedMessage
+                        id='user.settings.notifications.threads'
+                        defaultMessage="When enabled, any reply to a thread you're following will send a desktop notification."
+                    />
+                }
+            />
+        );
+
+        // }
+        // return undefined;
     }
 
     createSoundToggleSection = (): JSX.Element | undefined => {

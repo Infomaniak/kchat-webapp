@@ -6,11 +6,17 @@ HALL OF FAME
 
 Leopold Jacquot, 2022 🏆
 
+nb. cela a marché...
+
 ## install + watch
 
 ```shell
 nvm use 16
-npm install
+yarm install
+yarn workspace @mattermost/types build
+yarn workspace @mattermost/client build
+yarn workspace @mattermost/components build
+yarn build:webapp
 ```
 
 ## run the project
