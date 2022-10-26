@@ -81,7 +81,9 @@ const Login = () => {
                 console.log('[LOGIN] Login with code');
             }
             const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
+
+            // const refreshToken = localStorage.getItem('IKRefreshToken');
+
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             if (token && tokenExpire && !checkIKTokenIsExpired()) {
@@ -97,10 +99,11 @@ const Login = () => {
                     },
                     window.origin,
                 );
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
+
+                // navigator.serviceWorker.controller?.postMessage({
+                //     type: 'TOKEN_REFRESHED',
+                //     token: token || '',
+                // });
 
                 LocalStorageStore.setWasLoggedIn(true);
                 GlobalActions.redirectUserToDefaultTeam();
@@ -151,6 +154,7 @@ const Login = () => {
             }
 
             if (hash) {
+                console.log('[LOGIN] Login with hash');
                 const hash2Obj = {};
                 // eslint-disable-next-line array-callback-return
                 hash.substring(1).split('&').map((hk) => {
@@ -164,10 +168,12 @@ const Login = () => {
                 return;
             }
 
-            if ((!token || !refreshToken || !tokenExpire) && !loginCode) {
-                console.log('[LOGIN] No token or code or token expired, redirect to login ik');
-                getChallengeAndRedirectToLogin();
-            }
+            // refreshIKToken(true) higher should handle this case
+            //
+            // if (!token || !refreshToken || !tokenExpire) {
+            //     console.log('[LOGIN] No token or token expired, redirect to login ik');
+            //     getChallengeAndRedirectToLogin();
+            // }
         }
 
         // Determine if the user was unexpectedly logged out.
