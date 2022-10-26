@@ -4172,10 +4172,11 @@ export default class Client4 {
                             },
                             window.origin,
                         );
-                        navigator.serviceWorker.controller?.postMessage({
-                            type: 'TOKEN_REFRESHED',
-                            token: response.access_token || '',
-                        });
+                        // navigator.serviceWorker.controller?.postMessage({
+                        //     type: 'TOKEN_REFRESHED',
+                        //     token: response.access_token || '',
+                        // });
+
                         localStorage.removeItem('refreshingToken');
                     }).catch(() => {
                         console.log('[TOKEN] fail refresh from client');
