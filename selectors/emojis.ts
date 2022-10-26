@@ -97,8 +97,8 @@ export function isCustomEmojiEnabled(state: GlobalState) {
     return config && config.EnableCustomEmoji === 'true';
 }
 
-export const getOneClickReactionEmojis = createSelector(
-    'getOneClickReactionEmojis',
+export const getRecentEmojisAsMap = createSelector(
+    'getRecentEmojisAsMap',
     getEmojiMap,
     getRecentEmojisNames,
     (emojiMap, recentEmojis: string[]) => {
@@ -108,7 +108,15 @@ export const getOneClickReactionEmojis = createSelector(
 
         return (recentEmojis).
             map((recentEmoji) => emojiMap.get(recentEmoji)).
-            filter(isDefined).
+            filter(isDefined);
+    },
+);
+
+export const getOneClickReactionEmojis = createSelector(
+    'getOneClickReactionEmojis',
+    getRecentEmojisAsMap,
+    (emojiMap) => {
+        return emojiMap.
             slice(-3).
             reverse();
     },

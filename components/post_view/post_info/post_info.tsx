@@ -28,6 +28,7 @@ import PostTime from 'components/post_view/post_time';
 import InfoSmallIcon from 'components/widgets/icons/info_small_icon';
 import PriorityLabel from 'components/post_priority/post_priority_label';
 import {Emoji} from '@mattermost/types/emojis';
+import {Reaction} from '@mattermost/types/reactions';
 
 type Props = {
 
@@ -151,6 +152,8 @@ type Props = {
 
     oneClickReactionsEnabled: boolean;
     recentEmojis: Emoji[];
+    currentUserId: string;
+    postReactions: Reaction[];
 };
 
 type State = {
@@ -274,11 +277,22 @@ export default class PostInfo extends React.PureComponent<Props, State> {
         const showRecentlyUsedReactions = !isMobile && !isSystemMessage && hover && !isReadOnly && this.props.oneClickReactionsEnabled && this.props.enableEmojiPicker;
         let showRecentReacions;
         if (showRecentlyUsedReactions) {
+            const recentEmojis = this.props.recentEmojis.filter((emoji) => {
+                let alreadyUsed = false;
+                for (const reaction of this.props.postReactions) {
+                    if ((reaction.emoji_name === emoji.short_name || reaction.emoji_name === emoji.name) && reaction.user_id === this.props.currentUserId) {
+                        alreadyUsed = true;
+                        break;
+                    }
+                }
+                return !alreadyUsed;
+            }).slice(-3).reverse();
+
             showRecentReacions = (
                 <PostRecentReactions
                     channelId={post.channel_id}
                     postId={post.id}
-                    emojis={this.props.recentEmojis}
+                    emojis={recentEmojis}
                     teamId={this.props.teamId!}
                     getDotMenuRef={this.getDotMenu}
                 />

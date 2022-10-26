@@ -29,10 +29,12 @@ import {Preferences} from 'utils/constants';
 import {shouldShowDotMenu, shouldShowActionsMenu} from 'utils/post_utils';
 import {getSelectedPostCard} from 'selectors/rhs';
 import {isThreadOpen} from 'selectors/views/threads';
-import {getShortcutReactToLastPostEmittedFrom, getOneClickReactionEmojis} from 'selectors/emojis';
+import {getShortcutReactToLastPostEmittedFrom, getRecentEmojisAsMap} from 'selectors/emojis';
 import {getIsPostBeingEdited} from '../../../selectors/posts';
 
 import PostInfo from './post_info';
+import {getCurrentUserId} from 'packages/mattermost-redux/src/selectors/entities/common';
+import {getReactionsForPosts} from 'mattermost-redux/selectors/entities/posts';
 
 type OwnProps = {
     post: Post;
@@ -64,7 +66,13 @@ function makeMapStateToProps() {
         let emojis: Emoji[] = [];
         const oneClickReactionsEnabled = get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.ONE_CLICK_REACTIONS_ENABLED, Preferences.ONE_CLICK_REACTIONS_ENABLED_DEFAULT) === 'true';
         if (oneClickReactionsEnabled) {
-            emojis = getOneClickReactionEmojis(state);
+            emojis = getRecentEmojisAsMap(state);
+        }
+        const currentUserId = getCurrentUserId(state);
+        let postReactions = [];
+        const reactions = getReactionsForPosts(state)[ownProps.post.id];
+        for (const key in reactions) {
+            postReactions.push(reactions[key]);
         }
 
         return {
@@ -85,6 +93,8 @@ function makeMapStateToProps() {
             oneClickReactionsEnabled,
             recentEmojis: emojis,
             isPostPriorityEnabled: isPostPriorityEnabled(state),
+            currentUserId,
+            postReactions,
         };
     };
 }
