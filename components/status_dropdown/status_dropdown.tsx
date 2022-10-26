@@ -410,7 +410,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                 onToggle={this.onToggle}
                 open={this.props.isStatusDropdownOpen}
                 className={classNames('status-dropdown-menu status-dropdown-menu-global-header', {
-                    active: this.props.isStatusDropdownOpen || isStatusSet,
+                    active: this.props.isStatusDropdownOpen,
                 })}
             >
                 <div className='status-wrapper'>

@@ -129,7 +129,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
             cancelButton = (
                 <button
                     type='button'
-                    className={classNames('GenericModal__button cancel', this.props.cancelButtonClassName)}
+                    className={classNames('GenericModal__button cancel secondary', this.props.cancelButtonClassName)}
                     onClick={this.handleCancel}
                 >
                     {cancelButtonText}

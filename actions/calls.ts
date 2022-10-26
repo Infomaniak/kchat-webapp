@@ -162,7 +162,6 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                 });
             };
             window.onParticipantJoined = (msg: {id: string; displayName: string}) => {
-                // console.log(msg);
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_PROFILE_CONNECTED,
                     data: {
@@ -218,7 +217,9 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
 
             switch (type) {
             case 'call-closed': {
-                Client4.leaveMeet(message.id);
+                if (connectedCallID(getState())) {
+                    Client4.leaveMeet(message.id);
+                }
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
                     data: {

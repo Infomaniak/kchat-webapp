@@ -364,6 +364,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                         </button>
                     </div>
                     <QuickInput
+                        autoFocus={true}
                         inputComponent={MaxLengthInput}
                         value={text}
                         maxLength={CUSTOM_STATUS_TEXT_CHARACTER_LIMIT}

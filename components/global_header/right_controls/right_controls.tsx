@@ -7,6 +7,8 @@ import styled from 'styled-components';
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
 
+import {FormattedMessage} from 'react-intl';
+
 import Pluggable from 'plugins/pluggable';
 import {
     CustomizeYourExperienceTour,
@@ -16,6 +18,14 @@ import {
 import StatusDropdown from 'components/status_dropdown';
 
 import {isDesktopApp} from 'utils/user_agent';
+
+import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
+
+import Tooltip from 'components/tooltip';
+
+import OverlayTrigger from 'components/overlay_trigger';
+
+import Constants from 'utils/constants';
 
 import AtMentionsButton from './at_mentions_button/at_mentions_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';
@@ -58,6 +68,15 @@ const RightControlsContainer = styled.div`
 export type Props = {
     productId?: string | null;
 }
+
+const tooltipUserReport = (
+    <Tooltip id='userReport'>
+        <FormattedMessage
+            id='global_header.userReport'
+            defaultMessage='Feedback'
+        />
+    </Tooltip>
+);
 
 const RightControls = ({productId = null}: Props): JSX.Element => {
     const showCustomizeTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CUSTOMIZE_EXPERIENCE);
@@ -119,6 +138,26 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     <module-reporting-tools-component size='26'></module-reporting-tools-component>
                 </div>
             )}
+            <OverlayTrigger
+                trigger={['hover', 'focus']}
+                delayShow={Constants.OVERLAY_TIME_DELAY}
+                placement='bottom'
+                overlay={tooltipUserReport}
+            >
+                <a
+                    className='header-icon grey'
+                    style={{height: 45, width: 42, display: 'flex', justifyContent: 'center', alignItems: 'center', textDecoration: 'none'}}
+                    target='_blank'
+                    href='https://feedback.userreport.com/268b466f-3601-4873-853a-9bf3afc3410e/#ideas/recent'
+                    rel='noreferrer'
+                >
+                    <img
+                        style={{width: 21, height: 21, marginTop: 2}}
+                        src={imagePath}
+                        alt='User Feedback'
+                    />
+                </a>
+            </OverlayTrigger>
             <StatusDropdown/>
         </RightControlsContainer>
     );
