@@ -136,10 +136,11 @@ const Login = () => {
                         },
                         window.origin,
                     );
-                    navigator.serviceWorker.controller?.postMessage({
-                        type: 'TOKEN_REFRESHED',
-                        token: resp.access_token || '',
-                    });
+
+                    // navigator.serviceWorker.controller?.postMessage({
+                    //     type: 'TOKEN_REFRESHED',
+                    //     token: resp.access_token || '',
+                    // });
                     finishSignin();
                 }).catch((error) => {
                     console.log('[TOKEN] post token fail', error);
