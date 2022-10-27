@@ -1,3 +1,9 @@
+## 0.5.3 (2022-10-27)
+
+## Changed (1 change)
+
+- [small tweak in login useeffect](kchat/webapp@6c959103ef0a22a4f0c18926df1cfb8bda603ba9) by @antonbuksa
+
 ## 0.5.2 (2022-10-27)
 
 ## Fixed (5 changes)
