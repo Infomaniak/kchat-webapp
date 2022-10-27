@@ -56,7 +56,7 @@ type Props = {
 const markdownPreviewOptions = {
     singleline: true,
     mentionHighlight: false,
-    atMentions: false,
+    atMentions: true,
 };
 
 function ThreadItem({

@@ -41,7 +41,7 @@ const STANDARD_EXCLUDE = [
 ];
 
 // react-hot-loader and development source maps require eval
-const CSP_UNSAFE_EVAL_IF_DEV = DEV ? ' \'unsafe-eval\'' : '';
+const CSP_UNSAFE_EVAL_IF_DEV = ' \'unsafe-eval\'';
 const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
 
 var MYSTATS = {
@@ -305,6 +305,7 @@ var config = {
     plugins: [
         new webpack.ProvidePlugin({
             process: 'process/browser',
+            crypto: 'crypto-browserify',
         }),
         new webpack.DefinePlugin({
             COMMIT_HASH: JSON.stringify(childProcess.execSync('git rev-parse HEAD || echo dev').toString()),

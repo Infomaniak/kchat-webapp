@@ -31,23 +31,23 @@ interface Props {
 const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, leaveCallInChannel}: Props) => {
     const client = window;
 
-    window.addEventListener('beforeunload', (e) => {
-        window.postMessage(
-            {
-                type: 'window-will-unloaded',
-            },
-            window.origin,
-        );
-        if (hasCall && connectedID === post.props.conference_id && !post.props.end_at) {
-            e.stopPropagation();
-            e.preventDefault();
-            leaveCallInChannel(post.channel_id, connectedID).then(() => {
-                if (client.executeCommand) {
-                    client.executeCommand('hangup');
-                }
-            });
-        }
-    });
+    // window.addEventListener('beforeunload', (e) => {
+    //     window.postMessage(
+    //         {
+    //             type: 'window-will-unloaded',
+    //         },
+    //         window.origin,
+    //     );
+    //     if (hasCall && connectedID === post.props.conference_id && !post.props.end_at) {
+    //         e.stopPropagation();
+    //         e.preventDefault();
+    //         leaveCallInChannel(post.channel_id, connectedID).then(() => {
+    //             if (client.executeCommand) {
+    //                 client.executeCommand('hangup');
+    //             }
+    //         });
+    //     }
+    // });
 
     const onJoinCallClick = () => {
         onJoinCall(post.channel_id);

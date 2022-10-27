@@ -4172,16 +4172,18 @@ export default class Client4 {
                             },
                             window.origin,
                         );
-                        navigator.serviceWorker.controller?.postMessage({
-                            type: 'TOKEN_REFRESHED',
-                            token: response.access_token || '',
-                        });
+                        // navigator.serviceWorker.controller?.postMessage({
+                        //     type: 'TOKEN_REFRESHED',
+                        //     token: response.access_token || '',
+                        // });
+
                         localStorage.removeItem('refreshingToken');
                     }).catch(() => {
                         console.log('[TOKEN] fail refresh from client');
                         localStorage.removeItem('refreshingToken');
                         this.clearLocalStorageToken();
-                        this.getChallengeAndRedirectToLogin();
+
+                        // this.getChallengeAndRedirectToLogin();
                     });
                 }
             }
@@ -4219,7 +4221,7 @@ export default class Client4 {
         throw new ClientError(this.getUrl(), {
             message: msg,
             server_error_id: data.id,
-            status_code: data.status_code,
+            status_code: data.status_code ? data.status_code : response.status,
             url,
         });
     };

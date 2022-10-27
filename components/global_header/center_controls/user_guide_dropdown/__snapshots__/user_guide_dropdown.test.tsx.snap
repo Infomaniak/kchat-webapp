@@ -29,15 +29,18 @@ exports[`components/channel_header/components/UserGuideDropdown should match sna
       ]
     }
   >
-    <ForwardRef
-      active={false}
-      aria-label="Select to toggle the help menu."
-      compact={true}
-      icon="help-circle-outline"
-      inverted={true}
-      onClick={[Function]}
-      size="sm"
-    />
+    <Icon>
+      <ForwardRef
+        active={false}
+        aria-label="Select to toggle the help menu."
+        className="icon-button"
+        compact={true}
+        icon="help-circle-outline"
+        inverted={true}
+        onClick={[Function]}
+        size="sm"
+      />
+    </Icon>
   </OverlayTrigger>
   <Menu
     ariaLabel="Add Channel Dropdown"
@@ -86,15 +89,18 @@ exports[`components/channel_header/components/UserGuideDropdown should match sna
       ]
     }
   >
-    <ForwardRef
-      active={false}
-      aria-label="Select to toggle the help menu."
-      compact={true}
-      icon="help-circle-outline"
-      inverted={true}
-      onClick={[Function]}
-      size="sm"
-    />
+    <Icon>
+      <ForwardRef
+        active={false}
+        aria-label="Select to toggle the help menu."
+        className="icon-button"
+        compact={true}
+        icon="help-circle-outline"
+        inverted={true}
+        onClick={[Function]}
+        size="sm"
+      />
+    </Icon>
   </OverlayTrigger>
   <Menu
     ariaLabel="Add Channel Dropdown"
@@ -143,15 +149,18 @@ exports[`components/channel_header/components/UserGuideDropdown should match sna
       ]
     }
   >
-    <ForwardRef
-      active={false}
-      aria-label="Select to toggle the help menu."
-      compact={true}
-      icon="help-circle-outline"
-      inverted={true}
-      onClick={[Function]}
-      size="sm"
-    />
+    <Icon>
+      <ForwardRef
+        active={false}
+        aria-label="Select to toggle the help menu."
+        className="icon-button"
+        compact={true}
+        icon="help-circle-outline"
+        inverted={true}
+        onClick={[Function]}
+        size="sm"
+      />
+    </Icon>
   </OverlayTrigger>
   <Menu
     ariaLabel="Add Channel Dropdown"
