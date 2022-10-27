@@ -155,8 +155,13 @@ export default class SubMenuItem extends React.PureComponent<Props, State> {
         const hasSubmenu = subMenu && subMenu.length;
         const subMenuStyle: CSSProperties = {
             visibility: (this.state.show && hasSubmenu && !isMobile ? 'visible' : 'hidden') as 'visible' | 'hidden',
-            top: this.node && this.node.current ? String(this.node.current.offsetTop) + 'px' : 'unset',
         };
+        if (this.props.openUp && !isMobile) {
+            subMenuStyle.bottom = this.node && this.node.current ? String(this.node.current.offsetTop) + 'px' : 'unset';
+            subMenuStyle.top = 'auto';
+        } else {
+            subMenuStyle.top = this.node && this.node.current ? String(this.node.current.offsetTop) + 'px' : 'unset';
+        }
 
         const menuOffset = '100%';
         if (direction === 'left') {
