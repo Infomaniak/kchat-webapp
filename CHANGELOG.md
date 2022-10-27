@@ -1,3 +1,25 @@
+## 0.5.2 (2022-10-27)
+
+## Fixed (5 changes)
+
+- [fix: close navbar on small screen](kchat/webapp@712db0d1fa0771ae75fd296a6e3721f17dd95799) by @leonard.jouve ([merge request](kchat/webapp!176))
+- [fix: open submenu up or down](kchat/webapp@7f2386f86e5603b26a69e7ca759ecf586f01ace9) by @leonard.jouve ([merge request](kchat/webapp!173))
+- [automatically scroll to the top of the settings](kchat/webapp@100166014c78fdcd3916c3f92dfc867225e6b060) by @leonard.jouve ([merge request](kchat/webapp!171))
+- [fix add custom emoji name invalid translation](kchat/webapp@83f9d58c4cb3543673fd96ae46423864cdf76331) by @leonard.jouve ([merge request](kchat/webapp!169))
+- [fix file preview](kchat/webapp@cf140043b70d2fd12198423e02eb08914ceb489b) by @leonard.jouve ([merge request](kchat/webapp!160))
+
+## Changed (1 change)
+
+- [change release script to send changelog to kchat instead of slack](kchat/webapp@e4c879bd382a35750ced7e760b03286222937586) by @antonbuksa
+
+## Removed (1 change)
+
+- [remove team settings from main menu](kchat/webapp@ae03ed2363fcb4b6487460178709ab3769f041ea) by @leonard.jouve ([merge request](kchat/webapp!175))
+
+## remove (1 change)
+
+- [remove team settings](kchat/webapp@2272dba4c47ec9312fb11b9d26dfc4dd2c0c2920) by @leonard.jouve ([merge request](kchat/webapp!175))
+
 ## 0.5.1 (2022-10-25)
 
 ## Added (1 change)
