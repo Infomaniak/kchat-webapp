@@ -404,7 +404,7 @@ export class MainMenu extends React.PureComponent<Props> {
                     >
                         {invitePeopleModal}
                     </TeamPermissionGate> */}
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
@@ -414,7 +414,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             dialogType={TeamSettingsModal}
                             text={formatMessage({id: 'navbar_dropdown.teamSettings', defaultMessage: 'Team Settings'})}
                         />
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
