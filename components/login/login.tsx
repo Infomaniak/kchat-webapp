@@ -81,9 +81,7 @@ const Login = () => {
                 console.log('[LOGIN] Login with code');
             }
             const token = localStorage.getItem('IKToken');
-
-            // const refreshToken = localStorage.getItem('IKRefreshToken');
-
+            const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             if (token && tokenExpire && !checkIKTokenIsExpired()) {
@@ -113,6 +111,11 @@ const Login = () => {
             if (tokenExpire && checkIKTokenIsExpired()) {
                 refreshIKToken(true);
                 return;
+            }
+
+            if (!localStorage.getItem('IKToken') || !localStorage.getItem('IKRefreshToken') || !localStorage.getItem('IKTokenExpire')) {
+                console.log('[LOGIN] No token or token expired, redirect to login ik');
+                getChallengeAndRedirectToLogin();
             }
 
             if (loginCode) {
@@ -148,7 +151,8 @@ const Login = () => {
                 }).catch((error) => {
                     console.log('[TOKEN] post token fail', error);
                     clearLocalStorageToken();
-                    getChallengeAndRedirectToLogin();
+
+                    // getChallengeAndRedirectToLogin();
                 });
                 return;
             }
@@ -167,13 +171,6 @@ const Login = () => {
 
                 return;
             }
-
-            // refreshIKToken(true) higher should handle this case
-            //
-            // if (!token || !refreshToken || !tokenExpire) {
-            //     console.log('[LOGIN] No token or token expired, redirect to login ik');
-            //     getChallengeAndRedirectToLogin();
-            // }
         }
 
         // Determine if the user was unexpectedly logged out.
