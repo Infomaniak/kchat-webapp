@@ -6,12 +6,7 @@
 
 import React, {useEffect, useRef} from 'react';
 
-// import {useIntl} from 'react-intl';
-
-// import {useDispatch, useSelector} from 'react-redux';
 import {useSelector} from 'react-redux';
-
-import {useLocation} from 'react-router-dom';
 
 import * as GlobalActions from 'actions/global_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
@@ -19,9 +14,10 @@ import LoadingIk from 'components/loading_ik';
 
 // import LoadingScreen from 'components/loading_screen';
 import {RequestStatus} from 'mattermost-redux/constants';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
-import {getMyTeamMember, getTeamByName} from 'mattermost-redux/selectors/entities/teams';
+
+// import {getConfig} from 'mattermost-redux/selectors/entities/general';
+// import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
+// import {getMyTeamMember, getTeamByName} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
 import LocalStorageStore from 'stores/local_storage_store';
@@ -30,21 +26,23 @@ import {GlobalState} from 'types/store';
 import {isDesktopApp} from 'utils/user_agent';
 
 import './login.scss';
-import {setCSRFFromCookie} from 'utils/utils';
+
+// import {setCSRFFromCookie} from 'utils/utils';
 
 import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from './utils';
 
 const Login = () => {
-    const {search} = useLocation();
+    // const {
+    //     ExperimentalPrimaryTeam,
+    // } = useSelector(getConfig);
 
-    const {
-        ExperimentalPrimaryTeam,
-    } = useSelector(getConfig);
     const initializing = useSelector((state: GlobalState) => state.requests.users.logout.status === RequestStatus.SUCCESS || !state.storage.initialized);
     const currentUser = useSelector(getCurrentUser);
-    const experimentalPrimaryTeam = useSelector((state: GlobalState) => (ExperimentalPrimaryTeam ? getTeamByName(state, ExperimentalPrimaryTeam) : undefined));
-    const experimentalPrimaryTeamMember = useSelector((state: GlobalState) => getMyTeamMember(state, experimentalPrimaryTeam?.id ?? ''));
-    const useCaseOnboarding = useSelector(getUseCaseOnboarding);
+
+    // const experimentalPrimaryTeam = useSelector((state: GlobalState) => (ExperimentalPrimaryTeam ? getTeamByName(state, ExperimentalPrimaryTeam) : undefined));
+
+    // const experimentalPrimaryTeamMember = useSelector((state: GlobalState) => getMyTeamMember(state, experimentalPrimaryTeam?.id ?? ''));
+    // const useCaseOnboarding = useSelector(getUseCaseOnboarding);
 
     // const isCloud = useSelector(isCurrentLicenseCloud);
     // const graphQLEnabled = useSelector(isGraphQLEnabled);
@@ -116,32 +114,33 @@ const Login = () => {
         return (<LoadingIk/>);
     }
 
-    const finishSignin = (team?: Team) => {
-        const query = new URLSearchParams(search);
-        const redirectTo = query.get('redirect_to');
+    // const finishSignin = (team?: Team) => {
+    //     const query = new URLSearchParams(search);
+    //     const redirectTo = query.get('redirect_to');
 
-        setCSRFFromCookie();
+    //     setCSRFFromCookie();
 
-        // Record a successful login to local storage. If an unintentional logout occurs, e.g.
-        // via session expiration, this bit won't get reset and we can notify the user as such.
-        LocalStorageStore.setWasLoggedIn(true);
-        if (redirectTo && redirectTo.match(/^\/([^/]|$)/)) {
-            history.push(redirectTo);
-        } else if (team) {
-            history.push(`/${team.name}`);
-        } else if (experimentalPrimaryTeamMember.team_id) {
-            // Only set experimental team if user is on that team
-            history.push(`/${ExperimentalPrimaryTeam}`);
-        } else if (useCaseOnboarding) {
-            // need info about whether admin or not,
-            // and whether admin has already completed
-            // first time onboarding. Instead of fetching and orchestrating that here,
-            // let the default root component handle it.
-            history.push('/');
-        } else {
-            redirectUserToDefaultTeam();
-        }
-    };
+    //     // Record a successful login to local storage. If an unintentional logout occurs, e.g.
+    //     // via session expiration, this bit won't get reset and we can notify the user as such.
+    //     LocalStorageStore.setWasLoggedIn(true);
+    //     if (redirectTo && redirectTo.match(/^\/([^/]|$)/)) {
+    //         history.push(redirectTo);
+    //     } else if (team) {
+    //         history.push(`/${team.name}`);
+    //     } else if (experimentalPrimaryTeamMember.team_id) {
+    //         // Only set experimental team if user is on that team
+    //         history.push(`/${ExperimentalPrimaryTeam}`);
+    //     } else if (useCaseOnboarding) {
+    //         // need info about whether admin or not,
+    //         // and whether admin has already completed
+    //         // first time onboarding. Instead of fetching and orchestrating that here,
+    //         // let the default root component handle it.
+    //         history.push('/');
+    //     } else {
+    //         redirectUserToDefaultTeam();
+    //     }
+    // };
+
     const getContent = () => {
         return (<LoadingIk/>);
     };
