@@ -399,7 +399,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         if (isDesktopApp()) {
-            const loginCode = (new URLSearchParams(window.location.search)).get('code');
+            const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
             if (loginCode) {
                 console.log('[LOGIN] Login with code');
             }
@@ -437,12 +437,9 @@ export default class Root extends React.PureComponent<Props, State> {
 
                     // clearLocalStorageToken();
                 });
-            }
-            if (token) {
-                this.runMounted();
                 return;
             }
-            this.props.history.push('/login' + this.props.location.search);
+            this.runMounted();
         } else {
             this.runMounted();
         }
