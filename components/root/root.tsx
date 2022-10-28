@@ -176,35 +176,35 @@ export default class Root extends React.PureComponent<Props, State> {
         // Redux
         setUrl(getSiteURL());
 
-        if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
+        // if (isDesktopApp()) {
+        //     const token = localStorage.getItem('IKToken');
+        //     const refreshToken = localStorage.getItem('IKRefreshToken');
+        //     const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-            // Enable authHeader and set bearer token
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                LocalStorageStore.setWasLoggedIn(true);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token,
-                        },
-                    },
-                    window.origin,
-                );
-            }
+        //     // Enable authHeader and set bearer token
+        //     if (token && tokenExpire && !checkIKTokenIsExpired()) {
+        //         Client4.setAuthHeader = true;
+        //         Client4.setToken(token);
+        //         Client4.setCSRF(token);
+        //         LocalStorageStore.setWasLoggedIn(true);
+        //         window.postMessage(
+        //             {
+        //                 type: 'token-refreshed',
+        //                 message: {
+        //                     token,
+        //                 },
+        //             },
+        //             window.origin,
+        //         );
+        //     }
 
-            if (!token && !refreshToken) {
-                console.log('[TOKEN] No token, redirect to login 1');
-                this.props.history.push('/login' + this.props.location.search);
-            }
-        } else {
-            Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
-        }
+        //     if (!token && !refreshToken) {
+        //         console.log('[TOKEN] No token, redirect to login 1');
+        //         this.props.history.push('/login' + this.props.location.search);
+        //     }
+        // } else {
+        //     Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
+        // }
 
         setSystemEmojis(new Set(EmojiIndicesByAlias.keys()));
 
@@ -436,38 +436,38 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
+        // if (isDesktopApp()) {
+        //     const token = localStorage.getItem('IKToken');
+        //     const refreshToken = localStorage.getItem('IKRefreshToken');
+        //     const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-            // Enable authHeader and set bearer token
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                LocalStorageStore.setWasLoggedIn(true);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token,
-                        },
-                    },
-                    window.origin,
-                );
-            }
+        //     // Enable authHeader and set bearer token
+        //     if (token && tokenExpire && !checkIKTokenIsExpired()) {
+        //         Client4.setAuthHeader = true;
+        //         Client4.setToken(token);
+        //         Client4.setCSRF(token);
+        //         LocalStorageStore.setWasLoggedIn(true);
+        //         window.postMessage(
+        //             {
+        //                 type: 'token-refreshed',
+        //                 message: {
+        //                     token,
+        //                 },
+        //             },
+        //             window.origin,
+        //         );
+        //     }
 
-            // If need to refresh the token
-            // if (tokenExpire && checkIKTokenIsExpired()) {
-            //     refreshIKToken(true);
-            // }
+        //     // If need to refresh the token
+        //     // if (tokenExpire && checkIKTokenIsExpired()) {
+        //     //     refreshIKToken(true);
+        //     // }
 
-            if (!token && !refreshToken) {
-                console.log('[TOKEN] No token, redirect to login 3');
-                this.props.history.push('/login' + this.props.location.search);
-            }
-        }
+        //     if (!token && !refreshToken) {
+        //         console.log('[TOKEN] No token, redirect to login 3');
+        //         this.props.history.push('/login' + this.props.location.search);
+        //     }
+        // }
 
         // }
         this.mounted = true;
