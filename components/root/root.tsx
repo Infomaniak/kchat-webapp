@@ -399,7 +399,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         if (isDesktopApp()) {
-            const loginCode = (new URLSearchParams(search)).get('code');
+            const loginCode = (new URLSearchParams(window.location.search)).get('code');
             if (loginCode) {
                 console.log('[LOGIN] Login with code');
             }
