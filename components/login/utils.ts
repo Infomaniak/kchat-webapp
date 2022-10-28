@@ -81,7 +81,7 @@ export async function generateCodeChallenge(codeVerifier: string) {
  * get code_challenge and redirect to IK Login
  */
 export function getChallengeAndRedirectToLogin() {
-    const redirectTo = window.location.origin.endsWith('/') ? `${window.location.origin}login` : `${window.location.origin}/login`;
+    const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
     // const redirectTo = 'ktalk://auth-desktop';
     const codeVerifier = getCodeVerifier();
     let codeChallenge = '';

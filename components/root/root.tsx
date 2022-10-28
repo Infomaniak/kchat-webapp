@@ -74,13 +74,15 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenIsExpired, refreshIKToken} from '../login/utils';
+import {checkIKTokenIsExpired, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 
 import {ActionResult} from 'mattermost-redux/types/actions';
 
 import ErrorBoundary from '../error_page/error-boudaries';
+
+import {IKConstants} from 'utils/constants-ik';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -178,7 +180,6 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
-            // const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             // Enable authHeader and set bearer token
@@ -197,11 +198,6 @@ export default class Root extends React.PureComponent<Props, State> {
                     window.origin,
                 );
             }
-
-            // // If need to refresh the token
-            // if ((tokenExpire && checkIKTokenIsExpired()) || !token || !refreshToken) {
-            //     this.props.history.push('/login' + this.props.location.search);
-            // }
         } else {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
@@ -403,26 +399,49 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         if (isDesktopApp()) {
+            const loginCode = (new URLSearchParams(search)).get('code');
+            if (loginCode) {
+                console.log('[LOGIN] Login with code');
+            }
             const token = localStorage.getItem('IKToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-            // Enable authHeader and set bearer token
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                LocalStorageStore.setWasLoggedIn(true);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token,
+            if (!token && loginCode && localStorage.getItem('tokenExpired') === '1') {
+                const challenge = JSON.parse(localStorage.getItem('challenge') as string);
+
+                // Get token
+                Client4.getIKLoginToken(
+                    loginCode,
+                    challenge?.challenge,
+                    challenge?.verifier,
+                    `${IKConstants.LOGIN_URL}`,
+                    `${IKConstants.CLIENT_ID}`,
+                ).then((resp: any) => {
+                    storeTokenResponse(resp);
+                    localStorage.removeItem('challenge');
+                    localStorage.setItem('tokenExpired', '0');
+                    LocalStorageStore.setWasLoggedIn(true);
+                    window.postMessage(
+                        {
+                            type: 'token-refreshed',
+                            message: {
+                                token: resp.access_token,
+                            },
                         },
-                    },
-                    window.origin,
-                );
+                        window.origin,
+                    );
+                    this.runMounted();
+                }).catch((error: any) => {
+                    console.log('[TOKEN] post token fail', error);
+                    localStorage.setItem('tokenExpired', '0');
+                    this.props.history.push('/login' + this.props.location.search);
+
+                    // clearLocalStorageToken();
+                });
             }
         }
+    }
+
+    runMounted = () => {
         this.mounted = true;
 
         this.initiateMeRequests();

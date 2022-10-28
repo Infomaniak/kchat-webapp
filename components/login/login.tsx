@@ -18,7 +18,6 @@ import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
 
 // import LoadingScreen from 'components/loading_screen';
-import {Client4} from 'mattermost-redux/client';
 import {RequestStatus} from 'mattermost-redux/constants';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
@@ -32,7 +31,6 @@ import {isDesktopApp} from 'utils/user_agent';
 
 import './login.scss';
 import {setCSRFFromCookie} from 'utils/utils';
-import {IKConstants} from 'utils/constants-ik';
 
 import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from './utils';
 
@@ -66,75 +64,39 @@ const Login = () => {
         }
 
         if (isDesktopApp()) {
-            const loginCode = (new URLSearchParams(search)).get('code');
-            if (loginCode) {
-                console.log('[LOGIN] Login with code');
-            }
             const token = localStorage.getItem('IKToken');
 
             if (token && localStorage.getItem('IKTokenExpire') && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token,
-                        },
-                    },
-                    window.origin,
-                );
+                // Client4.setAuthHeader = true;
+                // Client4.setToken(token);
+                // Client4.setCSRF(token);
+                // window.postMessage(
+                //     {
+                //         type: 'token-refreshed',
+                //         message: {
+                //             token,
+                //         },
+                //     },
+                //     window.origin,
+                // );
 
-                LocalStorageStore.setWasLoggedIn(true);
+                // LocalStorageStore.setWasLoggedIn(true);
+
                 GlobalActions.redirectUserToDefaultTeam();
             }
 
             // If need to refresh the token
             if ((localStorage.getItem('IKTokenExpire') && checkIKTokenIsExpired()) || (localStorage.getItem('IKRefreshToken') && !token)) {
                 refreshIKToken(true);
-
-                return;
-            }
-
-            if (!token && loginCode && localStorage.getItem('tokenExpired') === '1') {
-                const challenge = JSON.parse(localStorage.getItem('challenge') as string);
-
-                // Get token
-                Client4.getIKLoginToken(
-                    loginCode,
-                    challenge?.challenge,
-                    challenge?.verifier,
-                    `${IKConstants.LOGIN_URL}`,
-                    `${IKConstants.CLIENT_ID}`,
-                ).then((resp: any) => {
-                    storeTokenResponse(resp);
-                    localStorage.removeItem('challenge');
-                    localStorage.setItem('tokenExpired', '0');
-                    LocalStorageStore.setWasLoggedIn(true);
-                    window.postMessage(
-                        {
-                            type: 'token-refreshed',
-                            message: {
-                                token: resp.access_token,
-                            },
-                        },
-                        window.origin,
-                    );
-
-                    finishSignin();
-                }).catch((error: any) => {
-                    console.log('[TOKEN] post token fail', error);
-                    localStorage.setItem('tokenExpired', '0');
-
-                    // clearLocalStorageToken();
-                });
-            }
-
-            if (!localStorage.getItem('IKToken') || !localStorage.getItem('IKRefreshToken') || !localStorage.getItem('IKTokenExpire')) {
+            } else {
                 clearLocalStorageToken();
                 getChallengeAndRedirectToLogin();
             }
+
+            // if (!localStorage.getItem('IKToken') || !localStorage.getItem('IKRefreshToken') || !localStorage.getItem('IKTokenExpire')) {
+            //     clearLocalStorageToken();
+            //     getChallengeAndRedirectToLogin();
+            // }
         }
     }, []);
 
