@@ -334,40 +334,6 @@ export default class Root extends React.PureComponent<Props, State> {
             BrowserStore.setLandingPageSeen(true);
         }
 
-        if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
-
-            // const tokenExpireIn = (1000 * tokenExpire) - Date.now();
-
-            // Enable authHeader and set bearer token
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                LocalStorageStore.setWasLoggedIn(true);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token,
-                        },
-                    },
-                    window.origin,
-                );
-
-                // Set a callback to refresh token a little while before it expires
-                // Don't need this, /login should handle it syncronously when requests start to 403
-                // setTimeout(refreshIKToken, tokenExpireIn - REFRESH_TOKEN_TIME_MARGIN, false, true);
-            }
-
-            if (!token && !refreshToken) {
-                console.log('[TOKEN] No token, redirect to login 2');
-                this.props.history.push('/login' + this.props.location.search);
-            }
-        }
-
         Utils.applyTheme(this.props.theme);
     }
 
@@ -436,40 +402,39 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        // if (isDesktopApp()) {
-        //     const token = localStorage.getItem('IKToken');
-        //     const refreshToken = localStorage.getItem('IKRefreshToken');
-        //     const tokenExpire = localStorage.getItem('IKTokenExpire');
+        if (isDesktopApp()) {
+            const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
 
-        //     // Enable authHeader and set bearer token
-        //     if (token && tokenExpire && !checkIKTokenIsExpired()) {
-        //         Client4.setAuthHeader = true;
-        //         Client4.setToken(token);
-        //         Client4.setCSRF(token);
-        //         LocalStorageStore.setWasLoggedIn(true);
-        //         window.postMessage(
-        //             {
-        //                 type: 'token-refreshed',
-        //                 message: {
-        //                     token,
-        //                 },
-        //             },
-        //             window.origin,
-        //         );
-        //     }
+            //     const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-        //     // If need to refresh the token
-        //     // if (tokenExpire && checkIKTokenIsExpired()) {
-        //     //     refreshIKToken(true);
-        //     // }
+            //     // Enable authHeader and set bearer token
+            //     if (token && tokenExpire && !checkIKTokenIsExpired()) {
+            //         Client4.setAuthHeader = true;
+            //         Client4.setToken(token);
+            //         Client4.setCSRF(token);
+            //         LocalStorageStore.setWasLoggedIn(true);
+            //         window.postMessage(
+            //             {
+            //                 type: 'token-refreshed',
+            //                 message: {
+            //                     token,
+            //                 },
+            //             },
+            //             window.origin,
+            //         );
+            //     }
 
-        //     if (!token && !refreshToken) {
-        //         console.log('[TOKEN] No token, redirect to login 3');
-        //         this.props.history.push('/login' + this.props.location.search);
-        //     }
-        // }
+            //     // If need to refresh the token
+            //     // if (tokenExpire && checkIKTokenIsExpired()) {
+            //     //     refreshIKToken(true);
+            //     // }
 
-        // }
+            if (!token && !refreshToken) {
+                console.log('[TOKEN] No token, redirect to login 3');
+                this.props.history.push('/login' + this.props.location.search);
+            }
+        }
         this.mounted = true;
 
         this.initiateMeRequests();
