@@ -16,8 +16,8 @@ import {useHistory, useLocation} from 'react-router-dom';
 import * as GlobalActions from 'actions/global_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
-import LoadingScreen from 'components/loading_screen';
 
+// import LoadingScreen from 'components/loading_screen';
 import {Client4} from 'mattermost-redux/client';
 import {RequestStatus} from 'mattermost-redux/constants';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
@@ -39,15 +39,8 @@ import {Team} from '@mattermost/types/teams';
 import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from './utils';
 
 const Login = () => {
-    // const {formatMessage} = useIntl();
-    // const dispatch = useDispatch<DispatchFunc>();
     const history = useHistory();
-    const {pathname, search, hash} = useLocation();
-
-    const searchParam = new URLSearchParams(search);
-    const extraParam = searchParam.get('extra');
-
-    // const emailParam = searchParam.get('email');
+    const {search, hash} = useLocation();
 
     const {
         ExperimentalPrimaryTeam,
@@ -81,10 +74,8 @@ const Login = () => {
                 console.log('[LOGIN] Login with code');
             }
             const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
+            if (token && localStorage.getItem('IKTokenExpire') && !checkIKTokenIsExpired()) {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
@@ -98,24 +89,20 @@ const Login = () => {
                     window.origin,
                 );
 
-                // navigator.serviceWorker.controller?.postMessage({
-                //     type: 'TOKEN_REFRESHED',
-                //     token: token || '',
-                // });
-
                 LocalStorageStore.setWasLoggedIn(true);
                 GlobalActions.redirectUserToDefaultTeam();
             }
 
-            // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
+            if (!token || !localStorage.getItem('IKRefreshToken') || !localStorage.getItem('IKTokenExpire')) {
+                clearLocalStorageToken();
+                getChallengeAndRedirectToLogin();
+
                 return;
             }
 
-            if (!localStorage.getItem('IKToken') || !localStorage.getItem('IKRefreshToken') || !localStorage.getItem('IKTokenExpire')) {
-                console.log('[LOGIN] No token or token expired, redirect to login ik');
-                getChallengeAndRedirectToLogin();
+            // If need to refresh the token
+            if (localStorage.getItem('IKTokenExpire') && checkIKTokenIsExpired()) {
+                refreshIKToken(true);
             }
 
             if (loginCode) {
@@ -150,9 +137,8 @@ const Login = () => {
                     finishSignin();
                 }).catch((error) => {
                     console.log('[TOKEN] post token fail', error);
-                    clearLocalStorageToken();
 
-                    // getChallengeAndRedirectToLogin();
+                    // clearLocalStorageToken();
                 });
                 return;
             }
@@ -168,30 +154,8 @@ const Login = () => {
                 storeTokenResponse(hash2Obj);
                 LocalStorageStore.setWasLoggedIn(true);
                 finishSignin();
-
-                return;
             }
         }
-
-        // Determine if the user was unexpectedly logged out.
-        if (LocalStorageStore.getWasLoggedIn()) {
-            if (extraParam === Constants.SIGNIN_CHANGE) {
-                // Assume that if the user triggered a sign in change, it was intended to logout.
-                // We can't preflight this, since in some flows it's the server that invalidates
-                // our session after we use it to complete the sign in change.
-                LocalStorageStore.setWasLoggedIn(false);
-            } else {
-                // Although the authority remains the local sessionExpired bit on the state, set this
-                // extra field in the querystring to signal the desktop app.
-                const newSearchParam = new URLSearchParams(search);
-                newSearchParam.set('extra', Constants.SESSION_EXPIRED);
-                history.replace(`${pathname}?${newSearchParam}`);
-            }
-
-            // return;
-        }
-
-        // redirectUserToDefaultTeam();
     }, []);
 
     useEffect(() => {

@@ -111,13 +111,16 @@ import {getSiteURL} from 'utils/url';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
+
 // import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {needRefreshToken, refreshIKToken} from 'components/login/utils';
+import {checkIKTokenIsExpired, needRefreshToken, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
+import {isDesktopApp} from 'utils/user_agent';
+
 // import {isDesktopApp} from 'utils/user_agent';
 
 const dispatch = store.dispatch;
@@ -208,13 +211,11 @@ function restart() {
 }
 
 export function reconnect(includeWebSocket = true) {
+    if (isDesktopApp() && checkIKTokenIsExpired()) {
+        refreshIKToken();
+    }
     if (includeWebSocket) {
-        // if (isDesktopApp()) {
-        // refreshIKToken();
-        // } else {
         reconnectWebSocket();
-
-        // }
     }
 
     dispatch({

@@ -131,12 +131,6 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         return;
     }
 
-    if (!refreshToken) {
-        clearLocalStorageToken();
-        getChallengeAndRedirectToLogin();
-        return;
-    }
-
     Client4.setToken('');
     Client4.setCSRF('');
     localStorage.setItem('refreshingToken', '1');
@@ -163,12 +157,6 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
             window.origin,
         );
 
-        // console.log('[TOKEN / SW] sending token to SW after refresh');
-        // navigator.serviceWorker.controller?.postMessage({
-        //     type: 'TOKEN_REFRESHED',
-        //     token: resp.access_token || localStorage.getItem('IKToken'),
-        // });
-
         localStorage.removeItem('refreshingToken');
 
         // Refresh the websockets as we just changed Bearer Token
@@ -179,8 +167,7 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         }
     }).catch((error) => {
         console.log('[TOKEN] Refresh token error ', error);
-        clearLocalStorageToken();
         localStorage.removeItem('refreshingToken');
-        getChallengeAndRedirectToLogin();
+        history.push('/login');
     });
 }
