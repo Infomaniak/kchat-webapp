@@ -93,6 +93,13 @@ const Login = () => {
                 GlobalActions.redirectUserToDefaultTeam();
             }
 
+            // If need to refresh the token
+            if ((localStorage.getItem('IKTokenExpire') && checkIKTokenIsExpired()) || (localStorage.getItem('IKRefreshToken') && !token)) {
+                refreshIKToken(true);
+
+                return;
+            }
+
             if (!token || !localStorage.getItem('IKRefreshToken') || !localStorage.getItem('IKTokenExpire')) {
                 clearLocalStorageToken();
                 getChallengeAndRedirectToLogin();
@@ -100,44 +107,39 @@ const Login = () => {
                 return;
             }
 
-            // If need to refresh the token
-            if (localStorage.getItem('IKTokenExpire') && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
-            }
+            // if (loginCode) {
+            //     const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
-            if (loginCode) {
-                const challenge = JSON.parse(localStorage.getItem('challenge') as string);
+            //     //    Get token
+            //     Client4.getIKLoginToken(
+            //         loginCode,
+            //         challenge?.challenge,
+            //         challenge?.verifier,
+            //         `${IKConstants.LOGIN_URL}`,
+            //         `${IKConstants.CLIENT_ID}`,
+            //     ).then((resp) => {
+            //         storeTokenResponse(resp);
+            //         localStorage.removeItem('challenge');
+            //         localStorage.setItem('tokenExpired', '0');
+            //         LocalStorageStore.setWasLoggedIn(true);
+            //         window.postMessage(
+            //             {
+            //                 type: 'token-refreshed',
+            //                 message: {
+            //                     token: resp.access_token,
+            //                 },
+            //             },
+            //             window.origin,
+            //         );
 
-                //    Get token
-                Client4.getIKLoginToken(
-                    loginCode,
-                    challenge?.challenge,
-                    challenge?.verifier,
-                    `${IKConstants.LOGIN_URL}`,
-                    `${IKConstants.CLIENT_ID}`,
-                ).then((resp) => {
-                    storeTokenResponse(resp);
-                    localStorage.removeItem('challenge');
-                    localStorage.setItem('tokenExpired', '0');
-                    LocalStorageStore.setWasLoggedIn(true);
-                    window.postMessage(
-                        {
-                            type: 'token-refreshed',
-                            message: {
-                                token: resp.access_token,
-                            },
-                        },
-                        window.origin,
-                    );
+            //         finishSignin();
+            //     }).catch((error) => {
+            //         console.log('[TOKEN] post token fail', error);
 
-                    finishSignin();
-                }).catch((error) => {
-                    console.log('[TOKEN] post token fail', error);
-
-                    // clearLocalStorageToken();
-                });
-                return;
-            }
+            //         // clearLocalStorageToken();
+            //     });
+            //     return;
+            // }
 
             if (hash) {
                 console.log('[LOGIN] Login with hash');
