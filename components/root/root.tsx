@@ -178,7 +178,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
+            // const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             // Enable authHeader and set bearer token
@@ -198,10 +198,10 @@ export default class Root extends React.PureComponent<Props, State> {
                 );
             }
 
-            // If need to refresh the token
-            if ((tokenExpire && checkIKTokenIsExpired()) || !token || !refreshToken) {
-                this.props.history.push('/login' + this.props.location.search);
-            }
+            // // If need to refresh the token
+            // if ((tokenExpire && checkIKTokenIsExpired()) || !token || !refreshToken) {
+            //     this.props.history.push('/login' + this.props.location.search);
+            // }
         } else {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
