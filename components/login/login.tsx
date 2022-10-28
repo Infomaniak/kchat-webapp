@@ -97,14 +97,7 @@ const Login = () => {
                 return;
             }
 
-            if (!token || !localStorage.getItem('IKRefreshToken') || !localStorage.getItem('IKTokenExpire')) {
-                clearLocalStorageToken();
-                getChallengeAndRedirectToLogin();
-
-                return;
-            }
-
-            if (loginCode) {
+            if (!token && loginCode && localStorage.getItem('tokenExpired') === '1') {
                 const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
                 // Get token
@@ -132,9 +125,15 @@ const Login = () => {
                     finishSignin();
                 }).catch((error: any) => {
                     console.log('[TOKEN] post token fail', error);
+                    localStorage.setItem('tokenExpired', '0');
 
                     // clearLocalStorageToken();
                 });
+            }
+
+            if (!localStorage.getItem('IKToken') || !localStorage.getItem('IKRefreshToken') || !localStorage.getItem('IKTokenExpire')) {
+                clearLocalStorageToken();
+                getChallengeAndRedirectToLogin();
             }
         }
     }, []);
