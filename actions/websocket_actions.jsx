@@ -1300,9 +1300,9 @@ export function handleUserTypingEvent(msg) {
 }
 
 function handleStatusChangedEvent(msg) {
-    if (needRefreshToken()) {
-        refreshIKToken();
-    }
+    // if (needRefreshToken()) {
+    //     refreshIKToken();
+    // }
     dispatch({
         type: UserTypes.RECEIVED_STATUSES,
         data: [{user_id: msg.data.user_id, status: msg.data.status}],

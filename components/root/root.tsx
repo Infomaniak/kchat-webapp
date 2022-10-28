@@ -196,16 +196,6 @@ export default class Root extends React.PureComponent<Props, State> {
                     },
                     window.origin,
                 );
-
-                // navigator.serviceWorker.controller?.postMessage({
-                //     type: 'TOKEN_REFRESHED',
-                //     token: token || '',
-                // });
-            }
-
-            // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
             }
 
             if (!token && !refreshToken) {
@@ -348,7 +338,8 @@ export default class Root extends React.PureComponent<Props, State> {
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
-            const tokenExpireIn = (1000 * tokenExpire) - Date.now();
+
+            // const tokenExpireIn = (1000 * tokenExpire) - Date.now();
 
             // Enable authHeader and set bearer token
             if (token && tokenExpire && !checkIKTokenIsExpired()) {
@@ -365,18 +356,10 @@ export default class Root extends React.PureComponent<Props, State> {
                     },
                     window.origin,
                 );
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
 
                 // Set a callback to refresh token a little while before it expires
-                setTimeout(refreshIKToken, tokenExpireIn - REFRESH_TOKEN_TIME_MARGIN, false, true);
-            }
-
-            // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
+                // Don't need this, /login should handle it syncronously when requests start to 403
+                // setTimeout(refreshIKToken, tokenExpireIn - REFRESH_TOKEN_TIME_MARGIN, false, true);
             }
 
             if (!token && !refreshToken) {
@@ -473,16 +456,12 @@ export default class Root extends React.PureComponent<Props, State> {
                     },
                     window.origin,
                 );
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
             }
 
             // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
-            }
+            // if (tokenExpire && checkIKTokenIsExpired()) {
+            //     refreshIKToken(true);
+            // }
 
             if (!token && !refreshToken) {
                 console.log('[TOKEN] No token, redirect to login 3');
