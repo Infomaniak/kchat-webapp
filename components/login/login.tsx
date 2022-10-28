@@ -28,15 +28,10 @@ import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import LocalStorageStore from 'stores/local_storage_store';
 import {GlobalState} from 'types/store';
 
-import Constants from 'utils/constants';
-import {IKConstants} from 'utils/constants-ik';
 import {isDesktopApp} from 'utils/user_agent';
-import {setCSRFFromCookie} from 'utils/utils';
 
 import './login.scss';
-import {Team} from '@mattermost/types/teams';
-
-import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from './utils';
+import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken} from './utils';
 
 const Login = () => {
     const history = useHistory();
@@ -69,10 +64,6 @@ const Login = () => {
         }
 
         if (isDesktopApp()) {
-            const loginCode = (new URLSearchParams(search)).get('code');
-            if (loginCode) {
-                console.log('[LOGIN] Login with code');
-            }
             const token = localStorage.getItem('IKToken');
 
             if (token && localStorage.getItem('IKTokenExpire') && !checkIKTokenIsExpired()) {
@@ -103,55 +94,6 @@ const Login = () => {
             if (!token || !localStorage.getItem('IKRefreshToken') || !localStorage.getItem('IKTokenExpire')) {
                 clearLocalStorageToken();
                 getChallengeAndRedirectToLogin();
-
-                return;
-            }
-
-            // if (loginCode) {
-            //     const challenge = JSON.parse(localStorage.getItem('challenge') as string);
-
-            //     //    Get token
-            //     Client4.getIKLoginToken(
-            //         loginCode,
-            //         challenge?.challenge,
-            //         challenge?.verifier,
-            //         `${IKConstants.LOGIN_URL}`,
-            //         `${IKConstants.CLIENT_ID}`,
-            //     ).then((resp) => {
-            //         storeTokenResponse(resp);
-            //         localStorage.removeItem('challenge');
-            //         localStorage.setItem('tokenExpired', '0');
-            //         LocalStorageStore.setWasLoggedIn(true);
-            //         window.postMessage(
-            //             {
-            //                 type: 'token-refreshed',
-            //                 message: {
-            //                     token: resp.access_token,
-            //                 },
-            //             },
-            //             window.origin,
-            //         );
-
-            //         finishSignin();
-            //     }).catch((error) => {
-            //         console.log('[TOKEN] post token fail', error);
-
-            //         // clearLocalStorageToken();
-            //     });
-            //     return;
-            // }
-
-            if (hash) {
-                console.log('[LOGIN] Login with hash');
-                const hash2Obj = {};
-                // eslint-disable-next-line array-callback-return
-                hash.substring(1).split('&').map((hk) => {
-                    const temp = hk.split('=');
-                    hash2Obj[temp[0]] = temp[1];
-                });
-                storeTokenResponse(hash2Obj);
-                LocalStorageStore.setWasLoggedIn(true);
-                finishSignin();
             }
         }
     }, []);
@@ -171,33 +113,6 @@ const Login = () => {
     if (initializing) {
         return (<LoadingIk/>);
     }
-
-    const finishSignin = (team?: Team) => {
-        const query = new URLSearchParams(search);
-        const redirectTo = query.get('redirect_to');
-
-        setCSRFFromCookie();
-
-        // Record a successful login to local storage. If an unintentional logout occurs, e.g.
-        // via session expiration, this bit won't get reset and we can notify the user as such.
-        LocalStorageStore.setWasLoggedIn(true);
-        if (redirectTo && redirectTo.match(/^\/([^/]|$)/)) {
-            history.push(redirectTo);
-        } else if (team) {
-            history.push(`/${team.name}`);
-        } else if (experimentalPrimaryTeamMember.team_id) {
-            // Only set experimental team if user is on that team
-            history.push(`/${ExperimentalPrimaryTeam}`);
-        } else if (useCaseOnboarding) {
-            // need info about whether admin or not,
-            // and whether admin has already completed
-            // first time onboarding. Instead of fetching and orchestrating that here,
-            // let the default root component handle it.
-            history.push('/');
-        } else {
-            redirectUserToDefaultTeam();
-        }
-    };
 
     const getContent = () => {
         return (<LoadingIk/>);

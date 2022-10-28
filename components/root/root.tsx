@@ -430,10 +430,10 @@ export default class Root extends React.PureComponent<Props, State> {
             //     //     refreshIKToken(true);
             //     // }
 
-            if (!token && !refreshToken) {
-                console.log('[TOKEN] No token, redirect to login 3');
-                this.props.history.push('/login' + this.props.location.search);
-            }
+            // if (!token && !refreshToken) {
+            //     console.log('[TOKEN] No token, redirect to login 3');
+            //     this.props.history.push('/login' + this.props.location.search);
+            // }
         }
         this.mounted = true;
 

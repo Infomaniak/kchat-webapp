@@ -139,9 +139,9 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         `${IKConstants.LOGIN_URL}`,
         `${IKConstants.CLIENT_ID}`,
     ).then((resp) => {
-        if (periodic && resp.expires_in && resp.expires_in > 0) {
-            setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN), false, true);
-        }
+        // if (periodic && resp.expires_in && resp.expires_in > 0) {
+        //     setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN), false, true);
+        // }
 
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);

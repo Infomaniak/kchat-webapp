@@ -4151,7 +4151,15 @@ export default class Client4 {
             if (url.indexOf('/commands/') === -1) {
                 console.log('[TOKEN] client error, redirect to /login');
                 localStorage.removeItem('IKToken');
-                window.location.href = 'https://kchat.preprod.dev.infomaniak.ch';
+                window.postMessage(
+                    {
+                        type: 'browser-history-push',
+                        message: {
+                            path: '/login',
+                        },
+                    },
+                    window.location.origin,
+                );
             }
         }
 
