@@ -12,7 +12,7 @@ nb. cela a marché...
 
 ```shell
 nvm use 16
-yarm install
+yarn install
 yarn workspace @mattermost/types build
 yarn workspace @mattermost/client build
 yarn workspace @mattermost/components build
