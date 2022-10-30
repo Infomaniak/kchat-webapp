@@ -168,7 +168,7 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
     }).catch((error) => {
         console.log('[TOKEN] Refresh token error ', error);
         localStorage.removeItem('refreshingToken');
-
-        // history.push('/login');
+        clearLocalStorageToken();
+        getChallengeAndRedirectToLogin();
     });
 }
