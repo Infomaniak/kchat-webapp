@@ -1,3 +1,9 @@
+## 0.5.4 (2022-10-31)
+
+## Fixed (1 change)
+
+- [fix trad unread thread](kchat/webapp@b60f2f5af3e52bfbd761c5bea27bf262c6464231) by @leonard.jouve ([merge request](kchat/webapp!181))
+
 ## 0.5.3 (2022-10-27)
 
 ## Changed (1 change)
