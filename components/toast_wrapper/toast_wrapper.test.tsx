@@ -5,8 +5,6 @@ import React, {ComponentProps} from 'react';
 
 import Preferences from 'mattermost-redux/constants/preferences';
 
-import Preferences from 'mattermost-redux/constants/preferences';
-
 import {DATE_LINE} from 'mattermost-redux/utils/post_list';
 
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
