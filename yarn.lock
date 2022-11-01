@@ -5,6 +5,13 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@adobe/css-tools@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@adobe/css-tools@npm:4.0.1"
+  checksum: 80226e2229024c21da9ffa6b5cd4a34b931f071e06f45aba4777ade071d7a6c94605cf73b13718b0c4b34e8b124c65c607b82eaa53a326d3eb73d9682a04a593
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.1.0":
   version: 2.2.0
   resolution: "@ampproject/remapping@npm:2.2.0"
@@ -3713,15 +3720,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chart.js@npm:2.9.34":
-  version: 2.9.34
-  resolution: "@types/chart.js@npm:2.9.34"
-  dependencies:
-    moment: ^2.10.2
-  checksum: 400a38c59c8e4729bcf189e82dee14fa2e0fe8b9b7ea6c535c3356ee20ba6bc1a8b82da9e46eb92324677d4011dd33d8d60a217dc3fc99ee5dd5ef6332e1f81a
-  languageName: node
-  linkType: hard
-
 "@types/cheerio@npm:*, @types/cheerio@npm:^0.22.22":
   version: 0.22.31
   resolution: "@types/cheerio@npm:0.22.31"
@@ -6491,32 +6489,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:2.9.4":
-  version: 2.9.4
-  resolution: "chart.js@npm:2.9.4"
-  dependencies:
-    chartjs-color: ^2.1.0
-    moment: ^2.10.2
-  checksum: cbdc7abe2fa65e4838848e68b035ae6048ebcc512b9057d7cdb6d361e728400d39e3fde75e0b4da815ab43f7890c31787d8f80d4e6ab75a3e80fc75b47cd173c
-  languageName: node
-  linkType: hard
-
-"chartjs-color-string@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "chartjs-color-string@npm:0.6.0"
-  dependencies:
-    color-name: ^1.0.0
-  checksum: 2355bc8e9514b779d0dc057c5ee6707e8166f270531c27287a399d6bfeb0d891b00a6f6c20e764453a062de0de8b298b11d3850fc94c323df66efb4720ece4c7
-  languageName: node
-  linkType: hard
-
-"chartjs-color@npm:^2.1.0":
-  version: 2.4.1
-  resolution: "chartjs-color@npm:2.4.1"
-  dependencies:
-    chartjs-color-string: ^0.6.0
-    color-convert: ^1.9.3
-  checksum: 254d7b2f103980417703331c49fba18877ac797fd9056d79f0d566dc4fd8d41f91b7f63d4b19602462b91110bee2fe0c9fd57266ce871e498ac1c25742fffb11
+"chart.js@npm:3.8.2":
+  version: 3.8.2
+  resolution: "chart.js@npm:3.8.2"
+  checksum: a60fef3c98ed6890ce0e1e094900aa573aa1f5fa2edc7363f52efb6850730666ac479a193e86fba17dc340a1651d6b273fac7632c3e0c40c9ed5a70d09b118da
   languageName: node
   linkType: hard
 
@@ -6727,7 +6703,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-convert@npm:^1.9.0, color-convert@npm:^1.9.3":
+"color-convert@npm:^1.9.0":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
   dependencies:
@@ -6759,7 +6735,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-name@npm:^1.0.0, color-name@npm:^1.1.4, color-name@npm:~1.1.4":
+"color-name@npm:^1.1.4, color-name@npm:~1.1.4":
   version: 1.1.4
   resolution: "color-name@npm:1.1.4"
   checksum: b0445859521eb4021cd0fb0cc1a75cecf67fceecae89b63f62b201cca8d345baf8b952c966862a9d9a2632987d4f6581f0ec8d957dfacece86f0a7919316f610
@@ -8196,10 +8172,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"emoji-regex@npm:10.1.0":
-  version: 10.1.0
-  resolution: "emoji-regex@npm:10.1.0"
-  checksum: 5bc780fc4d75f89369155a87c55f7e83a0bf72bcccda7df7f2c570cde4738d8b17d112d12afdadfec16647d1faef6501307b4304f81d35c823a938fe6547df0f
+"emoji-regex@npm:10.2.1":
+  version: 10.2.1
+  resolution: "emoji-regex@npm:10.2.1"
+  checksum: 1aa2d16881c56531fdfc03d0b36f5c2b6221cc4097499a5665b88b711dc3fb4d5b8804f0ca6f00c56e5dcf89bac75f0487eee85da1da77df3a33accc6ecbe426
   languageName: node
   linkType: hard
 
@@ -12382,6 +12358,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-styled-components@npm:7.1.1":
+  version: 7.1.1
+  resolution: "jest-styled-components@npm:7.1.1"
+  dependencies:
+    "@adobe/css-tools": ^4.0.1
+  peerDependencies:
+    styled-components: ">= 5"
+  checksum: 1376d1211855c459e59e6b030af7294519cd2dd78169a2cb0df185ff4390fff417ab51be3dd520f1e975d2f391f50ff266e803c168ff9f03f3ff7ebbb823d2d7
+  languageName: node
+  linkType: hard
+
 "jest-util@npm:^27.5.1":
   version: 27.5.1
   resolution: "jest-util@npm:27.5.1"
@@ -13364,7 +13351,6 @@ __metadata:
     "@testing-library/react": 12.1.4
     "@tippyjs/react": 4.2.6
     "@types/bootstrap": 4.5.0
-    "@types/chart.js": 2.9.34
     "@types/color-hash": 1.0.2
     "@types/country-list": 2.1.0
     "@types/enzyme": 3.10.11
@@ -13410,7 +13396,7 @@ __metadata:
     buffer: 6.0.3
     bundle-loader: 0.5.6
     chalk: 2.4.2
-    chart.js: 2.9.4
+    chart.js: 3.8.2
     classnames: 2.3.2
     color-contrast-checker: 2.1.0
     color-hash: 2.0.1
@@ -13427,7 +13413,7 @@ __metadata:
     ejs-compiled-loader: 3.1.0
     emoji-datasource: 6.1.1
     emoji-datasource-apple: 6.0.1
-    emoji-regex: 10.1.0
+    emoji-regex: 10.2.1
     enzyme: 3.11.0
     enzyme-adapter-react-16: 1.15.6
     enzyme-to-json: 3.6.2
@@ -13462,6 +13448,7 @@ __metadata:
     jest-canvas-mock: 2.4.0
     jest-cli: 27.5.1
     jest-junit: 12.2.0
+    jest-styled-components: 7.1.1
     jest-watch-typeahead: 0.6.4
     katex: 0.13.11
     key-mirror: 1.0.1
@@ -14005,7 +13992,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:>= 2.9.0, moment@npm:^2.10.2, moment@npm:^2.14.1, moment@npm:^2.29.1":
+"moment@npm:>= 2.9.0, moment@npm:^2.14.1, moment@npm:^2.29.1":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
