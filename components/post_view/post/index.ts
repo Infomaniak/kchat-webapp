@@ -66,7 +66,8 @@ function makeMapStateToProps() {
         let consecutivePostByUser = false;
         let previousPostIsComment = false;
 
-        if (previousPost && post.props && !post.props.priority) {
+        // && !post.props.priority
+        if (previousPost) {
             consecutivePostByUser = areConsecutivePostsBySameUser(post, previousPost);
             previousPostIsComment = Boolean(previousPost.root_id);
         }

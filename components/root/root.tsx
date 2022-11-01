@@ -22,7 +22,13 @@ import {getCurrentUser, isCurrentUserSystemAdmin, checkIsFirstAdmin} from 'matte
 
 import {loadRecentlyUsedCustomEmojis} from 'actions/emoji_actions';
 import * as GlobalActions from 'actions/global_actions';
-import {measurePageLoadTelemetry, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
+import {measurePageLoadTelemetry, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
+
+import SidebarRight from 'components/sidebar_right';
+import AppBar from 'components/app_bar/app_bar';
+import SidebarRightMenu from 'components/sidebar_right_menu';
+import AnnouncementBarController from 'components/announcement_bar';
+import SystemNotice from 'components/system_notice';
 
 import {makeAsyncComponent} from 'components/async_load';
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
@@ -42,7 +48,7 @@ import 'plugins/export.js';
 import Pluggable from 'plugins/pluggable';
 import BrowserStore from 'stores/browser_store';
 import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
-import {EmojiIndicesByAlias} from 'utils/emoji.jsx';
+import {EmojiIndicesByAlias} from 'utils/emoji';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 import {isDesktopApp} from 'utils/user_agent';
@@ -69,6 +75,7 @@ const LazyAuthorize = React.lazy(() => import('components/authorize'));
 const LazyCreateTeam = React.lazy(() => import('components/create_team'));
 const LazyMfa = React.lazy(() => import('components/mfa/mfa_controller'));
 const LazyPreparingWorkspace = React.lazy(() => import('components/preparing_workspace'));
+const LazyDelinquencyModalController = React.lazy(() => import('components/delinquency_modal'));
 
 import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
@@ -83,6 +90,8 @@ import {ActionResult} from 'mattermost-redux/types/actions';
 import ErrorBoundary from '../error_page/error-boudaries';
 
 import {IKConstants} from 'utils/constants-ik';
+
+import WelcomePostRenderer from 'components/welcome_post_renderer';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -109,8 +118,7 @@ const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
 const Mfa = makeAsyncComponent('Mfa', LazyMfa);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
-
-const REFRESH_TOKEN_TIME_MARGIN = 30000; // How many miliseconds to refresh before token expires (default is 30 seconds)
+const DelinquencyModalController = makeAsyncComponent('DelinquencyModalController', LazyDelinquencyModalController);
 
 type LoggedInRouteProps<T> = {
     component: React.ComponentType<T>;
@@ -151,9 +159,12 @@ type Props = {
     permalinkRedirectTeamName: string;
     isCloud: boolean;
     actions: Actions;
-    plugins: PluginComponent[];
+    plugins?: PluginComponent[];
     products: ProductComponent[];
     showLaunchingWorkspace: boolean;
+    rhsIsExpanded: boolean;
+    rhsIsOpen: boolean;
+    shouldShowAppBar: boolean;
 } & RouteComponentProps
 
 interface State {
@@ -216,7 +227,7 @@ export default class Root extends React.PureComponent<Props, State> {
         });
 
         document.addEventListener('dragover', (e) => {
-            if (!document.body.classList.contains('focalboard-body')) {
+            if (!Utils.isTextDroppableEvent(e) && !document.body.classList.contains('focalboard-body')) {
                 e.preventDefault();
                 e.stopPropagation();
             }
@@ -294,11 +305,17 @@ export default class Root extends React.PureComponent<Props, State> {
             });
         }
 
+        // This needs to be called as early as possible to ensure that a redirect won't remove the query string
+        this.trackUTMCampaign();
+
         if (this.props.location.pathname === '/' && this.props.noAccounts) {
             this.props.history.push('/signup_user_complete');
         }
 
-        initializePlugins().then(() => {
+        Promise.all([
+            this.props.actions.initializeProducts(),
+            initializePlugins(),
+        ]).then(() => {
             if (this.mounted) {
                 // supports enzyme tests, set state if and only if
                 // the component is still mounted on screen
@@ -344,6 +361,13 @@ export default class Root extends React.PureComponent<Props, State> {
                 prevProps.history.push('/terms_of_service');
             }
         }
+        if (
+            this.props.shouldShowAppBar !== prevProps.shouldShowAppBar ||
+            this.props.rhsIsOpen !== prevProps.rhsIsOpen ||
+            this.props.rhsIsExpanded !== prevProps.rhsIsExpanded
+        ) {
+            this.setRootMeta();
+        }
     }
 
     async redirectToOnboardingOrDefaultTeam() {
@@ -385,6 +409,29 @@ export default class Root extends React.PureComponent<Props, State> {
         }
 
         GlobalActions.redirectUserToDefaultTeam();
+    }
+
+    trackUTMCampaign() {
+        const qs = new URLSearchParams(window.location.search);
+
+        // list of key that we want to track
+        const keys = ['utm_source', 'utm_medium', 'utm_campaign'];
+
+        const campaign = keys.reduce((acc, key) => {
+            if (qs.has(key)) {
+                const value = qs.get(key);
+                if (value) {
+                    acc[key] = value;
+                }
+                qs.delete(key);
+            }
+            return acc;
+        }, {} as Record<string, string>);
+
+        if (Object.keys(campaign).length > 0) {
+            trackEvent('utm_params', 'utm_params', campaign);
+            this.props.history.replace({search: qs.toString()});
+        }
     }
 
     initiateMeRequests = async () => {
@@ -452,6 +499,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
         // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
         this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
+        this.props.actions.registerCustomPostRenderer('system_welcome_post', WelcomePostRenderer, 'welcome_post_renderer');
 
         if (this.desktopMediaQuery.addEventListener) {
             this.desktopMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
@@ -522,6 +570,18 @@ export default class Root extends React.PureComponent<Props, State> {
     handleMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
         if (e.matches) {
             this.updateWindowSize();
+        }
+    }
+
+    setRootMeta = () => {
+        const root = document.getElementById('root')!;
+
+        for (const [className, enabled] of Object.entries({
+            'app-bar-enabled': this.props.shouldShowAppBar,
+            'rhs-open': this.props.rhsIsOpen,
+            'rhs-open-expanded': this.props.rhsIsExpanded,
+        })) {
+            root.classList.toggle(className, enabled);
         }
     }
 
@@ -640,7 +700,6 @@ export default class Root extends React.PureComponent<Props, State> {
                     />
                     <CompassThemeProvider theme={this.props.theme}>
                         <ErrorBoundary>
-
                             {(this.props.showLaunchingWorkspace && !this.props.location.pathname.includes('/preparing-workspace') &&
                                 <LaunchingWorkspace
                                     fullscreen={true}
@@ -651,10 +710,13 @@ export default class Root extends React.PureComponent<Props, State> {
                                 />
                             )}
                             <ModalController/>
+                            <AnnouncementBarController/>
+                            <SystemNotice/>
                             <GlobalHeader/>
-                            {/* <CloudEffects/>
-                        <OnBoardingTaskList/> */}
+                            {/* <CloudEffects/> */}
+                            {/* <OnBoardingTaskList/> */}
                             <TeamSidebar/>
+                            {/* <DelinquencyModalController/> */}
                             <Switch>
                                 {this.props.products?.map((product) => (
                                     <Route
@@ -693,6 +755,9 @@ export default class Root extends React.PureComponent<Props, State> {
                                 <RootRedirect/>
                             </Switch>
                             <Pluggable pluggableName='Global'/>
+                            <SidebarRight/>
+                            <AppBar/>
+                            <SidebarRightMenu/>
                         </ErrorBoundary>
 
                     </CompassThemeProvider>

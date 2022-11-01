@@ -37,14 +37,13 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
 }))<SidebarHeaderContainerProps>`
     height: 46px;
     width: 100%;
-    padding: 0 16px;
+    padding: 0 16px !important;
 
     .dropdown-menu {
         position: absolute;
         transform: translate(0, 0);
         margin-left: 0;
         min-width: 210px;
-        max-width: 250px;
     }
 
     #SidebarContainer & .AddChannelDropdown_dropdownButton {
@@ -63,7 +62,7 @@ const SidebarHeading = styled(Heading).attrs(() => ({
     margin: 'none',
     size: 200,
 }))<SidebarHeaderProps>`
-    color: var(--sidebar-header-text-color);
+    color: var(--sidebar-header-text-color) !important;
     cursor: pointer;
     display: flex;
 

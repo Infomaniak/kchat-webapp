@@ -154,37 +154,36 @@ describe('components/trial_benefits_modal/trial_benefits_modal', () => {
         expect(mockOnExited).toHaveBeenCalled();
     });
 
-    // TODO: fix test
-    // test('should handle slide prev next click', () => {
-    //     const wrapper = mountWithIntl(
-    //         <Provider store={store}>
-    //             <TrialBenefitsModal
-    //                 {...props}
-    //             />
-    //         </Provider>,
-    //     );
+    test('should handle slide prev next click', () => {
+        const wrapper = mountWithIntl(
+            <Provider store={store}>
+                <TrialBenefitsModal
+                    {...props}
+                />
+            </Provider>,
+        );
 
-    //     wrapper.find(Carousel).props().onNextSlideClick!(5);
+        wrapper.find(Carousel).props().onNextSlideClick!(5);
 
-    //     expect(trackEvent).toHaveBeenCalledWith(
-    //         TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL,
-    //         'benefits_modal_post_enterprise_view',
-    //     );
+        expect(trackEvent).toHaveBeenCalledWith(
+            TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL,
+            'benefits_modal_post_enterprise_view',
+        );
 
-    //     wrapper.find(Carousel).props().onNextSlideClick!(4);
+        wrapper.find(Carousel).props().onNextSlideClick!(4);
 
-    //     expect(trackEvent).toHaveBeenCalledWith(
-    //         TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL,
-    //         'benefits_modal_slide_shown_playbooks',
-    //     );
+        expect(trackEvent).toHaveBeenCalledWith(
+            TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL,
+            'benefits_modal_slide_shown_playbooks',
+        );
 
-    //     wrapper.find(Carousel).props().onPrevSlideClick!(2);
+        wrapper.find(Carousel).props().onPrevSlideClick!(2);
 
-    //     expect(trackEvent).toHaveBeenCalledWith(
-    //         TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL,
-    //         'benefits_modal_slide_shown_ldap',
-    //     );
-    // });
+        expect(trackEvent).toHaveBeenCalledWith(
+            TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL,
+            'benefits_modal_slide_shown_ldap',
+        );
+    });
 
     test('should present the just started trial modal content', () => {
         const wrapper = mountWithIntl(

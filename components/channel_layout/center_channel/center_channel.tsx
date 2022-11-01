@@ -107,11 +107,11 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                                 path='/:team/:path(channels|messages)/:identifier/:postid?'
                                 component={ChannelIdentifierRouter}
                             />
-                            <Route
+                            {/* <Route
                                 path='/:team/_playbooks/:playbookId/run'
                             >
                                 <PlaybookRunner/>
-                            </Route>
+                            </Route> */}
                             {isCollapsedThreadsEnabled ? (
                                 <Route
                                     path='/:team/threads/:threadIdentifier?'

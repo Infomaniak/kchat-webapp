@@ -286,6 +286,7 @@ exports[`components/ChannelHeader should match snapshot with last active display
         }
       }
     />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -578,6 +579,7 @@ exports[`components/ChannelHeader should match snapshot with no last active disp
         }
       }
     />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -865,7 +867,7 @@ exports[`components/ChannelHeader should render active channel files 1`] = `
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -1152,7 +1154,7 @@ exports[`components/ChannelHeader should render active flagged posts 1`] = `
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -1439,7 +1441,7 @@ exports[`components/ChannelHeader should render active mentions posts 1`] = `
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -1726,7 +1728,7 @@ exports[`components/ChannelHeader should render active pinned posts 1`] = `
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -1982,7 +1984,7 @@ exports[`components/ChannelHeader should render archived view 1`] = `
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -2301,7 +2303,7 @@ exports[`components/ChannelHeader should render correct menu when muted 1`] = `
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -2588,7 +2590,7 @@ exports[`components/ChannelHeader should render not active channel files 1`] = `
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -2900,6 +2902,7 @@ exports[`components/ChannelHeader should render properly when custom status is e
         }
       }
     />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -3232,6 +3235,7 @@ exports[`components/ChannelHeader should render properly when custom status is s
         }
       }
     />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -3519,7 +3523,7 @@ exports[`components/ChannelHeader should render properly when empty 1`] = `
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -3806,7 +3810,7 @@ exports[`components/ChannelHeader should render properly when populated 1`] = `
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -4112,7 +4116,7 @@ exports[`components/ChannelHeader should render properly when populated with cha
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -4412,7 +4416,7 @@ exports[`components/ChannelHeader should render shared view 1`] = `
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {
@@ -4708,7 +4712,7 @@ exports[`components/ChannelHeader should render the pinned icon with the pinned 
         }
       }
     />
-    <Connect(injectIntl(MeetButton)) />
+    <Connect(CallButton) />
     <ChannelInfoButton
       channel={
         Object {

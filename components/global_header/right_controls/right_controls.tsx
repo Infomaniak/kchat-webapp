@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {FormattedMessage} from 'react-intl';
+import {ProductIdentifier} from '@mattermost/types/products';
 
 import Pluggable from 'plugins/pluggable';
 import {
@@ -26,10 +27,12 @@ import Tooltip from 'components/tooltip';
 import OverlayTrigger from 'components/overlay_trigger';
 
 import Constants from 'utils/constants';
+import {isChannels} from 'utils/products';
 
 import AtMentionsButton from './at_mentions_button/at_mentions_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';
 import SettingsButton from './settings_button';
+
 
 // import PlanUpgradeButton from './plan_upgrade_button';
 
@@ -66,7 +69,7 @@ const RightControlsContainer = styled.div`
 `;
 
 export type Props = {
-    productId?: string | null;
+    productId?: ProductIdentifier;
 }
 
 const tooltipUserReport = (
@@ -117,7 +120,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     </module-products-component>
                 </div>
             )}
-            {productId === null ? (
+            {isChannels(productId) ? (
                 <>
                     <AtMentionsButton/>
                     <SavedPostsButton/>

@@ -35,14 +35,11 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "presenceChannel": null,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
-          "teamChannel": null,
-          "userChannel": null,
         }
       }
     >
@@ -91,14 +88,11 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "presenceChannel": null,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
-          "teamChannel": null,
-          "userChannel": null,
         }
       }
     >
@@ -171,14 +165,11 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "presenceChannel": null,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
-          "teamChannel": null,
-          "userChannel": null,
         }
       }
     >
@@ -229,14 +220,11 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "presenceChannel": null,
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
-          "teamChannel": null,
-          "userChannel": null,
         }
       }
     >
