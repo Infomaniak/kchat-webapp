@@ -1,3 +1,15 @@
+## 0.5.5 (2022-11-02)
+
+## Fixed (1 change)
+
+- [Fix settings selector display bug](kchat/webapp@65bdc88b70610f57e0f4a27e4f60648fa1461c15) by @florent.glauda ([merge request](kchat/webapp!186))
+
+## Removed (3 changes)
+
+- [remove ws reconnect on error](kchat/webapp@203146d5ae28ca281b76f5645f9415f783544db0) by @antonbuksa
+- [comment manual token refresh - let client catch instead](kchat/webapp@85cacbee46f9f386428e13c9b82a4726c13a9594) by @antonbuksa
+- [remove bot account from main menu](kchat/webapp@4bd3416755006fbc54bd28a082e72817698e587c) by @leonard.jouve ([merge request](kchat/webapp!177))
+
 ## 0.5.4 (2022-10-31)
 
 ## Fixed (1 change)
