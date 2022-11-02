@@ -188,7 +188,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -241,7 +241,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -467,7 +467,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -520,7 +520,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -746,7 +746,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -799,7 +799,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -1025,7 +1025,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -1078,7 +1078,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -1304,7 +1304,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -1357,7 +1357,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -1554,7 +1554,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -1607,7 +1607,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -1833,7 +1833,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -1886,7 +1886,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -2112,7 +2112,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -2165,7 +2165,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -2391,7 +2391,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -2444,7 +2444,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -2670,7 +2670,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -2723,7 +2723,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -2949,7 +2949,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -3002,7 +3002,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -3235,7 +3235,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -3288,7 +3288,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -3514,7 +3514,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="channelDisplayMode"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
@@ -3567,7 +3567,7 @@ exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should 
           defaultValue={null}
           id="unreadScrollPosition"
           isSearchable={false}
-          menuPortalTarget={null}
+          menuPortalTarget={<body />}
           onChange={[Function]}
           options={
             Array [
