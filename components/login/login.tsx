@@ -84,11 +84,12 @@ const Login = () => {
 
                 GlobalActions.redirectUserToDefaultTeam();
 
-                // Return clean up function.
-                // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
+                // Clean up function (https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup)
                 // ---
-                // Responsible for destroying the interval when computer is put in sleep mode to
-                // prevent it from triggering redirects and ending up on the chrome-error page.
+                // Responsible for destroying the interval when computer is put in sleep mode.
+                // This can trigger redirects and app can end up on the chrome-error page
+                // because the refresh will fail and a redirect to ik login will be triggered
+                // without an active internet connection (in sleep).
                 // ---
                 // eslint-disable-next-line consistent-return
                 return () => clearInterval(intervalId.current as NodeJS.Timer);
