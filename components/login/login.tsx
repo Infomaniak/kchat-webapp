@@ -6,7 +6,6 @@ import React, {useEffect, useRef} from 'react';
 
 import {useSelector} from 'react-redux';
 
-import * as GlobalActions from 'actions/global_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
 
