@@ -25,7 +25,7 @@ import {GlobalState} from 'types/store';
 
 import {isDesktopApp} from 'utils/user_agent';
 
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from './utils';
+import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin} from './utils';
 import './login.scss';
 
 const Login = () => {
@@ -62,7 +62,7 @@ const Login = () => {
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
 
-            // 1. Check for desktop session end of life
+            // Check for desktop session end of life
             if (checkIKTokenIsExpired() || !token || !refreshToken) {
                 console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
                 clearLocalStorageToken();
