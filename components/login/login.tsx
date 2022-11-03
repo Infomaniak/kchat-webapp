@@ -84,22 +84,15 @@ const Login = () => {
 
                 GlobalActions.redirectUserToDefaultTeam();
 
+                // Return clean up function.
+                // https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
+                // ---
+                // Responsible for destroying the interval when computer is put in sleep mode to
+                // prevent it from triggering redirects and ending up on the chrome-error page.
+                // ---
                 // eslint-disable-next-line consistent-return
                 return () => clearInterval(intervalId.current as NodeJS.Timer);
             }
-
-            // if ((localStorage.getItem('IKTokenExpire') && checkIKTokenIsExpired()) || (localStorage.getItem('IKRefreshToken') && !token)) {
-            //     // TODO: need to remove this because either:
-            //     // 1) interval should refresh before token expires
-            //     // 2) if computer wakes up and token is already expired,
-            //     //    I'm pretty sure it's necessary to go through login with code.
-            //     console.log('[LOGIN DESKTOP] Refresh token');
-            //     refreshIKToken(true);
-            // } else {
-            //     console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
-            //     clearLocalStorageToken();
-            //     getChallengeAndRedirectToLogin();
-            // }
         }
 
         // For web simply send through to router if user exists.
