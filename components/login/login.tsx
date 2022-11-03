@@ -18,6 +18,8 @@ import {RequestStatus} from 'mattermost-redux/constants';
 // import {getConfig} from 'mattermost-redux/selectors/entities/general';
 // import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
 // import {getMyTeamMember, getTeamByName} from 'mattermost-redux/selectors/entities/teams';
+// import {setCSRFFromCookie} from 'utils/utils';
+
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
 import LocalStorageStore from 'stores/local_storage_store';
@@ -25,13 +27,11 @@ import {GlobalState} from 'types/store';
 
 import {isDesktopApp} from 'utils/user_agent';
 
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from './utils';
 import './login.scss';
 
-// import {setCSRFFromCookie} from 'utils/utils';
-
-import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from './utils';
-
 const Login = () => {
+    // TODO: can we clean this?
     // const {
     //     ExperimentalPrimaryTeam,
     // } = useSelector(getConfig);
@@ -39,62 +39,76 @@ const Login = () => {
     const initializing = useSelector((state: GlobalState) => state.requests.users.logout.status === RequestStatus.SUCCESS || !state.storage.initialized);
     const currentUser = useSelector(getCurrentUser);
 
+    // TODO: can we clean this?
     // const experimentalPrimaryTeam = useSelector((state: GlobalState) => (ExperimentalPrimaryTeam ? getTeamByName(state, ExperimentalPrimaryTeam) : undefined));
-
     // const experimentalPrimaryTeamMember = useSelector((state: GlobalState) => getMyTeamMember(state, experimentalPrimaryTeam?.id ?? ''));
     // const useCaseOnboarding = useSelector(getUseCaseOnboarding);
-
     // const isCloud = useSelector(isCurrentLicenseCloud);
     // const graphQLEnabled = useSelector(isGraphQLEnabled);
 
-    // const passwordInput = useRef<HTMLInputElement>(null);
-
     const closeSessionExpiredNotification = useRef<() => void>();
+    const intervalId = useRef<NodeJS.Timer | undefined>();
 
+    // Simple session guard
     useEffect(() => {
         console.log('[LOGIN] init login component');
         console.log('[LOGIN] get was logged in => ', LocalStorageStore.getWasLoggedIn());
 
-        if (currentUser) {
-            console.log('[LOGIN] Current user is ok');
-            redirectUserToDefaultTeam();
-            return;
-        }
-
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKTokenExpire');
 
-            if (token && localStorage.getItem('IKTokenExpire') && !checkIKTokenIsExpired()) {
-                // Client4.setAuthHeader = true;
-                // Client4.setToken(token);
-                // Client4.setCSRF(token);
-                // window.postMessage(
-                //     {
-                //         type: 'token-refreshed',
-                //         message: {
-                //             token,
-                //         },
-                //     },
-                //     window.origin,
-                // );
+            // 1. Check for desktop session end of life
+            if (checkIKTokenIsExpired() || !token || !refreshToken) {
+                console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
+                if (intervalId.current) {
+                    clearInterval(intervalId.current);
+                }
+                clearLocalStorageToken();
+                getChallengeAndRedirectToLogin();
 
-                // LocalStorageStore.setWasLoggedIn(true);
+                return;
+            }
+
+            // 2. Session is not dead, setup token keepalive.
+            // if token is ok and can refresh:
+            if (token && refreshToken && !checkIKTokenIsExpired()) {
+                console.log('[LOGIN DESKTOP] Token is ok');
+
+                // set an interval to run every minute to check if token needs refresh.
+                // eslint-disable-next-line consistent-return
+                intervalId.current = setInterval(() => {
+                    // If expiring soon, refresh before we start hitting errors.
+                    if (checkIKTokenExpiresSoon()) {
+                        refreshIKToken(/*redirectToReam*/false);
+                    }
+                }, 1000 * 60); // one minute
 
                 GlobalActions.redirectUserToDefaultTeam();
+
+                // eslint-disable-next-line consistent-return
+                return () => clearInterval(intervalId.current as NodeJS.Timer);
             }
 
             // If need to refresh the token
-            if ((localStorage.getItem('IKTokenExpire') && checkIKTokenIsExpired()) || (localStorage.getItem('IKRefreshToken') && !token)) {
-                refreshIKToken(true);
-            } else {
-                clearLocalStorageToken();
-                getChallengeAndRedirectToLogin();
-            }
-
-            // if (!localStorage.getItem('IKToken') || !localStorage.getItem('IKRefreshToken') || !localStorage.getItem('IKTokenExpire')) {
+            // if ((localStorage.getItem('IKTokenExpire') && checkIKTokenIsExpired()) || (localStorage.getItem('IKRefreshToken') && !token)) {
+            //     // TODO: need to remove this because either:
+            //     // 1) interval should refresh before token expires
+            //     // 2) if computer wakes up and token is already expired,
+            //     //    I'm pretty sure it's necessary to go through login with code.
+            //     console.log('[LOGIN DESKTOP] Refresh token');
+            //     refreshIKToken(true);
+            // } else {
+            //     console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
             //     clearLocalStorageToken();
             //     getChallengeAndRedirectToLogin();
             // }
+        }
+
+        // For web send through to router if user exists.
+        if (currentUser) {
+            console.log('[LOGIN] Current user is ok');
+            redirectUserToDefaultTeam();
         }
     }, []);
 

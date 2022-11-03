@@ -115,6 +115,17 @@ export function checkIKTokenIsExpired() {
 }
 
 /**
+ * check if token is expiring in 1 min
+ * @returns bool
+ */
+export function checkIKTokenExpiresSoon(): boolean {
+    const tokenExpire = localStorage.getItem('IKTokenExpire');
+    const isExpiredInOneMinute = parseInt(tokenExpire as string, 10) <= ((Date.now() / 1000) + 60);
+
+    return isExpiredInOneMinute;
+}
+
+/**
  * check if token is expired once
  * @returns bool
  */
