@@ -74,7 +74,7 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, refreshIKToken, storeTokenResponse} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 
@@ -400,48 +400,64 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         if (isDesktopApp()) {
+            // Rely on initial client calls to 401 here for the first redirect to login,
+            // we dont need to do it manually.
+            // Login will send us back here with a code after we give it the challange.
+            // Use code to refresh token.
             const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
             if (loginCode) {
                 // eslint-disable-next-line no-console
                 console.log('[LOGIN] Login with code');
             }
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
 
             if (loginCode) {
                 const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
-                // Get token
-                Client4.getIKLoginToken(
-                    loginCode,
-                    challenge?.challenge,
-                    challenge?.verifier,
-                    `${IKConstants.LOGIN_URL}`,
-                    `${IKConstants.CLIENT_ID}`,
-                ).then((resp: any) => {
-                    storeTokenResponse(resp);
+                try { // Get new token
+                    const response: {
+                        expires_in: string;
+                        access_token: string;
+                        refresh_token: string;
+                    } = Client4.getIKLoginToken(
+                        loginCode,
+                        challenge?.challenge,
+                        challenge?.verifier,
+                        IKConstants.LOGIN_URL,
+                        IKConstants.CLIENT_ID,
+                    );
+
+                    // Store in localstorage
+                    storeTokenResponse(response);
+
+                    // Remove challange and set logged in.
                     localStorage.removeItem('challenge');
                     localStorage.setItem('tokenExpired', '0');
                     LocalStorageStore.setWasLoggedIn(true);
+
+                    // Store in desktop storage.
                     window.postMessage(
                         {
                             type: 'token-refreshed',
                             message: {
-                                token: resp.access_token,
+                                token: response.access_token,
                             },
                         },
                         window.origin,
                     );
-                    this.runMounted();
-                }).catch((error: any) => {
+                } catch (error) {
+                    // This is an edge case that I haven't tested yet,
+                    // for now clear storage and resend to login to try and login again.
                     // eslint-disable-next-line no-console
                     console.log('[TOKEN] post token fail', error);
+                    clearLocalStorageToken();
                     this.props.history.push('/login' + this.props.location.search);
-                });
+                }
             }
 
+            const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
+
             // Setup token keepalive:
-            // - if token is ok and isn't expired,
             if (token && refreshToken) {
                 // eslint-disable-next-line no-console
                 console.log('[LOGIN DESKTOP] Token is ok');
@@ -449,14 +465,17 @@ export default class Root extends React.PureComponent<Props, State> {
                 // set an interval to run every minute to check if token needs refresh.
                 this.tokenCheckInterval = setInterval(this.doTokenCheck, 1000 * 60); // one minute
             }
+
+            // Allow through initial requests anyway to receive new errors.
             this.runMounted();
         } else {
+            // Allow through initial requests for web.
             this.runMounted();
         }
     }
 
     doTokenCheck = () => {
-        // - if expiring soon, refresh before we start hitting errors.
+        // If expiring soon, refresh before we start hitting errors.
         if (checkIKTokenExpiresSoon()) {
             refreshIKToken(/*redirectToReam*/false);
         }

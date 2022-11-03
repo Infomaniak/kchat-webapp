@@ -45,7 +45,6 @@ const Login = () => {
     // const graphQLEnabled = useSelector(isGraphQLEnabled);
 
     const closeSessionExpiredNotification = useRef<() => void>();
-    const intervalId = useRef<NodeJS.Timer | undefined>();
 
     // Session guard
 
@@ -66,9 +65,6 @@ const Login = () => {
             // 1. Check for desktop session end of life
             if (checkIKTokenIsExpired() || !token || !refreshToken) {
                 console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
-                if (intervalId.current) {
-                    clearInterval(intervalId.current);
-                }
                 clearLocalStorageToken();
                 getChallengeAndRedirectToLogin();
 
