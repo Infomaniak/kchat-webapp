@@ -408,7 +408,7 @@ export default class Root extends React.PureComponent<Props, State> {
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
 
-            if (!token && loginCode && localStorage.getItem('tokenExpired') === '1') {
+            if (loginCode) {
                 const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
                 // Get token
@@ -436,15 +436,13 @@ export default class Root extends React.PureComponent<Props, State> {
                 }).catch((error: any) => {
                     // eslint-disable-next-line no-console
                     console.log('[TOKEN] post token fail', error);
-                    localStorage.setItem('tokenExpired', '0');
                     this.props.history.push('/login' + this.props.location.search);
                 });
-                return;
             }
 
             // Setup token keepalive:
             // - if token is ok and isn't expired,
-            if (token && refreshToken && !checkIKTokenIsExpired()) {
+            if (token && refreshToken) {
                 // eslint-disable-next-line no-console
                 console.log('[LOGIN DESKTOP] Token is ok');
 
