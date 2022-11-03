@@ -1,3 +1,13 @@
+## 0.5.6 (2022-11-03)
+
+## Added (1 change)
+
+- [readd better interval for refresh before expiry in token guard](kchat/webapp@1b1c8b032262ec89c89154b8e2dc2cc8d71b6a9d) by @antonbuksa
+
+## Fixed (1 change)
+
+- [Fix settings selector display bug](kchat/webapp@65bdc88b70610f57e0f4a27e4f60648fa1461c15) by @florent.glauda ([merge request](kchat/webapp!186))
+
 ## 0.5.5 (2022-11-02)
 
 ## Fixed (1 change)
