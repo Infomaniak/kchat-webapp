@@ -48,13 +48,20 @@ const Login = () => {
     const intervalId = useRef<NodeJS.Timer | undefined>();
 
     // Session guard
+
+    // DEV NOTES
+    // When client4 starts hitting 401/403 return codes we redirect back here.
+    // At this point the token has already expired so it is either a computer wake up
+    // or our interval couldn't successfuly refresh the token. Apparently we should still
+    // be able to refresh if the token has expired but this doesn't seem to be the case atm.
+
     useEffect(() => {
         console.log('[LOGIN] init login component');
         console.log('[LOGIN] get was logged in => ', LocalStorageStore.getWasLoggedIn());
 
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKTokenExpire');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
 
             // 1. Check for desktop session end of life
             if (checkIKTokenIsExpired() || !token || !refreshToken) {
@@ -66,33 +73,6 @@ const Login = () => {
                 getChallengeAndRedirectToLogin();
 
                 return;
-            }
-
-            // 2. Session is not dead, setup token keepalive:
-            // - if token is ok and isn't expired,
-            if (token && refreshToken && !checkIKTokenIsExpired()) {
-                console.log('[LOGIN DESKTOP] Token is ok');
-
-                // - set an interval to run every minute to check if token needs refresh.
-                // eslint-disable-next-line consistent-return
-                intervalId.current = setInterval(() => {
-                    // - if expiring soon, refresh before we start hitting errors.
-                    if (checkIKTokenExpiresSoon()) {
-                        refreshIKToken(/*redirectToReam*/false);
-                    }
-                }, 1000 * 60); // one minute
-
-                GlobalActions.redirectUserToDefaultTeam();
-
-                // Clean up function (https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup)
-                // ---
-                // Responsible for destroying the interval when computer is put in sleep mode.
-                // This can trigger redirects and app can end up on the chrome-error page
-                // because the refresh will fail and a redirect to ik login will be triggered
-                // without an active internet connection (in sleep).
-                // ---
-                // eslint-disable-next-line consistent-return
-                return () => clearInterval(intervalId.current as NodeJS.Timer);
             }
         }
 

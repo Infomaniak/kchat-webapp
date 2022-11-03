@@ -74,7 +74,7 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenIsExpired, storeTokenResponse} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 
@@ -166,6 +166,7 @@ export default class Root extends React.PureComponent<Props, State> {
     private tabletMediaQuery: MediaQueryList;
     private mobileMediaQuery: MediaQueryList;
     private mounted: boolean;
+    private tokenCheckInterval: ReturnType<typeof setInterval>|null = null;
 
     // The constructor adds a bunch of event listeners,
     // so we do need this.
@@ -401,9 +402,11 @@ export default class Root extends React.PureComponent<Props, State> {
         if (isDesktopApp()) {
             const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
             if (loginCode) {
+                // eslint-disable-next-line no-console
                 console.log('[LOGIN] Login with code');
             }
             const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
 
             if (!token && loginCode && localStorage.getItem('tokenExpired') === '1') {
                 const challenge = JSON.parse(localStorage.getItem('challenge') as string);
@@ -431,17 +434,33 @@ export default class Root extends React.PureComponent<Props, State> {
                     );
                     this.runMounted();
                 }).catch((error: any) => {
+                    // eslint-disable-next-line no-console
                     console.log('[TOKEN] post token fail', error);
                     localStorage.setItem('tokenExpired', '0');
                     this.props.history.push('/login' + this.props.location.search);
-
-                    // clearLocalStorageToken();
                 });
                 return;
+            }
+
+            // Setup token keepalive:
+            // - if token is ok and isn't expired,
+            if (token && refreshToken && !checkIKTokenIsExpired()) {
+                // eslint-disable-next-line no-console
+                console.log('[LOGIN DESKTOP] Token is ok');
+
+                // set an interval to run every minute to check if token needs refresh.
+                this.tokenCheckInterval = setInterval(this.doTokenCheck, 1000 * 60); // one minute
             }
             this.runMounted();
         } else {
             this.runMounted();
+        }
+    }
+
+    doTokenCheck = () => {
+        // - if expiring soon, refresh before we start hitting errors.
+        if (checkIKTokenExpiresSoon()) {
+            refreshIKToken(/*redirectToReam*/false);
         }
     }
 
@@ -474,6 +493,7 @@ export default class Root extends React.PureComponent<Props, State> {
     componentWillUnmount() {
         this.mounted = false;
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
+        clearInterval(this.tokenCheckInterval);
 
         if (this.desktopMediaQuery.removeEventListener) {
             this.desktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
