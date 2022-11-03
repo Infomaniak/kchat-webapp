@@ -2,8 +2,6 @@
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 
-/* eslint-disable max-lines */
-
 import React, {useEffect, useRef} from 'react';
 
 import {useSelector} from 'react-redux';
@@ -49,7 +47,7 @@ const Login = () => {
     const closeSessionExpiredNotification = useRef<() => void>();
     const intervalId = useRef<NodeJS.Timer | undefined>();
 
-    // Simple session guard
+    // Session guard
     useEffect(() => {
         console.log('[LOGIN] init login component');
         console.log('[LOGIN] get was logged in => ', LocalStorageStore.getWasLoggedIn());
@@ -70,15 +68,15 @@ const Login = () => {
                 return;
             }
 
-            // 2. Session is not dead, setup token keepalive.
-            // if token is ok and can refresh:
+            // 2. Session is not dead, setup token keepalive:
+            // - if token is ok and isn't expired,
             if (token && refreshToken && !checkIKTokenIsExpired()) {
                 console.log('[LOGIN DESKTOP] Token is ok');
 
-                // set an interval to run every minute to check if token needs refresh.
+                // - set an interval to run every minute to check if token needs refresh.
                 // eslint-disable-next-line consistent-return
                 intervalId.current = setInterval(() => {
-                    // If expiring soon, refresh before we start hitting errors.
+                    // - if expiring soon, refresh before we start hitting errors.
                     if (checkIKTokenExpiresSoon()) {
                         refreshIKToken(/*redirectToReam*/false);
                     }
@@ -90,7 +88,6 @@ const Login = () => {
                 return () => clearInterval(intervalId.current as NodeJS.Timer);
             }
 
-            // If need to refresh the token
             // if ((localStorage.getItem('IKTokenExpire') && checkIKTokenIsExpired()) || (localStorage.getItem('IKRefreshToken') && !token)) {
             //     // TODO: need to remove this because either:
             //     // 1) interval should refresh before token expires
@@ -105,7 +102,7 @@ const Login = () => {
             // }
         }
 
-        // For web send through to router if user exists.
+        // For web simply send through to router if user exists.
         if (currentUser) {
             console.log('[LOGIN] Current user is ok');
             redirectUserToDefaultTeam();
