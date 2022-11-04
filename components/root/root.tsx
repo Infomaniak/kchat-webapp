@@ -398,7 +398,7 @@ export default class Root extends React.PureComponent<Props, State> {
         this.onConfigLoaded();
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if (isDesktopApp()) {
             // Rely on initial client calls to 401 here for the first redirect to login,
             // we dont need to do it manually.
@@ -416,7 +416,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         expires_in: string;
                         access_token: string;
                         refresh_token: string;
-                    } = Client4.getIKLoginToken(
+                    } = await Client4.getIKLoginToken(
                         loginCode,
                         challenge?.challenge,
                         challenge?.verifier,
