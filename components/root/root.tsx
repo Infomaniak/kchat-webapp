@@ -453,6 +453,8 @@ export default class Root extends React.PureComponent<Props, State> {
                     clearLocalStorageToken();
                     this.props.history.push('/login' + this.props.location.search);
                 }
+            } else {
+                this.runMounted();
             }
         } else {
             // Allow through initial requests for web.
