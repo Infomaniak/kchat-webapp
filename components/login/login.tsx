@@ -6,6 +6,8 @@ import React, {useEffect, useRef} from 'react';
 
 import {useSelector} from 'react-redux';
 
+import {useLocation} from 'react-router-dom';
+
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
 
@@ -23,16 +25,22 @@ import LocalStorageStore from 'stores/local_storage_store';
 import {GlobalState} from 'types/store';
 
 import {isDesktopApp} from 'utils/user_agent';
-
-import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin} from './utils';
+import {Client4} from 'mattermost-redux/client';
+import {
+    checkIKTokenIsExpired,
+    clearLocalStorageToken,
+    getChallengeAndRedirectToLogin,
+    storeTokenResponse,
+} from './utils';
 import './login.scss';
+import {IKConstants} from '../../utils/constants-ik';
 
 const Login = () => {
     // TODO: can we clean this?
     // const {
     //     ExperimentalPrimaryTeam,
     // } = useSelector(getConfig);
-
+    const {search} = useLocation();
     const initializing = useSelector((state: GlobalState) => state.requests.users.logout.status === RequestStatus.SUCCESS || !state.storage.initialized);
     const currentUser = useSelector(getCurrentUser);
 
@@ -60,6 +68,53 @@ const Login = () => {
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
+
+
+            const loginCode = (new URLSearchParams(search)).get('code');
+            if (loginCode) {
+                // eslint-disable-next-line no-console
+                console.log('[LOGIN] Login with code');
+                const challenge = JSON.parse(localStorage.getItem('challenge') as string);
+
+                try { // Get new token
+                    const response: {
+                        expires_in: string;
+                        access_token: string;
+                        refresh_token: string;
+                    } = Client4.getIKLoginToken(
+                        loginCode,
+                        challenge?.challenge,
+                        challenge?.verifier,
+                        IKConstants.LOGIN_URL,
+                        IKConstants.CLIENT_ID,
+                    );
+
+                    // Store in localstorage
+                    storeTokenResponse(response);
+
+                    // Remove challange and set logged in.
+                    localStorage.removeItem('challenge');
+                    localStorage.setItem('tokenExpired', '0');
+                    LocalStorageStore.setWasLoggedIn(true);
+
+                    // Store in desktop storage.
+                    window.postMessage(
+                        {
+                            type: 'token-refreshed',
+                            message: {
+                                token: response.access_token,
+                            },
+                        },
+                        window.origin,
+                    );
+                } catch (error) {
+                    // This is an edge case that I haven't tested yet,
+                    // for now clear storage and resend to login to try and login again.
+                    // eslint-disable-next-line no-console
+                    console.log('[TOKEN] post token fail', error);
+                    clearLocalStorageToken();
+                }
+            }
 
             // Check for desktop session end of life
             if (checkIKTokenIsExpired() || !token || !refreshToken) {
