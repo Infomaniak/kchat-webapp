@@ -451,6 +451,8 @@ export default class Root extends React.PureComponent<Props, State> {
                     console.log('[TOKEN] post token fail', error);
                     clearLocalStorageToken();
                     this.props.history.push('/login' + this.props.location.search);
+
+                    return;
                 }
             }
 
