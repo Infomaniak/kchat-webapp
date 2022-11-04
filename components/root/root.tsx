@@ -405,12 +405,10 @@ export default class Root extends React.PureComponent<Props, State> {
             // Login will send us back here with a code after we give it the challange.
             // Use code to refresh token.
             const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
+
             if (loginCode) {
                 // eslint-disable-next-line no-console
                 console.log('[LOGIN] Login with code');
-            }
-
-            if (loginCode) {
                 const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
                 try { // Get new token
@@ -444,6 +442,9 @@ export default class Root extends React.PureComponent<Props, State> {
                         },
                         window.origin,
                     );
+
+                    // Allow through initial requests anyway to receive new errors.
+                    this.runMounted();
                 } catch (error) {
                     // This is an edge case that I haven't tested yet,
                     // for now clear storage and resend to login to try and login again.
@@ -451,25 +452,8 @@ export default class Root extends React.PureComponent<Props, State> {
                     console.log('[TOKEN] post token fail', error);
                     clearLocalStorageToken();
                     this.props.history.push('/login' + this.props.location.search);
-
-                    return;
                 }
             }
-
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-
-            // Setup token keepalive:
-            if (token && refreshToken) {
-                // eslint-disable-next-line no-console
-                console.log('[LOGIN DESKTOP] Token is ok');
-
-                // set an interval to run every minute to check if token needs refresh.
-                this.tokenCheckInterval = setInterval(this.doTokenCheck, 1000 * 60); // one minute
-            }
-
-            // Allow through initial requests anyway to receive new errors.
-            this.runMounted();
         } else {
             // Allow through initial requests for web.
             this.runMounted();
@@ -485,6 +469,18 @@ export default class Root extends React.PureComponent<Props, State> {
 
     runMounted = () => {
         this.mounted = true;
+
+        const token = localStorage.getItem('IKToken');
+        const refreshToken = localStorage.getItem('IKRefreshToken');
+
+        // Setup token keepalive:
+        if (token && refreshToken) {
+            // eslint-disable-next-line no-console
+            console.log('[LOGIN DESKTOP] Token is ok');
+
+            // set an interval to run every minute to check if token needs refresh.
+            this.tokenCheckInterval = setInterval(this.doTokenCheck, 1000 * 60); // one minute
+        }
 
         this.initiateMeRequests();
 
