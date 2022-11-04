@@ -423,8 +423,10 @@ export default class Root extends React.PureComponent<Props, State> {
                         IKConstants.LOGIN_URL,
                         IKConstants.CLIENT_ID,
                     );
+
+                    // eslint-disable-next-line no-console
                     console.log('[ROOT LOGIN] Get token response', response);
-                    
+
                     // Store in localstorage
                     storeTokenResponse(response);
 
