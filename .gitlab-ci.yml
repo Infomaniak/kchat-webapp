@@ -51,7 +51,7 @@ code_quality:
     - when: never
 
 build_docker_image:
-  stage: build
+  stage: release
   tags:
     - kubernetes
   image:
