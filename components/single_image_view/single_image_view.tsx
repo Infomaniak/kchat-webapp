@@ -92,7 +92,7 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
         this.mounted = false;
     }
 
-    imageLoaded = ({height, width}) => {
+    imageLoaded = ({height, width}: State['svgDimensions']) => {
         if (this.mounted) {
             this.setState({loaded: true});
             if (!this.state.dimensions.height || !this.state.dimensions.width) {
