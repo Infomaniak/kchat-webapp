@@ -150,8 +150,7 @@ export default class WebSocketClient {
                 wssPort: 443,
                 httpPort: 443,
                 httpsPort: 443,
-                forceTLS: true,
-                enabledTransports: ['ws', 'wss'],
+                enabledTransports: ['wss'],
             });
         } else {
             this.conn = new Pusher('kchat-key', {
@@ -162,8 +161,7 @@ export default class WebSocketClient {
                 wssPort: 443,
                 httpPort: 443,
                 httpsPort: 443,
-                forceTLS: true,
-                enabledTransports: ['ws', 'wss'],
+                enabledTransports: ['wss'],
             });
         }
 
