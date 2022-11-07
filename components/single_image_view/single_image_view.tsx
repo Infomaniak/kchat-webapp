@@ -36,6 +36,10 @@ type State = {
         width: number;
         height: number;
     };
+    svgDimensions: {
+        width: number;
+        height: number;
+    };
 }
 
 export default class SingleImageView extends React.PureComponent<Props, State> {
@@ -53,6 +57,10 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
                 width: props.fileInfo?.width || 0,
                 height: props.fileInfo?.height || 0,
             },
+            svgDimensions: {
+                width: 0,
+                height: 0,
+            },
         };
     }
 
@@ -61,6 +69,14 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
     }
 
     static getDerivedStateFromProps(props: Props, state: State) {
+        if (state.svgDimensions.width !== 0 && state.svgDimensions.height !== 0) {
+            return {
+                dimensions: {
+                    width: state.svgDimensions.width,
+                    height: state.svgDimensions.height,
+                },
+            };
+        }
         if ((props.fileInfo?.width !== state.dimensions.width) || props.fileInfo.height !== state.dimensions.height) {
             return {
                 dimensions: {
@@ -76,9 +92,12 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
         this.mounted = false;
     }
 
-    imageLoaded = () => {
+    imageLoaded = ({height, width}) => {
         if (this.mounted) {
             this.setState({loaded: true});
+            if (!this.state.dimensions.height || !this.state.dimensions.width) {
+                this.setState({svgDimensions: {width, height}});
+            }
         }
     }
 
@@ -118,8 +137,8 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
         const fileURL = getFileUrl(id);
         const previewURL = hasPreviewImage ? getFilePreviewUrl(id) : fileURL;
 
-        const previewHeight = fileInfo.height;
-        const previewWidth = fileInfo.width;
+        const previewHeight = this.state.dimensions.height;
+        const previewWidth = this.state.dimensions.width;
 
         let minPreviewClass = '';
         if (
