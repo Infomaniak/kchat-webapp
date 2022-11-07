@@ -161,7 +161,7 @@ export default class WebSocketClient {
                 wssPort: 443,
                 httpPort: 443,
                 httpsPort: 443,
-                enabledTransports: ['wss'],
+                enabledTransports: ['ws', 'wss'],
             });
         }
 
