@@ -597,9 +597,10 @@ export function handleEvent(msg) {
     case SocketEvents.PUSHER_MEMBER_REMOVED:
         handlePusherMemberRemoved(msg);
         break;
-    case SocketEvents.PUSHER_PONG:
-        handlePusherPong(msg);
-        break;
+
+    // case SocketEvents.PUSHER_PONG:
+    //     handlePusherPong(msg);
+    //     break;
     default:
     }
 
