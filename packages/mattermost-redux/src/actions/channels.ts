@@ -22,6 +22,7 @@ import {
     getMyChannelMember as getMyChannelMemberSelector,
     getRedirectChannelNameForTeam,
     isManuallyUnread,
+    getUnreadChannelIds,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getServerVersion} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
@@ -43,7 +44,6 @@ import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {savePreferences} from './preferences';
 import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
-import { getUnreadChannelIds } from '../selectors/entities/channels';
 
 export function selectChannel(channelId: string) {
     return {
@@ -1268,8 +1268,7 @@ export function markChannelAsRead(channelId: string, prevChannelId?: string, upd
 
 export function markAllChannelsAsRead(prevChannelId?: string, updateLastViewedAt = true): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState();
-        const unreadChannelIds = getUnreadChannelIds(state);
+        const unreadChannelIds = getUnreadChannelIds(getState());
         for (const unreadChannelId of unreadChannelIds) {
             dispatch(markChannelAsRead(unreadChannelId, prevChannelId, updateLastViewedAt));
         }
