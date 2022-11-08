@@ -267,7 +267,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         } else if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
         } else {
-            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
         }
     }).catch(() => {
         if (isDesktopApp()) {
@@ -279,7 +279,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         } else if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
         } else {
-            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
         }
     });
 }
