@@ -1,26 +1,29 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import React, {memo, useCallback, useEffect, useState} from 'react';
+
+import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-
 import {FormattedMessage} from 'react-intl';
 
-import Constants, {InsightsScopes} from 'utils/constants';
+import {TopChannel, TopChannelGraphData} from '@mattermost/types/insights';
 
-import CircleLoader from '../skeleton_loader/circle_loader/circle_loader';
-import TitleLoader from '../skeleton_loader/title_loader/title_loader';
-import LineChartLoader from '../skeleton_loader/line_chart_loader/line_chart_loader';
-import widgetHoc, {WidgetHocProps} from '../widget_hoc/widget_hoc';
+import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
 
 import {getCurrentRelativeTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getMyTopChannels, getTopChannelsForTeam} from 'mattermost-redux/actions/insights';
-import {TopChannel, TopChannelGraphData} from '@mattermost/types/insights';
-import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
-import OverlayTrigger from 'components/overlay_trigger';
 
-import Tooltip from 'components/tooltip';
+import Constants, {InsightsScopes} from 'utils/constants';
+
+import {trackEvent} from 'actions/telemetry_actions';
+
 import {getCurrentUserTimezone} from 'selectors/general';
+
+import OverlayTrigger from 'components/overlay_trigger';
+import Tooltip from 'components/tooltip';
+
+import widgetHoc, {WidgetHocProps} from '../widget_hoc/widget_hoc';
+import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
 
 import TopChannelsLineChart from './top_channels_line_chart/top_channels_line_chart';
 
@@ -73,7 +76,8 @@ const TopChannels = (props: WidgetHocProps) => {
         getMyTeamChannels();
     }, [getMyTeamChannels]);
 
-    const skeletonTitle = useCallback(() => {
+    const skeletonTitle = useMemo(() => {
+        const skeletonFlexes = ['1', '0.85', '0.9', '0.5', '0.7'];
         const titles = [];
         for (let i = 0; i < 5; i++) {
             titles.push(
@@ -81,10 +85,12 @@ const TopChannels = (props: WidgetHocProps) => {
                     className='top-channel-loading-row'
                     key={i}
                 >
-                    <CircleLoader
-                        size={16}
+                    <CircleSkeletonLoader size={16}/>
+                    <RectangleSkeletonLoader
+                        height={12}
+                        margin='0 0 0 8px'
+                        flex={skeletonFlexes[i]}
                     />
-                    <TitleLoader/>
                 </div>,
             );
         }
@@ -107,13 +113,20 @@ const TopChannels = (props: WidgetHocProps) => {
         );
     }, []);
 
+    const trackClickEvent = useCallback(() => {
+        trackEvent('insights', 'open_channel_from_top_channels_widget');
+    }, []);
+
     return (
         <>
             <div className='top-channel-container'>
                 <div className='top-channel-line-chart'>
                     {
                         loading &&
-                        <LineChartLoader/>
+                        <RectangleSkeletonLoader
+                            height={200}
+                            borderRadius={4}
+                        />
                     }
                     {
                         (!loading && topChannels.length !== 0) &&
@@ -130,7 +143,7 @@ const TopChannels = (props: WidgetHocProps) => {
                 <div className='top-channel-list'>
                     {
                         loading &&
-                        skeletonTitle()
+                        skeletonTitle
                     }
                     {
                         (!loading && topChannels.length !== 0) &&
@@ -149,6 +162,7 @@ const TopChannels = (props: WidgetHocProps) => {
                                             className='channel-row'
                                             to={`${currentTeamUrl}/channels/${channel.name}`}
                                             key={channel.id}
+                                            onClick={trackClickEvent}
                                         >
                                             <div
                                                 className='channel-display-name'

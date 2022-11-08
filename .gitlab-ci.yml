@@ -1,22 +1,151 @@
 include:
-  - project: 'docker-public/gitlab-ci-dev-scripts'
-    ref: master
-    file: '/build-docker-image.yaml'
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+
+variables:
+  SAST_DISABLED: "true"
+
+stages:
+  - test
+  - build
+  - release
+
+workflow:
+  rules:
+    - if: "$CI_COMMIT_TAG =~ /\\-rc.*/"
+      variables:
+        DEPLOY_VARIABLE: preprod
+        SLACK_NOTIFY_CHANNEL: https://kchat.infomaniak.com/hooks/98402a61-8342-4cd7-49b0-7cc18d6865a4
+    - if: "$CI_COMMIT_TAG"
+      variables:
+        DEPLOY_VARIABLE: prod
+        SLACK_NOTIFY_CHANNEL: https://kchat.infomaniak.com/hooks/98402a61-8342-4cd7-49b0-7cc18d6865a4
+    - if: $CI_COMMIT_BRANCH == "master"
+      variables:
+        DEPLOY_VARIABLE: prodsec
+    - if: "$CI_MERGE_REQUEST_ID"
+      variables:
+        DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
+    - when: never
+
+eslint-sast:
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
+    - when: never
+
+code_quality:
+  artifacts:
+    paths: [gl-code-quality-report.json]
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
+    - when: never
+
+build_docker_image:
+  stage: release
+  tags:
+    - kubernetes
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint:
+      - ''
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual
+      allow_failure: false
+    - when: never
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+  script:
+    - /kaniko/executor
+      --cache=true
+      --context ${CI_PROJECT_DIR}
+      --dockerfile ${CI_PROJECT_DIR}/Dockerfile
+      --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+
+build_front:
+  stage: build
+  image: node:16.10.0
+  tags:
+    - kubernetes
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - when: never
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  before_script:
+    - export ENVIRONMENT=${DEPLOY_VARIABLE}
+    - npx yarn
+  script:
+    - yarn
+    - yarn workspace @mattermost/types build
+    - yarn workspace @mattermost/client build
+    - yarn workspace @mattermost/components build
+    - yarn build:webapp
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - .yarn/cache/
+      - .yarn/install-state.gz
+  artifacts:
+    paths:
+      - dist
+    expire_in: 1 days
+    when: always
+
+publish_front:
+  stage: release
+  tags:
+    - kubernetes
+  image:
+    name: minio/mc:RELEASE.2020-03-06T23-29-45Z
+    entrypoint: [ '' ]
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - when: never
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  before_script:
+    - mc config host add $S3_BUCKET $S3_HOST $S3_KEY $S3_PASSWORD --api s3v4
+  script:
+    - mc cp --recursive dist/ $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE
+  artifacts:
+    paths:
+      - dist
+    expire_in: 1 days
+    when: always
 
 unit_test:
   stage: test
-  image: node:16.14.2-bullseye
+  image: node:16.10.0
   tags:
     - docker-executor
     - kubernetes
     - shared
+  environment:
+    name: "$DEPLOY_VARIABLE"
   rules:
-    - if: $CI_COMMIT_TAG
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
     - when: never
   artifacts:
     paths:
@@ -25,18 +154,17 @@ unit_test:
     reports:
       junit:
         - coverage/junit.xml
-  coverage: '/^\s*Lines\s*: \d+\d+.\d+\d+\%/'
+  coverage: "/^\\s*Lines\\s*: \\d+\\d+.\\d+\\d+\\%/"
   cache:
     key:
       files:
-        - package-lock.json
-      prefix: ${CI_COMMIT_REF_SLUG}
+        - yarn.lock
     paths:
-      - .npm/
-      - node_modules/
+      - .yarn/cache/
+      - .yarn/install-state.gz
       - coverage/
   before_script:
-    - npm ci --cache .npm
+    - yarn
   script:
     # typescript
     # - npm run check-types
@@ -49,7 +177,14 @@ unit_test:
 
 pages:
   stage: test
-  needs: ['unit_test']
+  needs:
+    - unit_test
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
+    - when: never
   script:
     - mkdir .public
     - cp -r coverage/* .public
@@ -57,13 +192,17 @@ pages:
   artifacts:
     paths:
       - public
+
+changelog:
+  stage: release
+  image: registry.infomaniak.com:443/leopold.jacquot/debian-toolbox:0.0.1
+  needs:
+    - publish_front
+  environment:
+    name: "$DEPLOY_VARIABLE"
   rules:
-    - if: $CI_COMMIT_TAG
+    - if: $DEPLOY_VARIABLE == "prod"
       when: on_success
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
     - when: never
-  # only:
-  #   - alpha
+  script:
+    - "./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_NOTIFY_CHANNEL}"

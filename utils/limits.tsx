@@ -29,6 +29,9 @@ export const fallbackStarterLimits = {
     files: {
         totalStorage: FileSizes.Gigabyte * 10,
     },
+    teams: {
+        active: 1,
+    },
     integrations: {
         enabled: 5,
     },
@@ -69,5 +72,6 @@ export const limitThresholds = Object.freeze({
     ok: 0,
     warn: 50,
     danger: 66,
+    reached: 100,
     exceeded: 100.000001,
 });

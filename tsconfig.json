@@ -9,6 +9,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "strictNullChecks": true,
@@ -17,16 +18,10 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noEmit": true,
+    "noEmitOnError": true,
     "experimentalDecorators": true,
     "jsx": "react",
     "baseUrl": ".",
-    "paths": {
-        "@mattermost/client": ["packages/client/src"],
-        "@mattermost/types/*": ["packages/types/src/*"],
-        "mattermost-redux/*": ["packages/mattermost-redux/src/*"],
-        "reselect": ["packages/reselect/src"],
-        "!!file-loader*": ["utils/empty-string"]
-    }
   },
   "include": [
     "./**/*"
@@ -34,11 +29,10 @@
   "exclude": [
     "dist",
     "e2e",
-    "!node_modules/@types",
-    "coverage"
+    "node_modules",
+    "coverage",
+    "packages/components",
+    "packages/**/dist/**",
+    "packages/**/lib/**",
   ],
-  "references": [
-    {"path": "./packages/client"},
-    {"path": "./packages/types"},
-  ]
 }

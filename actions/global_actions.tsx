@@ -4,16 +4,16 @@
 import {batchActions} from 'redux-batched-actions';
 
 import {
-    fetchMyChannelsAndMembers,
+    fetchMyChannelsAndMembersREST,
     getChannelByNameAndTeamName,
     getChannelStats,
     selectChannel,
 } from 'mattermost-redux/actions/channels';
-import {logout, loadMe} from 'mattermost-redux/actions/users';
+import {logout, loadMe, loadMeREST} from 'mattermost-redux/actions/users';
 import {Preferences} from 'mattermost-redux/constants';
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentTeamId, getMyTeams, getTeam, getMyTeamMember, getTeamMemberships} from 'mattermost-redux/selectors/entities/teams';
-import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeamId, getMyKSuites, getTeam, getMyTeamMember, getTeamMemberships} from 'mattermost-redux/selectors/entities/teams';
+import {getBool, isCollapsedThreadsEnabled, isGraphQLEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedirectChannelNameForTeam, getChannelsNameMapInTeam, getAllDirectChannels, getChannelMessageCount} from 'mattermost-redux/selectors/entities/channels';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
@@ -21,14 +21,15 @@ import {ChannelTypes} from 'mattermost-redux/action_types';
 import {fetchAppBindings} from 'mattermost-redux/actions/apps';
 import {Channel, ChannelMembership} from '@mattermost/types/channels';
 import {UserProfile} from '@mattermost/types/users';
+import {Post} from '@mattermost/types/posts';
 import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import {Team} from '@mattermost/types/teams';
 import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
 import {browserHistory} from 'utils/browser_history';
-import {handleNewPost} from 'actions/post_actions.jsx';
-import {stopPeriodicStatusUpdates} from 'actions/status_actions.jsx';
-import {loadProfilesForSidebar} from 'actions/user_actions.jsx';
+import {handleNewPost} from 'actions/post_actions';
+import {stopPeriodicStatusUpdates} from 'actions/status_actions';
+import {loadProfilesForSidebar} from 'actions/user_actions';
 import {closeRightHandSide, closeMenu as closeRhsMenu, updateRhsState} from 'actions/views/rhs';
 import {clearUserCookie} from 'actions/views/cookie';
 import {close as closeLhs} from 'actions/views/lhs';
@@ -47,6 +48,9 @@ import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import * as Utils from 'utils/utils';
 import SubMenuModal from '../components/widgets/menu/menu_modals/submenu_modal/submenu_modal';
 
+import {isDesktopApp} from '../utils/user_agent';
+import {IKConstants} from '../utils/constants-ik';
+
 import {openModal} from './views/modals';
 
 const dispatch = store.dispatch;
@@ -63,6 +67,7 @@ export function emitChannelClickEvent(channel: Channel) {
         const member = getMyChannelMember(state, chan.id);
         const currentChannelId = getCurrentChannelId(state);
         const previousRhsState = getPreviousRhsState(state);
+
         dispatch(getChannelStats(chan.id));
 
         const penultimate = LocalStorageStore.getPreviousChannelName(userId, teamId);
@@ -72,7 +77,7 @@ export function emitChannelClickEvent(channel: Channel) {
             LocalStorageStore.setPreviousChannelName(userId, teamId, chan.name);
         }
 
-        if (penultimateType === PreviousViewedTypes.THREADS || penultimate !== chan.name) {
+        if (penultimateType !== PreviousViewedTypes.CHANNELS || penultimate !== chan.name) {
             LocalStorageStore.setPreviousViewedType(userId, teamId, PreviousViewedTypes.CHANNELS);
             LocalStorageStore.setPenultimateViewedType(userId, teamId, penultimateType);
         }
@@ -176,9 +181,9 @@ export function sendEphemeralPost(message: string, channelId?: string, parentId?
             type: PostTypes.EPHEMERAL,
             create_at: timestamp,
             update_at: timestamp,
-            root_id: parentId,
+            root_id: parentId || '',
             props: {},
-        };
+        } as Post;
 
         return doDispatch(handleNewPost(post));
     };
@@ -199,7 +204,7 @@ export function sendAddToChannelEphemeralPost(user: UserProfile, addedUsername: 
             addedUsername,
             addedUserId,
         },
-    };
+    } as unknown as Post;
 
     dispatch(handleNewPost(post));
 }
@@ -248,15 +253,34 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         if (shouldSignalLogout) {
             BrowserStore.signalLogout();
         }
-
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
 
         clearUserCookie();
 
-        browserHistory.push(redirectTo);
+        if (isDesktopApp()) {
+            if (redirectTo && redirectTo !== 'ikLogout') {
+                browserHistory.push(redirectTo);
+            } else {
+                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+            }
+        } else if (redirectTo && redirectTo !== 'ikLogout') {
+            browserHistory.push(redirectTo);
+        } else {
+            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+        }
     }).catch(() => {
-        browserHistory.push(redirectTo);
+        if (isDesktopApp()) {
+            if (redirectTo && redirectTo !== 'ikLogout') {
+                browserHistory.push(redirectTo);
+            } else {
+                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+            }
+        } else if (redirectTo && redirectTo !== 'ikLogout') {
+            browserHistory.push(redirectTo);
+        } else {
+            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+        }
     });
 }
 
@@ -287,7 +311,7 @@ export async function getTeamRedirectChannelIfIsAccesible(user: UserProfile, tea
     let teamChannels = getChannelsNameMapInTeam(state, team.id);
     if (!teamChannels || Object.keys(teamChannels).length === 0) {
         // This should be executed in pretty limited scenarios (empty teams)
-        await dispatch(fetchMyChannelsAndMembers(team.id)); // eslint-disable-line no-await-in-loop
+        await dispatch(fetchMyChannelsAndMembersREST(team.id)); // eslint-disable-line no-await-in-loop
         state = getState();
         teamChannels = getChannelsNameMapInTeam(state, team.id);
     }
@@ -334,7 +358,11 @@ export async function redirectUserToDefaultTeam() {
     const shouldLoadUser = Utils.isEmptyObject(getTeamMemberships(state)) || !user;
 
     if (shouldLoadUser) {
-        await dispatch(loadMe());
+        if (isGraphQLEnabled(state)) {
+            await dispatch(loadMe());
+        } else {
+            await dispatch(loadMeREST());
+        }
         state = getState();
         user = getCurrentUser(state);
     }
@@ -342,15 +370,11 @@ export async function redirectUserToDefaultTeam() {
     if (!user) {
         return;
     }
-    let teamId = '';
-    const locale = getCurrentLocale(state);
-    if (LocalStorageStore.getPreviousTeamId(user.id)) {
-        teamId = LocalStorageStore.getPreviousTeamId(user.id);
-    } else {
-        teamId = user.team_id;
-    }
 
-    let myTeams = getMyTeams(state);
+    const locale = getCurrentLocale(state);
+    const teamId = LocalStorageStore.getPreviousTeamId(user.id);
+
+    let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
         browserHistory.push('/select_team');
         return;
@@ -360,6 +384,7 @@ export async function redirectUserToDefaultTeam() {
     if (teamId) {
         team = getTeam(state, teamId);
     }
+
     if (team && team.delete_at === 0) {
         const channel = await getTeamRedirectChannelIfIsAccesible(user, team);
         if (channel) {

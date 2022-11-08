@@ -26,6 +26,7 @@ export type ViewsState = {
             onNavigationConfirmed: () => void;
             showNavigationPrompt: boolean;
         };
+        needsLoggedInLimitReachedCheck: boolean;
     };
 
     announcementBar: {

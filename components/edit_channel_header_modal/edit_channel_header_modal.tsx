@@ -240,7 +240,7 @@ export default class EditChannelHeaderModal extends React.PureComponent<Props, S
                         <p>
                             <FormattedMessage
                                 id='edit_channel_header_modal.description'
-                                defaultMessage='Edit the text appearing next to the channel name in the channel header.'
+                                defaultMessage='Edit the text appearing next to the channel name in the header.'
                             />
                         </p>
                         <div className='textarea-wrapper'>
@@ -278,7 +278,7 @@ export default class EditChannelHeaderModal extends React.PureComponent<Props, S
                 <Modal.Footer>
                     <button
                         type='button'
-                        className='btn btn-link cancel-button'
+                        className='btn cancel-button secondary'
                         onClick={this.hideModal}
                     >
                         <FormattedMessage

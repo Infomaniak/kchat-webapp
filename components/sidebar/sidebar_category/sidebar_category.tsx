@@ -30,6 +30,7 @@ import SidebarCategoryMenu from './sidebar_category_menu';
 type Props = {
     category: ChannelCategory;
     categoryIndex: number;
+    isLastCategory: boolean;
     channelIds: string[];
     setChannelRef: (channelId: string, ref: HTMLLIElement) => void;
     handleOpenMoreDirectChannelsModal: (e: Event) => void;
@@ -408,7 +409,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                             </SidebarCategoryHeader>
                                             <div
                                                 className={classNames('SidebarChannelGroup_content', {
-                                                    hasFollowingSibling: category.type === CategoryTypes.DIRECT_MESSAGES,
+                                                    hasFollowingSibling: !this.props.isLastCategory,
                                                 })}
                                             >
                                                 <ul

@@ -31,6 +31,7 @@ import {ServerError} from '@mattermost/types/errors';
 import {ModalData} from 'types/actions';
 
 import './profile_popover.scss';
+import {IKConstants} from '../../utils/constants-ik';
 
 interface ProfilePopoverProps extends Omit<React.ComponentProps<typeof Popover>, 'id'>{
 
@@ -144,6 +145,12 @@ interface ProfilePopoverProps extends Omit<React.ComponentProps<typeof Popover>,
         getMembershipForEntities: (teamId: string, userId: string, channelId?: string) => Promise<void>;
     };
     intl: IntlShape;
+
+    lastActivityTimestamp: number;
+
+    enableLastActiveTime: boolean;
+
+    timestampUnits: string[];
 }
 type ProfilePopoverState = {
     loadingDMChannel?: string;
@@ -220,21 +227,6 @@ ProfilePopoverState
             this.props.user.username,
             this.props.isRHS,
         );
-        this.handleCloseModals();
-    };
-    handleEditAccountSettings = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        if (!this.props.user) {
-            return;
-        }
-        if (this.props.hide) {
-            this.props.hide();
-        }
-        this.props.actions.openModal({
-            modalId: ModalIdentifiers.USER_SETTINGS,
-            dialogType: UserSettingsModal,
-            dialogProps: {isContentProductSettings: false},
-        });
         this.handleCloseModals();
     };
     showCustomStatusModal = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -333,6 +325,12 @@ ProfilePopoverState
 
         return {customStatusContent, expiryContent};
     }
+
+    redirectToManagerProfile = (e: React.MouseEvent<HTMLAnchorElement>): void => {
+        e.preventDefault();
+        window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
+    };
+
     render() {
         if (!this.props.user) {
             return null;
@@ -363,6 +361,30 @@ ProfilePopoverState
                 />
             </div>,
         );
+        if (this.props.enableLastActiveTime && this.props.lastActivityTimestamp && this.props.timestampUnits) {
+            dataContent.push(
+                <div
+                    className='user-popover-last-active'
+                    key='user-popover-last-active'
+                >
+                    <FormattedMessage
+                        id='channel_header.lastActive'
+                        defaultMessage='Active {timestamp}'
+                        values={{
+                            timestamp: (
+                                <Timestamp
+                                    value={this.props.lastActivityTimestamp}
+                                    units={this.props.timestampUnits}
+                                    useTime={false}
+                                    style={'short'}
+                                />
+                            ),
+                        }}
+                    />
+                </div>,
+            );
+        }
+
         const fullname = Utils.getFullName(this.props.user);
         const haveOverrideProp =
       this.props.overwriteIcon || this.props.overwriteName;
@@ -523,7 +545,7 @@ ProfilePopoverState
                 >
                     <a
                         href='#'
-                        onClick={this.handleEditAccountSettings}
+                        onClick={this.redirectToManagerProfile}
                     >
                         <LocalizedIcon
                             className='fa fa-pencil-square-o'

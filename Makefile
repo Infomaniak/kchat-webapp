@@ -43,6 +43,7 @@ node_modules: package.json package-lock.json
 	node skip_integrity_check.js
 
 	npm install
+	npm run build --workspace=packages/components
 	touch $@
 
 package: build ## Packages app
@@ -58,6 +59,7 @@ package-ci: ## used in the CI to build the package and bypass the npm install
 	@echo Building mattermost Webapp
 
 	rm -rf dist
+	npm run build --workspace=packages/components
 	npm run build
 
 	@echo Packaging webapp
@@ -68,12 +70,12 @@ package-ci: ## used in the CI to build the package and bypass the npm install
 	mv tmp/client dist
 	rmdir tmp
 
-build: node_modules ## Builds the app
+build: ## Builds the app
 	@echo Building mattermost Webapp
 
 	rm -rf dist
 
-	npm run build
+	export $(xargs < ./.env) && yarn build
 
 run: node_modules ## Runs app
 	@echo Running mattermost Webapp for development
@@ -106,6 +108,9 @@ clean: ## Clears cached; deletes node_modules and dist directories
 
 	rm -rf dist
 	rm -rf node_modules
+
+	rm -f .eslintcache
+	rm -f .stylelintcache
 
 e2e-test: node_modules
 	@echo E2E: Running mattermost-mysql-e2e

@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/* eslint-disable max-lines */
+
 import emojiRegex from 'emoji-regex';
 import {Renderer} from 'marked';
 
@@ -175,6 +177,20 @@ interface TextFormattingOptionsBase {
      */
     editedAt: number;
     postId: string;
+
+    /**
+     * Whether or not to render sum of members mentions e.g. "5 members..." into spans with a data-sum-of-members-mention attribute.
+     *
+     * Defaults to `false`.
+     */
+    atSumOfMembersMentions: boolean;
+
+    /**
+     * Whether or not to render plan mentions e.g. "Professional plan, Enterprise plan, Starter plan" into spans with a data-plan-mention attribute.
+     *
+     * Defaults to `false`.
+     */
+    atPlanMentions: boolean;
 }
 
 export type TextFormattingOptions = Partial<TextFormattingOptionsBase>;
@@ -186,6 +202,8 @@ const DEFAULT_OPTIONS: TextFormattingOptions = {
     emoticons: true,
     markdown: true,
     atMentions: false,
+    atSumOfMembersMentions: false,
+    atPlanMentions: false,
     minimumHashtagLength: 3,
     proxyImages: false,
     editedAt: 0,
@@ -239,9 +257,16 @@ export function formatText(
              * the Markdown.format function removes all duplicate line-breaks beforehand, so it is safe to just
              * replace occurrences which are not followed by opening <p> tags to prevent duplicate line-breaks
              *
-             * @link to regex101.com: https://regex101.com/r/iPZ02c/1
+             * The data-codeblock-code part is a fix for MM-45349 - do not replace newlines with `<br/>`
+             * in code blocks, as they become visible in the message
              */
-            output = output.replace(/[\r\n]+(?!(<p>))/g, '<br/>');
+            output = output.replace(/data-codeblock-code="[^"]+"|[\r\n]+(?!(<p>))/g, (match: string) => {
+                if (match.includes('data-codeblock-code')) {
+                    return match;
+                }
+
+                return '<br/>';
+            });
 
             /*
              * the replacer is not ideal, since it replaces every occurence with a new div
@@ -286,6 +311,14 @@ export function doFormatText(text: string, options: TextFormattingOptions, emoji
     // replace important words and phrases with tokens
     if (options.atMentions) {
         output = autolinkAtMentions(output, tokens);
+    }
+
+    if (options.atSumOfMembersMentions) {
+        output = autoLinkSumOfMembersMentions(output, tokens);
+    }
+
+    if (options.atPlanMentions) {
+        output = autoPlanMentions(output, tokens);
     }
 
     if (options.channelNamesMap) {
@@ -360,6 +393,50 @@ function autolinkEmails(text: string, tokens: Tokens) {
     }
 
     return text.replace(emailRegex, replaceEmailWithToken);
+}
+
+export function autoLinkSumOfMembersMentions(text: string, tokens: Tokens): string {
+    function replaceSumOfMembersMentionWithToken(fullMatch: string) {
+        const index = tokens.size;
+        const alias = `$MM_SUMOFMEMBERSMENTION${index}$`;
+
+        tokens.set(alias, {
+            value: `<span data-sum-of-members-mention="${fullMatch}">${fullMatch}</span>`,
+            originalText: fullMatch,
+        });
+
+        return alias;
+    }
+
+    let output = text;
+    output = output.replace(
+        Constants.SUM_OF_MEMBERS_MENTION_REGEX,
+        replaceSumOfMembersMentionWithToken,
+    );
+
+    return output;
+}
+
+export function autoPlanMentions(text: string, tokens: Tokens): string {
+    function replacePlanMentionWithToken(fullMatch: string) {
+        const index = tokens.size;
+        const alias = `$MM_PLANMENTION${index}$`;
+
+        tokens.set(alias, {
+            value: `<span data-plan-mention="${fullMatch}">${fullMatch}</span>`,
+            originalText: fullMatch,
+        });
+
+        return alias;
+    }
+
+    let output = text;
+    output = output.replace(
+        Constants.PLAN_MENTIONS,
+        replacePlanMentionWithToken,
+    );
+
+    return output;
 }
 
 export function autolinkAtMentions(text: string, tokens: Tokens): string {
@@ -919,4 +996,17 @@ function fixedCharCodeAt(str: string, idx = 0) {
     }
 
     return code;
+}
+
+export function fixedEncodeURIComponent(str: string) {
+    return str.replace(/[-._~:/?#[\]@!$&'()*+,;=]/g, (c: string) => {
+        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+    });
+}
+
+export function fixedDecodeURIComponent(str: string) {
+    return str.replace(/%(2D|2E|5F|7E|3A|2F|3F|23|5B|5C|5D|40|21|24|26|27|28|29|2A|2B|2C|3B|3D)/g, (inChar) => {
+        const c = inChar.substring(1);
+        return String.fromCharCode(parseInt(c, 16));
+    });
 }

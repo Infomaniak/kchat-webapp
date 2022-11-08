@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {Theme, ThemeTypeMap} from 'mattermost-redux/types/themes';
-import {Preferences} from '../constants';
+import {LegacyThemeType, Theme, ThemeKey, ThemeType} from 'mattermost-redux/selectors/entities/preferences';
+import {Preferences} from 'mattermost-redux/constants';
 
 export function makeStyleFromTheme(getStyleFromTheme: (a: any) => any): (a: any) => any {
     let lastTheme: any;
@@ -116,19 +116,19 @@ export const blendColors = (background: string, foreground: string, opacity: num
     return `rgba(${red},${green},${blue},${alpha})`;
 };
 
+type ThemeTypeMap = Record<ThemeType | LegacyThemeType, ThemeKey>;
+
 // object mapping theme types to their respective keys for retrieving the source themes directly
 // - supports mapping old themes to new themes
 const themeTypeMap: ThemeTypeMap = {
     Mattermost: 'denim',
-    // Organization: 'sapphire',
     'Mattermost Dark': 'indigo',
     'Windows Dark': 'indigo',
     Infomaniak: 'ik',
     Denim: 'denim',
-    // Sapphire: 'sapphire',
     Quartz: 'quartz',
     Indigo: 'indigo',
-    // Onyx: 'onyx',
+    Onyx: 'onyx',
 };
 
 // setThemeDefaults will set defaults on the theme for any unset properties.

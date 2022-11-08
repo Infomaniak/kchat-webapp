@@ -5,13 +5,13 @@ import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
 import {withRouter} from 'react-router-dom';
 
-import {fetchAllMyTeamsChannelsAndChannelMembers, fetchMyChannelsAndMembers, viewChannel} from 'mattermost-redux/actions/channels';
+import {fetchAllMyTeamsChannelsAndChannelMembersREST, fetchMyChannelsAndMembersREST, viewChannel} from 'mattermost-redux/actions/channels';
 import {getMyTeamUnreads, getTeamByName, selectTeam} from 'mattermost-redux/actions/teams';
 import {getGroups, getAllGroupsAssociatedToChannelsInTeam, getAllGroupsAssociatedToTeam, getGroupsByUserIdPaginated} from 'mattermost-redux/actions/groups';
 import {isCollapsedThreadsEnabled, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getLicense, getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-import {getCurrentTeamId, getMyTeams} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTeamId, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {Action} from 'mattermost-redux/types/actions';
 
@@ -48,7 +48,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         currentUser,
         currentTeamId: getCurrentTeamId(state),
         previousTeamId: getPreviousTeamId(state) as string,
-        teamsList: getMyTeams(state),
+        teamsList: getMyKSuites(state),
         currentChannelId: getCurrentChannelId(state),
         plugins,
         selectedThreadId: getSelectedThreadIdInCurrentTeam(state),
@@ -60,8 +60,8 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators<ActionCreatorsMapObject<Action>, any>({
-            fetchMyChannelsAndMembers,
-            fetchAllMyTeamsChannelsAndChannelMembers,
+            fetchMyChannelsAndMembersREST,
+            fetchAllMyTeamsChannelsAndChannelMembersREST,
             getMyTeamUnreads,
             viewChannel,
             markChannelAsReadOnFocus,

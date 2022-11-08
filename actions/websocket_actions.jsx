@@ -1,10 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 /* eslint-disable max-lines */
 
 import {batchActions} from 'redux-batched-actions';
 
-import {closeModal} from 'actions/views/modals';
+import {closeModal, openModal} from 'actions/views/modals';
 import {
     ChannelTypes,
     EmojiTypes,
@@ -20,7 +21,7 @@ import {
     AppsTypes,
     CloudTypes,
 } from 'mattermost-redux/action_types';
-import {WebsocketEvents, General, Permissions, Preferences} from 'mattermost-redux/constants';
+import {General, Permissions} from 'mattermost-redux/constants';
 import {addChannelToInitialCategory, fetchMyCategories, receivedCategoryOrder} from 'mattermost-redux/actions/channel_categories';
 import {
     getChannelAndMyMember,
@@ -33,7 +34,7 @@ import {
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 
-import {getBool, isCollapsedThreadsEnabled, cloudFreeEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {
     getThread as fetchThread,
@@ -65,14 +66,13 @@ import {clearErrors, logError} from 'mattermost-redux/actions/errors';
 import * as TeamActions from 'mattermost-redux/actions/teams';
 import {
     checkForModifiedUsers,
-    getMissingProfilesByIds,
-    getStatusesByIds,
     getUser as loadUser,
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
 import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
-import {getMyTeams, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
-import {getConfig, getLicense, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
+import {Client4} from 'mattermost-redux/client';
+import {getMyKSuites, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {
     getChannel,
     getChannelMembersInChannels,
@@ -91,19 +91,18 @@ import {fetchAppBindings, fetchRHSAppsBindings} from 'mattermost-redux/actions/a
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
 
-import {openModal} from 'actions/views/modals';
 import {incrementWsErrorCount, resetWsErrorCount} from 'actions/views/system';
 import {closeRightHandSide} from 'actions/views/rhs';
 import {syncPostsInChannel} from 'actions/views/channel';
 import {updateThreadLastOpened} from 'actions/views/threads';
 
 import {browserHistory} from 'utils/browser_history';
-import {loadChannelsForCurrentUser} from 'actions/channel_actions.jsx';
+import {loadChannelsForCurrentUser} from 'actions/channel_actions';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
-import {handleNewPost} from 'actions/post_actions.jsx';
-import * as StatusActions from 'actions/status_actions.jsx';
-import {loadProfilesForSidebar} from 'actions/user_actions.jsx';
+import {handleNewPost} from 'actions/post_actions';
+import * as StatusActions from 'actions/status_actions';
+import {loadProfilesForSidebar} from 'actions/user_actions';
 import store from 'stores/redux_store.jsx';
 import WebSocketClient from 'client/web_websocket_client.jsx';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
@@ -112,13 +111,17 @@ import {getSiteURL} from 'utils/url';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
-import DialingModal from 'components/kmeet_conference/ringing_dialog';
+
+// import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {needRefreshToken, refreshIKToken} from 'components/login/utils';
+import {checkIKTokenIsExpired, needRefreshToken, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
+import {isDesktopApp} from 'utils/user_agent';
+
+// import {isDesktopApp} from 'utils/user_agent';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -135,6 +138,7 @@ export function initialize() {
 
     const config = getConfig(getState());
     const user = getCurrentUser(getState());
+    const currentChannelId = getCurrentChannelId(getState());
     if (!user) {
         return;
     }
@@ -146,20 +150,24 @@ export function initialize() {
         connUrl = new URL(getSiteURL());
 
         // replace the protocol with a websocket one
-        if (connUrl.protocol === 'https:') {
-            connUrl.protocol = 'wss:';
-        } else {
-            connUrl.protocol = 'ws:';
-        }
+        connUrl.protocol = 'wss:';
+
+        // if (connUrl.protocol === 'https:') {
+        //     connUrl.protocol = 'wss:';
+        // } else {
+        //     connUrl.protocol = 'ws:';
+        // }
 
         // append a port number if one isn't already specified
-        if (!(/:\d+$/).test(connUrl.host)) {
-            if (connUrl.protocol === 'wss:') {
-                connUrl.host += ':' + config.WebsocketSecurePort;
-            } else {
-                connUrl.host += ':' + config.WebsocketPort;
-            }
-        }
+        connUrl.host += ':' + config.WebsocketSecurePort;
+
+        // if (!(/:\d+$/).test(connUrl.host)) {
+        //     if (connUrl.protocol === 'wss:') {
+        //         connUrl.host += ':' + config.WebsocketSecurePort;
+        //     } else {
+        //         connUrl.host += ':' + config.WebsocketPort;
+        //     }
+        // }
 
         connUrl = connUrl.toString();
     }
@@ -169,19 +177,22 @@ export function initialize() {
         connUrl = connUrl.substring(0, connUrl.length - 1);
     }
 
-    WebSocketClient.setEventCallback(handleEvent);
-    WebSocketClient.setFirstConnectCallback(handleFirstConnect);
-    WebSocketClient.setReconnectCallback(() => reconnect(false));
-    WebSocketClient.setMissedEventCallback(restart);
-    WebSocketClient.setCloseCallback(handleClose);
-    WebSocketClient.initialize(connUrl, user.user_id, user.team_id);
+    // connUrl += Client4.getUrlVersion() + '/websocket';
+    const authToken = Client4.getToken();
+    WebSocketClient.addMessageListener(handleEvent);
+    WebSocketClient.addFirstConnectListener(handleFirstConnect);
+    WebSocketClient.addReconnectListener(() => reconnect(false));
+    WebSocketClient.addMissedMessageListener(restart);
+    WebSocketClient.addCloseListener(handleClose);
+
+    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, authToken, currentChannelId);
 }
 
 export function close() {
     WebSocketClient.close();
 }
 
-function reconnectWebSocket() {
+export function reconnectWebSocket() {
     close();
     initialize();
 }
@@ -204,6 +215,9 @@ function restart() {
 }
 
 export function reconnect(includeWebSocket = true) {
+    // if (isDesktopApp() && checkIKTokenIsExpired()) {
+    //     refreshIKToken();
+    // }
     if (includeWebSocket) {
         reconnectWebSocket();
     }
@@ -239,7 +253,7 @@ export function reconnect(includeWebSocket = true) {
         const crtEnabled = isCollapsedThreadsEnabled(state);
         dispatch(TeamActions.getMyTeamUnreads(crtEnabled, true));
         if (crtEnabled) {
-            const teams = getMyTeams(state);
+            const teams = getMyKSuites(state);
             syncThreads(currentTeamId, currentUserId);
 
             for (const team of teams) {
@@ -436,10 +450,6 @@ export function handleEvent(msg) {
         handlePreferencesDeletedEvent(msg);
         break;
 
-    case SocketEvents.TYPING:
-        dispatch(handleUserTypingEvent(msg));
-        break;
-
     case SocketEvents.STATUS_CHANGED:
         handleStatusChangedEvent(msg);
         break;
@@ -591,9 +601,10 @@ export function handleEvent(msg) {
     case SocketEvents.PUSHER_MEMBER_REMOVED:
         handlePusherMemberRemoved(msg);
         break;
-    case SocketEvents.PUSHER_PONG:
-        handlePusherPong(msg);
-        break;
+
+    // case SocketEvents.PUSHER_PONG:
+    //     handlePusherPong(msg);
+    //     break;
     default:
     }
 
@@ -684,6 +695,11 @@ const handleNewPostEventDebounced = debouncePostEvent(100);
 export function handleNewPostEvent(msg) {
     return (myDispatch, myGetState) => {
         const post = msg.data.post;
+
+        if (window.logPostEvents) {
+            // eslint-disable-next-line no-console
+            console.log('handleNewPostEvent - new post received', post);
+        }
         myDispatch(handleNewPost(post, msg));
 
         getProfilesAndStatusesForPosts([post], myDispatch, myGetState);
@@ -711,6 +727,11 @@ export function handleNewPostEvents(queue) {
         // Note that this method doesn't properly update the sidebar state for these posts
         const posts = queue.map((msg) => msg.data.post);
 
+        if (window.logPostEvents) {
+            // eslint-disable-next-line no-console
+            console.log('handleNewPostEvents - new posts received', posts);
+        }
+
         // Receive the posts as one continuous block since they were received within a short period
         const crtEnabled = isCollapsedThreadsEnabled(myGetState());
         const actions = posts.map((post) => receivedNewPost(post, crtEnabled));
@@ -727,6 +748,12 @@ export function handleNewPostEvents(queue) {
 export function handlePostEditEvent(msg) {
     // Store post
     const post = msg.data.post;
+
+    if (window.logPostEvents) {
+        // eslint-disable-next-line no-console
+        console.log('handlePostEditEvent - post edit received', post);
+    }
+
     const crtEnabled = isCollapsedThreadsEnabled(getState());
     dispatch(receivedPost(post, crtEnabled));
 
@@ -744,6 +771,12 @@ export function handlePostEditEvent(msg) {
 
 async function handlePostDeleteEvent(msg) {
     const post = msg.data.post;
+
+    if (window.logPostEvents) {
+        // eslint-disable-next-line no-console
+        console.log('handlePostDeleteEvent - post delete received', post);
+    }
+
     const state = getState();
     const collapsedThreads = isCollapsedThreadsEnabled(state);
 
@@ -795,8 +828,7 @@ async function handleTeamAddedEvent(msg) {
     const state = getState();
     await dispatch(TeamActions.getMyTeamUnreads(isCollapsedThreadsEnabled(state)));
     const license = getLicense(state);
-    const isCloudFreeEnabled = cloudFreeEnabled(state);
-    if (license.Cloud === 'true' && isCloudFreeEnabled) {
+    if (license.Cloud === 'true') {
         dispatch(getTeamsUsage());
     }
 }
@@ -863,8 +895,7 @@ function handleUpdateTeamEvent(msg) {
     const state = store.getState();
     const license = getLicense(state);
     dispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
-    const isCloudFreeEnabled = cloudFreeEnabled(state);
-    if (license.Cloud === 'true' && isCloudFreeEnabled) {
+    if (license.Cloud === 'true') {
         dispatch(getTeamsUsage());
     }
 }
@@ -878,8 +909,7 @@ function handleDeleteTeamEvent(msg) {
     const state = store.getState();
     const {teams} = state.entities.teams;
     const license = getLicense(state);
-    const isCloudFreeEnabled = cloudFreeEnabled(state);
-    if (license.Cloud === 'true' && isCloudFreeEnabled) {
+    if (license.Cloud === 'true') {
         dispatch(getTeamsUsage());
     }
     if (
@@ -900,7 +930,7 @@ function handleDeleteTeamEvent(msg) {
             deletedTeam.id === teamMember.team_id
         ) {
             const myTeams = {};
-            getMyTeams(state).forEach((t) => {
+            getMyKSuites(state).forEach((t) => {
                 myTeams[t.id] = t;
             });
 
@@ -923,22 +953,15 @@ function handleDeleteTeamEvent(msg) {
             {type: TeamTypes.UPDATED_TEAM, data: deletedTeam},
         ]));
 
-        if (browserHistory.location?.pathname === `/admin_console/user_management/teams/${deletedTeam.id}`) {
-            return;
-        }
-
-        // If a deletion just happened and it's attempting to redirect back to the teams list, let it.
-        if (browserHistory.location?.pathname === '/admin_console/user_management/teams') {
-            return;
-        }
-
-        if (newTeamId) {
-            dispatch({type: TeamTypes.SELECT_TEAM, data: newTeamId});
-            const globalState = getState();
-            const redirectChannel = getRedirectChannelNameForTeam(globalState, newTeamId);
-            browserHistory.push(`${getCurrentTeamUrl(globalState)}/channels/${redirectChannel}`);
-        } else {
-            browserHistory.push('/');
+        if (currentTeamId === deletedTeam.id) {
+            if (newTeamId) {
+                dispatch({type: TeamTypes.SELECT_TEAM, data: newTeamId});
+                const globalState = getState();
+                const redirectChannel = getRedirectChannelNameForTeam(globalState, newTeamId);
+                browserHistory.push(`${getCurrentTeamUrl(globalState)}/channels/${redirectChannel}`);
+            } else {
+                browserHistory.push('/');
+            }
         }
     }
 }
@@ -976,7 +999,7 @@ function handleUserAddedEvent(msg) {
                 type: UserTypes.RECEIVED_PROFILE_IN_CHANNEL,
                 data: {id: msg.data.channel_id, user_id: msg.data.user_id},
             });
-            if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true') {
+            if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
                 doDispatch(getChannelMemberCountsByGroup(currentChannelId, isTimezoneEnabled));
             }
         }
@@ -1063,7 +1086,7 @@ export function handleUserRemovedEvent(msg) {
             type: UserTypes.RECEIVED_PROFILE_NOT_IN_CHANNEL,
             data: {id: msg.data.channel_id, user_id: msg.data.user_id},
         });
-        if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true') {
+        if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
             dispatch(getChannelMemberCountsByGroup(currentChannel.id, isTimezoneEnabled));
         }
     }
@@ -1234,57 +1257,10 @@ function addedNewDmUser(preference) {
     return preference.category === Constants.Preferences.CATEGORY_DIRECT_CHANNEL_SHOW && preference.value === 'true';
 }
 
-export function handleUserTypingEvent(msg) {
-    return async (doDispatch, doGetState) => {
-        const state = doGetState();
-        const config = getConfig(state);
-        const currentUserId = getCurrentUserId(state);
-        const userId = msg.data.data.user_id;
-
-        if (
-            isPerformanceDebuggingEnabled(state) &&
-            getBool(state, Preferences.CATEGORY_PERFORMANCE_DEBUGGING, Preferences.NAME_DISABLE_TYPING_MESSAGES)
-        ) {
-            return;
-        }
-
-        const data = {
-            id: msg.data.data.channel_id + msg.data.data.parent_id,
-            userId,
-            now: Date.now(),
-        };
-
-        doDispatch({
-            type: WebsocketEvents.TYPING,
-            data,
-        });
-
-        setTimeout(() => {
-            doDispatch({
-                type: WebsocketEvents.STOP_TYPING,
-                data,
-            });
-        }, parseInt(config.TimeBetweenUserTypingUpdatesMilliseconds, 10));
-
-        if (userId !== currentUserId) {
-            const result = await doDispatch(getMissingProfilesByIds([userId]));
-            if (result.data && result.data.length > 0) {
-                // Already loaded the user status
-                return;
-            }
-        }
-
-        const status = getStatusForUserId(state, userId);
-        if (status !== General.ONLINE) {
-            doDispatch(getStatusesByIds([userId]));
-        }
-    };
-}
-
 function handleStatusChangedEvent(msg) {
-    if (needRefreshToken()) {
-        refreshIKToken();
-    }
+    // if (needRefreshToken()) {
+    //     refreshIKToken();
+    // }
     dispatch({
         type: UserTypes.RECEIVED_STATUSES,
         data: [{user_id: msg.data.user_id, status: msg.data.status}],
@@ -1334,6 +1310,7 @@ function handleChannelViewedEvent(msg) {
 
 export function handlePluginEnabled(msg) {
     const manifest = msg.data.manifest;
+    dispatch({type: ActionTypes.RECEIVED_WEBAPP_PLUGIN, data: manifest});
 
     loadPlugin(manifest).catch((error) => {
         console.error(error.message); //eslint-disable-line no-console
@@ -1375,7 +1352,15 @@ function handlePluginStatusesChangedEvent(msg) {
 }
 
 function handleIntegrationsUsageChangedEvent(msg) {
-    store.dispatch({type: CloudTypes.RECEIVED_INTEGRATIONS_USAGE, data: msg.data.usage.enabled});
+    const state = store.getState();
+    const license = getLicense(state);
+
+    if (license.Cloud === 'true') {
+        store.dispatch({
+            type: CloudTypes.RECEIVED_INTEGRATIONS_USAGE,
+            data: msg.data.usage.enabled,
+        });
+    }
 }
 
 function handleOpenDialogEvent(msg) {
@@ -1557,19 +1542,24 @@ function handleCloudPaymentStatusUpdated() {
 }
 
 export function handleCloudSubscriptionChanged(msg) {
-    return (doDispatch) => {
-        if (msg.data.limits) {
-            doDispatch({
-                type: CloudTypes.RECEIVED_CLOUD_LIMITS,
-                data: msg.data.limits,
-            });
-        }
+    return (doDispatch, doGetState) => {
+        const state = doGetState();
+        const license = getLicense(state);
 
-        if (msg.data.subscription) {
-            doDispatch({
-                type: CloudTypes.RECEIVED_CLOUD_SUBSCRIPTION,
-                data: msg.data.subscription,
-            });
+        if (license.Cloud === 'true') {
+            if (msg.data.limits) {
+                doDispatch({
+                    type: CloudTypes.RECEIVED_CLOUD_LIMITS,
+                    data: msg.data.limits,
+                });
+            }
+
+            if (msg.data.subscription) {
+                doDispatch({
+                    type: CloudTypes.RECEIVED_CLOUD_SUBSCRIPTION,
+                    data: msg.data.subscription,
+                });
+            }
         }
         return {data: true};
     };
@@ -1634,18 +1624,19 @@ function handleThreadReadChanged(msg) {
                 doDispatch(updateThreadLastOpened(thread.id, msg.data.timestamp));
             }
 
-            handleReadChanged(
-                doDispatch,
-                msg.data.thread_id,
-                msg.data.team_id,
-                msg.data.channel_id,
-                {
-                    lastViewedAt: msg.data.timestamp,
-                    prevUnreadMentions: thread?.unread_mentions ?? msg.data.previous_unread_mentions,
-                    newUnreadMentions: msg.data.unread_mentions,
-                    prevUnreadReplies: thread?.unread_replies ?? msg.data.previous_unread_replies,
-                    newUnreadReplies: msg.data.unread_replies,
-                },
+            doDispatch(
+                handleReadChanged(
+                    msg.data.thread_id,
+                    msg.data.team_id,
+                    msg.data.channel_id,
+                    {
+                        lastViewedAt: msg.data.timestamp,
+                        prevUnreadMentions: thread?.unread_mentions ?? msg.data.previous_unread_mentions,
+                        newUnreadMentions: msg.data.unread_mentions,
+                        prevUnreadReplies: thread?.unread_replies ?? msg.data.previous_unread_replies,
+                        newUnreadReplies: msg.data.unread_replies,
+                    },
+                ),
             );
         } else if (msg.data.channel_id) {
             handleAllThreadsInChannelMarkedRead(doDispatch, doGetState, msg.channel_id, msg.data.timestamp);
@@ -1699,7 +1690,7 @@ function handleThreadUpdated(msg) {
             dispatch(updateThreadRead(currentUserId, currentTeamId, threadData.id, lastViewedAt));
         }
 
-        handleThreadArrived(doDispatch, doGetState, threadData, msg.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions);
+        handleThreadArrived(doDispatch, doGetState, threadData, msg.data.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions);
     };
 }
 
@@ -1716,7 +1707,6 @@ function handleThreadFollowChanged(msg) {
 
 function handleConferenceUserConnected(msg) {
     return (doDispatch, doGetState) => {
-        console.log(msg);
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
         doDispatch({
@@ -1793,20 +1783,20 @@ function handleIncomingConferenceCall(msg) {
             },
         });
 
-        if (!channel || channel.id !== msg.data.channel_id) {
-            doDispatch(openModal({
-                modalId: ModalIdentifiers.INCOMING_CALL,
-                dialogType: DialingModal,
-                dialogProps: {
-                    calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
-                },
-            }));
-        }
+        // if (!channel || channel.id !== msg.data.channel_id) {
+        //     doDispatch(openModal({
+        //         modalId: ModalIdentifiers.INCOMING_CALL,
+        //         dialogType: DialingModal,
+        //         dialogProps: {
+        //             calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
+        //         },
+        //     }));
+        // }
     };
 }
 
 function handlePusherMemberRemoved(msg) {
-    console.log('pusher member removed', msg);
+    // console.log('pusher member removed', msg);
 }
 
 function handlePusherPong() {

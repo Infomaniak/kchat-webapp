@@ -226,10 +226,11 @@ const NewChannelModal = () => {
             modalHeaderText={formatMessage({id: 'channel_modal.modalTitle', defaultMessage: 'Create a new channel'})}
             confirmButtonText={formatMessage({id: 'channel_modal.createNew', defaultMessage: 'Create channel'})}
             cancelButtonText={formatMessage({id: 'channel_modal.cancel', defaultMessage: 'Cancel'})}
+            cancelButtonClassName='secondary'
             errorText={serverError}
             isConfirmDisabled={!canCreate}
             autoCloseOnConfirmButton={false}
-            useCompassDesign={true}
+            compassDesign={true}
             handleConfirm={handleOnModalConfirm}
             handleEnterKeyPress={handleOnModalConfirm}
             handleCancel={handleOnModalCancel}

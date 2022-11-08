@@ -67,18 +67,6 @@ To set up a new package:
 1. Ensure all source files are located in `src` and all compiled files are built to `lib`.
 1. Add an entry to the `workspaces` section of the root `package.json` so that NPM is aware of your package.
 1. Set up import aliases so that the package is visible from the web app to the following tools:
-    1. Webpack - Add an entry to the `resolve.alias` section of the root `webpack.config.js` pointing to the `src` folder set up above.
-
-    ```js
-    module.exports = {
-        resolve: {
-            alias: {
-                '@mattermost/apple': 'packages/apple/src',
-            },
-        },
-    };
-    ```
-
     1. TypeScript - In the root `tsconfig.json`, add an entry to the `compilerOptions.paths` section pointing to the `src` folder and an entry to the `references` section pointing to the root of your package which should contain its own `tsconfig.json`.
 
     Note that the `compilerOptions.paths` entry will differ based on if your package exports just a single module (ie a single `index.js` file) or if it exports multiple submodules.
@@ -87,8 +75,8 @@ To set up a new package:
     {
         "compilerOptions": {
             "paths": {
-                "@mattermost/apple": ["packages/apple/src"], // import * as Apple from '@mattermost/apple';
-                "@mattermost/banana/*": ["packages/banana/src/*"], // import Yellow from '@mattermost/banana/yellow';
+                "@mattermost/apple": ["packages/apple/lib"], // import * as Apple from '@mattermost/apple';
+                "@mattermost/banana/*": ["packages/banana/lib/*"], // import Yellow from '@mattermost/banana/yellow';
             }
         },
         "references": [
@@ -112,14 +100,21 @@ To set up a new package:
         }
     }
     ```
+1. Add the compiled code to the CircleCI dependency cache. This is done by modifying the `paths` used by the `save_cache` step in `.circleci/config.yml`
+    ```yml
+    aliases:
+      - &save_cache
+        save_cache:
+          paths:
+            - ~/mattermost/mattermost-webapp/packages/apple/lib
+            - ~/mattermost/mattermost-webapp/packages/banana/lib
+    ```
 
 ### Publishing a subpackage
 
 The following is the rough process for releasing these packages. They'll require someone with write access on our NPM organization to run them, and they'll likely change over time as we improve this process.
 
 For full releases accompanying new versions of Mattermost:
-
-1. Ensure that the standard style checking, type checking, and tests pasts for the desired commit.
 
 1. Clean the repo.
 
@@ -137,28 +132,41 @@ For full releases accompanying new versions of Mattermost:
 
 1. Check in the changes to the package-lock.json.
 
-1. Tag that commit for each package being released. The tag name should be of the form `@mattermost/package-name@x.y.z`.
-
-1. Push that commit and the corresponding tags up to GitHub
-
-   ```sh
-   git push
-   git push origin @mattermost/package-name@x.y.z
-   ```
-
 1. Build the desired packages.
 
     ```sh
     npm run build --workspace=packages/apple --workspace=packages/banana
     ```
 
-1. Publish those packages to npm.
+1. Test everything in the web app. This will be needed until the packages get their own standalone tests.
 
     ```sh
-    npm run publish --access=public --workspace=packages/apple --workspace=packages/banana
+    make check-style check-types test
     ```
 
-    Note that you can also run that with `--dry-run` to see which files will be published. You can also use `npm pack` to generate a tarfile which will contain those files as well.
+1. Assuming those pass, you can now publish those packages to npm. You can also do a dry run first or use `npm pack` to see exactly which files will be pushed.
+
+    ```sh
+    # Run a dry run which will list all the files to be included in the published package.
+    npm publish --dry-run --workspace=packages/apple
+
+    # Generate the tar file that will be uploaded to NPM for inspection.
+    npm pack --workspace=packages/apple
+
+    # Actually publish these packages. You can also use --workspaces to publish everything.
+    npm publish --access=public --workspace=packages/apple --workspace=packages/banana
+    ```
+
+    The packages have now been published! There's still a few remaining cleanup tasks to do though.
+
+1. Tag the commit for each package that has been updated. The tag name should be of the form `@mattermost/package-name@x.y.z`.
+
+1. Push that commit and the corresponding tags up to GitHub
+
+   ```sh
+   git push release-x.y
+   git push origin @mattermost/apple@x.y.z @mattermost/banana@x.y.z
+   ```
 
 #### Publishing a pre-release version
 

@@ -25,8 +25,10 @@ import KeyboardShortcutsModal from '../keyboard_shortcuts/keyboard_shortcuts_mod
 
 import ChannelNavigator from './channel_navigator';
 import SidebarChannelList from './sidebar_channel_list';
+
 import SidebarHeader from './sidebar_header';
 import MobileSidebarHeader from './mobile_sidebar_header';
+import { isDesktopApp } from 'utils/user_agent';
 
 type Props = {
     teamId: string;
@@ -215,8 +217,14 @@ export default class Sidebar extends React.PureComponent<Props, State> {
     }
 
     render() {
+        const root: Element | null = document.querySelector('#root');
+
         if (!this.props.teamId) {
             return (<div/>);
+        }
+
+        if (isDesktopApp()) {
+            root!.classList.add('no-webcomponents');
         }
 
         const ariaLabel = Utils.localizeMessage('accessibility.sections.lhsNavigator', 'channel navigator region');

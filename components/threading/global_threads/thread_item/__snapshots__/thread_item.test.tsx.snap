@@ -62,7 +62,7 @@ exports[`components/threading/global_threads/thread_item should report total num
   </div>
   <div
     aria-readonly="true"
-    className="preview"
+    className="preview normalText"
     dir="auto"
     onClick={[Function]}
     tabIndex={0}
@@ -77,7 +77,7 @@ exports[`components/threading/global_threads/thread_item should report total num
       message="test msg"
       options={
         Object {
-          "atMentions": false,
+          "atMentions": true,
           "mentionHighlight": false,
           "singleline": true,
         }
@@ -181,7 +181,7 @@ exports[`components/threading/global_threads/thread_item should report unread me
   </div>
   <div
     aria-readonly="true"
-    className="preview"
+    className="preview normalText"
     dir="auto"
     onClick={[Function]}
     tabIndex={0}
@@ -196,7 +196,7 @@ exports[`components/threading/global_threads/thread_item should report unread me
       message="test msg"
       options={
         Object {
-          "atMentions": false,
+          "atMentions": true,
           "mentionHighlight": false,
           "singleline": true,
         }
@@ -298,7 +298,7 @@ exports[`components/threading/global_threads/thread_item should report unread me
   </div>
   <div
     aria-readonly="true"
-    className="preview"
+    className="preview normalText"
     dir="auto"
     onClick={[Function]}
     tabIndex={0}
@@ -313,7 +313,7 @@ exports[`components/threading/global_threads/thread_item should report unread me
       message="test msg"
       options={
         Object {
-          "atMentions": false,
+          "atMentions": true,
           "mentionHighlight": false,
           "singleline": true,
         }

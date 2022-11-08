@@ -3,8 +3,6 @@
 
 import React from 'react';
 
-import {isDesktopApp} from 'utils/user_agent';
-import {Client4} from 'mattermost-redux/client';
 interface PostEmojiProps {
     name: string;
     imageUrl: string;
@@ -22,7 +20,7 @@ export default class PostEmoji extends React.PureComponent<PostEmojiProps> {
         if (!this.props.imageUrl) {
             return emojiText;
         }
-        const emojiUrl = this.props.imageUrl + (this.props.imageUrl.indexOf('access_token') === -1 && isDesktopApp() && Client4.getToken() ? `?access_token=${Client4.getToken()}` : '');
+        const emojiUrl = this.props.imageUrl;
         return (
             <span
                 alt={emojiText}

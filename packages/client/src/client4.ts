@@ -12,7 +12,7 @@ import type {AppBinding, AppCallRequest, AppCallResponse} from '@mattermost/type
 import {Audit} from '@mattermost/types/audits';
 import {UserAutocomplete, AutocompleteSuggestion} from '@mattermost/types/autocomplete';
 import {Bot, BotPatch} from '@mattermost/types/bots';
-import {Product, SubscriptionResponse, CloudCustomer, Address, CloudCustomerPatch, Invoice, Limits, IntegrationsUsage} from '@mattermost/types/cloud';
+import {Product, SubscriptionResponse, CloudCustomer, Address, CloudCustomerPatch, Invoice, Limits, IntegrationsUsage, NotifyAdminRequest, Subscription, ValidBusinessEmail} from '@mattermost/types/cloud';
 import {ChannelCategory, OrderedChannelCategories} from '@mattermost/types/channel_categories';
 import {
     Channel,
@@ -116,16 +116,27 @@ import {
 import {CompleteOnboardingRequest} from '@mattermost/types/setup';
 
 import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/threads';
-import {TopChannelResponse, TopReactionResponse} from '@mattermost/types/insights';
-
-import {isDesktopApp} from 'utils/user_agent';
-
-import {IKConstants} from 'utils/constants-ik';
+import {LeastActiveChannelsResponse, TopChannelResponse, TopReactionResponse, TopThreadResponse, TopDMsResponse} from '@mattermost/types/insights';
 
 import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
+import crypto from 'crypto';
+
+// Fix error import
+// eslint-disable-next-line no-warning-comments
+// TODO update isDesktopApp() with callback
+function isDesktopApp(): boolean {
+    return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
+}
+
+const IKConstants = {
+    LOGIN_URL: process.env.LOGIN_ENDPOINT, // eslint-disable-line no-process-env
+    LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
+    CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
+    MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
+}
 
 const HEADER_AUTH = 'Authorization';
 const HEADER_BEARER = 'Bearer';
@@ -147,7 +158,7 @@ const GRAPHQL_ENDPOINT = '/api/v5/graphql';
 
 // placed here because currently not supported
 // to import from outside the package from main bundle
-const suitePluginIds = {
+export const suitePluginIds = {
     playbooks: 'playbooks',
     focalboard: 'focalboard',
     apps: 'com.mattermost.apps',
@@ -207,9 +218,6 @@ export default class Client4 {
 
     setToken(token: string) {
         this.token = token;
-        if ('serviceWorker' in navigator) {
-            navigator?.serviceWorker?.controller?.postMessage({token});
-        }
     }
 
     setCSRF(csrfToken: string) {
@@ -273,6 +281,10 @@ export default class Client4 {
 
     getTeamsRoute() {
         return `${this.getBaseRoute()}/teams`;
+    }
+
+    getKSuiteRoute() {
+        return `${this.getBaseRoute()}/servers`;
     }
 
     getTeamRoute(teamId: string) {
@@ -525,7 +537,7 @@ export default class Client4 {
 
     // User Routes
 
-    createUser = (user: UserProfile, token: string, inviteId: string, redirect: string) => {
+    createUser = (user: UserProfile, token: string, inviteId: string, redirect?: string) => {
         this.trackEvent('api', 'api_users_create');
 
         const queryParams: any = {};
@@ -724,7 +736,7 @@ export default class Client4 {
         );
     }
 
-    login = async (loginId: string, password: string, token = '', deviceId = '', ldapOnly = false) => {
+    login = async (loginId: string, password: string, token = '', ldapOnly = false) => {
         this.trackEvent('api', 'api_users_login');
 
         if (ldapOnly) {
@@ -732,10 +744,10 @@ export default class Client4 {
         }
 
         const body: any = {
-            device_id: deviceId,
             login_id: loginId,
             password,
             token,
+            deviceId: '',
         };
 
         if (ldapOnly) {
@@ -757,13 +769,13 @@ export default class Client4 {
         return profile;
     };
 
-    loginById = (id: string, password: string, token = '', deviceId = '') => {
+    loginById = (id: string, password: string, token = '') => {
         this.trackEvent('api', 'api_users_login');
         const body: any = {
-            device_id: deviceId,
             id,
             password,
             token,
+            device_id: '',
         };
 
         return this.doFetch<UserProfile>(
@@ -776,17 +788,12 @@ export default class Client4 {
         this.trackEvent('api', 'api_users_logout');
 
         const {response} = await this.doFetchWithResponse(
-            (isDesktopApp() ? `${IKConstants.LOGIN_URL}logout` : `${this.getUsersRoute()}/logout`),
+            `${this.getUsersRoute()}/logout`,
             {method: 'post'},
         );
-        console.log(response);
+
         if (response.ok) {
             this.token = '';
-            if (isDesktopApp()) {
-                localStorage.removeItem('IKToken');
-                localStorage.removeItem('IKRefreshToken');
-                localStorage.removeItem('IKTokenExpire');
-            }
         }
 
         this.serverVersion = '';
@@ -794,7 +801,7 @@ export default class Client4 {
         return response;
     };
 
-    getProfiles = (page = 0, perPage = PER_PAGE_DEFAULT, options = {}) => {
+    getProfiles = (page = 0, perPage = PER_PAGE_DEFAULT, options: Record<string, any> = {}) => {
         return this.doFetch<UserProfile[]>(
             `${this.getUsersRoute()}${buildQueryString({page, per_page: perPage, ...options})}`,
             {method: 'get'},
@@ -918,16 +925,6 @@ export default class Client4 {
             params._ = lastPictureUpdate;
         }
 
-        // const imgFetched = await this.getProfilePictureFetched(userId, lastPictureUpdate, params);
-        // if (imgFetched) {
-        //     return imgFetched
-        // } else {
-        //     return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
-        // }
-
-        if (isDesktopApp() && this.token) {
-            params.access_token = this.token;
-        }
         return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
     };
     arrayBufferToBase64(buffer: ArrayBuffer) {
@@ -949,11 +946,7 @@ export default class Client4 {
     }
 
     getDefaultProfilePictureUrl = (userId: string) => {
-        const params: any = {};
-        if (isDesktopApp() && this.token) {
-            params.access_token = this.token;
-        }
-        return `${this.getUserRoute(userId)}/image/default${buildQueryString(params)}`;
+        return `${this.getUserRoute(userId)}/image/default`;
     };
 
     autocompleteUsers = (name: string, teamId: string, channelId: string, options = {
@@ -1004,6 +997,9 @@ export default class Client4 {
         );
     };
 
+    /**
+     * @deprecated
+     */
     checkUserMfa = (loginId: string) => {
         return this.doFetch<{mfa_required: boolean}>(
             `${this.getUsersRoute()}/mfa`,
@@ -1015,13 +1011,6 @@ export default class Client4 {
         return this.doFetch<MfaSecret>(
             `${this.getUserRoute(userId)}/mfa/generate`,
             {method: 'post'},
-        );
-    };
-
-    attachDevice = (deviceId: string) => {
-        return this.doFetch<StatusOK>(
-            `${this.getUsersRoute()}/sessions/device`,
-            {method: 'put', body: JSON.stringify({device_id: deviceId})},
         );
     };
 
@@ -1213,6 +1202,13 @@ export default class Client4 {
         );
     }
 
+    archiveAllTeamsExcept = (teamId: string) => {
+        return this.doFetch<StatusOK>(
+            `${this.getTeamRoute(teamId)}/except`,
+            {method: 'delete'},
+        );
+    }
+
     updateTeam = (team: Team) => {
         this.trackEvent('api', 'api_teams_update_name', {team_id: team.id});
 
@@ -1260,6 +1256,13 @@ export default class Client4 {
 
     getTeams = (page = 0, perPage = PER_PAGE_DEFAULT, includeTotalCount = false, excludePolicyConstrained = false) => {
         return this.doFetch<Team[] | TeamsWithCount>(
+            `${this.getKSuiteRoute()}${buildQueryString({page, per_page: perPage, include_total_count: includeTotalCount, exclude_policy_constrained: excludePolicyConstrained})}`,
+            {method: 'get'},
+        );
+    };
+
+    getKSuites = (page = 0, perPage = PER_PAGE_DEFAULT, includeTotalCount = false, excludePolicyConstrained = false) => {
+        return this.doFetch<Team[] | TeamsWithCount>(
             `${this.getTeamsRoute()}${buildQueryString({page, per_page: perPage, include_total_count: includeTotalCount, exclude_policy_constrained: excludePolicyConstrained})}`,
             {method: 'get'},
         );
@@ -1297,6 +1300,13 @@ export default class Client4 {
         );
     };
 
+    getMyKSuites = () => {
+        return this.doFetch<Team[]>(
+            `${this.getUserRoute('me')}/servers`,
+            {method: 'get'},
+        );
+    }
+
     getTeamsForUser = (userId: string) => {
         return this.doFetch<Team[]>(
             `${this.getUserRoute(userId)}/teams`,
@@ -1319,7 +1329,7 @@ export default class Client4 {
     };
 
     getTeamMembers = (teamId: string, page = 0, perPage = PER_PAGE_DEFAULT, options: GetTeamMembersOpts) => {
-        return this.doFetch<TeamMembership>(
+        return this.doFetch<TeamMembership[]>(
             `${this.getTeamMembersRoute(teamId)}${buildQueryString({page, per_page: perPage, ...options})}`,
             {method: 'get'},
         );
@@ -2222,6 +2232,46 @@ export default class Client4 {
         );
     }
 
+    getTopThreadsForTeam = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopThreadResponse>(
+            `${this.getTeamRoute(teamId)}/top/threads${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+
+    getMyTopThreads = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopThreadResponse>(
+            `${this.getUsersRoute()}/me/top/threads${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getLeastActiveChannelsForTeam = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<LeastActiveChannelsResponse>(
+            `${this.getTeamRoute(teamId)}/top/inactive_channels${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+    getMyTopDMs = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopDMsResponse>(
+            `${this.getUsersRoute()}/me/top/dms${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getMyLeastActiveChannels = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<LeastActiveChannelsResponse>(
+            `${this.getUsersRoute()}/me/top/inactive_channels${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+    getNewTeamMembers = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopDMsResponse>(
+            `${this.getTeamRoute(teamId)}/top/team_members${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+
     searchPostsWithParams = (teamId: string, params: any) => {
         this.trackEvent('api', 'api_posts_search', {team_id: teamId});
 
@@ -2798,12 +2848,7 @@ export default class Client4 {
     };
 
     getCustomEmojiImageUrl = (id: string) => {
-        const params: any = {};
-
-        // if (isDesktopApp() && this.token) {
-        //     params.access_token = this.token;
-        // }
-        return `${this.getEmojiRoute(id)}/image${buildQueryString(params)}`;
+        return `${this.getEmojiRoute(id)}/image`;
     };
 
     searchCustomEmoji = (term: string, options = {}) => {
@@ -3451,12 +3496,12 @@ export default class Client4 {
         );
     }
 
-    installMarketplacePlugin = (id: string, version: string) => {
+    installMarketplacePlugin = (id: string) => {
         this.trackEvent('api', 'api_install_marketplace_plugin');
 
         return this.doFetch<MarketplacePlugin>(
             `${this.getPluginsMarketplaceRoute()}`,
-            {method: 'post', body: JSON.stringify({id, version})},
+            {method: 'post', body: JSON.stringify({id})},
         );
     }
 
@@ -3507,7 +3552,7 @@ export default class Client4 {
 
     getBoardsUsage = () => {
         return this.doFetch<BoardsUsageResponse>(
-            `/plugins/${suitePluginIds.focalboard}/api/v1/limits`,
+            `/plugins/${suitePluginIds.focalboard}/api/v2/limits`,
             {method: 'get'},
         );
     }
@@ -3849,6 +3894,13 @@ export default class Client4 {
         );
     }
 
+    notifyAdmin = (req: NotifyAdminRequest) => {
+        return this.doFetchWithResponse<StatusOK>(
+            `${this.getUsersRoute()}/notify-admin`,
+            {method: 'post', body: JSON.stringify(req)},
+        );
+    }
+
     confirmPaymentMethod = async (stripeSetupIntentID: string) => {
         return this.doFetch(
             `${this.getCloudRoute()}/payment/confirm`,
@@ -3863,16 +3915,23 @@ export default class Client4 {
         );
     }
 
-    requestCloudTrial = (email = '') => {
-        return this.doFetchWithResponse<CloudCustomer>(
+    requestCloudTrial = (subscriptionId: string, email = '') => {
+        return this.doFetchWithResponse<Subscription>(
             `${this.getCloudRoute()}/request-trial`,
-            {method: 'put', body: JSON.stringify({email})},
+            {method: 'put', body: JSON.stringify({email, subscription_id: subscriptionId})},
         );
     }
 
-    validateBusinessEmail = () => {
-        return this.doFetchWithResponse<CloudCustomer>(
+    validateBusinessEmail = (email = '') => {
+        return this.doFetchWithResponse<ValidBusinessEmail>(
             `${this.getCloudRoute()}/validate-business-email`,
+            {method: 'post', body: JSON.stringify({email})},
+        );
+    }
+
+    validateWorkspaceBusinessEmail = () => {
+        return this.doFetchWithResponse<ValidBusinessEmail>(
+            `${this.getCloudRoute()}/validate-workspace-business-email`,
             {method: 'post'},
         );
     }
@@ -4055,7 +4114,7 @@ export default class Client4 {
 
     /**
      * @param query string query of graphQL, pass the json stringified version of the query
-     * eg.  const query = JSON.stringify({query: `{license, config}`});
+     * eg.  const query = JSON.stringify({query: `{license, config}`, operationName: 'queryForLicenseAndConfig'});
      *      client4.fetchWithGraphQL(query);
      */
     fetchWithGraphQL = async <DataResponse>(query: string) => {
@@ -4080,10 +4139,6 @@ export default class Client4 {
         } catch (err) {
             throw new ClientError(this.getUrl(), {
                 message: 'Received invalid response from the server.',
-                intl: {
-                    id: 'mobile.request.invalid_response',
-                    defaultMessage: 'Received invalid response from the server.',
-                },
                 url,
             });
         }
@@ -4094,36 +4149,17 @@ export default class Client4 {
 
         if ((response.status === 403 || (response.status === 401 && data?.result === 'redirect')) && isDesktopApp()) {
             if (url.indexOf('/commands/') === -1) {
-                const token = localStorage.getItem('IKToken');
-                const refreshToken = localStorage.getItem('IKRefreshToken');
-                const isRefreshing = localStorage.getItem('refreshingToken');
-                this.setToken('');
-                this.setCSRF('');
-
-                if (token && refreshToken && isRefreshing !== '1') {
-                    localStorage.setItem('refreshingToken', '1');
-                    this.refreshIKLoginToken(
-                        refreshToken,
-                        `${IKConstants.LOGIN_URL}`,
-                        `${IKConstants.CLIENT_ID}`,
-                    ).then((response) => {
-                        console.log('getRefreshToken from client', response);
-
-                        const d = new Date();
-                        d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
-                        localStorage.setItem('IKToken', response.access_token);
-                        localStorage.setItem('IKRefreshToken', response.refresh_token);
-                        localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
-                        localStorage.setItem('tokenExpired', '0');
-                        this.setToken(response.access_token);
-                        this.setCSRF(response.access_token);
-                        this.setAuthHeader = true;
-                        localStorage.removeItem('refreshingToken');
-                    }).catch((error) => {
-                        console.log('catch refresh error', error);
-                        localStorage.removeItem('refreshingToken');
-                    });
-                }
+                console.log('[TOKEN] client error, redirect to /login');
+                localStorage.removeItem('IKToken');
+                window.postMessage(
+                    {
+                        type: 'browser-history-push',
+                        message: {
+                            path: '/login',
+                        },
+                    },
+                    window.location.origin,
+                );
             }
         }
 
@@ -4159,7 +4195,7 @@ export default class Client4 {
         throw new ClientError(this.getUrl(), {
             message: msg,
             server_error_id: data.id,
-            status_code: data.status_code,
+            status_code: data.status_code ? data.status_code : response.status,
             url,
         });
     };
@@ -4189,7 +4225,6 @@ export default class Client4 {
         );
     };
 
-    // TODO: when is ok update with env and/or current server url (dev, preprod....)
     getIKLoginToken = (code: string, challenge: string, verifier: string, loginUrl: string, clientId: string) => {
         // Body in formData because Laravel do not manage JSON
         const formData = new FormData();
@@ -4197,7 +4232,8 @@ export default class Client4 {
         formData.append('code', code);
         formData.append('code_verifier', verifier);
         formData.append('client_id', clientId);
-        formData.append('redirect_uri', 'ktalk://auth-desktop');
+        formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
+        // formData.append('redirect_uri', 'ktalk://auth-desktop' );
 
         return this.doFetch<any>(
 
@@ -4211,7 +4247,6 @@ export default class Client4 {
         );
     }
 
-    // TODO: when is ok update with env and/or current server url (dev, preprod....)
     refreshIKLoginToken = (refresh: string, loginUrl: string, clientId: string) => {
         // Body in formData because Laravel do not manage JSON
         const formData = new FormData();
@@ -4228,6 +4263,99 @@ export default class Client4 {
                 body: formData,
             },
         );
+    }
+
+    /****************************************************/
+    /*                                                  */
+    /*                IK CUSTOMS UTILS                  */
+    /*                                                  */
+    /****************************************************/
+
+    /**
+     * Store IKToken infos in localStorage and update Client
+     */
+    storeTokenResponse(response: { expires_in?: any; access_token?: any; refresh_token?: any }) {
+        // TODO: store in redux
+        const d = new Date();
+        d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
+        localStorage.setItem('IKToken', response.access_token);
+        localStorage.setItem('IKRefreshToken', response.refresh_token);
+        localStorage.setItem('IKTokenExpire', (d.getTime() / 1000, 10).toString());
+        localStorage.setItem('tokenExpired', '0');
+        this.setToken(response.access_token);
+        this.setCSRF(response.access_token);
+        this.setAuthHeader = true;
+    }
+
+    /**
+     * Clear IKToken informations in localStorage
+     */
+    clearLocalStorageToken() {
+        console.log('[TOKEN] Clear token storage');
+        localStorage.removeItem('IKToken');
+        localStorage.removeItem('IKRefreshToken');
+        localStorage.removeItem('IKTokenExpire');
+        localStorage.setItem('tokenExpired', '1');
+        window.postMessage(
+            {
+                type: 'token-cleared',
+                message: {
+                    token: null,
+                },
+            },
+            window.origin,
+        );
+    }
+
+
+    /**
+     * get code_verifier for challenge
+     * @returns string
+     */
+    getCodeVerifier() {
+        const ramdonByte = crypto.randomBytes(33);
+        const hash =
+            crypto.createHash('sha256').update(ramdonByte).digest();
+        return hash.toString('base64').
+            replace(/\+/g, '-').
+            replace(/\//g, '_').
+            replace(/[=]/g, '');
+    }
+
+    /**
+     * Generate code_challenge for oauth
+     * @param codeVerifier string
+     * @returns string
+     */
+    async generateCodeChallenge(codeVerifier: string) {
+        const hash =
+            crypto.createHash('sha256').update(codeVerifier).digest();
+        return hash.toString('base64').
+            replace(/\+/g, '-').
+            replace(/\//g, '_').
+            replace(/[=]/g, '');
+    }
+
+    /**
+     * get code_challenge and redirect to IK Login
+     */
+    getChallengeAndRedirectToLogin() {
+        const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
+        // const redirectTo = 'ktalk://auth-desktop';
+        const codeVerifier = this.getCodeVerifier();
+        let codeChallenge = '';
+
+        this.generateCodeChallenge(codeVerifier).then((challenge) => {
+            codeChallenge = challenge;
+
+            // TODO: store in redux instead of localstorage
+            localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
+
+            // TODO: add env for login url and/or current server
+            window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
+        }).catch(() => {
+            console.log('Error redirect');
+        });
     }
 }
 
@@ -4252,11 +4380,6 @@ export function parseAndMergeNestedHeaders(originalHeaders: any) {
 
 export class ClientError extends Error implements ServerError {
     url?: string;
-    intl?: {
-        id: string;
-        defaultMessage: string;
-        values?: any;
-    };
     server_error_id?: string;
     status_code?: number;
 
@@ -4265,7 +4388,6 @@ export class ClientError extends Error implements ServerError {
 
         this.message = data.message;
         this.url = data.url;
-        this.intl = data.intl;
         this.server_error_id = data.server_error_id;
         this.status_code = data.status_code;
 

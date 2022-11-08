@@ -58,11 +58,14 @@ exports[`components/FilePreviewModal should fall back to default preview if plug
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -78,6 +81,7 @@ exports[`components/FilePreviewModal should fall back to default preview if plug
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -112,7 +116,9 @@ exports[`components/FilePreviewModal should fall back to default preview if plug
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -190,11 +196,14 @@ exports[`components/FilePreviewModal should match snapshot 1`] = `
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -210,6 +219,7 @@ exports[`components/FilePreviewModal should match snapshot 1`] = `
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -244,7 +254,9 @@ exports[`components/FilePreviewModal should match snapshot 1`] = `
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -322,11 +334,14 @@ exports[`components/FilePreviewModal should match snapshot for external file 1`]
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -342,6 +357,7 @@ exports[`components/FilePreviewModal should match snapshot for external file 1`]
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_info_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -376,7 +392,9 @@ exports[`components/FilePreviewModal should match snapshot for external file 1`]
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -454,11 +472,14 @@ exports[`components/FilePreviewModal should match snapshot when plugin overrides
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -474,6 +495,7 @@ exports[`components/FilePreviewModal should match snapshot when plugin overrides
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -508,7 +530,9 @@ exports[`components/FilePreviewModal should match snapshot when plugin overrides
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -519,6 +543,7 @@ exports[`components/FilePreviewModal should match snapshot when plugin overrides
           <component
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -627,11 +652,14 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -647,6 +675,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -681,7 +710,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -690,9 +721,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
           onClick={[Function]}
         >
           <ImagePreview
-            canDownloadFiles={true}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -708,6 +739,8 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
                 "width": 350,
               }
             }
+            setToolbarZoom={[Function]}
+            toolbarZoom="A"
           />
         </div>
       </div>
@@ -774,11 +807,14 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -794,6 +830,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -828,7 +865,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -837,9 +876,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
           onClick={[Function]}
         >
           <ImagePreview
-            canDownloadFiles={true}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -855,6 +894,8 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
                 "width": 350,
               }
             }
+            setToolbarZoom={[Function]}
+            toolbarZoom="A"
           />
         </div>
       </div>
@@ -921,11 +962,14 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .js file
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={true}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -941,6 +985,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .js file
                 "width": 350,
               }
             }
+            fileType="code"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -975,7 +1020,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .js file
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -987,6 +1034,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .js file
             className="file-preview-modal__code-preview"
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1003,6 +1051,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .js file
               }
             }
             fileUrl="/api/v4/files/file_id"
+            getContent={[Function]}
           />
         </div>
       </div>
@@ -1069,11 +1118,14 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .m4a fil
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1089,6 +1141,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .m4a fil
                 "width": 350,
               }
             }
+            fileType="audio"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1123,7 +1176,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .m4a fil
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -1134,6 +1189,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .m4a fil
           <Connect(AudioVideoPreview)
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1216,11 +1272,14 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .mov fil
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1236,6 +1295,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .mov fil
                 "width": 350,
               }
             }
+            fileType="video"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1270,7 +1330,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .mov fil
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -1281,6 +1343,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .mov fil
           <Connect(AudioVideoPreview)
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1363,11 +1426,14 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1383,6 +1449,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id_1?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1417,7 +1484,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={3}
           />
         </ModalTitle>
@@ -1426,9 +1495,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
           onClick={[Function]}
         >
           <ImagePreview
-            canDownloadFiles={true}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1444,6 +1513,8 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
                 "width": 350,
               }
             }
+            setToolbarZoom={[Function]}
+            toolbarZoom="A"
           />
         </div>
       </div>
@@ -1510,11 +1581,14 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1530,6 +1604,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1564,7 +1639,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -1573,9 +1650,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
           onClick={[Function]}
         >
           <ImagePreview
-            canDownloadFiles={true}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1591,6 +1668,8 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
                 "width": 350,
               }
             }
+            setToolbarZoom={[Function]}
+            toolbarZoom="A"
           />
         </div>
       </div>
@@ -1657,11 +1736,14 @@ exports[`components/FilePreviewModal should match snapshot, loaded with other fi
           id="viewImageModalLabel"
         >
           <Memo(FilePreviewModalHeader)
+            canCopyContent={false}
             canDownloadFiles={true}
+            content=""
             enablePublicLink={true}
             fileIndex={0}
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,
@@ -1677,6 +1759,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with other fi
                 "width": 350,
               }
             }
+            fileType="other"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1711,7 +1794,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with other fi
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -1722,6 +1807,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with other fi
           <Connect(FileInfoPreview)
             fileInfo={
               Object {
+                "archived": false,
                 "clientId": "client_id",
                 "create_at": 1,
                 "delete_at": 1,

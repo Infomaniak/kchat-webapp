@@ -7,6 +7,7 @@ export type Search = {
 };
 
 export type SearchState = {
+    hasLimitation: string | number;
     current: any;
     results: string[];
     fileResults: string[];
@@ -14,6 +15,7 @@ export type SearchState = {
     pinned: Record<string, string[]>;
     isSearchingTerm: boolean;
     isSearchGettingMore: boolean;
+    isLimitedResults: number;
     recent: {
         [x: string]: Search[];
     };

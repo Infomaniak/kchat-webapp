@@ -1,22 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import React from 'react';
 import {Provider} from 'react-redux';
-import configureStore from 'redux-mock-store';
 
 import {act} from '@testing-library/react';
-
-import thunk from 'redux-thunk';
 
 import {ReactWrapper} from 'enzyme';
 
 import {TimeFrames} from '@mattermost/types/insights';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import mockStore from 'tests/test_store';
 
 import TopReactionsTable from './top_reactions_table';
-
-const mockStore = configureStore([thunk]);
 
 const actImmediate = (wrapper: ReactWrapper) =>
     act(
@@ -37,6 +34,7 @@ describe('components/activity_and_insights/insights/top_reactions/top_reactions_
 
     const initialState = {
         entities: {
+            general: {config: {}},
             teams: {
                 currentTeamId: 'team_id1',
                 teams: {

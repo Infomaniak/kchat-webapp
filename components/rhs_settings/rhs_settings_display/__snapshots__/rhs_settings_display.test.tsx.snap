@@ -1,0 +1,3606 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, channel display mode section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, clickToReply section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, clock section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, collapse section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, languages section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, link preview section with EnableLinkPreviews is false 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, link preview section with EnableLinkPreviews is true 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, message display section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, no active section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, teammate name display section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, theme section with EnableThemeSelection is false 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, theme section with EnableThemeSelection is true 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <Connect(RhsThemeSetting)
+      allowCustomThemes={true}
+      selected={true}
+      setEnforceFocus={[MockFunction]}
+      setRequireConfirm={[MockFunction]}
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;
+
+exports[`components/rhs_settings/rhs_settings_display/RhsSettingsDisplay should match snapshot, timezone section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="user-settings user-rhs-container container"
+  >
+    <div
+      className="divider-dark first"
+    />
+    <RhsSettingsItem
+      containerStyle="rhs-custom-bb"
+      infoPosition="bottom"
+      inputs={
+        Array [
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn active"
+              id="rhsCustomBtnSelect0"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgNoCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Standard
+                </div>
+              </label>
+            </div>
+          </div>,
+          <div
+            className="col-xs-6 col-sm-6 rhs-btns text-center"
+          >
+            <div
+              className="rhs-custom-btn "
+              id="rhsCustomBtnSelect1"
+              onClick={[Function]}
+            >
+              <label>
+                <SvgCompactIcon />
+                <div
+                  className="rhs-custom-btn-label"
+                >
+                  Compact
+                </div>
+              </label>
+            </div>
+          </div>,
+        ]
+      }
+      isCustomBtn={true}
+      key="messageDisplay"
+      saving={false}
+      section=""
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="collapseFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="collapseDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
+          id="user.settings.display.collapseDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Default Appearance of Image Previews"
+          id="user.settings.display.collapseDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="linkpreviewFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="linkPreviewDisplay"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
+          id="user.settings.display.linkPreviewDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Website Link Previews"
+          id="user.settings.display.linkPreviewDisplay"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="one_click_reactions_enabledFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="oneClickReactionsOnPosts"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, you can react in one-click with recently used reactions when hovering over a message."
+          id="user.settings.display.oneClickReactionsOnPostsDescription"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Quick reactions on messages"
+          id="user.settings.display.oneClickReactionsOnPostsTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      extraInfo={null}
+      infoPosition="bottom"
+      inputs={
+        <Toggle
+          id="show_unread_sectionFormatA"
+          onToggle={[Function]}
+          toggled={true}
+        />
+      }
+      key="showUnreadsCategory"
+      messageDesc={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="When enabled, all unread channels and direct messages will be grouped together in the sidebar."
+          id="user.settings.sidebar.showUnreadsCategoryDesc"
+        />
+      }
+      saving={false}
+      section=""
+      submit={[Function]}
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Group unread channels separately"
+          id="user.settings.sidebar.showUnreadsCategoryTitle"
+        />
+      }
+      updateSection={[Function]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="channelDisplayMode"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+              Object {
+                "label": "Fixed width, centered",
+                "value": "centered",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={
+            Array [
+              Object {
+                "label": "Full width",
+                "value": "full",
+              },
+            ]
+          }
+        />
+      }
+      key="channelDisplayMode"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Channel Display"
+          id="user.settings.display.channelDisplayTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <RhsSettingsItem
+      containerStyle=""
+      infoPosition="bottom"
+      inputs={
+        <StateManager
+          className="react-select settings-select advanced-select"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="unreadScrollPosition"
+          isSearchable={false}
+          menuPortalTarget={<body />}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Start me where I left off",
+                "value": "start_from_left_off",
+              },
+              Object {
+                "label": "Start me at the newest message",
+                "value": "start_from_newest",
+              },
+            ]
+          }
+          styles={
+            Object {
+              "menuPortal": [Function],
+            }
+          }
+          value={Array []}
+        />
+      }
+      key="unreadScrollPosition"
+      saving={false}
+      section=""
+      title={
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="Scroll position when viewing an unread channel"
+          id="user.settings.advance.unreadScrollPositionTitle"
+        />
+      }
+      updateSection={[MockFunction]}
+    />
+    <Connect(RhsLimitVisibleGMsDMs) />
+  </div>
+</div>
+`;

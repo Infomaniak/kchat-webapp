@@ -69,6 +69,10 @@
         }
     }
 
+    .textarea--has-labels {
+        margin-top: -3px;
+    }
+
     .textbox-preview-link {
         margin-right: 8px;
     }
@@ -371,7 +375,6 @@
 }
 
 .post-create__container {
-    z-index: 12;
     width: 100%;
     flex: 0 0 auto;
     background: var(--center-channel-bg);
@@ -573,11 +576,47 @@
     }
 }
 
-.post-body__helper-text {
-    display: inline-block;
-    margin: 8px 0 4px;
+.post-body__footer {
+    display: inline-flex;
+    align-items: center;
+    margin: 8px 0;
     color: rgba(var(--center-channel-color-rgb), 0.64);
     font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+    gap: 8px;
+
+    > button {
+        @include button-small;
+
+        padding: 10px 16px;
+        border-width: 0;
+        border-radius: 4px;
+        box-shadow: none;
+
+        &.cancel {
+            background: rgba(var(--button-bg-rgb), 0.08);
+            color: var(--button-bg);
+            font-weight: 600;
+
+            &:hover {
+                background: rgba(var(--button-bg-rgb), 0.12);
+            }
+
+            &:active {
+                background: rgba(var(--button-bg-rgb), 0.16);
+            }
+
+            @include button-focus;
+        }
+
+        &.save {
+            @include primary-button;
+
+            box-shadow: none;
+
+            @include button-focus;
+        }
+    }
 }
 
 .post-create-footer {
@@ -586,11 +625,12 @@
     font-size: 13px;
 
     .help__text {
-        text-align: right;
+        // text-align: right;
 
         a,
         button {
             margin-left: 10px;
+            float: right;
         }
     }
 
@@ -993,6 +1033,15 @@
 
                 span {
                     display: none;
+
+                    &.post-image__archived-name {
+                        display: inline-flex;
+                    }
+
+                    &.post-image__archived-filename,
+                    &.post-image__archived-label {
+                        display: inline-block;
+                    }
                 }
 
                 svg {
@@ -1282,6 +1331,7 @@
     .post-preview__header {
         display: flex;
         width: 100%;
+        align-items: center;
         margin-bottom: 2px;
         white-space: nowrap;
 
@@ -1361,11 +1411,6 @@
                 width: 32px;
                 height: 32px;
             }
-        }
-
-        path {
-            // still need to comment with currentColor instead of inherit?
-            // fill: currentColor;
         }
 
         .profile-icon {
@@ -1911,6 +1956,7 @@
     .post-preview {
         .post__img {
             width: 24px;
+            height: 24px;
             padding: 0;
             text-align: left;
 
@@ -1929,7 +1975,6 @@
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 4;
             text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .post-preview-collapse__show-more-button {

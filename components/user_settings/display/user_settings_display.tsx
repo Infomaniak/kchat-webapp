@@ -1,14 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 /* eslint-disable react/no-string-refs */
-/* eslint-disable max-lines */
-
-import deepEqual from 'fast-deep-equal';
 import React from 'react';
 
+import deepEqual from 'fast-deep-equal';
+
 import {FormattedMessage} from 'react-intl';
+import {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
 
 import {Timezone} from 'timezones.json';
+
+import {ActionResult} from 'mattermost-redux/types/actions';
 
 import {PreferenceType} from '@mattermost/types/preferences';
 import {UserProfile, UserTimezone} from '@mattermost/types/users';
@@ -16,12 +18,11 @@ import {UserProfile, UserTimezone} from '@mattermost/types/users';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import Constants from 'utils/constants';
-import {getBrowserTimezone} from 'utils/timezone.jsx';
+import {getBrowserTimezone} from 'utils/timezone';
 
 import * as I18n from 'i18n/i18n.jsx';
 import {t} from 'utils/i18n';
 
-import FormattedMarkdownMessage from 'components/formatted_markdown_message.jsx';
 import SettingItemMax from 'components/setting_item_max.jsx';
 import SettingItemMin from 'components/setting_item_min';
 import ThemeSetting from 'components/user_settings/display/user_settings_theme';
@@ -39,13 +40,24 @@ function getDisplayStateFromProps(props: Props) {
         availabilityStatusOnPosts: props.availabilityStatusOnPosts,
         channelDisplayMode: props.channelDisplayMode,
         messageDisplay: props.messageDisplay,
+        colorizeUsernames: props.colorizeUsernames,
         collapseDisplay: props.collapseDisplay,
         collapsedReplyThreads: props.collapsedReplyThreads,
         linkPreviewDisplay: props.linkPreviewDisplay,
+        lastActiveDisplay: props.lastActiveDisplay.toString(),
         oneClickReactionsOnPosts: props.oneClickReactionsOnPosts,
         clickToReply: props.clickToReply,
     };
 }
+
+type ChildOption = {
+    id: string;
+    message: string;
+    value: string;
+    display: string;
+    moreId: string;
+    moreMessage: string;
+};
 
 type Option = {
     value: string;
@@ -55,6 +67,7 @@ type Option = {
         moreId?: string;
         moreMessage?: string;
     };
+    childOption?: ChildOption;
 }
 
 type SectionProps ={
@@ -72,8 +85,10 @@ type SectionProps ={
     description: {
         id: string;
         message: string;
+        values?: Record<string, React.ReactNode | PrimitiveType | FormatXMLElementFn<React.ReactNode, React.ReactNode>>;
     };
     disabled?: boolean;
+    onSubmit?: () => void;
 }
 
 type Props = {
@@ -100,6 +115,7 @@ type Props = {
     availabilityStatusOnPosts: string;
     channelDisplayMode: string;
     messageDisplay: string;
+    colorizeUsernames: string;
     collapseDisplay: string;
     collapsedReplyThreads: string;
     collapsedReplyThreadsAllowUserPreference: boolean;
@@ -108,9 +124,12 @@ type Props = {
     oneClickReactionsOnPosts: string;
     emojiPickerEnabled: boolean;
     timezoneLabel: string;
+    lastActiveDisplay: boolean;
+    lastActiveTimeEnabled: boolean;
     actions: {
         savePreferences: (userId: string, preferences: PreferenceType[]) => void;
         autoUpdateTimezone: (deviceTimezone: string) => void;
+        updateMe: (user: UserProfile) => Promise<ActionResult>;
     };
 }
 
@@ -122,9 +141,11 @@ type State = {
     availabilityStatusOnPosts: string;
     channelDisplayMode: string;
     messageDisplay: string;
+    colorizeUsernames: string;
     collapseDisplay: string;
     collapsedReplyThreads: string;
     linkPreviewDisplay: string;
+    lastActiveDisplay: string;
     oneClickReactionsOnPosts: string;
     clickToReply: string;
     handleSubmit?: () => void;
@@ -185,6 +206,35 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
         }
     }
 
+    submitLastActive = () => {
+        const {user, actions} = this.props;
+        const {lastActiveDisplay} = this.state;
+
+        const updatedUser = {
+            ...user,
+            props: {
+                ...user.props,
+                show_last_active: lastActiveDisplay,
+            },
+        };
+
+        actions.updateMe(updatedUser).
+            then((res) => {
+                if ('data' in res) {
+                    this.props.updateSection('');
+                } else if ('error' in res) {
+                    const {error} = res;
+                    let serverError;
+                    if (error instanceof Error) {
+                        serverError = error.message;
+                    } else {
+                        serverError = error as string;
+                    }
+                    this.setState({serverError, isSaving: false});
+                }
+            });
+    };
+
     handleSubmit = async () => {
         const userId = this.props.user.id;
 
@@ -217,6 +267,12 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
             name: Preferences.MESSAGE_DISPLAY,
             value: this.state.messageDisplay,
+        };
+        const colorizeUsernamesPreference = {
+            user_id: userId,
+            category: Preferences.CATEGORY_DISPLAY_SETTINGS,
+            name: Preferences.COLORIZE_USERNAMES,
+            value: this.state.colorizeUsernames,
         };
         const collapseDisplayPreference = {
             user_id: userId,
@@ -262,6 +318,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             teammateNameDisplayPreference,
             availabilityStatusOnPostsPreference,
             oneClickReactionsOnPostsPreference,
+            colorizeUsernamesPreference,
         ];
 
         this.trackChangeIfNecessary(collapsedReplyThreadsPreference, this.props.collapsedReplyThreads);
@@ -299,6 +356,10 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
         this.setState({collapsedReplyThreads});
     }
 
+    handleLastActiveRadio(lastActiveDisplay: string) {
+        this.setState({lastActiveDisplay});
+    }
+
     handleLinkPreviewRadio(linkPreviewDisplay: string) {
         this.setState({linkPreviewDisplay});
     }
@@ -316,6 +377,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
     }
 
     updateSection = (section: string) => {
+        console.log(section)
         this.updateState();
         this.props.updateSection(section);
     }
@@ -340,9 +402,10 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             thirdOption,
             description,
             disabled,
+            onSubmit,
         } = props;
         let extraInfo = null;
-        let submit: (() => Promise<void>) | null = this.handleSubmit;
+        let submit: (() => Promise<void>) | (() => void) | null = onSubmit || this.handleSubmit;
 
         const firstMessage = (
             <FormattedMessage
@@ -402,20 +465,27 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
         );
 
         const messageDesc = (
-            <FormattedMarkdownMessage
+            <FormattedMessage
                 id={description.id}
                 defaultMessage={description.message}
+                values={description.values}
             />
         );
 
         if (this.props.activeSection === section) {
             const format = [false, false, false];
+            let childOptionToShow: ChildOption | undefined;
             if (value === firstOption.value) {
                 format[0] = true;
+                childOptionToShow = firstOption.childOption;
             } else if (value === secondOption.value) {
                 format[1] = true;
+                childOptionToShow = secondOption.childOption;
             } else {
                 format[2] = true;
+                if (thirdOption) {
+                    childOptionToShow = thirdOption.childOption;
+                }
             }
 
             const name = section + 'Format';
@@ -446,6 +516,39 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                                 onChange={() => this.handleOnChange(thirdDisplay)}
                             />
                             {thirdMessage}
+                        </label>
+                        <br/>
+                    </div>
+                );
+            }
+
+            let childOptionSection;
+            if (childOptionToShow) {
+                const childDisplay = childOptionToShow.display;
+                childOptionSection = (
+                    <div className='checkbox'>
+                        <hr/>
+                        <label>
+                            <input
+                                id={name + 'childOption'}
+                                type='checkbox'
+                                name={childOptionToShow.id}
+                                checked={childOptionToShow.value === 'true'}
+                                onChange={(e) => {
+                                    this.handleOnChange({[childDisplay]: e.target.checked ? 'true' : 'false'});
+                                }}
+                            />
+                            <FormattedMessage
+                                id={childOptionToShow.id}
+                                defaultMessage={childOptionToShow.message}
+                            />
+                            {moreColon}
+                            <span className='font-weight--normal'>
+                                <FormattedMessage
+                                    id={childOptionToShow.moreId}
+                                    defaultMessage={childOptionToShow.moreMessage}
+                                />
+                            </span>
                         </label>
                         <br/>
                     </div>
@@ -492,6 +595,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                         <br/>
                         {messageDesc}
                     </div>
+                    {childOptionSection}
                 </fieldset>,
             ];
 
@@ -609,6 +713,40 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             this.prevSections.message_display = 'linkpreview';
         } else {
             this.prevSections.message_display = this.prevSections.linkpreview;
+        }
+
+        let lastActiveSection = null;
+
+        if (this.props.lastActiveTimeEnabled) {
+            lastActiveSection = this.createSection({
+                section: 'lastactive',
+                display: 'lastActiveDisplay',
+                value: this.state.lastActiveDisplay,
+                defaultDisplay: 'true',
+                title: {
+                    id: t('user.settings.display.lastActiveDisplay'),
+                    message: 'Share last active time',
+                },
+                firstOption: {
+                    value: 'true',
+                    radionButtonText: {
+                        id: t('user.settings.display.lastActiveOn'),
+                        message: 'On',
+                    },
+                },
+                secondOption: {
+                    value: 'false',
+                    radionButtonText: {
+                        id: t('user.settings.display.lastActiveOff'),
+                        message: 'Off',
+                    },
+                },
+                description: {
+                    id: t('user.settings.display.lastActiveDesc'),
+                    message: 'When enabled, other users will see when you were last active.',
+                },
+                onSubmit: this.submitLastActive,
+            });
         }
 
         const clockSection = this.createSection({
@@ -767,6 +905,14 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     message: 'Compact',
                     moreId: t('user.settings.display.messageDisplayCompactDes'),
                     moreMessage: 'Fit as many messages on the screen as we can.',
+                },
+                childOption: {
+                    id: t('user.settings.display.colorize'),
+                    value: this.state.colorizeUsernames,
+                    display: 'colorizeUsernames',
+                    message: 'Colorize usernames',
+                    moreId: t('user.settings.display.colorizeDes'),
+                    moreMessage: 'Use colors to distinguish users in compact mode',
                 },
             },
             description: {
@@ -1000,11 +1146,12 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     </h3>
                     <div className='divider-dark first'/>
                     {themeSection}
+                    {lastActiveSection}
                     {/* {collapsedReplyThreads}
                     {clockSection}
                     {teammateNameDisplaySection}
                     {availabilityStatusOnPostsSection}
-                    {timezoneSelection} */}
+                    {timezoneSelection}
                     {linkPreviewSection}
                     {collapseSection}
                     {messageDisplaySection}

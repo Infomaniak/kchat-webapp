@@ -8,14 +8,13 @@ import {getStandardAnalytics} from 'mattermost-redux/actions/admin';
 import {getCloudSubscription, getCloudProducts, getCloudCustomer} from 'mattermost-redux/actions/cloud';
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 
-import {pageVisited, trackEvent} from 'actions/telemetry_actions';
+import {pageVisited} from 'actions/telemetry_actions';
 
 import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
 import CloudTrialBanner from 'components/admin_console/billing/billing_subscriptions/cloud_trial_banner';
 
 import {getCloudContactUsLink, InquiryType, SalesInquiryIssue} from 'selectors/cloud';
 import {getAdminAnalytics} from 'mattermost-redux/selectors/entities/admin';
-import {cloudFreeEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {
     getSubscriptionProduct,
     getCloudSubscription as selectCloudSubscription,
@@ -34,6 +33,7 @@ import BillingSummary from '../billing_summary';
 import PlanDetails from '../plan_details';
 
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
+import useOpenCloudPurchaseModal from 'components/common/hooks/useOpenCloudPurchaseModal';
 import useGetLimits from 'components/common/hooks/useGetLimits';
 
 import ContactSalesCard from './contact_sales_card';
@@ -66,7 +66,6 @@ const BillingSubscriptions = () => {
     const cancelAccountLink = useSelector(getCloudContactUsLink)(InquiryType.Sales, SalesInquiryIssue.CancelAccount);
     const trialQuestionsLink = useSelector(getCloudContactUsLink)(InquiryType.Sales, SalesInquiryIssue.TrialQuestions);
     const isLegacyFree = useSelector(checkSubscriptionIsLegacyFree);
-    const isCloudFreeEnabled = useSelector(cloudFreeEnabled);
     const trialEndDate = subscription?.trial_end_at || 0;
 
     const [showCreditCardBanner, setShowCreditCardBanner] = useState(true);
@@ -79,21 +78,21 @@ const BillingSubscriptions = () => {
 
     const openPricingModal = useOpenPricingModal();
 
+    const openCloudPurchaseModal = useOpenCloudPurchaseModal({});
+
     // show the upgrade section when is a free tier customer
-    const onUpgradeMattermostCloud = () => {
-        trackEvent('cloud_admin', 'click_upgrade_mattermost_cloud');
-        openPricingModal();
+    const onUpgradeMattermostCloud = (callerInfo: string) => {
+        openCloudPurchaseModal({trackingLocation: callerInfo});
     };
 
     let isFreeTrial = false;
     let daysLeftOnTrial = 0;
     if (subscription?.is_free_trial === 'true') {
         isFreeTrial = true;
-        daysLeftOnTrial = getRemainingDaysFromFutureTimestamp(subscription.trial_end_at);
-        const maxDays = isCloudFreeEnabled ? TrialPeriodDays.TRIAL_30_DAYS : TrialPeriodDays.TRIAL_14_DAYS;
-        if (daysLeftOnTrial > maxDays) {
-            daysLeftOnTrial = maxDays;
-        }
+        daysLeftOnTrial = Math.min(
+            getRemainingDaysFromFutureTimestamp(subscription.trial_end_at),
+            TrialPeriodDays.TRIAL_30_DAYS,
+        );
     }
 
     useEffect(() => {
@@ -111,11 +110,15 @@ const BillingSubscriptions = () => {
         pageVisited('cloud_admin', 'pageview_billing_subscription');
 
         if (actionQueryParam === 'show_purchase_modal') {
-            onUpgradeMattermostCloud();
+            onUpgradeMattermostCloud('billing_subscriptions_external_direct_link');
         }
 
         if (actionQueryParam === 'show_pricing_modal') {
-            openPricingModal();
+            openPricingModal({trackingLocation: 'billing_subscriptions_external_direct_link'});
+        }
+
+        if (actionQueryParam === 'show_delinquency_modal') {
+            openCloudPurchaseModal({trackingLocation: 'billing_subscriptions_external_direct_link'});
         }
     }, []);
 
@@ -160,7 +163,7 @@ const BillingSubscriptions = () => {
                     {showCreditCardBanner &&
                         isCardExpired &&
                         creditCardExpiredBanner(setShowCreditCardBanner)}
-                    {(isCloudFreeEnabled && isFreeTrial) && (<CloudTrialBanner trialEndDate={trialEndDate}/>)}
+                    {isFreeTrial && <CloudTrialBanner trialEndDate={trialEndDate}/>}
                     <div className='BillingSubscriptions__topWrapper'>
                         <PlanDetails
                             isFreeTrial={isFreeTrial}
@@ -173,7 +176,7 @@ const BillingSubscriptions = () => {
                             onUpgradeMattermostCloud={onUpgradeMattermostCloud}
                         />
                     </div>
-                    {isCloudFreeEnabled && hasSomeLimits(cloudLimits) ? (
+                    {hasSomeLimits(cloudLimits) && !isFreeTrial ? (
                         <Limits/>
                     ) : (
                         <ContactSalesCard

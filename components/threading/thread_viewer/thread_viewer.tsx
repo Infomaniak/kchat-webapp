@@ -1,26 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-/* eslint-disable max-lines */
-
 import React, {HTMLAttributes} from 'react';
 import classNames from 'classnames';
 
 import {ActionFunc} from 'mattermost-redux/types/actions';
-import {Channel} from '@mattermost/types/channels';
 import {ExtendedPost} from 'mattermost-redux/actions/posts';
-import {Post} from '@mattermost/types/posts';
-import {UserThread} from '@mattermost/types/threads';
 
 import deferComponentRender from 'components/deferComponentRender';
 import FileUploadOverlay from 'components/file_upload_overlay';
 import LoadingScreen from 'components/loading_screen';
+
 import {FakePost} from 'types/store/rhs';
+
+import {Channel} from '@mattermost/types/channels';
+import {Post} from '@mattermost/types/posts';
+import {UserThread} from '@mattermost/types/threads';
+
 import ThreadViewerVirtualized from '../virtualized_thread_viewer';
 
 import './thread_viewer.scss';
 
-const DeferredThreadViewerVirt = deferComponentRender(ThreadViewerVirtualized);
+const DeferredThreadViewerVirt = deferComponentRender(ThreadViewerVirtualized); // where this is called is causing issues
 
 type Attrs = Pick<HTMLAttributes<HTMLDivElement>, 'className' | 'id'>;
 
@@ -226,12 +227,11 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
                                     onCardClick={this.handleCardClick}
                                     onCardClickPost={this.handleCardClickPost}
                                     postIds={this.props.postIds}
-                                    removePost={this.props.actions.removePost}
                                     selected={this.props.selected}
                                     useRelativeTimestamp={this.props.useRelativeTimestamp || false}
                                     highlightedPostId={this.props.highlightedPostId}
                                     selectedPostFocusedAt={this.props.selectedPostFocusedAt}
-                                    isThreadView={this.props.isCollapsedThreadsEnabled && this.props.isThreadView}
+                                    isThreadView={Boolean(this.props.isCollapsedThreadsEnabled && this.props.isThreadView)}
                                 />
                             )}
                         </>

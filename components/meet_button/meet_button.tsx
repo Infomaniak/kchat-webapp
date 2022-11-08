@@ -23,7 +23,7 @@ export type Props = {
     hasCall?: boolean;
     intl: IntlShape;
     startCallInChannel: (channelID: string) => void;
-    isInCall: boolean;
+    isInCall?: boolean;
 }
 
 function logInfo(props: Props, connectedChannelID: string, channelID: string) {

@@ -12,12 +12,14 @@ import UserGuideDropdown from './user_guide_dropdown';
 const CenterControlsContainer = styled.div`
     display: flex;
     align-items: center;
-    height: 40px;
-    justify-content: center;
+    height: 46px;
+    justify-content: flex-start;
     flex-grow: 1;
+    border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
+    border-left: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
 
     > * + * {
-        margin-left: 8px;
+        margin-left: 3px;
     }
 `;
 

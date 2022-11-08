@@ -56,41 +56,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapse"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -153,7 +129,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
               </div>
               <div>
                 <br />
-                <injectIntl(FormattedMarkdownMessage)
+                <Memo(MemoizedFormattedMessage)
                   defaultMessage="Select the width of the center channel."
                   id="user.settings.display.channeldisplaymode"
                 />
@@ -251,41 +227,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapse"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -384,41 +336,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapse"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -517,103 +445,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <SettingItemMax
-        containerStyle=""
-        extraInfo={null}
-        infoPosition="bottom"
-        inputs={
-          Array [
-            <fieldset>
-              <legend
-                className="form-legend hidden-label"
-              >
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Default Appearance of Image Previews"
-                  id="user.settings.display.collapseDisplay"
-                />
-              </legend>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="collapseFormatA"
-                    name="collapseFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="On"
-                    id="user.settings.display.collapseOn"
-                  />
-                </label>
-                <br />
-              </div>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="collapseFormatB"
-                    name="collapseFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Off"
-                    id="user.settings.display.collapseOff"
-                  />
-                </label>
-                <br />
-              </div>
-              <div>
-                <br />
-                <injectIntl(FormattedMarkdownMessage)
-                  defaultMessage="Set whether previews of image links and image attachment thumbnails show as expanded or collapsed by default. This setting can also be controlled using the slash commands /expand and /collapse."
-                  id="user.settings.display.collapseDesc"
-                />
-              </div>
-            </fieldset>,
-          ]
-        }
-        saving={false}
-        section=""
-        submit={[Function]}
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -712,41 +554,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapse"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -845,26 +663,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="collapse"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -962,104 +771,18 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <SettingItemMax
-        containerStyle=""
-        extraInfo={null}
-        infoPosition="bottom"
-        inputs={
-          Array [
-            <fieldset>
-              <legend
-                className="form-legend hidden-label"
-              >
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Website Link Previews"
-                  id="user.settings.display.linkPreviewDisplay"
-                />
-              </legend>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="linkpreviewFormatA"
-                    name="linkpreviewFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="On"
-                    id="user.settings.display.linkPreviewOn"
-                  />
-                </label>
-                <br />
-              </div>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="linkpreviewFormatB"
-                    name="linkpreviewFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Off"
-                    id="user.settings.display.linkPreviewOff"
-                  />
-                </label>
-                <br />
-              </div>
-              <div>
-                <br />
-                <injectIntl(FormattedMarkdownMessage)
-                  defaultMessage="When available, the first web link in a message will show a preview of the website content below the message."
-                  id="user.settings.display.linkPreviewDesc"
-                />
-              </div>
-            </fieldset>,
-          ]
-        }
-        saving={false}
-        section=""
-        submit={[Function]}
-        title={
+      <Connect(SettingItemMin)
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapse"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -1158,121 +881,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapse"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <SettingItemMax
-        containerStyle=""
-        extraInfo={null}
-        infoPosition="bottom"
-        inputs={
-          Array [
-            <fieldset>
-              <legend
-                className="form-legend hidden-label"
-              >
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Message Display"
-                  id="user.settings.display.messageDisplayTitle"
-                />
-              </legend>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="message_displayFormatA"
-                    name="message_displayFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Standard"
-                    id="user.settings.display.messageDisplayClean"
-                  />
-                  : 
-                  <span
-                    className="font-weight--normal"
-                  >
-                    <Memo(MemoizedFormattedMessage)
-                      defaultMessage="Easy to scan and read."
-                      id="user.settings.display.messageDisplayCleanDes"
-                    />
-                  </span>
-                </label>
-                <br />
-              </div>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="message_displayFormatB"
-                    name="message_displayFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Compact"
-                    id="user.settings.display.messageDisplayCompact"
-                  />
-                  : 
-                  <span
-                    className="font-weight--normal"
-                  >
-                    <Memo(MemoizedFormattedMessage)
-                      defaultMessage="Fit as many messages on the screen as we can."
-                      id="user.settings.display.messageDisplayCompactDes"
-                    />
-                  </span>
-                </label>
-                <br />
-              </div>
-              <div>
-                <br />
-                <injectIntl(FormattedMarkdownMessage)
-                  defaultMessage="Select how messages in a channel should be displayed."
-                  id="user.settings.display.messageDisplayDescription"
-                />
-              </div>
-            </fieldset>,
-          ]
-        }
-        saving={false}
-        section=""
-        submit={[Function]}
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -1371,41 +990,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapse"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -1504,41 +1099,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapse"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -1637,41 +1208,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapse"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -1782,41 +1329,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
-        title={
+        describe={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
           />
         }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="collapse"
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
-          />
-        }
-        updateSection={[Function]}
-      />
-      <div
-        className="divider-dark"
-      />
-    </div>
-    <div>
-      <Connect(SettingItemMin)
-        section="message_display"
-        title={
-          <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -1915,11 +1438,17 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     />
     <div>
       <Connect(SettingItemMin)
-        section="linkpreview"
+        describe={
+          <Memo(MemoizedFormattedMessage)
+            defaultMessage="On"
+            id="user.settings.display.lastActiveOn"
+          />
+        }
+        section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Website Link Previews"
-            id="user.settings.display.linkPreviewDisplay"
+            defaultMessage="Share last active time"
+            id="user.settings.display.lastActiveDisplay"
           />
         }
         updateSection={[Function]}
@@ -1930,11 +1459,11 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="collapse"
+        section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Default Appearance of Image Previews"
-            id="user.settings.display.collapseDisplay"
+            defaultMessage="Channel Display"
+            id="user.settings.display.channelDisplayTitle"
           />
         }
         updateSection={[Function]}
@@ -1945,11 +1474,11 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     </div>
     <div>
       <Connect(SettingItemMin)
-        section="message_display"
+        section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
-            defaultMessage="Message Display"
-            id="user.settings.display.messageDisplayTitle"
+            defaultMessage="Quick reactions on messages"
+            id="user.settings.display.oneClickReactionsOnPostsTitle"
           />
         }
         updateSection={[Function]}
@@ -1958,6 +1487,64 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
         className="divider-dark"
       />
     </div>
+  </div>
+</div>
+`;
+
+exports[`components/user_settings/display/UserSettingsDisplay should not show last active section 1`] = `
+<div
+  id="displaySettings"
+>
+  <div
+    className="modal-header"
+  >
+    <button
+      aria-label="Close"
+      className="close"
+      data-dismiss="modal"
+      id="closeButton"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+      >
+        ×
+      </span>
+    </button>
+    <h4
+      className="modal-title"
+    >
+      <div
+        className="modal-back"
+      >
+        <span
+          onClick={[MockFunction]}
+        >
+          <BackIcon />
+        </span>
+      </div>
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h4>
+  </div>
+  <div
+    className="user-settings"
+  >
+    <h3
+      className="tab-header"
+      id="displaySettingsTitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Display Settings"
+        id="user.settings.display.title"
+      />
+    </h3>
+    <div
+      className="divider-dark first"
+    />
     <div>
       <Connect(SettingItemMin)
         section="channel_display_mode"
