@@ -456,8 +456,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             />
         );
 
-        const target: HTMLElement | null = document.body.querySelector('#displaySettings');
-
         return (
             <RhsSettingsItem
                 key={display}
@@ -472,7 +470,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                         onChange={(e) => this.handleOnChange({[display]: e.value})}
                         value={options.filter((opt: { value: string | boolean }) => opt.value === value)}
                         isSearchable={false}
-                        menuPortalTarget={target}
+                        menuPortalTarget={document.body}
                         styles={reactStyles}
                     />
                 }

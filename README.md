@@ -10,13 +10,22 @@ nb. cela a marché...
 
 ## install + watch
 
+.env file with
+
+```dotenv
+WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/next
+WEBCOMPONENT_API_ENDPOINT=https://welcome.preprod.dev.infomaniak.ch
+MANAGER_ENDPOINT=https://manager.preprod.dev.infomaniak.ch/
+LOGIN_ENDPOINT=https://login.preprod.dev.infomaniak.ch/
+```
+
 ```shell
 nvm use 16
-yarm install
+yarn install
 yarn workspace @mattermost/types build
 yarn workspace @mattermost/client build
 yarn workspace @mattermost/components build
-yarn build:webapp
+export $(xargs < ./.env) && yarn build:webapp
 ```
 
 ## run the project

@@ -2,199 +2,80 @@
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 
-/* eslint-disable max-lines */
-
 import React, {useEffect, useRef} from 'react';
 
-// import {useIntl} from 'react-intl';
-
-// import {useDispatch, useSelector} from 'react-redux';
 import {useSelector} from 'react-redux';
 
-import {useHistory, useLocation} from 'react-router-dom';
-
-import * as GlobalActions from 'actions/global_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
-import LoadingScreen from 'components/loading_screen';
 
-import {Client4} from 'mattermost-redux/client';
+// import LoadingScreen from 'components/loading_screen';
 import {RequestStatus} from 'mattermost-redux/constants';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
-import {getMyTeamMember, getTeamByName} from 'mattermost-redux/selectors/entities/teams';
+
+// import {getConfig} from 'mattermost-redux/selectors/entities/general';
+// import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
+// import {getMyTeamMember, getTeamByName} from 'mattermost-redux/selectors/entities/teams';
+// import {setCSRFFromCookie} from 'utils/utils';
+
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
 import LocalStorageStore from 'stores/local_storage_store';
 import {GlobalState} from 'types/store';
 
-import Constants from 'utils/constants';
-import {IKConstants} from 'utils/constants-ik';
 import {isDesktopApp} from 'utils/user_agent';
-import {setCSRFFromCookie} from 'utils/utils';
 
+import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin} from './utils';
 import './login.scss';
-import {Team} from '@mattermost/types/teams';
-
-import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from './utils';
 
 const Login = () => {
-    // const {formatMessage} = useIntl();
-    // const dispatch = useDispatch<DispatchFunc>();
-    const history = useHistory();
-    const {pathname, search, hash} = useLocation();
+    // TODO: can we clean this?
+    // const {
+    //     ExperimentalPrimaryTeam,
+    // } = useSelector(getConfig);
 
-    const searchParam = new URLSearchParams(search);
-    const extraParam = searchParam.get('extra');
-
-    // const emailParam = searchParam.get('email');
-
-    const {
-        ExperimentalPrimaryTeam,
-    } = useSelector(getConfig);
     const initializing = useSelector((state: GlobalState) => state.requests.users.logout.status === RequestStatus.SUCCESS || !state.storage.initialized);
     const currentUser = useSelector(getCurrentUser);
-    const experimentalPrimaryTeam = useSelector((state: GlobalState) => (ExperimentalPrimaryTeam ? getTeamByName(state, ExperimentalPrimaryTeam) : undefined));
-    const experimentalPrimaryTeamMember = useSelector((state: GlobalState) => getMyTeamMember(state, experimentalPrimaryTeam?.id ?? ''));
-    const useCaseOnboarding = useSelector(getUseCaseOnboarding);
 
+    // TODO: can we clean this?
+    // const experimentalPrimaryTeam = useSelector((state: GlobalState) => (ExperimentalPrimaryTeam ? getTeamByName(state, ExperimentalPrimaryTeam) : undefined));
+    // const experimentalPrimaryTeamMember = useSelector((state: GlobalState) => getMyTeamMember(state, experimentalPrimaryTeam?.id ?? ''));
+    // const useCaseOnboarding = useSelector(getUseCaseOnboarding);
     // const isCloud = useSelector(isCurrentLicenseCloud);
     // const graphQLEnabled = useSelector(isGraphQLEnabled);
 
-    // const passwordInput = useRef<HTMLInputElement>(null);
-
     const closeSessionExpiredNotification = useRef<() => void>();
+
+    // Session guard
+
+    // DEV NOTES
+    // When client4 starts hitting 401/403 return codes we redirect back here.
+    // At this point the token has already expired so it is either a computer wake up
+    // or our interval couldn't successfuly refresh the token. Apparently we should still
+    // be able to refresh if the token has expired but this doesn't seem to be the case atm.
 
     useEffect(() => {
         console.log('[LOGIN] init login component');
         console.log('[LOGIN] get was logged in => ', LocalStorageStore.getWasLoggedIn());
 
+        if (isDesktopApp()) {
+            const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
+
+            // Check for desktop session end of life
+            if (checkIKTokenIsExpired() || !token || !refreshToken) {
+                console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
+                clearLocalStorageToken();
+                getChallengeAndRedirectToLogin();
+
+                return;
+            }
+        }
+
+        // For web simply send through to router if user exists.
         if (currentUser) {
             console.log('[LOGIN] Current user is ok');
             redirectUserToDefaultTeam();
-            return;
         }
-
-        if (isDesktopApp()) {
-            const loginCode = (new URLSearchParams(search)).get('code');
-            if (loginCode) {
-                console.log('[LOGIN] Login with code');
-            }
-            const token = localStorage.getItem('IKToken');
-
-            // const refreshToken = localStorage.getItem('IKRefreshToken');
-
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
-
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token,
-                        },
-                    },
-                    window.origin,
-                );
-
-                // navigator.serviceWorker.controller?.postMessage({
-                //     type: 'TOKEN_REFRESHED',
-                //     token: token || '',
-                // });
-
-                LocalStorageStore.setWasLoggedIn(true);
-                GlobalActions.redirectUserToDefaultTeam();
-            }
-
-            // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
-                return;
-            }
-
-            if (loginCode) {
-                const challenge = JSON.parse(localStorage.getItem('challenge') as string);
-
-                //    Get token
-                Client4.getIKLoginToken(
-                    loginCode,
-                    challenge?.challenge,
-                    challenge?.verifier,
-                    `${IKConstants.LOGIN_URL}`,
-                    `${IKConstants.CLIENT_ID}`,
-                ).then((resp) => {
-                    storeTokenResponse(resp);
-                    localStorage.removeItem('challenge');
-                    localStorage.setItem('tokenExpired', '0');
-                    LocalStorageStore.setWasLoggedIn(true);
-                    window.postMessage(
-                        {
-                            type: 'token-refreshed',
-                            message: {
-                                token: resp.access_token,
-                            },
-                        },
-                        window.origin,
-                    );
-
-                    // navigator.serviceWorker.controller?.postMessage({
-                    //     type: 'TOKEN_REFRESHED',
-                    //     token: resp.access_token || '',
-                    // });
-                    finishSignin();
-                }).catch((error) => {
-                    console.log('[TOKEN] post token fail', error);
-                    clearLocalStorageToken();
-                    getChallengeAndRedirectToLogin();
-                });
-                return;
-            }
-
-            if (hash) {
-                console.log('[LOGIN] Login with hash');
-                const hash2Obj = {};
-                // eslint-disable-next-line array-callback-return
-                hash.substring(1).split('&').map((hk) => {
-                    const temp = hk.split('=');
-                    hash2Obj[temp[0]] = temp[1];
-                });
-                storeTokenResponse(hash2Obj);
-                LocalStorageStore.setWasLoggedIn(true);
-                finishSignin();
-
-                return;
-            }
-
-            // refreshIKToken(true) higher should handle this case
-            //
-            // if (!token || !refreshToken || !tokenExpire) {
-            //     console.log('[LOGIN] No token or token expired, redirect to login ik');
-            //     getChallengeAndRedirectToLogin();
-            // }
-        }
-
-        // Determine if the user was unexpectedly logged out.
-        if (LocalStorageStore.getWasLoggedIn()) {
-            if (extraParam === Constants.SIGNIN_CHANGE) {
-                // Assume that if the user triggered a sign in change, it was intended to logout.
-                // We can't preflight this, since in some flows it's the server that invalidates
-                // our session after we use it to complete the sign in change.
-                LocalStorageStore.setWasLoggedIn(false);
-            } else {
-                // Although the authority remains the local sessionExpired bit on the state, set this
-                // extra field in the querystring to signal the desktop app.
-                const newSearchParam = new URLSearchParams(search);
-                newSearchParam.set('extra', Constants.SESSION_EXPIRED);
-                history.replace(`${pathname}?${newSearchParam}`);
-            }
-
-            // return;
-        }
-
-        // redirectUserToDefaultTeam();
     }, []);
 
     useEffect(() => {
@@ -213,32 +94,32 @@ const Login = () => {
         return (<LoadingIk/>);
     }
 
-    const finishSignin = (team?: Team) => {
-        const query = new URLSearchParams(search);
-        const redirectTo = query.get('redirect_to');
+    // const finishSignin = (team?: Team) => {
+    //     const query = new URLSearchParams(search);
+    //     const redirectTo = query.get('redirect_to');
 
-        setCSRFFromCookie();
+    //     setCSRFFromCookie();
 
-        // Record a successful login to local storage. If an unintentional logout occurs, e.g.
-        // via session expiration, this bit won't get reset and we can notify the user as such.
-        LocalStorageStore.setWasLoggedIn(true);
-        if (redirectTo && redirectTo.match(/^\/([^/]|$)/)) {
-            history.push(redirectTo);
-        } else if (team) {
-            history.push(`/${team.name}`);
-        } else if (experimentalPrimaryTeamMember.team_id) {
-            // Only set experimental team if user is on that team
-            history.push(`/${ExperimentalPrimaryTeam}`);
-        } else if (useCaseOnboarding) {
-            // need info about whether admin or not,
-            // and whether admin has already completed
-            // first time onboarding. Instead of fetching and orchestrating that here,
-            // let the default root component handle it.
-            history.push('/');
-        } else {
-            redirectUserToDefaultTeam();
-        }
-    };
+    //     // Record a successful login to local storage. If an unintentional logout occurs, e.g.
+    //     // via session expiration, this bit won't get reset and we can notify the user as such.
+    //     LocalStorageStore.setWasLoggedIn(true);
+    //     if (redirectTo && redirectTo.match(/^\/([^/]|$)/)) {
+    //         history.push(redirectTo);
+    //     } else if (team) {
+    //         history.push(`/${team.name}`);
+    //     } else if (experimentalPrimaryTeamMember.team_id) {
+    //         // Only set experimental team if user is on that team
+    //         history.push(`/${ExperimentalPrimaryTeam}`);
+    //     } else if (useCaseOnboarding) {
+    //         // need info about whether admin or not,
+    //         // and whether admin has already completed
+    //         // first time onboarding. Instead of fetching and orchestrating that here,
+    //         // let the default root component handle it.
+    //         history.push('/');
+    //     } else {
+    //         redirectUserToDefaultTeam();
+    //     }
+    // };
 
     const getContent = () => {
         return (<LoadingIk/>);

@@ -150,7 +150,6 @@ export default class WebSocketClient {
                 wssPort: 443,
                 httpPort: 443,
                 httpsPort: 443,
-                forceTLS: true,
                 enabledTransports: ['ws', 'wss'],
             });
         } else {
@@ -162,7 +161,6 @@ export default class WebSocketClient {
                 wssPort: 443,
                 httpPort: 443,
                 httpsPort: 443,
-                forceTLS: true,
                 enabledTransports: ['ws', 'wss'],
             });
         }
@@ -183,10 +181,6 @@ export default class WebSocketClient {
         this.conn.connection.bind('connected', () => {
             if (token) {
                 this.sendMessage('authentication_challenge', {token});
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
             }
 
             if (this.connectFailCount > 0) {
@@ -245,32 +239,6 @@ export default class WebSocketClient {
 
             this.errorCallback?.(evt);
             this.errorListeners.forEach((listener) => listener(evt));
-
-            this.conn?.disconnect();
-            this.conn = null;
-            this.responseSequence = 1;
-
-            this.connectFailCount++;
-
-            this.closeCallback?.(this.connectFailCount);
-            this.closeListeners.forEach((listener) => listener(this.connectFailCount));
-
-            let retryTime = MIN_WEBSOCKET_RETRY_TIME;
-
-            // If we've failed a bunch of connections then start backing off
-            if (this.connectFailCount > MAX_WEBSOCKET_FAILS) {
-                retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount * this.connectFailCount;
-                if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
-                    retryTime = MAX_WEBSOCKET_RETRY_TIME;
-                }
-            }
-
-            setTimeout(
-                () => {
-                    this.initialize(connectionUrl, userId, teamId, token, authToken, presenceChannelId);
-                },
-                retryTime,
-            );
         });
 
         this.bindChannelGlobally(this.teamChannel);

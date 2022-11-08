@@ -10,9 +10,6 @@ import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import {reconnectWebSocket} from 'actions/websocket_actions';
 
-const REFRESH_TOKEN_TIME_MARGIN = 30; // How many seconds to refresh before token expires
-const OFFLINE_ATTEMPT_INTERVAL = 2000; // In milliseconds
-
 /**
  * Store IKToken infos in localStorage and update Client
  */
@@ -82,7 +79,6 @@ export async function generateCodeChallenge(codeVerifier: string) {
  */
 export function getChallengeAndRedirectToLogin() {
     const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
-    // const redirectTo = 'ktalk://auth-desktop';
     const codeVerifier = getCodeVerifier();
     let codeChallenge = '';
 
@@ -115,6 +111,17 @@ export function checkIKTokenIsExpired() {
 }
 
 /**
+ * check if token is expiring in 1 min
+ * @returns bool
+ */
+export function checkIKTokenExpiresSoon(): boolean {
+    const tokenExpire = localStorage.getItem('IKTokenExpire');
+    const isExpiredInOneMinute = parseInt(tokenExpire as string, 10) <= ((Date.now() / 1000) + 60);
+
+    return isExpiredInOneMinute;
+}
+
+/**
  * check if token is expired once
  * @returns bool
  */
@@ -123,17 +130,11 @@ export function needRefreshToken() {
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
-export function refreshIKToken(redirectToTeam = false, periodic = false) {
+export function refreshIKToken(redirectToTeam = false) {
     const refreshToken = localStorage.getItem('IKRefreshToken');
     const isRefreshing = localStorage.getItem('refreshingToken');
 
     if (isRefreshing) {
-        return;
-    }
-
-    if (!refreshToken) {
-        clearLocalStorageToken();
-        getChallengeAndRedirectToLogin();
         return;
     }
 
@@ -144,11 +145,7 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         refreshToken,
         `${IKConstants.LOGIN_URL}`,
         `${IKConstants.CLIENT_ID}`,
-    ).then((resp) => {
-        if (periodic && resp.expires_in && resp.expires_in > 0) {
-            setTimeout(refreshIKToken, 1000 * (resp.expires_in - REFRESH_TOKEN_TIME_MARGIN), false, true);
-        }
-
+    ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
         console.log('[TOKEN] Token refreshed');
@@ -163,12 +160,6 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
             window.origin,
         );
 
-        // console.log('[TOKEN / SW] sending token to SW after refresh');
-        // navigator.serviceWorker.controller?.postMessage({
-        //     type: 'TOKEN_REFRESHED',
-        //     token: resp.access_token || localStorage.getItem('IKToken'),
-        // });
-
         localStorage.removeItem('refreshingToken');
 
         // Refresh the websockets as we just changed Bearer Token
@@ -177,10 +168,8 @@ export function refreshIKToken(redirectToTeam = false, periodic = false) {
         if (redirectToTeam) {
             redirectUserToDefaultTeam();
         }
-    }).catch((error) => {
+    }).catch((error: unknown) => {
         console.log('[TOKEN] Refresh token error ', error);
-        clearLocalStorageToken();
         localStorage.removeItem('refreshingToken');
-        getChallengeAndRedirectToLogin();
     });
 }
