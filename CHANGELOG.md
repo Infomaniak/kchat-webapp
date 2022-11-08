@@ -1,3 +1,13 @@
+## 0.5.9 (2022-11-07)
+
+## Fixed (1 change)
+
+- [ws remove tls forcing, fix config conditions for setting ws protocol](kchat/webapp@cc7dbf1c46fcf2336095b7d08bdb1bb96474a301) by @antonbuksa
+
+## Removed (1 change)
+
+- [remove ws refresh from pong handler](kchat/webapp@cb4898c5cad300cde516935de5c4c5fe3c0aa504) by @antonbuksa
+
 ## 0.5.8 (2022-11-04)
 
 ## Added (1 change)

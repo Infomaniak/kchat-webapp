@@ -150,20 +150,24 @@ export function initialize() {
         connUrl = new URL(getSiteURL());
 
         // replace the protocol with a websocket one
-        if (connUrl.protocol === 'https:') {
-            connUrl.protocol = 'wss:';
-        } else {
-            connUrl.protocol = 'ws:';
-        }
+        connUrl.protocol = 'wss:';
+
+        // if (connUrl.protocol === 'https:') {
+        //     connUrl.protocol = 'wss:';
+        // } else {
+        //     connUrl.protocol = 'ws:';
+        // }
 
         // append a port number if one isn't already specified
-        if (!(/:\d+$/).test(connUrl.host)) {
-            if (connUrl.protocol === 'wss:') {
-                connUrl.host += ':' + config.WebsocketSecurePort;
-            } else {
-                connUrl.host += ':' + config.WebsocketPort;
-            }
-        }
+        connUrl.host += ':' + config.WebsocketSecurePort;
+
+        // if (!(/:\d+$/).test(connUrl.host)) {
+        //     if (connUrl.protocol === 'wss:') {
+        //         connUrl.host += ':' + config.WebsocketSecurePort;
+        //     } else {
+        //         connUrl.host += ':' + config.WebsocketPort;
+        //     }
+        // }
 
         connUrl = connUrl.toString();
     }
@@ -597,9 +601,10 @@ export function handleEvent(msg) {
     case SocketEvents.PUSHER_MEMBER_REMOVED:
         handlePusherMemberRemoved(msg);
         break;
-    case SocketEvents.PUSHER_PONG:
-        handlePusherPong(msg);
-        break;
+
+    // case SocketEvents.PUSHER_PONG:
+    //     handlePusherPong(msg);
+    //     break;
     default:
     }
 
