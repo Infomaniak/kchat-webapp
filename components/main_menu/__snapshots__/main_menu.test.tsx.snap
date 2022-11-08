@@ -336,6 +336,37 @@ exports[`components/Menu should match snapshot with most of the thing disabled i
         text="Add Groups to Team"
       />
     </Connect(TeamPermissionGate)>
+    <Connect(TeamPermissionGate)
+      permissions={
+        Array [
+          "add_user_to_team",
+          "invite_guest",
+        ]
+      }
+      teamId="team-id"
+    >
+      <MenuItemToggleModalRedux
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(InvitationModal)",
+            "type": [Function],
+          }
+        }
+        extraText="Add people to the team"
+        icon={
+          <i
+            className="fa fa-user-plus"
+          />
+        }
+        id="invitePeople"
+        modalId="invitation"
+        show={true}
+        text="Invite People"
+      />
+    </Connect(TeamPermissionGate)>
   </MenuGroup>
   <MenuGroup />
   <MenuGroup />
@@ -538,6 +569,37 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
         modalId="add_groups_to_team"
         show={false}
         text="Add Groups to Team"
+      />
+    </Connect(TeamPermissionGate)>
+    <Connect(TeamPermissionGate)
+      permissions={
+        Array [
+          "add_user_to_team",
+          "invite_guest",
+        ]
+      }
+      teamId="team-id"
+    >
+      <MenuItemToggleModalRedux
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(InvitationModal)",
+            "type": [Function],
+          }
+        }
+        extraText="Add people to the team"
+        icon={
+          <i
+            className="fa fa-user-plus"
+          />
+        }
+        id="invitePeople"
+        modalId="invitation"
+        show={true}
+        text="Invite People"
       />
     </Connect(TeamPermissionGate)>
   </MenuGroup>
@@ -757,6 +819,37 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
         modalId="add_groups_to_team"
         show={false}
         text="Add Groups to Team"
+      />
+    </Connect(TeamPermissionGate)>
+    <Connect(TeamPermissionGate)
+      permissions={
+        Array [
+          "add_user_to_team",
+          "invite_guest",
+        ]
+      }
+      teamId="team-id"
+    >
+      <MenuItemToggleModalRedux
+        dialogType={
+          Object {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "displayName": "Connect(InvitationModal)",
+            "type": [Function],
+          }
+        }
+        extraText="Add people to the team"
+        icon={
+          <i
+            className="fa fa-user-plus"
+          />
+        }
+        id="invitePeople"
+        modalId="invitation"
+        show={true}
+        text="Invite People"
       />
     </Connect(TeamPermissionGate)>
   </MenuGroup>

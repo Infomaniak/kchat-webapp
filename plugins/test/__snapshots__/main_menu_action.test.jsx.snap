@@ -107,6 +107,37 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
           text="Add Groups to Team"
         />
       </Connect(TeamPermissionGate)>
+      <Connect(TeamPermissionGate)
+        permissions={
+          Array [
+            "add_user_to_team",
+            "invite_guest",
+          ]
+        }
+        teamId="someteamid"
+      >
+        <MenuItemToggleModalRedux
+          dialogType={
+            Object {
+              "$$typeof": Symbol(react.memo),
+              "WrappedComponent": [Function],
+              "compare": null,
+              "displayName": "Connect(InvitationModal)",
+              "type": [Function],
+            }
+          }
+          extraText="Add people to the team"
+          icon={
+            <i
+              className="fa fa-user-plus"
+            />
+          }
+          id="invitePeople"
+          modalId="invitation"
+          show={true}
+          text="Invite People"
+        />
+      </Connect(TeamPermissionGate)>
     </MenuGroup>
     <MenuGroup />
     <MenuGroup>
