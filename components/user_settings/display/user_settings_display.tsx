@@ -1,9 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 /* eslint-disable react/no-string-refs */
-/* eslint-disable max-lines */
 import React from 'react';
-import {Form} from 'react-bootstrap';
+
 import deepEqual from 'fast-deep-equal';
 
 import {FormattedMessage} from 'react-intl';
@@ -11,13 +10,15 @@ import {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
 
 import {Timezone} from 'timezones.json';
 
+import {ActionResult} from 'mattermost-redux/types/actions';
+
 import {PreferenceType} from '@mattermost/types/preferences';
 import {UserProfile, UserTimezone} from '@mattermost/types/users';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
 import Constants from 'utils/constants';
-import {getBrowserTimezone} from 'utils/timezone.jsx';
+import {getBrowserTimezone} from 'utils/timezone';
 
 import * as I18n from 'i18n/i18n.jsx';
 import {t} from 'utils/i18n';
@@ -43,6 +44,7 @@ function getDisplayStateFromProps(props: Props) {
         collapseDisplay: props.collapseDisplay,
         collapsedReplyThreads: props.collapsedReplyThreads,
         linkPreviewDisplay: props.linkPreviewDisplay,
+        lastActiveDisplay: props.lastActiveDisplay.toString(),
         oneClickReactionsOnPosts: props.oneClickReactionsOnPosts,
         clickToReply: props.clickToReply,
     };
@@ -86,6 +88,7 @@ type SectionProps ={
         values?: Record<string, React.ReactNode | PrimitiveType | FormatXMLElementFn<React.ReactNode, React.ReactNode>>;
     };
     disabled?: boolean;
+    onSubmit?: () => void;
 }
 
 type Props = {
@@ -121,9 +124,12 @@ type Props = {
     oneClickReactionsOnPosts: string;
     emojiPickerEnabled: boolean;
     timezoneLabel: string;
+    lastActiveDisplay: boolean;
+    lastActiveTimeEnabled: boolean;
     actions: {
         savePreferences: (userId: string, preferences: PreferenceType[]) => void;
         autoUpdateTimezone: (deviceTimezone: string) => void;
+        updateMe: (user: UserProfile) => Promise<ActionResult>;
     };
 }
 
@@ -139,6 +145,7 @@ type State = {
     collapseDisplay: string;
     collapsedReplyThreads: string;
     linkPreviewDisplay: string;
+    lastActiveDisplay: string;
     oneClickReactionsOnPosts: string;
     clickToReply: string;
     handleSubmit?: () => void;
@@ -198,6 +205,35 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             trackEvent('settings', 'user_settings_update', props);
         }
     }
+
+    submitLastActive = () => {
+        const {user, actions} = this.props;
+        const {lastActiveDisplay} = this.state;
+
+        const updatedUser = {
+            ...user,
+            props: {
+                ...user.props,
+                show_last_active: lastActiveDisplay,
+            },
+        };
+
+        actions.updateMe(updatedUser).
+            then((res) => {
+                if ('data' in res) {
+                    this.props.updateSection('');
+                } else if ('error' in res) {
+                    const {error} = res;
+                    let serverError;
+                    if (error instanceof Error) {
+                        serverError = error.message;
+                    } else {
+                        serverError = error as string;
+                    }
+                    this.setState({serverError, isSaving: false});
+                }
+            });
+    };
 
     handleSubmit = async () => {
         const userId = this.props.user.id;
@@ -320,6 +356,10 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
         this.setState({collapsedReplyThreads});
     }
 
+    handleLastActiveRadio(lastActiveDisplay: string) {
+        this.setState({lastActiveDisplay});
+    }
+
     handleLinkPreviewRadio(linkPreviewDisplay: string) {
         this.setState({linkPreviewDisplay});
     }
@@ -362,9 +402,10 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             thirdOption,
             description,
             disabled,
+            onSubmit,
         } = props;
         let extraInfo = null;
-        let submit: (() => Promise<void>) | null = this.handleSubmit;
+        let submit: (() => Promise<void>) | (() => void) | null = onSubmit || this.handleSubmit;
 
         const firstMessage = (
             <FormattedMessage
@@ -674,6 +715,171 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             this.prevSections.message_display = this.prevSections.linkpreview;
         }
 
+        let lastActiveSection = null;
+
+        if (this.props.lastActiveTimeEnabled) {
+            lastActiveSection = this.createSection({
+                section: 'lastactive',
+                display: 'lastActiveDisplay',
+                value: this.state.lastActiveDisplay,
+                defaultDisplay: 'true',
+                title: {
+                    id: t('user.settings.display.lastActiveDisplay'),
+                    message: 'Share last active time',
+                },
+                firstOption: {
+                    value: 'true',
+                    radionButtonText: {
+                        id: t('user.settings.display.lastActiveOn'),
+                        message: 'On',
+                    },
+                },
+                secondOption: {
+                    value: 'false',
+                    radionButtonText: {
+                        id: t('user.settings.display.lastActiveOff'),
+                        message: 'Off',
+                    },
+                },
+                description: {
+                    id: t('user.settings.display.lastActiveDesc'),
+                    message: 'When enabled, other users will see when you were last active.',
+                },
+                onSubmit: this.submitLastActive,
+            });
+        }
+
+        const clockSection = this.createSection({
+            section: 'clock',
+            display: 'militaryTime',
+            value: this.state.militaryTime,
+            defaultDisplay: 'false',
+            title: {
+                id: t('user.settings.display.clockDisplay'),
+                message: 'Clock Display',
+            },
+            firstOption: {
+                value: 'false',
+                radionButtonText: {
+                    id: t('user.settings.display.normalClock'),
+                    message: '12-hour clock (example: 4:00 PM)',
+                },
+            },
+            secondOption: {
+                value: 'true',
+                radionButtonText: {
+                    id: t('user.settings.display.militaryClock'),
+                    message: '24-hour clock (example: 16:00)',
+                },
+            },
+            description: {
+                id: t('user.settings.display.preferTime'),
+                message: 'Select how you prefer time displayed.',
+            },
+        });
+
+        const teammateNameDisplaySection = this.createSection({
+            section: Preferences.NAME_NAME_FORMAT,
+            display: 'teammateNameDisplay',
+            value: this.props.lockTeammateNameDisplay ? this.props.configTeammateNameDisplay : this.state.teammateNameDisplay,
+            defaultDisplay: this.props.configTeammateNameDisplay,
+            title: {
+                id: t('user.settings.display.teammateNameDisplayTitle'),
+                message: 'Teammate Name Display',
+            },
+            firstOption: {
+                value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME,
+                radionButtonText: {
+                    id: t('user.settings.display.teammateNameDisplayUsername'),
+                    message: 'Show username',
+                },
+            },
+            secondOption: {
+                value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME,
+                radionButtonText: {
+                    id: t('user.settings.display.teammateNameDisplayNicknameFullname'),
+                    message: 'Show nickname if one exists, otherwise show first and last name',
+                },
+            },
+            thirdOption: {
+                value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME,
+                radionButtonText: {
+                    id: t('user.settings.display.teammateNameDisplayFullname'),
+                    message: 'Show first and last name',
+                },
+            },
+            description: {
+                id: t('user.settings.display.teammateNameDisplayDescription'),
+                message: 'Set how to display other user\'s names in posts and the Direct Messages list.',
+            },
+            disabled: this.props.lockTeammateNameDisplay,
+        });
+
+        const availabilityStatusOnPostsSection = this.createSection({
+            section: 'availabilityStatus',
+            display: 'availabilityStatusOnPosts',
+            value: this.state.availabilityStatusOnPosts,
+            defaultDisplay: 'true',
+            title: {
+                id: t('user.settings.display.availabilityStatusOnPostsTitle'),
+                message: 'Show user availability on posts',
+            },
+            firstOption: {
+                value: 'true',
+                radionButtonText: {
+                    id: t('user.settings.sidebar.on'),
+                    message: 'On',
+                },
+            },
+            secondOption: {
+                value: 'false',
+                radionButtonText: {
+                    id: t('user.settings.sidebar.off'),
+                    message: 'Off',
+                },
+            },
+            description: {
+                id: t('user.settings.display.availabilityStatusOnPostsDescription'),
+                message: 'When enabled, online availability is displayed on profile images in the message list.',
+            },
+        });
+
+        let timezoneSelection;
+        if (this.props.enableTimezone && !this.props.shouldAutoUpdateTimezone) {
+            const userTimezone = this.props.userTimezone;
+            if (this.props.activeSection === 'timezone') {
+                timezoneSelection = (
+                    <div>
+                        <ManageTimezones
+                            user={this.props.user}
+                            useAutomaticTimezone={Boolean(userTimezone.useAutomaticTimezone)}
+                            automaticTimezone={userTimezone.automaticTimezone}
+                            manualTimezone={userTimezone.manualTimezone}
+                            updateSection={this.updateSection}
+                        />
+                        <div className='divider-dark'/>
+                    </div>
+                );
+            } else {
+                timezoneSelection = (
+                    <div>
+                        <SettingItemMin
+                            title={
+                                <FormattedMessage
+                                    id='user.settings.display.timezone'
+                                    defaultMessage='Timezone'
+                                />
+                            }
+                            describe={this.props.timezoneLabel}
+                            section={'timezone'}
+                            updateSection={this.updateSection}
+                        />
+                        <div className='divider-dark'/>
+                    </div>
+                );
+            }
+        }
+
         const messageDisplaySection = this.createSection({
             section: Preferences.MESSAGE_DISPLAY,
             display: 'messageDisplay',
@@ -940,11 +1146,12 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     </h3>
                     <div className='divider-dark first'/>
                     {themeSection}
+                    {lastActiveSection}
                     {/* {collapsedReplyThreads}
                     {clockSection}
                     {teammateNameDisplaySection}
                     {availabilityStatusOnPostsSection}
-                    {timezoneSelection} */}
+                    {timezoneSelection}
                     {linkPreviewSection}
                     {collapseSection}
                     {messageDisplaySection}

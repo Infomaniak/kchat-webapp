@@ -6,7 +6,6 @@ import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
 import {updateMe} from 'mattermost-redux/actions/users';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {ActionFunc} from 'mattermost-redux/types/actions';
 
 import {GlobalState} from 'types/store';
@@ -22,7 +21,6 @@ function mapStateToProps(state: GlobalState) {
     return {
         sendPushNotifications,
         enableAutoResponder,
-        isCollapsedThreadsEnabled: isCollapsedThreadsEnabled(state),
     };
 }
 

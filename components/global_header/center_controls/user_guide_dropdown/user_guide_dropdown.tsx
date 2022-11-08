@@ -4,6 +4,7 @@
 import React from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import IconButton from '@infomaniak/compass-components/components/icon-button';
+import styled from 'styled-components';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -28,6 +29,12 @@ type Props = WrappedComponentProps & PropsFromRedux & {
 type State = {
     buttonActive: boolean;
 };
+
+const Icon = styled.div`
+    & .icon-button {
+        color: rgba(var(--center-channel-color-rgb),0.84);
+    }
+`;
 
 class UserGuideDropdown extends React.PureComponent<Props, State> {
     constructor(props: Props) {
@@ -130,15 +137,18 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                     placement='bottom'
                     overlay={this.state.buttonActive ? <></> : tooltip}
                 >
-                    <IconButton
-                        size={'sm'}
-                        icon={'help-circle-outline'}
-                        onClick={() => {}} // icon button currently requires onclick ... needs to revisit
-                        active={this.state.buttonActive}
-                        inverted={true}
-                        compact={true}
-                        aria-label='Select to toggle the help menu.' // proper wording and translation needed
-                    />
+                    <Icon>
+                        <IconButton
+                            className='icon-button'
+                            size={'sm'}
+                            icon={'help-circle-outline'}
+                            onClick={() => {}} // icon button currently requires onclick ... needs to revisit
+                            active={this.state.buttonActive}
+                            inverted={true}
+                            compact={true}
+                            aria-label='Select to toggle the help menu.' // proper wording and translation needed
+                        />
+                    </Icon>
                 </OverlayTrigger>
                 <Menu
                     openLeft={true}

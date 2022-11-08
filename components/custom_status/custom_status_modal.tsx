@@ -190,7 +190,10 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
         setEmoji(emojiName);
     };
 
-    const toggleEmojiPicker = () => setShowEmojiPicker((prevShow) => !prevShow);
+    const toggleEmojiPicker = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+        e?.stopPropagation();
+        setShowEmojiPicker((prevShow) => !prevShow);
+    };
 
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => setText(event.target.value);
 
@@ -361,6 +364,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                         </button>
                     </div>
                     <QuickInput
+                        autoFocus={true}
                         inputComponent={MaxLengthInput}
                         value={text}
                         maxLength={CUSTOM_STATUS_TEXT_CHARACTER_LIMIT}

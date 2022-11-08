@@ -74,11 +74,15 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenIsExpired, refreshIKToken} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 
 import {ActionResult} from 'mattermost-redux/types/actions';
+
+import ErrorBoundary from '../error_page/error-boudaries';
+
+import {IKConstants} from 'utils/constants-ik';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -135,6 +139,7 @@ export type Actions = {
     migrateRecentEmojis: () => void;
     loadConfigAndMe: () => Promise<{data: boolean}>;
     registerCustomPostRenderer: (type: string, component: any, id: string) => Promise<ActionResult>;
+    initializeProducts: () => Promise<void[]>;
 }
 
 type Props = {
@@ -161,6 +166,7 @@ export default class Root extends React.PureComponent<Props, State> {
     private tabletMediaQuery: MediaQueryList;
     private mobileMediaQuery: MediaQueryList;
     private mounted: boolean;
+    private tokenCheckInterval: ReturnType<typeof setInterval>|null = null;
 
     // The constructor adds a bunch of event listeners,
     // so we do need this.
@@ -175,7 +181,6 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
             // Enable authHeader and set bearer token
@@ -188,25 +193,11 @@ export default class Root extends React.PureComponent<Props, State> {
                     {
                         type: 'token-refreshed',
                         message: {
-                            token: token,
+                            token,
                         },
                     },
                     window.origin,
                 );
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
-            }
-
-            // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
-            }
-
-            if (!token && !refreshToken) {
-                console.log('[TOKEN] No token, redirect to login 1')
-                this.props.history.push('/login' + this.props.location.search);
             }
         } else {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
@@ -340,47 +331,6 @@ export default class Root extends React.PureComponent<Props, State> {
             BrowserStore.setLandingPageSeen(true);
         }
 
-        if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
-            const tokenExpireIn = (1000 * tokenExpire) - Date.now();
-
-            // Enable authHeader and set bearer token
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                LocalStorageStore.setWasLoggedIn(true);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token: token,
-                        },
-                    },
-                    window.origin,
-                );
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
-
-                // Set a callback to refresh token a little while before it expires
-                setTimeout(refreshIKToken, tokenExpireIn - REFRESH_TOKEN_TIME_MARGIN, false, true);
-            }
-
-            // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
-            }
-
-            if (!token && !refreshToken) {
-                console.log('[TOKEN] No token, redirect to login 2')
-                this.props.history.push('/login' + this.props.location.search);
-            }
-        }
-
         Utils.applyTheme(this.props.theme);
     }
 
@@ -448,46 +398,94 @@ export default class Root extends React.PureComponent<Props, State> {
         this.onConfigLoaded();
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
+            // Rely on initial client calls to 401 here for the first redirect to login,
+            // we dont need to do it manually.
+            // Login will send us back here with a code after we give it the challange.
+            // Use code to refresh token.
+            const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
 
-            // Enable authHeader and set bearer token
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                LocalStorageStore.setWasLoggedIn(true);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token: token,
+            if (loginCode) {
+                // eslint-disable-next-line no-console
+                console.log('[LOGIN] Login with code');
+                const challenge = JSON.parse(localStorage.getItem('challenge') as string);
+
+                try { // Get new token
+                    const response: {
+                        expires_in: string;
+                        access_token: string;
+                        refresh_token: string;
+                    } = await Client4.getIKLoginToken(
+                        loginCode,
+                        challenge?.challenge,
+                        challenge?.verifier,
+                        IKConstants.LOGIN_URL,
+                        IKConstants.CLIENT_ID,
+                    );
+
+                    // eslint-disable-next-line no-console
+                    console.log('[ROOT LOGIN] Get token response', response);
+
+                    // Store in localstorage
+                    storeTokenResponse(response);
+
+                    // Remove challange and set logged in.
+                    localStorage.removeItem('challenge');
+                    localStorage.setItem('tokenExpired', '0');
+                    LocalStorageStore.setWasLoggedIn(true);
+
+                    // Store in desktop storage.
+                    window.postMessage(
+                        {
+                            type: 'token-refreshed',
+                            message: {
+                                token: response.access_token,
+                            },
                         },
-                    },
-                    window.origin,
-                );
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
-            }
+                        window.origin,
+                    );
 
-            // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
+                    // Allow through initial requests anyway to receive new errors.
+                    this.runMounted();
+                } catch (error) {
+                    // This is an edge case that I haven't tested yet,
+                    // for now clear storage and resend to login to try and login again.
+                    // eslint-disable-next-line no-console
+                    console.log('[TOKEN] post token fail', error);
+                    clearLocalStorageToken();
+                    this.props.history.push('/login' + this.props.location.search);
+                }
+            } else {
+                this.runMounted();
             }
-
-            if (!token && !refreshToken) {
-                console.log('[TOKEN] No token, redirect to login 3')
-                this.props.history.push('/login' + this.props.location.search);
-            }
+        } else {
+            // Allow through initial requests for web.
+            this.runMounted();
         }
+    }
 
-        // }
+    doTokenCheck = () => {
+        // If expiring soon, refresh before we start hitting errors.
+        if (checkIKTokenExpiresSoon()) {
+            refreshIKToken(/*redirectToReam*/false);
+        }
+    }
+
+    runMounted = () => {
         this.mounted = true;
+
+        const token = localStorage.getItem('IKToken');
+        const refreshToken = localStorage.getItem('IKRefreshToken');
+
+        // Setup token keepalive:
+        if (token && refreshToken) {
+            // eslint-disable-next-line no-console
+            console.log('[LOGIN DESKTOP] Token is ok');
+
+            // set an interval to run every minute to check if token needs refresh.
+            this.tokenCheckInterval = setInterval(this.doTokenCheck, 1000 * 60); // one minute
+        }
 
         this.initiateMeRequests();
 
@@ -515,6 +513,7 @@ export default class Root extends React.PureComponent<Props, State> {
     componentWillUnmount() {
         this.mounted = false;
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
+        clearInterval(this.tokenCheckInterval);
 
         if (this.desktopMediaQuery.removeEventListener) {
             this.desktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
@@ -680,58 +679,62 @@ export default class Root extends React.PureComponent<Props, State> {
                         to={`/${this.props.permalinkRedirectTeamName}/pl/:postid`}
                     />
                     <CompassThemeProvider theme={this.props.theme}>
-                        {(this.props.showLaunchingWorkspace && !this.props.location.pathname.includes('/preparing-workspace') &&
-                            <LaunchingWorkspace
-                                fullscreen={true}
-                                zIndex={LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX}
-                                show={true}
-                                onPageView={noop}
-                                transitionDirection={Animations.Reasons.EnterFromBefore}
-                            />
-                        )}
-                        <ModalController/>
-                        <GlobalHeader/>
-                        {/* <CloudEffects/>
+                        <ErrorBoundary>
+
+                            {(this.props.showLaunchingWorkspace && !this.props.location.pathname.includes('/preparing-workspace') &&
+                                <LaunchingWorkspace
+                                    fullscreen={true}
+                                    zIndex={LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX}
+                                    show={true}
+                                    onPageView={noop}
+                                    transitionDirection={Animations.Reasons.EnterFromBefore}
+                                />
+                            )}
+                            <ModalController/>
+                            <GlobalHeader/>
+                            {/* <CloudEffects/>
                         <OnBoardingTaskList/> */}
-                        <TeamSidebar/>
-                        <Switch>
-                            {this.props.products?.map((product) => (
-                                <Route
-                                    key={product.id}
-                                    path={product.baseURL}
-                                    render={(props) => (
-                                        <LoggedIn {...props}>
-                                            <div className={classNames(['product-wrapper', {wide: !product.showTeamSidebar}])}>
-                                                <Pluggable
-                                                    pluggableName={'Product'}
-                                                    subComponentName={'mainComponent'}
-                                                    pluggableId={product.id}
-                                                    webSocketClient={webSocketClient}
-                                                />
-                                            </div>
-                                        </LoggedIn>
-                                    )}
+                            <TeamSidebar/>
+                            <Switch>
+                                {this.props.products?.map((product) => (
+                                    <Route
+                                        key={product.id}
+                                        path={product.baseURL}
+                                        render={(props) => (
+                                            <LoggedIn {...props}>
+                                                <div className={classNames(['product-wrapper', {wide: !product.showTeamSidebar}])}>
+                                                    <Pluggable
+                                                        pluggableName={'Product'}
+                                                        subComponentName={'mainComponent'}
+                                                        pluggableId={product.id}
+                                                        webSocketClient={webSocketClient}
+                                                    />
+                                                </div>
+                                            </LoggedIn>
+                                        )}
+                                    />
+                                ))}
+                                {this.props.plugins?.map((plugin) => (
+                                    <Route
+                                        key={plugin.id}
+                                        path={'/plug/' + (plugin as any).route}
+                                        render={() => (
+                                            <Pluggable
+                                                pluggableName={'CustomRouteComponent'}
+                                                pluggableId={plugin.id}
+                                            />
+                                        )}
+                                    />
+                                ))}
+                                <LoggedInRoute
+                                    path={'/:team'}
+                                    component={NeedsTeam}
                                 />
-                            ))}
-                            {this.props.plugins?.map((plugin) => (
-                                <Route
-                                    key={plugin.id}
-                                    path={'/plug/' + (plugin as any).route}
-                                    render={() => (
-                                        <Pluggable
-                                            pluggableName={'CustomRouteComponent'}
-                                            pluggableId={plugin.id}
-                                        />
-                                    )}
-                                />
-                            ))}
-                            <LoggedInRoute
-                                path={'/:team'}
-                                component={NeedsTeam}
-                            />
-                            <RootRedirect/>
-                        </Switch>
-                        <Pluggable pluggableName='Global'/>
+                                <RootRedirect/>
+                            </Switch>
+                            <Pluggable pluggableName='Global'/>
+                        </ErrorBoundary>
+
                     </CompassThemeProvider>
                 </Switch>
             </RootProvider>

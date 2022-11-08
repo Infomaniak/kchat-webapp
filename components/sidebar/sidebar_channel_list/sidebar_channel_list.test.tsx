@@ -109,6 +109,9 @@ describe('SidebarChannelList', () => {
             stopDragging: jest.fn(),
             clearChannelSelection: jest.fn(),
             multiSelectChannelAdd: jest.fn(),
+            markAllChannelsAsRead: jest.fn(),
+            openModal: jest.fn(),
+            closeModal: jest.fn(),
         },
     };
 

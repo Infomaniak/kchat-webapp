@@ -12,6 +12,7 @@ import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
 import {TUserStatus} from '@infomaniak/compass-components/shared';
 
 import {PreferenceType} from '@mattermost/types/preferences';
+import {PulsatingDot} from '@mattermost/components';
 import {ActionFunc} from 'mattermost-redux/types/actions';
 import {CustomStatusDuration, UserCustomStatus, UserProfile, UserStatus} from '@mattermost/types/users';
 
@@ -26,7 +27,6 @@ import ResetStatusModal from 'components/reset_status_modal';
 import EmojiIcon from 'components/widgets/icons/emoji_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import PulsatingDot from 'components/widgets/pulsating_dot';
 import Avatar, {TAvatarSizeToken} from 'components/widgets/users/avatar/avatar';
 import {OnboardingTaskCategory, OnboardingTasksName, TaskNameMapToSteps, CompleteYourProfileTour} from 'components/onboarding_tasks';
 import Tooltip from 'components/tooltip';
@@ -410,7 +410,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                 onToggle={this.onToggle}
                 open={this.props.isStatusDropdownOpen}
                 className={classNames('status-dropdown-menu status-dropdown-menu-global-header', {
-                    active: this.props.isStatusDropdownOpen || isStatusSet,
+                    active: this.props.isStatusDropdownOpen,
                 })}
             >
                 <div className='status-wrapper'>

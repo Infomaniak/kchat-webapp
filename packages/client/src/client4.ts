@@ -159,7 +159,7 @@ const GRAPHQL_ENDPOINT = '/api/v5/graphql';
 
 // placed here because currently not supported
 // to import from outside the package from main bundle
-const suitePluginIds = {
+export const suitePluginIds = {
     playbooks: 'playbooks',
     focalboard: 'focalboard',
     apps: 'com.mattermost.apps',
@@ -1330,7 +1330,7 @@ export default class Client4 {
     };
 
     getTeamMembers = (teamId: string, page = 0, perPage = PER_PAGE_DEFAULT, options: GetTeamMembersOpts) => {
-        return this.doFetch<TeamMembership>(
+        return this.doFetch<TeamMembership[]>(
             `${this.getTeamMembersRoute(teamId)}${buildQueryString({page, per_page: perPage, ...options})}`,
             {method: 'get'},
         );
@@ -3895,9 +3895,9 @@ export default class Client4 {
         );
     }
 
-    notifyAdminToUpgrade = (req: NotifyAdminRequest) => {
+    notifyAdmin = (req: NotifyAdminRequest) => {
         return this.doFetchWithResponse<StatusOK>(
-            `${this.getCloudRoute()}/notify-admin-to-upgrade`,
+            `${this.getUsersRoute()}/notify-admin`,
             {method: 'post', body: JSON.stringify(req)},
         );
     }
@@ -4157,41 +4157,17 @@ export default class Client4 {
 
         if ((response.status === 403 || (response.status === 401 && data?.result === 'redirect')) && isDesktopApp()) {
             if (url.indexOf('/commands/') === -1) {
-                const token = localStorage.getItem('IKToken');
-                const refreshToken = localStorage.getItem('IKRefreshToken');
-                const isRefreshing = localStorage.getItem('refreshingToken');
-                this.setToken('');
-                this.setCSRF('');
-
-                if (token && refreshToken && isRefreshing !== '1') {
-                    localStorage.setItem('refreshingToken', '1');
-                    this.refreshIKLoginToken(
-                        refreshToken,
-                        `${IKConstants.LOGIN_URL}`,
-                        `${IKConstants.CLIENT_ID}`,
-                    ).then((response) => {
-                        this.storeTokenResponse(response);
-                        window.postMessage(
-                            {
-                                type: 'token-refreshed',
-                                message: {
-                                    token: response.access_token,
-                                },
-                            },
-                            window.origin,
-                        );
-                        navigator.serviceWorker.controller?.postMessage({
-                            type: 'TOKEN_REFRESHED',
-                            token: response.access_token || '',
-                        });
-                        localStorage.removeItem('refreshingToken');
-                    }).catch(() => {
-                        console.log('[TOKEN] fail refresh from client');
-                        localStorage.removeItem('refreshingToken');
-                        this.clearLocalStorageToken();
-                        this.getChallengeAndRedirectToLogin();
-                    });
-                }
+                console.log('[TOKEN] client error, redirect to /login');
+                localStorage.removeItem('IKToken');
+                window.postMessage(
+                    {
+                        type: 'browser-history-push',
+                        message: {
+                            path: '/login',
+                        },
+                    },
+                    window.location.origin,
+                );
             }
         }
 
@@ -4227,7 +4203,7 @@ export default class Client4 {
         throw new ClientError(this.getUrl(), {
             message: msg,
             server_error_id: data.id,
-            status_code: data.status_code,
+            status_code: data.status_code ? data.status_code : response.status,
             url,
         });
     };
@@ -4389,7 +4365,6 @@ export default class Client4 {
             console.log('Error redirect');
         });
     }
-
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {

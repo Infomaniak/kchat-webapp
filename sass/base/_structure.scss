@@ -55,6 +55,11 @@ body {
             }
         }
     }
+    &.error {
+        > .channel-view {
+            padding: 0;
+        }
+    }
 }
 
 .help-page {

@@ -113,7 +113,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                 e.preventDefault();
                 if (this.props.isOpen && this.props.isChannelInfo) {
                     this.props.actions.closeRightHandSide();
-                } else {
+                } else if (this.props.channel) {
                     this.props.actions.showChannelInfo(this.props.channel.id);
                 }
             }
@@ -218,7 +218,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         } = this.props;
 
         let content = null;
-        const isSidebarRightExpanded = ((postRightVisible || postCardVisible || isPluginView || isSettings || searchVisible) && isExpanded)
+        const isSidebarRightExpanded = ((postRightVisible || postCardVisible || isPluginView || isSettings || searchVisible) && isExpanded);
 
         switch (true) {
         case postRightVisible:
@@ -279,9 +279,9 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                         isSideBarRightOpen={this.state.isOpened}
                         getFocus={this.getSearchBarFocus}
                         channelDisplayName={channelDisplayName}
-                        >
-                            {isOpen && content}
-                        </Search>
+                    >
+                        {isOpen && content}
+                    </Search>
                     }
                 </div>
             </div>

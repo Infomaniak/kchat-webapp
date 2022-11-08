@@ -22,6 +22,7 @@ import {
     getMyChannelMember as getMyChannelMemberSelector,
     getRedirectChannelNameForTeam,
     isManuallyUnread,
+    getUnreadChannelIds,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getServerVersion} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
@@ -341,7 +342,7 @@ export function updateChannelPrivacy(channelId: string, privacy: string): Action
     };
 }
 
-export function updateChannelNotifyProps(userId: string, channelId: string, props: ChannelNotifyProps): ActionFunc {
+export function updateChannelNotifyProps(userId: string, channelId: string, props: Partial<ChannelNotifyProps>): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const notifyProps = {
             user_id: userId,
@@ -465,7 +466,7 @@ export function getChannelTimezones(channelId: string): ActionFunc {
     };
 }
 
-export function fetchMyChannelsAndMembers(teamId: string): ActionFunc {
+export function fetchMyChannelsAndMembersREST(teamId: string): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         dispatch({
             type: ChannelTypes.CHANNELS_REQUEST,
@@ -525,7 +526,7 @@ export function fetchMyChannelsAndMembers(teamId: string): ActionFunc {
     };
 }
 
-export function fetchAllMyTeamsChannelsAndChannelMembers(): ActionFunc {
+export function fetchAllMyTeamsChannelsAndChannelMembersREST(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
         const {currentUserId} = state.entities.users;
@@ -1265,6 +1266,15 @@ export function markChannelAsRead(channelId: string, prevChannelId?: string, upd
     };
 }
 
+export function markAllChannelsAsRead(prevChannelId?: string, updateLastViewedAt = true): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const unreadChannelIds = getUnreadChannelIds(getState());
+        for (const unreadChannelId of unreadChannelIds) {
+            dispatch(markChannelAsRead(unreadChannelId, prevChannelId, updateLastViewedAt));
+        }
+    };
+}
+
 export function markChannelAsViewedOnServer(channelId: string, prevChannelId?: string): ActionFunc {
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
         Client4.viewMyChannel(channelId, prevChannelId).then().catch((error) => {
@@ -1625,7 +1635,7 @@ export default {
     patchChannel,
     updateChannelNotifyProps,
     getChannel,
-    fetchMyChannelsAndMembers,
+    fetchMyChannelsAndMembersREST,
     getChannelTimezones,
     getChannelMembersByIds,
     leaveChannel,

@@ -15,7 +15,7 @@ import {TextFormattingOptions} from 'utils/text_formatting';
 import Markdown from 'components/markdown';
 import CombinedSystemMessage from 'components/post_view/combined_system_message';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member';
-import CallNotificationMessage from 'components/kmeet_conference/post_type'
+import CallNotificationMessage from 'components/kmeet_conference/post_type';
 
 function renderUsername(value: string): ReactNode {
     const username = (value[0] === '@') ? value : `@${value}`;

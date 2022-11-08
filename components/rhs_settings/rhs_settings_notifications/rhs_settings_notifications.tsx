@@ -4,8 +4,10 @@
 /* eslint-disable max-lines */
 
 import React, {RefObject} from 'react';
-
+import ReactSelect from 'react-select';
 import semver from 'semver';
+
+import {FormattedMessage} from 'react-intl';
 
 import {UserNotifyProps, UserProfile} from '@mattermost/types/users';
 
@@ -14,6 +16,12 @@ import {ActionResult} from 'mattermost-redux/types/actions';
 import Constants, {NotificationLevels} from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
 import {isDesktopApp} from 'utils/user_agent';
+
+// import SettingItemMin from 'components/setting_item_min';
+
+import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
+
+import Toggle from 'components/toggle';
 
 import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
 
@@ -26,7 +34,6 @@ export type Props = {
     actions: {
         updateMe: (user: UserProfile) => Promise<ActionResult>;
     };
-    isCollapsedThreadsEnabled: boolean;
 }
 
 type State = {
@@ -256,13 +263,146 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         });
     }
 
+    createPushActivitySection = () => {
+        const options = [
+            {
+                value: NotificationLevels.ALL,
+                label: localizeMessage('user.settings.notifications.allActivity', 'For all activity'),
+            },
+            {
+                value: NotificationLevels.MENTION,
+                label: localizeMessage('user.settings.notifications.onlyMentions', 'Only for mentions and direct messages'),
+            },
+            {value: NotificationLevels.NONE, label: localizeMessage('user.settings.notifications.never', 'Never')},
+        ];
+        return (
+            <RhsSettingsItem
+                key='desktopNotifications'
+                title={
+                    <FormattedMessage
+                        id='channel_notifications.push'
+                        defaultMessage='Send mobile push notifications'
+                    />
+                }
+                inputs={
+                    <ReactSelect
+                        className='react-select settings-select advanced-select'
+                        classNamePrefix='react-select'
+                        id='pushNotificationLevel'
+                        key='pushNotificationLevel'
+                        options={options}
+                        clearable={false}
+                        value={options.filter((opt: { value: string | boolean }) => opt.value === this.state.pushActivity)}
+                        onChange={(e) => this.setStateValue('pushActivity', e?.value)}
+                        isSearchable={false}
+                        menuPortalTarget={document.body}
+                        styles={reactStyles}
+                    />
+                }
+                updateSection={
+                    this.props.updateSection
+                }
+            />
+        );
+    };
+
+    createPushNotificationSection = () => {
+        const options = [
+            {
+                value: Constants.UserStatuses.ONLINE,
+                label: localizeMessage('user.settings.push_notification.online', 'Online, away or offline'),
+            },
+            {
+                value: Constants.UserStatuses.AWAY,
+                label: localizeMessage('user.settings.push_notification.away', 'Away or offline'),
+            },
+            {value: Constants.UserStatuses.OFFLINE, label: localizeMessage('user.settings.push_notification.offline', 'Offline')},
+        ];
+
+        return (
+            <RhsSettingsItem
+                key='desktopNotifications'
+                title={
+                    <FormattedMessage
+                        id='user.settings.notifications.push_notification.status'
+                        defaultMessage='Trigger push notifications when'
+                    />
+                }
+                inputs={
+                    <ReactSelect
+                        className='react-select settings-select advanced-select'
+                        classNamePrefix='react-select'
+                        id='threadsPushLevel'
+                        key='threadsPushLevel'
+                        options={options}
+                        clearable={false}
+                        value={options.filter((opt: { value: string | boolean }) => opt.value === this.state.pushStatus)}
+                        onChange={(e) => this.setStateValue('pushStatus', e?.value)}
+                        isSearchable={false}
+                        menuPortalTarget={document.body}
+                        styles={reactStyles}
+                    />
+                }
+                updateSection={
+                    this.props.updateSection
+                }
+            />
+        );
+    }
+
+    createPushThreadsSection = () => {
+        return (
+            <RhsSettingsItem
+                key='threadsPush'
+                title={
+                    <FormattedMessage
+                        id='user.settings.notifications.threads.desktop'
+                        defaultMessage='Thread reply notifications'
+                    />
+                }
+                inputs={
+                    <Toggle
+                        id={name + 'childOption'}
+                        onToggle={() => this.setStateValue('pushThreads', this.state.pushThreads === NotificationLevels.ALL ? NotificationLevels.MENTION : NotificationLevels.ALL)}
+                        toggled={this.state.pushThreads === NotificationLevels.ALL}
+                    />
+                }
+                updateSection={
+                    this.props.updateSection
+                }
+                messageDesc={
+                    <FormattedMessage
+                        id='user.settings.notifications.push_threads'
+                        defaultMessage={'When enabled, any reply to a thread you\'re following will send a mobile push notification.'}
+                    />
+                }
+                containerStyle='rhs-custom-bb'
+            />
+        );
+    };
+
     render() {
         return (
             <div id='notificationSettings'>
-
-                <div className='user-settings user-rhs-container container'>
-                    <div className='divider-dark first'/>
-
+                <div className='user-settings user-rhs-container container mt-0'>
+                    <h5>
+                        <FormattedMessage
+                            id='user.settings.notifications.push'
+                            defaultMessage='Mobile Push Notifications'
+                        />
+                    </h5>
+                    <div className='divider-dark mt-5 rhs-custom-bb'/>
+                    {this.createPushNotificationSection()}
+                    {this.createPushActivitySection()}
+                    {this.createPushThreadsSection()}
+                    <div className='divider-dark'/>
+                    <h5>
+                        <FormattedMessage
+                            id='user.settings.notifications.desktop.title'
+                            defaultMessage='Desktop Notifications'
+                        />
+                    </h5>
+                    <div className='divider-dark mt-5 rhs-custom-bb'/>
                     <DesktopNotificationSettings
                         activity={this.state.desktopActivity}
                         threads={this.state.desktopThreads}
@@ -275,7 +415,6 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                         error={this.state.serverError}
                         active={this.props.activeSection === 'desktop'}
                         selectedSound={this.state.desktopNotificationSound || 'default'}
-                        isCollapsedThreadsEnabled={this.props.isCollapsedThreadsEnabled}
                     />
                 </div>
             </div>
@@ -283,3 +422,11 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         );
     }
 }
+
+const reactStyles = {
+    menuPortal: (provided: React.CSSProperties) => ({
+        ...provided,
+        zIndex: 9999,
+        cursor: 'pointer',
+    }),
+};

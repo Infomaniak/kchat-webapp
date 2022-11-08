@@ -465,9 +465,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
             </span>
         );
 
-        const fromWebhook = this.props.post.props?.from_webhook === 'true';
-        const fromBot = this.props.post.props?.from_bot === 'true';
-        this.canPostBeForwarded = !(fromWebhook || fromBot || isSystemMessage);
+        this.canPostBeForwarded = !(isSystemMessage);
 
         const forwardPostItemText = (
             <span className={'title-with-new-badge'}>
@@ -548,6 +546,14 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         />
                     </ChannelPermissionGate>
                     <Menu.ItemAction
+                        id={`unread_post_${this.props.post.id}`}
+                        show={!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH}
+                        text={Utils.localizeMessage('post_info.unread', 'Mark as Unread')}
+                        icon={Utils.getMenuItemIcon('icon-mark-as-unread')}
+                        rightDecorator={<ShortcutKey shortcutKey='U'/>}
+                        onClick={this.handleMarkPostAsUnread}
+                    />
+                    <Menu.ItemAction
                         id={`follow_post_thread_${this.props.post.id}`}
                         rightDecorator={<ShortcutKey shortcutKey='F'/>}
                         onClick={this.handleSetThreadFollow}
@@ -567,14 +573,6 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                             icon: Utils.getMenuItemIcon('icon-message-check-outline'),
                             text: this.props.threadReplyCount ? Utils.localizeMessage('threading.threadMenu.follow', 'Follow thread') : Utils.localizeMessage('threading.threadMenu.followMessage', 'Follow message'),
                         }}
-                    />
-                    <Menu.ItemAction
-                        id={`unread_post_${this.props.post.id}`}
-                        show={!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH}
-                        text={Utils.localizeMessage('post_info.unread', 'Mark as Unread')}
-                        icon={Utils.getMenuItemIcon('icon-mark-as-unread')}
-                        rightDecorator={<ShortcutKey shortcutKey='U'/>}
-                        onClick={this.handleMarkPostAsUnread}
                     />
                     <Menu.ItemAction
                         show={!isSystemMessage}

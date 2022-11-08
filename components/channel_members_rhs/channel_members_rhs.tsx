@@ -223,6 +223,9 @@ export default function ChannelMembersRHS({
         setIsNextPageLoading(false);
         actions.setChannelMembersRhsSearchTerm('');
         actions.loadProfilesAndReloadChannelMembersAll(membersCount, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
+
+        // TODO: mattermost
+        // actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
         actions.loadMyChannelMemberAndRole(channel.id);
         actions.loadChannelPendingGuests(channel.id);
     }, [channel.id, channel.type]);

@@ -72,6 +72,7 @@
     }
 
     &__body {
+        padding-right: 5px;
         .sitename,
         .title {
             @extend .truncate;

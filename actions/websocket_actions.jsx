@@ -97,7 +97,7 @@ import {syncPostsInChannel} from 'actions/views/channel';
 import {updateThreadLastOpened} from 'actions/views/threads';
 
 import {browserHistory} from 'utils/browser_history';
-import {loadChannelsForCurrentUser} from 'actions/channel_actions.jsx';
+import {loadChannelsForCurrentUser} from 'actions/channel_actions';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import {handleNewPost} from 'actions/post_actions';
@@ -111,14 +111,17 @@ import {getSiteURL} from 'utils/url';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
-import DialingModal from 'components/kmeet_conference/ringing_dialog';
+
+// import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {needRefreshToken, refreshIKToken} from 'components/login/utils';
+import {checkIKTokenIsExpired, needRefreshToken, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
+
+// import {isDesktopApp} from 'utils/user_agent';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -147,20 +150,24 @@ export function initialize() {
         connUrl = new URL(getSiteURL());
 
         // replace the protocol with a websocket one
-        if (connUrl.protocol === 'https:') {
-            connUrl.protocol = 'wss:';
-        } else {
-            connUrl.protocol = 'ws:';
-        }
+        connUrl.protocol = 'wss:';
+
+        // if (connUrl.protocol === 'https:') {
+        //     connUrl.protocol = 'wss:';
+        // } else {
+        //     connUrl.protocol = 'ws:';
+        // }
 
         // append a port number if one isn't already specified
-        if (!(/:\d+$/).test(connUrl.host)) {
-            if (connUrl.protocol === 'wss:') {
-                connUrl.host += ':' + config.WebsocketSecurePort;
-            } else {
-                connUrl.host += ':' + config.WebsocketPort;
-            }
-        }
+        connUrl.host += ':' + config.WebsocketSecurePort;
+
+        // if (!(/:\d+$/).test(connUrl.host)) {
+        //     if (connUrl.protocol === 'wss:') {
+        //         connUrl.host += ':' + config.WebsocketSecurePort;
+        //     } else {
+        //         connUrl.host += ':' + config.WebsocketPort;
+        //     }
+        // }
 
         connUrl = connUrl.toString();
     }
@@ -208,13 +215,11 @@ function restart() {
 }
 
 export function reconnect(includeWebSocket = true) {
+    // if (isDesktopApp() && checkIKTokenIsExpired()) {
+    //     refreshIKToken();
+    // }
     if (includeWebSocket) {
-        // if (isDesktopApp()) {
-        // refreshIKToken();
-        // } else {
         reconnectWebSocket();
-
-        // }
     }
 
     dispatch({
@@ -596,9 +601,10 @@ export function handleEvent(msg) {
     case SocketEvents.PUSHER_MEMBER_REMOVED:
         handlePusherMemberRemoved(msg);
         break;
-    case SocketEvents.PUSHER_PONG:
-        handlePusherPong(msg);
-        break;
+
+    // case SocketEvents.PUSHER_PONG:
+    //     handlePusherPong(msg);
+    //     break;
     default:
     }
 
@@ -993,7 +999,7 @@ function handleUserAddedEvent(msg) {
                 type: UserTypes.RECEIVED_PROFILE_IN_CHANNEL,
                 data: {id: msg.data.channel_id, user_id: msg.data.user_id},
             });
-            if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true') {
+            if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
                 doDispatch(getChannelMemberCountsByGroup(currentChannelId, isTimezoneEnabled));
             }
         }
@@ -1080,7 +1086,7 @@ export function handleUserRemovedEvent(msg) {
             type: UserTypes.RECEIVED_PROFILE_NOT_IN_CHANNEL,
             data: {id: msg.data.channel_id, user_id: msg.data.user_id},
         });
-        if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true') {
+        if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
             dispatch(getChannelMemberCountsByGroup(currentChannel.id, isTimezoneEnabled));
         }
     }
@@ -1251,57 +1257,10 @@ function addedNewDmUser(preference) {
     return preference.category === Constants.Preferences.CATEGORY_DIRECT_CHANNEL_SHOW && preference.value === 'true';
 }
 
-export function handleUserTypingEvent(msg) {
-    return async (doDispatch, doGetState) => {
-        const state = doGetState();
-        const config = getConfig(state);
-        const currentUserId = getCurrentUserId(state);
-        const userId = msg.data.data.user_id;
-
-        if (
-            isPerformanceDebuggingEnabled(state) &&
-            getBool(state, Preferences.CATEGORY_PERFORMANCE_DEBUGGING, Preferences.NAME_DISABLE_TYPING_MESSAGES)
-        ) {
-            return;
-        }
-
-        const data = {
-            id: msg.data.data.channel_id + msg.data.data.parent_id,
-            userId,
-            now: Date.now(),
-        };
-
-        doDispatch({
-            type: WebsocketEvents.TYPING,
-            data,
-        });
-
-        setTimeout(() => {
-            doDispatch({
-                type: WebsocketEvents.STOP_TYPING,
-                data,
-            });
-        }, parseInt(config.TimeBetweenUserTypingUpdatesMilliseconds, 10));
-
-        if (userId !== currentUserId) {
-            const result = await doDispatch(getMissingProfilesByIds([userId]));
-            if (result.data && result.data.length > 0) {
-                // Already loaded the user status
-                return;
-            }
-        }
-
-        const status = getStatusForUserId(state, userId);
-        if (status !== General.ONLINE) {
-            doDispatch(getStatusesByIds([userId]));
-        }
-    };
-}
-
 function handleStatusChangedEvent(msg) {
-    if (needRefreshToken()) {
-        refreshIKToken();
-    }
+    // if (needRefreshToken()) {
+    //     refreshIKToken();
+    // }
     dispatch({
         type: UserTypes.RECEIVED_STATUSES,
         data: [{user_id: msg.data.user_id, status: msg.data.status}],
@@ -1351,6 +1310,7 @@ function handleChannelViewedEvent(msg) {
 
 export function handlePluginEnabled(msg) {
     const manifest = msg.data.manifest;
+    dispatch({type: ActionTypes.RECEIVED_WEBAPP_PLUGIN, data: manifest});
 
     loadPlugin(manifest).catch((error) => {
         console.error(error.message); //eslint-disable-line no-console
@@ -1823,15 +1783,15 @@ function handleIncomingConferenceCall(msg) {
             },
         });
 
-        if (!channel || channel.id !== msg.data.channel_id) {
-            doDispatch(openModal({
-                modalId: ModalIdentifiers.INCOMING_CALL,
-                dialogType: DialingModal,
-                dialogProps: {
-                    calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
-                },
-            }));
-        }
+        // if (!channel || channel.id !== msg.data.channel_id) {
+        //     doDispatch(openModal({
+        //         modalId: ModalIdentifiers.INCOMING_CALL,
+        //         dialogType: DialingModal,
+        //         dialogProps: {
+        //             calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
+        //         },
+        //     }));
+        // }
     };
 }
 

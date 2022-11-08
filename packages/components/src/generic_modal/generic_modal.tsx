@@ -1,12 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-type Props = {
+export type Props = {
     className?: string;
     onExited: () => void;
     modalHeaderText?: React.ReactNode;
@@ -129,7 +129,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
             cancelButton = (
                 <button
                     type='button'
-                    className={classNames('GenericModal__button cancel', this.props.cancelButtonClassName)}
+                    className={classNames('GenericModal__button cancel secondary', this.props.cancelButtonClassName)}
                     onClick={this.handleCancel}
                 >
                     {cancelButtonText}

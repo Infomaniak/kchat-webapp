@@ -30,6 +30,8 @@ import {
 import {GlobalState} from 'types/store';
 
 import SidebarChannelList from './sidebar_channel_list';
+import {markAllChannelsAsRead} from 'packages/mattermost-redux/src/actions/channels';
+import {closeModal, openModal} from 'actions/views/modals';
 
 function mapStateToProps(state: GlobalState) {
     const currentTeam = getCurrentTeam(state);
@@ -68,6 +70,9 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             stopDragging,
             clearChannelSelection,
             multiSelectChannelAdd,
+            markAllChannelsAsRead,
+            openModal,
+            closeModal,
         }, dispatch),
     };
 }
