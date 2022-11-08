@@ -291,6 +291,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgEdit}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReply}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgLastReaction}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgMarkAllAsRead}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReprintPrev}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.msgReprintNext}/>
                             </div>
