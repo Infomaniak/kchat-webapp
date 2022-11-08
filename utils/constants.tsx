@@ -443,6 +443,7 @@ export const ModalIdentifiers = {
     CLOUD_INVOICE_PREVIEW: 'cloud_invoice_preview',
     BILLING_HISTORY: 'billing_history',
     SUM_OF_MEMBERS_MODAL: 'sum_of_members_modal',
+    MARK_ALL_AS_READ_MODAL: 'mark_all_as_read',
 };
 
 export const UserStatuses = {
