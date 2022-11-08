@@ -396,14 +396,14 @@ export class InvitationModal extends React.PureComponent<Props, State> {
             );
         }
 
-        // if (!this.props.canInviteGuests && !this.props.canAddUsers) {
-        //     view = (
-        //         <NoPermissionsView
-        //             footerClass='InvitationModal__footer'
-        //             onDone={this.handleHide}
-        //         />
-        //     );
-        // }
+        if (!this.props.canInviteGuests && !this.props.canAddUsers) {
+            view = (
+                <NoPermissionsView
+                    footerClass='InvitationModal__footer'
+                    onDone={this.handleHide}
+                />
+            );
+        }
 
         return (
             <Modal
