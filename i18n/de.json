@@ -126,7 +126,7 @@
   "add_emoji.imageTooLarge": "Fehler beim Erstellung des Emoji. Das Bild muss unter 1MB gross sein.",
   "add_emoji.name": "Name",
   "add_emoji.name.help": "Gib einen Emoji-Namen an, der bis zu 64 Zeichen lang sein kann. Er kann Kleinbuchstaben, Zahlen und die Symbole '-', '+' und '_' enthalten.",
-  "add_emoji.nameInvalid": "Der Name eines Emoji kann nur Kleinbuchstaben, Zahlen und die Symbole '-' und '_' enthalten.",
+  "add_emoji.nameInvalid": "Der Name eines Emoji kann nur Kleinbuchstaben, Zahlen und die Symbole '-', '+' und '_' enthalten.",
   "add_emoji.nameRequired": "Für das Emoji ist ein Name erforderlich",
   "add_emoji.nameTaken": "Dieser Name wird bereits von einem System-Emoji verwendet. Bitte wähle einen anderen Namen.",
   "add_emoji.preview": "Vorschau",

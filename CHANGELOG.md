@@ -1,3 +1,84 @@
+## 0.5.9 (2022-11-07)
+
+## Fixed (1 change)
+
+- [ws remove tls forcing, fix config conditions for setting ws protocol](kchat/webapp@cc7dbf1c46fcf2336095b7d08bdb1bb96474a301) by @antonbuksa
+
+## Removed (1 change)
+
+- [remove ws refresh from pong handler](kchat/webapp@cb4898c5cad300cde516935de5c4c5fe3c0aa504) by @antonbuksa
+
+## 0.5.8 (2022-11-04)
+
+## Added (1 change)
+
+- [readd better interval for refresh before expiry in token guard](kchat/webapp@1b1c8b032262ec89c89154b8e2dc2cc8d71b6a9d) by @antonbuksa
+
+## Fixed (2 changes)
+
+- [fix root async logic](kchat/webapp@2c6cb79ed54072c73eb66264b3d863cadeb9fe58) by @antonbuksa
+- [Fix settings selector display bug](kchat/webapp@65bdc88b70610f57e0f4a27e4f60648fa1461c15) by @florent.glauda ([merge request](kchat/webapp!186))
+
+## 0.5.7 (2022-11-04)
+
+No changes.
+
+## 0.5.6 (2022-11-03)
+
+## Added (1 change)
+
+- [readd better interval for refresh before expiry in token guard](kchat/webapp@1b1c8b032262ec89c89154b8e2dc2cc8d71b6a9d) by @antonbuksa
+
+## Fixed (1 change)
+
+- [Fix settings selector display bug](kchat/webapp@65bdc88b70610f57e0f4a27e4f60648fa1461c15) by @florent.glauda ([merge request](kchat/webapp!186))
+
+## 0.5.5 (2022-11-02)
+
+## Fixed (1 change)
+
+- [Fix settings selector display bug](kchat/webapp@65bdc88b70610f57e0f4a27e4f60648fa1461c15) by @florent.glauda ([merge request](kchat/webapp!186))
+
+## Removed (3 changes)
+
+- [remove ws reconnect on error](kchat/webapp@203146d5ae28ca281b76f5645f9415f783544db0) by @antonbuksa
+- [comment manual token refresh - let client catch instead](kchat/webapp@85cacbee46f9f386428e13c9b82a4726c13a9594) by @antonbuksa
+- [remove bot account from main menu](kchat/webapp@4bd3416755006fbc54bd28a082e72817698e587c) by @leonard.jouve ([merge request](kchat/webapp!177))
+
+## 0.5.4 (2022-10-31)
+
+## Fixed (1 change)
+
+- [fix trad unread thread](kchat/webapp@b60f2f5af3e52bfbd761c5bea27bf262c6464231) by @leonard.jouve ([merge request](kchat/webapp!181))
+
+## 0.5.3 (2022-10-27)
+
+## Changed (1 change)
+
+- [small tweak in login useeffect](kchat/webapp@6c959103ef0a22a4f0c18926df1cfb8bda603ba9) by @antonbuksa
+
+## 0.5.2 (2022-10-27)
+
+## Fixed (5 changes)
+
+- [fix: close navbar on small screen](kchat/webapp@712db0d1fa0771ae75fd296a6e3721f17dd95799) by @leonard.jouve ([merge request](kchat/webapp!176))
+- [fix: open submenu up or down](kchat/webapp@7f2386f86e5603b26a69e7ca759ecf586f01ace9) by @leonard.jouve ([merge request](kchat/webapp!173))
+- [automatically scroll to the top of the settings](kchat/webapp@100166014c78fdcd3916c3f92dfc867225e6b060) by @leonard.jouve ([merge request](kchat/webapp!171))
+- [fix add custom emoji name invalid translation](kchat/webapp@83f9d58c4cb3543673fd96ae46423864cdf76331) by @leonard.jouve ([merge request](kchat/webapp!169))
+- [fix file preview](kchat/webapp@cf140043b70d2fd12198423e02eb08914ceb489b) by @leonard.jouve ([merge request](kchat/webapp!160))
+
+## Changed (1 change)
+
+- [change release script to send changelog to kchat instead of slack](kchat/webapp@e4c879bd382a35750ced7e760b03286222937586) by @antonbuksa
+
+## Removed (1 change)
+
+- [remove team settings from main menu](kchat/webapp@ae03ed2363fcb4b6487460178709ab3769f041ea) by @leonard.jouve ([merge request](kchat/webapp!175))
+
+## remove (1 change)
+
+- [remove team settings](kchat/webapp@2272dba4c47ec9312fb11b9d26dfc4dd2c0c2920) by @leonard.jouve ([merge request](kchat/webapp!175))
+
 ## 0.5.1 (2022-10-25)
 
 ## Added (1 change)

@@ -4149,41 +4149,17 @@ export default class Client4 {
 
         if ((response.status === 403 || (response.status === 401 && data?.result === 'redirect')) && isDesktopApp()) {
             if (url.indexOf('/commands/') === -1) {
-                const token = localStorage.getItem('IKToken');
-                const refreshToken = localStorage.getItem('IKRefreshToken');
-                const isRefreshing = localStorage.getItem('refreshingToken');
-                this.setToken('');
-                this.setCSRF('');
-
-                if (token && refreshToken && isRefreshing !== '1') {
-                    localStorage.setItem('refreshingToken', '1');
-                    this.refreshIKLoginToken(
-                        refreshToken,
-                        `${IKConstants.LOGIN_URL}`,
-                        `${IKConstants.CLIENT_ID}`,
-                    ).then((response) => {
-                        this.storeTokenResponse(response);
-                        window.postMessage(
-                            {
-                                type: 'token-refreshed',
-                                message: {
-                                    token: response.access_token,
-                                },
-                            },
-                            window.origin,
-                        );
-                        navigator.serviceWorker.controller?.postMessage({
-                            type: 'TOKEN_REFRESHED',
-                            token: response.access_token || '',
-                        });
-                        localStorage.removeItem('refreshingToken');
-                    }).catch(() => {
-                        console.log('[TOKEN] fail refresh from client');
-                        localStorage.removeItem('refreshingToken');
-                        this.clearLocalStorageToken();
-                        this.getChallengeAndRedirectToLogin();
-                    });
-                }
+                console.log('[TOKEN] client error, redirect to /login');
+                localStorage.removeItem('IKToken');
+                window.postMessage(
+                    {
+                        type: 'browser-history-push',
+                        message: {
+                            path: '/login',
+                        },
+                    },
+                    window.location.origin,
+                );
             }
         }
 
@@ -4381,7 +4357,6 @@ export default class Client4 {
             console.log('Error redirect');
         });
     }
-
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {
