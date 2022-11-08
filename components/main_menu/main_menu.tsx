@@ -13,7 +13,7 @@ import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
 import {makeUrlSafe} from 'utils/url';
 
 // import * as UserAgent from 'utils/user_agent';
-// import InvitationModal from 'components/invitation_modal';
+import InvitationModal from 'components/invitation_modal';
 
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
