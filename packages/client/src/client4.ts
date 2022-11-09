@@ -508,7 +508,7 @@ export default class Client4 {
         }
 
         const csrfToken = this.csrf || this.getCSRFFromCookie();
-        if (options.method && options.method.toLowerCase() !== 'get' && csrfToken) {
+        if (options.method && options.method.toLowerCase() !== 'get' && options.method.toLowerCase() !== 'delete' && csrfToken) {
             headers[HEADER_X_CSRF_TOKEN] = csrfToken;
         }
 
