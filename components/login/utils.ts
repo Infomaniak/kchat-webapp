@@ -182,7 +182,8 @@ export function revokeIKToken() {
     ).then((resp: any) => {
         if (resp.data && resp.data === true) {
             console.log('[TOKEN] Token revoked');
-            clearLocalStorageToken();
+            // waiting for app release
+            /*clearLocalStorageToken();
             window.postMessage(
                 {
                     type: 'token-cleared',
@@ -191,7 +192,7 @@ export function revokeIKToken() {
                     },
                 },
                 window.origin,
-            );
+            );*/
         }
     }).catch((error: unknown) => {
         console.log('[TOKEN] Revoke token error ', error);
