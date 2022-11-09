@@ -173,3 +173,18 @@ export function refreshIKToken(redirectToTeam = false) {
         localStorage.removeItem('refreshingToken');
     });
 }
+
+export function revokeIKToken() {
+    const token = localStorage.getItem('IKToken');
+
+    Client4.setToken('');
+    Client4.setCSRF('');
+    Client4.revokeIKLoginToken()(
+        token,
+        `${IKConstants.LOGIN_URL}`,
+    ).then((resp: any) => {
+        console.log('[TOKEN] Token revoked', resp);
+    }).catch((error: unknown) => {
+        console.log('[TOKEN] Revoke token error ', error);
+    });
+}

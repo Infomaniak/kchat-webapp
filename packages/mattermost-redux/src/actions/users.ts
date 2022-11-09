@@ -34,7 +34,7 @@ import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 import {General} from 'mattermost-redux/constants';
 import {browserHistory} from 'utils/browser_history';
-import {clearLocalStorageToken} from '../../../../components/login/utils';
+import {clearLocalStorageToken, revokeIKToken} from '../../../../components/login/utils';
 import {isDesktopApp} from '../../../../utils/user_agent';
 
 export function generateMfaSecret(userId: string): ActionFunc {
@@ -178,6 +178,7 @@ export function logout(): ActionFunc {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
 
         if (isDesktopApp()) {
+            revokeIKToken();
             clearLocalStorageToken();
         }
 

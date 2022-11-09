@@ -4265,6 +4265,23 @@ export default class Client4 {
         );
     }
 
+    revokeIKLoginToken = (token: string, loginUrl: string) => {
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('token_type_hint', 'access_token');
+        formData.append('token', token);
+
+        return this.doFetch<any>(
+
+            // `${this.getBaseRoute()}/token`,
+            `${loginUrl}token`,
+            {
+                method: 'delete',
+                body: formData,
+            },
+        );
+    }
+
     /****************************************************/
     /*                                                  */
     /*                IK CUSTOMS UTILS                  */
