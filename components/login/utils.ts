@@ -176,9 +176,7 @@ export function refreshIKToken(redirectToTeam = false) {
 
 export function revokeIKToken() {
     const token = localStorage.getItem('IKToken');
-
-    Client4.setToken('');
-    Client4.setCSRF('');
+console.log(IKConstants.LOGIN_URL)
     Client4.revokeIKLoginToken()(
         token,
         `${IKConstants.LOGIN_URL}`,
@@ -186,5 +184,8 @@ export function revokeIKToken() {
         console.log('[TOKEN] Token revoked', resp);
     }).catch((error: unknown) => {
         console.log('[TOKEN] Revoke token error ', error);
+    }).finaly(() => {
+        Client4.setToken('');
+        Client4.setCSRF('');
     });
 }

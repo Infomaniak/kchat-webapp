@@ -262,7 +262,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             if (redirectTo && redirectTo !== 'ikLogout') {
                 browserHistory.push(redirectTo);
             } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
             }
         } else if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
@@ -274,7 +274,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             if (redirectTo && redirectTo !== 'ikLogout') {
                 browserHistory.push(redirectTo);
             } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
             }
         } else if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
