@@ -178,7 +178,7 @@ export function logout(): ActionFunc {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
 
         if (isDesktopApp()) {
-            revokeIKToken();
+            await revokeIKToken();
             clearLocalStorageToken();
         }
 
