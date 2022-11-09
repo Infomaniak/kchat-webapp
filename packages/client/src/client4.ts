@@ -502,7 +502,9 @@ export default class Client4 {
 
         if (this.setAuthHeader && this.token) {
             headers[HEADER_AUTH] = `${HEADER_BEARER} ${this.token}`;
-            headers[HEADER_X_XSRF_TOKEN] = this.token;
+            if (options.method && options.method.toLowerCase() !== 'delete') {
+                headers[HEADER_X_XSRF_TOKEN] = this.token;
+            }
         }
 
         const csrfToken = this.csrf || this.getCSRFFromCookie();
