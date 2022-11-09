@@ -16,7 +16,11 @@ import Constants from 'utils/constants';
 
 import {GlobalState} from 'types/store';
 
+import KMeetIcon from '../widgets/icons/kmeet_icon';
+
 import SvgCallComponent from './SvgCallComponent';
+
+import './meet_button.scss';
 
 export type Props = {
     currentChannelID: string;
@@ -54,22 +58,22 @@ function MeetButton(props: Props) {
         </Tooltip>
     );
 
-    const btnClasses = `channel-header__icon channel-header__icon--call ${props.isInCall && 'channel-header__icon--calling'}`;
+    const btnClasses = `btn ${props.isInCall && 'channel-header__icon--calling'} meet-btn`;
     return (
-        <button
-            type='button'
-            className={btnClasses}
-            onClick={onClick}
-            ref={ref}
-        >
-            <OverlayTrigger
-                delayShow={Constants.OVERLAY_TIME_DELAY}
-                placement='bottom'
-                overlay={tooltip}
+        <div className='meet-btn__wrapper'>
+            <a
+                type='button'
+                className={btnClasses}
+                href={`https://kmeet.infomaniak.com/${channelID}`}
+                ref={ref}
             >
-                <SvgCallComponent/>
-            </OverlayTrigger>
-        </button>
+                <KMeetIcon className="meet-btn__icon"/>
+                <FormattedMessage
+                    id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
+                    defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
+                />
+            </a>
+        </div>
     );
 }
 
