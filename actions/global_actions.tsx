@@ -259,7 +259,6 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             revokeIKToken();
         }
 
-        console.log('before clear storage')
         clearLocalStorageToken();
 
         stopPeriodicStatusUpdates();

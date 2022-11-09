@@ -4272,10 +4272,8 @@ export default class Client4 {
         const formData = new FormData();
         formData.append('token_type_hint', 'access_token');
         formData.append('token', token);
-console.log('[REVOKE TOKEN]', token, loginUrl)
-        return this.doFetch<any>(
 
-            // `${this.getBaseRoute()}/token`,
+        return this.doFetch<any>(
             `${loginUrl}token`,
             {
                 method: 'delete',
