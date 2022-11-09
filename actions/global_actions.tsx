@@ -52,6 +52,7 @@ import {isDesktopApp} from '../utils/user_agent';
 import {IKConstants} from '../utils/constants-ik';
 
 import {openModal} from './views/modals';
+import {clearLocalStorageToken, revokeIKToken} from '../components/login/utils';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -253,6 +254,12 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         if (shouldSignalLogout) {
             BrowserStore.signalLogout();
         }
+
+        if (isDesktopApp()) {
+            revokeIKToken();
+            clearLocalStorageToken();
+        }
+
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
 

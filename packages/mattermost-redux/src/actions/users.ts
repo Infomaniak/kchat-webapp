@@ -177,11 +177,6 @@ export function logout(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
 
-        if (isDesktopApp()) {
-            await revokeIKToken();
-            clearLocalStorageToken();
-        }
-
         // dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null}); // on s'en fou du success on est redirect sur login
 
         return {data: true};
@@ -521,7 +516,7 @@ export function getMe(): ActionFunc {
         });
         const me = await getMeFunc(dispatch, getState);
         if ('error' in me) {
-/*
+            /*
             if (me.error?.status_code && me.error?.status_code === 404 && (window && !window.location.pathname.includes('static/call'))) {
                 browserHistory.push('/error?type=team_not_found');
             }
