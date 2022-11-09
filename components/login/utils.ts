@@ -198,5 +198,17 @@ export function revokeIKToken() {
     }).finaly(() => {
         Client4.setToken('');
         Client4.setCSRF('');
+        // Waiting new app release
+
+        clearLocalStorageToken();
+        window.postMessage(
+            {
+                type: 'token-cleared',
+                message: {
+                    token: null,
+                },
+            },
+            window.origin,
+        );
     });
 }
