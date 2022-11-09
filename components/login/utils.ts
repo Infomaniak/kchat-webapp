@@ -176,12 +176,22 @@ export function refreshIKToken(redirectToTeam = false) {
 
 export function revokeIKToken() {
     const token = localStorage.getItem('IKToken');
-console.log(IKConstants.LOGIN_URL)
     Client4.revokeIKLoginToken(
         token,
         `${IKConstants.LOGIN_URL}`,
     ).then((resp: any) => {
-        console.log('[TOKEN] Token revoked', resp);
+        if (resp.data) {
+            console.log('[TOKEN] Token revoked');
+            window.postMessage(
+                {
+                    type: 'token-cleared',
+                    message: {
+                        token: null,
+                    },
+                },
+                window.origin,
+            );
+        }
     }).catch((error: unknown) => {
         console.log('[TOKEN] Revoke token error ', error);
     }).finaly(() => {

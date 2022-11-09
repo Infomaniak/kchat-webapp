@@ -258,25 +258,13 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
 
         clearUserCookie();
 
-        if (isDesktopApp()) {
-            if (redirectTo && redirectTo !== 'ikLogout') {
-                browserHistory.push(redirectTo);
-            } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}`);
-            }
-        } else if (redirectTo && redirectTo !== 'ikLogout') {
+        if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
         } else {
             window.location.assign(`${IKConstants.LOGOUT_URL}`);
         }
     }).catch(() => {
-        if (isDesktopApp()) {
-            if (redirectTo && redirectTo !== 'ikLogout') {
-                browserHistory.push(redirectTo);
-            } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}`);
-            }
-        } else if (redirectTo && redirectTo !== 'ikLogout') {
+        if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
         } else {
             window.location.assign(`${IKConstants.LOGOUT_URL}`);
