@@ -177,7 +177,7 @@ export function refreshIKToken(redirectToTeam = false) {
 export function revokeIKToken() {
     const token = localStorage.getItem('IKToken');
 console.log(IKConstants.LOGIN_URL)
-    Client4.revokeIKLoginToken()(
+    Client4.revokeIKLoginToken(
         token,
         `${IKConstants.LOGIN_URL}`,
     ).then((resp: any) => {
