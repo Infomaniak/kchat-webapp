@@ -258,16 +258,28 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
 
         clearUserCookie();
 
-        if (redirectTo && redirectTo !== 'ikLogout') {
+        if (isDesktopApp()) {
+            if (redirectTo && redirectTo !== 'ikLogout') {
+                browserHistory.push(redirectTo);
+            } else {
+                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
+            }
+        } else if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
         } else {
-            window.location.assign(`${IKConstants.LOGOUT_URL}`);
+            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
         }
     }).catch(() => {
-        if (redirectTo && redirectTo !== 'ikLogout') {
+        if (isDesktopApp()) {
+            if (redirectTo && redirectTo !== 'ikLogout') {
+                browserHistory.push(redirectTo);
+            } else {
+                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
+            }
+        } else if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
         } else {
-            window.location.assign(`${IKConstants.LOGOUT_URL}`);
+            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
         }
     });
 }
