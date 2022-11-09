@@ -1,3 +1,9 @@
+## 0.5.11 (2022-11-09)
+
+## Fixed (1 change)
+
+- [improve websocket reconnect states](kchat/webapp@4a042e6770792d19423ec7945404b7de17172cfd) by @antonbuksa
+
 ## 0.5.10 (2022-11-09)
 
 ## Added (1 change)
