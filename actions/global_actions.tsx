@@ -262,24 +262,24 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             if (redirectTo && redirectTo !== 'ikLogout') {
                 browserHistory.push(redirectTo);
             } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
+                window.location.assign(`${IKConstants.LOGOUT_URL}?r=${window.location.origin}`);
             }
         } else if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
         } else {
-            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
+            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`);
         }
     }).catch(() => {
         if (isDesktopApp()) {
             if (redirectTo && redirectTo !== 'ikLogout') {
                 browserHistory.push(redirectTo);
             } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
+                window.location.assign(`${IKConstants.LOGOUT_URL}?r=${window.location.origin}`);
             }
         } else if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
         } else {
-            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
+            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`);
         }
     });
 }
