@@ -257,8 +257,10 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
 
         if (isDesktopApp()) {
             revokeIKToken();
-            clearLocalStorageToken();
         }
+
+        console.log('before clear storage')
+        clearLocalStorageToken();
 
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
