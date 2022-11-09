@@ -173,3 +173,42 @@ export function refreshIKToken(redirectToTeam = false) {
         localStorage.removeItem('refreshingToken');
     });
 }
+
+export function revokeIKToken() {
+    const token = localStorage.getItem('IKToken');
+    Client4.revokeIKLoginToken(
+        token,
+        `${IKConstants.LOGIN_URL}`,
+    ).then((resp: any) => {
+        if (resp.data && resp.data === true) {
+            console.log('[TOKEN] Token revoked');
+            clearLocalStorageToken();
+            window.postMessage(
+                {
+                    type: 'token-cleared',
+                    message: {
+                        token: null,
+                    },
+                },
+                window.origin,
+            );
+        }
+    }).catch((error: unknown) => {
+        console.log('[TOKEN] Revoke token error ', error);
+    }).finaly(() => {
+        Client4.setToken('');
+        Client4.setCSRF('');
+        // Waiting new app release
+
+        clearLocalStorageToken();
+        window.postMessage(
+            {
+                type: 'token-cleared',
+                message: {
+                    token: null,
+                },
+            },
+            window.origin,
+        );
+    });
+}

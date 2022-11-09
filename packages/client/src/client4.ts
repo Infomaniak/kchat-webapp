@@ -502,11 +502,13 @@ export default class Client4 {
 
         if (this.setAuthHeader && this.token) {
             headers[HEADER_AUTH] = `${HEADER_BEARER} ${this.token}`;
-            headers[HEADER_X_XSRF_TOKEN] = this.token;
+            if (options.method && options.method.toLowerCase() !== 'delete') {
+                headers[HEADER_X_XSRF_TOKEN] = this.token;
+            }
         }
 
         const csrfToken = this.csrf || this.getCSRFFromCookie();
-        if (options.method && options.method.toLowerCase() !== 'get' && csrfToken) {
+        if (options.method && options.method.toLowerCase() !== 'get' && options.method.toLowerCase() !== 'delete' && csrfToken) {
             headers[HEADER_X_CSRF_TOKEN] = csrfToken;
         }
 
@@ -4260,6 +4262,21 @@ export default class Client4 {
             `${loginUrl}token`,
             {
                 method: 'post',
+                body: formData,
+            },
+        );
+    }
+
+    revokeIKLoginToken = (token: string, loginUrl: string) => {
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('token_type_hint', 'access_token');
+        formData.append('token', token);
+
+        return this.doFetch<any>(
+            `${loginUrl}token`,
+            {
+                method: 'delete',
                 body: formData,
             },
         );
