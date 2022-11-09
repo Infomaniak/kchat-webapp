@@ -195,7 +195,7 @@ export function revokeIKToken() {
         }
     }).catch((error: unknown) => {
         console.log('[TOKEN] Revoke token error ', error);
-    }).finaly(() => {
+    }).finally(() => {
         Client4.setToken('');
         Client4.setCSRF('');
         // Waiting new app release
