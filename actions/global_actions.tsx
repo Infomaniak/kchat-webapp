@@ -274,12 +274,12 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             if (redirectTo && redirectTo !== 'ikLogout') {
                 browserHistory.push(redirectTo);
             } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
+                window.location.assign(`${IKConstants.LOGOUT_URL}`);
             }
         } else if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
         } else {
-            window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}`);
+            window.location.assign(`${IKConstants.LOGOUT_URL}`);
         }
     });
 }
