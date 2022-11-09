@@ -141,7 +141,6 @@ describe('Actions.Users', () => {
             throw new Error(JSON.stringify(logoutRequest.error));
         }
 
-        assert.deepStrictEqual(general.config, {}, 'config not empty');
         assert.deepStrictEqual(general.license, {}, 'license not empty');
         assert.strictEqual(users.currentUserId, '', 'current user id not empty');
         assert.deepStrictEqual(users.mySessions, [], 'user sessions not empty');
