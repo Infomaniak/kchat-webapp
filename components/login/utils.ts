@@ -180,8 +180,9 @@ export function revokeIKToken() {
         token,
         `${IKConstants.LOGIN_URL}`,
     ).then((resp: any) => {
-        if (resp.data) {
+        if (resp.data && resp.data === true) {
             console.log('[TOKEN] Token revoked');
+            clearLocalStorageToken();
             window.postMessage(
                 {
                     type: 'token-cleared',
