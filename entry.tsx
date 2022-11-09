@@ -18,6 +18,10 @@ import {AnnouncementBarTypes} from 'utils/constants';
 import store from 'stores/redux_store.jsx';
 import App from 'components/app';
 
+import sentry from 'utils/sentry';
+
+sentry({SENTRY_DSN: 'https://75ce8efdf6ed465d89ae9990c403a72d@sentry.infomaniak.com/53'});
+
 declare global {
     interface Window {
         publicPath?: string;
