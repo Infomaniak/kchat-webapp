@@ -1,3 +1,16 @@
+## 0.5.10 (2022-11-09)
+
+## Added (1 change)
+
+- [add 'mark all as read' shortcut (Alt | Esc)](kchat/webapp@e5b3ccae2dd73b5c596288f762ffe499ba6df8d3) by @leonard.jouve ([merge request](kchat/webapp!188))
+
+## Fixed (4 changes)
+
+- [readd missing sentry init call](kchat/webapp@7c2ac14d7e845dd9bd39692e39d47d34512dd2d5) by @antonbuksa
+- [Fix logout for webapp & desktop](kchat/webapp@bfb461d63fed4a6ed6dcd4c9cdccf1befba9ab12) by @florent.glauda ([merge request](kchat/webapp!189))
+- [Fix web app logout](kchat/webapp@d8c41e6d9077563bd4c2231396d92d0440d7f74a) by @florent.glauda ([merge request](kchat/webapp!189))
+- [Fix web app logout](kchat/webapp@1f05cea0939acbd113effa79537f587421798678) by @florent.glauda ([merge request](kchat/webapp!189))
+
 ## 0.5.9 (2022-11-07)
 
 ## Fixed (1 change)
