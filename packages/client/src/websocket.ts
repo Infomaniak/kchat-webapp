@@ -8,7 +8,7 @@ const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
 const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
 const JITTER_RANGE = 2000; // 2 sec
 
-const WEBSOCKET_HELLO = 'hello';
+const WEBSOCKET_HELLO = 'pusher:subscription_succeeded';
 
 // Fix error import
 // eslint-disable-next-line no-warning-comments
@@ -30,6 +30,7 @@ export default class WebSocketClient {
     private userChannel: Channel | null;
     private presenceChannel: Channel | null;
     private connectionUrl: string | null;
+    private socketId: string | null;
 
     // responseSequence is the number to track a response sent
     // via the websocket. A response will always have the same sequence number
@@ -92,6 +93,7 @@ export default class WebSocketClient {
         this.connectFailCount = 0;
         this.responseCallbacks = {};
         this.connectionId = '';
+        this.socketId = null;
     }
 
     // on connect, only send auth cookie and blank state.
@@ -194,6 +196,23 @@ export default class WebSocketClient {
             }
 
             this.connectFailCount = 0;
+            if (this.socketId && this.conn?.connection.socket_id !== this.socketId && (this.missedEventCallback || this.missedMessageListeners.size > 0)) {
+                // eslint-disable-next-line no-console
+                console.log('got new connection id ', this.conn?.connection.socket_id); //eslint-disable-line no-console
+                // eslint-disable-next-line no-console
+                console.log('old connection id ', this.socketId);
+
+                // If we already have a connectionId present, and server sends a different one,
+                // that means it's either a long timeout, or server restart, or sequence number is not found.
+                // Then we do the sync calls, and reset sequence number to 0.
+                console.log('long timeout, or server restart, or sequence number is not found.'); //eslint-disable-line no-console
+
+                this.missedEventCallback?.();
+                this.missedMessageListeners.forEach((listener) => listener());
+
+                this.serverSequence = 0;
+            }
+            this.socketId = this.conn?.connection.socket_id as string;
         });
 
         this.conn.connection.bind('disconnected', () => {
@@ -326,24 +345,24 @@ export default class WebSocketClient {
                 }
             } else if (this.eventCallback || this.messageListeners.size > 0) {
                 // We check the hello packet, which is always the first packet in a stream.
-                if (evt === WEBSOCKET_HELLO && (this.missedEventCallback || this.missedMessageListeners.size > 0)) {
-                    console.log('got connection id ', data.connection_id); //eslint-disable-line no-console
-                    // If we already have a connectionId present, and server sends a different one,
-                    // that means it's either a long timeout, or server restart, or sequence number is not found.
-                    // Then we do the sync calls, and reset sequence number to 0.
-                    if (this.connectionId !== '' && this.connectionId !== data.connection_id) {
-                        console.log('long timeout, or server restart, or sequence number is not found.'); //eslint-disable-line no-console
+                // if (evt === WEBSOCKET_HELLO && (this.missedEventCallback || this.missedMessageListeners.size > 0)) {
+                //     console.log('got connection id ', data.connection_id); //eslint-disable-line no-console
+                //     // If we already have a connectionId present, and server sends a different one,
+                //     // that means it's either a long timeout, or server restart, or sequence number is not found.
+                //     // Then we do the sync calls, and reset sequence number to 0.
+                //     if (this.connectionId !== '' && this.connectionId !== data.connection_id) {
+                //         console.log('long timeout, or server restart, or sequence number is not found.'); //eslint-disable-line no-console
 
-                        this.missedEventCallback?.();
-                        this.missedMessageListeners.forEach((listener) => listener());
+                //         this.missedEventCallback?.();
+                //         this.missedMessageListeners.forEach((listener) => listener());
 
-                        this.serverSequence = 0;
-                    }
+                //         this.serverSequence = 0;
+                //     }
 
-                    // If it's a fresh connection, we have to set the connectionId regardless.
-                    // And if it's an existing connection, setting it again is harmless, and keeps the code simple.
-                    this.connectionId = data.connection_id;
-                }
+                //     // If it's a fresh connection, we have to set the connectionId regardless.
+                //     // And if it's an existing connection, setting it again is harmless, and keeps the code simple.
+                //     this.connectionId = data.connection_id;
+                // }
 
                 // TODO check if we need this
                 // Now we check for sequence number, and if it does not match,
