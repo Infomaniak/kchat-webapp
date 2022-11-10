@@ -14,10 +14,27 @@
         display: flex;
         align-items: center;
         border-radius: 4px;
+        border: none;
+        outline: none;
 
         &__icon {
             margin-right: 10px;
+            @media screen and (max-width: 999px) {
+                margin: 0;
+            }
         }
+
+        &__text {
+            @media screen and (max-width: 999px) {
+                display: none;
+            }
+        }
+    }
+}
+
+.meet-btn__overlay {
+    @media screen and (min-width: 1000px) {
+        display: none;
     }
 
 }
