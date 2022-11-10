@@ -6,12 +6,15 @@ import styled from 'styled-components';
 
 import {UserProfile} from 'mattermost-redux/types/users';
 
+import {Post} from 'mattermost-redux/types/posts';
+
+import {FormattedMessage, useIntl} from 'react-intl';
+
 import ActiveCallIcon from 'components/widgets/icons/active_call_icon';
 import CallIcon from 'components/widgets/icons/call_icon';
 import LeaveCallIcon from 'components/widgets/icons/leave_call_icon';
 import ConnectedProfiles from '../connected_profiles';
 
-import {Post} from 'mattermost-redux/types/posts';
 import {isDesktopApp} from 'utils/user_agent';
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
@@ -28,9 +31,9 @@ interface Props {
     // disconnect: (channedID: string) => void;
 }
 
-const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, leaveCallInChannel}: Props) => {
+const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles, onJoinCall, leaveCallInChannel}: Props) => {
     const client = window;
-
+    const intl = useIntl()
     // window.addEventListener('beforeunload', (e) => {
     //     window.postMessage(
     //         {
@@ -58,22 +61,32 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, l
             client.executeCommand('hangup');
         }
     };
-
+    moment.locale(intl.locale);
     const subMessage = post.props.end_at ? (
         <>
-            <Duration>
+            {/*            <Duration>
                 {`Ended at ${moment(post.props.end_at).format('h:mm A')}`}
             </Duration>
-            <span style={{margin: '0 4px'}}>{'•'}</span>
+            <span style={{margin: '0 4px'}}>{'•'}</span>*/}
             <Duration>
+                <FormattedMessage
+                    id='kmeet.calls.ended'
+                    defaultMessage='Terminée à {time}'
+                    values={{
+                        time: moment(post.props.end_at).format('LT'),
+                    }}
+                />
+                {/*
                 {`Lasted ${moment.duration(post.props.end_at - post.props.start_at).humanize(false)}`}
+*/}
             </Duration>
         </>
     ) : (
-        <Duration>{moment(post.props.create_at).fromNow()}</Duration>
+        <Duration>
+            {moment(post.props.start_at).fromNow()}
+        </Duration>
     );
 
-    // console.log(post)
     return (
         <Main data-testid={'call-thread'}>
             <SubMain ended={Boolean(post.props.end_at)}>
@@ -94,12 +107,17 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, l
                         <KMeetIcon style={{width: '100%', height: '100%'}}/>
                     </CallIndicator>
                     <MessageWrapper>
-                        <Message>{post.message}</Message>
+                        <Message>
+                            <FormattedMessage
+                                id='kmeet.calls.started'
+                                defaultMessage='Réunion kMeet démarrée'
+                            />
+                        </Message>
                         <SubMessage>{subMessage}</SubMessage>
                     </MessageWrapper>
                 </Left>
                 <Right>
-                    {
+                    {/*{
                         hasCall &&
                         <Profiles>
                             <ConnectedProfiles
@@ -111,21 +129,25 @@ const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, l
                                 maxShowedProfiles={2}
                             />
                         </Profiles>
-                    }
+                    }*/}
                     {
-                        hasCall && !connectedID &&
+                        hasCall && connectedUrl &&
                         <JoinButton onClick={onJoinCallClick}>
-                            <CallIcon fill='var(--center-channel-bg)'/>
-                            <ButtonText>{'Join call'}</ButtonText>
+                            <ButtonText>
+                                <FormattedMessage
+                                    id='kmeet.calls.open'
+                                    defaultMessage='Ouvrir'
+                                />
+                            </ButtonText>
                         </JoinButton>
                     }
-                    {
+                    {/*{
                         hasCall && connectedID && connectedID === post.props.conference_id &&
                         <LeaveButton onClick={onLeaveButtonClick}>
                             <LeaveCallIcon fill='var(--error-text)'/>
                             <ButtonText>{'Leave call'}</ButtonText>
                         </LeaveButton>
-                    }
+                    }*/}
                 </Right>
             </SubMain>
         </Main>
@@ -213,7 +235,7 @@ const Button = styled.button`
 
 const JoinButton = styled(Button)`
     color: var(--center-channel-bg);
-    background: var(--online-indicator);
+    background: var(--button-bg);
 `;
 
 const LeaveButton = styled(Button)`
