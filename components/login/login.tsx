@@ -24,7 +24,7 @@ import {GlobalState} from 'types/store';
 
 import {isDesktopApp} from 'utils/user_agent';
 
-import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken} from './utils';
+import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin} from './utils';
 import './login.scss';
 
 const Login = () => {
@@ -54,29 +54,21 @@ const Login = () => {
     // be able to refresh if the token has expired but this doesn't seem to be the case atm.
 
     useEffect(() => {
-        console.log('[components/login] init login component');
-        console.log('[components/login] get was logged in => ', LocalStorageStore.getWasLoggedIn());
+        console.log('[components/login] Init login component');
+        console.log('[components/login] Get was logged in => ', LocalStorageStore.getWasLoggedIn());
 
-        // On desktop always try a token refresh before sending to login
-        if (isDesktopApp() && checkIKTokenIsExpired()) {
-            console.log('[components/login] Token expired, trying refresh');
-            refreshIKToken(false)?.then((d: unknown) => {
-                console.log('[components/login] Token refresh response: ', d);
-                redirectUserToDefaultTeam();
-            }).catch((e: unknown) => {
-                console.warn('[components/login] Token refresh error: ', e);
+        if (isDesktopApp()) {
+            const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
+
+            // Check for desktop session end of life
+            if (checkIKTokenIsExpired() || !token || !refreshToken) {
                 console.log('[components/login] Session EOL: Redirect to infomaniak login');
                 clearLocalStorageToken();
                 getChallengeAndRedirectToLogin();
-            });
 
-            // if (!token || !refreshToken) {
-            //     console.log('[components/login] Session EOL: Redirect to infomaniak login');
-            //     clearLocalStorageToken();
-            //     getChallengeAndRedirectToLogin();
-
-            //     return;
-            // }
+                return;
+            }
         }
 
         // For web simply send through to router if user exists.

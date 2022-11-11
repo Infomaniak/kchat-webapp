@@ -26,6 +26,7 @@ import Pluggable from 'plugins/pluggable';
 
 import LocalStorageStore from 'stores/local_storage_store';
 import type {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {checkIKTokenIsExpired, clearLocalStorageToken, refreshIKToken} from 'components/login/utils';
 
 const BackstageController = makeAsyncComponent('BackstageController', LazyBackstageController);
 
@@ -104,6 +105,29 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
             const currentTime = (new Date()).getTime();
             if (currentTime > (lastTime + WAKEUP_THRESHOLD)) { // ignore small delays
                 console.log('computer woke up - fetching latest'); //eslint-disable-line no-console
+                if (UserAgent.isDesktopApp() && checkIKTokenIsExpired()) {
+                    // eslint-disable-next-line no-console
+                    console.log('[components/needs_team] Desktop token expired');
+                    refreshIKToken(/*redirectToReam*/false)?.then(() => {
+                        // eslint-disable-next-line no-console
+                        console.log('[components/needs_team] Desktop token refreshed');
+                    }).catch((e: unknown) => {
+                        // eslint-disable-next-line no-console
+                        console.warn('[components/needs_team] Desktop token refresh error: ', e);
+                        clearLocalStorageToken();
+                        // eslint-disable-next-line no-console
+                        console.log('[components/needs_team] Redirecting to app login');
+                        window.postMessage(
+                            {
+                                type: 'browser-history-push',
+                                message: {
+                                    path: '/login',
+                                },
+                            },
+                            window.location.origin,
+                        );
+                    });
+                }
                 reconnect(false);
             }
             lastTime = currentTime;

@@ -469,14 +469,15 @@ export default class Root extends React.PureComponent<Props, State> {
         // If expiring soon but not expired, refresh before we start hitting errors.
         if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
             // eslint-disable-next-line no-console
-            console.log('[components/root] Token expiring soon');
-            refreshIKToken(/*redirectToReam*/false)?.then((d: unknown) => {
+            console.log('[components/root] Desktop token expiring soon');
+            refreshIKToken(/*redirectToReam*/false)?.then(() => {
                 // eslint-disable-next-line no-console
-                console.log('[components/root] Token refresh response: ', d);
+                console.log('[components/root] Desktop token refreshed');
             }).catch((e: unknown) => {
                 // eslint-disable-next-line no-console
-                console.warn('[components/root] Token refresh error: ', e);
-                clearLocalStorageToken();
+                console.warn('[components/root] Desktop token refresh error: ', e);
+
+                // clearLocalStorageToken();
             });
         }
     }
