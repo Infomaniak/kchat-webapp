@@ -30,24 +30,15 @@ export type Props = {
     isInCall?: boolean;
 }
 
-function logInfo(props: Props, connectedChannelID: string, channelID: string) {
-    console.log(props);
-    console.log('');
-    console.log('Connected voice channel Id => ', connectedChannelID);
-    console.log('Current channel Id => ', channelID);
-}
-
 function MeetButton(props: Props) {
-    // const {formatMessage} = props.intl;
     const {startCallInChannel} = props;
-    const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
+
+    // const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
     const ref = useRef<HTMLButtonElement>(null);
     const channelID = useSelector(getCurrentChannelId);
     const onClick = React.useCallback(() => {
         startCallInChannel(channelID);
     }, [channelID]);
-
-    logInfo(props, connectedChannelID, channelID);
 
     const tooltip = (
         <Tooltip
