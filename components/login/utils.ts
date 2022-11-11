@@ -31,7 +31,7 @@ export function storeTokenResponse(response: { expires_in?: any; access_token?: 
  * Clear IKToken informations in localStorage
  */
 export function clearLocalStorageToken() {
-    console.log('[login/utils > clearLocalStorageToken] Clear token storage');
+    console.log('[login/utils > clearLocalStorageToken] clear token storage');
     localStorage.removeItem('IKToken');
     localStorage.removeItem('IKRefreshToken');
     localStorage.removeItem('IKTokenExpire');
@@ -92,7 +92,7 @@ export function getChallengeAndRedirectToLogin() {
         // TODO: add env for login url and/or current server
         window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
     }).catch(() => {
-        console.log('[login/utils > getChallengeAndRedirectToLogin] Error redirect');
+        console.log('[login/utils > getChallengeAndRedirectToLogin] error redirect');
     });
 }
 
@@ -103,7 +103,7 @@ export function getChallengeAndRedirectToLogin() {
 export function checkIKTokenIsExpired() {
     const tokenExpire = localStorage.getItem('IKTokenExpire');
     const isExpired = tokenExpire <= parseInt(Date.now() / 1000, 10);
-    console.log(`[login/utils > checkIKTokenIsExpired] Token is expired => ${isExpired}, localStorage tokenExpired => ${localStorage.getItem('tokenExpired')}`);
+    console.log(`[login/utils > checkIKTokenIsExpired] token is expired => ${isExpired}, localStorage tokenExpired => ${localStorage.getItem('tokenExpired')}`);
 
     if (isExpired) {
         localStorage.setItem('tokenExpired', '1');
@@ -150,7 +150,7 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> | undefined
     ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
-        console.log('[login/utils > refreshIKToken] Token refreshed');
+        console.log('[login/utils > refreshIKToken] token refreshed');
 
         window.postMessage(
             {
@@ -171,7 +171,7 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> | undefined
             redirectUserToDefaultTeam();
         }
     }).catch((error: unknown) => {
-        console.log('[login/utils > refreshIKToken] Refresh token error ', error);
+        console.log('[login/utils > refreshIKToken] refresh token error ', error);
         localStorage.removeItem('refreshingToken');
     });
 }
@@ -183,7 +183,7 @@ export function revokeIKToken() {
         `${IKConstants.LOGIN_URL}`,
     ).then((resp: any) => {
         if (resp.data && resp.data === true) {
-            console.log('[login/utils > revokeIKToken] Token revoked');
+            console.log('[login/utils > revokeIKToken] token revoked');
 
             // waiting for app release
             /*clearLocalStorageToken();
@@ -198,7 +198,7 @@ export function revokeIKToken() {
             );*/
         }
     }).catch((error: unknown) => {
-        console.log('[login/utils > revokeIKToken] Revoke token error ', error);
+        console.log('[login/utils > revokeIKToken] revoke token error ', error);
     }).finally(() => {
         Client4.setToken('');
         Client4.setCSRF('');

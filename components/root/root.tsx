@@ -408,7 +408,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
             if (loginCode) {
                 // eslint-disable-next-line no-console
-                console.log('[components/root] Login with code');
+                console.log('[components/root] login with code');
                 const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
                 try { // Get new token
@@ -425,7 +425,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     );
 
                     // eslint-disable-next-line no-console
-                    console.log('[ROOT LOGIN] Get token response', response);
+                    console.log('[components/root] get token response with code', response);
 
                     // Store in localstorage
                     storeTokenResponse(response);
@@ -452,7 +452,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     // This is an edge case that I haven't tested yet,
                     // for now clear storage and resend to login to try and login again.
                     // eslint-disable-next-line no-console
-                    console.log('[TOKEN] post token fail', error);
+                    console.log('[components/root] post token fail', error);
                     clearLocalStorageToken();
                     this.props.history.push('/login' + this.props.location.search);
                 }
@@ -469,13 +469,13 @@ export default class Root extends React.PureComponent<Props, State> {
         // If expiring soon but not expired, refresh before we start hitting errors.
         if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
             // eslint-disable-next-line no-console
-            console.log('[components/root] Desktop token expiring soon');
+            console.log('[components/root] desktop token expiring soon');
             refreshIKToken(/*redirectToReam*/false)?.then(() => {
                 // eslint-disable-next-line no-console
-                console.log('[components/root] Desktop token refreshed');
+                console.log('[components/root] desktop token refreshed');
             }).catch((e: unknown) => {
                 // eslint-disable-next-line no-console
-                console.warn('[components/root] Desktop token refresh error: ', e);
+                console.warn('[components/root] desktop token refresh error: ', e);
 
                 // clearLocalStorageToken();
             });
@@ -491,7 +491,7 @@ export default class Root extends React.PureComponent<Props, State> {
         // Setup token keepalive:
         if (token && refreshToken) {
             // eslint-disable-next-line no-console
-            console.log('[components/root] Token is ok');
+            console.log('[components/root] token is ok');
 
             // set an interval to run every minute to check if token needs refresh.
             this.tokenCheckInterval = setInterval(this.doTokenCheck, 1000 * 60); // one minute

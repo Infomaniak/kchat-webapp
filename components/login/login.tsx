@@ -54,8 +54,8 @@ const Login = () => {
     // be able to refresh if the token has expired but this doesn't seem to be the case atm.
 
     useEffect(() => {
-        console.log('[components/login] Init login component');
-        console.log('[components/login] Get was logged in => ', LocalStorageStore.getWasLoggedIn());
+        console.log('[components/login] init login component');
+        console.log('[components/login] get was logged in => ', LocalStorageStore.getWasLoggedIn());
 
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
@@ -63,7 +63,10 @@ const Login = () => {
 
             // Check for desktop session end of life
             if (checkIKTokenIsExpired() || !token || !refreshToken) {
-                console.log('[components/login] Session EOL: Redirect to infomaniak login');
+                console.log('[components/login] session EOL: redirecting to infomaniak login');
+
+                // Login should be the only one responsible for clearing storage.
+                // The only other case is if we can't renew the token with code in root.
                 clearLocalStorageToken();
                 getChallengeAndRedirectToLogin();
 
@@ -73,7 +76,7 @@ const Login = () => {
 
         // For web simply send through to router if user exists.
         if (currentUser) {
-            console.log('[components/login] Current user is ok');
+            console.log('[components/login] current user is ok');
             redirectUserToDefaultTeam();
         }
     }, []);

@@ -106,17 +106,14 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
             if (currentTime > (lastTime + WAKEUP_THRESHOLD)) { // ignore small delays
                 console.log('computer woke up - fetching latest'); //eslint-disable-line no-console
                 if (UserAgent.isDesktopApp() && checkIKTokenIsExpired()) {
-                    // eslint-disable-next-line no-console
-                    console.log('[components/needs_team] Desktop token expired');
+                    console.log('[components/needs_team] desktop token expired'); //eslint-disable-line no-console
                     refreshIKToken(/*redirectToReam*/false)?.then(() => {
-                        // eslint-disable-next-line no-console
-                        console.log('[components/needs_team] Desktop token refreshed');
+                        console.log('[components/needs_team] desktop token refreshed'); //eslint-disable-line no-console
                     }).catch((e: unknown) => {
-                        // eslint-disable-next-line no-console
-                        console.warn('[components/needs_team] Desktop token refresh error: ', e);
-                        clearLocalStorageToken();
-                        // eslint-disable-next-line no-console
-                        console.log('[components/needs_team] Redirecting to app login');
+                        console.warn('[components/needs_team] desktop token refresh error: ', e); //eslint-disable-line no-console
+
+                        // clearLocalStorageToken();
+                        console.log('[components/needs_team] redirecting to app login'); //eslint-disable-line no-console
                         window.postMessage(
                             {
                                 type: 'browser-history-push',
