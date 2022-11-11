@@ -215,9 +215,6 @@ function restart() {
 }
 
 export function reconnect(includeWebSocket = true) {
-    // if (isDesktopApp() && checkIKTokenIsExpired()) {
-    //     refreshIKToken();
-    // }
     if (includeWebSocket) {
         reconnectWebSocket();
     }

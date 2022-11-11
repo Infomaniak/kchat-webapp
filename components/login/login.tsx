@@ -54,21 +54,24 @@ const Login = () => {
     // be able to refresh if the token has expired but this doesn't seem to be the case atm.
 
     useEffect(() => {
-        console.log('[LOGIN] init login component');
-        console.log('[LOGIN] get was logged in => ', LocalStorageStore.getWasLoggedIn());
+        console.log('[components/login] init login component');
+        console.log('[components/login] get was logged in => ', LocalStorageStore.getWasLoggedIn());
 
         // On desktop always try a token refresh before sending to login
         if (isDesktopApp() && checkIKTokenIsExpired()) {
-            refreshIKToken(false)?.then(() => {
+            console.log('[components/login] Token expired, trying refresh');
+            refreshIKToken(false)?.then((d: unknown) => {
+                console.log('[components/login] Token refresh response: ', d);
                 redirectUserToDefaultTeam();
-            }).catch(() => {
-                console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
+            }).catch((e: unknown) => {
+                console.log('[components/login] Token refresh error: ', e);
+                console.log('[components/login] Session EOL: Redirect to infomaniak login');
                 clearLocalStorageToken();
                 getChallengeAndRedirectToLogin();
             });
 
             // if (!token || !refreshToken) {
-            //     console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
+            //     console.log('[components/login] Session EOL: Redirect to infomaniak login');
             //     clearLocalStorageToken();
             //     getChallengeAndRedirectToLogin();
 
@@ -78,7 +81,7 @@ const Login = () => {
 
         // For web simply send through to router if user exists.
         if (currentUser) {
-            console.log('[LOGIN] Current user is ok');
+            console.log('[components/login] Current user is ok');
             redirectUserToDefaultTeam();
         }
     }, []);

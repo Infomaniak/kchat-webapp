@@ -8,7 +8,8 @@ import {Client4} from 'mattermost-redux/client';
 import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
-import {reconnectWebSocket} from 'actions/websocket_actions';
+
+// import {reconnectWebSocket} from 'actions/websocket_actions';
 
 /**
  * Store IKToken infos in localStorage and update Client
@@ -30,7 +31,7 @@ export function storeTokenResponse(response: { expires_in?: any; access_token?: 
  * Clear IKToken informations in localStorage
  */
 export function clearLocalStorageToken() {
-    console.log('[TOKEN] Clear token storage');
+    console.log('[login/utils > clearLocalStorageToken] Clear token storage');
     localStorage.removeItem('IKToken');
     localStorage.removeItem('IKRefreshToken');
     localStorage.removeItem('IKTokenExpire');
@@ -91,7 +92,7 @@ export function getChallengeAndRedirectToLogin() {
         // TODO: add env for login url and/or current server
         window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
     }).catch(() => {
-        console.log('Error redirect');
+        console.log('[login/utils > getChallengeAndRedirectToLogin] Error redirect');
     });
 }
 
@@ -102,7 +103,7 @@ export function getChallengeAndRedirectToLogin() {
 export function checkIKTokenIsExpired() {
     const tokenExpire = localStorage.getItem('IKTokenExpire');
     const isExpired = tokenExpire <= parseInt(Date.now() / 1000, 10);
-    console.log(`[TOKEN] Check if token is expired => ${isExpired}, tokenExpired => ${localStorage.getItem('tokenExpired')}`);
+    console.log(`[login/utils > checkIKTokenIsExpired] Token is expired => ${isExpired}, localStorage tokenExpired => ${localStorage.getItem('tokenExpired')}`);
 
     if (isExpired) {
         localStorage.setItem('tokenExpired', '1');
@@ -126,7 +127,7 @@ export function checkIKTokenExpiresSoon(): boolean {
  * @returns bool
  */
 export function needRefreshToken() {
-    console.log('[TOKEN] Token need to be refresh ?');
+    console.log('[login/utils > needRefreshToken] Token need to be refresh ?');
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
@@ -150,7 +151,7 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> | undefined
     ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
-        console.log('[TOKEN] Token refreshed');
+        console.log('[login/utils > refreshIKToken] Token refreshed');
 
         window.postMessage(
             {
@@ -171,7 +172,7 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> | undefined
             redirectUserToDefaultTeam();
         }
     }).catch((error: unknown) => {
-        console.log('[TOKEN] Refresh token error ', error);
+        console.log('[login/utils > refreshIKToken] Refresh token error ', error);
         localStorage.removeItem('refreshingToken');
     });
 }
@@ -183,7 +184,8 @@ export function revokeIKToken() {
         `${IKConstants.LOGIN_URL}`,
     ).then((resp: any) => {
         if (resp.data && resp.data === true) {
-            console.log('[TOKEN] Token revoked');
+            console.log('[login/utils > revokeIKToken] Token revoked');
+
             // waiting for app release
             /*clearLocalStorageToken();
             window.postMessage(
@@ -197,12 +199,12 @@ export function revokeIKToken() {
             );*/
         }
     }).catch((error: unknown) => {
-        console.log('[TOKEN] Revoke token error ', error);
+        console.log('[login/utils > revokeIKToken] Revoke token error ', error);
     }).finally(() => {
         Client4.setToken('');
         Client4.setCSRF('');
-        // Waiting new app release
 
+        // Waiting new app release
         clearLocalStorageToken();
         window.postMessage(
             {

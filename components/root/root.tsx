@@ -408,7 +408,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
             if (loginCode) {
                 // eslint-disable-next-line no-console
-                console.log('[LOGIN] Login with code');
+                console.log('[components/root] Login with code');
                 const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
                 try { // Get new token
@@ -468,7 +468,16 @@ export default class Root extends React.PureComponent<Props, State> {
     doTokenCheck = () => {
         // If expiring soon but not expired, refresh before we start hitting errors.
         if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
-            refreshIKToken(/*redirectToReam*/false)?.then().catch(() => clearLocalStorageToken());
+            // eslint-disable-next-line no-console
+            console.log('[components/root] Token expiring soon');
+            refreshIKToken(/*redirectToReam*/false)?.then((d: unknown) => {
+                // eslint-disable-next-line no-console
+                console.log('[components/root] Token refresh response: ', d);
+            }).catch((e: unknown) => {
+                // eslint-disable-next-line no-console
+                console.log('[components/root] Token refresh error: ', e);
+                clearLocalStorageToken();
+            });
         }
     }
 
@@ -481,7 +490,7 @@ export default class Root extends React.PureComponent<Props, State> {
         // Setup token keepalive:
         if (token && refreshToken) {
             // eslint-disable-next-line no-console
-            console.log('[LOGIN DESKTOP] Token is ok');
+            console.log('[components/root] Token is ok');
 
             // set an interval to run every minute to check if token needs refresh.
             this.tokenCheckInterval = setInterval(this.doTokenCheck, 1000 * 60); // one minute
@@ -513,7 +522,9 @@ export default class Root extends React.PureComponent<Props, State> {
     componentWillUnmount() {
         this.mounted = false;
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
-        clearInterval(this.tokenCheckInterval);
+        if (this.tokenCheckInterval) {
+            clearInterval(this.tokenCheckInterval);
+        }
 
         if (this.desktopMediaQuery.removeEventListener) {
             this.desktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
