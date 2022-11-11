@@ -17,7 +17,7 @@ import {redirectUserToDefaultTeam} from 'actions/global_actions';
 export function storeTokenResponse(response: { expires_in?: any; access_token?: any; refresh_token?: any }) {
     // TODO: store in redux
     const d = new Date();
-    d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
+    d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10) + 3600); // add additional hour to expiry for backend timezone bug
     localStorage.setItem('IKToken', response.access_token);
     localStorage.setItem('IKRefreshToken', response.refresh_token);
     localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
@@ -127,7 +127,6 @@ export function checkIKTokenExpiresSoon(): boolean {
  * @returns bool
  */
 export function needRefreshToken() {
-    console.log('[login/utils > needRefreshToken] Token need to be refresh ?');
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 

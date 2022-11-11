@@ -475,7 +475,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 console.log('[components/root] Token refresh response: ', d);
             }).catch((e: unknown) => {
                 // eslint-disable-next-line no-console
-                console.log('[components/root] Token refresh error: ', e);
+                console.warn('[components/root] Token refresh error: ', e);
                 clearLocalStorageToken();
             });
         }

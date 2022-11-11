@@ -64,7 +64,7 @@ const Login = () => {
                 console.log('[components/login] Token refresh response: ', d);
                 redirectUserToDefaultTeam();
             }).catch((e: unknown) => {
-                console.log('[components/login] Token refresh error: ', e);
+                console.warn('[components/login] Token refresh error: ', e);
                 console.log('[components/login] Session EOL: Redirect to infomaniak login');
                 clearLocalStorageToken();
                 getChallengeAndRedirectToLogin();
