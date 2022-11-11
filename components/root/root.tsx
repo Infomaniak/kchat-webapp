@@ -5,6 +5,7 @@ import deepEqual from 'fast-deep-equal';
 import React from 'react';
 import {Route, Switch, Redirect, RouteComponentProps} from 'react-router-dom';
 import throttle from 'lodash/throttle';
+import * as Sentry from '@sentry/browser';
 
 import classNames from 'classnames';
 
@@ -185,10 +186,12 @@ export default class Root extends React.PureComponent<Props, State> {
 
             // Enable authHeader and set bearer token
             if (token && tokenExpire && !checkIKTokenIsExpired()) {
+                console.log('[components/root > constructor] updating token in client4'); // eslint-disable-line no-console
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
+                console.log('[components/root > constructor] token-refreshed sent to electron'); // eslint-disable-line no-console
                 window.postMessage(
                     {
                         type: 'token-refreshed',
@@ -392,6 +395,8 @@ export default class Root extends React.PureComponent<Props, State> {
         const {data: isMeLoaded} = await this.props.actions.loadConfigAndMe();
 
         if (isMeLoaded && this.props.location.pathname === '/') {
+            const currentUser = getCurrentUser(store.getState());
+            Sentry.setUser({email: currentUser.email, id: currentUser.id, username: currentUser.username});
             this.redirectToOnboardingOrDefaultTeam();
         }
 
