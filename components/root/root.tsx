@@ -5,7 +5,7 @@ import deepEqual from 'fast-deep-equal';
 import React from 'react';
 import {Route, Switch, Redirect, RouteComponentProps} from 'react-router-dom';
 import throttle from 'lodash/throttle';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/react';
 
 import classNames from 'classnames';
 
