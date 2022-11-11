@@ -24,7 +24,7 @@ import {GlobalState} from 'types/store';
 
 import {isDesktopApp} from 'utils/user_agent';
 
-import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin} from './utils';
+import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken} from './utils';
 import './login.scss';
 
 const Login = () => {
@@ -57,18 +57,23 @@ const Login = () => {
         console.log('[LOGIN] init login component');
         console.log('[LOGIN] get was logged in => ', LocalStorageStore.getWasLoggedIn());
 
-        if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-
-            // Check for desktop session end of life
-            if (checkIKTokenIsExpired() || !token || !refreshToken) {
+        // On desktop always try a token refresh before sending to login
+        if (isDesktopApp() && checkIKTokenIsExpired()) {
+            refreshIKToken(false)?.then(() => {
+                redirectUserToDefaultTeam();
+            }).catch(() => {
                 console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
                 clearLocalStorageToken();
                 getChallengeAndRedirectToLogin();
+            });
 
-                return;
-            }
+            // if (!token || !refreshToken) {
+            //     console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
+            //     clearLocalStorageToken();
+            //     getChallengeAndRedirectToLogin();
+
+            //     return;
+            // }
         }
 
         // For web simply send through to router if user exists.

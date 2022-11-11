@@ -130,7 +130,7 @@ export function needRefreshToken() {
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
-export function refreshIKToken(redirectToTeam = false) {
+export function refreshIKToken(redirectToTeam = false): Promise<any> | undefined {
     const refreshToken = localStorage.getItem('IKRefreshToken');
     const isRefreshing = localStorage.getItem('refreshingToken');
 
@@ -141,7 +141,9 @@ export function refreshIKToken(redirectToTeam = false) {
     Client4.setToken('');
     Client4.setCSRF('');
     localStorage.setItem('refreshingToken', '1');
-    Client4.refreshIKLoginToken(
+
+    // eslint-disable-next-line consistent-return
+    return Client4.refreshIKLoginToken(
         refreshToken,
         `${IKConstants.LOGIN_URL}`,
         `${IKConstants.CLIENT_ID}`,
@@ -163,7 +165,7 @@ export function refreshIKToken(redirectToTeam = false) {
         localStorage.removeItem('refreshingToken');
 
         // Refresh the websockets as we just changed Bearer Token
-        reconnectWebSocket();
+        // reconnectWebSocket();
 
         if (redirectToTeam) {
             redirectUserToDefaultTeam();

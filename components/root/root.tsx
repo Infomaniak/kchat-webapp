@@ -468,7 +468,7 @@ export default class Root extends React.PureComponent<Props, State> {
     doTokenCheck = () => {
         // If expiring soon but not expired, refresh before we start hitting errors.
         if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
-            refreshIKToken(/*redirectToReam*/false);
+            refreshIKToken(/*redirectToReam*/false)?.then().catch(() => clearLocalStorageToken());
         }
     }
 
