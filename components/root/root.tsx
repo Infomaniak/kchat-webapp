@@ -396,6 +396,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (isMeLoaded && this.props.location.pathname === '/') {
             const currentUser = getCurrentUser(store.getState());
+            console.log('[components/root] set user for sentry', {email: currentUser.email, id: currentUser.id, username: currentUser.username}); // eslint-disable-line no-console
             Sentry.setUser({email: currentUser.email, id: currentUser.id, username: currentUser.username});
             this.redirectToOnboardingOrDefaultTeam();
         }
