@@ -17,7 +17,7 @@ import {redirectUserToDefaultTeam} from 'actions/global_actions';
 export function storeTokenResponse(response: { expires_in?: any; access_token?: any; refresh_token?: any }) {
     // TODO: store in redux
     const d = new Date();
-    d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10) + 3600); // add additional hour to expiry for backend timezone bug
+    d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10)); // add additional hour to expiry for backend timezone bug
     localStorage.setItem('IKToken', response.access_token);
     localStorage.setItem('IKRefreshToken', response.refresh_token);
     localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
@@ -25,13 +25,13 @@ export function storeTokenResponse(response: { expires_in?: any; access_token?: 
     Client4.setToken(response.access_token);
     Client4.setCSRF(response.access_token);
     Client4.setAuthHeader = true;
+    console.log('[login/utils > storeTokenResponse] token stored at: ', d);
 }
 
 /**
  * Clear IKToken informations in localStorage
  */
 export function clearLocalStorageToken() {
-    console.log('[login/utils > clearLocalStorageToken] clear token storage');
     localStorage.removeItem('IKToken');
     localStorage.removeItem('IKRefreshToken');
     localStorage.removeItem('IKTokenExpire');
@@ -45,6 +45,7 @@ export function clearLocalStorageToken() {
         },
         window.origin,
     );
+    console.log('[login/utils > clearLocalStorageToken] token storage cleared at: ', new Date());
 }
 
 /**
@@ -150,7 +151,7 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> | undefined
     ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
         storeTokenResponse(resp);
         LocalStorageStore.setWasLoggedIn(true);
-        console.log('[login/utils > refreshIKToken] token refreshed');
+        console.log('[login/utils > refreshIKToken] token refreshed at: ', new Date());
 
         window.postMessage(
             {

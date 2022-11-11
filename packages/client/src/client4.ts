@@ -4152,7 +4152,7 @@ export default class Client4 {
         if ((response.status === 403 || (response.status === 401 && data?.result === 'redirect')) && isDesktopApp()) {
             if (url.indexOf('/commands/') === -1) {
                 // eslint-disable-next-line no-console
-                console.log('[client > doFetchWithResponse(401|403)] client error, redirect to /login');
+                console.log('[client > doFetchWithResponse(401|403)] desktop client auth error, clean token and redirect to /login');
                 localStorage.removeItem('IKToken');
                 window.postMessage(
                     {

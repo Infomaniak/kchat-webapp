@@ -63,11 +63,11 @@ const Login = () => {
 
             // Check for desktop session end of life
             if (checkIKTokenIsExpired() || !token || !refreshToken) {
-                console.log('[components/login] session EOL: redirecting to infomaniak login');
-
                 // Login should be the only one responsible for clearing storage.
                 // The only other case is if we can't renew the token with code in root.
+                console.log('[components/login] session EOL, clearing storage');
                 clearLocalStorageToken();
+                console.log('[components/login] redirecting to infomaniak login');
                 getChallengeAndRedirectToLogin();
 
                 return;
@@ -76,7 +76,7 @@ const Login = () => {
 
         // For web simply send through to router if user exists.
         if (currentUser) {
-            console.log('[components/login] current user is ok');
+            console.log('[components/login] current user is ok -> redirecting to team');
             redirectUserToDefaultTeam();
         }
     }, []);
