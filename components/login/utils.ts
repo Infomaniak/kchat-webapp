@@ -131,59 +131,52 @@ export function needRefreshToken() {
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
-export function refreshIKToken(redirectToTeam = false): Promise<{ expires_in?: string; access_token?: string; refresh_token?: string }> {
+export function refreshIKToken(redirectToTeam = false): Promise<any> {
     const refreshToken = localStorage.getItem('IKRefreshToken');
     const isRefreshing = localStorage.getItem('refreshingToken');
-    let promise: Promise<{ expires_in?: string; access_token?: string; refresh_token?: string }> | null = null;
 
-    if (isRefreshing && promise) {
-        return promise;
+    if (isRefreshing) {
+        return Promise.resolve();
     }
 
-    promise = new Promise((resolve, reject) => {
-        Client4.setToken('');
-        Client4.setCSRF('');
-        localStorage.setItem('refreshingToken', '1');
+    Client4.setToken('');
+    Client4.setCSRF('');
+    localStorage.setItem('refreshingToken', '1');
 
-        // eslint-disable-next-line consistent-return
-        Client4.refreshIKLoginToken(
-            refreshToken,
-            `${IKConstants.LOGIN_URL}`,
-            `${IKConstants.CLIENT_ID}`,
-        ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
-            storeTokenResponse(resp);
-            LocalStorageStore.setWasLoggedIn(true);
-            console.log('[login/utils > refreshIKToken] token refreshed at: ', new Date());
+    // eslint-disable-next-line consistent-return
+    return Client4.refreshIKLoginToken(
+        refreshToken,
+        `${IKConstants.LOGIN_URL}`,
+        `${IKConstants.CLIENT_ID}`,
+    ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
+        storeTokenResponse(resp);
+        LocalStorageStore.setWasLoggedIn(true);
+        console.log('[login/utils > refreshIKToken] token refreshed at: ', new Date());
 
-            window.postMessage(
-                {
-                    type: 'token-refreshed',
-                    message: {
-                        token: resp.access_token,
-                    },
+        window.postMessage(
+            {
+                type: 'token-refreshed',
+                message: {
+                    token: resp.access_token,
                 },
-                window.origin,
-            );
+            },
+            window.origin,
+        );
 
-            localStorage.removeItem('refreshingToken');
+        localStorage.removeItem('refreshingToken');
 
-            // Refresh the websockets as we just changed Bearer Token
-            // reconnectWebSocket();
+        // Refresh the websockets as we just changed Bearer Token
+        // reconnectWebSocket();
 
-            if (redirectToTeam) {
-                redirectUserToDefaultTeam();
-            }
-            resolve(resp);
-        }).catch((error: unknown) => {
-            console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
-            console.warn(error);
-            console.log('[login/utils > refreshIKToken] keeping old token');
-            localStorage.removeItem('refreshingToken');
-            reject(error);
-        });
+        if (redirectToTeam) {
+            redirectUserToDefaultTeam();
+        }
+    }).catch((error: unknown) => {
+        console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
+        console.warn(error);
+        console.log('[login/utils > refreshIKToken] keeping old token');
+        localStorage.removeItem('refreshingToken');
     });
-
-    return promise;
 }
 
 export function revokeIKToken() {
