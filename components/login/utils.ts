@@ -172,7 +172,9 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
             redirectUserToDefaultTeam();
         }
     }).catch((error: unknown) => {
-        console.log('[login/utils > refreshIKToken] refresh token error ', error);
+        console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
+        console.warn(error);
+        console.log('[login/utils > refreshIKToken] keeping old token');
         localStorage.removeItem('refreshingToken');
     });
 }
