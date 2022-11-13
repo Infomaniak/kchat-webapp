@@ -131,12 +131,12 @@ export function needRefreshToken() {
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
-export function refreshIKToken(redirectToTeam = false): Promise<any> | undefined {
+export function refreshIKToken(redirectToTeam = false): Promise<any> {
     const refreshToken = localStorage.getItem('IKRefreshToken');
     const isRefreshing = localStorage.getItem('refreshingToken');
 
     if (isRefreshing) {
-        return;
+        return Promise.resolve();
     }
 
     Client4.setToken('');

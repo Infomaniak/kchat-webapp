@@ -108,7 +108,8 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
                 if (UserAgent.isDesktopApp() && checkIKTokenIsExpired()) {
                     console.log('[components/needs_team] desktop token expired'); //eslint-disable-line no-console
                     refreshIKToken(/*redirectToReam*/false)?.then(() => {
-                        console.log('[components/needs_team] desktop token refreshed'); //eslint-disable-line no-console
+                        console.log('[components/needs_team] desktop token refreshed at: ', new Date()); //eslint-disable-line no-console
+                        reconnect(false);
                     }).catch((e: unknown) => {
                         console.warn('[components/needs_team] desktop token refresh error: ', e); //eslint-disable-line no-console
 
@@ -124,8 +125,9 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
                             window.location.origin,
                         );
                     });
+                } else {
+                    reconnect(false);
                 }
-                reconnect(false);
             }
             lastTime = currentTime;
         }, WAKEUP_CHECK_INTERVAL);

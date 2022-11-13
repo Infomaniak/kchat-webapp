@@ -1796,8 +1796,8 @@ function handlePusherMemberRemoved(msg) {
     // console.log('pusher member removed', msg);
 }
 
-function handlePusherPong() {
-    if (needRefreshToken()) {
-        refreshIKToken();
-    }
-}
+// function handlePusherPong() {
+//     if (needRefreshToken()) {
+//         refreshIKToken();
+//     }
+// }
