@@ -108,22 +108,11 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
                 if (UserAgent.isDesktopApp() && checkIKTokenIsExpired()) {
                     console.log('[components/needs_team] desktop token expired'); //eslint-disable-line no-console
                     refreshIKToken(/*redirectToReam*/false)?.then((r) => {
-                        console.log('[components/needs_team] reconnecting at: ', new Date()); //eslint-disable-line no-console
+                        console.log('[components/needs_team] reconnected at: ', new Date()); //eslint-disable-line no-console
                         console.log('[components/needs_team] new token expires: ', r.expires_in); //eslint-disable-line no-console
-                        reconnect(false);
                     }).catch((e: unknown) => {
                         console.warn('[components/needs_team] desktop token refresh error: ', e); //eslint-disable-line no-console
-                        console.log('[components/needs_team] redirecting to app login'); //eslint-disable-line no-console
-                        window.postMessage(
-                            {
-                                type: 'browser-history-push',
-                                message: {
-                                    path: '/login',
-                                },
-                            },
-                            window.location.origin,
-                        );
-                    });
+                    }).finally(() => reconnect(false));
                 } else {
                     reconnect(false);
                 }
