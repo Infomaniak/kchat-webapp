@@ -214,7 +214,11 @@ function restart() {
     dispatch(getClientConfig());
 }
 
-export function reconnect(includeWebSocket = true) {
+export async function reconnect(includeWebSocket = true) {
+    if (isDesktopApp() && checkIKTokenIsExpired()) {
+        await refreshIKToken(/*redirectToTeam**/false);
+    }
+
     if (includeWebSocket) {
         reconnectWebSocket();
     }
