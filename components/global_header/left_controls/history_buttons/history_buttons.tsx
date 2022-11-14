@@ -2,12 +2,12 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect, useState, useCallback} from 'react';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import * as Utils from 'utils/utils';
-import {browserHistory} from 'utils/browser_history';
 import Constants from 'utils/constants';
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
@@ -26,8 +26,12 @@ const HistoryButtonsContainer = styled.nav`
 `;
 
 const HistoryButtons = (): JSX.Element => {
+    const history = useHistory();
+
     const [canGoBack, setCanGoBack] = useState(true);
     const [canGoForward, setCanGoForward] = useState(true);
+    console.log('[history-buttons] canGoBack: ', canGoBack); // eslint-disable-line no-console
+    console.log('[history-buttons] canGoForward: ', canGoForward); // eslint-disable-line no-console
 
     const getTooltip = (shortcut: KeyboardShortcutDescriptor) => (
         <Tooltip
@@ -42,7 +46,7 @@ const HistoryButtons = (): JSX.Element => {
     );
     const goBack = () => {
         trackEvent('ui', 'ui_history_back');
-        browserHistory.goBack();
+        history.goBack();
         window.postMessage(
             {
                 type: 'history-button',
@@ -53,7 +57,7 @@ const HistoryButtons = (): JSX.Element => {
 
     const goForward = () => {
         trackEvent('ui', 'ui_history_forward');
-        browserHistory.goForward();
+        history.goForward();
         window.postMessage(
             {
                 type: 'history-button',
