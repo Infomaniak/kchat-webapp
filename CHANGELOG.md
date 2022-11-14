@@ -1,3 +1,9 @@
+## 0.5.15 (2022-11-14)
+
+## Changed (1 change)
+
+- [swap old browserHistory util with useHistory](kchat/webapp@9745ce1e6bc70479273db6ab4576b21660d72efb) by @antonbuksa
+
 ## 0.5.14 (2022-11-14)
 
 ## Fixed (2 changes)
