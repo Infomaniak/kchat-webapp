@@ -30,8 +30,6 @@ const HistoryButtons = (): JSX.Element => {
 
     const [canGoBack, setCanGoBack] = useState(true);
     const [canGoForward, setCanGoForward] = useState(true);
-    console.log('[history-buttons] canGoBack: ', canGoBack); // eslint-disable-line no-console
-    console.log('[history-buttons] canGoForward: ', canGoForward); // eslint-disable-line no-console
 
     const getTooltip = (shortcut: KeyboardShortcutDescriptor) => (
         <Tooltip
