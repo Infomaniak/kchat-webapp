@@ -1,3 +1,10 @@
+## 0.5.14 (2022-11-14)
+
+## Fixed (2 changes)
+
+- [hotfix channel router group dm length check](kchat/webapp@d70c796ecc8036194229d861885dfedaf6b90a19) by @antonbuksa
+- [reimplement reconnect checker for websockets](kchat/webapp@3471cd4b8a7313dda665c0e53541dce1649aaddb) by @antonbuksa
+
 ## 0.5.13 (2022-11-10)
 
 No changes.
