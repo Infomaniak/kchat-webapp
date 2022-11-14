@@ -216,6 +216,8 @@ function restart() {
 
 export async function reconnect(includeWebSocket = true) {
     if (isDesktopApp() && checkIKTokenIsExpired()) {
+        // eslint-disable-next-line no-param-reassign
+        includeWebSocket = true;
         await refreshIKToken(/*redirectToTeam**/false);
     }
 
