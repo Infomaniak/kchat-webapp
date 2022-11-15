@@ -13,9 +13,6 @@ function getInitialState() {
 }
 
 export default function reducer(state = getInitialState(), action: GenericAction) {
-    if (action.type === GeneralTypes.WEBSOCKET_SUCCESS) {
-        console.log('[websocket reducer > state ]', state.connected);
-    }
     if (!state.connected && action.type === GeneralTypes.WEBSOCKET_SUCCESS) {
         return {
             ...state,

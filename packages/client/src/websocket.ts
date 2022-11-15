@@ -173,47 +173,63 @@ export default class WebSocketClient {
         }
 
         this.conn.connection.bind('state_change', (states: { current: string }) => {
-            console.log('[websocket > state_change] Current state is ' + states.current);
+            console.log('[websocket] current state is: ', states.current);
             if (states.current === 'unavailable' || states.current === 'failed') {
-                console.log('[websocket > state => ]', states.current);
+                this.connectFailCount++;
+                console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
+                console.log('[websocket] calling close callbacks');
                 this.closeCallback?.(this.connectFailCount);
                 this.closeListeners.forEach((listener) => listener(this.connectFailCount));
             }
         });
 
         this.conn.connection.bind('error', (evt: any) => {
-            console.log('[websocket > error]', evt);
-        })
+            console.log('[websocket] unexpected error: ', evt);
+            console.log('[websocket] calling error callbacks');
+
+            this.errorCallback?.(evt);
+            this.errorListeners.forEach((listener) => listener(evt));
+        });
 
         this.conn.connection.bind('connected', () => {
             // eslint-disable-next-line no-console
-            console.log('[websocket > connected]', this.connectFailCount);
+            console.log('[websocket] connectFailCount: ', this.connectFailCount);
             if (token) {
                 this.sendMessage('authentication_challenge', {token});
             }
 
-            if (this.socketId && this.conn?.connection.socket_id !== this.socketId) {
-                // eslint-disable-next-line no-console
-                console.log('[websocket > connected] got new connection id ', this.conn?.connection.socket_id); //eslint-disable-line no-console
-                // eslint-disable-next-line no-console
-                console.log('[websocket > connected] old connection id ', this.socketId);
-
-                // If we already have a connectionId present, and server sends a different one,
-                // that means it's either a long timeout, or server restart, or sequence number is not found.
-                // Then we do the sync calls, and reset sequence number to 0.
-                console.log('[websocket > connected] long timeout, or server restart. Calling firstConnectListerners'); //eslint-disable-line no-console
-
-                this.firstConnectCallback?.();
-                this.firstConnectListeners.forEach((listener) => listener());
-            } else if ((this.firstConnectCallback || this.firstConnectListeners.size > 0)) {
-                console.log('[websocket > connected] websocket firstConnectListeners connection'); //eslint-disable-line no-console
-
+            if (this.connectFailCount > 0) {
+                console.log('[websocket] re-established connection'); //eslint-disable-line no-console
+                console.log('[websocket] calling reconnect callbacks');
+                this.reconnectCallback?.();
+                this.reconnectListeners.forEach((listener) => listener());
+            } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
+                console.log('[websocket] calling first connect callbacks');
                 this.firstConnectCallback?.();
                 this.firstConnectListeners.forEach((listener) => listener());
             }
 
-            this.connectFailCount = 0;
+            // if (this.socketId && this.conn?.connection.socket_id !== this.socketId) {
+            //     // eslint-disable-next-line no-console
+            //     console.log('[websocket > connected] got new connection id ', this.conn?.connection.socket_id); //eslint-disable-line no-console
+            //     // eslint-disable-next-line no-console
+            //     console.log('[websocket > connected] old connection id ', this.socketId);
 
+            //     // If we already have a connectionId present, and server sends a different one,
+            //     // that means it's either a long timeout, or server restart, or sequence number is not found.
+            //     // Then we do the sync calls, and reset sequence number to 0.
+            //     console.log('[websocket > connected] long timeout, or server restart. Calling firstConnectListerners'); //eslint-disable-line no-console
+
+            //     this.firstConnectCallback?.();
+            //     this.firstConnectListeners.forEach((listener) => listener());
+            // } else if ((this.firstConnectCallback || this.firstConnectListeners.size > 0)) {
+            //     console.log('[websocket > connected] websocket firstConnectListeners connection'); //eslint-disable-line no-console
+
+            //     this.firstConnectCallback?.();
+            //     this.firstConnectListeners.forEach((listener) => listener());
+            // }
+
+            this.connectFailCount = 0;
             this.socketId = this.conn?.connection.socket_id as string;
         });
 
@@ -306,7 +322,7 @@ export default class WebSocketClient {
                 //     this.conn?.disconnect(); // Will auto-reconnect after MIN_WEBSOCKET_RETRY_TIME.
                 //     return;
                 // }
-                this.serverSequence = data.seq + 1;
+                // this.serverSequence = data.seq + 1;
 
                 // @ts-ignore
                 this.eventCallback?.({event: evt, data});
@@ -435,13 +451,6 @@ export default class WebSocketClient {
     close() {
         this.connectFailCount = 0;
         this.responseSequence = 1;
-        if (this.conn && this.conn.connection.state === 'connected') {
-            this.conn.connection.bind('disconnected', () => {
-            });
-            this.conn.disconnect();
-            this.conn = null;
-            console.log('websocket closed'); //eslint-disable-line no-console
-        }
     }
 
     sendMessage(action: string, data: any, responseCallback?: () => void, authToken?: string) {
@@ -458,6 +467,7 @@ export default class WebSocketClient {
         if (this.conn && this.conn.connection.state === 'connected') {
             this.userChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
+            console.log('[websocket] tried to send message but connection unavailable, reconnecting...');
             this.conn = null;
 
             // @ts-ignore
