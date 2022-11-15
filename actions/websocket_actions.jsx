@@ -214,10 +214,13 @@ function restart() {
     dispatch(getClientConfig());
 }
 
-export function reconnect(includeWebSocket = true) {
-    // if (isDesktopApp() && checkIKTokenIsExpired()) {
-    //     refreshIKToken();
-    // }
+export async function reconnect(includeWebSocket = true) {
+    if (isDesktopApp() && checkIKTokenIsExpired()) {
+        // eslint-disable-next-line no-param-reassign
+        includeWebSocket = true;
+        await refreshIKToken(/*redirectToTeam**/false);
+    }
+
     if (includeWebSocket) {
         reconnectWebSocket();
     }
@@ -1799,8 +1802,8 @@ function handlePusherMemberRemoved(msg) {
     // console.log('pusher member removed', msg);
 }
 
-function handlePusherPong() {
-    if (needRefreshToken()) {
-        refreshIKToken();
-    }
-}
+// function handlePusherPong() {
+//     if (needRefreshToken()) {
+//         refreshIKToken();
+//     }
+// }
