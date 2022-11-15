@@ -103,7 +103,6 @@ export default class WebSocketClient {
     initialize(connectionUrl = this.connectionUrl, userId?: number, teamId?: string, token?: string, authToken?: string, presenceChannelId?: string) {
         let currentUserId;
         let currentPresenceChannelId;
-        console.log('init WS');
 
         // Store this for onmessage reconnect
         if (userId) {
@@ -174,7 +173,6 @@ export default class WebSocketClient {
         }
 
         this.conn.connection.bind('state_change', (states: { current: string }) => {
-            // states = {previous: 'oldState', current: 'newState'}
             console.log('[websocket > state_change] Current state is ' + states.current);
             if (states.current === 'unavailable' || states.current === 'failed') {
                 console.log('[websocket > state => ]', states.current);
