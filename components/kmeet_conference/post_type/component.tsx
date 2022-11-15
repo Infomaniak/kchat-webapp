@@ -62,7 +62,7 @@ const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles,
         }
     };
     moment.locale(String(intl.locale));
-    console.log(moment.locale())
+
     const subMessage = post.props.end_at ? (
         <>
             {/*            <Duration>
