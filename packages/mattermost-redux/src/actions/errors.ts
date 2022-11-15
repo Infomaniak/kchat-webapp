@@ -3,8 +3,6 @@
 
 import {serializeError, ErrorObject} from 'serialize-error';
 
-import * as Sentry from '@sentry/react';
-
 import {ErrorTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
 import {DispatchFunc, ActionFunc} from 'mattermost-redux/types/actions';
@@ -68,8 +66,6 @@ export function logError(error: ServerError, displayable = false, consoleError =
         if (consoleError) {
             serializedError.message = 'A JavaScript error has occurred. Please use the JavaScript console to capture and report the error';
         }
-
-        Sentry.captureException(error);
 
         dispatch(getLogErrorAction(serializedError, displayable));
 
