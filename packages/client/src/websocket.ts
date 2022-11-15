@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable no-console */
 
 import Pusher, {Channel} from 'pusher-js';
 
@@ -142,16 +143,20 @@ export default class WebSocketClient {
                         Authorization: `Bearer ${authToken}`,
                     },
                 },
-                enabledTransports: ['ws'],
-                disabledTransports: ['xhr_streaming'],
+                enabledTransports: ['ws', 'wss'],
+                activityTimeout: 5000,
+                pongTimeout: 3000,
+                unavailableTimeout: 3000,
             });
         } else {
             this.conn = new Pusher('kchat-key', {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,
                 authEndpoint: '/broadcasting/auth',
-                enabledTransports: ['ws'],
-                disabledTransports: ['xhr_streaming'],
+                enabledTransports: ['ws', 'wss'],
+                activityTimeout: 5000,
+                pongTimeout: 3000,
+                unavailableTimeout: 3000,
             });
         }
 
