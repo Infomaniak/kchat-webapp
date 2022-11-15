@@ -16,60 +16,66 @@ import Constants from 'utils/constants';
 
 import {GlobalState} from 'types/store';
 
+import KMeetIcon from '../widgets/icons/kmeet_icon';
+
 import SvgCallComponent from './SvgCallComponent';
+
+import './meet_button.scss';
 
 export type Props = {
     currentChannelID: string;
     hasCall?: boolean;
     intl: IntlShape;
-    startCallInChannel: (channelID: string) => void;
+    startCallInChannel: (channelID: unknown) => void;
     isInCall?: boolean;
 }
 
-function logInfo(props: Props, connectedChannelID: string, channelID: string) {
-    console.log(props);
-    console.log('');
-    console.log('Connected voice channel Id => ', connectedChannelID);
-    console.log('Current channel Id => ', channelID);
-}
-
 function MeetButton(props: Props) {
-    // const {formatMessage} = props.intl;
     const {startCallInChannel} = props;
-    const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
+
+    // const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
     const ref = useRef<HTMLButtonElement>(null);
     const channelID = useSelector(getCurrentChannelId);
     const onClick = React.useCallback(() => {
         startCallInChannel(channelID);
     }, [channelID]);
 
-    logInfo(props, connectedChannelID, channelID);
-
     const tooltip = (
-        <Tooltip id='call'>
+        <Tooltip
+            id='call'
+            className='meet-btn__overlay'
+        >
             <FormattedMessage
-                id={props.hasCall ? 'Join Call' : 'Start Call'}
-                defaultMessage={props.hasCall ? 'Join Call' : 'Start Call'}
+                id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
+                defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
             />
         </Tooltip>
     );
 
-    const btnClasses = `channel-header__icon channel-header__icon--call ${props.isInCall && 'channel-header__icon--calling'}`;
+    const btnClasses = 'btn meet-btn';
     return (
-        <button
-            type='button'
-            className={btnClasses}
-            onClick={onClick}
-            ref={ref}
+        <OverlayTrigger
+            delayShow={Constants.OVERLAY_TIME_DELAY}
+            placement='bottom'
+            overlay={tooltip}
         >
-            <OverlayTrigger
-                delayShow={Constants.OVERLAY_TIME_DELAY}
-                placement='bottom'
-                overlay={tooltip}
-            >
-                <SvgCallComponent/>
-            </OverlayTrigger>
-        </button>
+            <div className='meet-btn__wrapper'>
+                <button
+                    type='button'
+                    className={btnClasses}
+                    onClick={onClick}
+                    ref={ref}
+                >
+                    <KMeetIcon className='meet-btn__icon'/>
+                    <span className='meet-btn__text'>
+                        <FormattedMessage
+                            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
+                            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
+                        />
+                    </span>
+                </button>
+            </div>
+        </OverlayTrigger>
     );
 }
 

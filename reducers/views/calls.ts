@@ -202,6 +202,21 @@ const connectedCallID = (state: string | null = null, action: {type: string; dat
     }
 };
 
+const connectedCallUrl = (state: string | null = null, action: {type: string; data: {channelID: string; currentUserID: string; userID: string, url: string}}) => {
+    switch (action.type) {
+    case ActionTypes.VOICE_CHANNEL_UNINIT:
+        return null;
+    case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
+            return action.data.url;
+        return state;
+    case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED:
+            return null;
+        return state;
+    default:
+        return state;
+    }
+};
+
 interface UsersStatusesState {
     [channelID: string]: {
         [userID: string]: UserState;
@@ -466,6 +481,7 @@ export default combineReducers({
     voiceConnectedChannels,
     connectedChannelID,
     connectedCallID,
+    connectedCallUrl,
     voiceConnectedProfiles,
     voiceUsersStatuses,
     callStartAt,

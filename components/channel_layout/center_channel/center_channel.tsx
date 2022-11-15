@@ -76,7 +76,9 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
 
         return (
             <React.Fragment>
+{/*
                 {this.props.callChannel && <MeetWidget/>}
+*/}
                 <div
                     key='inner-wrap'
                     className={classNames('inner-wrap', 'channel__wrap', {

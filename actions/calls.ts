@@ -4,7 +4,13 @@ import {Dispatch} from 'redux';
 
 import {DispatchFunc, GenericAction, GetStateFunc} from 'mattermost-redux/types/actions';
 import {ActionTypes} from 'utils/constants';
-import {connectedCallID, connectedChannelID, voiceConnectedChannels, voiceConnectedUsers} from 'selectors/calls';
+import {
+    connectedCallID,
+    connectedCallUrl,
+    connectedChannelID,
+    voiceConnectedChannels,
+    voiceConnectedUsers,
+} from 'selectors/calls';
 import {getProfilesByIds} from 'mattermost-redux/actions/users';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
@@ -74,6 +80,9 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
             });
 
+            if (data && data.url) {
+                window.open(data.url, '_blank');
+            }
             await dispatch({
                 type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
                 data: {
@@ -84,7 +93,8 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                     id: data.id,
                 },
             });
-            try {
+
+            /*try {
                 const users = voiceConnectedUsers(state);
                 if (users && users.length > 0) {
                     dispatch({
@@ -98,9 +108,12 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             } catch (err) {
                 // eslint-disable-next-line no-console
                 console.log(err);
-                return;
-            }
-        } else if (!connectedChannelID(getState())) {
+            }*/
+        } else if (connectedCallUrl(state) !== null) {
+            window.open(connectedCallUrl(state), '_blank');
+        }
+
+        /*else if (!connectedChannelID(getState())) {
             data = {id: Object.keys(channels[dialingID || channelID])[0]};
             await Client4.acceptIncomingMeetCall(data.id);
             dispatch({
@@ -131,10 +144,10 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             } catch (err) {
                 // eslint-disable-next-line no-console
                 console.log(err);
-                return;
             }
-        }
+        }*/
 
+        /*
         function getBase64Image(img: any) {
             const canvas = document.createElement('canvas');
             const image = new Image(img);
@@ -143,11 +156,14 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             const dataURL = canvas.toDataURL('image/png');
             return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
         }
+*/
 
+        /*
         const username = displayUsername(currentUser, getTeammateNameDisplaySetting(getState()));
         const avartarUrl = getBase64Image(Client4.getProfilePictureUrl(currentUser.id, currentUser.last_picture_update)); // Convert avatar url in base64
+*/
 
-        if (!isDesktopApp()) {
+        /*        if (!isDesktopApp()) {
             window.onCloseJitsi = (window) => {
                 window.close();
                 Client4.leaveMeet(data.id);
@@ -169,9 +185,9 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                         profile: msg,
                     },
                 });
-            };
+            };*/
 
-            const channel = getChannel(getState(), {id: channelID});
+        /*            const channel = getChannel(getState(), {id: channelID});
             const windowFeatures = 'width=1100,height=800,left=200,top=200,resizable=yes';
             let qParams = `?channelID=${data.id}&channelName=${channel.display_name}`;
             if (currentUser) {
@@ -192,11 +208,13 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             };
 
             return;
-        }
+        }*/
+        /*
         const me = getCurrentUser(getState());
         const channel = getChannel(getState(), {id: channelID});
+*/
 
-        window.postMessage(
+        /*        window.postMessage(
             {
                 type: 'call-joined',
                 message: {
@@ -208,9 +226,9 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                 },
             },
             window.origin,
-        );
+        );*/
 
-        window.addEventListener('message', ({origin, data: {type, message = {}} = {}} = {}) => {
+        /*   window.addEventListener('message', ({origin, data: {type, message = {}} = {}} = {}) => {
             if (origin !== window.location.origin) {
                 return;
             }
@@ -264,7 +282,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
                 });
             }
             }
-        });
+        });*/
     };
 }
 
