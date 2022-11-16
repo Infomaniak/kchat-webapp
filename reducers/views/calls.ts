@@ -3,6 +3,7 @@
 import {combineReducers} from 'redux';
 
 import {UserProfile} from 'mattermost-redux/types/users';
+
 import {ActionTypes} from 'utils/constants';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
@@ -167,6 +168,7 @@ const voiceConnectedChannels = (state: ConnectedChannelsState = {}, action: Conn
 const connectedChannelID = (state: string | null = null, action: {type: string; data: {channelID: string; currentUserID: string; userID: string}}) => {
     switch (action.type) {
     case ActionTypes.VOICE_CHANNEL_UNINIT:
+    case ActionTypes.VOICE_CHANNEL_DELETED:
         return null;
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
         if (action.data.currentUserID === action.data.userID) {
@@ -202,16 +204,17 @@ const connectedCallID = (state: string | null = null, action: {type: string; dat
     }
 };
 
-const connectedCallUrl = (state: string | null = null, action: {type: string; data: {channelID: string; currentUserID: string; userID: string, url: string}}) => {
+const connectedCallUrl = (state: string | null = null, action: {type: string; data: {channelID: string; currentUserID: string; userID: string; url: string}}) => {
     switch (action.type) {
     case ActionTypes.VOICE_CHANNEL_UNINIT:
         return null;
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
-            return action.data.url;
-        return state;
+    case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED:
+    case ActionTypes.VOICE_CHANNEL_ADDED:
+        return `https://kmeet.infomaniak.com/${action.data.id}`;
     case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED:
-            return null;
-        return state;
+    case ActionTypes.VOICE_CHANNEL_DELETED:
+        return null;
     default:
         return state;
     }
