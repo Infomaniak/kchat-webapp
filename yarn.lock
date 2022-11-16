@@ -4017,6 +4017,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^14.14.31":
+  version: 14.18.33
+  resolution: "@types/node@npm:14.18.33"
+  checksum: 4e23f95186d8ae1d38c999bc6b46fe94e790da88744b0a3bfeedcbd0d9ffe2cb0ff39e85f43014f6739e5270292c1a1f6f97a1fc606fd573a0c17fda9a1d42de
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^16.11.7":
   version: 16.11.64
   resolution: "@types/node@npm:16.11.64"
@@ -13433,7 +13440,7 @@ __metadata:
     prettier: 2.3.2
     process: 0.11.10
     prop-types: 15.8.1
-    pusher-js: 7.0.6
+    pusher-js: 7.5.0
     react: 16.13.1
     react-beautiful-dnd: 13.1.0
     react-bootstrap: "github:mattermost/react-bootstrap#d821e2b1db1059bd36112d7587fd1b0912b27626"
@@ -15696,12 +15703,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pusher-js@npm:7.0.6":
-  version: 7.0.6
-  resolution: "pusher-js@npm:7.0.6"
+"pusher-js@npm:7.5.0":
+  version: 7.5.0
+  resolution: "pusher-js@npm:7.5.0"
   dependencies:
+    "@types/node": ^14.14.31
     tweetnacl: ^1.0.3
-  checksum: 5df7184dae46f3e24cdf5104a3357bc24e3d8fde248277367d0316571e34707290b928e6afbe953dccf586ed6b41f91e4d980bb8e6085269d39ee4b0f921417a
+  checksum: 3817dda5f945f8d38f49b638ae96ee610d9f424c59eb066aa0bb370b59a9338a88cde88ccfbb2d130d093e180ebc77c29ea6a8701dea4561ed0212ca2248a000
   languageName: node
   linkType: hard
 
