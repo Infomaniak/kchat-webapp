@@ -130,14 +130,10 @@ const MAX_WEBSOCKET_FAILS = 7;
 
 const pluginEventHandlers = {};
 
-export async function initialize() {
+export function initialize() {
     if (!window.WebSocket) {
         console.log('Browser does not support websocket'); //eslint-disable-line no-console
         return;
-    }
-
-    if (isDesktopApp() && checkIKTokenIsExpired()) {
-        await refreshIKToken(/*redirectToTeam**/false);
     }
 
     const config = getConfig(getState());
