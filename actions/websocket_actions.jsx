@@ -136,6 +136,10 @@ export function initialize() {
         return;
     }
 
+    if (isDesktopApp() && checkIKTokenIsExpired()) {
+        await refreshIKToken(/*redirectToTeam**/false);
+    }
+
     const config = getConfig(getState());
     const user = getCurrentUser(getState());
     const currentChannelId = getCurrentChannelId(getState());
@@ -178,7 +182,12 @@ export function initialize() {
     }
 
     // connUrl += Client4.getUrlVersion() + '/websocket';
-    const authToken = Client4.getToken();
+
+    // const authToken = Client4.getToken();
+
+    // test
+    const authToken = localStorage.getItem('IKToken');
+
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
     WebSocketClient.addReconnectListener(() => reconnect(false));
