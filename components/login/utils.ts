@@ -141,8 +141,8 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
         return REFRESH_PROMISE as Promise<any>;
     }
 
-    // Client4.setToken('');
-    // Client4.setCSRF('');
+    Client4.setToken('');
+    Client4.setCSRF('');
 
     localStorage.setItem('refreshingToken', '1');
 

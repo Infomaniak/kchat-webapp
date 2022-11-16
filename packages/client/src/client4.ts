@@ -4233,35 +4233,22 @@ export default class Client4 {
         );
     }
 
-    refreshIKLoginToken = async (refresh: string, loginUrl: string, clientId: string) => {
+    refreshIKLoginToken = (refresh: string, loginUrl: string, clientId: string) => {
         // Body in formData because Laravel do not manage JSON
         const formData = new FormData();
         formData.append('grant_type', 'refresh_token');
         formData.append('refresh_token', refresh);
         formData.append('client_id', clientId);
 
-        const response = await fetch(`${loginUrl}token`, {
-            method: 'post',
-            body: JSON.stringify(formData),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        return this.doFetch<any>(
+
+            // `${this.getBaseRoute()}/token`,
+            `${loginUrl}token`,
+            {
+                method: 'post',
+                body: formData,
             },
-        });
-
-        return response;
-
-        // return this.doFetch<any>(
-
-        //     // `${this.getBaseRoute()}/token`,
-        //     `${loginUrl}token`,
-        //     {
-        //         method: 'post',
-        //         body: formData,
-        //         headers: {
-        //             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        //         },
-        //     },
-        // );
+        );
     }
 
     revokeIKLoginToken = (token: string, loginUrl: string) => {
