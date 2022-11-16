@@ -20,6 +20,7 @@ import {GlobalState} from 'types/store';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
+import {IKConstants} from '../utils/constants-ik';
 
 // import {Client4} from 'mattermost-redux/client';
 
@@ -81,8 +82,9 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             });
 
             if (data && data.url) {
-                window.open(data.url, '_blank');
+                window.open(`${IKConstants.KMEET_ENDPOINT}/${data.id}`, '_blank');
             }
+
             await dispatch({
                 type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
                 data: {
