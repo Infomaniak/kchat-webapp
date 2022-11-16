@@ -1,3 +1,15 @@
+## 0.5.18 (2022-11-16)
+
+## Fixed (3 changes)
+
+- [remove unneeded manual sentry call onerror](kchat/webapp@0e6f9354ad9d8f6e871c6548858f23394d8817c7) by @antonbuksa ([merge request](kchat/webapp!194))
+- [remove unneeded manual sentry call onerror](kchat/webapp@72522c495a212c9f1638768f1a3555c642becd3b) by @antonbuksa ([merge request](kchat/webapp!196))
+- [Clean code and update snapshots](kchat/webapp@9ce731a5e97416ec56493549af05fd431e192058) by @florent.glauda ([merge request](kchat/webapp!194))
+
+## Changed (1 change)
+
+- [dont exec refresh in interval if token already expired](kchat/webapp@4cd90dacb4ac323888ac5f8aa2e60682a4002f1e) by @antonbuksa ([merge request](kchat/webapp!194))
+
 ## 0.5.17 (2022-11-15)
 
 No changes.
