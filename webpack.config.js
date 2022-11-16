@@ -343,7 +343,7 @@ var config = {
             },
             templateParameters: {
                 // eslint-disable-next-line no-process-env
-                KMEET_ENDPOINT: process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch',
+                KMEET_ENDPOINT: process.env.KMEET_ENDPOINT || 'https://kmeet.preprod.dev.infomaniak.ch',
             },
         }),
         new CopyWebpackPlugin({
