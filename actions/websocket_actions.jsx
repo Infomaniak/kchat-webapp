@@ -184,6 +184,9 @@ export function initialize() {
     // test
     const authToken = localStorage.getItem('IKToken');
 
+    // eslint-disable-next-line no-console
+    console.log('[websocket_actions > initialize] init called, ws will reauth');
+
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
     WebSocketClient.addReconnectListener(() => reconnect(false));
@@ -221,10 +224,16 @@ function restart() {
 
 export async function reconnect(includeWebSocket = true) {
     if (isDesktopApp() && checkIKTokenIsExpired()) {
+        // eslint-disable-next-line no-console
+        console.log('[websocket_actions > reconnect] token expired, calling refresh');
+        // eslint-disable-next-line no-param-reassign
+        includeWebSocket = true;
         await refreshIKToken(/*redirectToTeam**/false);
     }
 
     if (includeWebSocket) {
+        // eslint-disable-next-line no-console
+        console.log('[websocket_actions > reconnect] reconnecting websocket with new token');
         reconnectWebSocket();
     }
 
