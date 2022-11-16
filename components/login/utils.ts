@@ -8,7 +8,10 @@ import {Client4} from 'mattermost-redux/client';
 import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
-import {reconnectWebSocket} from 'actions/websocket_actions';
+
+// import {reconnectWebSocket} from 'actions/websocket_actions';
+
+let REFRESH_PROMISE: Promise<any> | null;
 
 /**
  * Store IKToken infos in localStorage and update Client
@@ -24,13 +27,13 @@ export function storeTokenResponse(response: { expires_in?: any; access_token?: 
     Client4.setToken(response.access_token);
     Client4.setCSRF(response.access_token);
     Client4.setAuthHeader = true;
+    console.log('[login/utils > storeTokenResponse] token stored at: ', d);
 }
 
 /**
  * Clear IKToken informations in localStorage
  */
 export function clearLocalStorageToken() {
-    console.log('[TOKEN] Clear token storage');
     localStorage.removeItem('IKToken');
     localStorage.removeItem('IKRefreshToken');
     localStorage.removeItem('IKTokenExpire');
@@ -44,6 +47,7 @@ export function clearLocalStorageToken() {
         },
         window.origin,
     );
+    console.log('[login/utils > clearLocalStorageToken] token storage cleared at: ', new Date());
 }
 
 /**
@@ -91,7 +95,7 @@ export function getChallengeAndRedirectToLogin() {
         // TODO: add env for login url and/or current server
         window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
     }).catch(() => {
-        console.log('Error redirect');
+        console.log('[login/utils > getChallengeAndRedirectToLogin] error redirect');
     });
 }
 
@@ -102,9 +106,9 @@ export function getChallengeAndRedirectToLogin() {
 export function checkIKTokenIsExpired() {
     const tokenExpire = localStorage.getItem('IKTokenExpire');
     const isExpired = tokenExpire <= parseInt(Date.now() / 1000, 10);
-    console.log(`[TOKEN] Check if token is expired => ${isExpired}, tokenExpired => ${localStorage.getItem('tokenExpired')}`);
 
     if (isExpired) {
+        console.log('[login/utils > checkIKTokenIsExpired] token is expired');
         localStorage.setItem('tokenExpired', '1');
     }
     return isExpired;
@@ -126,52 +130,58 @@ export function checkIKTokenExpiresSoon(): boolean {
  * @returns bool
  */
 export function needRefreshToken() {
-    console.log('[TOKEN] Token need to be refresh ?');
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
-export function refreshIKToken(redirectToTeam = false) {
+export function refreshIKToken(redirectToTeam = false): Promise<any> {
     const refreshToken = localStorage.getItem('IKRefreshToken');
     const isRefreshing = localStorage.getItem('refreshingToken');
 
     if (isRefreshing) {
-        return;
+        return REFRESH_PROMISE as Promise<any>;
     }
 
     Client4.setToken('');
     Client4.setCSRF('');
     localStorage.setItem('refreshingToken', '1');
-    Client4.refreshIKLoginToken(
-        refreshToken,
-        `${IKConstants.LOGIN_URL}`,
-        `${IKConstants.CLIENT_ID}`,
-    ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
-        storeTokenResponse(resp);
-        LocalStorageStore.setWasLoggedIn(true);
-        console.log('[TOKEN] Token refreshed');
 
-        window.postMessage(
-            {
-                type: 'token-refreshed',
-                message: {
-                    token: resp.access_token,
+    // eslint-disable-next-line consistent-return
+    REFRESH_PROMISE = new Promise((resolve, reject) => {
+        return Client4.refreshIKLoginToken(
+            refreshToken,
+            `${IKConstants.LOGIN_URL}`,
+            `${IKConstants.CLIENT_ID}`,
+        ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
+            storeTokenResponse(resp);
+            LocalStorageStore.setWasLoggedIn(true);
+            console.log('[login/utils > refreshIKToken] token refreshed');
+
+            window.postMessage(
+                {
+                    type: 'token-refreshed',
+                    message: {
+                        token: resp.access_token,
+                    },
                 },
-            },
-            window.origin,
-        );
+                window.origin,
+            );
 
-        localStorage.removeItem('refreshingToken');
+            localStorage.removeItem('refreshingToken');
 
-        // Refresh the websockets as we just changed Bearer Token
-        reconnectWebSocket();
-
-        if (redirectToTeam) {
-            redirectUserToDefaultTeam();
-        }
-    }).catch((error: unknown) => {
-        console.log('[TOKEN] Refresh token error ', error);
-        localStorage.removeItem('refreshingToken');
+            if (redirectToTeam) {
+                redirectUserToDefaultTeam();
+            }
+            resolve(resp);
+        }).catch((error: unknown) => {
+            console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
+            console.warn(error);
+            console.log('[login/utils > refreshIKToken] keeping old token');
+            localStorage.removeItem('refreshingToken');
+            reject(error);
+        });
     });
+
+    return REFRESH_PROMISE;
 }
 
 export function revokeIKToken() {
@@ -181,7 +191,8 @@ export function revokeIKToken() {
         `${IKConstants.LOGIN_URL}`,
     ).then((resp: any) => {
         if (resp.data && resp.data === true) {
-            console.log('[TOKEN] Token revoked');
+            console.log('[login/utils > revokeIKToken] token revoked');
+
             // waiting for app release
             /*clearLocalStorageToken();
             window.postMessage(
@@ -195,12 +206,12 @@ export function revokeIKToken() {
             );*/
         }
     }).catch((error: unknown) => {
-        console.log('[TOKEN] Revoke token error ', error);
+        console.log('[login/utils > revokeIKToken] revoke token error ', error);
     }).finally(() => {
         Client4.setToken('');
         Client4.setCSRF('');
-        // Waiting new app release
 
+        // Waiting new app release
         clearLocalStorageToken();
         window.postMessage(
             {
