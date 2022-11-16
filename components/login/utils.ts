@@ -154,7 +154,7 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
         ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
             storeTokenResponse(resp);
             LocalStorageStore.setWasLoggedIn(true);
-            console.log('[login/utils > refreshIKToken] token refreshed at: ', new Date());
+            console.log('[login/utils > refreshIKToken] token refreshed');
 
             window.postMessage(
                 {
@@ -167,9 +167,6 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
             );
 
             localStorage.removeItem('refreshingToken');
-
-            // Refresh the websockets as we just changed Bearer Token
-            // reconnectWebSocket();
 
             if (redirectToTeam) {
                 redirectUserToDefaultTeam();
