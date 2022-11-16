@@ -212,7 +212,7 @@ const connectedCallUrl = (state: string | null = null, action: {type: string; da
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
     case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED:
     case ActionTypes.VOICE_CHANNEL_ADDED:
-        return `${IKConstants.KMEET_ENDPOINT}/${action.data.id}`;
+        return `${IKConstants.KMEET_ENDPOINT}${action.data.id}`;
     case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED:
     case ActionTypes.VOICE_CHANNEL_DELETED:
         return null;
