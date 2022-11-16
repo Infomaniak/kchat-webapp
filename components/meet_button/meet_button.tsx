@@ -96,7 +96,7 @@ function MeetButton(props: Props) {
                 </button>
                 <button
                     type='button'
-                    className={btnClasses}
+                    className={`${btnClasses} btn-light`}
                     onClick={onClick}
                     ref={ref}
                 >
@@ -113,7 +113,7 @@ function MeetButton(props: Props) {
                 </button>
                 <button
                     type='button'
-                    className={btnClasses}
+                    className={`${btnClasses} btn-light`}
                     onClick={onClick}
                     ref={ref}
                 >
