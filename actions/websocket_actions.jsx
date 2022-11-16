@@ -145,7 +145,7 @@ export function initialize() {
 
     let connUrl = '';
     if (config.WebsocketURL) {
-        connUrl = 'wss://' + config.WebsocketURL + ':443';
+        connUrl = config.WebsocketURL;
     } else {
         connUrl = new URL(getSiteURL());
 
