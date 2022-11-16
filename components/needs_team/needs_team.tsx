@@ -26,7 +26,6 @@ import Pluggable from 'plugins/pluggable';
 
 import LocalStorageStore from 'stores/local_storage_store';
 import type {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {checkIKTokenIsExpired, clearLocalStorageToken, refreshIKToken} from 'components/login/utils';
 
 const BackstageController = makeAsyncComponent('BackstageController', LazyBackstageController);
 

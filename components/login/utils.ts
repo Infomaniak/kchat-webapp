@@ -19,7 +19,7 @@ let REFRESH_PROMISE: Promise<any> | null;
 export function storeTokenResponse(response: { expires_in?: any; access_token?: any; refresh_token?: any }) {
     // TODO: store in redux
     const d = new Date();
-    d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10)); // add additional hour to expiry for backend timezone bug
+    d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
     localStorage.setItem('IKToken', response.access_token);
     localStorage.setItem('IKRefreshToken', response.refresh_token);
     localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
