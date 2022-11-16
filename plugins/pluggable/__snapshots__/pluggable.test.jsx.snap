@@ -41,6 +41,7 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
+          "socketId": null,
           "teamChannel": null,
           "userChannel": null,
         }
@@ -97,6 +98,7 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
+          "socketId": null,
           "teamChannel": null,
           "userChannel": null,
         }
@@ -177,6 +179,7 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
+          "socketId": null,
           "teamChannel": null,
           "userChannel": null,
         }
@@ -235,6 +238,7 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
           "responseCallbacks": Object {},
           "responseSequence": 1,
           "serverSequence": 0,
+          "socketId": null,
           "teamChannel": null,
           "userChannel": null,
         }

@@ -5,7 +5,7 @@ import deepEqual from 'fast-deep-equal';
 import React from 'react';
 import {Route, Switch, Redirect, RouteComponentProps} from 'react-router-dom';
 import throttle from 'lodash/throttle';
-import * as Sentry from '@sentry/react';
+import {setUser} from '@sentry/react';
 
 import classNames from 'classnames';
 
@@ -399,7 +399,7 @@ export default class Root extends React.PureComponent<Props, State> {
             if (currentUser) {
                 const {email, id, username} = currentUser;
                 console.log('[components/root] set user for sentry', {email, id, username}); // eslint-disable-line no-console
-                Sentry.setUser({ip_address: '{{auto}}', email, id, username});
+                setUser({ip_address: '{{auto}}', email, id, username});
             }
 
             if (this.props.location.pathname === '/') {

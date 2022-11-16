@@ -143,11 +143,12 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
 
     Client4.setToken('');
     Client4.setCSRF('');
+
     localStorage.setItem('refreshingToken', '1');
 
     // eslint-disable-next-line consistent-return
     REFRESH_PROMISE = new Promise((resolve, reject) => {
-        return Client4.refreshIKLoginToken(
+        Client4.refreshIKLoginToken(
             refreshToken,
             `${IKConstants.LOGIN_URL}`,
             `${IKConstants.CLIENT_ID}`,
