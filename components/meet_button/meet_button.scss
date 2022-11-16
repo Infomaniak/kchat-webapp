@@ -18,6 +18,10 @@
         outline: none;
         margin-left: 10px;
 
+        &.btn-light {
+            max-height: 32px;
+        }
+
         &__icon {
             margin-right: 10px;
             @media screen and (max-width: 999px) {
