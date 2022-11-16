@@ -16,11 +16,20 @@
         border-radius: 4px;
         border: none;
         outline: none;
+        margin-left: 10px;
 
         &__icon {
             margin-right: 10px;
             @media screen and (max-width: 999px) {
                 margin: 0;
+            }
+
+            &--24 {
+                width: 24px;
+            }
+
+            &--16 {
+                width: 16px;
             }
         }
 

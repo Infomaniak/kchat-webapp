@@ -21,6 +21,7 @@ import KMeetIcon from '../widgets/icons/kmeet_icon';
 import SvgCallComponent from './SvgCallComponent';
 
 import './meet_button.scss';
+import meetSvg from './static/kmeet.svg';
 
 export type Props = {
     currentChannelID: string;
@@ -39,7 +40,6 @@ function MeetButton(props: Props) {
     const onClick = React.useCallback(() => {
         startCallInChannel(channelID);
     }, [channelID]);
-
     const tooltip = (
         <Tooltip
             id='call'
@@ -66,7 +66,61 @@ function MeetButton(props: Props) {
                     onClick={onClick}
                     ref={ref}
                 >
-                    <KMeetIcon className='meet-btn__icon'/>
+                    <img
+                        src={meetSvg}
+                        className='meet-btn__icon meet-btn__icon--24'
+                    />
+                    <span className='meet-btn__text'>
+                        <FormattedMessage
+                            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
+                            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
+                        />
+                    </span>
+                </button>
+                <button
+                    type='button'
+                    className={btnClasses}
+                    onClick={onClick}
+                    ref={ref}
+                >
+                    <img
+                        src={meetSvg}
+                        className='meet-btn__icon meet-btn__icon--16'
+                    />
+                    <span className='meet-btn__text'>
+                        <FormattedMessage
+                            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
+                            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
+                        />
+                    </span>
+                </button>
+                <button
+                    type='button'
+                    className={btnClasses}
+                    onClick={onClick}
+                    ref={ref}
+                >
+                    <img
+                        src={meetSvg}
+                        className='meet-btn__icon meet-btn__icon--24'
+                    />
+                    <span className='meet-btn__text'>
+                        <FormattedMessage
+                            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
+                            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
+                        />
+                    </span>
+                </button>
+                <button
+                    type='button'
+                    className={btnClasses}
+                    onClick={onClick}
+                    ref={ref}
+                >
+                    <img
+                        src={meetSvg}
+                        className='meet-btn__icon meet-btn__icon--16'
+                    />
                     <span className='meet-btn__text'>
                         <FormattedMessage
                             id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
