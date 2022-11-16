@@ -80,7 +80,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
             });
-
+console.log(IKConstants.KMEET_ENDPOINT)
             if (data && data.url) {
                 window.open(`${IKConstants.KMEET_ENDPOINT}/${data.id}`, '_blank');
             }
