@@ -130,7 +130,7 @@ const MAX_WEBSOCKET_FAILS = 7;
 
 const pluginEventHandlers = {};
 
-export function initialize() {
+export async function initialize() {
     if (!window.WebSocket) {
         console.log('Browser does not support websocket'); //eslint-disable-line no-console
         return;
