@@ -504,11 +504,12 @@ export default class WebSocketClient {
         if (this.conn && this.conn.connection.state === 'connected') {
             this.userChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
-            console.log('[websocket] tried to send message but connection unavailable, reconnecting...');
-            this.conn = null;
+            console.log('[websocket] tried to send message but connection unavailable');
+
+            // this.conn = null;
 
             // @ts-ignore
-            this.initialize(null, null, data.channel_id, null, authToken);
+            // this.initialize(null, null, data.channel_id, null, authToken);
         }
     }
 
