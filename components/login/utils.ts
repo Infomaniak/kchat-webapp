@@ -27,7 +27,7 @@ export function storeTokenResponse(response: { expires_in?: any; access_token?: 
     Client4.setToken(response.access_token);
     Client4.setCSRF(response.access_token);
     Client4.setAuthHeader = true;
-    console.log('[login/utils > storeTokenResponse] token stored at: ', d);
+    console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
 }
 
 /**
@@ -155,7 +155,6 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
         ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
             storeTokenResponse(resp);
             LocalStorageStore.setWasLoggedIn(true);
-            console.log('[login/utils > refreshIKToken] token refreshed at: ', new Date());
 
             window.postMessage(
                 {
