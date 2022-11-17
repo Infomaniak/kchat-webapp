@@ -216,6 +216,7 @@ export default class WebSocketClient {
         this.conn.connection.bind('error', (evt: any) => {
             console.log('[websocket] unexpected error: ', evt);
             this.errorCount++;
+            this.connectFailCount++;
             console.log('[websocket] calling close callbacks');
 
             // this.errorCallback?.(evt);
