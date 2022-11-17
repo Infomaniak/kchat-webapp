@@ -4,7 +4,7 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
-const MAX_WEBSOCKET_FAILS = 4;
+const MAX_WEBSOCKET_FAILS = 3;
 const MIN_WEBSOCKET_RETRY_TIME = 1000; // 1 sec
 const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
 const JITTER_RANGE = 2000; // 2 sec
@@ -150,7 +150,7 @@ export default class WebSocketClient {
                 enabledTransports: ['ws', 'wss'],
                 disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
                 activityTimeout: 10000,
-                pongTimeout: 3000,
+                pongTimeout: 5000,
                 unavailableTimeout: 3000,
             });
         } else {
@@ -163,7 +163,7 @@ export default class WebSocketClient {
                 forceTLS: true,
                 enabledTransports: ['ws', 'wss'],
                 activityTimeout: 10000,
-                pongTimeout: 3000,
+                pongTimeout: 5000,
                 unavailableTimeout: 3000,
             });
         }
@@ -181,7 +181,7 @@ export default class WebSocketClient {
             this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
         }
 
-        this.conn.connection.bind('state_change', (states: { current: string }) => {
+        this.conn.connection.bind('state_change', (states: { current: string; previous: string }) => {
             console.log('[websocket] current state is: ', states.current);
             if (states.current === 'unavailable' || states.current === 'failed') {
                 this.connectFailCount++;
@@ -190,7 +190,7 @@ export default class WebSocketClient {
 
             // Pusher becomes weirdly unresponsive when hitting the unavailable state so we want
             // to try an aggressive reconnect before we give up to the slow pusher algo
-            if (states.current === 'unavailable' && this.errorCount > 0) {
+            if (states.current === 'unavailable' && states.previous === 'connecting') {
                 if (this.connectFailCount < MAX_WEBSOCKET_FAILS) {
                     console.log('[websocket] attempting aggresive reconnect');
                     let retryTime = MIN_WEBSOCKET_RETRY_TIME;
@@ -217,7 +217,6 @@ export default class WebSocketClient {
 
         this.conn.connection.bind('error', (evt: any) => {
             console.log('[websocket] unexpected error: ', evt);
-            this.connectFailCount++;
             this.errorCount++;
             console.log('[websocket] calling close callbacks');
 
@@ -241,9 +240,10 @@ export default class WebSocketClient {
             // This can cause requests to be blocked by a network change after we start connecting
             // for example due to vpn reconnecting, in that case the reconnect will just be called by the connected state
             // so we don't need to worry.
-            if (this.connectFailCount > 0 && this.errorCount > 0) {
-                console.log('[websocket] agressive reconnect'); //eslint-disable-line no-console
-                console.log('[websocket] calling reconnect callbacks');
+            // In the case of a graceful network change pusher seems to respect the unresponsive timeout
+            // and reconnect quicker so we can avoid the agressive mode.
+            if (this.connectFailCount > 1 && this.errorCount > 0) {
+                console.log('[websocket] calling reconnect callbacks agressively');
                 this.reconnectCallback?.();
                 this.reconnectListeners.forEach((listener) => listener());
             }
