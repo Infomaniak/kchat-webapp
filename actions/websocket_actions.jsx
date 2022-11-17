@@ -226,9 +226,13 @@ export async function reconnect(includeWebSocket = true) {
     if (isDesktopApp() && checkIKTokenIsExpired()) {
         // eslint-disable-next-line no-console
         console.log('[websocket_actions > reconnect] token expired, calling refresh');
-        // eslint-disable-next-line no-param-reassign
-        includeWebSocket = true;
-        await refreshIKToken(/*redirectToTeam**/false);
+        includeWebSocket = true; // eslint-disable-line no-param-reassign
+        try {
+            await refreshIKToken(/*redirectToTeam**/false);
+        } catch {
+            // swallow
+            includeWebSocket = false; // eslint-disable-line no-param-reassign
+        }
     }
 
     if (includeWebSocket) {
