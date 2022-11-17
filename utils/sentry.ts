@@ -38,15 +38,13 @@ export default function init({SENTRY_DSN}: Args) {
             'XDR encoding failure',
             'Request timed out',
             'No network connection',
-            'Failed to fetch',
-            'NetworkError when attempting to fetch resource.',
-            'No network connection',
+
+            // 'Failed to fetch',
+            // 'NetworkError when attempting to fetch resource.',
             'webkitExitFullScreen',
             'InactiveSession',
-            'UnhandledRejection',
             /chrome-extension/,
             /moz-extension/,
-            'ChunkLoadError', // WebPack loading source code.
             /ResizeObserver loop/,
         ],
     });
