@@ -177,6 +177,7 @@ export default class WebSocketClient {
 
         this.conn.connection.bind('state_change', (states: { current: string; previous: string }) => {
             console.log('[websocket] current state is: ', states.current);
+
             if (states.current === 'unavailable' || states.current === 'failed') {
                 this.connectFailCount++;
                 console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
@@ -184,29 +185,31 @@ export default class WebSocketClient {
 
             // Pusher becomes weirdly unresponsive when hitting the unavailable state so we want
             // to try an aggressive reconnect before we give up to the slow pusher algo
-            if (states.current === 'unavailable' && states.previous === 'connecting') {
-                if (this.connectFailCount < MAX_WEBSOCKET_FAILS) {
-                    console.log('[websocket] attempting aggresive reconnect');
-                    let retryTime = MIN_WEBSOCKET_RETRY_TIME;
-                    console.log('[websocket > aggresive] calling disconnect: ', new Date());
-                    this.conn?.disconnect();
-                    retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount;
-                    if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
-                        retryTime = MAX_WEBSOCKET_RETRY_TIME;
-                    }
+            // if (states.current === 'unavailable' && states.previous === 'connecting') {
+            //     this.connectFailCount++;
+            //     console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
+            //     if (this.connectFailCount < MAX_WEBSOCKET_FAILS) {
+            //         console.log('[websocket] attempting aggresive reconnect');
+            //         let retryTime = MIN_WEBSOCKET_RETRY_TIME;
+            //         console.log('[websocket > aggresive] calling disconnect: ', new Date());
+            //         this.conn?.disconnect();
+            //         retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount;
+            //         if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
+            //             retryTime = MAX_WEBSOCKET_RETRY_TIME;
+            //         }
 
-                    // Applying jitter to avoid thundering herd problems.
-                    retryTime += Math.random() * JITTER_RANGE;
+            //         // Applying jitter to avoid thundering herd problems.
+            //         retryTime += Math.random() * JITTER_RANGE;
 
-                    setTimeout(
-                        () => {
-                            console.log('[websocket > aggresive] calling connect: ', new Date());
-                            this.conn?.connect();
-                        },
-                        retryTime,
-                    );
-                }
-            }
+            //         setTimeout(
+            //             () => {
+            //                 console.log('[websocket > aggresive] calling connect: ', new Date());
+            //                 this.conn?.connect();
+            //             },
+            //             retryTime,
+            //         );
+            //     }
+            // }
         });
 
         this.conn.connection.bind('error', (evt: any) => {
@@ -236,7 +239,7 @@ export default class WebSocketClient {
             // so we don't need to worry.
             // In the case of a graceful network change pusher seems to respect the unresponsive timeout
             // and reconnect quicker so we can avoid the agressive mode.
-            if (this.connectFailCount > 1 && this.errorCount > 0) {
+            if (this.connectFailCount > 0 && this.connectFailCount <= MAX_WEBSOCKET_FAILS && this.errorCount === 0) {
                 console.log('[websocket] calling reconnect callbacks agressively');
                 this.reconnectCallback?.();
                 this.reconnectListeners.forEach((listener) => listener());
