@@ -1,3 +1,9 @@
+## 0.5.21 (2022-11-17)
+
+## Changed (1 change)
+
+- [tweak fail counters in case of pusher errors](kchat/webapp@6369697aef6f83f4c1a554d77ff378a7dd8e2b8a) by @antonbuksa
+
 ## 0.5.20 (2022-11-17)
 
 ## Added (1 change)
