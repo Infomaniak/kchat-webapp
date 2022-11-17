@@ -4,7 +4,7 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
-const MAX_WEBSOCKET_FAILS = 6;
+const MAX_WEBSOCKET_FAILS = 5;
 const MIN_WEBSOCKET_RETRY_TIME = 1000; // 1 sec
 const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
 const JITTER_RANGE = 2000; // 2 sec
@@ -188,29 +188,29 @@ export default class WebSocketClient {
 
             // Pusher becomes weirdly unresponsive when hitting the unavailable state so we want
             // to try an aggressive reconnect before we give up to the slow pusher algo
-            // if (states.current === 'unavailable') {
-            //     if (this.connectFailCount < MAX_WEBSOCKET_FAILS) {
-            //         console.log('[websocket] attempting aggresive reconnect');
-            //         let retryTime = MIN_WEBSOCKET_RETRY_TIME;
-            //         console.log('[websocket > aggresive] calling disconnect: ', new Date());
-            //         this.conn?.disconnect();
-            //         retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount;
-            //         if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
-            //             retryTime = MAX_WEBSOCKET_RETRY_TIME;
-            //         }
+            if (states.current === 'unavailable') {
+                if (this.connectFailCount < MAX_WEBSOCKET_FAILS) {
+                    console.log('[websocket] attempting aggresive reconnect');
+                    let retryTime = MIN_WEBSOCKET_RETRY_TIME;
+                    console.log('[websocket > aggresive] calling disconnect: ', new Date());
+                    this.conn?.disconnect();
+                    retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount;
+                    if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
+                        retryTime = MAX_WEBSOCKET_RETRY_TIME;
+                    }
 
-            //         // Applying jitter to avoid thundering herd problems.
-            //         retryTime += Math.random() * JITTER_RANGE;
+                    // Applying jitter to avoid thundering herd problems.
+                    retryTime += Math.random() * JITTER_RANGE;
 
-            //         setTimeout(
-            //             () => {
-            //                 console.log('[websocket > aggresive] calling connect: ', new Date());
-            //                 this.conn?.connect();
-            //             },
-            //             retryTime,
-            //         );
-            //     }
-            // }
+                    setTimeout(
+                        () => {
+                            console.log('[websocket > aggresive] calling connect: ', new Date());
+                            this.conn?.connect();
+                        },
+                        retryTime,
+                    );
+                }
+            }
         });
 
         this.conn.connection.bind('error', (evt: any) => {
@@ -233,6 +233,11 @@ export default class WebSocketClient {
             //     this.sendMessage('authentication_challenge', {token});
             // }
 
+            // If we are reconnecting following an error (ie PusherError 1006) we want to reconnect
+            // the webapp as soon as computer wakes up and not wait for pusher to finish connecting.
+            // This can cause requests to be blocked by a network change after we start connecting
+            // for example due to vpn reconnecting, in that case the reconnect will just be called by the connected state
+            // so we don't need to worry.
             if (this.connectFailCount > 0) {
                 console.log('[websocket] agressive reconnect'); //eslint-disable-line no-console
                 console.log('[websocket] calling reconnect callbacks');
@@ -242,6 +247,7 @@ export default class WebSocketClient {
         });
 
         this.conn.connection.bind('connected', () => {
+            // If we failed to reconnect the webapp in connecting state due to ie a net change, we will make sure to recall it here.
             if (this.connectFailCount > 0) {
                 console.log('[websocket] re-established connection'); //eslint-disable-line no-console
                 console.log('[websocket] calling reconnect callbacks');
