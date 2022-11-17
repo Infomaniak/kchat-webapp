@@ -483,8 +483,6 @@ export default class Root extends React.PureComponent<Props, State> {
                 console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console
             }).catch((e: unknown) => {
                 console.warn('[components/root] desktop token refresh error: ', e); // eslint-disable-line no-console
-
-                // clearLocalStorageToken();
             });
         }
     }

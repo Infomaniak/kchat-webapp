@@ -1292,9 +1292,6 @@ function addedNewDmUser(preference) {
 }
 
 function handleStatusChangedEvent(msg) {
-    // if (needRefreshToken()) {
-    //     refreshIKToken();
-    // }
     dispatch({
         type: UserTypes.RECEIVED_STATUSES,
         data: [{user_id: msg.data.user_id, status: msg.data.status}],
@@ -1832,9 +1829,3 @@ function handleIncomingConferenceCall(msg) {
 function handlePusherMemberRemoved(msg) {
     // console.log('pusher member removed', msg);
 }
-
-// function handlePusherPong() {
-//     if (needRefreshToken()) {
-//         refreshIKToken();
-//     }
-// }
