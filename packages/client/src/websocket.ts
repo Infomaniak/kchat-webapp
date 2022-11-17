@@ -4,12 +4,12 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
-const MAX_WEBSOCKET_FAILS = 7;
-const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
+const MAX_WEBSOCKET_FAILS = 5;
+const MIN_WEBSOCKET_RETRY_TIME = 1000; // 1 sec
 const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
 const JITTER_RANGE = 2000; // 2 sec
 
-const WEBSOCKET_HELLO = 'pusher:subscription_succeeded';
+// const WEBSOCKET_HELLO = 'pusher:subscription_succeeded';
 
 // Fix error import
 // eslint-disable-next-line no-warning-comments
@@ -143,7 +143,8 @@ export default class WebSocketClient {
                     },
                 },
                 enabledTransports: ['ws', 'wss'],
-                activityTimeout: 5000,
+                disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
+                activityTimeout: 10000,
                 pongTimeout: 3000,
                 unavailableTimeout: 3000,
             });
@@ -153,7 +154,7 @@ export default class WebSocketClient {
                 httpHost: connectionUrl,
                 authEndpoint: '/broadcasting/auth',
                 enabledTransports: ['ws', 'wss'],
-                activityTimeout: 5000,
+                activityTimeout: 10000,
                 pongTimeout: 3000,
                 unavailableTimeout: 3000,
             });
@@ -178,8 +179,35 @@ export default class WebSocketClient {
                 this.connectFailCount++;
                 console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
                 console.log('[websocket] calling close callbacks');
-                this.closeCallback?.(this.connectFailCount);
-                this.closeListeners.forEach((listener) => listener(this.connectFailCount));
+
+                // this.closeCallback?.(this.connectFailCount);
+                // this.closeListeners.forEach((listener) => listener(this.connectFailCount));
+            }
+
+            // Pusher becomes weirdly unresponsive when hitting the unavailable state so we want
+            // to try an aggressive reconnect before we give up to the slow pusher algo
+            if (states.current === 'unavailable') {
+                if (this.connectFailCount < MAX_WEBSOCKET_FAILS) {
+                    console.log('[websocket] attempting aggresive reconnect');
+                    let retryTime = MIN_WEBSOCKET_RETRY_TIME;
+                    console.log('[websocket > aggresive] calling disconnect: ', new Date());
+                    this.conn?.disconnect();
+                    retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount;
+                    if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
+                        retryTime = MAX_WEBSOCKET_RETRY_TIME;
+                    }
+
+                    // Applying jitter to avoid thundering herd problems.
+                    retryTime += Math.random() * JITTER_RANGE;
+
+                    setTimeout(
+                        () => {
+                            console.log('[websocket > aggresive] calling connect: ', new Date());
+                            this.conn?.connect();
+                        },
+                        retryTime,
+                    );
+                }
             }
         });
 
@@ -187,16 +215,17 @@ export default class WebSocketClient {
             console.log('[websocket] unexpected error: ', evt);
             console.log('[websocket] calling error callbacks');
 
-            this.errorCallback?.(evt);
-            this.errorListeners.forEach((listener) => listener(evt));
+            // this.errorCallback?.(evt);
+            // this.errorListeners.forEach((listener) => listener(evt));
         });
 
         this.conn.connection.bind('connected', () => {
             // eslint-disable-next-line no-console
             console.log('[websocket] connectFailCount: ', this.connectFailCount);
-            if (token) {
-                this.sendMessage('authentication_challenge', {token});
-            }
+
+            // if (token) {
+            //     this.sendMessage('authentication_challenge', {token});
+            // }
 
             if (this.connectFailCount > 0) {
                 console.log('[websocket] re-established connection'); //eslint-disable-line no-console
@@ -219,11 +248,6 @@ export default class WebSocketClient {
             //     // that means it's either a long timeout, or server restart, or sequence number is not found.
             //     // Then we do the sync calls, and reset sequence number to 0.
             //     console.log('[websocket > connected] long timeout, or server restart. Calling firstConnectListerners'); //eslint-disable-line no-console
-
-            //     this.firstConnectCallback?.();
-            //     this.firstConnectListeners.forEach((listener) => listener());
-            // } else if ((this.firstConnectCallback || this.firstConnectListeners.size > 0)) {
-            //     console.log('[websocket > connected] websocket firstConnectListeners connection'); //eslint-disable-line no-console
 
             //     this.firstConnectCallback?.();
             //     this.firstConnectListeners.forEach((listener) => listener());
