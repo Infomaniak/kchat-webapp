@@ -181,8 +181,19 @@ export function initialize() {
 
     // const authToken = Client4.getToken();
 
+    const tokenExpire = localStorage.getItem('IKTokenExpire');
+    const token = localStorage.getItem('IKToken');
+    const refreshToken = localStorage.getItem('IKRefreshToken');
+
+    if (isDesktopApp() && (!token || !refreshToken || !tokenExpire)) {
+        // eslint-disable-next-line no-console
+        console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
+        browserHistory.push('/login');
+        return;
+    }
+
     // test
-    const authToken = localStorage.getItem('IKToken');
+    // const authToken = localStorage.getItem('IKToken');
 
     // eslint-disable-next-line no-console
     console.log('[websocket_actions > initialize] init called, ws will reauth');
@@ -193,7 +204,7 @@ export function initialize() {
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
-    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, authToken, currentChannelId);
+    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, token, currentChannelId);
 }
 
 export function close() {
