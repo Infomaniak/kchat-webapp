@@ -229,6 +229,8 @@ export async function reconnect(includeWebSocket = true) {
         const refreshToken = localStorage.getItem('IKRefreshToken');
 
         if (!token || !refreshToken || !tokenExpire) {
+            // eslint-disable-next-line no-console
+            console.log('[websocket_actions > reconnect] token storage corrupt, redirecting to login');
             browserHistory.push('/login');
             return;
         }
