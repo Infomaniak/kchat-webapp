@@ -267,21 +267,26 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
         // }
         return state;
     case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED: {
-        const call = state[action.data.callID];
+        /*const call = state[action.data.callID];
         if (call) {
             const newCall = Object.entries(call).filter(([key, val]) => key !== action.data.userID);
             return {
                 ...state,
                 [action.data.callID]: Object.fromEntries(newCall),
             };
+        }*/
+        if (action.data.currentUserID === action.data.userID) {
+            return {};
         }
         return state;
     }
     case ActionTypes.VOICE_CHANNEL_DELETED: {
         if (action.data.callID) {
+            /*
             const filteredCallsIds = Object.entries(state).filter(([key, val]) => key !== action.data.callID);
-
             return filteredCallsIds.length > 0 ? Object.fromEntries(filteredCallsIds) : {};
+*/
+            return {};
         }
         return state;
     }
