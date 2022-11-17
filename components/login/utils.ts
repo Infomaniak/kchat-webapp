@@ -105,13 +105,6 @@ export function getChallengeAndRedirectToLogin() {
  */
 export function checkIKTokenIsExpired() {
     const tokenExpire = localStorage.getItem('IKTokenExpire');
-    const token = localStorage.getItem('IKToken');
-    const refreshToken = localStorage.getItem('IKRefreshToken');
-
-    if (!token || !refreshToken || !tokenExpire) {
-        return true;
-    }
-
     const isExpired = tokenExpire <= parseInt(Date.now() / 1000, 10);
 
     if (isExpired) {

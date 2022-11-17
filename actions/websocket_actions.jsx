@@ -223,15 +223,26 @@ function restart() {
 }
 
 export async function reconnect(includeWebSocket = true) {
-    if (isDesktopApp() && checkIKTokenIsExpired()) {
-        // eslint-disable-next-line no-console
-        console.log('[websocket_actions > reconnect] token expired, calling refresh');
-        includeWebSocket = true; // eslint-disable-line no-param-reassign
-        try {
-            await refreshIKToken(/*redirectToTeam**/false);
-        } catch {
-            // swallow
-            includeWebSocket = false; // eslint-disable-line no-param-reassign
+    if (isDesktopApp()) {
+        const tokenExpire = localStorage.getItem('IKTokenExpire');
+        const token = localStorage.getItem('IKToken');
+        const refreshToken = localStorage.getItem('IKRefreshToken');
+
+        if (!token || !refreshToken || !tokenExpire) {
+            browserHistory.push('/login');
+            return;
+        }
+
+        if (checkIKTokenIsExpired()) {
+            // eslint-disable-next-line no-console
+            console.log('[websocket_actions > reconnect] token expired, calling refresh');
+            includeWebSocket = true; // eslint-disable-line no-param-reassign
+            try {
+                await refreshIKToken(/*redirectToTeam**/false);
+            } catch {
+                // swallow
+                includeWebSocket = false; // eslint-disable-line no-param-reassign
+            }
         }
     }
 
@@ -261,6 +272,7 @@ export async function reconnect(includeWebSocket = true) {
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
+            // eslint-disable-next-line no-console
             console.log('[websocket_actions] dispatch syncPostsInChannel');
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
