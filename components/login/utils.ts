@@ -27,7 +27,7 @@ export function storeTokenResponse(response: { expires_in?: any; access_token?: 
     Client4.setToken(response.access_token);
     Client4.setCSRF(response.access_token);
     Client4.setAuthHeader = true;
-    console.log('[login/utils > storeTokenResponse] token stored at: ', d);
+    console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
 }
 
 /**
@@ -105,6 +105,13 @@ export function getChallengeAndRedirectToLogin() {
  */
 export function checkIKTokenIsExpired() {
     const tokenExpire = localStorage.getItem('IKTokenExpire');
+    const token = localStorage.getItem('IKToken');
+    const refreshToken = localStorage.getItem('IKRefreshToken');
+
+    if (!token || !refreshToken || !tokenExpire) {
+        return true;
+    }
+
     const isExpired = tokenExpire <= parseInt(Date.now() / 1000, 10);
 
     if (isExpired) {
@@ -155,7 +162,6 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
         ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
             storeTokenResponse(resp);
             LocalStorageStore.setWasLoggedIn(true);
-            console.log('[login/utils > refreshIKToken] token refreshed');
 
             window.postMessage(
                 {

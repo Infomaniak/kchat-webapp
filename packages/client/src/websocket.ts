@@ -4,12 +4,12 @@
 
 import Pusher, {Channel} from 'pusher-js';
 
-const MAX_WEBSOCKET_FAILS = 7;
-const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
+const MAX_WEBSOCKET_FAILS = 3;
+const MIN_WEBSOCKET_RETRY_TIME = 1000; // 1 sec
 const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
 const JITTER_RANGE = 2000; // 2 sec
 
-const WEBSOCKET_HELLO = 'pusher:subscription_succeeded';
+// const WEBSOCKET_HELLO = 'pusher:subscription_succeeded';
 
 // Fix error import
 // eslint-disable-next-line no-warning-comments
@@ -42,6 +42,7 @@ export default class WebSocketClient {
     // server-sent event stream.
     private serverSequence: number;
     private connectFailCount: number;
+    private errorCount: number;
     private responseCallbacks: {[x: number]: ((msg: any) => void)};
 
     /**
@@ -92,6 +93,7 @@ export default class WebSocketClient {
         this.responseSequence = 1;
         this.serverSequence = 0;
         this.connectFailCount = 0;
+        this.errorCount = 0;
         this.responseCallbacks = {};
         this.connectionId = '';
         this.socketId = null;
@@ -143,8 +145,9 @@ export default class WebSocketClient {
                     },
                 },
                 enabledTransports: ['ws', 'wss'],
-                activityTimeout: 5000,
-                pongTimeout: 3000,
+                disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
+                activityTimeout: 10000,
+                pongTimeout: 5000,
                 unavailableTimeout: 3000,
             });
         } else {
@@ -153,8 +156,9 @@ export default class WebSocketClient {
                 httpHost: connectionUrl,
                 authEndpoint: '/broadcasting/auth',
                 enabledTransports: ['ws', 'wss'],
-                activityTimeout: 5000,
-                pongTimeout: 3000,
+                disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
+                activityTimeout: 10000,
+                pongTimeout: 5000,
                 unavailableTimeout: 3000,
             });
         }
@@ -172,32 +176,79 @@ export default class WebSocketClient {
             this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
         }
 
-        this.conn.connection.bind('state_change', (states: { current: string }) => {
+        this.conn.connection.bind('state_change', (states: { current: string; previous: string }) => {
             console.log('[websocket] current state is: ', states.current);
+
             if (states.current === 'unavailable' || states.current === 'failed') {
                 this.connectFailCount++;
                 console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
-                console.log('[websocket] calling close callbacks');
-                this.closeCallback?.(this.connectFailCount);
-                this.closeListeners.forEach((listener) => listener(this.connectFailCount));
             }
+
+            // Pusher becomes weirdly unresponsive when hitting the unavailable state so we want
+            // to try an aggressive reconnect before we give up to the slow pusher algo
+            // if (states.current === 'unavailable' && states.previous === 'connecting') {
+            //     this.connectFailCount++;
+            //     console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
+            //     if (this.connectFailCount < MAX_WEBSOCKET_FAILS) {
+            //         console.log('[websocket] attempting aggresive reconnect');
+            //         let retryTime = MIN_WEBSOCKET_RETRY_TIME;
+            //         console.log('[websocket > aggresive] calling disconnect: ', new Date());
+            //         this.conn?.disconnect();
+            //         retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount;
+            //         if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
+            //             retryTime = MAX_WEBSOCKET_RETRY_TIME;
+            //         }
+
+            //         // Applying jitter to avoid thundering herd problems.
+            //         retryTime += Math.random() * JITTER_RANGE;
+
+            //         setTimeout(
+            //             () => {
+            //                 console.log('[websocket > aggresive] calling connect: ', new Date());
+            //                 this.conn?.connect();
+            //             },
+            //             retryTime,
+            //         );
+            //     }
+            // }
         });
 
         this.conn.connection.bind('error', (evt: any) => {
             console.log('[websocket] unexpected error: ', evt);
-            console.log('[websocket] calling error callbacks');
+            this.errorCount++;
+            console.log('[websocket] calling close callbacks');
 
-            this.errorCallback?.(evt);
-            this.errorListeners.forEach((listener) => listener(evt));
+            // this.errorCallback?.(evt);
+            // this.errorListeners.forEach((listener) => listener(evt));
+
+            this.closeCallback?.(this.connectFailCount);
+            this.closeListeners.forEach((listener) => listener(this.connectFailCount));
+        });
+
+        this.conn.connection.bind('connecting', () => {
+            // eslint-disable-next-line no-console
+            console.log('[websocket] connecting with connectFailCount: ', this.connectFailCount);
+
+            // if (token) {
+            //     this.sendMessage('authentication_challenge', {token});
+            // }
+
+            // If we are reconnecting following an error (ie PusherError 1006) we want to reconnect
+            // the webapp as soon as computer wakes up and not wait for pusher to finish connecting.
+            // This can cause requests to be blocked by a network change after we start connecting
+            // for example due to vpn reconnecting, in that case the reconnect will just be called by the connected state
+            // so we don't need to worry.
+            // In the case of a graceful network change pusher seems to respect the unresponsive timeout
+            // and reconnect quicker so we can avoid the agressive mode.
+            if (this.connectFailCount > 0 && this.connectFailCount <= MAX_WEBSOCKET_FAILS && this.errorCount === 0) {
+                console.log('[websocket] calling reconnect callbacks agressively');
+                this.reconnectCallback?.();
+                this.reconnectListeners.forEach((listener) => listener());
+            }
         });
 
         this.conn.connection.bind('connected', () => {
-            // eslint-disable-next-line no-console
-            console.log('[websocket] connectFailCount: ', this.connectFailCount);
-            if (token) {
-                this.sendMessage('authentication_challenge', {token});
-            }
-
+            // If we failed to reconnect the webapp in connecting state due to ie a net change, we will make sure to recall it here.
             if (this.connectFailCount > 0) {
                 console.log('[websocket] re-established connection'); //eslint-disable-line no-console
                 console.log('[websocket] calling reconnect callbacks');
@@ -208,28 +259,8 @@ export default class WebSocketClient {
                 this.firstConnectCallback?.();
                 this.firstConnectListeners.forEach((listener) => listener());
             }
-
-            // if (this.socketId && this.conn?.connection.socket_id !== this.socketId) {
-            //     // eslint-disable-next-line no-console
-            //     console.log('[websocket > connected] got new connection id ', this.conn?.connection.socket_id); //eslint-disable-line no-console
-            //     // eslint-disable-next-line no-console
-            //     console.log('[websocket > connected] old connection id ', this.socketId);
-
-            //     // If we already have a connectionId present, and server sends a different one,
-            //     // that means it's either a long timeout, or server restart, or sequence number is not found.
-            //     // Then we do the sync calls, and reset sequence number to 0.
-            //     console.log('[websocket > connected] long timeout, or server restart. Calling firstConnectListerners'); //eslint-disable-line no-console
-
-            //     this.firstConnectCallback?.();
-            //     this.firstConnectListeners.forEach((listener) => listener());
-            // } else if ((this.firstConnectCallback || this.firstConnectListeners.size > 0)) {
-            //     console.log('[websocket > connected] websocket firstConnectListeners connection'); //eslint-disable-line no-console
-
-            //     this.firstConnectCallback?.();
-            //     this.firstConnectListeners.forEach((listener) => listener());
-            // }
-
             this.connectFailCount = 0;
+            this.errorCount = 0;
             this.socketId = this.conn?.connection.socket_id as string;
         });
 
@@ -451,6 +482,12 @@ export default class WebSocketClient {
     close() {
         this.connectFailCount = 0;
         this.responseSequence = 1;
+
+        if (this.conn && this.conn.connection.state === 'connected') {
+            this.conn.disconnect();
+            this.conn = null;
+            console.log('websocket closed'); //eslint-disable-line no-console
+        }
     }
 
     sendMessage(action: string, data: any, responseCallback?: () => void, authToken?: string) {

@@ -226,9 +226,13 @@ export async function reconnect(includeWebSocket = true) {
     if (isDesktopApp() && checkIKTokenIsExpired()) {
         // eslint-disable-next-line no-console
         console.log('[websocket_actions > reconnect] token expired, calling refresh');
-        // eslint-disable-next-line no-param-reassign
-        includeWebSocket = true;
-        await refreshIKToken(/*redirectToTeam**/false);
+        includeWebSocket = true; // eslint-disable-line no-param-reassign
+        try {
+            await refreshIKToken(/*redirectToTeam**/false);
+        } catch {
+            // swallow
+            includeWebSocket = false; // eslint-disable-line no-param-reassign
+        }
     }
 
     if (includeWebSocket) {
@@ -250,13 +254,14 @@ export async function reconnect(includeWebSocket = true) {
         const mostRecentId = getMostRecentPostIdInChannel(state, currentChannelId);
         const mostRecentPost = getPost(state, mostRecentId);
 
-        if (appsFeatureFlagEnabled(state)) {
-            dispatch(handleRefreshAppsBindings());
-        }
+        // if (appsFeatureFlagEnabled(state)) {
+        //     dispatch(handleRefreshAppsBindings());
+        // }
 
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
+            console.log('[websocket_actions] dispatch syncPostsInChannel');
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
             // if network timed-out the first time when loading a channel
@@ -289,6 +294,8 @@ export async function reconnect(includeWebSocket = true) {
     });
 
     if (state.websocket.lastDisconnectAt) {
+        // eslint-disable-next-line no-console
+        console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
         dispatch(checkForModifiedUsers());
     }
 
