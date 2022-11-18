@@ -103,7 +103,7 @@ export default class WebSocketClient {
     // on hello, get the connectionID and store it.
     // on reconnect, send cookie, connectionID, sequence number.
     initialize(connectionUrl = this.connectionUrl, userId?: number, teamId?: string, token?: string, authToken?: string, presenceChannelId?: string) {
-        let currentUserId;
+        let currentUserId: any;
         let currentPresenceChannelId;
 
         // Store this for onmessage reconnect
@@ -257,6 +257,11 @@ export default class WebSocketClient {
                 console.log('[websocket] calling reconnect callbacks');
                 this.reconnectCallback?.();
                 this.reconnectListeners.forEach((listener) => listener());
+                console.log('[websocket] resubscribe to channels');
+                // @ts-ignore
+                this.subscribeToTeamChannel(teamId);
+                // @ts-ignore
+                this.subscribeToUserChannel(userId || currentUserId);
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
                 console.log('[websocket] calling first connect callbacks');
                 this.firstConnectCallback?.();
