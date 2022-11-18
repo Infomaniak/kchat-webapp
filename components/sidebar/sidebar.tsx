@@ -113,17 +113,18 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                         dialogType: KeyboardShortcutsModal,
                     });
                 }
-            } else if (Utils.isKeyPressed(event, Constants.KeyCodes.A) && event.shiftKey) {
-                event.preventDefault();
-
-                this.props.actions.openModal({
-                    modalId: ModalIdentifiers.USER_SETTINGS,
-                    dialogType: UserSettingsModal,
-                    dialogProps: {
-                        isContentProductSettings: true,
-                    },
-                });
             }
+            // else if (Utils.isKeyPressed(event, Constants.KeyCodes.A) && event.shiftKey) {
+            //     event.preventDefault();
+
+            //     this.props.actions.openModal({
+            //         modalId: ModalIdentifiers.USER_SETTINGS,
+            //         dialogType: UserSettingsModal,
+            //         dialogProps: {
+            //             isContentProductSettings: true,
+            //         },
+            //     });
+            // }
         }
     }
 

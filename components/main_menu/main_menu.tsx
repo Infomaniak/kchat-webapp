@@ -82,20 +82,20 @@ export class MainMenu extends React.PureComponent<Props> {
         pluginMenuItems: [],
     };
 
-    async componentDidMount(): Promise<void> {
-        document.addEventListener('keydown', this.handleKeyDown);
-    }
+    // async componentDidMount(): Promise<void> {
+    //     document.addEventListener('keydown', this.handleKeyDown);
+    // }
 
-    componentWillUnmount(): void {
-        document.removeEventListener('keydown', this.handleKeyDown);
-    }
+    // componentWillUnmount(): void {
+    //     document.removeEventListener('keydown', this.handleKeyDown);
+    // }
 
-    handleKeyDown = (e: KeyboardEvent): void => {
-        if (cmdOrCtrlPressed(e) && e.shiftKey && isKeyPressed(e, Constants.KeyCodes.A)) {
-            e.preventDefault();
-            this.props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}});
-        }
-    }
+    // handleKeyDown = (e: KeyboardEvent): void => {
+    //     if (cmdOrCtrlPressed(e) && e.shiftKey && isKeyPressed(e, Constants.KeyCodes.A)) {
+    //         e.preventDefault();
+    //         this.props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}});
+    //     }
+    // }
 
     handleEmitUserLoggedOutEvent = (): void => {
         GlobalActions.emitUserLoggedOutEvent();
