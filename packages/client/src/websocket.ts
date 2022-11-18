@@ -137,12 +137,22 @@ export default class WebSocketClient {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,
                 authEndpoint: '/broadcasting/auth',
-                auth: {
-                    headers: {
+                // auth: {
+                //     headers: {
 
-                        // @ts-ignore
-                        Authorization: `Bearer ${authToken}`,
-                    },
+                //         // @ts-ignore
+                //         Authorization: `Bearer ${authToken}`,
+                //     },
+                // },
+                authorizer() {
+                    return {
+                        authorize(_, callback) {
+                        // Do some ajax to get the auth information
+                            callback(null, {
+                                auth: `Bearer ${localStorage.getItem('IKToken')}`,
+                            });
+                        },
+                    };
                 },
                 enabledTransports: ['ws', 'wss'],
                 disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
