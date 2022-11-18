@@ -9,8 +9,6 @@ import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 
-// import {reconnectWebSocket} from 'actions/websocket_actions';
-
 let REFRESH_PROMISE: Promise<any> | null;
 
 /**
