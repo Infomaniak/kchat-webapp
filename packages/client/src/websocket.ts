@@ -278,28 +278,20 @@ export default class WebSocketClient {
 
     subscribeToTeamChannel(teamId: string) {
         // @ts-ignore
-        this.conn?.config.auth?.headers?.Authorization = `Bearer ${localStorage.getItem('IKToken')}`;
-        // @ts-ignore
         this.teamChannel = this.conn.subscribe(`private-team.${teamId}`);
     }
 
     subscribeToUserChannel(userId: number) {
-        // @ts-ignore
-        this.conn?.config.auth?.headers?.Authorization = `Bearer ${localStorage.getItem('IKToken')}`;
         // @ts-ignore
         this.userChannel = this.conn.subscribe(`presence-user.${userId}`);
     }
 
     subscribeToPresenceChannel(channelID: string) {
         // @ts-ignore
-        this.conn?.config.auth?.headers?.Authorization = `Bearer ${localStorage.getItem('IKToken')}`;
-        // @ts-ignore
         this.presenceChannel = this.conn.subscribe(`presence-channel.${channelID}`);
     }
 
     bindPresenceChannel(channelID: string) {
-        // @ts-ignore
-        this.conn?.config.auth?.headers?.Authorization = `Bearer ${localStorage.getItem('IKToken')}`;
         // @ts-ignore
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`);
         if (this.presenceChannel) {

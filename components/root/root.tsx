@@ -85,6 +85,8 @@ import ErrorBoundary from '../error_page/error-boudaries';
 
 import {IKConstants} from 'utils/constants-ik';
 
+import {reconnectWebSocket} from 'actions/websocket_actions';
+
 import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
@@ -481,6 +483,7 @@ export default class Root extends React.PureComponent<Props, State> {
             console.log('[components/root] desktop token expiring soon'); // eslint-disable-line no-console
             refreshIKToken(/*redirectToReam*/false)?.then(() => {
                 console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console
+                reconnectWebSocket();
             }).catch((e: unknown) => {
                 console.warn('[components/root] desktop token refresh error: ', e); // eslint-disable-line no-console
             });
