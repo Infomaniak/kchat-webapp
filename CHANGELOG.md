@@ -1,3 +1,14 @@
+## 0.5.24 (2022-11-18)
+
+## Added (1 change)
+
+- [make sure to resubscribe to base channels on ws restart](kchat/webapp@6fbbba333270e3cde9881f5b4d30b49748afd77d) by @antonbuksa
+
+## Changed (2 changes)
+
+- [handle channel subscriptions in connected callback](kchat/webapp@3a45f7ec37ee886c2562948d0e99e8bcdfb28699) by @antonbuksa
+- [reconnect ws when refreshing token from root to reauth](kchat/webapp@c2fb83ba134b8eec87ed97b32f8ac009536d5a27) by @antonbuksa
+
 ## 0.5.23 (2022-11-18)
 
 ## Changed (1 change)
