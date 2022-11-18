@@ -182,6 +182,9 @@ export default class WebSocketClient {
             if (states.current === 'unavailable' || states.current === 'failed') {
                 this.connectFailCount++;
                 console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
+
+                this.closeCallback?.(this.connectFailCount);
+                this.closeListeners.forEach((listener) => listener(this.connectFailCount));
             }
 
             // Pusher becomes weirdly unresponsive when hitting the unavailable state so we want
