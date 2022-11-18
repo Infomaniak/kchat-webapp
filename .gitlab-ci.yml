@@ -127,8 +127,11 @@ publish_front:
   before_script:
     - mc config host add $S3_BUCKET $S3_HOST $S3_KEY $S3_PASSWORD --api s3v4
   script:
-    - mc cp --recursive dist/ $S3_BUCKET/$S3_BUCKET/kchat/new_$DEPLOY_VARIABLE
-    - mc mv --recursive $S3_BUCKET/$S3_BUCKET/kchat/new_$DEPLOY_VARIABLE $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE
+    - mv dist/root.html dist/root_new.html
+    - mv dist/call.html dist/call_new.html
+    - mc cp --recursive dist/ $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE
+    - mc mv $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE/root_new.html $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE/root.html
+    - mc mv $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE/call_new.html $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE/call.html
   artifacts:
     paths:
       - dist
