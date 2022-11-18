@@ -1,3 +1,9 @@
+## 0.5.23 (2022-11-18)
+
+## Changed (1 change)
+
+- [use authorizer func instead of headers for ws auth](kchat/webapp@bfeba5dd48ab6ed14b6f1131f4daa29a51c1365c) by @antonbuksa
+
 ## 0.5.22 (2022-11-18)
 
 No changes.
