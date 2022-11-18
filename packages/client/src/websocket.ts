@@ -139,7 +139,6 @@ export default class WebSocketClient {
                 authEndpoint: '/broadcasting/auth',
                 auth: {
                     headers: {
-
                         // @ts-ignore
                         Authorization: `Bearer ${authToken}`,
                     },
@@ -182,6 +181,9 @@ export default class WebSocketClient {
             if (states.current === 'unavailable' || states.current === 'failed') {
                 this.connectFailCount++;
                 console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
+
+                this.closeCallback?.(this.connectFailCount);
+                this.closeListeners.forEach((listener) => listener(this.connectFailCount));
             }
 
             // Pusher becomes weirdly unresponsive when hitting the unavailable state so we want
@@ -271,20 +273,28 @@ export default class WebSocketClient {
 
     subscribeToTeamChannel(teamId: string) {
         // @ts-ignore
+        this.conn?.config.auth?.headers = `Bearer ${localStorage.getItem('IKToken')}`;
+        // @ts-ignore
         this.teamChannel = this.conn.subscribe(`private-team.${teamId}`);
     }
 
     subscribeToUserChannel(userId: number) {
+        // @ts-ignore
+        this.conn?.config.auth?.headers = `Bearer ${localStorage.getItem('IKToken')}`;
         // @ts-ignore
         this.userChannel = this.conn.subscribe(`presence-user.${userId}`);
     }
 
     subscribeToPresenceChannel(channelID: string) {
         // @ts-ignore
+        this.conn?.config.auth?.headers = `Bearer ${localStorage.getItem('IKToken')}`;
+        // @ts-ignore
         this.presenceChannel = this.conn.subscribe(`presence-channel.${channelID}`);
     }
 
     bindPresenceChannel(channelID: string) {
+        // @ts-ignore
+        this.conn?.config.auth?.headers = `Bearer ${localStorage.getItem('IKToken')}`;
         // @ts-ignore
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`);
         if (this.presenceChannel) {
