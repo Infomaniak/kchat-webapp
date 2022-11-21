@@ -24,7 +24,7 @@ import * as UserUtils from 'mattermost-redux/utils/user_utils';
 import {Match, MatchAndHistory} from './channel_identifier_router';
 
 const LENGTH_OF_ID = 36;
-const LENGTH_OF_GROUP_ID = 38;
+const LENGTH_OF_GROUP_ID = 40;
 const LENGTH_OF_USER_ID_PAIR = 74;
 const USER_ID_PAIR_REGEXP = new RegExp(`^[a-zA-Z0-9-]{${LENGTH_OF_ID}}__[a-zA-Z0-9-]{${LENGTH_OF_ID}}$`);
 

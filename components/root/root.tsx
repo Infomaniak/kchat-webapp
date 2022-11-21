@@ -5,6 +5,7 @@ import deepEqual from 'fast-deep-equal';
 import React from 'react';
 import {Route, Switch, Redirect, RouteComponentProps} from 'react-router-dom';
 import throttle from 'lodash/throttle';
+import {setUser} from '@sentry/react';
 
 import classNames from 'classnames';
 
@@ -83,6 +84,8 @@ import {ActionResult} from 'mattermost-redux/types/actions';
 import ErrorBoundary from '../error_page/error-boudaries';
 
 import {IKConstants} from 'utils/constants-ik';
+
+import {reconnectWebSocket} from 'actions/websocket_actions';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -185,10 +188,12 @@ export default class Root extends React.PureComponent<Props, State> {
 
             // Enable authHeader and set bearer token
             if (token && tokenExpire && !checkIKTokenIsExpired()) {
+                console.log('[components/root > constructor] updating token in client4'); // eslint-disable-line no-console
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
+                console.log('[components/root > constructor] token-refreshed sent to electron'); // eslint-disable-line no-console
                 window.postMessage(
                     {
                         type: 'token-refreshed',
@@ -391,8 +396,17 @@ export default class Root extends React.PureComponent<Props, State> {
     initiateMeRequests = async () => {
         const {data: isMeLoaded} = await this.props.actions.loadConfigAndMe();
 
-        if (isMeLoaded && this.props.location.pathname === '/') {
-            this.redirectToOnboardingOrDefaultTeam();
+        if (isMeLoaded) {
+            const currentUser = getCurrentUser(store.getState());
+            if (currentUser) {
+                const {email, id, username} = currentUser;
+                console.log('[components/root] set user for sentry', {email, id, username}); // eslint-disable-line no-console
+                setUser({ip_address: '{{auto}}', email, id, username});
+            }
+
+            if (this.props.location.pathname === '/') {
+                this.redirectToOnboardingOrDefaultTeam();
+            }
         }
 
         this.onConfigLoaded();
@@ -407,8 +421,7 @@ export default class Root extends React.PureComponent<Props, State> {
             const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
 
             if (loginCode) {
-                // eslint-disable-next-line no-console
-                console.log('[LOGIN] Login with code');
+                console.log('[components/root] login with code'); // eslint-disable-line no-console
                 const challenge = JSON.parse(localStorage.getItem('challenge') as string);
 
                 try { // Get new token
@@ -424,8 +437,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         IKConstants.CLIENT_ID,
                     );
 
-                    // eslint-disable-next-line no-console
-                    console.log('[ROOT LOGIN] Get token response', response);
+                    console.log('[components/root] get token response with code ', response); // eslint-disable-line no-console
 
                     // Store in localstorage
                     storeTokenResponse(response);
@@ -452,7 +464,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     // This is an edge case that I haven't tested yet,
                     // for now clear storage and resend to login to try and login again.
                     // eslint-disable-next-line no-console
-                    console.log('[TOKEN] post token fail', error);
+                    console.log('[components/root] post token fail ', error);
                     clearLocalStorageToken();
                     this.props.history.push('/login' + this.props.location.search);
                 }
@@ -466,9 +478,15 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     doTokenCheck = () => {
-        // If expiring soon, refresh before we start hitting errors.
-        if (checkIKTokenExpiresSoon()) {
-            refreshIKToken(/*redirectToReam*/false);
+        // If expiring soon but not expired, refresh before we start hitting errors.
+        if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
+            console.log('[components/root] desktop token expiring soon'); // eslint-disable-line no-console
+            refreshIKToken(/*redirectToReam*/false)?.then(() => {
+                console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console
+                reconnectWebSocket();
+            }).catch((e: unknown) => {
+                console.warn('[components/root] desktop token refresh error: ', e); // eslint-disable-line no-console
+            });
         }
     }
 
@@ -479,12 +497,11 @@ export default class Root extends React.PureComponent<Props, State> {
         const refreshToken = localStorage.getItem('IKRefreshToken');
 
         // Setup token keepalive:
-        if (token && refreshToken) {
-            // eslint-disable-next-line no-console
-            console.log('[LOGIN DESKTOP] Token is ok');
+        if (isDesktopApp() && token && refreshToken) {
+            console.log('[components/root] desktop token is ok, setting up interval check'); // eslint-disable-line no-console
 
-            // set an interval to run every minute to check if token needs refresh.
-            this.tokenCheckInterval = setInterval(this.doTokenCheck, 1000 * 60); // one minute
+            // set an interval to run every minute to check if token needs refresh soon.
+            this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
         }
 
         this.initiateMeRequests();
@@ -513,7 +530,10 @@ export default class Root extends React.PureComponent<Props, State> {
     componentWillUnmount() {
         this.mounted = false;
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
-        clearInterval(this.tokenCheckInterval);
+        if (this.tokenCheckInterval) {
+            console.log('[components/root] destroy token interval check'); // eslint-disable-line no-console
+            clearInterval(this.tokenCheckInterval);
+        }
 
         if (this.desktopMediaQuery.removeEventListener) {
             this.desktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);

@@ -1,3 +1,110 @@
+## 0.5.24 (2022-11-18)
+
+## Added (1 change)
+
+- [make sure to resubscribe to base channels on ws restart](kchat/webapp@6fbbba333270e3cde9881f5b4d30b49748afd77d) by @antonbuksa
+
+## Changed (2 changes)
+
+- [handle channel subscriptions in connected callback](kchat/webapp@3a45f7ec37ee886c2562948d0e99e8bcdfb28699) by @antonbuksa
+- [reconnect ws when refreshing token from root to reauth](kchat/webapp@c2fb83ba134b8eec87ed97b32f8ac009536d5a27) by @antonbuksa
+
+## 0.5.23 (2022-11-18)
+
+## Changed (1 change)
+
+- [use authorizer func instead of headers for ws auth](kchat/webapp@bfeba5dd48ab6ed14b6f1131f4daa29a51c1365c) by @antonbuksa
+
+## 0.5.22 (2022-11-18)
+
+No changes.
+
+## 0.5.21 (2022-11-17)
+
+## Changed (1 change)
+
+- [tweak fail counters in case of pusher errors](kchat/webapp@6369697aef6f83f4c1a554d77ff378a7dd8e2b8a) by @antonbuksa
+
+## 0.5.20 (2022-11-17)
+
+## Added (1 change)
+
+- [add aggresive reconnect strategy for ws](kchat/webapp@87425552f9411d3ef3d7d4ac1f80798394b459a3) by @antonbuksa
+
+## Fixed (3 changes)
+
+- [remove unneeded manual sentry call onerror](kchat/webapp@0e6f9354ad9d8f6e871c6548858f23394d8817c7) by @antonbuksa ([merge request](kchat/webapp!194))
+- [remove unneeded manual sentry call onerror](kchat/webapp@72522c495a212c9f1638768f1a3555c642becd3b) by @antonbuksa ([merge request](kchat/webapp!196))
+- [Clean code and update snapshots](kchat/webapp@9ce731a5e97416ec56493549af05fd431e192058) by @florent.glauda ([merge request](kchat/webapp!194))
+
+## Changed (1 change)
+
+- [dont exec refresh in interval if token already expired](kchat/webapp@4cd90dacb4ac323888ac5f8aa2e60682a4002f1e) by @antonbuksa ([merge request](kchat/webapp!194))
+
+## 0.5.19 (2022-11-16)
+
+No changes.
+
+## 0.5.18 (2022-11-16)
+
+## Fixed (3 changes)
+
+- [remove unneeded manual sentry call onerror](kchat/webapp@0e6f9354ad9d8f6e871c6548858f23394d8817c7) by @antonbuksa ([merge request](kchat/webapp!194))
+- [remove unneeded manual sentry call onerror](kchat/webapp@72522c495a212c9f1638768f1a3555c642becd3b) by @antonbuksa ([merge request](kchat/webapp!196))
+- [Clean code and update snapshots](kchat/webapp@9ce731a5e97416ec56493549af05fd431e192058) by @florent.glauda ([merge request](kchat/webapp!194))
+
+## Changed (1 change)
+
+- [dont exec refresh in interval if token already expired](kchat/webapp@4cd90dacb4ac323888ac5f8aa2e60682a4002f1e) by @antonbuksa ([merge request](kchat/webapp!194))
+
+## 0.5.17 (2022-11-15)
+
+No changes.
+
+## 0.5.16 (2022-11-14)
+
+No changes.
+
+## 0.5.15 (2022-11-14)
+
+## Changed (1 change)
+
+- [swap old browserHistory util with useHistory](kchat/webapp@9745ce1e6bc70479273db6ab4576b21660d72efb) by @antonbuksa
+
+## 0.5.14 (2022-11-14)
+
+## Fixed (2 changes)
+
+- [hotfix channel router group dm length check](kchat/webapp@d70c796ecc8036194229d861885dfedaf6b90a19) by @antonbuksa
+- [reimplement reconnect checker for websockets](kchat/webapp@3471cd4b8a7313dda665c0e53541dce1649aaddb) by @antonbuksa
+
+## 0.5.13 (2022-11-10)
+
+No changes.
+
+## 0.5.12 (2022-11-09)
+
+No changes.
+
+## 0.5.11 (2022-11-09)
+
+## Fixed (1 change)
+
+- [improve websocket reconnect states](kchat/webapp@4a042e6770792d19423ec7945404b7de17172cfd) by @antonbuksa
+
+## 0.5.10 (2022-11-09)
+
+## Added (1 change)
+
+- [add 'mark all as read' shortcut (Alt | Esc)](kchat/webapp@e5b3ccae2dd73b5c596288f762ffe499ba6df8d3) by @leonard.jouve ([merge request](kchat/webapp!188))
+
+## Fixed (4 changes)
+
+- [readd missing sentry init call](kchat/webapp@7c2ac14d7e845dd9bd39692e39d47d34512dd2d5) by @antonbuksa
+- [Fix logout for webapp & desktop](kchat/webapp@bfb461d63fed4a6ed6dcd4c9cdccf1befba9ab12) by @florent.glauda ([merge request](kchat/webapp!189))
+- [Fix web app logout](kchat/webapp@d8c41e6d9077563bd4c2231396d92d0440d7f74a) by @florent.glauda ([merge request](kchat/webapp!189))
+- [Fix web app logout](kchat/webapp@1f05cea0939acbd113effa79537f587421798678) by @florent.glauda ([merge request](kchat/webapp!189))
+
 ## 0.5.9 (2022-11-07)
 
 ## Fixed (1 change)
