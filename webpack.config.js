@@ -150,7 +150,7 @@ if (DEV) {
     env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
     env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/next');
     env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.preprod.dev.infomaniak.ch');
-    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'https://kmeet.preprod.dev.infomaniak.ch/');
     env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.preprod.dev.infomaniak.ch/');
     env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.preprod.dev.infomaniak.ch/');
     if (process.env.MM_LIVE_RELOAD) {
@@ -162,7 +162,7 @@ if (DEV) {
     env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
     env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/next');
     env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com');
-    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'kmeet.infomaniak.com');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'https://kmeet.infomaniak.com/');
     env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.infomaniak.com/');
     env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.infomaniak.com/');
 }
@@ -343,7 +343,7 @@ var config = {
             },
             templateParameters: {
                 // eslint-disable-next-line no-process-env
-                KMEET_ENDPOINT: process.env.KMEET_ENDPOINT || 'kmeet.preprod.dev.infomaniak.ch',
+                KMEET_ENDPOINT: process.env.KMEET_ENDPOINT || 'https://kmeet.preprod.dev.infomaniak.ch/',
             },
         }),
         new CopyWebpackPlugin({

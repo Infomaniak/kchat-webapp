@@ -17,10 +17,9 @@ function mapStateToProps(state: GlobalState) {
     const connectedCall = connectedCallID(state);
     const currentChannelID = getCurrentChannelId(state);
     const channels = voiceConnectedChannels(state);
-
     return {
         currentChannelID,
-        hasCall: channels[currentChannelID],
+        hasCall: channels[currentChannelID] && Object.keys(channels[currentChannelID]).length > 0,
         isInCall: channels[currentChannelID] &&
             channels[currentChannelID][connectedCall] &&
             channels[currentChannelID][connectedCall].includes(getCurrentUserId(state)),

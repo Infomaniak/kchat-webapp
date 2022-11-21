@@ -10,7 +10,12 @@ import {getUser} from 'mattermost-redux/selectors/entities/users';
 import {Post} from 'mattermost-redux/types/posts';
 import {GlobalState} from 'mattermost-redux/types/store';
 
-import {connectedCallID, voiceConnectedChannels, voiceConnectedProfilesInChannel} from 'selectors/calls';
+import {
+    connectedCallID,
+    connectedCallUrl,
+    voiceConnectedChannels,
+    voiceConnectedProfilesInChannel,
+} from 'selectors/calls';
 
 import PostType from './component';
 
@@ -21,6 +26,7 @@ interface OwnProps {
 const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     let hasCall = false;
     const connectedID = connectedCallID(state) || '';
+    const connectedUrl = connectedCallUrl(state) || '';
     const channels = voiceConnectedChannels(state);
 
     let profiles = [];
@@ -54,6 +60,7 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     return {
         ...ownProps,
         connectedID,
+        connectedUrl,
         hasCall,
         pictures,
         profiles,
