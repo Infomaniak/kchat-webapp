@@ -1,3 +1,12 @@
+## 0.5.25 (2022-11-21)
+
+## Changed (4 changes)
+
+- [Update kMeet workflow (clean)](kchat/webapp@9cab270a35a0a02a224ba549b3cf7a2ce613c641) by @florent.glauda ([merge request](kchat/webapp!191))
+- [Clean kmeet btn](kchat/webapp@523a3a3d2f9b0e1055e18c564c0b00ad9d86ee31) by @florent.glauda ([merge request](kchat/webapp!191))
+- [Separate consecutive same user posts in threads](kchat/webapp@c6bcc765792ecb615a70b27c08482a673da7946b) by @florent.glauda ([merge request](kchat/webapp!193))
+- [Add kMeet refacto trads](kchat/webapp@913c39a1fc6f00a960485fd4e8055acd66540a37) by @florent.glauda ([merge request](kchat/webapp!191))
+
 ## 0.5.24 (2022-11-18)
 
 ## Added (1 change)
