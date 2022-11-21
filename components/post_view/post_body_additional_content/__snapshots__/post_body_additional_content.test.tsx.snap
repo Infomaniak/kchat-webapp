@@ -118,6 +118,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "responseCallbacks": Object {},
         "responseSequence": 1,
         "serverSequence": 0,
+        "socketId": null,
         "teamChannel": null,
         "userChannel": null,
       }
@@ -167,6 +168,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "responseCallbacks": Object {},
         "responseSequence": 1,
         "serverSequence": 0,
+        "socketId": null,
         "teamChannel": null,
         "userChannel": null,
       }
