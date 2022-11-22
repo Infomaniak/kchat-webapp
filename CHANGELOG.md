@@ -1,3 +1,15 @@
+## 0.5.27 (2022-11-22)
+
+## Fixed (1 change)
+
+- [fix token expire time](kchat/webapp@661c7a86077e90fe70515c67e2346f4e9cb79d38) by @florent.glauda
+
+## 0.5.26 (2022-11-22)
+
+## Fixed (1 change)
+
+- [fix logout clean token](kchat/webapp@babfa00d0fc5b9908086b832b24326fd43c81c8c) by @florent.glauda
+
 ## 0.5.25 (2022-11-21)
 
 ## Changed (4 changes)
