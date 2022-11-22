@@ -256,13 +256,11 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         }
 
         // Waiting for deleteToken login ik
-        // if (isDesktopApp()) {
+        if (isDesktopApp()) {
         //     revokeIKToken();
         // } else {
-
-        clearLocalStorageToken();
-
-        // }
+            clearLocalStorageToken();
+        }
 
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
