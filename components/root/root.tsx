@@ -482,6 +482,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 },
                 window.origin,
             );
+
             // Allow through initial requests anyway to receive new errors.
             this.runMounted();
         } catch (error) {
@@ -489,14 +490,16 @@ export default class Root extends React.PureComponent<Props, State> {
             // for now clear storage and resend to login to try and login again.
             // eslint-disable-next-line no-console
             console.log('[components/root] post token fail ', error);
-            this.retryGetToken += 1;
-            // eslint-disable-next-line operator-assignment
-            this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken * this.retryGetTokenTime;
 
             if (this.retryGetToken > MAX_GET_TOKEN_FAILS) {
                 clearInterval(this.loginCodeInterval);
                 clearLocalStorageToken();
                 this.props.history.push('/login');
+            } else {
+                this.retryGetToken += 1;
+                // eslint-disable-next-line operator-assignment
+                this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken * this.retryGetTokenTime;
+                this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), this.retryGetTokenTime);
             }
         }
     }
@@ -553,6 +556,8 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentWillUnmount() {
         this.mounted = false;
+        this.retryGetToken = 0;
+        this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME;
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
         if (this.tokenCheckInterval) {
             console.log('[components/root] destroy token interval check'); // eslint-disable-line no-console
