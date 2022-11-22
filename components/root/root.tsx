@@ -113,7 +113,8 @@ const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
 const Mfa = makeAsyncComponent('Mfa', LazyMfa);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 
-const REFRESH_TOKEN_TIME_MARGIN = 30000; // How many miliseconds to refresh before token expires (default is 30 seconds)
+const MAX_GET_TOKEN_FAILS = 5;
+const MIN_GET_TOKEN_RETRY_TIME = 1000; // 1 sec
 
 type LoggedInRouteProps<T> = {
     component: React.ComponentType<T>;
@@ -169,6 +170,9 @@ export default class Root extends React.PureComponent<Props, State> {
     private tabletMediaQuery: MediaQueryList;
     private mobileMediaQuery: MediaQueryList;
     private mounted: boolean;
+    private loginCodeInterval: any = null;
+    private retryGetToken = 0;
+    private retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME;
     private tokenCheckInterval: ReturnType<typeof setInterval>|null = null;
 
     // The constructor adds a bunch of event listeners,
@@ -178,6 +182,7 @@ export default class Root extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.mounted = false;
+        console.log('[ROOT > INIT] init root component');
 
         // Redux
         setUrl(getSiteURL());
@@ -422,58 +427,77 @@ export default class Root extends React.PureComponent<Props, State> {
 
             if (loginCode) {
                 console.log('[components/root] login with code'); // eslint-disable-line no-console
-                const challenge = JSON.parse(localStorage.getItem('challenge') as string);
-
-                try { // Get new token
-                    const response: {
-                        expires_in: string;
-                        access_token: string;
-                        refresh_token: string;
-                    } = await Client4.getIKLoginToken(
-                        loginCode,
-                        challenge?.challenge,
-                        challenge?.verifier,
-                        IKConstants.LOGIN_URL,
-                        IKConstants.CLIENT_ID,
-                    );
-
-                    console.log('[components/root] get token response with code ', response); // eslint-disable-line no-console
-
-                    // Store in localstorage
-                    storeTokenResponse(response);
-
-                    // Remove challange and set logged in.
-                    localStorage.removeItem('challenge');
-                    localStorage.setItem('tokenExpired', '0');
-                    LocalStorageStore.setWasLoggedIn(true);
-
-                    // Store in desktop storage.
-                    window.postMessage(
-                        {
-                            type: 'token-refreshed',
-                            message: {
-                                token: response.access_token,
-                            },
-                        },
-                        window.origin,
-                    );
-
-                    // Allow through initial requests anyway to receive new errors.
-                    this.runMounted();
-                } catch (error) {
-                    // This is an edge case that I haven't tested yet,
-                    // for now clear storage and resend to login to try and login again.
-                    // eslint-disable-next-line no-console
-                    console.log('[components/root] post token fail ', error);
-                    clearLocalStorageToken();
-                    this.props.history.push('/login' + this.props.location.search);
-                }
+                this.storeLoginCode(loginCode);
+                this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), this.retryGetTokenTime);
             } else {
                 this.runMounted();
             }
         } else {
             // Allow through initial requests for web.
             this.runMounted();
+        }
+    }
+
+    storeLoginCode = (code: string) => {
+        console.log('[components/root] store login code'); // eslint-disable-line no-console
+        localStorage.setItem('IKLoginCode', code);
+    }
+
+    tryGetNewToken = async () => {
+        const challenge = JSON.parse(localStorage.getItem('challenge') as string);
+        const loginCode = JSON.parse(localStorage.getItem('IKLoginCode') as string);
+
+        try { // Get new token
+            const response: {
+                expires_in: string;
+                access_token: string;
+                refresh_token: string;
+            } = await Client4.getIKLoginToken(
+                loginCode,
+                challenge?.challenge,
+                challenge?.verifier,
+                IKConstants.LOGIN_URL,
+                IKConstants.CLIENT_ID,
+            );
+
+            console.log('[components/root] get token response with code ', response); // eslint-disable-line no-console
+            clearInterval(this.loginCodeInterval);
+
+            // Store in localstorage
+            storeTokenResponse(response);
+
+            // Remove challenge, loginCode and set logged in.
+            localStorage.removeItem('challenge');
+            localStorage.removeItem('IKLoginCode');
+            localStorage.setItem('tokenExpired', '0');
+            LocalStorageStore.setWasLoggedIn(true);
+
+            // Store in desktop storage.
+            window.postMessage(
+                {
+                    type: 'token-refreshed',
+                    message: {
+                        token: response.access_token,
+                    },
+                },
+                window.origin,
+            );
+            // Allow through initial requests anyway to receive new errors.
+            this.runMounted();
+        } catch (error) {
+            // This is an edge case that I haven't tested yet,
+            // for now clear storage and resend to login to try and login again.
+            // eslint-disable-next-line no-console
+            console.log('[components/root] post token fail ', error);
+            this.retryGetToken += 1;
+            // eslint-disable-next-line operator-assignment
+            this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken * this.retryGetTokenTime;
+
+            if (this.retryGetToken > MAX_GET_TOKEN_FAILS) {
+                clearInterval(this.loginCodeInterval);
+                clearLocalStorageToken();
+                this.props.history.push('/login');
+            }
         }
     }
 
