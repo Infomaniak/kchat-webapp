@@ -446,7 +446,7 @@ export default class Root extends React.PureComponent<Props, State> {
     tryGetNewToken = async () => {
         const challenge = JSON.parse(localStorage.getItem('challenge') as string);
         const loginCode = JSON.parse(localStorage.getItem('IKLoginCode') as string);
-
+        console.log('[component/root] try get token count', this.retryGetToken); // eslint-disable-line no-console
         try { // Get new token
             const response: {
                 expires_in: string;
@@ -492,6 +492,7 @@ export default class Root extends React.PureComponent<Props, State> {
             console.log('[components/root] post token fail ', error);
 
             if (this.retryGetToken > MAX_GET_TOKEN_FAILS) {
+                console.log('[components/root] max retry count, clear interval, token & go login'); // eslint-disable-line no-console
                 clearInterval(this.loginCodeInterval);
                 clearLocalStorageToken();
                 this.props.history.push('/login');
