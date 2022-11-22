@@ -80,11 +80,9 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
             });
-console.log(IKConstants.KMEET_ENDPOINT)
+
             if (data && data.url) {
                 const kmeetUrl = new URL(`${IKConstants.KMEET_ENDPOINT}${data.id}`);
-
-                console.log(kmeetUrl)
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
 
@@ -116,7 +114,6 @@ console.log(IKConstants.KMEET_ENDPOINT)
             }*/
         } else if (connectedCallUrl(state) !== null) {
             const kmeetUrl = new URL(connectedCallUrl(state));
-            console.log(kmeetUrl)
             window.open(kmeetUrl.href, '_blank', 'noopener');
         }
 

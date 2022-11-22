@@ -26,7 +26,6 @@ import Pluggable from 'plugins/pluggable';
 
 import LocalStorageStore from 'stores/local_storage_store';
 import type {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {checkIKTokenIsExpired, clearLocalStorageToken, refreshIKToken} from 'components/login/utils';
 
 const BackstageController = makeAsyncComponent('BackstageController', LazyBackstageController);
 
@@ -105,17 +104,6 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
             const currentTime = (new Date()).getTime();
             if (currentTime > (lastTime + WAKEUP_THRESHOLD)) { // ignore small delays
                 console.log('computer woke up - fetching latest'); //eslint-disable-line no-console
-                // if (UserAgent.isDesktopApp() && checkIKTokenIsExpired()) {
-                //     console.log('[components/needs_team] desktop token expired'); //eslint-disable-line no-console
-                //     refreshIKToken(/*redirectToReam*/false)?.then((r) => {
-                //         console.log('[components/needs_team] reconnected at: ', new Date()); //eslint-disable-line no-console
-                //         console.log('[components/needs_team] new token expires: ', r.expires_in); //eslint-disable-line no-console
-                //     }).catch((e: unknown) => {
-                //         console.warn('[components/needs_team] desktop token refresh error: ', e); //eslint-disable-line no-console
-                //     }).finally(() => reconnect(false));
-                // } else {
-                //     reconnect(false);
-                // }
                 reconnect(false);
             }
             lastTime = currentTime;
