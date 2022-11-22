@@ -6,6 +6,8 @@ import React, {useEffect, useRef} from 'react';
 
 import {useSelector} from 'react-redux';
 
+import * as Sentry from '@sentry/react';
+
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
 
@@ -68,6 +70,7 @@ const Login = () => {
                 console.log('[components/login] session EOL, clearing storage');
                 clearLocalStorageToken();
                 console.log('[components/login] redirecting to infomaniak login');
+                Sentry.captureException(new Error('Redirected to external login on desktop'));
                 getChallengeAndRedirectToLogin();
 
                 return;
