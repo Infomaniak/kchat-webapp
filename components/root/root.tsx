@@ -565,6 +565,11 @@ export default class Root extends React.PureComponent<Props, State> {
             clearInterval(this.tokenCheckInterval);
         }
 
+        if (this.loginCodeInterval) {
+            console.log('[components/root] destroy login with code interval'); // eslint-disable-line no-console
+            clearInterval(this.loginCodeInterval);
+        }
+
         if (this.desktopMediaQuery.removeEventListener) {
             this.desktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
             this.smallDesktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
