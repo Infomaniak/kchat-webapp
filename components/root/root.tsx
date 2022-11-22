@@ -115,7 +115,7 @@ const Mfa = makeAsyncComponent('Mfa', LazyMfa);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 
 const MAX_GET_TOKEN_FAILS = 5;
-const MIN_GET_TOKEN_RETRY_TIME = 2000; // 1 sec
+const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
 
 type LoggedInRouteProps<T> = {
     component: React.ComponentType<T>;
@@ -183,7 +183,6 @@ export default class Root extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.mounted = false;
-        console.log('[ROOT > INIT] init root component');
 
         // Redux
         setUrl(getSiteURL());
