@@ -501,8 +501,10 @@ export default class Root extends React.PureComponent<Props, State> {
                 // clearInterval(this.loginCodeInterval);
                 clearLocalStorageToken();
                 this.IKLoginCode = null;
-                this.retryGetToken = 0;
+
+                // this.retryGetToken = 0;
                 Sentry.captureException(new Error('Get token max error count. Redirect to login'));
+                this.runMounted();
             }
         }
     }
