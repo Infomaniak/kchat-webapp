@@ -487,7 +487,7 @@ export default class WebSocketClient {
             this.userChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
             console.log('[websocket] tried to send message but connection unavailable');
-            Sentry.captureException(new Error('Tried to send message but connection unavailable'))
+            Sentry.captureException(new Error('Websocket tried to send message but connection unavailable'));
             // this.conn = null;
 
             // @ts-ignore
