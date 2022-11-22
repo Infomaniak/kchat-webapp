@@ -255,11 +255,12 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             BrowserStore.signalLogout();
         }
 
-        if (isDesktopApp()) {
-            revokeIKToken();
-        } else {
-            clearLocalStorageToken();
-        }
+        // Waiting for deleteToken login ik
+        // if (isDesktopApp()) {
+        //     revokeIKToken();
+        // } else {
+        clearLocalStorageToken();
+        // }
 
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
