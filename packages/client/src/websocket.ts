@@ -4,11 +4,11 @@
 
 import Pusher, {Channel} from 'pusher-js';
 import * as Sentry from '@sentry/react';
-const MAX_WEBSOCKET_FAILS = 3;
 
-// const MIN_WEBSOCKET_RETRY_TIME = 1000; // 1 sec
-// const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
-// const JITTER_RANGE = 2000; // 2 sec
+const MAX_WEBSOCKET_FAILS = 7;
+const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
+const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
+const JITTER_RANGE = 2000; // 2 sec
 
 // const WEBSOCKET_HELLO = 'pusher:subscription_succeeded';
 
@@ -33,6 +33,9 @@ export default class WebSocketClient {
     private presenceChannel: Channel | null;
     private connectionUrl: string | null;
     private socketId: string | null;
+    private currentPresence: string;
+    private currentUser: number | null;
+    private currentTeam: string;
 
     // responseSequence is the number to track a response sent
     // via the websocket. A response will always have the same sequence number
@@ -98,6 +101,9 @@ export default class WebSocketClient {
         this.responseCallbacks = {};
         this.connectionId = '';
         this.socketId = null;
+        this.currentPresence = '';
+        this.currentUser = null;
+        this.currentTeam = '';
     }
 
     // on connect, only send auth cookie and blank state.
@@ -142,6 +148,7 @@ export default class WebSocketClient {
                 authEndpoint: '/broadcasting/auth',
                 auth: {
                     headers: {
+
                         // @ts-ignore
                         Authorization: `Bearer ${authToken}`,
                     },
@@ -187,55 +194,63 @@ export default class WebSocketClient {
             console.log('[websocket] unexpected error: ', evt);
             this.errorCount++;
             this.connectFailCount++;
-            console.log('[websocket] calling close callbacks');
 
-            // this.errorCallback?.(evt);
-            // this.errorListeners.forEach((listener) => listener(evt));
+            this.conn?.disconnect();
+            this.conn = null;
+            console.log('websocket closed');
+
+            console.log('[websocket] calling close callbacks');
 
             this.closeCallback?.(this.connectFailCount);
             this.closeListeners.forEach((listener) => listener(this.connectFailCount));
+
+            let retryTime = MIN_WEBSOCKET_RETRY_TIME;
+
+            // If we've failed a bunch of connections then start backing off
+            if (this.connectFailCount > MAX_WEBSOCKET_FAILS) {
+                retryTime = MIN_WEBSOCKET_RETRY_TIME * this.connectFailCount * this.connectFailCount;
+                if (retryTime > MAX_WEBSOCKET_RETRY_TIME) {
+                    retryTime = MAX_WEBSOCKET_RETRY_TIME;
+                }
+            }
+
+            // Applying jitter to avoid thundering herd problems.
+            retryTime += Math.random() * JITTER_RANGE;
+
+            setTimeout(
+                () => {
+                    this.initialize(
+                        connectionUrl,
+                        this.currentUser as number,
+                        this.currentTeam,
+                        token,
+                        authToken,
+                        this.currentPresence,
+                    );
+                },
+                retryTime,
+            );
         });
 
         this.conn.connection.bind('connecting', () => {
             // eslint-disable-next-line no-console
             console.log('[websocket] connecting with connectFailCount: ', this.connectFailCount);
-
-            // if (token) {
-            //     this.sendMessage('authentication_challenge', {token});
-            // }
-
-            // If we are reconnecting following an error (ie PusherError 1006) we want to reconnect
-            // the webapp as soon as computer wakes up and not wait for pusher to finish connecting.
-            // This can cause requests to be blocked by a network change after we start connecting
-            // for example due to vpn reconnecting, in that case the reconnect will just be called by the connected state
-            // so we don't need to worry.
-            // In the case of a graceful network change pusher seems to respect the unresponsive timeout
-            // and reconnect quicker so we can avoid the agressive mode.
-            if (this.connectFailCount > 0 && this.connectFailCount <= MAX_WEBSOCKET_FAILS && this.errorCount === 0) {
-                console.log('[websocket] calling reconnect callbacks agressively');
-                this.reconnectCallback?.();
-                this.reconnectListeners.forEach((listener) => listener());
-            }
         });
 
         this.conn.connection.bind('connected', () => {
-            // @ts-ignore
-            this.subscribeToTeamChannel(teamId);
+            this.subscribeToTeamChannel(teamId as string);
 
-            // @ts-ignore
             this.subscribeToUserChannel(userId || currentUserId);
 
             if (presenceChannelId || currentPresenceChannelId) {
-                // @ts-ignore
                 this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
             }
 
             this.bindChannelGlobally(this.teamChannel);
             this.bindChannelGlobally(this.userChannel);
 
-            // If we failed to reconnect the webapp in connecting state due to ie a net change, we will make sure to recall it here.
+            console.log('[websocket] re-established connection');
             if (this.connectFailCount > 0) {
-                console.log('[websocket] re-established connection'); //eslint-disable-line no-console
                 console.log('[websocket] calling reconnect callbacks');
                 this.reconnectCallback?.();
                 this.reconnectListeners.forEach((listener) => listener());
@@ -251,23 +266,23 @@ export default class WebSocketClient {
     }
 
     subscribeToTeamChannel(teamId: string) {
-        // @ts-ignore
-        this.teamChannel = this.conn.subscribe(`private-team.${teamId}`);
+        this.currentTeam = teamId;
+        this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
     }
 
     subscribeToUserChannel(userId: number) {
-        // @ts-ignore
-        this.userChannel = this.conn.subscribe(`presence-user.${userId}`);
+        this.currentUser = userId;
+        this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
     }
 
     subscribeToPresenceChannel(channelID: string) {
-        // @ts-ignore
-        this.presenceChannel = this.conn.subscribe(`presence-channel.${channelID}`);
+        this.currentPresence = channelID;
+        this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
     }
 
     bindPresenceChannel(channelID: string) {
-        // @ts-ignore
-        this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`);
+        this.currentPresence = channelID;
+        this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
         if (this.presenceChannel) {
             this.bindChannelGlobally(this.presenceChannel);
         }
@@ -472,7 +487,7 @@ export default class WebSocketClient {
         }
     }
 
-    sendMessage(action: string, data: any, responseCallback?: () => void, authToken?: string) {
+    sendMessage(action: string, data: any, responseCallback?: () => void) {
         const msg = {
             action,
             seq: this.responseSequence++,
@@ -488,10 +503,11 @@ export default class WebSocketClient {
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
             console.log('[websocket] tried to send message but connection unavailable');
             Sentry.captureException(new Error('Websocket tried to send message but connection unavailable'));
-            // this.conn = null;
 
-            // @ts-ignore
-            // this.initialize(null, null, data.channel_id, null, authToken);
+            this.conn = null;
+
+            //@ts-ignore
+            this.initialize(this.connectionId, this.currentUser as number, this.currentTeam, undefined, localStorage.getItem('IKToken'), this.currentPresence);
         }
     }
 

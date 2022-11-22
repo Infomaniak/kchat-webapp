@@ -33,9 +33,6 @@ import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/pre
 import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 import {General} from 'mattermost-redux/constants';
-import {browserHistory} from 'utils/browser_history';
-import {clearLocalStorageToken, revokeIKToken} from '../../../../components/login/utils';
-import {isDesktopApp} from '../../../../utils/user_agent';
 
 export function generateMfaSecret(userId: string): ActionFunc {
     return bindClientFunc({
