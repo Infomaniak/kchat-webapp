@@ -18,6 +18,8 @@ export type Props = {
 }
 
 export default function RootRedirect(props: Props) {
+    console.log('[ROOT REDIRECT]')
+
     useEffect(() => {
         if (props.currentUserId) {
             if (props.isElegibleForFirstAdmingOnboarding) {
@@ -34,7 +36,7 @@ export default function RootRedirect(props: Props) {
             }
         }
     }, [props.currentUserId, props.isElegibleForFirstAdmingOnboarding]);
-
+console.log('[ROOT REDIRECT]')
     if (props.currentUserId) {
         // Ideally, this would be a Redirect like below, but since we need to call an action, this redirect is done above
         return null;

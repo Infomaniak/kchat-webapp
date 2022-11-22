@@ -178,7 +178,7 @@ export default class Root extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.mounted = false;
-
+        console.log('[ROOT > INIT] init root component')
         // Redux
         setUrl(getSiteURL());
 
