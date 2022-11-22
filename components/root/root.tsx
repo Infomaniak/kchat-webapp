@@ -491,12 +491,13 @@ export default class Root extends React.PureComponent<Props, State> {
             console.log('[components/root] post token fail ', error); // eslint-disable-line no-console
 
             if (this.retryGetToken < MAX_GET_TOKEN_FAILS) {
+                console.log('[components/root] will retry token post with fail count: ', this.retryGetToken); // eslint-disable-line no-console
                 this.retryGetToken += 1;
                 const retryTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken * this.retryGetToken;
                 clearInterval(this.loginCodeInterval);
                 this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), retryTime);
             } else {
-                console.log('[components/root] max retry count, clear interval, token & go login'); // eslint-disable-line no-console
+                console.log('[components/root] max retry count reached, continuing with mount to reach login'); // eslint-disable-line no-console
                 clearInterval(this.loginCodeInterval);
                 this.IKLoginCode = null;
 
