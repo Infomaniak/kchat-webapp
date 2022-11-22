@@ -430,7 +430,8 @@ export default class Root extends React.PureComponent<Props, State> {
             if (loginCode) {
                 console.log('[components/root] login with code'); // eslint-disable-line no-console
                 this.storeLoginCode(loginCode);
-                this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), this.retryGetTokenTime);
+                this.tryGetNewToken();
+                // this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), this.retryGetTokenTime);
             } else {
                 this.runMounted();
             }
@@ -463,7 +464,6 @@ export default class Root extends React.PureComponent<Props, State> {
             );
 
             console.log('[components/root] get token response with code ', response); // eslint-disable-line no-console
-            clearInterval(this.loginCodeInterval);
 
             // Store in localstorage
             storeTokenResponse(response);
@@ -485,6 +485,8 @@ export default class Root extends React.PureComponent<Props, State> {
                 window.origin,
             );
 
+            this.retryGetToken = 0;
+
             // Allow through initial requests anyway to receive new errors.
             this.runMounted();
         } catch (error) {
@@ -495,7 +497,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
             if (this.retryGetToken >= MAX_GET_TOKEN_FAILS) {
                 console.log('[components/root] max retry count, clear interval, token & go login'); // eslint-disable-line no-console
-                clearInterval(this.loginCodeInterval);
+                // clearInterval(this.loginCodeInterval);
                 clearLocalStorageToken();
                 this.IKLoginCode = null;
                 Sentry.captureException(new Error('Get token max error count. Redirect to login'))
@@ -503,7 +505,7 @@ export default class Root extends React.PureComponent<Props, State> {
             } else {
                 this.retryGetToken += 1;
                 // eslint-disable-next-line operator-assignment
-                this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken * this.retryGetTokenTime;
+                this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken;
                 this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), this.retryGetTokenTime);
             }
         }
