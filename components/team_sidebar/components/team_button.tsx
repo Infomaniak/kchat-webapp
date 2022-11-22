@@ -60,7 +60,7 @@ class TeamButton extends React.PureComponent<Props> {
 
         let teamClass: string = this.props.active ? 'active' : '';
         const disabled: string = this.props.disabled ? 'team-disabled' : '';
-        const isNotCreateTeamButton: boolean = false; //!this.props.url.endsWith('create_team') && !this.props.url.endsWith('select_team');
+        const isNotCreateTeamButton: boolean = !this.props.url.endsWith('create_team') && !this.props.url.endsWith('select_team');
         const handleClick = (this.props.active || this.props.disabled) ? this.handleDisabled : this.handleSwitch;
 
         let badge: JSX.Element | undefined;
