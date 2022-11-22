@@ -70,7 +70,7 @@ const Login = () => {
                 console.log('[components/login] session EOL, clearing storage');
                 clearLocalStorageToken();
                 console.log('[components/login] redirecting to infomaniak login');
-                Sentry.captureException({message: 'Redirected to external login on desktop '});
+                Sentry.captureException(new Error('Redirected to external login on desktop'));
                 getChallengeAndRedirectToLogin();
 
                 return;
