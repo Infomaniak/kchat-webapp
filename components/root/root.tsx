@@ -496,6 +496,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 console.log('[components/root] max retry count, clear interval, token & go login'); // eslint-disable-line no-console
                 clearInterval(this.loginCodeInterval);
                 clearLocalStorageToken();
+                this.props.history.push('/login');
                 this.IKLoginCode = null;
             } else {
                 this.retryGetToken += 1;
