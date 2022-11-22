@@ -51,8 +51,9 @@ import SubMenuModal from '../components/widgets/menu/menu_modals/submenu_modal/s
 import {isDesktopApp} from '../utils/user_agent';
 import {IKConstants} from '../utils/constants-ik';
 
-import {openModal} from './views/modals';
 import {clearLocalStorageToken, revokeIKToken} from '../components/login/utils';
+
+import {openModal} from './views/modals';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -255,11 +256,14 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             BrowserStore.signalLogout();
         }
 
-        if (isDesktopApp()) {
-            revokeIKToken();
-        } else {
-            clearLocalStorageToken();
-        }
+        // Waiting for deleteToken login ik
+        // if (isDesktopApp()) {
+        //     revokeIKToken();
+        // } else {
+        
+        clearLocalStorageToken();
+
+        // }
 
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
