@@ -173,6 +173,7 @@ export default class Root extends React.PureComponent<Props, State> {
     private loginCodeInterval: any = null;
     private retryGetToken = 0;
     private retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME;
+    private IKLoginCode: string | null = null;
     private tokenCheckInterval: ReturnType<typeof setInterval>|null = null;
 
     // The constructor adds a bunch of event listeners,
@@ -440,7 +441,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     storeLoginCode = (code: string) => {
         console.log('[components/root] store login code'); // eslint-disable-line no-console
-        localStorage.setItem('IKLoginCode', code);
+        this.IKLoginCode = code;
     }
 
     tryGetNewToken = async () => {
@@ -468,9 +469,9 @@ export default class Root extends React.PureComponent<Props, State> {
 
             // Remove challenge, loginCode and set logged in.
             localStorage.removeItem('challenge');
-            localStorage.removeItem('IKLoginCode');
             localStorage.setItem('tokenExpired', '0');
             LocalStorageStore.setWasLoggedIn(true);
+            this.IKLoginCode = null;
 
             // Store in desktop storage.
             window.postMessage(
@@ -495,7 +496,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 console.log('[components/root] max retry count, clear interval, token & go login'); // eslint-disable-line no-console
                 clearInterval(this.loginCodeInterval);
                 clearLocalStorageToken();
-                this.props.history.push('/login');
+                this.IKLoginCode = null;
             } else {
                 this.retryGetToken += 1;
                 // eslint-disable-next-line operator-assignment
@@ -559,6 +560,7 @@ export default class Root extends React.PureComponent<Props, State> {
         this.mounted = false;
         this.retryGetToken = 0;
         this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME;
+        this.IKLoginCode = null;
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
         if (this.tokenCheckInterval) {
             console.log('[components/root] destroy token interval check'); // eslint-disable-line no-console
