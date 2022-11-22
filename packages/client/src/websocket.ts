@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 
 import Pusher, {Channel} from 'pusher-js';
-
+import * as Sentry from '@sentry/react';
 const MAX_WEBSOCKET_FAILS = 3;
 
 // const MIN_WEBSOCKET_RETRY_TIME = 1000; // 1 sec
@@ -487,7 +487,7 @@ export default class WebSocketClient {
             this.userChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
             console.log('[websocket] tried to send message but connection unavailable');
-
+            Sentry.captureException(new Error('Tried to send message but connection unavailable'))
             // this.conn = null;
 
             // @ts-ignore

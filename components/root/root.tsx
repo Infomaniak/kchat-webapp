@@ -6,6 +6,7 @@ import React from 'react';
 import {Route, Switch, Redirect, RouteComponentProps} from 'react-router-dom';
 import throttle from 'lodash/throttle';
 import {setUser} from '@sentry/react';
+import * as Sentry from '@sentry/react';
 
 import classNames from 'classnames';
 
@@ -492,11 +493,12 @@ export default class Root extends React.PureComponent<Props, State> {
             // eslint-disable-next-line no-console
             console.log('[components/root] post token fail ', error);
 
-            if (this.retryGetToken > MAX_GET_TOKEN_FAILS) {
+            if (this.retryGetToken >= MAX_GET_TOKEN_FAILS) {
                 console.log('[components/root] max retry count, clear interval, token & go login'); // eslint-disable-line no-console
                 clearInterval(this.loginCodeInterval);
                 clearLocalStorageToken();
                 this.IKLoginCode = null;
+                Sentry.captureException(new Error('Get token max error count. Redirect to login'))
                 this.props.history.push('/login');
             } else {
                 this.retryGetToken += 1;
