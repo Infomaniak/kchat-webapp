@@ -484,6 +484,7 @@ export default class Root extends React.PureComponent<Props, State> {
             );
 
             this.retryGetToken = 0;
+            clearInterval(this.loginCodeInterval);
 
             // Allow through initial requests anyway to receive new errors.
             this.runMounted();
@@ -493,7 +494,7 @@ export default class Root extends React.PureComponent<Props, State> {
             if (this.retryGetToken < MAX_GET_TOKEN_FAILS) {
                 console.log('[components/root] will retry token post with fail count: ', this.retryGetToken); // eslint-disable-line no-console
                 this.retryGetToken += 1;
-                const retryTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken * this.retryGetToken;
+                const retryTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken;
                 clearInterval(this.loginCodeInterval);
                 this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), retryTime);
             } else {
