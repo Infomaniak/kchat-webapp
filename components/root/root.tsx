@@ -490,23 +490,19 @@ export default class Root extends React.PureComponent<Props, State> {
             // Allow through initial requests anyway to receive new errors.
             this.runMounted();
         } catch (error) {
-            // This is an edge case that I haven't tested yet,
-            // for now clear storage and resend to login to try and login again.
-            // eslint-disable-next-line no-console
-            console.log('[components/root] post token fail ', error);
+            console.log('[components/root] post token fail ', error); // eslint-disable-line no-console
 
-            if (this.retryGetToken >= MAX_GET_TOKEN_FAILS) {
+            if (this.retryGetToken < MAX_GET_TOKEN_FAILS) {
+                this.retryGetToken += 1;
+                this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken;
+                this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), this.retryGetTokenTime);
+            } else {
                 console.log('[components/root] max retry count, clear interval, token & go login'); // eslint-disable-line no-console
                 // clearInterval(this.loginCodeInterval);
                 clearLocalStorageToken();
                 this.IKLoginCode = null;
-                Sentry.captureException(new Error('Get token max error count. Redirect to login'))
-                this.props.history.push('/login');
-            } else {
-                this.retryGetToken += 1;
-                // eslint-disable-next-line operator-assignment
-                this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken;
-                this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), this.retryGetTokenTime);
+                this.retryGetToken = 0;
+                Sentry.captureException(new Error('Get token max error count. Redirect to login'));
             }
         }
     }
