@@ -18,6 +18,7 @@ export function storeTokenResponse(response: { expires_in?: any; access_token?: 
     // TODO: store in redux
     const d = new Date();
     d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
+    console.log('[login/utils] display token expiration', response.expires_in, d, d.getTime(), parseInt(d.getTime() / 1000, 10))
     localStorage.setItem('IKToken', response.access_token);
     localStorage.setItem('IKRefreshToken', response.refresh_token);
     localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
