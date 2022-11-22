@@ -115,7 +115,7 @@ const Mfa = makeAsyncComponent('Mfa', LazyMfa);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 
 const MAX_GET_TOKEN_FAILS = 5;
-const MIN_GET_TOKEN_RETRY_TIME = 1000; // 1 sec
+const MIN_GET_TOKEN_RETRY_TIME = 3000; // 1 sec
 
 type LoggedInRouteProps<T> = {
     component: React.ComponentType<T>;
@@ -173,7 +173,6 @@ export default class Root extends React.PureComponent<Props, State> {
     private mounted: boolean;
     private loginCodeInterval: any = null;
     private retryGetToken = 0;
-    private retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME;
     private IKLoginCode: string | null = null;
     private tokenCheckInterval: ReturnType<typeof setInterval>|null = null;
 
@@ -431,7 +430,6 @@ export default class Root extends React.PureComponent<Props, State> {
                 console.log('[components/root] login with code'); // eslint-disable-line no-console
                 this.storeLoginCode(loginCode);
                 this.tryGetNewToken();
-                // this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), this.retryGetTokenTime);
             } else {
                 this.runMounted();
             }
@@ -494,15 +492,14 @@ export default class Root extends React.PureComponent<Props, State> {
 
             if (this.retryGetToken < MAX_GET_TOKEN_FAILS) {
                 this.retryGetToken += 1;
-                this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken;
-                this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), this.retryGetTokenTime);
+                const retryTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken * this.retryGetToken;
+                clearInterval(this.loginCodeInterval);
+                this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), retryTime);
             } else {
                 console.log('[components/root] max retry count, clear interval, token & go login'); // eslint-disable-line no-console
-                // clearInterval(this.loginCodeInterval);
-                // clearLocalStorageToken();
+                clearInterval(this.loginCodeInterval);
                 this.IKLoginCode = null;
 
-                // this.retryGetToken = 0;
                 Sentry.captureException(new Error('Get token max error count. Redirect to login'));
                 this.runMounted();
             }
@@ -562,7 +559,6 @@ export default class Root extends React.PureComponent<Props, State> {
     componentWillUnmount() {
         this.mounted = false;
         this.retryGetToken = 0;
-        this.retryGetTokenTime = MIN_GET_TOKEN_RETRY_TIME;
         this.IKLoginCode = null;
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
         if (this.tokenCheckInterval) {
