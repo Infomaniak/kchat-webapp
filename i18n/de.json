@@ -3420,7 +3420,7 @@
   "globalThreads.subtitle": "Unterhaltungen, an denen du dich beteiligst, werden automatisch hier angezeigt",
   "globalThreads.threadList.noUnreadThreads": "Keine ungelesenen Unterhaltungen",
   "globalThreads.threadPane.unreadMessageLink": "Du hast {numUnread, plural, =0 {keine ungelesene Unterhaltung} =1 {<link>eine Unterhaltung</link>} other {<link>{numUnread} Unterhaltungen</link>}} {numUnread, plural, =0 {} other {mit ungelesenen Nachrichten}}",
-  "globalThreads.threadPane.unselectedTitle": "{numUnread, plural, =0 {Du bistauf dem aktuellen Stand} other {Lese deine Unterhaltungen}}",
+  "globalThreads.threadPane.unselectedTitle": "Wählen Sie einen Thread",
   "globalThreads.title": "{prefix} Unterhaltungen - {displayName} {siteName}",
   "global_header.productSettings": "Einstellungen",
   "group_list_modal.addGroupButton": "Gruppen hinzufügen",

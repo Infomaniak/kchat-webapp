@@ -3075,7 +3075,7 @@
   "globalThreads.sidebarLink": "Hilos",
   "globalThreads.subtitle": "Hilos en los que participes se mostrarán automáticamente aquí",
   "globalThreads.threadList.noUnreadThreads": "No hay hilos sin leer",
-  "globalThreads.threadPane.unselectedTitle": "{numUnread, plural, =0 {Parece que ya te has puesto al día} other {Ponte al día en tus hilos}}",
+  "globalThreads.threadPane.unselectedTitle": "Seleccione un hilo",
   "globalThreads.title": "{prefix}Hilos - {displayName} {siteName}",
   "group_list_modal.addGroupButton": "Agregar Grupos",
   "group_list_modal.removeGroupButton": "Eliminar Grupo",
