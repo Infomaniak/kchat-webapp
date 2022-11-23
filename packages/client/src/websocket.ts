@@ -498,10 +498,10 @@ export default class WebSocketClient {
             console.log('[websocket] tried to send message but connection unavailable');
             Sentry.captureException(new Error('Websocket tried to send message but connection unavailable'));
 
-            this.conn = null;
+            // this.conn = null;
 
-            //@ts-ignore
-            this.initialize(this.connectionId, this.currentUser as number, this.currentTeam, undefined, localStorage.getItem('IKToken'), this.currentPresence);
+            // //@ts-ignore
+            // this.initialize(this.connectionId, this.currentUser as number, this.currentTeam, undefined, localStorage.getItem('IKToken'), this.currentPresence);
         }
     }
 
