@@ -1,3 +1,13 @@
+## 0.5.29 (2022-11-22)
+
+## Changed (1 change)
+
+- [replace pusher reconnect with homemade sauce](kchat/webapp@b2b2bd169d78f702f000b99ee3264f3f9547ed73) by @antonbuksa ([merge request](kchat/webapp!208))
+
+## 0.5.28 (2022-11-22)
+
+No changes.
+
 ## 0.5.27 (2022-11-22)
 
 ## Fixed (1 change)
