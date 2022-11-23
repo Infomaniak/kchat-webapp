@@ -99,7 +99,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
                 >
                     <FormattedMessage
                         id='error.generic.link'
-                        defaultMessage='Back to Mattermost'
+                        defaultMessage='Back to kChat'
                     />
                 </Link>
             );
