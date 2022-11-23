@@ -1436,7 +1436,7 @@ function handleGroupAddedMemberEvent(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const data = JSON.parse(msg.data.group_member);
+        const data = msg.data.group_member;
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1454,7 +1454,7 @@ function handleGroupDeletedMemberEvent(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const data = JSON.parse(msg.data.group_member);
+        const data = msg.data.group_member;
 
         if (currentUserId === data.user_id) {
             dispatch(
