@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {useSelector} from 'react-redux';
 
@@ -26,8 +26,10 @@ import {GlobalState} from 'types/store';
 
 import {isDesktopApp} from 'utils/user_agent';
 
-import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin} from './utils';
+import {clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken} from './utils';
 import './login.scss';
+
+const MAX_TOKEN_RETRIES = 3;
 
 const Login = () => {
     // TODO: can we clean this?
@@ -37,6 +39,8 @@ const Login = () => {
 
     const initializing = useSelector((state: GlobalState) => state.requests.users.logout.status === RequestStatus.SUCCESS || !state.storage.initialized);
     const currentUser = useSelector(getCurrentUser);
+
+    const tokenInterval = useRef<NodeJS.Timer>();
 
     // TODO: can we clean this?
     // const experimentalPrimaryTeam = useSelector((state: GlobalState) => (ExperimentalPrimaryTeam ? getTeamByName(state, ExperimentalPrimaryTeam) : undefined));
@@ -49,12 +53,22 @@ const Login = () => {
 
     // Session guard
 
-    // DEV NOTES
-    // When client4 starts hitting 401/403 return codes we redirect back here.
-    // At this point the token has already expired so it is either a computer wake up
-    // or our interval couldn't successfuly refresh the token. Apparently we should still
-    // be able to refresh if the token has expired but this doesn't seem to be the case atm.
+    const [refreshFailCount, setRefreshFailCount] = useState(0);
 
+    const tryRefreshTokenWithErrorCount = (): Promise<any> => {
+        return refreshIKToken(/*redirectToReam*/false);
+    };
+
+    // DESKTOP DEV NOTES
+    // We should assume that the only reason we end up here on desktop is that the token is expired. Otherwise this route is skipped
+    // and we are redirected directly to default team.
+    // ----
+    // Here are the relevant redirects to watch out for that can end up here:
+    // 1. needs_team will redirect here when currentUser is undefined, which can happen after a 401 on /me
+    // 2. root will technically redirect here as it's rendered first, which means root is
+    // responsible for it's own session management. Since root launches our first requests the only ever time
+    // root won't skip this route is if it's a fresh user. The first condition here makes sure to handle the fresh user case.
+    // For all other cases, we want to try refreshing before sending to login.
     useEffect(() => {
         console.log('[components/login] init login component');
         console.log('[components/login] get was logged in => ', LocalStorageStore.getWasLoggedIn());
@@ -64,10 +78,10 @@ const Login = () => {
             const refreshToken = localStorage.getItem('IKRefreshToken');
 
             // Check for desktop session end of life
-            if (checkIKTokenIsExpired() || !token || !refreshToken) {
+            if (!token || !refreshToken) {
                 // Login should be the only one responsible for clearing storage.
                 // The only other case is if we can't renew the token with code in root.
-                console.log('[components/login] session EOL, clearing storage');
+                console.log('[components/login] session corrupt, clearing storage');
                 clearLocalStorageToken();
                 console.log('[components/login] redirecting to infomaniak login');
                 Sentry.captureException(new Error('Redirected to external login on desktop'));
@@ -75,13 +89,31 @@ const Login = () => {
 
                 return;
             }
-        }
-
-        // For web simply send through to router if user exists.
-        if (currentUser) {
+            if (refreshFailCount < MAX_TOKEN_RETRIES) {
+                tryRefreshTokenWithErrorCount().then(() => {
+                    console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console
+                    clearInterval(tokenInterval.current as NodeJS.Timer);
+                    setRefreshFailCount(0);
+                    redirectUserToDefaultTeam();
+                }).catch((e: unknown) => {
+                    console.warn('[components/root] desktop token refresh error: ', e); // eslint-disable-line no-console
+                    setRefreshFailCount(refreshFailCount + 1);
+                    tokenInterval.current = setInterval(tryRefreshTokenWithErrorCount, 1000);
+                });
+            } else {
+                // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
+                // Losing our entire app context to auth a user is far from ideal.
+                Sentry.captureException(new Error('Failed to refresh token in 3 attempts'));
+                clearLocalStorageToken();
+                getChallengeAndRedirectToLogin();
+            }
+        } else if (currentUser) {
             console.log('[components/login] current user is ok -> redirecting to team');
             redirectUserToDefaultTeam();
         }
+
+        // eslint-disable-next-line consistent-return
+        return () => clearInterval(tokenInterval.current as NodeJS.Timer);
     }, []);
 
     useEffect(() => {
