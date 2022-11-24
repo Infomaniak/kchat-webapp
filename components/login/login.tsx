@@ -53,16 +53,15 @@ const Login = () => {
 
     // Session guard
 
-    const [refreshFailCount, setRefreshFailCount] = useState(0);
-
     const tryRefreshTokenWithErrorCount = (errorCount: number) => {
+        console.log('[components/login] tryRefreshTokenWithErrorCount with error count: ', errorCount);
+
         // clear this right away so it doesn't retrigger while in promise land.
         clearInterval(tokenInterval.current as NodeJS.Timer);
         refreshIKToken(/*redirectToTeam**/true).catch(() => {
             if (errorCount < MAX_TOKEN_RETRIES) {
                 console.log('[components/login] will retry refresh');
-                setRefreshFailCount(errorCount + 1);
-                tokenInterval.current = setInterval(() => tryRefreshTokenWithErrorCount(refreshFailCount), 2000); // 2 sec
+                tokenInterval.current = setInterval(() => tryRefreshTokenWithErrorCount(errorCount + 1), 2000); // 2 sec
             } else {
                 // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
                 // Losing our entire app context to auth a user is far from ideal.
@@ -120,7 +119,6 @@ const Login = () => {
         return () => {
             console.log('login effect cleanup');
             clearInterval(tokenInterval.current as NodeJS.Timer);
-            setRefreshFailCount(0);
             if (closeSessionExpiredNotification!.current) {
                 closeSessionExpiredNotification.current();
                 closeSessionExpiredNotification.current = undefined;
@@ -154,7 +152,7 @@ const Login = () => {
     //         redirectUserToDefaultTeam();
     //     }
     // };
-    console.log('[components/login] token refresh error count: ', refreshFailCount);
+
     return (
         <div className='login-body'>
             <div className='login-body-content'>
