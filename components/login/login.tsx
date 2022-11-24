@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import {useSelector} from 'react-redux';
 
@@ -55,9 +55,19 @@ const Login = () => {
 
     const [refreshFailCount, setRefreshFailCount] = useState(0);
 
-    const tryRefreshTokenWithErrorCount = (): Promise<any> => {
-        return refreshIKToken(/*redirectToReam*/false);
-    };
+    const tryRefreshTokenWithErrorCount = useCallback(() => {
+        refreshIKToken(false).then(() => {
+            console.log('[components/login] desktop token refreshed'); // eslint-disable-line no-console
+            clearInterval(tokenInterval.current as NodeJS.Timer);
+            setRefreshFailCount(0);
+            redirectUserToDefaultTeam();
+        }).catch((e: unknown) => {
+            console.warn('[components/login] desktop token refresh error: ', e); // eslint-disable-line no-console
+            setRefreshFailCount(refreshFailCount + 1);
+            console.log('[components/login] token refresh error count updated: ', refreshFailCount);
+            tokenInterval.current = setInterval(() => refreshIKToken(false), 2000);
+        });
+    }, [refreshFailCount]);
 
     // DESKTOP DEV NOTES
     // We should assume that the only reason we end up here on desktop is that the token is expired. Otherwise this route is skipped
@@ -90,19 +100,11 @@ const Login = () => {
                 return;
             }
             if (refreshFailCount < MAX_TOKEN_RETRIES) {
-                tryRefreshTokenWithErrorCount().then(() => {
-                    console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console
-                    clearInterval(tokenInterval.current as NodeJS.Timer);
-                    setRefreshFailCount(0);
-                    redirectUserToDefaultTeam();
-                }).catch((e: unknown) => {
-                    console.warn('[components/root] desktop token refresh error: ', e); // eslint-disable-line no-console
-                    setRefreshFailCount(refreshFailCount + 1);
-                    tokenInterval.current = setInterval(tryRefreshTokenWithErrorCount, 1000);
-                });
+                tryRefreshTokenWithErrorCount();
             } else {
                 // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
                 // Losing our entire app context to auth a user is far from ideal.
+                console.log(`[components/login] failed to refresh token in ${MAX_TOKEN_RETRIES} attempts`);
                 Sentry.captureException(new Error('Failed to refresh token in 3 attempts'));
                 clearLocalStorageToken();
                 getChallengeAndRedirectToLogin();
@@ -112,9 +114,10 @@ const Login = () => {
             redirectUserToDefaultTeam();
         }
 
+        // We love hooks
         // eslint-disable-next-line consistent-return
         return () => clearInterval(tokenInterval.current as NodeJS.Timer);
-    }, []);
+    }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         return () => {
