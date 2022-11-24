@@ -56,12 +56,12 @@ const Login = () => {
     const [refreshFailCount, setRefreshFailCount] = useState(0);
 
     // uses useCallback just in case for rendering safety with promises
-    const tryRefreshTokenWithErrorCount = useCallback(() => {
+    const tryRefreshTokenWithErrorCount = () => {
         // clear this right away so it doesn't retrigger while in promise land.
         clearInterval(tokenInterval.current as NodeJS.Timer);
         refreshIKToken(/*redirectToTeam**/true).catch((e: unknown) => {
             console.warn('[components/login] desktop token refresh error: ', e); // eslint-disable-line no-console
-            setRefreshFailCount(refreshFailCount + 1);
+            setRefreshFailCount((s) => s + 1);
             console.log('[components/login] token refresh error count updated: ', refreshFailCount);
             if (refreshFailCount < MAX_TOKEN_RETRIES) {
                 console.log('[components/login] will retry refresh');
@@ -75,7 +75,7 @@ const Login = () => {
                 getChallengeAndRedirectToLogin();
             }
         });
-    }, [refreshFailCount]); // recreate when error count changes otherwise will still have old state val
+    };
 
     // DESKTOP DEV NOTES
     // We should assume that the only reason we end up here on desktop is that the token is expired. Otherwise this route is skipped
