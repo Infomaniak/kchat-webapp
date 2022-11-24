@@ -56,17 +56,25 @@ const Login = () => {
     const [refreshFailCount, setRefreshFailCount] = useState(0);
 
     const tryRefreshTokenWithErrorCount = useCallback(() => {
-        refreshIKToken(false).then(() => {
-            console.log('[components/login] desktop token refreshed'); // eslint-disable-line no-console
-            clearInterval(tokenInterval.current as NodeJS.Timer);
-            setRefreshFailCount(0);
-            redirectUserToDefaultTeam();
-        }).catch((e: unknown) => {
-            console.warn('[components/login] desktop token refresh error: ', e); // eslint-disable-line no-console
-            setRefreshFailCount(refreshFailCount + 1);
-            console.log('[components/login] token refresh error count updated: ', refreshFailCount);
-            tokenInterval.current = setInterval(() => refreshIKToken(false), 2000);
-        });
+        if (refreshFailCount < MAX_TOKEN_RETRIES) {
+            refreshIKToken(false).then(() => {
+                console.log('[components/login] desktop token refreshed'); // eslint-disable-line no-console
+                redirectUserToDefaultTeam();
+            }).catch((e: unknown) => {
+                console.warn('[components/login] desktop token refresh error: ', e); // eslint-disable-line no-console
+                setRefreshFailCount(refreshFailCount + 1);
+                console.log('[components/login] token refresh error count updated: ', refreshFailCount);
+                clearInterval(tokenInterval.current as NodeJS.Timer);
+                tokenInterval.current = setInterval(() => tryRefreshTokenWithErrorCount, 2000);
+            });
+        } else {
+            // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
+            // Losing our entire app context to auth a user is far from ideal.
+            console.log(`[components/login] failed to refresh token in ${MAX_TOKEN_RETRIES} attempts`);
+            Sentry.captureException(new Error('Failed to refresh token in 3 attempts'));
+            clearLocalStorageToken();
+            getChallengeAndRedirectToLogin();
+        }
     }, [refreshFailCount]);
 
     // DESKTOP DEV NOTES
@@ -99,24 +107,22 @@ const Login = () => {
 
                 return;
             }
-            if (refreshFailCount < MAX_TOKEN_RETRIES) {
-                tryRefreshTokenWithErrorCount();
-            } else {
-                // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
-                // Losing our entire app context to auth a user is far from ideal.
-                console.log(`[components/login] failed to refresh token in ${MAX_TOKEN_RETRIES} attempts`);
-                Sentry.captureException(new Error('Failed to refresh token in 3 attempts'));
-                clearLocalStorageToken();
-                getChallengeAndRedirectToLogin();
-            }
+
+            tryRefreshTokenWithErrorCount();
         } else if (currentUser) {
+            // Web auth redirects are still triggered throught client4 so we
+            // dont need to do any checks here.
             console.log('[components/login] current user is ok -> redirecting to team');
             redirectUserToDefaultTeam();
         }
 
         // We love hooks
         // eslint-disable-next-line consistent-return
-        return () => clearInterval(tokenInterval.current as NodeJS.Timer);
+        return () => {
+            console.log('login effect cleanup');
+            clearInterval(tokenInterval.current as NodeJS.Timer);
+            setRefreshFailCount(0);
+        };
     }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
