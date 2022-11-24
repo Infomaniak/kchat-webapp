@@ -194,7 +194,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
     };
 
     handleEmitUserLoggedOutEvent = (): void => {
-        GlobalActions.emitUserLoggedOutEvent('ikLogout');
+        GlobalActions.emitUserLoggedOutEvent('/login?redirect_to=' + encodeURIComponent(`${this.props.location.pathname}${this.props.location.search}`), true, false);
     }
 
     onToggle = (open: boolean): void => {
