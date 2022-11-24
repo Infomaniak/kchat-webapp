@@ -57,16 +57,15 @@ const Login = () => {
 
     // uses useCallback just in case for rendering safety with promises
     const tryRefreshTokenWithErrorCount = useCallback(() => {
-        refreshIKToken(/*redirectToTeam**/true).then(() => {
-            console.log('[components/login] desktop token refreshed'); // eslint-disable-line no-console
-        }).catch((e: unknown) => {
+        // clear this right away so it doesn't retrigger while in promise land.
+        clearInterval(tokenInterval.current as NodeJS.Timer);
+        refreshIKToken(/*redirectToTeam**/true).catch((e: unknown) => {
             console.warn('[components/login] desktop token refresh error: ', e); // eslint-disable-line no-console
             setRefreshFailCount(refreshFailCount + 1);
             console.log('[components/login] token refresh error count updated: ', refreshFailCount);
             if (refreshFailCount < MAX_TOKEN_RETRIES) {
                 console.log('[components/login] will retry refresh');
-                clearInterval(tokenInterval.current as NodeJS.Timer);
-                tokenInterval.current = setInterval(tryRefreshTokenWithErrorCount, 2000);
+                tokenInterval.current = setInterval(tryRefreshTokenWithErrorCount, 2000); // 2 sec
             } else {
                 // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
                 // Losing our entire app context to auth a user is far from ideal.
@@ -84,7 +83,7 @@ const Login = () => {
     // ----
     // Here are the relevant redirects to watch out for that can end up here:
     // 1. needs_team will redirect here when currentUser is undefined, which can happen after a 401 on /me
-    // 2. root will technically redirect here as it's rendered first, which means root is
+    // 2. root (components/root not the other one) will technically redirect here as it's rendered first, which means root is
     // responsible for it's own session management. Since root launches our first requests the only ever time
     // root won't skip this route is if it's a fresh user. The first condition here makes sure to handle the fresh user case.
     // For all other cases, we want to try refreshing before sending to login.
@@ -110,7 +109,7 @@ const Login = () => {
             }
 
             // This will try to refresh the token 3 times and will redirect to our ext
-            // login service if none of the attemps succeed.
+            // login service if none of the attempts succeed.
             tryRefreshTokenWithErrorCount();
         } else if (currentUser) {
             // Web auth redirects are still triggered throught client4 so we
@@ -140,10 +139,6 @@ const Login = () => {
         };
     }, []);
 
-    if (initializing) {
-        return (<LoadingIk/>);
-    }
-
     // const finishSignin = (team?: Team) => {
     //     const query = new URLSearchParams(search);
     //     const redirectTo = query.get('redirect_to');
@@ -171,14 +166,10 @@ const Login = () => {
     //     }
     // };
 
-    const getContent = () => {
-        return (<LoadingIk/>);
-    };
-
     return (
         <div className='login-body'>
             <div className='login-body-content'>
-                {getContent()}
+                <LoadingIk/>
             </div>
         </div>
     );
