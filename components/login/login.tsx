@@ -55,16 +55,14 @@ const Login = () => {
 
     const [refreshFailCount, setRefreshFailCount] = useState(0);
 
-    const tryRefreshTokenWithErrorCount = () => {
+    const tryRefreshTokenWithErrorCount = (errorCount: number) => {
         // clear this right away so it doesn't retrigger while in promise land.
         clearInterval(tokenInterval.current as NodeJS.Timer);
-        refreshIKToken(/*redirectToTeam**/true).catch((e: unknown) => {
-            console.warn('[components/login] desktop token refresh error: ', e); // eslint-disable-line no-console
-            setRefreshFailCount((s) => s + 1);
-            console.log('[components/login] token refresh error count updated: ', refreshFailCount);
-            if (refreshFailCount < MAX_TOKEN_RETRIES) {
+        refreshIKToken(/*redirectToTeam**/true).catch(() => {
+            if (errorCount < MAX_TOKEN_RETRIES) {
                 console.log('[components/login] will retry refresh');
-                tokenInterval.current = setInterval(tryRefreshTokenWithErrorCount, 2000); // 2 sec
+                setRefreshFailCount(errorCount + 1);
+                tokenInterval.current = setInterval(() => tryRefreshTokenWithErrorCount(refreshFailCount), 2000); // 2 sec
             } else {
                 // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
                 // Losing our entire app context to auth a user is far from ideal.
@@ -109,7 +107,7 @@ const Login = () => {
 
             // This will try to refresh the token 3 times and will redirect to our ext
             // login service if none of the attempts succeed.
-            tryRefreshTokenWithErrorCount();
+            tryRefreshTokenWithErrorCount(0);
         } else if (currentUser) {
             // Web auth redirects are still triggered throught client4 so we
             // dont need to do any checks here.
@@ -123,20 +121,12 @@ const Login = () => {
             console.log('login effect cleanup');
             clearInterval(tokenInterval.current as NodeJS.Timer);
             setRefreshFailCount(0);
-        };
-    }, []); //eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-        return () => {
             if (closeSessionExpiredNotification!.current) {
                 closeSessionExpiredNotification.current();
                 closeSessionExpiredNotification.current = undefined;
             }
-
-            // window.removeEventListener('resize', onWindowResize);
-            // window.removeEventListener('focus', onWindowFocus);
         };
-    }, []);
+    }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
     // const finishSignin = (team?: Team) => {
     //     const query = new URLSearchParams(search);
@@ -164,7 +154,7 @@ const Login = () => {
     //         redirectUserToDefaultTeam();
     //     }
     // };
-
+    console.log('[components/login] token refresh error count: ', refreshFailCount);
     return (
         <div className='login-body'>
             <div className='login-body-content'>
