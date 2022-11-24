@@ -594,7 +594,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (e.key === StoragePrefixes.LOGOUT && isNewLocalStorageEvent(e)) {
             console.log('detected logout from a different tab'); //eslint-disable-line no-console
-            GlobalActions.emitUserLoggedOutEvent('/', false, false);
+            // GlobalActions.emitUserLoggedOutEvent('/', false, false);
         }
         if (e.key === StoragePrefixes.LOGIN && isNewLocalStorageEvent(e)) {
             const isLoggedIn = getCurrentUser(store.getState());
