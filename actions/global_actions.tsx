@@ -267,17 +267,17 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
 
         clearUserCookie();
 
-        if (isDesktopApp() && userAction) {
+        if (userAction) {
             if (redirectTo && redirectTo !== 'ikLogout') {
                 browserHistory.push(redirectTo);
             } else {
                 window.location.assign(`${IKConstants.LOGOUT_URL}?r=${window.location.origin}`);
             }
-        } else if (redirectTo && redirectTo !== 'ikLogout') {
-            browserHistory.push(redirectTo);
-        } else {
-            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`);
         }
+
+        // else {
+        //     window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`);
+        // }
     });
 
     // TODO: fix this
