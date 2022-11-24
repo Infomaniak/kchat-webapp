@@ -55,7 +55,6 @@ const Login = () => {
 
     const [refreshFailCount, setRefreshFailCount] = useState(0);
 
-    // uses useCallback just in case for rendering safety with promises
     const tryRefreshTokenWithErrorCount = () => {
         // clear this right away so it doesn't retrigger while in promise land.
         clearInterval(tokenInterval.current as NodeJS.Timer);
