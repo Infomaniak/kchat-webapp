@@ -65,7 +65,7 @@ const Login = () => {
                 setRefreshFailCount(refreshFailCount + 1);
                 console.log('[components/login] token refresh error count updated: ', refreshFailCount);
                 clearInterval(tokenInterval.current as NodeJS.Timer);
-                tokenInterval.current = setInterval(() => tryRefreshTokenWithErrorCount, 2000);
+                tokenInterval.current = setInterval(tryRefreshTokenWithErrorCount, 2000);
             });
         } else {
             // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
