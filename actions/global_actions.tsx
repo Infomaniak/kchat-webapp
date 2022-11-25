@@ -276,7 +276,14 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             window.location.assign(url);
         }
     }).catch(() => {
-        browserHistory.push(redirectTo);
+        if (redirectTo && redirectTo !== 'ikLogout') {
+            browserHistory.push(redirectTo);
+        } else if (userAction) {
+            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
+                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
+                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+            window.location.assign(url);
+        }
     });
 }
 
