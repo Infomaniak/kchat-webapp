@@ -1,6 +1,6 @@
 include:
   - template: Security/SAST.gitlab-ci.yml
-  - template: Security/Container-Scanning.gitlab-ci.yml
+  # - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Code-Quality.gitlab-ci.yml
   - project: 'docker-public/gitlab-ci-dev-scripts'
     ref: master
