@@ -26,7 +26,6 @@ import Pluggable from 'plugins/pluggable';
 
 import LocalStorageStore from 'stores/local_storage_store';
 import type {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {Client4} from 'mattermost-redux/client';
 
 const BackstageController = makeAsyncComponent('BackstageController', LazyBackstageController);
 
@@ -90,8 +89,6 @@ type State = {
 
 export default class NeedsTeam extends React.PureComponent<Props, State> {
     public blurTime: number;
-    private keepAliveInterval: ReturnType<typeof setInterval>|null = null;
-
     constructor(props: Props) {
         super(props);
         this.blurTime = new Date().getTime();
@@ -155,10 +152,6 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
             iNoBounce.enable();
         }
 
-        if (!UserAgent.isDesktopApp()) {
-            this.keepAliveInterval = setInterval(() => Client4.keepAlive(), 300000); // 5 minutes
-        }
-
         window.addEventListener('focus', this.handleFocus);
         window.addEventListener('blur', this.handleBlur);
         window.addEventListener('keydown', this.onShortcutKeyDown);
@@ -180,10 +173,6 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
         stopPeriodicStatusUpdates();
         if (UserAgent.isIosSafari()) {
             iNoBounce.disable();
-        }
-
-        if (this.keepAliveInterval) {
-            clearInterval(this.keepAliveInterval);
         }
 
         clearInterval(wakeUpInterval);

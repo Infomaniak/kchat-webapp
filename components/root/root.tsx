@@ -175,6 +175,7 @@ export default class Root extends React.PureComponent<Props, State> {
     private retryGetToken = 0;
     private IKLoginCode: string | null = null;
     private tokenCheckInterval: ReturnType<typeof setInterval>|null = null;
+    private keepAliveInterval: ReturnType<typeof setInterval>|null = null;
 
     // The constructor adds a bunch of event listeners,
     // so we do need this.
@@ -433,6 +434,8 @@ export default class Root extends React.PureComponent<Props, State> {
                 this.runMounted();
             }
         } else {
+            this.keepAliveInterval = setInterval(() => Client4.keepAlive(), 300 * 1000);
+
             // Allow through initial requests for web.
             this.runMounted();
         }
@@ -570,6 +573,10 @@ export default class Root extends React.PureComponent<Props, State> {
         if (this.loginCodeInterval) {
             console.log('[components/root] destroy login with code interval'); // eslint-disable-line no-console
             clearInterval(this.loginCodeInterval);
+        }
+
+        if (this.keepAliveInterval) {
+            clearInterval(this.keepAliveInterval);
         }
 
         if (this.desktopMediaQuery.removeEventListener) {
