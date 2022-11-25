@@ -95,7 +95,7 @@ const Login = () => {
             if (!token || !refreshToken) {
                 // Login should be the only one responsible for clearing storage.
                 // The only other case is if we can't renew the token with code in root.
-                console.log('[components/login] session corrupt, clearing storage');
+                console.log('[components/login] no session, clearing storage just in case');
                 clearLocalStorageToken();
                 console.log('[components/login] redirecting to infomaniak login');
                 Sentry.captureException(new Error('Redirected to external login on desktop'));
