@@ -159,7 +159,7 @@ unit_test:
     reports:
       junit:
         - coverage/junit.xml
-  coverage: /All\sfiles.*?\s+(\d+.\d+)/
+  coverage: "/^\\s*Lines\\s*: \\d+\\d+.\\d+\\d+\\%/"
   cache:
     key:
       files:
