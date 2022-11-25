@@ -1,3 +1,9 @@
+## 0.5.31 (2022-11-23)
+
+## Changed (1 change)
+
+- [do not restart ws if cant send msg](kchat/webapp@4f94d7171b53b7801398e42dcfa693643736e261) by @antonbuksa
+
 ## 0.5.30 (2022-11-23)
 
 No changes.
