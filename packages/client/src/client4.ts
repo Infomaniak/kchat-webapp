@@ -4358,6 +4358,11 @@ export default class Client4 {
             console.log('[client > getChallengeAndRedirectToLogin] Error redirect');
         });
     }
+
+    // Only for Webview
+    keepAlive() {
+        this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
+    }
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {
