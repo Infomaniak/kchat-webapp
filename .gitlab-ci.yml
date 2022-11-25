@@ -149,7 +149,7 @@ unit_test:
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
-    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
     - when: never
   artifacts:
