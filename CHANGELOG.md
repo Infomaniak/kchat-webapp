@@ -1,3 +1,9 @@
+## 0.5.33 (2022-11-25)
+
+## Fixed (1 change)
+
+- [fix links in changelog](kchat/webapp@a4d31661b38672744ad4727e915feb9610c1c9b7) by @antonbuksa
+
 ## 0.5.32 (2022-11-25)
 
 ## Added (2 changes)
