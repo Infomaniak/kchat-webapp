@@ -2,6 +2,9 @@ include:
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Code-Quality.gitlab-ci.yml
+  - project: 'docker-public/gitlab-ci-dev-scripts'
+    ref: master
+    file: '/sentry-release.yaml'
 
 variables:
   SAST_DISABLED: "true"
@@ -192,6 +195,18 @@ pages:
   artifacts:
     paths:
       - public
+
+sentry_release:
+  needs:
+    - build_front
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+      allow_failure: false
+    - when: never
 
 changelog:
   stage: release
