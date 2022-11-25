@@ -267,33 +267,17 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
 
         clearUserCookie();
 
-        // if (userAction) {
         if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
-        } else {
-            window.location.assign(`${IKConstants.LOGOUT_URL}?r=${window.location.origin}`);
+        } else if (userAction) {
+            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
+                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
+                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+            window.location.assign(url);
         }
-        // }
-
-        // else {
-        //     window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`);
-        // }
+    }).catch(() => {
+        browserHistory.push(redirectTo);
     });
-
-    // TODO: fix this
-    // .catch(() => {
-    //     if (isDesktopApp()) {
-    //         if (redirectTo && redirectTo !== 'ikLogout') {
-    //             browserHistory.push(redirectTo);
-    //         } else {
-    //             window.location.assign(`${IKConstants.LOGOUT_URL}?r=${window.location.origin}`);
-    //         }
-    //     } else if (redirectTo && redirectTo !== 'ikLogout') {
-    //         browserHistory.push(redirectTo);
-    //     } else {
-    //         window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`);
-    //     }
-    // });
 }
 
 export function toggleSideBarRightMenuAction() {
