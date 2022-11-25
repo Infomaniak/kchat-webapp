@@ -32,16 +32,16 @@ workflow:
         DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
     - when: never
 
-eslint-sast:
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
-  rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
-      when: on_success
-    - if: $DEPLOY_VARIABLE == "prodsec"
-      when: on_success
-    - when: never
+# eslint-sast:
+#   artifacts:
+#     reports:
+#       sast: gl-sast-report.json
+#   rules:
+#     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+#       when: on_success
+#     - if: $DEPLOY_VARIABLE == "prodsec"
+#       when: on_success
+#     - when: never
 
 code_quality:
   artifacts:
