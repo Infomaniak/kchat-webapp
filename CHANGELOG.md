@@ -1,3 +1,18 @@
+## 0.5.32 (2022-11-25)
+
+## Added (2 changes)
+
+- [add sentry release job in ci](kchat/webapp@c25db4e663b6bac7365f9a5bccf3d51ecaa1c135) by @antonbuksa
+- [do 3 token refresh attempts in login before giving up and redirecting](kchat/webapp@84738cf042c9a4315dcec9a97da31009f834a044) by @antonbuksa ([merge request](kchat/webapp!216))
+
+## Changed (1 change)
+
+- [comment sentry exception in websocket until we mock it in tests](kchat/webapp@4b68a82c7ff43324dcbf5324390d5be2e5e45397) by @antonbuksa
+
+## Removed (1 change)
+
+- [remove obsolete mfa route](kchat/webapp@6ad3ae08ae4cea5913dd73df48fa5c0e8f115640) by @antonbuksa ([merge request](kchat/webapp!216))
+
 ## 0.5.31 (2022-11-23)
 
 ## Changed (1 change)
