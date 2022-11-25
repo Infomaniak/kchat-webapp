@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import {useSelector} from 'react-redux';
 
