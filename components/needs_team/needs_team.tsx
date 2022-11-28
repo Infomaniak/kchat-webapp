@@ -35,6 +35,7 @@ let lastTime = Date.now();
 const WAKEUP_CHECK_INTERVAL = 30000; // 30 seconds
 const WAKEUP_THRESHOLD = 60000; // 60 seconds
 const UNREAD_CHECK_TIME_MILLISECONDS = 10000;
+const WEB_SESSION_KEEPALIVE_INTERVAL = 300000; // 5 mins
 
 declare global {
     interface Window {
@@ -156,7 +157,7 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
         }
 
         if (!UserAgent.isDesktopApp()) {
-            this.keepAliveInterval = setInterval(() => Client4.keepAlive(), 300000); // 5 minutes
+            this.keepAliveInterval = setInterval(Client4.keepAlive, WEB_SESSION_KEEPALIVE_INTERVAL);
         }
 
         window.addEventListener('focus', this.handleFocus);
