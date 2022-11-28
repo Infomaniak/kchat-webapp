@@ -9,6 +9,22 @@ exports[`components/Menu should match snapshot with guest access disabled and no
   ariaLabel="team menu"
 >
   <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
+  <MenuGroup>
     <Connect(TeamPermissionGate)
       permissions={
         Array [
@@ -87,6 +103,22 @@ exports[`components/Menu should match snapshot with id 1`] = `
   id="test-id"
 >
   <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
+  <MenuGroup>
     <Connect(TeamPermissionGate)
       permissions={
         Array [
@@ -163,6 +195,22 @@ exports[`components/Menu should match snapshot with most of the thing disabled 1
 <Menu
   ariaLabel="team menu"
 >
+  <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
   <MenuGroup>
     <Connect(TeamPermissionGate)
       permissions={
@@ -340,6 +388,22 @@ exports[`components/Menu should match snapshot with most of the thing disabled i
   <MenuGroup />
   <MenuGroup />
   <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
+  <MenuGroup>
     <MenuItemLink
       id="integrations"
       show={true}
@@ -367,6 +431,22 @@ exports[`components/Menu should match snapshot with most of the thing enabled 1`
 <Menu
   ariaLabel="team menu"
 >
+  <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
   <MenuGroup>
     <Connect(TeamPermissionGate)
       permissions={
@@ -544,6 +624,22 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
   <MenuGroup />
   <MenuGroup />
   <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
+  <MenuGroup>
     <MenuItemLink
       id="integrations"
       show={true}
@@ -571,6 +667,22 @@ exports[`components/Menu should match snapshot with plugins 1`] = `
 <Menu
   ariaLabel="team menu"
 >
+  <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
   <MenuGroup>
     <Connect(TeamPermissionGate)
       permissions={
@@ -774,6 +886,22 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
       onClick={[Function]}
       show={true}
     />
+  </MenuGroup>
+  <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
   </MenuGroup>
   <MenuGroup>
     <MenuItemLink

@@ -1,7 +1,10 @@
 include:
   - template: Security/SAST.gitlab-ci.yml
-  - template: Security/Container-Scanning.gitlab-ci.yml
+  # - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Code-Quality.gitlab-ci.yml
+  - project: 'docker-public/gitlab-ci-dev-scripts'
+    ref: master
+    file: '/sentry-release.yaml'
 
 variables:
   SAST_DISABLED: "true"
@@ -29,16 +32,16 @@ workflow:
         DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
     - when: never
 
-eslint-sast:
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
-  rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
-      when: on_success
-    - if: $DEPLOY_VARIABLE == "prodsec"
-      when: on_success
-    - when: never
+# eslint-sast:
+#   artifacts:
+#     reports:
+#       sast: gl-sast-report.json
+#   rules:
+#     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+#       when: on_success
+#     - if: $DEPLOY_VARIABLE == "prodsec"
+#       when: on_success
+#     - when: never
 
 code_quality:
   artifacts:
@@ -146,6 +149,8 @@ unit_test:
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
     - when: never
   artifacts:
     paths:
@@ -154,7 +159,7 @@ unit_test:
     reports:
       junit:
         - coverage/junit.xml
-  coverage: "/^\\s*Lines\\s*: \\d+\\d+.\\d+\\d+\\%/"
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   cache:
     key:
       files:
@@ -192,6 +197,18 @@ pages:
   artifacts:
     paths:
       - public
+
+sentry_release:
+  needs:
+    - build_front
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+      allow_failure: false
+    - when: never
 
 changelog:
   stage: release

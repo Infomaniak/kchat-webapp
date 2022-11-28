@@ -256,7 +256,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         }
 
         // Waiting for deleteToken login ik
-        if (isDesktopApp()) {
+        if (isDesktopApp() && userAction) {
         //     revokeIKToken();
         // } else {
             clearLocalStorageToken();
@@ -267,28 +267,22 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
 
         clearUserCookie();
 
-        if (isDesktopApp()) {
-            if (redirectTo && redirectTo !== 'ikLogout') {
-                browserHistory.push(redirectTo);
-            } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?r=${window.location.origin}`);
-            }
-        } else if (redirectTo && redirectTo !== 'ikLogout') {
+        if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
-        } else {
-            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`);
+        } else if (userAction) {
+            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
+                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
+                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+            window.location.assign(url);
         }
     }).catch(() => {
-        if (isDesktopApp()) {
-            if (redirectTo && redirectTo !== 'ikLogout') {
-                browserHistory.push(redirectTo);
-            } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?r=${window.location.origin}`);
-            }
-        } else if (redirectTo && redirectTo !== 'ikLogout') {
+        if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
-        } else {
-            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`);
+        } else if (userAction) {
+            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
+                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
+                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+            window.location.assign(url);
         }
     });
 }

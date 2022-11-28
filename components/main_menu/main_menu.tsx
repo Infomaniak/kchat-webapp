@@ -18,7 +18,6 @@ import {makeUrlSafe} from 'utils/url';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 
-
 import UserSettingsModal from 'components/user_settings/modal';
 import TeamMembersModal from 'components/team_members_modal';
 import TeamSettingsModal from 'components/team_settings_modal';
@@ -66,6 +65,7 @@ export type Props = {
     };
     guestAccessEnabled: boolean;
     canInviteTeamMember: boolean;
+    ikGroupId: number;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
         showMentions: () => void;
@@ -99,6 +99,11 @@ export class MainMenu extends React.PureComponent<Props> {
 
     handleEmitUserLoggedOutEvent = (): void => {
         GlobalActions.emitUserLoggedOutEvent();
+    }
+
+    handleEmitUserGoToDashboard = (e: Event): void => {
+        e.preventDefault();
+        window.open(`${IKConstants.MANAGER_URL}v3/${this.props.ikGroupId}/ng/kchat`, '_blank');
     }
 
     getFlagged = (e: Event): void => {
@@ -333,6 +338,17 @@ export class MainMenu extends React.PureComponent<Props> {
                     {pluginItems}
                 </Menu.Group>
                 <Menu.Group>
+                    <SystemPermissionGate
+                        permissions={[Permissions.SYSTEM_ADMIN]}
+                    >
+                        <Menu.ItemAction
+                            id='dashboardManager'
+                            onClick={this.handleEmitUserGoToDashboard}
+                            text={formatMessage({id: 'navbar_dropdown.dashboard', defaultMessage: 'Tableau de bord'})}
+                        />
+                    </SystemPermissionGate>
+                </Menu.Group>
+                <Menu.Group>
                     <Menu.ItemLink
                         id='integrations'
                         show={true}
@@ -385,6 +401,17 @@ export class MainMenu extends React.PureComponent<Props> {
                 id={this.props.id}
                 ariaLabel={formatMessage({id: 'sidebar.team_menu.menuAriaLabel', defaultMessage: 'team menu'})}
             >
+                <Menu.Group>
+                    <SystemPermissionGate
+                        permissions={[Permissions.SYSTEM_ADMIN]}
+                    >
+                        <Menu.ItemAction
+                            id='dashboardManager'
+                            onClick={this.handleEmitUserGoToDashboard}
+                            text={formatMessage({id: 'navbar_dropdown.dashboard', defaultMessage: 'Tableau de bord'})}
+                        />
+                    </SystemPermissionGate>
+                </Menu.Group>
                 <Menu.Group>
                     <TeamPermissionGate
                         teamId={teamId}

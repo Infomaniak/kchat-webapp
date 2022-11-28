@@ -111,8 +111,9 @@ const HelpController = makeAsyncComponent('HelpController', LazyHelpController);
 const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', LazyLinkingLandingPage);
 const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
-const Mfa = makeAsyncComponent('Mfa', LazyMfa);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
+
+// const Mfa = makeAsyncComponent('Mfa', LazyMfa);
 
 const MAX_GET_TOKEN_FAILS = 5;
 const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
@@ -720,10 +721,10 @@ export default class Root extends React.PureComponent<Props, State> {
                         path={'/create_team'}
                         component={CreateTeam}
                     />
-                    <LoggedInRoute
+                    {/* <LoggedInRoute
                         path={'/mfa'}
                         component={Mfa}
-                    />
+                    /> */}
                     <LoggedInRoute
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
