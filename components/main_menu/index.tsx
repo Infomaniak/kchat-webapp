@@ -92,6 +92,7 @@ function mapStateToProps(state: GlobalState) {
         isCloud,
         isStarterFree,
         isFreeTrial,
+        ikGroupId: state.entities.teams.teams[currentTeam.id]?.account_id,
     };
 }
 
