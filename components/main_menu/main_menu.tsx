@@ -18,7 +18,6 @@ import {makeUrlSafe} from 'utils/url';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 
-
 import UserSettingsModal from 'components/user_settings/modal';
 import TeamMembersModal from 'components/team_members_modal';
 import TeamSettingsModal from 'components/team_settings_modal';
@@ -339,11 +338,15 @@ export class MainMenu extends React.PureComponent<Props> {
                     {pluginItems}
                 </Menu.Group>
                 <Menu.Group>
-                    <Menu.ItemAction
-                        id='dashboardManager'
-                        onClick={this.handleEmitUserGoToDashboard}
-                        text={formatMessage({id: 'navbar_dropdown.dashboard', defaultMessage: 'Tableau de bord'})}
-                    />
+                    <SystemPermissionGate
+                        permissions={[Permissions.SYSTEM_ADMIN]}
+                    >
+                        <Menu.ItemAction
+                            id='dashboardManager'
+                            onClick={this.handleEmitUserGoToDashboard}
+                            text={formatMessage({id: 'navbar_dropdown.dashboard', defaultMessage: 'Tableau de bord'})}
+                        />
+                    </SystemPermissionGate>
                 </Menu.Group>
                 <Menu.Group>
                     <Menu.ItemLink
@@ -399,11 +402,15 @@ export class MainMenu extends React.PureComponent<Props> {
                 ariaLabel={formatMessage({id: 'sidebar.team_menu.menuAriaLabel', defaultMessage: 'team menu'})}
             >
                 <Menu.Group>
-                    <Menu.ItemAction
-                        id='dashboardManager'
-                        onClick={this.handleEmitUserGoToDashboard}
-                        text={formatMessage({id: 'navbar_dropdown.dashboard', defaultMessage: 'Tableau de bord'})}
-                    />
+                    <SystemPermissionGate
+                        permissions={[Permissions.SYSTEM_ADMIN]}
+                    >
+                        <Menu.ItemAction
+                            id='dashboardManager'
+                            onClick={this.handleEmitUserGoToDashboard}
+                            text={formatMessage({id: 'navbar_dropdown.dashboard', defaultMessage: 'Tableau de bord'})}
+                        />
+                    </SystemPermissionGate>
                 </Menu.Group>
                 <Menu.Group>
                     <TeamPermissionGate
