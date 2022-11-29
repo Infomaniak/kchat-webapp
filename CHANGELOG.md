@@ -1,3 +1,9 @@
+## 0.5.34 (2022-11-29)
+
+## Fixed (1 change)
+
+- [Fix no team error page](kchat/webapp@63c6d124d6eee0a1661635bd3d514ba6aea20eef) by @florent.glauda ([merge request](kchat/webapp!211))
+
 ## 0.5.33 (2022-11-25)
 
 ## Fixed (1 change)
