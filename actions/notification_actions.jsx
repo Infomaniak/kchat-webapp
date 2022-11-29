@@ -29,7 +29,7 @@ export function sendDesktopNotification(post, msgProps) {
     return async (dispatch, getState) => {
         const state = getState();
         const currentUserId = getCurrentUserId(state);
-
+        console.log(msgProps)
         if ((currentUserId === post.user_id && post.props.from_webhook !== 'true')) {
             return;
         }

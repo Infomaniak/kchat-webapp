@@ -74,7 +74,6 @@ export async function showNotification(
     const notification = new Notification(title, {
         body,
         tag: body,
-        icon,
         requireInteraction,
         silent,
     });
