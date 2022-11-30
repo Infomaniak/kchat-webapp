@@ -86,6 +86,8 @@ build_front:
       allow_failure: false
     - if: $DEPLOY_VARIABLE == "preprod"
       when: on_success
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+      when: on_success
     - when: never
   environment:
     name: "$DEPLOY_VARIABLE"
@@ -123,6 +125,8 @@ publish_front:
       when: on_success
       allow_failure: false
     - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
       when: on_success
     - when: never
   environment:
