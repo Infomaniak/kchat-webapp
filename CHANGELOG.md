@@ -1,3 +1,9 @@
+## 0.5.35 (2022-11-30)
+
+## Fixed (1 change)
+
+- [Fix notifications double icônes in desktop app](kchat/webapp@7ce25fc78f476dfd92a4c295f5228ae25d4f0153) by @florent.glauda ([merge request](kchat/webapp!219))
+
 ## 0.5.34 (2022-11-29)
 
 ## Fixed (1 change)
