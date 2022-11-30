@@ -29,7 +29,6 @@ export function sendDesktopNotification(post, msgProps) {
     return async (dispatch, getState) => {
         const state = getState();
         const currentUserId = getCurrentUserId(state);
-
         if ((currentUserId === post.user_id && post.props.from_webhook !== 'true')) {
             return;
         }
@@ -192,7 +191,7 @@ export function sendDesktopNotification(post, msgProps) {
 
 const notifyMe = (title, body, channel, teamId, silent, soundName, url) => (dispatch) => {
     // handle notifications in desktop app >= 4.3.0
-    if (isDesktopApp() && window.desktop && semver.gte(window.desktop.version, '4.3.0')) {
+    if (isDesktopApp()) {
         const msg = {
             title,
             body,
@@ -201,15 +200,8 @@ const notifyMe = (title, body, channel, teamId, silent, soundName, url) => (disp
             silent,
         };
 
-        if (isDesktopApp() && window.desktop) {
-            if (semver.gte(window.desktop.version, '4.6.0')) {
-                msg.data = {soundName};
-            }
-
-            if (semver.gte(window.desktop.version, '4.7.2')) {
-                msg.url = url;
-            }
-        }
+        msg.data = {soundName};
+        msg.url = url;
 
         // get the desktop app to trigger the notification
         window.postMessage(
