@@ -8,17 +8,16 @@ import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
 
 import {ErrorPageTypes, Constants} from 'utils/constants';
-import WarningIcon from 'components/widgets/icons/fa_warning_icon';
 
 import MattermostLogoSvg from '../../images/logo.svg';
 
-import {browserHistory} from '../../utils/browser_history';
+import {isDesktopApp} from 'utils/user_agent';
+
+import * as GlobalActions from 'actions/global_actions';
 
 import ErrorTitle from './error_title';
 import ErrorMessage from './error_message';
 import SvgIlluErrorQuestion from './assets/SvgIlluErrorQuestion';
-import SvgIlluErrorWarning from './assets/SvgIlluErrorWarning';
-import SvgIlluErrorTool from './assets/SvgIlluErrorTool';
 
 type Location = {
     search: string;
@@ -63,6 +62,15 @@ export default class ErrorPage extends React.PureComponent<Props> {
             }
         };
 
+        const goToKsuite = () => {
+            if (isDesktopApp()) {
+                GlobalActions.emitUserLoggedOutEvent('ikLogout');
+            }
+            if (window) {
+                window.open('https://infomaniak.com/ksuite', '_blank');
+            }
+        };
+
         let trustParams = false;
         if (signature) {
             params.delete('s');
@@ -91,7 +99,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
                 >
                     <FormattedMessage
                         id='error.generic.link'
-                        defaultMessage='Back to Mattermost'
+                        defaultMessage='Back to kChat'
                     />
                 </Link>
             );
@@ -99,7 +107,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
             backButton = (
                 <a
                     className='btn btn-primary'
-                    href='https://infomaniak.com/ksuite'
+                    onClick={() => goToKsuite()}
                 >
                     <FormattedMessage
                         id='error.generic.link_ksuite'
