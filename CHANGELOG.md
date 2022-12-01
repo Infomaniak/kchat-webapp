@@ -1,3 +1,46 @@
+## 0.5.35 (2022-11-30)
+
+## Fixed (1 change)
+
+- [Fix notifications double icônes in desktop app](kchat/webapp@7ce25fc78f476dfd92a4c295f5228ae25d4f0153) by @florent.glauda ([merge request](kchat/webapp!219))
+
+## 0.5.34 (2022-11-29)
+
+## Fixed (1 change)
+
+- [Fix no team error page](kchat/webapp@63c6d124d6eee0a1661635bd3d514ba6aea20eef) by @florent.glauda ([merge request](kchat/webapp!211))
+
+## 0.5.33 (2022-11-25)
+
+## Fixed (1 change)
+
+- [fix links in changelog](kchat/webapp@a4d31661b38672744ad4727e915feb9610c1c9b7) by @antonbuksa
+
+## 0.5.32 (2022-11-25)
+
+## Added (2 changes)
+
+- [add sentry release job in ci](kchat/webapp@c25db4e663b6bac7365f9a5bccf3d51ecaa1c135) by @antonbuksa
+- [do 3 token refresh attempts in login before giving up and redirecting](kchat/webapp@84738cf042c9a4315dcec9a97da31009f834a044) by @antonbuksa ([merge request](kchat/webapp!216))
+
+## Changed (1 change)
+
+- [comment sentry exception in websocket until we mock it in tests](kchat/webapp@4b68a82c7ff43324dcbf5324390d5be2e5e45397) by @antonbuksa
+
+## Removed (1 change)
+
+- [remove obsolete mfa route](kchat/webapp@6ad3ae08ae4cea5913dd73df48fa5c0e8f115640) by @antonbuksa ([merge request](kchat/webapp!216))
+
+## 0.5.31 (2022-11-23)
+
+## Changed (1 change)
+
+- [do not restart ws if cant send msg](kchat/webapp@4f94d7171b53b7801398e42dcfa693643736e261) by @antonbuksa
+
+## 0.5.30 (2022-11-23)
+
+No changes.
+
 ## 0.5.29 (2022-11-22)
 
 ## Changed (1 change)
