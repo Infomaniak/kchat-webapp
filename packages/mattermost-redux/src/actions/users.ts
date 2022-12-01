@@ -33,6 +33,7 @@ import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/pre
 import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 import {General} from 'mattermost-redux/constants';
+import {browserHistory} from 'utils/browser_history';
 
 export function generateMfaSecret(userId: string): ActionFunc {
     return bindClientFunc({
@@ -513,11 +514,9 @@ export function getMe(): ActionFunc {
         });
         const me = await getMeFunc(dispatch, getState);
         if ('error' in me) {
-            /*
             if (me.error?.status_code && me.error?.status_code === 404 && (window && !window.location.pathname.includes('static/call'))) {
                 browserHistory.push('/error?type=team_not_found');
             }
-*/
             return me;
         }
         if ('data' in me) {
