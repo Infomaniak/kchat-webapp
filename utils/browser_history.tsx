@@ -3,11 +3,11 @@
 
 import {createBrowserHistory} from 'history';
 
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
+// import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';/
+
+import {isDesktopApp} from 'utils/user_agent';
 
 const b = createBrowserHistory({basename: window.basename});
-const isDesktop = isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '5.0.0');
 
 type Data = {
     type?: string;
@@ -37,8 +37,8 @@ window.addEventListener('message', ({origin, data: {type, message = {}} = {}}: P
 
 const browserHistory = {
     ...b,
-    push: (path: string | { pathname: string }, ...args: string[]) => {
-        if (isDesktop) {
+    push: (path, ...args) => {
+        if (isDesktopApp()) {
             window.postMessage(
                 {
                     type: 'browser-history-push',

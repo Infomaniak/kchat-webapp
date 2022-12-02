@@ -22,6 +22,7 @@ import {
     getMyChannelMember as getMyChannelMemberSelector,
     getRedirectChannelNameForTeam,
     isManuallyUnread,
+    getUnreadChannelIds,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getServerVersion} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
@@ -1262,6 +1263,15 @@ export function markChannelAsRead(channelId: string, prevChannelId?: string, upd
         }
 
         return {data: true};
+    };
+}
+
+export function markAllChannelsAsRead(prevChannelId?: string, updateLastViewedAt = true): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const unreadChannelIds = getUnreadChannelIds(getState());
+        for (const unreadChannelId of unreadChannelIds) {
+            dispatch(markChannelAsRead(unreadChannelId, prevChannelId, updateLastViewedAt));
+        }
     };
 }
 

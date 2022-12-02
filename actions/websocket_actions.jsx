@@ -150,20 +150,24 @@ export function initialize() {
         connUrl = new URL(getSiteURL());
 
         // replace the protocol with a websocket one
-        if (connUrl.protocol === 'https:') {
-            connUrl.protocol = 'wss:';
-        } else {
-            connUrl.protocol = 'ws:';
-        }
+        connUrl.protocol = 'wss:';
+
+        // if (connUrl.protocol === 'https:') {
+        //     connUrl.protocol = 'wss:';
+        // } else {
+        //     connUrl.protocol = 'ws:';
+        // }
 
         // append a port number if one isn't already specified
-        if (!(/:\d+$/).test(connUrl.host)) {
-            if (connUrl.protocol === 'wss:') {
-                connUrl.host += ':' + config.WebsocketSecurePort;
-            } else {
-                connUrl.host += ':' + config.WebsocketPort;
-            }
-        }
+        connUrl.host += ':' + config.WebsocketSecurePort;
+
+        // if (!(/:\d+$/).test(connUrl.host)) {
+        //     if (connUrl.protocol === 'wss:') {
+        //         connUrl.host += ':' + config.WebsocketSecurePort;
+        //     } else {
+        //         connUrl.host += ':' + config.WebsocketPort;
+        //     }
+        // }
 
         connUrl = connUrl.toString();
     }
@@ -174,14 +178,33 @@ export function initialize() {
     }
 
     // connUrl += Client4.getUrlVersion() + '/websocket';
-    const authToken = Client4.getToken();
+
+    // const authToken = Client4.getToken();
+
+    const tokenExpire = localStorage.getItem('IKTokenExpire');
+    const token = localStorage.getItem('IKToken');
+    const refreshToken = localStorage.getItem('IKRefreshToken');
+
+    if (isDesktopApp() && (!token || !refreshToken || !tokenExpire)) {
+        // eslint-disable-next-line no-console
+        console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
+        browserHistory.push('/login');
+        return;
+    }
+
+    // test
+    // const authToken = localStorage.getItem('IKToken');
+
+    // eslint-disable-next-line no-console
+    console.log('[websocket_actions > initialize] init called, ws will reauth');
+
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
     WebSocketClient.addReconnectListener(() => reconnect(false));
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
-    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, authToken, currentChannelId);
+    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, token, currentChannelId);
 }
 
 export function close() {
@@ -210,11 +233,35 @@ function restart() {
     dispatch(getClientConfig());
 }
 
-export function reconnect(includeWebSocket = true) {
-    if (isDesktopApp() && checkIKTokenIsExpired()) {
-        refreshIKToken();
+export async function reconnect(includeWebSocket = true) {
+    if (isDesktopApp()) {
+        const tokenExpire = localStorage.getItem('IKTokenExpire');
+        const token = localStorage.getItem('IKToken');
+        const refreshToken = localStorage.getItem('IKRefreshToken');
+
+        if (!token || !refreshToken || !tokenExpire) {
+            // eslint-disable-next-line no-console
+            console.log('[websocket_actions > reconnect] token storage corrupt, redirecting to login');
+            browserHistory.push('/login');
+            return;
+        }
+
+        if (checkIKTokenIsExpired()) {
+            // eslint-disable-next-line no-console
+            console.log('[websocket_actions > reconnect] token expired, calling refresh');
+            includeWebSocket = true; // eslint-disable-line no-param-reassign
+            try {
+                await refreshIKToken(/*redirectToTeam**/false);
+            } catch {
+                // swallow
+                includeWebSocket = false; // eslint-disable-line no-param-reassign
+            }
+        }
     }
+
     if (includeWebSocket) {
+        // eslint-disable-next-line no-console
+        console.log('[websocket_actions > reconnect] reconnecting websocket with new token');
         reconnectWebSocket();
     }
 
@@ -231,13 +278,15 @@ export function reconnect(includeWebSocket = true) {
         const mostRecentId = getMostRecentPostIdInChannel(state, currentChannelId);
         const mostRecentPost = getPost(state, mostRecentId);
 
-        if (appsFeatureFlagEnabled(state)) {
-            dispatch(handleRefreshAppsBindings());
-        }
+        // if (appsFeatureFlagEnabled(state)) {
+        //     dispatch(handleRefreshAppsBindings());
+        // }
 
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
+            // eslint-disable-next-line no-console
+            console.log('[websocket_actions] dispatch syncPostsInChannel');
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
             // if network timed-out the first time when loading a channel
@@ -270,6 +319,8 @@ export function reconnect(includeWebSocket = true) {
     });
 
     if (state.websocket.lastDisconnectAt) {
+        // eslint-disable-next-line no-console
+        console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
         dispatch(checkForModifiedUsers());
     }
 
@@ -597,9 +648,10 @@ export function handleEvent(msg) {
     case SocketEvents.PUSHER_MEMBER_REMOVED:
         handlePusherMemberRemoved(msg);
         break;
-    case SocketEvents.PUSHER_PONG:
-        handlePusherPong(msg);
-        break;
+
+    // case SocketEvents.PUSHER_PONG:
+    //     handlePusherPong(msg);
+    //     break;
     default:
     }
 
@@ -1253,9 +1305,6 @@ function addedNewDmUser(preference) {
 }
 
 function handleStatusChangedEvent(msg) {
-    // if (needRefreshToken()) {
-    //     refreshIKToken();
-    // }
     dispatch({
         type: UserTypes.RECEIVED_STATUSES,
         data: [{user_id: msg.data.user_id, status: msg.data.status}],
@@ -1387,7 +1436,7 @@ function handleGroupAddedMemberEvent(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const data = JSON.parse(msg.data.group_member);
+        const data = msg.data.group_member;
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1405,7 +1454,7 @@ function handleGroupDeletedMemberEvent(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const data = JSON.parse(msg.data.group_member);
+        const data = msg.data.group_member;
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1792,10 +1841,4 @@ function handleIncomingConferenceCall(msg) {
 
 function handlePusherMemberRemoved(msg) {
     // console.log('pusher member removed', msg);
-}
-
-function handlePusherPong() {
-    if (needRefreshToken()) {
-        refreshIKToken();
-    }
 }

@@ -29,6 +29,8 @@ const mockHistoryPush = jest.fn();
 const mockLicense = {IsLicensed: 'false'};
 let mockConfig: Partial<ClientConfig>;
 
+jest.mock('@sentry/react', () => ({captureException: () => jest.fn()}));
+
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux') as typeof import('react-redux'),
     useSelector: (selector: (state: typeof mockState) => unknown) => selector(mockState),

@@ -1,0 +1,53 @@
+// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
+// See LICENSE.txt for license information.
+
+@import 'utils/mixins';
+
+.meet-btn__wrapper {
+    display: flex;
+    align-items: center;
+
+    .meet-btn {
+        background: rgba(var(--center-channel-color-rgb), 0.08);
+        color: rgba(var(--center-channel-color-rgb), 0.785) !important;
+        max-height: 44px;
+        display: flex;
+        align-items: center;
+        border-radius: 4px;
+        border: none;
+        outline: none;
+        margin-left: 10px;
+
+        &.btn-light {
+            max-height: 32px;
+        }
+
+        &__icon {
+            margin-right: 10px;
+            @media screen and (max-width: 999px) {
+                margin: 0;
+            }
+
+            &--24 {
+                width: 24px;
+            }
+
+            &--16 {
+                width: 16px;
+            }
+        }
+
+        &__text {
+            @media screen and (max-width: 999px) {
+                display: none;
+            }
+        }
+    }
+}
+
+.meet-btn__overlay {
+    @media screen and (min-width: 1000px) {
+        display: none;
+    }
+
+}

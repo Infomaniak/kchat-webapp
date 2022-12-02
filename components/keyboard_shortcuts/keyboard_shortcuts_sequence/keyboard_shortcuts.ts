@@ -441,6 +441,16 @@ export const KEYBOARD_SHORTCUTS = {
             defaultMessage: 'Link:\t⌘|⌥|K',
         },
     },
+    msgMarkAllAsRead: {
+        default: {
+            id: t('shortcuts.msgs.mark_all_as_read'),
+            defaultMessage: 'Mark all messages as read:\tAlt|Esc',
+        },
+        mac: {
+            id: t('shortcuts.msgs.mark_all_as_read.mac'),
+            defaultMessage: 'Mark all messages as read:\t⌥|Esc',
+        },
+    },
     filesUpload: {
         default: {
             id: t('shortcuts.files.upload'),
