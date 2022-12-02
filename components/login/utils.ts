@@ -9,8 +9,6 @@ import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 
-// import {reconnectWebSocket} from 'actions/websocket_actions';
-
 let REFRESH_PROMISE: Promise<any> | null;
 
 /**
@@ -19,7 +17,7 @@ let REFRESH_PROMISE: Promise<any> | null;
 export function storeTokenResponse(response: { expires_in?: any; access_token?: any; refresh_token?: any }) {
     // TODO: store in redux
     const d = new Date();
-    d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
+    d.setHours(d.getHours() + 2);
     localStorage.setItem('IKToken', response.access_token);
     localStorage.setItem('IKRefreshToken', response.refresh_token);
     localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));

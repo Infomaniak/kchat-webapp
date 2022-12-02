@@ -1,3 +1,98 @@
+## 0.5.35 (2022-11-30)
+
+## Fixed (1 change)
+
+- [Fix notifications double icônes in desktop app](kchat/webapp@7ce25fc78f476dfd92a4c295f5228ae25d4f0153) by @florent.glauda ([merge request](kchat/webapp!219))
+
+## 0.5.34 (2022-11-29)
+
+## Fixed (1 change)
+
+- [Fix no team error page](kchat/webapp@63c6d124d6eee0a1661635bd3d514ba6aea20eef) by @florent.glauda ([merge request](kchat/webapp!211))
+
+## 0.5.33 (2022-11-25)
+
+## Fixed (1 change)
+
+- [fix links in changelog](kchat/webapp@a4d31661b38672744ad4727e915feb9610c1c9b7) by @antonbuksa
+
+## 0.5.32 (2022-11-25)
+
+## Added (2 changes)
+
+- [add sentry release job in ci](kchat/webapp@c25db4e663b6bac7365f9a5bccf3d51ecaa1c135) by @antonbuksa
+- [do 3 token refresh attempts in login before giving up and redirecting](kchat/webapp@84738cf042c9a4315dcec9a97da31009f834a044) by @antonbuksa ([merge request](kchat/webapp!216))
+
+## Changed (1 change)
+
+- [comment sentry exception in websocket until we mock it in tests](kchat/webapp@4b68a82c7ff43324dcbf5324390d5be2e5e45397) by @antonbuksa
+
+## Removed (1 change)
+
+- [remove obsolete mfa route](kchat/webapp@6ad3ae08ae4cea5913dd73df48fa5c0e8f115640) by @antonbuksa ([merge request](kchat/webapp!216))
+
+## 0.5.31 (2022-11-23)
+
+## Changed (1 change)
+
+- [do not restart ws if cant send msg](kchat/webapp@4f94d7171b53b7801398e42dcfa693643736e261) by @antonbuksa
+
+## 0.5.30 (2022-11-23)
+
+No changes.
+
+## 0.5.29 (2022-11-22)
+
+## Changed (1 change)
+
+- [replace pusher reconnect with homemade sauce](kchat/webapp@b2b2bd169d78f702f000b99ee3264f3f9547ed73) by @antonbuksa ([merge request](kchat/webapp!208))
+
+## 0.5.28 (2022-11-22)
+
+No changes.
+
+## 0.5.27 (2022-11-22)
+
+## Fixed (1 change)
+
+- [fix token expire time](kchat/webapp@661c7a86077e90fe70515c67e2346f4e9cb79d38) by @florent.glauda
+
+## 0.5.26 (2022-11-22)
+
+## Fixed (1 change)
+
+- [fix logout clean token](kchat/webapp@babfa00d0fc5b9908086b832b24326fd43c81c8c) by @florent.glauda
+
+## 0.5.25 (2022-11-21)
+
+## Changed (4 changes)
+
+- [Update kMeet workflow (clean)](kchat/webapp@9cab270a35a0a02a224ba549b3cf7a2ce613c641) by @florent.glauda ([merge request](kchat/webapp!191))
+- [Clean kmeet btn](kchat/webapp@523a3a3d2f9b0e1055e18c564c0b00ad9d86ee31) by @florent.glauda ([merge request](kchat/webapp!191))
+- [Separate consecutive same user posts in threads](kchat/webapp@c6bcc765792ecb615a70b27c08482a673da7946b) by @florent.glauda ([merge request](kchat/webapp!193))
+- [Add kMeet refacto trads](kchat/webapp@913c39a1fc6f00a960485fd4e8055acd66540a37) by @florent.glauda ([merge request](kchat/webapp!191))
+
+## 0.5.24 (2022-11-18)
+
+## Added (1 change)
+
+- [make sure to resubscribe to base channels on ws restart](kchat/webapp@6fbbba333270e3cde9881f5b4d30b49748afd77d) by @antonbuksa
+
+## Changed (2 changes)
+
+- [handle channel subscriptions in connected callback](kchat/webapp@3a45f7ec37ee886c2562948d0e99e8bcdfb28699) by @antonbuksa
+- [reconnect ws when refreshing token from root to reauth](kchat/webapp@c2fb83ba134b8eec87ed97b32f8ac009536d5a27) by @antonbuksa
+
+## 0.5.23 (2022-11-18)
+
+## Changed (1 change)
+
+- [use authorizer func instead of headers for ws auth](kchat/webapp@bfeba5dd48ab6ed14b6f1131f4daa29a51c1365c) by @antonbuksa
+
+## 0.5.22 (2022-11-18)
+
+No changes.
+
 ## 0.5.21 (2022-11-17)
 
 ## Changed (1 change)
