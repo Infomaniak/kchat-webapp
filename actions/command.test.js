@@ -189,20 +189,20 @@ describe('executeCommand', () => {
         });
     });
 
-    describe('settings', () => {
-        test('should pass right modal params', async () => {
-            const result = await store.dispatch(executeCommand('/settings', {}));
-            expect(store.getActions()).toEqual([
-                {
-                    type: ActionTypes.MODAL_OPEN,
-                    dialogProps: {isContentProductSettings: true},
-                    dialogType: UserSettingsModal,
-                    modalId: 'user_settings',
-                },
-            ]);
-            expect(result).toEqual({data: true});
-        });
-    });
+    // describe('settings', () => {
+    //     test('should pass right modal params', async () => {
+    //         const result = await store.dispatch(executeCommand('/settings', {}));
+    //         expect(store.getActions()).toEqual([
+    //             {
+    //                 type: ActionTypes.MODAL_OPEN,
+    //                 dialogProps: {isContentProductSettings: true},
+    //                 dialogType: UserSettingsModal,
+    //                 modalId: 'user_settings',
+    //             },
+    //         ]);
+    //         expect(result).toEqual({data: true});
+    //     });
+    // });
 
     describe('collapse', () => {
         test('call executeCommand with right params', async () => {
