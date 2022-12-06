@@ -411,3 +411,8 @@ export async function redirectUserToDefaultTeam() {
 
     browserHistory.push('/select_team');
 }
+
+export function redirectToManagerDashboard(groupId: number) {
+    window.open(`${IKConstants.MANAGER_URL}v3/${groupId}/ng/kchat`, '_blank');
+}
+

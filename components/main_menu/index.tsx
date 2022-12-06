@@ -64,6 +64,7 @@ function mapStateToProps(state: GlobalState) {
     const isCloud = isCloudLicense(license);
     const isStarterFree = isCloud && subscriptionProduct?.sku === CloudProducts.STARTER;
     const isFreeTrial = isCloud && subscription?.is_free_trial === 'true';
+    const ikGroupId = state.entities.teams.teams[currentTeam.id].account_id;
 
     return {
         appDownloadLink,
@@ -92,6 +93,7 @@ function mapStateToProps(state: GlobalState) {
         isCloud,
         isStarterFree,
         isFreeTrial,
+        ikGroupId,
     };
 }
 

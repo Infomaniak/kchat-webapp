@@ -4038,6 +4038,7 @@
   "navbar_dropdown.create.modal.titleAdminPreTrial": "Teste unbeschränkte Teams mit einem kostenlosen Test",
   "navbar_dropdown.create.modal.titleEndUser": "Mehrere Team sind in den bezahlten Plänen verfügbar",
   "navbar_dropdown.create.tooltip.cloudFreeTrial": "Während deines Tests kannst du mehrere Teams erstellen. Diese Teams werden nach deinem Test archiviert.",
+  "navbar_dropdown.dashboard": "Anzeiger",
   "navbar_dropdown.help": "Hilfe",
   "navbar_dropdown.integrations": "Integrationen",
   "navbar_dropdown.invitePeople": "Personen einladen",
