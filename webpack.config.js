@@ -290,6 +290,7 @@ var config = {
             'mattermost-redux/test': 'packages/mattermost-redux/test',
             'mattermost-redux': 'packages/mattermost-redux/src',
             reselect: 'packages/reselect/src',
+            marked: '@infomaniak/marked',
         },
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
         fallback: {
@@ -636,7 +637,6 @@ if (targetIsDevServer) {
             alias: {
                 ...config.resolve.alias,
                 'react-dom': '@hot-loader/react-dom',
-                'marked': '@infomaniak/marked',
             },
         },
     };
