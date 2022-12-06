@@ -4361,7 +4361,7 @@ export default class Client4 {
 
     // Only for Webview
     keepAlive() {
-        this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
+        return this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
     }
 }
 

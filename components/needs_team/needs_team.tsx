@@ -91,11 +91,13 @@ type State = {
 
 export default class NeedsTeam extends React.PureComponent<Props, State> {
     public blurTime: number;
-    private keepAliveInterval: ReturnType<typeof setInterval>|null = null;
+    private keepAliveInterval: React.MutableRefObject<NodeJS.Timer | null>;
 
     constructor(props: Props) {
         super(props);
         this.blurTime = new Date().getTime();
+        this.keepAliveInterval = React.createRef<NodeJS.Timer>();
+        this.keepAliveInterval.current = null;
 
         if (this.props.mfaRequired) {
             this.props.history.push('/mfa/setup');
@@ -157,7 +159,7 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
         }
 
         if (!UserAgent.isDesktopApp()) {
-            this.keepAliveInterval = setInterval(Client4.keepAlive, WEB_SESSION_KEEPALIVE_INTERVAL);
+            this.keepAliveInterval.current = setInterval(this.handleKeepAlive, WEB_SESSION_KEEPALIVE_INTERVAL);
         }
 
         window.addEventListener('focus', this.handleFocus);
@@ -184,13 +186,17 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
         }
 
         if (this.keepAliveInterval) {
-            clearInterval(this.keepAliveInterval);
+            clearInterval(this.keepAliveInterval.current as NodeJS.Timeout);
         }
 
         clearInterval(wakeUpInterval);
         window.removeEventListener('focus', this.handleFocus);
         window.removeEventListener('blur', this.handleBlur);
         window.removeEventListener('keydown', this.onShortcutKeyDown);
+    }
+
+    handleKeepAlive = () => {
+        Client4.keepAlive();
     }
 
     handleBlur = () => {
