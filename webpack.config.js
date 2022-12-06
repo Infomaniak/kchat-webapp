@@ -636,6 +636,7 @@ if (targetIsDevServer) {
             alias: {
                 ...config.resolve.alias,
                 'react-dom': '@hot-loader/react-dom',
+                'marked': '@infomaniak/marked',
             },
         },
     };
