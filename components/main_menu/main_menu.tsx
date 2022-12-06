@@ -103,7 +103,7 @@ export class MainMenu extends React.PureComponent<Props> {
 
     handleEmitUserGoToDashboard = (e: Event): void => {
         e.preventDefault();
-        window.open(`${IKConstants.MANAGER_URL}v3/${this.props.ikGroupId}/ng/kchat`, '_blank');
+        GlobalActions.redirectToManagerDashboard(this.props.ikGroupId);
     }
 
     getFlagged = (e: Event): void => {
