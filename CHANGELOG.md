@@ -1,3 +1,15 @@
+## 0.5.36 (2022-12-06)
+
+## Added (3 changes)
+
+- [Add manager link to kchat dashboard](kchat/webapp@75afc9b79734f42d56a6106f0d0e4f2312affb45) by @florent.glauda ([merge request](kchat/webapp!218))
+- [call keepAlive on Webview](kchat/webapp@343f8538ed75a7795da8b21112936607187be5e7) by @leonard.jouve ([merge request](kchat/webapp!217))
+- [New thread icons](kchat/webapp@841b898495413c6088674bfa17a4e81517636caa) by @leonard.jouve ([merge request](kchat/webapp!212))
+
+## Fixed (1 change)
+
+- [Fix youtube video player dimensions](kchat/webapp@eecf61f10130aa13c7e2789817f209f14ea928ae) by @leonard.jouve ([merge request](kchat/webapp!210))
+
 ## 0.5.35 (2022-11-30)
 
 ## Fixed (1 change)
