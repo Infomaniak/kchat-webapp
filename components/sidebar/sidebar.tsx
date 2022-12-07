@@ -45,8 +45,8 @@ type Props = {
         openModal: <P>(modalData: ModalData<P>) => void;
         closeModal: (modalId: string) => void;
         clearChannelSelection: () => void;
-        showSettings: () => void;
-        closeRightHandSide: () => void;
+        showSettings?: () => void;
+        closeRightHandSide?: () => void;
     };
     isCloud: boolean;
     unreadFilterEnabled: boolean;
