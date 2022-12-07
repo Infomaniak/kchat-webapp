@@ -162,7 +162,7 @@ const Login = () => {
     return (
         <div className='login-body'>
             <div className='login-body-content'>
-                {!sessionExpired ? (
+                {sessionExpired ? (
                     <div>
                         <h3>{'Your session has expired please refresh using the button:'}</h3>
                         <button
