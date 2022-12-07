@@ -8,6 +8,8 @@ import {useSelector} from 'react-redux';
 
 import * as Sentry from '@sentry/react';
 
+import {useIntl} from 'react-intl';
+
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
 
@@ -37,6 +39,7 @@ const Login = () => {
     //     ExperimentalPrimaryTeam,
     // } = useSelector(getConfig);
 
+    const intl = useIntl();
     const initializing = useSelector((state: GlobalState) => state.requests.users.logout.status === RequestStatus.SUCCESS || !state.storage.initialized);
     const currentUser = useSelector(getCurrentUser);
     const [sessionExpired, setSessionExpired] = useState(false);
@@ -127,7 +130,7 @@ const Login = () => {
 
     const redirectLoginIk = (e: React.SyntheticEvent) => {
         e.preventDefault();
-        Sentry.captureException(new Error('Failed to refresh token in 3 attempts'));
+        Sentry.captureException(new Error('Session Expired'));
         clearLocalStorageToken();
         getChallengeAndRedirectToLogin();
     };
@@ -163,12 +166,19 @@ const Login = () => {
         <div className='login-body'>
             <div className='login-body-content'>
                 {sessionExpired ? (
-                    <div>
-                        <h3>{'Your session has expired please refresh using the button:'}</h3>
-                        <button
-                            className='btn btn-primary'
-                            onClick={redirectLoginIk}
-                        >{'Refresh'}</button>
+                    <div
+                        className='container session-expired-container'
+                    >
+                        <div className='login-body-card'>
+                            <div className='login-body-card-content'>
+                                <h4>{intl.formatMessage({id: 'login.session_expired.notification', defaultMessage: 'Session Expired: Please sign in to continue receiving notifications.'})}</h4>
+                                <button
+                                    className='btn btn-primary'
+                                    style={{marginTop: 20, borderRadius: 8}}
+                                    onClick={redirectLoginIk}
+                                >{intl.formatMessage({id: 'login.title', defaultMessage: 'Log in to your account'})}</button>
+                            </div>
+                        </div>
                     </div>
                 ) : <LoadingIk/>}
             </div>

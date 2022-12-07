@@ -7,6 +7,19 @@
     display: flex;
     flex-direction: column;
     margin: auto;
+    height: 100%;
+
+    .session-expired-container {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        background: url('/static/images/ksuite-bg.png');
+        h4 {
+            color: var(--title-color-indigo-500);
+        }
+    }
 
     .login-body-action {
         display: flex;
@@ -25,7 +38,7 @@
     .login-body-content {
         display: flex;
         height: fit-content;
-        flex: 1;
+        flex: 1 100%;
         align-items: center;
         justify-content: center;
 
