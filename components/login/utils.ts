@@ -133,9 +133,8 @@ export function needRefreshToken() {
 
 export function refreshIKToken(redirectToTeam = false): Promise<any> {
     const refreshToken = localStorage.getItem('IKRefreshToken');
-    const isRefreshing = localStorage.getItem('refreshingToken');
 
-    if (isRefreshing) {
+    if (REFRESH_PROMISE) {
         return REFRESH_PROMISE as Promise<any>;
     }
 
@@ -164,18 +163,17 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
                 window.origin,
             );
 
-            localStorage.removeItem('refreshingToken');
-
             if (redirectToTeam) {
                 redirectUserToDefaultTeam();
             }
             resolve(resp);
+            REFRESH_PROMISE = null;
         }).catch((error: unknown) => {
             console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
             console.warn(error);
             console.log('[login/utils > refreshIKToken] keeping old token');
-            localStorage.removeItem('refreshingToken');
             reject(error);
+            REFRESH_PROMISE = null;
         });
     });
 
