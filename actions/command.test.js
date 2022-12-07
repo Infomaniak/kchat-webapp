@@ -12,7 +12,7 @@ import * as GlobalActions from 'actions/global_actions';
 
 import mockStore from 'tests/test_store';
 
-import {ActionTypes, Constants, ModalIdentifiers} from 'utils/constants';
+import {ActionTypes, Constants, ModalIdentifiers, RHSStates} from 'utils/constants';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 
@@ -189,20 +189,18 @@ describe('executeCommand', () => {
         });
     });
 
-    // describe('settings', () => {
-    //     test('should pass right modal params', async () => {
-    //         const result = await store.dispatch(executeCommand('/settings', {}));
-    //         expect(store.getActions()).toEqual([
-    //             {
-    //                 type: ActionTypes.MODAL_OPEN,
-    //                 dialogProps: {isContentProductSettings: true},
-    //                 dialogType: UserSettingsModal,
-    //                 modalId: 'user_settings',
-    //             },
-    //         ]);
-    //         expect(result).toEqual({data: true});
-    //     });
-    // });
+    describe('settings', () => {
+        test('should pass right modal params', async () => {
+            const result = await store.dispatch(executeCommand('/settings', {}));
+            expect(store.getActions()).toEqual([
+                {
+                    type: ActionTypes.UPDATE_RHS_STATE,
+                    state: RHSStates.SETTINGS,
+                },
+            ]);
+            expect(result).toEqual({data: true});
+        });
+    });
 
     describe('collapse', () => {
         test('call executeCommand with right params', async () => {
