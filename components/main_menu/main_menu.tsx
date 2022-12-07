@@ -86,7 +86,6 @@ export class MainMenu extends React.PureComponent<Props> {
 
     async componentDidMount(): Promise<void> {
         document.addEventListener('keydown', this.handleKeyDown);
-        console.log('add listener')
     }
 
     componentWillUnmount(): void {
@@ -95,7 +94,6 @@ export class MainMenu extends React.PureComponent<Props> {
 
     handleKeyDown = (e: KeyboardEvent): void => {
         if (cmdOrCtrlPressed(e) && e.shiftKey && isKeyPressed(e, Constants.KeyCodes.A)) {
-            console.log("key pressed")
             e.preventDefault();
             if (this.props.isRhsSettings) {
                 this.props.actions.closeRightHandSide();
