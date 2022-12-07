@@ -14,8 +14,12 @@
         align-items: flex-start;
         flex-direction: column;
         height: 100%;
+        width: 100%;
         justify-content: center;
         background: url('images/ksuite-bg.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center right;
         h4 {
             color: var(--title-color-indigo-500);
         }
@@ -38,7 +42,7 @@
     .login-body-content {
         display: flex;
         height: fit-content;
-        flex: 1 100%;
+        flex: 1;
         align-items: center;
         justify-content: center;
 

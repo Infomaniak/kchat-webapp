@@ -166,17 +166,17 @@ const Login = () => {
         <div className='login-body'>
             <div className='login-body-content'>
                 {sessionExpired ? (
-                    <div
-                        className='container session-expired-container'
-                    >
-                        <div className='login-body-card'>
-                            <div className='login-body-card-content'>
-                                <h4>{intl.formatMessage({id: 'login.session_expired.notification', defaultMessage: 'Session Expired: Please sign in to continue receiving notifications.'})}</h4>
-                                <button
-                                    className='btn btn-primary'
-                                    style={{marginTop: 20, borderRadius: 8}}
-                                    onClick={redirectLoginIk}
-                                >{intl.formatMessage({id: 'login.title', defaultMessage: 'Log in to your account'})}</button>
+                    <div className='session-expired-container'>
+                        <div className='container-lg'>
+                            <div className='login-body-card'>
+                                <div className='login-body-card-content'>
+                                    <h4>{intl.formatMessage({id: 'login.session_expired.notification', defaultMessage: 'Session Expired: Please sign in to continue receiving notifications.'})}</h4>
+                                    <button
+                                        className='btn btn-primary'
+                                        style={{marginTop: 20, borderRadius: 8}}
+                                        onClick={redirectLoginIk}
+                                    >{intl.formatMessage({id: 'login.title', defaultMessage: 'Log in to your account'})}</button>
+                                </div>
                             </div>
                         </div>
                     </div>
