@@ -187,7 +187,7 @@ export async function initialize() {
 
     if (isDesktopApp()) {
         if (checkIKTokenIsExpired() || (!token || !refreshToken || !tokenExpire)) {
-        // eslint-disable-next-line no-console
+            // eslint-disable-next-line no-console
             console.log('[websocket_actions > initialize] token storage corrupt or token expired, redirecting to login');
             browserHistory.push('/login');
             return;
