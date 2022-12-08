@@ -1,3 +1,13 @@
+## 0.5.37 (2022-12-08)
+
+## Fixed (1 change)
+
+- [Remove old settings modal](kchat/webapp@f3d66203345c8d0addda5cf3a3830afeed2f381d) by @leonard.jouve ([merge request](kchat/webapp!203))
+
+## Changed (1 change)
+
+- [Open RHSSettings with shortcuts](kchat/webapp@c0ba1df3a724bd5571686398c0afb44fb9869f9b) by @florent.glauda ([merge request](kchat/webapp!203))
+
 ## 0.5.36 (2022-12-06)
 
 ## Added (3 changes)
