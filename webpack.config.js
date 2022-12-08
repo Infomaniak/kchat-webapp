@@ -378,6 +378,7 @@ var config = {
                 {from: 'images/cloud-laptop-error.png', to: 'images'},
                 {from: 'images/cloud-laptop-warning.png', to: 'images'},
                 {from: 'images/cloud-upgrade-person-hand-to-face.png', to: 'images'},
+                {from: 'images/ksuite-bg.png', to: 'images'},
             ],
         }),
 

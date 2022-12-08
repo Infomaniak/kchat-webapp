@@ -2,11 +2,13 @@
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {useSelector} from 'react-redux';
 
 import * as Sentry from '@sentry/react';
+
+import {useIntl} from 'react-intl';
 
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
@@ -37,8 +39,10 @@ const Login = () => {
     //     ExperimentalPrimaryTeam,
     // } = useSelector(getConfig);
 
+    const intl = useIntl();
     const initializing = useSelector((state: GlobalState) => state.requests.users.logout.status === RequestStatus.SUCCESS || !state.storage.initialized);
     const currentUser = useSelector(getCurrentUser);
+    const [sessionExpired, setSessionExpired] = useState(false);
 
     const tokenInterval = useRef<NodeJS.Timer>();
 
@@ -66,9 +70,7 @@ const Login = () => {
                 // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
                 // Losing our entire app context to auth a user is far from ideal.
                 console.log(`[components/login] failed to refresh token in ${MAX_TOKEN_RETRIES} attempts`);
-                Sentry.captureException(new Error('Failed to refresh token in 3 attempts'));
-                clearLocalStorageToken();
-                getChallengeAndRedirectToLogin();
+                setSessionExpired(true);
             }
         });
     };
@@ -126,6 +128,13 @@ const Login = () => {
         };
     }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
+    const redirectLoginIk = (e: React.SyntheticEvent) => {
+        e.preventDefault();
+        Sentry.captureException(new Error('Session Expired'));
+        clearLocalStorageToken();
+        getChallengeAndRedirectToLogin();
+    };
+
     // const finishSignin = (team?: Team) => {
     //     const query = new URLSearchParams(search);
     //     const redirectTo = query.get('redirect_to');
@@ -156,7 +165,22 @@ const Login = () => {
     return (
         <div className='login-body'>
             <div className='login-body-content'>
-                <LoadingIk/>
+                {sessionExpired ? (
+                    <div className='session-expired-container'>
+                        <div className='container-lg'>
+                            <div className='login-body-card'>
+                                <div className='login-body-card-content'>
+                                    <h4>{intl.formatMessage({id: 'login.session_expired.notification', defaultMessage: 'Session Expired: Please sign in to continue receiving notifications.'})}</h4>
+                                    <button
+                                        className='btn btn-primary'
+                                        style={{marginTop: 20, borderRadius: 8}}
+                                        onClick={redirectLoginIk}
+                                    >{intl.formatMessage({id: 'login.title', defaultMessage: 'Log in to your account'})}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ) : <LoadingIk/>}
             </div>
         </div>
     );

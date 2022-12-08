@@ -7,6 +7,23 @@
     display: flex;
     flex-direction: column;
     margin: auto;
+    height: 100%;
+
+    .session-expired-container {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        background: url('images/ksuite-bg.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center right;
+        h4 {
+            color: var(--title-color-indigo-500);
+        }
+    }
 
     .login-body-action {
         display: flex;

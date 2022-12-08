@@ -115,7 +115,7 @@ import InteractiveDialog from 'components/interactive_dialog';
 // import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {checkIKTokenIsExpired, needRefreshToken, refreshIKToken} from 'components/login/utils';
+import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
@@ -130,7 +130,7 @@ const MAX_WEBSOCKET_FAILS = 7;
 
 const pluginEventHandlers = {};
 
-export function initialize() {
+export async function initialize() {
     if (!window.WebSocket) {
         console.log('Browser does not support websocket'); //eslint-disable-line no-console
         return;
@@ -185,14 +185,15 @@ export function initialize() {
     const token = localStorage.getItem('IKToken');
     const refreshToken = localStorage.getItem('IKRefreshToken');
 
-    if (isDesktopApp() && (!token || !refreshToken || !tokenExpire)) {
-        // eslint-disable-next-line no-console
-        console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
-        browserHistory.push('/login');
-        return;
+    if (isDesktopApp()) {
+        if (checkIKTokenIsExpired() || (!token || !refreshToken || !tokenExpire)) {
+            // eslint-disable-next-line no-console
+            console.log('[websocket_actions > initialize] token storage corrupt or token expired, redirecting to login');
+            browserHistory.push('/login');
+            return;
+        }
     }
 
-    // test
     // const authToken = localStorage.getItem('IKToken');
 
     // eslint-disable-next-line no-console
