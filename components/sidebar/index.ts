@@ -20,15 +20,17 @@ import {GlobalState} from 'types/store';
 import {getIsLhsOpen} from 'selectors/lhs';
 import {getIsMobileView} from 'selectors/views/browser';
 import {isModalOpen} from 'selectors/views/modals';
-import {ModalIdentifiers} from 'utils/constants';
+import {ModalIdentifiers, RHSStates} from 'utils/constants';
 
 import Sidebar from './sidebar';
+import {getRhsState} from '../../selectors/rhs';
+import {closeRightHandSide, showSettings} from '../../actions/views/rhs';
 
 function mapStateToProps(state: GlobalState) {
     const currentTeam = getCurrentTeam(state);
     const unreadFilterEnabled = isUnreadFilterEnabled(state);
     const userGroupsEnabled = isCustomGroupsEnabled(state);
-
+    const rhsState = getRhsState(state);
     let canCreatePublicChannel = false;
     let canCreatePrivateChannel = false;
     let canJoinPublicChannel = false;
@@ -40,7 +42,7 @@ function mapStateToProps(state: GlobalState) {
     }
 
     const canCreateCustomGroups = haveISystemPermission(state, {permission: Permissions.CREATE_CUSTOM_GROUP}) && isCustomGroupsEnabled(state);
-
+    const isRhsSettings = rhsState === RHSStates.SETTINGS;
     return {
         teamId: currentTeam ? currentTeam.id : '',
         canCreatePrivateChannel,
@@ -59,6 +61,7 @@ function mapStateToProps(state: GlobalState) {
         isKeyBoardShortcutModalOpen: isModalOpen(state, ModalIdentifiers.KEYBOARD_SHORTCUTS_MODAL),
         userGroupsEnabled,
         canCreateCustomGroups,
+        isRhsSettings,
     };
 }
 
@@ -78,6 +81,8 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             fetchMyCategories,
             openModal,
             closeModal,
+            showSettings,
+            closeRightHandSide,
         }, dispatch),
     };
 }

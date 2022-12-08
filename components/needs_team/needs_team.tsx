@@ -21,6 +21,7 @@ import Pluggable from 'plugins/pluggable';
 
 import LocalStorageStore from 'stores/local_storage_store';
 import type {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {Client4} from 'mattermost-redux/client';
 
 import {UserProfile, UserStatus} from '@mattermost/types/users';
 import {Group} from '@mattermost/types/groups';
@@ -35,6 +36,7 @@ let lastTime = Date.now();
 const WAKEUP_CHECK_INTERVAL = 30000; // 30 seconds
 const WAKEUP_THRESHOLD = 60000; // 60 seconds
 const UNREAD_CHECK_TIME_MILLISECONDS = 10000;
+const WEB_SESSION_KEEPALIVE_INTERVAL = 300000; // 5 mins
 
 declare global {
     interface Window {
@@ -89,9 +91,13 @@ type State = {
 
 export default class NeedsTeam extends React.PureComponent<Props, State> {
     public blurTime: number;
+    private keepAliveInterval: React.MutableRefObject<NodeJS.Timer | null>;
+
     constructor(props: Props) {
         super(props);
         this.blurTime = new Date().getTime();
+        this.keepAliveInterval = React.createRef<NodeJS.Timer>();
+        this.keepAliveInterval.current = null;
 
         if (this.props.mfaRequired) {
             this.props.history.push('/mfa/setup');
@@ -152,6 +158,10 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
             iNoBounce.enable();
         }
 
+        if (!UserAgent.isDesktopApp()) {
+            this.keepAliveInterval.current = setInterval(this.handleKeepAlive, WEB_SESSION_KEEPALIVE_INTERVAL);
+        }
+
         window.addEventListener('focus', this.handleFocus);
         window.addEventListener('blur', this.handleBlur);
         window.addEventListener('keydown', this.onShortcutKeyDown);
@@ -175,10 +185,18 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
             iNoBounce.disable();
         }
 
+        if (this.keepAliveInterval) {
+            clearInterval(this.keepAliveInterval.current as NodeJS.Timeout);
+        }
+
         clearInterval(wakeUpInterval);
         window.removeEventListener('focus', this.handleFocus);
         window.removeEventListener('blur', this.handleBlur);
         window.removeEventListener('keydown', this.onShortcutKeyDown);
+    }
+
+    handleKeepAlive = () => {
+        Client4.keepAlive();
     }
 
     handleBlur = () => {
