@@ -9,7 +9,7 @@ import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 
-let REFRESH_PROMISE: Promise<any> | null;
+let REFRESH_PROMISE: Promise<any> | null = null;
 
 /**
  * Store IKToken infos in localStorage and update Client
@@ -134,14 +134,16 @@ export function needRefreshToken() {
 export function refreshIKToken(redirectToTeam = false): Promise<any> {
     const refreshToken = localStorage.getItem('IKRefreshToken');
 
+    if (!refreshToken) {
+        return Promise.reject(new Error('missing refresh token'));
+    }
+
     if (REFRESH_PROMISE) {
         return REFRESH_PROMISE as Promise<any>;
     }
 
     Client4.setToken('');
     Client4.setCSRF('');
-
-    localStorage.setItem('refreshingToken', '1');
 
     // eslint-disable-next-line consistent-return
     REFRESH_PROMISE = new Promise((resolve, reject) => {
