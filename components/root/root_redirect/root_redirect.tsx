@@ -45,7 +45,6 @@ export default function RootRedirect(props: Props) {
             to={{
                 ...props.location,
                 pathname: '/login',
-                // pathname: isDesktopApp() ? '/': '/login',
             }}
         />
     );

@@ -9,9 +9,10 @@ interface Args {
 }
 
 // Webpack global var
-declare const COMMIT_HASH: string;
+// declare const COMMIT_HASH: string;
+declare const GIT_RELEASE: string;
 
-const isLocalhost = (host: string) => host.startsWith('localhost') || host.startsWith('local.');
+const isLocalhost = (host: string) => host.startsWith('localhost') || host.startsWith('local.') || host.startsWith('kchat.devd');
 
 export default function init({SENTRY_DSN}: Args) {
     const {host} = window.location;
@@ -22,7 +23,7 @@ export default function init({SENTRY_DSN}: Args) {
 
     Sentry.init({
         dsn: SENTRY_DSN,
-        release: COMMIT_HASH, //eslint-disable-line no-process-env
+        release: GIT_RELEASE, //eslint-disable-line no-process-env
         environment: host.split('.').splice(1).join('.'),
         normalizeDepth: 5,
         integrations: [new BrowserTracing()],
@@ -38,15 +39,13 @@ export default function init({SENTRY_DSN}: Args) {
             'XDR encoding failure',
             'Request timed out',
             'No network connection',
-            'Failed to fetch',
-            'NetworkError when attempting to fetch resource.',
-            'No network connection',
+
+            // 'Failed to fetch',
+            // 'NetworkError when attempting to fetch resource.',
             'webkitExitFullScreen',
             'InactiveSession',
-            'UnhandledRejection',
             /chrome-extension/,
             /moz-extension/,
-            'ChunkLoadError', // WebPack loading source code.
             /ResizeObserver loop/,
         ],
     });

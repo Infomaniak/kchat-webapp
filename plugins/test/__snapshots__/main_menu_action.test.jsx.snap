@@ -150,6 +150,22 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
       />
     </MenuGroup>
     <MenuGroup>
+      <Connect(SystemPermissionGate)
+        permissions={
+          Array [
+            undefined,
+          ]
+        }
+      >
+        <MenuItemAction
+          id="dashboardManager"
+          onClick={[Function]}
+          show={true}
+          text="Tableau de bord"
+        />
+      </Connect(SystemPermissionGate)>
+    </MenuGroup>
+    <MenuGroup>
       <MenuItemLink
         id="integrations"
         show={true}
@@ -185,6 +201,22 @@ exports[`plugins/MainMenuActions should match snapshot in web view 1`] = `
     onClick={[Function]}
     style={Object {}}
   >
+    <MenuGroup>
+      <Connect(SystemPermissionGate)
+        permissions={
+          Array [
+            undefined,
+          ]
+        }
+      >
+        <MenuItemAction
+          id="dashboardManager"
+          onClick={[Function]}
+          show={true}
+          text="Tableau de bord"
+        />
+      </Connect(SystemPermissionGate)>
+    </MenuGroup>
     <MenuGroup>
       <Connect(TeamPermissionGate)
         permissions={

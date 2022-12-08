@@ -42,6 +42,7 @@ import {Permissions} from 'mattermost-redux/constants';
 import {isMarketplaceEnabled} from 'mattermost-redux/selectors/entities/general';
 
 import {doAppSubmit, openAppsModal, postEphemeralCallResponseForCommandArgs} from './apps';
+import {showSettings} from './views/rhs';
 
 export function executeCommand(message: string, args: CommandArgs): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
@@ -112,7 +113,7 @@ export function executeCommand(message: string, args: CommandArgs): ActionFunc {
             break;
         }
         case '/settings':
-            dispatch(openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}}));
+            dispatch(showSettings());
             return {data: true};
         case '/marketplace':
             // check if user has permissions to access the read plugins

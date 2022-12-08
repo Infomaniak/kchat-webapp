@@ -503,11 +503,13 @@ export default class Client4 {
 
         if (this.setAuthHeader && this.token) {
             headers[HEADER_AUTH] = `${HEADER_BEARER} ${this.token}`;
-            headers[HEADER_X_XSRF_TOKEN] = this.token;
+            if (options.method && options.method.toLowerCase() !== 'delete') {
+                headers[HEADER_X_XSRF_TOKEN] = this.token;
+            }
         }
 
         const csrfToken = this.csrf || this.getCSRFFromCookie();
-        if (options.method && options.method.toLowerCase() !== 'get' && csrfToken) {
+        if (options.method && options.method.toLowerCase() !== 'get' && options.method.toLowerCase() !== 'delete' && csrfToken) {
             headers[HEADER_X_CSRF_TOKEN] = csrfToken;
         }
 
@@ -4155,22 +4157,6 @@ export default class Client4 {
             window.location.href = data.uri;
         }
 
-        if ((response.status === 403 || (response.status === 401 && data?.result === 'redirect')) && isDesktopApp()) {
-            if (url.indexOf('/commands/') === -1) {
-                console.log('[TOKEN] client error, redirect to /login');
-                localStorage.removeItem('IKToken');
-                window.postMessage(
-                    {
-                        type: 'browser-history-push',
-                        message: {
-                            path: '/login',
-                        },
-                    },
-                    window.location.origin,
-                );
-            }
-        }
-
         if (headers.has(HEADER_X_VERSION_ID)) {
             const serverVersion = headers.get(HEADER_X_VERSION_ID);
 
@@ -4273,6 +4259,21 @@ export default class Client4 {
         );
     }
 
+    revokeIKLoginToken = (token: string, loginUrl: string) => {
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('token_type_hint', 'access_token');
+        formData.append('token', token);
+
+        return this.doFetch<any>(
+            `${loginUrl}token`,
+            {
+                method: 'delete',
+                body: formData,
+            },
+        );
+    }
+
     /****************************************************/
     /*                                                  */
     /*                IK CUSTOMS UTILS                  */
@@ -4299,7 +4300,7 @@ export default class Client4 {
      * Clear IKToken informations in localStorage
      */
     clearLocalStorageToken() {
-        console.log('[TOKEN] Clear token storage');
+        console.log('[client > clearLocalStorageToken] Clear token storage');
         localStorage.removeItem('IKToken');
         localStorage.removeItem('IKRefreshToken');
         localStorage.removeItem('IKTokenExpire');
@@ -4314,7 +4315,6 @@ export default class Client4 {
             window.origin,
         );
     }
-
 
     /**
      * get code_verifier for challenge
@@ -4349,7 +4349,7 @@ export default class Client4 {
      */
     getChallengeAndRedirectToLogin() {
         const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
-        // const redirectTo = 'ktalk://auth-desktop';
+
         const codeVerifier = this.getCodeVerifier();
         let codeChallenge = '';
 
@@ -4362,8 +4362,14 @@ export default class Client4 {
             // TODO: add env for login url and/or current server
             window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
         }).catch(() => {
-            console.log('Error redirect');
+            // eslint-disable-next-line no-console
+            console.log('[client > getChallengeAndRedirectToLogin] Error redirect');
         });
+    }
+
+    // Only for Webview
+    keepAlive() {
+        return this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
     }
 }
 

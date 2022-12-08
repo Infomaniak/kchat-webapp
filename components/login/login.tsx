@@ -6,6 +6,8 @@ import React, {useEffect, useRef} from 'react';
 
 import {useSelector} from 'react-redux';
 
+import * as Sentry from '@sentry/react';
+
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
 
@@ -24,8 +26,10 @@ import {GlobalState} from 'types/store';
 
 import {isDesktopApp} from 'utils/user_agent';
 
-import {checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin} from './utils';
+import {clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken} from './utils';
 import './login.scss';
+
+const MAX_TOKEN_RETRIES = 3;
 
 const Login = () => {
     // TODO: can we clean this?
@@ -35,6 +39,8 @@ const Login = () => {
 
     const initializing = useSelector((state: GlobalState) => state.requests.users.logout.status === RequestStatus.SUCCESS || !state.storage.initialized);
     const currentUser = useSelector(getCurrentUser);
+
+    const tokenInterval = useRef<NodeJS.Timer>();
 
     // TODO: can we clean this?
     // const experimentalPrimaryTeam = useSelector((state: GlobalState) => (ExperimentalPrimaryTeam ? getTeamByName(state, ExperimentalPrimaryTeam) : undefined));
@@ -47,52 +53,78 @@ const Login = () => {
 
     // Session guard
 
-    // DEV NOTES
-    // When client4 starts hitting 401/403 return codes we redirect back here.
-    // At this point the token has already expired so it is either a computer wake up
-    // or our interval couldn't successfuly refresh the token. Apparently we should still
-    // be able to refresh if the token has expired but this doesn't seem to be the case atm.
+    const tryRefreshTokenWithErrorCount = (errorCount: number) => {
+        console.log('[components/login] tryRefreshTokenWithErrorCount with error count: ', errorCount);
 
+        // clear this right away so it doesn't retrigger while in promise land.
+        clearInterval(tokenInterval.current as NodeJS.Timer);
+        refreshIKToken(/*redirectToTeam**/true).catch(() => {
+            if (errorCount < MAX_TOKEN_RETRIES) {
+                console.log('[components/login] will retry refresh');
+                tokenInterval.current = setInterval(() => tryRefreshTokenWithErrorCount(errorCount + 1), 2000); // 2 sec
+            } else {
+                // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
+                // Losing our entire app context to auth a user is far from ideal.
+                console.log(`[components/login] failed to refresh token in ${MAX_TOKEN_RETRIES} attempts`);
+                Sentry.captureException(new Error('Failed to refresh token in 3 attempts'));
+                clearLocalStorageToken();
+                getChallengeAndRedirectToLogin();
+            }
+        });
+    };
+
+    // DESKTOP DEV NOTES
+    // We should assume that the only reason we end up here on desktop is that the token is expired. Otherwise this route is skipped
+    // and we are redirected directly to default team.
+    // ----
+    // Here are the relevant redirects to watch out for that can end up here:
+    // 1. needs_team will redirect here when currentUser is undefined, which can happen after a 401 on /me
+    // 2. root (components/root not the other one) will technically redirect here as it's rendered first, which means root is
+    // responsible for it's own session management. Since root launches our first requests the only ever time
+    // root won't skip this route is if it's a fresh user. The first condition here makes sure to handle the fresh user case.
+    // For all other cases, we want to try refreshing before sending to login.
     useEffect(() => {
-        console.log('[LOGIN] init login component');
-        console.log('[LOGIN] get was logged in => ', LocalStorageStore.getWasLoggedIn());
+        console.log('[components/login] init login component');
+        console.log('[components/login] get was logged in => ', LocalStorageStore.getWasLoggedIn());
 
         if (isDesktopApp()) {
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
 
             // Check for desktop session end of life
-            if (checkIKTokenIsExpired() || !token || !refreshToken) {
-                console.log('[LOGIN DESKTOP] Session EOL: Redirect to infomaniak login');
+            if (!token || !refreshToken) {
+                // Login should be the only one responsible for clearing storage.
+                // The only other case is if we can't renew the token with code in root.
+                console.log('[components/login] no session, clearing storage just in case');
                 clearLocalStorageToken();
+                console.log('[components/login] redirecting to infomaniak login');
+                Sentry.captureException(new Error('Redirected to external login on desktop'));
                 getChallengeAndRedirectToLogin();
 
                 return;
             }
-        }
 
-        // For web simply send through to router if user exists.
-        if (currentUser) {
-            console.log('[LOGIN] Current user is ok');
+            // This will try to refresh the token 3 times and will redirect to our ext
+            // login service if none of the attempts succeed.
+            tryRefreshTokenWithErrorCount(0);
+        } else if (currentUser) {
+            // Web auth redirects are still triggered throught client4 so we
+            // dont need to do any checks here.
+            console.log('[components/login] current user is ok -> redirecting to team');
             redirectUserToDefaultTeam();
         }
-    }, []);
 
-    useEffect(() => {
+        // We love hooks
+        // eslint-disable-next-line consistent-return
         return () => {
+            console.log('login effect cleanup');
+            clearInterval(tokenInterval.current as NodeJS.Timer);
             if (closeSessionExpiredNotification!.current) {
                 closeSessionExpiredNotification.current();
                 closeSessionExpiredNotification.current = undefined;
             }
-
-            // window.removeEventListener('resize', onWindowResize);
-            // window.removeEventListener('focus', onWindowFocus);
         };
-    }, []);
-
-    if (initializing) {
-        return (<LoadingIk/>);
-    }
+    }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
     // const finishSignin = (team?: Team) => {
     //     const query = new URLSearchParams(search);
@@ -121,14 +153,10 @@ const Login = () => {
     //     }
     // };
 
-    const getContent = () => {
-        return (<LoadingIk/>);
-    };
-
     return (
         <div className='login-body'>
             <div className='login-body-content'>
-                {getContent()}
+                <LoadingIk/>
             </div>
         </div>
     );
