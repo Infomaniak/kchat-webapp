@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {useSelector} from 'react-redux';
 
@@ -57,7 +57,7 @@ const Login = () => {
 
     // Session guard
 
-    const tryRefreshTokenWithErrorCount = useCallback((errorCount: number) => {
+    const tryRefreshTokenWithErrorCount = (errorCount: number) => {
         console.log('[components/login] tryRefreshTokenWithErrorCount with error count: ', errorCount);
 
         // clear this right away so it doesn't retrigger while in promise land.
@@ -73,7 +73,7 @@ const Login = () => {
                 setSessionExpired(true);
             }
         });
-    }, [tokenInterval, setSessionExpired]);
+    };
 
     // DESKTOP DEV NOTES
     // We should assume that the only reason we end up here on desktop is that the token is expired. Otherwise this route is skipped
