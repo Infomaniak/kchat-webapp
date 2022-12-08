@@ -24,7 +24,7 @@ import {Permissions} from 'mattermost-redux/constants';
 
 import {RHSStates, CloudProducts} from 'utils/constants';
 
-import {showMentions, showFlaggedPosts, closeRightHandSide, closeMenu as closeRhsMenu} from 'actions/views/rhs';
+import {showMentions, showFlaggedPosts, showSettings, closeRightHandSide, closeMenu as closeRhsMenu} from 'actions/views/rhs';
 import {openModal} from 'actions/views/modals';
 import {getRhsState} from 'selectors/rhs';
 import {isCloudLicense} from 'utils/license_utils';
@@ -84,6 +84,7 @@ function mapStateToProps(state: GlobalState) {
         teamName: currentTeam.name,
         currentUser,
         isMentionSearch: rhsState === RHSStates.MENTION,
+        isRhsSettings: rhsState === RHSStates.SETTINGS,
         teamIsGroupConstrained: Boolean(currentTeam.group_constrained),
         isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
         teamUrl: getCurrentRelativeTeamUrl(state),
@@ -103,6 +104,7 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             openModal,
             showMentions,
             showFlaggedPosts,
+            showSettings,
             closeRightHandSide,
             closeRhsMenu,
         }, dispatch),
