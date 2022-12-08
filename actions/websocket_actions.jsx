@@ -182,24 +182,15 @@ export async function initialize() {
     // const authToken = Client4.getToken();
 
     const tokenExpire = localStorage.getItem('IKTokenExpire');
-    let token = localStorage.getItem('IKToken');
+    const token = localStorage.getItem('IKToken');
     const refreshToken = localStorage.getItem('IKRefreshToken');
 
     if (isDesktopApp()) {
-        if (!token || !refreshToken || !tokenExpire) {
+        if (checkIKTokenIsExpired() || (!token || !refreshToken || !tokenExpire)) {
         // eslint-disable-next-line no-console
-            console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
+            console.log('[websocket_actions > initialize] token storage corrupt or token expired, redirecting to login');
             browserHistory.push('/login');
             return;
-        }
-        if (checkIKTokenIsExpired()) {
-            console.log('[websocket_actions > initialize] token expired, calling refresh'); // eslint-disable-line no-console
-            try {
-                await refreshIKToken(/*redirectToTeam**/false);
-                token = localStorage.getItem('IKToken');
-            } catch {
-                // swallow
-            }
         }
     }
 
