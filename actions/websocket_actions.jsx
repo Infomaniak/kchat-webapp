@@ -115,7 +115,7 @@ import InteractiveDialog from 'components/interactive_dialog';
 // import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {checkIKTokenIsExpired, needRefreshToken, refreshIKToken} from 'components/login/utils';
+import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
@@ -182,17 +182,27 @@ export function initialize() {
     // const authToken = Client4.getToken();
 
     const tokenExpire = localStorage.getItem('IKTokenExpire');
-    const token = localStorage.getItem('IKToken');
+    let token = localStorage.getItem('IKToken');
     const refreshToken = localStorage.getItem('IKRefreshToken');
 
-    if (isDesktopApp() && (!token || !refreshToken || !tokenExpire)) {
+    if (isDesktopApp()) {
+        if (!token || !refreshToken || !tokenExpire) {
         // eslint-disable-next-line no-console
-        console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
-        browserHistory.push('/login');
-        return;
+            console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
+            browserHistory.push('/login');
+            return;
+        }
+        if (checkIKTokenIsExpired()) {
+            console.log('[websocket_actions > initialize] token expired, calling refresh'); // eslint-disable-line no-console
+            try {
+                await refreshIKToken(/*redirectToTeam**/false);
+                token = localStorage.getItem('IKToken');
+            } catch {
+                // swallow
+            }
+        }
     }
 
-    // test
     // const authToken = localStorage.getItem('IKToken');
 
     // eslint-disable-next-line no-console
