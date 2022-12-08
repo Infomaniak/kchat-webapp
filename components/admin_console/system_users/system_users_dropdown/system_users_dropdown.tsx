@@ -235,6 +235,8 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
                                     />
                                 </li>
                             </ul>
+                            <p/>
+                            <p/>
                         </>
                     );
                     break;

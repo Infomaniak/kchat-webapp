@@ -5,6 +5,13 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@adobe/css-tools@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@adobe/css-tools@npm:4.0.1"
+  checksum: 80226e2229024c21da9ffa6b5cd4a34b931f071e06f45aba4777ade071d7a6c94605cf73b13718b0c4b34e8b124c65c607b82eaa53a326d3eb73d9682a04a593
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.1.0":
   version: 2.2.0
   resolution: "@ampproject/remapping@npm:2.2.0"
@@ -2144,6 +2151,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@guyplusplus/turndown-plugin-gfm@npm:1.0.7":
+  version: 1.0.7
+  resolution: "@guyplusplus/turndown-plugin-gfm@npm:1.0.7"
+  dependencies:
+    turndown: ^7.1.1
+  checksum: 2f3ec461880d647d6b8517896216cdb27ab549fea16f91dd0e64c8b2e0bcf5ce54b966522c96275ca9f453f155bbfd6d45233ca855be08c394769fb14845bb35
+  languageName: node
+  linkType: hard
+
 "@hot-loader/react-dom@npm:16.13.0":
   version: 16.13.0
   resolution: "@hot-loader/react-dom@npm:16.13.0"
@@ -3500,23 +3516,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:1.6.0":
-  version: 1.6.0
-  resolution: "@stripe/react-stripe-js@npm:1.6.0"
+"@stripe/react-stripe-js@npm:1.13.0":
+  version: 1.13.0
+  resolution: "@stripe/react-stripe-js@npm:1.13.0"
   dependencies:
     prop-types: ^15.7.2
   peerDependencies:
-    "@stripe/stripe-js": ^1.19.1
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-  checksum: 717e9fbe267b2bf2d98c28b0f37a11d5dfad3af7d80021f32a1b0bab3011bcbfd75e29a936d998164c7c3b8fc42f9cedf05d788c90ccabbca989deb0c13c8c47
+    "@stripe/stripe-js": ^1.41.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 1d3c5f5225091e5777d136a982a0b084e2dc4eb600d771b57d5eae66e34ccbf97c3329da78b77663128c919c4bec3a05891f35ae35249e4082bb767628e09a61
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:1.20.3":
-  version: 1.20.3
-  resolution: "@stripe/stripe-js@npm:1.20.3"
-  checksum: 3bdd2e105ee7cb7bd5dabbee8535a838cf2bdc0e1a4470f2ac8c1d433ece73bb3317ebc211e20aff4bc5d214838b7256e67096e2d2f5777cdef0551873302c08
+"@stripe/stripe-js@npm:1.41.0":
+  version: 1.41.0
+  resolution: "@stripe/stripe-js@npm:1.41.0"
+  checksum: 2a768f07fe157bf2509904187cac8538cfbab5e6605e1b7912659c978302559f405e1747f9649258bf02d77e974ff26dda0baec565a7d271f1e87c59d2eec261
   languageName: node
   linkType: hard
 
@@ -3689,15 +3705,6 @@ __metadata:
     "@types/jquery": "*"
     popper.js: ^1.14.1
   checksum: b582830e840d77db95c5292a46f8be238b50877bae81348e51fa2836629e80561bd329e5986229feca448d8a3b82ca4dd78e3d9e240687023e6d8b68d15ec1af
-  languageName: node
-  linkType: hard
-
-"@types/chart.js@npm:2.9.34":
-  version: 2.9.34
-  resolution: "@types/chart.js@npm:2.9.34"
-  dependencies:
-    moment: ^2.10.2
-  checksum: 400a38c59c8e4729bcf189e82dee14fa2e0fe8b9b7ea6c535c3356ee20ba6bc1a8b82da9e46eb92324677d4011dd33d8d60a217dc3fc99ee5dd5ef6332e1f81a
   languageName: node
   linkType: hard
 
@@ -4425,6 +4432,13 @@ __metadata:
   version: 1.4.3
   resolution: "@types/tinycolor2@npm:1.4.3"
   checksum: 61984b2825d4ee902016ef24777787bb2fb9e4999ccd4f7e5a709442c00cf90ba4afa510b9c78f18dcc83c03305d597d5fe3825a6aad38354f95c68af70ebc1b
+  languageName: node
+  linkType: hard
+
+"@types/turndown@npm:5.0.1":
+  version: 5.0.1
+  resolution: "@types/turndown@npm:5.0.1"
+  checksum: 137c02fb863f96a2f032292fbfaf958fb784b62d97acb6a4968c012d365fa092997443584bd50205f89ad9128c729119efdf5db67cdda586f1cdd43049b26d6b
   languageName: node
   linkType: hard
 
@@ -6470,32 +6484,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:2.9.4":
-  version: 2.9.4
-  resolution: "chart.js@npm:2.9.4"
-  dependencies:
-    chartjs-color: ^2.1.0
-    moment: ^2.10.2
-  checksum: cbdc7abe2fa65e4838848e68b035ae6048ebcc512b9057d7cdb6d361e728400d39e3fde75e0b4da815ab43f7890c31787d8f80d4e6ab75a3e80fc75b47cd173c
-  languageName: node
-  linkType: hard
-
-"chartjs-color-string@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "chartjs-color-string@npm:0.6.0"
-  dependencies:
-    color-name: ^1.0.0
-  checksum: 2355bc8e9514b779d0dc057c5ee6707e8166f270531c27287a399d6bfeb0d891b00a6f6c20e764453a062de0de8b298b11d3850fc94c323df66efb4720ece4c7
-  languageName: node
-  linkType: hard
-
-"chartjs-color@npm:^2.1.0":
-  version: 2.4.1
-  resolution: "chartjs-color@npm:2.4.1"
-  dependencies:
-    chartjs-color-string: ^0.6.0
-    color-convert: ^1.9.3
-  checksum: 254d7b2f103980417703331c49fba18877ac797fd9056d79f0d566dc4fd8d41f91b7f63d4b19602462b91110bee2fe0c9fd57266ce871e498ac1c25742fffb11
+"chart.js@npm:3.8.2":
+  version: 3.8.2
+  resolution: "chart.js@npm:3.8.2"
+  checksum: a60fef3c98ed6890ce0e1e094900aa573aa1f5fa2edc7363f52efb6850730666ac479a193e86fba17dc340a1651d6b273fac7632c3e0c40c9ed5a70d09b118da
   languageName: node
   linkType: hard
 
@@ -6585,7 +6577,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:2.3.1, classnames@npm:^2.2.5":
+"classnames@npm:2.3.2":
+  version: 2.3.2
+  resolution: "classnames@npm:2.3.2"
+  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
+  languageName: node
+  linkType: hard
+
+"classnames@npm:^2.2.5":
   version: 2.3.1
   resolution: "classnames@npm:2.3.1"
   checksum: 14db8889d56c267a591f08b0834989fe542d47fac659af5a539e110cc4266694e8de86e4e3bbd271157dbd831361310a8293e0167141e80b0f03a0f175c80960
@@ -6699,7 +6698,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-convert@npm:^1.9.0, color-convert@npm:^1.9.3":
+"color-convert@npm:^1.9.0":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
   dependencies:
@@ -6731,7 +6730,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-name@npm:^1.0.0, color-name@npm:^1.1.4, color-name@npm:~1.1.4":
+"color-name@npm:^1.1.4, color-name@npm:~1.1.4":
   version: 1.1.4
   resolution: "color-name@npm:1.1.4"
   checksum: b0445859521eb4021cd0fb0cc1a75cecf67fceecae89b63f62b201cca8d345baf8b952c966862a9d9a2632987d4f6581f0ec8d957dfacece86f0a7919316f610
@@ -7286,13 +7285,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-vars-ponyfill@npm:2.4.7":
-  version: 2.4.7
-  resolution: "css-vars-ponyfill@npm:2.4.7"
+"css-vars-ponyfill@npm:2.4.8":
+  version: 2.4.8
+  resolution: "css-vars-ponyfill@npm:2.4.8"
   dependencies:
     balanced-match: ^1.0.2
     get-css-data: ^2.0.2
-  checksum: 47b18e1be5cfcc0edf67bd78dbd0b6cb8686af3b8693bd06cc72b743569dac3a447f5a05e65b22317e57d98f47f130c3317214cf7ad260d828704e2f05e70046
+  checksum: ea2e270455d039d4b9a34e7a9c0264052c0c9d832538123afce7766cfe833b7c149406d5d984a406ad401d9b7e0115fdbac029321214d49ebe88cd743d055899
   languageName: node
   linkType: hard
 
@@ -7933,6 +7932,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"domino@npm:^2.1.6":
+  version: 2.1.6
+  resolution: "domino@npm:2.1.6"
+  checksum: 9b1b6d2661efd8bf942b70d5e11ac0de6a63f17e49b7eb227d9a612fa7b7c12b7775520d64f498988a8ee334ea9c59a463c84ea510b0af17dd3e13fdce120410
+  languageName: node
+  linkType: hard
+
 "dommatrix@npm:^1.0.3":
   version: 1.0.3
   resolution: "dommatrix@npm:1.0.3"
@@ -8161,10 +8167,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"emoji-regex@npm:10.1.0":
-  version: 10.1.0
-  resolution: "emoji-regex@npm:10.1.0"
-  checksum: 5bc780fc4d75f89369155a87c55f7e83a0bf72bcccda7df7f2c570cde4738d8b17d112d12afdadfec16647d1faef6501307b4304f81d35c823a938fe6547df0f
+"emoji-regex@npm:10.2.1":
+  version: 10.2.1
+  resolution: "emoji-regex@npm:10.2.1"
+  checksum: 1aa2d16881c56531fdfc03d0b36f5c2b6221cc4097499a5665b88b711dc3fb4d5b8804f0ca6f00c56e5dcf89bac75f0487eee85da1da77df3a33accc6ecbe426
   languageName: node
   linkType: hard
 
@@ -9108,6 +9114,17 @@ __metadata:
   version: 3.0.2
   resolution: "extend@npm:3.0.2"
   checksum: a50a8309ca65ea5d426382ff09f33586527882cf532931cb08ca786ea3146c0553310bda688710ff61d7668eba9f96b923fe1420cdf56a2c3eaf30fcab87b515
+  languageName: node
+  linkType: hard
+
+"external-remotes-plugin@npm:1.0.0":
+  version: 1.0.0
+  resolution: "external-remotes-plugin@npm:1.0.0"
+  dependencies:
+    webpack-sources: ^2.2.0
+  peerDependencies:
+    webpack: ^5
+  checksum: ac2bc6ad190ef973b4942a50deae2cbc292985e4870e51d18f0c085042d5e6025f812fe2872fcb1de4dc4a1182e9258d7c366fbaa4bbd441189a30bd5832ef72
   languageName: node
   linkType: hard
 
@@ -10197,17 +10214,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"highlight.js@npm:*":
+"highlight.js@npm:*, highlight.js@npm:11.6.0":
   version: 11.6.0
   resolution: "highlight.js@npm:11.6.0"
   checksum: 3908eb34a4b442ca1e20c1ae6415ea935fbbcdb2b532a89948d82b0fa4ad41fc5de3802a0de4e88a0bcb7d97d4445579048cd2aab1d105ac47f59dd58a9a98ae
-  languageName: node
-  linkType: hard
-
-"highlight.js@npm:11.5.1":
-  version: 11.5.1
-  resolution: "highlight.js@npm:11.5.1"
-  checksum: bff556101d7691c6275ad19318e368fc971cd0621ef3d86222f5373df7d8191a2fc1ffd47f118138cbcf85e5fe91cfeefaecd6184f49a3ec18090955efc9edef
   languageName: node
   linkType: hard
 
@@ -12343,6 +12353,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-styled-components@npm:7.1.1":
+  version: 7.1.1
+  resolution: "jest-styled-components@npm:7.1.1"
+  dependencies:
+    "@adobe/css-tools": ^4.0.1
+  peerDependencies:
+    styled-components: ">= 5"
+  checksum: 1376d1211855c459e59e6b030af7294519cd2dd78169a2cb0df185ff4390fff417ab51be3dd520f1e975d2f391f50ff266e803c168ff9f03f3ff7ebbb823d2d7
+  languageName: node
+  linkType: hard
+
 "jest-util@npm:^27.5.1":
   version: 27.5.1
   resolution: "jest-util@npm:27.5.1"
@@ -13309,6 +13330,7 @@ __metadata:
     "@deanwhillier/jest-matchmedia-mock": 1.2.0
     "@floating-ui/react-dom": 0.7.2
     "@floating-ui/react-dom-interactions": 0.9.1
+    "@guyplusplus/turndown-plugin-gfm": 1.0.7
     "@hot-loader/react-dom": 16.13.0
     "@infomaniak/compass-components": 0.9.0
     "@infomaniak/compass-icons": 0.8.0
@@ -13318,13 +13340,12 @@ __metadata:
     "@sentry/react": 7.18.0
     "@sentry/tracing": 7.18.0
     "@sentry/types": 7.18.0
-    "@stripe/react-stripe-js": 1.6.0
-    "@stripe/stripe-js": 1.20.3
+    "@stripe/react-stripe-js": 1.13.0
+    "@stripe/stripe-js": 1.41.0
     "@testing-library/jest-dom": 5.16.4
     "@testing-library/react": 12.1.4
     "@tippyjs/react": 4.2.6
     "@types/bootstrap": 4.5.0
-    "@types/chart.js": 2.9.34
     "@types/color-hash": 1.0.2
     "@types/country-list": 2.1.0
     "@types/enzyme": 3.10.11
@@ -13357,6 +13378,7 @@ __metadata:
     "@types/shallow-equals": 1.0.0
     "@types/styled-components": 5.1.24
     "@types/tinycolor2": 1.4.3
+    "@types/turndown": 5.0.1
     "@types/webpack-env": 1.17.0
     "@typescript-eslint/eslint-plugin": 4.28.1
     "@typescript-eslint/parser": 4.28.1
@@ -13369,8 +13391,8 @@ __metadata:
     buffer: 6.0.3
     bundle-loader: 0.5.6
     chalk: 2.4.2
-    chart.js: 2.9.4
-    classnames: 2.3.1
+    chart.js: 3.8.2
+    classnames: 2.3.2
     color-contrast-checker: 2.1.0
     color-hash: 2.0.1
     concurrently: 7.3.0
@@ -13380,13 +13402,13 @@ __metadata:
     cross-env: 7.0.3
     crypto-browserify: 3.12.0
     css-loader: 5.2.6
-    css-vars-ponyfill: 2.4.7
+    css-vars-ponyfill: 2.4.8
     dotenv-webpack: 7.0.3
     dynamic-virtualized-list: "github:mattermost/dynamic-virtualized-list#77a0cb4c565bc239bab1ce5414b95bdd9a570963"
     ejs-compiled-loader: 3.1.0
     emoji-datasource: 6.1.1
     emoji-datasource-apple: 6.0.1
-    emoji-regex: 10.1.0
+    emoji-regex: 10.2.1
     enzyme: 3.11.0
     enzyme-adapter-react-16: 1.15.6
     enzyme-to-json: 3.6.2
@@ -13401,13 +13423,14 @@ __metadata:
     eslint-plugin-react: 7.24.0
     eslint-plugin-react-hooks: 4.3.0
     exif2css: 1.3.0
+    external-remotes-plugin: 1.0.0
     fast-deep-equal: 3.1.3
     file-loader: 6.2.0
     flexsearch: 0.6.32
     font-awesome: 4.7.0
     form-data: 4.0.0
     gfycat-sdk: 1.4.18
-    highlight.js: 11.5.1
+    highlight.js: 11.6.0
     hoist-non-react-statics: 3.3.2
     html-loader: 2.1.2
     html-to-react: 1.5.0
@@ -13420,6 +13443,7 @@ __metadata:
     jest-canvas-mock: 2.4.0
     jest-cli: 27.5.1
     jest-junit: 12.2.0
+    jest-styled-components: 7.1.1
     jest-watch-typeahead: 0.6.4
     katex: 0.13.11
     key-mirror: 1.0.1
@@ -13432,7 +13456,7 @@ __metadata:
     memoize-one: 5.2.1
     mini-css-extract-plugin: 2.0.0
     mmjstool: "https://github.com/mattermost/mattermost-utilities.git"
-    moment-timezone: 0.5.34
+    moment-timezone: 0.5.38
     nock: 13.2.8
     p-queue: 7.1.0
     pdfjs-dist: 2.15.349
@@ -13463,7 +13487,7 @@ __metadata:
     react-window: 1.8.7
     react-window-infinite-loader: 1.0.8
     rebound: 0.1.0
-    redux: 4.1.0
+    redux: 4.2.0
     redux-batched-actions: 0.5.0
     redux-devtools-extension: 2.13.9
     redux-mock-store: 1.5.4
@@ -13475,13 +13499,13 @@ __metadata:
     rudder-sdk-js: 1.0.16
     sass: 1.35.1
     sass-loader: 12.1.0
-    semver: 7.3.7
+    semver: 7.3.8
     serialize-error: 8.0.1
     shallow-equals: 1.0.0
     smooth-scroll-into-view-if-needed: 1.1.33
     stream-browserify: 3.0.0
     style-loader: 3.0.0
-    styled-components: 5.3.5
+    styled-components: 5.3.6
     stylelint: 13.13.1
     stylelint-config-idiomatic-order: 8.1.0
     stylelint-config-recommended: 5.0.0
@@ -13492,6 +13516,7 @@ __metadata:
     terser-webpack-plugin: 5.1.4
     timezones.json: 1.6.1
     tinycolor2: 1.4.2
+    turndown: 7.1.1
     typescript: 4.3.4
     webpack: 5.64.2
     webpack-bundle-analyzer: 4.6.0
@@ -13944,7 +13969,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment-timezone@npm:*, moment-timezone@npm:0.5.34":
+"moment-timezone@npm:*":
   version: 0.5.34
   resolution: "moment-timezone@npm:0.5.34"
   dependencies:
@@ -13953,7 +13978,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:>= 2.9.0, moment@npm:^2.10.2, moment@npm:^2.14.1, moment@npm:^2.29.1":
+"moment-timezone@npm:0.5.38":
+  version: 0.5.38
+  resolution: "moment-timezone@npm:0.5.38"
+  dependencies:
+    moment: ">= 2.9.0"
+  checksum: ff7077de41f2c41a0026cd2b310154c14df8f918331a4ebe88f5872a599deb5e463b123c96990dc447b7474a81c9f3aef7ac57c3d0dfc3bfb9af2cc5b0bca826
+  languageName: node
+  linkType: hard
+
+"moment@npm:>= 2.9.0, moment@npm:^2.14.1, moment@npm:^2.29.1":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
@@ -16554,16 +16588,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:4.1.0":
-  version: 4.1.0
-  resolution: "redux@npm:4.1.0"
-  dependencies:
-    "@babel/runtime": ^7.9.2
-  checksum: 322d5f4b49cbbdb3f64f04e9279cabbdea9a698024b530dc98563eb598b6bd55ff8a715208e3ee09db9802a2f426c991c78906b1c6491ebb52e7310e55ee5cdf
-  languageName: node
-  linkType: hard
-
-"redux@npm:^4.0.0, redux@npm:^4.0.4, redux@npm:^4.0.5":
+"redux@npm:4.2.0, redux@npm:^4.0.0, redux@npm:^4.0.4, redux@npm:^4.0.5":
   version: 4.2.0
   resolution: "redux@npm:4.2.0"
   dependencies:
@@ -17353,14 +17378,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.3.7, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7":
-  version: 7.3.7
-  resolution: "semver@npm:7.3.7"
+"semver@npm:7.3.8":
+  version: 7.3.8
+  resolution: "semver@npm:7.3.8"
   dependencies:
     lru-cache: ^6.0.0
   bin:
     semver: bin/semver.js
-  checksum: 2fa3e877568cd6ce769c75c211beaed1f9fce80b28338cadd9d0b6c40f2e2862bafd62c19a6cff42f3d54292b7c623277bcab8816a2b5521cf15210d43e75232
+  checksum: ba9c7cbbf2b7884696523450a61fee1a09930d888b7a8d7579025ad93d459b2d1949ee5bbfeb188b2be5f4ac163544c5e98491ad6152df34154feebc2cc337c1
   languageName: node
   linkType: hard
 
@@ -17370,6 +17395,17 @@ __metadata:
   bin:
     semver: ./bin/semver.js
   checksum: 1b26ecf6db9e8292dd90df4e781d91875c0dcc1b1909e70f5d12959a23c7eebb8f01ea581c00783bbee72ceeaad9505797c381756326073850dc36ed284b21b9
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7":
+  version: 7.3.7
+  resolution: "semver@npm:7.3.7"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: 2fa3e877568cd6ce769c75c211beaed1f9fce80b28338cadd9d0b6c40f2e2862bafd62c19a6cff42f3d54292b7c623277bcab8816a2b5521cf15210d43e75232
   languageName: node
   linkType: hard
 
@@ -17728,6 +17764,13 @@ __metadata:
   dependencies:
     is-plain-obj: ^1.0.0
   checksum: f0fd827fa9f8f866e98588d2a38c35209afbf1e9a05bb0e4ceeeb8bbf31d923c8902b0a7e0f561590ddb65e58eba6a74f74b991c85360bcc52e83a3f0d1cffd7
+  languageName: node
+  linkType: hard
+
+"source-list-map@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "source-list-map@npm:2.0.1"
+  checksum: 806efc6f75e7cd31e4815e7a3aaf75a45c704871ea4075cb2eb49882c6fca28998f44fc5ac91adb6de03b2882ee6fb02f951fdc85e6a22b338c32bfe19557938
   languageName: node
   linkType: hard
 
@@ -18199,7 +18242,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:5.3.5, styled-components@npm:^5.3.1":
+"styled-components@npm:5.3.6":
+  version: 5.3.6
+  resolution: "styled-components@npm:5.3.6"
+  dependencies:
+    "@babel/helper-module-imports": ^7.0.0
+    "@babel/traverse": ^7.4.5
+    "@emotion/is-prop-valid": ^1.1.0
+    "@emotion/stylis": ^0.8.4
+    "@emotion/unitless": ^0.7.4
+    babel-plugin-styled-components: ">= 1.12.0"
+    css-to-react-native: ^3.0.0
+    hoist-non-react-statics: ^3.0.0
+    shallowequal: ^1.1.0
+    supports-color: ^5.5.0
+  peerDependencies:
+    react: ">= 16.8.0"
+    react-dom: ">= 16.8.0"
+    react-is: ">= 16.8.0"
+  checksum: 68eac1e451be81d66739cf86de8ec9e72f46e7584aa359271761a2437468210bd7cf0a864281fc97dab08c32b35e6bf7513dc8b4104ed6b196cf8d65674dd289
+  languageName: node
+  linkType: hard
+
+"styled-components@npm:^5.3.1":
   version: 5.3.5
   resolution: "styled-components@npm:5.3.5"
   dependencies:
@@ -18959,6 +19024,15 @@ __metadata:
   dependencies:
     safe-buffer: ^5.0.1
   checksum: 05f6510358f8afc62a057b8b692f05d70c1782b70db86d6a1e0d5e28a32389e52fa6e7707b6c5ecccacc031462e4bc35af85ecfe4bbc341767917b7cf6965711
+  languageName: node
+  linkType: hard
+
+"turndown@npm:7.1.1, turndown@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "turndown@npm:7.1.1"
+  dependencies:
+    domino: ^2.1.6
+  checksum: f2d77632bd69bc93298b619f051dc0c050fabee15188afe874eab713f8ffdcaea89106a536c19db0962a677b5f7177f5aa84b45ef38e06d6e489a49f11abd80d
   languageName: node
   linkType: hard
 
@@ -19796,6 +19870,16 @@ __metadata:
     jimp: 0.16.1
     mime: 2.4.6
   checksum: e048aec05f4fb87938e89748e20fdb9dc787e3835f3fdaa77fa2759c0c456665174dd1dd8987c7fd09c465d8f7e2175fae375677c941306535f75a5bd9fb22c4
+  languageName: node
+  linkType: hard
+
+"webpack-sources@npm:^2.2.0":
+  version: 2.3.1
+  resolution: "webpack-sources@npm:2.3.1"
+  dependencies:
+    source-list-map: ^2.0.1
+    source-map: ^0.6.1
+  checksum: 6fd67f2274a84c5f51ad89767112ec8b47727134bf0f2ba0cff458c970f18966939a24128bdbddba621cd66eeb2bef0552642a9333cd8e54514f7b2a71776346
   languageName: node
   linkType: hard
 

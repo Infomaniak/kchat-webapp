@@ -156,9 +156,10 @@ exports[`components/AdminSidebar Plugins should match snapshot 1`] = `
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="enterprise"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -180,9 +181,10 @@ exports[`components/AdminSidebar Plugins should match snapshot 1`] = `
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="enterprise"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -224,9 +226,10 @@ exports[`components/AdminSidebar Plugins should match snapshot 1`] = `
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="professional"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -268,9 +271,10 @@ exports[`components/AdminSidebar Plugins should match snapshot 1`] = `
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="professional"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -292,9 +296,10 @@ exports[`components/AdminSidebar Plugins should match snapshot 1`] = `
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="professional"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -316,9 +321,10 @@ exports[`components/AdminSidebar Plugins should match snapshot 1`] = `
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="professional"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -340,9 +346,10 @@ exports[`components/AdminSidebar Plugins should match snapshot 1`] = `
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="professional"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -421,9 +428,10 @@ exports[`components/AdminSidebar Plugins should match snapshot 1`] = `
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="enterprise"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -445,9 +453,10 @@ exports[`components/AdminSidebar Plugins should match snapshot 1`] = `
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="enterprise"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -469,9 +478,10 @@ exports[`components/AdminSidebar Plugins should match snapshot 1`] = `
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="enterprise"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -4582,9 +4592,10 @@ exports[`components/AdminSidebar should match snapshot, with license (without an
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="enterprise"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -4642,9 +4653,10 @@ exports[`components/AdminSidebar should match snapshot, with license (without an
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="enterprise"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -4886,9 +4898,10 @@ exports[`components/AdminSidebar should match snapshot, with license (without an
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="professional"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -5038,9 +5051,10 @@ exports[`components/AdminSidebar should match snapshot, with license (without an
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="professional"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -5062,9 +5076,10 @@ exports[`components/AdminSidebar should match snapshot, with license (without an
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="professional"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -5098,9 +5113,10 @@ exports[`components/AdminSidebar should match snapshot, with license (without an
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="professional"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -5122,9 +5138,10 @@ exports[`components/AdminSidebar should match snapshot, with license (without an
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="professional"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -5259,9 +5276,10 @@ exports[`components/AdminSidebar should match snapshot, with license (without an
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="enterprise"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -5283,9 +5301,10 @@ exports[`components/AdminSidebar should match snapshot, with license (without an
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="enterprise"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }
@@ -5307,9 +5326,10 @@ exports[`components/AdminSidebar should match snapshot, with license (without an
               restrictedIndicator={
                 <RestrictedIndicator
                   blocked={true}
+                  minimumPlanRequiredForFeature="enterprise"
                   tooltipMessageBlocked={
                     Object {
-                      "defaultMessage": "This is a professional feature, available with an upgrade or free {trialLength}-day trial",
+                      "defaultMessage": "This is {article} {minimumPlanRequiredForFeature} feature, available with an upgrade or free {trialLength}-day trial",
                       "id": "admin.sidebar.restricted_indicator.tooltip.message.blocked",
                     }
                   }

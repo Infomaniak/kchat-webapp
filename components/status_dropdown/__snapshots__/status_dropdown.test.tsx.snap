@@ -7,8 +7,9 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
   onToggle={[Function]}
   open={false}
 >
-  <div
-    className="status-wrapper"
+  <button
+    aria-label="Set a status"
+    className="status-wrapper style--none"
   >
     <Memo(CustomStatusEmoji)
       emojiStyle={
@@ -20,16 +21,15 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
       showTooltip={true}
       tooltipDirection="bottom"
     />
-    <button
-      aria-label="Set a status"
-      className="status style--none"
+    <div
+      className="status"
     >
       <StatusIcon
         size="sm"
         status="offline"
       />
-    </button>
-  </div>
+    </div>
+  </button>
   <Menu
     ariaLabel="Set a status"
     id="statusDropdownMenu"
@@ -221,8 +221,9 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
   onToggle={[Function]}
   open={true}
 >
-  <div
-    className="status-wrapper"
+  <button
+    aria-label="Set a status"
+    className="status-wrapper style--none"
   >
     <Memo(CustomStatusEmoji)
       emojiStyle={
@@ -234,16 +235,15 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
       showTooltip={true}
       tooltipDirection="bottom"
     />
-    <button
-      aria-label="Set a status"
-      className="status style--none"
+    <div
+      className="status"
     >
       <StatusIcon
         size="sm"
         status="offline"
       />
-    </button>
-  </div>
+    </div>
+  </button>
   <Menu
     ariaLabel="Set a status"
     id="statusDropdownMenu"
@@ -517,8 +517,9 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
   onToggle={[Function]}
   open={true}
 >
-  <div
-    className="status-wrapper"
+  <button
+    aria-label="Set a status"
+    className="status-wrapper style--none"
   >
     <Memo(CustomStatusEmoji)
       emojiStyle={
@@ -530,16 +531,15 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
       showTooltip={true}
       tooltipDirection="bottom"
     />
-    <button
-      aria-label="Set a status"
-      className="status style--none"
+    <div
+      className="status"
     >
       <StatusIcon
         size="sm"
         status="offline"
       />
-    </button>
-  </div>
+    </div>
+  </button>
   <Menu
     ariaLabel="Set a status"
     id="statusDropdownMenu"
@@ -765,8 +765,9 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
   onToggle={[Function]}
   open={true}
 >
-  <div
-    className="status-wrapper"
+  <button
+    aria-label="Set a status"
+    className="status-wrapper style--none"
   >
     <Memo(CustomStatusEmoji)
       emojiStyle={
@@ -778,16 +779,15 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
       showTooltip={true}
       tooltipDirection="bottom"
     />
-    <button
-      aria-label="Set a status"
-      className="status style--none"
+    <div
+      className="status"
     >
       <StatusIcon
         size="sm"
         status="offline"
       />
-    </button>
-  </div>
+    </div>
+  </button>
   <Menu
     ariaLabel="Set a status"
     id="statusDropdownMenu"
@@ -1013,8 +1013,9 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
   onToggle={[Function]}
   open={true}
 >
-  <div
-    className="status-wrapper"
+  <button
+    aria-label="Set a status"
+    className="status-wrapper style--none"
   >
     <Memo(CustomStatusEmoji)
       emojiStyle={
@@ -1026,16 +1027,15 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
       showTooltip={true}
       tooltipDirection="bottom"
     />
-    <button
-      aria-label="Set a status"
-      className="status style--none"
+    <div
+      className="status"
     >
       <StatusIcon
         size="sm"
         status="offline"
       />
-    </button>
-  </div>
+    </div>
+  </button>
   <Menu
     ariaLabel="Set a status"
     id="statusDropdownMenu"
@@ -1262,8 +1262,9 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
   onToggle={[Function]}
   open={false}
 >
-  <div
-    className="status-wrapper"
+  <button
+    aria-label="Set a status"
+    className="status-wrapper style--none"
   >
     <Memo(CustomStatusEmoji)
       emojiStyle={
@@ -1279,16 +1280,15 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
       size="sm"
       url="http://localhost:8065/api/v4/users/jsx5jmdiyjyuzp9rzwfaf5pwjo/image?_=1590519110944"
     />
-    <button
-      aria-label="Set a status"
-      className="status style--none"
+    <div
+      className="status"
     >
       <StatusIcon
         size="sm"
         status="offline"
       />
-    </button>
-  </div>
+    </div>
+  </button>
   <Menu
     ariaLabel="Set a status"
     id="statusDropdownMenu"
@@ -1484,8 +1484,9 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
   onToggle={[Function]}
   open={true}
 >
-  <div
-    className="status-wrapper"
+  <button
+    aria-label="Set a status"
+    className="status-wrapper style--none"
   >
     <Memo(CustomStatusEmoji)
       emojiStyle={
@@ -1497,16 +1498,15 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
       showTooltip={true}
       tooltipDirection="bottom"
     />
-    <button
-      aria-label="Set a status"
-      className="status style--none"
+    <div
+      className="status"
     >
       <StatusIcon
         size="sm"
         status="offline"
       />
-    </button>
-  </div>
+    </div>
+  </button>
   <Menu
     ariaLabel="Set a status"
     id="statusDropdownMenu"
@@ -1698,8 +1698,9 @@ exports[`components/StatusDropdown should not show clear status button when cust
   onToggle={[Function]}
   open={true}
 >
-  <div
-    className="status-wrapper"
+  <button
+    aria-label="Set a status"
+    className="status-wrapper style--none"
   >
     <Memo(CustomStatusEmoji)
       emojiStyle={
@@ -1711,16 +1712,15 @@ exports[`components/StatusDropdown should not show clear status button when cust
       showTooltip={true}
       tooltipDirection="bottom"
     />
-    <button
-      aria-label="Set a status"
-      className="status style--none"
+    <div
+      className="status"
     >
       <StatusIcon
         size="sm"
         status="offline"
       />
-    </button>
-  </div>
+    </div>
+  </button>
   <Menu
     ariaLabel="Set a status"
     id="statusDropdownMenu"
@@ -1946,8 +1946,9 @@ exports[`components/StatusDropdown should show clear status button when custom s
   onToggle={[Function]}
   open={true}
 >
-  <div
-    className="status-wrapper"
+  <button
+    aria-label="Set a status"
+    className="status-wrapper style--none"
   >
     <Memo(CustomStatusEmoji)
       emojiStyle={
@@ -1959,16 +1960,15 @@ exports[`components/StatusDropdown should show clear status button when custom s
       showTooltip={true}
       tooltipDirection="bottom"
     />
-    <button
-      aria-label="Set a status"
-      className="status style--none"
+    <div
+      className="status"
     >
       <StatusIcon
         size="sm"
         status="offline"
       />
-    </button>
-  </div>
+    </div>
+  </button>
   <Menu
     ariaLabel="Set a status"
     id="statusDropdownMenu"

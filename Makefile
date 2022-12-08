@@ -1,9 +1,7 @@
-.PHONY: build test run clean stop check-style fix-style run-unit emojis help package-ci update-dependencies
+.PHONY: build dist test run clean stop check-style fix-style run-unit emojis help update-dependencies
 
 BUILD_SERVER_DIR = ../mattermost-server
-BUILD_WEBAPP_DIR = ../mattermost-webapp
-MM_UTILITIES_DIR = ../mattermost-utilities
-EMOJI_TOOLS_DIR = ./build/emoji
+
 export NODE_OPTIONS=--max-old-space-size=4096
 
 -include config.override.mk
@@ -13,6 +11,9 @@ RUN_IN_BACKGROUND ?=
 ifeq ($(RUN_CLIENT_IN_BACKGROUND),true)
 	RUN_IN_BACKGROUND := &
 endif
+
+# The CI environment variable is set automatically in CircleCI and GitLab CI
+CI ?= false
 
 check-style: node_modules ## Checks JS file for ESLint confirmity
 	@echo Checking for style guide compliance
@@ -42,27 +43,23 @@ node_modules: package.json package-lock.json
 
 	node skip_integrity_check.js
 
+ifeq ($(CI),false)
 	npm install
-	npm run build --workspace=packages/components
+else
+	npm ci
+endif
+
 	touch $@
 
-package: build ## Packages app
-	@echo Packaging webapp
-
-	mkdir tmp
-	mv dist tmp/client
-	tar -C tmp -czf mattermost-webapp.tar.gz client
-	mv tmp/client dist
-	rmdir tmp
-
-package-ci: ## used in the CI to build the package and bypass the npm install
-	@echo Building mattermost Webapp
+build: node_modules ## Builds app
+	@echo Building Mattermost Web App
 
 	rm -rf dist
 	npm run build --workspace=packages/components
 	npm run build
 
-	@echo Packaging webapp
+dist: node_modules build ## Builds and packages app
+	@echo Packaging Mattermost Web App
 
 	mkdir tmp
 	mv dist tmp/client
@@ -70,15 +67,8 @@ package-ci: ## used in the CI to build the package and bypass the npm install
 	mv tmp/client dist
 	rmdir tmp
 
-build: ## Builds the app
-	@echo Building mattermost Webapp
-
-	rm -rf dist
-
-	export $(xargs < ./.env) && yarn build
-
 run: node_modules ## Runs app
-	@echo Running mattermost Webapp for development
+	@echo Running Mattermost Web App for development
 
 	npm run run $(RUN_IN_BACKGROUND)
 
@@ -86,7 +76,7 @@ dev: node_modules ## Runs webpack-dev-server
 	npm run dev-server
 
 run-fullmap: node_modules ## Legacy alias to run
-	@echo Running mattermost Webapp for development
+	@echo Running Mattermost Web App for development
 
 	npm run run $(RUN_IN_BACKGROUND)
 
@@ -102,7 +92,7 @@ endif
 restart: | stop run ## Restarts the app
 
 clean: ## Clears cached; deletes node_modules and dist directories
-	@echo Cleaning Webapp
+	@echo Cleaning Web App
 
 	npm run clean --workspaces --if-present
 
