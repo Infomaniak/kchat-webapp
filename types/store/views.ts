@@ -76,6 +76,7 @@ export type ViewsState = {
         switchCallModal: boolean;
         connectedChannelID: string;
         connectedCallID: string;
+        connectedCallUrl: string;
         voiceConnectedChannels: any;
     };
 

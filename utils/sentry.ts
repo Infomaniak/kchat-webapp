@@ -9,7 +9,8 @@ interface Args {
 }
 
 // Webpack global var
-declare const COMMIT_HASH: string;
+// declare const COMMIT_HASH: string;
+declare const GIT_RELEASE: string;
 
 const isLocalhost = (host: string) => host.startsWith('localhost') || host.startsWith('local.') || host.startsWith('kchat.devd');
 
@@ -22,7 +23,7 @@ export default function init({SENTRY_DSN}: Args) {
 
     Sentry.init({
         dsn: SENTRY_DSN,
-        release: COMMIT_HASH, //eslint-disable-line no-process-env
+        release: GIT_RELEASE, //eslint-disable-line no-process-env
         environment: host.split('.').splice(1).join('.'),
         normalizeDepth: 5,
         integrations: [new BrowserTracing()],
