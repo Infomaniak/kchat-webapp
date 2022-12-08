@@ -116,7 +116,7 @@ export function isEdge(): boolean {
 }
 
 export function isDesktopApp(): boolean {
-    return userAgent().indexOf('Mattermost') !== -1 && userAgent().indexOf('Electron') !== -1;
+    return userAgent().indexOf('kChat') !== -1 && userAgent().indexOf('Electron') !== -1;
 }
 
 export function isWindowsApp(): boolean {
@@ -151,7 +151,7 @@ export function isLinux(): boolean {
 
 export function getDesktopVersion(): string {
     // use if the value window.desktop.version is not set yet
-    const regex = /Mattermost\/(\d+\.\d+\.\d+)/gm;
+    const regex = /kChat\/(\d+\.\d+\.\d+)/gm;
     const match = regex.exec(window.navigator.appVersion)?.[1] || '';
     return match;
 }

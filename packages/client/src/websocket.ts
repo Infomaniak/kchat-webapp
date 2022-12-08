@@ -17,7 +17,7 @@ const JITTER_RANGE = 2000; // 2 sec
 // eslint-disable-next-line no-warning-comments
 // TODO update isDesktopApp() with callback
 function isDesktopApp(): boolean {
-    return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
+    return window.navigator.userAgent.indexOf('kChat') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
 }
 
 export type MessageListener = (msg: WebSocketMessage) => void;
