@@ -89,22 +89,6 @@ const ProductMenu = (): JSX.Element => {
     const showBoardsTour = enableTutorial && tutorialStep === boardsStep && exploreToolsTourTriggered && focalboard;
     const showPlaybooksTour = enableTutorial && tutorialStep === playbooksStep && exploreToolsTourTriggered && playbooks;
 
-    const enableTutorial = useSelector(getConfig).EnableTutorial === 'true';
-    const currentUserId = useSelector(getCurrentUserId);
-    const tutorialStep = useSelector((state: GlobalState) => getInt(state, TutorialTourName.EXPLORE_OTHER_TOOLS, currentUserId, 0));
-    const triggerStep = useSelector((state: GlobalState) => getInt(state, OnboardingTaskCategory, OnboardingTasksName.EXPLORE_OTHER_TOOLS, FINISHED));
-    const exploreToolsTourTriggered = triggerStep === GenericTaskSteps.STARTED;
-
-    const pluginsList = useSelector((state: GlobalState) => state.plugins.plugins);
-    const focalboard = pluginsList.focalboard;
-    const playbooks = pluginsList.playbooks;
-
-    const boardsStep = 0;
-    const playbooksStep = focalboard ? 1 : 0;
-
-    const showBoardsTour = enableTutorial && tutorialStep === boardsStep && exploreToolsTourTriggered && focalboard;
-    const showPlaybooksTour = enableTutorial && tutorialStep === playbooksStep && exploreToolsTourTriggered && playbooks;
-
     const handleClick = () => dispatch(setProductMenuSwitcherOpen(!switcherOpen));
 
     const handleOnBoardingTaskData = useHandleOnBoardingTaskData();
