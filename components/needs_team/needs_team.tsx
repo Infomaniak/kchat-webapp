@@ -126,6 +126,16 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
 
         LocalStorageStore.setTeamIdJoinedOnLoad(null);
 
+        window.postMessage(
+            {
+                type: 'update-teams',
+                message: {
+                    teams: this.props.teamsList,
+                },
+            },
+            window.origin,
+        );
+
         if (!team) {
             this.joinTeam(this.props, true);
         }
