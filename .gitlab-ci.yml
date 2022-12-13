@@ -29,7 +29,7 @@ workflow:
         DEPLOY_VARIABLE: prodsec
     - if: "$CI_MERGE_REQUEST_ID"
       variables:
-        DEPLOY_VARIABLE: "staging/${CI_COMMIT_BRANCH}"
+        DEPLOY_VARIABLE: "staging/${CI_COMMIT_REF_SLUG}"
     - when: never
 
 # eslint-sast:
@@ -37,7 +37,7 @@ workflow:
 #     reports:
 #       sast: gl-sast-report.json
 #   rules:
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_BRANCH}"
+#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
 #       when: on_success
 #     - if: $DEPLOY_VARIABLE == "prodsec"
 #       when: on_success
@@ -47,7 +47,7 @@ code_quality:
   artifacts:
     paths: [gl-code-quality-report.json]
   rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_BRANCH}"
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
@@ -86,7 +86,7 @@ build_front:
       allow_failure: false
     - if: $DEPLOY_VARIABLE == "preprod"
       when: on_success
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_BRANCH}"
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - when: never
   environment:
@@ -126,7 +126,7 @@ publish_front:
       allow_failure: false
     - if: $DEPLOY_VARIABLE == "preprod"
       when: on_success
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_BRANCH}"
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - when: never
   environment:
@@ -151,7 +151,7 @@ unit_test:
   environment:
     name: "$DEPLOY_VARIABLE"
   rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_BRANCH}"
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
@@ -191,7 +191,7 @@ pages:
   environment:
     name: "$DEPLOY_VARIABLE"
   rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_BRANCH}"
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - when: never
   script:
