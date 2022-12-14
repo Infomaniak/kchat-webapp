@@ -10,14 +10,7 @@ import {Post} from 'mattermost-redux/types/posts';
 
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import ActiveCallIcon from 'components/widgets/icons/active_call_icon';
-import CallIcon from 'components/widgets/icons/call_icon';
-import LeaveCallIcon from 'components/widgets/icons/leave_call_icon';
-import ConnectedProfiles from '../connected_profiles';
-
-import {isDesktopApp} from 'utils/user_agent';
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
-import {connectedCallUrl} from '../../../selectors/calls';
 
 interface Props {
     post: Post;

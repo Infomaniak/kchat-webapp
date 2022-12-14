@@ -12,7 +12,6 @@ import {GlobalState} from 'mattermost-redux/types/store';
 
 import {
     connectedCallID,
-    connectedCallUrl,
     voiceConnectedChannels,
     voiceConnectedProfilesInChannel,
 } from 'selectors/calls';
