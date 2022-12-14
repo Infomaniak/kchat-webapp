@@ -17,6 +17,7 @@ import ConnectedProfiles from '../connected_profiles';
 
 import {isDesktopApp} from 'utils/user_agent';
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
+import {connectedCallUrl} from '../../../selectors/calls';
 
 interface Props {
     post: Post;
@@ -51,9 +52,12 @@ const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles,
     //         });
     //     }
     // });
-
+    console.log('[CALL KMEET] post component get call url', connectedUrl);
     const onJoinCallClick = () => {
-        onJoinCall(post.channel_id);
+        const kmeetUrl = new URL(connectedUrl);
+        console.log('[CALL KMEET] post component join call url', kmeetUrl.href);
+        window.open(kmeetUrl.href, '_blank', 'noopener');
+        //onJoinCall(post.channel_id);
     };
 
     const onLeaveButtonClick = () => {
