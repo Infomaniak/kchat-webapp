@@ -24,7 +24,7 @@ export default class FileThumbnail extends React.PureComponent<Props> {
         const type = getFileType(fileInfo.extension);
 
         let thumbnail;
-        if (type === FileTypes.IMAGE) {
+        if (type === FileTypes.IMAGE && fileInfo.has_preview_image) {
             let className = 'post-image';
 
             if (fileInfo.width < Constants.THUMBNAIL_WIDTH && fileInfo.height < Constants.THUMBNAIL_HEIGHT) {
@@ -47,7 +47,7 @@ export default class FileThumbnail extends React.PureComponent<Props> {
                     }}
                 />
             );
-        } else if (fileInfo.extension === FileTypes.SVG && this.props.enableSVGs) {
+        } else if (fileInfo.extension === FileTypes.SVG && this.props.enableSVGs && fileInfo.has_preview_image) {
             thumbnail = (
                 <img
                     alt={'file thumbnail image'}
