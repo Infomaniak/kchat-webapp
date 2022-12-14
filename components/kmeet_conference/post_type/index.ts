@@ -18,6 +18,7 @@ import {
 } from 'selectors/calls';
 
 import PostType from './component';
+import {IKConstants} from '../../../utils/constants-ik';
 
 interface OwnProps {
     post: Post;
@@ -26,7 +27,8 @@ interface OwnProps {
 const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     let hasCall = false;
     const connectedID = connectedCallID(state) || '';
-    const connectedUrl = connectedCallUrl(state) || '';
+    // const connectedUrl = connectedCallUrl(state) || '';
+    const connectedUrl = (ownProps.post.props.conference_id && !ownProps.post.props.end_at) ? `${IKConstants.KMEET_ENDPOINT}${ownProps.post.props.conference_id}` : '';
     const channels = voiceConnectedChannels(state);
 
     let profiles = [];
