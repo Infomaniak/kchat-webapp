@@ -33,7 +33,7 @@ interface Props {
 }
 
 const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles, onJoinCall, leaveCallInChannel}: Props) => {
-    const client = window;
+    //const client = window;
     const intl = useIntl()
     // window.addEventListener('beforeunload', (e) => {
     //     window.postMessage(
@@ -57,14 +57,13 @@ const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles,
         const kmeetUrl = new URL(connectedUrl);
         console.log('[CALL KMEET] post component join call url', kmeetUrl.href);
         window.open(kmeetUrl.href, '_blank', 'noopener');
-        //onJoinCall(post.channel_id);
     };
 
-    const onLeaveButtonClick = () => {
+    /*const onLeaveButtonClick = () => {
         if (client.executeCommand) {
             client.executeCommand('hangup');
         }
-    };
+    };*/
     moment.locale(String(intl.locale));
 
     const subMessage = post.props.end_at ? (
@@ -136,7 +135,7 @@ const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles,
                         </Profiles>
                     }*/}
                     {
-                        hasCall && connectedUrl &&
+                        connectedUrl &&
                         <JoinButton onClick={onJoinCallClick}>
                             <ButtonText>
                                 <FormattedMessage
