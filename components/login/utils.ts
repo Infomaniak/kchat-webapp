@@ -9,7 +9,7 @@ import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 
-let REFRESH_PROMISE: Promise<any> | null;
+let REFRESH_PROMISE: Promise<any> | null = null;
 
 /**
  * Store IKToken infos in localStorage and update Client
@@ -133,16 +133,17 @@ export function needRefreshToken() {
 
 export function refreshIKToken(redirectToTeam = false): Promise<any> {
     const refreshToken = localStorage.getItem('IKRefreshToken');
-    const isRefreshing = localStorage.getItem('refreshingToken');
 
-    if (isRefreshing) {
+    if (!refreshToken) {
+        return Promise.reject(new Error('missing refresh token'));
+    }
+
+    if (REFRESH_PROMISE) {
         return REFRESH_PROMISE as Promise<any>;
     }
 
     Client4.setToken('');
     Client4.setCSRF('');
-
-    localStorage.setItem('refreshingToken', '1');
 
     // eslint-disable-next-line consistent-return
     REFRESH_PROMISE = new Promise((resolve, reject) => {
@@ -164,17 +165,16 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
                 window.origin,
             );
 
-            localStorage.removeItem('refreshingToken');
-
+            REFRESH_PROMISE = null;
+            resolve(resp);
             if (redirectToTeam) {
                 redirectUserToDefaultTeam();
             }
-            resolve(resp);
         }).catch((error: unknown) => {
             console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
             console.warn(error);
             console.log('[login/utils > refreshIKToken] keeping old token');
-            localStorage.removeItem('refreshingToken');
+            REFRESH_PROMISE = null;
             reject(error);
         });
     });
