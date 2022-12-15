@@ -20,7 +20,7 @@ import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Header from 'components/widgets/header';
 
 import Button from '../../common/button';
-import BalloonIllustration from '../../common/balloon_illustration';
+import ReadThreadIllustration from 'components/threading/common/read_thread_illustration';
 
 import {useThreadRouting} from '../../hooks';
 import './thread_list.scss';
@@ -235,7 +235,7 @@ const ThreadList = ({
                 {unread && !someUnread && isEmpty(unreadIds) ? (
                     <NoResultsIndicator
                         expanded={true}
-                        iconGraphic={BalloonIllustration}
+                        iconGraphic={<ReadThreadIllustration scale={0.5}/>}
                         title={formatMessage({
                             id: 'globalThreads.threadList.noUnreadThreads',
                             defaultMessage: 'No unread threads',

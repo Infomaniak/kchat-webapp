@@ -74,10 +74,13 @@ const LessThanMaxFreeUsers = ({setHeader, createBoard}: {setHeader: React.ReactN
             {setHeader}
             <div className='LessThanMaxFreeUsers'>
                 <EmptyStateThemeableSvg
-                    width={128}
-                    height={113}
+                    width={129}
+                    height={154}
                 />
-                <div className='titleAndButton'>
+                <div
+                    className='titleAndButton'
+                    style={{justifyContent: 'center'}}
+                >
                     <FormattedMessage
                         id='intro_messages.inviteOthersToWorkspace.title'
                         defaultMessage='Let’s add some people to the workspace!'
