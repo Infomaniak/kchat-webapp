@@ -1,3 +1,10 @@
+## 0.6.0 (2022-12-15)
+
+## Fixed (2 changes)
+
+- [better handle multiple calls to refreshToken func](kchat/webapp@b6c2a11c603a4561164d6f9afd166b563a151d54) by @antonbuksa ([merge request](kchat/webapp!240))
+- [Add secondary class to remove message modal cancel button](kchat/webapp@069e787384fd569df1a5c2ef07b6ca74d164dd56) by @leonard.jouve ([merge request](kchat/webapp!201))
+
 ## 0.5.37 (2022-12-08)
 
 ## Fixed (1 change)
