@@ -52,6 +52,7 @@ import {isDesktopApp} from '../utils/user_agent';
 import {IKConstants} from '../utils/constants-ik';
 
 import {openModal} from './views/modals';
+import {clearLocalStorageToken, revokeIKToken} from '../components/login/utils';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -253,33 +254,35 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         if (shouldSignalLogout) {
             BrowserStore.signalLogout();
         }
+
+        // Waiting for deleteToken login ik
+        if (isDesktopApp() && userAction) {
+        //     revokeIKToken();
+        // } else {
+            clearLocalStorageToken();
+        }
+
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
 
         clearUserCookie();
 
-        if (isDesktopApp()) {
-            if (redirectTo && redirectTo !== 'ikLogout') {
-                browserHistory.push(redirectTo);
-            } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
-            }
-        } else if (redirectTo && redirectTo !== 'ikLogout') {
+        if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
-        } else {
-            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+        } else if (userAction) {
+            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
+                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
+                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+            window.location.assign(url);
         }
     }).catch(() => {
-        if (isDesktopApp()) {
-            if (redirectTo && redirectTo !== 'ikLogout') {
-                browserHistory.push(redirectTo);
-            } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
-            }
-        } else if (redirectTo && redirectTo !== 'ikLogout') {
+        if (redirectTo && redirectTo !== 'ikLogout') {
             browserHistory.push(redirectTo);
-        } else {
-            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+        } else if (userAction) {
+            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
+                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
+                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+            window.location.assign(url);
         }
     });
 }
@@ -408,3 +411,8 @@ export async function redirectUserToDefaultTeam() {
 
     browserHistory.push('/select_team');
 }
+
+export function redirectToManagerDashboard(groupId: number) {
+    window.open(`${IKConstants.MANAGER_URL}v3/${groupId}/ng/kchat`, '_blank');
+}
+

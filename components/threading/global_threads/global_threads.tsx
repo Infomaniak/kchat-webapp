@@ -37,7 +37,8 @@ import LoadingScreen from 'components/loading_screen';
 import NoResultsIndicator from 'components/no_results_indicator';
 
 import {useThreadRouting} from '../hooks';
-import ChatIllustration from '../common/chat_illustration';
+import ReadThreadIllustration from '../common/read_thread_illustration';
+import SelectThreadIllustration from '../common/select_thread_illustration';
 
 import ThreadViewer from '../thread_viewer';
 
@@ -149,6 +150,8 @@ const GlobalThreads = () => {
         setFilter(ThreadFilter.unread);
     }, []);
 
+    const noUnread = filter === ThreadFilter.unread && numUnread === 0;
+
     return (
         <div
             id='app-content'
@@ -174,7 +177,7 @@ const GlobalThreads = () => {
                     ) : (
                         <NoResultsIndicator
                             expanded={true}
-                            iconGraphic={ChatIllustration}
+                            iconGraphic={ReadThreadIllustration}
                             title={formatMessage({
                                 id: 'globalThreads.noThreads.title',
                                 defaultMessage: 'No followed threads yet',
@@ -207,29 +210,27 @@ const GlobalThreads = () => {
                             />
                         </ThreadPane>
                     ) : (
-                        <NoResultsIndicator
-                            expanded={true}
-                            iconGraphic={ChatIllustration}
-                            title={formatMessage({
-                                id: 'globalThreads.threadPane.unselectedTitle',
-                                defaultMessage: '{numUnread, plural, =0 {Looks like you’re all caught up} other {Catch up on your threads}}',
-                            }, {numUnread})}
-                            subtitle={formatMessage({
-                                id: 'globalThreads.threadPane.unreadMessageLink',
-                                defaultMessage: 'You have {numUnread, plural, =0 {no unread threads} =1 {<link>{numUnread} thread</link>} other {<link>{numUnread} threads</link>}} {numUnread, plural, =0 {} other {with unread messages}}',
-                            }, {
-                                numUnread,
-                                link: (chunks) => (
-                                    <Link
-                                        key='single'
-                                        to={`${url}/${unreadThreadIds[0]}`}
-                                        onClick={handleSelectUnread}
-                                    >
-                                        {chunks}
-                                    </Link>
-                                ),
-                            })}
-                        />
+                        <>
+                            {noUnread ? (
+                                <NoResultsIndicator
+                                    expanded={true}
+                                    iconGraphic={ReadThreadIllustration}
+                                    title={formatMessage({
+                                        id: 'globalThreads.threadList.noUnreadThreads',
+                                        defaultMessage: 'No unread thread',
+                                    })}
+                                />
+                            ) : (
+                                <NoResultsIndicator
+                                    expanded={true}
+                                    iconGraphic={SelectThreadIllustration}
+                                    title={formatMessage({
+                                        id: 'globalThreads.threadPane.unselectedTitle',
+                                        defaultMessage: 'Select a Thread',
+                                    })}
+                                />
+                            )}
+                        </>
                     )}
                 </>
             )}

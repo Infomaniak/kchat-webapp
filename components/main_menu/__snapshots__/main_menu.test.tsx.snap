@@ -9,6 +9,22 @@ exports[`components/Menu should match snapshot with guest access disabled and no
   ariaLabel="team menu"
 >
   <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
+  <MenuGroup>
     <Connect(TeamPermissionGate)
       permissions={
         Array [
@@ -31,30 +47,6 @@ exports[`components/Menu should match snapshot with guest access disabled and no
         modalId="add_groups_to_team"
         show={false}
         text="Add Groups to Team"
-      />
-    </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "manage_team",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamSettingsModal)",
-            "type": [Function],
-          }
-        }
-        id="teamSettings"
-        modalId="team_settings"
-        show={true}
-        text="Team Settings"
       />
     </Connect(TeamPermissionGate)>
     <Connect(TeamPermissionGate)
@@ -111,6 +103,22 @@ exports[`components/Menu should match snapshot with id 1`] = `
   id="test-id"
 >
   <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
+  <MenuGroup>
     <Connect(TeamPermissionGate)
       permissions={
         Array [
@@ -133,30 +141,6 @@ exports[`components/Menu should match snapshot with id 1`] = `
         modalId="add_groups_to_team"
         show={false}
         text="Add Groups to Team"
-      />
-    </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "manage_team",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamSettingsModal)",
-            "type": [Function],
-          }
-        }
-        id="teamSettings"
-        modalId="team_settings"
-        show={true}
-        text="Team Settings"
       />
     </Connect(TeamPermissionGate)>
     <Connect(TeamPermissionGate)
@@ -212,6 +196,22 @@ exports[`components/Menu should match snapshot with most of the thing disabled 1
   ariaLabel="team menu"
 >
   <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
+  <MenuGroup>
     <Connect(TeamPermissionGate)
       permissions={
         Array [
@@ -234,30 +234,6 @@ exports[`components/Menu should match snapshot with most of the thing disabled 1
         modalId="add_groups_to_team"
         show={false}
         text="Add Groups to Team"
-      />
-    </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "manage_team",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamSettingsModal)",
-            "type": [Function],
-          }
-        }
-        id="teamSettings"
-        modalId="team_settings"
-        show={true}
-        text="Team Settings"
       />
     </Connect(TeamPermissionGate)>
     <Connect(TeamPermissionGate)
@@ -409,38 +385,24 @@ exports[`components/Menu should match snapshot with most of the thing disabled i
       />
     </Connect(TeamPermissionGate)>
   </MenuGroup>
+  <MenuGroup />
+  <MenuGroup />
   <MenuGroup>
-    <Connect(TeamPermissionGate)
+    <Connect(SystemPermissionGate)
       permissions={
         Array [
-          "manage_team",
+          undefined,
         ]
       }
-      teamId="team-id"
     >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamSettingsModal)",
-            "type": [Function],
-          }
-        }
-        icon={
-          <i
-            className="fa fa-globe"
-          />
-        }
-        id="teamSettings"
-        modalId="team_settings"
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
         show={true}
-        text="Team Settings"
+        text="Tableau de bord"
       />
-    </Connect(TeamPermissionGate)>
+    </Connect(SystemPermissionGate)>
   </MenuGroup>
-  <MenuGroup />
   <MenuGroup>
     <MenuItemLink
       id="integrations"
@@ -470,6 +432,22 @@ exports[`components/Menu should match snapshot with most of the thing enabled 1`
   ariaLabel="team menu"
 >
   <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
+  <MenuGroup>
     <Connect(TeamPermissionGate)
       permissions={
         Array [
@@ -492,30 +470,6 @@ exports[`components/Menu should match snapshot with most of the thing enabled 1`
         modalId="add_groups_to_team"
         show={false}
         text="Add Groups to Team"
-      />
-    </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "manage_team",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamSettingsModal)",
-            "type": [Function],
-          }
-        }
-        id="teamSettings"
-        modalId="team_settings"
-        show={true}
-        text="Team Settings"
       />
     </Connect(TeamPermissionGate)>
     <Connect(TeamPermissionGate)
@@ -667,38 +621,24 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
       />
     </Connect(TeamPermissionGate)>
   </MenuGroup>
+  <MenuGroup />
+  <MenuGroup />
   <MenuGroup>
-    <Connect(TeamPermissionGate)
+    <Connect(SystemPermissionGate)
       permissions={
         Array [
-          "manage_team",
+          undefined,
         ]
       }
-      teamId="team-id"
     >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamSettingsModal)",
-            "type": [Function],
-          }
-        }
-        icon={
-          <i
-            className="fa fa-globe"
-          />
-        }
-        id="teamSettings"
-        modalId="team_settings"
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
         show={true}
-        text="Team Settings"
+        text="Tableau de bord"
       />
-    </Connect(TeamPermissionGate)>
+    </Connect(SystemPermissionGate)>
   </MenuGroup>
-  <MenuGroup />
   <MenuGroup>
     <MenuItemLink
       id="integrations"
@@ -728,6 +668,22 @@ exports[`components/Menu should match snapshot with plugins 1`] = `
   ariaLabel="team menu"
 >
   <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
+  </MenuGroup>
+  <MenuGroup>
     <Connect(TeamPermissionGate)
       permissions={
         Array [
@@ -750,30 +706,6 @@ exports[`components/Menu should match snapshot with plugins 1`] = `
         modalId="add_groups_to_team"
         show={false}
         text="Add Groups to Team"
-      />
-    </Connect(TeamPermissionGate)>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "manage_team",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamSettingsModal)",
-            "type": [Function],
-          }
-        }
-        id="teamSettings"
-        modalId="team_settings"
-        show={true}
-        text="Team Settings"
       />
     </Connect(TeamPermissionGate)>
     <Connect(TeamPermissionGate)
@@ -940,37 +872,7 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
       />
     </Connect(TeamPermissionGate)>
   </MenuGroup>
-  <MenuGroup>
-    <Connect(TeamPermissionGate)
-      permissions={
-        Array [
-          "manage_team",
-        ]
-      }
-      teamId="team-id"
-    >
-      <MenuItemToggleModalRedux
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "displayName": "Connect(TeamSettingsModal)",
-            "type": [Function],
-          }
-        }
-        icon={
-          <i
-            className="fa fa-globe"
-          />
-        }
-        id="teamSettings"
-        modalId="team_settings"
-        show={true}
-        text="Team Settings"
-      />
-    </Connect(TeamPermissionGate)>
-  </MenuGroup>
+  <MenuGroup />
   <MenuGroup>
     <MenuItemAction
       id="plugin-id-1_pluginmenuitem"
@@ -984,6 +886,22 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
       onClick={[Function]}
       show={true}
     />
+  </MenuGroup>
+  <MenuGroup>
+    <Connect(SystemPermissionGate)
+      permissions={
+        Array [
+          undefined,
+        ]
+      }
+    >
+      <MenuItemAction
+        id="dashboardManager"
+        onClick={[Function]}
+        show={true}
+        text="Tableau de bord"
+      />
+    </Connect(SystemPermissionGate)>
   </MenuGroup>
   <MenuGroup>
     <MenuItemLink

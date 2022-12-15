@@ -29,6 +29,7 @@ import SidebarChannelList from './sidebar_channel_list';
 import SidebarHeader from './sidebar_header';
 import MobileSidebarHeader from './mobile_sidebar_header';
 import { isDesktopApp } from 'utils/user_agent';
+import {closeRightHandSide, showSettings} from '../../actions/views/rhs';
 
 type Props = {
     teamId: string;
@@ -37,12 +38,15 @@ type Props = {
     canJoinPublicChannel: boolean;
     isOpen: boolean;
     hasSeenModal: boolean;
+    isRhsSettings?: boolean;
     actions: {
         fetchMyCategories: (teamId: string) => {data: boolean};
         createCategory: (teamId: string, categoryName: string) => {data: string};
         openModal: <P>(modalData: ModalData<P>) => void;
         closeModal: (modalId: string) => void;
         clearChannelSelection: () => void;
+        showSettings?: () => void;
+        closeRightHandSide?: () => void;
     };
     isCloud: boolean;
     unreadFilterEnabled: boolean;
@@ -116,13 +120,11 @@ export default class Sidebar extends React.PureComponent<Props, State> {
             } else if (Utils.isKeyPressed(event, Constants.KeyCodes.A) && event.shiftKey) {
                 event.preventDefault();
 
-                this.props.actions.openModal({
-                    modalId: ModalIdentifiers.USER_SETTINGS,
-                    dialogType: UserSettingsModal,
-                    dialogProps: {
-                        isContentProductSettings: true,
-                    },
-                });
+                if (this.props.isRhsSettings) {
+                    this.props.actions.closeRightHandSide();
+                } else {
+                    this.props.actions.showSettings();
+                }
             }
         }
     }

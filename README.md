@@ -1,4 +1,4 @@
-# ktalk-webapp
+# kchat-webapp
 
 HALL OF FAME
 
@@ -10,13 +10,22 @@ nb. cela a marché...
 
 ## install + watch
 
+.env file with
+
+```dotenv
+WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/next
+WEBCOMPONENT_API_ENDPOINT=https://welcome.preprod.dev.infomaniak.ch
+MANAGER_ENDPOINT=https://manager.preprod.dev.infomaniak.ch/
+LOGIN_ENDPOINT=https://login.preprod.dev.infomaniak.ch/
+```
+
 ```shell
 nvm use 16
-yarm install
+yarn install
 yarn workspace @mattermost/types build
 yarn workspace @mattermost/client build
 yarn workspace @mattermost/components build
-yarn build:webapp
+export $(xargs < ./.env) && yarn build:webapp
 ```
 
 ## run the project
@@ -50,8 +59,8 @@ npm run run
 
 ```yaml
 SERVICES=(
-  applications/ktalk/proxy-api
-  applications/ktalk/webapp
+  applications/kchat/proxy-api
+  applications/kchat/webapp
 )
 ```
 
@@ -61,15 +70,15 @@ SERVICES=(
 version: '2.2'
 
 services:
-  proxy-api-ktalk:
+  proxy-api-kchat:
     volumes:
-      - /home/code/src/dev-local/container-config/ktalk/proxy-api-ktalk/000-default.conf:/etc/apache2/sites-available/000-default.conf
-  ktalk-webapp:
+      - /home/code/src/dev-local/container-config/kchat/proxy-api-kchat/000-default.conf:/etc/apache2/sites-available/000-default.conf
+  kchat-webapp:
     volumes:
-      - /home/code/src/dev-local/container-config/ktalk/webapp/default.conf.template:/etc/nginx/templates/default.conf.template
-      - /home/code/src/ktalk-webapp/dist:/var/www/static
+      - /home/code/src/dev-local/container-config/kchat/webapp/default.conf.template:/etc/nginx/templates/default.conf.template
+      - /home/code/src/kchat-webapp/dist:/var/www/static
 ```
 
-Then go on https://ktalk.devdXXX.dev.infomaniak.ch
+Then go on https://kchat.devdXXX.dev.infomaniak.ch
 
 ### Changelog

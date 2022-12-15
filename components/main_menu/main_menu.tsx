@@ -8,7 +8,7 @@ import {Permissions} from 'mattermost-redux/constants';
 
 import * as GlobalActions from 'actions/global_actions';
 import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
-import {Constants, LicenseSkus, ModalIdentifiers, PaidFeatures} from 'utils/constants';
+import {Constants, LicenseSkus, ModalIdentifiers, PaidFeatures, RHSStates} from 'utils/constants';
 import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
 import {makeUrlSafe} from 'utils/url';
 
@@ -17,7 +17,6 @@ import {makeUrlSafe} from 'utils/url';
 
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
-
 
 import UserSettingsModal from 'components/user_settings/modal';
 import TeamMembersModal from 'components/team_members_modal';
@@ -31,6 +30,7 @@ import {ModalData} from 'types/actions';
 import {PluginComponent} from 'types/store/plugins';
 import {UserProfile} from '@mattermost/types/users';
 import {IKConstants} from '../../utils/constants-ik';
+import {closeRightHandSide, showSettings} from '../../actions/views/rhs';
 
 export type Props = {
     mobile: boolean;
@@ -52,6 +52,7 @@ export type Props = {
     moreTeamsToJoin: boolean;
     pluginMenuItems?: PluginComponent[];
     isMentionSearch?: boolean;
+    isRhsSettings?: boolean;
     teamIsGroupConstrained: boolean;
     isLicensedForLDAPGroups?: boolean;
     intl: IntlShape;
@@ -66,10 +67,12 @@ export type Props = {
     };
     guestAccessEnabled: boolean;
     canInviteTeamMember: boolean;
+    ikGroupId: number;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
         showMentions: () => void;
         showFlaggedPosts: () => void;
+        showSettings: () => void;
         closeRightHandSide: () => void;
         closeRhsMenu: () => void;
     };
@@ -93,12 +96,21 @@ export class MainMenu extends React.PureComponent<Props> {
     handleKeyDown = (e: KeyboardEvent): void => {
         if (cmdOrCtrlPressed(e) && e.shiftKey && isKeyPressed(e, Constants.KeyCodes.A)) {
             e.preventDefault();
-            this.props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}});
+            if (this.props.isRhsSettings) {
+                this.props.actions.closeRightHandSide();
+            } else {
+                this.props.actions.showSettings();
+            }
         }
     }
 
     handleEmitUserLoggedOutEvent = (): void => {
         GlobalActions.emitUserLoggedOutEvent();
+    }
+
+    handleEmitUserGoToDashboard = (e: Event): void => {
+        e.preventDefault();
+        GlobalActions.redirectToManagerDashboard(this.props.ikGroupId);
     }
 
     getFlagged = (e: Event): void => {
@@ -249,7 +261,7 @@ export class MainMenu extends React.PureComponent<Props> {
                     </TeamPermissionGate> */}
                 </Menu.Group>
                 <Menu.Group>
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
@@ -260,7 +272,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.teamSettings', defaultMessage: 'Team Settings'})}
                             icon={<i className='fa fa-globe'/>}
                         />
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                     {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
@@ -333,6 +345,17 @@ export class MainMenu extends React.PureComponent<Props> {
                     {pluginItems}
                 </Menu.Group>
                 <Menu.Group>
+                    <SystemPermissionGate
+                        permissions={[Permissions.SYSTEM_ADMIN]}
+                    >
+                        <Menu.ItemAction
+                            id='dashboardManager'
+                            onClick={this.handleEmitUserGoToDashboard}
+                            text={formatMessage({id: 'navbar_dropdown.dashboard', defaultMessage: 'Tableau de bord'})}
+                        />
+                    </SystemPermissionGate>
+                </Menu.Group>
+                <Menu.Group>
                     <Menu.ItemLink
                         id='integrations'
                         show={true}
@@ -386,6 +409,17 @@ export class MainMenu extends React.PureComponent<Props> {
                 ariaLabel={formatMessage({id: 'sidebar.team_menu.menuAriaLabel', defaultMessage: 'team menu'})}
             >
                 <Menu.Group>
+                    <SystemPermissionGate
+                        permissions={[Permissions.SYSTEM_ADMIN]}
+                    >
+                        <Menu.ItemAction
+                            id='dashboardManager'
+                            onClick={this.handleEmitUserGoToDashboard}
+                            text={formatMessage({id: 'navbar_dropdown.dashboard', defaultMessage: 'Tableau de bord'})}
+                        />
+                    </SystemPermissionGate>
+                </Menu.Group>
+                <Menu.Group>
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
@@ -404,7 +438,7 @@ export class MainMenu extends React.PureComponent<Props> {
                     >
                         {invitePeopleModal}
                     </TeamPermissionGate> */}
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
@@ -414,7 +448,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             dialogType={TeamSettingsModal}
                             text={formatMessage({id: 'navbar_dropdown.teamSettings', defaultMessage: 'Team Settings'})}
                         />
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}

@@ -24,7 +24,7 @@ import {Permissions} from 'mattermost-redux/constants';
 
 import {RHSStates, CloudProducts} from 'utils/constants';
 
-import {showMentions, showFlaggedPosts, closeRightHandSide, closeMenu as closeRhsMenu} from 'actions/views/rhs';
+import {showMentions, showFlaggedPosts, showSettings, closeRightHandSide, closeMenu as closeRhsMenu} from 'actions/views/rhs';
 import {openModal} from 'actions/views/modals';
 import {getRhsState} from 'selectors/rhs';
 import {isCloudLicense} from 'utils/license_utils';
@@ -64,6 +64,7 @@ function mapStateToProps(state: GlobalState) {
     const isCloud = isCloudLicense(license);
     const isStarterFree = isCloud && subscriptionProduct?.sku === CloudProducts.STARTER;
     const isFreeTrial = isCloud && subscription?.is_free_trial === 'true';
+    const ikGroupId = state.entities.teams.teams[currentTeam.id].account_id;
 
     return {
         appDownloadLink,
@@ -83,6 +84,7 @@ function mapStateToProps(state: GlobalState) {
         teamName: currentTeam.name,
         currentUser,
         isMentionSearch: rhsState === RHSStates.MENTION,
+        isRhsSettings: rhsState === RHSStates.SETTINGS,
         teamIsGroupConstrained: Boolean(currentTeam.group_constrained),
         isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
         teamUrl: getCurrentRelativeTeamUrl(state),
@@ -92,6 +94,7 @@ function mapStateToProps(state: GlobalState) {
         isCloud,
         isStarterFree,
         isFreeTrial,
+        ikGroupId,
     };
 }
 
@@ -101,6 +104,7 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             openModal,
             showMentions,
             showFlaggedPosts,
+            showSettings,
             closeRightHandSide,
             closeRhsMenu,
         }, dispatch),

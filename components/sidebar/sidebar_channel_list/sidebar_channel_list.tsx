@@ -19,7 +19,7 @@ import {Team} from '@mattermost/types/teams';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {DraggingState} from 'types/store';
-import {Constants, DraggingStates, DraggingStateTypes} from 'utils/constants';
+import {Constants, DraggingStates, DraggingStateTypes, ModalIdentifiers} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
 import SidebarCategory from '../sidebar_category';
@@ -28,6 +28,8 @@ import UnreadChannels from '../unread_channels';
 
 import GlobalThreadsLink from 'components/threading/global_threads_link';
 import ActivityAndInsightsLink from 'components/activity_and_insights/activity_and_insights_link/activity_and_insights_link';
+import {ModalData} from 'types/actions';
+import ConfirmModal from 'components/confirm_modal';
 
 export function renderView(props: any) {
     return (
@@ -91,6 +93,9 @@ type Props = {
         stopDragging: () => void;
         clearChannelSelection: () => void;
         multiSelectChannelAdd: (channelId: string) => void;
+        markAllChannelsAsRead: () => void;
+        openModal: <P>(modalData: ModalData<P>) => void;
+        closeModal: (ModalIdentifier: string) => void;
     };
 };
 
@@ -134,11 +139,13 @@ export default class SidebarChannelList extends React.PureComponent<Props, State
     componentDidMount() {
         document.addEventListener('keydown', this.navigateChannelShortcut);
         document.addEventListener('keydown', this.navigateUnreadChannelShortcut);
+        document.addEventListener('keydown', this.markAllAsRead);
     }
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.navigateChannelShortcut);
         document.removeEventListener('keydown', this.navigateUnreadChannelShortcut);
+        document.removeEventListener('keydown', this.markAllAsRead);
     }
 
     componentDidUpdate(prevProps: Props) {
@@ -372,6 +379,52 @@ export default class SidebarChannelList extends React.PureComponent<Props, State
             }
         }
     };
+
+    markAllAsRead = (e: KeyboardEvent) => {
+        if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && Utils.isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
+            e.preventDefault();
+            if (this.props.unreadChannelIds.length <= 0) {
+                return;
+            }
+            const title = (
+                <FormattedMessage
+                    id='mark_all_as_read_modal.title'
+                    defaultMessage='Mark all messages as read'
+                />
+            );
+            const message = (
+                <FormattedMessage
+                    id='mark_all_as_read_modal.message'
+                    defaultMessage='Are you sure want to mark all your messages as read ?'
+                />
+            );
+            const confirmButtonText = (
+                <FormattedMessage
+                    id='mark_all_as_read_modal.confirm'
+                    defaultMessage='Yes'
+                />
+            );
+            const onConfirm = () => {
+                this.props.actions.markAllChannelsAsRead();
+                this.props.actions.closeModal(ModalIdentifiers.MARK_ALL_AS_READ_MODAL);
+            };
+            const onCancel = () => {
+                this.props.actions.closeModal(ModalIdentifiers.MARK_ALL_AS_READ_MODAL);
+            };
+            this.props.actions.openModal({
+                modalId: ModalIdentifiers.MARK_ALL_AS_READ_MODAL,
+                dialogType: ConfirmModal,
+                dialogProps: {
+                    show: true,
+                    title,
+                    message,
+                    confirmButtonText,
+                    onConfirm,
+                    onCancel,
+                },
+            });
+        }
+    }
 
     renderCategory = (category: ChannelCategory, index: number) => {
         const {categories} = this.props;
