@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux';
 import {GlobalState} from 'types/store';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
-const NoThreadIllustration = ({scale = 1, ...props}: {scale: number; props?: React.HTMLAttributes<HTMLSpanElement>}) => {
+const NoThreadIllustration = ({scale = 0.7, ...props}: {scale?: number; props?: React.HTMLAttributes<HTMLSpanElement>}) => {
     const theme = useSelector((state: GlobalState) => getTheme(state));
     return (
         <span
@@ -15,12 +15,11 @@ const NoThreadIllustration = ({scale = 1, ...props}: {scale: number; props?: Rea
         >
             {theme.ikType === 'dark' ? (
                 <svg
-                    width='519'
-                    height='256'
+                    width={Math.round(519 * scale).toString()}
+                    height={Math.round(256 * scale).toString()}
                     viewBox='0 0 519 256'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
-                    transform={`scale(${scale})`}
                 >
                     <path
                         d='M340.935 193.138H340.153V193.921V210.804L320.827 193.34L320.604 193.138H320.303H180.053C177.026 193.138 174.573 190.684 174.573 187.658V70.4561C174.573 67.4296 177.026 64.9762 180.053 64.9762H371.065C374.092 64.9762 376.545 67.4296 376.545 70.4561V187.658C376.545 190.684 374.092 193.138 371.065 193.138H340.935Z'
@@ -164,12 +163,11 @@ const NoThreadIllustration = ({scale = 1, ...props}: {scale: number; props?: Rea
                 </svg>
             ) : (
                 <svg
-                    width='519'
-                    height='256'
+                    width={Math.round(519 * scale).toString()}
+                    height={Math.round(256 * scale).toString()}
                     viewBox='0 0 519 256'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
-                    transform={`scale(${scale})`}
                 >
                     <path
                         d='M340.935 193.138H340.153V193.921V210.804L320.827 193.34L320.604 193.138H320.303H180.053C177.026 193.138 174.573 190.684 174.573 187.658V70.4561C174.573 67.4296 177.026 64.9762 180.053 64.9762H371.065C374.092 64.9762 376.545 67.4296 376.545 70.4561V187.658C376.545 190.684 374.092 193.138 371.065 193.138H340.935Z'

@@ -46,7 +46,7 @@ import ThreadPane from './thread_pane';
 
 import './global_threads.scss';
 
-const NO_THREAD_ILLUSTRATION = (<NoThreadIllustration scale={0.7}/>);
+const NO_THREAD_ILLUSTRATION = (<NoThreadIllustration/>);
 
 const GlobalThreads = () => {
     const {formatMessage} = useIntl();
@@ -214,10 +214,7 @@ const GlobalThreads = () => {
                         <NoResultsIndicator
                             expanded={true}
                             iconGraphic={NO_THREAD_ILLUSTRATION}
-                            title={noUnread ? formatMessage({
-                                id: 'globalThreads.threadList.noUnreadThreads',
-                                defaultMessage: 'No unread thread',
-                            }) : formatMessage({
+                            title={formatMessage({
                                 id: 'globalThreads.threadPane.unselectedTitle',
                                 defaultMessage: 'Select a Thread',
                             })}

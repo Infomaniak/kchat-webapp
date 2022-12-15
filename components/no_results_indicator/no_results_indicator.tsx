@@ -31,7 +31,7 @@ interface Props {
 const iconMap: {[key in NoResultsVariant]: React.ReactNode } = {
     [NoResultsVariant.ChannelSearch]: <SearchIcon className='no-results__icon'/>,
     [NoResultsVariant.Mentions]: <MentionsIcon className='no-results__icon'/>,
-    [NoResultsVariant.FlaggedPosts]: <IKFlagIcon scale={0.5}/>,
+    [NoResultsVariant.FlaggedPosts]: <IKFlagIcon/>,
     [NoResultsVariant.PinnedPosts]: <PinIcon className='no-results__icon'/>,
     [NoResultsVariant.ChannelFiles]: <i className='icon icon-file-text-outline no-results__icon'/>,
     [NoResultsVariant.ChannelFilesFiltered]: <i className='icon icon-file-text-outline no-results__icon'/>,

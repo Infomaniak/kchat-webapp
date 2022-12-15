@@ -7,18 +7,17 @@ import {useSelector} from 'react-redux';
 import {GlobalState} from 'types/store';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
-const ReadThreadIllustration = ({scale, ...props}: {scale?: number; props?: React.HTMLAttributes<HTMLSpanElement>}) => {
+const ReadThreadIllustration = ({scale = 0.5, ...props}: {scale?: number; props?: React.HTMLAttributes<HTMLSpanElement>}) => {
     const theme = useSelector((state: GlobalState) => getTheme(state));
     return (
         <span {...props}>
             {theme.ikType === 'dark' ? (
                 <svg
-                    width='314'
-                    height='250'
+                    width={Math.round(314 * scale).toString()}
+                    height={Math.round(250 * scale).toString()}
                     viewBox='0 0 314 250'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
-                    transform={`scale(${scale})`}
                 >
                     <path
                         d='M256.536 97.3601H257.149V97.9729V123.459L281.626 97.5521L281.808 97.3601H282.072H308.147C310.89 97.3601 313.113 95.1371 313.113 92.3948V5.57809C313.113 2.8358 310.89 0.612745 308.147 0.612745H182.049C179.307 0.612745 177.084 2.8358 177.084 5.57809V92.3948C177.084 95.1371 179.307 97.3601 182.049 97.3601H256.536Z'
@@ -53,12 +52,11 @@ const ReadThreadIllustration = ({scale, ...props}: {scale?: number; props?: Reac
                 </svg>
             ) : (
                 <svg
-                    width='314'
-                    height='250'
+                    width={Math.round(314 * scale).toString()}
+                    height={Math.round(250 * scale).toString()}
                     viewBox='0 0 314 250'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
-                    transform={`scale(${scale})`}
                 >
                     <path
                         d='M256.674 97.3601H257.287V97.9729V123.459L281.764 97.5521L281.946 97.3601H282.21H308.285C311.027 97.3601 313.251 95.1371 313.251 92.3948V5.57809C313.251 2.8358 311.027 0.612745 308.285 0.612745H182.187C179.444 0.612745 177.221 2.8358 177.221 5.57809V92.3948C177.221 95.1371 179.444 97.3601 182.187 97.3601H256.674Z'

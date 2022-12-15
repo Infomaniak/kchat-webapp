@@ -235,7 +235,7 @@ const ThreadList = ({
                 {unread && !someUnread && isEmpty(unreadIds) ? (
                     <NoResultsIndicator
                         expanded={true}
-                        iconGraphic={<ReadThreadIllustration scale={0.5}/>}
+                        iconGraphic={<ReadThreadIllustration/>}
                         title={formatMessage({
                             id: 'globalThreads.threadList.noUnreadThreads',
                             defaultMessage: 'No unread threads',

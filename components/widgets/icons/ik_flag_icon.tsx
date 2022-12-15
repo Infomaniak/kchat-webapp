@@ -8,20 +8,20 @@ import {useIntl} from 'react-intl';
 import {GlobalState} from 'types/store';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
-export default function IKFlagIcon({scale, ...props}: {scale?: number; props?: React.HTMLAttributes<HTMLSpanElement>}) {
+export default function IKFlagIcon({scale = 0.5, ...props}: {scale?: number; props?: React.HTMLAttributes<HTMLSpanElement>}) {
     const {formatMessage} = useIntl();
     const theme = useSelector((state: GlobalState) => getTheme(state));
     return (
         <span {...props}>
             {theme.ikType === 'dark' ? (
                 <svg
-                    width='309'
-                    height='250'
+                    width={Math.round(309 * scale).toString()}
+                    height={Math.round(250 * scale).toString()}
                     viewBox='0 0 309 250'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
                     aria-label={formatMessage({id: 'generic_icons.flag', defaultMessage: 'Flag Icon'})}
-                    transform={`scale(${scale})`}
+                    style={{marginBottom: '20px'}}
                 >
                     <path
                         d='M252.568 96.374H253.167V96.9725V122.211L277.243 96.5629L277.42 96.374H277.679H303.358C306.036 96.374 308.208 94.2028 308.208 91.5244V5.44805C308.208 2.7697 306.036 0.59846 303.358 0.59846H179.283C176.605 0.59846 174.433 2.7697 174.433 5.44805V91.5244C174.433 94.2028 176.605 96.374 179.283 96.374H252.568Z'
@@ -53,13 +53,13 @@ export default function IKFlagIcon({scale, ...props}: {scale?: number; props?: R
                 </svg>
             ) : (
                 <svg
-                    width='309'
-                    height='250'
+                    width={Math.round(309 * scale).toString()}
+                    height={Math.round(250 * scale).toString()}
                     viewBox='0 0 309 250'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
                     aria-label={formatMessage({id: 'generic_icons.flag', defaultMessage: 'Flag Icon'})}
-                    transform={`scale(${scale})`}
+                    style={{marginBottom: '20px'}}
                 >
                     <path
                         d='M252.569 96.374H253.167V96.9725V122.211L277.243 96.5629L277.42 96.374H277.68H303.359C306.037 96.374 308.208 94.2028 308.208 91.5244V5.44806C308.208 2.7697 306.037 0.598461 303.359 0.598461H179.283C176.605 0.598461 174.434 2.7697 174.434 5.44806V91.5244C174.434 94.2028 176.605 96.374 179.283 96.374H252.569Z'
