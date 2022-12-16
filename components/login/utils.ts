@@ -166,10 +166,10 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
             );
 
             REFRESH_PROMISE = null;
-            resolve(resp);
             if (redirectToTeam) {
                 redirectUserToDefaultTeam();
             }
+            resolve(resp);
         }).catch((error: unknown) => {
             console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
             console.warn(error);
