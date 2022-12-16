@@ -1,3 +1,9 @@
+## 0.6.1 (2022-12-16)
+
+## Fixed (1 change)
+
+- [fix url parsing](kchat/webapp@893c27be4ce6e311aca6a92ae6cf62fbf470cecb) by  ([merge request](kchat/webapp!226))
+
 ## 0.6.0 (2022-12-15)
 
 ## Fixed (2 changes)
