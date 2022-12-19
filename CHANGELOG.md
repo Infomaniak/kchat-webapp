@@ -1,3 +1,10 @@
+## 0.6.2 (2022-12-19)
+
+## Fixed (2 changes)
+
+- [Fix kmeet call url post btn](kchat/webapp@fd246143ac33140e8e82f3ae92131ee1f498f337) by @florent.glauda ([merge request](kchat/webapp!238))
+- [fix: create emoji margin](kchat/webapp@d7035927ab1899fc03df413640180c085b2bc4e0) by @leonard.jouve ([merge request](kchat/webapp!174))
+
 ## 0.6.1 (2022-12-16)
 
 ## Fixed (1 change)
