@@ -27,7 +27,7 @@ interface Props {
 
 const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles, onJoinCall, leaveCallInChannel}: Props) => {
     //const client = window;
-    const intl = useIntl()
+    const intl = useIntl();
     // window.addEventListener('beforeunload', (e) => {
     //     window.postMessage(
     //         {
@@ -45,10 +45,9 @@ const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles,
     //         });
     //     }
     // });
-    console.log('[CALL KMEET] post component get call url', connectedUrl);
+
     const onJoinCallClick = () => {
         const kmeetUrl = new URL(connectedUrl);
-        console.log('[CALL KMEET] post component join call url', kmeetUrl.href);
         window.open(kmeetUrl.href, '_blank', 'noopener');
     };
 
