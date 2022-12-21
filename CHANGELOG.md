@@ -1,3 +1,9 @@
+## 0.6.3 (2022-12-21)
+
+## Removed (1 change)
+
+- [remove rebind when presence is missing](kchat/webapp@63294a4f61641cf4334b4b71ced8dd7d19ad7743) by @antonbuksa ([merge request](kchat/webapp!247))
+
 ## 0.6.2 (2022-12-19)
 
 ## Fixed (2 changes)
