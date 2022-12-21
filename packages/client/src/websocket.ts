@@ -524,8 +524,12 @@ export default class WebSocketClient {
         if (this.conn && this.presenceChannel && this.conn.connection.state === 'connected') {
             this.presenceChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected' || !this.presenceChannel) {
-            // this.bindPresenceChannel(data.channel_id);
             console.log('presence channel is missing');
+            console.log('connection: ', this.conn);
+            console.log('connection state: ', this.conn?.connection.state);
+            console.log('presence channel: ', this.presenceChannel);
+
+            // this.bindPresenceChannel(data.channel_id);
         }
     }
 
