@@ -288,10 +288,11 @@ export default class WebSocketClient {
 
     unbindPresenceChannel(channelID: string) {
         // @ts-ignore
-        this.presenceChannel = this.conn?.unsubscribe(`presence-channel.${channelID}`);
-        if (this.presenceChannel) {
-            this.unbindChannelGlobally(this.presenceChannel);
-        }
+        this.conn?.unsubscribe(`presence-channel.${channelID}`);
+
+        // if (this.presenceChannel) {
+        //     this.unbindChannelGlobally(this.presenceChannel);
+        // }
     }
 
     bindChannelGlobally(channel: Channel | null) {
