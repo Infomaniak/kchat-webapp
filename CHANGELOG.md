@@ -1,3 +1,9 @@
+## 0.6.4 (2022-12-22)
+
+## Removed (1 change)
+
+- [remove new label on forward action](kchat/webapp@33634081ef3d342de5d0e64353a094740f8f66f7) by @antonbuksa
+
 ## 0.6.3 (2022-12-21)
 
 ## Removed (1 change)
