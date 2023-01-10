@@ -1,3 +1,9 @@
+## 0.6.5 (2023-01-10)
+
+## Other (1 change)
+
+- [Add log for debug upload fails](kchat/webapp@01b82b36fdd636099fab63eb22f1f08bb525a3c1) by @florent.glauda ([merge request](kchat/webapp!256))
+
 ## 0.6.4 (2022-12-22)
 
 ## Removed (1 change)
