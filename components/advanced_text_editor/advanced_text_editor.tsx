@@ -192,7 +192,6 @@ const AdvanceTextEditor = ({
 
     let attachmentPreview = null;
     if (!readOnlyChannel && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0)) {
-        console.log('[UPLOAD FILE] advanced text editor draft info', draft)
         attachmentPreview = (
             <div>
                 <FilePreview
