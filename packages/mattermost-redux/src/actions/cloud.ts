@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import {CloudTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
 
@@ -36,6 +37,15 @@ export function getCloudCustomer(): ActionFunc {
         onSuccess: [CloudTypes.RECEIVED_CLOUD_CUSTOMER],
         onFailure: CloudTypes.CLOUD_CUSTOMER_FAILED,
         onRequest: CloudTypes.CLOUD_CUSTOMER_REQUEST,
+    });
+}
+
+export function getLicenseExpandStatus(): ActionFunc {
+    return bindClientFunc({
+        clientFunc: Client4.getLicenseExpandStatus,
+        onRequest: CloudTypes.CLOUD_EXPAND_STATS_REQUEST,
+        onSuccess: [CloudTypes.RECEIVED_CLOUD_EXPAND_STATS],
+        onFailure: CloudTypes.CLOUD_EXPAND_STATS_FAILED,
     });
 }
 

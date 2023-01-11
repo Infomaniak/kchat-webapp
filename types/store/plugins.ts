@@ -7,6 +7,8 @@ import {TIconGlyph} from '@infomaniak/compass-components/foundations/icon';
 
 import {ProductScope} from '@mattermost/types/products';
 
+import {ProductScope} from '@mattermost/types/products';
+
 import {ClientPluginManifest} from '@mattermost/types/plugins';
 import {PluginAnalyticsRow} from '@mattermost/types/admin';
 import {FileInfo} from '@mattermost/types/files';

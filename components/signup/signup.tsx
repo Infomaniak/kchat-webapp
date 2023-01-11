@@ -287,10 +287,6 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
 
         window.addEventListener('resize', onWindowResize);
 
-        onWindowResize();
-
-        window.addEventListener('resize', onWindowResize);
-
         if (search) {
             if ((inviteId || token) && loggedIn) {
                 handleAddUserToTeamFromInvite(token, inviteId);
@@ -356,15 +352,15 @@ const Signup = ({onCustomizeHeader}: SignupProps) => {
     };
 
     const getMessageSubtitle = () => {
-        if (enableCustomBrand && CustomBrandText) {
-            return (
+        if (enableCustomBrand) {
+            return CustomBrandText ? (
                 <div className='signup-body-custom-branding-markdown'>
                     <Markdown
                         message={CustomBrandText}
                         options={{mentionHighlight: false}}
                     />
                 </div>
-            );
+            ) : null;
         }
 
         return (

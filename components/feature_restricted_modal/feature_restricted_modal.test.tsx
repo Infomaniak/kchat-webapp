@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import React from 'react';
 import {shallow} from 'enzyme';
 
@@ -100,6 +101,21 @@ describe('components/global/product_switcher_menu', () => {
 
     test('should show with system admin pre trial for self hosted', () => {
         mockState.entities.users.profiles.user1.roles = 'system_admin';
+
+        const wrapper = shallow(<FeatureRestrictedModal {...defaultProps}/>);
+
+        expect(wrapper.find('.FeatureRestrictedModal__description').text()).toEqual(defaultProps.messageAdminPreTrial);
+        expect(wrapper.find('.FeatureRestrictedModal__terms').length).toEqual(1);
+        expect(wrapper.find('.FeatureRestrictedModal__buttons').hasClass('single')).toEqual(false);
+        expect(wrapper.find('.button-plans').length).toEqual(1);
+        expect(wrapper.find('StartTrialBtn').length).toEqual(1);
+    });
+
+    test('should show with system admin pre trial for cloud', () => {
+        mockState.entities.users.profiles.user1.roles = 'system_admin';
+        mockState.entities.general.license = {
+            Cloud: 'true',
+        };
 
         const wrapper = shallow(<FeatureRestrictedModal {...defaultProps}/>);
 

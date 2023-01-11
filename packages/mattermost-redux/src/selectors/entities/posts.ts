@@ -10,11 +10,27 @@ import {getMyPreferences} from 'mattermost-redux/selectors/entities/preferences'
 import {getUsers, getCurrentUserId, getUserStatuses} from 'mattermost-redux/selectors/entities/users';
 import {getConfig, getFeatureFlagValue} from 'mattermost-redux/selectors/entities/general';
 
+import {createIdsSelector} from 'mattermost-redux/utils/helpers';
+
+import {
+    isPostEphemeral,
+    isSystemMessage,
+    shouldFilterJoinLeavePost,
+    comparePosts,
+    isPostPendingOrFailed,
+    isPostCommentMention,
+} from 'mattermost-redux/utils/post_utils';
+
+import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
+
+import {shouldShowJoinLeaveMessages} from 'mattermost-redux/utils/post_list';
+
 import {Channel} from '@mattermost/types/channels';
 import {
     MessageHistory,
     OpenGraphMetadata,
     Post,
+    PostAcknowledgement,
     PostOrderBlock,
 } from '@mattermost/types/posts';
 import {Reaction} from '@mattermost/types/reactions';
@@ -25,17 +41,6 @@ import {
     RelationOneToOne,
     RelationOneToMany,
 } from '@mattermost/types/utilities';
-
-import {createIdsSelector} from 'mattermost-redux/utils/helpers';
-import {
-    isPostEphemeral,
-    isSystemMessage,
-    shouldFilterJoinLeavePost,
-    comparePosts,
-    isPostPendingOrFailed,
-    isPostCommentMention,
-} from 'mattermost-redux/utils/post_utils';
-import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
 export function getAllPosts(state: GlobalState) {
     return state.entities.posts.posts;
@@ -74,6 +79,11 @@ export function makeGetReactionsForPost(): (state: GlobalState, postId: Post['id
 
         return null;
     });
+}
+
+export function getHasReactions(state: GlobalState, postId: Post['id']): boolean {
+    const reactions = getReactionsForPosts(state)?.[postId] || {};
+    return Object.keys(reactions).length > 0;
 }
 
 export function getOpenGraphMetadata(state: GlobalState): RelationOneToOne<Post, Record<string, OpenGraphMetadata>> {
@@ -351,9 +361,11 @@ export function makeGetPostsForThread(): (state: GlobalState, rootId: string) =>
     return createIdsSelector(
         'makeGetPostsForThread',
         getAllPosts,
+        getCurrentUser,
         (state: GlobalState, rootId: string) => state.entities.posts.postsInThread[rootId],
         (state: GlobalState, rootId: string) => state.entities.posts.posts[rootId],
-        (posts, postsForThread, rootPost) => {
+        shouldShowJoinLeaveMessages,
+        (posts, currentUser, postsForThread, rootPost, showJoinLeave) => {
             const thread: Post[] = [];
 
             if (rootPost) {
@@ -363,7 +375,9 @@ export function makeGetPostsForThread(): (state: GlobalState, rootId: string) =>
             postsForThread?.forEach((id) => {
                 const post = posts[id];
 
-                if (post) {
+                const skip = shouldFilterJoinLeavePost(post, showJoinLeave, currentUser ? currentUser.username : '');
+
+                if (post && !skip) {
                     thread.push(post);
                 }
             });
@@ -440,10 +454,6 @@ export const getSearchResults: (state: GlobalState) => Post[] = createSelector(
         return postIds.map((id) => posts[id]);
     },
 );
-
-export function getHasLimitations(state: GlobalState) {
-    return state.entities.search.hasLimitation;
-}
 
 // Returns the matched text from the search results, if the server has provided them.
 // These matches will only be present if the server is running Mattermost 5.1 or higher
@@ -755,5 +765,38 @@ export function isPostPriorityEnabled(state: GlobalState) {
     return (
         getFeatureFlagValue(state, 'PostPriority') === 'true' &&
         getConfig(state).PostPriority === 'true'
+    );
+}
+
+export function isPostAcknowledgementsEnabled(state: GlobalState) {
+    return (
+        isPostPriorityEnabled(state) &&
+        getConfig(state).PostAcknowledgements === 'true'
+    );
+}
+
+export function getPostAcknowledgements(state: GlobalState, postId: Post['id']): Record<UserProfile['id'], PostAcknowledgement['acknowledged_at']> {
+    return state.entities.posts.acknowledgements[postId];
+}
+
+export function makeGetPostAcknowledgementsWithProfiles(): (state: GlobalState, postId: Post['id']) => Array<{user: UserProfile; acknowledgedAt: PostAcknowledgement['acknowledged_at']}> {
+    return createSelector(
+        'makeGetPostAcknowledgementsWithProfiles',
+        getUsers,
+        getPostAcknowledgements,
+        (users, acknowledgements) => {
+            if (!acknowledgements) {
+                return [];
+            }
+            return Object.keys(acknowledgements).flatMap((userId) => {
+                if (!users[userId]) {
+                    return [];
+                }
+                return {
+                    user: users[userId],
+                    acknowledgedAt: acknowledgements[userId],
+                };
+            }).sort((a, b) => b.acknowledgedAt - a.acknowledgedAt);
+        },
     );
 }

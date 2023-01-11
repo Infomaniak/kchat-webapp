@@ -19,6 +19,8 @@ import LoadingSpinner from 'components/widgets/loading/loading_wrapper';
 import NoResultsIndicator from 'components/no_results_indicator/no_results_indicator';
 import FlagIcon from 'components/widgets/icons/flag_icon';
 import FileSearchResultItem from 'components/file_search_results';
+
+// Todo: delete, use mattermost version
 import ChannelMessageLimitationBanner from 'components/post_view/channel_message_limitation_banner/channel_message_limitation_banner';
 
 import {NoResultsVariant} from 'components/no_results_indicator/types';
@@ -51,14 +53,21 @@ const renderView = (props: Record<string, unknown>): JSX.Element => (
 const renderThumbHorizontal = (props: Record<string, unknown>): JSX.Element => (
     <div
         {...props}
-        className='scrollbar--horizontal'
+        className='scrollbar--horizontal scrollbar--thumb--RHS'
     />
 );
 
 const renderThumbVertical = (props: Record<string, unknown>): JSX.Element => (
     <div
         {...props}
-        className='scrollbar--vertical'
+        className='scrollbar--vertical scrollbar--thumb--RHS'
+    />
+);
+
+const renderTrackVertical = (props: Record<string, unknown>): JSX.Element => (
+    <div
+        {...props}
+        className='scrollbar--vertical--RHS'
     />
 );
 
@@ -250,6 +259,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
             </div>
         );
         break;
+    // Todo: delete, use mattermost version
     case noResults && (searchType === DataSearchTypes.MESSAGES_SEARCH_TYPE && !isChannelFiles && hasLimitDate !== null):
         contentItems = (
             <div
@@ -383,6 +393,7 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
                 autoHide={true}
                 autoHideTimeout={500}
                 autoHideDuration={500}
+                renderTrackVertical={renderTrackVertical}
                 renderThumbHorizontal={renderThumbHorizontal}
                 renderThumbVertical={renderThumbVertical}
                 renderView={renderView}

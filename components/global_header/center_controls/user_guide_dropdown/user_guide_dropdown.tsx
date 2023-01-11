@@ -3,8 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import IconButton from '@infomaniak/compass-components/components/icon-button';
-import styled from 'styled-components';
+import IconButton from '@mattermost/compass-components/components/icon-button';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -29,12 +28,6 @@ type Props = WrappedComponentProps & PropsFromRedux & {
 type State = {
     buttonActive: boolean;
 };
-
-const Icon = styled.div`
-    & .icon-button {
-        color: rgba(var(--center-channel-color-rgb),0.84);
-    }
-`;
 
 class UserGuideDropdown extends React.PureComponent<Props, State> {
     constructor(props: Props) {
@@ -81,27 +74,26 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
 
         return (
             <Menu.Group>
-                {/* Hide this (Mattermost) links until we have help pages */}
-                {/*{this.props.enableAskCommunityLink === 'true' && (*/}
-                {/*    <Menu.ItemExternalLink*/}
-                {/*        id='askTheCommunityLink'*/}
-                {/*        url={askTheCommunityUrl}*/}
-                {/*        text={intl.formatMessage({id: 'userGuideHelp.askTheCommunity', defaultMessage: 'Ask the community'})}*/}
-                {/*        onClick={this.askTheCommunityClick}*/}
-                {/*    />*/}
-                {/*)}*/}
-                {/*<Menu.ItemExternalLink*/}
-                {/*    id='helpResourcesLink'*/}
-                {/*    url={this.props.helpLink}*/}
-                {/*    text={intl.formatMessage({id: 'userGuideHelp.helpResources', defaultMessage: 'Help resources'})}*/}
-                {/*/>*/}
-                {/*{this.props.reportAProblemLink && (*/}
-                {/*    <Menu.ItemExternalLink*/}
-                {/*        id='reportAProblemLink'*/}
-                {/*        url={this.props.reportAProblemLink}*/}
-                {/*        text={intl.formatMessage({id: 'userGuideHelp.reportAProblem', defaultMessage: 'Report a problem'})}*/}
-                {/*    />*/}
-                {/*)}*/}
+                {this.props.enableAskCommunityLink === 'true' && (
+                    <Menu.ItemExternalLink
+                        id='askTheCommunityLink'
+                        url={askTheCommunityUrl}
+                        text={intl.formatMessage({id: 'userGuideHelp.askTheCommunity', defaultMessage: 'Ask the community'})}
+                        onClick={this.askTheCommunityClick}
+                    />
+                )}
+                <Menu.ItemExternalLink
+                    id='helpResourcesLink'
+                    url={this.props.helpLink}
+                    text={intl.formatMessage({id: 'userGuideHelp.helpResources', defaultMessage: 'Help resources'})}
+                />
+                {this.props.reportAProblemLink && (
+                    <Menu.ItemExternalLink
+                        id='reportAProblemLink'
+                        url={this.props.reportAProblemLink}
+                        text={intl.formatMessage({id: 'userGuideHelp.reportAProblem', defaultMessage: 'Report a problem'})}
+                    />
+                )}
                 <Menu.ItemAction
                     id='keyboardShortcuts'
                     onClick={this.openKeyboardShortcutsModal}
@@ -137,18 +129,17 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                     placement='bottom'
                     overlay={this.state.buttonActive ? <></> : tooltip}
                 >
-                    <Icon>
-                        <IconButton
-                            className='icon-button'
-                            size={'sm'}
-                            icon={'help-circle-outline'}
-                            onClick={() => {}} // icon button currently requires onclick ... needs to revisit
-                            active={this.state.buttonActive}
-                            inverted={true}
-                            compact={true}
-                            aria-label='Select to toggle the help menu.' // proper wording and translation needed
-                        />
-                    </Icon>
+                    <IconButton
+                        size={'sm'}
+                        icon={'help-circle-outline'}
+                        onClick={() => {}} // icon button currently requires onclick ... needs to revisit
+                        active={this.state.buttonActive}
+                        inverted={true}
+                        compact={true}
+                        aria-controls='AddChannelDropdown'
+                        aria-expanded={this.state.buttonActive}
+                        aria-label={intl.formatMessage({id: 'channel_header.userHelpGuide', defaultMessage: 'Help'})}
+                    />
                 </OverlayTrigger>
                 <Menu
                     openLeft={true}

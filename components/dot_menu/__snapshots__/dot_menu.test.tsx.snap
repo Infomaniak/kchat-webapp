@@ -113,22 +113,6 @@ exports[`components/dot_menu/DotMenu should match snapshot, canDelete 1`] = `
     <MenuItemAction
       icon={
         <span
-          className="icon-mark-as-unread MenuItem__compass-icon"
-        />
-      }
-      id="unread_post_post_id_1"
-      onClick={[Function]}
-      rightDecorator={
-        <ShortcutKey
-          shortcutKey="U"
-        />
-      }
-      show={true}
-      text="Mark as Unread"
-    />
-    <MenuItemAction
-      icon={
-        <span
           className="icon-message-check-outline MenuItem__compass-icon"
         />
       }
@@ -399,22 +383,6 @@ exports[`components/dot_menu/DotMenu should match snapshot, hide "New" badge on 
     <MenuItemAction
       icon={
         <span
-          className="icon-mark-as-unread MenuItem__compass-icon"
-        />
-      }
-      id="unread_post_post_id_1"
-      onClick={[Function]}
-      rightDecorator={
-        <ShortcutKey
-          shortcutKey="U"
-        />
-      }
-      show={true}
-      text="Mark as Unread"
-    />
-    <MenuItemAction
-      icon={
-        <span
           className="icon-message-check-outline MenuItem__compass-icon"
         />
       }
@@ -677,22 +645,6 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
         text="Add Reaction"
       />
     </Connect(ChannelPermissionGate)>
-    <MenuItemAction
-      icon={
-        <span
-          className="icon-mark-as-unread MenuItem__compass-icon"
-        />
-      }
-      id="unread_post_post_id_1"
-      onClick={[Function]}
-      rightDecorator={
-        <ShortcutKey
-          shortcutKey="U"
-        />
-      }
-      show={true}
-      text="Mark as Unread"
-    />
     <MenuItemAction
       icon={
         <span
@@ -971,22 +923,6 @@ exports[`components/dot_menu/DotMenu should match snapshot, show "New" badge on 
         text="Add Reaction"
       />
     </Connect(ChannelPermissionGate)>
-    <MenuItemAction
-      icon={
-        <span
-          className="icon-mark-as-unread MenuItem__compass-icon"
-        />
-      }
-      id="unread_post_post_id_1"
-      onClick={[Function]}
-      rightDecorator={
-        <ShortcutKey
-          shortcutKey="U"
-        />
-      }
-      show={true}
-      text="Mark as Unread"
-    />
     <MenuItemAction
       icon={
         <span

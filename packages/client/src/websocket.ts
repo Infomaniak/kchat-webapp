@@ -237,12 +237,15 @@ export default class WebSocketClient {
 
             this.subscribeToUserChannel(userId || currentUserId);
 
-            if (presenceChannelId || currentPresenceChannelId) {
-                this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
-            }
+            this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
+
+            // if ((presenceChannelId || currentPresenceChannelId) && !this.presenceChannel) {
+            //     this.bindPresenceChannel(presenceChannelId || currentPresenceChannelId);
+            // }
 
             this.bindChannelGlobally(this.teamChannel);
             this.bindChannelGlobally(this.userChannel);
+            this.bindChannelGlobally(this.presenceChannel);
 
             console.log('[websocket] re-established connection');
             if (this.connectFailCount > 0) {
@@ -285,10 +288,11 @@ export default class WebSocketClient {
 
     unbindPresenceChannel(channelID: string) {
         // @ts-ignore
-        this.presenceChannel = this.conn?.unsubscribe(`presence-channel.${channelID}`);
-        if (this.presenceChannel) {
-            this.unbindChannelGlobally(this.presenceChannel);
-        }
+        this.conn?.unsubscribe(`presence-channel.${channelID}`);
+
+        // if (this.presenceChannel) {
+        //     this.unbindChannelGlobally(this.presenceChannel);
+        // }
     }
 
     bindChannelGlobally(channel: Channel | null) {
@@ -521,7 +525,12 @@ export default class WebSocketClient {
         if (this.conn && this.presenceChannel && this.conn.connection.state === 'connected') {
             this.presenceChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected' || !this.presenceChannel) {
-            this.bindPresenceChannel(data.channel_id);
+            console.log('presence channel is missing');
+            console.log('connection: ', this.conn);
+            console.log('connection state: ', this.conn?.connection.state);
+            console.log('presence channel: ', this.presenceChannel);
+
+            // this.bindPresenceChannel(data.channel_id);
         }
     }
 

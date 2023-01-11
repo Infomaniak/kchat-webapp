@@ -32,9 +32,8 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
-    onContextMenu={[Function]}
   >
-    <Connect(injectIntl(SidebarCategoryMenu))
+    <Connect(Component)
       category={
         Object {
           "channel_ids": Array [
@@ -51,11 +50,6 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
         }
       }
       isMenuOpen={false}
-      menuTriggerRef={
-        Object {
-          "current": null,
-        }
-      }
       onToggleMenu={[Function]}
     />
   </SidebarCategoryHeader>
@@ -69,11 +63,10 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
       <Connect(SidebarChannel)
         channelId="channel_id"
         channelIndex={0}
-        getChannelRef={[MockFunction]}
         isAutoSortedCategory={true}
         isCategoryCollapsed={false}
         isCategoryDragged={false}
-        isDropDisabled={false}
+        isDraggable={true}
         key="channel_id"
         setChannelRef={[MockFunction]}
       />
@@ -114,9 +107,8 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
-    onContextMenu={[Function]}
   >
-    <Connect(injectIntl(SidebarCategoryMenu))
+    <Connect(Component)
       category={
         Object {
           "channel_ids": Array [
@@ -133,11 +125,6 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
         }
       }
       isMenuOpen={false}
-      menuTriggerRef={
-        Object {
-          "current": null,
-        }
-      }
       onToggleMenu={[Function]}
     />
   </SidebarCategoryHeader>
@@ -151,11 +138,10 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
       <Connect(SidebarChannel)
         channelId="channel_id"
         channelIndex={0}
-        getChannelRef={[MockFunction]}
         isAutoSortedCategory={true}
         isCategoryCollapsed={true}
         isCategoryDragged={false}
-        isDropDisabled={false}
+        isDraggable={true}
         key="channel_id"
         setChannelRef={[MockFunction]}
       />
@@ -196,9 +182,16 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
-    onContextMenu={[Function]}
   >
-    <Connect(injectIntl(SidebarCategoryMenu))
+    <div
+      className="SidebarCategory_newLabel"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="new"
+        id="sidebar_left.sidebar_category.newLabel"
+      />
+    </div>
+    <Connect(Component)
       category={
         Object {
           "channel_ids": Array [],
@@ -213,11 +206,6 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
         }
       }
       isMenuOpen={false}
-      menuTriggerRef={
-        Object {
-          "current": null,
-        }
-      }
       onToggleMenu={[Function]}
     />
   </SidebarCategoryHeader>
@@ -297,9 +285,8 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
-    onContextMenu={[Function]}
   >
-    <Connect(injectIntl(SidebarCategorySortingMenu))
+    <Connect(Component)
       category={
         Object {
           "channel_ids": Array [
@@ -318,11 +305,6 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
       handleOpenDirectMessagesModal={[Function]}
       isCollapsed={false}
       isMenuOpen={false}
-      menuButtonRef={
-        Object {
-          "current": null,
-        }
-      }
       onToggleMenu={[Function]}
     />
     <OverlayTrigger
@@ -372,7 +354,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
     </OverlayTrigger>
   </SidebarCategoryHeader>
   <div
-    className="SidebarChannelGroup_content"
+    className="SidebarChannelGroup_content hasFollowingSibling"
   >
     <ul
       className="NavGroupContent"
@@ -381,11 +363,10 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
       <Connect(SidebarChannel)
         channelId="channel_id"
         channelIndex={0}
-        getChannelRef={[MockFunction]}
         isAutoSortedCategory={true}
         isCategoryCollapsed={false}
         isCategoryDragged={false}
-        isDropDisabled={false}
+        isDraggable={true}
         key="channel_id"
         setChannelRef={[MockFunction]}
       />
@@ -431,9 +412,8 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
-    onContextMenu={[Function]}
   >
-    <Connect(injectIntl(SidebarCategorySortingMenu))
+    <Connect(Component)
       category={
         Object {
           "channel_ids": Array [
@@ -452,11 +432,6 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
       handleOpenDirectMessagesModal={[Function]}
       isCollapsed={false}
       isMenuOpen={false}
-      menuButtonRef={
-        Object {
-          "current": null,
-        }
-      }
       onToggleMenu={[Function]}
     />
     <OverlayTrigger
@@ -506,7 +481,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
     </OverlayTrigger>
   </SidebarCategoryHeader>
   <div
-    className="SidebarChannelGroup_content"
+    className="SidebarChannelGroup_content hasFollowingSibling"
   >
     <ul
       className="NavGroupContent"

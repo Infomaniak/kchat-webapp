@@ -12,6 +12,7 @@ import mockStore from 'tests/test_store';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 import {Team} from '@mattermost/types/teams';
+import {generateId} from 'utils/utils';
 
 import ResultView from './result_view';
 import InviteView from './invite_view';
@@ -62,6 +63,7 @@ describe('InvitationModal', () => {
                 license: {
                     IsLicensed: 'true',
                     Cloud: 'true',
+                    Id: generateId(),
                 },
             },
             cloud: {
@@ -82,6 +84,9 @@ describe('InvitationModal', () => {
                         permissions: [],
                     },
                 },
+            },
+            preferences: {
+                myPreferences: {},
             },
         },
     };

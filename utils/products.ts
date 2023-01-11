@@ -6,6 +6,7 @@ import {useLocation, matchPath} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 
 import {ProductIdentifier, ProductScope} from '@mattermost/types/products';
+import {Product} from '@mattermost/types/cloud';
 
 import {ProductComponent} from 'types/store/plugins';
 import {selectProducts, selectCurrentProductId, selectCurrentProduct} from 'selectors/products';
@@ -32,6 +33,36 @@ export const useProducts = (): ProductComponent[] | undefined => {
 export const useCurrentProductId = () => {
     const {pathname} = useLocation();
     return useSelector((state: GlobalState) => selectCurrentProductId(state, pathname));
+};
+
+export const useCurrentProduct = () => {
+    const {pathname} = useLocation();
+    return useSelector((state: GlobalState) => selectCurrentProduct(state, pathname));
+};
+
+export const inScope = (scope: ProductScope, productId: ProductIdentifier, pluginId?: string) => {
+    if (scope === '*' || scope?.includes('*')) {
+        return true;
+    }
+    if (Array.isArray(scope)) {
+        return scope.includes(productId) || (pluginId !== undefined && scope.includes(pluginId));
+    }
+    return scope === productId || (pluginId !== undefined && scope === pluginId);
+};
+
+export const isChannels = (productId: ProductIdentifier) => productId === null;
+
+// find a product based on its SKU an RecurringInterval
+export const findProductBySkuAndInterval = (products: Record<string, Product>, sku: string, interval: string) => {
+    return Object.values(products).find(((product) => {
+        return product.sku === sku && product.recurring_interval === interval;
+    }));
+};
+
+export const findProductByID = (products: Record<string, Product>, id: string) => {
+    return Object.values(products).find(((product) => {
+        return product.id === id;
+    }));
 };
 
 export const useCurrentProduct = () => {

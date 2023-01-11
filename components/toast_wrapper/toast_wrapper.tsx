@@ -5,9 +5,11 @@ import React from 'react';
 import {FormattedMessage, injectIntl, IntlShape, WrappedComponentProps} from 'react-intl';
 import {RouteComponentProps} from 'react-router-dom';
 
+import {Preferences} from 'mattermost-redux/constants';
+
 import {isIdNotPost, getNewMessageIndex} from 'utils/post_utils';
 import {isKeyPressed, localizeMessage} from 'utils/utils';
-import {isToday, isWithinLastWeek} from 'utils/datetime';
+import {isToday} from 'utils/datetime';
 import Constants from 'utils/constants';
 import {getHistory} from 'utils/browser_history';
 

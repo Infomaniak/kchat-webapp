@@ -30,15 +30,6 @@ const FeatureList = (props: FeatureListProps) => {
         ),
         intl.formatMessage(
             {
-                id: 'admin.billing.subscription.planDetails.features.limitedIntegrationsEnabled',
-                defaultMessage: 'Limited to {limit} Apps and Plugins',
-            },
-            {
-                limit: intl.formatNumber(limits.integrations?.enabled ?? fallbackStarterLimits.integrations.enabled),
-            },
-        ),
-        intl.formatMessage(
-            {
                 id: 'admin.billing.subscription.planDetails.features.limitedFileStorage',
                 defaultMessage: 'Limited to {limit} File Storage',
             },
@@ -141,6 +132,10 @@ const FeatureList = (props: FeatureListProps) => {
             id: 'admin.billing.subscription.planDetails.features.readOnlyChannels',
             defaultMessage: 'Read-only announcement channels',
         }),
+        intl.formatMessage({
+            id: 'admin.billing.subscription.planDetails.features.sharedChannels',
+            defaultMessage: 'Shared channels (coming soon)',
+        }),
     ];
 
     const featuresCloudEnterprise = [
@@ -155,10 +150,6 @@ const FeatureList = (props: FeatureListProps) => {
         intl.formatMessage({
             id: 'admin.billing.subscription.planDetails.features.customRetentionPolicies',
             defaultMessage: 'Custom data retention policies',
-        }),
-        intl.formatMessage({
-            id: 'admin.billing.subscription.planDetails.features.sharedChannels',
-            defaultMessage: 'Shared channels (coming soon)',
         }),
         intl.formatMessage({
             id: 'admin.billing.subscription.planDetails.features.ldapSync',

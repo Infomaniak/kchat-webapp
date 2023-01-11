@@ -3,6 +3,8 @@
 /* eslint-disable react/self-closing-comp */
 
 import React from 'react';
+import {useSelector} from 'react-redux';
+
 import styled from 'styled-components';
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
@@ -10,13 +12,19 @@ import IconButton from '@infomaniak/compass-components/components/icon-button';
 import {FormattedMessage} from 'react-intl';
 import {ProductIdentifier} from '@mattermost/types/products';
 
+import {GlobalState} from 'types/store';
+
 import Pluggable from 'plugins/pluggable';
 import {
     CustomizeYourExperienceTour,
-    OnboardingTourSteps,
     useShowOnboardingTutorialStep,
-} from 'components/onboarding_tour';
+} from 'components/tours/onboarding_tour';
 import StatusDropdown from 'components/status_dropdown';
+import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
+
+import {isChannels} from 'utils/products';
+
+import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -43,6 +51,8 @@ const RightControlsContainer = styled.div`
     flex-shrink: 0;
     position: relative;
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
+    flex-basis: 30%;
+    justify-content: flex-end;
 
     .header-icon {
         transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -82,7 +92,11 @@ const tooltipUserReport = (
 );
 
 const RightControls = ({productId = null}: Props): JSX.Element => {
-    const showCustomizeTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CUSTOMIZE_EXPERIENCE);
+    // guest validation to see which point the messaging tour tip starts
+    const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
+    const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.CUSTOMIZE_EXPERIENCE : OnboardingTourSteps.CUSTOMIZE_EXPERIENCE;
+
+    const showCustomizeTip = useShowOnboardingTutorialStep(tourStep);
 
     const trigger = (
         <span

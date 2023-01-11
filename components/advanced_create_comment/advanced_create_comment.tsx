@@ -11,7 +11,7 @@ import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
 
 import * as GlobalActions from 'actions/global_actions';
 
-import Constants, {AdvancedTextEditor, Locations, ModalIdentifiers, Preferences} from 'utils/constants';
+import Constants, {AdvancedTextEditor as AdvancedTextEditorConst, Locations, ModalIdentifiers, Preferences} from 'utils/constants';
 import {PreferenceType} from '@mattermost/types/preferences';
 import * as UserAgent from 'utils/user_agent';
 import {isMac} from 'utils/utils';
@@ -23,6 +23,7 @@ import {
     isErrorInvalidSlashCommand,
     splitMessageBasedOnCaretPosition,
     groupsMentionedInText,
+    mentionsMinusSpecialMentionsInText,
 } from 'utils/post_utils';
 import {getTable, hasHtmlLink, formatMarkdownMessage, isGitHubCodeBlock, formatGithubCodePaste} from 'utils/paste';
 
@@ -30,7 +31,7 @@ import NotifyConfirmModal from 'components/notify_confirm_modal';
 import {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
 import PostDeletedModal from 'components/post_deleted_modal';
 import {PostDraft} from 'types/store/draft';
-import {Group} from '@mattermost/types/groups';
+import {Group, GroupSource} from '@mattermost/types/groups';
 import {ChannelMemberCountsByGroup} from '@mattermost/types/channels';
 import {FilePreviewInfo} from 'components/file_preview/file_preview';
 import {Emoji} from '@mattermost/types/emojis';
@@ -42,7 +43,7 @@ import {
     applyMarkdown,
     ApplyMarkdownOptions,
 } from 'utils/markdown/apply_markdown';
-import AdvanceTextEditor from '../advanced_text_editor/advanced_text_editor';
+import AdvancedTextEditor from '../advanced_text_editor/advanced_text_editor';
 import {TextboxClass, TextboxElement} from '../textbox';
 
 import FileLimitStickyBanner from '../file_limit_sticky_banner';
@@ -50,6 +51,7 @@ import FileLimitStickyBanner from '../file_limit_sticky_banner';
 const KeyCodes = Constants.KeyCodes;
 
 type Props = {
+    currentTeamId: string;
 
     // The channel for which this comment is a part of
     channelId: string;
@@ -100,10 +102,10 @@ type Props = {
     clearCommentDraftUploads: () => void;
 
     // Called when comment draft needs to be updated
-    onUpdateCommentDraft: (draft?: PostDraft) => void;
+    onUpdateCommentDraft: (draft?: PostDraft, save?: boolean) => void;
 
     // Called when comment draft needs to be updated for a specific root ID
-    updateCommentDraftWithRootId: (rootID: string, draft: PostDraft) => void;
+    updateCommentDraftWithRootId: (rootID: string, draft: PostDraft, save?: boolean) => void;
 
     // Called when submitting the comment
     onSubmit: (draft: PostDraft, options: {ignoreSlash: boolean}) => void;
@@ -169,7 +171,7 @@ type Props = {
     scrollToBottom?: () => void;
 
     // Group member mention
-    getChannelMemberCountsByGroup: (channelID: string) => void;
+    getChannelMemberCountsByGroup: (channelID: string, isTimezoneEnabled: boolean) => void;
     groupsWithAllowReference: Map<string, Group> | null;
     channelMemberCountsByGroup: ChannelMemberCountsByGroup;
     onHeightChange?: (height: number, maxHeight: number) => void;
@@ -180,6 +182,7 @@ type Props = {
     useCustomGroupMentions: boolean;
     emojiMap: EmojiMap;
     isFormattingBarHidden: boolean;
+    searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined) => Promise<{ data: any }>;
 }
 
 type State = {
@@ -199,12 +202,19 @@ type State = {
     isFormattingBarHidden: boolean;
 };
 
+function isDraftEmpty(draft: PostDraft): boolean {
+    return !draft || (!draft.message && draft.fileInfos.length === 0);
+}
+
 class AdvancedCreateComment extends React.PureComponent<Props, State> {
     private lastBlurAt = 0;
     private draftsForPost: {[postID: string]: PostDraft | null} = {};
     private doInitialScrollToBottom = false;
 
     private saveDraftFrame?: number | null;
+
+    private isDraftSubmitting = false;
+    private isDraftEdited = false;
 
     private readonly textboxRef: React.RefObject<TextboxClass>;
     private readonly fileUploadRef: React.RefObject<FileUploadClass>;
@@ -223,7 +233,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         const rootChanged = props.rootId !== state.rootId;
         const messageInHistoryChanged = props.messageInHistory !== state.messageInHistory;
-        if (rootChanged || messageInHistoryChanged) {
+        if (rootChanged || messageInHistoryChanged || props.draft.remote) {
             updatedState = {...updatedState, draft: {...props.draft, uploadsInProgress: rootChanged ? [] : props.draft.uploadsInProgress}};
         }
 
@@ -249,7 +259,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        const {useLDAPGroupMentions, getChannelMemberCountsByGroup, channelId, clearCommentDraftUploads, onResetHistoryIndex, setShowPreview, draft} = this.props;
+        const {clearCommentDraftUploads, onResetHistoryIndex, setShowPreview, draft} = this.props;
         clearCommentDraftUploads();
         onResetHistoryIndex();
         setShowPreview(false);
@@ -260,10 +270,8 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         document.addEventListener('paste', this.pasteHandler);
         document.addEventListener('keydown', this.focusTextboxIfNecessary);
-        window.addEventListener('beforeunload', this.saveDraft);
-        if (useLDAPGroupMentions) {
-            getChannelMemberCountsByGroup(channelId);
-        }
+        window.addEventListener('beforeunload', this.saveDraftWithShow);
+        this.getChannelMemberCountsByGroup();
 
         // When draft.message is not empty, set doInitialScrollToBottom to true so that
         // on next component update, the actual this.scrollToBottom() will be called.
@@ -277,8 +285,8 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.props.resetCreatePostRequest?.();
         document.removeEventListener('paste', this.pasteHandler);
         document.removeEventListener('keydown', this.focusTextboxIfNecessary);
-        window.removeEventListener('beforeunload', this.saveDraft);
-        this.saveDraft();
+        window.removeEventListener('beforeunload', this.saveDraftWithShow);
+        this.saveDraftOnUnmount();
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
@@ -297,9 +305,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         }
 
         if (prevProps.rootId !== this.props.rootId || prevProps.selectedPostFocussedAt !== this.props.selectedPostFocussedAt) {
-            if (this.props.useLDAPGroupMentions) {
-                this.props.getChannelMemberCountsByGroup(this.props.channelId);
-            }
+            this.getChannelMemberCountsByGroup();
             this.focusTextbox();
         }
 
@@ -315,10 +321,58 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         }
     }
 
-    saveDraft = () => {
+    getChannelMemberCountsByGroup = () => {
+        const {useLDAPGroupMentions, useCustomGroupMentions, channelId, isTimezoneEnabled, searchAssociatedGroupsForReference, getChannelMemberCountsByGroup, draft, currentTeamId} = this.props;
+
+        if ((useLDAPGroupMentions || useCustomGroupMentions) && channelId) {
+            const mentions = mentionsMinusSpecialMentionsInText(draft.message);
+
+            if (mentions.length === 1) {
+                searchAssociatedGroupsForReference(mentions[0], currentTeamId, channelId);
+            } else if (mentions.length > 1) {
+                getChannelMemberCountsByGroup(channelId, isTimezoneEnabled);
+            }
+        }
+    }
+
+    saveDraftOnUnmount = () => {
+        if (!this.isDraftEdited || !this.state.draft) {
+            return;
+        }
+
+        const updatedDraft = {
+            ...this.state.draft,
+            show: !isDraftEmpty(this.state.draft),
+            remote: false,
+        } as PostDraft;
+
+        this.props.onUpdateCommentDraft(updatedDraft, true);
+    }
+
+    saveDraftWithShow = () => {
+        this.setState((prev) => {
+            if (prev.draft) {
+                return {
+                    draft: {
+                        ...prev.draft,
+                        show: !isDraftEmpty(prev.draft),
+                        remote: false,
+                    } as PostDraft,
+                };
+            }
+
+            return {
+                draft: prev.draft,
+            };
+        }, () => {
+            this.saveDraft(true);
+        });
+    }
+
+    saveDraft = (save = false) => {
         if (this.saveDraftFrame) {
             clearTimeout(this.saveDraftFrame);
-            this.props.onUpdateCommentDraft(this.state.draft);
+            this.props.onUpdateCommentDraft(this.state.draft, save);
             this.saveDraftFrame = null;
         }
     }
@@ -392,7 +446,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         const updatedDraft = {...draft, message};
 
-        this.props.onUpdateCommentDraft(updatedDraft);
+        this.handleDraftChange(updatedDraft);
         this.setState({draft: updatedDraft});
     }
 
@@ -453,8 +507,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             message: newMessage,
         };
 
-        this.props.onUpdateCommentDraft(modifiedDraft);
-        this.draftsForPost[this.props.rootId] = modifiedDraft;
+        this.handleDraftChange(modifiedDraft);
 
         this.setState({
             showEmojiPicker: false,
@@ -480,8 +533,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             message: newMessage,
         };
 
-        this.props.onUpdateCommentDraft(modifiedDraft);
-        this.draftsForPost[this.props.rootId] = modifiedDraft;
+        this.handleDraftChange(modifiedDraft);
 
         this.setState({
             showEmojiPicker: false,
@@ -498,6 +550,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
     handleSubmit = async (e: React.FormEvent | React.MouseEvent) => {
         e.preventDefault();
         this.setShowPreview(false);
+        this.isDraftSubmitting = true;
 
         const {
             channelMembersCount,
@@ -524,10 +577,10 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             if (mentionGroups.length > 0) {
                 mentionGroups.
                     forEach((group) => {
-                        if (group.source === 'ldap' && !useLDAPGroupMentions) {
+                        if (group.source === GroupSource.Ldap && !useLDAPGroupMentions) {
                             return;
                         }
-                        if (group.source === 'custom' && !useCustomGroupMentions) {
+                        if (group.source === GroupSource.Custom && !useCustomGroupMentions) {
                             return;
                         }
                         const mappedValue = channelMemberCountsByGroup[group.id];
@@ -585,6 +638,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         if (memberNotifyCount > 0) {
             this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount);
+            this.isDraftSubmitting = false;
             return;
         }
 
@@ -600,10 +654,12 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         const enableAddButton = this.shouldEnableAddButton();
 
         if (!enableAddButton) {
+            this.isDraftSubmitting = false;
             return;
         }
 
         if (draft.uploadsInProgress.length > 0) {
+            this.isDraftSubmitting = false;
             return;
         }
 
@@ -612,11 +668,13 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             setTimeout(() => {
                 this.setState({errorClass: null});
             }, Constants.ANIMATION_TIMEOUT);
+            this.isDraftSubmitting = false;
             return;
         }
 
         if (this.props.rootDeleted) {
             this.showPostDeletedModal();
+            this.isDraftSubmitting = false;
             return;
         }
 
@@ -646,12 +704,15 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             }
             err.submittedMessage = draft.message;
             this.setState({serverError: err});
+            this.isDraftSubmitting = false;
             return;
         }
 
         if (this.saveDraftFrame) {
             clearTimeout(this.saveDraftFrame);
         }
+
+        this.isDraftSubmitting = false;
         this.setState({draft: {...this.props.draft, uploadsInProgress: []}});
         this.draftsForPost[this.props.rootId] = null;
     }
@@ -672,6 +733,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         if (allowSending) {
             e.persist?.();
 
+            this.isDraftSubmitting = true;
             this.textboxRef.current?.blur();
             this.handleSubmit(e);
 
@@ -708,14 +770,10 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         }
 
         const draft = this.state.draft!;
-        const updatedDraft = {...draft, message};
+        const show = isDraftEmpty(draft) ? false : draft.show;
+        const updatedDraft = {...draft, message, show};
 
-        if (this.saveDraftFrame) {
-            clearTimeout(this.saveDraftFrame);
-        }
-        this.saveDraftFrame = window.setTimeout(() => {
-            this.props.onUpdateCommentDraft(updatedDraft);
-        }, Constants.SAVE_DRAFT_TIMEOUT);
+        this.handleDraftChange(updatedDraft);
 
         this.setState({draft: updatedDraft, serverError}, () => {
             if (this.props.scrollToBottom) {
@@ -723,6 +781,23 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             }
         });
         this.draftsForPost[this.props.rootId] = updatedDraft;
+    }
+
+    handleDraftChange = (draft: PostDraft, rootId?: string, save = false) => {
+        this.isDraftEdited = true;
+
+        if (this.saveDraftFrame) {
+            clearTimeout(this.saveDraftFrame);
+        }
+
+        this.saveDraftFrame = window.setTimeout(() => {
+            if (typeof rootId == 'undefined') {
+                this.props.onUpdateCommentDraft(draft);
+            } else {
+                this.props.updateCommentDraftWithRootId(rootId, draft, save);
+            }
+        }, Constants.SAVE_DRAFT_TIMEOUT);
+        this.draftsForPost[this.props.rootId] = draft;
     }
 
     handleMouseUpKeyUp = (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -905,8 +980,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             message: res.message,
         };
 
-        this.props.onUpdateCommentDraft(modifiedDraft);
-        this.draftsForPost[this.props.rootId] = modifiedDraft;
+        this.handleDraftChange(modifiedDraft);
 
         this.setState({
             draft: modifiedDraft,
@@ -917,6 +991,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
     }
 
     handleFileUploadChange = () => {
+        this.isDraftEdited = true;
         this.focusTextbox();
     }
 
@@ -961,8 +1036,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             fileInfos: newFileInfos,
             uploadsInProgress,
         };
-        this.props.updateCommentDraftWithRootId(rootId!, modifiedDraft);
-        this.draftsForPost[rootId!] = modifiedDraft;
+        this.handleDraftChange(modifiedDraft, rootId!, true);
         if (this.props.rootId === rootId) {
             this.setState({draft: modifiedDraft});
         }
@@ -982,7 +1056,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                 ...draft,
                 uploadsInProgress,
             };
-            this.props.updateCommentDraftWithRootId(rootId, modifiedDraft);
+            this.props.updateCommentDraftWithRootId(rootId, modifiedDraft, true);
             this.draftsForPost[rootId] = modifiedDraft;
             if (this.props.rootId === rootId) {
                 this.setState({draft: modifiedDraft});
@@ -1036,6 +1110,12 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.draftsForPost[this.props.rootId] = modifiedDraft;
 
         this.handleFileUploadChange();
+
+        if (this.saveDraftFrame) {
+            clearTimeout(this.saveDraftFrame);
+        }
+
+        this.saveDraftFrame = window.setTimeout(() => {}, Constants.SAVE_DRAFT_TIMEOUT);
     }
 
     getFileUploadTarget = () => {
@@ -1050,7 +1130,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.props.savePreferences(this.props.currentUserId, [{
             category: Preferences.ADVANCED_TEXT_EDITOR,
             user_id: this.props.currentUserId,
-            name: AdvancedTextEditor.COMMENT,
+            name: AdvancedTextEditorConst.COMMENT,
             value: String(!this.state.isFormattingBarHidden),
         }]);
     }
@@ -1082,6 +1162,9 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
     }
 
     handleBlur = () => {
+        if (!this.isDraftSubmitting) {
+            this.saveDraftWithShow();
+        }
         this.lastBlurAt = Date.now();
     }
 
@@ -1094,7 +1177,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     (this.props.draft.fileInfos.length > 0 || this.props.draft.uploadsInProgress.length > 0) &&
                     <FileLimitStickyBanner/>
                 }
-                <AdvanceTextEditor
+                <AdvancedTextEditor
                     location={Locations.RHS_COMMENT}
                     textboxRef={this.textboxRef}
                     currentUserId={this.props.currentUserId}

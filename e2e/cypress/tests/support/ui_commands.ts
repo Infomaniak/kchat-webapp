@@ -52,7 +52,7 @@ function typeCmdOrCtrlInt(textboxSelector: string) {
     return cy.get(textboxSelector).type(cmdOrCtrl, {release: false});
 }
 
-function cmdOrCtrlShortcut(subject: string, text: string): ChainableT<any> {
+function cmdOrCtrlShortcut(subject: string, text?: string): ChainableT<any> {
     const cmdOrCtrl = isMac() ? '{cmd}' : '{ctrl}';
     return cy.get(subject).type(`${cmdOrCtrl}${text}`);
 }
@@ -708,7 +708,7 @@ declare global {
              * @param {String} postId - Post ID
              * @param {String} [location] - as 'CENTER', 'RHS_ROOT', 'RHS_COMMENT'
              */
-            clickPostReactionIcon(postId: string, location?: string): ChainableT<void>;
+            clickPostReactionIcon(postId?: string, location?: string): ChainableT<void>;
 
             /**
              * Click comment icon by post ID or to most recent post (if post ID is not provided)

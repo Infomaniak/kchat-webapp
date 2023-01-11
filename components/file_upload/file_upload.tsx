@@ -9,6 +9,8 @@ import {PaperclipIcon} from '@infomaniak/compass-icons/components';
 
 import {FilePreviewInfo} from '../file_preview/file_preview';
 
+import {FilePreviewInfo} from '../file_preview/file_preview';
+
 import dragster from 'utils/dragster';
 import Constants from 'utils/constants';
 import DelayedAction from 'utils/delayed_action';
@@ -344,7 +346,7 @@ export class FileUpload extends PureComponent<Props, State> {
         const files: File[] = [];
         Array.from(droppedFiles).forEach((file, index) => {
             const item = items[index];
-            if (item && item.webkitGetAsEntry && (item.webkitGetAsEntry() === null || item.webkitGetAsEntry().isDirectory)) {
+            if (item && item.webkitGetAsEntry && (item.webkitGetAsEntry() === null || (item.webkitGetAsEntry() as FileSystemEntry).isDirectory)) {
                 return;
             }
             files.push(file);

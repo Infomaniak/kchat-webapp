@@ -1,10 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import React, {memo, useCallback} from 'react';
 
 import ReactSelect, {ValueType} from 'react-select';
 
-import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
+import Icon from '@mattermost/compass-components/foundations/icon/Icon';
 
 import {trackEvent} from 'actions/telemetry_actions';
 

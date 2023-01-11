@@ -19,9 +19,26 @@ const LazyChannelHeaderMobile = makeAsyncComponent(
     React.lazy(() => import('components/channel_header_mobile')),
 );
 
+import type {OwnProps, PropsFromRedux} from './index';
+
+const LazyChannelHeaderMobile = makeAsyncComponent(
+    'LazyChannelHeaderMobile',
+    React.lazy(() => import('components/channel_header_mobile')),
+);
+
 const LazyGlobalThreads = makeAsyncComponent(
     'LazyGlobalThreads',
     React.lazy(() => import('components/threading/global_threads')),
+    (
+        <div className='app__content'>
+            <LoadingScreen/>
+        </div>
+    ),
+);
+
+const LazyDrafts = makeAsyncComponent(
+    'LazyDrafts',
+    React.lazy(() => import('components/drafts')),
     (
         <div className='app__content'>
             <LoadingScreen/>
@@ -75,27 +92,42 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
         const url = this.props.match.url;
 
         return (
-            <React.Fragment>
-{/*
-                {this.props.callChannel && <MeetWidget/>}
-*/}
-                <div
-                    key='inner-wrap'
-                    className={classNames('inner-wrap', 'channel__wrap', {
-                        'move--right': this.props.lhsOpen,
-                        'move--left': this.props.rhsOpen,
-                        'move--left-small': this.props.rhsMenuOpen,
-                    })}
-                >
-                    {isMobileView && (
-                        <div className='row header'>
-                            <div id='navbar_wrapper'>
-                                <LazyChannelHeaderMobile/>
-                            </div>
+            <div
+                key='inner-wrap'
+                className={classNames('inner-wrap', 'channel__wrap', {
+                    'move--right': this.props.lhsOpen,
+                    'move--left': this.props.rhsOpen,
+                    'move--left-small': this.props.rhsMenuOpen,
+                })}
+            >
+                {isMobileView && (
+                    <div className='row header'>
+                        <div id='navbar_wrapper'>
+                            <LazyChannelHeaderMobile/>
                         </div>
-                    )}
-                    <div className='row main'>
-                        <Switch>
+                    </div>
+                )}
+                <div className='row main'>
+                    <Switch>
+                        <Route
+                            path={`${url}/pl/:postid`}
+                            render={(props) => (
+                                <PermalinkView
+                                    {...props}
+                                    returnTo={this.state.returnTo}
+                                />
+                            )}
+                        />
+                        <Route
+                            path='/:team/:path(channels|messages)/:identifier/:postid?'
+                            component={ChannelIdentifierRouter}
+                        />
+                        <Route
+                            path='/:team/_playbooks/:playbookId/run'
+                        >
+                            <PlaybookRunner/>
+                        </Route>
+                        {isCollapsedThreadsEnabled ? (
                             <Route
                                 path={`${url}/pl/:postid`}
                                 render={(props) => (
@@ -105,32 +137,28 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                                     />
                                 )}
                             />
+                        ) : null}
+                        <Route
+                            path='/:team/drafts'
+                            component={LazyDrafts}
+                        />
+                        {insightsAreEnabled ? (
                             <Route
-                                path='/:team/:path(channels|messages)/:identifier/:postid?'
-                                component={ChannelIdentifierRouter}
+                                path='/:team/activity-and-insights'
+                                component={LazyActivityAndInsights}
                             />
-                            {/* <Route
-                                path='/:team/_playbooks/:playbookId/run'
-                            >
-                                <PlaybookRunner/>
-                            </Route> */}
-                            {isCollapsedThreadsEnabled ? (
-                                <Route
-                                    path='/:team/threads/:threadIdentifier?'
-                                    component={LazyGlobalThreads}
-                                />
-                            ) : null}
-                            {insightsAreEnabled ? (
-                                <Route
-                                    path='/:team/activity-and-insights'
-                                    component={LazyActivityAndInsights}
-                                />
-                            ) : null}
-                            <Redirect to={lastChannelPath}/>
-                        </Switch>
-                    </div>
+                        ) : null}
+                        {isCollapsedThreadsEnabled ? (
+                            <Route
+                                path='/:team/threads/:threadIdentifier?'
+                                component={LazyGlobalThreads}
+                            />
+                        ) : null}
+                        
+                        <Redirect to={lastChannelPath}/>
+                    </Switch>
                 </div>
-            </React.Fragment>
+            </div>
         );
     }
 }

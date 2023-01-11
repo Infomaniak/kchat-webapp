@@ -12,7 +12,7 @@ import {getCloudProducts, getCloudSubscription} from 'mattermost-redux/actions/c
 import {getCloudSubscription as selectCloudSubscription, getSubscriptionProduct as selectSubscriptionProduct, isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 
-import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
+import useOpenPricingModal, {TelemetryProps} from 'components/common/hooks/useOpenPricingModal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
@@ -22,7 +22,7 @@ border-radius: 4px;
 border: none;
 box-shadow: none;
 height: 24px;
-width: 67px;
+width: auto;
 font-family: 'Open Sans';
 font-style: normal;
 font-weight: 600;
@@ -32,7 +32,7 @@ letter-spacing: 0.02em;
 color: var(--button-color);
 `;
 
-let openPricingModal: () => void;
+let openPricingModal: (telemetryProps?: TelemetryProps) => void;
 
 const PlanUpgradeButton = (): JSX.Element | null => {
     const dispatch = useDispatch();
@@ -55,7 +55,8 @@ const PlanUpgradeButton = (): JSX.Element | null => {
     const license = useSelector(getLicense);
 
     const isEnterpriseTrial = subscription?.is_free_trial === 'true';
-    const isStarter = product?.sku === CloudProducts.STARTER;
+
+    const isCloudFree = product?.sku === CloudProducts.STARTER;
 
     const isSelfHostedEnterpriseTrial = !isCloud && license.IsTrial === 'true';
     const isSelfHostedStarter = license.IsLicensed === 'false';
@@ -70,8 +71,8 @@ const PlanUpgradeButton = (): JSX.Element | null => {
         return null;
     }
 
-    // for cloud, only show when subscribed to starter or enterprise trial plans
-    if (isCloud && !(isStarter || isEnterpriseTrial)) {
+    // for cloud, only show when subscribed to free or enterprise trial plans
+    if (isCloud && !(isCloudFree || isEnterpriseTrial)) {
         return null;
     }
 
@@ -88,16 +89,17 @@ const PlanUpgradeButton = (): JSX.Element | null => {
 
     return (
         <OverlayTrigger
-            trigger={['hover', 'focus']}
+            trigger={['hover']}
             delayShow={Constants.OVERLAY_TIME_DELAY}
             placement='bottom'
             overlay={tooltip}
         >
             <UpgradeButton
                 id='UpgradeButton'
-                onClick={openPricingModal}
+                aria-haspopup='dialog'
+                onClick={() => openPricingModal({trackingLocation: 'global_header_plan_upgrade_button'})}
             >
-                {formatMessage({id: 'pricing_modal.btn.upgrade', defaultMessage: 'Upgrade'})}
+                {formatMessage({id: 'pricing_modal.btn.viewPlans', defaultMessage: 'View plans'})}
             </UpgradeButton>
         </OverlayTrigger>);
 };

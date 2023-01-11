@@ -108,7 +108,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
                 <Link to={returnTo}>
                     <FormattedMessage
                         id='error.generic.link'
-                        defaultMessage='Back to Mattermost'
+                        defaultMessage='Back to kChat'
                     />
                 </Link>
             );
@@ -117,7 +117,16 @@ export default class ErrorPage extends React.PureComponent<Props> {
                 <Link to={returnTo}>
                     <FormattedMessage
                         id='error.generic.link'
-                        defaultMessage='Back to Mattermost'
+                        defaultMessage='Back to kChat'
+                    />
+                </Link>
+            );
+        } else if (type === ErrorPageTypes.TEAM_NOT_FOUND) {
+            backButton = (
+                <Link to={returnTo}>
+                    <FormattedMessage
+                        id='error.generic.link'
+                        defaultMessage='Back to kChat'
                     />
                 </Link>
             );

@@ -38,13 +38,15 @@ import {sendGenericPostMessage} from 'actions/global_actions';
 
 import {GlobalState} from 'types/store';
 
-import Constants, {ItemStatus, ModalIdentifiers, suitePluginIds} from 'utils/constants';
+import Constants, {ItemStatus, ModalIdentifiers} from 'utils/constants';
 import {cleanUpUrlable, validateChannelUrl, getSiteURL} from 'utils/url';
 import {localizeMessage} from 'utils/utils';
 
 import {Board, BoardPatch, BoardTemplate} from '@mattermost/types/boards';
 import {ChannelType, Channel} from '@mattermost/types/channels';
 import {ServerError} from '@mattermost/types/errors';
+
+import {canCreateBoards} from './selectors';
 
 import './new_channel_modal.scss';
 
@@ -114,6 +116,14 @@ const NewChannelModal = () => {
     const EMPTY_BOARD = 'empty-board';
     const focalboardPlugin = useSelector((state: GlobalState) => state.plugins.plugins?.focalboard);
     const focalboardEnabled = focalboardPlugin?.id === suitePluginIds.focalboard && focalboardPlugin.version >= BOARDS_API_ENABLED_VERSION;
+
+    // create a board along with the channel
+    const [addBoard, setAddBoard] = useState(false);
+    const [selectedBoardTemplate, setSelectedBoardTemplate] = useState<BoardTemplate | null>(null);
+    const [boardTemplates, setBoardTemplates] = useState<BoardTemplate[]>([]);
+    const newChannelWithBoardPulsatingDotState = useSelector((state: GlobalState) => getPreference(state, Preferences.APP_BAR, Preferences.NEW_CHANNEL_WITH_BOARD_TOUR_SHOWED, ''));
+    const EMPTY_BOARD = 'empty-board';
+    const focalboardEnabled = useSelector(canCreateBoards);
 
     const handleOnModalConfirm = async () => {
         if (!canCreate) {
@@ -318,7 +328,57 @@ const NewChannelModal = () => {
         e.stopPropagation();
     };
 
-    const canCreate = displayName && !displayNameError && url && !urlError && type && !purposeError && !serverError;
+    const canCreate = displayName && !displayNameError && url && !urlError && type && !purposeError && !serverError && (!addBoard || (addBoard && selectedBoardTemplate !== null));
+
+    const showNewBoardTemplateSelector = async () => {
+        setAddBoard((prev) => !prev);
+        if (boardTemplates.length > 0) {
+            return;
+        }
+        const {data: templates} = await dispatch(getBoardsTemplates());
+
+        // define a dummy template use to identify the empty board
+        const emptyBoard = [{
+            id: EMPTY_BOARD,
+            title: 'Empty board',
+            icon: '',
+            description: 'Create an empty board.',
+        } as BoardTemplate];
+        setBoardTemplates([...templates || [], ...emptyBoard]);
+    };
+
+    const newBoardInfoIcon = () => {
+        const tooltip = (
+            <Tooltip
+                id='new-channel-with-board-tooltip'
+            >
+                <>
+                    <div className='title'>
+                        <FormattedMessage
+                            id={'channel_modal.create_board.tooltip_title'}
+                            defaultMessage={'Manage your task with a board'}
+                        />
+                    </div>
+                    <div className='description'>
+                        <FormattedMessage
+                            id={'channel_modal.create_board.tooltip_description'}
+                            defaultMessage={'Use any of our templates to manage your tasks or start from scratch with your own!'}
+                        />
+                    </div>
+                </>
+            </Tooltip>
+        );
+
+        return (
+            <OverlayTrigger
+                delayShow={Constants.OVERLAY_TIME_DELAY}
+                placement='right'
+                overlay={tooltip}
+            >
+                <i className='icon-information-outline'/>
+            </OverlayTrigger>
+        );
+    };
 
     const showNewBoardTemplateSelector = async () => {
         setAddBoard((prev) => !prev);

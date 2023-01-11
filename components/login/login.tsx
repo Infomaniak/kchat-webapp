@@ -123,6 +123,9 @@ const Login = () => {
                 closeSessionExpiredNotification.current();
                 closeSessionExpiredNotification.current = undefined;
             }
+
+            window.removeEventListener('resize', onWindowResize);
+            window.removeEventListener('focus', onWindowFocus);
         };
     }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
