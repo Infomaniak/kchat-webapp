@@ -5,7 +5,7 @@ import React from 'react';
 import {FormattedDate, FormattedMessage, FormattedNumber} from 'react-intl';
 
 import {useDispatch} from 'react-redux';
-import {CheckCircleOutlineIcon} from '@mattermost/compass-icons/components';
+import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {BillingSchemes, CloudLinks, TrialPeriodDays, ModalIdentifiers} from 'utils/constants';
 

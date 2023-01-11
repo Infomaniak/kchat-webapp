@@ -35,7 +35,6 @@ import Tooltip from 'components/tooltip';
 import OverlayTrigger from 'components/overlay_trigger';
 
 import Constants from 'utils/constants';
-import {isChannels} from 'utils/products';
 
 import AtMentionsButton from './at_mentions_button/at_mentions_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';

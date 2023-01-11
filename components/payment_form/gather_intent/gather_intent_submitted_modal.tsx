@@ -6,7 +6,7 @@ import {FormattedMessage} from 'react-intl';
 import {Modal} from 'react-bootstrap';
 
 import './gather_intent.scss';
-import {CheckCircleIcon} from '@mattermost/compass-icons/components';
+import {CheckCircleIcon} from '@infomaniak/compass-icons/components';
 
 export interface GatherIntentModalProps {
     onClose: () => void;

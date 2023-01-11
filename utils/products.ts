@@ -35,23 +35,6 @@ export const useCurrentProductId = () => {
     return useSelector((state: GlobalState) => selectCurrentProductId(state, pathname));
 };
 
-export const useCurrentProduct = () => {
-    const {pathname} = useLocation();
-    return useSelector((state: GlobalState) => selectCurrentProduct(state, pathname));
-};
-
-export const inScope = (scope: ProductScope, productId: ProductIdentifier, pluginId?: string) => {
-    if (scope === '*' || scope?.includes('*')) {
-        return true;
-    }
-    if (Array.isArray(scope)) {
-        return scope.includes(productId) || (pluginId !== undefined && scope.includes(pluginId));
-    }
-    return scope === productId || (pluginId !== undefined && scope === pluginId);
-};
-
-export const isChannels = (productId: ProductIdentifier) => productId === null;
-
 // find a product based on its SKU an RecurringInterval
 export const findProductBySkuAndInterval = (products: Record<string, Product>, sku: string, interval: string) => {
     return Object.values(products).find(((product) => {

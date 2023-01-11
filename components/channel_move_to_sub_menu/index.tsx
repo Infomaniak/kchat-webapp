@@ -9,7 +9,7 @@ import {
     FolderOutlineIcon,
     StarOutlineIcon,
     FolderMoveOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 
 import {Channel} from '@mattermost/types/channels';
 import {DispatchFunc} from 'mattermost-redux/types/actions';

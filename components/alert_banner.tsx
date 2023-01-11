@@ -10,7 +10,7 @@ import {
     CheckIcon,
     CloseIcon,
     InformationOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';

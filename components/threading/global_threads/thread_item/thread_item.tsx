@@ -6,7 +6,7 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import classNames from 'classnames';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
+import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
 
 import {getChannel as fetchChannel} from 'mattermost-redux/actions/channels';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';

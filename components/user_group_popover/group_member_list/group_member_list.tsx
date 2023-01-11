@@ -9,7 +9,7 @@ import InfiniteLoader from 'react-window-infinite-loader';
 import {useHistory} from 'react-router-dom';
 import {useIntl} from 'react-intl';
 
-import {SendIcon} from '@mattermost/compass-icons/components';
+import {SendIcon} from '@infomaniak/compass-icons/components';
 
 import {UserProfile} from '@mattermost/types/users';
 import {Group} from '@mattermost/types/groups';

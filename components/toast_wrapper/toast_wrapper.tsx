@@ -17,7 +17,6 @@ import Toast from 'components/toast/toast';
 import Timestamp, {RelativeRanges} from 'components/timestamp';
 import {SearchShortcut} from 'components/search_shortcut';
 import {HintToast} from 'components/hint-toast/hint_toast';
-import {Preferences} from 'mattermost-redux/constants';
 
 const TOAST_TEXT_COLLAPSE_WIDTH = 500;
 

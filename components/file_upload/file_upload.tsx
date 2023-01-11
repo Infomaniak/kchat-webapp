@@ -9,8 +9,6 @@ import {PaperclipIcon} from '@infomaniak/compass-icons/components';
 
 import {FilePreviewInfo} from '../file_preview/file_preview';
 
-import {FilePreviewInfo} from '../file_preview/file_preview';
-
 import dragster from 'utils/dragster';
 import Constants from 'utils/constants';
 import DelayedAction from 'utils/delayed_action';

@@ -140,6 +140,7 @@ import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
+// @ts-ignore
 import crypto from 'crypto';
 
 // Fix error import
@@ -150,9 +151,12 @@ function isDesktopApp(): boolean {
 }
 
 const IKConstants = {
+    // @ts-ignore
     LOGIN_URL: process.env.LOGIN_ENDPOINT, // eslint-disable-line no-process-env
+    // @ts-ignore
     LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
     CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
+    // @ts-ignore
     MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
 }
 

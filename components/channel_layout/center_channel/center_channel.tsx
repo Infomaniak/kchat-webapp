@@ -19,13 +19,6 @@ const LazyChannelHeaderMobile = makeAsyncComponent(
     React.lazy(() => import('components/channel_header_mobile')),
 );
 
-import type {OwnProps, PropsFromRedux} from './index';
-
-const LazyChannelHeaderMobile = makeAsyncComponent(
-    'LazyChannelHeaderMobile',
-    React.lazy(() => import('components/channel_header_mobile')),
-);
-
 const LazyGlobalThreads = makeAsyncComponent(
     'LazyGlobalThreads',
     React.lazy(() => import('components/threading/global_threads')),

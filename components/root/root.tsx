@@ -90,18 +90,10 @@ import {UserProfile} from '@mattermost/types/users';
 
 import {ActionResult} from 'mattermost-redux/types/actions';
 
-import ErrorBoundary from '../error_page/error-boudaries';
-
 import {IKConstants} from 'utils/constants-ik';
 
 import WelcomePostRenderer from 'components/welcome_post_renderer';
 import {reconnectWebSocket} from 'actions/websocket_actions';
-
-import {UserProfile} from '@mattermost/types/users';
-
-import {ActionResult} from 'mattermost-redux/types/actions';
-
-import WelcomePostRenderer from 'components/welcome_post_renderer';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -131,8 +123,8 @@ const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparin
 const MAX_GET_TOKEN_FAILS = 5;
 const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
-const DelinquencyModalController = makeAsyncComponent('DelinquencyModalController', LazyDelinquencyModalController);
-const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
+// const DelinquencyModalController = makeAsyncComponent('DelinquencyModalController', LazyDelinquencyModalController);
+// const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
 
 type LoggedInRouteProps<T> = {
     component: React.ComponentType<T>;

@@ -4,7 +4,7 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import {FilterVariantIcon} from '@mattermost/compass-icons/components';
+import {FilterVariantIcon} from '@infomaniak/compass-icons/components';
 
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';

@@ -5,8 +5,6 @@
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 
-import React from 'react';
-
 import deepEqual from 'fast-deep-equal';
 
 import {FormattedMessage} from 'react-intl';

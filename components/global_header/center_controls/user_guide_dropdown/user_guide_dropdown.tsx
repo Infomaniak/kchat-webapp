@@ -3,7 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import IconButton from '@mattermost/compass-components/components/icon-button';
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {trackEvent} from 'actions/telemetry_actions';
 

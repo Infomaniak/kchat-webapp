@@ -5,7 +5,7 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import classNames from 'classnames';
 
-import {AlertOutlineIcon} from '@mattermost/compass-icons/components';
+import {AlertOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import StatisticCount from 'components/analytics/statistic_count';
 

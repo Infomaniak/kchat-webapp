@@ -6,7 +6,7 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {isEmpty} from 'lodash';
 
-import {PlaylistCheckIcon} from '@mattermost/compass-icons/components';
+import {PlaylistCheckIcon} from '@infomaniak/compass-icons/components';
 
 import * as Utils from 'utils/utils';
 import {getThreadCountsInCurrentTeam} from 'mattermost-redux/selectors/entities/threads';
@@ -28,10 +28,6 @@ import MarkAllThreadsAsReadModal, {MarkAllThreadsAsReadModalProps} from '../mark
 import Button from '../../common/button';
 import BalloonIllustration from '../../common/balloon_illustration';
 import {useThreadRouting} from '../../hooks';
-
-import {closeModal, openModal} from 'actions/views/modals';
-
-import MarkAllThreadsAsReadModal, {MarkAllThreadsAsReadModalProps} from '../mark_all_threads_as_read_modal';
 
 import VirtualizedThreadList from './virtualized_thread_list';
 import './thread_list.scss';

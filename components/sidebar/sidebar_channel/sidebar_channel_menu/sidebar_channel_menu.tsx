@@ -13,7 +13,7 @@ import {
     LinkVariantIcon,
     AccountOutlineIcon,
     CloseIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 
 import {trackEvent} from 'actions/telemetry_actions';
 

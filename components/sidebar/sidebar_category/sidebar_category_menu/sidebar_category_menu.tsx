@@ -12,7 +12,7 @@ import {
     SortAlphabeticalAscendingIcon,
     ClockOutlineIcon,
     FolderPlusOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
 
 import {ChannelCategory, CategorySorting} from '@mattermost/types/channel_categories';
 

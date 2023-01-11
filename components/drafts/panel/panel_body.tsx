@@ -5,7 +5,7 @@ import React, {useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import {FormattedMessage} from 'react-intl';
 
-import {CheckCircleOutlineIcon} from '@mattermost/compass-icons/components';
+import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 

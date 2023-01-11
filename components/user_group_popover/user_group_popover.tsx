@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {debounce} from 'lodash';
 
-import {CloseIcon, MagnifyIcon} from '@mattermost/compass-icons/components';
+import {CloseIcon, MagnifyIcon} from '@infomaniak/compass-icons/components';
 
 import {ModalData} from 'types/actions';
 import {UserProfile} from '@mattermost/types/users';

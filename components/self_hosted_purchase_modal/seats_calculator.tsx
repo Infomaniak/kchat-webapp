@@ -4,7 +4,7 @@
 import React from 'react';
 import {useIntl, FormattedMessage, FormattedNumber} from 'react-intl';
 
-import {InformationOutlineIcon} from '@mattermost/compass-icons/components';
+import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {Constants, ItemStatus} from 'utils/constants';
 

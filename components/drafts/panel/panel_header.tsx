@@ -6,7 +6,7 @@ import cn from 'classnames';
 
 import {FormattedMessage} from 'react-intl';
 
-import {SyncIcon} from '@mattermost/compass-icons/components';
+import {SyncIcon} from '@infomaniak/compass-icons/components';
 
 import Timestamp from 'components/timestamp';
 import Badge from 'components/widgets/badges/badge';

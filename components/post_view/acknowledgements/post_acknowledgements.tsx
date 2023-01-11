@@ -19,7 +19,7 @@ import {
     useRole,
 } from '@floating-ui/react-dom-interactions';
 
-import {CheckCircleOutlineIcon} from '@mattermost/compass-icons/components';
+import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {acknowledgePost, unacknowledgePost} from 'mattermost-redux/actions/posts';
 
