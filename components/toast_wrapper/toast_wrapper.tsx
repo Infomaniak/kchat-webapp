@@ -288,7 +288,6 @@ export class ToastWrapperClass extends React.PureComponent<Props, State> {
                     values={{
                         count,
                         isToday: isToday(new Date(since)).toString(),
-                        isWithinLastWeek: isWithinLastWeek(new Date(since)).toString(),
                         date: (
                             <Timestamp
                                 value={since}
