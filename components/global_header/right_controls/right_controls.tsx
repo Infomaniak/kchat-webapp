@@ -50,7 +50,6 @@ const RightControlsContainer = styled.div`
     flex-shrink: 0;
     position: relative;
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
-    flex-basis: 30%;
     justify-content: flex-end;
 
     .header-icon {

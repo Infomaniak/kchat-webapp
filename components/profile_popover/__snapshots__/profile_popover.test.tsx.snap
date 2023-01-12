@@ -1628,8 +1628,8 @@ exports[`components/ProfilePopover should match snapshot with custom status not 
         data-toggle="tooltip"
         key="user-popover-settings"
       >
-        <button
-          className="style--link"
+        <a
+          href="#"
           onClick={[Function]}
         >
           <LocalizedIcon
@@ -1645,7 +1645,7 @@ exports[`components/ProfilePopover should match snapshot with custom status not 
             defaultMessage="Edit Profile"
             id="user_profile.account.editProfile"
           />
-        </button>
+        </a>
       </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
