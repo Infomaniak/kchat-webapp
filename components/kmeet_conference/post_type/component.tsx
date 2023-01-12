@@ -10,12 +10,6 @@ import {Post} from 'mattermost-redux/types/posts';
 
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import ActiveCallIcon from 'components/widgets/icons/active_call_icon';
-import CallIcon from 'components/widgets/icons/call_icon';
-import LeaveCallIcon from 'components/widgets/icons/leave_call_icon';
-import ConnectedProfiles from '../connected_profiles';
-
-import {isDesktopApp} from 'utils/user_agent';
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
 interface Props {
@@ -32,8 +26,8 @@ interface Props {
 }
 
 const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles, onJoinCall, leaveCallInChannel}: Props) => {
-    const client = window;
-    const intl = useIntl()
+    //const client = window;
+    const intl = useIntl();
     // window.addEventListener('beforeunload', (e) => {
     //     window.postMessage(
     //         {
@@ -53,14 +47,15 @@ const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles,
     // });
 
     const onJoinCallClick = () => {
-        onJoinCall(post.channel_id);
+        const kmeetUrl = new URL(connectedUrl);
+        window.open(kmeetUrl.href, '_blank', 'noopener');
     };
 
-    const onLeaveButtonClick = () => {
+    /*const onLeaveButtonClick = () => {
         if (client.executeCommand) {
             client.executeCommand('hangup');
         }
-    };
+    };*/
     moment.locale(String(intl.locale));
 
     const subMessage = post.props.end_at ? (
@@ -132,7 +127,7 @@ const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles,
                         </Profiles>
                     }*/}
                     {
-                        hasCall && connectedUrl &&
+                        connectedUrl &&
                         <JoinButton onClick={onJoinCallClick}>
                             <ButtonText>
                                 <FormattedMessage

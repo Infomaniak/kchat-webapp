@@ -2368,6 +2368,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@infomaniak/marked@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@infomaniak/marked@npm:0.2.0"
+  bin:
+    marked: bin/marked
+  checksum: cabc2d1d8f78a39b73128f6ae30427c9b6d20064d0b2a0264df71a21ce896b9e7c9543be70cd2fd553155af6d09cb14fab2e7d516b6a74f871016afe20e75aac
+  languageName: node
+  linkType: hard
+
 "@istanbuljs/load-nyc-config@npm:^1.0.0":
   version: 1.1.0
   resolution: "@istanbuljs/load-nyc-config@npm:1.1.0"
@@ -13458,15 +13467,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@github:mattermost/marked#2ef7f28cc7718e3f551c4ce9ea75fdd7580c2008":
-  version: 0.3.6
-  resolution: "marked@https://github.com/mattermost/marked.git#commit=2ef7f28cc7718e3f551c4ce9ea75fdd7580c2008"
-  bin:
-    marked: ./bin/marked
-  checksum: c2ba3ba9d2322fe3f05376a7feb09c6cfc79deabb96a9f32f9050123f8ae30eff87d1cdf29d346974ca02aea2d8fe48fb312a846a8db4d5eb3b08b7a14f459c1
-  languageName: node
-  linkType: hard
-
 "match-stream@npm:>= 0.0.2 < 1":
   version: 0.0.2
   resolution: "match-stream@npm:0.0.2"
@@ -13511,6 +13511,7 @@ __metadata:
     "@hot-loader/react-dom": 17.0.2
     "@infomaniak/compass-components": 0.9.0
     "@infomaniak/compass-icons": 0.8.0
+    "@infomaniak/marked": ^0.2.0
     "@mattermost/client": "workspace:packages/client"
     "@mattermost/components": "workspace:packages/components"
     "@mattermost/types": "workspace:packages/types"
@@ -13629,7 +13630,6 @@ __metadata:
     lodash: 4.17.21
     luxon: 3.0.4
     mark.js: 8.11.1
-    marked: "github:mattermost/marked#2ef7f28cc7718e3f551c4ce9ea75fdd7580c2008"
     memoize-one: 6.0.0
     mini-css-extract-plugin: 2.0.0
     mmjstool: "https://github.com/mattermost/mattermost-utilities.git"

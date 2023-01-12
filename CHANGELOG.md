@@ -1,3 +1,45 @@
+## 0.6.6 (2023-01-11)
+
+No changes.
+
+## 0.6.5 (2023-01-10)
+
+## Other (1 change)
+
+- [Add log for debug upload fails](kchat/webapp@01b82b36fdd636099fab63eb22f1f08bb525a3c1) by @florent.glauda ([merge request](kchat/webapp!256))
+
+## 0.6.4 (2022-12-22)
+
+## Removed (1 change)
+
+- [remove new label on forward action](kchat/webapp@33634081ef3d342de5d0e64353a094740f8f66f7) by @antonbuksa
+
+## 0.6.3 (2022-12-21)
+
+## Removed (1 change)
+
+- [remove rebind when presence is missing](kchat/webapp@63294a4f61641cf4334b4b71ced8dd7d19ad7743) by @antonbuksa ([merge request](kchat/webapp!247))
+
+## 0.6.2 (2022-12-19)
+
+## Fixed (2 changes)
+
+- [Fix kmeet call url post btn](kchat/webapp@fd246143ac33140e8e82f3ae92131ee1f498f337) by @florent.glauda ([merge request](kchat/webapp!238))
+- [fix: create emoji margin](kchat/webapp@d7035927ab1899fc03df413640180c085b2bc4e0) by @leonard.jouve ([merge request](kchat/webapp!174))
+
+## 0.6.1 (2022-12-16)
+
+## Fixed (1 change)
+
+- [fix url parsing](kchat/webapp@893c27be4ce6e311aca6a92ae6cf62fbf470cecb) by  ([merge request](kchat/webapp!226))
+
+## 0.6.0 (2022-12-15)
+
+## Fixed (2 changes)
+
+- [better handle multiple calls to refreshToken func](kchat/webapp@b6c2a11c603a4561164d6f9afd166b563a151d54) by @antonbuksa ([merge request](kchat/webapp!240))
+- [Add secondary class to remove message modal cancel button](kchat/webapp@069e787384fd569df1a5c2ef07b6ca74d164dd56) by @leonard.jouve ([merge request](kchat/webapp!201))
+
 ## 0.5.37 (2022-12-08)
 
 ## Fixed (1 change)

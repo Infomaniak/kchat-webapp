@@ -29,7 +29,7 @@ workflow:
         DEPLOY_VARIABLE: prodsec
     - if: "$CI_MERGE_REQUEST_ID"
       variables:
-        DEPLOY_VARIABLE: "staging/${CI_MERGE_REQUEST_ID}"
+        DEPLOY_VARIABLE: "staging/${CI_COMMIT_REF_SLUG}"
     - when: never
 
 # eslint-sast:
@@ -37,7 +37,7 @@ workflow:
 #     reports:
 #       sast: gl-sast-report.json
 #   rules:
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
 #       when: on_success
 #     - if: $DEPLOY_VARIABLE == "prodsec"
 #       when: on_success
@@ -47,7 +47,7 @@ code_quality:
   artifacts:
     paths: [gl-code-quality-report.json]
   rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
@@ -86,7 +86,7 @@ build_front:
       allow_failure: false
     - if: $DEPLOY_VARIABLE == "preprod"
       when: on_success
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - when: never
   environment:
@@ -126,7 +126,7 @@ publish_front:
       allow_failure: false
     - if: $DEPLOY_VARIABLE == "preprod"
       when: on_success
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - when: never
   environment:
@@ -151,7 +151,7 @@ unit_test:
   environment:
     name: "$DEPLOY_VARIABLE"
   rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
       allow_failure: true
     - if: $DEPLOY_VARIABLE == "prodsec"
@@ -185,23 +185,23 @@ unit_test:
     # unit tests
     - npm run test-ci
 
-# pages:
-#   stage: test
-#   needs:
-#     - unit_test
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_MERGE_REQUEST_ID}"
-#       when: on_success
-#     - when: never
-#   script:
-#     - mkdir .public
-#     - cp -r coverage/* .public
-#     - mv .public public
-#   artifacts:
-#     paths:
-#       - public
+pages:
+  stage: test
+  needs:
+    - unit_test
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+      when: on_success
+    - when: never
+  script:
+    - mkdir .public
+    - cp -r coverage/* .public
+    - mv .public public
+  artifacts:
+    paths:
+      - public
 
 sentry_release:
   needs:

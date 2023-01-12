@@ -33,7 +33,7 @@ export $(xargs < ./.env) && yarn build:webapp
 ### new way (webpack server on your host)
 
 ```shell
-npm run dev-server
+yarn dev-server:webapp
 ```
 
 Be sure to edit `/etc/hosts` file to add a record for your fake devd endpoint.

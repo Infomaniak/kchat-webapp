@@ -473,14 +473,14 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                     id='forward_post_button.label'
                     defaultMessage='Forward'
                 />
-                {this.props.showForwardPostNewLabel && (
+                {/* {this.props.showForwardPostNewLabel && (
                     <Badge variant='success'>
                         <FormattedMessage
                             id='badge.label.new'
                             defaultMessage='NEW'
                         />
                     </Badge>
-                )}
+                )} */}
             </span>
         );
 

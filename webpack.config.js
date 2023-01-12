@@ -171,6 +171,7 @@ var config = {
             'mattermost-redux/test': 'packages/mattermost-redux/test',
             'mattermost-redux': 'packages/mattermost-redux/src',
             reselect: 'packages/reselect/src',
+            marked: '@infomaniak/marked',
         },
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
         fallback: {
