@@ -1870,17 +1870,17 @@ function handlePostAcknowledgementRemoved(msg) {
 
 function handleUpsertDraftEvent(msg) {
     return async (doDispatch, doGetState) => {
-        const state = doGetState();
-        const connectionId = getConnectionId(state);
+        //const state = doGetState();
+        //const connectionId = getConnectionId(state);
 
         const draft = msg.data.draft;
         const {key, value} = transformServerDraft(draft);
         value.show = true;
         value.remote = false;
 
-        if (msg.broadcast.omit_connection_id !== connectionId) {
-            value.remote = true;
-        }
+        // if (msg.broadcast.omit_connection_id !== connectionId) {
+        //     value.remote = true;
+        // }
 
         doDispatch(setGlobalItem(key, value));
     };
