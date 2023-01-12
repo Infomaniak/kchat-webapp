@@ -28,6 +28,7 @@ const config = {
             '<rootDir>/packages/mattermost-redux/test/$1',
         '^mattermost-redux/(.*)$': '<rootDir>/packages/mattermost-redux/src/$1',
         '^reselect$': '<rootDir>/packages/reselect/src',
+        "^marked$": "node_modules/@infomaniak/marked",
         '^.+\\.(jpg|jpeg|png|apng|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
             'identity-obj-proxy',
         '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
