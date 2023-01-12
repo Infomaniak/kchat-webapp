@@ -1851,7 +1851,7 @@ function handlePusherMemberRemoved(msg) {
 }
 
 function handlePostAcknowledgementAdded(msg) {
-    const data = JSON.parse(msg.data.acknowledgement);
+    const data = msg.data.acknowledgement;
 
     return {
         type: PostTypes.CREATE_ACK_POST_SUCCESS,
@@ -1860,7 +1860,7 @@ function handlePostAcknowledgementAdded(msg) {
 }
 
 function handlePostAcknowledgementRemoved(msg) {
-    const data = JSON.parse(msg.data.acknowledgement);
+    const data = msg.data.acknowledgement;
 
     return {
         type: PostTypes.DELETE_ACK_POST_SUCCESS,
@@ -1873,7 +1873,7 @@ function handleUpsertDraftEvent(msg) {
         const state = doGetState();
         const connectionId = getConnectionId(state);
 
-        const draft = JSON.parse(msg.data.draft);
+        const draft = msg.data.draft;
         const {key, value} = transformServerDraft(draft);
         value.show = true;
         value.remote = false;
@@ -1888,7 +1888,7 @@ function handleUpsertDraftEvent(msg) {
 
 function handleDeleteDraftEvent(msg) {
     return async (doDispatch) => {
-        const draft = JSON.parse(msg.data.draft);
+        const draft = msg.data.draft;
         const {key} = transformServerDraft(draft);
 
         doDispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: [], remote: true}));
