@@ -146,6 +146,19 @@ export function getKSuites(page = 0, perPage: number = General.TEAMS_CHUNK_SIZE,
 
         try {
             data = await Client4.getKSuites(page, perPage, includeTotalCount, excludePolicyConstrained) as TeamsWithCount;
+            // notify app
+            console.log(data)
+            if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
+                window.postMessage(
+                    {
+                        type: 'update-teams',
+                        message: {
+                            teams: data,
+                        },
+                    },
+                    window.origin,
+                );
+            }
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch({type: TeamTypes.GET_TEAMS_FAILURE, data});
