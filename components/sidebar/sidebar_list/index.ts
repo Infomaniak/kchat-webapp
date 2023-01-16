@@ -12,7 +12,6 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {switchToChannelById} from 'actions/views/channel';
-import {switchToGlobalThreads} from 'actions/views/threads';
 import {
     moveChannelsInSidebar,
     setDraggingState,
@@ -20,7 +19,7 @@ import {
     clearChannelSelection,
     multiSelectChannelAdd,
 } from 'actions/views/channel_sidebar';
-import {close} from 'actions/views/lhs';
+import {close, switchToLhsStaticPage} from 'actions/views/lhs';
 import {
     getDisplayedChannels,
     getDraggingState,
@@ -28,8 +27,9 @@ import {
     isUnreadFilterEnabled,
 } from 'selectors/views/channel_sidebar';
 import {GlobalState} from 'types/store';
+import {getCurrentStaticPageId, getVisibleStaticPages} from 'selectors/lhs';
 
-import SidebarChannelList from './sidebar_channel_list';
+import SidebarList from './sidebar_list';
 import {markAllChannelsAsRead} from 'packages/mattermost-redux/src/actions/channels';
 import {closeModal, openModal} from 'actions/views/modals';
 
@@ -55,6 +55,8 @@ function mapStateToProps(state: GlobalState) {
         showUnreadsCategory: shouldShowUnreadsCategory(state),
         collapsedThreads,
         hasUnreadThreads,
+        currentStaticPageId: getCurrentStaticPageId(state),
+        staticPages: getVisibleStaticPages(state),
     };
 }
 
@@ -63,7 +65,6 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
         actions: bindActionCreators({
             close,
             switchToChannelById,
-            switchToGlobalThreads,
             moveChannelsInSidebar,
             moveCategory,
             setDraggingState,
@@ -73,8 +74,9 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             markAllChannelsAsRead,
             openModal,
             closeModal,
+            switchToLhsStaticPage,
         }, dispatch),
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarChannelList);
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarList);

@@ -129,7 +129,7 @@ const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
 type LoggedInRouteProps<T> = {
     component: React.ComponentType<T>;
     path: string;
-    theme: Theme;
+    theme?: Theme; // the routes that send the theme are the ones that will actually need to show the onboarding tasklist
 };
 function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
     const {component: Component, theme, ...rest} = props;
@@ -138,9 +138,9 @@ function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
             {...rest}
             render={(routeProps: RouteComponentProps) => (
                 <LoggedIn {...routeProps}>
-                    {/* <CompassThemeProvider theme={theme}>
+                    {/* {theme && <CompassThemeProvider theme={theme}>
                         <OnBoardingTaskList/>
-                    </CompassThemeProvider> */}
+                    </CompassThemeProvider>} */}
                     <Component {...(routeProps as unknown as T)}/>
                 </LoggedIn>
             )}
@@ -749,7 +749,6 @@ export default class Root extends React.PureComponent<Props, State> {
                         component={HelpController}
                     />
                     <LoggedInRoute
-                        theme={this.props.theme}
                         path={'/terms_of_service'}
                         component={TermsOfService}
                     />
@@ -782,12 +781,10 @@ export default class Root extends React.PureComponent<Props, State> {
                         component={CreateTeam}
                     />
                     {/* <LoggedInRoute
-                        theme={this.props.theme}
                         path={'/mfa'}
                         component={Mfa}
                     /> */}
                     <LoggedInRoute
-                        theme={this.props.theme}
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
                     />

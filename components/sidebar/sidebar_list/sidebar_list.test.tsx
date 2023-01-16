@@ -14,9 +14,9 @@ import {TestHelper} from 'utils/test_helper';
 
 import {DraggingStates, DraggingStateTypes} from 'utils/constants';
 
-import SidebarChannelList from './sidebar_channel_list';
+import SidebarList from './sidebar_list';
 
-describe('SidebarChannelList', () => {
+describe('SidebarList', () => {
     const currentChannel = TestHelper.getChannelMock({
         id: 'channel_id',
         display_name: 'channel_display_name',
@@ -98,9 +98,11 @@ describe('SidebarChannelList', () => {
         showUnreadsCategory: false,
         collapsedThreads: true,
         hasUnreadThreads: false,
+        currentStaticPageId: '',
+        staticPages: [],
         actions: {
             switchToChannelById: jest.fn(),
-            switchToGlobalThreads: jest.fn(),
+            switchToLhsStaticPage: jest.fn(),
             close: jest.fn(),
             moveChannelsInSidebar: jest.fn(),
             moveCategory: jest.fn(),
@@ -117,7 +119,7 @@ describe('SidebarChannelList', () => {
 
     test('should match snapshot', () => {
         const wrapper = shallow(
-            <SidebarChannelList {...baseProps}/>,
+            <SidebarList {...baseProps}/>,
         );
 
         expect(wrapper).toMatchSnapshot();
@@ -132,7 +134,7 @@ describe('SidebarChannelList', () => {
 
     test('should close sidebar on mobile when channel is selected (ie. changed)', () => {
         const wrapper = shallow(
-            <SidebarChannelList {...baseProps}/>,
+            <SidebarList {...baseProps}/>,
         );
 
         wrapper.setProps({currentChannelId: 'new_channel_id'});
@@ -140,8 +142,8 @@ describe('SidebarChannelList', () => {
     });
 
     test('should scroll to top when team changes', () => {
-        const wrapper = shallow<SidebarChannelList>(
-            <SidebarChannelList {...baseProps}/>,
+        const wrapper = shallow<SidebarList>(
+            <SidebarList {...baseProps}/>,
         );
 
         wrapper.instance().scrollbar = {
@@ -160,8 +162,8 @@ describe('SidebarChannelList', () => {
     });
 
     test('should display unread scroll indicator when channels appear outside visible area', () => {
-        const wrapper = shallow<SidebarChannelList>(
-            <SidebarChannelList {...baseProps}/>,
+        const wrapper = shallow<SidebarList>(
+            <SidebarList {...baseProps}/>,
         );
         const instance = wrapper.instance();
 
@@ -190,8 +192,8 @@ describe('SidebarChannelList', () => {
     });
 
     test('should scroll to correct position when scrolling to channel', () => {
-        const wrapper = shallow<SidebarChannelList>(
-            <SidebarChannelList {...baseProps}/>,
+        const wrapper = shallow<SidebarList>(
+            <SidebarList {...baseProps}/>,
         );
         const instance = wrapper.instance();
 
@@ -219,8 +221,8 @@ describe('SidebarChannelList', () => {
             style: {},
         }]);
 
-        const wrapper = shallow<SidebarChannelList>(
-            <SidebarChannelList {...baseProps}/>,
+        const wrapper = shallow<SidebarList>(
+            <SidebarList {...baseProps}/>,
         );
 
         const categoryBefore = {
@@ -251,8 +253,8 @@ describe('SidebarChannelList', () => {
     });
 
     test('should call correct action on dropping item', () => {
-        const wrapper = shallow<SidebarChannelList>(
-            <SidebarChannelList {...baseProps}/>,
+        const wrapper = shallow<SidebarList>(
+            <SidebarList {...baseProps}/>,
         );
 
         const categoryResult: DropResult = {

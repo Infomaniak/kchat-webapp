@@ -167,6 +167,8 @@ interface ProfilePopoverProps extends Omit<React.ComponentProps<typeof Popover>,
     enableLastActiveTime: boolean;
 
     timestampUnits: string[];
+
+    isAnyModalOpen: boolean;
 }
 type ProfilePopoverState = {
     loadingDMChannel?: string;
@@ -235,6 +237,13 @@ ProfilePopoverState
             },
         ));
     }
+
+    componentDidUpdate(prevProps: ProfilePopoverProps) {
+        if (this.props.isAnyModalOpen !== prevProps.isAnyModalOpen) {
+            this.props.hide?.();
+        }
+    }
+
     handleShowDirectChannel = (e: React.MouseEvent<HTMLAnchorElement>) => {
         const {actions} = this.props;
         e.preventDefault();

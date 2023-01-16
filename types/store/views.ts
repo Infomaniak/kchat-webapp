@@ -8,6 +8,7 @@ import {Team} from '@mattermost/types/teams';
 import {UserThread} from '@mattermost/types/threads';
 
 import {I18nState} from './i18n';
+import {LhsViewState} from './lhs';
 import {RhsViewState} from './rhs';
 
 import {DraggingState} from '.';
@@ -118,11 +119,7 @@ export type ViewsState = {
 
     i18n: I18nState;
 
-    ik: { accessToken: string; refreshToken: string };
-
-    lhs: {
-        isOpen: boolean;
-    };
+    lhs: LhsViewState;
 
     search: {
         modalSearch: string;
