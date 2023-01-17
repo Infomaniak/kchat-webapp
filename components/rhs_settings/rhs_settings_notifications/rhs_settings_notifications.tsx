@@ -62,7 +62,7 @@ type State = {
     serverError: string;
 };
 
-function getNotificationsStateFromProps(props: Props): State {
+function getNotificationsStateFromProps(props: Props, state?: State): State {
     const user = props.user;
 
     let desktop: UserNotifyProps['desktop'] = NotificationLevels.MENTION;
@@ -165,7 +165,7 @@ function getNotificationsStateFromProps(props: Props): State {
         desktopNotificationSound,
         usernameKey,
         customKeys,
-        customKeysChecked: customKeys.length > 0,
+        customKeysChecked: state?.customKeysChecked || false,
         firstNameKey,
         channelKey,
         autoResponderActive,
@@ -251,14 +251,14 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
             then(({data: result, error: err}) => {
                 if (result) {
                     this.handleUpdateSection('');
-                    this.setState(getNotificationsStateFromProps(this.props));
+                    this.setState(getNotificationsStateFromProps(this.props, this.state));
                 } else if (err) {
                     this.setState({serverError: err.message, isSaving: false});
                 }
             });
     }
 
-    handleCancel = (): void => this.setState(getNotificationsStateFromProps(this.props));
+    handleCancel = (): void => this.setState(getNotificationsStateFromProps(this.props, this.state));
 
     handleUpdateSection = (section: string): void => {
         if (section) {
@@ -403,7 +403,10 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
             {
                 value: 'select',
                 label: (
-                    <div className='settings-item__select'>
+                    <div
+                        key='mention-keys-select-select'
+                        className='settings-item__select'
+                    >
                         <FormattedMessage
                             id='user.settings.select'
                             defaultMessage='Select'
@@ -417,7 +420,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
             options.push({
                 value: 'fistname',
                 label: (
-                    <label
+                    <div
+                        key='mention-keys-select-firstname'
                         className='settings-item__select'
                         onClick={(e: React.MouseEvent) => this.onMentionKeySelect(e, 'firstNameKey', !this.state.firstNameKey)}
                     >
@@ -433,7 +437,7 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                                 first_name: user.first_name,
                             }}
                         />
-                    </label>
+                    </div>
                 ),
             });
         }
@@ -442,7 +446,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
             {
                 value: 'non_sensitive',
                 label: (
-                    <label
+                    <div
+                        key='mention-keys-select-non-sensitive'
                         className='settings-item__select'
                         onClick={(e: React.MouseEvent) => this.onMentionKeySelect(e, 'usernameKey', !this.state.usernameKey)}
                     >
@@ -458,13 +463,14 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                                 username: user.username,
                             }}
                         />
-                    </label>
+                    </div>
                 ),
             },
             {
                 value: 'wide',
                 label: (
-                    <label
+                    <div
+                        key='mention-keys-select-wide'
                         className='settings-item__select'
                         onClick={(e: React.MouseEvent) => this.onMentionKeySelect(e, 'channelKey', !this.state.channelKey)}
                     >
@@ -477,13 +483,14 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                             id='user.settings.notifications.channelWide'
                             defaultMessage='Channel-wide mentions "@channel", "@all", "@here"'
                         />
-                    </label>
+                    </div>
                 ),
             },
             {
                 value: 'custom',
                 label: (
-                    <label
+                    <div
+                        key='mention-keys-select-custom'
                         className='settings-item__select'
                         onClick={(e: React.MouseEvent) => this.onMentionKeySelect(e, 'customKeysChecked', !this.state.customKeysChecked)}
                     >
@@ -496,7 +503,7 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                             id='user.settings.notifications.sensitiveWords'
                             defaultMessage='Other non-case sensitive words, separated by commas:'
                         />
-                    </label>
+                    </div>
                 ),
             },
         );
@@ -509,8 +516,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                     <ReactSelect
                         className='react-select settings-select advanced-select'
                         classNamePrefix='react-select'
-                        id='threadsPushLevel'
-                        key='threadsPushLevel'
+                        id='mentionKeysSelect'
+                        key='mention-keys-inputs'
                         options={options}
                         clearable={false}
                         value={options.filter((option) => option.value === 'select')}
@@ -520,7 +527,10 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                     />,
                 ]}
                 subtitle={(
-                    <div className='settings-item__input'>
+                    <div
+                        key='mention-keys-subtitle'
+                        className='settings-item__input'
+                    >
                         <input
                             key='mention-keys-input'
                             ref={this.mentionKeysInputRef}
@@ -563,7 +573,10 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                     />,
                 ]}
                 subtitle={(
-                    <div className='settings-item__input'>
+                    <div
+                        key='auto-responder-subtitle'
+                        className='settings-item__input'
+                    >
                         <input
                             key='auto-responder-input'
                             ref={this.autoResponderInputRef}
