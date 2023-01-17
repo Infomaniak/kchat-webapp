@@ -172,7 +172,7 @@ function PostPriorityPicker({
                     id: 'post_priority.picker.header',
                     defaultMessage: 'Message priority',
                 })}
-                <Beta
+                {/* <Beta
                     uppercase={true}
                     variant='info'
                     size='xs'
@@ -188,7 +188,7 @@ function PostPriorityPicker({
                         id={'post_priority.picker.feedback'}
                         defaultMessage={'Give feedback'}
                     />
-                </Feedback>
+                </Feedback> */}
             </Header>
             <div role='application'>
                 <Menu className='Menu'>
