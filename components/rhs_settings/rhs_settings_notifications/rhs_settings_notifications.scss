@@ -1,0 +1,19 @@
+.settings-item {
+    &__select {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__input {
+        width: 100%;
+        padding: 0 15px;
+
+        input {
+            width: 100%;
+        }
+    }
+
+    &__disabled {
+        display: none;
+    }
+}

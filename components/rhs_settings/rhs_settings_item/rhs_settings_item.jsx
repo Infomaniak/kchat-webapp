@@ -121,6 +121,8 @@ export default class RhsSettingsItem extends React.PureComponent {
         isSelect: PropTypes.bool,
 
         isCustomBtn: PropTypes.bool,
+
+        subtitle: PropTypes.element,
     }
 
     constructor(props) {
@@ -292,6 +294,7 @@ export default class RhsSettingsItem extends React.PureComponent {
                 className={`row rhs-settings-section ${this.props.containerStyle}`}
             >
                 {title}
+                {this.props.subtitle}
                 <div className='col-sm-12'>
                     <div
                         tabIndex='-1'
