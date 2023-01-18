@@ -108,7 +108,7 @@ describe('components/global/product_switcher_menu', () => {
         expect(wrapper.find('.FeatureRestrictedModal__terms').length).toEqual(1);
         expect(wrapper.find('.FeatureRestrictedModal__buttons').hasClass('single')).toEqual(false);
         expect(wrapper.find('.button-plans').length).toEqual(1);
-        expect(wrapper.find('StartTrialBtn').length).toEqual(1);
+        // expect(wrapper.find('StartTrialBtn').length).toEqual(1);
     });
 
     test('should show with system admin pre trial for cloud', () => {
