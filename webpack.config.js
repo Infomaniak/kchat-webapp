@@ -709,7 +709,7 @@ if (targetIsDevServer) {
                 target: process.env.BASE_URL || 'https://kchat.infomaniak.com', //eslint-disable-line no-process-env
                 changeOrigin: true,
                 xfwd: true,
-                ws: true,
+                ws: false,
             }],
             port: 9005,
             devMiddleware: {
