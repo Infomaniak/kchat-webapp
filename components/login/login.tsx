@@ -24,10 +24,11 @@ import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import LocalStorageStore from 'stores/local_storage_store';
 import {GlobalState} from 'types/store';
 
-import {isDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 
 import {clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken} from './utils';
 import './login.scss';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 const MAX_TOKEN_RETRIES = 3;
 
@@ -87,7 +88,7 @@ const Login = () => {
         console.log('[components/login] init login component');
         console.log('[components/login] get was logged in => ', LocalStorageStore.getWasLoggedIn());
 
-        if (isDesktopApp()) {
+        if (isDesktopApp() && !isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
             const token = localStorage.getItem('IKToken');
             const refreshToken = localStorage.getItem('IKRefreshToken');
 

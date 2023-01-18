@@ -99,6 +99,7 @@ import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
@@ -466,7 +467,7 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     async componentDidMount() {
-        if (isDesktopApp()) {
+        if (isDesktopApp() && !isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.0.0')) {
             // Rely on initial client calls to 401 here for the first redirect to login,
             // we dont need to do it manually.
             // Login will send us back here with a code after we give it the challange.
