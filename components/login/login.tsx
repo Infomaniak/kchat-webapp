@@ -108,6 +108,8 @@ const Login = () => {
             // This will try to refresh the token 3 times and will redirect to our ext
             // login service if none of the attempts succeed.
             tryRefreshTokenWithErrorCount(0);
+        } else if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+            getChallengeAndRedirectToLogin();
         } else if (currentUser) {
             // Web auth redirects are still triggered throught client4 so we
             // dont need to do any checks here.
