@@ -82,7 +82,7 @@ describe('components/view_image/ImagePreview', () => {
             <ImagePreview {...props}/>,
         );
 
-        expect(wrapper.find('a').prop('href')).toBe('#');
-        expect(wrapper.find('img').prop('src')).toBe(props.fileInfo.link);
+        expect(wrapper.find('div').prop('className')).toBe('image_preview_div');
+        expect(wrapper.find('canvas').prop('className')).toBe('image_preview_canvas__normal');
     });
 });
