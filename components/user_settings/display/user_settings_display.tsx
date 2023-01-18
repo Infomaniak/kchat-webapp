@@ -382,7 +382,6 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
     }
 
     updateSection = (section: string) => {
-        console.log(section)
         this.updateState();
         this.props.updateSection(section);
     }
