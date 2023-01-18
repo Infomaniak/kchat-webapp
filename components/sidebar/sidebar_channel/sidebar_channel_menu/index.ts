@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {RefObject} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 
 import {Channel} from '@mattermost/types/channels';
@@ -31,6 +32,7 @@ export type OwnProps = {
     channelLink: string;
     isUnread: boolean;
     isMenuOpen: boolean;
+    menuTriggerRef: RefObject<HTMLButtonElement>;
     onToggleMenu: (isMenuOpen: boolean) => void;
     closeHandler?: (callback: () => void) => void;
 }

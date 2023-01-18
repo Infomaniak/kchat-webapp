@@ -235,6 +235,7 @@ const SidebarChannelMenu = (props: Props) => {
             onToggleMenu={onToggleMenu}
             tooltipText={formatMessage({id: 'sidebar_left.sidebar_channel_menu.editChannel', defaultMessage: 'Channel options'})}
             tabIndex={0}
+            menuButtonRef={props.menuTriggerRef}
         >
             {props.isMenuOpen && (
                 <>
