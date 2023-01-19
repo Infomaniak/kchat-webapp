@@ -161,6 +161,8 @@ export function refreshIKToken(redirectToTeam = false): Promise<any> {
                     type: 'token-refreshed',
                     message: {
                         token: resp.access_token,
+                        refreshToken: resp.refresh_token,
+                        expiresIn: resp.expires_in,
                     },
                 },
                 window.origin,

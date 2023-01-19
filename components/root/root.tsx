@@ -211,15 +211,15 @@ export default class Root extends React.PureComponent<Props, State> {
                 Client4.setCSRF(token);
                 LocalStorageStore.setWasLoggedIn(true);
                 console.log('[components/root > constructor] token-refreshed sent to electron'); // eslint-disable-line no-console
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token,
-                        },
-                    },
-                    window.origin,
-                );
+                // window.postMessage(
+                //     {
+                //         type: 'token-refreshed',
+                //         message: {
+                //             token,
+                //         },
+                //     },
+                //     window.origin,
+                // );
             }
         } else {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
@@ -525,6 +525,8 @@ export default class Root extends React.PureComponent<Props, State> {
                     type: 'token-refreshed',
                     message: {
                         token: response.access_token,
+                        refreshToken: response.refresh_token,
+                        expiresIn: response.expires_in,
                     },
                 },
                 window.origin,
