@@ -6,6 +6,8 @@
 import React, {RefObject} from 'react';
 import ReactSelect from 'react-select';
 import semver from 'semver';
+import debounce from 'lodash/debounce';
+import classNames from 'classnames';
 
 import {FormattedMessage} from 'react-intl';
 
@@ -14,7 +16,7 @@ import {UserNotifyProps, UserProfile} from '@mattermost/types/users';
 import {ActionResult} from 'mattermost-redux/types/actions';
 
 import Constants, {NotificationLevels} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
+import {localizeMessage, moveCursorToEnd} from 'utils/utils';
 import {isDesktopApp} from 'utils/user_agent';
 
 // import SettingItemMin from 'components/setting_item_min';
@@ -24,6 +26,8 @@ import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
 import Toggle from 'components/toggle';
 
 import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
+
+import './rhs_settings_notifications.scss';
 
 export type Props = {
     user: UserProfile;
@@ -58,7 +62,7 @@ type State = {
     serverError: string;
 };
 
-function getNotificationsStateFromProps(props: Props): State {
+function getNotificationsStateFromProps(props: Props, state?: State): State {
     const user = props.user;
 
     let desktop: UserNotifyProps['desktop'] = NotificationLevels.MENTION;
@@ -161,7 +165,7 @@ function getNotificationsStateFromProps(props: Props): State {
         desktopNotificationSound,
         usernameKey,
         customKeys,
-        customKeysChecked: customKeys.length > 0,
+        customKeysChecked: state?.customKeysChecked || false,
         firstNameKey,
         channelKey,
         autoResponderActive,
@@ -172,11 +176,15 @@ function getNotificationsStateFromProps(props: Props): State {
     };
 }
 
+const DEBOUNCE_DELAY = 500;
+
 export default class RhsNotificationsTab extends React.PureComponent<Props, State> {
     customCheckRef: RefObject<HTMLInputElement>;
     customMentionsRef: RefObject<HTMLInputElement>;
     drawerRef: RefObject<HTMLHeadingElement>;
     wrapperRef: RefObject<HTMLDivElement>;
+    mentionKeysInputRef: RefObject<HTMLInputElement>;
+    autoResponderInputRef: RefObject<HTMLInputElement>;
 
     static defaultProps = {
         activeSection: '',
@@ -190,6 +198,13 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         this.customMentionsRef = React.createRef();
         this.drawerRef = React.createRef();
         this.wrapperRef = React.createRef();
+        this.mentionKeysInputRef = React.createRef();
+        this.autoResponderInputRef = React.createRef();
+    }
+
+    componentWillUnmount() {
+        this.handleAutoResponderInput.flush();
+        this.handleMentionKeysInput.flush();
     }
 
     handleSubmit = (): void => {
@@ -236,14 +251,14 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
             then(({data: result, error: err}) => {
                 if (result) {
                     this.handleUpdateSection('');
-                    this.setState(getNotificationsStateFromProps(this.props));
+                    this.setState(getNotificationsStateFromProps(this.props, this.state));
                 } else if (err) {
                     this.setState({serverError: err.message, isSaving: false});
                 }
             });
     }
 
-    handleCancel = (): void => this.setState(getNotificationsStateFromProps(this.props));
+    handleCancel = (): void => this.setState(getNotificationsStateFromProps(this.props, this.state));
 
     handleUpdateSection = (section: string): void => {
         if (section) {
@@ -381,10 +396,230 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         );
     };
 
+    createMentionKeysSection = () => {
+        const {user} = this.props;
+
+        const options = [
+            {
+                value: 'select',
+                label: (
+                    <div
+                        key='mention-keys-select-select'
+                        className='settings-item__select'
+                    >
+                        <FormattedMessage
+                            id='user.settings.select'
+                            defaultMessage='Select'
+                        />
+                    </div>
+                ),
+            },
+        ];
+
+        if (user.first_name) {
+            options.push({
+                value: 'fistname',
+                label: (
+                    <div
+                        key='mention-keys-select-firstname'
+                        className='settings-item__select'
+                        onClick={(e: React.MouseEvent) => this.onMentionKeySelect(e, 'firstNameKey', !this.state.firstNameKey)}
+                    >
+                        <input
+                            id='notificationTriggerFirst'
+                            type='checkbox'
+                            checked={this.state.firstNameKey}
+                        />
+                        <FormattedMessage
+                            id='user.settings.notifications.sensitiveName'
+                            defaultMessage='Your case sensitive first name "{first_name}"'
+                            values={{
+                                first_name: user.first_name,
+                            }}
+                        />
+                    </div>
+                ),
+            });
+        }
+
+        options.push(
+            {
+                value: 'non_sensitive',
+                label: (
+                    <div
+                        key='mention-keys-select-non-sensitive'
+                        className='settings-item__select'
+                        onClick={(e: React.MouseEvent) => this.onMentionKeySelect(e, 'usernameKey', !this.state.usernameKey)}
+                    >
+                        <input
+                            id='notificationTriggerUsername'
+                            type='checkbox'
+                            checked={this.state.usernameKey}
+                        />
+                        <FormattedMessage
+                            id='user.settings.notifications.sensitiveUsername'
+                            defaultMessage='Your non case-sensitive username "{username}"'
+                            values={{
+                                username: user.username,
+                            }}
+                        />
+                    </div>
+                ),
+            },
+            {
+                value: 'wide',
+                label: (
+                    <div
+                        key='mention-keys-select-wide'
+                        className='settings-item__select'
+                        onClick={(e: React.MouseEvent) => this.onMentionKeySelect(e, 'channelKey', !this.state.channelKey)}
+                    >
+                        <input
+                            id='notificationTriggerShouts'
+                            type='checkbox'
+                            checked={this.state.channelKey}
+                        />
+                        <FormattedMessage
+                            id='user.settings.notifications.channelWide'
+                            defaultMessage='Channel-wide mentions "@channel", "@all", "@here"'
+                        />
+                    </div>
+                ),
+            },
+            {
+                value: 'custom',
+                label: (
+                    <div
+                        key='mention-keys-select-custom'
+                        className='settings-item__select'
+                        onClick={(e: React.MouseEvent) => this.onMentionKeySelect(e, 'customKeysChecked', !this.state.customKeysChecked)}
+                    >
+                        <input
+                            id='notificationTriggerCustom'
+                            type='checkbox'
+                            checked={this.state.customKeysChecked}
+                        />
+                        <FormattedMessage
+                            id='user.settings.notifications.sensitiveWords'
+                            defaultMessage='Other non-case sensitive words, separated by commas:'
+                        />
+                    </div>
+                ),
+            },
+        );
+
+        return (
+            <RhsSettingsItem
+                key='mentionKeys'
+                title={localizeMessage('user.settings.notifications.wordsTrigger', 'Words That Trigger Mentions')}
+                inputs={[
+                    <ReactSelect
+                        className='react-select settings-select advanced-select'
+                        classNamePrefix='react-select'
+                        id='mentionKeysSelect'
+                        key='mention-keys-inputs'
+                        options={options}
+                        clearable={false}
+                        value={options.filter((option) => option.value === 'select')}
+                        isSearchable={false}
+                        menuPortalTarget={document.body}
+                        styles={reactStyles}
+                    />,
+                ]}
+                subtitle={(
+                    <div
+                        key='mention-keys-subtitle'
+                        className='settings-item__input'
+                    >
+                        <input
+                            key='mention-keys-input'
+                            ref={this.mentionKeysInputRef}
+                            className={classNames('form-control', 'mentions-input', {'settings-item__disabled': !this.state.customKeysChecked})}
+                            onInput={this.handleMentionKeysInput}
+                            autoFocus={this.state.customKeysChecked}
+                            type='text'
+                            placeholder={localizeMessage('user.settings.notifications.mentionsSubtitle', 'Mentions')}
+                            defaultValue={this.state.customKeys}
+                            onFocus={moveCursorToEnd}
+                            aria-labelledby='notificationTriggerCustom'
+                        />
+                    </div>
+                )}
+                updateSection={this.handleUpdateSection}
+                messageDesc={localizeMessage('user.settings.notifications.mentionsInfo', 'Mentions trigger when someone sends a message that includes your username (@{username}) or any of the options selected above.')}
+            />
+        );
+    }
+
+    createAutoResponderSection = () => {
+        if (!this.props.enableAutoResponder) {
+            return null;
+        }
+
+        return (
+            <RhsSettingsItem
+                key='autoResponder'
+                title={
+                    <FormattedMessage
+                        id='user.settings.notifications.autoResponder'
+                        defaultMessage='Automatic Direct Message Replies'
+                    />
+                }
+                inputs={[
+                    <Toggle
+                        key='auto-responder-toggle'
+                        onToggle={() => this.setStateValue('autoResponderActive', !this.state.autoResponderActive)}
+                        toggled={this.state.autoResponderActive}
+                    />,
+                ]}
+                subtitle={(
+                    <div
+                        key='auto-responder-subtitle'
+                        className='settings-item__input'
+                    >
+                        <input
+                            key='auto-responder-input'
+                            ref={this.autoResponderInputRef}
+                            className={classNames('form-control', {'settings-item__disabled': !this.state.autoResponderActive})}
+                            onInput={this.handleAutoResponderInput}
+                            type='text'
+                            placeholder={localizeMessage('user.settings.notifications.autoResponderPlaceholder', 'Message')}
+                            autoFocus={this.state.autoResponderActive}
+                            onFocus={moveCursorToEnd}
+                            defaultValue={localizeMessage('user.settings.notifications.autoResponderDefault', 'Hello, I am out of office and unable to respond to messages.')}
+                        />
+                    </div>
+                )}
+                updateSection={this.handleUpdateSection}
+                messageDesc={localizeMessage('user.settings.notifications.autoResponderHint', 'Set a custom message that will be automatically sent in response to Direct Messages. Mentions in Public and Private Channels will not trigger the automated reply. Enabling Automatic Replies sets your status to Out of Office and disables email and push notifications.')}
+            />
+        );
+    }
+
+    onMentionKeySelect = (e: React.MouseEvent, state: string, value: string | boolean) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.setStateValue(state, value);
+    };
+
+    handleMentionKeysInput = debounce(() => {
+        if (this.mentionKeysInputRef.current) {
+            this.setStateValue('customKeys', this.mentionKeysInputRef.current.value.trim());
+        }
+    }, DEBOUNCE_DELAY);
+
+    handleAutoResponderInput = debounce(() => {
+        if (this.autoResponderInputRef.current) {
+            this.setStateValue('autoResponderMessage', this.autoResponderInputRef.current.value);
+        }
+    }, DEBOUNCE_DELAY);
+
     render() {
         return (
             <div id='notificationSettings'>
                 <div className='user-settings user-rhs-container container mt-0'>
+                    {this.createMentionKeysSection()}
+                    {this.createAutoResponderSection()}
                     <h5>
                         <FormattedMessage
                             id='user.settings.notifications.push'
