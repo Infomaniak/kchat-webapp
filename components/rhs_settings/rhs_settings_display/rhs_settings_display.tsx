@@ -37,9 +37,9 @@ const Preferences = Constants.Preferences;
 
 function getDisplayStateFromProps(props: Props) {
     return {
-        lastActiveDisplay: props.lastActiveDisplay.toString(),
-        militaryTime: props.militaryTime,
-        teammateNameDisplay: props.teammateNameDisplay,
+        // lastActiveDisplay: props.lastActiveDisplay.toString(),
+        // militaryTime: props.militaryTime,
+        // teammateNameDisplay: props.teammateNameDisplay,
         availabilityStatusOnPosts: props.availabilityStatusOnPosts,
         channelDisplayMode: props.channelDisplayMode ? props.channelDisplayMode : Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
         messageDisplay: props.messageDisplay ? props.messageDisplay : Preferences.MESSAGE_DISPLAY_CLEAN,
@@ -806,88 +806,88 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             });
         }
 
-        const clockSection = this.createSection({
-            section: 'clock',
-            display: 'militaryTime',
-            value: this.state.militaryTime,
-            defaultDisplay: 'false',
-            title: {
-                id: t('user.settings.display.clockDisplay'),
-                message: 'Clock Display',
-            },
-            firstOption: {
-                value: 'false',
-                radionButtonText: {
-                    id: t('user.settings.display.normalClock'),
-                    message: '12-hour clock (example: 4:00 PM)',
-                },
-            },
-            secondOption: {
-                value: 'true',
-                radionButtonText: {
-                    id: t('user.settings.display.militaryClock'),
-                    message: '24-hour clock (example: 16:00)',
-                },
-            },
-            description: {
-                id: t('user.settings.display.preferTime'),
-                message: 'Select how you prefer time displayed. When disabled, displays a clock ranging from 0 to 24 hours (e.g. 16:00)',
-            },
-        });
+        // const clockSection = this.createSection({
+        //     section: 'clock',
+        //     display: 'militaryTime',
+        //     value: this.state.militaryTime,
+        //     defaultDisplay: 'false',
+        //     title: {
+        //         id: t('user.settings.display.clockDisplay'),
+        //         message: 'Clock Display',
+        //     },
+        //     firstOption: {
+        //         value: 'false',
+        //         radionButtonText: {
+        //             id: t('user.settings.display.normalClock'),
+        //             message: '12-hour clock (example: 4:00 PM)',
+        //         },
+        //     },
+        //     secondOption: {
+        //         value: 'true',
+        //         radionButtonText: {
+        //             id: t('user.settings.display.militaryClock'),
+        //             message: '24-hour clock (example: 16:00)',
+        //         },
+        //     },
+        //     description: {
+        //         id: t('user.settings.display.preferTime'),
+        //         message: 'Select how you prefer time displayed. When disabled, displays a clock ranging from 0 to 24 hours (e.g. 16:00)',
+        //     },
+        // });
 
-        const teammateNameDisplaySection = this.createSelect({
-            section: Preferences.NAME_NAME_FORMAT,
-            display: 'teammateNameDisplay',
-            value: this.props.lockTeammateNameDisplay ? this.props.configTeammateNameDisplay : this.state.teammateNameDisplay,
-            defaultDisplay: this.props.configTeammateNameDisplay,
-            title: {
-                id: t('user.settings.display.teammateNameDisplayTitle'),
-                message: 'Teammate Name Display',
-            },
-            options: [
-                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME, label: localizeMessage('user.settings.display.teammateNameDisplayUsername', 'Show username')},
-                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayNicknameFullname', 'Show nickname if one exists, otherwise show first and last name')},
-                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayFullname', 'Show first and last name')},
-            ],
-            description: {
-                id: t('user.settings.display.teammateNameDisplayDescription'),
-                message: 'Set how to display other user\'s names in posts and the Direct Messages list.',
-            },
-            disabled: this.props.lockTeammateNameDisplay,
-        });
+        // const teammateNameDisplaySection = this.createSelect({
+        //     section: Preferences.NAME_NAME_FORMAT,
+        //     display: 'teammateNameDisplay',
+        //     value: this.props.lockTeammateNameDisplay ? this.props.configTeammateNameDisplay : this.state.teammateNameDisplay,
+        //     defaultDisplay: this.props.configTeammateNameDisplay,
+        //     title: {
+        //         id: t('user.settings.display.teammateNameDisplayTitle'),
+        //         message: 'Teammate Name Display',
+        //     },
+        //     options: [
+        //         {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME, label: localizeMessage('user.settings.display.teammateNameDisplayUsername', 'Show username')},
+        //         {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayNicknameFullname', 'Show nickname if one exists, otherwise show first and last name')},
+        //         {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayFullname', 'Show first and last name')},
+        //     ],
+        //     description: {
+        //         id: t('user.settings.display.teammateNameDisplayDescription'),
+        //         message: 'Set how to display other user\'s names in posts and the Direct Messages list.',
+        //     },
+        //     disabled: this.props.lockTeammateNameDisplay,
+        // });
+        //
+        // let lastActiveSection = null;
 
-        let lastActiveSection = null;
-
-        if (this.props.lastActiveTimeEnabled) {
-            lastActiveSection = this.createSection({
-                section: 'lastactive',
-                display: 'lastActiveDisplay',
-                value: this.state.lastActiveDisplay,
-                defaultDisplay: 'true',
-                title: {
-                    id: t('user.settings.display.lastActiveDisplay'),
-                    message: 'Share last active time',
-                },
-                firstOption: {
-                    value: 'false',
-                    radionButtonText: {
-                        id: t('user.settings.display.lastActiveOff'),
-                        message: 'Off',
-                    },
-                },
-                secondOption: {
-                    value: 'true',
-                    radionButtonText: {
-                        id: t('user.settings.display.lastActiveOn'),
-                        message: 'On',
-                    },
-                },
-                description: {
-                    id: t('user.settings.display.lastActiveDesc'),
-                    message: 'When enabled, other users will see when you were last active.',
-                },
-            });
-        }
+        // if (this.props.lastActiveTimeEnabled) {
+        //     lastActiveSection = this.createSection({
+        //         section: 'lastactive',
+        //         display: 'lastActiveDisplay',
+        //         value: this.state.lastActiveDisplay,
+        //         defaultDisplay: 'true',
+        //         title: {
+        //             id: t('user.settings.display.lastActiveDisplay'),
+        //             message: 'Share last active time',
+        //         },
+        //         firstOption: {
+        //             value: 'false',
+        //             radionButtonText: {
+        //                 id: t('user.settings.display.lastActiveOff'),
+        //                 message: 'Off',
+        //             },
+        //         },
+        //         secondOption: {
+        //             value: 'true',
+        //             radionButtonText: {
+        //                 id: t('user.settings.display.lastActiveOn'),
+        //                 message: 'On',
+        //             },
+        //         },
+        //         description: {
+        //             id: t('user.settings.display.lastActiveDesc'),
+        //             message: 'When enabled, other users will see when you were last active.',
+        //         },
+        //     });
+        // }
 
         return (
             <div id='displaySettings'>
