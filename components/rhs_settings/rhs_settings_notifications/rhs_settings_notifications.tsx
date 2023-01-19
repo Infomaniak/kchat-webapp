@@ -618,8 +618,8 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         return (
             <div id='notificationSettings'>
                 <div className='user-settings user-rhs-container container mt-0'>
-                    {this.createMentionKeysSection()}
-                    {this.createAutoResponderSection()}
+                    {/*{this.createMentionKeysSection()}*/}
+                    {/*{this.createAutoResponderSection()}*/}
                     <h5>
                         <FormattedMessage
                             id='user.settings.notifications.push'

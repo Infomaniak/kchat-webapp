@@ -304,12 +304,12 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             value: this.state.unreadScrollPosition,
         };
 
-        const timePreference = {
-            user_id: userId,
-            category: Preferences.CATEGORY_DISPLAY_SETTINGS,
-            name: Preferences.USE_MILITARY_TIME,
-            value: this.state.militaryTime,
-        };
+        // const timePreference = {
+        //     user_id: userId,
+        //     category: Preferences.CATEGORY_DISPLAY_SETTINGS,
+        //     name: Preferences.USE_MILITARY_TIME,
+        //     value: this.state.militaryTime,
+        // };
 
         this.setState({isSaving: true});
 
@@ -324,7 +324,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             teammateNameDisplayPreference,
             availabilityStatusOnPostsPreference,
             colorizeUsernamesPreference,
-            timePreference,
+            // timePreference,
         ];
 
         await this.props.actions.savePreferences(userId, preferences);
@@ -901,9 +901,9 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     {showUnreadSection}
                     {channelDisplayModeSection}
                     {UnreadScrollPositionSection}
-                    {clockSection}
-                    {teammateNameDisplaySection}
-                    {lastActiveSection}
+                    {/*{clockSection}*/}
+                    {/*{teammateNameDisplaySection}*/}
+                    {/*{lastActiveSection}*/}
                     <RhsLimitVisibleGMsDMs/>
                 </div>
             </div>
