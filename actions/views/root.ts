@@ -24,7 +24,7 @@ export function loadConfigAndMe() {
         // If expired, refresh token
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
-                const token = await window.authManager.getToken();
+                const token = await window.authManager.tokenRequest();
                 if (!Object.keys(token).length) {
                     window.postMessage(
                         {
