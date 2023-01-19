@@ -3020,6 +3020,7 @@
   "navbar_dropdown.switchTo": "Passa a ",
   "navbar_dropdown.teamSettings": "Impostazioni squadra",
   "navbar_dropdown.viewMembers": "Mostra membri",
+  "navbar_dropdown.accountSettings": "Profilo",
   "no_results.channel_search.subtitle": "Controlla l'ortografia o prova un'altra ricerca.",
   "no_results.channel_search.title": "Nessun risultato per {channelName}",
   "no_results.flagged_posts.subtitle": "I messaggi segnato sono visibili solo da te. Usa i contrassegni per segnare i messaggi da seguire o salvare qualcosa per doto cliccando l'{icon} per salvarli qui.",

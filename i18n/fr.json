@@ -3842,6 +3842,7 @@
   "navbar_dropdown.tryTrialNow": "Essayez gratuitement la version Enterprise maintenant !",
   "navbar_dropdown.userGroups": "Groupes d'utilisateurs",
   "navbar_dropdown.viewMembers": "Voir les membres",
+  "navbar_dropdown.accountSettings": "Profil",
   "next_steps_view.welcomeToMattermost": "Bienvenue dans kChat",
   "no_results.channel_files.subtitle": "Les fichiers postés dans ce canal apparaîtront ici.",
   "no_results.channel_files.title": "Aucun fichier pour le moment",
