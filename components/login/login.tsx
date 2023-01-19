@@ -24,10 +24,11 @@ import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import LocalStorageStore from 'stores/local_storage_store';
 import {GlobalState} from 'types/store';
 
-import {isDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 
 import {clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken} from './utils';
 import './login.scss';
+import { isServerVersionGreaterThanOrEqualTo } from 'utils/server_version';
 
 const MAX_TOKEN_RETRIES = 3;
 
@@ -88,25 +89,35 @@ const Login = () => {
         console.log('[components/login] get was logged in => ', LocalStorageStore.getWasLoggedIn());
 
         if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+                window.authManager.tokenRequest().then((data) => {
+                    console.log(data)
 
-            // Check for desktop session end of life
-            if (!token || !refreshToken) {
-                // Login should be the only one responsible for clearing storage.
-                // The only other case is if we can't renew the token with code in root.
-                console.log('[components/login] no session, clearing storage just in case');
-                clearLocalStorageToken();
-                console.log('[components/login] redirecting to infomaniak login');
-                Sentry.captureException(new Error('Redirected to external login on desktop'));
-                getChallengeAndRedirectToLogin();
-
-                return;
+                    // if (!data) {
+                    //     getChallengeAndRedirectToLogin();
+                    // }
+                })
+            } else {
+                const token = localStorage.getItem('IKToken');
+                const refreshToken = localStorage.getItem('IKRefreshToken');
+    
+                // Check for desktop session end of life
+                if (!token || !refreshToken) {
+                    // Login should be the only one responsible for clearing storage.
+                    // The only other case is if we can't renew the token with code in root.
+                    console.log('[components/login] no session, clearing storage just in case');
+                    clearLocalStorageToken();
+                    console.log('[components/login] redirecting to infomaniak login');
+                    Sentry.captureException(new Error('Redirected to external login on desktop'));
+                    getChallengeAndRedirectToLogin();
+    
+                    return;
+                }
+    
+                // This will try to refresh the token 3 times and will redirect to our ext
+                // login service if none of the attempts succeed.
+                tryRefreshTokenWithErrorCount(0);
             }
-
-            // This will try to refresh the token 3 times and will redirect to our ext
-            // login service if none of the attempts succeed.
-            tryRefreshTokenWithErrorCount(0);
         } else if (currentUser) {
             // Web auth redirects are still triggered throught client4 so we
             // dont need to do any checks here.
