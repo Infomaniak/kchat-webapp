@@ -8,6 +8,8 @@ import {Client4} from 'mattermost-redux/client';
 import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
+import { isServerVersionGreaterThanOrEqualTo } from 'utils/server_version';
+import { getDesktopVersion } from 'utils/user_agent';
 
 let REFRESH_PROMISE: Promise<any> | null = null;
 
@@ -132,11 +134,17 @@ export function needRefreshToken() {
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
-export function refreshIKToken(redirectToTeam = false): Promise<any> {
-    const refreshToken = localStorage.getItem('IKRefreshToken');
+export async function refreshIKToken(redirectToTeam = false): Promise<any> {
+    let refreshToken
+    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+        const {refreshToken: rt} = await window.authManager.tokenRequest();
+        refreshToken = rt;
+    } else {
+        refreshToken = localStorage.getItem('IKRefreshToken');
 
-    if (!refreshToken) {
-        return Promise.reject(new Error('missing refresh token'));
+        if (!refreshToken) {
+            return Promise.reject(new Error('missing refresh token'));
+        }
     }
 
     if (REFRESH_PROMISE) {
