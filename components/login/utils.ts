@@ -134,6 +134,10 @@ export function needRefreshToken() {
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
+export async function refreshTokenV2(redirectToTeam = false) {
+    window.authManager.refreshToken();
+}
+
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
     let refreshToken
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {

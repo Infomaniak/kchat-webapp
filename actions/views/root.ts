@@ -12,8 +12,9 @@ import {Translations} from 'types/store/i18n';
 import {ActionTypes} from 'utils/constants';
 import en from 'i18n/en.json';
 
-import {checkIKTokenIsExpired,refreshIKToken} from 'components/login/utils';
-import {isDesktopApp} from '../../utils/user_agent';
+import {checkIKTokenIsExpired, refreshIKToken, refreshTokenV2} from 'components/login/utils';
+import {getDesktopVersion, isDesktopApp} from '../../utils/user_agent';
+import { isServerVersionGreaterThanOrEqualTo } from 'utils/server_version';
 const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};
 
 export type TranslationPluginFunction = (locale: string) => Translations
@@ -21,13 +22,32 @@ export type TranslationPluginFunction = (locale: string) => Translations
 export function loadConfigAndMe() {
     return async (dispatch: DispatchFunc) => {
         // If expired, refresh token
-        if (isDesktopApp() && checkIKTokenIsExpired()) {
-            console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
-            await refreshIKToken(/*redirectToReam*/false)?.then(() => {
-                console.log('[actions/view/root] desktop token refreshed'); // eslint-disable-line no-console
-            }).catch((e: unknown) => {
-                console.warn('[actions/view/root] desktop token refresh error: ', e); // eslint-disable-line no-console
-            });
+        if (isDesktopApp()) {
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+                const token = await window.authManager.getToken();
+                if (!Object.keys(token).length) {
+                    window.postMessage(
+                        {
+                            type: 'reset-teams',
+                            message: {},
+                        },
+                        window.origin,
+                    );
+                } else if (token.expiresIn <= 0) {
+                    refreshTokenV2(token.token, token.refreshToken)
+                }
+
+                Client4.setAuthHeader = true;
+                Client4.setToken(token.token);
+                Client4.setCSRF(token.token);
+            } else if (checkIKTokenIsExpired()) {
+                console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
+                await refreshIKToken(/*redirectToReam*/false)?.then(() => {
+                    console.log('[actions/view/root] desktop token refreshed'); // eslint-disable-line no-console
+                }).catch((e: unknown) => {
+                    console.warn('[actions/view/root] desktop token refresh error: ', e); // eslint-disable-line no-console
+                });
+            }
         }
 
         const [{data: clientConfig}] = await Promise.all([
