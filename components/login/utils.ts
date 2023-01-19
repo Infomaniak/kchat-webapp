@@ -93,8 +93,7 @@ export function getChallengeAndRedirectToLogin() {
         localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
 
         // TODO: add env for login url and/or current server
-        // &redirect_uri=${redirectTo}
-        window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code`);
+        window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
     }).catch(() => {
         console.log('[login/utils > getChallengeAndRedirectToLogin] error redirect');
     });
