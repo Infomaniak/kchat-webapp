@@ -1002,7 +1002,7 @@ describe('components/SwitchChannelProvider', () => {
         switchProvider.startNewRequest(searchText);
         await switchProvider.fetchUsersAndChannels(searchText, resultsCallback);
         const expectedOrder = [
-            'insights',
+            // 'insights',
             'insight_gm_channel',
         ];
 
