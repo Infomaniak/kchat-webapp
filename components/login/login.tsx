@@ -93,7 +93,7 @@ const Login = () => {
                 window.authManager.tokenRequest().then((data) => {
                     console.log(data)
 
-                    if(!Object.keys(data)) {
+                    if(!Object.keys(data).length) {
                         getChallengeAndRedirectToLogin();
                     }
 
