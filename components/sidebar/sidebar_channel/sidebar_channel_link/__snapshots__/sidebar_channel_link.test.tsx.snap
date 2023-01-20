@@ -10,27 +10,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   tabIndex={0}
   to="http://a.fake.link"
 >
-  <Connect(SidebarChannelIcon)
-    channel={
-      Object {
-        "create_at": 0,
-        "creator_id": "",
-        "delete_at": 0,
-        "display_name": "channel_display_name",
-        "group_constrained": false,
-        "header": "",
-        "id": "channel_id",
-        "last_post_at": 0,
-        "last_root_post_at": 0,
-        "name": "",
-        "purpose": "",
-        "scheme_id": "",
-        "team_id": "",
-        "type": "O",
-        "update_at": 0,
-      }
-    }
+  <SidebarChannelIcon
     icon={null}
+    isDeleted={false}
   />
   <div
     className="SidebarChannelLinkLabel_wrapper"
@@ -63,10 +45,14 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       pluggableName="SidebarChannelLinkLabel"
     />
   </div>
+  <Connect(Component)
+    id="channel_id"
+  />
   <ChannelMentionBadge
+    hasUrgent={false}
     unreadMentions={0}
   />
-  <Connect(injectIntl(SidebarChannelMenu))
+  <Connect(Component)
     channel={
       Object {
         "create_at": 0,
@@ -87,7 +73,6 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       }
     }
     channelLink="http://a.fake.link"
-    isCollapsed={false}
     isMenuOpen={false}
     isUnread={false}
     menuTriggerRef={
@@ -110,27 +95,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   tabIndex={0}
   to="http://a.fake.link"
 >
-  <Connect(SidebarChannelIcon)
-    channel={
-      Object {
-        "create_at": 0,
-        "creator_id": "",
-        "delete_at": 0,
-        "display_name": "channel_display_name",
-        "group_constrained": false,
-        "header": "",
-        "id": "channel_id",
-        "last_post_at": 0,
-        "last_root_post_at": 0,
-        "name": "",
-        "purpose": "",
-        "scheme_id": "",
-        "team_id": "",
-        "type": "O",
-        "update_at": 0,
-      }
-    }
+  <SidebarChannelIcon
     icon={null}
+    isDeleted={false}
   />
   <div
     className="SidebarChannelLinkLabel_wrapper"
@@ -163,10 +130,14 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       pluggableName="SidebarChannelLinkLabel"
     />
   </div>
+  <Connect(Component)
+    id="channel_id"
+  />
   <ChannelMentionBadge
+    hasUrgent={false}
     unreadMentions={0}
   />
-  <Connect(injectIntl(SidebarChannelMenu))
+  <Connect(Component)
     channel={
       Object {
         "create_at": 0,
@@ -187,7 +158,6 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       }
     }
     channelLink="http://a.fake.link"
-    isCollapsed={false}
     isMenuOpen={false}
     isUnread={false}
     menuTriggerRef={
@@ -210,27 +180,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   tabIndex={0}
   to="http://a.fake.link"
 >
-  <Connect(SidebarChannelIcon)
-    channel={
-      Object {
-        "create_at": 0,
-        "creator_id": "",
-        "delete_at": 0,
-        "display_name": "channel_display_name",
-        "group_constrained": false,
-        "header": "",
-        "id": "channel_id",
-        "last_post_at": 0,
-        "last_root_post_at": 0,
-        "name": "",
-        "purpose": "",
-        "scheme_id": "",
-        "team_id": "",
-        "type": "O",
-        "update_at": 0,
-      }
-    }
+  <SidebarChannelIcon
     icon={null}
+    isDeleted={false}
   />
   <div
     className="SidebarChannelLinkLabel_wrapper"
@@ -287,10 +239,14 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       pluggableName="SidebarChannelLinkLabel"
     />
   </div>
+  <Connect(Component)
+    id="channel_id"
+  />
   <ChannelMentionBadge
+    hasUrgent={false}
     unreadMentions={0}
   />
-  <Connect(injectIntl(SidebarChannelMenu))
+  <Connect(Component)
     channel={
       Object {
         "create_at": 0,
@@ -311,7 +267,6 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       }
     }
     channelLink="http://a.fake.link"
-    isCollapsed={false}
     isMenuOpen={false}
     isUnread={false}
     menuTriggerRef={
@@ -334,27 +289,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   tabIndex={0}
   to="http://a.fake.link"
 >
-  <Connect(SidebarChannelIcon)
-    channel={
-      Object {
-        "create_at": 0,
-        "creator_id": "",
-        "delete_at": 0,
-        "display_name": "channel_display_name",
-        "group_constrained": false,
-        "header": "",
-        "id": "channel_id",
-        "last_post_at": 0,
-        "last_root_post_at": 0,
-        "name": "",
-        "purpose": "",
-        "scheme_id": "",
-        "team_id": "",
-        "type": "O",
-        "update_at": 0,
-      }
-    }
+  <SidebarChannelIcon
     icon={null}
+    isDeleted={false}
   />
   <div
     className="SidebarChannelLinkLabel_wrapper"
@@ -387,10 +324,14 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       pluggableName="SidebarChannelLinkLabel"
     />
   </div>
+  <Connect(Component)
+    id="channel_id"
+  />
   <ChannelMentionBadge
+    hasUrgent={false}
     unreadMentions={2}
   />
-  <Connect(injectIntl(SidebarChannelMenu))
+  <Connect(Component)
     channel={
       Object {
         "create_at": 0,
@@ -411,7 +352,6 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       }
     }
     channelLink="http://a.fake.link"
-    isCollapsed={false}
     isMenuOpen={false}
     isUnread={true}
     menuTriggerRef={

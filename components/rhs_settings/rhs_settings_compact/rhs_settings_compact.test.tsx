@@ -43,6 +43,7 @@ describe('components/user_settings/display/user_settings_theme/user_settings_the
         allowCustomThemes: true,
         showAllTeamsCheckbox: true,
         applyToAllTeams: true,
+        areAllSectionsInactive: false
     };
 
     it('should match snapshot', () => {

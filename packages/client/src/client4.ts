@@ -4,15 +4,31 @@
 /* eslint-disable max-lines */
 
 import {PreferenceType} from '@mattermost/types/preferences';
-import FormData from 'form-data';
-
 import {SystemSetting} from '@mattermost/types/general';
 import {ClusterInfo, AnalyticsRow, SchemaMigration} from '@mattermost/types/admin';
 import type {AppBinding, AppCallRequest, AppCallResponse} from '@mattermost/types/apps';
 import {Audit} from '@mattermost/types/audits';
 import {UserAutocomplete, AutocompleteSuggestion} from '@mattermost/types/autocomplete';
 import {Bot, BotPatch} from '@mattermost/types/bots';
-import {Product, SubscriptionResponse, CloudCustomer, Address, CloudCustomerPatch, Invoice, Limits, IntegrationsUsage, NotifyAdminRequest, Subscription, ValidBusinessEmail} from '@mattermost/types/cloud';
+import {
+    Product,
+    CloudCustomer,
+    Address,
+    CloudCustomerPatch,
+    Invoice,
+    Limits,
+    NotifyAdminRequest,
+    Subscription,
+    ValidBusinessEmail,
+    LicenseExpandStatus,
+    CreateSubscriptionRequest,
+} from '@mattermost/types/cloud';
+import {
+    SelfHostedSignupForm,
+    SelfHostedSignupCustomerResponse,
+    SelfHostedSignupSuccessResponse,
+    SelfHostedSignupBootstrapResponse,
+} from '@mattermost/types/hosted_customer';
 import {ChannelCategory, OrderedChannelCategories} from '@mattermost/types/channel_categories';
 import {
     Channel,
@@ -77,8 +93,9 @@ import type {
     MarketplaceApp,
     MarketplacePlugin,
 } from '@mattermost/types/marketplace';
-import {Post, PostList, PostSearchResults, OpenGraphMetadata, PostsUsageResponse, TeamsUsageResponse, PaginatedPostList, FilesUsageResponse} from '@mattermost/types/posts';
-import {BoardsUsageResponse} from '@mattermost/types/boards';
+import {Post, PostList, PostSearchResults, OpenGraphMetadata, PostsUsageResponse, TeamsUsageResponse, PaginatedPostList, FilesUsageResponse, PostAcknowledgement, PostAnalytics} from '@mattermost/types/posts';
+import {Draft} from '@mattermost/types/drafts';
+import {BoardPatch, BoardsUsageResponse, BoardTemplate, Board, CreateBoardResponse} from '@mattermost/types/boards';
 import {Reaction} from '@mattermost/types/reactions';
 import {Role} from '@mattermost/types/roles';
 import {SamlCertificateStatus, SamlMetadataResponse} from '@mattermost/types/saml';
@@ -114,14 +131,16 @@ import {
     GetDataRetentionCustomPoliciesRequest,
 } from '@mattermost/types/data_retention';
 import {CompleteOnboardingRequest} from '@mattermost/types/setup';
-
 import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/threads';
 import {LeastActiveChannelsResponse, TopChannelResponse, TopReactionResponse, TopThreadResponse, TopDMsResponse} from '@mattermost/types/insights';
+
+import {Category, WorkTemplate} from '@mattermost/types/work_templates';
 
 import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
+// @ts-ignore
 import crypto from 'crypto';
 
 // Fix error import
@@ -132,9 +151,12 @@ function isDesktopApp(): boolean {
 }
 
 const IKConstants = {
+    // @ts-ignore
     LOGIN_URL: process.env.LOGIN_ENDPOINT, // eslint-disable-line no-process-env
+    // @ts-ignore
     LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
     CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
+    // @ts-ignore
     MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
 }
 
@@ -155,17 +177,6 @@ export const DEFAULT_LIMIT_BEFORE = 30;
 export const DEFAULT_LIMIT_AFTER = 30;
 
 const GRAPHQL_ENDPOINT = '/api/v5/graphql';
-
-// placed here because currently not supported
-// to import from outside the package from main bundle
-export const suitePluginIds = {
-    playbooks: 'playbooks',
-    focalboard: 'focalboard',
-    apps: 'com.mattermost.apps',
-    calls: 'com.mattermost.calls',
-    nps: 'com.mattermost.nps',
-    channelExport: 'com.mattermost.plugin-channel-export',
-};
 
 export default class Client4 {
     logToConsole = false;
@@ -188,6 +199,8 @@ export default class Client4 {
     };
     userRoles = '';
     telemetryHandler?: TelemetryHandler;
+
+    useBoardsProduct = false;
 
     getUrl() {
         return this.url;
@@ -250,6 +263,10 @@ export default class Client4 {
 
     setTelemetryHandler(telemetryHandler?: TelemetryHandler) {
         this.telemetryHandler = telemetryHandler;
+    }
+
+    setUseBoardsProduct(useBoardsProduct: boolean) {
+        this.useBoardsProduct = useBoardsProduct;
     }
 
     getServerVersion() {
@@ -345,6 +362,24 @@ export default class Client4 {
 
     getCommandsRoute() {
         return `${this.getBaseRoute()}/commands`;
+    }
+
+    getBaseWorkTemplate() {
+        return `${this.getBaseRoute()}/worktemplates`;
+    }
+
+    getWorkTemplateCategories = () => {
+        return this.doFetch<Category[]>(
+            `${this.getBaseWorkTemplate()}/categories`,
+            {method: 'get'},
+        );
+    }
+
+    getWorkTemplates = (categoryId: string) => {
+        return this.doFetch<WorkTemplate[]>(
+            `${this.getBaseWorkTemplate()}/categories/${categoryId}/templates`,
+            {method: 'get'},
+        );
     }
 
     getFilesRoute() {
@@ -459,6 +494,10 @@ export default class Client4 {
         return `${this.getBaseRoute()}/cloud`;
     }
 
+    getHostedCustomerRoute() {
+        return `${this.getBaseRoute()}/hosted_customer`;
+    }
+
     getUsageRoute() {
         return `${this.getBaseRoute()}/usage`;
     }
@@ -477,6 +516,14 @@ export default class Client4 {
 
     getSystemRoute(): string {
         return `${this.getBaseRoute()}/system`;
+    }
+
+    getDraftsRoute() {
+        return `${this.getBaseRoute()}/drafts`;
+    }
+
+    getBoardsRoute() {
+        return `${this.url}/plugins/${this.useBoardsProduct ? 'boards' : 'focalboard'}/api/v2`;
     }
 
     getCSRFFromCookie() {
@@ -521,7 +568,7 @@ export default class Client4 {
         }
 
         if (options.body) {
-            // when the body is an instance of FormData we let fetch to set the Content-Type header so it defines a correct boundary
+            // when the body is an instance of FormData we let browser set the Content-Type header generated by FormData interface with correct boundary
             if (!(options.body instanceof FormData)) {
                 headers[HEADER_CONTENT_TYPE] = 'application/json';
             }
@@ -681,12 +728,6 @@ export default class Client4 {
             method: 'post',
             body: formData,
         };
-
-        if (formData.getBoundary) {
-            request.headers = {
-                'Content-Type': `multipart/form-data; boundary=${formData.getBoundary()}`,
-            };
-        }
 
         return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/image`,
@@ -878,9 +919,9 @@ export default class Client4 {
         );
     };
 
-    getProfilesInGroup = (groupId: string, page = 0, perPage = PER_PAGE_DEFAULT) => {
+    getProfilesInGroup = (groupId: string, page = 0, perPage = PER_PAGE_DEFAULT, sort = '') => {
         return this.doFetch<UserProfile[]>(
-            `${this.getUsersRoute()}${buildQueryString({in_group: groupId, page, per_page: perPage})}`,
+            `${this.getUsersRoute()}${buildQueryString({in_group: groupId, page, per_page: perPage, sort})}`,
             {method: 'get'},
         );
     };
@@ -1536,12 +1577,6 @@ export default class Client4 {
             body: formData,
         };
 
-        if (formData.getBoundary) {
-            request.headers = {
-                'Content-Type': `multipart/form-data; boundary=${formData.getBoundary()}`,
-            };
-        }
-
         return this.doFetch<StatusOK>(
             `${this.getTeamRoute(teamId)}/image`,
             request,
@@ -1961,7 +1996,13 @@ export default class Client4 {
             `${this.getPostsRoute()}`,
             {method: 'post', body: JSON.stringify(post)},
         );
-        const analyticsData = {channel_id: result.channel_id, post_id: result.id, user_actual_id: result.user_id, root_id: result.root_id};
+        const analyticsData = {channel_id: result.channel_id, post_id: result.id, user_actual_id: result.user_id, root_id: result.root_id} as PostAnalytics;
+        if (post.metadata?.priority) {
+            analyticsData.priority = post.metadata.priority.priority;
+            analyticsData.requested_ack = post.metadata.priority.requested_ack;
+            analyticsData.persistent_notifications = post.metadata.priority.persistent_notifications;
+        }
+
         this.trackEvent('api', 'api_posts_create', analyticsData);
 
         if (result.root_id != null && result.root_id !== '') {
@@ -2364,18 +2405,12 @@ export default class Client4 {
         return url;
     }
 
-    uploadFile = (fileFormData: any, formBoundary: string) => {
+    uploadFile = (fileFormData: any) => {
         this.trackEvent('api', 'api_files_upload');
         const request: any = {
             method: 'post',
             body: fileFormData,
         };
-
-        if (formBoundary) {
-            request.headers = {
-                'Content-Type': `multipart/form-data; boundary=${formBoundary}`,
-            };
-        }
 
         return this.doFetch<FileUploadResponse>(
             `${this.getFilesRoute()}`,
@@ -2391,6 +2426,24 @@ export default class Client4 {
             {method: 'get'},
         );
     }
+
+    acknowledgePost = (postId: string, userId: string) => {
+        this.trackEvent('api', 'api_posts_ack');
+
+        return this.doFetch<PostAcknowledgement>(
+            `${this.getUserRoute(userId)}/posts/${postId}/ack`,
+            {method: 'post'},
+        );
+    };
+
+    unacknowledgePost = (postId: string, userId: string) => {
+        this.trackEvent('api', 'api_posts_unack');
+
+        return this.doFetch<null>(
+            `${this.getUserRoute(userId)}/posts/${postId}/ack`,
+            {method: 'delete'},
+        );
+    };
 
     // Preference Routes
 
@@ -2802,12 +2855,6 @@ export default class Client4 {
             body: formData,
         };
 
-        if (formData.getBoundary) {
-            request.headers = {
-                'Content-Type': `multipart/form-data; boundary=${formData.getBoundary()}`,
-            };
-        }
-
         return this.doFetch<CustomEmoji>(
             `${this.getEmojisRoute()}`,
             request,
@@ -3114,12 +3161,6 @@ export default class Client4 {
             body: formData,
         };
 
-        if (formData.getBoundary) {
-            request.headers = {
-                'Content-Type': `multipart/form-data; boundary=${formData.getBoundary()}`,
-            };
-        }
-
         return this.doFetch<StatusOK>(
             `${this.getBrandRoute()}/image`,
             request,
@@ -3318,12 +3359,6 @@ export default class Client4 {
             body: formData,
         };
 
-        if (formData.getBoundary) {
-            request.headers = {
-                'Content-Type': `multipart/form-data; boundary=${formData.getBoundary()}`,
-            };
-        }
-
         return this.doFetch<License>(
             `${this.getBaseRoute()}/license`,
             request,
@@ -3461,12 +3496,6 @@ export default class Client4 {
             body: formData,
         };
 
-        if (formData.getBoundary) {
-            request.headers = {
-                'Content-Type': `multipart/form-data; boundary=${formData.getBoundary()}`,
-            };
-        }
-
         return this.doFetch<PluginManifest>(
             this.getPluginsRoute(),
             request,
@@ -3554,8 +3583,36 @@ export default class Client4 {
 
     getBoardsUsage = () => {
         return this.doFetch<BoardsUsageResponse>(
-            `/plugins/${suitePluginIds.focalboard}/api/v2/limits`,
+            `${this.getBoardsRoute()}/limits`,
             {method: 'get'},
+        );
+    }
+
+    getBoardsTemplates = (teamId = '0') => {
+        return this.doFetch<BoardTemplate[]>(
+            `${this.getBoardsRoute()}/teams/${teamId}/templates`,
+            {method: 'get'},
+        );
+    }
+
+    createBoard = (board: Board) => {
+        return this.doFetch<CreateBoardResponse>(
+            `${this.getBoardsRoute()}/boards`,
+            {method: 'POST', body: JSON.stringify({...board})},
+        );
+    }
+
+    createBoardFromTemplate = (boardTemplateId: string, teamId: string) => {
+        return this.doFetch<CreateBoardResponse>(
+            `${this.getBoardsRoute()}/boards/${boardTemplateId}/duplicate?asTemplate=false&toTeam=${teamId}`,
+            {method: 'POST'},
+        );
+    }
+
+    patchBoard = (newBoardId: string, boardPatch: BoardPatch) => {
+        return this.doFetch<Board>(
+            `${this.getBoardsRoute()}/boards/${newBoardId}`,
+            {method: 'PATCH', body: JSON.stringify({...boardPatch})},
         );
     }
 
@@ -3776,6 +3833,13 @@ export default class Client4 {
         );
     }
 
+    createGroupTeamsAndChannels = (userID: string) => {
+        return this.doFetch<Group>(
+            `${this.getBaseRoute()}/ldap/users/${userID}/group_sync_memberships`,
+            {method: 'post'},
+        );
+    }
+
     // Redirect Location
     getRedirectLocation = (urlParam: string) => {
         if (!urlParam.length) {
@@ -3863,9 +3927,43 @@ export default class Client4 {
         );
     };
 
-    getIntegrationsUsage = () => {
-        return this.doFetch<IntegrationsUsage>(
-            `${this.getUsageRoute()}/integrations`, {method: 'get'},
+    bootstrapSelfHostedSignup = (reset?: boolean) => {
+        let query = '';
+
+        // reset will drop the old token
+        if (reset) {
+            query = '?reset=true';
+        }
+        return this.doFetch<SelfHostedSignupBootstrapResponse>(
+            `${this.getHostedCustomerRoute()}/bootstrap${query}`,
+            {method: 'post'},
+        );
+    };
+
+    getAvailabilitySelfHostedSignup = () => {
+        return this.doFetch<void>(
+            `${this.getHostedCustomerRoute()}/signup_available`,
+            {method: 'get'},
+        );
+    }
+
+    getSelfHostedProducts = () => {
+        return this.doFetch<Product[]>(
+            `${this.getCloudRoute()}/products/selfhosted`, {method: 'get'},
+        );
+    }
+
+    createCustomerSelfHostedSignup = (form: SelfHostedSignupForm) => {
+        return this.doFetch<SelfHostedSignupCustomerResponse>(
+            `${this.getHostedCustomerRoute()}/customer`,
+            {method: 'post', body: JSON.stringify(form)},
+        );
+    };
+
+    confirmSelfHostedSignup = (setupIntentId: string, createSubscriptionRequest: CreateSubscriptionRequest) => {
+        return this.doFetch<SelfHostedSignupSuccessResponse>(
+            `${this.getHostedCustomerRoute()}/confirm`,
+            {method: 'post', body: JSON.stringify({stripe_setup_intent_id: setupIntentId, subscription: createSubscriptionRequest})},
         );
     };
 
@@ -3879,6 +3977,12 @@ export default class Client4 {
     getCloudCustomer = () => {
         return this.doFetch<CloudCustomer>(
             `${this.getCloudRoute()}/customer`, {method: 'get'},
+        );
+    }
+
+    getLicenseExpandStatus = () => {
+        return this.doFetch<LicenseExpandStatus>(
+            `${this.getCloudRoute()}/subscription/expand`, {method: 'get'},
         );
     }
 
@@ -3910,10 +4014,10 @@ export default class Client4 {
         );
     }
 
-    subscribeCloudProduct = (productId: string) => {
+    subscribeCloudProduct = (productId: string, seats = 0) => {
         return this.doFetch<CloudCustomer>(
             `${this.getCloudRoute()}/subscription`,
-            {method: 'put', body: JSON.stringify({product_id: productId})},
+            {method: 'put', body: JSON.stringify({product_id: productId, seats})},
         );
     }
 
@@ -3939,7 +4043,7 @@ export default class Client4 {
     }
 
     getSubscription = () => {
-        return this.doFetch<SubscriptionResponse>(
+        return this.doFetch<Subscription>(
             `${this.getCloudRoute()}/subscription`,
             {method: 'get'},
         );
@@ -3961,6 +4065,17 @@ export default class Client4 {
 
     getInvoicePdfUrl = (invoiceId: string) => {
         return `${this.getCloudRoute()}/subscription/invoices/${invoiceId}/pdf`;
+    }
+
+    getSelfHostedInvoices = () => {
+        return this.doFetch<Invoice[]>(
+            `${this.getHostedCustomerRoute()}/invoices`,
+            {method: 'get'},
+        );
+    }
+
+    getSelfHostedInvoicePdfUrl = (invoiceId: string) => {
+        return `${this.getHostedCustomerRoute()}/invoices/${invoiceId}/pdf`;
     }
 
     getCloudLimits = () => {
@@ -4125,7 +4240,7 @@ export default class Client4 {
 
     // Client Helpers
 
-    private doFetch = async <ClientDataResponse>(url: string, options: Options): Promise<ClientDataResponse> => {
+    protected doFetch = async <ClientDataResponse>(url: string, options: Options): Promise<ClientDataResponse> => {
         const {data} = await this.doFetchWithResponse<ClientDataResponse>(url, options);
 
         return data;
@@ -4363,6 +4478,44 @@ export default class Client4 {
     keepAlive() {
         return this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
     }
+    upsertDraft = async (draft: Draft, connectionId: string) => {
+        const result = await this.doFetch<Draft>(
+            `${this.getDraftsRoute()}`,
+            {
+                method: 'post',
+                body: JSON.stringify(draft),
+                headers: {
+                    'Connection-Id': `${connectionId}`,
+                },
+            },
+        );
+
+        return result;
+    };
+
+    getUserDrafts = (teamId: Team['id']) => {
+        return this.doFetch<Draft[]>(
+            `${this.getUserRoute('me')}/teams/${teamId}/drafts`,
+            {method: 'get'},
+        );
+    };
+
+    deleteDraft = (channelId: Channel['id'], rootId = '', connectionId: string) => {
+        let endpoint = `${this.getUserRoute('me')}/channels/${channelId}/drafts`;
+        if (rootId !== '') {
+            endpoint += `/${rootId}`;
+        }
+
+        return this.doFetch<null>(
+            endpoint,
+            {
+                method: 'delete',
+                headers: {
+                    'Connection-Id': `${connectionId}`,
+                },
+            },
+        );
+    };
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {

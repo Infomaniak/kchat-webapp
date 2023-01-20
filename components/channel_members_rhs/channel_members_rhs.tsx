@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useEffect, useState} from 'react';
-import styled from 'styled-components';
 import {debounce} from 'lodash';
-
+import React, {useCallback, useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useHistory} from 'react-router-dom';
+import styled from 'styled-components';
 
 import {UserProfile} from '@mattermost/types/users';
 import {Channel, ChannelMembership} from '@mattermost/types/channels';
@@ -13,7 +13,6 @@ import Constants, {ModalIdentifiers} from 'utils/constants';
 import MoreDirectChannels from 'components/more_direct_channels';
 import ChannelInviteModal from 'components/channel_invite_modal';
 import {ModalData} from 'types/actions';
-import {browserHistory} from 'utils/browser_history';
 
 import {ProfilesInChannelSortBy} from 'mattermost-redux/actions/users';
 
@@ -54,8 +53,7 @@ export interface Props {
         closeRightHandSide: () => void;
         goBack: () => void;
         setChannelMembersRhsSearchTerm: (terms: string) => void;
-        loadProfilesAndReloadChannelMembersAll: (membersCount: number, perParge: number, channelId: string) => void;
-        // loadProfilesAndReloadChannelMembers: (page: number, perParge: number, channelId: string, sort: string) => void;
+        loadProfilesAndReloadChannelMembers: (page: number, perParge: number, channelId: string, sort: string) => void;
         loadMyChannelMemberAndRole: (channelId: string) => void;
         setEditChannelMembers: (active: boolean) => void;
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;
@@ -85,6 +83,8 @@ export default function ChannelMembersRHS({
     editing = false,
     actions,
 }: Props) {
+    const history = useHistory();
+
     const [list, setList] = useState<ListItem[]>([]);
 
     const [page, setPage] = useState(0);
@@ -164,10 +164,7 @@ export default function ChannelMembersRHS({
         setPage(0);
         setIsNextPageLoading(false);
         actions.setChannelMembersRhsSearchTerm('');
-        actions.loadProfilesAndReloadChannelMembersAll(membersCount, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
-
-        // TODO: mattermost
-        // actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
+        actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
         actions.loadMyChannelMemberAndRole(channel.id);
     }, [channel.id, channel.type]);
 
@@ -205,8 +202,8 @@ export default function ChannelMembersRHS({
         // we first prepare the DM channel...
         await actions.openDirectChannelToUserId(user.id);
 
-        // ... qnd then redirect to it
-        browserHistory.push(teamUrl + '/messages/@' + user.username);
+        // ... and then redirect to it
+        history.push(teamUrl + '/messages/@' + user.username);
 
         await actions.closeRightHandSide();
     };

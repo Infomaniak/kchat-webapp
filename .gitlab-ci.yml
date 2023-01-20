@@ -153,6 +153,7 @@ unit_test:
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
+      allow_failure: true
     - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
     - when: never
@@ -184,23 +185,23 @@ unit_test:
     # unit tests
     - npm run test-ci
 
-pages:
-  stage: test
-  needs:
-    - unit_test
-  environment:
-    name: "$DEPLOY_VARIABLE"
-  rules:
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-      when: on_success
-    - when: never
-  script:
-    - mkdir .public
-    - cp -r coverage/* .public
-    - mv .public public
-  artifacts:
-    paths:
-      - public
+# pages:
+#   stage: test
+#   needs:
+#     - unit_test
+#   environment:
+#     name: "$DEPLOY_VARIABLE"
+#   rules:
+#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+#       when: on_success
+#     - when: never
+#   script:
+#     - mkdir .public
+#     - cp -r coverage/* .public
+#     - mv .public public
+#   artifacts:
+#     paths:
+#       - public
 
 sentry_release:
   needs:

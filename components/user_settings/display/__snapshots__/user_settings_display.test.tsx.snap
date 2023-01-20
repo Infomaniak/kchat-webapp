@@ -55,13 +55,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -76,70 +82,87 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <SettingItemMax
+      <SettingItem
+        active={true}
+        areAllSectionsInactive={false}
         containerStyle=""
-        extraInfo={null}
         infoPosition="bottom"
-        inputs={
-          Array [
-            <fieldset>
-              <legend
-                className="form-legend hidden-label"
-              >
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Channel Display"
-                  id="user.settings.display.channelDisplayTitle"
-                />
-              </legend>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="channel_display_modeFormatA"
-                    name="channel_display_modeFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Full width"
-                    id="user.settings.display.fullScreen"
-                  />
-                </label>
-                <br />
-              </div>
-              <div
-                className="radio"
-              >
-                <label>
-                  <input
-                    checked={false}
-                    id="channel_display_modeFormatB"
-                    name="channel_display_modeFormat"
-                    onChange={[Function]}
-                    type="radio"
-                  />
-                  <Memo(MemoizedFormattedMessage)
-                    defaultMessage="Fixed width, centered"
-                    id="user.settings.display.fixedWidthCentered"
-                  />
-                </label>
-                <br />
-              </div>
-              <div>
-                <br />
-                <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Select the width of the center channel."
-                  id="user.settings.display.channeldisplaymode"
-                />
-              </div>
-            </fieldset>,
-          ]
+        max={
+          <SettingItemMax
+            containerStyle=""
+            extraInfo={null}
+            infoPosition="bottom"
+            inputs={
+              Array [
+                <fieldset>
+                  <legend
+                    className="form-legend hidden-label"
+                  >
+                    <Memo(MemoizedFormattedMessage)
+                      defaultMessage="Channel Display"
+                      id="user.settings.display.channelDisplayTitle"
+                    />
+                  </legend>
+                  <div
+                    className="radio"
+                  >
+                    <label>
+                      <input
+                        checked={false}
+                        id="channel_display_modeFormatA"
+                        name="channel_display_modeFormat"
+                        onChange={[Function]}
+                        type="radio"
+                      />
+                      <Memo(MemoizedFormattedMessage)
+                        defaultMessage="Full width"
+                        id="user.settings.display.fullScreen"
+                      />
+                    </label>
+                    <br />
+                  </div>
+                  <div
+                    className="radio"
+                  >
+                    <label>
+                      <input
+                        checked={false}
+                        id="channel_display_modeFormatB"
+                        name="channel_display_modeFormat"
+                        onChange={[Function]}
+                        type="radio"
+                      />
+                      <Memo(MemoizedFormattedMessage)
+                        defaultMessage="Fixed width, centered"
+                        id="user.settings.display.fixedWidthCentered"
+                      />
+                    </label>
+                    <br />
+                  </div>
+                  <div>
+                    <br />
+                    <Memo(MemoizedFormattedMessage)
+                      defaultMessage="Select the width of the center channel."
+                      id="user.settings.display.channeldisplaymode"
+                    />
+                  </div>
+                </fieldset>,
+              ]
+            }
+            saving={false}
+            section=""
+            submit={[Function]}
+            title={
+              <Memo(MemoizedFormattedMessage)
+                defaultMessage="Channel Display"
+                id="user.settings.display.channelDisplayTitle"
+              />
+            }
+            updateSection={[Function]}
+          />
         }
         saving={false}
-        section=""
-        submit={[Function]}
+        section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="Channel Display"
@@ -153,7 +176,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -226,13 +255,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -247,7 +282,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -262,7 +303,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -335,13 +382,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -356,7 +409,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -371,7 +430,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -444,13 +509,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -465,7 +536,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -480,7 +557,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -553,13 +636,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -574,7 +663,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -589,7 +684,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -662,13 +763,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -683,7 +790,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -698,7 +811,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -771,13 +890,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -792,7 +917,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -807,7 +938,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -880,13 +1017,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -901,7 +1044,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -916,7 +1065,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -989,13 +1144,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={true}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1010,7 +1171,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={true}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1025,7 +1192,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={true}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1098,13 +1271,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1119,7 +1298,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1134,7 +1319,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1207,13 +1398,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1228,7 +1425,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1243,7 +1446,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1318,6 +1527,7 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
     <div>
       <Connect(ThemeSetting)
         allowCustomThemes={true}
+        areAllSectionsInactive={false}
         selected={true}
         setEnforceFocus={[MockFunction]}
         setRequireConfirm={[MockFunction]}
@@ -1328,13 +1538,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1349,7 +1565,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1364,7 +1586,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1437,13 +1665,19 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
         describe={
           <Memo(MemoizedFormattedMessage)
             defaultMessage="On"
             id="user.settings.display.lastActiveOn"
           />
         }
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="lastactive"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1458,7 +1692,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1473,7 +1713,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should match snaps
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={false}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1546,7 +1792,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should not show la
       className="divider-dark first"
     />
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={true}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="channel_display_mode"
         title={
           <Memo(MemoizedFormattedMessage)
@@ -1561,7 +1813,13 @@ exports[`components/user_settings/display/UserSettingsDisplay should not show la
       />
     </div>
     <div>
-      <Connect(SettingItemMin)
+      <SettingItem
+        active={false}
+        areAllSectionsInactive={true}
+        containerStyle=""
+        infoPosition="bottom"
+        max={null}
+        saving={false}
         section="one_click_reactions_enabled"
         title={
           <Memo(MemoizedFormattedMessage)

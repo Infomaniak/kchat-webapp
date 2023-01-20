@@ -27,7 +27,6 @@ describe('components/sidebar/sidebar_category', () => {
         isLastCategory: true,
         draggingState: {},
         setChannelRef: jest.fn(),
-        getChannelRef: jest.fn(),
         handleOpenMoreDirectChannelsModal: jest.fn(),
         isNewCategory: false,
         isDisabled: false,

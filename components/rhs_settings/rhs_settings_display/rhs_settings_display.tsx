@@ -19,6 +19,7 @@ import {localizeMessage} from 'utils/utils';
 import {PreferenceType} from '@mattermost/types/preferences';
 
 import {UserProfile, UserTimezone} from '@mattermost/types/users';
+import {ActionResult} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import Constants from 'utils/constants';
@@ -36,6 +37,8 @@ const Preferences = Constants.Preferences;
 
 function getDisplayStateFromProps(props: Props) {
     return {
+        // lastActiveDisplay: props.lastActiveDisplay.toString(),
+        // militaryTime: props.militaryTime,
         teammateNameDisplay: props.teammateNameDisplay,
         availabilityStatusOnPosts: props.availabilityStatusOnPosts,
         channelDisplayMode: props.channelDisplayMode ? props.channelDisplayMode : Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
@@ -152,9 +155,13 @@ type Props = {
     timezoneLabel: string;
     showUnreadsCategory: string;
     unreadScrollPosition: string;
+    militaryTime: string;
+    lastActiveDisplay: boolean;
+    lastActiveTimeEnabled: boolean;
     actions: {
         savePreferences: (userId: string, preferences: PreferenceType[]) => void;
         autoUpdateTimezone: (deviceTimezone: string) => void;
+        updateMe: (user: UserProfile) => Promise<ActionResult>;
     };
 }
 
@@ -173,6 +180,8 @@ type State = {
     unreadScrollPosition: string;
     handleSubmit?: () => void;
     serverError?: string;
+    militaryTime: string;
+    lastActiveDisplay: string;
 }
 
 export default class RhsSettingsDisplay extends React.PureComponent<Props, State> {
@@ -229,7 +238,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
     }
 
     handleSubmit = async () => {
-        const userId = this.props.user.id;
+        const {user, actions} = this.props;
+        const userId = user.id;
 
         const collapseDisplayPreference = {
             user_id: userId,
@@ -294,6 +304,13 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             value: this.state.unreadScrollPosition,
         };
 
+        // const timePreference = {
+        //     user_id: userId,
+        //     category: Preferences.CATEGORY_DISPLAY_SETTINGS,
+        //     name: Preferences.USE_MILITARY_TIME,
+        //     value: this.state.militaryTime,
+        // };
+
         this.setState({isSaving: true});
 
         const preferences = [
@@ -307,11 +324,36 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             teammateNameDisplayPreference,
             availabilityStatusOnPostsPreference,
             colorizeUsernamesPreference,
+            // timePreference,
         ];
 
         await this.props.actions.savePreferences(userId, preferences);
 
         this.updateSection('');
+
+        const updatedUser = {
+            ...user,
+            props: {
+                ...user.props,
+                show_last_active: this.state.lastActiveDisplay,
+            },
+        };
+
+        actions.updateMe(updatedUser).
+            then((res) => {
+                if ('data' in res) {
+                    this.props.updateSection('');
+                } else if ('error' in res) {
+                    const {error} = res;
+                    let serverError;
+                    if (error instanceof Error) {
+                        serverError = error.message;
+                    } else {
+                        serverError = error as string;
+                    }
+                    this.setState({serverError, isSaving: false});
+                }
+            });
     }
 
     handleOnChange(display: {[key: string]: any}) {
@@ -764,6 +806,89 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             });
         }
 
+        // const clockSection = this.createSection({
+        //     section: 'clock',
+        //     display: 'militaryTime',
+        //     value: this.state.militaryTime,
+        //     defaultDisplay: 'false',
+        //     title: {
+        //         id: t('user.settings.display.clockDisplay'),
+        //         message: 'Clock Display',
+        //     },
+        //     firstOption: {
+        //         value: 'false',
+        //         radionButtonText: {
+        //             id: t('user.settings.display.normalClock'),
+        //             message: '12-hour clock (example: 4:00 PM)',
+        //         },
+        //     },
+        //     secondOption: {
+        //         value: 'true',
+        //         radionButtonText: {
+        //             id: t('user.settings.display.militaryClock'),
+        //             message: '24-hour clock (example: 16:00)',
+        //         },
+        //     },
+        //     description: {
+        //         id: t('user.settings.display.preferTime'),
+        //         message: 'Select how you prefer time displayed. When disabled, displays a clock ranging from 0 to 24 hours (e.g. 16:00)',
+        //     },
+        // });
+
+        // const teammateNameDisplaySection = this.createSelect({
+        //     section: Preferences.NAME_NAME_FORMAT,
+        //     display: 'teammateNameDisplay',
+        //     value: this.props.lockTeammateNameDisplay ? this.props.configTeammateNameDisplay : this.state.teammateNameDisplay,
+        //     defaultDisplay: this.props.configTeammateNameDisplay,
+        //     title: {
+        //         id: t('user.settings.display.teammateNameDisplayTitle'),
+        //         message: 'Teammate Name Display',
+        //     },
+        //     options: [
+        //         {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME, label: localizeMessage('user.settings.display.teammateNameDisplayUsername', 'Show username')},
+        //         {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayNicknameFullname', 'Show nickname if one exists, otherwise show first and last name')},
+        //         {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayFullname', 'Show first and last name')},
+        //     ],
+        //     description: {
+        //         id: t('user.settings.display.teammateNameDisplayDescription'),
+        //         message: 'Set how to display other user\'s names in posts and the Direct Messages list.',
+        //     },
+        //     disabled: this.props.lockTeammateNameDisplay,
+        // });
+        //
+        // let lastActiveSection = null;
+
+        // if (this.props.lastActiveTimeEnabled) {
+        //     lastActiveSection = this.createSection({
+        //         section: 'lastactive',
+        //         display: 'lastActiveDisplay',
+        //         value: this.state.lastActiveDisplay,
+        //         defaultDisplay: 'true',
+        //         title: {
+        //             id: t('user.settings.display.lastActiveDisplay'),
+        //             message: 'Share last active time',
+        //         },
+        //         firstOption: {
+        //             value: 'false',
+        //             radionButtonText: {
+        //                 id: t('user.settings.display.lastActiveOff'),
+        //                 message: 'Off',
+        //             },
+        //         },
+        //         secondOption: {
+        //             value: 'true',
+        //             radionButtonText: {
+        //                 id: t('user.settings.display.lastActiveOn'),
+        //                 message: 'On',
+        //             },
+        //         },
+        //         description: {
+        //             id: t('user.settings.display.lastActiveDesc'),
+        //             message: 'When enabled, other users will see when you were last active.',
+        //         },
+        //     });
+        // }
+
         return (
             <div id='displaySettings'>
                 <div className='user-settings user-rhs-container container'>
@@ -776,6 +901,9 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     {showUnreadSection}
                     {channelDisplayModeSection}
                     {UnreadScrollPositionSection}
+                    {/*{clockSection}*/}
+                    {/*{teammateNameDisplaySection}*/}
+                    {/*{lastActiveSection}*/}
                     <RhsLimitVisibleGMsDMs/>
                 </div>
             </div>

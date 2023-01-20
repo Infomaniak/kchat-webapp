@@ -1,9 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import React, {memo, useCallback} from 'react';
 import {useIntl} from 'react-intl';
-
-import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
 
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Menu from 'components/widgets/menu/menu';
@@ -42,10 +41,7 @@ const InsightsTitle = (props: Props) => {
             <button className='insights-title'>
                 {title()}
                 <span className='icon'>
-                    <Icon
-                        size={16}
-                        glyph={'chevron-down'}
-                    />
+                    <i className='icon icon-chevron-down'/>
                 </span>
             </button>
             <Menu
@@ -56,24 +52,23 @@ const InsightsTitle = (props: Props) => {
                     buttonClass='insights-filter-btn'
                     onClick={props.setFilterTypeMy}
                     icon={
-                        <Icon
-                            size={16}
-                            glyph={'account-outline'}
-                        />
+                        <span className='icon'>
+                            <i className='icon icon-account-outline'/>
+                        </span>
                     }
                     text={Utils.localizeMessage('insights.filter.myInsights', 'My insights')}
                 />
                 <Menu.ItemAction
                     id='insightsDropdownTeam'
-                    buttonClass='insights-filter-btn'
+                    buttonClass={'insights-filter-btn'}
                     onClick={props.setFilterTypeTeam}
                     icon={
-                        <Icon
-                            size={16}
-                            glyph={'account-multiple-outline'}
-                        />
+                        <span className='icon'>
+                            <i className='icon icon-account-multiple-outline'/>
+                        </span>
                     }
                     text={Utils.localizeMessage('insights.filter.teamInsights', 'Team insights')}
+
                 />
             </Menu>
         </MenuWrapper>

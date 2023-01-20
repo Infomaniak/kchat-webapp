@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
 
@@ -18,6 +18,7 @@ import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 
 const SettingsButton = (): JSX.Element | null => {
     const dispatch = useDispatch();
+    const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
 
     const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -53,7 +54,8 @@ const SettingsButton = (): JSX.Element | null => {
                 onClick={settingButtonClick}
                 inverted={true}
                 compact={true}
-                aria-label='Select to open the settings modal.' // proper wording and translation needed
+                aria-haspopup='dialog'
+                aria-label={formatMessage({id: 'global_header.productSettings', defaultMessage: 'Settings'})}
             />
 
         </OverlayTrigger>

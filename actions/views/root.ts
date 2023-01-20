@@ -16,7 +16,7 @@ import {checkIKTokenIsExpired,refreshIKToken} from 'components/login/utils';
 import {isDesktopApp} from '../../utils/user_agent';
 const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};
 
-type TranslationPluginFunction = (locale: string) => Translations
+export type TranslationPluginFunction = (locale: string) => Translations
 
 export function loadConfigAndMe() {
     return async (dispatch: DispatchFunc) => {
