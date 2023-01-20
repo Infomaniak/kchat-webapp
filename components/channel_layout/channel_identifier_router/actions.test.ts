@@ -98,7 +98,7 @@ describe('Actions', () => {
             expect(res).toEqual(expected);
         });
 
-        describe('identifier is 26 char long', () => {
+        describe('identifier is 36 char long', () => {
             beforeAll(() => {
                 TestHelper.initBasic(Client4);
             });
@@ -108,10 +108,10 @@ describe('Actions', () => {
             });
 
             test.each([
-                {desc: 'fetching a channel by id succeeds', expected: 'channel_id', statusCode: 200, identifier: 'pjz4yj7jw7nzmmo3upi4htmt1y'},
-                {desc: 'fetching a channel by id fails status 404', expected: 'channel_name', statusCode: 404, identifier: 'channelnamethatis26charlon'},
-                {desc: 'fetching a channel by id fails status not 404', expected: 'error', statusCode: 403, identifier: 'channelnamethatis26charlon'},
-                {desc: 'identifier is a channel name stored in redux (no fetching happens)', expected: 'channel_name', identifier: '12345678901234567890123456'},
+                {desc: 'fetching a channel by id succeeds', expected: 'channel_id', statusCode: 200, identifier: 'pjz4yj7jw7nzmmo3upi4htmt1yjhnbgfikbr'},
+                {desc: 'fetching a channel by id fails status 404', expected: 'channel_name', statusCode: 404, identifier: 'channelnamethatis26charlongandisacha'},
+                {desc: 'fetching a channel by id fails status not 404', expected: 'error', statusCode: 403, identifier: 'channelnamethatis26charlongandisacha'},
+                {desc: 'identifier is a channel name stored in redux (no fetching happens)', expected: 'channel_name', identifier: '123456789012345678901234567890123456'},
             ])('Should return $expected if $desc', async ({expected, statusCode, identifier}) => {
                 const scope = nock(Client4.getBaseRoute()).
                     get(`/channels/${identifier}`).
