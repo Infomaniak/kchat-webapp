@@ -1,3 +1,9 @@
+## 0.7.1 (2023-01-20)
+
+## Fixed (1 change)
+
+- [fix team sidebar link](kchat/webapp@533a74f4a5b9994feb08141cddbd7339d9c5ecc4) by @antonbuksa
+
 ## 0.7.0 (2023-01-20)
 
 ## Added (1 change)
