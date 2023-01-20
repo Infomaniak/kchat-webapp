@@ -193,7 +193,7 @@ export function initialize() {
     if (isDesktopApp() && (!token || !refreshToken || !tokenExpire)) {
         // eslint-disable-next-line no-console
         console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
-        browserHistory.push('/login');
+        getHistory().push('/login');
         return;
     }
 
@@ -244,7 +244,7 @@ export async function reconnect(includeWebSocket = true) {
         if (!token || !refreshToken || !tokenExpire) {
             // eslint-disable-next-line no-console
             console.log('[websocket_actions > reconnect] token storage corrupt, redirecting to login');
-            browserHistory.push('/login');
+            getHistory().push('/login');
             return;
         }
 
