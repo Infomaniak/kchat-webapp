@@ -49,7 +49,7 @@ describe('Actions', () => {
     const channel3 = {id: 'channel_id3', name: 'achannel3', team_id: 'team_id1', type: 'O'};
     const channel4 = {id: 'channel_id4', name: 'additional-abilities---community-systems', team_id: 'team_id1', type: 'O'};
     const channel5 = {id: 'channel_id5', name: 'some-group-channel', team_id: 'team_id1', type: 'G'};
-    const channel6 = {id: 'channel_id6', name: '12345678901234567890123456', team_id: 'team_id1', type: 'O'};
+    const channel6 = {id: 'channel_id6', name: '123456789012345678901234567890123456', team_id: 'team_id1', type: 'O'};
 
     const initialState = {
         entities: {
@@ -88,10 +88,10 @@ describe('Actions', () => {
             {desc: 'channel exists and is type G', expected: 'group_channel_group_id', path: 'channels', identifier: 'some-group-channel'},
             {desc: 'identifier is a group id', expected: 'group_channel_group_id', path: 'messages', identifier: '9c992e32cc7b3e5651f68b0ead4935fdf40d67ff'},
             {desc: 'identifier looks like a group id but matching channel is an open channel', expected: 'channel_name', path: 'channels', identifier: 'additional-abilities--community-systems'},
-            {desc: 'identifier is in the format userid--userid2', expected: 'channel_name', path: 'channels', identifier: '3y8ujrgtbfn78ja5nfms3qm5jw--3y8ujrgtbfn78ja5nfms3qm5jw'},
+            {desc: 'identifier is in the format userid--userid2', expected: 'channel_name', path: 'channels', identifier: '3y8ujrgtbfn78ja5nfms3qm5jwkdjeuxbchf--3y8ujrgtbfn78ja5nfms3qm5jwkdjeuxbchf'},
             {desc: 'identifier is the username', expected: 'direct_channel_username', path: 'messages', identifier: '@user1'},
             {desc: 'identifier is the user email', expected: 'direct_channel_email', path: 'messages', identifier: 'user1@bladekick.com'},
-            {desc: 'identifier is the user id', expected: 'direct_channel_user_id', path: 'messages', identifier: '3y8ujrgtbfn78ja5nfms3qm5jw'},
+            {desc: 'identifier is the user id', expected: 'direct_channel_user_id', path: 'messages', identifier: '3y8ujrgtbfn78ja5nfms3qm5jwkdjeuxbchf'},
             {desc: 'the path is not right', expected: 'error', path: 'messages', identifier: 'test'},
         ])('Should return $expected if $desc', async ({expected, path, identifier}) => {
             const res = await getPathFromIdentifier((initialState as any), path, identifier);
