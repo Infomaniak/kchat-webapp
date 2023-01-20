@@ -39,7 +39,7 @@ function getDisplayStateFromProps(props: Props) {
     return {
         // lastActiveDisplay: props.lastActiveDisplay.toString(),
         // militaryTime: props.militaryTime,
-        // teammateNameDisplay: props.teammateNameDisplay,
+        teammateNameDisplay: props.teammateNameDisplay,
         availabilityStatusOnPosts: props.availabilityStatusOnPosts,
         channelDisplayMode: props.channelDisplayMode ? props.channelDisplayMode : Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
         messageDisplay: props.messageDisplay ? props.messageDisplay : Preferences.MESSAGE_DISPLAY_CLEAN,
