@@ -1,3 +1,9 @@
+## 0.7.3 (2023-01-23)
+
+## Deprecated (1 change)
+
+- [comment old unused calls code](kchat/webapp@8ab404351a47a7c24c8ca831093fde32edacdf7a) by @antonbuksa
+
 ## 0.7.2 (2023-01-23)
 
 No changes.
