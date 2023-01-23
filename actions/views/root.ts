@@ -12,7 +12,7 @@ import {Translations} from 'types/store/i18n';
 import {ActionTypes} from 'utils/constants';
 import en from 'i18n/en.json';
 
-import {checkIKTokenIsExpired, refreshIKToken, refreshTokenV2} from 'components/login/utils';
+import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {getDesktopVersion, isDesktopApp} from '../../utils/user_agent';
 import { isServerVersionGreaterThanOrEqualTo } from 'utils/server_version';
 const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};

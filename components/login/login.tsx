@@ -26,7 +26,7 @@ import {GlobalState} from 'types/store';
 
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 
-import {clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken} from './utils';
+import {clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, isDefaultAuthServer} from './utils';
 import './login.scss';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {Client4} from 'mattermost-redux/client';
@@ -72,13 +72,18 @@ const Login = () => {
                 clearLocalStorageToken();
                 if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
                     window.authManager.resetToken();
-                    window.postMessage(
-                        {
-                            type: 'reset-teams',
-                            message: {},
-                        },
-                        window.origin,
-                    );
+                    if (isDefaultAuthServer()) {
+                        getChallengeAndRedirectToLogin();
+                    } else {
+                        window.postMessage(
+                            {
+                                type: 'reset-teams',
+                                message: {},
+                            },
+                            window.origin,
+                        );
+                    }
+                    
                 } else {
                     getChallengeAndRedirectToLogin();
                 }
@@ -102,15 +107,19 @@ const Login = () => {
 
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
-                window.authManager.tokenRequest().then((data) => {
+                window.authManager.tokenRequest().then((data: {
+                    token: string;
+                    refreshToken: string;
+                    expiresAt: number;
+                }) => {
                     console.log(data)
 
                     if (!Object.keys(data).length) {
-                        getChallengeAndRedirectToLogin();
+                        // getChallengeAndRedirectToLogin();
                     } else {
                         localStorage.setItem('IKToken', data.token);
                         localStorage.setItem('IKRefreshToken', data.refreshToken);
-                        localStorage.setItem('IKTokenExpire', parseInt(Date.now() / 1000) + data.expiresIn)
+                        localStorage.setItem('IKTokenExpire', (data.expiresAt).toString())
 
                         Client4.setToken(data.token);
                         Client4.setCSRF(data.token);

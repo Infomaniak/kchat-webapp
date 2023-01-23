@@ -13,6 +13,8 @@ import { getDesktopVersion } from 'utils/user_agent';
 
 let REFRESH_PROMISE: Promise<any> | null = null;
 
+let v2DefaultAuthServer = 'https://kchat.preprod.dev.infomaniak.ch'
+
 /**
  * Store IKToken infos in localStorage and update Client
  */
@@ -133,8 +135,8 @@ export function needRefreshToken() {
     return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
-export async function refreshTokenV2(redirectToTeam = false) {
-    window.authManager.refreshToken();
+export function isDefaultAuthServer() {
+    return window.location.origin === v2DefaultAuthServer
 }
 
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
