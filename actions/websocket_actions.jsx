@@ -1811,17 +1811,20 @@ function handleIncomingConferenceCall(msg) {
     return (doDispatch, doGetState) => {
         // Pop calling modal for user to accept or deny call
         // const data = await Client4
-        const doGetProfilesInChannel = makeGetProfilesInChannel();
+        // const doGetProfilesInChannel = makeGetProfilesInChannel();
+
         const state = doGetState();
-        let users = [];
+
+        // let users = [];
 
         // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
         const channel = getChannel(state, connectedChannelID(doGetState()));
-        users = doGetProfilesInChannel(state, msg.data.channel_id, true);
+        
+        // users = doGetProfilesInChannel(state, msg.data.channel_id, true);
 
-        if (users.length <= 0) {
-            users.push(getUser(state, msg.data.user_id));
-        }
+        // if (users.length <= 0) {
+        //     users.push(getUser(state, msg.data.user_id));
+        // }
 
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_ADDED,
