@@ -26,18 +26,6 @@ export function loadConfigAndMe() {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
                 const token = await window.authManager.tokenRequest();
 
-                // if (!Object.keys(token).length) {
-                //     window.postMessage(
-                //         {
-                //             type: 'reset-teams',
-                //             message: {},
-                //         },
-                //         window.origin,
-                //     );
-                // } else if (token.expiresIn <= 0) {
-                //     refreshTokenV2(token.token, token.refreshToken)
-                // }
-
                 Client4.setAuthHeader = true;
                 Client4.setToken(token.token);
                 Client4.setCSRF(token.token);

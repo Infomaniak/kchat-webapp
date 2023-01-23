@@ -138,12 +138,25 @@ export async function refreshTokenV2(redirectToTeam = false) {
 }
 
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
-    let refreshToken
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
-        const {refreshToken: rt} = await window.authManager.tokenRequest();
-        refreshToken = rt;
+        try {
+            const {token, refreshToken, expiresAt} = await window.authManager.refreshToken();
+            localStorage.setItem('IKToken', token);
+            localStorage.setItem('IKRefreshToken', refreshToken);
+            localStorage.setItem('IKTokenExpire', expiresAt);
+            localStorage.setItem('tokenExpired', '0');
+            Client4.setToken(token);
+            Client4.setCSRF(token);
+            Client4.setAuthHeader = true;
+
+            if (redirectToTeam) {
+                redirectUserToDefaultTeam();
+            }
+        } catch {
+            console.error(new Error('failed to refresh in v2 mode'));
+        }
     } else {
-        refreshToken = localStorage.getItem('IKRefreshToken');
+        const refreshToken = localStorage.getItem('IKRefreshToken');
 
         if (!refreshToken) {
             return Promise.reject(new Error('missing refresh token'));

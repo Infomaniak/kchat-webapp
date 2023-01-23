@@ -70,7 +70,18 @@ const Login = () => {
                 console.log(`[components/login] failed to refresh token in ${MAX_TOKEN_RETRIES} attempts`);
                 Sentry.captureException(new Error('Failed to refresh token in 3 attempts'));
                 clearLocalStorageToken();
-                getChallengeAndRedirectToLogin();
+                if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+                    window.authManager.resetToken();
+                    window.postMessage(
+                        {
+                            type: 'reset-teams',
+                            message: {},
+                        },
+                        window.origin,
+                    );
+                } else {
+                    getChallengeAndRedirectToLogin();
+                }
             }
         });
     };
