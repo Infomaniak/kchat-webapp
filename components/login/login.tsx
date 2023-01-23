@@ -99,6 +99,8 @@ const Login = () => {
                         localStorage.setItem('IKToken', data.token);
                         localStorage.setItem('IKRefreshToken', data.refreshToken);
                         localStorage.setItem('IKTokenExpire', parseInt(Date.now() / 1000) + data.expiresIn)
+
+                        redirectUserToDefaultTeam();
                     }
 
                     // if (!data) {
