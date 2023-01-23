@@ -161,9 +161,9 @@ class TeamButton extends React.PureComponent<Props> {
             <a
                 id={`${this.props.url.slice(1)}TeamButton`}
                 aria-label={ariaLabel}
-                // to={this.props.url}
-                // onClick={this.handleSwitch}
-                href={this.props.url}
+                to={this.props.url}
+                onClick={this.handleSwitch}
+                // href={this.props.url}
             >
                 {btn}
             </a>
