@@ -114,6 +114,7 @@ const SidebarCategorySortingMenu = (props: Props) => {
             tooltipText={formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'})}
             tabIndex={props.isCollapsed ? -1 : 0}
             additionalClass='additionalClass'
+            menuButtonRef={props.menuTriggerRef}
         >
             <>
                 <Menu.Group>

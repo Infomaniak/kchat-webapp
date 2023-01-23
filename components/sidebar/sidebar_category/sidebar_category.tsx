@@ -295,7 +295,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                         isCollapsed={category.collapsed}
                         isMenuOpen={this.state.isMenuOpen}
                         onToggleMenu={this.handleMenuToggle}
-                        menuButtonRef={this.menuTriggerRef}
+                        menuTriggerRef={this.menuTriggerRef}
                     />
                     <OverlayTrigger
                         delayShow={500}
