@@ -82,7 +82,9 @@
             font-size: 14px;
             line-height: 14px;
         }
-        .modal-footer, .modal-header, .filter-controls {
+        .modal-footer,
+        // .modal-header,
+        .filter-controls {
             button:not(.close) {
                 position: relative;
                 display: inline-flex;

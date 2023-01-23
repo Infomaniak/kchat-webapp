@@ -168,6 +168,7 @@ const SidebarCategoryMenu = (props: Props) => {
             onOpenDirectionChange={handleOpenDirectionChange}
             onToggleMenu={handleToggleMenu}
             tooltipText={formatMessage({id: 'sidebar_left.sidebar_category_menu.editCategory', defaultMessage: 'Category options'})}
+            menuButtonRef={props.menuTriggerRef}
         >
             <Menu.Group>
                 {muteUnmuteCategoryMenuItem}

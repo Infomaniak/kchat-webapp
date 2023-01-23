@@ -111,7 +111,7 @@ describe('components/dot_menu/DotMenu', () => {
             <DotMenu {...baseProps}/>,
         );
 
-        expect(wrapper.find(`#unread_post_${baseProps.post.id}`).prop('show')).toBe(true);
+        expect(wrapper.find(`#unread_post_${baseProps.post.id}`).first().prop('show')).toBe(true);
     });
 
     test('should not show mark as unread when channel is archived', () => {
@@ -123,7 +123,7 @@ describe('components/dot_menu/DotMenu', () => {
             <DotMenu {...props}/>,
         );
 
-        expect(wrapper.find(`#unread_post_${baseProps.post.id}`).prop('show')).toBe(false);
+        expect(wrapper.find(`#unread_post_${baseProps.post.id}`).first().prop('show')).toBe(false);
     });
 
     test('should not show mark as unread in search', () => {
@@ -135,7 +135,7 @@ describe('components/dot_menu/DotMenu', () => {
             <DotMenu {...props}/>,
         );
 
-        expect(wrapper.find(`#unread_post_${baseProps.post.id}`).prop('show')).toBe(false);
+        expect(wrapper.find(`#unread_post_${baseProps.post.id}`).first().prop('show')).toBe(false);
     });
 
     describe('RHS', () => {

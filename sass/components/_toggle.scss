@@ -28,7 +28,7 @@ $toggle-default-font-size: 0.75rem;
 // Mixin for Default Switch Styles
 // Variables: $size, $margin, $color, $bg, $active-bg, $font-size
 @mixin toggle-mixin($size: $toggle-default-size, $margin: $toggle-default-margin, $font-size: $toggle-default-font-size) {
-    $handlePosition: calc($size/7);
+    $handlePosition: calc($size/10);
     $handleSize: calc($size - (2 * $handlePosition));
 
     position: relative;
@@ -51,12 +51,12 @@ $toggle-default-font-size: 0.75rem;
 
     > .handle {
         position: absolute;
-        top: 0.2rem;
-        left: 0.2rem;
-        width: 1.6rem;
-        height: 1.6rem;
+        top: $handlePosition;
+        left: $handlePosition;
+        width: $handleSize;
+        height: $handleSize;
         background: #fff;
-        border-radius: 1.6rem;
+        border-radius: calc($handleSize/2);
         transition: left 0.25s;
     }
 
@@ -64,7 +64,7 @@ $toggle-default-font-size: 0.75rem;
         transition: background-color 0.25s;
 
         > .handle {
-            right: 0.2rem;
+            right: $handlePosition;
             left: inherit;
             transition: left 0.25s;
         }

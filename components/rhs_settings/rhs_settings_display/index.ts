@@ -11,8 +11,9 @@ import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {autoUpdateTimezone} from 'mattermost-redux/actions/timezone';
+import {updateMe} from 'mattermost-redux/actions/users';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 import {get, isCollapsedThreadsAllowed, getCollapsedThreadsPreference} from 'mattermost-redux/selectors/entities/preferences';
 import {getTimezoneLabel, makeGetUserTimezone} from 'mattermost-redux/selectors/entities/timezone';
 import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
@@ -42,6 +43,12 @@ export function makeMapStateToProps() {
         const lockTeammateNameDisplay = getLicense(state).LockTeammateNameDisplay === 'true' && config.LockTeammateNameDisplay === 'true';
         const configTeammateNameDisplay = config.TeammateNameDisplay as string;
         const emojiPickerEnabled = config.EnableEmojiPicker === 'true';
+        const lastActiveTimeEnabled = config.EnableLastActiveTime === 'true';
+
+        let lastActiveDisplay = true;
+        if (getUser(state, currentUserId).props?.show_last_active === 'false') {
+            lastActiveDisplay = false;
+        }
 
         return {
             lockTeammateNameDisplay,
@@ -70,6 +77,9 @@ export function makeMapStateToProps() {
             emojiPickerEnabled,
             showUnreadsCategory: get(state, Preferences.CATEGORY_SIDEBAR_SETTINGS, 'show_unread_section'),
             unreadScrollPosition: get(state, Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.UNREAD_SCROLL_POSITION),
+            militaryTime: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, Preferences.USE_MILITARY_TIME_DEFAULT),
+            lastActiveDisplay,
+            lastActiveTimeEnabled,
         };
     };
 }
@@ -79,6 +89,7 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
         actions: bindActionCreators({
             autoUpdateTimezone,
             savePreferences,
+            updateMe,
         }, dispatch),
     };
 }

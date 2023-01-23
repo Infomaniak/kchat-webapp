@@ -455,6 +455,10 @@ export const getSearchResults: (state: GlobalState) => Post[] = createSelector(
     },
 );
 
+export function getHasLimitations(state: GlobalState) {
+    return state.entities.search.hasLimitation;
+}
+
 // Returns the matched text from the search results, if the server has provided them.
 // These matches will only be present if the server is running Mattermost 5.1 or higher
 // with Elasticsearch enabled to search posts. Otherwise, null will be returned.
