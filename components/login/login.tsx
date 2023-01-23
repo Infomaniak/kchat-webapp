@@ -28,7 +28,8 @@ import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 
 import {clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken} from './utils';
 import './login.scss';
-import { isServerVersionGreaterThanOrEqualTo } from 'utils/server_version';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {Client4} from 'mattermost-redux/client';
 
 const MAX_TOKEN_RETRIES = 3;
 
@@ -99,6 +100,10 @@ const Login = () => {
                         localStorage.setItem('IKToken', data.token);
                         localStorage.setItem('IKRefreshToken', data.refreshToken);
                         localStorage.setItem('IKTokenExpire', parseInt(Date.now() / 1000) + data.expiresIn)
+
+                        Client4.setToken(data.token);
+                        Client4.setCSRF(data.token);
+                        Client4.setAuthHeader = true;
 
                         redirectUserToDefaultTeam();
                     }
