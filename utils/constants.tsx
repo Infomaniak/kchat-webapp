@@ -942,6 +942,9 @@ export const ErrorPageTypes = {
     TEAM_NOT_FOUND: 'team_not_found',
     CHANNEL_NOT_FOUND: 'channel_not_found',
     CLOUD_ARCHIVED: 'cloud_archived',
+    NO_TEAM: 'no_team',
+    MAINTENANCE: 'maintenance',
+    BLOCKED: 'blocked',
 };
 
 export const JobTypes = {

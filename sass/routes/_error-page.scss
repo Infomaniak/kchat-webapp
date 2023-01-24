@@ -21,6 +21,21 @@ body {
                 }
 
             }
+                .error__content {
+                    display: flex;
+                    flex-direction: row-reverse;
+                    width: 100%;
+                    height: 100%;
+
+                    .error__fullscreen-graphic {
+                        max-width: 40%;
+                        height: 100%;
+                        > img {
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                    }
+                }
 
                 .error__dialog {
                     display: flex;
@@ -28,7 +43,7 @@ body {
                     justify-content: center;
                     margin: 0 auto;
                     align-items: center;
-                    margin-top: 20vh;
+                    // margin-top: 20vh;
 
                     @media screen and (min-width: 1300px) {
                         width: 1280px;

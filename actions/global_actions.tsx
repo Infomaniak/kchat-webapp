@@ -435,3 +435,10 @@ export function redirectToManagerDashboard(groupId: number) {
     window.open(`${IKConstants.MANAGER_URL}v3/${groupId}/ng/kchat`, '_blank');
 }
 
+export function redirectToShop() {
+    window.open('https://www.infomaniak.com/gtl/kchat', '_blank');
+}
+
+export function redirectToKSuite() {
+    window.open('https://www.infomaniak.com/gtl/ksuite', '_blank');
+}
