@@ -188,7 +188,7 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
                     message: {
                         token: resp.access_token,
                         refreshToken: resp.refresh_token,
-                        expiresIn: resp.expires_in,
+                        expiresAt: parseInt(Date.now() / 1000) + resp.expires_in,
                     },
                 },
                 window.origin,
