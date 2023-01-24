@@ -84,7 +84,7 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, refreshIKToken, storeTokenResponse} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 

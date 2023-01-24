@@ -164,52 +164,52 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
         if (!refreshToken) {
             return Promise.reject(new Error('missing refresh token'));
         }
-    }
-
-    if (REFRESH_PROMISE) {
-        return REFRESH_PROMISE as Promise<any>;
-    }
-
-    Client4.setToken('');
-    Client4.setCSRF('');
-
-    // eslint-disable-next-line consistent-return
-    REFRESH_PROMISE = new Promise((resolve, reject) => {
-        Client4.refreshIKLoginToken(
-            refreshToken,
-            `${IKConstants.LOGIN_URL}`,
-            `${IKConstants.CLIENT_ID}`,
-        ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
-            storeTokenResponse(resp);
-            LocalStorageStore.setWasLoggedIn(true);
-
-            window.postMessage(
-                {
-                    type: 'token-refreshed',
-                    message: {
-                        token: resp.access_token,
-                        refreshToken: resp.refresh_token,
-                        expiresAt: parseInt(Date.now() / 1000) + resp.expires_in,
+        
+        if (REFRESH_PROMISE) {
+            return REFRESH_PROMISE as Promise<any>;
+        }
+    
+        Client4.setToken('');
+        Client4.setCSRF('');
+    
+        // eslint-disable-next-line consistent-return
+        REFRESH_PROMISE = new Promise((resolve, reject) => {
+            Client4.refreshIKLoginToken(
+                refreshToken,
+                `${IKConstants.LOGIN_URL}`,
+                `${IKConstants.CLIENT_ID}`,
+            ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
+                storeTokenResponse(resp);
+                LocalStorageStore.setWasLoggedIn(true);
+    
+                window.postMessage(
+                    {
+                        type: 'token-refreshed',
+                        message: {
+                            token: resp.access_token,
+                            refreshToken: resp.refresh_token,
+                            expiresAt: parseInt(Date.now() / 1000) + resp.expires_in,
+                        },
                     },
-                },
-                window.origin,
-            );
-
-            REFRESH_PROMISE = null;
-            if (redirectToTeam) {
-                redirectUserToDefaultTeam();
-            }
-            resolve(resp);
-        }).catch((error: unknown) => {
-            console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
-            console.warn(error);
-            console.log('[login/utils > refreshIKToken] keeping old token');
-            REFRESH_PROMISE = null;
-            reject(error);
+                    window.origin,
+                );
+    
+                REFRESH_PROMISE = null;
+                if (redirectToTeam) {
+                    redirectUserToDefaultTeam();
+                }
+                resolve(resp);
+            }).catch((error: unknown) => {
+                console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
+                console.warn(error);
+                console.log('[login/utils > refreshIKToken] keeping old token');
+                REFRESH_PROMISE = null;
+                reject(error);
+            });
         });
-    });
-
-    return REFRESH_PROMISE;
+    
+        return REFRESH_PROMISE;
+    }
 }
 
 export function revokeIKToken() {
