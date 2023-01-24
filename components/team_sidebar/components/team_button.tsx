@@ -32,7 +32,7 @@ interface Props {
     mentions?: number;
     placement?: 'left' | 'right' | 'top' | 'bottom';
     teamIconUrl?: string | null;
-    switchTeam: (url: string) => void;
+    switchTeam: (name: string) => void;
     intl: IntlShape;
     isDraggable?: boolean;
     teamIndex?: number;
@@ -45,7 +45,7 @@ interface Props {
 class TeamButton extends React.PureComponent<Props> {
     handleSwitch = () => {
         mark('TeamLink#click');
-        this.props.switchTeam(this.props.url);
+        this.props.switchTeam(this.props.displayName);
 
         setTimeout(() => {
             trackEvent('ui', 'ui_team_sidebar_switch_team');

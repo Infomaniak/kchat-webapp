@@ -192,6 +192,16 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         this.setState({teamsOrder: newTeamsOrder});
     }
 
+    switchTeamIK(teamName: string) {
+        window.postMessage(
+            {
+                type: 'switch-server',
+                data: teamName,
+            },
+            window.origin,
+        );
+    }
+
     render() {
         const root: Element | null = document.querySelector('#root');
         if (this.props.myTeams.length <= 1) {
@@ -222,7 +232,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
                     mentions={this.props.mentionsInTeamMap.has(team.id) ? this.props.mentionsInTeamMap.get(team.id) : 0}
                     hasUrgent={this.props.teamHasUrgentMap.has(team.id) ? this.props.teamHasUrgentMap.get(team.id) : false}
                     teamIconUrl={Utils.imageURLForTeam(team)}
-                    switchTeam={(url: string) => this.props.actions.switchTeam(url, currentProduct ? team : undefined)}
+                    switchTeam={this.switchTeamIK}
                     isDraggable={true}
                     teamId={team.id}
                     teamIndex={index}
