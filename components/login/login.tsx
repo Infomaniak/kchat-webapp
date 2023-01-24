@@ -115,7 +115,17 @@ const Login = () => {
                     console.log(data)
 
                     if (!Object.keys(data).length) {
-                        // getChallengeAndRedirectToLogin();
+                        if (isDefaultAuthServer()) {
+                            getChallengeAndRedirectToLogin();
+                        } else {
+                            window.postMessage(
+                                {
+                                    type: 'reset-teams',
+                                    message: {},
+                                },
+                                window.origin,
+                            );
+                        }
                     } else {
                         localStorage.setItem('IKToken', data.token);
                         localStorage.setItem('IKRefreshToken', data.refreshToken);
