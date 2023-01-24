@@ -142,7 +142,8 @@ export function isDefaultAuthServer() {
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
         try {
-            const {token, refreshToken, expiresAt} = await window.authManager.refreshToken();
+            await window.authManager.refreshToken();
+            const {token, refreshToken, expiresAt} = await window.authManager.tokenRequest();
             localStorage.setItem('IKToken', token);
             localStorage.setItem('IKRefreshToken', refreshToken);
             localStorage.setItem('IKTokenExpire', expiresAt);
