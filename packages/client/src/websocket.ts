@@ -144,7 +144,7 @@ export default class WebSocketClient {
             this.conn = new Pusher('kchat-key', {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,
-                authEndpoint: 'https://kchat.preprod.dev.infomaniak.ch/broadcasting/auth',
+                authEndpoint: '/broadcasting/auth',
                 auth: {
                     headers: {
 
@@ -162,7 +162,7 @@ export default class WebSocketClient {
             this.conn = new Pusher('kchat-key', {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,
-                authEndpoint: 'https://kchat.preprod.dev.infomaniak.ch/broadcasting/auth',
+                authEndpoint: '/broadcasting/auth',
                 enabledTransports: ['ws', 'wss'],
                 disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
                 activityTimeout: 10000,
