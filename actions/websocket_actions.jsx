@@ -886,11 +886,11 @@ export function handlePostUnreadEvent(msg) {
 }
 
 async function handleKSuiteAdded(msg) {
-    window.authManager.addTeam(msg.data)
+    window.authManager.addTeam(msg.data.team)
 }
 
 async function handleKSuiteDeleted(msg) {
-    window.authManager.deleteTeam(msg.data)
+    window.authManager.deleteTeam(msg.data.team)
 }
 
 async function handleTeamAddedEvent(msg) {
