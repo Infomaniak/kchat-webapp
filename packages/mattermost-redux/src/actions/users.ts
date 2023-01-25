@@ -88,7 +88,7 @@ export function loadMeREST(): ActionFunc {
                 dispatch(getMyTeamMembers()),
             ]);
 
-            const isCollapsedThreads = isCollapsedThreadsEnabled(state);
+            const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
             await dispatch(getMyTeamUnreads(isCollapsedThreads));
         } catch (error) {
             dispatch(logError(error as ServerError));
