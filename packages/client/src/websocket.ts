@@ -278,6 +278,10 @@ export default class WebSocketClient {
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
     }
 
+    unsubscribeToPresenceChannel(channelID: string) {
+        this.conn?.unsubscribe(`presence-channel.${channelID}`);
+    }
+
     bindPresenceChannel(channelID: string) {
         this.currentPresence = channelID;
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
