@@ -123,7 +123,7 @@ export default function AddToChannels(props: Props) {
             className='AddToChannels__customMessage'
             data-testid='customMessage'
         >
-            {!props.customMessage.open && (
+            {/* {!props.customMessage.open && (
                 <div className={'AddToChannels__customMessageTitle ' + props.titleClass}>
                     <a
                         onClick={props.toggleCustomMessage}
@@ -154,7 +154,7 @@ export default function AddToChannels(props: Props) {
                         value={props.customMessage.message}
                     />
                 </React.Fragment>
-            )}
+            )} */}
         </div>
     </div>);
 }
