@@ -32,9 +32,16 @@ import {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {GlobalState} from 'types/store';
 
 import type {InviteResults} from './result_view';
+import {InviteType} from './invite_as';
+
 const InvitationModal = makeAsyncComponent('InvitationModal', React.lazy(() => import('./invitation_modal')));
 
-const searchProfiles = (term: string, options = {}) => {
+const searchProfiles = (term: string, options = {}, inviteType?: InviteType) => {
+    if (inviteType && inviteType === InviteType.GUEST) {
+        //disable users autocomplete
+        return () => Promise.resolve({data: {}});
+    }
+
     if (!term) {
         return getProfiles(0, 20, options);
     }
@@ -95,7 +102,7 @@ type Actions = {
     sendMembersInvites: (teamId: string, users: UserProfile[], emails: string[]) => Promise<{data: InviteResults}>;
     sendMembersInvitesToChannels: (teamId: string, channels: Channel[], users: UserProfile[], emails: string[], message: string) => Promise<{data: InviteResults}>;
     regenerateTeamInviteId: (teamId: string) => void;
-    searchProfiles: (term: string, options?: Record<string, string>) => Promise<{data: UserProfile[]}>;
+    searchProfiles: (term: string, options?: Record<string, string>, inviteType?: InviteType) => Promise<{data: UserProfile[]}>;
     searchChannels: (teamId: string, term: string) => ActionFunc;
 }
 

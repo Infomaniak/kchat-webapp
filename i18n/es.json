@@ -3759,6 +3759,7 @@
   "invite_modal.add_channels_title_b": "**(requerido)**",
   "invite_modal.add_channels_title_c": "**(Opcional)**",
   "invite_modal.add_invites": "Ingresa un nombre o dirección de correo electrónico",
+  "invite_modal.add_invites.email": "Ingresa una dirección de correo electrónico",
   "invite_modal.as": "Invitar como",
   "invite_modal.choose_guest_a": "Invitado",
   "invite_modal.choose_member": "Miembro",

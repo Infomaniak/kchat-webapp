@@ -69,6 +69,7 @@ export type Props = InviteState & {
     canAddUsers: boolean;
     townSquareDisplayName: string;
     channelToInvite?: Channel;
+    shouldOpenMenu: boolean;
 }
 
 export default function InviteView(props: Props) {
@@ -141,7 +142,10 @@ export default function InviteView(props: Props) {
         errorProperties.errorMessageValues.text = Constants.MAX_ADD_MEMBERS_BATCH.toString();
     }
 
-    let placeholder = formatMessage({
+    let placeholder = props.inviteType === InviteType.GUEST ? formatMessage({
+        id: 'invite_modal.add_invites.email',
+        defaultMessage: 'Enter an email address',
+    }) : formatMessage({
         id: 'invite_modal.add_invites',
         defaultMessage: 'Enter a name or email address',
     });
@@ -231,6 +235,7 @@ export default function InviteView(props: Props) {
                     inputValue={props.usersEmailsSearch}
                     emailInvitationsEnabled={props.emailInvitationsEnabled}
                     autoFocus={true}
+                    isMenuOpen={props.shouldOpenMenu}
                 />
                 {props.canInviteGuests && props.canAddUsers &&
                 <InviteAs
