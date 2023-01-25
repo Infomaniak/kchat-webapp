@@ -200,40 +200,40 @@ export default class Root extends React.PureComponent<Props, State> {
         // Redux
         setUrl(getSiteURL());
 
-        if (isDesktopApp()) {
-            if (!isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.0.0')) {
-                // const token = localStorage.getItem('IKToken');
-                // const tokenExpire = localStorage.getItem('IKTokenExpire');
+        // if (isDesktopApp()) {
+        //     if (!isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.0.0')) {
+        //         const token = localStorage.getItem('IKToken');
+        //         const tokenExpire = localStorage.getItem('IKTokenExpire');
                 
-                // const refreshT = localStorage.getItem('IKRefreshToken');
+        //         // const refreshT = localStorage.getItem('IKRefreshToken');
     
-                // let now = Date.now() / 1000; // Current time in seconds
-                // let secondsUntilExpire = parseInt(tokenExpire) - now;
+        //         // let now = Date.now() / 1000; // Current time in seconds
+        //         // let secondsUntilExpire = parseInt(tokenExpire) - now;
     
-                // Enable authHeader and set bearer token
-                if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                    console.log('[components/root > constructor] updating token in client4'); // eslint-disable-line no-console
-                    Client4.setAuthHeader = true;
-                    Client4.setToken(token);
-                    Client4.setCSRF(token);
-                    LocalStorageStore.setWasLoggedIn(true);
-                    console.log('[components/root > constructor] token-refreshed sent to electron'); // eslint-disable-line no-console
-                    // window.postMessage(
-                    //     {
-                    //         type: 'token-refreshed',
-                    //         message: {
-                    //             token,
-                    //             refreshToken: refreshT,
-                    //             expiresIn: secondsUntilExpire,
-                    //         },
-                    //     },
-                    //     window.origin,
-                    // );
-                }
-            }
-        } else {
-            // Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
-        }
+        //         // Enable authHeader and set bearer token
+        //         // if (token && tokenExpire && !checkIKTokenIsExpired()) {
+        //         //     console.log('[components/root > constructor] updating token in client4'); // eslint-disable-line no-console
+        //         //     Client4.setAuthHeader = true;
+        //         //     Client4.setToken(token);
+        //         //     Client4.setCSRF(token);
+        //         //     LocalStorageStore.setWasLoggedIn(true);
+        //         //     console.log('[components/root > constructor] token-refreshed sent to electron'); // eslint-disable-line no-console
+        //             // window.postMessage(
+        //             //     {
+        //             //         type: 'token-refreshed',
+        //             //         message: {
+        //             //             token,
+        //             //             refreshToken: refreshT,
+        //             //             expiresIn: secondsUntilExpire,
+        //             //         },
+        //             //     },
+        //             //     window.origin,
+        //             // );
+        //         // }
+        //     }
+        // } else {
+        //     // Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
+        // }
 
         setSystemEmojis(new Set(EmojiIndicesByAlias.keys()));
 
