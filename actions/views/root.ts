@@ -22,22 +22,9 @@ export type TranslationPluginFunction = (locale: string) => Translations
 export function loadConfigAndMe() {
     return async (dispatch: DispatchFunc) => {
         // If expired, refresh token
-        if (isDesktopApp()) {
-            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
-                const token = await window.authManager.tokenRequest();
-
-                Client4.setAuthHeader = true;
-                Client4.setToken(token.token);
-                Client4.setCSRF(token.token);
-
-            } else if (checkIKTokenIsExpired()) {
-                console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
-                await refreshIKToken(/*redirectToReam*/false)?.then(() => {
-                    console.log('[actions/view/root] desktop token refreshed'); // eslint-disable-line no-console
-                }).catch((e: unknown) => {
-                    console.warn('[actions/view/root] desktop token refresh error: ', e); // eslint-disable-line no-console
-                });
-            }
+        if (isDesktopApp() && checkIKTokenIsExpired()) {
+            console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
+            await refreshIKToken(/*redirectToReam*/false)
         }
 
         const [{data: clientConfig}] = await Promise.all([
