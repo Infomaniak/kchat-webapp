@@ -662,6 +662,11 @@ export function handleEvent(msg) {
     case SocketEvents.HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED:
         dispatch(handleHostedCustomerSignupProgressUpdated(msg));
         break;
+    case SocketEvents.KSUITE_ADDED:
+        handleKSuiteAdded(msg)
+        break;
+    case SocketEvents.KSUITE_DELETED:
+        handleKSuiteDeleted(msg)
     default:
     }
 
@@ -878,6 +883,14 @@ export function handlePostUnreadEvent(msg) {
             },
         },
     );
+}
+
+async function handleKSuiteAdded(msg) {
+    window.authManager.addTeam(msg.data.team)
+}
+
+async function handleKSuiteDeleted(msg) {
+    window.authManager.deleteTeam(msg.data.team)
 }
 
 async function handleTeamAddedEvent(msg) {

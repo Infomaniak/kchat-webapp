@@ -129,6 +129,17 @@ function myMembers(state: RelationOneToOne<Team, TeamMembership> = {}, action: G
         const nextState = {...state};
         const receivedTeams = teamListToMap(action.data);
         updateState(receivedTeams, nextState);
+        if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams: action.data,
+                    },
+                },
+                window.origin,
+            );
+        }
         return nextState;
     }
     case TeamTypes.RECEIVED_TEAMS: {
