@@ -3883,6 +3883,7 @@
   "invite_modal.add_channels_title_b": "**(required)**",
   "invite_modal.add_channels_title_c": "**(Optional)**",
   "invite_modal.add_invites": "Enter a name or email address",
+  "invite_modal.add_invites.email": "Enter an email address",
   "invite_modal.as": "Invite as",
   "invite_modal.choose_guest_a": "Guest",
   "invite_modal.choose_guest_b": "limited to select channels and teams",

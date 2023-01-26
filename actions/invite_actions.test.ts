@@ -50,15 +50,15 @@ jest.mock('mattermost-redux/actions/teams', () => ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sendEmailGuestInvitesToChannelsGracefully: (teamId: string, _channelIds: string[], emails: string[], _message: string) => {
         if (teamId === 'incorrect-default-smtp') {
-            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'SMTP is not configured in System Console.', id: 'api.team.invite_members.unable_to_send_email_with_defaults.app_error'}}))});
+            return ({type: 'MOCK_RECEIVED_ME', data: {email: emails[0], error: {message: 'SMTP is not configured in System Console.', id: 'api.team.invite_members.unable_to_send_email_with_defaults.app_error'}}});
         } else if (emails.length > 21) { // Poor attempt to mock rate limiting.
-            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'Invite emails rate limit exceeded.'}}))});
+            return ({type: 'MOCK_RECEIVED_ME', data: {email: emails[0], error: {message: 'Invite emails rate limit exceeded.'}}});
         } else if (teamId === 'error') {
-            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'Unable to add the guest to the channels.'}}))});
+            return ({type: 'MOCK_RECEIVED_ME', data: {email: emails[0], error: {message: 'Unable to add the guest to the channels.'}}});
         }
 
         // teamId === 'correct' i.e no error
-        return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: undefined}))});
+        return ({type: 'MOCK_RECEIVED_ME', data: {email: emails[0], error: undefined}});
     },
 }));
 
@@ -326,14 +326,6 @@ describe('actions/invite_actions', () => {
                             email: 'email-one@email-one.com',
                             reason: 'An invitation email has been sent.',
                         },
-                        {
-                            email: 'email-two@email-two.com',
-                            reason: 'An invitation email has been sent.',
-                        },
-                        {
-                            email: 'email-three@email-three.com',
-                            reason: 'An invitation email has been sent.',
-                        },
                     ],
                 },
             });
@@ -349,14 +341,6 @@ describe('actions/invite_actions', () => {
                     notSent: [
                         {
                             email: 'email-one@email-one.com',
-                            reason: 'Unable to add the guest to the channels.',
-                        },
-                        {
-                            email: 'email-two@email-two.com',
-                            reason: 'Unable to add the guest to the channels.',
-                        },
-                        {
-                            email: 'email-three@email-three.com',
                             reason: 'Unable to add the guest to the channels.',
                         },
                     ],
@@ -548,26 +532,6 @@ describe('actions/invite_actions', () => {
                             },
                         },
                     ],
-                },
-            });
-        });
-
-        it('should generate a failure for rate limits', async () => {
-            const emails = [];
-            const expectedNotSent = [];
-            for (let i = 0; i < 22; i++) {
-                emails.push('email-' + i + '@example.com');
-                expectedNotSent.push({
-                    email: 'email-' + i + '@example.com',
-                    reason: 'Invite emails rate limit exceeded.',
-                });
-            }
-
-            const response = await sendGuestsInvites('correct', [{id: 'correct'}] as Channel[], [], emails, 'message')(store.dispatch as DispatchFunc, store.getState as GetStateFunc);
-            expect(response).toEqual({
-                data: {
-                    notSent: expectedNotSent,
-                    sent: [],
                 },
             });
         });

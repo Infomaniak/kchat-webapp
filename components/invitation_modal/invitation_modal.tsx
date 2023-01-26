@@ -33,12 +33,14 @@ import './invitation_modal.scss';
 // false means no backdrop
 type Backdrop = 'static' | boolean
 
+const MAX_VALUES = 1;
+
 export type Props = {
     actions: {
         searchChannels: (teamId: string, term: string) => ActionFunc;
         regenerateTeamInviteId: (teamId: string) => void;
 
-        searchProfiles: (term: string, options?: Record<string, string>) => Promise<{data: UserProfile[]}>;
+        searchProfiles: (term: string, options?: Record<string, string>, inviteType?: InviteType) => Promise<{data: UserProfile[]}>;
         sendGuestsInvites: (
             currentTeamId: string,
             channels: Channel[],
@@ -88,6 +90,7 @@ type State = {
     result: ResultState;
     termWithoutResults: string | null;
     show: boolean;
+    shouldOpenMenu: boolean;
 };
 
 export class InvitationModal extends React.PureComponent<Props, State> {
@@ -113,6 +116,7 @@ export class InvitationModal extends React.PureComponent<Props, State> {
                     channels: props.channelToInvite ? [...defaultStateChannels, props.channelToInvite] : defaultStateChannels,
                 },
             },
+            shouldOpenMenu: true,
         };
     }
 
@@ -286,7 +290,7 @@ export class InvitationModal extends React.PureComponent<Props, State> {
     }
 
     debouncedSearchProfiles = debounce((term: string, callback: (users: UserProfile[]) => void) => {
-        this.props.actions.searchProfiles(term).
+        this.props.actions.searchProfiles(term, {}, this.state.invite.inviteType).
             then(({data}: {data: UserProfile[]}) => {
                 callback(data);
                 if (data.length === 0) {
@@ -326,13 +330,17 @@ export class InvitationModal extends React.PureComponent<Props, State> {
     }
 
     onUsersInputChange = (usersEmailsSearch: string) => {
-        this.setState((state: State) => ({
-            ...state,
-            invite: {
-                ...state.invite,
-                usersEmailsSearch,
-            },
-        }));
+        const {usersEmails, inviteType} = this.state.invite;
+        if (usersEmails.length < MAX_VALUES) {
+            this.setState((state: State) => ({
+                ...state,
+                invite: {
+                    ...state.invite,
+                    usersEmailsSearch,
+                },
+                shouldOpenMenu: inviteType !== InviteType.GUEST || isEmail(usersEmailsSearch),
+            }));
+        }
     }
 
     getBackdrop = (): Backdrop => {
@@ -382,6 +390,7 @@ export class InvitationModal extends React.PureComponent<Props, State> {
                 footerClass='InvitationModal__footer'
                 onClose={this.handleHide}
                 channelToInvite={this.props.channelToInvite}
+                shouldOpenMenu={this.state.shouldOpenMenu}
                 {...this.state.invite}
             />
         );

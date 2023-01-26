@@ -3891,6 +3891,7 @@
   "invite_modal.add_channels_title_b": "**(notwendig)**",
   "invite_modal.add_channels_title_c": "**(Optional)**",
   "invite_modal.add_invites": "Namen oder Email eingeben",
+  "invite_modal.add_invites.email": "Email eingeben",
   "invite_modal.as": "Einladen als",
   "invite_modal.choose_guest_a": "Gast",
   "invite_modal.choose_guest_b": "beschränkt auf ausgewählte Kanäle und Teams",
