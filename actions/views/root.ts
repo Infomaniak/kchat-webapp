@@ -22,7 +22,9 @@ export type TranslationPluginFunction = (locale: string) => Translations
 export function loadConfigAndMe() {
     return async (dispatch: DispatchFunc) => {
         // If expired, refresh token
-        if (isDesktopApp() && checkIKTokenIsExpired()) {
+
+        //  && checkIKTokenIsExpired()
+        if (isDesktopApp()) {
             console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
             await refreshIKToken(/*redirectToReam*/false)
         }
