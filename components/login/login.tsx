@@ -113,7 +113,7 @@ const Login = () => {
                 }) => {
                     console.log(data)
 
-                    if (!Object.keys(data).length) {
+                    if (!Object.keys(data).length) { // eslint-disable-line no-negated-condition
                         if (isDefaultAuthServer()) {
                             getChallengeAndRedirectToLogin();
                         } else {

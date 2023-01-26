@@ -139,35 +139,59 @@ export function isDefaultAuthServer() {
     return window.location.origin === v2DefaultAuthServer
 }
 
+function storeTokenV2(tokenData: {token: string, refreshToken: string, expiresAt: number}) {
+    const {token, refreshToken, expiresAt} = tokenData;
+    localStorage.setItem('IKToken', token);
+    localStorage.setItem('IKRefreshToken', refreshToken);
+    localStorage.setItem('IKTokenExpire', expiresAt);
+    localStorage.setItem('tokenExpired', '0');
+    Client4.setToken(token);
+    Client4.setCSRF(token);
+    Client4.setAuthHeader = true;
+}
+
+async function refreshTokenV2() {
+    try {
+        const newToken = await window.authManager.refreshToken()
+        console.log(newToken);
+        storeTokenV2(newToken);
+    } catch (error) {
+        console.error(error);
+        window.postMessage(
+            {
+                type: 'reset-teams',
+                message: {},
+            },
+            window.origin,
+        );
+    }
+}
+
+function isValidTokenV2(token: {token: string, refreshToken: string, expiresAt: number}) {
+    const isExpired = token.expiresAt <= parseInt(Date.now() / 1000, 10);
+
+    return !isExpired
+}
+
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
-        try {
-            window.authManager.refreshToken().then((tokenRes) => {
-                console.log(tokenRes)
-                const {token, refreshToken, expiresAt} = tokenRes;
-                localStorage.setItem('IKToken', token);
-                localStorage.setItem('IKRefreshToken', refreshToken);
-                localStorage.setItem('IKTokenExpire', expiresAt);
-                localStorage.setItem('tokenExpired', '0');
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                Client4.setAuthHeader = true;
-            }).catch((e: unknown) => {
-                console.log(e);
-                window.postMessage(
-                    {
-                        type: 'reset-teams',
-                        message: {},
-                    },
-                    window.origin,
-                );
-            });
+        const updatedToken = await window.authManager.tokenRequest()
+        if (!Object.keys(updatedToken)) {
+            window.postMessage(
+                {
+                    type: 'reset-teams',
+                    message: {},
+                },
+                window.origin,
+            );
+        } else if (isValidTokenV2(updatedToken)) {
+            storeTokenV2(updatedToken);
+        } else {
+            await refreshTokenV2()
+        }
 
-            if (redirectToTeam) {
-                redirectUserToDefaultTeam();
-            }
-        } catch {
-            console.error(new Error('failed to refresh in v2 mode'));
+        if (redirectToTeam) {
+            redirectUserToDefaultTeam();
         }
     } else {
         const refreshToken = localStorage.getItem('IKRefreshToken');
