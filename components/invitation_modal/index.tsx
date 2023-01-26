@@ -39,7 +39,7 @@ const InvitationModal = makeAsyncComponent('InvitationModal', React.lazy(() => i
 const searchProfiles = (term: string, options = {}, inviteType?: InviteType) => {
     if (inviteType && inviteType === InviteType.GUEST) {
         //disable users autocomplete
-        return () => Promise.resolve({data: {}});
+        return () => Promise.resolve({data: []});
     }
 
     if (!term) {
