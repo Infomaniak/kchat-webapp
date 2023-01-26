@@ -36,6 +36,7 @@ export default class WebSocketClient {
     private socketId: string | null;
     private currentPresence: string;
     private currentUser: number | null;
+    private currentTeamUser: string;
     private currentTeam: string;
 
     // responseSequence is the number to track a response sent
@@ -104,19 +105,33 @@ export default class WebSocketClient {
         this.socketId = null;
         this.currentPresence = '';
         this.currentUser = null;
+        this.currentTeamUser = '';
         this.currentTeam = '';
     }
 
     // on connect, only send auth cookie and blank state.
     // on hello, get the connectionID and store it.
     // on reconnect, send cookie, connectionID, sequence number.
-    initialize(connectionUrl = this.connectionUrl, userId?: number, teamId?: string, token?: string, authToken?: string, presenceChannelId?: string) {
+    initialize(
+        connectionUrl = this.connectionUrl,
+        userId?: number,
+        userTeamId?: string,
+        teamId?: string,
+        token?: string,
+        authToken?: string,
+        presenceChannelId?: string
+    ) {
         let currentUserId: any;
+        let currentUserTeamId: any;
         let currentPresenceChannelId: any;
 
         // Store this for onmessage reconnect
         if (userId) {
             currentUserId = userId;
+        }
+
+        if (userTeamId) {
+            currentUserTeamId = userTeamId;
         }
 
         if (presenceChannelId) {
@@ -217,6 +232,7 @@ export default class WebSocketClient {
                     this.initialize(
                         connectionUrl,
                         this.currentUser as number,
+                        this.currentTeamUser,
                         this.currentTeam,
                         token,
                         authToken,
@@ -236,6 +252,7 @@ export default class WebSocketClient {
             this.subscribeToTeamChannel(teamId as string);
 
             this.subscribeToUserChannel(userId || currentUserId);
+            this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId)
 
             this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
 
@@ -271,6 +288,11 @@ export default class WebSocketClient {
     subscribeToUserChannel(userId: number) {
         this.currentUser = userId;
         this.userChannel = this.conn?.subscribe(`presence-user.${userId}`) as Channel;
+    }
+
+    subscribeToUserTeamScopedChannel(teamUserId: string) {
+        this.currentTeamUser = teamUserId;
+        this.userChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
     }
 
     subscribeToPresenceChannel(channelID: string) {
