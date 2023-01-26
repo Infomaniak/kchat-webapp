@@ -201,7 +201,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
                     </a>
                 );
             }
-        } else if (type === ErrorPageTypes.NO_TEAM) {
+        } else if (type === ErrorPageTypes.NO_KSUITE) {
             illustration = null;
             fullscreenIllustration = (
                 <div className='error__fullscreen-graphic'>
@@ -220,7 +220,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
                 </a>
             );
         } else if (type === ErrorPageTypes.BLOCKED) {
-            illustration = <SvgIlluErrorBlocked/>
+            illustration = <SvgIlluErrorBlocked/>;
             if (isAdmin && ikGroupId) {
                 backButton = (
                     <a
@@ -235,7 +235,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
                 );
                 secondaryButton = (
                     <a
-                        className='btn btn-secondary'
+                        className='btn-secondary'
                         onClick={() => GlobalActions.redirectToManagerDashboard(ikGroupId)}
                     >
                         <FormattedMessage

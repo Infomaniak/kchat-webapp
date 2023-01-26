@@ -192,7 +192,7 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                 </p>
             );
             break;
-        case ErrorPageTypes.NO_TEAM:
+        case ErrorPageTypes.NO_KSUITE:
             errorMessage = (
                 <p>
                     <FormattedMessage

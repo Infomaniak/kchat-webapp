@@ -82,6 +82,12 @@ body {
                         color: var(--center-channel-color);
                     }
 
+                .error__dialog-btns {
+                    display: flex;
+                    gap: 16px;
+                    align-items: center;
+                }
+
                 .error__graphic {
                     margin-right: 30px;
                     margin-left: 30px;

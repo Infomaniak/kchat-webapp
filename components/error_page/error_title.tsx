@@ -83,7 +83,7 @@ const ErrorTitle: React.FC<Props> = ({type, title, groupName}: Props) => {
                 />
             );
             break;
-        case ErrorPageTypes.NO_TEAM:
+        case ErrorPageTypes.NO_KSUITE:
             errorTitle = (
                 <FormattedMessage
                     id='error.no_team.title'
