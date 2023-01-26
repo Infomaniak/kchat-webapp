@@ -142,9 +142,6 @@ export function isDefaultAuthServer() {
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
         try {
-            const cb = ((reply: {token: string, refreshToken: string, expiresAt: number}) => {
-            });
-            
             window.authManager.refreshToken().then((tokenRes) => {
                 console.log(tokenRes)
                 const {token, refreshToken, expiresAt} = tokenRes;
@@ -155,28 +152,16 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 Client4.setAuthHeader = true;
+            }).catch((e: unknown) => {
+                console.log(e);
+                window.postMessage(
+                    {
+                        type: 'reset-teams',
+                        message: {},
+                    },
+                    window.origin,
+                );
             });
-
-            // const {token, refreshToken, expiresAt} = await window.authManager.tokenRequest(window.origin);
-            // if (!token || !refreshToken || !expiresAt) {
-            //     clearLocalStorageToken();
-            //     window.postMessage(
-            //         {
-            //             type: 'reset-teams',
-            //             message: {},
-            //         },
-            //         window.origin,
-            //     );
-
-            //     return;
-            // }
-            // localStorage.setItem('IKToken', token);
-            // localStorage.setItem('IKRefreshToken', refreshToken);
-            // localStorage.setItem('IKTokenExpire', expiresAt);
-            // localStorage.setItem('tokenExpired', '0');
-            // Client4.setToken(token);
-            // Client4.setCSRF(token);
-            // Client4.setAuthHeader = true;
 
             if (redirectToTeam) {
                 redirectUserToDefaultTeam();

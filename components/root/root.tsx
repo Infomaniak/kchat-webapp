@@ -562,7 +562,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     doTokenCheck = () => {
         // If expiring soon but not expired, refresh before we start hitting errors.
-        // if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
+        if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
             console.log('[components/root] desktop token expiring soon'); // eslint-disable-line no-console
             refreshIKToken(/*redirectToReam*/false)?.then(() => {
                 console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console
@@ -570,7 +570,7 @@ export default class Root extends React.PureComponent<Props, State> {
             }).catch((e: unknown) => {
                 console.warn('[components/root] desktop token refresh error: ', e); // eslint-disable-line no-console
             });
-        // }
+        }
     }
 
     runMounted = () => {
