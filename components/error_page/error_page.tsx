@@ -15,12 +15,14 @@ import {isDesktopApp} from 'utils/user_agent';
 
 import * as GlobalActions from 'actions/global_actions';
 
+import NoTeamIcon from 'images/no_team_icon.png';
+import loaderkChat from 'images/logo_compact.png';
+
 import ErrorTitle from './error_title';
 import ErrorMessage from './error_message';
 import SvgIlluErrorQuestion from './assets/SvgIlluErrorQuestion';
 import SvgIlluErrorMaintenance from './assets/SvgIlluErrorMaintenance';
 import SvgIlluErrorBlocked from './assets/SvgIlluErrorBlocked';
-import NoTeamIcon from 'images/no_team_icon.png';
 
 type Location = {
     search: string;
@@ -49,9 +51,18 @@ export default class ErrorPage extends React.PureComponent<Props> {
         const header = (
             <div className='error-header'>
                 <img
-                    src={MattermostLogoSvg}
                     className='error-header__logo'
+                    src={loaderkChat}
+                    alt='kchat logo'
                 />
+                <div className='error-header__title'>
+                    <img
+                        className='error-header__ik-logo'
+                        src={MattermostLogoSvg}
+                        alt='infomaniak logo'
+                    />
+                    {'kChat'}
+                </div>
             </div>
         );
 
@@ -162,7 +173,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
                     />
                 </Link>
             );
-        } else if  (type === ErrorPageTypes.MAINTENANCE) {
+        } else if (type === ErrorPageTypes.MAINTENANCE) {
             illustration = <SvgIlluErrorMaintenance/>;
             if (isAdmin && ikGroupId) {
                 backButton = (
