@@ -142,7 +142,7 @@ export function isDefaultAuthServer() {
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
         try {
-            await window.authManager.refreshToken((reply: {token: string, refreshToken: string, expiresAt: number}) => {
+            const cb = ((reply: {token: string, refreshToken: string, expiresAt: number}) => {
                 const {token, refreshToken, expiresAt} = reply;
                 localStorage.setItem('IKToken', token);
                 localStorage.setItem('IKRefreshToken', refreshToken);
@@ -151,7 +151,9 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
                 Client4.setToken(token);
                 Client4.setCSRF(token);
                 Client4.setAuthHeader = true;
-            }, window.origin);
+            });
+
+            await window.authManager.refreshToken(cb, window.origin);
 
             // const {token, refreshToken, expiresAt} = await window.authManager.tokenRequest(window.origin);
             // if (!token || !refreshToken || !expiresAt) {
