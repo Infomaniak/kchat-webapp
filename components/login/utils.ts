@@ -144,6 +144,18 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
         try {
             await window.authManager.refreshToken();
             const {token, refreshToken, expiresAt} = await window.authManager.tokenRequest();
+            if (!token || !refreshToken || !expiresAt) {
+                clearLocalStorageToken();
+                window.postMessage(
+                    {
+                        type: 'reset-teams',
+                        message: {},
+                    },
+                    window.origin,
+                );
+
+                return;
+            }
             localStorage.setItem('IKToken', token);
             localStorage.setItem('IKRefreshToken', refreshToken);
             localStorage.setItem('IKTokenExpire', expiresAt);

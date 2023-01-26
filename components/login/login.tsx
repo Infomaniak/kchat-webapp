@@ -83,7 +83,6 @@ const Login = () => {
                             window.origin,
                         );
                     }
-                    
                 } else {
                     getChallengeAndRedirectToLogin();
                 }
