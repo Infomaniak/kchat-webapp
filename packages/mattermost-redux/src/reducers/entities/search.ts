@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import {combineReducers} from 'redux';
 
 import {PostTypes, PreferenceTypes, SearchTypes, UserTypes} from 'mattermost-redux/action_types';
@@ -304,23 +305,23 @@ function isSearchGettingMore(state = false, action: GenericAction) {
 
 // mattermost version
 // function isLimitedResults(state = -1, action: GenericAction): number {
-    // switch (action.type) {
-    //     case SearchTypes.SEARCH_POSTS_REQUEST: {
-    //         if (!action.isGettingMore) {
-    //             return -1;
-    //         }
-    //         return state;
-    //     }
-    //     case SearchTypes.RECEIVED_SEARCH_POSTS: {
-    //         if (action.data?.first_inaccessible_post_time) {
-    //             return action.data.first_inaccessible_post_time || 0;
-    //         }
-    //         return state;
-    //     }
-    //     default: {
-    //         return state;
-    //     }
-    //     }
+//     switch (action.type) {
+//     case SearchTypes.SEARCH_POSTS_REQUEST: {
+//         if (!action.isGettingMore) {
+//             return -1;
+//         }
+//         return state;
+//     }
+//     case SearchTypes.RECEIVED_SEARCH_POSTS: {
+//         if (action.data?.first_inaccessible_post_time) {
+//             return action.data.first_inaccessible_post_time || 0;
+//         }
+//         return state;
+//     }
+//     default: {
+//         return state;
+//     }
+//     }
 function hasLimitation(state: string | null = null, action: GenericAction) {
     const {data, type} = action;
 

@@ -88,84 +88,82 @@ describe('components/learn_more_trial_modal/start_trial_btn', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    // test('should handle on click', async () => {
-    //     const mockOnClick = jest.fn();
+    test('should handle on click', async () => {
+        const mockOnClick = jest.fn();
 
-    //     let wrapper: ReactWrapper<any>;
+        let wrapper: ReactWrapper<any>;
 
-    //     // Mount the component
-    //     await act(async () => {
-    //         wrapper = mountWithIntl(
-    //             <Provider store={store}>
-    //                 <StartTrialBtn
-    //                     {...props}
-    //                     onClick={mockOnClick}
-    //                 />
-    //             </Provider>,
-    //         );
-    //     });
+        // Mount the component
+        await act(async () => {
+            wrapper = mountWithIntl(
+                <Provider store={store}>
+                    <StartTrialBtn
+                        {...props}
+                        onClick={mockOnClick}
+                    />
+                </Provider>,
+            );
+        });
 
-    //     await act(async () => {
-    //         wrapper.find('.start-trial-btn').simulate('click');
-    //     });
+        await act(async () => {
+            wrapper.find('.start-trial-btn').simulate('click');
+        });
 
-    //     expect(mockOnClick).toHaveBeenCalled();
+        expect(mockOnClick).toHaveBeenCalled();
 
-    //     expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
-    // });
+        expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
+    });
 
-    // test('should handle on click when rendered as button', async () => {
-    //     const mockOnClick = jest.fn();
+    test('should handle on click when rendered as button', async () => {
+        const mockOnClick = jest.fn();
 
-    //     let wrapper: ReactWrapper<any>;
+        let wrapper: ReactWrapper<any>;
 
-    //     // Mount the component
-    //     await act(async () => {
-    //         wrapper = mountWithIntl(
-    //             <Provider store={store}>
-    //                 <StartTrialBtn
-    //                     {...props}
-    //                     renderAsButton={true}
-    //                     onClick={mockOnClick}
-    //                 />
-    //             </Provider>,
-    //         );
-    //     });
+        // Mount the component
+        await act(async () => {
+            wrapper = mountWithIntl(
+                <Provider store={store}>
+                    <StartTrialBtn
+                        {...props}
+                        renderAsButton={true}
+                        onClick={mockOnClick}
+                    />
+                </Provider>,
+            );
+        });
 
-    //     await act(async () => {
-    //         wrapper.find('button').simulate('click');
-    //     });
+        await act(async () => {
+            wrapper.find('button').simulate('click');
+        });
 
-    //     expect(mockOnClick).toHaveBeenCalled();
+        expect(mockOnClick).toHaveBeenCalled();
 
-    //     expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
-    // });
+        expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
+    });
 
-    // test('does not show success for embargoed countries', async () => {
-    //     const mockOnClick = jest.fn();
+    test('does not show success for embargoed countries', async () => {
+        const mockOnClick = jest.fn();
 
-    //     let wrapper: ReactWrapper<any>;
-    //     const clonedState = JSON.parse(JSON.stringify(state));
-    //     clonedState.entities.admin.analytics.TOTAL_USERS = 451;
+        let wrapper: ReactWrapper<any>;
+        const clonedState = JSON.parse(JSON.stringify(state));
+        clonedState.entities.admin.analytics.TOTAL_USERS = 451;
 
-    //     // Mount the component
-    //     await act(async () => {
-    //         wrapper = mountWithIntl(
-    //             <Provider store={mockStore(clonedState)}>
-    //                 <StartTrialBtn
-    //                     {...props}
-    //                     onClick={mockOnClick}
-    //                 />
-    //             </Provider>,
-    //         );
-    //     });
+        // Mount the component
+        await act(async () => {
+            wrapper = mountWithIntl(
+                <Provider store={mockStore(clonedState)}>
+                    <StartTrialBtn
+                        {...props}
+                        onClick={mockOnClick}
+                    />
+                </Provider>,
+            );
+        });
 
-    //     await act(async () => {
-    //         wrapper.find('.start-trial-btn').simulate('click');
-    //     });
+        await act(async () => {
+            wrapper.find('.start-trial-btn').simulate('click');
+        });
 
-    //     expect(mockOnClick).not.toHaveBeenCalled();
-
-    //     expect(trackEvent).toHaveBeenCalledWith(TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_MODAL, 'test_telemetry_id');
-    // });
+        expect(mockOnClick).not.toHaveBeenCalled();
+    });
 });

@@ -1323,6 +1323,7 @@ export function actionsToMarkChannelAsRead(getState: GetStateFunc, channelId: st
                 channelId,
                 amount: channelMember.mention_count,
                 amountRoot: channelMember.mention_count_root,
+                amountUrgent: channelMember.urgent_mention_count,
             },
         });
     }
@@ -1352,6 +1353,7 @@ export function actionsToMarkChannelAsRead(getState: GetStateFunc, channelId: st
                 channelId: prevChannelId,
                 amount: prevChannelMember.mention_count,
                 amountRoot: prevChannelMember.mention_count_root,
+                amountUrgent: prevChannelMember.urgent_mention_count,
             },
         });
     }
@@ -1409,7 +1411,7 @@ export function markChannelAsUnread(teamId: string, channelId: string, mentions:
     };
 }
 
-export function actionsToMarkChannelAsUnread(getState: GetStateFunc, teamId: string, channelId: string, mentions: string[], fetchedChannelMember = false, isRoot = false) {
+export function actionsToMarkChannelAsUnread(getState: GetStateFunc, teamId: string, channelId: string, mentions: string[], fetchedChannelMember = false, isRoot = false, priority = '') {
     const state = getState();
     const {myMembers} = state.entities.channels;
     const {currentUserId} = state.entities.users;
@@ -1446,6 +1448,7 @@ export function actionsToMarkChannelAsUnread(getState: GetStateFunc, teamId: str
                 channelId,
                 amountRoot: isRoot ? 1 : 0,
                 amount: 1,
+                amountUrgent: priority === 'urgent' ? 1 : 0,
                 fetchedChannelMember,
             },
         });

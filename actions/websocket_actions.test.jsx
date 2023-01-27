@@ -17,7 +17,7 @@ import store from 'stores/redux_store.jsx';
 
 import configureStore from 'tests/test_store';
 
-import {browserHistory} from 'utils/browser_history';
+import {getHistory} from 'utils/browser_history';
 import Constants, {SocketEvents, UserStatuses, ActionTypes} from 'utils/constants';
 
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
@@ -74,8 +74,6 @@ jest.mock('plugins', () => ({
     ...jest.requireActual('plugins'),
     loadPluginsIfNecessary: jest.fn(() => Promise.resolve()),
 }));
-
-jest.mock('utils/browser_history');
 
 let mockState = {
     entities: {
@@ -596,7 +594,7 @@ describe('handleChannelUpdatedEvent', () => {
 
         testStore.dispatch(handleChannelUpdatedEvent(msg));
 
-        expect(browserHistory.replace).toHaveBeenCalled();
+        expect(getHistory().replace).toHaveBeenCalled();
     });
 
     test('should not change URL when another channel is updated', () => {
@@ -607,7 +605,7 @@ describe('handleChannelUpdatedEvent', () => {
 
         testStore.dispatch(handleChannelUpdatedEvent(msg));
 
-        expect(browserHistory.replace).not.toHaveBeenCalled();
+        expect(getHistory().replace).not.toHaveBeenCalled();
     });
 });
 

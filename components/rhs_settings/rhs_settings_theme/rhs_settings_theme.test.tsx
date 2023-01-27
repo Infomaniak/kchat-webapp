@@ -3,9 +3,10 @@
 
 import React, {ComponentProps} from 'react';
 import {shallow} from 'enzyme';
-import {IntlProvider} from 'react-intl';
-import {Provider} from 'react-redux';
-import {render, fireEvent, screen} from '@testing-library/react';
+
+// import {IntlProvider} from 'react-intl';
+// import {Provider} from 'react-redux';
+// import {render, fireEvent, screen} from '@testing-library/react';
 
 import {Preferences} from 'mattermost-redux/constants';
 
@@ -43,6 +44,7 @@ describe('components/user_settings/display/user_settings_theme/user_settings_the
         allowCustomThemes: true,
         showAllTeamsCheckbox: true,
         applyToAllTeams: true,
+        areAllSectionsInactive: false,
     };
 
     it('should match snapshot', () => {

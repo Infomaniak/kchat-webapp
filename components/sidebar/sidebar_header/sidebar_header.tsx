@@ -19,15 +19,16 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import MainMenu from 'components/main_menu';
 import AddChannelDropdown from 'components/sidebar/add_channel_dropdown';
 import {isAddChannelDropdownOpen} from 'selectors/views/add_channel_dropdown';
-import {OnboardingTourSteps, useShowOnboardingTutorialStep} from 'components/onboarding_tour';
-import {setAddChannelDropdown} from '../../../actions/views/add_channel_dropdown';
+import {useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
+import {OnboardingTourSteps} from 'components/tours';
+
+import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 
 type SidebarHeaderContainerProps = {
     id?: string;
 }
 
-type SidebarHeaderProps = {
-}
+type SidebarHeaderProps = Record<string, unknown>;
 
 const SidebarHeaderContainer = styled(Flex).attrs(() => ({
     element: 'header',
@@ -37,14 +38,13 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
 }))<SidebarHeaderContainerProps>`
     height: 46px;
     width: 100%;
-    padding: 0 16px;
+    padding: 0 16px !important;
 
     .dropdown-menu {
         position: absolute;
         transform: translate(0, 0);
         margin-left: 0;
         min-width: 210px;
-        max-width: 250px;
     }
 
     #SidebarContainer & .AddChannelDropdown_dropdownButton {
@@ -63,7 +63,7 @@ const SidebarHeading = styled(Heading).attrs(() => ({
     margin: 'none',
     size: 200,
 }))<SidebarHeaderProps>`
-    color: var(--sidebar-header-text-color);
+    color: var(--sidebar-header-text-color) !important;
     cursor: pointer;
     display: flex;
 
@@ -122,6 +122,7 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                 id={'sidebar-header-container'}
             >
                 <OverlayTrigger
+
                     delayShow={Constants.OVERLAY_TIME_DELAY}
                     placement='bottom'
                     overlay={currentTeam.description?.length ? (
@@ -133,8 +134,10 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                         className='SidebarHeaderMenuWrapper test-team-header'
                     >
                         <SidebarHeading>
-                            <span className='title'>{currentTeam.display_name}</span>
-                            <i className='icon icon-chevron-down'/>
+                            <button className='style--none sidebar-header'>
+                                <span className='title'>{currentTeam.display_name}</span>
+                                <i className='icon icon-chevron-down'/>
+                            </button>
                         </SidebarHeading>
                         <MainMenu
                             id='sidebarDropdownMenu'

@@ -34,6 +34,7 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     const lastViewedType = getLastViewedTypeByTeamName(state, ownProps.match.params.team);
     let channelName = getLastViewedChannelNameByTeamName(state, ownProps.match.params.team);
     const callChannel = getChannel(state, connectedChannelID(state));
+
     const previousTeamId = getPreviousTeamId(state);
     const team = getTeamByName(state, ownProps.match.params.team);
 

@@ -8,9 +8,9 @@ import {makeAddLastViewAtToProfiles} from 'mattermost-redux/selectors/entities/u
 import store from 'stores/redux_store';
 import {Constants} from 'utils/constants';
 
-import Provider from '../provider.jsx';
+import Provider from '../provider';
 
-import AtMentionSuggestion from './at_mention_suggestion.jsx';
+import AtMentionSuggestion from './at_mention_suggestion';
 
 const profilesInChannelOptions = {active: true};
 const regexForAtMention = /(?:^|\W)@([\p{L}\d\-_. ]*)$/iu;
@@ -71,8 +71,10 @@ export default class AtMentionProvider extends Provider {
             profileSuggestions.push(...usernameSuggestions);
         }
         [profile.first_name, profile.last_name, profile.nickname].forEach((property) => {
-            const suggestions = getSuggestionsSplitBy(property.toLowerCase(), ' ');
-            profileSuggestions.push(...suggestions);
+            if (property) {
+                const suggestions = getSuggestionsSplitBy(property.toLowerCase(), ' ');
+                profileSuggestions.push(...suggestions);
+            }
         });
         profileSuggestions.push(profile.first_name.toLowerCase() + ' ' + profile.last_name.toLowerCase());
 
