@@ -8,8 +8,8 @@ import {Client4} from 'mattermost-redux/client';
 import {IKConstants} from 'utils/constants-ik';
 import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
-import { isServerVersionGreaterThanOrEqualTo } from 'utils/server_version';
-import { getDesktopVersion } from 'utils/user_agent';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion} from 'utils/user_agent';
 
 let REFRESH_PROMISE: Promise<any> | null = null;
 
