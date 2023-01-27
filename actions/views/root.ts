@@ -13,8 +13,7 @@ import {ActionTypes} from 'utils/constants';
 import en from 'i18n/en.json';
 
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
-import {getDesktopVersion, isDesktopApp} from '../../utils/user_agent';
-import { isServerVersionGreaterThanOrEqualTo } from 'utils/server_version';
+import {isDesktopApp} from '../../utils/user_agent';
 const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};
 
 export type TranslationPluginFunction = (locale: string) => Translations
