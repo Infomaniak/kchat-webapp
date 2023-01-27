@@ -1,3 +1,17 @@
+## 0.7.6 (2023-01-25)
+
+## Changed (1 change)
+
+- [Revert "Merge branch 'fix/multiple-message-notifications' into 'master'"](kchat/webapp@519cc337a8e8d5f64dd25e37347a9c5d686be7d7) by @antonbuksa
+
+## 0.7.5 (2023-01-25)
+
+No changes.
+
+## 0.7.4 (2023-01-25)
+
+No changes.
+
 ## 0.7.3 (2023-01-23)
 
 ## Deprecated (1 change)
