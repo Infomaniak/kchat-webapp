@@ -27,6 +27,7 @@ import {
 import {getConfig, getServerVersion} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {closeModal, openModal} from 'actions/views/modals';
+import {isModalOpen} from 'selectors/views/modals';
 
 import {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
@@ -69,7 +70,9 @@ export function createChannel(channel: Channel, userId: string): ActionFunc {
             });
             dispatch(logError(error));
             if (isLimitExceeded(error)) {
-                dispatch(closeModal(ModalIdentifiers.NEW_CHANNEL_MODAL));
+                if (isModalOpen(getState(), ModalIdentifiers.NEW_CHANNEL_MODAL)) {
+                    dispatch(closeModal(ModalIdentifiers.NEW_CHANNEL_MODAL));
+                }
                 dispatch(openModal({
                     modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
                     dialogType: ChannelLimitReachedModal,

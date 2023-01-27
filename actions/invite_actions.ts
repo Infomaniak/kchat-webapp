@@ -14,6 +14,7 @@ import {getTeamMember} from 'mattermost-redux/selectors/entities/teams';
 import {getChannelMembersInChannels} from 'mattermost-redux/selectors/entities/channels';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
+import {isModalOpen} from 'selectors/views/modals';
 
 import {addUsersToTeam} from 'actions/team_actions';
 import {t} from 'utils/i18n';
@@ -170,13 +171,6 @@ export function sendGuestsInvites(
             try {
                 response = await dispatch(TeamActions.sendEmailGuestInvitesToChannelsGracefully(teamId, channels.map((x) => x.id), emails, message));
             } catch (e) {
-                if (isLimitExceeded(e)) {
-                    dispatch(closeModal(ModalIdentifiers.INVITATION));
-                    dispatch(openModal({
-                        modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
-                        dialogType: ChannelLimitReachedModal,
-                    }));
-                }
                 response = {data: emails.map((email) => ({email, error: {error: localizeMessage('invite.guests.unable-to-add-the-user-to-the-channels', 'Unable to add the guest to the channels.')}}))};
             }
 
@@ -186,6 +180,15 @@ export function sendGuestsInvites(
                 }
                 for (const email of emails) {
                     notSent.push({email, reason: response.error.message});
+                }
+                if (isLimitExceeded(response.error)) {
+                    if (isModalOpen(state, ModalIdentifiers.INVITATION)) {
+                        dispatch(closeModal(ModalIdentifiers.INVITATION));
+                    }
+                    dispatch(openModal({
+                        modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
+                        dialogType: ChannelLimitReachedModal,
+                    }));
                 }
             } else {
                 for (const res of (response.data || [])) {
