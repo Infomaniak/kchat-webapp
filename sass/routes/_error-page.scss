@@ -86,6 +86,10 @@ body {
                     display: flex;
                     gap: 16px;
                     align-items: center;
+
+                    > a {
+                        border-radius: 4px;
+                    }
                 }
 
                 .error__graphic {
