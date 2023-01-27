@@ -435,3 +435,6 @@ export function redirectToManagerDashboard(groupId: number) {
     window.open(`${IKConstants.MANAGER_URL}v3/${groupId}/ng/kchat`, '_blank');
 }
 
+export function redirectToManagerProfile() {
+    window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
+}

@@ -154,6 +154,23 @@ export function getCloudLimits(): ActionFunc {
     };
 }
 
+export function getUsage(): ActionFunc {
+    return async (dispatch: DispatchFunc) => {
+        try {
+            const result = await Client4.getUsage();
+            if (result) {
+                dispatch({
+                    type: CloudTypes.RECEIVED_USAGE,
+                    data: result,
+                });
+            }
+        } catch (e) {
+            return e;
+        }
+        return true;
+    };
+}
+
 export function getMessagesUsage(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         try {

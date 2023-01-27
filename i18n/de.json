@@ -5667,5 +5667,18 @@
   "workspace_limits.teams_limit_reached.view_upgrade_options": "Zeige Upgrade Optionen",
   "workspace_limits.upgrade": "Upgrade zur Vermeidung von {planName} Datenbeschränkungen",
   "workspace_limits.upgrade_reasons.free": "{planName} ist beschränkt auf {messagesLimit} Nachrichtenverlauf, {storageLimit} Dateispeicher, {appsLimit} Anwendungen, und {boardsCardsLimit} Board-Karten. Du kannst etwas löschen um Platz freizugeben oder auf ein bezahltes Abonnement wechseln.",
-  "yourcomputer": "Dein Computer"
+  "yourcomputer": "Dein Computer",
+  "create_channel.limit_error": "Kanal-Limit erreicht.",
+  "file_upload.limit_error": "Speichergrenze erreicht.",
+  "invite.guests.limit_error": "Gast-Limit erreicht.",
+  "limitModal.plans": "Verfügbar für Pläne",
+  "limitModal.planList": "Basic, Teams & Pro",
+  "limitModal.upgrade": "Mein Angebot ändern",
+  "limitModal.contactAdmin": "Einen Administrator informieren",
+  "externalLimit.title": "Kommunizieren Sie besser mit Personen außerhalb Ihrer Organisation",
+  "externalLimit.subtitle": "Sie haben das Limit für externe Nutzer ({externalsUsage, number}/{externalsLimit, number}) in Ihrem kChat erreicht. Um weitere einzuladen, müssen Sie sich für ein höheres Angebot anmelden.",
+  "storageLimit.title": "Erhöhen Sie den Speicherplatz in Ihrer kSuite!",
+  "storageLimit.subtitle": "Ihr Speicherplatz ist voll. Schalten Sie mehr Anwendungen und Funktionen frei, indem Sie Ihren Speicherplatz aufstocken und die Zusammenarbeit mit kDrive, kChat... optimieren. Melden Sie sich für ein höheres Angebot an, um neue Dateien an kChat und kDrive zu senden.",
+  "channelLimit.title": "Erstellen Sie neue Kanäle, um besser mit den Mitgliedern Ihrer Organisation zu kommunizieren.",
+  "channelLimit.subtitle": "Sie haben das Limit für öffentliche Kanäle ({publicChannelUsage, number}/{publicChannelLimit, number}) und private Kanäle ({privateChannelUsage, number}/{privateChannelLimit, number}) in Ihrem kChat erreicht. Um weitere zu erstellen, müssen Sie ein höheres Angebot abonnieren."
 }

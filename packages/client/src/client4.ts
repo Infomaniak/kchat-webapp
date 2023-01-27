@@ -4085,6 +4085,13 @@ export default class Client4 {
         );
     }
 
+    getUsage = () => {
+        return this.doFetch(
+            this.getUsageRoute(),
+            {method: 'get'},
+        );
+    }
+
     getPostsUsage = () => {
         return this.doFetch<PostsUsageResponse>(
             `${this.getUsageRoute()}/posts`,

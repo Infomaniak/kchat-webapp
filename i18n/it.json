@@ -3799,5 +3799,18 @@
   "widgets.users_emails_input.loading": "Caricamento",
   "widgets.users_emails_input.no_user_found_matching": "Nessuna corrispondenza per **{text}**, digitare l'indirizzo email",
   "widgets.users_emails_input.valid_email": "Aggiungi **{email}**",
-  "yourcomputer": "Il tuo pc"
+  "yourcomputer": "Il tuo pc",
+  "create_channel.limit_error": "Il limite del canale è stato raggiunto.",
+  "file_upload.limit_error": "Limite di memoria raggiunto.",
+  "invite.guests.limit_error": "Limite di ospiti raggiunto.",
+  "limitModal.plans": "Disponibile per i piani",
+  "limitModal.planList": "Basic, Teams & Pro",
+  "limitModal.upgrade": "Modificare la mia offerta",
+  "limitModal.contactAdmin": "Informare un amministratore",
+  "externalLimit.title": "Comunicare meglio con le persone esterne alla vostra organizzazione",
+  "externalLimit.subtitle": "È stato raggiunto il limite di utenti esterni ({externalsUsage, number}/{externalsLimit, number}) sulla kChat. Per invitare altri utenti, è necessario sottoscrivere un'offerta superiore.",
+  "storageLimit.title": "Aumentate lo spazio di archiviazione della vostra kSuite!",
+  "storageLimit.subtitle": "Lo spazio di archiviazione è pieno. Sbloccate più applicazioni e funzioni aumentando lo spazio di archiviazione e ottimizzate il lavoro collaborativo con kDrive, kChat... Registratevi per un'offerta premium per inviare nuovi file a kChat e kDrive.",
+  "channelLimit.title": "Creare nuovi canali per comunicare meglio con i membri dell'organizzazione",
+  "channelLimit.subtitle": "È stato raggiunto il limite di canali pubblici ({publicChannelUsage, number}/{publicChannelLimit, number}) e privati ({privateChannelUsage, number}/{privateChannelLimit, number}) sulla kChat. Per crearne altri, è necessario sottoscrivere un pacchetto superiore."
 }
