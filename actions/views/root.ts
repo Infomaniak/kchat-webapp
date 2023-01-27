@@ -24,7 +24,11 @@ export function loadConfigAndMe() {
         // If expired, refresh token
         if (isDesktopApp() && checkIKTokenIsExpired()) {
             console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
-            await refreshIKToken(/*redirectToReam*/false)
+            await refreshIKToken(/*redirectToReam*/false)?.then(() => {
+                console.log('[actions/view/root] desktop token refreshed'); // eslint-disable-line no-console
+            }).catch((e: unknown) => {
+                console.warn('[actions/view/root] desktop token refresh error: ', e); // eslint-disable-line no-console
+            });
         }
 
         const [{data: clientConfig}] = await Promise.all([
