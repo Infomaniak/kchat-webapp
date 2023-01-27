@@ -661,12 +661,12 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED:
         dispatch(handleHostedCustomerSignupProgressUpdated(msg));
-        break;
-    case SocketEvents.KSUITE_ADDED:
-        handleKSuiteAdded(msg)
-        break;
-    case SocketEvents.KSUITE_DELETED:
-        handleKSuiteDeleted(msg)
+        // break;
+    // case SocketEvents.KSUITE_ADDED:
+    //     handleKSuiteAdded(msg)
+    //     break;
+    // case SocketEvents.KSUITE_DELETED:
+    //     handleKSuiteDeleted(msg)
     default:
     }
 
