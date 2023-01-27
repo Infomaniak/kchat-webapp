@@ -217,11 +217,7 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                 <p>
                     <FormattedMessage
                         id='error.blocked.message'
-                        defaultMessage='The kSuite product has expired since {expirationDate}. Please renew it to continue communicating within your organization with kChat.'
-                        values={{
-                            //must be replaced with the real expiry date
-                            expirationDate: '12/03/2022'
-                        }}
+                        defaultMessage='The kSuite product has expired. Please renew it to continue communicating within your organization with kChat.'
                     />
                 </p>
             )

@@ -3322,7 +3322,7 @@
   "error.no_team.title": "Sie haben keinen kChat, lernen Sie ihn mit kSuite kennen",
   "error.no_team.message": "kSuite integriert alle unsere Produktivitätsanwendungen, einschließlich kChat, um live zu kommunizieren, sich auszutauschen und Ihre Teams zu koordinieren.",
   "error.blocked.title": "Der kChat {groupName} ist derzeit gesperrt",
-  "error.blocked.message": "Das Produkt kSuite ist seit dem {expirationDate} abgelaufen. Bitte verlängern Sie es, um weiterhin innerhalb Ihrer Organisation mit kChat kommunizieren zu können.",
+  "error.blocked.message": "Das Produkt kSuite ist abgelaufen. Bitte verlängern Sie es, um weiterhin innerhalb Ihrer Organisation mit kChat kommunizieren zu können.",
   "error.not_found.message": "Die Seite, die du versuchst zu erreichen, existiert nicht",
   "error.not_found.title": "Seite nicht gefunden",
   "error.oauth_access_denied": "Du musst kChat autorisieren, um sich mit {service} anmelden zu können.",

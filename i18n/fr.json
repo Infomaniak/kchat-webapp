@@ -3151,7 +3151,7 @@
   "error.no_team.title": "Vous ne possédez pas de kChat, découvrez le avec kSuite",
   "error.no_team.message": "kSuite intègre tous nos applications de productivité dont kChat pour communiquer en direct, partager et coordonner vos équipes.",
   "error.blocked.title": "Le kChat {groupName} est actuellement bloqué",
-  "error.blocked.message": "Le produit kSuite a expiré depuis le {expirationDate}. Veuillez le renouveler pour continuer à communiquer au sein de votre organisation avec kChat.",
+  "error.blocked.message": "Le produit kSuite a expiré. Veuillez le renouveler pour continuer à communiquer au sein de votre organisation avec kChat.",
   "error.not_found.message": "La page que vous essayer d'atteindre n'existe pas",
   "error.not_found.title": "Page non trouvée",
   "error.oauth_access_denied": "Vous devez autoriser kChat à se connecter avec {service}.",
