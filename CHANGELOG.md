@@ -1,3 +1,9 @@
+## 0.8.0 (2023-01-27)
+
+## Added (1 change)
+
+- [support multiple servers on desktop](kchat/webapp@3a4a274739c506fb1d954fa2549fbee53dbc2123) by @antonbuksa ([merge request](kchat/webapp!262))
+
 ## 0.7.6 (2023-01-25)
 
 ## Changed (1 change)
