@@ -18,7 +18,7 @@ function mapStateToProps(state: GlobalState) {
     const config = getConfig(state);
     const user = getCurrentUser(state);
 
-    const teamId = LocalStorageStore.getPreviousTeamId(user.id);
+    const teamId = LocalStorageStore.getPreviousTeamId(user?.id);
     let ikGroupId;
     let ikGroupName;
     if (teamId) {
