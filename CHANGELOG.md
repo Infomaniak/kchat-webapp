@@ -1,3 +1,9 @@
+## 0.8.1 (2023-01-27)
+
+## Changed (1 change)
+
+- [tweak v2 token validity condition](kchat/webapp@e9c646488b75a4a5cf54450acae84912095deb57) by @antonbuksa
+
 ## 0.8.0 (2023-01-27)
 
 ## Added (1 change)
