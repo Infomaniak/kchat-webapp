@@ -80,7 +80,7 @@ export default class SidebarMenu extends React.PureComponent<Props, State> {
     }
 
     setMenuPosition = () => {
-        if (this.props.menuButtonRef && !this.props.menuButtonRef.current) {
+        if (!this.props.menuButtonRef.current) {
             return;
         }
 
