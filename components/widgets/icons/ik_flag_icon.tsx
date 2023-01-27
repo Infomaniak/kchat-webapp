@@ -8,15 +8,15 @@ import {useIntl} from 'react-intl';
 import {GlobalState} from 'types/store';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
-export default function IKFlagIcon({scale = 0.5, ...props}: {scale?: number; props?: React.HTMLAttributes<HTMLSpanElement>}) {
+export default function IKFlagIcon(props: React.HTMLAttributes<HTMLSpanElement>) {
     const {formatMessage} = useIntl();
     const theme = useSelector((state: GlobalState) => getTheme(state));
     return (
         <span {...props}>
             {theme.ikType === 'dark' ? (
                 <svg
-                    width={Math.round(309 * scale).toString()}
-                    height={Math.round(250 * scale).toString()}
+                    width='155'
+                    height='125'
                     viewBox='0 0 309 250'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
@@ -53,8 +53,8 @@ export default function IKFlagIcon({scale = 0.5, ...props}: {scale?: number; pro
                 </svg>
             ) : (
                 <svg
-                    width={Math.round(309 * scale).toString()}
-                    height={Math.round(250 * scale).toString()}
+                    width='155'
+                    height='125'
                     viewBox='0 0 309 250'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
