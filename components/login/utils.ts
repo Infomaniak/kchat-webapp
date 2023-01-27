@@ -168,9 +168,9 @@ async function refreshTokenV2() {
 }
 
 function isValidTokenV2(token: {token: string, refreshToken: string, expiresAt: number}) {
-    const isExpired = token.expiresAt <= parseInt(Date.now() / 1000, 10);
+    const isExpiredInOneMinute = token.expiresAt <= ((Date.now() / 1000) + 60);
 
-    return !isExpired
+    return !isExpiredInOneMinute;
 }
 
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
