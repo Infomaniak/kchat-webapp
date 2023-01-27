@@ -111,8 +111,6 @@ const Login = () => {
                     refreshToken: string;
                     expiresAt: number;
                 }) => {
-                    console.log(data)
-
                     if (!Object.keys(data).length) { // eslint-disable-line no-negated-condition
                         if (isDefaultAuthServer()) {
                             getChallengeAndRedirectToLogin();

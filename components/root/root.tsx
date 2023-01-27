@@ -99,7 +99,7 @@ import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
-import { isServerVersionGreaterThanOrEqualTo } from 'utils/server_version';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
