@@ -7,14 +7,14 @@ import {useSelector} from 'react-redux';
 import {GlobalState} from 'types/store';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
-const ReadThreadIllustration = ({scale = 0.5, ...props}: {scale?: number; props?: React.HTMLAttributes<HTMLSpanElement>}) => {
+const ReadThreadIllustration = (props: React.HTMLAttributes<HTMLSpanElement>) => {
     const theme = useSelector((state: GlobalState) => getTheme(state));
     return (
         <span {...props}>
             {theme.ikType === 'dark' ? (
                 <svg
-                    width={Math.round(314 * scale).toString()}
-                    height={Math.round(250 * scale).toString()}
+                    width='157'
+                    height='125'
                     viewBox='0 0 314 250'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
@@ -52,8 +52,8 @@ const ReadThreadIllustration = ({scale = 0.5, ...props}: {scale?: number; props?
                 </svg>
             ) : (
                 <svg
-                    width={Math.round(314 * scale).toString()}
-                    height={Math.round(250 * scale).toString()}
+                    width='157'
+                    height='125'
                     viewBox='0 0 314 250'
                     fill='none'
                     xmlns='http://www.w3.org/2000/svg'
