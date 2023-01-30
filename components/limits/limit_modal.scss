@@ -1,28 +1,38 @@
-.limit-modal-header {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-
-    &__icon {
+.limit-modal {
+    .limit-modal-header {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        gap: 15px;
+
+        &__icon {
+            display: flex;
+            justify-content: center;
+        }
+
+        &__title {
+            text-align: center;
+        }
     }
 
-    &__title {
+    .limit-modal-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
+        gap: 20px;
+        padding-bottom: 20px;
+
+        &__wrapper {
+            display: flex;
+            gap: 5px;
+        }
     }
-}
 
-.limit-modal-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 20px;
-    padding-bottom: 20px;
-
-    &__wrapper {
+    .modal-footer {
         display: flex;
-        gap: 5px;
+        justify-content: space-between;
+        &::before, &::after {
+            display: none;
+        }
     }
 }

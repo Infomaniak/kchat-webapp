@@ -59,23 +59,26 @@ const StorageLimitReachedModal = () => {
 
     const content = (
         <div className='limit-modal-content'>
-            {formatMessage({
-                id: 'storageLimit.subtitle',
-                defaultMessage: 'Your storage space is full. Unlock more applications, features by boosting your storage space and optimize collaborative work with kDrive, kChat... Sign up for a higher plan to send new files to kChat and kDrive.',
-            })}
-            <a
-                onClick={redirectToManagerProfile}
-            >
-                {formatMessage({
-                    id: 'admin.billing.subscription.LearnMore',
-                    defaultMessage: 'Learn more',
-                })}
-            </a>
-
+            {isAdmin ? (
+                formatMessage({
+                    id: 'storageLimit.subtitle.admin',
+                    defaultMessage: 'Your storage space is full. Sign up for a higher plan to continue sending files.',
+                })
+            ) : (
+                formatMessage({
+                    id: 'storageLimit.subtitle',
+                    defaultMessage: 'Your storage space is full. To continue uploading files, please contact an administrator to change the offer.',
+                })
+            )}
         </div>
     );
 
     const confirmButtonText = isAdmin ? formatMessage({id: 'limitModal.upgrade', defaultMessage: 'Modify my offer'}) : formatMessage({id: 'general_button.close', defaultMessage: 'Close'});
+
+    let cancelButtonText;
+    if (isAdmin) {
+        cancelButtonText = formatMessage({id: 'Not now', defaultMessage: 'Pas pour le moment'});
+    }
 
     if (!limitsLoaded || !usageLoaded || !isLimited(limits)) {
         return null;
@@ -83,11 +86,13 @@ const StorageLimitReachedModal = () => {
 
     return (
         <GenericModal
+            className='limit-modal'
             id='StorageLimitReachedModal'
             handleConfirm={handleConfirm}
             handleCancel={handleCancel}
             modalHeaderText={header}
             confirmButtonText={confirmButtonText}
+            cancelButtonText={cancelButtonText}
             show={show}
         >
             {content}

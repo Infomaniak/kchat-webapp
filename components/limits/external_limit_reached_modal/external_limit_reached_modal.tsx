@@ -92,6 +92,7 @@ const ExternalLimitReachedModal = () => {
 
     return (
         <GenericModal
+            className='limit-modal'
             id='ExternalLimitReachedModal'
             modalHeaderText={header}
             handleCancel={handleCancel}

@@ -3810,7 +3810,8 @@
   "externalLimit.title": "Comunicare meglio con le persone esterne alla vostra organizzazione",
   "externalLimit.subtitle": "È stato raggiunto il limite di utenti esterni ({externalsUsage, number}/{externalsLimit, number}) sulla kChat. Per invitare altri utenti, è necessario sottoscrivere un'offerta superiore.",
   "storageLimit.title": "Aumentate lo spazio di archiviazione della vostra kSuite!",
-  "storageLimit.subtitle": "Lo spazio di archiviazione è pieno. Sbloccate più applicazioni e funzioni aumentando lo spazio di archiviazione e ottimizzate il lavoro collaborativo con kDrive, kChat... Registratevi per un'offerta premium per inviare nuovi file a kChat e kDrive.",
+  "storageLimit.subtitle": "Lo spazio di archiviazione è pieno. Per continuare a inviare file, contattare un amministratore per modificare l'offerta.",
+  "storageLimit.subtitle.admin": "Lo spazio di archiviazione è pieno. Abbonarsi a un'offerta superiore per continuare a inviare file.",
   "channelLimit.title": "Creare nuovi canali per comunicare meglio con i membri dell'organizzazione",
   "channelLimit.subtitle": "È stato raggiunto il limite di canali pubblici ({publicChannelUsage, number}/{publicChannelLimit, number}) e privati ({privateChannelUsage, number}/{privateChannelLimit, number}) sulla kChat. Per crearne altri, è necessario sottoscrivere un pacchetto superiore."
 }

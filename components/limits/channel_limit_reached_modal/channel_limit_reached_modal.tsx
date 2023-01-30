@@ -80,6 +80,7 @@ const ChannelLimitReachedModal = () => {
 
     return (
         <GenericModal
+            className='limit-modal'
             id='ChannelLimitReachedModal'
             show={show}
             handleConfirm={handleConfirm}
