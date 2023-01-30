@@ -4395,42 +4395,6 @@ export default class Client4 {
     /****************************************************/
 
     /**
-     * Store IKToken infos in localStorage and update Client
-     */
-    storeTokenResponse(response: { expires_in?: any; access_token?: any; refresh_token?: any }) {
-        // TODO: store in redux
-        const d = new Date();
-        d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
-        localStorage.setItem('IKToken', response.access_token);
-        localStorage.setItem('IKRefreshToken', response.refresh_token);
-        localStorage.setItem('IKTokenExpire', (d.getTime() / 1000, 10).toString());
-        localStorage.setItem('tokenExpired', '0');
-        this.setToken(response.access_token);
-        this.setCSRF(response.access_token);
-        this.setAuthHeader = true;
-    }
-
-    /**
-     * Clear IKToken informations in localStorage
-     */
-    clearLocalStorageToken() {
-        console.log('[client > clearLocalStorageToken] Clear token storage');
-        localStorage.removeItem('IKToken');
-        localStorage.removeItem('IKRefreshToken');
-        localStorage.removeItem('IKTokenExpire');
-        localStorage.setItem('tokenExpired', '1');
-        window.postMessage(
-            {
-                type: 'token-cleared',
-                message: {
-                    token: null,
-                },
-            },
-            window.origin,
-        );
-    }
-
-    /**
      * get code_verifier for challenge
      * @returns string
      */
