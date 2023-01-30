@@ -84,7 +84,7 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, refreshIKToken, storeTokenResponse} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 
@@ -99,6 +99,7 @@ import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
@@ -200,26 +201,28 @@ export default class Root extends React.PureComponent<Props, State> {
         setUrl(getSiteURL());
 
         if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
+            if (!isServerVersionGreaterThanOrEqualTo(UserAgent.getDesktopVersion(), '2.0.0')) {
+                const token = localStorage.getItem('IKToken');
+                const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-            // Enable authHeader and set bearer token
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                console.log('[components/root > constructor] updating token in client4'); // eslint-disable-line no-console
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                LocalStorageStore.setWasLoggedIn(true);
-                console.log('[components/root > constructor] token-refreshed sent to electron'); // eslint-disable-line no-console
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token,
+                // Enable authHeader and set bearer token
+                if (token && tokenExpire && !checkIKTokenIsExpired()) {
+                    console.log('[components/root > constructor] updating token in client4'); // eslint-disable-line no-console
+                    Client4.setAuthHeader = true;
+                    Client4.setToken(token);
+                    Client4.setCSRF(token);
+                    LocalStorageStore.setWasLoggedIn(true);
+                    console.log('[components/root > constructor] token-refreshed sent to electron'); // eslint-disable-line no-console
+                    window.postMessage(
+                        {
+                            type: 'token-refreshed',
+                            message: {
+                                token,
+                            },
                         },
-                    },
-                    window.origin,
-                );
+                        window.origin,
+                    );
+                }
             }
         } else {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
@@ -525,6 +528,8 @@ export default class Root extends React.PureComponent<Props, State> {
                     type: 'token-refreshed',
                     message: {
                         token: response.access_token,
+                        refreshToken: response.refresh_token,
+                        expiresAt: parseInt(Date.now() / 1000) + response.expires_in,
                     },
                 },
                 window.origin,
