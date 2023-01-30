@@ -152,8 +152,6 @@ const GlobalThreads = () => {
         setFilter(ThreadFilter.unread);
     }, []);
 
-    const noUnread = filter === ThreadFilter.unread && numUnread === 0;
-
     return (
         <div
             id='app-content'
