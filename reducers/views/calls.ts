@@ -5,8 +5,6 @@ import {combineReducers} from 'redux';
 import {UserProfile} from 'mattermost-redux/types/users';
 
 import {ActionTypes} from 'utils/constants';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import {IKConstants} from '../../utils/constants-ik';
 
 export type UserState = {
     voice: boolean;
