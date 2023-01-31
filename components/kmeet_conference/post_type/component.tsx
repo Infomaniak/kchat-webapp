@@ -45,7 +45,6 @@ const PostType = ({post, connectedID, connectedUrl, hasCall, pictures, profiles,
     //         });
     //     }
     // });
-
     const onJoinCallClick = () => {
         const kmeetUrl = new URL(connectedUrl);
         window.open(kmeetUrl.href, '_blank', 'noopener');

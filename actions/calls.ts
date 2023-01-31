@@ -82,7 +82,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             });
 
             if (data && data.url) {
-                const kmeetUrl = new URL(`${IKConstants.KMEET_ENDPOINT}${data.id}`);
+                const kmeetUrl = new URL(data.url);
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
 

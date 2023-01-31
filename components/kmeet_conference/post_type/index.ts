@@ -11,7 +11,7 @@ import {Post} from 'mattermost-redux/types/posts';
 import {GlobalState} from 'mattermost-redux/types/store';
 
 import {
-    connectedCallID,
+    connectedCallID, connectedCallUrl,
     voiceConnectedChannels,
     voiceConnectedProfilesInChannel,
 } from 'selectors/calls';
@@ -26,8 +26,9 @@ interface OwnProps {
 const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     let hasCall = false;
     const connectedID = connectedCallID(state) || '';
-    // const connectedUrl = connectedCallUrl(state) || '';
-    const connectedUrl = (ownProps.post.props.conference_id && !ownProps.post.props.end_at) ? `${IKConstants.KMEET_ENDPOINT}${ownProps.post.props.conference_id}` : '';
+    const connectedUrl = (ownProps.post.props.conference_id && !ownProps.post.props.end_at) ? connectedCallUrl(state) : '';
+
+    // const connectedUrl = (ownProps.post.props.conference_id && !ownProps.post.props.end_at) ? `${IKConstants.KMEET_ENDPOINT}${ownProps.post.props.conference_id}` : '';
     const channels = voiceConnectedChannels(state);
 
     let profiles = [];

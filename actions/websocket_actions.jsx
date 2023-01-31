@@ -1832,7 +1832,7 @@ function handleIncomingConferenceCall(msg) {
 
         // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
         const channel = getChannel(state, connectedChannelID(doGetState()));
-        
+
         // users = doGetProfilesInChannel(state, msg.data.channel_id, true);
 
         // if (users.length <= 0) {
@@ -1847,6 +1847,7 @@ function handleIncomingConferenceCall(msg) {
                 participants: msg.data.participants,
                 userID: msg.data.user_id,
                 currentUserID: getCurrentUserId(getState()),
+                url: msg.data.url,
             },
         });
 
