@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 
@@ -17,7 +17,6 @@ import {isModalOpen} from 'selectors/views/modals';
 import {GlobalState} from 'types/store';
 
 import {ModalIdentifiers} from 'utils/constants';
-import {isLimited} from 'utils/limits';
 
 import '../limit_modal.scss';
 
@@ -32,16 +31,19 @@ const ExternalLimitReachedModal = () => {
     const {guests: externalsLimit} = limits;
     const {guests: externalsUsage, usageLoaded} = useGetUsage();
 
-    const handleConfirm = () => {
-        if (!isAdmin) {
-            return dispatch(closeModal(ModalIdentifiers.EXTERNAL_LIMIT_REACHED));
+    const handleClose = useCallback(() => {
+        dispatch(closeModal(ModalIdentifiers.EXTERNAL_LIMIT_REACHED));
+    }, [dispatch]);
+
+    const handleConfirm = useCallback(() => {
+        if (isAdmin) {
+            redirectToManagerProfile();
         }
-        return redirectToManagerProfile();
-    };
+    }, [isAdmin]);
 
     let handleCancel;
     if (isAdmin) {
-        handleCancel = () => dispatch(closeModal(ModalIdentifiers.EXTERNAL_LIMIT_REACHED));
+        handleCancel = handleClose;
     }
 
     const header = (
@@ -86,7 +88,8 @@ const ExternalLimitReachedModal = () => {
 
     const confirmButtonText = isAdmin ? formatMessage({id: 'limitModal.upgrade', defaultMessage: 'Modify my offer'}) : formatMessage({id: 'general_button.close', defaultMessage: 'Close'});
 
-    if (!limitsLoaded || !usageLoaded || !isLimited(limits)) {
+    if (!limitsLoaded || !usageLoaded) {
+        handleClose();
         return null;
     }
 
@@ -95,6 +98,7 @@ const ExternalLimitReachedModal = () => {
             className='limit-modal'
             id='ExternalLimitReachedModal'
             modalHeaderText={header}
+            onExited={handleClose}
             handleCancel={handleCancel}
             handleConfirm={handleConfirm}
             confirmButtonText={confirmButtonText}

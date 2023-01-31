@@ -91,7 +91,7 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                     ]));
 
                     onSuccess(response, channelId, rootId);
-                } else if (isLimitExceeded(JSON.parse(xhr.response))) {
+                } else if (xhr.status === 409 && isLimitExceeded(JSON.parse(xhr.response))) {
                     if (onError) {
                         onError(localizeMessage('file_upload.limit_error', 'Storage limit reached.'), clientId, channelId, rootId);
                     }

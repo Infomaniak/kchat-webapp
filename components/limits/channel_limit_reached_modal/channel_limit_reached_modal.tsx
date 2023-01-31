@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 
@@ -12,7 +12,6 @@ import {GlobalState} from 'types/store';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import {ModalIdentifiers} from 'utils/constants';
-import {isLimited} from 'utils/limits';
 
 import GenericModal from 'components/generic_modal';
 import ChannelLimitReachedIcon from 'components/widgets/icons/channel_limit_reached_icon';
@@ -32,16 +31,19 @@ const ChannelLimitReachedModal = () => {
     const {public_channels: publicChannelLimit, private_channels: privateChannelLimit} = limits;
     const {public_channels: publicChannelUsage, private_channels: privateChannelUsage, usageLoaded} = useGetUsage();
 
-    const handleConfirm = () => {
-        if (!isAdmin) {
-            return dispatch(closeModal(ModalIdentifiers.CHANNEL_LIMIT_REACHED));
+    const handleClose = useCallback(() => {
+        dispatch(closeModal(ModalIdentifiers.CHANNEL_LIMIT_REACHED));
+    }, [dispatch]);
+
+    const handleConfirm = useCallback(() => {
+        if (isAdmin) {
+            redirectToManagerProfile();
         }
-        return redirectToManagerProfile();
-    };
+    }, [isAdmin]);
 
     let handleCancel;
     if (isAdmin) {
-        handleCancel = () => dispatch(closeModal(ModalIdentifiers.CHANNEL_LIMIT_REACHED));
+        handleCancel = handleClose;
     }
 
     const header = (
@@ -74,7 +76,8 @@ const ChannelLimitReachedModal = () => {
 
     const confirmButtonText = isAdmin ? formatMessage({id: 'limitModal.upgrade', defaultMessage: 'Modify my offer'}) : formatMessage({id: 'general_button.close', defaultMessage: 'Close'});
 
-    if (!usageLoaded || !limitsLoaded || !isLimited(limits)) {
+    if (!usageLoaded || !limitsLoaded) {
+        handleClose();
         return null;
     }
 
@@ -83,6 +86,7 @@ const ChannelLimitReachedModal = () => {
             className='limit-modal'
             id='ChannelLimitReachedModal'
             show={show}
+            onExited={handleClose}
             handleConfirm={handleConfirm}
             handleCancel={handleCancel}
             modalHeaderText={header}

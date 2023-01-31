@@ -1,12 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 
 import {ModalIdentifiers} from 'utils/constants';
-import {isLimited} from 'utils/limits';
 
 import GenericModal from 'components/generic_modal';
 import StorageLimitReachedIcon from 'components/widgets/icons/storage_limit_reached_icon';
@@ -28,19 +27,22 @@ const StorageLimitReachedModal = () => {
     const isAdmin = useSelector((state: GlobalState) => isCurrentUserSystemAdmin(state));
     const show = useSelector((state: GlobalState) => isModalOpen(state, ModalIdentifiers.STORAGE_LIMIT_REACHED));
 
-    const [limits, limitsLoaded] = useGetLimits();
+    const [limitsLoaded] = useGetLimits();
     const {usageLoaded} = useGetUsage();
 
-    const handleConfirm = () => {
-        if (!isAdmin) {
-            return dispatch(closeModal(ModalIdentifiers.STORAGE_LIMIT_REACHED));
+    const handleClose = useCallback(() => {
+        dispatch(closeModal(ModalIdentifiers.STORAGE_LIMIT_REACHED));
+    }, [dispatch]);
+
+    const handleConfirm = useCallback(() => {
+        if (isAdmin) {
+            redirectToManagerProfile();
         }
-        return redirectToManagerProfile();
-    };
+    }, [isAdmin]);
 
     let handleCancel;
     if (isAdmin) {
-        handleCancel = () => dispatch(closeModal(ModalIdentifiers.STORAGE_LIMIT_REACHED));
+        handleCancel = handleClose;
     }
 
     const header = (
@@ -80,7 +82,8 @@ const StorageLimitReachedModal = () => {
         cancelButtonText = formatMessage({id: 'Not now', defaultMessage: 'Pas pour le moment'});
     }
 
-    if (!limitsLoaded || !usageLoaded || !isLimited(limits)) {
+    if (!limitsLoaded || !usageLoaded) {
+        handleClose();
         return null;
     }
 
@@ -88,6 +91,7 @@ const StorageLimitReachedModal = () => {
         <GenericModal
             className='limit-modal'
             id='StorageLimitReachedModal'
+            onExited={handleClose}
             handleConfirm={handleConfirm}
             handleCancel={handleCancel}
             modalHeaderText={header}
