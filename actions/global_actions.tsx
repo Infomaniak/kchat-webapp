@@ -438,3 +438,7 @@ export function redirectToManagerDashboard(groupId: number) {
 export function redirectToManagerProfile() {
     window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
 }
+
+export function redirectTokSuiteDashboard() {
+    window.open(`${IKConstants.MANAGER_URL}/v3/ng/k-suite/dashboard`, '_blank');
+}

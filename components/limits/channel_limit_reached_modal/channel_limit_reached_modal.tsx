@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 
 import {closeModal} from 'actions/views/modals';
-import {redirectToManagerProfile} from 'actions/global_actions';
+import {redirectTokSuiteDashboard} from 'actions/global_actions';
 import {isModalOpen} from 'selectors/views/modals';
 import {GlobalState} from 'types/store';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
@@ -37,7 +37,7 @@ const ChannelLimitReachedModal = () => {
 
     const handleConfirm = useCallback(() => {
         if (isAdmin) {
-            redirectToManagerProfile();
+            redirectTokSuiteDashboard();
         }
     }, [isAdmin]);
 
