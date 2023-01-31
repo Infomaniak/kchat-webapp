@@ -74,10 +74,7 @@ const LessThanMaxFreeUsers = ({setHeader, pluginButtons}: {setHeader: React.Reac
             {pluginButtons}
             {setHeader}
             <div className='LessThanMaxFreeUsers'>
-                <EmptyStateThemeableSvg
-                    width={129}
-                    height={154}
-                />
+                <EmptyStateThemeableSvg/>
                 <div
                     className='titleAndButton'
                     style={{justifyContent: 'center'}}
