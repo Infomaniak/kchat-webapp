@@ -442,3 +442,11 @@ export function redirectToManagerProfile() {
 export function redirectTokSuiteDashboard() {
     window.open(`${IKConstants.MANAGER_URL}/v3/ng/k-suite/dashboard`, '_blank');
 }
+
+export function redirectToShop() {
+    window.open('https://www.infomaniak.com/gtl/kchat', '_blank');
+}
+
+export function redirectToKSuite() {
+    window.open('https://www.infomaniak.com/gtl/ksuite', '_blank');
+}

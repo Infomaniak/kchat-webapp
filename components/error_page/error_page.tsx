@@ -15,9 +15,14 @@ import {isDesktopApp} from 'utils/user_agent';
 
 import * as GlobalActions from 'actions/global_actions';
 
+import NoTeamIcon from 'images/no_team_icon.png';
+import loaderkChat from 'images/logo_compact.png';
+
 import ErrorTitle from './error_title';
 import ErrorMessage from './error_message';
 import SvgIlluErrorQuestion from './assets/SvgIlluErrorQuestion';
+import SvgIlluErrorMaintenance from './assets/SvgIlluErrorMaintenance';
+import SvgIlluErrorBlocked from './assets/SvgIlluErrorBlocked';
 
 type Location = {
     search: string;
@@ -28,6 +33,9 @@ type Props = {
     asymmetricSigningPublicKey?: string;
     siteName?: string;
     isGuest?: boolean;
+    isAdmin?: boolean;
+    ikGroupId?: number;
+    ikGroupName?: string;
 }
 
 export default class ErrorPage extends React.PureComponent<Props> {
@@ -43,9 +51,18 @@ export default class ErrorPage extends React.PureComponent<Props> {
         const header = (
             <div className='error-header'>
                 <img
-                    src={MattermostLogoSvg}
                     className='error-header__logo'
+                    src={loaderkChat}
+                    alt='kchat logo'
                 />
+                <div className='error-header__title'>
+                    <img
+                        className='error-header__ik-logo'
+                        src={MattermostLogoSvg}
+                        alt='infomaniak logo'
+                    />
+                    {'kChat'}
+                </div>
             </div>
         );
 
@@ -53,7 +70,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
     }
 
     public render() {
-        const {isGuest} = this.props;
+        const {isGuest, isAdmin, ikGroupId, ikGroupName} = this.props;
         const params: URLSearchParams = new URLSearchParams(this.props.location ? this.props.location.search : '');
         const signature = params.get('s');
         const reloadPage = () => {
@@ -90,7 +107,9 @@ export default class ErrorPage extends React.PureComponent<Props> {
         const returnTo = (trustParams && params.get('returnTo')) || '';
 
         let backButton;
-        const illustration = <SvgIlluErrorQuestion/>;
+        let secondaryButton;
+        let illustration = <SvgIlluErrorQuestion/>;
+        let fullscreenIllustration;
         if (type === ErrorPageTypes.PERMALINK_NOT_FOUND && returnTo) {
             backButton = (
                 <Link
@@ -104,24 +123,6 @@ export default class ErrorPage extends React.PureComponent<Props> {
                 </Link>
             );
         } else if (type === ErrorPageTypes.CLOUD_ARCHIVED && returnTo) {
-            backButton = (
-                <Link to={returnTo}>
-                    <FormattedMessage
-                        id='error.generic.link'
-                        defaultMessage='Back to kChat'
-                    />
-                </Link>
-            );
-        } else if (type === ErrorPageTypes.CLOUD_ARCHIVED && returnTo) {
-            backButton = (
-                <Link to={returnTo}>
-                    <FormattedMessage
-                        id='error.generic.link'
-                        defaultMessage='Back to kChat'
-                    />
-                </Link>
-            );
-        } else if (type === ErrorPageTypes.TEAM_NOT_FOUND) {
             backButton = (
                 <Link to={returnTo}>
                     <FormattedMessage
@@ -172,6 +173,91 @@ export default class ErrorPage extends React.PureComponent<Props> {
                     />
                 </Link>
             );
+        } else if (type === ErrorPageTypes.MAINTENANCE) {
+            illustration = <SvgIlluErrorMaintenance/>;
+            if (isAdmin && ikGroupId) {
+                backButton = (
+                    <a
+                        className='btn btn-primary'
+                        onClick={() => GlobalActions.redirectToManagerDashboard(ikGroupId)}
+                    >
+                        <FormattedMessage
+                            id='navbar_dropdown.dashboard'
+                            defaultMessage='Tableau de bord'
+                        />
+                    </a>
+                );
+            } else {
+                backButton = (
+                    <a
+                        className='btn btn-primary'
+                        onClick={() => reloadPage()}
+                    >
+                        <FormattedMessage
+                            id='error.generic.reload'
+                            defaultMessage='Reload page'
+
+                        />
+                    </a>
+                );
+            }
+        } else if (type === ErrorPageTypes.NO_KSUITE) {
+            illustration = null;
+            fullscreenIllustration = (
+                <div className='error__fullscreen-graphic'>
+                    <img src={NoTeamIcon}/>
+                </div>
+            );
+            backButton = (
+                <a
+                    className='btn btn-primary'
+                    onClick={GlobalActions.redirectToKSuite}
+                >
+                    <FormattedMessage
+                        id='navbar_dropdown.kSuite'
+                        defaultMessage='Discover kSuite'
+                    />
+                </a>
+            );
+        } else if (type === ErrorPageTypes.BLOCKED) {
+            illustration = <SvgIlluErrorBlocked/>;
+            if (isAdmin && ikGroupId) {
+                backButton = (
+                    <a
+                        className='btn btn-primary'
+                        onClick={GlobalActions.redirectToShop}
+                    >
+                        <FormattedMessage
+                            id='navbar_dropdown.shop'
+                            defaultMessage='Go to shop'
+                        />
+                    </a>
+                );
+                secondaryButton = (
+                    <a
+                        className='btn-secondary'
+                        onClick={() => GlobalActions.redirectToManagerDashboard(ikGroupId)}
+                    >
+                        <FormattedMessage
+                            id='navbar_dropdown.dashboard'
+                            defaultMessage='Tableau de bord'
+                        />
+                    </a>
+                );
+            } else {
+                backButton = (
+                    <a
+                        className='btn btn-primary'
+                        onClick={() => reloadPage()}
+                    >
+                        <FormattedMessage
+                            id='error.generic.reload'
+                            defaultMessage='Reload page'
+
+                        />
+                    </a>
+                );
+            }
         } else if (type === ErrorPageTypes.OAUTH_ACCESS_DENIED || type === ErrorPageTypes.OAUTH_MISSING_CODE) {
             backButton = (
                 <Link
@@ -204,32 +290,36 @@ export default class ErrorPage extends React.PureComponent<Props> {
         const errorPage = (
             <div className='error-page'>
                 {this.renderHeader()}
-                <div className='error__dialog'>
-                    <div className='error__dialog-body'>
-                        <h1
-                            data-testid='errorMessageTitle'
-                            className='error__dialog-title mb-4'
-                        >
-                            <ErrorTitle
+                <div className='error__content'>
+                    {fullscreenIllustration}
+                    <div className='error__dialog'>
+                        <div className='error__dialog-body'>
+                            <h1
+                                data-testid='errorMessageTitle'
+                                className='error__dialog-title mb-4'
+                            >
+                                <ErrorTitle
+                                    type={type}
+                                    title={title}
+                                    groupName={ikGroupName}
+                                />
+                            </h1>
+                            <ErrorMessage
                                 type={type}
-                                title={title}
+                                message={message}
+                                service={service}
+                                isGuest={isGuest}
                             />
-                        </h1>
-                        <ErrorMessage
-                            type={type}
-                            message={message}
-                            service={service}
-                            isGuest={isGuest}
-                        />
-                        <div className='error__dialog-btns mt-8'>
-                            {backButton}
+                            <div className='error__dialog-btns mt-8'>
+                                {backButton}
+                                {secondaryButton}
+                            </div>
+                        </div>
+                        <div className='error__graphic'>
+                            {illustration}
                         </div>
                     </div>
-                    <div className='error__graphic'>
-                        {illustration}
-                    </div>
                 </div>
-
             </div>
         );
 
