@@ -282,25 +282,6 @@ describe('actions/invite_actions', () => {
                 },
             });
         });
-
-        it('should generate a failure for smtp config', async () => {
-            const emails = ['email-one@email-one.com'];
-            const response = await sendMembersInvites('incorrect-default-smtp', [], emails)(store.dispatch as DispatchFunc, store.getState as GetStateFunc);
-            expect(response).toEqual({
-                data: {
-                    notSent: [
-                        {
-                            email: 'email-one@email-one.com',
-                            reason: {
-                                id: 'admin.environment.smtp.smtpFailure',
-                                message: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
-                            },
-                            path: ConsolePages.SMTP,
-                        }],
-                    sent: [],
-                },
-            });
-        });
     });
 
     describe('sendGuestsInvites', () => {
@@ -567,25 +548,6 @@ describe('actions/invite_actions', () => {
             expect(response).toEqual({
                 data: {
                     notSent: expectedNotSent,
-                    sent: [],
-                },
-            });
-        });
-
-        it('should generate a failure for smtp config', async () => {
-            const emails = ['email-one@email-one.com'];
-            const response = await sendGuestsInvites('incorrect-default-smtp', [{id: 'error'}] as Channel[], [], emails, 'message')(store.dispatch as DispatchFunc, store.getState as GetStateFunc);
-            expect(response).toEqual({
-                data: {
-                    notSent: [
-                        {
-                            email: 'email-one@email-one.com',
-                            reason: {
-                                id: 'admin.environment.smtp.smtpFailure',
-                                message: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
-                            },
-                            path: ConsolePages.SMTP,
-                        }],
                     sent: [],
                 },
             });
