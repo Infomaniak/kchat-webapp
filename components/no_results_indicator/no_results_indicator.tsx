@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import {t} from 'utils/i18n';
 
-import FlagIcon from 'components/widgets/icons/flag_icon';
+import IKFlagIcon from 'components/widgets/icons/ik_flag_icon';
 import MentionsIcon from 'components/widgets/icons/mentions_icon';
 import PinIcon from 'components/widgets/icons/pin_icon';
 import SearchIcon from 'components/widgets/icons/search_icon';
@@ -31,7 +31,7 @@ interface Props {
 const iconMap: {[key in NoResultsVariant]: React.ReactNode } = {
     [NoResultsVariant.ChannelSearch]: <SearchIcon className='no-results__icon'/>,
     [NoResultsVariant.Mentions]: <MentionsIcon className='no-results__icon'/>,
-    [NoResultsVariant.FlaggedPosts]: <FlagIcon className='no-results__icon'/>,
+    [NoResultsVariant.FlaggedPosts]: <IKFlagIcon/>,
     [NoResultsVariant.PinnedPosts]: <PinIcon className='no-results__icon'/>,
     [NoResultsVariant.ChannelFiles]: <i className='icon icon-file-text-outline no-results__icon'/>,
     [NoResultsVariant.ChannelFilesFiltered]: <i className='icon icon-file-text-outline no-results__icon'/>,
@@ -100,7 +100,7 @@ const NoResultsIndicator = ({
     style,
     variant,
     iconGraphic = variant ? (
-        <div className='no-results__variant-wrapper'>
+        <div className={classNames({'no_results__variant-wrapper': variant !== NoResultsVariant.FlaggedPosts})}>
             {iconMap[variant]}
         </div>
     ) : null,
