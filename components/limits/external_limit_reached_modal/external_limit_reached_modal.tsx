@@ -11,7 +11,7 @@ import useGetUsage from 'components/common/hooks/useGetUsage';
 import useGetLimits from 'components/common/hooks/useGetLimits';
 
 import {closeModal} from 'actions/views/modals';
-import {redirectToManagerProfile} from 'actions/global_actions';
+import {redirectTokSuiteDashboard} from 'actions/global_actions';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import {isModalOpen} from 'selectors/views/modals';
 import {GlobalState} from 'types/store';
@@ -37,7 +37,7 @@ const ExternalLimitReachedModal = () => {
 
     const handleConfirm = useCallback(() => {
         if (isAdmin) {
-            redirectToManagerProfile();
+            redirectTokSuiteDashboard();
         }
     }, [isAdmin]);
 
@@ -75,7 +75,7 @@ const ExternalLimitReachedModal = () => {
                     defaultMessage: 'Available for plans',
                 })}
                 <a
-                    onClick={redirectToManagerProfile}
+                    onClick={redirectTokSuiteDashboard}
                 >
                     {formatMessage({
                         id: 'limitModal.planList',

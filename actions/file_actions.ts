@@ -17,7 +17,6 @@ import StorageLimitReachedModal from 'components/limits/storage_limit_reached_mo
 
 import {localizeMessage} from 'utils/utils';
 import {ModalIdentifiers} from 'utils/constants';
-import {isLimitExceeded} from 'utils/limits';
 
 export interface UploadFile {
     file: File;
@@ -91,14 +90,17 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                     ]));
 
                     onSuccess(response, channelId, rootId);
-                } else if (xhr.status === 409 && isLimitExceeded(JSON.parse(xhr.response))) {
-                    if (onError) {
-                        onError(localizeMessage('file_upload.limit_error', 'Storage limit reached.'), clientId, channelId, rootId);
+                } else if (xhr.status === 409) {
+                    const errorResponse = JSON.parse(xhr.response);
+                    if (errorResponse.server_error_id === 'quota-exceeded' || errorResponse.id === 'quota-exceeded') {
+                        if (onError) {
+                            onError('', clientId, channelId, rootId);
+                        }
+                        dispatch(openModal({
+                            modalId: ModalIdentifiers.STORAGE_LIMIT_REACHED,
+                            dialogType: StorageLimitReachedModal,
+                        }));
                     }
-                    dispatch(openModal({
-                        modalId: ModalIdentifiers.STORAGE_LIMIT_REACHED,
-                        dialogType: StorageLimitReachedModal,
-                    }));
                 }
             };
         }
