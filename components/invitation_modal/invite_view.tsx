@@ -10,16 +10,11 @@ import {Channel} from '@mattermost/types/channels';
 import {UserProfile} from '@mattermost/types/users';
 import {Team} from '@mattermost/types/teams';
 
-import {getSiteURL} from 'utils/url';
 import {Constants} from 'utils/constants';
 
-import {trackEvent} from 'actions/telemetry_actions';
-import useCopyText from 'components/common/hooks/useCopyText';
 import UsersEmailsInput from 'components/widgets/inputs/users_emails_input';
-import {getAnalyticsCategory} from 'components/onboarding_tasks';
 
 import {t} from 'utils/i18n';
-import {getTrackFlowRole, getRoleForTrackFlow} from 'utils/utils';
 
 import AddToChannels, {CustomMessageProps, InviteChannels, defaultCustomMessage, defaultInviteChannels} from './add_to_channels';
 import InviteAs, {InviteType} from './invite_as';
@@ -80,48 +75,6 @@ export default function InviteView(props: Props) {
     }, [props.currentTeam.id, props.currentTeam.invite_id, props.regenerateTeamInviteId]);
 
     const {formatMessage} = useIntl();
-
-    const inviteURL = useMemo(() => {
-        return `${getSiteURL()}/signup_user_complete/?id=${props.currentTeam.invite_id}&sbr=${getTrackFlowRole()}`;
-    }, [props.currentTeam.invite_id]);
-
-    const copyText = useCopyText({
-        trackCallback: () => trackEvent(getAnalyticsCategory(props.isAdmin), 'click_copy_invite_link', getRoleForTrackFlow()),
-        text: inviteURL,
-    });
-
-    const copyButton = (
-        <button
-            onClick={copyText.onClick}
-            data-testid='InviteView__copyInviteLink'
-            aria-label={
-                formatMessage({
-                    id: 'invite_modal.copy_link.url_aria',
-                    defaultMessage: 'team invite link {inviteURL}',
-                }, {inviteURL})
-            }
-            className='InviteView__copyLink'
-        >
-            {!copyText.copiedRecently && (
-                <>
-                    <i className='icon icon-link-variant'/>
-                    <FormattedMessage
-                        id='invite_modal.copy_link'
-                        defaultMessage='Copy invite link'
-                    />
-                </>
-            )}
-            {copyText.copiedRecently && (
-                <>
-                    <i className='icon icon-check'/>
-                    <FormattedMessage
-                        id='invite_modal.copied'
-                        defaultMessage='Copied'
-                    />
-                </>
-            )}
-        </button>
-    );
 
     const errorProperties = {
         showError: false,
@@ -263,7 +216,6 @@ export default function InviteView(props: Props) {
                 <OverageUsersBannerNotice/>
             </Modal.Body>
             <Modal.Footer className={'InviteView__footer ' + props.footerClass}>
-                {copyButton}
                 <button
                     disabled={!isInviteValid}
                     onClick={props.invite}
