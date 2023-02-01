@@ -87,6 +87,14 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                     ]));
 
                     onSuccess(response, channelId, rootId);
+                } else {
+                    dispatch({
+                        type: FileTypes.UPLOAD_FILES_FAILURE,
+                        clientIds: [clientId],
+                        channelId,
+                        rootId,
+                    });
+                    onError(localizeMessage('channel_loader.unknown_error', 'We received an unexpected status code from the server.') + ' (' + xhr.status + ')', clientId, channelId, rootId);
                 }
             };
         }
