@@ -8,7 +8,7 @@ const config = {
     testPathIgnorePatterns: ['/node_modules/', '/e2e/'],
     clearMocks: true,
     globals: {
-        GIT_RELEASE: true,
+        GIT_RELEASE: '1.0.0',
     },
     collectCoverageFrom: [
         'actions/**/*.{js,jsx,ts,tsx}',
