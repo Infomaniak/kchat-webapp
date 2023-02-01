@@ -4340,8 +4340,8 @@ export default class Client4 {
         formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
         // formData.append('redirect_uri', 'ktalk://auth-desktop' );
 
-        if (this.defaultHeaders['webapp-version']) {
-            delete this.defaultHeaders['webapp-version'];
+        if (this.defaultHeaders['Webapp-Version']) {
+            delete this.defaultHeaders['Webapp-Version'];
         }
 
         return this.doFetch<any>(
