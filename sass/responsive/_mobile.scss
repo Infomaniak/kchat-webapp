@@ -481,7 +481,7 @@
     .backstage-list__item {
         .item-actions,
         .actions {
-            margin: 10px 0;
+            // margin: 10px 0;
         }
     }
 
@@ -2088,6 +2088,12 @@
         top: 60px;
         left: 15px;
         width: calc(100% - 30px);
+    }
+
+    .backstage-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
     }
 }
 

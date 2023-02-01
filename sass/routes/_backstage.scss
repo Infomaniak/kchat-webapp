@@ -220,9 +220,12 @@
         text-overflow: ellipsis;
     }
 
+    .item-details__row {
+        justify-content: space-between !important;
+    }
+
     .item-details__row + .item-details__row {
         @include clearfix;
-
         text-overflow: ellipsis;
     }
 
