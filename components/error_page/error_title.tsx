@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import { StringMappingType } from 'typescript';
 
 import {ErrorPageTypes} from 'utils/constants';
 import * as Utils from 'utils/utils';
