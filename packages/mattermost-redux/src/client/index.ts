@@ -7,6 +7,8 @@ import {
     DEFAULT_LIMIT_BEFORE,
 } from '@mattermost/client';
 
+declare const GIT_RELEASE: string;
+
 const Client4 = new ClientClass4();
 Client4.setWebappVersion(GIT_RELEASE);
 
