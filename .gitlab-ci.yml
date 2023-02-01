@@ -153,7 +153,6 @@ unit_test:
   rules:
     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
-      allow_failure: true
     - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
     - when: never
