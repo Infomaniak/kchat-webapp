@@ -38,8 +38,7 @@ import LoadingScreen from 'components/loading_screen';
 import NoResultsIndicator from 'components/no_results_indicator';
 
 import {useThreadRouting} from '../hooks';
-import ReadThreadIllustration from '../common/read_thread_illustration';
-import SelectThreadIllustration from '../common/select_thread_illustration';
+import NoThreadIllustration from '../common/no_thread_illustration';
 
 import ThreadViewer from '../thread_viewer';
 
@@ -47,6 +46,8 @@ import ThreadList, {ThreadFilter, FILTER_STORAGE_KEY} from './thread_list';
 import ThreadPane from './thread_pane';
 
 import './global_threads.scss';
+
+const NO_THREAD_ILLUSTRATION = (<NoThreadIllustration/>);
 
 const GlobalThreads = () => {
     const {formatMessage} = useIntl();
@@ -151,8 +152,6 @@ const GlobalThreads = () => {
         setFilter(ThreadFilter.unread);
     }, []);
 
-    const noUnread = filter === ThreadFilter.unread && numUnread === 0;
-
     return (
         <div
             id='app-content'
@@ -178,7 +177,7 @@ const GlobalThreads = () => {
                     ) : (
                         <NoResultsIndicator
                             expanded={true}
-                            iconGraphic={ReadThreadIllustration}
+                            iconGraphic={NO_THREAD_ILLUSTRATION}
                             title={formatMessage({
                                 id: 'globalThreads.noThreads.title',
                                 defaultMessage: 'No followed threads yet',
@@ -211,27 +210,14 @@ const GlobalThreads = () => {
                             />
                         </ThreadPane>
                     ) : (
-                        <>
-                            {noUnread ? (
-                                <NoResultsIndicator
-                                    expanded={true}
-                                    iconGraphic={ReadThreadIllustration}
-                                    title={formatMessage({
-                                        id: 'globalThreads.threadList.noUnreadThreads',
-                                        defaultMessage: 'No unread thread',
-                                    })}
-                                />
-                            ) : (
-                                <NoResultsIndicator
-                                    expanded={true}
-                                    iconGraphic={SelectThreadIllustration}
-                                    title={formatMessage({
-                                        id: 'globalThreads.threadPane.unselectedTitle',
-                                        defaultMessage: 'Select a Thread',
-                                    })}
-                                />
-                            )}
-                        </>
+                        <NoResultsIndicator
+                            expanded={true}
+                            iconGraphic={NO_THREAD_ILLUSTRATION}
+                            title={formatMessage({
+                                id: 'globalThreads.threadPane.unselectedTitle',
+                                defaultMessage: 'Select a Thread',
+                            })}
+                        />
                     )}
                 </>
             )}

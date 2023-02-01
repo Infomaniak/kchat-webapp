@@ -74,11 +74,11 @@ const LessThanMaxFreeUsers = ({setHeader, pluginButtons}: {setHeader: React.Reac
             {pluginButtons}
             {setHeader}
             <div className='LessThanMaxFreeUsers'>
-                <EmptyStateThemeableSvg
-                    width={128}
-                    height={113}
-                />
-                <div className='titleAndButton'>
+                <EmptyStateThemeableSvg/>
+                <div
+                    className='titleAndButton'
+                    style={{justifyContent: 'center'}}
+                >
                     <FormattedMessage
                         id='intro_messages.inviteOthersToWorkspace.title'
                         defaultMessage='Let’s add some people to the workspace!'
