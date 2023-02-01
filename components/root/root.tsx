@@ -480,6 +480,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 console.log('[components/root] login with code'); // eslint-disable-line no-console
                 this.storeLoginCode(loginCode);
                 this.tryGetNewToken();
+                debugger;
             } else {
                 this.runMounted();
             }
