@@ -704,6 +704,14 @@ export function applyTheme(theme: Theme) {
             'button-color-04': changeOpacity(theme.buttonColor, 0.04),
             'error-text-08': changeOpacity(theme.errorTextColor, 0.08),
             'error-text-12': changeOpacity(theme.errorTextColor, 0.12),
+            'ik-illustration-grey-1': theme.ikIllustrationGreyOne,
+            'ik-illustration-grey-2': theme.ikIllustrationGreyTwo,
+            'ik-illustration-grey-3': theme.ikIllustrationGreyThree,
+            'ik-illustration-grey-4': theme.ikIllustrationGreyFour,
+            'ik-illustration-grey-5': theme.ikIllustrationGreyFive,
+            'ik-illustration-grey-6': theme.ikIllustrationGreySix,
+            'ik-illustration-grey-7': theme.ikIllustrationGreySeven,
+            'ik-illustration-grey-8': theme.ikIllustrationGreyEight,
         },
     });
 }

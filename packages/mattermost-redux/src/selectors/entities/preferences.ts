@@ -145,6 +145,14 @@ export type Theme = {
     mentionHighlightBg: string;
     mentionHighlightLink: string;
     codeTheme: string;
+    ikIllustrationGreyOne: string;
+    ikIllustrationGreyTwo: string;
+    ikIllustrationGreyThree: string;
+    ikIllustrationGreyFour: string;
+    ikIllustrationGreyFive: string;
+    ikIllustrationGreySix: string;
+    ikIllustrationGreySeven: string;
+    ikIllustrationGreyEight: string;
 };
 
 const getDefaultTheme = createSelector('getDefaultTheme', getConfig, (config): Theme => {
