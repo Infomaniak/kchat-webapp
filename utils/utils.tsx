@@ -712,6 +712,13 @@ export function applyTheme(theme: Theme) {
             'ik-illustration-grey-6': theme.ikIllustrationGreySix,
             'ik-illustration-grey-7': theme.ikIllustrationGreySeven,
             'ik-illustration-grey-8': theme.ikIllustrationGreyEight,
+            'ik-illustration-grey-9': theme.ikIllustrationGreyNine,
+            'ik-illustration-grey-10': theme.ikIllustrationGreyTen,
+            'ik-illustration-grey-11': theme.ikIllustrationGreyEleven,
+            'ik-illustration-grey-12': theme.ikIllustrationGreyTwelve,
+            'ik-illustration-grey-13': theme.ikIllustrationGreyThirteen,
+            'ik-illustration-grey-14': theme.ikIllustrationGreyFourteen,
+            'ik-illustration-grey-15': theme.ikIllustrationGreyFifteen,
         },
     });
 }
