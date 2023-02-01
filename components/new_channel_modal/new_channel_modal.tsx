@@ -35,6 +35,7 @@ import {
 import {switchToChannel} from 'actions/views/channel';
 import {closeModal} from 'actions/views/modals';
 import {sendGenericPostMessage} from 'actions/global_actions';
+import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
 import {GlobalState} from 'types/store';
 
@@ -139,7 +140,7 @@ const NewChannelModal = () => {
         };
 
         try {
-            const {data: newChannel, error} = await dispatch(createChannel(channel, ''));
+            const {data: newChannel, error} = await dispatch(createChannel(channel, '', openChannelLimitModalIfNeeded));
             if (error) {
                 onCreateChannelError(error);
                 return;

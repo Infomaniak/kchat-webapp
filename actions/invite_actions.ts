@@ -5,8 +5,8 @@ import {RelationOneToOne} from '@mattermost/types/utilities';
 import {UserProfile} from '@mattermost/types/users';
 import {Channel, ChannelMembership} from '@mattermost/types/channels';
 import {TeamMemberWithError, TeamInviteWithError} from '@mattermost/types/teams';
+import {ServerError} from '@mattermost/types/errors';
 
-import {closeModal, openModal} from 'actions/views/modals';
 import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import * as TeamActions from 'mattermost-redux/actions/teams';
 import {joinChannel} from 'mattermost-redux/actions/channels';
@@ -14,15 +14,11 @@ import {getTeamMember} from 'mattermost-redux/selectors/entities/teams';
 import {getChannelMembersInChannels} from 'mattermost-redux/selectors/entities/channels';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
-import {isModalOpen} from 'selectors/views/modals';
 
 import {addUsersToTeam} from 'actions/team_actions';
 import {t} from 'utils/i18n';
 import {localizeMessage} from 'utils/utils';
-import {ConsolePages, ModalIdentifiers} from 'utils/constants';
-import {isLimitExceeded} from 'utils/limits';
-
-import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
+import {ConsolePages} from 'utils/constants';
 
 export function sendMembersInvites(teamId: string, users: UserProfile[], emails: string[]): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
@@ -149,6 +145,7 @@ export function sendGuestsInvites(
     users: UserProfile[],
     emails: string[],
     message: string,
+    openExternalLimitModalIfNeeded: (error: ServerError) => ActionFunc,
 ): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
@@ -181,15 +178,7 @@ export function sendGuestsInvites(
                 for (const email of emails) {
                     notSent.push({email, reason: response.error.message});
                 }
-                if (isLimitExceeded(response.error)) {
-                    if (isModalOpen(state, ModalIdentifiers.INVITATION)) {
-                        dispatch(closeModal(ModalIdentifiers.INVITATION));
-                    }
-                    dispatch(openModal({
-                        modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
-                        dialogType: ChannelLimitReachedModal,
-                    }));
-                }
+                dispatch(openExternalLimitModalIfNeeded(response.error));
             } else {
                 for (const res of (response.data || [])) {
                     if (res.error) {
