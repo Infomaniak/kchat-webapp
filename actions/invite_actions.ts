@@ -182,18 +182,7 @@ export function sendGuestsInvites(
             } else {
                 for (const res of (response.data || [])) {
                     if (res.error) {
-                        if (res.error.id === 'api.team.invite_members.unable_to_send_email_with_defaults.app_error' && isCurrentUserSystemAdmin(state)) {
-                            notSent.push({
-                                email: res.email,
-                                reason: {
-                                    id: t('admin.environment.smtp.smtpFailure'),
-                                    message: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
-                                },
-                                path: ConsolePages.SMTP,
-                            });
-                        } else {
-                            notSent.push({email: res.email, reason: res.error.message});
-                        }
+                        notSent.push({email: res.email, reason: res.error.message});
                     } else {
                         sent.push({email: res.email, reason: localizeMessage('invite.guests.added-to-channel', 'An invitation email has been sent.')});
                     }
