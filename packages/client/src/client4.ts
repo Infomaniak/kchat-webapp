@@ -241,6 +241,10 @@ export default class Client4 {
         this.defaultHeaders['Accept-Language'] = locale;
     }
 
+    setWebappVersion(version: string) {
+        this.defaultHeaders['Webapp-Version'] = version;
+    }
+
     setEnableLogging(enable: boolean) {
         this.enableLogging = enable;
     }
