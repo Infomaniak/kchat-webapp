@@ -2820,6 +2820,7 @@
   "invitation_modal.members.users_emails_input.no_user_found_matching": "Nessuna corrispondenza per **{text}**, digitare l'indirizzo email",
   "invitation_modal.members.users_emails_input.no_user_found_matching-email-disabled": "Nessuna corrispondenza trovata per **{text}**",
   "invitation_modal.members.users_emails_input.valid_email": "Invita **{email}** come membro della squadra",
+  "invite_modal.add_invites.email": "Inserire un indirizzo e-mail",
   "invite.guests.added-to-channel": "Un invito email è stato inviato.",
   "invite.guests.already-all-channels-member": "Questa persona è già membro di tutti i canali.",
   "invite.guests.already-some-channels-member": "Questa persona è già membro di alcuni canali.",
