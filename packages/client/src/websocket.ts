@@ -31,6 +31,7 @@ export default class WebSocketClient {
     private conn: Pusher | null;
     private teamChannel: Channel | null;
     private userChannel: Channel | null;
+    private userTeamChannel: Channel | null;
     private presenceChannel: Channel | null;
     private connectionUrl: string | null;
     private socketId: string | null;
@@ -94,6 +95,7 @@ export default class WebSocketClient {
         this.conn = null;
         this.teamChannel = null;
         this.userChannel = null;
+        this.userTeamChannel = null;
         this.presenceChannel = null;
         this.connectionUrl = null;
         this.responseSequence = 1;
@@ -262,6 +264,7 @@ export default class WebSocketClient {
 
             this.bindChannelGlobally(this.teamChannel);
             this.bindChannelGlobally(this.userChannel);
+            this.bindChannelGlobally(this.userTeamChannel);
             this.bindChannelGlobally(this.presenceChannel);
 
             console.log('[websocket] re-established connection');
@@ -292,7 +295,7 @@ export default class WebSocketClient {
 
     subscribeToUserTeamScopedChannel(teamUserId: string) {
         this.currentTeamUser = teamUserId;
-        this.userChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
+        this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
     }
 
     subscribeToPresenceChannel(channelID: string) {
