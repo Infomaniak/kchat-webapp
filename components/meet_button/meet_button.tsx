@@ -2,21 +2,13 @@
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 import React, {useRef} from 'react';
-import {injectIntl, IntlShape, FormattedMessage} from 'react-intl';
-
-// import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
-import {useSelector} from 'react-redux';
+import {FormattedMessage, injectIntl} from 'react-intl';
 
 import OverlayTrigger from 'components/overlay_trigger';
-import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
 import Tooltip from 'components/tooltip';
 
 import Constants from 'utils/constants';
-
-// import {GlobalState} from 'types/store';
-
-// import SvgCallComponent from './SvgCallComponent';
 
 import './meet_button.scss';
 import meetSvg from './static/kmeet.svg';
@@ -24,20 +16,17 @@ import meetSvg from './static/kmeet.svg';
 export type Props = {
     currentChannelID: string;
     hasCall?: boolean;
-    intl: IntlShape;
     startCallInChannel: (channelID: unknown) => void;
-    isInCall?: boolean;
 }
 
 function MeetButton(props: Props) {
     const {startCallInChannel} = props;
 
-    // const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
     const ref = useRef<HTMLButtonElement>(null);
-    const channelID = useSelector(getCurrentChannelId);
     const onClick = React.useCallback(() => {
-        startCallInChannel(channelID);
-    }, [channelID]);
+        startCallInChannel(props.currentChannelID);
+    }, [props.currentChannelID]);
+
     const tooltip = (
         <Tooltip
             id='call'

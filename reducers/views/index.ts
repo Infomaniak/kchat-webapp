@@ -29,6 +29,7 @@ import addChannelDropdown from './add_channel_dropdown';
 import threads from './threads';
 import calls from './calls';
 import onboardingTasks from './onboarding_tasks';
+import kmeetCalls from './kmeet_calls';
 
 export default combineReducers({
     admin,
@@ -57,4 +58,5 @@ export default combineReducers({
     threads,
     productMenu,
     calls,
+    kmeetCalls,
 });
