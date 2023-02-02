@@ -1,3 +1,9 @@
+## 0.9.1 (2023-02-02)
+
+### Fixed (1 change)
+
+- [fix assign channel](kchat/webapp@6296833940f87b7b3e7fde77cd8c00c5f3d75d31) by @antonbuksa
+
 ## 0.9.0 (2023-02-02)
 
 ### Added (1 change)
