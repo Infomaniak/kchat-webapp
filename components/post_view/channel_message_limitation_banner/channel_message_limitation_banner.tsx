@@ -15,8 +15,8 @@ import {getMonthLong} from 'utils/i18n';
 import {getCurrentLocale} from 'selectors/i18n';
 import store from 'stores/redux_store.jsx';
 
-import OffersModal from 'components/offers_modal/offers_modal';
 import MaxMessagesIconSvg from 'components/common/svg_images_components/max_messages_icon_svg';
+import StorageLimitReachedModal from 'components/limits/storage_limit_reached_modal';
 
 import './channel_message_limitation_banner.scss';
 
@@ -35,8 +35,8 @@ export default function ChannelMessageLimitationBanner(props: Props) {
 
     function handleButtonClick() {
         dispatch(openModal({
-            modalId: ModalIdentifiers.OFFERS,
-            dialogType: OffersModal,
+            modalId: ModalIdentifiers.STORAGE_LIMIT_REACHED,
+            dialogType: StorageLimitReachedModal,
         }));
     }
 

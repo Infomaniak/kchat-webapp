@@ -229,22 +229,28 @@ const state: GlobalState = {
             },
         },
         usage: {
+            storage: 0,
+            public_channels: 0,
+            private_channels: 0,
+            guests: 0,
+            members: 0,
+            usageLoaded: false,
             files: {
                 totalStorage: 0,
-                totalStorageLoaded: false,
+                totalStorageLoaded: true,
             },
             messages: {
                 history: 0,
-                historyLoaded: false,
+                historyLoaded: true,
             },
             teams: {
                 active: 0,
                 cloudArchived: 0,
-                teamsLoaded: false,
+                teamsLoaded: true,
             },
             boards: {
                 cards: 0,
-                cardsLoaded: false,
+                cardsLoaded: true,
             },
         },
         insights: {
