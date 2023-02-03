@@ -26,9 +26,7 @@ export default function MsgTyping(props: Props) {
                 const rootId = msg.data.data.parent_id;
                 const userId = msg.data.data.user_id;
 
-                if (props.channelId === channelId && props.postId === rootId) {
-                    userStartedTyping(userId, channelId, rootId, Date.now());
-                }
+                userStartedTyping(userId, channelId, rootId, Date.now());
             } else if (msg.event === SocketEvents.POSTED) {
                 const post = msg.data.post;
 
@@ -36,11 +34,9 @@ export default function MsgTyping(props: Props) {
                 const rootId = post.root_id;
                 const userId = post.user_id;
 
-                if (props.channelId === channelId && props.postId === rootId) {
-                    userStoppedTyping(userId, channelId, rootId, Date.now());
-                }
+                userStoppedTyping(userId, channelId, rootId, Date.now());
             }
-        }, [props.channelId, props.postId, userStartedTyping, userStoppedTyping]),
+        }, [userStartedTyping, userStoppedTyping]),
     });
 
     const getTypingText = () => {

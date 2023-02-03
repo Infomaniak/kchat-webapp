@@ -12,6 +12,7 @@ import {Channel} from '@mattermost/types/channels';
 import {getCurrentChannelId, getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, getUser} from 'mattermost-redux/selectors/entities/users';
+import {isChannelBeingTypedIn} from 'mattermost-redux/selectors/entities/typing';
 
 import {leaveDirectChannel} from 'actions/views/channel';
 
@@ -35,6 +36,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         currentUserId: currentUser.id,
         redirectChannel,
         active,
+        isChannelBeingTypedIn: isChannelBeingTypedIn(state, ownProps.channel.id),
     };
 }
 

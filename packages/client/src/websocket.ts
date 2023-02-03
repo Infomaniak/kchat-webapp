@@ -311,15 +311,15 @@ export default class WebSocketClient {
             this.currentPresenceChannel = channel;
         }
         this.presenceChannels.set(channelID, channel);
-        if (this.currentPresenceChannel) {
-            this.bindChannelGlobally(this.currentPresenceChannel);
+        if (channel) {
+            this.bindChannelGlobally(channel);
         }
     }
 
     unbindPresenceChannel(channelID: string) {
-        this.presenceChannels.delete(channelID);
         // @ts-ignore
         this.conn?.unsubscribe(`presence-channel.${channelID}`);
+        this.presenceChannels.delete(channelID);
         // if (this.currentPresenceChannel) {
         //     this.unbindChannelGlobally(this.currentPresenceChannel);
         // }

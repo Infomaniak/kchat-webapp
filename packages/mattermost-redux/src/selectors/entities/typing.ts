@@ -40,3 +40,7 @@ export function makeGetUsersTypingByChannelAndPost(): (state: GlobalState, props
         getUsersTypingImpl,
     );
 }
+
+export function isChannelBeingTypedIn(state: GlobalState, channelId: string): boolean {
+    return Object.keys(state.entities.typing).includes(channelId);
+}
