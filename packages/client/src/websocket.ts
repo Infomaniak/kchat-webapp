@@ -121,7 +121,7 @@ export default class WebSocketClient {
         teamId?: string,
         token?: string,
         authToken?: string,
-        presenceChannelId?: string
+        presenceChannelId?: string,
     ) {
         let currentUserId: any;
         let currentUserTeamId: any;
@@ -303,8 +303,10 @@ export default class WebSocketClient {
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
     }
 
-    bindPresenceChannel(channelID: string) {
-        this.currentPresence = channelID;
+    bindPresenceChannel(channelID: string, isCurrentChannel: boolean) {
+        if (isCurrentChannel) {
+            this.currentPresence = channelID;
+        }
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
         if (this.presenceChannel) {
             this.bindChannelGlobally(this.presenceChannel);

@@ -8,8 +8,11 @@ import {getCurrentChannel, getDirectTeammate} from 'mattermost-redux/selectors/e
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {makeGetChannelIdsForCategory} from 'mattermost-redux/selectors/entities/channel_categories';
+import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
 
 import {goToLastViewedChannel} from 'actions/views/channel';
+import {getCategoriesForCurrentTeam} from 'selectors/views/channel_sidebar';
 
 import {GlobalState} from 'types/store';
 
@@ -29,6 +32,13 @@ function mapStateToProps(state: GlobalState) {
     const viewArchivedChannels = config.ExperimentalViewArchivedChannels === 'true';
     const enableOnboardingFlow = config.EnableOnboardingFlow === 'true';
 
+    const directMessagesCategory = getCategoriesForCurrentTeam(state).find((category) => category.type === CategoryTypes.DIRECT_MESSAGES);
+    let directMessagesChannelIds: string[] = [];
+    if (directMessagesCategory) {
+        const getChannelIdsForCategory = makeGetChannelIdsForCategory();
+        directMessagesChannelIds = getChannelIdsForCategory(state, directMessagesCategory);
+    }
+
     return {
         channelId: channel ? channel.id : '',
         deactivatedChannel: channel ? isDeactivatedChannel(state, channel.id) : false,
@@ -38,6 +48,7 @@ function mapStateToProps(state: GlobalState) {
         isCloud: getLicense(state).Cloud === 'true',
         teamUrl: getCurrentRelativeTeamUrl(state),
         isFirstAdmin: isFirstAdmin(state),
+        directMessagesChannelIds,
     };
 }
 

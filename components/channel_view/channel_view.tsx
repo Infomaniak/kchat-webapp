@@ -92,12 +92,24 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             if (this.props.channelIsArchived && !this.props.viewArchivedChannels) {
                 this.props.goToLastViewedChannel();
             }
-            if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
-                WebSocketClient.bindPresenceChannel(this.props.channelId);
-            }
-            if (prevProps.channelId) {
-                WebSocketClient.unbindPresenceChannel(prevProps.channelId);
-            }
+        }
+        if (prevProps.directMessagesChannelIds !== this.props.directMessagesChannelIds) {
+            const {directMessagesChannelIds: prevDirectMessagesChannelIds} = prevProps;
+            const {directMessagesChannelIds, channelId} = this.props;
+            prevDirectMessagesChannelIds.forEach((id: string) => {
+                if (!directMessagesChannelIds.includes(id)) {
+                    // channel removed from the sidebar
+                    WebSocketClient.unbindPresenceChannel(id);
+                    console.log('unbind channel ws', id); //eslint-disable-line no-console
+                }
+            });
+            directMessagesChannelIds.forEach((id: string) => {
+                if (!prevDirectMessagesChannelIds.includes(id)) {
+                    // channel added to the sidebar
+                    WebSocketClient.bindPresenceChannel(id, id === channelId);
+                    console.log('bind channel ws', id); //eslint-disable-line no-console
+                }
+            });
         }
     }
 
