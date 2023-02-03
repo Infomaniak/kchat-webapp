@@ -4347,6 +4347,10 @@ export default class Client4 {
         formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
         // formData.append('redirect_uri', 'ktalk://auth-desktop' );
 
+        if (this.defaultHeaders['Webapp-Version']) {
+            delete this.defaultHeaders['Webapp-Version'];
+        }
+
         return this.doFetch<any>(
 
             `${loginUrl}token`,
@@ -4366,6 +4370,10 @@ export default class Client4 {
         formData.append('refresh_token', refresh);
         formData.append('client_id', clientId);
 
+        if (this.defaultHeaders['Webapp-Version']) {
+            delete this.defaultHeaders['Webapp-Version'];
+        }
+
         return this.doFetch<any>(
 
             // `${this.getBaseRoute()}/token`,
@@ -4382,6 +4390,10 @@ export default class Client4 {
         const formData = new FormData();
         formData.append('token_type_hint', 'access_token');
         formData.append('token', token);
+
+        if (this.defaultHeaders['Webapp-Version']) {
+            delete this.defaultHeaders['Webapp-Version'];
+        }
 
         return this.doFetch<any>(
             `${loginUrl}token`,
