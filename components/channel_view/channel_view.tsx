@@ -110,10 +110,11 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             });
         }
         if (prevProps.channelId !== this.props.channelId) {
+            if (prevProps.channelId && !this.props.directMessagesChannelIds.includes(prevProps.channelId)) {
+                WebSocketClient.unbindPresenceChannel(prevProps.channelId);
+            }
             if (this.props.channelId) {
                 WebSocketClient.bindPresenceChannel(this.props.channelId, true);
-            } else {
-                WebSocketClient.unbindPresenceChannel(prevProps.channelId);
             }
         }
     }
