@@ -23,6 +23,7 @@ describe('components/channel_view', () => {
         isCloud: false,
         goToLastViewedChannel: jest.fn(),
         isFirstAdmin: false,
+        directMessagesChannelIds: [],
     };
 
     it('Should match snapshot with base props', () => {

@@ -12,6 +12,7 @@ exports[`components/channel_view Should match snapshot if channel is archived 1`
     channelId="channelId"
     channelIsArchived={true}
     deactivatedChannel={false}
+    directMessagesChannelIds={Array []}
     enableOnboardingFlow={true}
     goToLastViewedChannel={[MockFunction]}
     history={Object {}}
@@ -68,6 +69,7 @@ exports[`components/channel_view Should match snapshot if channel is deactivated
     channelId="channelId"
     channelIsArchived={false}
     deactivatedChannel={true}
+    directMessagesChannelIds={Array []}
     enableOnboardingFlow={true}
     goToLastViewedChannel={[MockFunction]}
     history={Object {}}
@@ -123,6 +125,7 @@ exports[`components/channel_view Should match snapshot with base props 1`] = `
     channelId="channelId"
     channelIsArchived={false}
     deactivatedChannel={false}
+    directMessagesChannelIds={Array []}
     enableOnboardingFlow={true}
     goToLastViewedChannel={[MockFunction]}
     history={Object {}}
