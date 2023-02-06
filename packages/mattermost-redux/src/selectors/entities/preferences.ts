@@ -153,6 +153,13 @@ export type Theme = {
     ikIllustrationGreySix: string;
     ikIllustrationGreySeven: string;
     ikIllustrationGreyEight: string;
+    ikIllustrationGreyNine: string;
+    ikIllustrationGreyTen: string;
+    ikIllustrationGreyEleven: string;
+    ikIllustrationGreyTwelve: string;
+    ikIllustrationGreyThirteen: string;
+    ikIllustrationGreyFourteen: string;
+    ikIllustrationGreyFifteen: string;
 };
 
 const getDefaultTheme = createSelector('getDefaultTheme', getConfig, (config): Theme => {

@@ -32,6 +32,7 @@ import {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-r
 import {Channel, ChannelNotifyProps, ChannelMembership, ChannelModerationPatch, ChannelsWithTotalCount, ChannelSearchOpts} from '@mattermost/types/channels';
 
 import {PreferenceType} from '@mattermost/types/preferences';
+import {ServerError} from '@mattermost/types/errors';
 
 import {getChannelsIdForTeam, getChannelByName} from 'mattermost-redux/utils/channel_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
@@ -52,7 +53,7 @@ export function selectChannel(channelId: string) {
     };
 }
 
-export function createChannel(channel: Channel, userId: string): ActionFunc {
+export function createChannel(channel: Channel, userId: string, openLimitModalIfNeeded: (error: ServerError) => ActionFunc): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let created;
         try {
@@ -64,6 +65,7 @@ export function createChannel(channel: Channel, userId: string): ActionFunc {
                 error,
             });
             dispatch(logError(error));
+            dispatch(openLimitModalIfNeeded(error));
             return {error};
         }
 
