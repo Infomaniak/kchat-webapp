@@ -3,6 +3,8 @@
 
 import React from 'react';
 
+import './channel_typing.scss';
+
 type Props = {
     isChannelBeingTypedIn?: boolean;
 }
@@ -13,11 +15,10 @@ const ChannelTyping = ({isChannelBeingTypedIn}: Props) => {
     }
 
     return (
-        <div>
-            {'beingTypedIn'}
-            <div className='dot__first'/>
-            <div className='dot__second'/>
-            <div className='dot__third'/>
+        <div className='channel-typing'>
+            <div className='dot'/>
+            <div className='dot'/>
+            <div className='dot'/>
         </div>
     );
 };
