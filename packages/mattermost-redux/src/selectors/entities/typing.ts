@@ -41,6 +41,4 @@ export function makeGetUsersTypingByChannelAndPost(): (state: GlobalState, props
     );
 }
 
-export function isChannelBeingTypedIn(state: GlobalState, channelId: string): boolean {
-    return Object.keys(state.entities.typing).includes(channelId);
-}
+export const isChannelBeingTypedIn = (state: GlobalState, channelId: string) => Object.keys(state.entities.typing).includes(channelId);

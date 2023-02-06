@@ -105,7 +105,9 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "connectionId": "",
         "connectionUrl": null,
         "currentPresence": "",
+        "currentPresenceChannel": null,
         "currentTeam": "",
+        "currentTeamUser": "",
         "currentUser": null,
         "errorCallback": null,
         "errorCount": 0,
@@ -116,7 +118,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "messageListeners": Set {},
         "missedEventCallback": null,
         "missedMessageListeners": Set {},
-        "presenceChannel": null,
+        "presenceChannels": Map {},
         "reconnectCallback": null,
         "reconnectListeners": Set {},
         "responseCallbacks": Object {},
@@ -125,6 +127,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "socketId": null,
         "teamChannel": null,
         "userChannel": null,
+        "userTeamChannel": null,
       }
     }
   />
@@ -159,7 +162,9 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "connectionId": "",
         "connectionUrl": null,
         "currentPresence": "",
+        "currentPresenceChannel": null,
         "currentTeam": "",
+        "currentTeamUser": "",
         "currentUser": null,
         "errorCallback": null,
         "errorCount": 0,
@@ -170,7 +175,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "messageListeners": Set {},
         "missedEventCallback": null,
         "missedMessageListeners": Set {},
-        "presenceChannel": null,
+        "presenceChannels": Map {},
         "reconnectCallback": null,
         "reconnectListeners": Set {},
         "responseCallbacks": Object {},
@@ -179,6 +184,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "socketId": null,
         "teamChannel": null,
         "userChannel": null,
+        "userTeamChannel": null,
       }
     }
   />

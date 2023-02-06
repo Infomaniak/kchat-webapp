@@ -305,14 +305,19 @@ export default class WebSocketClient {
     }
 
     bindPresenceChannel(channelID: string, isCurrentChannel: boolean) {
-        if (!this.presenceChannels.has(channelID)) {
-            const channel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
-            this.presenceChannels.set(channelID, channel);
-            this.bindChannelGlobally(channel);
+        let channel;
+        if (this.presenceChannels.has(channelID)) {
+            channel = this.presenceChannels.get(channelID);
+        } else {
+            channel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
+            if (channel) {
+                this.presenceChannels.set(channelID, channel);
+                this.bindChannelGlobally(channel);
+            }
         }
-        if (isCurrentChannel) {
+        if (isCurrentChannel && channel) {
             this.currentPresence = channelID;
-            this.currentPresenceChannel = this.presenceChannels.get(channelID)!;
+            this.currentPresenceChannel = channel;
         }
     }
 

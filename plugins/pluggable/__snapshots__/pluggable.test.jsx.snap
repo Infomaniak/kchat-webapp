@@ -28,7 +28,9 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
           "connectionId": "",
           "connectionUrl": null,
           "currentPresence": "",
+          "currentPresenceChannel": null,
           "currentTeam": "",
+          "currentTeamUser": "",
           "currentUser": null,
           "errorCallback": null,
           "errorCount": 0,
@@ -39,7 +41,7 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "presenceChannel": null,
+          "presenceChannels": Map {},
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
@@ -48,6 +50,7 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
           "socketId": null,
           "teamChannel": null,
           "userChannel": null,
+          "userTeamChannel": null,
         }
       }
     >
@@ -89,7 +92,9 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
           "connectionId": "",
           "connectionUrl": null,
           "currentPresence": "",
+          "currentPresenceChannel": null,
           "currentTeam": "",
+          "currentTeamUser": "",
           "currentUser": null,
           "errorCallback": null,
           "errorCount": 0,
@@ -100,7 +105,7 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "presenceChannel": null,
+          "presenceChannels": Map {},
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
@@ -109,6 +114,7 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
           "socketId": null,
           "teamChannel": null,
           "userChannel": null,
+          "userTeamChannel": null,
         }
       }
     >
@@ -174,7 +180,9 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
           "connectionId": "",
           "connectionUrl": null,
           "currentPresence": "",
+          "currentPresenceChannel": null,
           "currentTeam": "",
+          "currentTeamUser": "",
           "currentUser": null,
           "errorCallback": null,
           "errorCount": 0,
@@ -185,7 +193,7 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "presenceChannel": null,
+          "presenceChannels": Map {},
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
@@ -194,6 +202,7 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
           "socketId": null,
           "teamChannel": null,
           "userChannel": null,
+          "userTeamChannel": null,
         }
       }
     >
@@ -237,7 +246,9 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
           "connectionId": "",
           "connectionUrl": null,
           "currentPresence": "",
+          "currentPresenceChannel": null,
           "currentTeam": "",
+          "currentTeamUser": "",
           "currentUser": null,
           "errorCallback": null,
           "errorCount": 0,
@@ -248,7 +259,7 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
           "messageListeners": Set {},
           "missedEventCallback": null,
           "missedMessageListeners": Set {},
-          "presenceChannel": null,
+          "presenceChannels": Map {},
           "reconnectCallback": null,
           "reconnectListeners": Set {},
           "responseCallbacks": Object {},
@@ -257,6 +268,7 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
           "socketId": null,
           "teamChannel": null,
           "userChannel": null,
+          "userTeamChannel": null,
         }
       }
     >
