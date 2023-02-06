@@ -1118,6 +1118,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
         color: rgba(var(--sidebar-text-rgb), 0.72);
         font-size: 14px;
         text-decoration: none;
+        overflow: hidden;
 
         .emoji {
             color: var(--sidebar-text);
