@@ -91,7 +91,7 @@ export function loadMeREST(): ActionFunc {
                 const {url} = orderedKSuite[0];
 
                 // if the user is neither already on this page nor in a development environment
-                if (url.replace('https://', '') !== window.location.hostname && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                if (url !== window.location.protocol + '//' + window.location.hostname && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
                     window.open(url, '_self');
                 }
             } else {
