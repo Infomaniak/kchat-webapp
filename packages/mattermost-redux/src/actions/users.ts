@@ -31,6 +31,7 @@ import {
     transformToRecievedMyTeamMembersReducerPayload,
 } from 'mattermost-redux/actions/users_queries';
 
+import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
@@ -38,6 +39,8 @@ import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/pre
 import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 import {General} from 'mattermost-redux/constants';
+
+import {getHistory} from 'utils/browser_history';
 
 export function generateMfaSecret(userId: string): ActionFunc {
     return bindClientFunc({
@@ -79,12 +82,33 @@ export function loadMeREST(): ActionFunc {
         dispatch(setServerVersion(serverVersion));
 
         try {
+            await dispatch(getMyKSuites());
+            const kSuites = getTeams(getState());
+
+            // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
+            const orderedKSuite = Object.values(kSuites).sort((a, b) => b.update_at - a.update_at);
+            if (orderedKSuite.length > 0) {
+                const {url} = orderedKSuite[0];
+
+                // if the user is neither already on this page nor in a development environment
+                if (url.replace('https://', '') !== window.location.hostname && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                    window.open(url, '_self');
+                }
+            } else {
+                // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
+                getHistory().push('/error?type=no_ksuite');
+            }
+        } catch (error) {
+            dispatch(logError(error as ServerError));
+            return {error: error as ServerError};
+        }
+
+        try {
             await Promise.all([
                 dispatch(getClientConfig()),
                 dispatch(getLicenseConfig()),
                 dispatch(getMe()),
                 dispatch(getMyPreferences()),
-                dispatch(getMyKSuites()),
                 dispatch(getMyTeamMembers()),
             ]);
 
