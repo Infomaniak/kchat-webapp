@@ -2,15 +2,21 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {useSelector} from 'react-redux';
+
+import {GlobalState} from '@mattermost/types/store';
+import {isChannelBeingTypedIn} from 'mattermost-redux/selectors/entities/typing';
 
 import './channel_typing.scss';
 
 type Props = {
-    isChannelBeingTypedIn?: boolean;
+    channelId: string;
 }
 
-const ChannelTyping = ({isChannelBeingTypedIn}: Props) => {
-    if (!isChannelBeingTypedIn) {
+const ChannelTyping = ({channelId}: Props) => {
+    const channelBeingTypedIn = useSelector((state: GlobalState) => isChannelBeingTypedIn(state, channelId));
+
+    if (!channelBeingTypedIn) {
         return null;
     }
 

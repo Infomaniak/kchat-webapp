@@ -20,12 +20,12 @@ import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
 import {ChannelsAndDirectMessagesTour} from 'components/tours/onboarding_tour';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
+import ChannelTyping from 'components/sidebar/sidebar_channel/channel_typing';
 
 import ChannelMentionBadge from '../channel_mention_badge';
 import ChannelPencilIcon from '../channel_pencil_icon';
 import SidebarChannelIcon from '../sidebar_channel_icon';
 import SidebarChannelMenu from '../sidebar_channel_menu';
-import ChannelTyping from '../channel_typing';
 import {Channel} from '@mattermost/types/channels';
 
 type Props = {
@@ -60,8 +60,6 @@ type Props = {
     showChannelsTutorialStep: boolean;
 
     hasUrgent: boolean;
-
-    isChannelBeingTypedIn?: boolean;
 
     actions: {
         markMostRecentPostInChannelAsUnread: (channelId: string) => void;
@@ -185,7 +183,6 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
             firstChannelName,
             showChannelsTutorialStep,
             hasUrgent,
-            isChannelBeingTypedIn,
         } = this.props;
 
         let channelsTutorialTip: JSX.Element | null = null;
@@ -258,7 +255,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                     />
                 </div>
                 <ChannelPencilIcon id={channel.id}/>
-                <ChannelTyping isChannelBeingTypedIn={isChannelBeingTypedIn}/>
+                <ChannelTyping channelId={channel.id}/>
                 <ChannelMentionBadge
                     unreadMentions={unreadMentions}
                     hasUrgent={hasUrgent}
