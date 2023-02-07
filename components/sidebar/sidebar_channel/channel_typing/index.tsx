@@ -9,10 +9,12 @@ import {GlobalState} from '@mattermost/types/store';
 import {isChannelBeingTypedIn, makeGetUsersTypingByChannelAndPost} from 'mattermost-redux/selectors/entities/typing';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
-import './channel_typing.scss';
-import OverlayTrigger from 'components/overlay_trigger';
 import Constants from 'utils/constants';
+
+import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import './channel_typing.scss';
 
 type Props = {
     channelId: string;
