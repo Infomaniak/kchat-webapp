@@ -13,9 +13,11 @@ import {ActionFunc} from 'mattermost-redux/types/actions';
 import {Team} from '@mattermost/types/teams';
 
 import {Channel} from '@mattermost/types/channels';
+import {ServerError} from '@mattermost/types/errors';
 import {UserProfile} from '@mattermost/types/users';
 
 import {trackEvent} from 'actions/telemetry_actions';
+import {openExternalLimitModalIfNeeded} from 'actions/cloud';
 
 import {isEmail} from 'mattermost-redux/utils/helpers';
 
@@ -47,6 +49,7 @@ export type Props = {
             users: UserProfile[],
             emails: string[],
             message: string,
+            openExternalLimitModalIfNeeded: (error: ServerError) => ActionFunc,
         ) => Promise<{data: InviteResults}>;
         sendMembersInvites: (
             teamId: string,
@@ -202,6 +205,7 @@ export class InvitationModal extends React.PureComponent<Props, State> {
                 users,
                 emails,
                 this.state.invite.customMessage.open ? this.state.invite.customMessage.message : '',
+                openExternalLimitModalIfNeeded,
             );
             invites = result.data;
         }

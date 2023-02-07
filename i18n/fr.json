@@ -4942,5 +4942,19 @@
   "widgets.users_emails_input.loading": "Chargement",
   "widgets.users_emails_input.no_user_found_matching": "Aucun utilisateur trouvé correspondant aux termes **{text}**. Saisissez leur adresse e-mail pour les inviter.",
   "widgets.users_emails_input.valid_email": "Ajouter **{email}**",
-  "yourcomputer": "Votre ordinateur"
+  "yourcomputer": "Votre ordinateur",
+  "create_channel.limit_error": "Limite de canal atteinte.",
+  "file_upload.limit_error": "Limite de stockage atteinte.",
+  "invite.guests.limit_error": "Limite d'invité atteinte.",
+  "limitModal.plans": "Disponible pour les plans",
+  "limitModal.planList": "Basic, Teams & Pro",
+  "limitModal.upgrade": "Modifier mon offre",
+  "limitModal.contactAdmin": "Informer un administrateur",
+  "externalLimit.title": "Communiquez mieux avec les personnes externes à votre organisation",
+  "externalLimit.subtitle": "Vous avez atteint la limite d’utilisateurs externes ({externalsUsage, number}/{externalsLimit, number}) sur votre kChat. Pour en inviter des supplémentaires, vous devez souscrire à une offre suprérieure.",
+  "storageLimit.title": "Augmentez l’espace de stockage de votre kSuite !",
+  "storageLimit.subtitle": "Votre espace de stockage est plein. Pour continuer à envoyer des fichiers, veuillez contacter un administrateur pour qu’il modifie l’offre.",
+  "storageLimit.subtitle.admin": "Votre espace de stockage est plein. Souscrivez à une offre supérieure pour continuer à envoyer des fichiers.",
+  "channelLimit.title": "Créez de nouveaux canaux pour mieux communiquer avec les membres de votre organisation",
+  "channelLimit.subtitle": "Vous avez atteint la limite de canaux publics ({publicChannelUsage, number}/{publicChannelLimit, number}) et de canaux privés ({privateChannelUsage, number}/{privateChannelLimit, number}) sur votre kChat. Pour en créer des supplémentaires, vous devez souscrire à une offre supérieure."
 }

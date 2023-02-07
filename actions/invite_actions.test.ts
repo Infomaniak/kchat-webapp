@@ -282,25 +282,6 @@ describe('actions/invite_actions', () => {
                 },
             });
         });
-
-        it('should generate a failure for smtp config', async () => {
-            const emails = ['email-one@email-one.com'];
-            const response = await sendMembersInvites('incorrect-default-smtp', [], emails)(store.dispatch as DispatchFunc, store.getState as GetStateFunc);
-            expect(response).toEqual({
-                data: {
-                    notSent: [
-                        {
-                            email: 'email-one@email-one.com',
-                            reason: {
-                                id: 'admin.environment.smtp.smtpFailure',
-                                message: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
-                            },
-                            path: ConsolePages.SMTP,
-                        }],
-                    sent: [],
-                },
-            });
-        });
     });
 
     describe('sendGuestsInvites', () => {
@@ -536,20 +517,21 @@ describe('actions/invite_actions', () => {
             });
         });
 
-        it('should generate a failure for smtp config', async () => {
-            const emails = ['email-one@email-one.com'];
-            const response = await sendGuestsInvites('incorrect-default-smtp', [{id: 'error'}] as Channel[], [], emails, 'message')(store.dispatch as DispatchFunc, store.getState as GetStateFunc);
+        it('should generate a failure for rate limits', async () => {
+            const emails = [];
+            const expectedNotSent = [];
+            for (let i = 0; i < 22; i++) {
+                emails.push('email-' + i + '@example.com');
+                expectedNotSent.push({
+                    email: 'email-' + i + '@example.com',
+                    reason: 'Invite emails rate limit exceeded.',
+                });
+            }
+
+            const response = await sendGuestsInvites('correct', [{id: 'correct'}] as Channel[], [], emails, 'message')(store.dispatch as DispatchFunc, store.getState as GetStateFunc);
             expect(response).toEqual({
                 data: {
-                    notSent: [
-                        {
-                            email: 'email-one@email-one.com',
-                            reason: {
-                                id: 'admin.environment.smtp.smtpFailure',
-                                message: 'SMTP is not configured in System Console. Can be configured <a>here</a>.',
-                            },
-                            path: ConsolePages.SMTP,
-                        }],
+                    notSent: expectedNotSent,
                     sent: [],
                 },
             });

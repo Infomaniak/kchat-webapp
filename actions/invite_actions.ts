@@ -5,6 +5,7 @@ import {RelationOneToOne} from '@mattermost/types/utilities';
 import {UserProfile} from '@mattermost/types/users';
 import {Channel, ChannelMembership} from '@mattermost/types/channels';
 import {TeamMemberWithError, TeamInviteWithError} from '@mattermost/types/teams';
+import {ServerError} from '@mattermost/types/errors';
 
 import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import * as TeamActions from 'mattermost-redux/actions/teams';
@@ -144,6 +145,7 @@ export function sendGuestsInvites(
     users: UserProfile[],
     emails: string[],
     message: string,
+    openExternalLimitModalIfNeeded: (error: ServerError) => ActionFunc,
 ): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
@@ -176,12 +178,14 @@ export function sendGuestsInvites(
                 for (const email of emails) {
                     notSent.push({email, reason: response.error.message});
                 }
-            } else if (response.data) {
-                const res = response.data;
-                if (res.error) {
-                    notSent.push({email: res.email, reason: res.error.message});
-                } else {
-                    sent.push({email: res.email, reason: localizeMessage('invite.guests.added-to-channel', 'An invitation email has been sent.')});
+                dispatch(openExternalLimitModalIfNeeded(response.error));
+            } else {
+                for (const res of (response.data || [])) {
+                    if (res.error) {
+                        notSent.push({email: res.email, reason: res.error.message});
+                    } else {
+                        sent.push({email: res.email, reason: localizeMessage('invite.guests.added-to-channel', 'An invitation email has been sent.')});
+                    }
                 }
             }
         }

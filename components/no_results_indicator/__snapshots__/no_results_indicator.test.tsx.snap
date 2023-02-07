@@ -8,7 +8,7 @@ exports[`components/no_results_indicator should match snapshot when expanded 1`]
     className="no-results__wrapper"
   >
     <div
-      className="no-results__variant-wrapper"
+      className="no_results__variant-wrapper"
     >
       <SearchIcon
         className="no-results__icon"

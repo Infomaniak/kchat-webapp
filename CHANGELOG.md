@@ -1,3 +1,34 @@
+## 0.9.3 (2023-02-03)
+
+No changes.
+
+## 0.9.2 (2023-02-03)
+
+### Fixed (1 change)
+
+- [temporary upload stuck fix](kchat/webapp@657a4dffbbb39626af7d6bd5248461dcc20e036a) by @leonard.jouve ([merge request](kchat/webapp!272))
+
+## 0.9.1 (2023-02-02)
+
+### Fixed (1 change)
+
+- [fix assign channel](kchat/webapp@6296833940f87b7b3e7fde77cd8c00c5f3d75d31) by @antonbuksa
+
+## 0.9.0 (2023-02-02)
+
+### Added (1 change)
+
+- [add webapp version as default header](kchat/webapp@743019debe437e0de1d4bb7e4fbb2bdd1dfd6d42) by @antonbuksa ([merge request](kchat/webapp!267))
+
+### Changed (2 changes)
+
+- [split user ws channel](kchat/webapp@4190e05e3b67d40dd2098b37cf765b993b346904) by @antonbuksa
+- [change some illustrations](kchat/webapp@9f63b1f909e48cd773d8749fd5bc2ff75828517d) by @leonard.jouve ([merge request](kchat/webapp!241))
+
+### Removed (1 change)
+
+- [remove mattermost footer](kchat/webapp@a234660035c3a1857aa7434aee468bdbe30a1d8b) by @leonard.jouve ([merge request](kchat/webapp!263))
+
 ## 0.8.1 (2023-01-27)
 
 ## Changed (1 change)

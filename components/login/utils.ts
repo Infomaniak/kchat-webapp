@@ -30,6 +30,7 @@ export function storeTokenResponse(response: { expires_in?: any; access_token?: 
     Client4.setCSRF(response.access_token);
     Client4.setAuthHeader = true;
     console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
+    Client4.setWebappVersion(GIT_RELEASE);
 }
 
 /**

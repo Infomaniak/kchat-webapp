@@ -29,6 +29,7 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
           "connectionUrl": null,
           "currentPresence": "",
           "currentTeam": "",
+          "currentTeamUser": "",
           "currentUser": null,
           "errorCallback": null,
           "errorCount": 0,
@@ -48,6 +49,7 @@ exports[`plugins/Pluggable should match snapshot with extended component 1`] = `
           "socketId": null,
           "teamChannel": null,
           "userChannel": null,
+          "userTeamChannel": null,
         }
       }
     >
@@ -90,6 +92,7 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
           "connectionUrl": null,
           "currentPresence": "",
           "currentTeam": "",
+          "currentTeamUser": "",
           "currentUser": null,
           "errorCallback": null,
           "errorCount": 0,
@@ -109,6 +112,7 @@ exports[`plugins/Pluggable should match snapshot with extended component with pl
           "socketId": null,
           "teamChannel": null,
           "userChannel": null,
+          "userTeamChannel": null,
         }
       }
     >
@@ -175,6 +179,7 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
           "connectionUrl": null,
           "currentPresence": "",
           "currentTeam": "",
+          "currentTeamUser": "",
           "currentUser": null,
           "errorCallback": null,
           "errorCount": 0,
@@ -194,6 +199,7 @@ exports[`plugins/Pluggable should match snapshot with null pluggableId 1`] = `
           "socketId": null,
           "teamChannel": null,
           "userChannel": null,
+          "userTeamChannel": null,
         }
       }
     >
@@ -238,6 +244,7 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
           "connectionUrl": null,
           "currentPresence": "",
           "currentTeam": "",
+          "currentTeamUser": "",
           "currentUser": null,
           "errorCallback": null,
           "errorCount": 0,
@@ -257,6 +264,7 @@ exports[`plugins/Pluggable should match snapshot with valid pluggableId 1`] = `
           "socketId": null,
           "teamChannel": null,
           "userChannel": null,
+          "userTeamChannel": null,
         }
       }
     >

@@ -99,6 +99,7 @@ describe('components/sidebar/show_three_days_left_trial_modal', () => {
                     },
                 },
                 usage: {
+                    usageLoaded: true,
                     files: {
                         totalStorage: 0,
                         totalStorageLoaded: true,
