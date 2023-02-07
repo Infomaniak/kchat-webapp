@@ -97,6 +97,7 @@ export function loadMeREST(): ActionFunc {
             } else {
                 // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
                 getHistory().push('/error?type=no_ksuite');
+                throw new Error('no ksuite');
             }
         } catch (error) {
             dispatch(logError(error as ServerError));
