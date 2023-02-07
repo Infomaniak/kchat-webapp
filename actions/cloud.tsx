@@ -12,9 +12,18 @@ import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/act
 import {getConfirmCardSetup} from 'components/payment_form/stripe';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
+import {closeModal, openModal} from 'actions/views/modals';
 
 import {StripeSetupIntent, BillingDetails} from 'types/cloud/sku';
 import {CloudTypes} from 'mattermost-redux/action_types';
+import {ServerError} from '@mattermost/types/errors';
+import {isModalOpen} from 'selectors/views/modals';
+
+import {isLimitExceeded} from 'utils/limits';
+import {ModalIdentifiers} from 'utils/constants';
+
+import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
+import ExternalLimitReachedModal from 'components/limits/external_limit_reached_modal';
 
 // Returns true for success, and false for any error
 export function completeStripeAddPaymentMethod(
@@ -154,6 +163,23 @@ export function getCloudLimits(): ActionFunc {
     };
 }
 
+export function getUsage(): ActionFunc {
+    return async (dispatch: DispatchFunc) => {
+        try {
+            const result = await Client4.getUsage();
+            if (result) {
+                dispatch({
+                    type: CloudTypes.RECEIVED_USAGE,
+                    data: result,
+                });
+            }
+        } catch (e) {
+            return e;
+        }
+        return true;
+    };
+}
+
 export function getMessagesUsage(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         try {
@@ -255,6 +281,36 @@ export function retryFailedCloudFetches() {
             getCloudLimits()(dispatch, getState);
         }
 
+        return {data: true};
+    };
+}
+
+export function openChannelLimitModalIfNeeded(error: ServerError) {
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        if (isLimitExceeded(error)) {
+            if (isModalOpen(getState(), ModalIdentifiers.NEW_CHANNEL_MODAL)) {
+                dispatch(closeModal(ModalIdentifiers.NEW_CHANNEL_MODAL));
+            }
+            dispatch(openModal({
+                modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
+                dialogType: ChannelLimitReachedModal,
+            }));
+        }
+        return {data: true};
+    };
+}
+
+export function openExternalLimitModalIfNeeded(error: ServerError) {
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        if (isLimitExceeded(error)) {
+            if (isModalOpen(getState(), ModalIdentifiers.INVITATION)) {
+                dispatch(closeModal(ModalIdentifiers.INVITATION));
+            }
+            dispatch(openModal({
+                modalId: ModalIdentifiers.EXTERNAL_LIMIT_REACHED,
+                dialogType: ExternalLimitReachedModal,
+            }));
+        }
         return {data: true};
     };
 }

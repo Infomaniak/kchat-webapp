@@ -5672,5 +5672,19 @@
   "workspace_limits.teams_limit_reached.view_upgrade_options": "View upgrade options",
   "workspace_limits.upgrade": "Upgrade to avoid {planName} data limits",
   "workspace_limits.upgrade_reasons.free": "{planName} is restricted to {messagesLimit} message history, {storageLimit} file storage, {appsLimit} apps, and {boardsCardsLimit} board cards. You can delete items to free up space or upgrade to a paid plan.",
-  "yourcomputer": "Your computer"
+  "yourcomputer": "Your computer",
+  "create_channel.limit_error": "Channel limit reached.",
+  "file_upload.limit_error": "Storage limit reached.",
+  "invite.guests.limit_error": "Guest limit reached",
+  "limitModal.plans": "Available for plans",
+  "limitModal.planList": "Basic, Teams & Pro",
+  "limitModal.upgrade": "Modify my offer",
+  "limitModal.contactAdmin": "Inform an administrator",
+  "externalLimit.title": "Communicate better with people outside your organization",
+  "externalLimit.subtitle": "You have reached the limit of external users ({externalsUsage, number}/{externalsLimit, number}) on your kChat. To invite additional users, you must subscribe to a higher plan.",
+  "storageLimit.title": "Increase the storage space of your kSuite!",
+  "storageLimit.subtitle": "Your storage space is full. To continue uploading files, please contact an administrator to change the offer.",
+  "storageLimit.subtitle.admin": "Your storage space is full. Sign up for a higher plan to continue sending files.",
+  "channelLimit.title": "Create new channels to better communicate with your organization’s members",
+  "channelLimit.subtitle": "You have reached the limit of public channels ({publicChannelUsage, number}/{publicChannelLimit, number}) and private channels ({privateChannelUsage, number}/{privateChannelLimit, number}) on your kChat. To create additional ones, you need to subscribe to a premium package."
 }

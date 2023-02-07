@@ -1,3 +1,13 @@
+## 0.9.3 (2023-02-03)
+
+No changes.
+
+## 0.9.2 (2023-02-03)
+
+### Fixed (1 change)
+
+- [temporary upload stuck fix](kchat/webapp@657a4dffbbb39626af7d6bd5248461dcc20e036a) by @leonard.jouve ([merge request](kchat/webapp!272))
+
 ## 0.9.1 (2023-02-02)
 
 ### Fixed (1 change)
