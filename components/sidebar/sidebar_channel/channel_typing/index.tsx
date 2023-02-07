@@ -5,9 +5,9 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 
-import {GlobalState} from '@mattermost/types/store';
 import {isChannelBeingTypedIn, makeGetUsersTypingByChannelAndPost} from 'mattermost-redux/selectors/entities/typing';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
+import {GlobalState} from '@mattermost/types/store';
 
 import Constants from 'utils/constants';
 
