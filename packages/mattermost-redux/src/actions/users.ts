@@ -90,8 +90,10 @@ export function loadMeREST(): ActionFunc {
             if (orderedKSuite.length > 0) {
                 const {url} = orderedKSuite[0];
 
-                // if the user is neither already on this page nor in a development environment
-                if (url !== window.location.protocol + '//' + window.location.hostname && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                console.log(process.env.NODE_ENV);
+
+                // if the user is neither already on this page nor in a development or testing environment
+                if (url !== window.location.protocol + '//' + window.location.hostname && process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'test') { //eslint-disable-line no-process-env
                     window.open(url, '_self');
                 }
             } else {
