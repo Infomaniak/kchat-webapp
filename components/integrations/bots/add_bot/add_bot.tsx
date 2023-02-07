@@ -240,7 +240,7 @@ export default class AddBot extends React.PureComponent<Props, State> {
         }
 
         if (this.state.pictureFile && this.isFile(this.state.pictureFile)) {
-            if (!AcceptedProfileImageTypes.includes(this.state.pictureFile.type)) {
+            if (!AcceptedProfileImageTypes.includes('image/jpeg')) {
                 this.setState({
                     error: (
                         <FormattedMessage
@@ -249,6 +249,7 @@ export default class AddBot extends React.PureComponent<Props, State> {
                         />
                     ),
                 });
+                return;
             } else if (this.state.pictureFile.size > this.props.maxFileSize) {
                 this.setState({
                     error: (
@@ -258,6 +259,7 @@ export default class AddBot extends React.PureComponent<Props, State> {
                         />
                     ),
                 });
+                return;
             }
         }
 
@@ -457,6 +459,8 @@ export default class AddBot extends React.PureComponent<Props, State> {
             }
         }
 
+        console.log(this.state.error);
+
         return (
             <div className='backstage-content'>
                 <BackstageHeader>
@@ -528,7 +532,7 @@ export default class AddBot extends React.PureComponent<Props, State> {
                                         defaultMessage='Upload Image'
                                     />
                                     <input
-                                        accept={Constants.ACCEPT_STATIC_IMAGE}
+                                        accept={Constants.ACCEPT_STATIC_IMAGE + ', .pdf'}
                                         type='file'
                                         onChange={this.updatePicture}
                                     />
