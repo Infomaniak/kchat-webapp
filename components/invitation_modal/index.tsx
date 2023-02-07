@@ -28,6 +28,7 @@ import {makeAsyncComponent} from 'components/async_load';
 import {Channel} from '@mattermost/types/channels';
 import {UserProfile} from '@mattermost/types/users';
 import {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {ServerError} from '@mattermost/types/errors';
 
 import {GlobalState} from 'types/store';
 
@@ -91,7 +92,7 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
 }
 
 type Actions = {
-    sendGuestsInvites: (teamId: string, channels: Channel[], users: UserProfile[], emails: string[], message: string) => Promise<{data: InviteResults}>;
+    sendGuestsInvites: (teamId: string, channels: Channel[], users: UserProfile[], emails: string[], message: string, openExternalLimitModalIfNeeded: (error: ServerError) => ActionFunc) => Promise<{data: InviteResults}>;
     sendMembersInvites: (teamId: string, users: UserProfile[], emails: string[]) => Promise<{data: InviteResults}>;
     sendMembersInvitesToChannels: (teamId: string, channels: Channel[], users: UserProfile[], emails: string[], message: string) => Promise<{data: InviteResults}>;
     regenerateTeamInviteId: (teamId: string) => void;
