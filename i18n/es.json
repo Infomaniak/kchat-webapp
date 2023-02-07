@@ -2913,6 +2913,7 @@
   "channel_notifications.sendDesktop": "Enviar notificaciones de escritorio",
   "channel_select.placeholder": "--- Selecciona un canal ---",
   "channel_switch_modal.deactivated": "Desactivado",
+  "channel_typing": "{usersTyping} {length, plural, =1 {está} other {están}} escribiendo...",
   "channel_toggle_button.private": "Privado",
   "channel_toggle_button.public": "Público",
   "claim.email_to_ldap.enterLdapPwd": "Ingresa el ID y la contraseña de tu cuenta AD/LDAP",

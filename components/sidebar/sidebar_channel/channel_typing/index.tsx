@@ -3,11 +3,16 @@
 
 import React from 'react';
 import {useSelector} from 'react-redux';
+import {useIntl} from 'react-intl';
 
 import {GlobalState} from '@mattermost/types/store';
-import {isChannelBeingTypedIn} from 'mattermost-redux/selectors/entities/typing';
+import {isChannelBeingTypedIn, makeGetUsersTypingByChannelAndPost} from 'mattermost-redux/selectors/entities/typing';
+import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
 import './channel_typing.scss';
+import OverlayTrigger from 'components/overlay_trigger';
+import Constants from 'utils/constants';
+import Tooltip from 'components/tooltip';
 
 type Props = {
     channelId: string;
@@ -15,17 +20,33 @@ type Props = {
 
 const ChannelTyping = ({channelId}: Props) => {
     const channelBeingTypedIn = useSelector((state: GlobalState) => isChannelBeingTypedIn(state, channelId));
+    const getUsersTypingByChannelAndPost = makeGetUsersTypingByChannelAndPost();
+    const usersTyping = useSelector((state: GlobalState) => getUsersTypingByChannelAndPost(state, {channelId, postId: ''}));
+    const currentChannelId = useSelector(getCurrentChannelId);
+    const {formatMessage} = useIntl();
 
-    if (!channelBeingTypedIn) {
+    const overlay = (
+        <Tooltip id={`channel-typing-tooltip-${channelId}`}>
+            {formatMessage({id: 'channel_typing', defaultMessage: '{usersTyping} {length, plural, =1 {is} other {are}} typing...'}, {usersTyping: usersTyping.join(', '), length: usersTyping.length})}
+        </Tooltip>
+    );
+
+    if (!channelBeingTypedIn || channelId === currentChannelId) {
         return null;
     }
 
     return (
-        <div className='channel-typing'>
-            <div className='dot'/>
-            <div className='dot'/>
-            <div className='dot'/>
-        </div>
+        <OverlayTrigger
+            delay={Constants.OVERLAY_TIME_DELAY}
+            placement='top'
+            overlay={overlay}
+        >
+            <div className='channel-typing'>
+                <div className='dot'/>
+                <div className='dot'/>
+                <div className='dot'/>
+            </div>
+        </OverlayTrigger>
     );
 };
 

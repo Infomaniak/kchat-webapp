@@ -2853,6 +2853,7 @@
   "channel_switch_modal.deactivated": "Désactivé",
   "channel_toggle_button.private": "Privé",
   "channel_toggle_button.public": "Public",
+  "channel_typing": "{usersTyping} {length, plural, =1 {est} other {sont}} en train d'écrire...",
   "claim.email_to_ldap.enterLdapPwd": "Spécifiez l'identifiant et le mot de passe de votre compte AD/LDAP",
   "claim.email_to_ldap.enterPwd": "Spécifiez le mot de passe pour votre compte e-mail {site}",
   "claim.email_to_ldap.ldapId": "Identifiant AD/LDAP",

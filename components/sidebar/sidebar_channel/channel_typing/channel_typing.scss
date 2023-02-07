@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
     gap: 3px;
     @for $i from 1 through 3 {
         .dot:nth-child(#{$i}){
