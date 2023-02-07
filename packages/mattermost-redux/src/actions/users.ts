@@ -87,34 +87,30 @@ export function loadMeREST(): ActionFunc {
 
             // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
             const orderedKSuite = Object.values(kSuites).sort((a, b) => b.update_at - a.update_at);
-            if (orderedKSuite.length > 0) {
-                const {url} = orderedKSuite[0];
 
-                // if the user is neither already on this page nor in a development or testing environment
-                if (url !== window.location.protocol + '//' + window.location.hostname && process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'test') { //eslint-disable-line no-process-env
-                    window.open(url, '_self');
+            // don't redirect to the error page if it is a testing environment
+            if (orderedKSuite.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
+                if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                    const {url} = orderedKSuite[0];
+                    if (url !== window.location.protocol + '//' + window.location.hostname) {
+                        window.open(url, '_self');
+                    }
                 }
+
+                await Promise.all([
+                    dispatch(getClientConfig()),
+                    dispatch(getLicenseConfig()),
+                    dispatch(getMe()),
+                    dispatch(getMyPreferences()),
+                    dispatch(getMyTeamMembers()),
+                ]);
+
+                const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
+                await dispatch(getMyTeamUnreads(isCollapsedThreads));
             } else {
                 // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
                 getHistory().push('/error?type=no_ksuite');
-                throw new Error('no ksuite');
             }
-        } catch (error) {
-            dispatch(logError(error as ServerError));
-            return {error: error as ServerError};
-        }
-
-        try {
-            await Promise.all([
-                dispatch(getClientConfig()),
-                dispatch(getLicenseConfig()),
-                dispatch(getMe()),
-                dispatch(getMyPreferences()),
-                dispatch(getMyTeamMembers()),
-            ]);
-
-            const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
-            await dispatch(getMyTeamUnreads(isCollapsedThreads));
         } catch (error) {
             dispatch(logError(error as ServerError));
             return {error: error as ServerError};
