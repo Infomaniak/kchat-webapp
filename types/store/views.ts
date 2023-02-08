@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {UserProfile} from 'mattermost-redux/types/users';
+
 import {Channel} from '@mattermost/types/channels';
 import {MarketplaceApp, MarketplacePlugin} from '@mattermost/types/marketplace';
 import {RelationOneToOne} from '@mattermost/types/utilities';
@@ -12,7 +14,6 @@ import {LhsViewState} from './lhs';
 import {RhsViewState} from './rhs';
 
 import {DraggingState} from '.';
-import { UserProfile } from 'mattermost-redux/types/users';
 
 export type ModalFilters = {
     roles?: string[];
@@ -79,6 +80,15 @@ export type ViewsState = {
         connectedCallID: string;
         connectedCallUrl: string;
         voiceConnectedChannels: any;
+    };
+
+    kmeetCalls: {
+        connectedKmeetUrls: {
+            [channelId: string]: {
+                url: string;
+                id: string;
+            };
+        };
     };
 
     rhs: RhsViewState;
