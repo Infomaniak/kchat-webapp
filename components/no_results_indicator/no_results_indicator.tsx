@@ -34,7 +34,6 @@ const iconMap: {[key in NoResultsVariant]: React.ReactNode } = {
     [NoResultsVariant.Mentions]: <MentionsIcon className='no-results__icon'/>,
     [NoResultsVariant.FlaggedPosts]: <IKFlagIcon/>,
     [NoResultsVariant.PinnedPosts]: <PinIcon className='no-results__icon'/>,
-    // [NoResultsVariant.ChannelFiles]: <i className='icon icon-file-text-outline no-results__icon'/>,
     [NoResultsVariant.ChannelFiles]: <ChannelFilesIcon className='no-results__icon'/>,
     [NoResultsVariant.ChannelFilesFiltered]: <i className='icon icon-file-text-outline no-results__icon'/>,
     [NoResultsVariant.UserGroups]: <i className='icon icon-account-multiple-outline no-results__icon'/>,
