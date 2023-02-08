@@ -50,15 +50,15 @@ jest.mock('mattermost-redux/actions/teams', () => ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sendEmailGuestInvitesToChannelsGracefully: (teamId: string, _channelIds: string[], emails: string[], _message: string) => {
         if (teamId === 'incorrect-default-smtp') {
-            return ({type: 'MOCK_RECEIVED_ME', data: {email: emails[0], error: {message: 'SMTP is not configured in System Console.', id: 'api.team.invite_members.unable_to_send_email_with_defaults.app_error'}}});
+            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'SMTP is not configured in System Console.', id: 'api.team.invite_members.unable_to_send_email_with_defaults.app_error'}}))});
         } else if (emails.length > 21) { // Poor attempt to mock rate limiting.
-            return ({type: 'MOCK_RECEIVED_ME', data: {email: emails[0], error: {message: 'Invite emails rate limit exceeded.'}}});
+            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'Invite emails rate limit exceeded.'}}))});
         } else if (teamId === 'error') {
-            return ({type: 'MOCK_RECEIVED_ME', data: {email: emails[0], error: {message: 'Unable to add the guest to the channels.'}}});
+            return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: {message: 'Unable to add the guest to the channels.'}}))});
         }
 
         // teamId === 'correct' i.e no error
-        return ({type: 'MOCK_RECEIVED_ME', data: {email: emails[0], error: undefined}});
+        return ({type: 'MOCK_RECEIVED_ME', data: emails.map((email) => ({email, error: undefined}))});
     },
 }));
 
