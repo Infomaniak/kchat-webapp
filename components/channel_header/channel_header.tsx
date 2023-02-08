@@ -39,13 +39,15 @@ import {handleFormattedTextClick, localizeMessage, isEmptyObject, toTitleCase} f
 import {t} from 'utils/i18n';
 
 import MeetButton from 'components/meet_button';
-import {UserCustomStatus, UserProfile} from '@mattermost/types/users';
-import {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
+
 import {RhsState} from 'types/store/rhs';
 
 import {ModalData} from 'types/actions';
 
 import LocalizedIcon from 'components/localized_icon';
+
+import {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
+import {UserCustomStatus, UserProfile} from '@mattermost/types/users';
 
 import ChannelInfoButton from './channel_info_button';
 import HeaderIconWrapper from './components/header_icon_wrapper';
@@ -454,10 +456,13 @@ class ChannelHeader extends React.PureComponent<Props, State> {
         const channelFilesIconClass = classNames('channel-header__icon channel-header__icon--wide channel-header__icon--left', {
             'channel-header__icon--active': rhsState === RHSStates.CHANNEL_FILES,
         });
+
         const channelFilesIcon = <i className='icon icon-file-text-outline'/>;
+
         const pinnedIconClass = classNames('channel-header__icon channel-header__icon--wide channel-header__icon--left', {
             'channel-header__icon--active': rhsState === RHSStates.PIN,
         });
+
         const pinnedIcon = this.props.pinnedPostsCount ? (
             <>
                 <i

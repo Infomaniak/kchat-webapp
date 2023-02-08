@@ -588,6 +588,7 @@ export function applyTheme(theme: Theme) {
     }
     updateCodeTheme(theme.codeTheme);
 
+    // @ts-ignore
     cssVars({
         variables: {
 
@@ -719,6 +720,12 @@ export function applyTheme(theme: Theme) {
             'ik-illustration-grey-13': theme.ikIllustrationGreyThirteen,
             'ik-illustration-grey-14': theme.ikIllustrationGreyFourteen,
             'ik-illustration-grey-15': theme.ikIllustrationGreyFifteen,
+            'ik-illustration-grey-16': theme.ikIllustrationGreySixteen,
+            'ik-illustration-grey-17': theme.ikIllustrationGreySeventeen,
+            'ik-illustration-grey-18': theme.ikIllustrationGreyEighteen,
+            'ik-illustration-grey-19': theme.ikIllustrationGreyNineteen,
+            'ik-illustration-white-1': theme.ikIllustrationWhiteOne,
+            'ik-illustration-blue-1': theme.ikIllustrationBlueOne,
         },
     });
 }

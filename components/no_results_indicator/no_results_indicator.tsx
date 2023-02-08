@@ -10,6 +10,7 @@ import {t} from 'utils/i18n';
 import IKFlagIcon from 'components/widgets/icons/ik_flag_icon';
 import MentionsIcon from 'components/widgets/icons/mentions_icon';
 import PinIcon from 'components/widgets/icons/pin_icon';
+import ChannelFilesIcon from 'components/widgets/icons/channel_files_icon';
 import SearchIcon from 'components/widgets/icons/search_icon';
 
 import {NoResultsVariant, NoResultsLayout} from './types';
@@ -33,7 +34,8 @@ const iconMap: {[key in NoResultsVariant]: React.ReactNode } = {
     [NoResultsVariant.Mentions]: <MentionsIcon className='no-results__icon'/>,
     [NoResultsVariant.FlaggedPosts]: <IKFlagIcon/>,
     [NoResultsVariant.PinnedPosts]: <PinIcon className='no-results__icon'/>,
-    [NoResultsVariant.ChannelFiles]: <i className='icon icon-file-text-outline no-results__icon'/>,
+    // [NoResultsVariant.ChannelFiles]: <i className='icon icon-file-text-outline no-results__icon'/>,
+    [NoResultsVariant.ChannelFiles]: <ChannelFilesIcon className='no-results__icon'/>,
     [NoResultsVariant.ChannelFilesFiltered]: <i className='icon icon-file-text-outline no-results__icon'/>,
     [NoResultsVariant.UserGroups]: <i className='icon icon-account-multiple-outline no-results__icon'/>,
     [NoResultsVariant.UserGroupMembers]: <i className='icon icon-account-outline no-results__icon'/>,

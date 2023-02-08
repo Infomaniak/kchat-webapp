@@ -706,7 +706,7 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: process.env.BASE_URL || 'https://kchat.infomaniak.com', //eslint-disable-line no-process-env
+                target: process.env.BASE_URL || 'https://kchat.preprod.dev.infomaniak.ch', //eslint-disable-line no-process-env
                 changeOrigin: true,
                 xfwd: true,
                 ws: false,
