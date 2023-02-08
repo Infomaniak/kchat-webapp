@@ -563,6 +563,7 @@ export function fetchAllMyTeamsChannelsAndChannelMembersREST(): ActionFunc {
                     data: {
                         channelID: conferences[i].channel_id,
                         id: conferences[i].id,
+                        url: conferences[i].url,
                         users: conferences[i].participants,
                     },
                 });

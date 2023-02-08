@@ -6,6 +6,14 @@ import {ActionTypes} from 'utils/constants';
 
 const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: {type: string; data: {channelID: string; url: string; id: string}}) => {
     switch (action.type) {
+    case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED:
+        return {
+            ...state,
+            [action.data.channelID]: {
+                url: action.data.url,
+                id: action.data.id,
+            },
+        };
     case ActionTypes.VOICE_CHANNEL_ADDED:
         return {
             ...state,
