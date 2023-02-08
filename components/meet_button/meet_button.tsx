@@ -14,11 +14,9 @@ import Tooltip from 'components/tooltip';
 
 import Constants from 'utils/constants';
 
-import {GlobalState} from 'types/store';
+// import {GlobalState} from 'types/store';
 
-import KMeetIcon from '../widgets/icons/kmeet_icon';
-
-import SvgCallComponent from './SvgCallComponent';
+// import SvgCallComponent from './SvgCallComponent';
 
 import './meet_button.scss';
 import meetSvg from './static/kmeet.svg';

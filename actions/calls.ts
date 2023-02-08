@@ -2,26 +2,27 @@
 // See LICENSE.txt for license information.
 import {Dispatch} from 'redux';
 
-import {DispatchFunc, GenericAction, GetStateFunc} from 'mattermost-redux/types/actions';
+import {DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {ActionTypes} from 'utils/constants';
 import {
     connectedCallID,
     connectedCallUrl,
     connectedChannelID,
     voiceConnectedChannels,
-    voiceConnectedUsers,
+
+    // voiceConnectedUsers,
 } from 'selectors/calls';
-import {getProfilesByIds} from 'mattermost-redux/actions/users';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
-import {isDesktopApp} from 'utils/user_agent';
-import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 import {GlobalState} from 'types/store';
-import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
-import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-import {IKConstants} from '../utils/constants-ik';
 
+// import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
+// import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
+
+// import {getProfilesByIds} from 'mattermost-redux/actions/users';
+// import {isDesktopApp} from 'utils/user_agent';
+// import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+// import {displayUsername} from 'mattermost-redux/utils/user_utils';
 // import {Client4} from 'mattermost-redux/client';
 
 export const showExpandedView = () => (dispatch: Dispatch<GenericAction>) => {
@@ -66,14 +67,16 @@ export function leaveCallInChannel(channelID: string, dialingID: string) {
     };
 }
 
-export function startOrJoinCallInChannel(channelID: string, dialingID?: string) {
+export function startOrJoinCallInChannel(channelID: string /**, dialingID?: string*/) {
     return async (dispatch: DispatchFunc, getState) => {
         const state = getState();
-        const currentUser = getCurrentUser(getState());
-        const getChannel = makeGetChannel();
-        const currentChannel = getChannel(state, {id: channelID});
-        const channelName = currentChannel.display_name.length > 30 ? `${currentChannel.display_name.substring(0, 30)}...` : currentChannel.display_name;
         const channels = voiceConnectedChannels(state);
+
+        // const getChannel = makeGetChannel();
+        // const currentChannel = getChannel(state, {id: channelID});
+        // const currentUser = getCurrentUser(getState());
+        // const channelName = currentChannel.display_name.length > 30 ? `${currentChannel.display_name.substring(0, 30)}...` : currentChannel.display_name;
+
         let data;
         if (!connectedChannelID(getState()) && !channels[channelID]) {
             data = await Client4.startMeet(channelID);
@@ -82,7 +85,7 @@ export function startOrJoinCallInChannel(channelID: string, dialingID?: string) 
             });
 
             if (data && data.url) {
-                const kmeetUrl = new URL(`${IKConstants.KMEET_ENDPOINT}${data.id}`);
+                const kmeetUrl = new URL(data.url);
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
 
