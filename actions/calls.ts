@@ -14,9 +14,10 @@ import {
 } from 'selectors/calls';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
-import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 import {GlobalState} from 'types/store';
-import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
+
+// import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
+// import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
 // import {getProfilesByIds} from 'mattermost-redux/actions/users';
 // import {isDesktopApp} from 'utils/user_agent';
@@ -77,7 +78,7 @@ export function startOrJoinCallInChannel(channelID: string /**, dialingID?: stri
         // const channelName = currentChannel.display_name.length > 30 ? `${currentChannel.display_name.substring(0, 30)}...` : currentChannel.display_name;
 
         let data;
-        if (/**!connectedChannelID(getState()) &&*/!channels[channelID]) {
+        if (!connectedChannelID(getState()) && !channels[channelID]) {
             data = await Client4.startMeet(channelID);
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
