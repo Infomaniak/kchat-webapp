@@ -11,13 +11,13 @@ import {Post} from 'mattermost-redux/types/posts';
 import {GlobalState} from 'mattermost-redux/types/store';
 
 import {
-    connectedCallID, connectedCallUrl,
+    connectedCallID,
+    connectedCallUrl,
     voiceConnectedChannels,
     voiceConnectedProfilesInChannel,
 } from 'selectors/calls';
 
 import PostType from './component';
-import {IKConstants} from '../../../utils/constants-ik';
 
 interface OwnProps {
     post: Post;
