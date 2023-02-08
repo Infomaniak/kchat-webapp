@@ -1,3 +1,16 @@
+## 0.9.4 (2023-02-08)
+
+### Fixed (3 changes)
+
+- [Fixed mobile sidebar](kchat/webapp@89aaf569842d1f11fb65189f0d557611a6711af0) by @olivier.thuymans ([merge request](kchat/webapp!275))
+- [fixed duplicate mark as unread button](kchat/webapp@bb182a8847ffd2be9a041845a9349680c68c9f75) by @olivier.thuymans ([merge request](kchat/webapp!271))
+- [Update kmeet url with backend response](kchat/webapp@cc8e7a7058c98f5b81db51c9ce8f7445c6bbddd0) by @florent.glauda ([merge request](kchat/webapp!266))
+
+### Removed (2 changes)
+
+- [calls: clean imports](kchat/webapp@502a7407693937ee0102fa0e37f8b29b0d2ac2d5) by @antonbuksa ([merge request](kchat/webapp!266))
+- [rm console system wording in bots accounts](kchat/webapp@e9682012d93e00ffb7bb1e8c4a52e905eea66aef) by @florent.glauda ([merge request](kchat/webapp!273))
+
 ## 0.9.3 (2023-02-03)
 
 No changes.
