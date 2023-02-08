@@ -17,10 +17,14 @@ import {cleanUpUrlable} from 'utils/url';
 import {GlobalState} from 'types/store';
 import Permissions from 'mattermost-redux/constants/permissions';
 import {createChannel} from 'mattermost-redux/actions/channels';
+import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
 import {ChannelType} from '@mattermost/types/channels';
 
 jest.mock('mattermost-redux/actions/channels');
+jest.mock('mattermost-redux/actions/cloud', () => ({
+    openChannelLimitModalIfNeeded: jest.fn,
+}));
 
 import NewChannelModal from './new_channel_modal';
 
@@ -439,6 +443,6 @@ describe('components/new_channel_modal', () => {
             team_id: 'current_team_id',
             type: 'O',
             update_at: 0,
-        }, '');
+        }, '', openChannelLimitModalIfNeeded);
     });
 });

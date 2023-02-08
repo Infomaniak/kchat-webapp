@@ -17,11 +17,9 @@ import OffersFoldersSvg from 'components/common/svg_images_components/offers_fol
 import {ModalIdentifiers} from 'utils/constants';
 
 import {closeModal} from 'actions/views/modals';
+import {redirectTokSuiteDashboard} from 'actions/global_actions';
 
 import './offers_modal.scss';
-
-const LEARN_MORE_LINK = 'https://www.youtube.com/watch?v=xvFZjo5PgG0';
-const MODIFY_OFFER_LINK = 'https://www.youtube.com/watch?v=xvFZjo5PgG0';
 
 type Props = {
     onExited?: () => void;
@@ -43,7 +41,7 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
     };
 
     const handleAccept = () => {
-        window.open(MODIFY_OFFER_LINK, '_blank', 'noreferrer')?.focus();
+        redirectTokSuiteDashboard();
         handleOnClose();
     };
 
@@ -75,9 +73,7 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
                         />
                         <p className='modify-link'>
                             <a
-                                href={LEARN_MORE_LINK}
-                                target='_blank'
-                                rel='noreferrer'
+                                onClick={redirectTokSuiteDashboard}
                             >
                                 <FormattedMessage
                                     id='offers_modal.link'

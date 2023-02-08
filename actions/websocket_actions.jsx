@@ -206,7 +206,15 @@ export function initialize() {
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
-    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, token, currentChannelId);
+    WebSocketClient.initialize(
+        connUrl,
+        user.user_id,
+        user.id,
+        user.team_id,
+        null,
+        token,
+        currentChannelId
+    );
 }
 
 export function close() {

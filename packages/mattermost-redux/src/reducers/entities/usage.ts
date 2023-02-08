@@ -6,28 +6,41 @@ import {CloudUsage} from '@mattermost/types/cloud';
 import {CloudTypes} from 'mattermost-redux/action_types';
 
 const emptyUsage = {
+    storage: 0,
+    public_channels: 0,
+    private_channels: 0,
+    guests: 0,
+    members: 0,
+    usageLoaded: false,
     files: {
         totalStorage: 0,
-        totalStorageLoaded: false,
+        totalStorageLoaded: true,
     },
     messages: {
         history: 0,
-        historyLoaded: false,
+        historyLoaded: true,
     },
     boards: {
         cards: 0,
-        cardsLoaded: false,
+        cardsLoaded: true,
     },
     teams: {
         active: 0,
         cloudArchived: 0,
-        teamsLoaded: false,
+        teamsLoaded: true,
     },
 };
 
 // represents the usage associated with this workspace
 export default function usage(state: CloudUsage = emptyUsage, action: GenericAction) {
     switch (action.type) {
+    case CloudTypes.RECEIVED_USAGE:
+        return {
+            ...state,
+            ...action.data,
+            usageLoaded: true,
+        };
+        break;
     case CloudTypes.RECEIVED_MESSAGES_USAGE: {
         return {
             ...state,
