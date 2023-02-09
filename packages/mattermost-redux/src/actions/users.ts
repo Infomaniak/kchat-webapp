@@ -44,8 +44,8 @@ import {getHistory} from 'utils/browser_history';
 
 function isIkBaseUrl() {
     const whitelist = [
-        'https://kchat.infomaniak.com',
-        'https://kchat.preprod.dev.infomaniak.ch',
+        'https://do-not-replace-kchat.infomaniak.com'.replace('do-not-replace-', ''),
+        'https://do-not-replace-kchat.preprod.dev.infomaniak.ch'.replace('do-not-replace-', ''),
     ];
     return whitelist.includes(window.origin);
 }
