@@ -93,9 +93,9 @@ export function loadMeREST(): ActionFunc {
             await dispatch(getMyKSuites());
             const kSuites = getTeams(getState());
 
-            if (isIkBaseUrl() && kSuites.length > 0) {
+            if (kSuites.length > 0) {
                 // don't redirect to the error page if it is a testing environment
-                if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                if (isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
                     // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
                     const orderedKSuite = kSuites.sort((a, b) => b.update_at - a.update_at);
 
