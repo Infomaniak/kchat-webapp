@@ -137,7 +137,7 @@ export function needRefreshToken() {
 }
 
 export function isDefaultAuthServer() {
-    return window.location.origin === v2DefaultAuthServer
+    return window.location.origin === v2DefaultAuthServer;
 }
 
 function storeTokenV2(tokenData: {token: string, refreshToken: string, expiresAt: number}) {
@@ -153,7 +153,7 @@ function storeTokenV2(tokenData: {token: string, refreshToken: string, expiresAt
 
 async function refreshTokenV2() {
     try {
-        const newToken = await window.authManager.refreshToken()
+        const newToken = await window.authManager.refreshToken();
         console.log(newToken);
         storeTokenV2(newToken);
     } catch (error) {
@@ -176,19 +176,22 @@ function isValidTokenV2(token: {token: string, refreshToken: string, expiresAt: 
 
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
-        const updatedToken = await window.authManager.tokenRequest()
+        const updatedToken = await window.authManager.tokenRequest();
         if (!Object.keys(updatedToken)) {
-            window.postMessage(
-                {
-                    type: 'reset-teams',
-                    message: {},
-                },
-                window.origin,
-            );
+            clearLocalStorageToken();
+            return Promise.reject(new Error('missing refresh token'));
+
+            // window.postMessage(
+            //     {
+            //         type: 'reset-teams',
+            //         message: {},
+            //     },
+            //     window.origin,
+            // );
         } else if (isValidTokenV2(updatedToken)) {
             storeTokenV2(updatedToken);
         } else {
-            await refreshTokenV2()
+            await refreshTokenV2();
         }
 
         if (redirectToTeam) {
@@ -200,14 +203,14 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
         if (!refreshToken) {
             return Promise.reject(new Error('missing refresh token'));
         }
-        
+
         if (REFRESH_PROMISE) {
             return REFRESH_PROMISE as Promise<any>;
         }
-    
+
         Client4.setToken('');
         Client4.setCSRF('');
-    
+
         // eslint-disable-next-line consistent-return
         REFRESH_PROMISE = new Promise((resolve, reject) => {
             Client4.refreshIKLoginToken(
@@ -217,7 +220,7 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
             ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
                 storeTokenResponse(resp);
                 LocalStorageStore.setWasLoggedIn(true);
-    
+
                 window.postMessage(
                     {
                         type: 'token-refreshed',
@@ -229,7 +232,7 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
                     },
                     window.origin,
                 );
-    
+
                 REFRESH_PROMISE = null;
                 if (redirectToTeam) {
                     redirectUserToDefaultTeam();
@@ -243,7 +246,7 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
                 reject(error);
             });
         });
-    
+
         return REFRESH_PROMISE;
     }
 }
