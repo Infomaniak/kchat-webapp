@@ -42,6 +42,14 @@ import {General} from 'mattermost-redux/constants';
 
 import {getHistory} from 'utils/browser_history';
 
+function isIkBaseUrl() {
+    const whitelist = [
+        'https://kchat.infomaniak.com',
+        'https://kchat.preprod.dev.infomaniak.ch',
+    ];
+    return whitelist.includes(window.origin);
+}
+
 export function generateMfaSecret(userId: string): ActionFunc {
     return bindClientFunc({
         clientFunc: Client4.generateMfaSecret,
@@ -85,16 +93,14 @@ export function loadMeREST(): ActionFunc {
             await dispatch(getMyKSuites());
             const kSuites = getTeams(getState());
 
-            // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
-            const orderedKSuite = Object.values(kSuites).sort((a, b) => b.update_at - a.update_at);
-
-            // don't redirect to the error page if it is a testing environment
-            if (orderedKSuite.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
+            if (isIkBaseUrl() && kSuites.length > 0) {
+                // don't redirect to the error page if it is a testing environment
                 if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                    // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
+                    const orderedKSuite = kSuites.sort((a, b) => b.update_at - a.update_at);
+
                     const {url} = orderedKSuite[0];
-                    if (url !== window.location.protocol + '//' + window.location.hostname) {
-                        window.open(url, '_self');
-                    }
+                    window.open(url, '_self');
                 }
 
                 await Promise.all([
