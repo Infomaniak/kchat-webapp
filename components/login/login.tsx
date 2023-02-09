@@ -126,7 +126,7 @@ const Login = () => {
                     } else {
                         localStorage.setItem('IKToken', data.token);
                         localStorage.setItem('IKRefreshToken', data.refreshToken);
-                        localStorage.setItem('IKTokenExpire', (data.expiresAt).toString())
+                        localStorage.setItem('IKTokenExpire', (data.expiresAt).toString());
 
                         Client4.setToken(data.token);
                         Client4.setCSRF(data.token);

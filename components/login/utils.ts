@@ -13,7 +13,7 @@ import {getDesktopVersion} from 'utils/user_agent';
 
 let REFRESH_PROMISE: Promise<any> | null = null;
 
-let v2DefaultAuthServer = 'https://kchat.preprod.dev.infomaniak.ch';
+const v2DefaultAuthServer = 'https://kchat.preprod.dev.infomaniak.ch';
 
 /**
  * Store IKToken infos in localStorage and update Client
@@ -177,17 +177,9 @@ function isValidTokenV2(token: {token: string, refreshToken: string, expiresAt: 
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
         const updatedToken = await window.authManager.tokenRequest();
-        if (!Object.keys(updatedToken)) {
+        if (!Object.keys(updatedToken).length) {
             clearLocalStorageToken();
             return Promise.reject(new Error('missing refresh token'));
-
-            // window.postMessage(
-            //     {
-            //         type: 'reset-teams',
-            //         message: {},
-            //     },
-            //     window.origin,
-            // );
         } else if (isValidTokenV2(updatedToken)) {
             storeTokenV2(updatedToken);
         } else {
