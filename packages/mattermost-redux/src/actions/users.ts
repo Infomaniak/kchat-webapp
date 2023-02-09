@@ -93,7 +93,8 @@ export function loadMeREST(): ActionFunc {
             await dispatch(getMyKSuites());
             const kSuites = getTeams(getState());
 
-            if (kSuites.length > 0) {
+            // allow through in tests to launch promise.all but not trigger redirect
+            if (kSuites.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
                 // don't redirect to the error page if it is a testing environment
                 if (isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
                     // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
