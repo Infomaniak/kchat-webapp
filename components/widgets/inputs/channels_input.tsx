@@ -131,9 +131,9 @@ export default class ChannelsInput extends React.PureComponent<Props, State> {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onChange = (value: Channel[], _meta: ActionMeta<Channel>) => {
+    onChange = (value: Channel[] | null, _meta: ActionMeta<Channel>) => {
         if (this.props.onChange) {
-            this.props.onChange(value);
+            this.props.onChange(value || []);
         }
     }
 
