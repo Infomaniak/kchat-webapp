@@ -15,6 +15,7 @@ export default function PinIcon(props: React.HTMLAttributes<HTMLSpanElement>) {
                 fill='none'
                 role='img'
                 aria-label={formatMessage({id: 'generic_icons.pin', defaultMessage: 'Pin Icon'})}
+                style={{marginBottom: '20px'}}
             >
                 <path
                     d='M30.7845 157.917H31.554V158.687V191.139L62.511 158.16L62.739 157.917H63.0721L167.267 157.917C170.711 157.917 173.503 155.126 173.503 151.682V41.0051C173.503 37.5613 170.711 34.7695 167.267 34.7695H7.73209C4.28827 34.7695 1.49651 37.5613 1.49651 41.0051V151.682C1.49651 155.126 4.28827 157.917 7.73209 157.917L30.7845 157.917Z'
