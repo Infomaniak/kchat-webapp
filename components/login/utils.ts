@@ -13,7 +13,8 @@ import {getDesktopVersion} from 'utils/user_agent';
 
 let REFRESH_PROMISE: Promise<any> | null = null;
 
-const v2DefaultAuthServer = 'https://kchat.preprod.dev.infomaniak.ch';
+// eslint-disable-next-line no-process-env
+const v2DefaultAuthServer = process.env.BASE_URL;
 
 /**
  * Store IKToken infos in localStorage and update Client
