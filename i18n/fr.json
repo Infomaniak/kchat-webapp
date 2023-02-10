@@ -3196,6 +3196,7 @@
   "filtered_user_list.userStatus": "Statut utilisateur :",
   "flag_post.flag": "Marquez le message d'un indicateur pour le suivi",
   "flag_post.unflag": "Supprimer l'indicateur",
+  "forward_post_button.label": "Transférer",
   "full_screen_modal.back": "Précédent",
   "full_screen_modal.close": "Fermer",
   "general_button.close": "Fermer",
