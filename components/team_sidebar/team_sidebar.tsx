@@ -15,6 +15,8 @@ import Permissions from 'mattermost-redux/constants/permissions';
 import {Constants} from 'utils/constants';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import * as Utils from 'utils/utils';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import Pluggable from 'plugins/pluggable';
 
@@ -300,6 +302,10 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
                     <Pluggable pluggableName='BottomTeamSidebar'/>
                 </div>,
             );
+        }
+
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '3.0.0')) {
+            return null;
         }
 
         return (
