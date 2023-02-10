@@ -31,6 +31,7 @@ import {
     transformToRecievedMyTeamMembersReducerPayload,
 } from 'mattermost-redux/actions/users_queries';
 
+import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
@@ -38,6 +39,17 @@ import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/pre
 import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 import {General} from 'mattermost-redux/constants';
+
+import {getHistory} from 'utils/browser_history';
+import {isDesktopApp} from 'utils/user_agent';
+
+function isIkBaseUrl() {
+    const whitelist = [
+        'https://do-not-replace-kchat.infomaniak.com'.replace('do-not-replace-', ''),
+        'https://do-not-replace-kchat.preprod.dev.infomaniak.ch'.replace('do-not-replace-', ''),
+    ];
+    return whitelist.includes(window.origin);
+}
 
 export function generateMfaSecret(userId: string): ActionFunc {
     return bindClientFunc({
@@ -79,17 +91,36 @@ export function loadMeREST(): ActionFunc {
         dispatch(setServerVersion(serverVersion));
 
         try {
-            await Promise.all([
-                dispatch(getClientConfig()),
-                dispatch(getLicenseConfig()),
-                dispatch(getMe()),
-                dispatch(getMyPreferences()),
-                dispatch(getMyKSuites()),
-                dispatch(getMyTeamMembers()),
-            ]);
+            await dispatch(getMyKSuites());
+            const kSuites = getTeams(getState());
 
-            const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
-            await dispatch(getMyTeamUnreads(isCollapsedThreads));
+            const suiteArr = Object.values(kSuites);
+
+            // allow through in tests to launch promise.all but not trigger redirect
+            if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
+                // don't redirect to the error page if it is a testing environment
+                if (!isDesktopApp() && isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                    // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
+                    const orderedKSuite = suiteArr.sort((a, b) => b.update_at - a.update_at);
+
+                    const {url} = orderedKSuite[0];
+                    window.open(url, '_self');
+                }
+
+                await Promise.all([
+                    dispatch(getClientConfig()),
+                    dispatch(getLicenseConfig()),
+                    dispatch(getMe()),
+                    dispatch(getMyPreferences()),
+                    dispatch(getMyTeamMembers()),
+                ]);
+
+                const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
+                await dispatch(getMyTeamUnreads(isCollapsedThreads));
+            } else if (!isDesktopApp()) {
+                // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
+                getHistory().push('/error?type=no_ksuite');
+            }
         } catch (error) {
             dispatch(logError(error as ServerError));
             return {error: error as ServerError};

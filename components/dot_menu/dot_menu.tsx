@@ -575,14 +575,6 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         }}
                     />
                     <Menu.ItemAction
-                        id={`unread_post_${this.props.post.id}`}
-                        show={!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH}
-                        text={Utils.localizeMessage('post_info.unread', 'Mark as Unread')}
-                        icon={Utils.getMenuItemIcon('icon-mark-as-unread')}
-                        rightDecorator={<ShortcutKey shortcutKey='U'/>}
-                        onClick={this.handleMarkPostAsUnread}
-                    />
-                    <Menu.ItemAction
                         show={!isSystemMessage}
                         text={this.props.isFlagged ? Utils.localizeMessage('rhs_root.mobile.unflag', 'Remove from Saved') : Utils.localizeMessage('rhs_root.mobile.flag', 'Save')}
                         icon={this.props.isFlagged ? Utils.getMenuItemIcon('icon-bookmark') : Utils.getMenuItemIcon('icon-bookmark-outline')}

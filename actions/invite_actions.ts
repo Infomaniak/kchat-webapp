@@ -172,9 +172,6 @@ export function sendGuestsInvites(
             }
 
             if (response.error) {
-                if (response.error.server_error_id === 'app.email.rate_limit_exceeded.app_error') {
-                    response.error.message = localizeMessage('invite.rate-limit-exceeded', 'Invite emails rate limit exceeded.');
-                }
                 for (const email of emails) {
                     notSent.push({email, reason: response.error.message});
                 }
