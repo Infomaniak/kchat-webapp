@@ -1,3 +1,15 @@
+## 0.9.6 (2023-02-10)
+
+### Fixed (3 changes)
+
+- [fix logout for multi server apps](kchat/webapp@efb741efb6ac377b9535b99331df11f70c423bd1) by @antonbuksa ([merge request](kchat/webapp!281))
+- [external invite fixes and allow only one email](kchat/webapp@0ba2f11ec73a63884e5de7a0dba9ed4c469acdc5) by @leonard.jouve ([merge request](kchat/webapp!261))
+- [remove invitation custom message](kchat/webapp@f80b722a4142749a276eb1f0ddd84c6b10ef782a) by @leonard.jouve ([merge request](kchat/webapp!261))
+
+### Changed (1 change)
+
+- [localized user report href](kchat/webapp@a1379e45240ca496f1fd6ba7fba4639ac412c355) by @leonard.jouve ([merge request](kchat/webapp!277))
+
 ## 0.9.5 (2023-02-08)
 
 ### Changed (2 changes)
