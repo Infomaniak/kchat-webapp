@@ -25,7 +25,7 @@
 }
 
 .backstage-body {
-    overflow: auto;
+    overflow: hidden;
     width: 100%;
     background-color: $bg--gray;
     grid-area: center;
@@ -42,8 +42,10 @@
 .backstage-sidebar {
     position: absolute;
     width: 260px;
+    height: 100vh;
     padding: 46px 20px;
     vertical-align: top;
+    background-color: $bg--gray;
 
     ul {
         padding: 0;
@@ -321,6 +323,10 @@
             text-align: left;
         }
     }
+}
+
+.integrations-list {
+    overflow: auto;
 }
 
 .integration__icon {
