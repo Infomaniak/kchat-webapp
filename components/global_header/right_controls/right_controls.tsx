@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {FormattedMessage} from 'react-intl';
+
 import {ProductIdentifier} from '@mattermost/types/products';
 
 import {GlobalState} from 'types/store';
@@ -25,6 +26,7 @@ import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/
 import {isChannels} from 'utils/products';
 
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentLocale} from 'selectors/i18n';
 
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -89,10 +91,23 @@ const tooltipUserReport = (
     </Tooltip>
 );
 
+const userReportHrefs: Record<string, string> = {
+    en: 'https://feedback.userreport.com/6b7737f6-0cc1-410f-993f-be2ffbf73a05#ideas/popular',
+    fr: 'https://feedback.userreport.com/d7b91e08-f79e-4eae-8a5d-f1527c33bd9b#ideas/popular',
+    es: 'https://feedback.userreport.com/a9ae4ff9-2920-4c3c-bbb1-67e6ac1db26e#ideas/popular',
+    it: 'https://feedback.userreport.com/066a68a7-e8f9-47a3-8099-18591dbdfd1f#ideas/popular',
+    de: 'https://feedback.userreport.com/e68afd5f-31f2-4327-af79-fb0b665aee68#ideas/popular',
+};
+
 const RightControls = ({productId = null}: Props): JSX.Element => {
     // guest validation to see which point the messaging tour tip starts
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.CUSTOMIZE_EXPERIENCE : OnboardingTourSteps.CUSTOMIZE_EXPERIENCE;
+    const locale = useSelector(getCurrentLocale);
+    let userReportHref = 'https://feedback.userreport.com/6b7737f6-0cc1-410f-993f-be2ffbf73a05#ideas/popular';
+    if (userReportHrefs[locale]) {
+        userReportHref = userReportHrefs[locale];
+    }
 
     const showCustomizeTip = useShowOnboardingTutorialStep(tourStep);
 
@@ -163,7 +178,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     className='header-icon grey'
                     style={{height: 45, width: 42, display: 'flex', justifyContent: 'center', alignItems: 'center', textDecoration: 'none'}}
                     target='_blank'
-                    href='https://feedback.userreport.com/268b466f-3601-4873-853a-9bf3afc3410e/#ideas/recent'
+                    href={userReportHref}
                     rel='noreferrer'
                 >
                     <img

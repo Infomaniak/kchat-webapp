@@ -39,6 +39,7 @@ export type Team = {
     scheme_id: string;
     group_constrained: boolean;
     policy_id?: string | null;
+    url: string;
 };
 
 export type TeamsState = {

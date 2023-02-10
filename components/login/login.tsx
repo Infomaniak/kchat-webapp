@@ -126,7 +126,7 @@ const Login = () => {
                     } else {
                         localStorage.setItem('IKToken', data.token);
                         localStorage.setItem('IKRefreshToken', data.refreshToken);
-                        localStorage.setItem('IKTokenExpire', (data.expiresAt).toString())
+                        localStorage.setItem('IKTokenExpire', (data.expiresAt).toString());
 
                         Client4.setToken(data.token);
                         Client4.setCSRF(data.token);
@@ -138,11 +138,11 @@ const Login = () => {
                     // if (!data) {
                     //     getChallengeAndRedirectToLogin();
                     // }
-                })
+                });
             } else {
                 const token = localStorage.getItem('IKToken');
                 const refreshToken = localStorage.getItem('IKRefreshToken');
-    
+
                 // Check for desktop session end of life
                 if (!token || !refreshToken) {
                     // Login should be the only one responsible for clearing storage.
@@ -152,10 +152,10 @@ const Login = () => {
                     console.log('[components/login] redirecting to infomaniak login');
                     Sentry.captureException(new Error('Redirected to external login on desktop'));
                     getChallengeAndRedirectToLogin();
-    
+
                     return;
                 }
-    
+
                 // This will try to refresh the token 3 times and will redirect to our ext
                 // login service if none of the attempts succeed.
                 tryRefreshTokenWithErrorCount(0);
