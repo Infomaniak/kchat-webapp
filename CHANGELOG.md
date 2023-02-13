@@ -1,3 +1,15 @@
+## 0.9.7 (2023-02-13)
+
+### Fixed (2 changes)
+
+- [fix WS channel with duplicated callbacks on reconnect](kchat/webapp@56e2d50e1ef5ff518bcf49c7dda637a9102eb3cd) by @leonard.jouve ([merge request](kchat/webapp!284))
+- [Added missing translation](kchat/webapp@d3ea5241da0954aa0e994ce323a717519d20ed1e) by @olivier.thuymans ([merge request](kchat/webapp!283))
+
+### Changed (2 changes)
+
+- [update readme to prepare for gh mirror](kchat/webapp@1e13ccfb40e1d48f486fd84facdbc904b9eee470) by @antonbuksa
+- [swap changelog webhook to new url](kchat/webapp@fffff02c4e7ec0b63d28a79d0d05bfc8622ec6d8) by @antonbuksa
+
 ## 0.9.6 (2023-02-10)
 
 ### Fixed (3 changes)
