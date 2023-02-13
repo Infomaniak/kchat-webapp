@@ -9,7 +9,7 @@ import {Link} from 'react-router-dom';
 
 import {ErrorPageTypes, Constants} from 'utils/constants';
 
-import MattermostLogoSvg from '../../images/logo.svg';
+import MattermostLogoSvg from 'images/logo.svg';
 
 import {isDesktopApp} from 'utils/user_agent';
 
