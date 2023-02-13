@@ -43,11 +43,12 @@ body {
 
         > .row {
             &.content {
-                min-height: calc(100vh - 89px);
+                min-height: 100vh;
+                // min-height: calc(100vh - 89px);
 
-                @media (max-width: 768px) {
-                    min-height: calc(100vh - 187px);
-                }
+                // @media (max-width: 768px) {
+                //     min-height: calc(100vh - 187px);
+                // }
             }
         }
     }
@@ -162,7 +163,6 @@ body.app__body #root {
         }
         #SidebarContainer.move--right {
             position: relative;
-            left: 65px;
         }
     }
 

@@ -16,6 +16,7 @@ import {A11yClassNames, Constants, CrtTutorialSteps, ModalIdentifiers, Preferenc
 import NoResultsIndicator from 'components/no_results_indicator';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Header from 'components/widgets/header';
+
 import CRTListTutorialTip from 'components/tours/crt_tour/crt_list_tutorial_tip';
 import {GlobalState} from 'types/store';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';
@@ -27,6 +28,7 @@ import {UserThread} from '@mattermost/types/threads';
 import MarkAllThreadsAsReadModal, {MarkAllThreadsAsReadModalProps} from '../mark_all_threads_as_read_modal';
 import Button from '../../common/button';
 import BalloonIllustration from '../../common/balloon_illustration';
+import ReadThreadIllustration from 'components/threading/common/read_thread_illustration';
 import {useThreadRouting} from '../../hooks';
 
 import VirtualizedThreadList from './virtualized_thread_list';
@@ -263,7 +265,7 @@ const ThreadList = ({
                 {unread && !someUnread && isEmpty(unreadIds) ? (
                     <NoResultsIndicator
                         expanded={true}
-                        iconGraphic={BalloonIllustration}
+                        iconGraphic={<ReadThreadIllustration/>}
                         title={formatMessage({
                             id: 'globalThreads.threadList.noUnreadThreads',
                             defaultMessage: 'No unread threads',

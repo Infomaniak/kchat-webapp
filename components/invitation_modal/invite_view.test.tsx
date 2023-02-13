@@ -56,6 +56,7 @@ const defaultProps: Props = deepFreeze({
     usersEmails: [],
     usersEmailsSearch: '',
     townSquareDisplayName: '',
+    shouldOpenMenu: true,
 });
 
 let props = defaultProps;

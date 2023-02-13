@@ -188,7 +188,9 @@
         flex-direction: column;
         padding: 0 24px;
         font-size: 13px;
-        gap: 8px;
+        gap: 3px;
+        padding-top: 3px;
+
 
         .help__text {
             text-align: right;
@@ -199,8 +201,10 @@
             }
         }
 
-        &--has-error {
-            padding: 6px 0 0;
+        .has-error {
+            > label {
+                margin-bottom: 0px;
+            }
             color: var(--error-text);
         }
 

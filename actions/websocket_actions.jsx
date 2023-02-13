@@ -206,7 +206,15 @@ export function initialize() {
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
-    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, token, currentChannelId);
+    WebSocketClient.initialize(
+        connUrl,
+        user.user_id,
+        user.id,
+        user.team_id,
+        null,
+        token,
+        currentChannelId
+    );
 }
 
 export function close() {
@@ -1832,7 +1840,7 @@ function handleIncomingConferenceCall(msg) {
 
         // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
         const channel = getChannel(state, connectedChannelID(doGetState()));
-        
+
         // users = doGetProfilesInChannel(state, msg.data.channel_id, true);
 
         // if (users.length <= 0) {
@@ -1847,6 +1855,7 @@ function handleIncomingConferenceCall(msg) {
                 participants: msg.data.participants,
                 userID: msg.data.user_id,
                 currentUserID: getCurrentUserId(getState()),
+                url: msg.data.url,
             },
         });
 
