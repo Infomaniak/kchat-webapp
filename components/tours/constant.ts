@@ -31,7 +31,15 @@ export const OnboardingTourSteps = {
     CREATE_AND_JOIN_CHANNELS: 1,
     INVITE_PEOPLE: 2,
     SEND_MESSAGE: 3,
-    CUSTOMIZE_EXPERIENCE: 4,
+
+    // CUSTOMIZE_EXPERIENCE: 4,
+
+    CHANNEL_HEADER: 4,
+    AT_MENTIONS: 5,
+    KMEET: 6,
+    SETTINGS: 7,
+    STATUS: 8,
+    PROFILE: 9,
     FINISHED,
 };
 

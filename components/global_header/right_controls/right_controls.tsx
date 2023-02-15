@@ -147,20 +147,12 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     </module-products-component>
                 </div>
             )}
-            {isChannels(productId) ? (
-                <>
-                    <AtMentionsButton/>
-                    <SavedPostsButton/>
-                    <SettingsButton/>
-                    {showCustomizeTip && <CustomizeYourExperienceTour/>}
-                </>
-            ) : (
-                <Pluggable
-                    pluggableName={'Product'}
-                    subComponentName={'headerRightComponent'}
-                    pluggableId={productId}
-                />
-            )}
+            <>
+                <AtMentionsButton/>
+                <SavedPostsButton/>
+                <SettingsButton/>
+                {showCustomizeTip && <CustomizeYourExperienceTour/>}
+            </>
             {!isDesktopApp() && (
                 <div style={{height: 46, width: 42, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}

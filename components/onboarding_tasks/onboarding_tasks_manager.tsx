@@ -149,33 +149,28 @@ export const useTasksList = () => {
     });
 
     // Cloud conditions
-    const subscription = useSelector((state: GlobalState) => state.entities.cloud.subscription);
-    const isCloud = license?.Cloud === 'true';
-    const isFreeTrial = subscription?.is_free_trial === 'true';
-    const hadPrevCloudTrial = subscription?.is_free_trial === 'false' && subscription?.trial_end_at > 0;
+    // const subscription = useSelector((state: GlobalState) => state.entities.cloud.subscription);
+    // const isCloud = license?.Cloud === 'true';
+    // const isFreeTrial = subscription?.is_free_trial === 'true';
+    // const hadPrevCloudTrial = subscription?.is_free_trial === 'false' && subscription?.trial_end_at > 0;
 
     // Show this CTA if the instance is currently not licensed and has never had a trial license loaded before
     // if Cloud, show if not in trial and had never been on trial
-    const selfHostedTrialCondition = isCurrentLicensed === 'false' && isPrevLicensed === 'false';
-    const cloudTrialCondition = isCloud && !isFreeTrial && !hadPrevCloudTrial;
+    // const selfHostedTrialCondition = isCurrentLicensed === 'false' && isPrevLicensed === 'false';
+    // const cloudTrialCondition = isCloud && !isFreeTrial && !hadPrevCloudTrial;
 
-    const showStartTrialTask = selfHostedTrialCondition || cloudTrialCondition;
+    // const showStartTrialTask = selfHostedTrialCondition || cloudTrialCondition;
 
     const list: Record<string, string> = {...OnboardingTasksName};
-    if (!pluginsList.focalboard || !isUserFirstAdmin) {
-        delete list.BOARDS_TOUR;
-    }
-    if (!pluginsList.playbooks || !isUserFirstAdmin) {
-        delete list.PLAYBOOKS_TOUR;
-    }
-    if (!showStartTrialTask) {
-        delete list.START_TRIAL;
-    }
 
-    if (!isUserFirstAdmin && !isUserAdmin) {
-        delete list.VISIT_SYSTEM_CONSOLE;
-        delete list.START_TRIAL;
-    }
+    delete list.BOARDS_TOUR;
+    delete list.PLAYBOOKS_TOUR;
+    delete list.START_TRIAL;
+
+    // if (!isUserFirstAdmin && !isUserAdmin) {
+        // delete list.VISIT_SYSTEM_CONSOLE;
+        // delete list.START_TRIAL;
+    // }
 
     // explore other tools tour is only shown to subsequent admins and end users
     if (isUserFirstAdmin || (!pluginsList.playbooks && !pluginsList.focalboard)) {
@@ -183,15 +178,17 @@ export const useTasksList = () => {
     }
 
     // invite other users is hidden for guest users
-    if (isGuestUser) {
-        delete list.INVITE_PEOPLE;
-    }
+    // if (isGuestUser) {
+    // }
+
+    delete list.INVITE_PEOPLE;
 
     if (isThinOnBoardingTaskList) {
         delete list.DOWNLOAD_APP;
-        delete list.COMPLETE_YOUR_PROFILE;
-        delete list.VISIT_SYSTEM_CONSOLE;
     }
+
+    delete list.COMPLETE_YOUR_PROFILE;
+    delete list.VISIT_SYSTEM_CONSOLE;
     return Object.values(list);
 };
 
@@ -365,7 +362,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
                 value: 'true',
             }];
             dispatch(savePreferences(currentUserId, preferences));
-            window.open('https://mattermost.com/download/', '_blank', 'noopener,noreferrer');
+            window.open('https://infomaniak.com/gtl/kchat', '_blank', 'noopener,noreferrer');
             break;
         }
         case OnboardingTasksName.START_TRIAL: {
