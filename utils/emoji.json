@@ -57785,5 +57785,15 @@
         "skins": [
             "1F3FF"
         ]
+    },
+    {
+        "id": "mattermost",
+        "name": "Mattermost",
+        "unified": "",
+        "short_name": "mattermost",
+        "short_names": [
+            "mattermost"
+        ],
+        "category": "custom"
     }
 ]
