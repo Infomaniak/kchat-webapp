@@ -68,7 +68,6 @@ exports[`components/channel_invite_modal should match snapshot for channel_invit
         backButtonText="Cancel"
         buttonSubmitLoadingText="Adding..."
         buttonSubmitText="Add"
-        customNoOptionsMessage={null}
         focusOnLoad={true}
         handleAdd={[Function]}
         handleCancel={[Function]}
@@ -181,7 +180,6 @@ exports[`components/channel_invite_modal should match snapshot for channel_invit
         backButtonText="Cancel"
         buttonSubmitLoadingText="Adding..."
         buttonSubmitText="Add"
-        customNoOptionsMessage={null}
         focusOnLoad={true}
         handleAdd={[Function]}
         handleCancel={[Function]}
@@ -349,7 +347,6 @@ exports[`components/channel_invite_modal should match snapshot with exclude and 
         backButtonText="Cancel"
         buttonSubmitLoadingText="Adding..."
         buttonSubmitText="Add"
-        customNoOptionsMessage={null}
         focusOnLoad={true}
         handleAdd={[Function]}
         handleCancel={[Function]}
