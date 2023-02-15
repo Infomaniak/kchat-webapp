@@ -1,3 +1,9 @@
+## 0.9.8 (2023-02-15)
+
+### Removed (1 change)
+
+- [remove invite to team cta when inviting to channel](kchat/webapp@c0d5c180b148b336a826b4991367bdfa1007f5ff) by @antonbuksa ([merge request](kchat/webapp!287))
+
 ## 0.9.7 (2023-02-13)
 
 ### Fixed (2 changes)
