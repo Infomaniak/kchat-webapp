@@ -11,7 +11,8 @@ import {GlobalState} from '@mattermost/types/store';
 import {ClientConfig, FeatureFlags, ClientLicense} from '@mattermost/types/config';
 
 export function getConfig(state: GlobalState): Partial<ClientConfig> {
-    return state.entities.general.config;
+    return {...state.entities.general.config, EnableOnboardingFlow: 'true', EnableTutorial: 'true'};
+    // return state.entities.general.config;
 }
 
 /**
