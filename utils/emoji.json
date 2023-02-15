@@ -57787,12 +57787,12 @@
         ]
     },
     {
-        "id": "infomaniak",
-        "name": "Infomaniak",
+        "id": "kchat",
+        "name": "kChat",
         "unified": "",
-        "short_name": "infomaniak",
+        "short_name": "kchat",
         "short_names": [
-            "infomaniak"
+            "kchat"
         ],
         "category": "custom"
     }
