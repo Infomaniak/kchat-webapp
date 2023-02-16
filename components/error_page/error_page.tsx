@@ -16,6 +16,7 @@ import {isDesktopApp} from 'utils/user_agent';
 import * as GlobalActions from 'actions/global_actions';
 
 import NoTeamIcon from 'images/no_team_icon.png';
+import kSuite from 'images/ik/kSuite.svg';
 import loaderkChat from 'images/logo_compact.png';
 
 import ErrorTitle from './error_title';
@@ -73,6 +74,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
         const {isGuest, isAdmin, ikGroupId, ikGroupName} = this.props;
         const params: URLSearchParams = new URLSearchParams(this.props.location ? this.props.location.search : '');
         const signature = params.get('s');
+        let customClasses = '';
         const reloadPage = () => {
             if (window && window.location) {
                 window.location.assign(window.location.origin);
@@ -203,9 +205,13 @@ export default class ErrorPage extends React.PureComponent<Props> {
             }
         } else if (type === ErrorPageTypes.NO_KSUITE) {
             illustration = null;
+            customClasses = 'no-kSuite';
             fullscreenIllustration = (
                 <div className='error__fullscreen-graphic'>
-                    <img src={NoTeamIcon}/>
+                    <img
+                        src={kSuite}
+                        alt='log ksuite'
+                    />
                 </div>
             );
             backButton = (
@@ -288,7 +294,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
         }
 
         const errorPage = (
-            <div className='error-page'>
+            <div className={`error-page ${customClasses}`}>
                 {this.renderHeader()}
                 <div className='error__content'>
                     {fullscreenIllustration}
