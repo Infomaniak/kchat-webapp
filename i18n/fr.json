@@ -2769,7 +2769,7 @@
   "channel_info_rhs.top_buttons.mute": "Sourdine",
   "channel_info_rhs.top_buttons.muted": "En sourdine",
   "channel_invite.addNewMembers": "Ajouter des nouveaux membres à {channel}",
-  "channel_invite.invite_guest": "Ajouter en tant qu'invité",
+  "channel_invite.invite_guest": "Ajouter un nouvel utilisateur invité",
   "channel_invite.no_options_message": "Aucun résultat trouvé - <InvitationModalLink>Invitez-les dans l'équipe</InvitationModalLink>",
   "channel_limitation.messages": "Les messages antérieurs au {date} peuvent ne pas apparaître car votre kChat a atteint la limite de 10 000 messages. Pour afficher davantage de messages, souscrivez à un forfait plus élevé.",
   "channel_limitation.messages_button": "Modifier mon offre",

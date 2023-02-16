@@ -2141,6 +2141,7 @@
   "channel_header.userHelpGuide": "Aiuto",
   "channel_header.viewMembers": "Mostra membri",
   "channel_invite.addNewMembers": "Aggiungi nuovi membri a {channel}",
+  "channel_invite.invite_guest": "Invitare un nuovo ospite",
   "channel_limitation.messages": "I messaggi precedenti al {date} potrebbero non essere visualizzati perché la kChat ha raggiunto il limite di 10.000 messaggi. Per visualizzare più messaggi, sottoscrivere un piano superiore.",
   "channel_limitation.messages_button": "Modificare la mia offerta",
   "channel_loader.posted": "Pubblicato",
