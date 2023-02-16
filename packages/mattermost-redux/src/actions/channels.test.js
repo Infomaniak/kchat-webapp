@@ -58,7 +58,7 @@ describe('Actions.Channels', () => {
             post('/channels').
             reply(201, TestHelper.fakeChannelWithId(TestHelper.basicTeam.id));
 
-        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam.id), TestHelper.basicUser.id));
+        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam.id), TestHelper.basicUser.id, jest.fn));
 
         const createRequest = store.getState().requests.channels.createChannel;
 
@@ -262,7 +262,7 @@ describe('Actions.Channels', () => {
 
         assert.equal(publicChannel.type, General.OPEN_CHANNEL);
 
-        await store.dispatch(Actions.updateChannelPrivacy(publicChannel.id, General.PRIVATE_CHANNEL));
+        await store.dispatch(Actions.updateChannelPrivacy(publicChannel.id, General.PRIVATE_CHANNEL, jest.fn));
 
         const updateRequest = store.getState().requests.channels.updateChannel;
         if (updateRequest.status === RequestStatus.FAILURE) {

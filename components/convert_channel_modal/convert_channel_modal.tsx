@@ -8,6 +8,9 @@ import {FormattedMessage} from 'react-intl';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 import Constants from 'utils/constants';
 import {General} from 'mattermost-redux/constants';
+import {ServerError} from '@mattermost/types/errors';
+import {ActionFunc} from 'mattermost-redux/types/actions';
+import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
@@ -21,7 +24,7 @@ type Props = {
     onExited: () => void;
 
     actions: {
-        updateChannelPrivacy: (channelId: string, privacy: string) => void;
+        updateChannelPrivacy: (channelId: string, privacy: string, openChannelLimitModalIfNeeded: (error: ServerError) => ActionFunc) => void;
     };
 }
 
@@ -42,7 +45,7 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
             return;
         }
 
-        actions.updateChannelPrivacy(channelId, General.PRIVATE_CHANNEL);
+        actions.updateChannelPrivacy(channelId, General.PRIVATE_CHANNEL, openChannelLimitModalIfNeeded);
         trackEvent('actions', 'convert_to_private_channel', {channel_id: channelId});
         this.onHide();
     }
