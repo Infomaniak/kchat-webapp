@@ -588,7 +588,6 @@ export function applyTheme(theme: Theme) {
     }
     updateCodeTheme(theme.codeTheme);
 
-    // @ts-ignore
     cssVars({
         variables: {
 
