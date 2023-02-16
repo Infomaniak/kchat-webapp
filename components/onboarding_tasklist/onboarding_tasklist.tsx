@@ -37,7 +37,7 @@ const TaskItems = styled.div`
     border-radius: 4px;
     border: solid 1px rgba(var(--center-channel-color-rgb), 0.16);
     background-color: var(--center-channel-bg);
-    width: 352px;
+    width: 367px;
     padding: 24px 0;
     transform: scale(0);
     opacity: 0;
@@ -125,7 +125,6 @@ const Button = styled.button<{open: boolean}>(({open}) => {
 
 const Skeleton = styled.div`
     height: auto;
-    margin: 0 auto;
     padding: 0 20px;
     position: relative;
 `;
@@ -309,7 +308,7 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                                     onClick={dismissChecklist}
                                 >
                                     <FormattedMessage
-                                        id='onboardingTask.checklist.dismiss_link'
+                                        id='onboardingTask.taskList.dismiss_link'
                                         defaultMessage='No thanks, I’ll figure it out myself'
                                     />
                                 </span>

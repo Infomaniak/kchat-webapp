@@ -40,11 +40,9 @@ import {
 import {ModalIdentifiers, TELEMETRY_CATEGORIES, ExploreOtherToolsTourSteps} from 'utils/constants';
 
 import BullsEye from 'components/common/svg_images_components/bulls_eye_svg';
-import Channels from 'components/common/svg_images_components/channels_svg';
 import Clipboard from 'components/common/svg_images_components/clipboard_svg';
 import Gears from 'components/common/svg_images_components/gears_svg';
 import Handshake from 'components/common/svg_images_components/handshake_svg';
-import Phone from 'components/common/svg_images_components/phone_svg';
 import Security from 'components/common/svg_images_components/security_svg';
 import Sunglasses from 'components/common/svg_images_components/sunglasses_svg';
 import Wrench from 'components/common/svg_images_components/wrench_svg';
@@ -59,9 +57,8 @@ const useGetTaskDetails = () => {
     return {
         [OnboardingTasksName.CHANNELS_TOUR]: {
             id: 'task_learn_more_about_messaging',
-            svg: Channels,
             message: formatMessage({
-                id: 'onboardingTask.checklist.task_learn_more_about_messaging',
+                id: 'onboardingTask.taskList.introduction',
                 defaultMessage: 'Take a tour of Channels.',
             }),
         },
@@ -109,9 +106,8 @@ const useGetTaskDetails = () => {
 
         [OnboardingTasksName.DOWNLOAD_APP]: {
             id: 'task_download_mm_apps',
-            svg: Phone,
             message: formatMessage({
-                id: 'onboardingTask.checklist.task_download_mm_apps',
+                id: 'onboardingTask.taskList.download',
                 defaultMessage: 'Download the Desktop and Mobile Apps.',
             }),
         },
@@ -206,9 +202,9 @@ export const useTasksListWithStatus = () => {
                     const {id, svg, message} = getTaskDetails[task];
                     return (
                         <div key={id}>
-                            <picture>
+                            {svg && <picture>
                                 {React.createElement(svg, {width: 24, height: 24})}
-                            </picture>
+                            </picture>}
                             <span>{message}</span>
                         </div>
                     );
