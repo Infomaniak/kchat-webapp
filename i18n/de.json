@@ -2859,7 +2859,7 @@
   "channel_info_rhs.top_buttons.mute": "Stummschalten",
   "channel_info_rhs.top_buttons.muted": "Stumm geschaltet",
   "channel_invite.addNewMembers": "Füge neue Mitglieder zu {channel} hinzu",
-  "channel_invite.invite_guest": "Als Gast einladen",
+  "channel_invite.invite_guest": "Einen neuen Gast einladen",
   "channel_invite.no_options_message": "Kein Treffer gefunden - <InvitationModalLink>Lade sie ins Team ein</InvitationModalLink>",
   "channel_limitation.messages": "Nachrichten vor dem {date} werden möglicherweise nicht angezeigt, weil Ihr kChat das Limit von 10.000 Nachrichten erreicht hat. Um mehr Nachrichten anzuzeigen, abonniere einen höheren Tarif.",
   "channel_limitation.messages_button": "Mein Angebot ändern",
