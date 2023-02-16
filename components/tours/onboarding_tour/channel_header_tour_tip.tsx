@@ -8,27 +8,27 @@ import {useMeasurePunchouts} from '@mattermost/components';
 
 import OnboardingTourTip from './onboarding_tour_tip';
 
-export const KmeetTour = () => {
+export const ChannelHeaderTour = () => {
     const title = (
         <FormattedMessage
-            id='onboardingTour.KmeetTourTip.title'
-            defaultMessage={'Kmeet'}
+            id='onboardingTour.ChannelHeaderTourTip.title'
+            defaultMessage={'Channel Header'}
         />
     );
     const screen = (
         <FormattedMessage
-            id='onboardingTour.KmeetTourTip.content'
-            defaultMessage={'Kmeet'}
+            id='onboardingTour.ChannelHeaderTourTip.content'
+            defaultMessage={'Channel Header'}
         />
     );
 
-    const overlayPunchOut = useMeasurePunchouts(['channel-header-kmeet-btn'], []);
+    const overlayPunchOut = useMeasurePunchouts(['channel-header'], []);
 
     return (
         <OnboardingTourTip
             title={title}
             screen={screen}
-            placement='bottom-end'
+            placement='bottom-start'
             width={400}
             overlayPunchOut={overlayPunchOut}
         />

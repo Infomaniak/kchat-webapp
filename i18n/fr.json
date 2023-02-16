@@ -4958,7 +4958,7 @@
   "storageLimit.subtitle.admin": "Votre espace de stockage est plein. Souscrivez à une offre supérieure pour continuer à envoyer des fichiers.",
   "channelLimit.title": "Créez de nouveaux canaux pour mieux communiquer avec les membres de votre organisation",
   "channelLimit.subtitle": "Vous avez atteint la limite de canaux publics ({publicChannelUsage, number}/{publicChannelLimit, number}) et de canaux privés ({privateChannelUsage, number}/{privateChannelLimit, number}) sur votre kChat. Pour en créer des supplémentaires, vous devez souscrire à une offre supérieure.",
-  "onboardingTour.ChannelsTourTip.title": "Accédez aux cannaux de discussion",
+  "onboardingTour.ChannelsTourTip.title": "Accédez aux canaux de discussion",
   "onboardingTour.ChannelsTourTip.content": "Retrouvez les différents canaux de discussion publiques et privés auxquels vous avez accès. Les conversations sont visibles par l’ensemble des membres présents dans le canal, l’idéal pour partager des informations !",
   "onboardingTour.CreateChannelsTourTip.title": "Créez des canaux de discussion",
   "onboardingTour.CreateChannelsTourTip.content": "Créez facilement un nouveau canal de discussion publique et ajoutez les membres de votre organisation avec lesquels vous souhaitez collaborer.",

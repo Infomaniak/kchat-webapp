@@ -46,7 +46,10 @@ function MeetButton(props: Props) {
             placement='bottom'
             overlay={tooltip}
         >
-            <div className='meet-btn__wrapper'>
+            <div
+                className='meet-btn__wrapper'
+                id='channel-header-kmeet-btn'
+            >
                 <button
                     type='button'
                     className={btnClasses}

@@ -39,6 +39,7 @@ import {handleFormattedTextClick, localizeMessage, isEmptyObject, toTitleCase} f
 import {t} from 'utils/i18n';
 
 import MeetButton from 'components/meet_button';
+import {ChannelHeaderTour, KmeetTour} from 'components/tours/onboarding_tour';
 import {UserCustomStatus, UserProfile} from '@mattermost/types/users';
 import {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
 import {RhsState} from 'types/store/rhs';
@@ -94,6 +95,8 @@ export type Props = {
     isLastActiveEnabled: boolean;
     timestampUnits?: string[];
     lastActivityTimestamp?: number;
+    showChannelHeaderTutorialStep: boolean;
+    showKmeetTutorialStep: boolean;
 };
 
 type State = {
@@ -291,6 +294,8 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             rhsState,
             hasGuests,
             teammateNameDisplaySetting,
+            showChannelHeaderTutorialStep,
+            showKmeetTutorialStep,
         } = this.props;
         const {formatMessage} = this.props.intl;
         const ariaLabelChannelHeader = localizeMessage('accessibility.sections.channelHeader', 'channel header region');
@@ -858,9 +863,13 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         channelMember={channelMember}
                     />
                     {showMeetBtn &&
-                        <MeetButton/>
+                        <>
+                            <MeetButton/>
+                            {showKmeetTutorialStep && <KmeetTour/>}
+                        </>
                     }
                     <ChannelInfoButton channel={channel}/>
+                    {showChannelHeaderTutorialStep && <ChannelHeaderTour/>}
                 </div>
             </div>
         );

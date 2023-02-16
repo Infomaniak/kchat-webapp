@@ -2,33 +2,34 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+
 import {FormattedMessage} from 'react-intl';
 
 import {useMeasurePunchouts} from '@mattermost/components';
 
 import OnboardingTourTip from './onboarding_tour_tip';
 
-export const KmeetTour = () => {
+export const JoinChannelsTour = () => {
     const title = (
         <FormattedMessage
-            id='onboardingTour.KmeetTourTip.title'
-            defaultMessage={'Kmeet'}
+            id='onboardingTour.JoinChannelsTourTip.title'
+            defaultMessage={'Join channels'}
         />
     );
     const screen = (
         <FormattedMessage
-            id='onboardingTour.KmeetTourTip.content'
-            defaultMessage={'Kmeet'}
+            id='onboardingTour.JoinChannelsTourTip.content'
+            defaultMessage={'Browse available channels to see what your team is discussing. As you join channels, organize them into  categories based on how you work.'}
         />
     );
 
-    const overlayPunchOut = useMeasurePunchouts(['channel-header-kmeet-btn'], []);
+    const overlayPunchOut = useMeasurePunchouts(['showMoreChannels'], []);
 
     return (
         <OnboardingTourTip
             title={title}
             screen={screen}
-            placement='bottom-end'
+            placement='right-start'
             width={400}
             overlayPunchOut={overlayPunchOut}
         />

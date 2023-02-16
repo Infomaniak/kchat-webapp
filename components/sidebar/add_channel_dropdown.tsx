@@ -10,7 +10,7 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Menu from 'components/widgets/menu/menu';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import {CreateAndJoinChannelsTour, InvitePeopleTour} from 'components/tours/onboarding_tour';
+import {CreateChannelsTour, InvitePeopleTour, JoinChannelsTour} from 'components/tours/onboarding_tour';
 
 type Props = {
     canCreateChannel: boolean;
@@ -23,6 +23,7 @@ type Props = {
     showCreateCategoryModal: () => void;
     handleOpenDirectMessagesModal: (e: Event) => void;
     unreadFilterEnabled: boolean;
+    showJoinChannelTutorialTip: boolean;
     showCreateTutorialTip: boolean;
     showInviteTutorialTip: boolean;
     isAddChannelOpen: boolean;
@@ -40,6 +41,7 @@ const AddChannelDropdown = ({
     showCreateCategoryModal,
     handleOpenDirectMessagesModal,
     unreadFilterEnabled,
+    showJoinChannelTutorialTip,
     showCreateTutorialTip,
     showInviteTutorialTip,
     isAddChannelOpen,
@@ -126,7 +128,8 @@ const AddChannelDropdown = ({
                     {joinPublicChannel}
                     {createChannel}
                     {createDirectMessage}
-                    {showCreateTutorialTip && <CreateAndJoinChannelsTour/>}
+                    {showCreateTutorialTip && <CreateChannelsTour/>}
+                    {showJoinChannelTutorialTip && <JoinChannelsTour/>}
                     {createUserGroup}
                 </Menu.Group>
                 {createCategory}

@@ -6,29 +6,31 @@ import {FormattedMessage} from 'react-intl';
 
 import {useMeasurePunchouts} from '@mattermost/components';
 
+import {CategoryTypes} from 'packages/mattermost-redux/src/constants/channel_categories';
+
 import OnboardingTourTip from './onboarding_tour_tip';
 
-export const KmeetTour = () => {
+export const DirectMessagesTour = () => {
     const title = (
         <FormattedMessage
-            id='onboardingTour.KmeetTourTip.title'
-            defaultMessage={'Kmeet'}
+            id='onboardingTour.DirectMessagesTourTip.title'
+            defaultMessage={'Direct messages'}
         />
     );
     const screen = (
         <FormattedMessage
-            id='onboardingTour.KmeetTourTip.content'
-            defaultMessage={'Kmeet'}
+            id='onboardingTour.DirectMessagesTourTip.content'
+            defaultMessage={'Direct Messages'}
         />
     );
 
-    const overlayPunchOut = useMeasurePunchouts(['channel-header-kmeet-btn'], []);
+    const overlayPunchOut = useMeasurePunchouts([`sidebar-droppable-category-${CategoryTypes.DIRECT_MESSAGES}`], []);
 
     return (
         <OnboardingTourTip
             title={title}
             screen={screen}
-            placement='bottom-end'
+            placement='right-start'
             width={400}
             overlayPunchOut={overlayPunchOut}
         />

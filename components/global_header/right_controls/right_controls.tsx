@@ -17,7 +17,9 @@ import {GlobalState} from 'types/store';
 
 import Pluggable from 'plugins/pluggable';
 import {
+    AtMentionsTour,
     CustomizeYourExperienceTour,
+    SettingsTour,
     useShowOnboardingTutorialStep,
 } from 'components/tours/onboarding_tour';
 import StatusDropdown from 'components/status_dropdown';
@@ -104,6 +106,8 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.CUSTOMIZE_EXPERIENCE : OnboardingTourSteps.CUSTOMIZE_EXPERIENCE;
     const locale = useSelector(getCurrentLocale);
+    const showAtMentionsTutorialStep = useShowOnboardingTutorialStep(OnboardingTourSteps.AT_MENTIONS);
+    const showSettingsTutorialStep = useShowOnboardingTutorialStep(OnboardingTourSteps.SETTINGS);
     let userReportHref = 'https://feedback.userreport.com/6b7737f6-0cc1-410f-993f-be2ffbf73a05#ideas/popular';
     if (userReportHrefs[locale]) {
         userReportHref = userReportHrefs[locale];
@@ -152,6 +156,8 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                 <SavedPostsButton/>
                 <SettingsButton/>
                 {showCustomizeTip && <CustomizeYourExperienceTour/>}
+                {showAtMentionsTutorialStep && <AtMentionsTour/>}
+                {showSettingsTutorialStep && <SettingsTour/>}
             </>
             {!isDesktopApp() && (
                 <div style={{height: 46, width: 42, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
