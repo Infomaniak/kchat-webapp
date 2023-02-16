@@ -66,6 +66,7 @@ body {
                             background-size: cover;
                             width: 100%;
                             max-height: 40%;
+                            padding-top: 80px;
                         }
 
                         > img {
@@ -156,7 +157,7 @@ body {
 
                 .error__content {
                     @media screen and (max-width: 768px) {
-                        padding: 40px 0;
+                        padding: 0 0 40px 0;
                     }
                 }
             }
