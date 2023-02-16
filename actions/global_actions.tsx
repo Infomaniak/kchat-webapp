@@ -48,11 +48,13 @@ import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import * as Utils from 'utils/utils';
 import SubMenuModal from '../components/widgets/menu/menu_modals/submenu_modal/submenu_modal';
 
-import {isDesktopApp} from '../utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from '../utils/user_agent';
 import {IKConstants} from '../utils/constants-ik';
 
+import {clearLocalStorageToken} from '../components/login/utils';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+
 import {openModal} from './views/modals';
-import {clearLocalStorageToken, revokeIKToken} from '../components/login/utils';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -276,9 +278,8 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
 
         // Waiting for deleteToken login ik
         if (isDesktopApp() && userAction) {
-        //     revokeIKToken();
-        // } else {
             clearLocalStorageToken();
+            window.authManager.logout();
         }
 
         stopPeriodicStatusUpdates();
@@ -292,6 +293,12 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
                 `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
                 `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+
+            // Desktop version 2.0 and up handles logout through authManager
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+                return;
+            }
+
             window.location.assign(url);
         }
     }).catch(() => {
@@ -301,6 +308,11 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
                 `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
                 `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+
+            // Desktop version 2.0 and up handles logout through authManager
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+                return;
+            }
             window.location.assign(url);
         }
     });
@@ -435,3 +447,10 @@ export function redirectToManagerDashboard(groupId: number) {
     window.open(`${IKConstants.MANAGER_URL}v3/${groupId}/ng/kchat`, '_blank');
 }
 
+export function redirectToManagerProfile() {
+    window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
+}
+
+export function redirectTokSuiteDashboard() {
+    window.open(`${IKConstants.MANAGER_URL}/v3/ng/k-suite/dashboard`, '_blank');
+}

@@ -480,6 +480,9 @@ export const ModalIdentifiers = {
     WORK_TEMPLATES: 'work_template',
     DOWNGRADE_MODAL: 'downgrade_modal',
     PURCHASE_IN_PROGRESS: 'purchase_in_progress',
+    CHANNEL_LIMIT_REACHED: 'channel_limit_reached',
+    STORAGE_LIMIT_REACHED: 'storage_limit_reached',
+    EXTERNAL_LIMIT_REACHED: 'external_limit_reached',
 };
 
 export const UserStatuses = {
@@ -672,6 +675,8 @@ export const SocketEvents = {
     DRAFT_UPDATED: 'draft_updated',
     DRAFT_DELETED: 'draft_deleted',
     HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED: 'hosted_customer_signup_progress_updated',
+    KSUITE_ADDED: 'ksuite_added',
+    KSUITE_DELETED: 'ksuite_deleted',
 };
 
 export const TutorialSteps = {

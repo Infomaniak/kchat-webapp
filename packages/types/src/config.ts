@@ -141,6 +141,7 @@ export type ClientConfig = {
     LdapPictureAttributeSet: string;
     LockTeammateNameDisplay: string;
     ManagedResourcePaths: string;
+    MaxBotProfileImageSize: string;
     MaxFileSize: string;
     MaxPostSize: string;
     MaxNotificationsPerChannel: string;

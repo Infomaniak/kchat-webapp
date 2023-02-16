@@ -206,7 +206,15 @@ export function initialize() {
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
-    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, token, currentChannelId);
+    WebSocketClient.initialize(
+        connUrl,
+        user.user_id,
+        user.id,
+        user.team_id,
+        null,
+        token,
+        currentChannelId
+    );
 }
 
 export function close() {
@@ -661,7 +669,12 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED:
         dispatch(handleHostedCustomerSignupProgressUpdated(msg));
-        break;
+        // break;
+    // case SocketEvents.KSUITE_ADDED:
+    //     handleKSuiteAdded(msg)
+    //     break;
+    // case SocketEvents.KSUITE_DELETED:
+    //     handleKSuiteDeleted(msg)
     default:
     }
 
@@ -878,6 +891,14 @@ export function handlePostUnreadEvent(msg) {
             },
         },
     );
+}
+
+async function handleKSuiteAdded(msg) {
+    window.authManager.addTeam(msg.data.team)
+}
+
+async function handleKSuiteDeleted(msg) {
+    window.authManager.deleteTeam(msg.data.team)
 }
 
 async function handleTeamAddedEvent(msg) {
@@ -1819,7 +1840,7 @@ function handleIncomingConferenceCall(msg) {
 
         // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
         const channel = getChannel(state, connectedChannelID(doGetState()));
-        
+
         // users = doGetProfilesInChannel(state, msg.data.channel_id, true);
 
         // if (users.length <= 0) {
@@ -1834,6 +1855,7 @@ function handleIncomingConferenceCall(msg) {
                 participants: msg.data.participants,
                 userID: msg.data.user_id,
                 currentUserID: getCurrentUserId(getState()),
+                url: msg.data.url,
             },
         });
 

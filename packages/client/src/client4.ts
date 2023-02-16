@@ -241,6 +241,10 @@ export default class Client4 {
         this.defaultHeaders['Accept-Language'] = locale;
     }
 
+    setWebappVersion(version: string) {
+        this.defaultHeaders['Webapp-Version'] = version;
+    }
+
     setEnableLogging(enable: boolean) {
         this.enableLogging = enable;
     }
@@ -4085,6 +4089,13 @@ export default class Client4 {
         );
     }
 
+    getUsage = () => {
+        return this.doFetch(
+            this.getUsageRoute(),
+            {method: 'get'},
+        );
+    }
+
     getPostsUsage = () => {
         return this.doFetch<PostsUsageResponse>(
             `${this.getUsageRoute()}/posts`,
@@ -4336,6 +4347,10 @@ export default class Client4 {
         formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
         // formData.append('redirect_uri', 'ktalk://auth-desktop' );
 
+        if (this.defaultHeaders['Webapp-Version']) {
+            delete this.defaultHeaders['Webapp-Version'];
+        }
+
         return this.doFetch<any>(
 
             `${loginUrl}token`,
@@ -4355,6 +4370,10 @@ export default class Client4 {
         formData.append('refresh_token', refresh);
         formData.append('client_id', clientId);
 
+        if (this.defaultHeaders['Webapp-Version']) {
+            delete this.defaultHeaders['Webapp-Version'];
+        }
+
         return this.doFetch<any>(
 
             // `${this.getBaseRoute()}/token`,
@@ -4372,6 +4391,10 @@ export default class Client4 {
         formData.append('token_type_hint', 'access_token');
         formData.append('token', token);
 
+        if (this.defaultHeaders['Webapp-Version']) {
+            delete this.defaultHeaders['Webapp-Version'];
+        }
+
         return this.doFetch<any>(
             `${loginUrl}token`,
             {
@@ -4386,42 +4409,6 @@ export default class Client4 {
     /*                IK CUSTOMS UTILS                  */
     /*                                                  */
     /****************************************************/
-
-    /**
-     * Store IKToken infos in localStorage and update Client
-     */
-    storeTokenResponse(response: { expires_in?: any; access_token?: any; refresh_token?: any }) {
-        // TODO: store in redux
-        const d = new Date();
-        d.setSeconds(d.getSeconds() + parseInt(response.expires_in, 10));
-        localStorage.setItem('IKToken', response.access_token);
-        localStorage.setItem('IKRefreshToken', response.refresh_token);
-        localStorage.setItem('IKTokenExpire', (d.getTime() / 1000, 10).toString());
-        localStorage.setItem('tokenExpired', '0');
-        this.setToken(response.access_token);
-        this.setCSRF(response.access_token);
-        this.setAuthHeader = true;
-    }
-
-    /**
-     * Clear IKToken informations in localStorage
-     */
-    clearLocalStorageToken() {
-        console.log('[client > clearLocalStorageToken] Clear token storage');
-        localStorage.removeItem('IKToken');
-        localStorage.removeItem('IKRefreshToken');
-        localStorage.removeItem('IKTokenExpire');
-        localStorage.setItem('tokenExpired', '1');
-        window.postMessage(
-            {
-                type: 'token-cleared',
-                message: {
-                    token: null,
-                },
-            },
-            window.origin,
-        );
-    }
 
     /**
      * get code_verifier for challenge
