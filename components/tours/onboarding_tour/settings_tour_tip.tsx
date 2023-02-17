@@ -8,6 +8,8 @@ import {useMeasurePunchouts} from '@mattermost/components';
 
 import OnboardingTourTip from './onboarding_tour_tip';
 
+import './tip.scss';
+
 export const SettingsTour = () => {
     const title = (
         <FormattedMessage
@@ -25,12 +27,15 @@ export const SettingsTour = () => {
     const overlayPunchOut = useMeasurePunchouts(['right-controls-settings'], []);
 
     return (
-        <OnboardingTourTip
-            title={title}
-            screen={screen}
-            placement='bottom-start'
-            width={400}
-            overlayPunchOut={overlayPunchOut}
-        />
+        <span className='tip__positioned'>
+            <OnboardingTourTip
+                title={title}
+                screen={screen}
+                placement='left-start'
+                pulsatingDotPlacement='top'
+                width={400}
+                overlayPunchOut={overlayPunchOut}
+            />
+        </span>
     );
 };

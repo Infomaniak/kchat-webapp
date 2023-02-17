@@ -377,6 +377,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                             id={`sidebar-droppable-category-${category.type === CategoryTypes.CUSTOM ? category.id : category.type}`}
                             {...provided.draggableProps}
                         >
+                            {category.type === CategoryTypes.DIRECT_MESSAGES && showDirectMessagesTutorialStep && <DirectMessagesTour/>}
                             <Droppable
                                 droppableId={category.id}
                                 type='SIDEBAR_CHANNEL'
@@ -428,7 +429,6 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                 }}
                             </Droppable>
                             {inviteMembersButton}
-                            {category.type === CategoryTypes.DIRECT_MESSAGES && showDirectMessagesTutorialStep && <DirectMessagesTour/>}
                         </div>
                     );
                 }}

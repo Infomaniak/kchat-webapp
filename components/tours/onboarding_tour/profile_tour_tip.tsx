@@ -12,25 +12,28 @@ export const ProfileTour = () => {
     const title = (
         <FormattedMessage
             id='onboardingTour.ProfileTourTip.title'
-            defaultMessage={'Profile'}
+            defaultMessage='Profile'
         />
     );
     const screen = (
         <FormattedMessage
             id='onboardingTour.ProfileTourTip.content'
-            defaultMessage={'Profile'}
+            defaultMessage='Profile'
         />
     );
 
     const overlayPunchOut = useMeasurePunchouts(['accountSettings'], []);
 
     return (
-        <OnboardingTourTip
-            title={title}
-            screen={screen}
-            placement='left-start'
-            width={400}
-            overlayPunchOut={overlayPunchOut}
-        />
+        <span className='tip__positioned'>
+            <OnboardingTourTip
+                title={title}
+                screen={screen}
+                placement='left-start'
+                pulsatingDotPlacement='bottom'
+                width={400}
+                overlayPunchOut={overlayPunchOut}
+            />
+        </span>
     );
 };

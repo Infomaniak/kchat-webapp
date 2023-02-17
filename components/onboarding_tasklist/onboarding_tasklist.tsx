@@ -271,7 +271,7 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                 onClick={toggleTaskList}
             >
                 <TaskItems className={open ? 'open' : ''}>
-                    {completedCount === tasksList.length ?
+                    {false ?
                         <Completed
                             dismissAction={dismissChecklist}
                             isFirstAdmin={isFirstAdmin}

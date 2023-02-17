@@ -31,6 +31,7 @@ export const ChannelsTour = () => {
             title={title}
             screen={screen}
             placement='right-start'
+            pulsatingDotPlacement='right'
             width={352}
             overlayPunchOut={overlayPunchOut}
         />

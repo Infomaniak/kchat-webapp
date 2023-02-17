@@ -46,7 +46,6 @@ describe('components/ChannelHeader', () => {
             'hour',
         ],
         showChannelHeaderTutorialStep: false,
-        showKmeetTutorialStep: false,
     };
 
     const populatedProps = {

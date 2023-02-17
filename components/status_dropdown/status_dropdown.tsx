@@ -527,6 +527,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                             )}
                             rightDecorator={status === 'online' && selectedIndicator}
                             id={'status-menu-online'}
+                            sibling={showStatusTutorialStep && <StatusTour/>}
                         />
                         <Menu.ItemAction
                             onClick={setAway}
@@ -571,7 +572,6 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                             id={'status-menu-offline'}
                         />
                     </Menu.Group>
-                    {showStatusTutorialStep && <StatusTour/>}
                     <Menu.Group>
                         <Menu.ItemAction
                             id='accountSettings'
@@ -584,6 +584,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                                     glyph={'account-outline'}
                                 />
                             )}
+                            sibling={showProfileTutorialStep && <ProfileTour/>}
                         >
                             {this.props.showCompleteYourProfileTour && (
                                 <div
@@ -595,7 +596,6 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                             )}
                         </Menu.ItemAction>
                     </Menu.Group>
-                    {showProfileTutorialStep && <ProfileTour/>}
                     <Menu.Group>
                         <Menu.ItemAction
                             id='logout'

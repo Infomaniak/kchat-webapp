@@ -10,29 +10,34 @@ import {CategoryTypes} from 'packages/mattermost-redux/src/constants/channel_cat
 
 import OnboardingTourTip from './onboarding_tour_tip';
 
+import './tip.scss';
+
 export const DirectMessagesTour = () => {
     const title = (
         <FormattedMessage
             id='onboardingTour.DirectMessagesTourTip.title'
-            defaultMessage={'Direct messages'}
+            defaultMessage='Direct messages'
         />
     );
     const screen = (
         <FormattedMessage
             id='onboardingTour.DirectMessagesTourTip.content'
-            defaultMessage={'Direct Messages'}
+            defaultMessage='Direct Messages'
         />
     );
 
     const overlayPunchOut = useMeasurePunchouts([`sidebar-droppable-category-${CategoryTypes.DIRECT_MESSAGES}`], []);
 
     return (
-        <OnboardingTourTip
-            title={title}
-            screen={screen}
-            placement='right-start'
-            width={400}
-            overlayPunchOut={overlayPunchOut}
-        />
+        <span className='tip__positioned-horizontaly'>
+            <OnboardingTourTip
+                title={title}
+                screen={screen}
+                placement='right-start'
+                pulsatingDotPlacement='right-start'
+                width={400}
+                overlayPunchOut={overlayPunchOut}
+            />
+        </span>
     );
 };

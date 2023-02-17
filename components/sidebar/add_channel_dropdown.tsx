@@ -72,6 +72,7 @@ const AddChannelDropdown = ({
                     onClick={showMoreChannelsModal}
                     icon={<i className='icon-globe'/>}
                     text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.browseChannels', defaultMessage: 'Browse Channels'})}
+                    sibling={showJoinChannelTutorialTip && <JoinChannelsTour/>}
                 />
             );
         }
@@ -84,6 +85,7 @@ const AddChannelDropdown = ({
                     onClick={showNewChannelModal}
                     icon={<i className='icon-plus'/>}
                     text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.createNewChannel', defaultMessage: 'Create New Channel'})}
+                    sibling={showCreateTutorialTip && <CreateChannelsTour/>}
                 />
             );
         }
@@ -128,8 +130,6 @@ const AddChannelDropdown = ({
                     {joinPublicChannel}
                     {createChannel}
                     {createDirectMessage}
-                    {showCreateTutorialTip && <CreateChannelsTour/>}
-                    {showJoinChannelTutorialTip && <JoinChannelsTour/>}
                     {createUserGroup}
                 </Menu.Group>
                 {createCategory}

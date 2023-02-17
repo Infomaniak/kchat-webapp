@@ -9,29 +9,34 @@ import {useMeasurePunchouts} from '@mattermost/components';
 
 import OnboardingTourTip from './onboarding_tour_tip';
 
+import './tip.scss';
+
 export const JoinChannelsTour = () => {
     const title = (
         <FormattedMessage
             id='onboardingTour.JoinChannelsTourTip.title'
-            defaultMessage={'Join channels'}
+            defaultMessage='Join channels'
         />
     );
     const screen = (
         <FormattedMessage
             id='onboardingTour.JoinChannelsTourTip.content'
-            defaultMessage={'Browse available channels to see what your team is discussing. As you join channels, organize them into  categories based on how you work.'}
+            defaultMessage='Browse available channels to see what your team is discussing. As you join channels, organize them into categories based on how you work.'
         />
     );
 
     const overlayPunchOut = useMeasurePunchouts(['showMoreChannels'], []);
 
     return (
-        <OnboardingTourTip
-            title={title}
-            screen={screen}
-            placement='right-start'
-            width={400}
-            overlayPunchOut={overlayPunchOut}
-        />
+        <span className='tip__positioned-horizontaly'>
+            <OnboardingTourTip
+                title={title}
+                screen={screen}
+                placement='right-start'
+                pulsatingDotPlacement='right'
+                width={400}
+                overlayPunchOut={overlayPunchOut}
+            />
+        </span>
     );
 };

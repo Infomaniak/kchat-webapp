@@ -96,7 +96,6 @@ export type Props = {
     timestampUnits?: string[];
     lastActivityTimestamp?: number;
     showChannelHeaderTutorialStep: boolean;
-    showKmeetTutorialStep: boolean;
 };
 
 type State = {
@@ -295,7 +294,6 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             hasGuests,
             teammateNameDisplaySetting,
             showChannelHeaderTutorialStep,
-            showKmeetTutorialStep,
         } = this.props;
         const {formatMessage} = this.props.intl;
         const ariaLabelChannelHeader = localizeMessage('accessibility.sections.channelHeader', 'channel header region');
@@ -561,6 +559,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     className='channel-header__description'
                     dir='auto'
                 >
+                    {showChannelHeaderTutorialStep && <ChannelHeaderTour/>}
                     {dmHeaderIconStatus}
                     {dmHeaderTextStatus}
                     {memberListButton}
@@ -671,6 +670,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     id='channelHeaderDescription'
                     className='channel-header__description light'
                 >
+                    {showChannelHeaderTutorialStep && <ChannelHeaderTour/>}
                     {dmHeaderIconStatus}
                     {dmHeaderTextStatus}
                     {memberListButton}
@@ -862,14 +862,8 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         channel={channel}
                         channelMember={channelMember}
                     />
-                    {showMeetBtn &&
-                        <>
-                            <MeetButton/>
-                            {showKmeetTutorialStep && <KmeetTour/>}
-                        </>
-                    }
+                    {showMeetBtn && <MeetButton/>}
                     <ChannelInfoButton channel={channel}/>
-                    {showChannelHeaderTutorialStep && <ChannelHeaderTour/>}
                 </div>
             </div>
         );

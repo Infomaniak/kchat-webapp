@@ -76,11 +76,6 @@ function makeMapStateToProps() {
             taskName: OnboardingTasksName.CHANNELS_TOUR,
             tourStep: OnboardingTourSteps.CHANNEL_HEADER,
         });
-        const showKmeetTutorialStep = getShowTutorialStep(state, {
-            tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
-            taskName: OnboardingTasksName.CHANNELS_TOUR,
-            tourStep: OnboardingTourSteps.KMEET,
-        });
 
         let dmUser;
         let gmMembers;
@@ -131,7 +126,6 @@ function makeMapStateToProps() {
             isLastActiveEnabled,
             timestampUnits,
             showChannelHeaderTutorialStep,
-            showKmeetTutorialStep,
         };
     };
 }

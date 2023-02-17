@@ -80,6 +80,10 @@ const RightControlsContainer = styled.div`
     }
 `;
 
+const ButtonWrapper = styled.div`
+    height: 100%;
+`;
+
 export type Props = {
     productId?: ProductIdentifier;
 }
@@ -152,12 +156,16 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                 </div>
             )}
             <>
-                <AtMentionsButton/>
+                <ButtonWrapper>
+                    {showAtMentionsTutorialStep && <AtMentionsTour/>}
+                    <AtMentionsButton/>
+                </ButtonWrapper>
                 <SavedPostsButton/>
-                <SettingsButton/>
+                <ButtonWrapper>
+                    {showSettingsTutorialStep && <SettingsTour/>}
+                    <SettingsButton/>
+                </ButtonWrapper>
                 {showCustomizeTip && <CustomizeYourExperienceTour/>}
-                {showAtMentionsTutorialStep && <AtMentionsTour/>}
-                {showSettingsTutorialStep && <SettingsTour/>}
             </>
             {!isDesktopApp() && (
                 <div style={{height: 46, width: 42, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
