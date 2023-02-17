@@ -32,7 +32,7 @@ export default class WebSocketClient {
     private teamChannel: Channel | null;
     private userChannel: Channel | null;
     private userTeamChannel: Channel | null;
-    private presenceChannel: Channel | null;
+    private currentPresenceChannel: Channel | null;
     private connectionUrl: string | null;
     private socketId: string | null;
     private currentPresence: string;
@@ -86,6 +86,7 @@ export default class WebSocketClient {
     private firstConnectListeners = new Set<FirstConnectListener>();
     private reconnectListeners = new Set<ReconnectListener>();
     private missedMessageListeners = new Set<MissedMessageListener>();
+    private presenceChannels = new Map<string, Channel>();
     private errorListeners = new Set<ErrorListener>();
     private closeListeners = new Set<CloseListener>();
 
@@ -96,7 +97,7 @@ export default class WebSocketClient {
         this.teamChannel = null;
         this.userChannel = null;
         this.userTeamChannel = null;
-        this.presenceChannel = null;
+        this.currentPresenceChannel = null;
         this.connectionUrl = null;
         this.responseSequence = 1;
         this.serverSequence = 0;
@@ -258,7 +259,7 @@ export default class WebSocketClient {
 
             this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
 
-            // if ((presenceChannelId || currentPresenceChannelId) && !this.presenceChannel) {
+            // if ((presenceChannelId || currentPresenceChannelId) && !this.currentPresenceChannel) {
             //     this.bindPresenceChannel(presenceChannelId || currentPresenceChannelId);
             // }
 
@@ -270,7 +271,7 @@ export default class WebSocketClient {
                 this.userTeamChannel.unbind_global();
             }
             this.bindChannelGlobally(this.userTeamChannel);
-            this.bindChannelGlobally(this.presenceChannel);
+            this.bindChannelGlobally(this.currentPresenceChannel);
 
             console.log('[websocket] re-established connection');
             if (this.connectFailCount > 0) {
@@ -305,23 +306,32 @@ export default class WebSocketClient {
 
     subscribeToPresenceChannel(channelID: string) {
         this.currentPresence = channelID;
-        this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
+        this.currentPresenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
     }
 
-    bindPresenceChannel(channelID: string) {
-        this.currentPresence = channelID;
-        this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
-        if (this.presenceChannel) {
-            this.bindChannelGlobally(this.presenceChannel);
+    bindPresenceChannel(channelID: string, isCurrentChannel: boolean) {
+        let channel;
+        if (this.presenceChannels.has(channelID)) {
+            channel = this.presenceChannels.get(channelID);
+        } else {
+            channel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
+            if (channel) {
+                this.presenceChannels.set(channelID, channel);
+                this.bindChannelGlobally(channel);
+            }
+        }
+        if (isCurrentChannel && channel) {
+            this.currentPresence = channelID;
+            this.currentPresenceChannel = channel;
         }
     }
 
     unbindPresenceChannel(channelID: string) {
         // @ts-ignore
         this.conn?.unsubscribe(`presence-channel.${channelID}`);
-
-        // if (this.presenceChannel) {
-        //     this.unbindChannelGlobally(this.presenceChannel);
+        this.presenceChannels.delete(channelID);
+        // if (this.currentPresenceChannel) {
+        //     this.unbindChannelGlobally(this.currentPresenceChannel);
         // }
     }
 
@@ -552,13 +562,13 @@ export default class WebSocketClient {
             this.responseCallbacks[msg.seq] = responseCallback;
         }
 
-        if (this.conn && this.presenceChannel && this.conn.connection.state === 'connected') {
-            this.presenceChannel?.trigger(action, msg);
-        } else if (!this.conn || this.conn.connection.state === 'disconnected' || !this.presenceChannel) {
+        if (this.conn && this.currentPresenceChannel && this.conn.connection.state === 'connected') {
+            this.currentPresenceChannel?.trigger(action, msg);
+        } else if (!this.conn || this.conn.connection.state === 'disconnected' || !this.currentPresenceChannel) {
             console.log('presence channel is missing');
             console.log('connection: ', this.conn);
             console.log('connection state: ', this.conn?.connection.state);
-            console.log('presence channel: ', this.presenceChannel);
+            console.log('presence channel: ', this.currentPresenceChannel);
 
             // this.bindPresenceChannel(data.channel_id);
         }

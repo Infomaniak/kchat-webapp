@@ -2948,6 +2948,7 @@
   "channel_notifications.sendDesktop": "Desktop-Benachrichtigungen senden",
   "channel_select.placeholder": "--- Wähle einen Kanal ---",
   "channel_switch_modal.deactivated": "Deaktiviert",
+  "channel_typing": "{usersTyping} {length, plural, =1 {tippt} other {tippen gerade}}...",
   "channel_toggle_button.private": "Privat",
   "channel_toggle_button.public": "Öffentlich",
   "claim.email_to_ldap.enterLdapPwd": "Gib eine ID und ein Passwort für dein AD/LDAP-Konto ein",

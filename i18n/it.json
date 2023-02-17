@@ -2192,6 +2192,7 @@
   "channel_notifications.sendDesktop": "Invia notifiche desktop",
   "channel_select.placeholder": "--- Seleziona un canale ---",
   "channel_switch_modal.deactivated": "Disattivato",
+  "channel_typing": "{usersTyping} {length, plural, =1 {sta} other {stanno}} scrivendo...",
   "channel_toggle_button.private": "Privato",
   "channel_toggle_button.public": "Pubblico",
   "claim.email_to_ldap.enterLdapPwd": "Inserisci l'ID e la password del tuo account AD/LDAP",

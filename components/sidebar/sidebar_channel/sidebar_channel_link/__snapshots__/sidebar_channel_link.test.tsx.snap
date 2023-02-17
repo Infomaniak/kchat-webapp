@@ -48,6 +48,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   <Connect(Component)
     id="channel_id"
   />
+  <ChannelTyping
+    channelId="channel_id"
+  />
   <ChannelMentionBadge
     hasUrgent={false}
     unreadMentions={0}
@@ -132,6 +135,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   </div>
   <Connect(Component)
     id="channel_id"
+  />
+  <ChannelTyping
+    channelId="channel_id"
   />
   <ChannelMentionBadge
     hasUrgent={false}
@@ -242,6 +248,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   <Connect(Component)
     id="channel_id"
   />
+  <ChannelTyping
+    channelId="channel_id"
+  />
   <ChannelMentionBadge
     hasUrgent={false}
     unreadMentions={0}
@@ -326,6 +335,9 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
   </div>
   <Connect(Component)
     id="channel_id"
+  />
+  <ChannelTyping
+    channelId="channel_id"
   />
   <ChannelMentionBadge
     hasUrgent={false}

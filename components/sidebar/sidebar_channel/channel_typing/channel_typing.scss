@@ -1,0 +1,34 @@
+.channel-typing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 3px;
+    @for $i from 1 through 3 {
+        .dot:nth-child(#{$i}){
+            animation-delay: $i * 0.5s - 0.5s;
+        }
+    }
+
+    .dot {
+        width: 4px;
+        height: 4px;
+        padding: 1px;
+        border-radius: 50%;
+        background-color: var(--sidebar-text);
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+        animation-name: typing;
+        @keyframes typing {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    }
+}

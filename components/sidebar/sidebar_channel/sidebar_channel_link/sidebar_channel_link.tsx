@@ -20,6 +20,7 @@ import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
 import {ChannelsTour} from 'components/tours/onboarding_tour';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
+import ChannelTyping from 'components/sidebar/sidebar_channel/channel_typing';
 
 import ChannelMentionBadge from '../channel_mention_badge';
 import ChannelPencilIcon from '../channel_pencil_icon';
@@ -254,6 +255,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                     />
                 </div>
                 <ChannelPencilIcon id={channel.id}/>
+                <ChannelTyping channelId={channel.id}/>
                 <ChannelMentionBadge
                     unreadMentions={unreadMentions}
                     hasUrgent={hasUrgent}
