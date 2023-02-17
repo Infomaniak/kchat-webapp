@@ -45,6 +45,8 @@ describe('components/ChannelHeader', () => {
             'minute',
             'hour',
         ],
+        showChannelHeaderTutorialStep: false,
+        showKmeetTutorialStep: false,
     };
 
     const populatedProps = {
