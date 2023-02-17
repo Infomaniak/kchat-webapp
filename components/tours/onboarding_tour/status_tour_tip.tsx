@@ -14,13 +14,13 @@ export const StatusTour = () => {
     const title = (
         <FormattedMessage
             id='onboardingTour.StatusTourTip.title'
-            defaultMessage={'Status'}
+            defaultMessage='Status'
         />
     );
     const screen = (
         <FormattedMessage
             id='onboardingTour.StatusTourTip.content'
-            defaultMessage={'Status'}
+            defaultMessage='In a meeting or on leave? Update your status to inform your colleagues whether you are available or not'
         />
     );
 

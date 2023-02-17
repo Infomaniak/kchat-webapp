@@ -20,7 +20,7 @@ export const ChannelHeaderTour = () => {
     const screen = (
         <FormattedMessage
             id='onboardingTour.ChannelHeaderTourTip.content'
-            defaultMessage='Channel Header'
+            defaultMessage='Pin messages, add links in your channel header and access all files shared with members present'
         />
     );
 

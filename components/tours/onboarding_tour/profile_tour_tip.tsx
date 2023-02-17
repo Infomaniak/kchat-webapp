@@ -18,7 +18,7 @@ export const ProfileTour = () => {
     const screen = (
         <FormattedMessage
             id='onboardingTour.ProfileTourTip.content'
-            defaultMessage='Profile'
+            defaultMessage='Access your profile in one click and manage the settings of your Infomaniak account at any time'
         />
     );
 

@@ -20,7 +20,7 @@ export const KmeetTour = () => {
     const screen = (
         <FormattedMessage
             id='onboardingTour.KmeetTourTip.content'
-            defaultMessage='Kmeet'
+            defaultMessage='Create a kMeet call with a colleague by personal message or directly in a public channel to include all members'
         />
     );
 

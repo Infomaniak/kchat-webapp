@@ -14,13 +14,13 @@ export const SettingsTour = () => {
     const title = (
         <FormattedMessage
             id='onboardingTour.SettingsTourTip.title'
-            defaultMessage={'Settings'}
+            defaultMessage='Settings'
         />
     );
     const screen = (
         <FormattedMessage
             id='onboardingTour.SettingsTourTip.content'
-            defaultMessage={'Settings'}
+            defaultMessage='Access all your kChat settings. Choose your theme, customize notifications and find all the keyboard shortcuts'
         />
     );
 

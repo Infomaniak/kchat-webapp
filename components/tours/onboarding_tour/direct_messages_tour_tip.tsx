@@ -22,7 +22,7 @@ export const DirectMessagesTour = () => {
     const screen = (
         <FormattedMessage
             id='onboardingTour.DirectMessagesTourTip.content'
-            defaultMessage='Direct Messages'
+            defaultMessage='Contact a member of your organisation or create a private conversation with up to 7 users'
         />
     );
 

@@ -20,7 +20,7 @@ export const AtMentionsTour = () => {
     const screen = (
         <FormattedMessage
             id='onboardingTour.AtMentionsTourTip.content'
-            defaultMessage='At Mentions'
+            defaultMessage='Find directly the messages in which you have been mentioned so that you don’t miss any important information'
         />
     );
 
