@@ -693,7 +693,6 @@
         width: 100%;
         height: auto;
         flex: 0 0 100%;
-        margin: 0 0 30px;
         margin-left: 0;
     }
 
@@ -2243,6 +2242,15 @@
             height: calc(100vh - 138px - 4em);
             min-height: calc(100vh - 138px - 4em);
         }
+    }
+    .integrations-list {
+        gap: 15px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .integration-option {
+        flex: 0 0 100% !important;
     }
 }
 

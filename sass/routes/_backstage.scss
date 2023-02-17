@@ -25,7 +25,7 @@
 }
 
 .backstage-body {
-    overflow: hidden;
+    overflow-y: scroll;
     width: 100%;
     background-color: $bg--gray;
     grid-area: center;
@@ -326,7 +326,13 @@
 }
 
 .integrations-list {
-    overflow: auto;
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
 }
 
 .integration__icon {
@@ -344,7 +350,6 @@
     flex: 0 0 30%;
     padding: 20px;
     border: 1px solid $light-gray;
-    margin: 0 30px 30px 0;
     background-color: $white;
     border-radius: 4px;
     text-align: center;
