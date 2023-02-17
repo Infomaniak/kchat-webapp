@@ -315,7 +315,7 @@ export function updateChannel(channel: Channel): ActionFunc {
     };
 }
 
-export function updateChannelPrivacy(channelId: string, privacy: string): ActionFunc {
+export function updateChannelPrivacy(channelId: string, privacy: string, openLimitModalIfNeeded: (error: ServerError) => ActionFunc): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         dispatch({type: ChannelTypes.UPDATE_CHANNEL_REQUEST, data: null});
 
@@ -327,6 +327,7 @@ export function updateChannelPrivacy(channelId: string, privacy: string): Action
 
             dispatch({type: ChannelTypes.UPDATE_CHANNEL_FAILURE, error});
             dispatch(logError(error));
+            dispatch(openLimitModalIfNeeded(error));
             return {error};
         }
 
@@ -563,6 +564,7 @@ export function fetchAllMyTeamsChannelsAndChannelMembersREST(): ActionFunc {
                     data: {
                         channelID: conferences[i].channel_id,
                         id: conferences[i].id,
+                        url: conferences[i].url,
                         users: conferences[i].participants,
                     },
                 });

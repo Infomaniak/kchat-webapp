@@ -265,6 +265,11 @@ export default class WebSocketClient {
 
             this.bindChannelGlobally(this.teamChannel);
             this.bindChannelGlobally(this.userChannel);
+
+            // unbind previous listeners if needed to prevent duplicated callbacks
+            if (this.userTeamChannel && this.userTeamChannel.global_callbacks.length > 0) {
+                this.userTeamChannel.unbind_global();
+            }
             this.bindChannelGlobally(this.userTeamChannel);
             this.bindChannelGlobally(this.currentPresenceChannel);
 

@@ -262,13 +262,6 @@ export default class Bots extends React.PureComponent<Props, State> {
                                 ),
                             }}
                         />
-                        <FormattedMarkdownMessage
-                            id='bots.manage.help2'
-                            defaultMessage={'Enable bot account creation in the [System Console]({siteURL}/admin_console/integrations/bot_accounts).'}
-                            values={{
-                                siteURL: getSiteURL(),
-                            }}
-                        />
                     </React.Fragment>
                 }
                 searchPlaceholder={Utils.localizeMessage('bots.manage.search', 'Search Bot Accounts')}

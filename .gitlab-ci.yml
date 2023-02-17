@@ -19,11 +19,11 @@ workflow:
     - if: "$CI_COMMIT_TAG =~ /\\-rc.*/"
       variables:
         DEPLOY_VARIABLE: preprod
-        SLACK_NOTIFY_CHANNEL: https://kchat.infomaniak.com/hooks/98402a61-8342-4cd7-49b0-7cc18d6865a4
+        SLACK_NOTIFY_CHANNEL: https://infomaniak.kchat.infomaniak.com/hooks/986f3435-6c53-4648-a86c-33c64fc14daf
     - if: "$CI_COMMIT_TAG"
       variables:
         DEPLOY_VARIABLE: prod
-        SLACK_NOTIFY_CHANNEL: https://kchat.infomaniak.com/hooks/98402a61-8342-4cd7-49b0-7cc18d6865a4
+        SLACK_NOTIFY_CHANNEL: https://infomaniak.kchat.infomaniak.com/hooks/986f3435-6c53-4648-a86c-33c64fc14daf
     - if: $CI_COMMIT_BRANCH == "master"
       variables:
         DEPLOY_VARIABLE: prodsec
