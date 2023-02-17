@@ -2658,4 +2658,19 @@ describe('Actions.Channels', () => {
         assert.equal(channelMemberCounts['group-2'].channel_member_count, 999);
         assert.equal(channelMemberCounts['group-2'].channel_member_timezones_count, 131);
     });
+
+    it('should display limit modal if reached when converting channel', async () => {
+        const openChannelLimitModalIfNeeded = jest.fn(() => ({type: ''}));
+        const channelID = 'cid10000000000000000000000';
+        const statusCode = 409;
+        const id = 'quota-exceeded';
+        nock(Client4.getBaseRoute()).
+            put(`/channels/${channelID}/privacy`).
+            reply(statusCode, {status_code: statusCode, id});
+        await store.dispatch(Actions.updateChannelPrivacy(channelID, General.PRIVATE_CHANNEL, openChannelLimitModalIfNeeded));
+        expect(openChannelLimitModalIfNeeded).toBeCalledTimes(1);
+        const {status_code: responseStatusCode, server_error_id: responseServerErrorId} = openChannelLimitModalIfNeeded.mock.calls[0][0];
+        expect(responseStatusCode).toEqual(statusCode);
+        expect(responseServerErrorId).toEqual(id);
+    });
 });
