@@ -4308,6 +4308,7 @@ export default class Client4 {
             message: msg,
             server_error_id: data.id,
             status_code: data.status_code ? data.status_code : response.status,
+            error: data.error ? data.error : null,
             url,
         });
     };
@@ -4528,6 +4529,7 @@ export class ClientError extends Error implements ServerError {
     url?: string;
     server_error_id?: string;
     status_code?: number;
+    error?: {code: string};
 
     constructor(baseUrl: string, data: ServerError) {
         super(data.message + ': ' + cleanUrlForLogging(baseUrl, data.url || ''));
@@ -4536,6 +4538,7 @@ export class ClientError extends Error implements ServerError {
         this.url = data.url;
         this.server_error_id = data.server_error_id;
         this.status_code = data.status_code;
+        this.error = data.error;
 
         // Ensure message is treated as a property of this class when object spreading. Without this,
         // copying the object by using `{...error}` would not include the message.
