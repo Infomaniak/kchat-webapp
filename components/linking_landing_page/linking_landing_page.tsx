@@ -4,8 +4,6 @@
 import React, {PureComponent} from 'react';
 import {FormattedMessage} from 'react-intl';
 import MattermostLogoSvg from 'images/logo.svg';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import CheckboxCheckedIcon from 'components/widgets/icons/checkbox_checked_icon';
 import BrowserStore from 'stores/browser_store';
 import {LandingPreferenceTypes} from 'utils/constants';
 import * as Utils from 'utils/utils';
@@ -23,9 +21,6 @@ type Props = {
     iosAppLink?: string;
     androidAppLink?: string;
     siteUrl?: string;
-    siteName?: string;
-    brandImageUrl?: string;
-    enableCustomBrand: boolean;
 }
 
 type State = {
@@ -35,6 +30,7 @@ type State = {
     nativeLocation: string;
     brandImageError: boolean;
     navigating: boolean;
+    desktopAppLink: string;
 }
 
 export default class LinkingLandingPage extends PureComponent<Props, State> {
@@ -50,17 +46,24 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
             nativeLocation: location.replace(/^(https|http)/, 'kchat'),
             brandImageError: false,
             navigating: false,
+            desktopAppLink: 'https://www.infomaniak.com/gtl/apps.kchat',
         };
 
         if (!BrowserStore.hasSeenLandingPage()) {
             BrowserStore.setLandingPageSeen(true);
         }
+
+        this.getLatestDesktopAppsVersions().then((res) => {
+            this.setState({
+                desktopAppLink: res,
+            });
+        });
     }
 
     componentDidMount() {
         Utils.applyTheme(this.props.defaultTheme);
         if (this.checkLandingPreferenceApp()) {
-            this.openMattermostApp();
+            this.openKChatApp();
         }
 
         window.addEventListener('beforeunload', this.clearLandingPreferenceIfNotChecked);
@@ -106,7 +109,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
         }
     }
 
-    openMattermostApp = () => {
+    openKChatApp = () => {
         this.setPreference(LandingPreferenceTypes.MATTERMOSTAPP);
         this.setState({redirectPage: true});
         window.location.href = this.state.nativeLocation;
@@ -143,25 +146,29 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
         );
     }
 
+    getLatestDesktopAppsVersions = async () => {
+        let desktopAppLink = this.state.desktopAppLink;
+
+        if (UserAgent.isWindows() || UserAgent.isLinux()) {
+            await fetch('https://www.infomaniak.com/kchat/latest').then((response) => (response.ok ? response.json() : Promise.reject(new Error(response.statusText)))).then((data) => {
+                if (UserAgent.isWindows()) {
+                    desktopAppLink = data.win32.downloadurl;
+                } else if (UserAgent.isLinux()) {
+                    desktopAppLink = data.linux.downloadurl;
+                }
+            });
+        }
+
+        return desktopAppLink;
+    }
     getDownloadLink = () => {
         if (UserAgent.isIosWeb()) {
             return this.props.iosAppLink;
         } else if (UserAgent.isAndroidWeb()) {
             return this.props.androidAppLink;
         }
-        let desktopAppLink = '';
-        fetch('https://www.infomaniak.com/kchat/latest').then((response) => (response.ok ? response.json() : Promise.reject(new Error(response.statusText)))).then((data) => {
-            if (UserAgent.isMac()) {
-                desktopAppLink = 'https://infomaniak.com/gtl/apps.kchat';
-            } else if (UserAgent.isWindows()) {
-                desktopAppLink = data.win32.downloadurl;
-            } else if (UserAgent.isLinux()) {
-                desktopAppLink = data.linux.downloadurl;
-            }
-            console.log(data, desktopAppLink)
-        });
 
-        return desktopAppLink;
+        return this.state.desktopAppLink;
     }
 
     renderDownloadLinkText = () => {
@@ -188,7 +195,6 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
 
     renderDownloadLinkSection = () => {
         const downloadLink = this.getDownloadLink();
-            console.log(downloadLink)
         if (downloadLink) {
             return (
                 <div className='get-app__download-link'>
@@ -208,50 +214,6 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
     }
 
     renderDialogHeader = () => {
-        const downloadLink = this.getDownloadLink();
-
-        let openingLink = (
-            <FormattedMessage
-                id='get_app.openingLink'
-                defaultMessage='Opening link in Mattermost...'
-            />
-        );
-        if (this.props.enableCustomBrand) {
-            openingLink = (
-                <FormattedMessage
-                    id='get_app.openingLinkWhiteLabel'
-                    defaultMessage='Opening link in {appName}...'
-                    values={{
-                        appName: this.props.siteName || 'Mattermost',
-                    }}
-                />
-            );
-        }
-
-        if (this.state.redirectPage) {
-            return (
-                <h1 className='get-app__launching'>
-                    {openingLink}
-                    <div className={`get-app__alternative${this.state.redirectPage ? ' redirect-page' : ''}`}>
-                        <FormattedMessage
-                            id='get_app.redirectedInMoments'
-                            defaultMessage='You will be redirected in a few moments.'
-                        />
-                        <br/>
-                        {this.renderDownloadLinkText()}
-                        {'\u00A0'}
-                        <br className='mobile-only'/>
-                        <a href={downloadLink}>
-                            <FormattedMessage
-                                id='get_app.downloadTheAppNow'
-                                defaultMessage='Download the app now.'
-                            />
-                        </a>
-                    </div>
-                </h1>
-            );
-        }
-
         return (
             <div className='get-app__launching'>
                 <div className='get-app__launching--header'>
@@ -274,16 +236,6 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
     }
 
     renderDialogBody = () => {
-        if (this.state.redirectPage) {
-            return (
-                <div className='get-app__dialog-body'>
-                    {this.renderDialogHeader()}
-                    <div className='get-app__hr'/>
-                    {this.renderDownloadLinkSection()}
-                </div>
-            );
-        }
-
         return (
             <div className='get-app__dialog-body'>
                 {this.renderDialogHeader()}
@@ -323,7 +275,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
     }
 
     renderHeader = () => {
-        const header = (
+        return (
             <div className='get-app__header'>
                 <img
                     className='get-app__logo'
@@ -340,13 +292,9 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
                 </div>
             </div>
         );
-
-        return header;
     }
 
     render() {
-        const isMobile = UserAgent.isMobile();
-
         if (this.checkLandingPreferenceBrowser()) {
             this.openInBrowser();
             return null;
