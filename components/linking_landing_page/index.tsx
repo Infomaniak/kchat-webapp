@@ -3,7 +3,6 @@
 
 import {connect} from 'react-redux';
 
-import {Client4} from 'mattermost-redux/client';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
@@ -16,13 +15,11 @@ function mapStateToProps(state: GlobalState) {
 
     return {
         desktopAppLink: config.AppDownloadLink,
-        iosAppLink: config.IosAppDownloadLink,
-        androidAppLink: config.AndroidAppDownloadLink,
+        iosAppLink: 'https://apps.apple.com/app/infomaniak-kchat/id6443845553',
+        androidAppLink: 'https://play.google.com/store/apps/details?id=com.infomaniak.chat',
         defaultTheme: getTheme(state),
         siteUrl: config.SiteURL,
         siteName: config.SiteName,
-        brandImageUrl: Client4.getBrandImageUrl('0'),
-        enableCustomBrand: config.EnableCustomBrand === 'true',
     };
 }
 
