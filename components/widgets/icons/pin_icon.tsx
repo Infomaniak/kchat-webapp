@@ -9,9 +9,9 @@ export default function PinIcon(props: React.HTMLAttributes<HTMLSpanElement>) {
     return (
         <span {...props}>
             <svg
-                width='261'
-                height='242'
-                viewBox='0 0 261 242'
+                width='200'
+                height='161'
+                viewBox='0 0 270 250'
                 fill='none'
                 role='img'
                 aria-label={formatMessage({id: 'generic_icons.pin', defaultMessage: 'Pin Icon'})}

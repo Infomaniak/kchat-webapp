@@ -33,9 +33,9 @@ const iconMap: {[key in NoResultsVariant]: React.ReactNode } = {
     [NoResultsVariant.ChannelSearch]: <SearchIcon className='no-results__icon'/>,
     [NoResultsVariant.Mentions]: <MentionsIcon className='no-results__icon'/>,
     [NoResultsVariant.FlaggedPosts]: <IKFlagIcon/>,
-    [NoResultsVariant.PinnedPosts]: <PinIcon className='no-results__icon'/>,
-    [NoResultsVariant.ChannelFiles]: <ChannelFilesIcon className='no-results__icon'/>,
-    [NoResultsVariant.ChannelFilesFiltered]: <ChannelFilesIcon className='no-results__icon'/>,
+    [NoResultsVariant.PinnedPosts]: <PinIcon/>,
+    [NoResultsVariant.ChannelFiles]: <ChannelFilesIcon/>,
+    [NoResultsVariant.ChannelFilesFiltered]: <ChannelFilesIcon/>,
     [NoResultsVariant.UserGroups]: <i className='icon icon-account-multiple-outline no-results__icon'/>,
     [NoResultsVariant.UserGroupMembers]: <i className='icon icon-account-outline no-results__icon'/>,
 };

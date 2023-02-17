@@ -9,10 +9,10 @@ export default function ChannelFilesIcon(props: React.HTMLAttributes<HTMLSpanEle
     return (
         <span {...props}>
             <svg
-                width='261'
-                height='242'
+                width='200'
+                height='161'
+                viewBox='0 0 270 250'
                 fill='none'
-                viewBox='0 0 261 242'
                 role='img'
                 aria-label={formatMessage({id: 'Channel Files Icon', defaultMessage: 'Channel Files Icon'})}
                 style={{marginBottom: '20px'}}
