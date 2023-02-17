@@ -692,7 +692,6 @@
     .integration-option {
         width: 100%;
         height: auto;
-        flex: 0 0 100%;
         margin-left: 0;
     }
 
@@ -2245,12 +2244,6 @@
     }
     .integrations-list {
         gap: 15px;
-    }
-}
-
-@media screen and (max-width: 360px) {
-    .integration-option {
-        flex: 0 0 100% !important;
     }
 }
 

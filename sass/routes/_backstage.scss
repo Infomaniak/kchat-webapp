@@ -347,13 +347,21 @@
 }
 
 .integration-option {
-    flex: 0 0 30%;
+    flex: 0 0 45%;
     padding: 20px;
     border: 1px solid $light-gray;
     background-color: $white;
     border-radius: 4px;
     text-align: center;
     transition: all 0.2s ease;
+
+    @media screen and (max-width: 360px) {
+        flex: 0 0 100%;
+    }
+
+    @media screen and (min-width: 1280px) {
+        flex: 0 0 30%;
+    }
 
     &:hover {
         @extend %box-shadow-1;
