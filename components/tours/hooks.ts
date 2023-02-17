@@ -14,6 +14,7 @@ import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 import {switchToChannels} from 'actions/views/onboarding_tasks';
 import {getHistory} from 'utils/browser_history';
 import {GlobalState} from 'types/store';
+import {setStatusDropdown} from 'actions/views/status_dropdown';
 
 import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from '../onboarding_tasks';
 
@@ -29,7 +30,6 @@ import {
 } from './constant';
 
 export const useGetTourSteps = (tourCategory: string) => {
-    const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const pluginsList = useSelector((state: GlobalState) => state.plugins.plugins);
 
     let tourSteps: Record<string, number> = TTNameMapToTourSteps[tourCategory];
@@ -46,9 +46,6 @@ export const useGetTourSteps = (tourCategory: string) => {
             delete steps.BOARDS_TOUR;
         }
         tourSteps = steps;
-    } else if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP && isGuestUser) {
-        // restrict the 'learn more about messaging' tour when user is guest (townSquare, channel creation and user invite are restricted to guests)
-        tourSteps = TTNameMapToTourSteps[TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS];
     }
     return tourSteps;
 };
@@ -76,6 +73,39 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
                 dispatch(switchToChannels());
                 break;
             }
+            case OnboardingTourSteps.CHANNELS: {
+                dispatch(openLhs());
+                break;
+            }
+            case OnboardingTourSteps.JOIN_CHANNELS: {
+                dispatch(setAddChannelDropdown(true));
+                break;
+            }
+            case OnboardingTourSteps.CREATE_CHANNELS: {
+                dispatch(setAddChannelDropdown(true));
+                break;
+            }
+            case OnboardingTourSteps.CHANNEL_HEADER: {
+                dispatch(switchToChannels());
+                dispatch(setAddChannelDropdown(false));
+                break;
+            }
+            case OnboardingTourSteps.DIRECT_MESSAGES: {
+                dispatch(openLhs());
+                break;
+            }
+            case OnboardingTourSteps.KMEET: {
+                dispatch(switchToChannels());
+                break;
+            }
+            case OnboardingTourSteps.STATUS: {
+                dispatch(setStatusDropdown(true));
+                break;
+            }
+            case OnboardingTourSteps.PROFILE: {
+                dispatch(setStatusDropdown(true));
+                break;
+            }
             case OnboardingTourSteps.FINISHED: {
                 let preferences = [
                     {
@@ -94,6 +124,7 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
                     },
                 ];
                 dispatch(savePreferences(currentUserId, preferences));
+                dispatch(setStatusDropdown(false));
                 break;
             }
             default:

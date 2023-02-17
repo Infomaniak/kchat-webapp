@@ -27,11 +27,24 @@ export const TutorialTourName = {
 };
 
 export const OnboardingTourSteps = {
-    CHANNELS_AND_DIRECT_MESSAGES: 0,
-    CREATE_AND_JOIN_CHANNELS: 1,
-    INVITE_PEOPLE: 2,
-    SEND_MESSAGE: 3,
-    CUSTOMIZE_EXPERIENCE: 4,
+
+    // CHANNELS_AND_DIRECT_MESSAGES: 0,
+    // CREATE_AND_JOIN_CHANNELS: 1,
+    // INVITE_PEOPLE: 2,
+    // SEND_MESSAGE: 3,
+    // CUSTOMIZE_EXPERIENCE: 4,
+
+    CHANNELS: 0,
+    JOIN_CHANNELS: 1,
+    CREATE_CHANNELS: 2,
+    CHANNEL_HEADER: 3,
+    DIRECT_MESSAGES: 4,
+    AT_MENTIONS: 5,
+    KMEET: 6,
+    SETTINGS: 7,
+    STATUS: 8,
+    PROFILE: 9,
+
     FINISHED,
 };
 

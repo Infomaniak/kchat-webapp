@@ -45,6 +45,7 @@ exports[`components/global/AtMentionsButton should match snapshot 1`] = `
     className="grey "
     compact={true}
     icon="mentions"
+    id="right-controls-at-mentions"
     inverted={true}
     onClick={[Function]}
     size="sm"
