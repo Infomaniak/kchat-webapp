@@ -35,8 +35,8 @@ function redirectToErrorPageIfNecessary(err: ServerError) {
         getHistory().replace('/error?type=maintenance');
         break;
     case statusCodes.HTTP_BLOCKED:
-        console.log(err);
-        if (err.server_error_id === 'product_locked' || err.code === 'product_locked') {
+        console.log(err.error?.code);
+        if (err.server_error_id === 'product_locked' || err.error?.code === 'product_locked') {
             getHistory().replace('/error?type=blocked');
         }
         break;
