@@ -669,12 +669,37 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED:
         dispatch(handleHostedCustomerSignupProgressUpdated(msg));
-        // break;
-    // case SocketEvents.KSUITE_ADDED:
-    //     handleKSuiteAdded(msg)
-    //     break;
-    // case SocketEvents.KSUITE_DELETED:
-    //     handleKSuiteDeleted(msg)
+        break;
+    case SocketEvents.KSUITE_ADDED:
+        // handleKSuiteAdded(msg)
+        // dispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'reset-teams',
+                    message: {},
+                },
+                window.origin,
+            );
+        }
+        break;
+    case SocketEvents.KSUITE_DELETED:
+        // handleKSuiteDeleted(msg)
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'reset-teams',
+                    message: {},
+                },
+                window.origin,
+            );
+        } else {
+            dispatch(batchActions([
+                {type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}},
+                {type: TeamTypes.UPDATED_TEAM, data: msg.data.team},
+            ]));
+        }
+        break;
     default:
     }
 
@@ -894,11 +919,11 @@ export function handlePostUnreadEvent(msg) {
 }
 
 async function handleKSuiteAdded(msg) {
-    window.authManager.addTeam(msg.data.team)
+    window.authManager.addTeam(msg.data.team);
 }
 
 async function handleKSuiteDeleted(msg) {
-    window.authManager.deleteTeam(msg.data.team)
+    window.authManager.deleteTeam(msg.data.team);
 }
 
 async function handleTeamAddedEvent(msg) {
