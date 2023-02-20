@@ -4270,8 +4270,7 @@ export default class Client4 {
                 url,
             });
         }
-
-        if ((response.status === 401 && data?.result === 'redirect') && !isDesktopApp()) {
+        if ((response.status === 401 && data?.result === 'redirect') && !isDesktopApp() && !window.location.href.includes('landing')) {
             window.location.href = data.uri;
         }
 

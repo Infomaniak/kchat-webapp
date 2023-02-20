@@ -84,9 +84,6 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, refreshIKToken, storeTokenResponse} from '../login/utils';
-
-import {UserProfile} from '@mattermost/types/users';
 
 import {ActionResult} from 'mattermost-redux/types/actions';
 
@@ -95,11 +92,16 @@ import {IKConstants} from 'utils/constants-ik';
 import WelcomePostRenderer from 'components/welcome_post_renderer';
 import {reconnectWebSocket} from 'actions/websocket_actions';
 
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, refreshIKToken, storeTokenResponse} from '../login/utils';
+
+import {UserProfile} from '@mattermost/types/users';
+
 import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
@@ -124,6 +126,7 @@ const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparin
 const MAX_GET_TOKEN_FAILS = 5;
 const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
+
 // const DelinquencyModalController = makeAsyncComponent('DelinquencyModalController', LazyDelinquencyModalController);
 // const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
 
@@ -341,23 +344,9 @@ export default class Root extends React.PureComponent<Props, State> {
         this.props.actions.migrateRecentEmojis();
         loadRecentlyUsedCustomEmojis()(store.dispatch, store.getState);
 
-        const iosDownloadLink = getConfig(store.getState()).IosAppDownloadLink;
-        const androidDownloadLink = getConfig(store.getState()).AndroidAppDownloadLink;
-        const desktopAppDownloadLink = getConfig(store.getState()).AppDownloadLink;
-
         const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
 
-        // redirect to the mobile landing page if the user hasn't seen it before
-        let landing;
-        if (UserAgent.isAndroidWeb()) {
-            landing = androidDownloadLink;
-        } else if (UserAgent.isIosWeb()) {
-            landing = iosDownloadLink;
-        } else {
-            landing = desktopAppDownloadLink;
-        }
-
-        if (landing && !this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
+        if (!this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
             this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
             BrowserStore.setLandingPageSeen(true);
         }
@@ -365,7 +354,7 @@ export default class Root extends React.PureComponent<Props, State> {
         Utils.applyTheme(this.props.theme);
     }
 
-    componentDidUpdate(prevProps: Props) {
+    async componentDidUpdate(prevProps: Props) {
         if (!deepEqual(prevProps.theme, this.props.theme)) {
             Utils.applyTheme(this.props.theme);
         }
@@ -468,7 +457,7 @@ export default class Root extends React.PureComponent<Props, State> {
         this.onConfigLoaded();
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         if (isDesktopApp()) {
             // Rely on initial client calls to 401 here for the first redirect to login,
             // we dont need to do it manually.
@@ -484,8 +473,15 @@ export default class Root extends React.PureComponent<Props, State> {
                 this.runMounted();
             }
         } else {
-            // Allow through initial requests for web.
-            this.runMounted();
+            const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
+
+            if (!this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
+                this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
+                BrowserStore.setLandingPageSeen(true);
+            } else {
+                // Allow through initial requests for web.
+                this.runMounted();
+            }
         }
     }
 
@@ -706,6 +702,18 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     render() {
+        if (!this.state.configLoaded && this.props.location.pathname.includes('/landing')) {
+            return (
+                <RootProvider>
+                    <Switch>
+                        <Route
+                            path={'/landing'}
+                            component={LinkingLandingPage}
+                        />
+                    </Switch>
+                </RootProvider>
+            );
+        }
         if (!this.state.configLoaded) {
             return <div/>;
         }
