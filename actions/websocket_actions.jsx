@@ -120,7 +120,7 @@ import InteractiveDialog from 'components/interactive_dialog';
 // import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {checkIKTokenIsExpired, needRefreshToken, refreshIKToken} from 'components/login/utils';
+import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
