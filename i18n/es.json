@@ -3244,7 +3244,7 @@
   "error.no_team.message": "kSuite integra todas nuestras aplicaciones de productividad, incluido kChat, para comunicarse en directo, compartir y coordinar a sus equipos.",
   "error.blocked.title": "El kChat {groupName} está actualmente bloqueado",
   "error.blocked.message": "El producto kSuite ha caducado. Renuévalo para seguir comunicándote dentro de tu organización con kChat.",
-  "error.not_found.message": "La página que está intentando acceder no existe",
+  "error.not_found.message": "Es posible que este enlace nunca haya existido. Si este enlace existe, póngase en contacto con la persona que lo compartió con usted para que le dé derechos de acceso.",
   "error.not_found.title": "Página no encontrada",
   "error.oauth_access_denied": "Debes autorizar a kChat para iniciar sesión con {service}.",
   "error.oauth_access_denied.title": "Error de Autorización",

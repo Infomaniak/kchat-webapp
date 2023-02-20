@@ -2421,7 +2421,7 @@
   "error.no_team.message": "kSuite integra tutte le nostre applicazioni di produttività, compresa kChat, per comunicare in diretta, condividere e coordinare i vostri team.",
   "error.blocked.title": "La kChat {groupName} è attualmente bloccata",
   "error.blocked.message": "Il prodotto kSuite è scaduto. Rinnovatelo per continuare a comunicare all'interno della vostra organizzazione con kChat.",
-  "error.not_found.message": "La pagina che cerchi di raggiungere non esiste",
+  "error.not_found.message": "Questo link potrebbe non essere mai esistito. Se questo link esiste, si prega di contattare la persona che lo ha condiviso con voi in modo che possa darvi i diritti di accesso.",
   "error.not_found.title": "Pagina non trovata",
   "error.oauth_access_denied": "Deve consentire a Mattermost di accedere con {service}.",
   "error.oauth_access_denied.title": "Errore di autorizzazione",
