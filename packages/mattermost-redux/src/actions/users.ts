@@ -549,7 +549,7 @@ export function getMe(): ActionFunc {
         });
         const me = await getMeFunc(dispatch, getState);
         if ('error' in me) {
-            if (me.error?.status_code && me.error?.status_code === 404 && me.error?.status_code !== 401 && (window && !window.location.pathname.includes('static/call'))) {
+            if (me.error?.status_code && me.error?.status_code === 404 && (window && !window.location.pathname.includes('static/call'))) {
                 getHistory().push('/error?type=no_ksuite');
             }
             return me;
