@@ -109,7 +109,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
             document.body.classList.add('android');
         }
 
-        if (!this.props.currentUser) {
+        if (!this.props.currentUser && !this.props.location.pathname.includes('landing')) {
             const rootEl = document.getElementById('root');
             if (rootEl) {
                 rootEl.setAttribute('class', '');
