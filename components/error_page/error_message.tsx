@@ -228,7 +228,7 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                 <p>
                     <FormattedMessage
                         id='error.not_found.message'
-                        defaultMessage="Ce lien n'a peut-être jamais existé. Si ce lien existe, veuillez contacter la personne qui vous a partagé ce lien afin qu’elle vous donne les droits d’accès."
+                        defaultMessage='Ce lien n’a peut-être jamais existé. Si ce lien existe, veuillez contacter la personne qui vous a partagé ce lien afin qu’elle vous donne les droits d’accès.'
                     />
                 </p>
             );

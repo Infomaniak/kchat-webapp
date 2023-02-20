@@ -110,7 +110,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
 
         let backButton;
         let secondaryButton;
-        let illustration = <SvgIlluErrorQuestion/>;
+        let illustration: JSX.Element | null = <SvgIlluErrorQuestion/>;
         let fullscreenIllustration;
         if (type === ErrorPageTypes.PERMALINK_NOT_FOUND && returnTo) {
             backButton = (
