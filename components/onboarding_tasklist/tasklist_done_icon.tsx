@@ -13,25 +13,23 @@ const TasklistDoneIcon = () => {
             xmlns='http://www.w3.org/2000/svg'
         >
             <rect
+                className='fill-ik-illustration-grey-9'
                 width='327'
                 height='150'
                 rx='8'
-                fill='#F4F6FD'
             />
             <circle
+                className='fill-ik-illustration-grey-6 stroke-ik-illustration-grey-7'
                 cx='164.692'
                 cy='90.553'
                 r='46.0175'
-                fill='white'
-                stroke='#E0E0E0'
                 strokeWidth='0.86014'
             />
             <circle
+                className='fill-ik-illustration-grey-6 stroke-ik-illustration-grey-7'
                 cx='164.692'
                 cy='90.5525'
                 r='32.3118'
-                fill='white'
-                stroke='#E0E0E0'
                 strokeWidth='0.746964'
             />
             <circle

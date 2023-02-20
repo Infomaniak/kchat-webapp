@@ -7,6 +7,9 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTeamDefaultChannelId} from 'mattermost-redux/selectors/entities/channels';
+import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
+import {ChannelCategory} from '@mattermost/types/channel_categories';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {close as closeLhs, open as openLhs} from 'actions/views/lhs';
@@ -15,6 +18,7 @@ import {switchToChannels} from 'actions/views/onboarding_tasks';
 import {getHistory} from 'utils/browser_history';
 import {GlobalState} from 'types/store';
 import {setStatusDropdown} from 'actions/views/status_dropdown';
+import {collapseAllCategoriesExcept} from 'actions/views/channel_sidebar';
 
 import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from '../onboarding_tasks';
 
@@ -52,6 +56,7 @@ export const useGetTourSteps = (tourCategory: string) => {
 export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
     const dispatch = useDispatch();
     const currentUserId = useSelector(getCurrentUserId);
+    const defaultChannelId = useSelector(getCurrentTeamDefaultChannelId);
     const teamUrl = useSelector((state: GlobalState) => getCurrentRelativeTeamUrl(state));
 
     const nextStepActions = useCallback((step: number) => {
@@ -75,6 +80,7 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
             }
             case OnboardingTourSteps.CHANNELS: {
                 dispatch(openLhs());
+                dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => !category.channel_ids.includes(defaultChannelId)));
                 break;
             }
             case OnboardingTourSteps.JOIN_CHANNELS: {
@@ -92,6 +98,7 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
             }
             case OnboardingTourSteps.DIRECT_MESSAGES: {
                 dispatch(openLhs());
+                dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => category.type !== CategoryTypes.DIRECT_MESSAGES));
                 break;
             }
             case OnboardingTourSteps.KMEET: {

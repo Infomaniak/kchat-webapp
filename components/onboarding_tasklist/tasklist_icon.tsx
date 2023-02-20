@@ -13,10 +13,10 @@ const TasklistIcon = () => {
             xmlns='http://www.w3.org/2000/svg'
         >
             <rect
+                className='fill-ik-illustration-grey-9'
                 width='327'
                 height='150'
                 rx='8'
-                fill='#F4F6FD'
             />
             <g clipPath='url(#clip0_3253_17095)'>
                 <rect
@@ -88,15 +88,13 @@ const TasklistIcon = () => {
                 />
             </g>
             <path
+                className='fill-ik-illustration-grey-6 stroke-ik-illustration-grey-7'
                 d='M113.653 100.103L113.77 99.9944H113.931H178.556C180.139 99.9944 181.422 98.7113 181.422 97.1286V38.5642C181.422 36.9815 180.139 35.6985 178.556 35.6985H88.1197C86.5369 35.6985 85.2539 36.9815 85.2539 38.5642V97.1286C85.2539 98.7113 86.5369 99.9944 88.1197 99.9944H105.144H105.553V100.404V107.591L113.653 100.103Z'
-                fill='#F5F5F5'
-                stroke='#E0E0E0'
                 strokeWidth='0.818792'
             />
             <path
+                className='fill-ik-illustration-grey-13 stroke-ik-illustration-grey-7'
                 d='M188.886 81.4736L188.744 81.3453H188.553H115.157C113.623 81.3453 112.38 80.1017 112.38 78.5675V17.2752C112.38 15.741 113.623 14.4974 115.157 14.4974H215.12C216.654 14.4974 217.897 15.741 217.897 17.2752V78.5675C217.897 80.1017 216.654 81.3453 215.12 81.3453H199.35H198.853V81.8427V90.4745L188.886 81.4736Z'
-                fill='white'
-                stroke='#E0E0E0'
                 strokeWidth='0.994794'
             />
             <ellipse

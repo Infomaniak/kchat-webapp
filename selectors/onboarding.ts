@@ -130,7 +130,6 @@ export const getShowTaskListBool = createSelector(
     (state: GlobalState) => getCategory(state, OnboardingTaskCategory),
     (state: GlobalState) => getCategory(state, Preferences.RECOMMENDED_NEXT_STEPS),
     (state, onboardingPreferences, legacyStepsPreferences) => {
-        return [true, true];
         const isMobileView = isMobile();
 
         // conditions to validate scenario where users (initially first_admins) had already set any of the onboarding task list preferences values.
