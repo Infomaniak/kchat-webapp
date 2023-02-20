@@ -28,7 +28,9 @@ import {
 } from 'mattermost-redux/selectors/entities/preferences';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {isCurrentUserGuestUser, isCurrentUserSystemAdmin, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentTeamDefaultChannelId} from 'mattermost-redux/selectors/entities/channels';
 
+import {ChannelCategory} from '@mattermost/types/channel_categories';
 import {GlobalState} from 'types/store';
 import {
     openInvitationsModal,
@@ -36,6 +38,8 @@ import {
     setShowOnboardingVisitConsoleTour,
     switchToChannels,
 } from 'actions/views/onboarding_tasks';
+import {collapseAllCategoriesExcept} from 'actions/views/channel_sidebar';
+import {open as openLhs} from 'actions/views/lhs';
 
 import {ModalIdentifiers, TELEMETRY_CATEGORIES, ExploreOtherToolsTourSteps} from 'utils/constants';
 
@@ -254,6 +258,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
 
     const handleSaveData = useHandleOnBoardingTaskData();
     const currentUserId = useSelector(getCurrentUserId);
+    const currentTeamDefaultChannelId = useSelector(getCurrentTeamDefaultChannelId);
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const inAdminConsole = matchPath(pathname, {path: '/admin_console'}) != null;
     const inChannels = matchPath(pathname, {path: '/:team/channels/:chanelId'}) != null;
@@ -286,6 +291,8 @@ export const useHandleOnBoardingTaskTrigger = () => {
             if (!inChannels) {
                 dispatch(switchToChannels());
             }
+            dispatch(openLhs());
+            dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => !category.channel_ids.includes(currentTeamDefaultChannelId)));
             break;
         }
         case OnboardingTasksName.BOARDS_TOUR: {
