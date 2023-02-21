@@ -895,7 +895,6 @@ export function handlePostUnreadEvent(msg) {
 }
 
 function handleKSuiteAdded(msg) {
-    // window.authManager.addTeam(msg.data.team);
     console.log(msg)
     return (doDispatch, doGetState) => {
         console.log([
@@ -916,11 +915,11 @@ function handleKSuiteAdded(msg) {
                 window.origin,
             );
         }
+        doDispatch({type: TeamTypes.RECEIVED_TEAM, data: msg.data.team});
     };
 }
 
 function handleKSuiteDeleted(msg) {
-    // window.authManager.deleteTeam(msg.data.team);
     return (doDispatch, doGetState) => {
         console.log(msg);
         if (isDesktopApp()) {
@@ -939,10 +938,8 @@ function handleKSuiteDeleted(msg) {
             );
         }
 
-        // doDispatch(batchActions([
-        //     {type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}},
-        //     {type: TeamTypes.UPDATED_TEAM, data: msg.data.team},
-        // ]));
+        doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}});
+        doDispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
     };
 }
 
