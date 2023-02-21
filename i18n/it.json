@@ -2549,6 +2549,7 @@
   "get_app.dontHaveTheDesktopApp": "Non hai l'app desktop?",
   "get_app.dontHaveTheMobileApp": "Non hai l'app mobile?",
   "get_app.downloadTheAppNow": "Scarica l'app adesso.",
+  "get_app.howJoinkChat": "Come vuoi partecipare alla chat?",
   "get_app.ifNothingPrompts": "Puoi vedere {siteName} nell'app desktop o continuare nel browser.",
   "get_app.ifNothingPromptsMobile": "Puoi vedere {siteName} nell'app mobile o continuare nel browser.",
   "get_app.launching": "Dove vuoi vederlo?",
