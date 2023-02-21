@@ -3402,6 +3402,7 @@
   "get_app.dontHaveTheDesktopApp": "¿No tienes la App de Escritorio?",
   "get_app.dontHaveTheMobileApp": "¿No tienes la App Móvil?",
   "get_app.downloadTheAppNow": "Descargar la app ahora.",
+  "get_app.howJoinkChat": "¿Cómo quieres participar en el chat?",
   "get_app.ifNothingPrompts": "Puedes ver {siteName} en la app de escritorio o continuar en tu navegador.",
   "get_app.ifNothingPromptsMobile": "Puedes ver {siteName} en la app móvil o continuar en tu navegador.",
   "get_app.launching": "¿Dónde quisieras ver esto?",

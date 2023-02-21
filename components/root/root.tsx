@@ -268,6 +268,14 @@ export default class Root extends React.PureComponent<Props, State> {
         store.subscribe(() => applyLuxonDefaults(store.getState()));
     }
 
+    isIkBaseUrl = () =>{
+        const whitelist = [
+            'https://do-not-replace-kchat.infomaniak.com'.replace('do-not-replace-', ''),
+            'https://do-not-replace-kchat.preprod.dev.infomaniak.ch'.replace('do-not-replace-', ''),
+        ];
+        return whitelist.includes(window.origin);
+    }
+
     onConfigLoaded = () => {
         const telemetryId = this.props.telemetryId;
 
@@ -346,7 +354,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
         const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
 
-        if (!this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
+        if (!this.props.isCloud && !this.isIkBaseUrl && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
             this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
             BrowserStore.setLandingPageSeen(true);
         }
@@ -475,7 +483,7 @@ export default class Root extends React.PureComponent<Props, State> {
         } else {
             const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
 
-            if (!this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
+            if (!this.props.isCloud && !this.isIkBaseUrl && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
                 this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
                 BrowserStore.setLandingPageSeen(true);
             } else {
