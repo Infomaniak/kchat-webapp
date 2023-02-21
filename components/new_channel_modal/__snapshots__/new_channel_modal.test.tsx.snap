@@ -68,6 +68,10 @@ exports[`components/new_channel_modal should match snapshot 1`] = `
       }
       selected="O"
     />
+    <ChannelLimitIndicator
+      setLimitations={[Function]}
+      type="O"
+    />
     <div
       className="new-channel-modal-purpose-container"
     >

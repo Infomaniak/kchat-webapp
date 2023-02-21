@@ -155,6 +155,39 @@ describe('components/new_channel_modal', () => {
                         },
                     },
                 },
+                usage: {
+                    storage: 0,
+                    public_channels: 0,
+                    private_channels: 0,
+                    guests: 0,
+                    members: 0,
+                    files: {
+                        totalStorage: 0,
+                    },
+                    messages: {
+                        history: 0,
+                    },
+                    teams: {
+                        active: 0,
+                        cloudArchived: 0,
+                    },
+                    boards: {
+                        cards: 0,
+                    },
+                    usageLoaded: true,
+                },
+                cloud: {
+                    limits: {
+                        limits: {
+                            storage: 10,
+                            public_channels: 10,
+                            private_channels: 10,
+                            guests: 10,
+                            members: 10,
+                        },
+                        limitsLoaded: true,
+                    },
+                },
             },
             plugins: {
                 plugins: {focalboard: {id: suitePluginIds.focalboard, version: '7.2.1'}},
