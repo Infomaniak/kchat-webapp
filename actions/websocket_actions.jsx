@@ -896,7 +896,12 @@ export function handlePostUnreadEvent(msg) {
 
 function handleKSuiteAdded(msg) {
     // window.authManager.addTeam(msg.data.team);
+    console.log(msg)
     return (doDispatch, doGetState) => {
+        console.log([
+            ...getMyKSuites(doGetState()),
+            msg.data.team,
+        ]);
         if (isDesktopApp()) {
             window.postMessage(
                 {
@@ -920,7 +925,9 @@ function handleKSuiteDeleted(msg) {
         console.log(msg);
         if (isDesktopApp()) {
             const currentTeams = getMyKSuites(doGetState());
+            console.log(currentTeams);
             const newTeams = currentTeams.filter((team) => team.id !== msg.data.team.id);
+            console.log(newTeams)
             window.postMessage(
                 {
                     type: 'update-teams',
