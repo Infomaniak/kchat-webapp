@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {FormattedMessage} from 'react-intl';
 
 import UpgradeOfferIcon from 'components/widgets/icons/upgrade_offer_icon';
@@ -13,6 +13,7 @@ import useGetLimits from 'components/common/hooks/useGetLimits';
 
 import {ChannelType} from '@mattermost/types/channels';
 import {General} from 'mattermost-redux/constants';
+import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 
 import {getUsage} from 'actions/cloud';
 import {redirectTokSuiteDashboard} from 'actions/global_actions';
@@ -26,6 +27,7 @@ type Props = {
 
 const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
     const dispatch = useDispatch();
+    const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
     const {public_channels: publicChannelsUsage, private_channels: privateChannelsUsage} = useGetUsage();
     const {public_channels: publicChannelsLimit, private_channels: privateChannelsLimit} = useGetLimits()[0];
     const {public_channels: publicChannelsUsageDelta, private_channels: privateChannelsUsageDelta} = useGetUsageDeltas();
@@ -59,7 +61,7 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
                     type,
                     usage: type === General.OPEN_CHANNEL ? publicChannelsUsage : privateChannelsUsage,
                     limit: type === General.OPEN_CHANNEL ? publicChannelsLimit : privateChannelsLimit,
-                    modifyOffer: (chunks: string[]) => (<a onClick={redirectTokSuiteDashboard}>{chunks}</a>),
+                    modifyOffer: (chunks: string[]) => (<a onClick={() => redirectTokSuiteDashboard(currentTeamAccountId)}>{chunks}</a>),
                 }}
             />
         </div>

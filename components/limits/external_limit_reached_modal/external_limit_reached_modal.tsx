@@ -14,6 +14,7 @@ import {closeModal} from 'actions/views/modals';
 import {redirectTokSuiteDashboard} from 'actions/global_actions';
 import {getUsage} from 'actions/cloud';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 import {isModalOpen} from 'selectors/views/modals';
 import {GlobalState} from 'types/store';
 
@@ -27,6 +28,7 @@ const ExternalLimitReachedModal = () => {
 
     const isAdmin = useSelector(isCurrentUserSystemAdmin);
     const show = useSelector((state: GlobalState) => isModalOpen(state, ModalIdentifiers.EXTERNAL_LIMIT_REACHED));
+    const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
 
     const [limits, limitsLoaded] = useGetLimits();
     const {guests: externalsLimit} = limits;
@@ -42,9 +44,9 @@ const ExternalLimitReachedModal = () => {
 
     const handleConfirm = useCallback(() => {
         if (isAdmin) {
-            redirectTokSuiteDashboard();
+            redirectTokSuiteDashboard(currentTeamAccountId);
         }
-    }, [isAdmin]);
+    }, [isAdmin, currentTeamAccountId]);
 
     let handleCancel;
     if (isAdmin) {

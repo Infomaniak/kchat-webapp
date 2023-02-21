@@ -11,6 +11,7 @@ import {getUsage} from 'actions/cloud';
 import {isModalOpen} from 'selectors/views/modals';
 import {GlobalState} from 'types/store';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 
 import {ModalIdentifiers} from 'utils/constants';
 
@@ -32,6 +33,7 @@ const ChannelLimitReachedModal = ({isPublicLimited, isPrivateLimited}: Props) =>
 
     const isAdmin = useSelector((state: GlobalState) => isCurrentUserSystemAdmin(state));
     const show = useSelector((state: GlobalState) => isModalOpen(state, ModalIdentifiers.CHANNEL_LIMIT_REACHED));
+    const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
 
     const [limits, limitsLoaded] = useGetLimits();
     const {public_channels: publicChannelLimit, private_channels: privateChannelLimit} = limits;
@@ -47,9 +49,9 @@ const ChannelLimitReachedModal = ({isPublicLimited, isPrivateLimited}: Props) =>
 
     const handleConfirm = useCallback(() => {
         if (isAdmin) {
-            redirectTokSuiteDashboard();
+            redirectTokSuiteDashboard(currentTeamAccountId);
         }
-    }, [isAdmin]);
+    }, [isAdmin, currentTeamAccountId]);
 
     let handleCancel;
     if (isAdmin) {

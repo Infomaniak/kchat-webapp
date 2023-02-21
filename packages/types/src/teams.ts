@@ -24,6 +24,7 @@ export type TeamType = 'O' | 'I';
 
 export type Team = {
     id: string;
+    account_id: number;
     create_at: number;
     update_at: number;
     delete_at: number;
