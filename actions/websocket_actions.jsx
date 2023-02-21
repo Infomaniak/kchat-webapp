@@ -894,7 +894,7 @@ export function handlePostUnreadEvent(msg) {
     );
 }
 
-async function handleKSuiteAdded(msg) {
+function handleKSuiteAdded(msg) {
     // window.authManager.addTeam(msg.data.team);
     return (doDispatch, doGetState) => {
         if (isDesktopApp()) {
@@ -914,9 +914,10 @@ async function handleKSuiteAdded(msg) {
     };
 }
 
-async function handleKSuiteDeleted(msg) {
+function handleKSuiteDeleted(msg) {
     // window.authManager.deleteTeam(msg.data.team);
     return (doDispatch, doGetState) => {
+        console.log(msg);
         if (isDesktopApp()) {
             const currentTeams = getMyKSuites(doGetState());
             const newTeams = currentTeams.filter((team) => team.id !== msg.data.team.id);
@@ -930,10 +931,11 @@ async function handleKSuiteDeleted(msg) {
                 window.origin,
             );
         }
-        doDispatch(batchActions([
-            {type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}},
-            {type: TeamTypes.UPDATED_TEAM, data: msg.data.team},
-        ]));
+
+        // doDispatch(batchActions([
+        //     {type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}},
+        //     {type: TeamTypes.UPDATED_TEAM, data: msg.data.team},
+        // ]));
     };
 }
 
