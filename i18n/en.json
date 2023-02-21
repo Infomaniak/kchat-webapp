@@ -5695,7 +5695,7 @@
   "storageLimit.subtitle": "Your storage space is full. To continue uploading files, please contact an administrator to change the offer.",
   "storageLimit.subtitle.admin": "Your storage space is full. Sign up for a higher plan to continue sending files.",
   "channelLimit.title": "Create new channels to better communicate with your organization’s members",
-  "channelLimit.subtitle": "You have reached the limit of public channels ({publicChannelUsage, number}/{publicChannelLimit, number}) and private channels ({privateChannelUsage, number}/{privateChannelLimit, number}) on your kChat. To create additional ones, you need to subscribe to a premium package.",
+  "channelLimit.subtitle": "You have reached the limit of <bold>{isPublicLimited, select, true {public channels ({publicChannelUsage, number}/{publicChannelLimit, number}) {isPrivateLimited, select, true {and} other {}}} other {}} {isPrivateLimited, select, true {private channels ({privateChannelUsage, number}/{privateChannelLimit, number})} other {}}</bold> on your kChat. To create additional ones, you need to subscribe to a premium package.",
   "onboardingTour.ChannelsTourTip.title": "Access the discussion channels",
   "onboardingTour.ChannelsTourTip.content": "Find the different public and private discussion channels to which you have access. The conversations are visible to all the members present in the channel, ideal for sharing information!",
   "onboardingTour.CreateChannelsTourTip.title": "Create discussion channels",
