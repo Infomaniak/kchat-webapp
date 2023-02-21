@@ -2666,14 +2666,25 @@ describe('Actions.Channels', () => {
         const channelID = 'cid10000000000000000000000';
         const statusCode = 409;
         const id = 'quota-exceeded';
+        store = configureStore({
+            entities: {
+                channels: {
+                    channels: {
+                        [channelID]: {type: General.OPEN_CHANNEL},
+                    },
+                },
+            },
+        });
         nock(Client4.getBaseRoute()).
             put(`/channels/${channelID}/privacy`).
             reply(statusCode, {status_code: statusCode, id});
         await store.dispatch(Actions.updateChannelPrivacy(channelID, General.PRIVATE_CHANNEL, openChannelLimitModalIfNeeded));
         expect(openChannelLimitModalIfNeeded).toBeCalledTimes(1);
         const {status_code: responseStatusCode, server_error_id: responseServerErrorId} = openChannelLimitModalIfNeeded.mock.calls[0][0];
+        const type = openChannelLimitModalIfNeeded.mock.calls[0][1];
         expect(responseStatusCode).toEqual(statusCode);
         expect(responseServerErrorId).toEqual(id);
+        expect(type).toEqual(General.OPEN_CHANNEL);
     });
 
     it('should display limit modal if reached when unarchiving channel', async () => {
@@ -2681,13 +2692,24 @@ describe('Actions.Channels', () => {
         const channelID = 'cid10000000000000000000000';
         const statusCode = 409;
         const id = 'quota-exceeded';
+        store = configureStore({
+            entities: {
+                channels: {
+                    channels: {
+                        [channelID]: {type: General.OPEN_CHANNEL},
+                    },
+                },
+            },
+        });
         nock(Client4.getBaseRoute()).
             post(`/channels/${channelID}/restore`).
             reply(statusCode, {status_code: statusCode, id});
         await store.dispatch(Actions.unarchiveChannel(channelID, openChannelLimitModalIfNeeded));
         expect(openChannelLimitModalIfNeeded).toBeCalledTimes(1);
         const {status_code: responseStatusCode, server_error_id: responseServerErrorId} = openChannelLimitModalIfNeeded.mock.calls[0][0];
+        const type = openChannelLimitModalIfNeeded.mock.calls[0][1];
         expect(responseStatusCode).toEqual(statusCode);
         expect(responseServerErrorId).toEqual(id);
+        expect(type).toEqual(General.OPEN_CHANNEL);
     });
 });

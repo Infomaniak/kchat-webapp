@@ -7,7 +7,7 @@ import {FormattedMessage} from 'react-intl';
 
 import {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
-import {Channel} from '@mattermost/types/channels';
+import {Channel, ChannelType} from '@mattermost/types/channels';
 import {ServerError} from '@mattermost/types/errors';
 
 import Constants from 'utils/constants';
@@ -24,7 +24,7 @@ type State = {
 }
 
 export type ChannelDetailsActions = {
-    unarchiveChannel: (channelId: string, openLimitModalIfNeeded: (error: ServerError) => ActionFunc) => Promise<ActionResult>;
+    unarchiveChannel: (channelId: string, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc) => Promise<ActionResult>;
 };
 
 export default class UnarchiveChannelModal extends React.PureComponent<Props, State> {

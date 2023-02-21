@@ -9,6 +9,7 @@ import {trackEvent} from 'actions/telemetry_actions.jsx';
 import Constants from 'utils/constants';
 import {General} from 'mattermost-redux/constants';
 import {ServerError} from '@mattermost/types/errors';
+import {ChannelType} from '@mattermost/types/channels';
 import {ActionFunc} from 'mattermost-redux/types/actions';
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
@@ -24,7 +25,7 @@ type Props = {
     onExited: () => void;
 
     actions: {
-        updateChannelPrivacy: (channelId: string, privacy: string, openChannelLimitModalIfNeeded: (error: ServerError) => ActionFunc) => void;
+        updateChannelPrivacy: (channelId: string, privacy: string, openChannelLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc) => void;
     };
 }
 
