@@ -74,20 +74,6 @@ const ExternalLimitReachedModal = () => {
                 externalsUsage,
                 externalsLimit,
             })}
-            <div className='limit-modal-content__wrapper'>
-                {formatMessage({
-                    id: 'limitModal.plans',
-                    defaultMessage: 'Available for plans',
-                })}
-                <a
-                    onClick={redirectTokSuiteDashboard}
-                >
-                    {formatMessage({
-                        id: 'limitModal.planList',
-                        defaultMessage: 'Basic, Teams & Pro',
-                    })}
-                </a>
-            </div>
         </div>
     );
 
