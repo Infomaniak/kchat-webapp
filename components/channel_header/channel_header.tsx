@@ -39,6 +39,7 @@ import {handleFormattedTextClick, localizeMessage, isEmptyObject, toTitleCase} f
 import {t} from 'utils/i18n';
 
 import MeetButton from 'components/meet_button';
+import {ChannelHeaderTour, KmeetTour} from 'components/tours/onboarding_tour';
 import {UserCustomStatus, UserProfile} from '@mattermost/types/users';
 import {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
 import {RhsState} from 'types/store/rhs';
@@ -94,6 +95,7 @@ export type Props = {
     isLastActiveEnabled: boolean;
     timestampUnits?: string[];
     lastActivityTimestamp?: number;
+    showChannelHeaderTutorialStep: boolean;
 };
 
 type State = {
@@ -291,6 +293,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             rhsState,
             hasGuests,
             teammateNameDisplaySetting,
+            showChannelHeaderTutorialStep,
         } = this.props;
         const {formatMessage} = this.props.intl;
         const ariaLabelChannelHeader = localizeMessage('accessibility.sections.channelHeader', 'channel header region');
@@ -556,6 +559,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     className='channel-header__description'
                     dir='auto'
                 >
+                    {showChannelHeaderTutorialStep && <ChannelHeaderTour/>}
                     {dmHeaderIconStatus}
                     {dmHeaderTextStatus}
                     {memberListButton}
@@ -666,6 +670,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     id='channelHeaderDescription'
                     className='channel-header__description light'
                 >
+                    {showChannelHeaderTutorialStep && <ChannelHeaderTour/>}
                     {dmHeaderIconStatus}
                     {dmHeaderTextStatus}
                     {memberListButton}
@@ -857,9 +862,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         channel={channel}
                         channelMember={channelMember}
                     />
-                    {showMeetBtn &&
-                        <MeetButton/>
-                    }
+                    {showMeetBtn && <MeetButton/>}
                     <ChannelInfoButton channel={channel}/>
                 </div>
             </div>

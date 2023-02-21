@@ -1,3 +1,9 @@
+## 0.9.10 (2023-02-20)
+
+### Fixed (1 change)
+
+- [archive channel secondary class](kchat/webapp@9a8ea73382e4b3e883c2aa0667ce2577fd8f0f79) by @leonard.jouve ([merge request](kchat/webapp!292))
+
 ## 0.9.9 (2023-02-20)
 
 ### Added (2 changes)

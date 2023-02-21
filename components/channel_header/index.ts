@@ -46,6 +46,9 @@ import {isModalOpen} from 'selectors/views/modals';
 import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
 import {ModalIdentifiers} from 'utils/constants';
 import {isFileAttachmentsEnabled} from 'utils/file_utils';
+import {OnboardingTourSteps, TutorialTourName} from 'components/tours';
+import {OnboardingTasksName} from 'components/onboarding_tasks';
+import {getShowTutorialStep} from 'selectors/onboarding';
 
 import {GlobalState} from 'types/store';
 
@@ -67,6 +70,12 @@ function makeMapStateToProps() {
         const teams = getMyKSuites(state);
         const hasMoreThanOneTeam = teams.length > 1;
         const config = getConfig(state);
+
+        const showChannelHeaderTutorialStep = getShowTutorialStep(state, {
+            tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
+            taskName: OnboardingTasksName.CHANNELS_TOUR,
+            tourStep: OnboardingTourSteps.CHANNEL_HEADER,
+        });
 
         let dmUser;
         let gmMembers;
@@ -116,6 +125,7 @@ function makeMapStateToProps() {
             isFileAttachmentsEnabled: isFileAttachmentsEnabled(config),
             isLastActiveEnabled,
             timestampUnits,
+            showChannelHeaderTutorialStep,
         };
     };
 }

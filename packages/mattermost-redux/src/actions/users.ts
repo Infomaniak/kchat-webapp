@@ -550,7 +550,7 @@ export function getMe(): ActionFunc {
         const me = await getMeFunc(dispatch, getState);
         if ('error' in me) {
             if (me.error?.status_code && me.error?.status_code === 404 && (window && !window.location.pathname.includes('static/call'))) {
-                getHistory().push('/error?type=no_ksuite');
+                getHistory().push('/error?type=page_not_found');
             }
             return me;
         }
