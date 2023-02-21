@@ -1,3 +1,26 @@
+## 0.9.10 (2023-02-20)
+
+### Fixed (1 change)
+
+- [archive channel secondary class](kchat/webapp@9a8ea73382e4b3e883c2aa0667ce2577fd8f0f79) by @leonard.jouve ([merge request](kchat/webapp!292))
+
+## 0.9.9 (2023-02-20)
+
+### Added (2 changes)
+
+- [add tests for limitation modals](kchat/webapp@357c30a0e06597a7ff275d95580c8955eb5aedca) by @leonard.jouve ([merge request](kchat/webapp!288))
+- [add new error pages](kchat/webapp@4e9ea2ca6fdad67617aa983daf94ea384bc094ee) by @leonard.jouve ([merge request](kchat/webapp!264))
+
+### Fixed (3 changes)
+
+- [Fixed missing french translation in toast_wrapper](kchat/webapp@d8b8d27179006c8742eacad9a4a0eb58c3539f0c) by @olivier.thuymans ([merge request](kchat/webapp!285))
+- [handle limit when converting channel to private](kchat/webapp@e9f408dbf53f3b9613f52104b5d686c172108d8d) by @leonard.jouve ([merge request](kchat/webapp!288))
+- [trad guest ChannelInviteModal](kchat/webapp@75e54710b716b0b19888753ee9fb010019e4ca1f) by @leonard.jouve ([merge request](kchat/webapp!289))
+
+### Changed (1 change)
+
+- [tweak error implementation to handle api custom codes](kchat/webapp@da0521d08d432e2d76bb6a6d3d5895736cf9706e) by @antonbuksa ([merge request](kchat/webapp!264))
+
 ## 0.9.8 (2023-02-15)
 
 ### Removed (1 change)
