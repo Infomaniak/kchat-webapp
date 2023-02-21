@@ -120,7 +120,7 @@ import InteractiveDialog from 'components/interactive_dialog';
 // import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {checkIKTokenIsExpired, needRefreshToken, refreshIKToken} from 'components/login/utils';
+import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
@@ -671,34 +671,10 @@ export function handleEvent(msg) {
         dispatch(handleHostedCustomerSignupProgressUpdated(msg));
         break;
     case SocketEvents.KSUITE_ADDED:
-        // handleKSuiteAdded(msg)
-        // dispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
-        if (isDesktopApp()) {
-            window.postMessage(
-                {
-                    type: 'reset-teams',
-                    message: {},
-                },
-                window.origin,
-            );
-        }
+        dispatch(handleKSuiteAdded(msg));
         break;
     case SocketEvents.KSUITE_DELETED:
-        // handleKSuiteDeleted(msg)
-        if (isDesktopApp()) {
-            window.postMessage(
-                {
-                    type: 'reset-teams',
-                    message: {},
-                },
-                window.origin,
-            );
-        } else {
-            dispatch(batchActions([
-                {type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}},
-                {type: TeamTypes.UPDATED_TEAM, data: msg.data.team},
-            ]));
-        }
+        dispatch(handleKSuiteDeleted(msg));
         break;
     default:
     }
@@ -919,11 +895,46 @@ export function handlePostUnreadEvent(msg) {
 }
 
 async function handleKSuiteAdded(msg) {
-    window.authManager.addTeam(msg.data.team);
+    // window.authManager.addTeam(msg.data.team);
+    return (doDispatch, doGetState) => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams: [
+                            ...getMyKSuites(doGetState()),
+                            msg.data.team,
+                        ],
+                    },
+                },
+                window.origin,
+            );
+        }
+    };
 }
 
 async function handleKSuiteDeleted(msg) {
-    window.authManager.deleteTeam(msg.data.team);
+    // window.authManager.deleteTeam(msg.data.team);
+    return (doDispatch, doGetState) => {
+        if (isDesktopApp()) {
+            const currentTeams = getMyKSuites(doGetState());
+            const newTeams = currentTeams.filter((team) => team.id !== msg.data.team.id);
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams: newTeams,
+                    },
+                },
+                window.origin,
+            );
+        }
+        doDispatch(batchActions([
+            {type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}},
+            {type: TeamTypes.UPDATED_TEAM, data: msg.data.team},
+        ]));
+    };
 }
 
 async function handleTeamAddedEvent(msg) {
