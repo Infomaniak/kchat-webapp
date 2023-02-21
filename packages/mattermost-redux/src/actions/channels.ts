@@ -741,12 +741,13 @@ export function deleteChannel(channelId: string): ActionFunc {
     };
 }
 
-export function unarchiveChannel(channelId: string): ActionFunc {
+export function unarchiveChannel(channelId: string, openLimitModalIfNeeded: (error: ServerError) => ActionFunc): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         try {
             await Client4.unarchiveChannel(channelId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(openLimitModalIfNeeded(error));
             dispatch(logError(error));
             return {error};
         }

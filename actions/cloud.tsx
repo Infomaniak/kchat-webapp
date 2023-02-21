@@ -290,6 +290,8 @@ export function openChannelLimitModalIfNeeded(error: ServerError) {
         if (isLimitExceeded(error)) {
             if (isModalOpen(getState(), ModalIdentifiers.NEW_CHANNEL_MODAL)) {
                 dispatch(closeModal(ModalIdentifiers.NEW_CHANNEL_MODAL));
+            } else if (isModalOpen(getState(), ModalIdentifiers.UNARCHIVE_CHANNEL)) {
+                dispatch(closeModal(ModalIdentifiers.UNARCHIVE_CHANNEL));
             }
             dispatch(openModal({
                 modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,

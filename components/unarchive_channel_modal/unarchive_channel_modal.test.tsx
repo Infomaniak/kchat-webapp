@@ -5,6 +5,8 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import {Modal} from 'react-bootstrap';
 
+import {openChannelLimitModalIfNeeded} from 'actions/cloud';
+
 import {TestHelper} from 'utils/test_helper';
 
 import UnarchiveChannelModal from './unarchive_channel_modal';
@@ -67,7 +69,7 @@ describe('components/unarchive_channel_modal', () => {
         wrapper.instance().handleUnarchive();
 
         expect(actions.unarchiveChannel).toHaveBeenCalledTimes(1);
-        expect(actions.unarchiveChannel).toHaveBeenCalledWith(props.channel.id);
+        expect(actions.unarchiveChannel).toHaveBeenCalledWith(props.channel.id, openChannelLimitModalIfNeeded);
     });
 
     test('should have called props.onHide when Modal.onExited is called', () => {
