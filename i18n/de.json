@@ -5716,5 +5716,6 @@
   "onboardingTour.taskList.completed.subtitle": "Starten Sie eine Unterhaltung und lernen Sie Ihre neuen Kollegen kennen 💬 ",
   "onboardingTask.taskList.dismiss_link": "Die Einführung überspringen",
   "onboardingTask.taskList.introduction": "👋 Vorstellung von kChat",
-  "onboardingTask.taskList.download": "📱💻 Herunterladen der Anwendung"
+  "onboardingTask.taskList.download": "📱💻 Herunterladen der Anwendung",
+  "channelLimitIndicator.text": "Sie haben das Limit von {type, select, O {öffentliche Kanäle} P {private Kanäle} other {}} ({usage, number}/{limit, number}) auf Ihrem kSuite-Angebot erreicht. <modifyOffer>Bearbeiten Sie Ihr Angebot</modifyOffer>, um zusätzliche Kanäle zu erstellen."
 }
