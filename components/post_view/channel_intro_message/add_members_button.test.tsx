@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {Provider} from 'react-redux';
+import {IntlProvider} from 'react-intl';
 
 import {mount} from 'enzyme';
 
@@ -47,10 +48,21 @@ describe('components/post_view/AddMembersButton', () => {
                 roles: {
                     system_role: {permissions: ['test_system_permission']},
                     team_role: {permissions: ['test_team_permission']},
-                    channel_role: {permissions: ['test_channel_permission']},
+                    channel_role: {permissions: ['test_channel_permission', 'manage_public_channel_members']},
+                },
+            },
+            channels: {
+                roles: {
+                    channel_id: ['channel_role'],
                 },
             },
         },
+    };
+
+    const intlProps = {
+        defaultLocale: 'en',
+        locale: 'en',
+        messages: {testId: 'Actual value'},
     };
 
     const store = mockStore(initialState);
@@ -63,9 +75,11 @@ describe('components/post_view/AddMembersButton', () => {
             channel,
         };
         const wrapper = mount(
-            <Provider store={store}>
-                <AddMembersButton {...props}/>
-            </Provider>,
+            <IntlProvider {...intlProps}>
+                <Provider store={store}>
+                    <AddMembersButton {...props}/>
+                </Provider>
+            </IntlProvider>,
         );
 
         expect(wrapper).toMatchSnapshot();
@@ -78,9 +92,11 @@ describe('components/post_view/AddMembersButton', () => {
             channel,
         };
         const wrapper = mount(
-            <Provider store={store}>
-                <AddMembersButton {...props}/>
-            </Provider>,
+            <IntlProvider {...intlProps}>
+                <Provider store={store}>
+                    <AddMembersButton {...props}/>
+                </Provider>
+            </IntlProvider>,
         );
 
         expect(wrapper).toMatchSnapshot();
@@ -105,9 +121,11 @@ describe('components/post_view/AddMembersButton', () => {
             pluginButtons,
         };
         const wrapper = mount(
-            <Provider store={store}>
-                <AddMembersButton {...props}/>
-            </Provider>,
+            <IntlProvider {...intlProps}>
+                <Provider store={store}>
+                    <AddMembersButton {...props}/>
+                </Provider>
+            </IntlProvider>,
         );
 
         expect(wrapper).toMatchSnapshot();
