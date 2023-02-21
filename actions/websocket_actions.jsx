@@ -332,6 +332,7 @@ export async function reconnect(includeWebSocket = true) {
         // eslint-disable-next-line no-console
         console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
         dispatch(checkForModifiedUsers());
+        dispatch(TeamActions.getMyKSuites());
     }
 
     dispatch(resetWsErrorCount());
