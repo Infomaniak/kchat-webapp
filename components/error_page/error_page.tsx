@@ -110,7 +110,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
 
         let backButton;
         let secondaryButton;
-        let illustration = <SvgIlluErrorQuestion/>;
+        let illustration: JSX.Element | null = <SvgIlluErrorQuestion/>;
         let fullscreenIllustration;
         if (type === ErrorPageTypes.PERMALINK_NOT_FOUND && returnTo) {
             backButton = (
@@ -278,6 +278,18 @@ export default class ErrorPage extends React.PureComponent<Props> {
             );
         } else if (type === ErrorPageTypes.OAUTH_INVALID_PARAM || type === ErrorPageTypes.OAUTH_INVALID_REDIRECT_URL) {
             backButton = null;
+        } else if (type === ErrorPageTypes.PAGE_NOT_FOUND && ikGroupId) {
+            backButton = (
+                <a
+                    className='btn btn-primary'
+                    onClick={() => GlobalActions.redirectToManagerDashboard(ikGroupId)}
+                >
+                    <FormattedMessage
+                        id='navbar_dropdown.dashboard'
+                        defaultMessage='Tableau de bord'
+                    />
+                </a>
+            );
         } else {
             backButton = (
                 <a

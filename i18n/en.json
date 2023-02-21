@@ -3334,7 +3334,7 @@
   "error.no_team.message": "kSuite integrates all our productivity applications including kChat to communicate live, share and coordinate your teams.",
   "error.blocked.title": "The kChat {groupName} is currently blocked",
   "error.blocked.message": "The kSuite product has expired. Please renew it to continue communicating within your organization with kChat.",
-  "error.not_found.message": "The page you were trying to reach does not exist",
+  "error.not_found.message": "This link may never have existed. If this link exists, please contact the person who shared this link with you so that they can give you access rights.",
   "error.not_found.title": "Page Not Found",
   "error.oauth_access_denied": "You must authorize kChat to log in with {service}.",
   "error.oauth_access_denied.title": "Authorization Error",
