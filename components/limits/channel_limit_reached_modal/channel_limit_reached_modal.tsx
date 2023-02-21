@@ -1,12 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 
 import {closeModal} from 'actions/views/modals';
 import {redirectTokSuiteDashboard} from 'actions/global_actions';
+import {getUsage} from 'actions/cloud';
 import {isModalOpen} from 'selectors/views/modals';
 import {GlobalState} from 'types/store';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
@@ -30,6 +31,10 @@ const ChannelLimitReachedModal = () => {
     const [limits, limitsLoaded] = useGetLimits();
     const {public_channels: publicChannelLimit, private_channels: privateChannelLimit} = limits;
     const {public_channels: publicChannelUsage, private_channels: privateChannelUsage, usageLoaded} = useGetUsage();
+
+    useEffect(() => {
+        dispatch(getUsage());
+    }, []);
 
     const handleClose = useCallback(() => {
         dispatch(closeModal(ModalIdentifiers.CHANNEL_LIMIT_REACHED));

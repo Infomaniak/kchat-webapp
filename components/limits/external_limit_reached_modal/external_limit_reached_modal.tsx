@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 
@@ -12,6 +12,7 @@ import useGetLimits from 'components/common/hooks/useGetLimits';
 
 import {closeModal} from 'actions/views/modals';
 import {redirectTokSuiteDashboard} from 'actions/global_actions';
+import {getUsage} from 'actions/cloud';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import {isModalOpen} from 'selectors/views/modals';
 import {GlobalState} from 'types/store';
@@ -30,6 +31,10 @@ const ExternalLimitReachedModal = () => {
     const [limits, limitsLoaded] = useGetLimits();
     const {guests: externalsLimit} = limits;
     const {guests: externalsUsage, usageLoaded} = useGetUsage();
+
+    useEffect(() => {
+        dispatch(getUsage());
+    }, []);
 
     const handleClose = useCallback(() => {
         dispatch(closeModal(ModalIdentifiers.EXTERNAL_LIMIT_REACHED));
