@@ -12,8 +12,12 @@ import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {Preferences, Touched} from 'utils/constants';
 
+import {OnboardingTourSteps, TutorialTourName} from 'components/tours';
+import {OnboardingTasksName} from 'components/onboarding_tasks';
+
 import {getDraggingState, makeGetFilteredChannelIdsForCategory} from 'selectors/views/channel_sidebar';
 import {GlobalState} from 'types/store';
+import {getShowTutorialStep} from 'selectors/onboarding';
 
 import SidebarCategory from './sidebar_category';
 
@@ -25,11 +29,18 @@ function makeMapStateToProps() {
     const getChannelIdsForCategory = makeGetFilteredChannelIdsForCategory();
 
     return (state: GlobalState, ownProps: OwnProps) => {
+        const showDirectMessagesTutorialStep = getShowTutorialStep(state, {
+            tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
+            taskName: OnboardingTasksName.CHANNELS_TOUR,
+            tourStep: OnboardingTourSteps.DIRECT_MESSAGES,
+        });
+
         return {
             channelIds: getChannelIdsForCategory(state, ownProps.category),
             draggingState: getDraggingState(state),
             touchedInviteMembersButton: getBool(state, Preferences.TOUCHED, Touched.INVITE_MEMBERS),
             currentUserId: getCurrentUserId(state),
+            showDirectMessagesTutorialStep,
         };
     };
 }

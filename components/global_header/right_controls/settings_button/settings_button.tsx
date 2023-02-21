@@ -47,6 +47,7 @@ const SettingsButton = (): JSX.Element | null => {
             overlay={tooltip}
         >
             <IconButton
+                id='right-controls-settings'
                 className={`grey ${rhsState === RHSStates.SETTINGS ? 'active' : ''}`}
                 size={'sm'}
                 icon={'cog'}
