@@ -37,6 +37,10 @@
     margin: 46px auto;
     background-color: $bg--gray;
     vertical-align: top;
+
+    @media screen and (min-width: 1920px) {
+        max-width: 1600px;
+    }
 }
 
 .backstage-sidebar {
@@ -361,6 +365,10 @@
 
     @media screen and (min-width: 1280px) {
         flex: 0 0 30%;
+    }
+
+    @media screen and (min-width: 1920px) {
+        flex: 0 0 20%;
     }
 
     &:hover {
