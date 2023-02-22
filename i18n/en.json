@@ -5722,5 +5722,5 @@
   "onboardingTask.taskList.dismiss_link": "Skip the introduction",
   "onboardingTask.taskList.introduction": "👋 kChat introduction",
   "onboardingTask.taskList.download": "📱💻 Download the application",
-  "channelLimitIndicator.text": "You have reached the limit of {type, select, O {public channels} P {private channels} other {}} ({usage, number}/{limit, number}) on your kSuite offer. <modifyOffer>Modify your offer</modifyOffer> to create additional channels."
+  "channelLimitIndicator.text": "You have reached the limit of {type, select, O {public channels} P {private channels} other {}} ({usage, number}/{limit, number}) on your kSuite offer. {isAdmin, select, true {<modifyOffer>Modify your offer</modifyOffer> to create additional channels.} other {Please contact an administrator to modify the offer.}}"
 }

@@ -14,6 +14,7 @@ import useGetLimits from 'components/common/hooks/useGetLimits';
 import {ChannelType} from '@mattermost/types/channels';
 import {General} from 'mattermost-redux/constants';
 import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import {getUsage} from 'actions/cloud';
 import {redirectTokSuiteDashboard} from 'actions/global_actions';
@@ -27,6 +28,7 @@ type Props = {
 
 const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
     const dispatch = useDispatch();
+    const isAdmin = useSelector(isCurrentUserSystemAdmin);
     const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
     const {public_channels: publicChannelsUsage, private_channels: privateChannelsUsage} = useGetUsage();
     const {public_channels: publicChannelsLimit, private_channels: privateChannelsLimit} = useGetLimits()[0];
@@ -55,9 +57,10 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
             <UpgradeOfferIcon/>
             <FormattedMessage
                 id='channelLimitIndicator.text'
-                defaultMessage='You have reached the limit of {type, select, O {public channels} P {private channels} other {}} ({usage, number}/{limit, number}) on your kSuite offer. <modifyOffer>Modify your offer</modifyOffer> to create additional channels.'
+                defaultMessage='You have reached the limit of {type, select, O {public channels} P {private channels} other {}} ({usage, number}/{limit, number}) on your kSuite offer. {isAdmin, select, true {<modifyOffer>Modify your offer</modifyOffer> to create additional channels.} other {Please contact an administrator to modify the offer.}}'
                 values={{
                     type,
+                    isAdmin,
                     usage: type === General.OPEN_CHANNEL ? publicChannelsUsage : privateChannelsUsage,
                     limit: type === General.OPEN_CHANNEL ? publicChannelsLimit : privateChannelsLimit,
                     modifyOffer: (chunks: string[]) => (<a onClick={() => redirectTokSuiteDashboard(currentTeamAccountId)}>{chunks}</a>),
