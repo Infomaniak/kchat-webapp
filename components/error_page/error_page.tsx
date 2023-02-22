@@ -181,11 +181,12 @@ export default class ErrorPage extends React.PureComponent<Props> {
                 backButton = (
                     <a
                         className='btn btn-primary'
-                        onClick={() => GlobalActions.redirectToManagerDashboard(ikGroupId)}
+                        onClick={() => reloadPage()}
                     >
                         <FormattedMessage
-                            id='navbar_dropdown.dashboard'
-                            defaultMessage='Tableau de bord'
+                            id='error.generic.reload'
+                            defaultMessage='Reload page'
+
                         />
                     </a>
                 );
@@ -231,11 +232,12 @@ export default class ErrorPage extends React.PureComponent<Props> {
                 backButton = (
                     <a
                         className='btn btn-primary'
-                        onClick={GlobalActions.redirectToShop}
+                        onClick={() => reloadPage()}
                     >
                         <FormattedMessage
-                            id='navbar_dropdown.shop'
-                            defaultMessage='Go to shop'
+                            id='error.generic.reload'
+                            defaultMessage='Reload page'
+
                         />
                     </a>
                 );
