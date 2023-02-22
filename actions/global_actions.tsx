@@ -456,9 +456,9 @@ export function redirectToKSuite() {
 }
 
 export function redirectToManagerProfile() {
-    window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
+    window.open(`${IKConstants.MANAGER_URL}v3/ng/profile/user/dashboard`, '_blank');
 }
 
-export function redirectTokSuiteDashboard() {
-    window.open(`${IKConstants.MANAGER_URL}/v3/ng/k-suite/dashboard`, '_blank');
+export function redirectTokSuiteDashboard(accountId?: number) {
+    window.open(`${IKConstants.MANAGER_URL}v3${accountId ? `/${accountId}` : ''}/ng/k-suite/dashboard`, '_blank');
 }

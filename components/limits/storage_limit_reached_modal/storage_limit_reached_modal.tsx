@@ -16,6 +16,7 @@ import {closeModal} from 'actions/views/modals';
 import {redirectTokSuiteDashboard} from 'actions/global_actions';
 import {GlobalState} from 'types/store';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 import {isModalOpen} from 'selectors/views/modals';
 
 import '../limit_modal.scss';
@@ -26,6 +27,7 @@ const StorageLimitReachedModal = () => {
 
     const isAdmin = useSelector((state: GlobalState) => isCurrentUserSystemAdmin(state));
     const show = useSelector((state: GlobalState) => isModalOpen(state, ModalIdentifiers.STORAGE_LIMIT_REACHED));
+    const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
 
     const [limitsLoaded] = useGetLimits();
     const {usageLoaded} = useGetUsage();
@@ -36,7 +38,7 @@ const StorageLimitReachedModal = () => {
 
     const handleConfirm = useCallback(() => {
         if (isAdmin) {
-            redirectTokSuiteDashboard();
+            redirectTokSuiteDashboard(currentTeamAccountId);
         }
     }, [isAdmin]);
 

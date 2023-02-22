@@ -9,6 +9,7 @@ import {FormattedMessage} from 'react-intl';
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 import {GlobalState} from 'types/store';
 
+import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 import {isModalOpen} from 'selectors/views/modals';
 
 import GenericModal from 'components/generic_modal';
@@ -29,6 +30,8 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
     const dispatch = useDispatch<DispatchFunc>();
 
     const show = useSelector((state: GlobalState) => isModalOpen(state, ModalIdentifiers.OFFERS));
+    const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
+
     if (!show) {
         return null;
     }
@@ -41,7 +44,7 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
     };
 
     const handleAccept = () => {
-        redirectTokSuiteDashboard();
+        redirectTokSuiteDashboard(currentTeamAccountId);
         handleOnClose();
     };
 
@@ -73,7 +76,7 @@ const OffersModal: React.FC<Props> = (props: Props): JSX.Element | null => {
                         />
                         <p className='modify-link'>
                             <a
-                                onClick={redirectTokSuiteDashboard}
+                                onClick={() => redirectTokSuiteDashboard(currentTeamAccountId)}
                             >
                                 <FormattedMessage
                                     id='offers_modal.link'

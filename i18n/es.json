@@ -5237,7 +5237,7 @@
   "storageLimit.subtitle": "Tu espacio de almacenamiento está lleno. Para seguir enviando archivos, póngase en contacto con un administrador para cambiar la oferta.",
   "storageLimit.subtitle.admin": "Tu espacio de almacenamiento está lleno. Suscríbase a una oferta superior para seguir enviando archivos.",
   "channelLimit.title": "Cree nuevos canales para comunicarse mejor con los miembros de su organización",
-  "channelLimit.subtitle": "Has alcanzado el límite de canales públicos ({publicChannelUsage, number}/{publicChannelLimit, number}) y privados ({privateChannelUsage, number}/{privateChannelLimit, number}) en tu kChat. Para crear otros adicionales, debe suscribirse a un paquete superior.",
+  "channelLimit.subtitle": "Has alcanzado el límite de <bold>{isPublicLimited, select, true {canales públicos ({publicChannelUsage, number}/{publicChannelLimit, number}) {isPrivateLimited, select, true {y} other {}}} other {}} {isPrivateLimited, select, true {canales privados ({privateChannelUsage, number}/{privateChannelLimit, number})} other {}}</bold> en tu kChat. Para crear otros adicionales, debe suscribirse a un paquete superior.",
   "onboardingTour.ChannelsTourTip.title": "Accede a los canales de debate",
   "onboardingTour.ChannelsTourTip.content": "Encuentra los diferentes canales de debate públicos y privados a los que tienes acceso. Las conversaciones son visibles para todos los miembros presentes en el canal, ¡ideal para compartir información!",
   "onboardingTour.CreateChannelsTourTip.title": "Crear canales de debate",
@@ -5263,5 +5263,6 @@
   "onboardingTour.taskList.completed.subtitle": "Inicia una conversación y conoce a tus nuevos compañeros 💬 ",
   "onboardingTask.taskList.dismiss_link": "Saltar la introducción",
   "onboardingTask.taskList.introduction": "👋 kChat introduction",
-  "onboardingTask.taskList.download": "📱💻 Descargar la aplicación"
+  "onboardingTask.taskList.download": "📱💻 Descargar la aplicación",
+  "channelLimitIndicator.text": "Has alcanzado el límite de {type, select, O {canales públicos} P {canales privados} other {}} ({usage, number}/{limit, number}) en tu oferta kSuite. <modifyOffer>Modifica tu oferta</modifyOffer> para crear canales adicionales."
 }
