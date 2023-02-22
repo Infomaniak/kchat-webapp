@@ -316,6 +316,10 @@ const state: GlobalState = {
                 status: 'not_started',
                 error: null,
             },
+            getMyKSuites: {
+                status: 'not_started',
+                error: null,
+            },
             getTeams: {
                 status: 'not_started',
                 error: null,
