@@ -32,9 +32,8 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
     const {public_channels: publicChannelsLimit, private_channels: privateChannelsLimit} = useGetLimits()[0];
     const {public_channels: publicChannelsUsageDelta, private_channels: privateChannelsUsageDelta} = useGetUsageDeltas();
 
-    // manually increment usage delta by 1 as the user tries to create a new channel
-    const publicChannelLimitReached = publicChannelsUsageDelta + 1 >= 0;
-    const privateChannelLimitReached = privateChannelsUsageDelta + 1 >= 0;
+    const publicChannelLimitReached = publicChannelsUsageDelta >= 0;
+    const privateChannelLimitReached = privateChannelsUsageDelta >= 0;
 
     useEffect(() => {
         dispatch(getUsage());
