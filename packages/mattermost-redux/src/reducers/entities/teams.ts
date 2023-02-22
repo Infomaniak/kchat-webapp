@@ -27,7 +27,7 @@ function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
     case TeamTypes.RECEIVED_TEAMS_LIST:
     case SchemeTypes.RECEIVED_SCHEME_TEAMS:
     case AdminTypes.RECEIVED_DATA_RETENTION_CUSTOM_POLICY_TEAMS_SEARCH:
-        return Object.assign({}, state, teamListToMap(action.data));
+        return Object.assign({}, teamListToMap(action.data));
     case AdminTypes.RECEIVED_DATA_RETENTION_CUSTOM_POLICY_TEAMS:
     case UserTypes.LOGIN: // Used by the mobile app
         return Object.assign({}, state, teamListToMap(action.data.teams));
