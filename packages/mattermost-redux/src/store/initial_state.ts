@@ -213,7 +213,6 @@ const state: GlobalState = {
                     private_channels: 0,
                     members: 0,
                     guests: 0,
-                    pending_guests: 0,
                     storage: 0,
                 },
                 limitsLoaded: false,

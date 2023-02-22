@@ -4960,7 +4960,7 @@
   "limitModal.upgrade": "Modifier mon offre",
   "limitModal.contactAdmin": "Informer un administrateur",
   "externalLimit.title": "Communiquez mieux avec les personnes externes à votre organisation",
-  "externalLimit.subtitle": "Vous avez atteint la limite d’utilisateurs externes ({externalsUsage, number}/{externalsLimit, number}{pendingGuestsUsage, select, 0 {} other { dont {pendingGuestsUsage, number} invitations en attente}}) sur votre kChat. Pour en inviter des supplémentaires, vous devez souscrire à une offre suprérieure.",
+  "externalLimit.subtitle": "Vous avez atteint la limite d’utilisateurs externes ({externalsUsage, number}/{externalsLimit, number}{pendingGuestsUsage, select, 0 {} other { dont {pendingGuestsUsage, number} {pendingGuestsUsage, plural, =0 {} one {invitation} other{invitations}} en attente}}) sur votre kChat. Pour en inviter des supplémentaires, vous devez souscrire à une offre suprérieure.",
   "storageLimit.title": "Augmentez l’espace de stockage de votre kSuite !",
   "storageLimit.subtitle": "Votre espace de stockage est plein. Pour continuer à envoyer des fichiers, veuillez contacter un administrateur pour qu’il modifie l’offre.",
   "storageLimit.subtitle.admin": "Votre espace de stockage est plein. Souscrivez à une offre supérieure pour continuer à envoyer des fichiers.",

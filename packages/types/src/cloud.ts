@@ -181,7 +181,6 @@ export type Limits = {
     public_channels: number;
     private_channels: number;
     guests: number;
-    pending_guests: number;
     members: number;
     messages?: {
         history?: number;

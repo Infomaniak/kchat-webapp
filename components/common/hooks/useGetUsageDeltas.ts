@@ -29,7 +29,7 @@ export default function useGetUsageDeltas(): CloudUsage {
                 public_channels: usage.public_channels - withBackupValue(limits.public_channels, limitsLoaded),
                 private_channels: usage.private_channels - withBackupValue(limits.private_channels, limitsLoaded),
                 guests: usage.guests - withBackupValue(limits.guests, limitsLoaded),
-                pending_guests: usage.pending_guests - withBackupValue(limits.pending_guests, limitsLoaded),
+                pending_guests: -usage.pending_guests,
                 members: usage.members - withBackupValue(limits.members, limitsLoaded),
                 usageLoaded: usage.usageLoaded,
                 files: {
