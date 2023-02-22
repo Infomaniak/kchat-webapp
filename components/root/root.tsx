@@ -341,26 +341,26 @@ export default class Root extends React.PureComponent<Props, State> {
         this.props.actions.migrateRecentEmojis();
         loadRecentlyUsedCustomEmojis()(store.dispatch, store.getState);
 
-        const iosDownloadLink = getConfig(store.getState()).IosAppDownloadLink;
-        const androidDownloadLink = getConfig(store.getState()).AndroidAppDownloadLink;
-        const desktopAppDownloadLink = getConfig(store.getState()).AppDownloadLink;
+        // const iosDownloadLink = getConfig(store.getState()).IosAppDownloadLink;
+        // const androidDownloadLink = getConfig(store.getState()).AndroidAppDownloadLink;
+        // const desktopAppDownloadLink = getConfig(store.getState()).AppDownloadLink;
 
-        const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
+        // const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
 
         // redirect to the mobile landing page if the user hasn't seen it before
-        let landing;
-        if (UserAgent.isAndroidWeb()) {
-            landing = androidDownloadLink;
-        } else if (UserAgent.isIosWeb()) {
-            landing = iosDownloadLink;
-        } else {
-            landing = desktopAppDownloadLink;
-        }
+        // let landing;
+        // if (UserAgent.isAndroidWeb()) {
+        //     landing = androidDownloadLink;
+        // } else if (UserAgent.isIosWeb()) {
+        //     landing = iosDownloadLink;
+        // } else {
+        //     landing = desktopAppDownloadLink;
+        // }
 
-        if (landing && !this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
-            this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
-            BrowserStore.setLandingPageSeen(true);
-        }
+        // if (landing && !this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
+        //     this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
+        //     BrowserStore.setLandingPageSeen(true);
+        // }
 
         Utils.applyTheme(this.props.theme);
     }
