@@ -39,15 +39,14 @@ import {handleFormattedTextClick, localizeMessage, isEmptyObject, toTitleCase} f
 import {t} from 'utils/i18n';
 
 import MeetButton from 'components/meet_button';
-
+import {ChannelHeaderTour, KmeetTour} from 'components/tours/onboarding_tour';
+import {UserCustomStatus, UserProfile} from '@mattermost/types/users';
+import {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
 import {RhsState} from 'types/store/rhs';
 
 import {ModalData} from 'types/actions';
 
 import LocalizedIcon from 'components/localized_icon';
-
-import {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
-import {UserCustomStatus, UserProfile} from '@mattermost/types/users';
 
 import ChannelInfoButton from './channel_info_button';
 import HeaderIconWrapper from './components/header_icon_wrapper';
