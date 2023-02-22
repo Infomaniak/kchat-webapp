@@ -87,7 +87,7 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                     <p>
                         <FormattedMarkdownMessage
                             id='convert_channel.question1'
-                            defaultMessage='When you convert **{display_name}** to a private channel, history and membership are preserved. Publicly shared files remain accessible to anyone with the link. Membership in a private channel is by invitation only.'
+                            defaultMessage='When you convert **{display_name}** to a private channel, history and membership are preserved. Membership in a private channel is by invitation only.'
                             values={{
                                 display_name: channelDisplayName,
                             }}

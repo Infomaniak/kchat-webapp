@@ -3063,7 +3063,7 @@
   "confirm_modal.cancel": "Abbrechen",
   "convert_channel.cancel": "Nein, abbrechen",
   "convert_channel.confirm": "Ja, in privaten Kanal umwandeln",
-  "convert_channel.question1": "Wenn du **{display_name}** in einen privaten Kanal umwandelst, bleiben Verlauf und Mitgliedschaft erhalten. Öffentlich geteilte Dateien bleiben für jeden verfügbar, der über den Link verfügt. Mitgliedschaft zu privaten Kanälen erfolgt nur auf Einladung.",
+  "convert_channel.question1": "Wenn du **{display_name}** in einen privaten Kanal umwandelst, bleiben Verlauf und Mitgliedschaft erhalten. Mitgliedschaft zu privaten Kanälen erfolgt nur auf Einladung.",
   "convert_channel.question2": "Diese Änderung ist permanent und kann nicht rückgängig gemacht werden.",
   "convert_channel.question3": "Bist du sicher, dass du **{display_name}** in einen privaten Kanal umwandeln möchtest?",
   "convert_channel.title": "{display_name} in privaten Kanal umwandeln?",
