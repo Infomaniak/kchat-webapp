@@ -89,7 +89,7 @@
     .backstage-content {
         max-width: 100%;
         padding: 0;
-        margin: 30px !important;
+        margin: 30px;
     }
 
     .backstage-sidebar {
@@ -112,6 +112,12 @@
                 }
             }
         }
+    }
+}
+
+@media (min-width: 960px) {
+    .backstage-content {
+        margin: 46px 46px 46px 150px;
     }
 }
 
