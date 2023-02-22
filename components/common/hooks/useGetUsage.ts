@@ -21,7 +21,7 @@ export default function useGetUsage(): CloudUsage {
             dispatch(getUsageAction());
             setRequestedUsage(true);
         }
-    }, [isLoggedIn, requestedUsage, usage]);
+    }, [isLoggedIn, requestedUsage, usage, dispatch]);
 
     return usage;
 }

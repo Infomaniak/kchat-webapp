@@ -5230,7 +5230,7 @@
   "limitModal.upgrade": "Modificar mi oferta",
   "limitModal.contactAdmin": "Informar a un administrador",
   "externalLimit.title": "Comuníquese mejor con personas ajenas a su organización",
-  "externalLimit.subtitle": "Has alcanzado el límite de usuarios externos ({externalsUsage, number}/{externalsLimit, number}) en tu kChat. Para invitar a más usuarios, tienes que suscribirte a una oferta superior.",
+  "externalLimit.subtitle": "Has alcanzado el límite de usuarios externos ({externalsUsage, number}/{externalsLimit, number}{pendingGuestsUsage, select, 0 {} other { incluyendo {pendingGuestsUsage, number} invitaciones pendientes}}) en tu kChat. Para invitar a más usuarios, tienes que suscribirte a una oferta superior.",
   "storageLimit.title": "¡Aumente el espacio de almacenamiento de su kSuite!",
   "storageLimit.subtitle": "Tu espacio de almacenamiento está lleno. Para seguir enviando archivos, póngase en contacto con un administrador para cambiar la oferta.",
   "storageLimit.subtitle.admin": "Tu espacio de almacenamiento está lleno. Suscríbase a una oferta superior para seguir enviando archivos.",

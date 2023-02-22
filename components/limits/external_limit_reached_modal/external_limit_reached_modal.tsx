@@ -31,12 +31,12 @@ const ExternalLimitReachedModal = () => {
     const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
 
     const [limits, limitsLoaded] = useGetLimits();
-    const {guests: externalsLimit} = limits;
-    const {guests: externalsUsage, usageLoaded} = useGetUsage();
+    const {guests: externalsLimit, pending_guests: pendingGuestsLimit} = limits;
+    const {guests: externalsUsage, pending_guests: pendingGuestsUsage, usageLoaded} = useGetUsage();
 
     useEffect(() => {
         dispatch(getUsage());
-    }, []);
+    }, [dispatch]);
 
     const handleClose = useCallback(() => {
         dispatch(closeModal(ModalIdentifiers.EXTERNAL_LIMIT_REACHED));
@@ -71,10 +71,11 @@ const ExternalLimitReachedModal = () => {
         <div className='limit-modal-content'>
             {formatMessage({
                 id: 'externalLimit.subtitle',
-                defaultMessage: 'You have reached the limit of external users ({externalsUsage, number}/{externalsLimit, number}) on your kChat. To invite additional users, you must subscribe to a higher plan.',
+                defaultMessage: 'You have reached the limit of external users ({externalsUsage, number}/{externalsLimit, number}{pendingGuestsUsage, select, 0 {} other { including {pendingGuestsUsage, number} pending invitations}}) on your kChat. To invite additional users, you must subscribe to a higher plan.',
             }, {
-                externalsUsage,
-                externalsLimit,
+                externalsUsage: externalsUsage + pendingGuestsUsage,
+                externalsLimit: externalsLimit + pendingGuestsLimit,
+                pendingGuestsUsage,
             })}
         </div>
     );

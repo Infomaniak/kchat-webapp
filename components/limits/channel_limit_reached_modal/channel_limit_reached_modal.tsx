@@ -41,7 +41,7 @@ const ChannelLimitReachedModal = ({isPublicLimited, isPrivateLimited}: Props) =>
 
     useEffect(() => {
         dispatch(getUsage());
-    }, []);
+    }, [dispatch]);
 
     const handleClose = useCallback(() => {
         dispatch(closeModal(ModalIdentifiers.CHANNEL_LIMIT_REACHED));

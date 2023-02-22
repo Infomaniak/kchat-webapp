@@ -5685,7 +5685,7 @@
   "limitModal.upgrade": "Mein Angebot ändern",
   "limitModal.contactAdmin": "Einen Administrator informieren",
   "externalLimit.title": "Kommunizieren Sie besser mit Personen außerhalb Ihrer Organisation",
-  "externalLimit.subtitle": "Sie haben das Limit für externe Nutzer ({externalsUsage, number}/{externalsLimit, number}) in Ihrem kChat erreicht. Um weitere einzuladen, müssen Sie sich für ein höheres Angebot anmelden.",
+  "externalLimit.subtitle": "Sie haben das Limit für externe Nutzer ({externalsUsage, number}/{externalsLimit, number}{pendingGuestsUsage, select, 0 {} other { einschließlich {pendingGuestsUsage, number} ausstehende Einladungen}}) in Ihrem kChat erreicht. Um weitere einzuladen, müssen Sie sich für ein höheres Angebot anmelden.",
   "storageLimit.title": "Erhöhen Sie den Speicherplatz in Ihrer kSuite!",
   "storageLimit.subtitle": "Ihr Speicherplatz ist voll. Um weiterhin Dateien hochladen zu können, wenden Sie sich bitte an einen Administrator, damit er das Angebot ändert.",
   "storageLimit.subtitle.admin": "Ihr Speicherplatz ist voll. Melden Sie sich für ein höheres Angebot an, damit Sie weiterhin Dateien versenden können.",

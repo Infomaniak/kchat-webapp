@@ -39,7 +39,7 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
 
     useEffect(() => {
         dispatch(getUsage());
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         setLimitations({
