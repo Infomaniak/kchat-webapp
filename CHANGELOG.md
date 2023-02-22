@@ -1,3 +1,16 @@
+## 0.9.11 (2023-02-22)
+
+### Fixed (2 changes)
+
+- [Added missing emoji](kchat/webapp@3c4d919b3e598733d130338d3208e8a158eb2ee1) by @olivier.thuymans ([merge request](kchat/webapp!293))
+- [fix add/delete teams from websocket](kchat/webapp@8a2e534dd1570bd27aeb15081d6b317df5f8794e) by @antonbuksa ([merge request](kchat/webapp!299))
+
+## 0.9.10 (2023-02-20)
+
+### Fixed (1 change)
+
+- [archive channel secondary class](kchat/webapp@9a8ea73382e4b3e883c2aa0667ce2577fd8f0f79) by @leonard.jouve ([merge request](kchat/webapp!292))
+
 ## 0.9.9 (2023-02-20)
 
 ### Added (2 changes)

@@ -239,12 +239,6 @@ describe('Data Retention Teams', () => {
         expect(nextState.teams.team1).toEqual({
             id: 'team1',
         });
-        expect(nextState.teams.team2).toEqual({
-            id: 'team2',
-        });
-        expect(nextState.teams.team3).toEqual({
-            id: 'team3',
-        });
         expect(nextState.teams.team4).toEqual({
             id: 'team4',
         });
