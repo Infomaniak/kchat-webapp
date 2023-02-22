@@ -91,6 +91,44 @@ describe('Limit modals', () => {
             }), General.OPEN_CHANNEL));
             expect(closeModal).toHaveBeenCalledTimes(0);
         });
+        describe('should trigger modal with expected limitation', () => {
+            test('public', () => {
+                store = mockStore(initialState);
+                store.dispatch(openChannelLimitModalIfNeeded(new ClientError('', {
+                    status_code: 409,
+                    server_error_id: 'quota-exceeded',
+                    url: '',
+                    message: '',
+                }), General.OPEN_CHANNEL));
+                expect(openModal).toHaveBeenCalledTimes(1);
+                expect(openModal).toBeCalledWith({
+                    modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
+                    dialogType: ChannelLimitReachedModal,
+                    dialogProps: {
+                        isPublicLimited: true,
+                        isPrivateLimited: false,
+                    },
+                });
+            });
+            test('private', () => {
+                store = mockStore(initialState);
+                store.dispatch(openChannelLimitModalIfNeeded(new ClientError('', {
+                    status_code: 409,
+                    server_error_id: 'quota-exceeded',
+                    url: '',
+                    message: '',
+                }), General.PRIVATE_CHANNEL));
+                expect(openModal).toHaveBeenCalledTimes(1);
+                expect(openModal).toBeCalledWith({
+                    modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
+                    dialogType: ChannelLimitReachedModal,
+                    dialogProps: {
+                        isPublicLimited: false,
+                        isPrivateLimited: true,
+                    },
+                });
+            });
+        });
     });
     describe('Externals Limit', () => {
         it('should display external limit modal if needed', () => {

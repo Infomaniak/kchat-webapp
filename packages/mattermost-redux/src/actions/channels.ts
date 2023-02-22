@@ -315,7 +315,7 @@ export function updateChannel(channel: Channel): ActionFunc {
     };
 }
 
-export function updateChannelPrivacy(channelId: string, privacy: string, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc): ActionFunc {
+export function updateChannelPrivacy(channelId: string, privacy: ChannelType, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         dispatch({type: ChannelTypes.UPDATE_CHANNEL_REQUEST, data: null});
 
@@ -327,7 +327,7 @@ export function updateChannelPrivacy(channelId: string, privacy: string, openLim
 
             dispatch({type: ChannelTypes.UPDATE_CHANNEL_FAILURE, error});
             dispatch(logError(error));
-            dispatch(openLimitModalIfNeeded(error, getChannelSelector(getState(), channelId).type));
+            dispatch(openLimitModalIfNeeded(error, privacy));
             return {error};
         }
 

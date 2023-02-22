@@ -2684,7 +2684,7 @@ describe('Actions.Channels', () => {
         const type = openChannelLimitModalIfNeeded.mock.calls[0][1];
         expect(responseStatusCode).toEqual(statusCode);
         expect(responseServerErrorId).toEqual(id);
-        expect(type).toEqual(General.OPEN_CHANNEL);
+        expect(type).toEqual(General.PRIVATE_CHANNEL);
     });
 
     it('should display limit modal if reached when unarchiving channel', async () => {
