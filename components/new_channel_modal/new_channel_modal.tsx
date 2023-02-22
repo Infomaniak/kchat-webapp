@@ -375,7 +375,7 @@ const NewChannelModal = () => {
         );
     };
 
-    const handleSetLimitations = (newLimitations: Partial<Record<ChannelType, boolean>>) => {
+    const handleSetLimitations = (newLimitations: Record<typeof General.OPEN_CHANNEL | typeof General.PRIVATE_CHANNEL, boolean>) => {
         if (newLimitations[General.OPEN_CHANNEL] && newLimitations[General.PRIVATE_CHANNEL]) {
             dispatch(openModal({
                 modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,

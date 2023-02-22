@@ -22,7 +22,7 @@ import './channel_limit_indicator.scss';
 
 type Props = {
     type: ChannelType;
-    setLimitations: (limtation: Partial<Record<ChannelType, boolean>>) => void;
+    setLimitations: (limtation: Record<typeof General.OPEN_CHANNEL | typeof General.PRIVATE_CHANNEL, boolean>) => void;
 };
 
 const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
