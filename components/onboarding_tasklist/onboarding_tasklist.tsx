@@ -37,7 +37,7 @@ const TaskItems = styled.div`
     border-radius: 4px;
     border: solid 1px rgba(var(--center-channel-color-rgb), 0.16);
     background-color: var(--center-channel-bg);
-    width: 367px;
+    width: 400px;
     padding: 24px 0;
     transform: scale(0);
     opacity: 0;
