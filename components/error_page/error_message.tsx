@@ -192,13 +192,43 @@ const ErrorMessage: React.FC<Props> = ({type, message, service, isGuest}: Props)
                 </p>
             );
             break;
+        case ErrorPageTypes.NO_KSUITE:
+            errorMessage = (
+                <p>
+                    <FormattedMessage
+                        id='error.no_team.message'
+                        defaultMessage='kSuite integrates all our productivity applications including kChat to communicate live, share and coordinate your teams.'
+                    />
+                </p>
+            );
+            break;
+        case ErrorPageTypes.MAINTENANCE:
+            errorMessage = (
+                <p>
+                    <FormattedMessage
+                        id='error.maintenance.message'
+                        defaultMessage='An update is in progress to improve kChat. This process may take a few minutes. Thank you for your patience.'
+                    />
+                </p>
+            );
+            break;
+        case ErrorPageTypes.BLOCKED:
+            errorMessage = (
+                <p>
+                    <FormattedMessage
+                        id='error.blocked.message'
+                        defaultMessage='The kSuite product has expired. Please renew it to continue communicating within your organization with kChat.'
+                    />
+                </p>
+            )
+            break;
         case ErrorPageTypes.PAGE_NOT_FOUND:
         default:
             errorMessage = (
                 <p>
                     <FormattedMessage
                         id='error.not_found.message'
-                        defaultMessage="Ce lien n'a peut-être jamais existé. Si ce lien existe, veuillez contacter la personne qui vous a partagé ce lien afin qu’elle vous donne les droits d’accès."
+                        defaultMessage='Ce lien n’a peut-être jamais existé. Si ce lien existe, veuillez contacter la personne qui vous a partagé ce lien afin qu’elle vous donne les droits d’accès.'
                     />
                 </p>
             );
