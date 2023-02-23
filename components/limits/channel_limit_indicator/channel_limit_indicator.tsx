@@ -46,7 +46,7 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
             [General.OPEN_CHANNEL]: publicChannelLimitReached,
             [General.PRIVATE_CHANNEL]: privateChannelLimitReached,
         });
-    }, [setLimitations, publicChannelLimitReached, privateChannelLimitReached]);
+    }, [publicChannelLimitReached, privateChannelLimitReached]);
 
     if ((type === General.OPEN_CHANNEL && !publicChannelLimitReached) || (type === General.PRIVATE_CHANNEL && !privateChannelLimitReached)) {
         return null;

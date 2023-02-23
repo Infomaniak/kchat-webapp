@@ -387,7 +387,7 @@ const NewChannelModal = () => {
             }));
             dispatch(closeModal(ModalIdentifiers.NEW_CHANNEL_MODAL));
         }
-        setLimitations(limitations);
+        setLimitations({...newLimitations});
     };
 
     return (
