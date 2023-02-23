@@ -79,22 +79,6 @@ describe('components/Root', () => {
         shouldShowAppBar: false,
     };
 
-    test('should load config and license on mount and redirect to sign-up page', () => {
-        const props = {
-            ...baseProps,
-            noAccounts: true,
-            history: {
-                push: jest.fn(),
-            } as unknown as RouteComponentProps['history'],
-        };
-
-        const wrapper = shallow(<Root {...props}/>);
-
-        (wrapper.instance() as any).onConfigLoaded();
-        expect(props.history.push).toHaveBeenCalledWith('/signup_user_complete');
-        wrapper.unmount();
-    });
-
     test('should load user, config, and license on mount and redirect to defaultTeam on success', (done) => {
         document.cookie = 'SASESSION=userid';
         localStorage.setItem('was_logged_in', 'true');
@@ -151,24 +135,6 @@ describe('components/Root', () => {
         }
 
         const wrapper = shallow(<MockedRoot {...props}/>);
-        wrapper.unmount();
-    });
-
-    test('should call history on props change', () => {
-        const props = {
-            ...baseProps,
-            noAccounts: false,
-            history: {
-                push: jest.fn(),
-            } as unknown as RouteComponentProps['history'],
-        };
-        const wrapper = shallow(<Root {...props}/>);
-        expect(props.history.push).not.toHaveBeenCalled();
-        const props2 = {
-            noAccounts: true,
-        };
-        wrapper.setProps(props2);
-        expect(props.history.push).toHaveBeenLastCalledWith('/signup_user_complete');
         wrapper.unmount();
     });
 

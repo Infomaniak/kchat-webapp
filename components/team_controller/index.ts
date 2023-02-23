@@ -5,7 +5,6 @@ import {connect, ConnectedProps} from 'react-redux';
 import {RouteComponentProps} from 'react-router-dom';
 
 import {fetchAllMyTeamsChannelsAndChannelMembersREST, fetchMyChannelsAndMembersREST, viewChannel} from 'mattermost-redux/actions/channels';
-import {getLicense, getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId, getMyTeams} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
@@ -19,8 +18,6 @@ import {markChannelAsReadOnFocus} from 'actions/views/channel';
 import {initializeTeam, joinTeam} from 'components/team_controller/actions';
 import {fetchChannelsAndMembers} from 'actions/channel_actions';
 
-import {checkIfMFARequired} from 'utils/route';
-
 import TeamController from './team_controller';
 
 type Params = {
@@ -30,9 +27,7 @@ type Params = {
 
 export type OwnProps = RouteComponentProps<Params>;
 
-function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
-    const license = getLicense(state);
-    const config = getConfig(state);
+function mapStateToProps(state: GlobalState) {
     const currentUser = getCurrentUser(state);
     const plugins = state.plugins.components.NeedsTeamComponent;
     const graphQLEnabled = isGraphQLEnabled(state);
@@ -44,7 +39,6 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         teamsList: getMyTeams(state),
         plugins,
         selectedThreadId: getSelectedThreadIdInCurrentTeam(state),
-        mfaRequired: checkIfMFARequired(currentUser, license, config, ownProps.match.url),
         graphQLEnabled,
     };
 }
