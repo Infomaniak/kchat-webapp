@@ -76,12 +76,6 @@ exports[`components/Menu should match snapshot with guest access disabled and no
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <MenuItemLink
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
   </MenuGroup>
   <MenuGroup />
   <MenuGroup>
@@ -168,12 +162,6 @@ exports[`components/Menu should match snapshot with id 1`] = `
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <MenuItemLink
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
   </MenuGroup>
   <MenuGroup />
   <MenuGroup>
@@ -259,12 +247,6 @@ exports[`components/Menu should match snapshot with most of the thing disabled 1
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <MenuItemLink
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
   </MenuGroup>
   <MenuGroup />
   <MenuGroup>
@@ -384,7 +366,7 @@ exports[`components/Menu should match snapshot with most of the thing disabled i
     <Connect(SystemPermissionGate)
       permissions={
         Array [
-          undefined,
+          "manage_system",
         ]
       }
     >
@@ -492,12 +474,6 @@ exports[`components/Menu should match snapshot with most of the thing enabled 1`
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <MenuItemLink
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
   </MenuGroup>
   <MenuGroup />
   <MenuGroup>
@@ -617,7 +593,7 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
     <Connect(SystemPermissionGate)
       permissions={
         Array [
-          undefined,
+          "manage_system",
         ]
       }
     >
@@ -725,12 +701,6 @@ exports[`components/Menu should match snapshot with plugins 1`] = `
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <MenuItemLink
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
   </MenuGroup>
   <MenuGroup>
     <MenuItemAction
@@ -878,7 +848,7 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
     <Connect(SystemPermissionGate)
       permissions={
         Array [
-          undefined,
+          "manage_system",
         ]
       }
     >
