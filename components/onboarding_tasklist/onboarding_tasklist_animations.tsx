@@ -19,7 +19,7 @@ const Animation = styled.div`
 
     &:before {
         content: '';
-        background-color: var(--denim-status-online);
+        background-color: #0088B2;
         opacity: 0;
         border-radius: 50%;
         width: 1rem;
@@ -30,6 +30,10 @@ const Animation = styled.div`
         margin-right: auto;
         left: 0;
         right: 0;
+    }
+
+    .icon-check-circle {
+        color: #0088B2;
     }
 
     .x1 {
@@ -63,34 +67,34 @@ const Animation = styled.div`
         }
     }
     @keyframes moveUp {
-        0% { 
+        0% {
             top: 0;
         }
-        100% { 
+        100% {
             top: -50px;
         }
     }
 
     @keyframes opacity {
-        0% { 
+        0% {
             opacity:0;
         }
-        50% { 
+        50% {
             opacity: 1;
         }
-        100% { 
+        100% {
             opacity: 0;
         }
     }
 
     @keyframes scale {
-        0% { 
+        0% {
             transform: scale(0);
         }
-        50% { 
+        50% {
             transform: scale(2);
         }
-        100% { 
+        100% {
             transform: scale(4);
         }
     }
