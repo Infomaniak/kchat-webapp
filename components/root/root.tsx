@@ -125,7 +125,7 @@ const MAX_GET_TOKEN_FAILS = 5;
 const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
 // const DelinquencyModalController = makeAsyncComponent('DelinquencyModalController', LazyDelinquencyModalController);
-// const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
+const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
 
 type LoggedInRouteProps<T> = {
     component: React.ComponentType<T>;
@@ -139,9 +139,9 @@ function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
             {...rest}
             render={(routeProps: RouteComponentProps) => (
                 <LoggedIn {...routeProps}>
-                    {/* {theme && <CompassThemeProvider theme={theme}>
+                    {theme && <CompassThemeProvider theme={theme}>
                         <OnBoardingTaskList/>
-                    </CompassThemeProvider>} */}
+                    </CompassThemeProvider>}
                     <Component {...(routeProps as unknown as T)}/>
                 </LoggedIn>
             )}

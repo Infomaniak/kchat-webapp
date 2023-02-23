@@ -370,22 +370,6 @@ export default class ChannelInviteModal extends React.PureComponent<Props, State
             );
         };
 
-        const customNoOptionsMessage = (
-            <div className='custom-no-options-message'>
-                <FormattedMessage
-                    id='channel_invite.no_options_message'
-                    defaultMessage='No matches found - <InvitationModalLink>Invite them to the team</InvitationModalLink>'
-                    values={{
-                        InvitationModalLink: (chunks: string) => (
-                            <InviteModalLink>
-                                {chunks}
-                            </InviteModalLink>
-                        ),
-                    }}
-                />
-            </div>
-        );
-
         const content = (
             <MultiSelect
                 key='addUsersToChannelKey'
@@ -411,7 +395,6 @@ export default class ChannelInviteModal extends React.PureComponent<Props, State
                 backButtonText={localizeMessage('multiselect.cancel', 'Cancel')}
                 backButtonClick={closeMembersInviteModal}
                 backButtonClass={'btn-cancel tertiary-button'}
-                customNoOptionsMessage={this.props.emailInvitationsEnabled ? customNoOptionsMessage : null}
             />
         );
 

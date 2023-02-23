@@ -1200,6 +1200,13 @@ export const getDefaultChannelForTeams: (state: GlobalState) => RelationOneToOne
     },
 );
 
+export const getCurrentTeamDefaultChannelId: (state: GlobalState) => string = createSelector(
+    'getCurrentTeamDefaultChannelId',
+    getCurrentTeamId,
+    getDefaultChannelForTeams,
+    (currentTeamId: string, defaultChannelForTeams: RelationOneToOne<Team, Channel>) => defaultChannelForTeams[currentTeamId]?.id ?? '',
+);
+
 export const getMyFirstChannelForTeams: (state: GlobalState) => RelationOneToOne<Team, Channel> = createSelector(
     'getMyFirstChannelForTeams',
     getAllChannels,

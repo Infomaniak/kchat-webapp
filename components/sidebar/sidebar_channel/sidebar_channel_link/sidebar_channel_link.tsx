@@ -17,7 +17,7 @@ import Constants from 'utils/constants';
 import {wrapEmojis} from 'utils/emoji_utils';
 import {isDesktopApp} from 'utils/user_agent';
 import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
-import {ChannelsAndDirectMessagesTour} from 'components/tours/onboarding_tour';
+import {ChannelsTour} from 'components/tours/onboarding_tour';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 
@@ -189,7 +189,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
         // firstChannelName is based on channel.name,
         // but we want to display `display_name` to the user, so we check against `.name` for channel equality but pass in the .display_name value
         if (firstChannelName === channel.name || (!firstChannelName && showChannelsTutorialStep && channel.name === Constants.DEFAULT_CHANNEL)) {
-            channelsTutorialTip = firstChannelName ? (<ChannelsAndDirectMessagesTour firstChannelName={channel.display_name}/>) : <ChannelsAndDirectMessagesTour/>;
+            channelsTutorialTip = (<ChannelsTour/>);
         }
 
         let labelElement: JSX.Element = (

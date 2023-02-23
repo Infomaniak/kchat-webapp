@@ -30,6 +30,7 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Avatar, {TAvatarSizeToken} from 'components/widgets/users/avatar/avatar';
 import {OnboardingTaskCategory, OnboardingTasksName, TaskNameMapToSteps, CompleteYourProfileTour} from 'components/onboarding_tasks';
 import Tooltip from 'components/tooltip';
+import {ProfileTour, StatusTour} from 'components/tours/onboarding_tour';
 
 import {ModalData} from 'types/actions';
 
@@ -62,6 +63,8 @@ type Props = {
     showCompleteYourProfileTour: boolean;
     showCustomStatusPulsatingDot: boolean;
     timezone?: string;
+    showProfileTutorialStep: boolean;
+    showStatusTutorialStep: boolean;
 }
 
 type State = {
@@ -343,7 +346,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
     render = (): JSX.Element => {
         const {intl} = this.props;
         const needsConfirm = this.isUserOutOfOffice() && this.props.autoResetPref === '';
-        const {status, customStatus, isCustomStatusExpired, currentUser} = this.props;
+        const {status, customStatus, isCustomStatusExpired, currentUser, showProfileTutorialStep, showStatusTutorialStep} = this.props;
         const isStatusSet = customStatus && (customStatus.text.length > 0 || customStatus.emoji.length > 0) && !isCustomStatusExpired;
 
         const setOnline = needsConfirm ? () => this.showStatusChangeConfirmation('online') : this.setOnline;
@@ -524,6 +527,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                             )}
                             rightDecorator={status === 'online' && selectedIndicator}
                             id={'status-menu-online'}
+                            sibling={showStatusTutorialStep && <StatusTour/>}
                         />
                         <Menu.ItemAction
                             onClick={setAway}
@@ -580,6 +584,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                                     glyph={'account-outline'}
                                 />
                             )}
+                            sibling={showProfileTutorialStep && <ProfileTour/>}
                         >
                             {this.props.showCompleteYourProfileTour && (
                                 <div

@@ -5,8 +5,9 @@ import React, {useRef} from 'react';
 import {FormattedMessage, injectIntl} from 'react-intl';
 
 import OverlayTrigger from 'components/overlay_trigger';
-
 import Tooltip from 'components/tooltip';
+import {KmeetTour, useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
+import {OnboardingTourSteps} from 'components/tours';
 
 import Constants from 'utils/constants';
 
@@ -20,6 +21,7 @@ export type Props = {
 }
 
 function MeetButton(props: Props) {
+    const showKmeetTutorialStep = useShowOnboardingTutorialStep(OnboardingTourSteps.KMEET);
     const {startCallInChannel} = props;
 
     const ref = useRef<HTMLButtonElement>(null);
@@ -46,7 +48,11 @@ function MeetButton(props: Props) {
             placement='bottom'
             overlay={tooltip}
         >
-            <div className='meet-btn__wrapper'>
+            <div
+                className='meet-btn__wrapper'
+                id='channel-header-kmeet-btn'
+            >
+                {showKmeetTutorialStep && <KmeetTour/>}
                 <button
                     type='button'
                     className={btnClasses}

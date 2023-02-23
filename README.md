@@ -1,84 +1,46 @@
 # kchat-webapp
 
-HALL OF FAME
+Infomaniak fork of the mattermost web client modified to work with our internal API as part of the kSuite.
 
-> Jsais pas, essaye un window.location = 'kchat.infomaniak.com'
+:warning: This project is still in beta.    
 
-Leopold Jacquot, 2022 🏆
+## Running the project
 
-nb. cela a marché...
+### Prerequisites
 
-## install + watch
+ - Node 16
+ - Yarn
 
-.env file with
+### Environment
+
+Create a .env file with the following variables
 
 ```dotenv
-WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/next
-WEBCOMPONENT_API_ENDPOINT=https://welcome.preprod.dev.infomaniak.ch
-MANAGER_ENDPOINT=https://manager.preprod.dev.infomaniak.ch/
-LOGIN_ENDPOINT=https://login.preprod.dev.infomaniak.ch/
+WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current
+WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com
+MANAGER_ENDPOINT=https://manager.infomaniak.com
+LOGIN_ENDPOINT=https://login.infomaniak.com
 ```
 
+### Installing and building dependencies
+
+We are using yarn berry with workspace tools for monorepo support building and better module caching between builds
+
 ```shell
-nvm use 16
-yarn install
+yarn
 yarn workspace @mattermost/types build
 yarn workspace @mattermost/client build
 yarn workspace @mattermost/components build
+```
+
+### Running with webpack dev server
+
+```shell
+export $(xargs < ./.env) && yarn dev-server:webapp
+```
+
+### Running prod build
+
+```shell
 export $(xargs < ./.env) && yarn build:webapp
 ```
-
-## run the project
-
-### new way (webpack server on your host)
-
-```shell
-yarn dev-server:webapp
-```
-
-Be sure to edit `/etc/hosts` file to add a record for your fake devd endpoint.
-
-127.0.0.1 local.devdXXX.dev.infomaniak.ch
-
-Then go on https://local.devdXXX.dev.infomaniak.ch:9005/
-
-If you are redirected to the preprod, then check you are connected to the manager on your devd host (https://manager.devdXXX.dev.infomaniak.ch/v3).
-
-### old way (docker/dev-local)
-
-#### run the build
-
-```shell
-make build
-npm run run
-```
-
-#### setup dev-local
-
-`config-remote`
-
-```yaml
-SERVICES=(
-  applications/kchat/proxy-api
-  applications/kchat/webapp
-)
-```
-
-`docker-compose.develop-remote.yml`
-
-```yaml
-version: '2.2'
-
-services:
-  proxy-api-kchat:
-    volumes:
-      - /home/code/src/dev-local/container-config/kchat/proxy-api-kchat/000-default.conf:/etc/apache2/sites-available/000-default.conf
-  kchat-webapp:
-    volumes:
-      - /home/code/src/dev-local/container-config/kchat/webapp/default.conf.template:/etc/nginx/templates/default.conf.template
-      - /home/code/src/kchat-webapp/dist:/var/www/static
-```
-
-Then go on https://kchat.devdXXX.dev.infomaniak.ch
-
-### Changelog

@@ -36,6 +36,7 @@ describe('components/sidebar/sidebar_category', () => {
         menuButtonRef: {
             current: null,
         },
+        showDirectMessagesTutorialStep: false,
         actions: {
             setCategoryCollapsed: jest.fn(),
             setCategorySorting: jest.fn(),

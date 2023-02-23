@@ -13,9 +13,9 @@ export function isSystemEmoji(emoji: Emoji): emoji is SystemEmoji {
 }
 
 export function getEmojiImageUrl(emoji: Emoji): string {
-    // If its the mattermost custom emoji
-    if (!isSystemEmoji(emoji) && emoji.id === 'mattermost') {
-        return Client4.getSystemEmojiImageUrl('mattermost');
+    // If its the kchat custom emoji
+    if (!isSystemEmoji(emoji) && emoji.id === 'kchat') {
+        return Client4.getSystemEmojiImageUrl('kchat');
     }
 
     if (isSystemEmoji(emoji)) {

@@ -50,6 +50,7 @@ const AtMentionsButton = (): JSX.Element => {
             overlay={tooltip}
         >
             <IconButton
+                id='right-controls-at-mentions'
                 className={`grey ${rhsState === RHSStates.MENTION ? 'active' : ''}`}
                 size={'sm'}
                 icon={'mentions'}
