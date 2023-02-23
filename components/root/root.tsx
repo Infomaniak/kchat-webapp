@@ -33,7 +33,7 @@ import {makeAsyncComponent} from 'components/async_load';
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
 import GlobalHeader from 'components/global_header/global_header';
 import ModalController from 'components/modal_controller';
-import {HFTRoute, LoggedInHFTRoute} from 'components/header_footer_template_route';
+import {HFTRoute} from 'components/header_footer_template_route';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
 import LaunchingWorkspace, {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_workspace/launching_workspace';
 import {Animations} from 'components/preparing_workspace/steps';
@@ -58,8 +58,8 @@ const LazyErrorPage = React.lazy(() => import('components/error_page'));
 const LazyLogin = React.lazy(() => import('components/login/login'));
 const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
 const LazyHelpController = React.lazy(() => import('components/help/help_controller'));
-const LazyLinkingLandingPage = React.lazy(() => import('components/linking_landing_page'));
-const LazySelectTeam = React.lazy(() => import('components/select_team'));
+
+// const LazyLinkingLandingPage = React.lazy(() => import('components/linking_landing_page'));
 const LazyPreparingWorkspace = React.lazy(() => import('components/preparing_workspace'));
 const LazyTeamController = React.lazy(() => import('components/team_controller'));
 const LazyOnBoardingTaskList = React.lazy(() => import('components/onboarding_tasklist'));
@@ -88,8 +88,8 @@ const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const Login = makeAsyncComponent('LoginController', LazyLogin);
 const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
 const HelpController = makeAsyncComponent('HelpController', LazyHelpController);
-const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', LazyLinkingLandingPage);
-const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
+
+// const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', LazyLinkingLandingPage);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
 const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
@@ -97,6 +97,7 @@ const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardi
 const MAX_GET_TOKEN_FAILS = 5;
 const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
 
+// const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 // const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
 // const ClaimController = makeAsyncComponent('ClaimController', LazyClaimController);
 // const PasswordResetForm = makeAsyncComponent('PasswordResetForm', LazyPasswordResetForm);
@@ -684,14 +685,10 @@ export default class Root extends React.PureComponent<Props, State> {
                         path={'/help'}
                         component={HelpController}
                     />
-                    <Route
+                    {/* <Route
                         path={'/landing'}
                         component={LinkingLandingPage}
-                    />
-                    <LoggedInHFTRoute
-                        path={'/select_team'}
-                        component={SelectTeam}
-                    />
+                    /> */}
                     <LoggedInRoute
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
