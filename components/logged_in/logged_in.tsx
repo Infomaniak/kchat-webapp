@@ -30,14 +30,12 @@ export type Props = {
     currentUser?: UserProfile;
     currentChannelId?: string;
     children?: React.ReactNode;
-    mfaRequired: boolean;
     enableTimezone: boolean;
     actions: {
         autoUpdateTimezone: (deviceTimezone: string) => void;
         getChannelURLAction: (channel: Channel, teamId: string, url: string) => void;
         viewChannel: (channelId: string, prevChannelId?: string) => void;
     };
-    showTermsOfService: boolean;
     location: {
         pathname: string;
         search: string;
@@ -138,18 +136,6 @@ export default class LoggedIn extends React.PureComponent<Props> {
     public render(): React.ReactNode {
         if (!this.isValidState()) {
             return <LoadingScreen/>;
-        }
-
-        if (this.props.mfaRequired) {
-            if (this.props.location.pathname !== '/mfa/setup') {
-                return <Redirect to={'/mfa/setup'}/>;
-            }
-        } else if (this.props.location.pathname === '/mfa/confirm') {
-            // Nothing to do. Wait for MFA flow to complete before prompting TOS.
-        } else if (this.props.showTermsOfService) {
-            if (this.props.location.pathname !== '/terms_of_service') {
-                return <Redirect to={'/terms_of_service?redirect_to=' + encodeURIComponent(this.props.location.pathname)}/>;
-            }
         }
 
         return this.props.children;
