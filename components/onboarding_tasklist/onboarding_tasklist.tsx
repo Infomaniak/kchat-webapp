@@ -245,9 +245,19 @@ const OnBoardingTaskList = (): JSX.Element | null => {
             name: OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN,
             value: String(!open),
         }];
+
+        // disable onboarding if the user completed every steps (more than 0 to prevent dismiss before load)
+        if (open && completedCount > 0 && completedCount === tasksList.length) {
+            preferences.push({
+                user_id: currentUserId,
+                category: OnboardingTaskCategory,
+                name: OnboardingTaskList.ONBOARDING_TASK_LIST_SHOW,
+                value: 'false',
+            });
+        }
         dispatch(savePreferences(currentUserId, preferences));
         trackEvent(OnboardingTaskCategory, open ? OnboardingTaskList.ONBOARDING_TASK_LIST_CLOSE : OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN);
-    }, [open, currentUserId]);
+    }, [open, currentUserId, completedCount, tasksList]);
 
     if (Object.keys(myPreferences).length === 0 || !showTaskList || !isEnableOnboardingFlow) {
         return null;
