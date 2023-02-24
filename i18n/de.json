@@ -5689,7 +5689,7 @@
   "storageLimit.subtitle": "Ihr Speicherplatz ist voll. Um weiterhin Dateien hochladen zu können, wenden Sie sich bitte an einen Administrator, damit er das Angebot ändert.",
   "storageLimit.subtitle.admin": "Ihr Speicherplatz ist voll. Melden Sie sich für ein höheres Angebot an, damit Sie weiterhin Dateien versenden können.",
   "channelLimit.title": "Erstellen Sie neue Kanäle, um besser mit den Mitgliedern Ihrer Organisation zu kommunizieren.",
-  "channelLimit.subtitle": "Sie haben das Limit für öffentliche Kanäle ({publicChannelUsage, number}/{publicChannelLimit, number}) und private Kanäle ({privateChannelUsage, number}/{privateChannelLimit, number}) in Ihrem kChat erreicht. Um weitere zu erstellen, müssen Sie ein höheres Angebot abonnieren.",
+  "channelLimit.subtitle": "Sie haben das Limit für <bold>{isPublicLimited, select, true {öffentliche Kanäle ({publicChannelUsage, number}/{publicChannelLimit, number}) {isPrivateLimited, select, true {und} other {}}} other {}} {isPrivateLimited, select, true {private Kanäle ({privateChannelUsage, number}/{privateChannelLimit, number})} other {}}</bold> in Ihrem kChat erreicht. Um weitere zu erstellen, müssen Sie ein höheres Angebot abonnieren.",
   "onboardingTour.ChannelsTourTip.title": "Öffentliche und private Kanäle",
   "onboardingTour.ChannelsTourTip.content": "Hier finden Sie die Chat-Kanäle Ihrer Organisation, zu denen Sie Zugang haben. Der Inhalt dieser Kanäle ist für alle Mitglieder sichtbar, die sich in diesen Kanälen aufhalten. Die Kanäle eignen sich daher hervorragend, um die Transparenz zu erhöhen und Projekte in Ihrer Organisation zu koordinieren.",
   "onboardingTour.CreateChannelsTourTip.title": "Privater / öffentlicher Kanal",

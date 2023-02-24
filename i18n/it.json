@@ -3822,7 +3822,7 @@
   "storageLimit.subtitle": "Lo spazio di archiviazione è pieno. Per continuare a inviare file, contattare un amministratore per modificare l'offerta.",
   "storageLimit.subtitle.admin": "Lo spazio di archiviazione è pieno. Abbonarsi a un'offerta superiore per continuare a inviare file.",
   "channelLimit.title": "Creare nuovi canali per comunicare meglio con i membri dell'organizzazione",
-  "channelLimit.subtitle": "È stato raggiunto il limite di canali pubblici ({publicChannelUsage, number}/{publicChannelLimit, number}) e privati ({privateChannelUsage, number}/{privateChannelLimit, number}) sulla kChat. Per crearne altri, è necessario sottoscrivere un pacchetto superiore.",
+  "channelLimit.subtitle": "È stato raggiunto il limite di <bold>{isPublicLimited, select, true {canali pubblici ({publicChannelUsage, number}/{publicChannelLimit, number}) {isPrivateLimited, select, true {e} other {}}} other {}} {isPrivateLimited, select, true {canali privati ({privateChannelUsage, number}/{privateChannelLimit, number})} other {}}</bold> sulla kChat. Per crearne altri, è necessario sottoscrivere un pacchetto superiore.",
   "onboardingTour.ChannelsTourTip.title": "Canali pubblici e privati",
   "onboardingTour.ChannelsTourTip.content": "Trova i canali di discussione della vostra organizzazione a cui avete accesso. Il contenuto di questi canali è visibile a tutti i membri presenti in questi canali. I canali sono quindi ideali per aumentare la trasparenza e coordinare i progetti della vostra organizzazione.",
   "onboardingTour.CreateChannelsTourTip.title": "Canale privato/pubblico",

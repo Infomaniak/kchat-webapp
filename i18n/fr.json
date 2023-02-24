@@ -4964,7 +4964,7 @@
   "storageLimit.subtitle": "Votre espace de stockage est plein. Pour continuer à envoyer des fichiers, veuillez contacter un administrateur pour qu’il modifie l’offre.",
   "storageLimit.subtitle.admin": "Votre espace de stockage est plein. Souscrivez à une offre supérieure pour continuer à envoyer des fichiers.",
   "channelLimit.title": "Créez de nouveaux canaux pour mieux communiquer avec les membres de votre organisation",
-  "channelLimit.subtitle": "Vous avez atteint la limite de canaux publics ({publicChannelUsage, number}/{publicChannelLimit, number}) et de canaux privés ({privateChannelUsage, number}/{privateChannelLimit, number}) sur votre kChat. Pour en créer des supplémentaires, vous devez souscrire à une offre supérieure.",
+  "channelLimit.subtitle": "Vous avez atteint la limite de <bold>{isPublicLimited, select, true {canaux publics ({publicChannelUsage, number}/{publicChannelLimit, number}) {isPrivateLimited, select, true {et de} other {}}} other {}} {isPrivateLimited, select, true {canaux privés ({privateChannelUsage, number}/{privateChannelLimit, number})} other {}}</bold> sur votre kChat. Pour en créer des supplémentaires, vous devez souscrire à une offre supérieure.",
   "onboardingTour.ChannelsTourTip.title": "Canaux publics et privés",
   "onboardingTour.ChannelsTourTip.content": "Retrouvez les canaux de discussion de votre organisation auxquels vous avez accès. Le contenu de ces canaux est visible par tous les membres présents dans ces canaux. Les canaux sont donc parfaits pour augmenter la transparence et coordonner les projets dans votre organisation.",
   "onboardingTour.CreateChannelsTourTip.title": "Canal privé / public",
