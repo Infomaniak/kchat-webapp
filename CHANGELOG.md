@@ -1,3 +1,21 @@
+## 0.9.13 (2023-02-24)
+
+### Fixed (4 changes)
+
+- [disable onboarding when completed](kchat/webapp@9070bd545db3de0a6283e47eb06396b416ac04b9) by @leonard.jouve ([merge request](kchat/webapp!308))
+- [External invitation: filter archived channels](kchat/webapp@81851a5a182963fdc8c892f3860d47eaa70a9cfc) by @leonard.jouve ([merge request](kchat/webapp!306))
+- [Convert channel modal wording](kchat/webapp@9328346784556ab36ebb83b380da51bfd4e3a5d1) by @leonard.jouve ([merge request](kchat/webapp!303))
+- [Adapted icons style to match others + fixed bug svg](kchat/webapp@9438e7b182ad7ba335c3fee01dbc22246336b439) by @olivier.thuymans ([merge request](kchat/webapp!280))
+
+### Changed (2 changes)
+
+- [change add members button modal](kchat/webapp@3c0cdf8af1e68620955dcdbef1ff7ba1a702f401) by @leonard.jouve ([merge request](kchat/webapp!295))
+- [changed illustrations for pins and files tabs when empty](kchat/webapp@b891b6baceb42a717ce2e48592760c0d085a895c) by @olivier.thuymans ([merge request](kchat/webapp!280))
+
+### Removed (1 change)
+
+- [remove mattermost help menu and EnableAskCommunity config flag](kchat/webapp@d27cfa41d4375a7a6a54a3bec31990321f641ac9) by @antonbuksa ([merge request](kchat/webapp!309))
+
 ## 0.9.12 (2023-02-23)
 
 ### Changed (1 change)
