@@ -124,6 +124,8 @@ const Preferences = {
             ikIllustrationGreyThirteen: '#F1F1F1',
             ikIllustrationGreyFourteen: '#FFFFFF',
             ikIllustrationGreyFifteen: '#F1F1F1',
+            ikIllustrationGreySixteen: '#F1F1F1',
+            ikIllustrationGreySeventeen: '#F5F5F5',
         },
         ik: {
             type: 'Infomaniak',
@@ -168,6 +170,8 @@ const Preferences = {
             ikIllustrationGreyThirteen: '#F1F1F1',
             ikIllustrationGreyFourteen: '#FFFFFF',
             ikIllustrationGreyFifteen: '#F1F1F1',
+            ikIllustrationGreySixteen: '#F1F1F1',
+            ikIllustrationGreySeventeen: '#F5F5F5',
         },
         indigo: {
             type: 'Indigo',
@@ -212,6 +216,8 @@ const Preferences = {
             ikIllustrationGreyThirteen: '#666666',
             ikIllustrationGreyFourteen: '#333333',
             ikIllustrationGreyFifteen: '#1A1A1A',
+            ikIllustrationGreySixteen: '#282828',
+            ikIllustrationGreySeventeen: '#7C7C7C',
         },
         onyx: {
             type: 'Onyx',
@@ -256,6 +262,8 @@ const Preferences = {
             ikIllustrationGreyThirteen: '#666666',
             ikIllustrationGreyFourteen: '#333333',
             ikIllustrationGreyFifteen: '#1A1A1A',
+            ikIllustrationGreySixteen: '#282828',
+            ikIllustrationGreySeventeen: '#7C7C7C',
         },
     } as Record<ThemeKey, Theme>,
     RECENT_EMOJIS: 'recent_emojis',
