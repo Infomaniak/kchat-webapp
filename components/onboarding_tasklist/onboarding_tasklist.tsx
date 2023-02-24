@@ -246,8 +246,8 @@ const OnBoardingTaskList = (): JSX.Element | null => {
             value: String(!open),
         }];
 
-        // disable onboarding if the user completed every steps (more than 0 to prevent dismiss before load)
-        if (open && completedCount > 0 && completedCount === tasksList.length) {
+        // disable onboarding if the user completed every steps
+        if (open && completedCount === tasksList.length) {
             preferences.push({
                 user_id: currentUserId,
                 category: OnboardingTaskCategory,
