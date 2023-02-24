@@ -341,7 +341,6 @@ const defaultServerConfig: AdminConfig = {
         SupportEmail: '',
         CustomTermsOfServiceEnabled: false,
         CustomTermsOfServiceReAcceptancePeriod: 365,
-        EnableAskCommunityLink: true,
     },
     AnnouncementSettings: {
         EnableBanner: false,
