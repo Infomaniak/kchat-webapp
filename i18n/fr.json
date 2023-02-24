@@ -2937,7 +2937,7 @@
   "confirm_modal.cancel": "Annuler",
   "convert_channel.cancel": "Non, annuler",
   "convert_channel.confirm": "Oui, convertir en canal privé",
-  "convert_channel.question1": "Lorsque vous convertissez **{display_name}** en canal privé, l'historique et l'appartenance des membres sont conservés. Les fichiers partagés publiquement restent accessibles à toute personne disposant du lien. Adhérer à un canal privé n'est possible que sur invitation.",
+  "convert_channel.question1": "Lorsque vous convertissez **{display_name}** en canal privé, l'historique et l'appartenance des membres sont conservés. Adhérer à un canal privé n'est possible que sur invitation.",
   "convert_channel.question2": "Le changement est permanent et ne peut pas être annulé.",
   "convert_channel.question3": "Voulez-vous vraiment convertir **{display_name}** en canal privé ?",
   "convert_channel.title": "Convertir {display_name} en un canal privé ?",

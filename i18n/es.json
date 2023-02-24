@@ -3019,7 +3019,7 @@
   "confirm_modal.cancel": "Cancelar",
   "convert_channel.cancel": "No, cancelar",
   "convert_channel.confirm": "Sí, convertir a canal privado",
-  "convert_channel.question1": "Al convertir **{display_name}** a un canal privado, el historial y sus miembros son preservados. Los archivos que fueron compartidos públicamente serán accesibles para todos utilizando el enlace. La membresía a este canal será únicamente por invitación.",
+  "convert_channel.question1": "Al convertir **{display_name}** a un canal privado, el historial y sus miembros son preservados. La membresía a este canal será únicamente por invitación.",
   "convert_channel.question2": "Este cambio es permanente y no puede deshacerse.",
   "convert_channel.question3": "¿Estás seguro de querer convertir **{display_name}** a un canal privado?",
   "convert_channel.title": "¿Convertir {display_name} a un Canal Privado?",
