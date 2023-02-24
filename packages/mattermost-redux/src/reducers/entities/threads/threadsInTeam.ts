@@ -209,18 +209,18 @@ function handleSingleTeamThreadRead(state: ThreadsState['unreadThreadsInTeam'], 
 
         // the thread is unread
         if (thread && (newUnreadReplies > 0 || newUnreadMentions > 0)) {
-            // FIXED: why should we not add a thread if he is not in the unread list...
+            // FIXED: add if the user has no unread thread as is doesn't make sense to compare it to an empty array
+            // or
             // if it's newer add it, we don't care about ordering here since we order on the selector
-            // if (shouldAddThreadId(team, thread, extra.threads)) {
-            return {
-                ...state,
-                [teamId]: [
-                    ...team,
-                    id,
-                ],
-            };
-
-            // }
+            if (team.length === 0 || shouldAddThreadId(team, thread, extra.threads)) {
+                return {
+                    ...state,
+                    [teamId]: [
+                        ...team,
+                        id,
+                    ],
+                };
+            }
         }
 
         // do nothing when the thread is read
