@@ -1,0 +1,15 @@
+.tip {
+    &__positioned {
+        position: absolute;
+    }
+
+    &__positioned-horizontaly {
+        position: absolute;
+        width: 100%;
+    }
+
+    &__positioned-verticaly {
+        position: absolute;
+        height: 100%;
+    }
+}

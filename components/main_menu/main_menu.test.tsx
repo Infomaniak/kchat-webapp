@@ -37,7 +37,8 @@ describe('components/Menu', () => {
         teamType: Constants.OPEN_TEAM,
         teamName: 'team_name',
         currentUser: TestHelper.getUserMock(),
-        appDownloadLink: undefined,
+
+        // appDownloadLink: undefined,
         enableCommands: false,
         enableCustomEmoji: false,
         enableIncomingWebhooks: false,
@@ -46,13 +47,9 @@ describe('components/Menu', () => {
         canManageSystemBots: false,
         canCreateOrDeleteCustomEmoji: false,
         canManageIntegrations: true,
-        enableUserCreation: false,
-        enableEmailInvitations: false,
-        enablePluginMarketplace: false,
-        experimentalPrimaryTeam: undefined,
-        helpLink: undefined,
-        reportAProblemLink: undefined,
-        moreTeamsToJoin: false,
+
+        // helpLink: undefined,
+        // reportAProblemLink: undefined,
         pluginMenuItems: [],
         isMentionSearch: false,
         isFirstAdmin: false,
@@ -70,6 +67,7 @@ describe('components/Menu', () => {
             closeRightHandSide: jest.fn(),
             closeRhsMenu: jest.fn(),
             getCloudLimits: jest.fn(),
+            showSettings: jest.fn(),
         },
         teamIsGroupConstrained: false,
         isCloud: false,
@@ -78,6 +76,7 @@ describe('components/Menu', () => {
         userIsAdmin: true,
         isFreeTrial: false,
         usageDeltaTeams: 1,
+        ikGroupId: 1,
     };
 
     const defaultState = {
@@ -137,20 +136,17 @@ describe('components/Menu', () => {
     test('should match snapshot with most of the thing enabled', () => {
         const props = {
             ...defaultProps,
-            appDownloadLink: 'test',
+
+            // appDownloadLink: 'test',
             enableCommands: true,
             enableCustomEmoji: true,
             canCreateOrDeleteCustomEmoji: true,
             enableIncomingWebhooks: true,
             enableOAuthServiceProvider: true,
             enableOutgoingWebhooks: true,
-            enableUserCreation: true,
-            enableEmailInvitations: true,
-            enablePluginMarketplace: true,
-            experimentalPrimaryTeam: 'test',
-            helpLink: 'test-link-help',
-            reportAProblemLink: 'test-report-link',
-            moreTeamsToJoin: true,
+
+            // helpLink: 'test-link-help',
+            // reportAProblemLink: 'test-report-link',
         };
         const wrapper = getMainMenuWrapper(props);
         expect(wrapper).toMatchSnapshot();
@@ -160,20 +156,17 @@ describe('components/Menu', () => {
         const props = {
             ...defaultProps,
             mobile: true,
-            appDownloadLink: 'test',
+
+            // appDownloadLink: 'test',
             enableCommands: true,
             enableCustomEmoji: true,
             canCreateOrDeleteCustomEmoji: true,
             enableIncomingWebhooks: true,
             enableOAuthServiceProvider: true,
             enableOutgoingWebhooks: true,
-            enableUserCreation: true,
-            enableEmailInvitations: true,
-            enablePluginMarketplace: true,
-            experimentalPrimaryTeam: 'test',
-            helpLink: 'test-link-help',
-            reportAProblemLink: 'test-report-link',
-            moreTeamsToJoin: true,
+
+            // helpLink: 'test-link-help',
+            // reportAProblemLink: 'test-report-link',
         };
         const wrapper = getMainMenuWrapper(props);
         expect(wrapper).toMatchSnapshot();
@@ -229,30 +222,6 @@ describe('components/Menu', () => {
         const wrapper = getMainMenuWrapper(props);
         expect(wrapper).toMatchSnapshot();
     });
-
-    // Infomaniak: leave team is handled through manager.
-    // test('should show leave team option when primary team is not set', () => {
-    //     const props = {...defaultProps, teamIsGroupConstrained: false, experimentalPrimaryTeam: undefined};
-    //     const wrapper = getMainMenuWrapper(props);
-
-    //     // show leave team option when experimentalPrimaryTeam is not set
-    //     expect(wrapper.find('#leaveTeam')).toHaveLength(1);
-    //     expect(wrapper.find('#leaveTeam').find(Menu.ItemToggleModalRedux).props().show).toEqual(true);
-    // });
-
-    // test('should hide leave team option when experimentalPrimaryTeam is same as current team', () => {
-    //     const props = {...defaultProps, teamIsGroupConstrained: false};
-    //     const wrapper = getMainMenuWrapper(props);
-    //     expect(wrapper.find('#leaveTeam')).toHaveLength(1);
-    //     expect(wrapper.find('#leaveTeam').find(Menu.ItemToggleModalRedux).props().show).toEqual(true);
-    // });
-
-    // test('should hide leave team option when experimentalPrimaryTeam is same as current team', () => {
-    //     const props = {...defaultProps, teamIsGroupConstrained: false, experimentalPrimaryTeam: 'other-team'};
-    //     const wrapper = getMainMenuWrapper(props);
-    //     expect(wrapper.find('#leaveTeam')).toHaveLength(1);
-    //     expect(wrapper.find('#leaveTeam').find(Menu.ItemToggleModalRedux).props().show).toEqual(true);
-    // });
 
     test('mobile view should hide the subscribe now button when does not have permissions', () => {
         const noPermissionsState = {...defaultState};

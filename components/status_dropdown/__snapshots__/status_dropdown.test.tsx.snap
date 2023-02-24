@@ -78,6 +78,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -201,6 +202,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
         id="accountSettings"
         onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
@@ -382,6 +384,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -505,6 +508,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
         id="accountSettings"
         onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
@@ -638,6 +642,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -761,6 +766,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
         id="accountSettings"
         onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
@@ -894,6 +900,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -1017,6 +1024,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
         id="accountSettings"
         onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
@@ -1151,6 +1159,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -1274,6 +1283,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
         id="accountSettings"
         onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
@@ -1381,6 +1391,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -1504,6 +1515,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         id="accountSettings"
         onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
@@ -1603,6 +1615,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -1726,6 +1739,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
         id="accountSettings"
         onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
@@ -1859,6 +1873,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -1982,6 +1997,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
         id="accountSettings"
         onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
@@ -2163,6 +2179,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -2286,6 +2303,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
         id="accountSettings"
         onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>

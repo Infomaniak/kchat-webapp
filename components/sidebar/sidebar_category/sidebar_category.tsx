@@ -23,6 +23,7 @@ import InviteMembersButton from '../invite_members_button';
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import {DirectMessagesTour} from 'components/tours/onboarding_tour';
 
 import SidebarCategorySortingMenu from './sidebar_category_sorting_menu';
 import SidebarCategoryMenu from './sidebar_category_menu';
@@ -38,6 +39,7 @@ type Props = {
     draggingState: DraggingState;
     currentUserId: string;
     touchedInviteMembersButton: boolean;
+    showDirectMessagesTutorialStep: boolean;
     actions: {
         setCategoryCollapsed: (categoryId: string, collapsed: boolean) => void;
         setCategorySorting: (categoryId: string, sorting: CategorySorting) => void;
@@ -246,6 +248,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
             categoryIndex,
             channelIds,
             isNewCategory,
+            showDirectMessagesTutorialStep,
         } = this.props;
 
         if (!category) {
@@ -371,8 +374,10 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                 isCollapsed: category.collapsed,
                             })}
                             ref={provided.innerRef}
+                            id={`sidebar-droppable-category-${category.type === CategoryTypes.CUSTOM ? category.id : category.type}`}
                             {...provided.draggableProps}
                         >
+                            {category.type === CategoryTypes.DIRECT_MESSAGES && showDirectMessagesTutorialStep && <DirectMessagesTour/>}
                             <Droppable
                                 droppableId={category.id}
                                 type='SIDEBAR_CHANNEL'
