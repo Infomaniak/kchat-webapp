@@ -121,7 +121,7 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
       <Connect(SystemPermissionGate)
         permissions={
           Array [
-            undefined,
+            "manage_system",
           ]
         }
       >
@@ -237,12 +237,6 @@ exports[`plugins/MainMenuActions should match snapshot in web view 1`] = `
           text="Manage Groups"
         />
       </Connect(TeamPermissionGate)>
-      <MenuItemLink
-        id="joinTeam"
-        show={true}
-        text="Join Another Team"
-        to="/select_team"
-      />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction

@@ -12,7 +12,6 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {GlobalState} from 'types/store';
 import Constants from 'utils/constants';
 
-import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
@@ -105,7 +104,6 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
     const showJoinChannelTourTip = useShowOnboardingTutorialStep(OnboardingTourSteps.JOIN_CHANNELS);
     const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_CHANNELS);
     const showInviteTutorialTip = false;
-    const usageDeltas = useGetUsageDeltas();
     const isAddChannelOpen = useSelector(isAddChannelDropdownOpen);
     const openAddChannelOpen = useCallback((open: boolean) => {
         dispatch(setAddChannelDropdown(open));
@@ -140,10 +138,7 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                                 <i className='icon icon-chevron-down'/>
                             </button>
                         </SidebarHeading>
-                        <MainMenu
-                            id='sidebarDropdownMenu'
-                            usageDeltaTeams={usageDeltas.teams.active}
-                        />
+                        <MainMenu id='sidebarDropdownMenu'/>
                     </MenuWrapper>
                 </OverlayTrigger>
                 <AddChannelDropdown

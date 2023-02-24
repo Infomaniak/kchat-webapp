@@ -37,7 +37,7 @@ const TaskItems = styled.div`
     border-radius: 4px;
     border: solid 1px rgba(var(--center-channel-color-rgb), 0.16);
     background-color: var(--center-channel-bg);
-    width: 367px;
+    width: 400px;
     padding: 24px 0;
     transform: scale(0);
     opacity: 0;
@@ -245,9 +245,19 @@ const OnBoardingTaskList = (): JSX.Element | null => {
             name: OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN,
             value: String(!open),
         }];
+
+        // disable onboarding if the user completed every steps
+        if (open && completedCount === tasksList.length) {
+            preferences.push({
+                user_id: currentUserId,
+                category: OnboardingTaskCategory,
+                name: OnboardingTaskList.ONBOARDING_TASK_LIST_SHOW,
+                value: 'false',
+            });
+        }
         dispatch(savePreferences(currentUserId, preferences));
         trackEvent(OnboardingTaskCategory, open ? OnboardingTaskList.ONBOARDING_TASK_LIST_CLOSE : OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN);
-    }, [open, currentUserId]);
+    }, [open, currentUserId, completedCount, tasksList]);
 
     if (Object.keys(myPreferences).length === 0 || !showTaskList || !isEnableOnboardingFlow) {
         return null;

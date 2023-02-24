@@ -366,7 +366,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
                 value: 'true',
             }];
             dispatch(savePreferences(currentUserId, preferences));
-            window.open('https://infomaniak.com/gtl/kchat', '_blank', 'noopener,noreferrer');
+            window.open('https://infomaniak.com/gtl/apps.kchat', '_blank', 'noopener,noreferrer');
             break;
         }
         case OnboardingTasksName.START_TRIAL: {
