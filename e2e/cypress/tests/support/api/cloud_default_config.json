@@ -89,8 +89,7 @@
     "SupportSettings": {
         "SupportEmail": "",
         "CustomTermsOfServiceEnabled": false,
-        "CustomTermsOfServiceReAcceptancePeriod": 365,
-        "EnableAskCommunityLink": true
+        "CustomTermsOfServiceReAcceptancePeriod": 365
     },
     "AnnouncementSettings": {
         "EnableBanner": false,

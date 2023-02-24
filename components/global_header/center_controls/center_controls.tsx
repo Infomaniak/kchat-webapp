@@ -32,21 +32,10 @@ export type Props = {
     productId?: ProductIdentifier;
 }
 
-const CenterControls = ({productId = null}: Props): JSX.Element => {
+const CenterControls = (): JSX.Element => {
     return (
         <CenterControlsContainer>
-            {isChannels(productId) ? (
-                <>
-                    <GlobalSearchNav/>
-                    <UserGuideDropdown/>
-                </>
-            ) : (
-                <Pluggable
-                    pluggableName={'Product'}
-                    subComponentName={'headerCentreComponent'}
-                    pluggableId={productId}
-                />
-            )}
+            <GlobalSearchNav/>
         </CenterControlsContainer>
     );
 };
