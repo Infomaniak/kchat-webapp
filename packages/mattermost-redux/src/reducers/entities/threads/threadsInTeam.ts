@@ -15,6 +15,9 @@ type State = ThreadsState['threadsInTeam'] | ThreadsState['unreadThreadsInTeam']
 // older threads will be added by scrolling so no need to manually add.
 // furthermore manually adding older thread will BREAK pagination
 function shouldAddThreadId(ids: Array<UserThread['id']>, thread: UserThread, threads: IDMappedObjects<UserThread>) {
+    if (!ids.length) {
+        return true;
+    }
     return ids.some((id) => {
         const t = threads![id];
         return thread.last_reply_at > t.last_reply_at;
@@ -209,10 +212,8 @@ function handleSingleTeamThreadRead(state: ThreadsState['unreadThreadsInTeam'], 
 
         // the thread is unread
         if (thread && (newUnreadReplies > 0 || newUnreadMentions > 0)) {
-            // FIXED: add if the user has no unread thread as is doesn't make sense to compare it to an empty array
-            // or
             // if it's newer add it, we don't care about ordering here since we order on the selector
-            if (team.length === 0 || shouldAddThreadId(team, thread, extra.threads)) {
+            if (shouldAddThreadId(team, thread, extra.threads)) {
                 return {
                     ...state,
                     [teamId]: [
