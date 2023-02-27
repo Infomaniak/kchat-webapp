@@ -616,16 +616,23 @@ describe('threads', () => {
             ['a', {id: 't2', last_reply_at: 5, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}}],
 
             // DM/GM threads
-            [undefined, {id: 't3', last_reply_at: 40, unread_mentions: 0, unread_replies: 0}, {a: {all: ['t1', 't2', 't3'], unread: ['t2']}, b: {all: ['t1', 't3'], unread: []}}],
-            [undefined, {id: 't3', last_reply_at: 40, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2', 't3'], unread: ['t2', 't3']}, b: {all: ['t1', 't3'], unread: []}}],
-            [undefined, {id: 't3', last_reply_at: 40, unread_mentions: 0, unread_replies: 1}, {a: {all: ['t1', 't2', 't3'], unread: ['t2', 't3']}, b: {all: ['t1', 't3'], unread: []}}],
-            [undefined, {id: 't3', last_reply_at: 5, unread_mentions: 0, unread_replies: 0}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}}],
-            [undefined, {id: 't3', last_reply_at: 5, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}}],
-            [undefined, {id: 't2', last_reply_at: 40, unread_mentions: 0, unread_replies: 0}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1', 't2'], unread: []}}],
-            [undefined, {id: 't2', last_reply_at: 40, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1', 't2'], unread: []}}],
-            [undefined, {id: 't2', last_reply_at: 40, unread_mentions: 0, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1', 't2'], unread: []}}],
-            [undefined, {id: 't2', last_reply_at: 5, unread_mentions: 0, unread_replies: 0}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}}],
-            [undefined, {id: 't2', last_reply_at: 5, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}}],
+            [undefined, {id: 't3', last_reply_at: 40, unread_mentions: 0, unread_replies: 0}, {a: {all: ['t1', 't2', 't3'], unread: ['t2']}, b: {all: ['t1', 't3'], unread: []}, c: {all: ['t3'], unread: []}}],
+            [undefined, {id: 't3', last_reply_at: 40, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2', 't3'], unread: ['t2', 't3']}, b: {all: ['t1', 't3'], unread: ['t3']}, c: {all: ['t3'], unread: ['t3']}}],
+            [undefined, {id: 't3', last_reply_at: 40, unread_mentions: 0, unread_replies: 1}, {a: {all: ['t1', 't2', 't3'], unread: ['t2', 't3']}, b: {all: ['t1', 't3'], unread: ['t3']}, c: {all: ['t3'], unread: ['t3']}}],
+            [undefined, {id: 't3', last_reply_at: 5, unread_mentions: 0, unread_replies: 0}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}, c: {all: ['t3'], unread: []}}],
+            [undefined, {id: 't3', last_reply_at: 5, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}, c: {all: ['t3'], unread: ['t3']}}],
+            [undefined, {id: 't2', last_reply_at: 40, unread_mentions: 0, unread_replies: 0}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1', 't2'], unread: []}, c: {all: ['t2'], unread: []}}],
+            [undefined, {id: 't2', last_reply_at: 40, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1', 't2'], unread: ['t2']}, c: {all: ['t2'], unread: ['t2']}}],
+            [undefined, {id: 't2', last_reply_at: 40, unread_mentions: 0, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1', 't2'], unread: ['t2']}, c: {all: ['t2'], unread: ['t2']}}],
+            [undefined, {id: 't2', last_reply_at: 5, unread_mentions: 0, unread_replies: 0}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}, c: {all: ['t2'], unread: []}}],
+            [undefined, {id: 't2', last_reply_at: 5, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}, c: {all: ['t2'], unread: ['t2']}}],
+
+            // should add unread thread if unreadThreadsInTeam is empty
+            ['b', {id: 't1', last_reply_at: 40, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: ['t1']}}],
+
+            // should not add unread thread if the thread should not be added in threadsInTeam
+            ['b', {id: 't2', last_reply_at: 5, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}}],
+
         ])('should handle "%s" team and thread %o', (teamId, thread, expected) => {
             const nextState = threadsReducer(state, {
                 type: ThreadTypes.RECEIVED_THREAD,
@@ -644,8 +651,8 @@ describe('threads', () => {
             expect(nextState.unreadThreadsInTeam.b).toEqual(expected.b.unread);
 
             // team c
-            expect(nextState.threadsInTeam.c).toEqual([]);
-            expect(nextState.unreadThreadsInTeam.c).toEqual([]);
+            expect(nextState.threadsInTeam.c).toEqual(expected.c?.all ?? []);
+            expect(nextState.unreadThreadsInTeam.c).toEqual(expected.c?.unread ?? []);
         });
     });
 
