@@ -680,16 +680,6 @@ if (targetIsDevServer) {
             server: 'https',
             allowedHosts: 'all',
             liveReload: true,
-            // proxy: {
-
-            //     // Forward these requests to the server
-            //     '/api': {
-            //         ...proxyToServer,
-            //         ws: true,
-            //     },
-            //     '/plugins': proxyToServer,
-            //     '/static/plugins': proxyToServer,
-            // },
             proxy: [{
                 context: () => true,
                 bypass(req) {
@@ -708,7 +698,7 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: process.env.BASE_URL || 'https://kchat.infomaniak.com', //eslint-disable-line no-process-env
+                target: process.env.BASE_URL || 'https://infomaniak.kchat.infomaniak.com/', //eslint-disable-line no-process-env
                 changeOrigin: true,
                 xfwd: true,
                 ws: false,

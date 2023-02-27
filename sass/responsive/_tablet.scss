@@ -1,6 +1,10 @@
 @charset "utf-8";
 
 @media screen and (max-width: 960px) {
+    .integrations-list {
+        justify-content: center;
+    }
+
     .system-users__filter-row {
         flex-direction: column;
 
@@ -108,6 +112,12 @@
                 }
             }
         }
+    }
+}
+
+@media (min-width: 960px) {
+    .backstage-content {
+        margin: 46px 46px 46px 150px;
     }
 }
 

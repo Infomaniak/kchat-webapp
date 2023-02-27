@@ -74,14 +74,6 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
 
         return (
             <Menu.Group>
-                {this.props.enableAskCommunityLink === 'true' && (
-                    <Menu.ItemExternalLink
-                        id='askTheCommunityLink'
-                        url={askTheCommunityUrl}
-                        text={intl.formatMessage({id: 'userGuideHelp.askTheCommunity', defaultMessage: 'Ask the community'})}
-                        onClick={this.askTheCommunityClick}
-                    />
-                )}
                 <Menu.ItemExternalLink
                     id='helpResourcesLink'
                     url={this.props.helpLink}
@@ -130,6 +122,7 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                     overlay={this.state.buttonActive ? <></> : tooltip}
                 >
                     <IconButton
+                        className='color-grey'
                         size={'sm'}
                         icon={'help-circle-outline'}
                         onClick={() => {}} // icon button currently requires onclick ... needs to revisit

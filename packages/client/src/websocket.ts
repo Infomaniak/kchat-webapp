@@ -121,7 +121,7 @@ export default class WebSocketClient {
         teamId?: string,
         token?: string,
         authToken?: string,
-        presenceChannelId?: string
+        presenceChannelId?: string,
     ) {
         let currentUserId: any;
         let currentUserTeamId: any;
@@ -254,7 +254,7 @@ export default class WebSocketClient {
             this.subscribeToTeamChannel(teamId as string);
 
             this.subscribeToUserChannel(userId || currentUserId);
-            this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId)
+            this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId);
 
             this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
 
@@ -264,6 +264,11 @@ export default class WebSocketClient {
 
             this.bindChannelGlobally(this.teamChannel);
             this.bindChannelGlobally(this.userChannel);
+
+            // unbind previous listeners if needed to prevent duplicated callbacks
+            if (this.userTeamChannel && this.userTeamChannel.global_callbacks.length > 0) {
+                this.userTeamChannel.unbind_global();
+            }
             this.bindChannelGlobally(this.userTeamChannel);
             this.bindChannelGlobally(this.presenceChannel);
 

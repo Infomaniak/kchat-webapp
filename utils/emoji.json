@@ -57787,12 +57787,12 @@
         ]
     },
     {
-        "id": "mattermost",
-        "name": "Mattermost",
+        "id": "kchat",
+        "name": "kChat",
         "unified": "",
-        "short_name": "mattermost",
+        "short_name": "kchat",
         "short_names": [
-            "mattermost"
+            "kchat"
         ],
         "category": "custom"
     }

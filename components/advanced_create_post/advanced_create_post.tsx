@@ -973,7 +973,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
     handleFileUploadComplete = (fileInfos: FileInfo[], clientIds: string[], channelId: string) => {
         const draft = {...this.draftsForChannel[channelId]!};
-        console.log('[UPLOAD FILE] create post file upload complete', draft)
+
         // remove each finished file from uploads
         for (let i = 0; i < clientIds.length; i++) {
             if (draft.uploadsInProgress) {

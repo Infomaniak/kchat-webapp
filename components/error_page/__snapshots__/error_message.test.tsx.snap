@@ -167,7 +167,7 @@ exports[`components/error_page/ErrorMessage should match snapshot, oauth_missing
 exports[`components/error_page/ErrorMessage should match snapshot, page_not_found type 1`] = `
 <p>
   <MemoizedFormattedMessage
-    defaultMessage="Ce lien n'a peut-être jamais existé. Si ce lien existe, veuillez contacter la personne qui vous a partagé ce lien afin qu’elle vous donne les droits d’accès."
+    defaultMessage="Ce lien n’a peut-être jamais existé. Si ce lien existe, veuillez contacter la personne qui vous a partagé ce lien afin qu’elle vous donne les droits d’accès."
     id="error.not_found.message"
   />
 </p>

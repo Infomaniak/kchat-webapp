@@ -719,6 +719,8 @@ export function applyTheme(theme: Theme) {
             'ik-illustration-grey-13': theme.ikIllustrationGreyThirteen,
             'ik-illustration-grey-14': theme.ikIllustrationGreyFourteen,
             'ik-illustration-grey-15': theme.ikIllustrationGreyFifteen,
+            'ik-illustration-grey-16': theme.ikIllustrationGreySixteen,
+            'ik-illustration-grey-17': theme.ikIllustrationGreySeventeen,
         },
     });
 }

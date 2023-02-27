@@ -478,13 +478,6 @@
         margin: 8px 0;
     }
 
-    .backstage-list__item {
-        .item-actions,
-        .actions {
-            margin: 10px 0;
-        }
-    }
-
     .integration__icon {
         &.integration-list__icon {
             position: relative;
@@ -699,8 +692,6 @@
     .integration-option {
         width: 100%;
         height: auto;
-        flex: 0 0 100%;
-        margin: 0 0 30px;
         margin-left: 0;
     }
 
@@ -2089,6 +2080,12 @@
         left: 15px;
         width: calc(100% - 30px);
     }
+
+    .backstage-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -2244,6 +2241,9 @@
             height: calc(100vh - 138px - 4em);
             min-height: calc(100vh - 138px - 4em);
         }
+    }
+    .integrations-list {
+        gap: 15px;
     }
 }
 

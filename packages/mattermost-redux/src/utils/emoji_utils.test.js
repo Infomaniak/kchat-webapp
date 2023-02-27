@@ -136,10 +136,10 @@ describe('EmojiUtils', () => {
             expect(EmojiUtils.getEmojiImageUrl({short_names: ['system_emoji_short_names']})).toBe('/static/emoji/system_emoji_short_names.png');
         });
 
-        test('return correct url for mattermost emoji', () => {
-            expect(EmojiUtils.getEmojiImageUrl({id: 'mattermost', category: 'custom'})).toBe('/static/emoji/mattermost.png');
+        test('return correct url for kchat emoji', () => {
+            expect(EmojiUtils.getEmojiImageUrl({id: 'kchat', category: 'custom'})).toBe('/static/emoji/kchat.png');
 
-            expect(EmojiUtils.getEmojiImageUrl({id: 'mattermost'})).toBe('/static/emoji/mattermost.png');
+            expect(EmojiUtils.getEmojiImageUrl({id: 'kchat'})).toBe('/static/emoji/kchat.png');
         });
 
         test('return correct url for custom emojis', () => {

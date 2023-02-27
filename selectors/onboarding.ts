@@ -5,12 +5,15 @@ import {isMobile} from 'utils/utils';
 
 import {createSelector} from 'reselect';
 
-import {makeGetCategory, getBool} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentUser, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {makeGetCategory, getBool, getInt} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentUser, getCurrentUserId, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
-import {OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
+import {GenericTaskSteps, OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
+import {FINISHED} from 'components/tours';
 
 import {GlobalState} from 'types/store';
+import {ClientConfig} from '@mattermost/types/config';
 
 import {RecommendedNextStepsLegacy, Preferences} from 'utils/constants';
 
@@ -170,5 +173,19 @@ export const getShowTaskListBool = createSelector(
         const firstTimeOnboarding = existingUserHasntFinishedNorSkippedLegacyNextSteps;
 
         return [showTaskList, firstTimeOnboarding];
+    },
+);
+
+export const getShowTutorialStep = createSelector(
+    'getShowTutorialStep',
+    getConfig,
+    (state: GlobalState, {tourName}: {tourName: string; taskName: string; tourStep: number}) => getInt(state, tourName, getCurrentUserId(state), 0),
+    (state: GlobalState, {taskName}: {tourName: string; taskName: string; tourStep: number}) => getInt(state, OnboardingTaskCategory, taskName, FINISHED),
+    (state: GlobalState, {tourStep}: {tourName: string; taskName: string; tourStep: number}) => tourStep,
+    (config: Partial<ClientConfig>, tutorialStep: number, triggerStep: number, tourStep: number) => {
+        const channelTourTriggered = triggerStep === GenericTaskSteps.STARTED;
+        const isOnboardingEnabled = config.EnableOnboardingFlow === 'true' && config.EnableTutorial === 'true';
+        const showTutorialStep = tutorialStep === tourStep;
+        return isOnboardingEnabled && channelTourTriggered && showTutorialStep;
     },
 );

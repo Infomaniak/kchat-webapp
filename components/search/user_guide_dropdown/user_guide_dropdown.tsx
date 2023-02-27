@@ -18,8 +18,6 @@ import KeyboardShortcutsModal from 'components/keyboard_shortcuts/keyboard_short
 
 import type {PropsFromRedux} from './index';
 
-const askTheCommunityUrl = 'https://mattermost.com/pl/default-ask-mattermost-community/';
-
 type Props = PropsFromRedux & WrappedComponentProps
 
 type State = {
@@ -57,14 +55,6 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
 
         return (
             <Menu.Group>
-                {this.props.enableAskCommunityLink === 'true' && (
-                    <Menu.ItemExternalLink
-                        id='askTheCommunityLink'
-                        url={askTheCommunityUrl}
-                        text={intl.formatMessage({id: 'userGuideHelp.askTheCommunity', defaultMessage: 'Ask the community'})}
-                        onClick={this.askTheCommunityClick}
-                    />
-                )}
                 <Menu.ItemExternalLink
                     id='helpResourcesLink'
                     url={this.props.helpLink}

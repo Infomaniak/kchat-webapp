@@ -12,7 +12,6 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {GlobalState} from 'types/store';
 import Constants from 'utils/constants';
 
-import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
@@ -102,9 +101,9 @@ export type Props = {
 const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
     const dispatch = useDispatch();
     const currentTeam = useSelector((state: GlobalState) => getCurrentTeam(state));
-    const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS);
-    const showInviteTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.INVITE_PEOPLE);
-    const usageDeltas = useGetUsageDeltas();
+    const showJoinChannelTourTip = useShowOnboardingTutorialStep(OnboardingTourSteps.JOIN_CHANNELS);
+    const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_CHANNELS);
+    const showInviteTutorialTip = false;
     const isAddChannelOpen = useSelector(isAddChannelDropdownOpen);
     const openAddChannelOpen = useCallback((open: boolean) => {
         dispatch(setAddChannelDropdown(open));
@@ -139,10 +138,7 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                                 <i className='icon icon-chevron-down'/>
                             </button>
                         </SidebarHeading>
-                        <MainMenu
-                            id='sidebarDropdownMenu'
-                            usageDeltaTeams={usageDeltas.teams.active}
-                        />
+                        <MainMenu id='sidebarDropdownMenu'/>
                     </MenuWrapper>
                 </OverlayTrigger>
                 <AddChannelDropdown
@@ -154,6 +150,7 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                     canJoinPublicChannel={props.canJoinPublicChannel}
                     handleOpenDirectMessagesModal={props.handleOpenDirectMessagesModal}
                     unreadFilterEnabled={props.unreadFilterEnabled}
+                    showJoinChannelTutorialTip={showJoinChannelTourTip}
                     showCreateTutorialTip={showCreateTutorialTip}
                     showInviteTutorialTip={showInviteTutorialTip}
                     isAddChannelOpen={isAddChannelOpen}

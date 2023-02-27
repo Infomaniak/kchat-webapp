@@ -22,13 +22,12 @@ import {getIsMobileView} from 'selectors/views/browser';
 import UserGuideDropdown from './user_guide_dropdown';
 
 function mapStateToProps(state: GlobalState) {
-    const {HelpLink, ReportAProblemLink, EnableAskCommunityLink} = getConfig(state);
+    const {HelpLink, ReportAProblemLink} = getConfig(state);
 
     return {
         helpLink: HelpLink || '',
         isMobileView: getIsMobileView(state),
         reportAProblemLink: ReportAProblemLink || '',
-        enableAskCommunityLink: EnableAskCommunityLink || '',
         teamUrl: getCurrentRelativeTeamUrl(state),
         pluginMenuItems: getUserGuideDropdownPluginMenuItems(state),
         isFirstAdmin: isFirstAdmin(state),

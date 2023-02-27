@@ -71,7 +71,6 @@ export const ChannelsAndDirectMessagesTour = ({firstChannelName}: Props) => {
         <OnboardingTourTip
             title={title}
             screen={screen}
-            imageURL={ChannelsImg}
             placement='right-start'
             pulsatingDotPlacement='right'
             width={352}

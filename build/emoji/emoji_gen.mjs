@@ -67,7 +67,7 @@ readDirPromise.then((images) => {
                 catch((err) => log(errorLogColor, `[ERROR] Failed to copy ${imageFile}: ${err}`)));
     }
 });
-Fs.copyFile('images/icon64x64.png', 'images/emoji/mattermost.png');
+Fs.copyFile('images/icon64x64.png', 'images/emoji/kchat.png');
 
 // copy sheet image
 const sheetSource = `node_modules/emoji-datasource-apple/img/apple/sheets/${EMOJI_SIZE}.png`;
@@ -248,12 +248,12 @@ fullEmoji.forEach((emoji) => {
 
 // add built-in custom emojis
 fullEmoji.push({
-    id: 'mattermost',
-    name: 'Mattermost',
+    id: 'kchat',
+    name: 'kChat',
     unified: '',
-    image: 'mattermost.png',
-    short_name: 'mattermost',
-    short_names: ['mattermost'],
+    image: 'kchat.png',
+    short_name: 'kchat',
+    short_names: ['kchat'],
     category: 'custom',
 });
 
