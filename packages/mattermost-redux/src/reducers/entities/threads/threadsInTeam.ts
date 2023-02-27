@@ -16,7 +16,7 @@ type State = ThreadsState['threadsInTeam'] | ThreadsState['unreadThreadsInTeam']
 // furthermore manually adding older thread will BREAK pagination
 function shouldAddThreadId(ids: Array<UserThread['id']>, thread: UserThread, threads: IDMappedObjects<UserThread>, threadsInTeam: Array<UserThread['id']>) {
     // FIX: live update threads
-    // if threads array is empty and thread id is included or should be added to threadsInTeam
+    // always add threads if the threads array is empty and thread id is included or should be added to threadsInTeam
     if (!ids.length && (threadsInTeam.includes(thread.id) || !threadsInTeam.length || shouldAddThreadId(threadsInTeam, thread, threads, []))) {
         return true;
     }
