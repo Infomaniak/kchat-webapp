@@ -1,3 +1,15 @@
+## 0.9.14 (2023-02-27)
+
+### Fixed (2 changes)
+
+- [remove server check in checkForModifiedUsers](kchat/webapp@c51e057c28eff0ec31f60a582eaebadfb5298aae) by @antonbuksa
+- [Live update unread threads](kchat/webapp@2f21e0c5eb453ac0b29c724097dfbdcecabdfd3e) by @leonard.jouve ([merge request](kchat/webapp!310))
+
+### Changed (2 changes)
+
+- [hide web team switch for app 2.1 for new desktop switch](kchat/webapp@57aff4e72d93405d60010c41656f9d186ba3e5ce) by @antonbuksa
+- [condition teamsidebar only for webapp](kchat/webapp@fa669f9e9a47d63413eeb8a091df8f6b51e7465b) by @leonard.jouve
+
 ## 0.9.13 (2023-02-24)
 
 ### Fixed (4 changes)
