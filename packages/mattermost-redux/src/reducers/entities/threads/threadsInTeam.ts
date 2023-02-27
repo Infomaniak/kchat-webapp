@@ -17,10 +17,20 @@ type State = ThreadsState['threadsInTeam'] | ThreadsState['unreadThreadsInTeam']
 function shouldAddThreadId(ids: Array<UserThread['id']>, thread: UserThread, threads: IDMappedObjects<UserThread>, threadsInTeam: Array<UserThread['id']>) {
     // FIX: live update threads
     // always add threads if the threads array is empty and thread id is included or should be added to threadsInTeam
-    if (!ids.length && (threadsInTeam.includes(thread.id) || !threadsInTeam.length || shouldAddThreadId(threadsInTeam, thread, threads, []))) {
+    if (!ids.length && (threadsInTeam.includes(thread.id) || shouldBeAddedToThreadsInTeam(threadsInTeam, thread, threads))) {
         return true;
     }
     return ids.some((id) => {
+        const t = threads![id];
+        return thread.last_reply_at > t.last_reply_at;
+    });
+}
+
+function shouldBeAddedToThreadsInTeam(threadsInTeam: Array<UserThread['id']>, thread: UserThread, threads: IDMappedObjects<UserThread>) {
+    if (!threadsInTeam.length) {
+        return true;
+    }
+    return threadsInTeam.some((id) => {
         const t = threads![id];
         return thread.last_reply_at > t.last_reply_at;
     });
