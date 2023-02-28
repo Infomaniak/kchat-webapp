@@ -3803,7 +3803,7 @@
   "multiselect.createGroup": "Créer le groupe",
   "multiselect.creating": "Création...",
   "multiselect.go": "Aller à",
-  "multiselect.list.notFound": "Aucun résultat trouvé pour **{searchQuery}**",
+  "multiselect.list.notFound": "Aucun résultat trouvé pour <b>{searchQuery}</b>",
   "multiselect.loading": "Chargement…",
   "multiselect.numGroupsRemaining": "Utilisez les flèches ↑↓ pour parcourir, ↵ pour sélectionner. Vous pouvez encore ajouter {num, number} {num, plural, one {groupe} other {groupes}}. ",
   "multiselect.numMembers": "{memberOptions, number} de {totalCount, number} membres",
