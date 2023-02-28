@@ -186,33 +186,7 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
                 helpText={
                     <FormattedMessage
                         id='installed_outgoing_webhooks.help'
-                        defaultMessage='Use outgoing webhooks to connect external tools to Mattermost. {buildYourOwn} or visit the {appDirectory} to find self-hosted, third-party apps and integrations.'
-                        values={{
-                            buildYourOwn: (
-                                <a
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-webhooks-outgoing/'
-                                >
-                                    <FormattedMessage
-                                        id='installed_outgoing_webhooks.help.buildYourOwn'
-                                        defaultMessage='Build your own'
-                                    />
-                                </a>
-                            ),
-                            appDirectory: (
-                                <a
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    href='https://mattermost.com/marketplace'
-                                >
-                                    <FormattedMessage
-                                        id='installed_outgoing_webhooks.help.appDirectory'
-                                        defaultMessage='App Directory'
-                                    />
-                                </a>
-                            ),
-                        }}
+                        defaultMessage='Use outgoing webhooks to connect external tools to kChat.'
                     />
                 }
                 searchPlaceholder={localizeMessage('installed_outgoing_webhooks.search', 'Search Outgoing Webhooks')}

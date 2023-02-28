@@ -110,33 +110,7 @@ export default class InstalledCommands extends React.PureComponent<Props> {
                 helpText={
                     <FormattedMessage
                         id='installed_commands.help'
-                        defaultMessage='Use slash commands to connect external tools to Mattermost. {buildYourOwn} or visit the {appDirectory} to find self-hosted, third-party apps and integrations.'
-                        values={{
-                            buildYourOwn: (
-                                <a
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-slash-commands/'
-                                >
-                                    <FormattedMessage
-                                        id='installed_commands.help.buildYourOwn'
-                                        defaultMessage='Build Your Own'
-                                    />
-                                </a>
-                            ),
-                            appDirectory: (
-                                <a
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    href='https://mattermost.com/marketplace'
-                                >
-                                    <FormattedMessage
-                                        id='installed_commands.help.appDirectory'
-                                        defaultMessage='App Directory'
-                                    />
-                                </a>
-                            ),
-                        }}
+                        defaultMessage='Use slash commands to connect external tools to kChat.'
                     />
                 }
                 searchPlaceholder={Utils.localizeMessage('installed_commands.search', 'Search Slash Commands')}
