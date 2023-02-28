@@ -68,7 +68,7 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, refreshIKToken, storeTokenResponse} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, getUTCOrRelativeTimestamp, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 
@@ -485,7 +485,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     message: {
                         token: response.access_token,
                         refreshToken: response.refresh_token,
-                        expiresAt: parseInt(Date.now() / 1000) + response.expires_in,
+                        expiresAt: getUTCOrRelativeTimestamp() + response.expires_in,
                     },
                 },
                 window.origin,
