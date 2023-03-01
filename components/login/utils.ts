@@ -173,7 +173,8 @@ export function getUTCOrRelativeTimestamp() {
     let timestamp;
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.2')) {
         const now = new Date();
-        timestamp = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+        const offsetInMs = now.getTimezoneOffset() * 60000;
+        timestamp = Date.now() + offsetInMs;
     } else {
         timestamp = Date.now();
     }
