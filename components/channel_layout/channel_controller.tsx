@@ -15,7 +15,6 @@ import Sidebar from 'components/sidebar';
 import CenterChannel from 'components/channel_layout/center_channel';
 import LoadingScreen from 'components/loading_screen';
 import FaviconTitleHandler from 'components/favicon_title_handler';
-import ProductNoticesModal from 'components/product_notices_modal';
 
 import Pluggable from 'plugins/pluggable';
 
@@ -60,7 +59,6 @@ export default function ChannelController() {
                 className='channel-view'
             >
                 <FaviconTitleHandler/>
-                <ProductNoticesModal/>
                 <div className={classNames('container-fluid channel-view-inner')}>
                     {shouldRenderCenterChannel ? <CenterChannel/> : <LoadingScreen centered={true}/>}
                     <Pluggable pluggableName='Root'/>
