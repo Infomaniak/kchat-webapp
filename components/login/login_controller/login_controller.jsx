@@ -25,6 +25,7 @@ import {showNotification} from 'utils/notifications';
 import {intlShape} from 'utils/react_intl';
 import {isDesktopApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
+import {getUTCOrRelativeTimestamp} from '../utils';
 
 // TODO: clean login controller
 class LoginController extends React.PureComponent {
@@ -94,7 +95,7 @@ class LoginController extends React.PureComponent {
             const refreshToken = localStorage.getItem('IKRefreshToken');
             const tokenExpire = localStorage.getItem('IKTokenExpire');
 
-            if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
+            if (token && tokenExpire && !(tokenExpire <= getUTCOrRelativeTimestamp())) {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
                 Client4.setCSRF(token);
@@ -126,7 +127,7 @@ class LoginController extends React.PureComponent {
                 return;
             }
 
-            if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= parseInt(Date.now() / 1000, 10))) {
+            if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= getUTCOrRelativeTimestamp())) {
                 // eslint-disable-next-line react/no-did-mount-set-state
                 this.setState({loading: true});
                 const codeVerifier = this.getCodeVerifier();
@@ -140,6 +141,7 @@ class LoginController extends React.PureComponent {
                     // TODO: add env for login url and/or current server
                     window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=token&redirect_uri=ktalk://auth-desktop`);
                 }).catch(() => {
+                    // eslint-disable no-console
                     console.log('Error redirect');
 
                     // Ignore the failure

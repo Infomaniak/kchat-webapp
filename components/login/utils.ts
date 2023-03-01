@@ -109,7 +109,7 @@ export function getChallengeAndRedirectToLogin() {
  */
 export function checkIKTokenIsExpired() {
     const tokenExpire = localStorage.getItem('IKTokenExpire');
-    const isExpired = tokenExpire <= parseInt(Date.now() / 1000, 10);
+    const isExpired = parseInt(tokenExpire as string, 10) <= getUTCOrRelativeTimestamp();
 
     if (isExpired) {
         console.log('[login/utils > checkIKTokenIsExpired] token is expired');
@@ -124,7 +124,7 @@ export function checkIKTokenIsExpired() {
  */
 export function checkIKTokenExpiresSoon(): boolean {
     const tokenExpire = localStorage.getItem('IKTokenExpire');
-    const isExpiredInOneMinute = parseInt(tokenExpire as string, 10) <= ((Date.now() / 1000) + 60);
+    const isExpiredInOneMinute = parseInt(tokenExpire as string, 10) <= (getUTCOrRelativeTimestamp() + 60);
 
     return isExpiredInOneMinute;
 }
@@ -141,7 +141,7 @@ export function isDefaultAuthServer() {
     return window.location.origin === v2DefaultAuthServer;
 }
 
-function storeTokenV2(tokenData: {token: string, refreshToken: string, expiresAt: number}) {
+function storeTokenV2(tokenData: {token: string; refreshToken: string; expiresAt: number}) {
     const {token, refreshToken, expiresAt} = tokenData;
     localStorage.setItem('IKToken', token);
     localStorage.setItem('IKRefreshToken', refreshToken);
@@ -169,8 +169,20 @@ async function refreshTokenV2() {
     }
 }
 
-function isValidTokenV2(token: {token: string, refreshToken: string, expiresAt: number}) {
-    const isExpiredInOneMinute = token.expiresAt <= ((Date.now() / 1000) + 60);
+export function getUTCOrRelativeTimestamp() {
+    let timestamp;
+    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.2')) {
+        const now = new Date();
+        timestamp = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+    } else {
+        timestamp = Date.now();
+    }
+
+    return timestamp / 1000;
+}
+
+function isValidTokenV2(token: {token: string; refreshToken: string; expiresAt: number}) {
+    const isExpiredInOneMinute = token.expiresAt <= (getUTCOrRelativeTimestamp() + 60);
 
     return !isExpiredInOneMinute;
 }
@@ -220,7 +232,7 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
                         message: {
                             token: resp.access_token,
                             refreshToken: resp.refresh_token,
-                            expiresAt: parseInt(Date.now() / 1000) + resp.expires_in,
+                            expiresAt: getUTCOrRelativeTimestamp() + resp.expires_in,
                         },
                     },
                     window.origin,
