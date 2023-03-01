@@ -43,6 +43,7 @@ import {
     ChannelWithTeamData,
     ChannelSearchOpts,
     ServerChannel,
+    PendingGuests,
 } from '@mattermost/types/channels';
 import {Options, StatusOK, ClientResponse, LogLevel, FetchPaginatedThreadOptions} from '@mattermost/types/client4';
 import {Compliance} from '@mattermost/types/compliance';
@@ -4502,6 +4503,20 @@ export default class Client4 {
                     'Connection-Id': `${connectionId}`,
                 },
             },
+        );
+    };
+
+    getChannelPendingGuests = (channelId: string) => {
+        return this.doFetch<PendingGuests>(
+            `${this.getChannelMembersRoute(channelId)}/pending_guest`,
+            {method: 'GET'},
+        );
+    };
+
+    cancelPendingGuestInvite = (invitationKey: string) => {
+        return this.doFetch(
+            `${this.getTeamsRoute()}/invites/email`,
+            {method: 'DELETE', body: JSON.stringify({invitation_key: invitationKey})},
         );
     };
 }

@@ -153,6 +153,7 @@ export type ChannelsState = {
     channelModerations: RelationOneToOne<Channel, ChannelModeration[]>;
     channelMemberCountsByGroup: RelationOneToOne<Channel, ChannelMemberCountsByGroup>;
     messageCounts: RelationOneToOne<Channel, ChannelMessageCount>;
+    pendingGuests: Record<Channel['id'], PendingGuests>;
 };
 
 export type ChannelModeration = {
@@ -209,3 +210,27 @@ export type ChannelSearchOpts = {
     page?: number;
     per_page?: number;
 };
+
+export type PendingGuest = {
+    id: number;
+    key: string;
+    type: string;
+    status: string;
+    invited_by_id: number;
+    account_id: number;
+    user_id?: number;
+    email?: string;
+    sms?: number;
+    force_link?: string;
+    expires_at: number;
+    created_at: number;
+    updated_at: number;
+    deleted_at?: number;
+    data: {
+        team_id: string;
+        channel_ids: string[];
+        product_id: number;
+    };
+};
+
+export type PendingGuests = Record<string, PendingGuest>;

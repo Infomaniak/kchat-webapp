@@ -18,6 +18,7 @@ import {
     ChannelMemberCountByGroup,
     ChannelMemberCountsByGroup,
     ServerChannel,
+    PendingGuests,
 } from '@mattermost/types/channels';
 import {
     RelationOneToMany,
@@ -952,6 +953,32 @@ function roles(state: RelationOneToOne<Channel, Set<string>> = {}, action: Gener
     }
 }
 
+function pendingGuests(state: Record<Channel['id'], PendingGuests> = {}, action: GenericAction) {
+    switch (action.type) {
+    case ChannelTypes.RECEIVED_CHANNEL_PENDING_GUESTS: {
+        const {channelId, pendingGuests} = action.data;
+        return {
+            ...state,
+            [channelId]: {...pendingGuests},
+        };
+    }
+    case ChannelTypes.CANCELED_PENDING_GUEST_INVITE: {
+        const {channelId, invitationKey} = action.data;
+        const channelState = {...state[channelId]};
+        const canceledInviteKey = Object.keys(channelState).find((key) => channelState[key].key === invitationKey);
+        if (canceledInviteKey) {
+            Reflect.deleteProperty(channelState, canceledInviteKey);
+        }
+        return {
+            ...state,
+            [channelId]: channelState,
+        };
+    }
+    default:
+        return state;
+    }
+}
+
 export default combineReducers({
 
     // the current selected channel
@@ -990,4 +1017,6 @@ export default combineReducers({
 
     // object where every key is the channel id mapping to an object containing the number of messages in the channel
     messageCounts,
+
+    pendingGuests,
 });

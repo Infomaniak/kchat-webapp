@@ -7,9 +7,9 @@ import {VariableSizeList, ListChildComponentProps} from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 
 import {UserProfile} from '@mattermost/types/users';
-import {Channel} from '@mattermost/types/channels';
+import {Channel, PendingGuest as PendingGuestType} from '@mattermost/types/channels';
 
-import Member from './member';
+import Member, {PendingGuest} from './member';
 import {ChannelMember, ListItem, ListItemType} from './channel_members_rhs';
 
 export interface Props {
@@ -95,6 +95,23 @@ const MemberList = ({
                         />
                     </div>
                 );
+            case ListItemType.PendingGuest: {
+                const pendingGuest = members[index].data as PendingGuestType;
+                return (
+                    <div
+                        style={style}
+                        key={`pending-guest-${pendingGuest.id}`}
+                    >
+                        <PendingGuest
+                            channel={channel}
+                            pendingGuest={pendingGuest}
+                            editing={editing}
+                            index={index}
+                            totalUsers={members.length}
+                        />
+                    </div>
+                );
+            }
             case ListItemType.Separator:
             case ListItemType.FirstSeparator:
                 return (

@@ -1430,3 +1430,5 @@ export const getRecentProfilesFromDMs: (state: GlobalState) => UserProfile[] = c
         return [...sortedUserProfiles];
     },
 );
+
+export const getPendingGuestsInChannel = (state: GlobalState, channelId: string) => state.entities.channels.pendingGuests[channelId] ?? {};

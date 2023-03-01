@@ -8,7 +8,7 @@ import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 
 import {UserProfile} from '@mattermost/types/users';
-import {Channel, ChannelMembership} from '@mattermost/types/channels';
+import {Channel, ChannelMembership, PendingGuest, PendingGuests} from '@mattermost/types/channels';
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import MoreDirectChannels from 'components/more_direct_channels';
 import ChannelInviteModal from 'components/channel_invite_modal';
@@ -46,6 +46,7 @@ export interface Props {
     channelMembers: ChannelMember[];
     canManageMembers: boolean;
     editing: boolean;
+    pendingGuests: PendingGuests;
 
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
@@ -57,18 +58,20 @@ export interface Props {
         loadMyChannelMemberAndRole: (channelId: string) => void;
         setEditChannelMembers: (active: boolean) => void;
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;
+        getChannelPendingGuests: (channelId: string) => void;
     };
 }
 
 export enum ListItemType {
     Member = 'member',
+    PendingGuest = 'pending-guest',
     FirstSeparator = 'first-separator',
     Separator = 'separator',
 }
 
 export interface ListItem {
     type: ListItemType;
-    data: ChannelMember | JSX.Element;
+    data: ChannelMember | PendingGuest | JSX.Element;
 }
 
 export default function ChannelMembersRHS({
@@ -81,6 +84,7 @@ export default function ChannelMembersRHS({
     channelMembers,
     canManageMembers,
     editing = false,
+    pendingGuests,
     actions,
 }: Props) {
     const history = useHistory();
@@ -97,6 +101,12 @@ export default function ChannelMembersRHS({
 
     // show search if there's more than 20 or if the user have an active search.
     const showSearch = searching || membersCount >= 20;
+
+    const pendingGuestsCount = Object.keys(pendingGuests).length;
+
+    useEffect(() => {
+        actions.getChannelPendingGuests(channel.id);
+    }, [channel, actions]);
 
     useEffect(() => {
         return () => {
@@ -148,8 +158,24 @@ export default function ChannelMembersRHS({
 
             listcp.push({type: ListItemType.Member, data: member});
         }
+        Object.keys(pendingGuests).forEach((key, index) => {
+            const pendingGuest = pendingGuests[key];
+            if (index === 0) {
+                const text = (
+                    <FormattedMessage
+                        id='channel_members_rhs.list.channel_pending_guests_title'
+                        defaultMessage='PENDING GUESTS'
+                    />
+                );
+                listcp.push({
+                    type: ListItemType.Separator,
+                    data: <MemberListSeparator>{text}</MemberListSeparator>,
+                });
+            }
+            listcp.push({type: ListItemType.PendingGuest, data: pendingGuest});
+        });
         setList(listcp);
-    }, [channelMembers]);
+    }, [channelMembers, pendingGuests]);
 
     useEffect(() => {
         if (channel.type === Constants.DM_CHANNEL) {
@@ -233,6 +259,7 @@ export default function ChannelMembersRHS({
             <ActionBar
                 channelType={channel.type}
                 membersCount={membersCount}
+                pendingGuestsCount={pendingGuestsCount}
                 canManageMembers={canManageMembers}
                 editing={editing}
                 actions={{
@@ -253,13 +280,7 @@ export default function ChannelMembersRHS({
                             defaultMessage: 'In this channel, you can only remove guests. Only <link>channel admins</link> can manage other members.',
                         }, {
                             link: (msg: React.ReactNode) => (
-                                <a
-                                    href='https://docs.mattermost.com/welcome/about-user-roles.html#channel-admin'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
+                                <span>{msg}</span>
                             ),
                         })}
                     />
