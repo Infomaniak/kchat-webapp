@@ -14,8 +14,23 @@ type State = ThreadsState['threadsInTeam'] | ThreadsState['unreadThreadsInTeam']
 // return true only if it's 'newer' than other threads
 // older threads will be added by scrolling so no need to manually add.
 // furthermore manually adding older thread will BREAK pagination
-function shouldAddThreadId(ids: Array<UserThread['id']>, thread: UserThread, threads: IDMappedObjects<UserThread>) {
+function shouldAddThreadId(ids: Array<UserThread['id']>, thread: UserThread, threads: IDMappedObjects<UserThread>, threadsInTeam: Array<UserThread['id']>) {
+    // FIX: live update threads
+    // always add threads if the threads array is empty and thread id is included or should be added to threadsInTeam
+    if (!ids.length && (threadsInTeam.includes(thread.id) || shouldBeAddedToThreadsInTeam(threadsInTeam, thread, threads))) {
+        return true;
+    }
     return ids.some((id) => {
+        const t = threads![id];
+        return thread.last_reply_at > t.last_reply_at;
+    });
+}
+
+function shouldBeAddedToThreadsInTeam(threadsInTeam: Array<UserThread['id']>, thread: UserThread, threads: IDMappedObjects<UserThread>) {
+    if (!threadsInTeam.length) {
+        return true;
+    }
+    return threadsInTeam.some((id) => {
         const t = threads![id];
         return thread.last_reply_at > t.last_reply_at;
     });
@@ -67,6 +82,7 @@ function handleAllTeamsReceivedThread(state: State, thread: UserThread, teamId: 
 // adds thread to single team
 function handleSingleTeamReceivedThread(state: State, thread: UserThread, teamId: Team['id'], extra: ExtraData) {
     const nextSet = new Set(state[teamId] || []);
+    const threadsInTeam = extra.threadsInTeam[teamId] || [];
 
     // thread exists in state
     if (nextSet.has(thread.id)) {
@@ -74,7 +90,7 @@ function handleSingleTeamReceivedThread(state: State, thread: UserThread, teamId
     }
 
     // check if thread is newer than any of the existing threads
-    const shouldAdd = shouldAddThreadId([...nextSet], thread, extra.threads);
+    const shouldAdd = shouldAddThreadId([...nextSet], thread, extra.threads, threadsInTeam);
 
     if (shouldAdd) {
         nextSet.add(thread.id);
@@ -104,6 +120,7 @@ export function handleReceivedThread(state: State, action: GenericAction, extra:
 export function handleFollowChanged(state: State, action: GenericAction, extra: ExtraData) {
     const {id, team_id: teamId, following} = action.data;
     const nextSet = new Set(state[teamId] || []);
+    const threadsInTeam = extra.threadsInTeam[teamId] || [];
 
     const thread = extra.threads[id];
 
@@ -125,7 +142,7 @@ export function handleFollowChanged(state: State, action: GenericAction, extra: 
     }
 
     // check if thread is newer than any of the existing threads
-    const shouldAdd = shouldAddThreadId([...nextSet], thread, extra.threads);
+    const shouldAdd = shouldAddThreadId([...nextSet], thread, extra.threads, threadsInTeam);
 
     if (shouldAdd && following) {
         nextSet.add(thread.id);
@@ -201,6 +218,7 @@ function handleSingleTeamThreadRead(state: ThreadsState['unreadThreadsInTeam'], 
         newUnreadReplies,
     } = action.data;
     const team = state[teamId] || [];
+    const threadsInTeam = extra.threadsInTeam[teamId] || [];
     const index = team.indexOf(id);
 
     // the thread is not in the unread list
@@ -210,7 +228,7 @@ function handleSingleTeamThreadRead(state: ThreadsState['unreadThreadsInTeam'], 
         // the thread is unread
         if (thread && (newUnreadReplies > 0 || newUnreadMentions > 0)) {
             // if it's newer add it, we don't care about ordering here since we order on the selector
-            if (shouldAddThreadId(team, thread, extra.threads)) {
+            if (shouldAddThreadId(team, thread, extra.threads, threadsInTeam)) {
                 return {
                     ...state,
                     [teamId]: [
