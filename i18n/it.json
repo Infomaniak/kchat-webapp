@@ -2991,7 +2991,7 @@
   "multiselect.addTeamsPlaceholder": "Cerca e aggiungi squadre",
   "multiselect.adding": "Aggiunta...",
   "multiselect.go": "Vai",
-  "multiselect.list.notFound": "Nessun elemento trovato",
+  "multiselect.list.notFound": "Nessun elemento trovato corrispondenti a <b>{searchQuery}</b>",
   "multiselect.loading": "Caricamento...",
   "multiselect.numGroupsRemaining": "Usa ↑↓ per navigare, ↵ per scegliere. Puoi aggiungere {num, number} {num, plural, one {group} other {groups}}. ",
   "multiselect.numMembers": "{memberOptions, number} di {totalCount, number} membri",

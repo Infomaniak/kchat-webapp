@@ -49,6 +49,10 @@ describe('handleFollowChanged', () => {
                 last_reply_at: 200,
             },
         },
+        threadsInTeam: {
+            team_id1: [],
+            team_id2: [],
+        },
     } as unknown as ExtraData;
 
     test('follow existing thread', () => {

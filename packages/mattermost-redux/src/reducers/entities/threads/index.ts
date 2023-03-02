@@ -167,6 +167,7 @@ const initialState = {
 function reducer(state: ThreadsState = initialState, action: GenericAction): ThreadsState {
     const extra: ExtraData = {
         threads: state.threads,
+        threadsInTeam: state.threadsInTeam,
     };
 
     // acting as a 'middleware'
