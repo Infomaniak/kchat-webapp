@@ -28,7 +28,7 @@ jest.mock('mattermost-redux/actions/cloud', () => ({
 
 import NewChannelModal from './new_channel_modal';
 
-const mockDispatch = jest.fn();
+const mockDispatch = jest.fn((action) => action());
 let mockState: GlobalState;
 
 jest.mock('react-redux', () => ({
