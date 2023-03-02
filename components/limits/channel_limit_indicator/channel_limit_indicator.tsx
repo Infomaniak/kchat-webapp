@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {FormattedMessage} from 'react-intl';
 
@@ -30,6 +30,7 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
     const dispatch = useDispatch();
     const isAdmin = useSelector(isCurrentUserSystemAdmin);
     const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
+    const [loaded, setLoaded] = useState(false);
     const {public_channels: publicChannelsUsage, private_channels: privateChannelsUsage} = useGetUsage();
     const {public_channels: publicChannelsLimit, private_channels: privateChannelsLimit} = useGetLimits()[0];
     const {public_channels: publicChannelsUsageDelta, private_channels: privateChannelsUsageDelta} = useGetUsageDeltas();
@@ -37,16 +38,25 @@ const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
     const publicChannelLimitReached = publicChannelsUsageDelta >= 0;
     const privateChannelLimitReached = privateChannelsUsageDelta >= 0;
 
-    useEffect(() => {
-        dispatch(getUsage());
+    const loadUsage = useCallback(async () => {
+        const {data} = await dispatch(getUsage());
+        if (data) {
+            setLoaded(true);
+        }
     }, [dispatch]);
 
     useEffect(() => {
-        setLimitations({
-            [General.OPEN_CHANNEL]: publicChannelLimitReached,
-            [General.PRIVATE_CHANNEL]: privateChannelLimitReached,
-        });
-    }, [publicChannelLimitReached, privateChannelLimitReached]);
+        loadUsage();
+    }, [loadUsage]);
+
+    useEffect(() => {
+        if (loaded) {
+            setLimitations({
+                [General.OPEN_CHANNEL]: publicChannelLimitReached,
+                [General.PRIVATE_CHANNEL]: privateChannelLimitReached,
+            });
+        }
+    }, [publicChannelLimitReached, privateChannelLimitReached, loaded]);
 
     if ((type === General.OPEN_CHANNEL && !publicChannelLimitReached) || (type === General.PRIVATE_CHANNEL && !privateChannelLimitReached)) {
         return null;

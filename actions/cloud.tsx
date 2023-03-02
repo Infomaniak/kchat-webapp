@@ -178,7 +178,7 @@ export function getUsage(): ActionFunc {
         } catch (e) {
             return e;
         }
-        return true;
+        return {data: true};
     };
 }
 
