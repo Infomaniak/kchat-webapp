@@ -43,12 +43,11 @@ const PendingGuestsDropdown = ({channel, pendingGuest, index, totalUsers}: Props
                     type='button'
                 >
                     <span className='sr-only'>{pendingGuest.email}</span>
-                    <span>
+                    <span className='pr-1'>
                         <FormattedMessage
                             id='pending_guests_dropdown.role'
                             defaultMessage='Pending guest'
                         />
-                        {' '}
                     </span>
                     <DropdownIcon/>
                 </button>

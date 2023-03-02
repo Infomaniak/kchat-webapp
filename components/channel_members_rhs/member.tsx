@@ -217,6 +217,11 @@ const StyledPendingGuest = styled.div`
         background: rgba(var(--center-channel-color-rgb), 0.08);
         color: rgba(var(--center-channel-color-rgb), 0.56);
     }
+
+    .MenuWrapper {
+        font-weight: 600;
+        font-size: 11px;
+    }
 `;
 
 const StyledMailIcon = styled(MailIcon)`
