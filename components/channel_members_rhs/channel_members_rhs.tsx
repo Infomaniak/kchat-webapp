@@ -164,7 +164,7 @@ export default function ChannelMembersRHS({
                 const text = (
                     <FormattedMessage
                         id='channel_members_rhs.list.channel_pending_guests_title'
-                        defaultMessage='PENDING GUESTS'
+                        defaultMessage='PENDING INVITATIONS'
                     />
                 );
                 listcp.push({

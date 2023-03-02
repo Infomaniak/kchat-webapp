@@ -5716,5 +5716,8 @@
   "onboardingTour.taskList.completed.subtitle": "Starten Sie eine Unterhaltung und lernen Sie Ihre neuen Kollegen kennen 💬 ",
   "onboardingTask.taskList.dismiss_link": "Die Einführung überspringen",
   "onboardingTask.taskList.introduction": "👋 Lernen Sie die wichtigsten Funktionen von kChat kennen.",
-  "onboardingTask.taskList.download": "📱💻 Lade kChat auf deine Geräte herunter."
+  "onboardingTask.taskList.download": "📱💻 Lade kChat auf deine Geräte herunter.",
+  "channel_members_rhs.list.channel_pending_guests_title": "AUSSTEHENDE EINLADUNGEN",
+  "pending_guests_dropdown.role": "Anstehender Gast",
+  "pending_guests_dropdown.cancel": "Einladung abbrechen"
 }

@@ -42,23 +42,25 @@ const PendingGuestsDropdown = ({channel, pendingGuest, index, totalUsers}: Props
                     className='dropdown-toggle theme color--link style--none'
                     type='button'
                 >
+                    <span className='sr-only'>{pendingGuest.email}</span>
                     <span>
                         <FormattedMessage
                             id='pending_guests_dropdown.role'
-                            defaultMessage='Pending Guest'
+                            defaultMessage='Pending guest'
                         />
+                        {' '}
                     </span>
                     <DropdownIcon/>
                 </button>
                 <Menu
                     openLeft={true}
                     openUp={totalUsers > ROWS_FROM_BOTTOM_TO_OPEN_UP && totalUsers - index <= ROWS_FROM_BOTTOM_TO_OPEN_UP}
-                    ariaLabel={formatMessage({id: 'pending_guests_dropdown.cancel', defaultMessage: 'Cancel pending guest invite'})}
+                    ariaLabel={formatMessage({id: 'pending_guests_dropdown.cancel', defaultMessage: 'Cancel invitation'})}
                 >
                     <Menu.ItemAction
                         show={canCancelPendingGuestInvite}
                         onClick={handleCancelPendingGuestInvite}
-                        text={formatMessage({id: 'pending_guests_dropdown.cancel_action', defaultMessage: 'Cancel Invite'})}
+                        text={formatMessage({id: 'pending_guests_dropdown.cancel', defaultMessage: 'Cancel invitation'})}
                         isDangerous={true}
                     />
                 </Menu>
@@ -69,8 +71,8 @@ const PendingGuestsDropdown = ({channel, pendingGuest, index, totalUsers}: Props
     return (
         <div>
             <FormattedMessage
-                id='channel_members_dropdown.channel_pending_guest'
-                defaultMessage='Pending Guest'
+                id='pending_guests_dropdown.role'
+                defaultMessage='Pending guest'
             />
         </div>
     );

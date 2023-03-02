@@ -238,13 +238,7 @@ export const PendingGuest = ({channel, pendingGuest, editing, index, totalUsers}
             <StyledMailIcon/>
             <UserInfo>
                 <DisplayName>
-                    {/* change this/*/}
-                    {pendingGuest.email ?? (
-                        <FormattedMessage
-                            id='channel_members_rhs.list.channel_pending_guests_unknown'
-                            defaultMessage='unknown'
-                        />
-                    )}
+                    {pendingGuest.email}
                     <GuestBadge show={true}/>
                 </DisplayName>
             </UserInfo>

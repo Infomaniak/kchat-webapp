@@ -5721,5 +5721,8 @@
   "onboardingTour.taskList.completed.subtitle": "Start a conversation and get to know your new colleagues 💬 ",
   "onboardingTask.taskList.dismiss_link": "Skip the introduction",
   "onboardingTask.taskList.introduction": "👋 Discover the main features of kChat",
-  "onboardingTask.taskList.download": "📱💻 Download kChat to your devices"
+  "onboardingTask.taskList.download": "📱💻 Download kChat to your devices",
+  "channel_members_rhs.list.channel_pending_guests_title": "PENDING INVITATIONS",
+  "pending_guests_dropdown.role": "Pending guest",
+  "pending_guests_dropdown.cancel": "Cancel Invitation"
 }
