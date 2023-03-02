@@ -17,7 +17,7 @@ import {ModalIdentifiers} from 'utils/constants';
 import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import CancelMultipleInvitesModal from 'components/cancel_invites_modal';
+import CancelMultipleInvitesModal from 'components/cancel_mutiple_invites_modal';
 
 type Props = {
     channel: Channel;
