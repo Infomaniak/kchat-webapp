@@ -483,6 +483,7 @@ export const ModalIdentifiers = {
     CHANNEL_LIMIT_REACHED: 'channel_limit_reached',
     STORAGE_LIMIT_REACHED: 'storage_limit_reached',
     EXTERNAL_LIMIT_REACHED: 'external_limit_reached',
+    CANCEL_MULTIPLE_INVITES: 'cancel_multiple_invites',
 };
 
 export const UserStatuses = {

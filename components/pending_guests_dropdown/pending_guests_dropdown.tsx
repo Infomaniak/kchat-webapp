@@ -10,10 +10,14 @@ import {haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/ro
 import {Permissions} from 'mattermost-redux/constants';
 import {GlobalState} from '@mattermost/types/store';
 import {Channel, PendingGuest} from '@mattermost/types/channels';
+import {openModal} from 'actions/views/modals';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+import CancelMultipleInvitesModal from 'components/cancel_invites_modal';
 
 type Props = {
     channel: Channel;
@@ -31,6 +35,18 @@ const PendingGuestsDropdown = ({channel, pendingGuest, index, totalUsers}: Props
 
     const handleCancelPendingGuestInvite = () => {
         if (pendingGuest) {
+            if (pendingGuest.data?.channel_ids?.length > 1) {
+                dispatch(openModal({
+                    modalId: ModalIdentifiers.CANCEL_MULTIPLE_INVITES,
+                    dialogType: CancelMultipleInvitesModal,
+                    dialogProps: {
+                        currentChannelId: channel.id,
+                        channelIds: pendingGuest.data.channel_ids,
+                        pendingGuestKey: pendingGuest.key,
+                    },
+                }));
+                return;
+            }
             dispatch(cancelPendingGuestInvite(channel.id, pendingGuest.key));
         }
     };
