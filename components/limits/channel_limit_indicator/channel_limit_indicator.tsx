@@ -12,6 +12,7 @@ import useGetUsage from 'components/common/hooks/useGetUsage';
 import useGetLimits from 'components/common/hooks/useGetLimits';
 
 import {ChannelType} from '@mattermost/types/channels';
+import {DispatchFunc} from 'mattermost-redux/types/actions';
 import {General} from 'mattermost-redux/constants';
 import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
@@ -27,7 +28,7 @@ type Props = {
 };
 
 const ChannelLimitIndicator = ({type, setLimitations}: Props) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<DispatchFunc>();
     const isAdmin = useSelector(isCurrentUserSystemAdmin);
     const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
     const [loaded, setLoaded] = useState(false);
