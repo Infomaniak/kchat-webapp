@@ -48,7 +48,7 @@ import Pluggable from 'plugins/pluggable';
 import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import * as Utils from 'utils/utils';
-import {isDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import webSocketClient from 'client/web_websocket_client.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
@@ -78,6 +78,8 @@ import {IKConstants} from 'utils/constants-ik';
 
 import WelcomePostRenderer from 'components/welcome_post_renderer';
 import {reconnectWebSocket} from 'actions/websocket_actions';
+
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -517,8 +519,9 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     doTokenCheck = () => {
-        // If expiring soon but not expired, refresh before we start hitting errors.
-        if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
+        if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+            refreshIKToken(/*redirectToReam*/false);
+        } else if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
             console.log('[components/root] desktop token expiring soon'); // eslint-disable-line no-console
             refreshIKToken(/*redirectToReam*/false)?.then(() => {
                 console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console

@@ -124,7 +124,8 @@ import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
-import {isDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 // import {isDesktopApp} from 'utils/user_agent';
 
@@ -213,7 +214,7 @@ export function initialize() {
         user.team_id,
         null,
         token,
-        currentChannelId
+        currentChannelId,
     );
 }
 
@@ -245,26 +246,38 @@ function restart() {
 
 export async function reconnect(includeWebSocket = true) {
     if (isDesktopApp()) {
-        const tokenExpire = localStorage.getItem('IKTokenExpire');
-        const token = localStorage.getItem('IKToken');
-        const refreshToken = localStorage.getItem('IKRefreshToken');
-
-        if (!token || !refreshToken || !tokenExpire) {
-            // eslint-disable-next-line no-console
-            console.log('[websocket_actions > reconnect] token storage corrupt, redirecting to login');
-            getHistory().push('/login');
-            return;
-        }
-
-        if (checkIKTokenIsExpired()) {
-            // eslint-disable-next-line no-console
-            console.log('[websocket_actions > reconnect] token expired, calling refresh');
-            includeWebSocket = true; // eslint-disable-line no-param-reassign
+        if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.2')) {
+            const token = localStorage.getItem('IKToken');
             try {
-                await refreshIKToken(/*redirectToTeam**/false);
-            } catch {
-                // swallow
-                includeWebSocket = false; // eslint-disable-line no-param-reassign
+                const newToken = await refreshIKToken(/*redirectToTeam**/false);
+                if (token !== newToken.token) {
+                    includeWebSocket = true; // eslint-disable-line no-param-reassign
+                }
+            } catch (e) {
+                return;
+            }
+        } else {
+            const tokenExpire = localStorage.getItem('IKTokenExpire');
+            const token = localStorage.getItem('IKToken');
+            const refreshToken = localStorage.getItem('IKRefreshToken');
+
+            if (!token || !refreshToken || !tokenExpire) {
+                // eslint-disable-next-line no-console
+                console.log('[websocket_actions > reconnect] token storage corrupt, redirecting to login');
+                getHistory().push('/login');
+                return;
+            }
+
+            if (checkIKTokenIsExpired()) {
+                // eslint-disable-next-line no-console
+                console.log('[websocket_actions > reconnect] token expired, calling refresh');
+                includeWebSocket = true; // eslint-disable-line no-param-reassign
+                try {
+                    await refreshIKToken(/*redirectToTeam**/false);
+                } catch {
+                    // swallow
+                    includeWebSocket = false; // eslint-disable-line no-param-reassign
+                }
             }
         }
     }
