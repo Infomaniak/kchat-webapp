@@ -24,7 +24,11 @@ export function loadConfigAndMe() {
         // If expired, refresh token
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.2')) {
-                await refreshIKToken(/*redirectToReam*/false);
+                try {
+                    await refreshIKToken(/*redirectToReam*/false);
+                } catch (e) {
+                    console.log(e);
+                }
             } else if (checkIKTokenIsExpired()) {
                 console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
                 await refreshIKToken(/*redirectToReam*/false)?.then(() => {
