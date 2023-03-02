@@ -2771,8 +2771,7 @@
   "channel_invite.addNewMembers": "Ajouter des nouveaux membres à {channel}",
   "channel_invite.invite_guest": "Ajouter un nouvel utilisateur invité",
   "channel_invite.no_options_message": "Aucun résultat trouvé - <InvitationModalLink>Invitez-les dans l'équipe</InvitationModalLink>",
-  "channel_limitation.messages": "Les messages antérieurs au {date} peuvent ne pas apparaître car votre kChat a atteint la limite de 10 000 messages. Pour afficher davantage de messages, souscrivez à un forfait plus élevé.",
-  "channel_limitation.messages_button": "Modifier mon offre",
+  "channel_limitation.messages": "Les messages et fichiers datant de plus de 3 mois sont masqués. Pour afficher plus de messages, {isAdmin, select, true {souscrivez à une offre supérieure. <modifyOffer>Modifier mon offre</modifyOffer>} other {contactez un administrateur pour qu’il souscrive à une offre supérieure.}}",
   "channel_loader.posted": "Publié",
   "channel_loader.postedImage": " a publié une image",
   "channel_loader.socketError": "kChat est inaccessible, veuillez vérifier votre connexion. Si le problème persiste, demandez à un administrateur système de [vérifier le port du WebSocket](!https://docs.mattermost.com/install/troubleshooting.html#please-check-connection-mattermost-unreachable-if-issue-persists-ask-administrator-to-check-websocket-port).",
@@ -4960,12 +4959,12 @@
   "limitModal.upgrade": "Modifier mon offre",
   "limitModal.contactAdmin": "Informer un administrateur",
   "externalLimit.title": "Communiquez mieux avec les personnes externes à votre organisation",
-  "externalLimit.subtitle": "Vous avez atteint la limite d’utilisateurs externes ({externalsUsage, number}/{externalsLimit, number}) sur votre kChat. Pour en inviter des supplémentaires, vous devez souscrire à une offre suprérieure.",
+  "externalLimit.subtitle": "Vous avez atteint la limite d’utilisateurs externes ({externalsUsage, number}/{externalsLimit, number}{pendingGuestsUsage, select, 0 {} other { dont {pendingGuestsUsage, number} {pendingGuestsUsage, plural, =0 {} one {invitation} other{invitations}} en attente}}) sur votre kChat. Pour en inviter des supplémentaires, vous devez souscrire à une offre suprérieure.",
   "storageLimit.title": "Augmentez l’espace de stockage de votre kSuite !",
   "storageLimit.subtitle": "Votre espace de stockage est plein. Pour continuer à envoyer des fichiers, veuillez contacter un administrateur pour qu’il modifie l’offre.",
   "storageLimit.subtitle.admin": "Votre espace de stockage est plein. Souscrivez à une offre supérieure pour continuer à envoyer des fichiers.",
   "channelLimit.title": "Créez de nouveaux canaux pour mieux communiquer avec les membres de votre organisation",
-  "channelLimit.subtitle": "Vous avez atteint la limite de canaux publics ({publicChannelUsage, number}/{publicChannelLimit, number}) et de canaux privés ({privateChannelUsage, number}/{privateChannelLimit, number}) sur votre kChat. Pour en créer des supplémentaires, vous devez souscrire à une offre supérieure.",
+  "channelLimit.subtitle": "Vous avez atteint la limite de <bold>{isPublicLimited, select, true {canaux publics ({publicChannelUsage, number}/{publicChannelLimit, number}) {isPrivateLimited, select, true {et de} other {}}} other {}} {isPrivateLimited, select, true {canaux privés ({privateChannelUsage, number}/{privateChannelLimit, number})} other {}}</bold> sur votre kChat. Pour en créer des supplémentaires, vous devez souscrire à une offre supérieure.",
   "onboardingTour.ChannelsTourTip.title": "Canaux publics et privés",
   "onboardingTour.ChannelsTourTip.content": "Retrouvez les canaux de discussion de votre organisation auxquels vous avez accès. Le contenu de ces canaux est visible par tous les membres présents dans ces canaux. Les canaux sont donc parfaits pour augmenter la transparence et coordonner les projets dans votre organisation.",
   "onboardingTour.CreateChannelsTourTip.title": "Canal privé / public",
@@ -4991,5 +4990,6 @@
   "onboardingTour.taskList.completed.subtitle": "Démarrez une conversation et faites connaissance avec vos nouveaux collègues 💬 ",
   "onboardingTask.taskList.dismiss_link": "Passer l'introduction",
   "onboardingTask.taskList.introduction": "👋 Découvrez les principales fonctionnalités de kChat",
-  "onboardingTask.taskList.download": "📱💻 Téléchargez kChat sur vos appareils"
+  "onboardingTask.taskList.download": "📱💻 Téléchargez kChat sur vos appareils",
+  "channelLimitIndicator.text": "Vous avez atteint la limite de {type, select, O {canaux publics} P {canaux privés} other {}} ({usage, number}/{limit, number}) sur votre offre kSuite. {isAdmin, select, true {<modifyOffer>Modifier votre offre</modifyOffer> pour créer des canaux supplémentaires.} other {Veuillez contacter un administrateur pour qu'il modifie l'offre.}}"
 }

@@ -177,11 +177,11 @@ export type InvoiceLineItem = {
 }
 
 export type Limits = {
-    storage?: number;
-    public_channels?: number;
-    private_channels?: number;
-    guests?: number;
-    members?: number;
+    storage: number;
+    public_channels: number;
+    private_channels: number;
+    guests: number;
+    members: number;
     messages?: {
         history?: number;
     };
@@ -202,6 +202,7 @@ export interface CloudUsage {
     public_channels: number;
     private_channels: number;
     guests: number;
+    pending_guests: number;
     members: number;
     usageLoaded: boolean;
     files: {

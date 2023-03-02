@@ -381,3 +381,9 @@ export function makeGetBadgeCountForTeamId(): (state: GlobalState, id: string) =
 export function searchTeamsInPolicy(teams: Team[], term: string): Team[] {
     return filterTeamsStartingWithTerm(teams, term);
 }
+
+export const getCurrentTeamAccountId = createSelector(
+    'getCurrentTeamAccountId',
+    getCurrentTeam,
+    (currentTeam: Team) => currentTeam.account_id,
+);
