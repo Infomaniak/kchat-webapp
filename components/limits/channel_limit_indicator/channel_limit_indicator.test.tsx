@@ -3,6 +3,8 @@
 
 import React from 'react';
 import {Provider} from 'react-redux';
+import {act} from 'react-dom/test-utils';
+import {ReactWrapper} from 'enzyme';
 
 import mockStore from 'tests/test_store';
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
@@ -15,6 +17,23 @@ import ChannelLimitIndicator from './channel_limit_indicator';
 jest.mock('actions/global_actions', () => ({
     redirectTokSuiteDashboard: jest.fn(),
 }));
+
+jest.mock('actions/cloud', () => ({
+    getUsage: () => {
+        return () => Promise.resolve({data: true});
+    },
+}));
+
+const actImmediate = (wrapper: ReactWrapper) =>
+    act(
+        () =>
+            new Promise<void>((resolve) => {
+                setImmediate(() => {
+                    wrapper.update();
+                    resolve();
+                });
+            }),
+    );
 
 describe('channel limit indicator', () => {
     let store;
@@ -78,7 +97,7 @@ describe('channel limit indicator', () => {
         },
     };
     describe('visibility', () => {
-        test('public limited', () => {
+        test('public limited', async () => {
             store = mockStore({
                 ...initialState,
                 entities: {
@@ -98,6 +117,7 @@ describe('channel limit indicator', () => {
                     />
                 </Provider>,
             );
+            await actImmediate(wrapper);
             expect(wrapper.find('.channel-limit-indicator').exists()).toBe(true);
             wrapper = mountWithIntl(
                 <Provider store={store}>
@@ -107,6 +127,7 @@ describe('channel limit indicator', () => {
                     />
                 </Provider>,
             );
+            await actImmediate(wrapper);
             expect(wrapper.find('.channel-limit-indicator').exists()).toBe(false);
             expect(setLimitations).toHaveBeenCalledTimes(2);
             expect(setLimitations).toHaveBeenCalledWith({
@@ -114,7 +135,7 @@ describe('channel limit indicator', () => {
                 [General.PRIVATE_CHANNEL]: false,
             });
         });
-        test('private limited', () => {
+        test('private limited', async () => {
             store = mockStore({
                 ...initialState,
                 entities: {
@@ -134,6 +155,7 @@ describe('channel limit indicator', () => {
                     />
                 </Provider>,
             );
+            await actImmediate(wrapper);
             expect(wrapper.find('.channel-limit-indicator').exists()).toBe(true);
             wrapper = mountWithIntl(
                 <Provider store={store}>
@@ -143,6 +165,7 @@ describe('channel limit indicator', () => {
                     />
                 </Provider>,
             );
+            await actImmediate(wrapper);
             expect(wrapper.find('.channel-limit-indicator').exists()).toBe(false);
             expect(setLimitations).toHaveBeenCalledTimes(2);
             expect(setLimitations).toHaveBeenCalledWith({
@@ -150,7 +173,7 @@ describe('channel limit indicator', () => {
                 [General.PRIVATE_CHANNEL]: true,
             });
         });
-        test('not limited', () => {
+        test('not limited', async () => {
             store = mockStore({...initialState});
             const setLimitations = jest.fn();
             let wrapper = mountWithIntl(
@@ -161,6 +184,7 @@ describe('channel limit indicator', () => {
                     />
                 </Provider>,
             );
+            await actImmediate(wrapper);
             expect(wrapper.find('.channel-limit-indicator').exists()).toBe(false);
             wrapper = mountWithIntl(
                 <Provider store={store}>
@@ -170,6 +194,7 @@ describe('channel limit indicator', () => {
                     />
                 </Provider>,
             );
+            await actImmediate(wrapper);
             expect(wrapper.find('.channel-limit-indicator').exists()).toBe(false);
             expect(setLimitations).toHaveBeenCalledTimes(2);
             expect(setLimitations).toHaveBeenCalledWith({
@@ -178,7 +203,7 @@ describe('channel limit indicator', () => {
             });
         });
     });
-    it('should redirect to ksuite manager', () => {
+    it('should redirect to ksuite manager', async () => {
         store = mockStore({
             ...initialState,
             entities: {
@@ -197,6 +222,7 @@ describe('channel limit indicator', () => {
                 />
             </Provider>,
         );
+        await actImmediate(wrapper);
         const modifyOffer = wrapper.find('a');
         expect(modifyOffer.exists()).toBe(true);
         modifyOffer.simulate('click');
