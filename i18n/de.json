@@ -5719,5 +5719,7 @@
   "onboardingTask.taskList.download": "📱💻 Lade kChat auf deine Geräte herunter.",
   "channel_members_rhs.list.channel_pending_guests_title": "AUSSTEHENDE EINLADUNGEN",
   "pending_guests_dropdown.role": "Anstehender Gast",
-  "pending_guests_dropdown.cancel": "Einladung abbrechen"
+  "pending_guests_dropdown.cancel": "Einladung abbrechen",
+  "cancel_multiple_invites_modal.header": "Mehrere Einladungen absagen",
+  "cancel_multiple_invites_modal.content": "Wenn Sie diese Einladung stornieren, stornieren Sie auch die Einladungen in den folgenden Kanälen :"
 }

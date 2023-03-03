@@ -5724,5 +5724,7 @@
   "onboardingTask.taskList.download": "📱💻 Download kChat to your devices",
   "channel_members_rhs.list.channel_pending_guests_title": "PENDING INVITATIONS",
   "pending_guests_dropdown.role": "Pending guest",
-  "pending_guests_dropdown.cancel": "Cancel Invitation"
+  "pending_guests_dropdown.cancel": "Cancel Invitation",
+  "cancel_multiple_invites_modal.header": "Cancel multiple invitations",
+  "cancel_multiple_invites_modal.content": "By cancelling this invitation, you will also cancel invitations in the following channels :"
 }

@@ -3856,5 +3856,7 @@
   "onboardingTask.taskList.download": "📱💻 Scarica kChat sui tuoi dispositivi",
   "channel_members_rhs.list.channel_pending_guests_title": "INVITI IN ATTESA",
   "pending_guests_dropdown.role": "Ospite in attesa",
-  "pending_guests_dropdown.cancel": "Annullare l'invito"
+  "pending_guests_dropdown.cancel": "Annullare l'invito",
+  "cancel_multiple_invites_modal.header": "Annullare più inviti",
+  "cancel_multiple_invites_modal.content": "Annullando questo invito, annullerete anche gli inviti nei seguenti canali :"
 }
