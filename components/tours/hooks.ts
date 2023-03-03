@@ -62,7 +62,7 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
     const isGuest = useSelector(isCurrentUserGuestUser);
 
     const nextStepActions = useCallback((step: number) => {
-        if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP) {
+        if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP || tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS) {
             const tourSteps = isGuest ? OnboardingTourStepsForGuestUsers : OnboardingTourSteps;
             switch (step) {
             case OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES : {

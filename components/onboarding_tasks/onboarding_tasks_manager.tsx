@@ -269,7 +269,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
         switch (taskName) {
         case OnboardingTasksName.CHANNELS_TOUR: {
             handleSaveData(taskName, TaskNameMapToSteps[taskName].STARTED, true);
-            const tourCategory = TutorialTourName.ONBOARDING_TUTORIAL_STEP;
+            const tourCategory = isGuestUser ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP;
             const preferences = [
                 {
                     user_id: currentUserId,
