@@ -11,6 +11,7 @@ import {
     getCurrentChannelStats,
     getMembersInCurrentChannel,
     getMyCurrentChannelMembership,
+    getPendingGuestsInChannel,
     isCurrentChannelArchived,
 } from 'mattermost-redux/selectors/entities/channels';
 import {GlobalState} from 'types/store';
@@ -31,7 +32,7 @@ import {getIsEditingMembers, getPreviousRhsState} from 'selectors/rhs';
 import {setChannelMembersRhsSearchTerm} from 'actions/views/search';
 import {loadProfilesAndReloadChannelMembers, loadProfilesAndReloadChannelMembersAll, searchProfilesAndChannelMembers} from 'actions/user_actions';
 import {Channel, ChannelMembership} from '@mattermost/types/channels';
-import {loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
+import {getChannelPendingGuests, loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
 
 import {UserProfile} from '@mattermost/types/users';
 import {RelationOneToOne} from '@mattermost/types/utilities';
@@ -107,6 +108,7 @@ function mapStateToProps(state: GlobalState) {
             canManageMembers: false,
             canGoBack: false,
             teamUrl: '',
+            pendingGuests: {},
         } as unknown as Props;
     }
 
@@ -139,6 +141,8 @@ function mapStateToProps(state: GlobalState) {
 
     const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
 
+    const pendingGuests = getPendingGuestsInChannel(state, channel.id);
+
     return {
         channel,
         currentUserIsChannelAdmin,
@@ -149,6 +153,7 @@ function mapStateToProps(state: GlobalState) {
         canManageMembers,
         channelMembers,
         editing,
+        pendingGuests,
     } as Props;
 }
 
@@ -165,6 +170,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             loadMyChannelMemberAndRole,
             setEditChannelMembers,
             searchProfilesAndChannelMembers,
+            getChannelPendingGuests,
         }, dispatch),
     };
 }

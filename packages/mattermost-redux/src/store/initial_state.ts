@@ -58,6 +58,7 @@ const state: GlobalState = {
             channelModerations: {},
             channelMemberCountsByGroup: {},
             messageCounts: {},
+            pendingGuests: {},
         },
         posts: {
             expandedURLs: {},

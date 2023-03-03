@@ -9,6 +9,7 @@ import {FormattedMessage} from 'react-intl';
 import ProfilePicture from 'components/profile_picture';
 import {Client4} from 'mattermost-redux/client';
 import ChannelMembersDropdown from 'components/channel_members_dropdown';
+import PendingGuestsDropdown from 'components/pending_guests_dropdown';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
@@ -17,8 +18,9 @@ import Constants from 'utils/constants';
 
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import GuestBadge from 'components/widgets/badges/guest_badge';
+import MailIcon from 'components/widgets/icons/mail_icon';
 
-import {Channel} from '@mattermost/types/channels';
+import {Channel, PendingGuest as PendingGuestType} from '@mattermost/types/channels';
 import {UserProfile} from '@mattermost/types/users';
 
 import {ChannelMember} from './channel_members_rhs';
@@ -203,3 +205,56 @@ export default styled(Member)`
         font-size: 11px;
     }
 `;
+
+const StyledPendingGuest = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    &:hover {
+        background: rgba(var(--center-channel-color-rgb), 0.08);
+        color: rgba(var(--center-channel-color-rgb), 0.56);
+    }
+
+    .MenuWrapper {
+        font-weight: 600;
+        font-size: 11px;
+    }
+`;
+
+const StyledMailIcon = styled(MailIcon)`
+    width: 24px;
+    height: 24px;
+`;
+
+type PendingGuestProp = {
+    channel: Channel;
+    pendingGuest: PendingGuestType;
+    editing: boolean;
+    index: number;
+    totalUsers: number;
+};
+
+export const PendingGuest = ({channel, pendingGuest, editing, index, totalUsers}: PendingGuestProp) => {
+    return (
+        <StyledPendingGuest>
+            <StyledMailIcon/>
+            <UserInfo>
+                <DisplayName>
+                    {pendingGuest.email}
+                    <GuestBadge show={true}/>
+                </DisplayName>
+            </UserInfo>
+            <RoleChooser className={classNames({editing}, 'member-role-chooser')}>
+                <PendingGuestsDropdown
+                    channel={channel}
+                    pendingGuest={pendingGuest}
+                    index={index}
+                    totalUsers={totalUsers}
+                />
+            </RoleChooser>
+        </StyledPendingGuest>
+    );
+};

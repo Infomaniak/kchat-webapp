@@ -4992,5 +4992,10 @@
   "onboardingTask.taskList.dismiss_link": "Passer l'introduction",
   "onboardingTask.taskList.introduction": "👋 Découvrez les principales fonctionnalités de kChat",
   "onboardingTask.taskList.download": "📱💻 Téléchargez kChat sur vos appareils",
+  "channel_members_rhs.list.channel_pending_guests_title": "INVITATIONS EN ATTENTE",
+  "pending_guests_dropdown.role": "Invité en attente",
+  "pending_guests_dropdown.cancel": "Annuler l'invitation",
+  "cancel_multiple_invites_modal.header": "Annuler plusieurs invitations",
+  "cancel_multiple_invites_modal.content": "En annulant cette invitation, vous annulez également les invitations dans les canaux suivants :",
   "channelLimitIndicator.text": "Vous avez atteint la limite de {type, select, O {canaux publics} P {canaux privés} other {}} ({usage, number}/{limit, number}) sur votre offre kSuite. {isAdmin, select, true {<modifyOffer>Modifier votre offre</modifyOffer> pour créer des canaux supplémentaires.} other {Veuillez contacter un administrateur pour qu'il modifie l'offre.}}"
 }
