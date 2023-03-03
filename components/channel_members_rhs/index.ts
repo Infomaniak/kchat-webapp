@@ -95,7 +95,7 @@ function mapStateToProps(state: GlobalState) {
     const channel = getCurrentChannel(state);
     const currentTeam = getCurrentTeam(state);
     const currentUser = getMyCurrentChannelMembership(state);
-    const {member_count: membersCount} = getCurrentChannelStats(state) || {member_count: 0};
+    const {member_count: membersCount, guest_count: guestsCount} = getCurrentChannelStats(state) || {member_count: 0, guest_count: 0};
 
     if (!channel) {
         return {
@@ -105,6 +105,7 @@ function mapStateToProps(state: GlobalState) {
             channelAdmins: [],
             searchTerms: '',
             membersCount,
+            guestsCount,
             canManageMembers: false,
             canGoBack: false,
             teamUrl: '',
@@ -147,6 +148,7 @@ function mapStateToProps(state: GlobalState) {
         channel,
         currentUserIsChannelAdmin,
         membersCount,
+        guestsCount,
         searchTerms,
         teamUrl,
         canGoBack,

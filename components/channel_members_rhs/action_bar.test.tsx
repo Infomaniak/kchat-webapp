@@ -13,6 +13,7 @@ describe('channel_members_rhs/action_bar', () => {
     const actionBarDefaultProps: Props = {
         channelType: Constants.OPEN_CHANNEL,
         membersCount: 12,
+        guestsCount: 0,
         pendingGuestsCount: 0,
         canManageMembers: true,
         editing: false,
