@@ -249,8 +249,20 @@ exports[`components/integrations/InstalledOutgoingWebhooks should match snapshot
   }
   helpText={
     <Memo(MemoizedFormattedMessage)
-      defaultMessage="Use outgoing webhooks to connect external tools to kChat."
+      defaultMessage="Use outgoing webhooks to connect external tools to kChat. {learnMore}"
       id="installed_outgoing_webhooks.help"
+      values={
+        Object {
+          "learnMore": <a
+            onClick={[Function]}
+          >
+            <Memo(MemoizedFormattedMessage)
+              defaultMessage="Learn more"
+              id="developer_documentation.learn_more"
+            />
+          </a>,
+        }
+      }
     />
   }
   loading={true}
