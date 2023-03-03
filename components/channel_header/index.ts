@@ -74,7 +74,7 @@ function makeMapStateToProps() {
 
         const isGuest = isCurrentUserGuestUser(state);
         const showChannelHeaderTutorialStep = getShowTutorialStep(state, {
-            tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
+            tourName: isGuest ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP,
             taskName: OnboardingTasksName.CHANNELS_TOUR,
             tourStep: isGuest ? OnboardingTourStepsForGuestUsers.CHANNEL_HEADER : OnboardingTourSteps.CHANNEL_HEADER,
         });

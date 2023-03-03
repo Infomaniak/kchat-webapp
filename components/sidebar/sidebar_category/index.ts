@@ -31,13 +31,13 @@ function makeMapStateToProps() {
     return (state: GlobalState, ownProps: OwnProps) => {
         const isGuest = isCurrentUserGuestUser(state);
         const showDirectMessagesTutorialStep = getShowTutorialStep(state, {
-            tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
+            tourName: isGuest ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP,
             taskName: OnboardingTasksName.CHANNELS_TOUR,
             tourStep: isGuest ? OnboardingTourStepsForGuestUsers.DIRECT_MESSAGES : OnboardingTourSteps.DIRECT_MESSAGES,
         });
 
         const showChannelsTutorialStep = getShowTutorialStep(state, {
-            tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
+            tourName: isGuest ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP,
             taskName: OnboardingTasksName.CHANNELS_TOUR,
             tourStep: isGuest ? OnboardingTourStepsForGuestUsers.CHANNELS : OnboardingTourSteps.CHANNELS,
         });
