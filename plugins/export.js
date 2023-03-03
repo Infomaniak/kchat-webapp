@@ -21,8 +21,6 @@ import Timestamp from 'components/timestamp';
 import Avatar from 'components/widgets/users/avatar';
 import BotBadge from 'components/widgets/badges/bot_badge';
 
-import {openPricingModal} from '../components/global_header/right_controls/plan_upgrade_button';
-
 import Textbox from './textbox';
 
 // The following import has intentional side effects. Do not remove without research.
@@ -50,12 +48,6 @@ window.WebappUtils = {
 Object.defineProperty(window.WebappUtils, 'browserHistory', {
     get: () => getHistory(),
 });
-
-// This need to be a function because `openPricingModal`
-// is initialized when `UpgradeCloudButton` is loaded.
-// So if we export `openPricingModal` directly, it will be locked
-// to the initial value of undefined.
-window.openPricingModal = () => openPricingModal;
 
 // Components exposed on window FOR INTERNAL PLUGIN USE ONLY. These components may have breaking changes in the future
 // outside of major releases. They will be replaced by common components once that project is more mature and able to
