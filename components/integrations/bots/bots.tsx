@@ -249,16 +249,10 @@ export default class Bots extends React.PureComponent<Props, State> {
                             defaultMessage='Use {botAccounts} to integrate with Mattermost through plugins or the API. Bot accounts are available to everyone on your server. '
                             values={{
                                 botAccounts: (
-                                    <a
-                                        target='_blank'
-                                        rel='noopener noreferrer'
-                                        href='https://mattermost.com/pl/default-bot-accounts'
-                                    >
-                                        <FormattedMessage
-                                            id='bots.manage.bot_accounts'
-                                            defaultMessage='Bot Accounts'
-                                        />
-                                    </a>
+                                    <FormattedMessage
+                                        id='bots.manage.bot_accounts'
+                                        defaultMessage='Bot Accounts'
+                                    />
                                 ),
                             }}
                         />

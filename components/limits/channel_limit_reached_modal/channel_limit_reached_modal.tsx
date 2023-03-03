@@ -1,15 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 
 import {closeModal} from 'actions/views/modals';
 import {redirectTokSuiteDashboard} from 'actions/global_actions';
+import {getUsage} from 'actions/cloud';
 import {isModalOpen} from 'selectors/views/modals';
 import {GlobalState} from 'types/store';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 
 import {ModalIdentifiers} from 'utils/constants';
 
@@ -20,16 +22,26 @@ import useGetLimits from 'components/common/hooks/useGetLimits';
 
 import '../limit_modal.scss';
 
-const ChannelLimitReachedModal = () => {
+type Props = {
+    isPublicLimited?: boolean;
+    isPrivateLimited?: boolean;
+};
+
+const ChannelLimitReachedModal = ({isPublicLimited, isPrivateLimited}: Props) => {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
 
     const isAdmin = useSelector((state: GlobalState) => isCurrentUserSystemAdmin(state));
     const show = useSelector((state: GlobalState) => isModalOpen(state, ModalIdentifiers.CHANNEL_LIMIT_REACHED));
+    const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
 
     const [limits, limitsLoaded] = useGetLimits();
     const {public_channels: publicChannelLimit, private_channels: privateChannelLimit} = limits;
     const {public_channels: publicChannelUsage, private_channels: privateChannelUsage, usageLoaded} = useGetUsage();
+
+    useEffect(() => {
+        dispatch(getUsage());
+    }, [dispatch]);
 
     const handleClose = useCallback(() => {
         dispatch(closeModal(ModalIdentifiers.CHANNEL_LIMIT_REACHED));
@@ -37,9 +49,9 @@ const ChannelLimitReachedModal = () => {
 
     const handleConfirm = useCallback(() => {
         if (isAdmin) {
-            redirectTokSuiteDashboard();
+            redirectTokSuiteDashboard(currentTeamAccountId);
         }
-    }, [isAdmin]);
+    }, [isAdmin, currentTeamAccountId]);
 
     let handleCancel;
     if (isAdmin) {
@@ -62,21 +74,26 @@ const ChannelLimitReachedModal = () => {
 
     const content = (
         <div className='limit-modal-content'>
-            {formatMessage({
-                id: 'channelLimit.subtitle',
-                defaultMessage: 'You have reached the limit of public channels ({publicChannelUsage, number}/{publicChannelLimit, number}) and private channels ({privateChannelUsage, number}/{privateChannelLimit, number}) on your kChat. To create additional ones, you need to subscribe to a premium package.',
-            }, {
-                publicChannelUsage,
-                publicChannelLimit,
-                privateChannelUsage,
-                privateChannelLimit,
-            })}
+            <div>
+                {formatMessage({
+                    id: 'channelLimit.subtitle',
+                    defaultMessage: 'You have reached the limit of <bold>{isPublicLimited, select, true {public channels ({publicChannelUsage, number}/{publicChannelLimit, number}) {isPrivateLimited, select, true {and} other {}}} other {}} {isPrivateLimited, select, true {private channels ({privateChannelUsage, number}/{privateChannelLimit, number})} other {}}</bold> on your kChat. To create additional ones, you need to subscribe to a premium package.',
+                }, {
+                    isPublicLimited,
+                    isPrivateLimited,
+                    publicChannelUsage,
+                    publicChannelLimit,
+                    privateChannelUsage,
+                    privateChannelLimit,
+                    bold: (chunks) => (<b>{chunks}</b>),
+                })}
+            </div>
         </div>
     );
 
     const confirmButtonText = isAdmin ? formatMessage({id: 'limitModal.upgrade', defaultMessage: 'Modify my offer'}) : formatMessage({id: 'general_button.close', defaultMessage: 'Close'});
 
-    if (!usageLoaded || !limitsLoaded) {
+    if (!usageLoaded || !limitsLoaded || (!isPublicLimited && !isPrivateLimited)) {
         handleClose();
         return null;
     }

@@ -28,7 +28,7 @@ jest.mock('mattermost-redux/actions/cloud', () => ({
 
 import NewChannelModal from './new_channel_modal';
 
-const mockDispatch = jest.fn();
+const mockDispatch = jest.fn((action) => action());
 let mockState: GlobalState;
 
 jest.mock('react-redux', () => ({
@@ -108,6 +108,39 @@ describe('components/new_channel_modal', () => {
                         system_user: {
                             permissions: [],
                         },
+                    },
+                },
+                usage: {
+                    storage: 0,
+                    public_channels: 0,
+                    private_channels: 0,
+                    guests: 0,
+                    members: 0,
+                    files: {
+                        totalStorage: 0,
+                    },
+                    messages: {
+                        history: 0,
+                    },
+                    teams: {
+                        active: 0,
+                        cloudArchived: 0,
+                    },
+                    boards: {
+                        cards: 0,
+                    },
+                    usageLoaded: true,
+                },
+                cloud: {
+                    limits: {
+                        limits: {
+                            storage: 10,
+                            public_channels: 10,
+                            private_channels: 10,
+                            guests: 10,
+                            members: 10,
+                        },
+                        limitsLoaded: true,
                     },
                 },
             },
