@@ -33,52 +33,11 @@ const LeftControlsContainer = styled.div`
     }
 `;
 
-const HeaderIcon = styled.span`
-    height: 31px;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    justify-content: center;
-    padding-right: 6px;
-    > i {
-        cursor: pointer;
-        background-color: rgba(var(--sidebar-text-rgb), 0.08);
-        color: rgba(var(--sidebar-text-rgb), 0.72);
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        position: relative;
-        border-radius: 50%;
-        display: -webkit-box;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-`;
-
 const LeftControls = (): JSX.Element => (
     <LeftControlsContainer>
         {/* <ProductMenu/> */}
         <AppNameDisplay/>
         {isDesktopApp() && <HistoryButtons/>}
-        {!isDesktopApp() && (
-            <div
-                style={{position: 'relative', marginLeft: 'auto', marginRight: 9}}
-            >
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <module-products-component position='right'>
-                    <HeaderIcon
-                        className='header-icon'
-                        slot='trigger'
-                    >
-                        <i className='icon icon-chevron-down'/>
-                    </HeaderIcon>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                </module-products-component>
-            </div>
-        )}
     </LeftControlsContainer>
 );
 
