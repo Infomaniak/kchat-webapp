@@ -37,6 +37,7 @@ describe('components/sidebar/sidebar_category', () => {
             current: null,
         },
         showDirectMessagesTutorialStep: false,
+        showChannelsTutorialStep: false,
         actions: {
             setCategoryCollapsed: jest.fn(),
             setCategorySorting: jest.fn(),
