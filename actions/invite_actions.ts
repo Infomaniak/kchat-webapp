@@ -9,9 +9,9 @@ import {ServerError} from '@mattermost/types/errors';
 
 import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import * as TeamActions from 'mattermost-redux/actions/teams';
-import {joinChannel} from 'mattermost-redux/actions/channels';
+import {getChannelPendingGuests, joinChannel} from 'mattermost-redux/actions/channels';
 import {getTeamMember} from 'mattermost-redux/selectors/entities/teams';
-import {getChannelMembersInChannels} from 'mattermost-redux/selectors/entities/channels';
+import {getChannelMembersInChannels, getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
@@ -19,6 +19,8 @@ import {addUsersToTeam} from 'actions/team_actions';
 import {t} from 'utils/i18n';
 import {localizeMessage} from 'utils/utils';
 import {ConsolePages} from 'utils/constants';
+import {getIsRhsOpen} from 'selectors/rhs';
+import {GlobalState} from 'types/store';
 
 export function sendMembersInvites(teamId: string, users: UserProfile[], emails: string[]): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
@@ -167,6 +169,11 @@ export function sendGuestsInvites(
             let response;
             try {
                 response = await dispatch(TeamActions.sendEmailGuestInvitesToChannelsGracefully(teamId, channels.map((x) => x.id), emails, message));
+                if (getIsRhsOpen(state as GlobalState)) {
+                    // live update channel members list
+                    const currentChannelId = getCurrentChannelId(state);
+                    dispatch(getChannelPendingGuests(currentChannelId));
+                }
             } catch (e) {
                 response = {data: emails.map((email) => ({email, error: {error: localizeMessage('invite.guests.unable-to-add-the-user-to-the-channels', 'Unable to add the guest to the channels.')}}))};
             }
