@@ -5,6 +5,7 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {ActionResult} from 'mattermost-redux/types/actions';
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 import * as Utils from 'utils/utils';
 import BackstageList from 'components/backstage/components/backstage_list';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
@@ -110,7 +111,17 @@ export default class InstalledCommands extends React.PureComponent<Props> {
                 helpText={
                     <FormattedMessage
                         id='installed_commands.help'
-                        defaultMessage='Use slash commands to connect external tools to kChat.'
+                        defaultMessage='Use slash commands to connect external tools to kChat. {learnMore}'
+                        values={{
+                            learnMore: (
+                                <a onClick={redirectToDeveloperDocumentation}>
+                                    <FormattedMessage
+                                        id='developer_documentation.learn_more'
+                                        defaultMessage='Learn more'
+                                    />
+                                </a>
+                            ),
+                        }}
                     />
                 }
                 searchPlaceholder={Utils.localizeMessage('installed_commands.search', 'Search Slash Commands')}

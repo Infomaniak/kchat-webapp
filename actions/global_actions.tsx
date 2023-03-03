@@ -462,3 +462,7 @@ export function redirectToManagerProfile() {
 export function redirectTokSuiteDashboard(accountId?: number) {
     window.open(`${IKConstants.MANAGER_URL}v3${accountId ? `/${accountId}` : ''}/ng/k-suite/dashboard`, '_blank');
 }
+
+export function redirectToDeveloperDocumentation() {
+    window.open('https://developer.infomaniak.com', '_blank', 'noopener,noreferrer');
+}

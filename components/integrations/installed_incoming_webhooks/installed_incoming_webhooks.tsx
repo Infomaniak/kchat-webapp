@@ -12,6 +12,7 @@ import {IncomingWebhook} from '@mattermost/types/integrations';
 import {ActionResult} from 'mattermost-redux/types/actions';
 import {UserProfile} from '@mattermost/types/users';
 import {IDMappedObjects} from '@mattermost/types/utilities';
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 
 import BackstageList from 'components/backstage/components/backstage_list';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
@@ -130,7 +131,17 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
                 helpText={
                     <FormattedMessage
                         id='installed_incoming_webhooks.help'
-                        defaultMessage='Use incoming webhooks to connect external tools to kChat.'
+                        defaultMessage='Use incoming webhooks to connect external tools to kChat. {learnMore}'
+                        values={{
+                            learnMore: (
+                                <a onClick={redirectToDeveloperDocumentation}>
+                                    <FormattedMessage
+                                        id='developer_documentation.learn_more'
+                                        defaultMessage='Learn more'
+                                    />
+                                </a>
+                            ),
+                        }}
                     />
                 }
                 searchPlaceholder={Utils.localizeMessage('installed_incoming_webhooks.search', 'Search Incoming Webhooks')}

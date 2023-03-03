@@ -6,6 +6,7 @@ import {FormattedMessage} from 'react-intl';
 
 import {localizeMessage} from 'utils/utils';
 import Constants from 'utils/constants';
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 
 import BackstageList from 'components/backstage/components/backstage_list';
 import InstalledOutgoingWebhook, {matchesFilter} from 'components/integrations/installed_outgoing_webhook';
@@ -186,7 +187,17 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
                 helpText={
                     <FormattedMessage
                         id='installed_outgoing_webhooks.help'
-                        defaultMessage='Use outgoing webhooks to connect external tools to kChat.'
+                        defaultMessage='Use outgoing webhooks to connect external tools to kChat. {learnMore}'
+                        values={{
+                            learnMore: (
+                                <a onClick={redirectToDeveloperDocumentation}>
+                                    <FormattedMessage
+                                        id='developer_documentation.learn_more'
+                                        defaultMessage='Learn more'
+                                    />
+                                </a>
+                            ),
+                        }}
                     />
                 }
                 searchPlaceholder={localizeMessage('installed_outgoing_webhooks.search', 'Search Outgoing Webhooks')}
