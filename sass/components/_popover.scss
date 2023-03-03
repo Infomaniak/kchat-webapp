@@ -284,6 +284,13 @@
     white-space: nowrap;
 }
 
+.user-popover__id {
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    color: rgba(var(--center-channel-color-rgb), .64);
+}
+
 .user-profile-popover .user-popover__username:only-child,
 .user-profile-popover .user-popover__username:only-child > a {
     max-width: 100%;
