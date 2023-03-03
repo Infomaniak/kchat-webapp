@@ -9,10 +9,10 @@ import {GenericAction} from 'mattermost-redux/types/actions';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {ChannelCategory} from '@mattermost/types/channel_categories';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 import {Preferences, Touched} from 'utils/constants';
 
-import {OnboardingTourSteps, TutorialTourName} from 'components/tours';
+import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours';
 import {OnboardingTasksName} from 'components/onboarding_tasks';
 
 import {getDraggingState, makeGetFilteredChannelIdsForCategory} from 'selectors/views/channel_sidebar';
@@ -29,16 +29,17 @@ function makeMapStateToProps() {
     const getChannelIdsForCategory = makeGetFilteredChannelIdsForCategory();
 
     return (state: GlobalState, ownProps: OwnProps) => {
+        const isGuest = isCurrentUserGuestUser(state);
         const showDirectMessagesTutorialStep = getShowTutorialStep(state, {
             tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
             taskName: OnboardingTasksName.CHANNELS_TOUR,
-            tourStep: OnboardingTourSteps.DIRECT_MESSAGES,
+            tourStep: isGuest ? OnboardingTourStepsForGuestUsers.DIRECT_MESSAGES : OnboardingTourSteps.DIRECT_MESSAGES,
         });
 
         const showChannelsTutorialStep = getShowTutorialStep(state, {
             tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
             taskName: OnboardingTasksName.CHANNELS_TOUR,
-            tourStep: OnboardingTourSteps.CHANNELS,
+            tourStep: isGuest ? OnboardingTourStepsForGuestUsers.CHANNELS : OnboardingTourSteps.CHANNELS,
         });
 
         return {

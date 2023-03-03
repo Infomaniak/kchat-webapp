@@ -2,12 +2,15 @@
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 import React, {useRef} from 'react';
+import {useSelector} from 'react-redux';
 import {FormattedMessage, injectIntl} from 'react-intl';
+
+import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import {KmeetTour, useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
-import {OnboardingTourSteps} from 'components/tours';
+import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 
 import Constants from 'utils/constants';
 
@@ -21,7 +24,9 @@ export type Props = {
 }
 
 function MeetButton(props: Props) {
-    const showKmeetTutorialStep = useShowOnboardingTutorialStep(OnboardingTourSteps.KMEET);
+    const isGuest = useSelector(isCurrentUserGuestUser);
+    const kmeetTourStep = isGuest ? OnboardingTourStepsForGuestUsers.KMEET : OnboardingTourSteps.KMEET;
+    const showKmeetTutorialStep = useShowOnboardingTutorialStep(kmeetTourStep);
     const {startCallInChannel} = props;
 
     const ref = useRef<HTMLButtonElement>(null);

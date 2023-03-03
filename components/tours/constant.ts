@@ -49,8 +49,19 @@ export const OnboardingTourSteps = {
 };
 
 export const OnboardingTourStepsForGuestUsers = {
-    SEND_MESSAGE: 0,
-    CUSTOMIZE_EXPERIENCE: 1,
+
+    // SEND_MESSAGE: 0,
+    // CUSTOMIZE_EXPERIENCE: 1,
+
+    CHANNELS: 0,
+    CHANNEL_HEADER: 1,
+    DIRECT_MESSAGES: 2,
+    AT_MENTIONS: 3,
+    KMEET: 4,
+    SETTINGS: 5,
+    STATUS: 6,
+    PROFILE: 7,
+
     FINISHED,
 };
 
