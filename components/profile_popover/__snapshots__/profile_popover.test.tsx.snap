@@ -91,6 +91,14 @@ exports[`components/ProfilePopover should hide add-to-channel option if not on t
           }
         />
       </div>
+      <div
+        className="pb-1 user-popover__id"
+        key="user-popover-userid"
+      >
+        ID:
+         
+        user_id
+      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -136,14 +144,6 @@ exports[`components/ProfilePopover should hide add-to-channel option if not on t
           }
         }
       />
-      <div
-        className="pb-1 user-popover__id"
-        key="user-popover-userid"
-      >
-        ID:
-         
-        user_id
-      </div>
       <div
         className="popover__row first"
         data-toggle="tooltip"
@@ -314,6 +314,14 @@ exports[`components/ProfilePopover should match snapshot 1`] = `
           }
         />
       </div>
+      <div
+        className="pb-1 user-popover__id"
+        key="user-popover-userid"
+      >
+        ID:
+         
+        user_id
+      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -359,14 +367,6 @@ exports[`components/ProfilePopover should match snapshot 1`] = `
           }
         }
       />
-      <div
-        className="pb-1 user-popover__id"
-        key="user-popover-userid"
-      >
-        ID:
-         
-        user_id
-      </div>
       <div
         className="popover__row first"
         data-toggle="tooltip"
@@ -649,6 +649,14 @@ exports[`components/ProfilePopover should match snapshot for shared user 1`] = `
           withTooltip={true}
         />
       </div>
+      <div
+        className="pb-1 user-popover__id"
+        key="user-popover-userid"
+      >
+        ID:
+         
+        user_id
+      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -695,14 +703,6 @@ exports[`components/ProfilePopover should match snapshot for shared user 1`] = `
           }
         }
       />
-      <div
-        className="pb-1 user-popover__id"
-        key="user-popover-userid"
-      >
-        ID:
-         
-        user_id
-      </div>
       <div
         className="popover__row first"
         data-toggle="tooltip"
@@ -956,6 +956,14 @@ exports[`components/ProfilePopover should match snapshot with custom status 1`] 
           }
         />
       </div>
+      <div
+        className="pb-1 user-popover__id"
+        key="user-popover-userid"
+      >
+        ID:
+         
+        user_id
+      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -1001,14 +1009,6 @@ exports[`components/ProfilePopover should match snapshot with custom status 1`] 
           }
         }
       />
-      <div
-        className="pb-1 user-popover__id"
-        key="user-popover-userid"
-      >
-        ID:
-         
-        user_id
-      </div>
       <div
         className="pb-1"
         id="user-popover-status"
@@ -1302,6 +1302,14 @@ exports[`components/ProfilePopover should match snapshot with custom status expi
           }
         />
       </div>
+      <div
+        className="pb-1 user-popover__id"
+        key="user-popover-userid"
+      >
+        ID:
+         
+        user_id
+      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -1347,14 +1355,6 @@ exports[`components/ProfilePopover should match snapshot with custom status expi
           }
         }
       />
-      <div
-        className="pb-1 user-popover__id"
-        key="user-popover-userid"
-      >
-        ID:
-         
-        user_id
-      </div>
       <div
         className="popover__row first"
         data-toggle="tooltip"
@@ -1599,6 +1599,13 @@ exports[`components/ProfilePopover should match snapshot with custom status not 
           }
         />
       </div>
+      <div
+        className="pb-1 user-popover__id"
+        key="user-popover-userid"
+      >
+        ID:
+         
+      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -1644,13 +1651,6 @@ exports[`components/ProfilePopover should match snapshot with custom status not 
           }
         }
       />
-      <div
-        className="pb-1 user-popover__id"
-        key="user-popover-userid"
-      >
-        ID:
-         
-      </div>
       <div
         className="pb-1"
         id="user-popover-status"
@@ -1845,6 +1845,14 @@ exports[`components/ProfilePopover should match snapshot with last active displa
           }
         />
       </div>
+      <div
+        className="pb-1 user-popover__id"
+        key="user-popover-userid"
+      >
+        ID:
+         
+        user_id
+      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -1890,14 +1898,6 @@ exports[`components/ProfilePopover should match snapshot with last active displa
           }
         }
       />
-      <div
-        className="pb-1 user-popover__id"
-        key="user-popover-userid"
-      >
-        ID:
-         
-        user_id
-      </div>
       <div
         className="popover__row first"
         data-toggle="tooltip"
@@ -2117,6 +2117,14 @@ exports[`components/ProfilePopover should match snapshot with no last active dis
           status="offline"
         />
       </div>
+      <div
+        className="pb-1 user-popover__id"
+        key="user-popover-userid"
+      >
+        ID:
+         
+        user_id
+      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -2162,14 +2170,6 @@ exports[`components/ProfilePopover should match snapshot with no last active dis
           }
         }
       />
-      <div
-        className="pb-1 user-popover__id"
-        key="user-popover-userid"
-      >
-        ID:
-         
-        user_id
-      </div>
       <div
         className="popover__row first"
         data-toggle="tooltip"

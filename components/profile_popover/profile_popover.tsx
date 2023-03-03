@@ -551,6 +551,14 @@ ProfilePopoverState
             );
         }
         dataContent.push(
+            <div
+                className='pb-1 user-popover__id'
+                key='user-popover-userid'
+            >
+                {formatMessage({id: 'channel_info_rhs.about_area_id', defaultMessage: 'ID:'})} {this.props.user?.id}
+            </div>,
+        );
+        dataContent.push(
             <Pluggable
                 key='profilePopoverPluggable2'
                 pluggableName='PopoverUserAttributes'
@@ -591,15 +599,6 @@ ProfilePopoverState
                 </div>,
             );
         }
-
-        dataContent.push(
-            <div
-                className='pb-1 user-popover__id'
-                key='user-popover-userid'
-            >
-                {formatMessage({id: 'channel_info_rhs.about_area_id', defaultMessage: 'ID:'})} {this.props.user?.id}
-            </div>,
-        );
 
         const customStatusAndExpiryContent = !haveOverrideProp && this.renderCustomStatus();
         if (customStatusAndExpiryContent) {
