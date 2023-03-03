@@ -21,7 +21,7 @@ export default function useGetLimits(): [Limits, boolean] {
             dispatch(getCloudLimitsAction());
             setRequestedLimits(true);
         }
-    }, [isLoggedIn, requestedLimits, cloudLimitsReceived]);
+    }, [isLoggedIn, requestedLimits, cloudLimitsReceived, dispatch]);
 
     const result: [Limits, boolean] = useMemo(() => {
         return [cloudLimits, cloudLimitsReceived];

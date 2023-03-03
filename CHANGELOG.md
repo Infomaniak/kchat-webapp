@@ -1,3 +1,15 @@
+## 0.9.15 (2023-03-02)
+
+### Added (1 change)
+
+- [channel limit indicator](kchat/webapp@83f08c3ce960462da69cce4da45d2228045a87c2) by @leonard.jouve ([merge request](kchat/webapp!296))
+
+### Fixed (3 changes)
+
+- [default channel intro message wording](kchat/webapp@ac2c585cf706c3483f4afb4026f2395a0a60f888) by @leonard.jouve ([merge request](kchat/webapp!314))
+- [Multiselect not found wording](kchat/webapp@903f861c100cd03dd97af8d5a4fc211da09bc03e) by @leonard.jouve ([merge request](kchat/webapp!313))
+- [Remove mattermost doc from integrations](kchat/webapp@2db3f68b61960e7b59c79c64d01e38ad4de99d27) by @leonard.jouve ([merge request](kchat/webapp!312))
+
 ## 0.9.14 (2023-02-27)
 
 ### Fixed (2 changes)

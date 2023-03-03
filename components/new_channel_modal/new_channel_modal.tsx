@@ -8,6 +8,8 @@ import {Tooltip} from 'react-bootstrap';
 
 import classNames from 'classnames';
 
+import ChannelLimitIndicator from 'components/limits/channel_limit_indicator';
+import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import GenericModal from 'components/generic_modal';
 import Input from 'components/widgets/inputs/input/input';
@@ -24,6 +26,7 @@ import {ActionFunc, DispatchFunc} from 'mattermost-redux/types/actions';
 import {haveICurrentChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import Preferences from 'mattermost-redux/constants/preferences';
+import {General} from 'mattermost-redux/constants';
 import {
     attachBoardToChannel,
     createBoardFromTemplate,
@@ -33,7 +36,7 @@ import {
 } from 'mattermost-redux/actions/boards';
 
 import {switchToChannel} from 'actions/views/channel';
-import {closeModal} from 'actions/views/modals';
+import {closeModal, openModal} from 'actions/views/modals';
 import {sendGenericPostMessage} from 'actions/global_actions';
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
@@ -107,6 +110,7 @@ const NewChannelModal = () => {
     const [urlError, setURLError] = useState('');
     const [purposeError, setPurposeError] = useState('');
     const [serverError, setServerError] = useState('');
+    const [limitations, setLimitations] = useState<Partial<Record<ChannelType, boolean>>>({});
 
     // create a board along with the channel
     const [addBoard, setAddBoard] = useState(false);
@@ -319,7 +323,7 @@ const NewChannelModal = () => {
         e.stopPropagation();
     };
 
-    const canCreate = displayName && !displayNameError && url && !urlError && type && !purposeError && !serverError && (!addBoard || (addBoard && selectedBoardTemplate !== null));
+    const canCreate = displayName && !displayNameError && url && !urlError && type && !purposeError && !serverError && (!addBoard || (addBoard && selectedBoardTemplate !== null)) && !(limitations[type] ?? false);
 
     const showNewBoardTemplateSelector = async () => {
         setAddBoard((prev) => !prev);
@@ -369,6 +373,21 @@ const NewChannelModal = () => {
                 <i className='icon-information-outline'/>
             </OverlayTrigger>
         );
+    };
+
+    const handleSetLimitations = (newLimitations: Record<typeof General.OPEN_CHANNEL | typeof General.PRIVATE_CHANNEL, boolean>) => {
+        if (newLimitations[General.OPEN_CHANNEL] && newLimitations[General.PRIVATE_CHANNEL]) {
+            dispatch(openModal({
+                modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
+                dialogType: ChannelLimitReachedModal,
+                dialogProps: {
+                    isPublicLimited: true,
+                    isPrivateLimited: true,
+                },
+            }));
+            dispatch(closeModal(ModalIdentifiers.NEW_CHANNEL_MODAL));
+        }
+        setLimitations({...newLimitations});
     };
 
     return (
@@ -429,6 +448,10 @@ const NewChannelModal = () => {
                         disabled: !canCreatePrivateChannel,
                     }}
                     onChange={handleOnTypeChange}
+                />
+                <ChannelLimitIndicator
+                    type={type}
+                    setLimitations={handleSetLimitations}
                 />
                 <div className='new-channel-modal-purpose-container'>
                     <textarea

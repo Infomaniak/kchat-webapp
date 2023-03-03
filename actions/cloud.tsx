@@ -17,10 +17,12 @@ import {closeModal, openModal} from 'actions/views/modals';
 import {StripeSetupIntent, BillingDetails} from 'types/cloud/sku';
 import {CloudTypes} from 'mattermost-redux/action_types';
 import {ServerError} from '@mattermost/types/errors';
+import {ChannelType} from '@mattermost/types/channels';
 import {isModalOpen} from 'selectors/views/modals';
 
 import {isLimitExceeded} from 'utils/limits';
 import {ModalIdentifiers} from 'utils/constants';
+import {General} from 'mattermost-redux/constants';
 
 import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
 import ExternalLimitReachedModal from 'components/limits/external_limit_reached_modal';
@@ -176,7 +178,7 @@ export function getUsage(): ActionFunc {
         } catch (e) {
             return e;
         }
-        return true;
+        return {data: true};
     };
 }
 
@@ -285,15 +287,21 @@ export function retryFailedCloudFetches() {
     };
 }
 
-export function openChannelLimitModalIfNeeded(error: ServerError) {
+export function openChannelLimitModalIfNeeded(error: ServerError, type: ChannelType) {
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
         if (isLimitExceeded(error)) {
             if (isModalOpen(getState(), ModalIdentifiers.NEW_CHANNEL_MODAL)) {
                 dispatch(closeModal(ModalIdentifiers.NEW_CHANNEL_MODAL));
+            } else if (isModalOpen(getState(), ModalIdentifiers.UNARCHIVE_CHANNEL)) {
+                dispatch(closeModal(ModalIdentifiers.UNARCHIVE_CHANNEL));
             }
             dispatch(openModal({
                 modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
                 dialogType: ChannelLimitReachedModal,
+                dialogProps: {
+                    isPublicLimited: type === General.OPEN_CHANNEL,
+                    isPrivateLimited: type === General.PRIVATE_CHANNEL,
+                },
             }));
         }
         return {data: true};
