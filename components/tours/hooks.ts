@@ -29,6 +29,7 @@ import {
     ExploreOtherToolsTourSteps,
     FINISHED,
     OnboardingTourSteps,
+    OnboardingTourStepsForGuestUsers,
     TTNameMapToTourSteps,
     TutorialTourName,
 } from './constant';
@@ -58,9 +59,11 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
     const currentUserId = useSelector(getCurrentUserId);
     const defaultChannelId = useSelector(getCurrentTeamDefaultChannelId);
     const teamUrl = useSelector((state: GlobalState) => getCurrentRelativeTeamUrl(state));
+    const isGuest = useSelector(isCurrentUserGuestUser);
 
     const nextStepActions = useCallback((step: number) => {
         if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP) {
+            const tourSteps = isGuest ? OnboardingTourStepsForGuestUsers : OnboardingTourSteps;
             switch (step) {
             case OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES : {
                 dispatch(openLhs());
@@ -78,42 +81,42 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
                 dispatch(switchToChannels());
                 break;
             }
-            case OnboardingTourSteps.CHANNELS: {
+            case tourSteps.CHANNELS: {
                 dispatch(openLhs());
                 dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => category.type !== CategoryTypes.CHANNELS));
                 break;
             }
-            case OnboardingTourSteps.JOIN_CHANNELS: {
+            case isGuest ? null : OnboardingTourSteps.JOIN_CHANNELS: {
                 dispatch(setAddChannelDropdown(true));
                 break;
             }
-            case OnboardingTourSteps.CREATE_CHANNELS: {
+            case isGuest ? null : OnboardingTourSteps.CREATE_CHANNELS: {
                 dispatch(setAddChannelDropdown(true));
                 break;
             }
-            case OnboardingTourSteps.CHANNEL_HEADER: {
+            case tourSteps.CHANNEL_HEADER: {
                 dispatch(switchToChannels());
                 dispatch(setAddChannelDropdown(false));
                 break;
             }
-            case OnboardingTourSteps.DIRECT_MESSAGES: {
+            case tourSteps.DIRECT_MESSAGES: {
                 dispatch(openLhs());
                 dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => category.type !== CategoryTypes.DIRECT_MESSAGES));
                 break;
             }
-            case OnboardingTourSteps.KMEET: {
+            case tourSteps.KMEET: {
                 dispatch(switchToChannels());
                 break;
             }
-            case OnboardingTourSteps.STATUS: {
+            case tourSteps.STATUS: {
                 dispatch(setStatusDropdown(true));
                 break;
             }
-            case OnboardingTourSteps.PROFILE: {
+            case tourSteps.PROFILE: {
                 dispatch(setStatusDropdown(true));
                 break;
             }
-            case OnboardingTourSteps.FINISHED: {
+            case tourSteps.FINISHED: {
                 let preferences = [
                     {
                         user_id: currentUserId,
