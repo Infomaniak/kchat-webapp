@@ -305,7 +305,7 @@ export default function ChannelMembersRHS({
                         editing={editing}
                         channel={channel}
                         actions={{openDirectMessage, loadMore}}
-                        hasNextPage={channelMembers.length < totalMembersCount}
+                        hasNextPage={channelMembers.length < membersCount + guestsCount}
                         isNextPageLoading={isNextPageLoading}
                     />
                 )}
