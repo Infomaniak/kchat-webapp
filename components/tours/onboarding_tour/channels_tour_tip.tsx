@@ -10,8 +10,6 @@ import {CategoryTypes} from 'packages/mattermost-redux/src/constants/channel_cat
 
 import OnboardingTourTip from './onboarding_tour_tip';
 
-import './tip.scss';
-
 export const ChannelsTour = () => {
     const title = (
         <FormattedMessage
@@ -29,15 +27,13 @@ export const ChannelsTour = () => {
     const overlayPunchOut = useMeasurePunchouts([`sidebar-droppable-category-${CategoryTypes.CHANNELS}`], []);
 
     return (
-        <span className='tip__positioned-horizontaly'>
-            <OnboardingTourTip
-                title={title}
-                screen={screen}
-                placement='right-start'
-                pulsatingDotPlacement='right-start'
-                width={400}
-                overlayPunchOut={overlayPunchOut}
-            />
-        </span>
+        <OnboardingTourTip
+            title={title}
+            screen={screen}
+            placement='right-start'
+            pulsatingDotPlacement='right'
+            width={400}
+            overlayPunchOut={overlayPunchOut}
+        />
     );
 };

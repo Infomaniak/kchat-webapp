@@ -35,19 +35,12 @@ function makeMapStateToProps() {
             tourStep: OnboardingTourSteps.DIRECT_MESSAGES,
         });
 
-        const showChannelsTutorialStep = getShowTutorialStep(state, {
-            tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
-            taskName: OnboardingTasksName.CHANNELS_TOUR,
-            tourStep: OnboardingTourSteps.CHANNELS,
-        });
-
         return {
             channelIds: getChannelIdsForCategory(state, ownProps.category),
             draggingState: getDraggingState(state),
             touchedInviteMembersButton: getBool(state, Preferences.TOUCHED, Touched.INVITE_MEMBERS),
             currentUserId: getCurrentUserId(state),
             showDirectMessagesTutorialStep,
-            showChannelsTutorialStep,
         };
     };
 }

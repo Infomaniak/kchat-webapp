@@ -80,7 +80,7 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
             }
             case OnboardingTourSteps.CHANNELS: {
                 dispatch(openLhs());
-                dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => category.type !== CategoryTypes.CHANNELS));
+                dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => !category.channel_ids.includes(defaultChannelId)));
                 break;
             }
             case OnboardingTourSteps.JOIN_CHANNELS: {
