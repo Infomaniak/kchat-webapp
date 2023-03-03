@@ -11,7 +11,7 @@ import {Client4} from 'mattermost-redux/client';
 import {Preferences} from 'mattermost-redux/constants';
 
 import {get, getBool} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentUser, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getStatusForUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {openModal} from 'actions/views/modals';
 import {setStatusDropdown} from 'actions/views/status_dropdown';
@@ -22,7 +22,7 @@ import {isStatusDropdownOpen} from 'selectors/views/status_dropdown';
 import {GenericAction} from 'mattermost-redux/types/actions';
 import {GlobalState} from 'types/store';
 import {OnboardingTasksName} from 'components/onboarding_tasks';
-import {OnboardingTourSteps, TutorialTourName} from 'components/tours';
+import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours';
 import {getShowTutorialStep} from 'selectors/onboarding';
 
 import StatusDropdown from './status_dropdown';
@@ -36,15 +36,16 @@ function makeMapStateToProps() {
         const userId = currentUser?.id;
         const customStatus = getCustomStatus(state, userId);
         const isMilitaryTime = getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false);
+        const isGuest = isCurrentUserGuestUser(state);
         const showStatusTutorialStep = getShowTutorialStep(state, {
-            tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
+            tourName: isGuest ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP,
             taskName: OnboardingTasksName.CHANNELS_TOUR,
-            tourStep: OnboardingTourSteps.STATUS,
+            tourStep: isGuest ? OnboardingTourStepsForGuestUsers.STATUS : OnboardingTourSteps.STATUS,
         });
         const showProfileTutorialStep = getShowTutorialStep(state, {
-            tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
+            tourName: isGuest ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP,
             taskName: OnboardingTasksName.CHANNELS_TOUR,
-            tourStep: OnboardingTourSteps.PROFILE,
+            tourStep: isGuest ? OnboardingTourStepsForGuestUsers.PROFILE : OnboardingTourSteps.PROFILE,
         });
 
         return {

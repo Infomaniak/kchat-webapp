@@ -49,8 +49,19 @@ export const OnboardingTourSteps = {
 };
 
 export const OnboardingTourStepsForGuestUsers = {
-    SEND_MESSAGE: 0,
-    CUSTOMIZE_EXPERIENCE: 1,
+
+    // SEND_MESSAGE: 0,
+    // CUSTOMIZE_EXPERIENCE: 1,
+
+    CHANNELS: 0,
+    CHANNEL_HEADER: 1,
+    DIRECT_MESSAGES: 2,
+    AT_MENTIONS: 3,
+    KMEET: 4,
+    SETTINGS: 5,
+    STATUS: 6,
+    PROFILE: 7,
+
     FINISHED,
 };
 
@@ -75,6 +86,7 @@ export const CrtTutorialTriggerSteps = {
 
 export const TTNameMapToATStatusKey = {
     [TutorialTourName.ONBOARDING_TUTORIAL_STEP]: TutorialTourName.ONBOARDING_TUTORIAL_STEP + AutoStatusSuffix,
+    [TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS]: TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS + AutoStatusSuffix,
     [TutorialTourName.CRT_TUTORIAL_STEP]: 'crt_tutorial_auto_tour_status',
     [TutorialTourName.CRT_THREAD_PANE_STEP]: TutorialTourName.CRT_THREAD_PANE_STEP + AutoStatusSuffix,
     [TutorialTourName.EXPLORE_OTHER_TOOLS]: TutorialTourName.EXPLORE_OTHER_TOOLS + AutoStatusSuffix,

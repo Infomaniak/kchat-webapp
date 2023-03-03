@@ -28,6 +28,7 @@ import {
     getLastActiveTimestampUnits,
     getLastActivityForUserId,
     getUser,
+    isCurrentUserGuestUser,
     makeGetProfilesInChannel,
 } from 'mattermost-redux/selectors/entities/users';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
@@ -46,7 +47,7 @@ import {isModalOpen} from 'selectors/views/modals';
 import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
 import {ModalIdentifiers} from 'utils/constants';
 import {isFileAttachmentsEnabled} from 'utils/file_utils';
-import {OnboardingTourSteps, TutorialTourName} from 'components/tours';
+import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours';
 import {OnboardingTasksName} from 'components/onboarding_tasks';
 import {getShowTutorialStep} from 'selectors/onboarding';
 
@@ -71,10 +72,11 @@ function makeMapStateToProps() {
         const hasMoreThanOneTeam = teams.length > 1;
         const config = getConfig(state);
 
+        const isGuest = isCurrentUserGuestUser(state);
         const showChannelHeaderTutorialStep = getShowTutorialStep(state, {
-            tourName: TutorialTourName.ONBOARDING_TUTORIAL_STEP,
+            tourName: isGuest ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP,
             taskName: OnboardingTasksName.CHANNELS_TOUR,
-            tourStep: OnboardingTourSteps.CHANNEL_HEADER,
+            tourStep: isGuest ? OnboardingTourStepsForGuestUsers.CHANNEL_HEADER : OnboardingTourSteps.CHANNEL_HEADER,
         });
 
         let dmUser;

@@ -110,8 +110,10 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.CUSTOMIZE_EXPERIENCE : OnboardingTourSteps.CUSTOMIZE_EXPERIENCE;
     const locale = useSelector(getCurrentLocale);
-    const showAtMentionsTutorialStep = useShowOnboardingTutorialStep(OnboardingTourSteps.AT_MENTIONS);
-    const showSettingsTutorialStep = useShowOnboardingTutorialStep(OnboardingTourSteps.SETTINGS);
+    const atMentionsTourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.AT_MENTIONS : OnboardingTourSteps.AT_MENTIONS;
+    const showAtMentionsTutorialStep = useShowOnboardingTutorialStep(atMentionsTourStep);
+    const settingsTourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SETTINGS : OnboardingTourSteps.SETTINGS;
+    const showSettingsTutorialStep = useShowOnboardingTutorialStep(settingsTourStep);
     let userReportHref = 'https://feedback.userreport.com/6b7737f6-0cc1-410f-993f-be2ffbf73a05#ideas/popular';
     if (userReportHrefs[locale]) {
         userReportHref = userReportHrefs[locale];
