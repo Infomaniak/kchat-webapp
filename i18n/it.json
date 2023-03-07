@@ -2357,6 +2357,8 @@
   "edit_channel_purpose_modal.title2": "Modifica Scopo per ",
   "edit_command.update": "Aggiorna",
   "edit_command.updating": "Aggiornamento...",
+  "edit_post.action_buttons.save": "Risparmiare",
+  "edit_post.action_buttons.cancel": "Annullare",
   "edit_post.editPost": "Modifica post...",
   "edit_post.time_limit_button.for_n_seconds": "Per {n} secondi",
   "edit_post.time_limit_button.no_limit": "Sempre",

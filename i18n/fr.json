@@ -3072,6 +3072,8 @@
   "edit_channel_purpose_modal.title2": "Modifier la description de ",
   "edit_command.update": "Mettre à jour",
   "edit_command.updating": "Mise à jour en cours...",
+  "edit_post.action_buttons.save": "Enregistrer",
+  "edit_post.action_buttons.cancel": "Annuler",
   "edit_post.editPost": "Modifier le message...",
   "edit_post.helper_text": "<strong>{key}Entrée</strong> pour enregistrer, <strong>Échap</strong> pour annuler",
   "edit_post.time_limit_button.for_n_seconds": "Pour {n} secondes",
