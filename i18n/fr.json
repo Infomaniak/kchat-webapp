@@ -3316,7 +3316,7 @@
   "globalThreads.searchGuidance.title": "C'est la fin de la liste",
   "globalThreads.sidebarLink": "Fils de discussion",
   "globalThreads.subtitle": "Les discussions auxquelles vous participez seront automatiquement affichées ici",
-  "globalThreads.threadList.noUnreadThreads": "Pas de fil de discussion non lus",
+  "globalThreads.threadList.noUnreadThreads": "Pas de fil de discussion non-lu",
   "globalThreads.threadPane.unreadMessageLink": "Vous {numUnread, plural, =0 {n'avez aucun fil non lu} =1 {avez <link>{numUnread} fil non lu</link>} other {avez <link>{numUnread} fils non lus</link>}} {numUnread, plural, =0 {} other {avec des messages non lus}}",
   "globalThreads.threadPane.unselectedTitle": "Selectionnez un Fil de Discussion",
   "globalThreads.title": "{prefix}Fils de discussion - {displayName} {siteName}",
