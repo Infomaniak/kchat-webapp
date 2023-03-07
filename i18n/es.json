@@ -4485,6 +4485,7 @@
   "sidebar.types.favorites": "FAVORITOS",
   "sidebar.types.unreads": "SIN LEER",
   "sidebar.unreads": "Más sin leer",
+  "sidebar_left.sidebar_channel_menu.markAsUnread": "Marcar como no leído",
   "sidebar_left.add_channel_dropdown.browseChannels": "Ver Canales",
   "sidebar_left.add_channel_dropdown.browseOrCreateChannels": "Ver o crear canales",
   "sidebar_left.add_channel_dropdown.createCategory": "Crear Nueva Categoría",
