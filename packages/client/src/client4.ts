@@ -832,6 +832,17 @@ export default class Client4 {
         );
     };
 
+    registerDevice = (device_id: string) => {
+        const body: any = {
+            device_id,
+        };
+
+        return this.doFetch<UserProfile>(
+            `${this.getUsersRoute()}/sessions/device`,
+            {method: 'put', body: JSON.stringify(body)},
+        );
+    };
+
     logout = async () => {
         this.trackEvent('api', 'api_users_logout');
 
