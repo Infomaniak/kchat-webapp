@@ -3311,6 +3311,7 @@
   "sidebar_left.sidebar_category_menu.dropdownAriaLabel": "Modifica il menù delle categorie",
   "sidebar_left.sidebar_category_menu.editCategory": "Opzioni della categoria",
   "sidebar_left.sidebar_category_menu.renameCategory": "Rinomina la categoria",
+  "sidebar_left.sidebar_channel_menu.markAsUnread": "Segna come non letto",
   "sidebar_left.sidebar_channel_menu.addMembers": "Aggiungi membri",
   "sidebar_left.sidebar_channel_menu.copyLink": "Copia il link",
   "sidebar_left.sidebar_channel_menu.dropdownAriaLabel": "Modifica il menù dei canali",
