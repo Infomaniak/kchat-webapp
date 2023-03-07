@@ -1,3 +1,10 @@
+## 1.0.2 (2023-03-07)
+
+### Fixed (2 changes)
+
+- [edit post trads](kchat/webapp@832f6efb3599e986be51bab5fc7cc716e38d01e9) by @leonard.jouve ([merge request](kchat/webapp!326))
+- [fr insights trads](kchat/webapp@107e8037e946d965187cb8e8c38c84b1b281f72c) by @leonard.jouve ([merge request](kchat/webapp!325))
+
 ## 1.0.1 (2023-03-03)
 
 No changes.
