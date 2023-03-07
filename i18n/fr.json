@@ -2743,6 +2743,7 @@
   "channel_header.setConversationHeader": "Éditer l'entête de la conversation",
   "channel_header.setHeader": "Éditer l'entête du canal",
   "channel_header.setPurpose": "Éditer la description du canal",
+  "channel_header.lastActive": "Dernière activité {timestamp}",
   "channel_header.unarchive": "Désarchiver le canal",
   "channel_header.unmute": "Rétablir le son du canal",
   "channel_header.unmuteConversation": "Rétablir le son de la conversation",

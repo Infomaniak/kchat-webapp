@@ -2136,6 +2136,7 @@
   "channel_header.search": "Cerca",
   "channel_header.setHeader": "Modifica titolo canale",
   "channel_header.setPurpose": "Modifica scopo canale",
+  "channel_header.lastActive": "Attivo {timestamp}",
   "channel_header.unarchive": "Archivia Canale",
   "channel_header.unmute": "Togli Silenzioso al Canale",
   "channel_header.userHelpGuide": "Aiuto",
