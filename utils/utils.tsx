@@ -95,6 +95,10 @@ export function isLinux() {
     return navigator.platform.toUpperCase().indexOf('LINUX') >= 0;
 }
 
+export function registerDevice(device_id: string) {
+    return Client4.registerDevice(device_id);
+}
+
 export function createSafeId(prop: {props: {defaultMessage: string}} | string): string | undefined {
     let str = '';
 
