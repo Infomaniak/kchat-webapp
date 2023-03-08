@@ -70,7 +70,10 @@ class MobileChannelHeaderDropdown extends React.PureComponent<Props> {
                     />
                 </a>
 
-                <Menu ariaLabel={this.props.intl.formatMessage({id: 'channel_header.menuAriaLabel', defaultMessage: 'Channel Menu'})}>
+                <Menu
+                    className='mt-6'
+                    ariaLabel={this.props.intl.formatMessage({id: 'channel_header.menuAriaLabel', defaultMessage: 'Channel Menu'})}
+                >
                     <ChannelHeaderDropdownItems isMobile={true}/>
                     <div className='Menu__close visible-xs-block'>
                         {'×'}
