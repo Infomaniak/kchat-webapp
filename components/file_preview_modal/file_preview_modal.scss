@@ -37,6 +37,7 @@
     }
 
     &__content-image {
+        overflow: hidden;
         height: calc(100vh - 120px);
 
         @media screen and (max-width: 768px) {
