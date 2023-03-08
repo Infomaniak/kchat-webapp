@@ -1,23 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useRef, useMemo, useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {clamp} from 'lodash';
-import classNames from 'classnames';
+
+import {ZoomValue} from 'components/file_preview_modal/file_preview_modal_image_controls/file_preview_modal_image_controls';
+import {LinkInfo} from 'components/file_preview_modal/types';
 
 import {getFilePreviewUrl, getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 import {FileInfo} from '@mattermost/types/files';
-
-import {ZoomValue} from './file_preview_modal_image_controls/file_preview_modal_image_controls';
-import {LinkInfo} from './types';
 
 import './image_preview.scss';
 
 const HORIZONTAL_PADDING = 48;
 const VERTICAL_PADDING = 168;
-
 const SCROLL_SENSITIVITY = 0.003;
-const MAX_ZOOM = 5;
+const MAX_SCALE = 5;
+const MIN_SCALE = 1;
 
 let zoomExport: number;
 let minZoomExport: number;
@@ -28,61 +27,75 @@ interface Props {
     setToolbarZoom: (toolbarZoom: ZoomValue) => void;
 }
 
-// Utils
-const getWindowDimensions = () => {
-    const maxWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) - HORIZONTAL_PADDING;
-    const maxHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) - VERTICAL_PADDING;
-    return {maxWidth, maxHeight};
-};
-
-const fitCanvas = (width: number, height: number) => {
-    // Calculate maximum scale for canvas to fit in viewport
-    const {maxWidth, maxHeight} = getWindowDimensions();
-    const scaleX = maxWidth / width;
-    const scaleY = maxHeight / height;
-
-    return Math.round(Math.min(scaleX, scaleY) * 100) / 100;
-};
-
 export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Props) {
-    const background = useMemo(() => new Image(), []);
-    const {width, height} = background;
-    const containerScale = fitCanvas(width, height);
-
-    const zoom = useRef(0);
-    const minZoom = useRef(0);
-
-    minZoom.current = Math.min(containerScale, 1);
-    const maxCanvasZoom = containerScale;
-
-    let isFullscreen = {horizontal: false, vertical: false};
-    let cursorType = 'normal';
-
-    // Set the zoom given by the toolbar dropdown
-    switch (toolbarZoom) {
-    case 'A':
-        zoom.current = minZoom.current;
-        break;
-    case 'W':
-        zoom.current = getWindowDimensions().maxWidth / width;
-        break;
-    case 'H':
-        zoom.current = getWindowDimensions().maxHeight / height;
-        break;
-    default:
-        zoom.current = toolbarZoom;
-        break;
-    }
-
-    const [offset, setOffset] = useState({x: 0, y: 0});
     const [dragging, setDragging] = useState(false);
-    const [, setIsReady] = useState(false);
+    const [offset, setOffset] = useState({x: 0, y: 0});
 
-    const touch = useRef({x: 0, y: 0});
-    const canvasBorder = useRef({w: 0, h: 0});
-    const isMouseDown = useRef(false);
     const containerRef = useRef<HTMLDivElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const imgRef = useRef<HTMLImageElement>(null);
+    const scale = useRef(1);
+    const isMouseDown = useRef(false);
+    const touch = useRef({x: 0, y: 0});
+    const imageBorder = useRef({w: 0, h: 0});
+
+    const getWindowDimensions = () => {
+        const maxWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) - HORIZONTAL_PADDING;
+        const maxHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) - VERTICAL_PADDING;
+        return {maxWidth, maxHeight};
+    };
+
+    const fitImage = (width: number, height: number) => {
+        const {maxWidth, maxHeight} = getWindowDimensions();
+        const scaleX = maxWidth / width;
+        const scaleY = maxHeight / height;
+        return Math.round(Math.min(scaleX, scaleY) * 100) / 100;
+    };
+
+    const clampOffset = (x: number, y: number) => {
+        const {w, h} = imageBorder.current;
+        const {horizontal, vertical} = isFullscreen;
+
+        if (scale.current <= maxZoom) {
+            return {xPos: 0, yPos: 0};
+        }
+
+        return {
+            xPos: horizontal ? clamp(x, w, -w) : 0,
+            yPos: vertical ? clamp(y, h, -h) : 0,
+        };
+    };
+
+    const maxZoom = fitImage(fileInfo.width, fileInfo.height);
+    let isFullscreen = {horizontal: false, vertical: false};
+
+    if (imgRef.current) {
+        const {maxWidth, maxHeight} = getWindowDimensions();
+        const {width, height} = imgRef.current;
+
+        switch (toolbarZoom) {
+        case 'A':
+            scale.current = MIN_SCALE;
+            break;
+        case 'W':
+            scale.current = clamp(getWindowDimensions().maxWidth / width, MIN_SCALE, MAX_SCALE);
+            break;
+        case 'H':
+            scale.current = clamp(getWindowDimensions().maxHeight / height, MIN_SCALE, MAX_SCALE);
+            break;
+        default:
+            scale.current = toolbarZoom;
+            break;
+        }
+
+        imageBorder.current = {
+            w: (maxWidth - (width * scale.current)) / 2,
+            h: (maxHeight - (height * scale.current)) / 2,
+        };
+        isFullscreen = {
+            horizontal: imageBorder.current.w <= 0,
+            vertical: imageBorder.current.h <= 0,
+        };
+    }
 
     const isExternalFile = !fileInfo.id;
 
@@ -96,38 +109,24 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         previewUrl = fileInfo.has_preview_image ? getFilePreviewUrl(fileInfo.id) : fileUrl;
     }
 
-    const clampOffset = (x: number, y: number) => {
-        // Clamps the offset to something that is inside canvas or window depending on zoom level
-        const {w, h} = canvasBorder.current;
-        const {horizontal, vertical} = isFullscreen;
-
-        if (zoom.current <= maxCanvasZoom) {
-            return {xPos: 0, yPos: 0};
-        }
-
-        return {
-            xPos: horizontal ? clamp(x, w, -w) : 0,
-            yPos: vertical ? clamp(y, h, -h) : 0,
-        };
-    };
-
     const handleWheel = (event: React.WheelEvent) => {
         event.persist();
         const {deltaY} = event;
         if (!dragging) {
-            zoom.current = clamp(zoom.current + (deltaY * SCROLL_SENSITIVITY * -1), minZoom.current, MAX_ZOOM);
-            setToolbarZoom(zoom.current === minZoom.current ? 'A' : zoom.current);
+            scale.current = clamp(scale.current + (deltaY * SCROLL_SENSITIVITY * -1), MIN_SCALE, MAX_SCALE);
+            const {xPos, yPos} = clampOffset(offset.x, offset.y);
+            setOffset({x: xPos, y: yPos});
+            setToolbarZoom(scale.current === MIN_SCALE ? 'A' : scale.current);
         }
     };
 
     const handleMouseMove = (event: React.MouseEvent) => {
-        if (!dragging) {
+        if (!dragging || scale.current === MIN_SCALE) {
             return;
         }
-
         const {x, y} = touch.current;
         const {clientX, clientY} = event;
-        const {xPos, yPos} = clampOffset(offset.x + (x - clientX), offset.y + (y - clientY));
+        const {xPos, yPos} = clampOffset(offset.x + (clientX - x), offset.y + (clientY - y));
         setOffset({x: xPos, y: yPos});
         touch.current = {x: clientX, y: clientY};
     };
@@ -145,101 +144,40 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         setDragging(false);
     };
 
-    // Stop dragging if mouse left canvas
-    const handleMouseLeave = () => setDragging(false);
-
-    // Resume dragging if mouse stays clicked
-    const handleMouseEnter = () => setDragging(isMouseDown.current);
-
-    // Load new image
-    const initializeCanvas = () => {
-        // Global mouseup event, otherwise canvas can stay stuck on mouse when leaving canvas while dragging
-        window.addEventListener('mouseup', handleMouseUp);
-
-        background.src = previewUrl;
-        if (canvasRef.current) {
-            background.onload = () => {
-                // Change the state to re-render
-                setIsReady(true);
-            };
-        }
-    };
-
-    // Initialize canvas
-    useEffect(() => {
-        initializeCanvas();
-
-        return () => {
-            window.removeEventListener('mouseup', handleMouseUp);
-        };
-    }, []);
-
     // if the previewUrl is changed, cause a re-render to display new image
     useEffect(() => {
-        setIsReady(false);
-        initializeCanvas();
     }, [previewUrl]);
 
-    if (canvasRef.current) {
-        const context = canvasRef.current.getContext('2d');
+    zoomExport = scale.current;
+    minZoomExport = MIN_SCALE;
 
-        if (context) {
-            // Improve smoothing quality
-            context.imageSmoothingQuality = 'high';
+    const {xPos, yPos} = clampOffset(offset.x, offset.y);
+    const containerStyle = {
+        transform: `
+            translate(${xPos}px, ${yPos}px)
+            scale(${scale.current})
+        `,
+    };
 
-            // Resize canvas to current zoom level
-            canvasRef.current.width = width * zoom.current;
-            canvasRef.current.height = height * zoom.current;
+    let cursorType = 'normal';
 
-            // Update borders and clamp offset accordingly
-            canvasBorder.current = {w: context.canvas.offsetLeft, h: context.canvas.offsetTop - 72 - 48};
-            isFullscreen = {
-                horizontal: canvasBorder.current.w <= 0,
-                vertical: canvasBorder.current.h <= 0,
-            };
-
-            // Translate canvas to current offset
-            const {xPos, yPos} = clampOffset(offset.x, offset.y);
-            context.translate(-xPos, -yPos);
-
-            context.drawImage(background, 0, 0, width * zoom.current, height * zoom.current);
-        }
-    }
-
-    // Reset offset to center when unzoomed
-    if (!(isFullscreen.horizontal || isFullscreen.vertical) && (offset.x !== 0 && offset.y !== 0)) {
-        setOffset({x: 0, y: 0});
-    }
-
-    // Change cursor to dragging only if the image in the canvas is zoomed and draggable
-    if (isFullscreen.horizontal || isFullscreen.vertical) {
+    if (scale.current !== 1) {
         cursorType = dragging ? 'dragging' : 'hover';
-    } else {
-        cursorType = 'normal';
     }
-
-    const containerClass = classNames({
-        image_preview_div: true,
-        fullscreen: zoom.current >= maxCanvasZoom,
-        normal: zoom.current < maxCanvasZoom,
-    });
-
-    zoomExport = zoom.current;
-    minZoomExport = minZoom.current;
 
     return (
         <div
             ref={containerRef}
-            className={containerClass}
+            style={containerStyle}
         >
-            <canvas
+            <img
                 onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
                 onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                onMouseEnter={handleMouseEnter}
                 onWheel={handleWheel}
-                ref={canvasRef}
-                className={`image_preview_canvas__${cursorType}`}
+                ref={imgRef}
+                src={previewUrl}
+                className={`image_preview image_preview__${cursorType} ${isFullscreen.horizontal || isFullscreen.vertical ? 'image_preview__fullscreen' : ''}`}
             />
         </div>
     );

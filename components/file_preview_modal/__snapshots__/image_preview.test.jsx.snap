@@ -2,60 +2,88 @@
 
 exports[`components/view_image/ImagePreview should match snapshot, with preview 1`] = `
 <div
-  className="image_preview_div"
+  style={
+    Object {
+      "transform": "
+            translate(0px, 0px)
+            scale(1)
+        ",
+    }
+  }
 >
-  <canvas
-    className="image_preview_canvas__normal"
+  <img
+    className="image_preview image_preview__normal "
     onMouseDown={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     onMouseMove={[Function]}
+    onMouseUp={[Function]}
     onWheel={[Function]}
+    src="/api/v4/files/file_id_1/preview"
   />
 </div>
 `;
 
 exports[`components/view_image/ImagePreview should match snapshot, with preview, cannot download 1`] = `
 <div
-  className="image_preview_div"
+  style={
+    Object {
+      "transform": "
+            translate(0px, 0px)
+            scale(1)
+        ",
+    }
+  }
 >
-  <canvas
-    className="image_preview_canvas__normal"
+  <img
+    className="image_preview image_preview__normal "
     onMouseDown={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     onMouseMove={[Function]}
+    onMouseUp={[Function]}
     onWheel={[Function]}
+    src="/api/v4/files/file_id_1/preview"
   />
 </div>
 `;
 
 exports[`components/view_image/ImagePreview should match snapshot, without preview 1`] = `
 <div
-  className="image_preview_div"
+  style={
+    Object {
+      "transform": "
+            translate(0px, 0px)
+            scale(1)
+        ",
+    }
+  }
 >
-  <canvas
-    className="image_preview_canvas__normal"
+  <img
+    className="image_preview image_preview__normal "
     onMouseDown={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     onMouseMove={[Function]}
+    onMouseUp={[Function]}
     onWheel={[Function]}
+    src="/api/v4/files/file_id?download=1"
   />
 </div>
 `;
 
 exports[`components/view_image/ImagePreview should match snapshot, without preview, cannot download 1`] = `
 <div
-  className="image_preview_div"
+  style={
+    Object {
+      "transform": "
+            translate(0px, 0px)
+            scale(1)
+        ",
+    }
+  }
 >
-  <canvas
-    className="image_preview_canvas__normal"
+  <img
+    className="image_preview image_preview__normal "
     onMouseDown={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     onMouseMove={[Function]}
+    onMouseUp={[Function]}
     onWheel={[Function]}
+    src="/api/v4/files/file_id?download=1"
   />
 </div>
 `;

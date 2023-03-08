@@ -1,16 +1,10 @@
-.image_preview_div {
-    &.normal {
-        display: flex;
-        align-items: center;
-        text-align: center;
+.image_preview {
+    border-radius: 8px;
+
+    &__fullscreen {
+        border-radius: 0px;
     }
 
-    &.fullscreen {
-        border-radius: 0;
-    }
-}
-
-.image_preview_canvas {
     &__normal {
         cursor: default;
     }
