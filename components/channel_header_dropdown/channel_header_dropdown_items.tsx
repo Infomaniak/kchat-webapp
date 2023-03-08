@@ -54,6 +54,9 @@ export type Props = {
     penultimateViewedChannelName: string;
     pluginMenuItems: PluginComponent[];
     isLicensedForLDAPGroups: boolean;
+    actions: {
+        startOrJoinKmeetCallInChannel: (channelId: string) => void;
+    };
 }
 
 export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
@@ -69,6 +72,7 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
             isMobile,
             penultimateViewedChannelName,
             isLicensedForLDAPGroups,
+            actions,
         } = this.props;
 
         const isPrivate = channel.type === Constants.PRIVATE_CHANNEL;
@@ -215,6 +219,14 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                 </Menu.Group>
 
                 <Menu.Group divider={divider}>
+                    {isMobile && (
+                        <Menu.ItemAction
+                            id='startCallInChannel'
+                            key='startCallInChannel'
+                            onClick={() => actions.startOrJoinKmeetCallInChannel(channel.id)}
+                            text={localizeMessage('kmeet.calls.start', 'Start call')}
+                        />
+                    )}
                     <Menu.ItemToggleModalRedux
                         id='channelEditHeader'
                         show={(channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) && !isArchived && !isReadonly}

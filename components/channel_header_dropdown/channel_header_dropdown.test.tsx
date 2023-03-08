@@ -22,6 +22,9 @@ describe('components/ChannelHeaderDropdown', () => {
         penultimateViewedChannelName: 'test-channel',
         pluginMenuItems: [],
         isLicensedForLDAPGroups: false,
+        actions: {
+            startOrJoinKmeetCallInChannel: jest.fn(() => ({type: ''})),
+        },
     };
     test('should match snapshot with no plugin items', () => {
         const wrapper = shallow(<ChannelHeaderDropdown {...defaultProps}/>);
