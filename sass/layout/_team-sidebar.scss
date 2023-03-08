@@ -135,6 +135,10 @@
             text-decoration: none;
         }
     }
+
+    @media screen and (max-width: 768px) {
+        margin-top: 0px;
+    }
 }
 
 .multi-teams {
