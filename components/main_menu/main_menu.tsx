@@ -185,24 +185,6 @@ export class MainMenu extends React.PureComponent<Props> {
                 ariaLabel={formatMessage({id: 'navbar_dropdown.menuAriaLabel', defaultMessage: 'main menu'})}
             >
                 <Menu.Group>
-                    <SystemPermissionGate
-                        permissions={[Permissions.SYSCONSOLE_WRITE_BILLING]}
-                    >
-                        <Menu.CloudTrial
-                            id='menuCloudTrial'
-                        />
-                    </SystemPermissionGate>
-                </Menu.Group>
-                <Menu.Group>
-                    <SystemPermissionGate
-                        permissions={[Permissions.SYSCONSOLE_WRITE_ABOUT_EDITION_AND_LICENSE]}
-                    >
-                        <Menu.StartTrial
-                            id='startTrial'
-                        />
-                    </SystemPermissionGate>
-                </Menu.Group>
-                <Menu.Group>
                     <Menu.ItemAction
                         id='recentMentions'
                         onClick={this.searchMentions}
@@ -303,17 +285,6 @@ export class MainMenu extends React.PureComponent<Props> {
                 </Menu.Group>
                 <Menu.Group>
                     {pluginItems}
-                </Menu.Group>
-                <Menu.Group>
-                    <SystemPermissionGate
-                        permissions={[Permissions.MANAGE_SYSTEM]}
-                    >
-                        <Menu.ItemAction
-                            id='dashboardManager'
-                            onClick={this.handleEmitUserGoToDashboard}
-                            text={formatMessage({id: 'navbar_dropdown.dashboard', defaultMessage: 'Tableau de bord'})}
-                        />
-                    </SystemPermissionGate>
                 </Menu.Group>
                 <Menu.Group>
                     <Menu.ItemLink
