@@ -450,7 +450,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                                     'file-preview-modal__content',
                                     {
                                         'file-preview-modal__content-scrollable': (!isFileInfo(fileInfo) || !fileInfo.archived) && this.state.loaded[this.state.imageIndex] && (fileType === FileTypes.PDF),
-                                        'file-preview-modal__content-image': (fileType === FileTypes.IMAGE || fileType === FileTypes.SVG),
+                                        [`file-preview-modal__content-image${this.props.isMobileView ? '-mobile' : ''}`]: (fileType === FileTypes.IMAGE || fileType === FileTypes.SVG),
                                     },
                                 )}
                                 onClick={this.handleBgClose}
