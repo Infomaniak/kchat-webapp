@@ -54,6 +54,8 @@ export type Props = {
     penultimateViewedChannelName: string;
     pluginMenuItems: PluginComponent[];
     isLicensedForLDAPGroups: boolean;
+    dmUserId: string;
+    hasCall: boolean;
     actions: {
         startOrJoinKmeetCallInChannel: (channelId: string) => void;
     };
@@ -72,6 +74,8 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
             isMobile,
             penultimateViewedChannelName,
             isLicensedForLDAPGroups,
+            dmUserId,
+            hasCall,
             actions,
         } = this.props;
 
@@ -81,6 +85,8 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
         const channelPropertiesPermission = isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_PROPERTIES : Permissions.MANAGE_PUBLIC_CHANNEL_PROPERTIES;
         const channelDeletePermission = isPrivate ? Permissions.DELETE_PRIVATE_CHANNEL : Permissions.DELETE_PUBLIC_CHANNEL;
         const channelUnarchivePermission = Permissions.MANAGE_TEAM;
+        const isDM = channel.type === Constants.DM_CHANNEL;
+        const showCall = !isDM || user.id !== dmUserId;
 
         let divider;
         if (isMobile) {
@@ -219,12 +225,12 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                 </Menu.Group>
 
                 <Menu.Group divider={divider}>
-                    {isMobile && (
+                    {isMobile && showCall && (
                         <Menu.ItemAction
                             id='startCallInChannel'
                             key='startCallInChannel'
                             onClick={() => actions.startOrJoinKmeetCallInChannel(channel.id)}
-                            text={localizeMessage('kmeet.calls.start', 'Start call')}
+                            text={hasCall ? localizeMessage('kmeet.calls.join', 'Join call') : localizeMessage('kmeet.calls.start', 'Start call')}
                         />
                     )}
                     <Menu.ItemToggleModalRedux
