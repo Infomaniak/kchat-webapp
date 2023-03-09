@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useRef, useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {clamp} from 'lodash';
 
 import {ZoomValue} from 'components/file_preview_modal/file_preview_modal_image_controls/file_preview_modal_image_controls';
@@ -27,6 +27,19 @@ interface Props {
     setToolbarZoom: (toolbarZoom: ZoomValue) => void;
 }
 
+const getWindowDimensions = () => {
+    const maxWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) - HORIZONTAL_PADDING;
+    const maxHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) - VERTICAL_PADDING;
+    return {maxWidth, maxHeight};
+};
+
+const fitImage = (width: number, height: number) => {
+    const {maxWidth, maxHeight} = getWindowDimensions();
+    const scaleX = maxWidth / width;
+    const scaleY = maxHeight / height;
+    return Math.round(Math.min(scaleX, scaleY) * 100) / 100;
+};
+
 export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Props) {
     const [dragging, setDragging] = useState(false);
     const [offset, setOffset] = useState({x: 0, y: 0});
@@ -37,19 +50,6 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     const isMouseDown = useRef(false);
     const touch = useRef({x: 0, y: 0});
     const imageBorder = useRef({w: 0, h: 0});
-
-    const getWindowDimensions = () => {
-        const maxWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) - HORIZONTAL_PADDING;
-        const maxHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) - VERTICAL_PADDING;
-        return {maxWidth, maxHeight};
-    };
-
-    const fitImage = (width: number, height: number) => {
-        const {maxWidth, maxHeight} = getWindowDimensions();
-        const scaleX = maxWidth / width;
-        const scaleY = maxHeight / height;
-        return Math.round(Math.min(scaleX, scaleY) * 100) / 100;
-    };
 
     const clampOffset = (x: number, y: number) => {
         const {w, h} = imageBorder.current;
@@ -143,10 +143,6 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         isMouseDown.current = false;
         setDragging(false);
     };
-
-    // if the previewUrl is changed, cause a re-render to display new image
-    useEffect(() => {
-    }, [previewUrl]);
 
     zoomExport = scale.current;
     minZoomExport = MIN_SCALE;
