@@ -1,3 +1,21 @@
+## 1.0.4 (2023-03-09)
+
+### Added (1 change)
+
+- [add kmeet button in channel header dropdown on mobile](kchat/webapp@ad0c8a93b49b2782c40822d8278975a0dca858ef) by @leonard.jouve ([merge request](kchat/webapp!334))
+
+### Fixed (5 changes)
+
+- [fix mobile team sidebar padding](kchat/webapp@e9637273efbaa96a01ad42369324eabf1c66a3f1) by @leonard.jouve ([merge request](kchat/webapp!337))
+- [Add margin to mobile channel header dropdown](kchat/webapp@62c7a7cfdf3b7381008c08de9db9fefa87871ba0) by @leonard.jouve ([merge request](kchat/webapp!336))
+- [Clean mobile right sidebar menu](kchat/webapp@8bb1a49d1692160add6c8cbe31690e376b8891e4) by @leonard.jouve ([merge request](kchat/webapp!335))
+- [fix file preview container size](kchat/webapp@4c1a04426860f476804a9e93fcb3174079af226d) by @leonard.jouve ([merge request](kchat/webapp!331))
+- [fix svg container size](kchat/webapp@693ff0ef4e6e27cd4837448075b8ee8c54aeadc4) by @leonard.jouve ([merge request](kchat/webapp!330))
+
+### Performance (1 change)
+
+- [perf: clean s3 buckets](kchat/webapp@6be24ebdc15ab3f3a6696dd3bb745c01b4ed4880) by @leopold.jacquot
+
 ## 1.0.3 (2023-03-07)
 
 No changes.
