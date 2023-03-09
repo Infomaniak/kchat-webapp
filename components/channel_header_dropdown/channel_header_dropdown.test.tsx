@@ -22,6 +22,8 @@ describe('components/ChannelHeaderDropdown', () => {
         penultimateViewedChannelName: 'test-channel',
         pluginMenuItems: [],
         isLicensedForLDAPGroups: false,
+        dmUserId: '',
+        hasCall: false,
         actions: {
             startOrJoinKmeetCallInChannel: jest.fn(() => ({type: ''})),
         },
