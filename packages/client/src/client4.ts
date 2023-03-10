@@ -4343,6 +4343,10 @@ export default class Client4 {
         formData.append('client_id', clientId);
         formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
 
+        if (this.defaultHeaders[HEADER_X_CSRF_TOKEN]) {
+            delete this.defaultHeaders[HEADER_X_CSRF_TOKEN];
+        }
+
         if (this.defaultHeaders['Webapp-Version']) {
             delete this.defaultHeaders['Webapp-Version'];
         }
@@ -4366,6 +4370,10 @@ export default class Client4 {
         formData.append('refresh_token', refresh);
         formData.append('client_id', clientId);
 
+        if (this.defaultHeaders[HEADER_X_CSRF_TOKEN]) {
+            delete this.defaultHeaders[HEADER_X_CSRF_TOKEN];
+        }
+
         if (this.defaultHeaders['Webapp-Version']) {
             delete this.defaultHeaders['Webapp-Version'];
         }
@@ -4384,6 +4392,10 @@ export default class Client4 {
         const formData = new FormData();
         formData.append('token_type_hint', 'access_token');
         formData.append('token', token);
+
+        if (this.defaultHeaders[HEADER_X_CSRF_TOKEN]) {
+            delete this.defaultHeaders[HEADER_X_CSRF_TOKEN];
+        }
 
         if (this.defaultHeaders['Webapp-Version']) {
             delete this.defaultHeaders['Webapp-Version'];

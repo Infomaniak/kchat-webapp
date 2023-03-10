@@ -463,7 +463,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 loginCode as string,
                 challenge?.challenge,
                 challenge?.verifier,
-                IKConstants.LOGIN_URL,
+                IKConstants.LOGIN_URL!,
                 IKConstants.CLIENT_ID,
             );
 
