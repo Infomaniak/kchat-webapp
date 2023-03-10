@@ -531,7 +531,7 @@ export default class Client4 {
         return '';
     }
 
-    getOptions(options: Options) {
+    getOptions(options: Options, withxsrf = true) {
         const newOptions: Options = {...options};
 
         const headers: {[x: string]: string} = {
@@ -544,7 +544,7 @@ export default class Client4 {
         }
 
         const csrfToken = this.csrf || this.getCSRFFromCookie();
-        if (options.method && options.method.toLowerCase() !== 'get' && options.method.toLowerCase() !== 'delete' && csrfToken) {
+        if (withxsrf && options.method && options.method.toLowerCase() !== 'get' && options.method.toLowerCase() !== 'delete' && csrfToken) {
             headers[HEADER_X_CSRF_TOKEN] = csrfToken;
         }
 
@@ -4247,14 +4247,14 @@ export default class Client4 {
 
     // Client Helpers
 
-    protected doFetch = async <ClientDataResponse>(url: string, options: Options): Promise<ClientDataResponse> => {
-        const {data} = await this.doFetchWithResponse<ClientDataResponse>(url, options);
+    protected doFetch = async <ClientDataResponse>(url: string, options: Options, withxsrf = true): Promise<ClientDataResponse> => {
+        const {data} = await this.doFetchWithResponse<ClientDataResponse>(url, options, withxsrf);
 
         return data;
     };
 
-    private doFetchWithResponse = async <ClientDataResponse>(url: string, options: Options): Promise<ClientResponse<ClientDataResponse>> => {
-        const response = await fetch(url, this.getOptions(options));
+    private doFetchWithResponse = async <ClientDataResponse>(url: string, options: Options, withxsrf = true): Promise<ClientResponse<ClientDataResponse>> => {
+        const response = await fetch(url, this.getOptions(options, withxsrf));
         const headers = parseAndMergeNestedHeaders(response.headers);
 
         let data;
@@ -4343,10 +4343,6 @@ export default class Client4 {
         formData.append('client_id', clientId);
         formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
 
-        if (this.defaultHeaders[HEADER_X_CSRF_TOKEN]) {
-            delete this.defaultHeaders[HEADER_X_CSRF_TOKEN];
-        }
-
         if (this.defaultHeaders['Webapp-Version']) {
             delete this.defaultHeaders['Webapp-Version'];
         }
@@ -4360,6 +4356,7 @@ export default class Client4 {
                 // mode: 'no-cors',
                 body: formData,
             },
+            false,
         );
     }
 
@@ -4369,10 +4366,6 @@ export default class Client4 {
         formData.append('grant_type', 'refresh_token');
         formData.append('refresh_token', refresh);
         formData.append('client_id', clientId);
-
-        if (this.defaultHeaders[HEADER_X_CSRF_TOKEN]) {
-            delete this.defaultHeaders[HEADER_X_CSRF_TOKEN];
-        }
 
         if (this.defaultHeaders['Webapp-Version']) {
             delete this.defaultHeaders['Webapp-Version'];
@@ -4384,6 +4377,7 @@ export default class Client4 {
                 method: 'post',
                 body: formData,
             },
+            false,
         );
     }
 
@@ -4392,10 +4386,6 @@ export default class Client4 {
         const formData = new FormData();
         formData.append('token_type_hint', 'access_token');
         formData.append('token', token);
-
-        if (this.defaultHeaders[HEADER_X_CSRF_TOKEN]) {
-            delete this.defaultHeaders[HEADER_X_CSRF_TOKEN];
-        }
 
         if (this.defaultHeaders['Webapp-Version']) {
             delete this.defaultHeaders['Webapp-Version'];
@@ -4407,6 +4397,7 @@ export default class Client4 {
                 method: 'delete',
                 body: formData,
             },
+            false,
         );
     }
 
