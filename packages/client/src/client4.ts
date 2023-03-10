@@ -141,24 +141,12 @@ import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
-// @ts-ignore
-import crypto from 'crypto';
 
 // Fix error import
 // eslint-disable-next-line no-warning-comments
 // TODO update isDesktopApp() with callback
 function isDesktopApp(): boolean {
     return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
-}
-
-const IKConstants = {
-    // @ts-ignore
-    LOGIN_URL: process.env.LOGIN_ENDPOINT, // eslint-disable-line no-process-env
-    // @ts-ignore
-    LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
-    CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
-    // @ts-ignore
-    MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
 }
 
 const HEADER_AUTH = 'Authorization';
@@ -168,7 +156,6 @@ const HEADER_REQUESTED_WITH = 'X-Requested-With';
 const HEADER_USER_AGENT = 'User-Agent';
 export const HEADER_X_CLUSTER_ID = 'X-Cluster-Id';
 const HEADER_X_CSRF_TOKEN = 'KCHAT-XSRF-TOKEN';
-const HEADER_X_XSRF_TOKEN = 'X-XSRF-Token';
 export const HEADER_X_VERSION_ID = 'X-Version-Id';
 
 const AUTOCOMPLETE_LIMIT_DEFAULT = 25;
@@ -4409,63 +4396,6 @@ export default class Client4 {
                 body: formData,
             },
         );
-    }
-
-    /****************************************************/
-    /*                                                  */
-    /*                IK CUSTOMS UTILS                  */
-    /*                                                  */
-    /****************************************************/
-
-    /**
-     * get code_verifier for challenge
-     * @returns string
-     */
-    getCodeVerifier() {
-        const ramdonByte = crypto.randomBytes(33);
-        const hash =
-            crypto.createHash('sha256').update(ramdonByte).digest();
-        return hash.toString('base64').
-            replace(/\+/g, '-').
-            replace(/\//g, '_').
-            replace(/[=]/g, '');
-    }
-
-    /**
-     * Generate code_challenge for oauth
-     * @param codeVerifier string
-     * @returns string
-     */
-    async generateCodeChallenge(codeVerifier: string) {
-        const hash =
-            crypto.createHash('sha256').update(codeVerifier).digest();
-        return hash.toString('base64').
-            replace(/\+/g, '-').
-            replace(/\//g, '_').
-            replace(/[=]/g, '');
-    }
-
-    /**
-     * get code_challenge and redirect to IK Login
-     */
-    getChallengeAndRedirectToLogin() {
-        const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
-
-        const codeVerifier = this.getCodeVerifier();
-        let codeChallenge = '';
-
-        this.generateCodeChallenge(codeVerifier).then((challenge) => {
-            codeChallenge = challenge;
-
-            // TODO: store in redux instead of localstorage
-            localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
-
-            // TODO: add env for login url and/or current server
-            window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
-        }).catch(() => {
-            // eslint-disable-next-line no-console
-            console.log('[client > getChallengeAndRedirectToLogin] Error redirect');
-        });
     }
 
     // Only for Webview
