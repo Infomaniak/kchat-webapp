@@ -28,7 +28,6 @@ export function storeTokenResponse(response: { expires_in?: any; access_token?: 
     localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
     localStorage.setItem('tokenExpired', '0');
     Client4.setToken(response.access_token);
-    Client4.setCSRF(response.access_token);
     Client4.setAuthHeader = true;
     console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
     Client4.setWebappVersion(GIT_RELEASE);
@@ -148,7 +147,6 @@ function storeTokenV2(tokenData: {token: string, refreshToken: string, expiresAt
     localStorage.setItem('IKTokenExpire', expiresAt);
     localStorage.setItem('tokenExpired', '0');
     Client4.setToken(token);
-    Client4.setCSRF(token);
     Client4.setAuthHeader = true;
 }
 
@@ -202,7 +200,6 @@ export async function refreshIKToken(redirectToTeam = false): Promise<any> {
         }
 
         Client4.setToken('');
-        Client4.setCSRF('');
 
         // eslint-disable-next-line consistent-return
         REFRESH_PROMISE = new Promise((resolve, reject) => {

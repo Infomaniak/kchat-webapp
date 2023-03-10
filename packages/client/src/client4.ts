@@ -167,7 +167,7 @@ const HEADER_CONTENT_TYPE = 'Content-Type';
 const HEADER_REQUESTED_WITH = 'X-Requested-With';
 const HEADER_USER_AGENT = 'User-Agent';
 export const HEADER_X_CLUSTER_ID = 'X-Cluster-Id';
-const HEADER_X_CSRF_TOKEN = 'X-CSRF-Token';
+const HEADER_X_CSRF_TOKEN = 'KCHAT-XSRF-TOKEN';
 const HEADER_X_XSRF_TOKEN = 'X-XSRF-Token';
 export const HEADER_X_VERSION_ID = 'X-Version-Id';
 
@@ -536,8 +536,8 @@ export default class Client4 {
             const cookies = document.cookie.split(';');
             for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
-                if (cookie.startsWith('MMCSRF=')) {
-                    return cookie.replace('MMCSRF=', '');
+                if (cookie.startsWith('KCHAT-XSRF-TOKEN=')) {
+                    return cookie.replace('KCHAT-XSRF-TOKEN=', '');
                 }
             }
         }
@@ -554,9 +554,6 @@ export default class Client4 {
 
         if (this.setAuthHeader && this.token) {
             headers[HEADER_AUTH] = `${HEADER_BEARER} ${this.token}`;
-            if (options.method && options.method.toLowerCase() !== 'delete') {
-                headers[HEADER_X_XSRF_TOKEN] = this.token;
-            }
         }
 
         const csrfToken = this.csrf || this.getCSRFFromCookie();
@@ -4358,7 +4355,6 @@ export default class Client4 {
         formData.append('code_verifier', verifier);
         formData.append('client_id', clientId);
         formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
-        // formData.append('redirect_uri', 'ktalk://auth-desktop' );
 
         if (this.defaultHeaders['Webapp-Version']) {
             delete this.defaultHeaders['Webapp-Version'];
@@ -4388,8 +4384,6 @@ export default class Client4 {
         }
 
         return this.doFetch<any>(
-
-            // `${this.getBaseRoute()}/token`,
             `${loginUrl}token`,
             {
                 method: 'post',

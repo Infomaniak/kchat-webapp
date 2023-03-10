@@ -26,10 +26,11 @@ import {GlobalState} from 'types/store';
 
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 
-import {clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, isDefaultAuthServer} from './utils';
 import './login.scss';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {Client4} from 'mattermost-redux/client';
+
+import {clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, isDefaultAuthServer} from './utils';
 
 const MAX_TOKEN_RETRIES = 3;
 
@@ -90,16 +91,6 @@ const Login = () => {
         });
     };
 
-    // DESKTOP DEV NOTES
-    // We should assume that the only reason we end up here on desktop is that the token is expired. Otherwise this route is skipped
-    // and we are redirected directly to default team.
-    // ----
-    // Here are the relevant redirects to watch out for that can end up here:
-    // 1. needs_team will redirect here when currentUser is undefined, which can happen after a 401 on /me
-    // 2. root (components/root not the other one) will technically redirect here as it's rendered first, which means root is
-    // responsible for it's own session management. Since root launches our first requests the only ever time
-    // root won't skip this route is if it's a fresh user. The first condition here makes sure to handle the fresh user case.
-    // For all other cases, we want to try refreshing before sending to login.
     useEffect(() => {
         console.log('[components/login] init login component');
         console.log('[components/login] get was logged in => ', LocalStorageStore.getWasLoggedIn());
@@ -129,7 +120,6 @@ const Login = () => {
                         localStorage.setItem('IKTokenExpire', (data.expiresAt).toString());
 
                         Client4.setToken(data.token);
-                        Client4.setCSRF(data.token);
                         Client4.setAuthHeader = true;
 
                         redirectUserToDefaultTeam();

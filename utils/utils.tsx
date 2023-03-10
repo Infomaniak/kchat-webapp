@@ -1690,8 +1690,8 @@ export function setCSRFFromCookie() {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            if (cookie.startsWith('x-xsrf-token=')) {
-                Client4.setCSRF(cookie.replace('x-xsrf-token=', ''));
+            if (cookie.startsWith('KCHAT-XSRF-TOKEN=')) {
+                Client4.setCSRF(cookie.replace('KCHAT-XSRF-TOKEN=', ''));
                 break;
             }
         }

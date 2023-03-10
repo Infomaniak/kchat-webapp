@@ -97,7 +97,6 @@ class LoginController extends React.PureComponent {
             if (token && tokenExpire && !(tokenExpire <= parseInt(Date.now() / 1000, 10))) {
                 Client4.setAuthHeader = true;
                 Client4.setToken(token);
-                Client4.setCSRF(token);
                 navigator.serviceWorker.controller?.postMessage({
                     type: 'TOKEN_REFRESHED',
                     token: token || '',
