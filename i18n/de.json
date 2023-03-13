@@ -5008,7 +5008,7 @@
   "textbox.quote": ">Zitat",
   "textbox.strike": "Durchgestrichen",
   "threadFromArchivedChannelMessage": "Du betrachtest eine Unterhaltung aus einem **archivierten Kanal**. Neue Antworten können nicht gepostet werden.",
-  "threading.filters.allThreads": "Alle deine Unterhaltungen",
+  "threading.filters.allThreads": "Alle Unterhaltungen",
   "threading.filters.unreads": "Ungelesen",
   "threading.following": "Gefolgt",
   "threading.footer.lastReplyAt": "Letzte Antwort {formatted}",

@@ -18,6 +18,7 @@ import {
 import {getThreadCounts, getThreads} from 'mattermost-redux/actions/threads';
 
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
+import {getIsRhsOpen} from 'selectors/rhs';
 
 import {GlobalState} from 'types/store/index';
 
@@ -64,6 +65,7 @@ const GlobalThreads = () => {
     const threadIds = useSelector((state: GlobalState) => getThreadOrderInCurrentTeam(state, selectedThread?.id), shallowEqual);
     const unreadThreadIds = useSelector((state: GlobalState) => getUnreadThreadOrderInCurrentTeam(state, selectedThread?.id), shallowEqual);
     const numUnread = counts?.total_unread_threads || 0;
+    const isRHSOpened = useSelector(getIsRhsOpen);
 
     useEffect(() => {
         dispatch(suppressRHS);
@@ -155,7 +157,10 @@ const GlobalThreads = () => {
     return (
         <div
             id='app-content'
-            className={classNames('GlobalThreads app__content', {'thread-selected': Boolean(selectedThread)})}
+            className={classNames('GlobalThreads app__content', {
+                'thread-selected': Boolean(selectedThread),
+                'rhs-opened': isRHSOpened,
+            })}
         >
             <Header
                 level={2}
