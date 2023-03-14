@@ -21,8 +21,8 @@ export function storeTokenResponse(response: { expires_in?: number; access_token
     const d = new Date();
     d.setHours(d.getHours() + 2);
     localStorage.setItem('IKToken', response.access_token);
-    localStorage.setItem('IKRefreshToken', response.refresh_token);
     if (!isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+        localStorage.setItem('IKRefreshToken', response.refresh_token);
         localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
     }
     localStorage.setItem('tokenExpired', '0');
@@ -138,12 +138,15 @@ export function isDefaultAuthServer() {
     return window.location.origin === v2DefaultAuthServer;
 }
 
-function storeTokenV2(tokenData: {token: string; refreshToken: string; expiresAt: number}) {
-    const {token, refreshToken, expiresAt} = tokenData;
+function storeTokenV2(tokenData: {token: string; refreshToken?: string; expiresAt?: number}) {
+    const {token} = tokenData;
     localStorage.setItem('IKToken', token);
-    localStorage.setItem('IKRefreshToken', refreshToken);
-    localStorage.setItem('IKTokenExpire', expiresAt);
-    localStorage.setItem('tokenExpired', '0');
+    if (!isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+        const {refreshToken, expiresAt} = tokenData;
+        localStorage.setItem('IKRefreshToken', refreshToken!);
+        localStorage.setItem('IKTokenExpire', expiresAt!);
+        localStorage.setItem('tokenExpired', '0');
+    }
     Client4.setToken(token);
     Client4.setCSRF(token);
     Client4.setAuthHeader = true;
@@ -166,19 +169,19 @@ async function refreshTokenV2() {
     }
 }
 
-function isValidTokenV2(token: {token: string; refreshToken: string; expiresAt: number}) {
-    const isExpiredInOneMinute = token.expiresAt <= ((Date.now() / 1000) + 60);
+function isValidTokenV2(token: {token: string; refreshToken?: string; expiresAt?: number}) {
+    const isExpiredInOneMinute = token.expiresAt! <= ((Date.now() / 1000) + 60);
 
     return !isExpiredInOneMinute;
 }
 
 // TODO: type correctly
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
-    const updatedToken = await window.authManager.tokenRequest();
+    const updatedToken: {token: string; refreshToken?: string; expiresAt?: number} = await window.authManager.tokenRequest();
     if (!Object.keys(updatedToken).length || (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0') && updatedToken.expiresAt)) {
         clearLocalStorageToken();
         return Promise.reject(new Error('missing refresh token or 2.1 unicorn with token expire'));
-    } else if (isValidTokenV2(updatedToken)) {
+    } else if (!updatedToken.expiresAt || isValidTokenV2(updatedToken)) {
         storeTokenV2(updatedToken);
     } else {
         await refreshTokenV2();
