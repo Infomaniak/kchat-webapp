@@ -85,7 +85,7 @@ export async function generateCodeChallenge(codeVerifier: string) {
 /**
  * get code_challenge and redirect to IK Login
  */
-export function getChallengeAndRedirectToLogin() {
+export function getChallengeAndRedirectToLogin(infinite = false) {
     const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
     const codeVerifier = getCodeVerifier();
     let codeChallenge = '';
@@ -97,7 +97,7 @@ export function getChallengeAndRedirectToLogin() {
         localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
 
         // TODO: add env for login url and/or current server
-        window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
+        window.location.assign(`${IKConstants.LOGIN_URL}authorize?code_challenge=${codeChallenge}${infinite ? '' : '&access_type=offline'}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
     }).catch(() => {
         console.log('[login/utils > getChallengeAndRedirectToLogin] error redirect');
     });
@@ -108,6 +108,9 @@ export function getChallengeAndRedirectToLogin() {
  * @returns bool
  */
 export function checkIKTokenIsExpired() {
+    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+        return false;
+    }
     const tokenExpire = localStorage.getItem('IKTokenExpire');
     const isExpired = tokenExpire <= parseInt(Date.now() / 1000, 10);
 
@@ -169,7 +172,7 @@ async function refreshTokenV2() {
     }
 }
 
-function isValidTokenV2(token: {token: string, refreshToken: string, expiresAt: number}) {
+function isValidTokenV2(token: {token: string; refreshToken: string; expiresAt: number}) {
     const isExpiredInOneMinute = token.expiresAt <= ((Date.now() / 1000) + 60);
 
     return !isExpiredInOneMinute;

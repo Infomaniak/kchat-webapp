@@ -48,7 +48,7 @@ import Pluggable from 'plugins/pluggable';
 import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import * as Utils from 'utils/utils';
-import {isDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import webSocketClient from 'client/web_websocket_client.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
@@ -78,6 +78,8 @@ import {IKConstants} from 'utils/constants-ik';
 
 import WelcomePostRenderer from 'components/welcome_post_renderer';
 import {reconnectWebSocket} from 'actions/websocket_actions';
+
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -456,7 +458,7 @@ export default class Root extends React.PureComponent<Props, State> {
         console.log('[component/root] try get token count', this.retryGetToken); // eslint-disable-line no-console
         try { // Get new token
             const response: {
-                expires_in: string;
+                expires_in?: number;
                 access_token: string;
                 refresh_token: string;
             } = await Client4.getIKLoginToken(
@@ -478,15 +480,25 @@ export default class Root extends React.PureComponent<Props, State> {
             LocalStorageStore.setWasLoggedIn(true);
             this.IKLoginCode = undefined;
 
+            let newToken;
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+                newToken = {
+                    token: response.access_token,
+                    refreshToken: response.refresh_token,
+                };
+            } else {
+                newToken = {
+                    token: response.access_token,
+                    refreshToken: response.refresh_token,
+                    expiresAt: (Date.now() / 1000) + response.expires_in,
+                };
+            }
+
             // Store in desktop storage.
             window.postMessage(
                 {
                     type: 'token-refreshed',
-                    message: {
-                        token: response.access_token,
-                        refreshToken: response.refresh_token,
-                        expiresAt: parseInt(Date.now() / 1000) + response.expires_in,
-                    },
+                    message: newToken,
                 },
                 window.origin,
             );
