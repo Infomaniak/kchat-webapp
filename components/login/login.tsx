@@ -63,7 +63,7 @@ const Login = () => {
         if (isDesktopApp()) {
             window.authManager.tokenRequest().then((data: {
                 token: string;
-                refreshToken: string;
+                refreshToken?: string;
                 expiresAt?: number;
             }) => {
                 if (!Object.keys(data).length || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) { // eslint-disable-line no-negated-condition
@@ -80,7 +80,9 @@ const Login = () => {
                     }
                 } else {
                     localStorage.setItem('IKToken', data.token);
-                    localStorage.setItem('IKRefreshToken', data.refreshToken);
+                    if (data.refreshToken) {
+                        localStorage.setItem('IKRefreshToken', data.refreshToken);
+                    }
                     if (data.expiresAt) {
                         localStorage.setItem('IKTokenExpire', (data.expiresAt).toString());
                     }

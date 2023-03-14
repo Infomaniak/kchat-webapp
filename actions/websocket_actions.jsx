@@ -187,12 +187,13 @@ export function initialize() {
     // const authToken = Client4.getToken();
 
     // const tokenExpire = localStorage.getItem('IKTokenExpire');
+    // const refreshToken = localStorage.getItem('IKRefreshToken');
 
     const token = localStorage.getItem('IKToken');
-    const refreshToken = localStorage.getItem('IKRefreshToken');
 
     //  || !tokenExpire
-    if (isDesktopApp() && (!token || !refreshToken)) {
+    // || !refreshToken
+    if (isDesktopApp() && !token) {
         // eslint-disable-next-line no-console
         console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
         getHistory().push('/login');
@@ -248,11 +249,12 @@ function restart() {
 export async function reconnect(includeWebSocket = true) {
     if (isDesktopApp()) {
         // const tokenExpire = localStorage.getItem('IKTokenExpire');
+        // const refreshToken = localStorage.getItem('IKRefreshToken');
         const token = localStorage.getItem('IKToken');
-        const refreshToken = localStorage.getItem('IKRefreshToken');
 
         // || !tokenExpire
-        if (!token || !refreshToken) {
+        // || !refreshToken
+        if (!token) {
             // eslint-disable-next-line no-console
             console.log('[websocket_actions > reconnect] token storage corrupt, redirecting to login');
             getHistory().push('/login');

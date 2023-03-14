@@ -484,7 +484,6 @@ export default class Root extends React.PureComponent<Props, State> {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
                 newToken = {
                     token: response.access_token,
-                    refreshToken: response.refresh_token,
                 };
             } else {
                 newToken = {
@@ -545,10 +544,12 @@ export default class Root extends React.PureComponent<Props, State> {
         this.mounted = true;
 
         const token = localStorage.getItem('IKToken');
-        const refreshToken = localStorage.getItem('IKRefreshToken');
+
+        // const refreshToken = localStorage.getItem('IKRefreshToken');
 
         // Setup token keepalive:
-        if (isDesktopApp() && token && refreshToken) {
+        // && refreshToken
+        if (isDesktopApp() && token && !isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
             console.log('[components/root] desktop token is ok, setting up interval check'); // eslint-disable-line no-console
 
             // set an interval to run every minute to check if token needs refresh soon.
