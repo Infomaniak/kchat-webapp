@@ -66,7 +66,7 @@ const Login = () => {
                 refreshToken?: string;
                 expiresAt?: number;
             }) => {
-                if (!Object.keys(data).length || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) { // eslint-disable-line no-negated-condition
+                if (!Object.keys(data).length) { // eslint-disable-line no-negated-condition
                     if (isDefaultAuthServer()) {
                         getChallengeAndRedirectToLogin(isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0'));
                     } else {
