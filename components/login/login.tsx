@@ -56,43 +56,6 @@ const Login = () => {
 
     const closeSessionExpiredNotification = useRef<() => void>();
 
-    // Session guard
-
-    // const tryRefreshTokenWithErrorCount = (errorCount: number) => {
-    //     console.log('[components/login] tryRefreshTokenWithErrorCount with error count: ', errorCount);
-
-    //     // clear this right away so it doesn't retrigger while in promise land.
-    //     clearInterval(tokenInterval.current as NodeJS.Timer);
-    //     refreshIKToken(/*redirectToTeam**/true).catch(() => {
-    //         if (errorCount < MAX_TOKEN_RETRIES) {
-    //             console.log('[components/login] will retry refresh');
-    //             tokenInterval.current = setInterval(() => tryRefreshTokenWithErrorCount(errorCount + 1), 2000); // 2 sec
-    //         } else {
-    //             // We track this case in sentry with the goal of reducing to a minimum the number of occurences.
-    //             // Losing our entire app context to auth a user is far from ideal.
-    //             console.log(`[components/login] failed to refresh token in ${MAX_TOKEN_RETRIES} attempts`);
-    //             Sentry.captureException(new Error('Failed to refresh token in 3 attempts'));
-    //             clearLocalStorageToken();
-    //             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
-    //                 window.authManager.resetToken();
-    //                 if (isDefaultAuthServer()) {
-    //                     getChallengeAndRedirectToLogin();
-    //                 } else {
-    //                     window.postMessage(
-    //                         {
-    //                             type: 'reset-teams',
-    //                             message: {},
-    //                         },
-    //                         window.origin,
-    //                     );
-    //                 }
-    //             } else {
-    //                 getChallengeAndRedirectToLogin();
-    //             }
-    //         }
-    //     });
-    // };
-
     useEffect(() => {
         console.log('[components/login] init login component');
         console.log('[components/login] get was logged in => ', LocalStorageStore.getWasLoggedIn());

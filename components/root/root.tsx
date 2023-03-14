@@ -465,7 +465,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 loginCode as string,
                 challenge?.challenge,
                 challenge?.verifier,
-                IKConstants.LOGIN_URL,
+                IKConstants.LOGIN_URL!,
                 IKConstants.CLIENT_ID,
             );
 
@@ -490,7 +490,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 newToken = {
                     token: response.access_token,
                     refreshToken: response.refresh_token,
-                    expiresAt: (Date.now() / 1000) + response.expires_in,
+                    expiresAt: (Date.now() / 1000) + response.expires_in, // ignore as its never undefined in 2.0
                 };
             }
 
