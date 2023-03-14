@@ -4362,7 +4362,7 @@ export default class Client4 {
         if (this.defaultHeaders['Webapp-Version']) {
             delete this.defaultHeaders['Webapp-Version'];
         }
-        debugger;
+
         return this.doFetch<any>(
             `${loginUrl}token`,
             {
