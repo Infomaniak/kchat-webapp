@@ -544,24 +544,24 @@ export default class Root extends React.PureComponent<Props, State> {
     runMounted = () => {
         this.mounted = true;
 
-        let token = localStorage.getItem('IKToken');
+        const token = localStorage.getItem('IKToken');
         const tokenExpire = localStorage.getItem('IKTokenExpire');
         const refreshToken = localStorage.getItem('IKRefreshToken');
 
         // Validate infinite token or setup token keepalive for older tokens
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+                if (isDefaultAuthServer() && !token) {
+                    getChallengeAndRedirectToLogin(true);
+                }
+
                 // If old token with expire still present
                 if (token && (tokenExpire || refreshToken)) {
                     // Prepare migrate to infinite token by clearing all instances of old token
                     clearLocalStorageToken();
                     window.authManager.resetToken();
-                }
 
-                // Need to reset teams before redirecting to login after token is cleared
-                // If old token was present it should now be cleared so check it again.
-                token = localStorage.getItem('IKToken');
-                if (!token) {
+                    // Need to reset teams before redirecting to login after token is cleared
                     if (isDefaultAuthServer()) {
                         getChallengeAndRedirectToLogin(true);
                     } else {
