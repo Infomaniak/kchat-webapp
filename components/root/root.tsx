@@ -68,7 +68,7 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 
@@ -544,7 +544,7 @@ export default class Root extends React.PureComponent<Props, State> {
     runMounted = () => {
         this.mounted = true;
 
-        const token = localStorage.getItem('IKToken');
+        let token = localStorage.getItem('IKToken');
         const tokenExpire = localStorage.getItem('IKTokenExpire');
         const refreshToken = localStorage.getItem('IKRefreshToken');
 
@@ -554,7 +554,23 @@ export default class Root extends React.PureComponent<Props, State> {
                 if (tokenExpire || refreshToken) {
                     // Migrate to infinite token
                     clearLocalStorageToken();
-                    getChallengeAndRedirectToLogin(true);
+                }
+
+                // Need to reset teams before redirecting after token is cleared
+                // Refresh value since localstorage might of been cleared after last one was created
+                token = localStorage.getItem('IKToken');
+                if (!token) {
+                    if (isDefaultAuthServer()) {
+                        getChallengeAndRedirectToLogin(true);
+                    } else {
+                        window.postMessage(
+                            {
+                                type: 'reset-teams',
+                                message: {},
+                            },
+                            window.origin,
+                        );
+                    }
                 }
             } else if (token && refreshToken) {
                 // set an interval to run every minute to check if token needs refresh soon.
