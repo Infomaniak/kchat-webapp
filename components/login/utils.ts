@@ -95,7 +95,6 @@ export function getChallengeAndRedirectToLogin(infinite = false) {
         // TODO: store in redux instead of localstorage
         localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
 
-        // TODO: add env for login url and/or current server
         window.location.assign(`${IKConstants.LOGIN_URL}authorize?code_challenge=${codeChallenge}${infinite ? '' : '&access_type=offline'}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
     }).catch(() => {
         console.log('[login/utils > getChallengeAndRedirectToLogin] error redirect');
@@ -110,8 +109,13 @@ export function checkIKTokenIsExpired() {
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
         return false;
     }
+
     const tokenExpire = localStorage.getItem('IKTokenExpire');
-    const isExpired = tokenExpire <= parseInt(Date.now() / 1000, 10);
+    if (!tokenExpire) {
+        return true;
+    }
+
+    const isExpired = parseInt(tokenExpire, 10) <= Date.now() / 1000;
 
     if (isExpired) {
         console.log('[login/utils > checkIKTokenIsExpired] token is expired');
@@ -128,9 +132,13 @@ export function checkIKTokenExpiresSoon(): boolean {
     if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
         return false;
     }
-    const tokenExpire = localStorage.getItem('IKTokenExpire');
-    const isExpiredInOneMinute = parseInt(tokenExpire as string, 10) <= ((Date.now() / 1000) + 60);
 
+    const tokenExpire = localStorage.getItem('IKTokenExpire');
+    if (!tokenExpire) {
+        return true;
+    }
+
+    const isExpiredInOneMinute = parseInt(tokenExpire, 10) <= ((Date.now() / 1000) + 60);
     return isExpiredInOneMinute;
 }
 
@@ -178,9 +186,9 @@ function isValidTokenV2(token: {token: string; refreshToken?: string; expiresAt?
 // TODO: type correctly
 export async function refreshIKToken(redirectToTeam = false): Promise<any> {
     const updatedToken: {token: string; refreshToken?: string; expiresAt?: number} = await window.authManager.tokenRequest();
-    if (!Object.keys(updatedToken).length || (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0') && updatedToken.expiresAt)) {
+    if (!Object.keys(updatedToken).length) {
         clearLocalStorageToken();
-        return Promise.reject(new Error('missing refresh token or 2.1 unicorn with token expire'));
+        return Promise.reject(new Error('token empty'));
     } else if (!updatedToken.expiresAt || isValidTokenV2(updatedToken)) {
         storeTokenV2(updatedToken);
     } else {

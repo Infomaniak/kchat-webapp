@@ -68,7 +68,7 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, refreshIKToken, storeTokenResponse} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 
@@ -428,7 +428,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     async componentDidMount() {
         if (isDesktopApp()) {
-            // Rely on initial client calls to 401 here for the first redirect to login,
+            // Rely on initial client calls to 401 for the first redirect to login,
             // we dont need to do it manually.
             // Login will send us back here with a code after we give it the challange.
             // Use code to refresh token.
@@ -527,6 +527,7 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     }
 
+    // Does not run in 2.1 and up
     doTokenCheck = () => {
         // If expiring soon but not expired, refresh before we start hitting errors.
         if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
@@ -544,16 +545,21 @@ export default class Root extends React.PureComponent<Props, State> {
         this.mounted = true;
 
         const token = localStorage.getItem('IKToken');
+        const tokenExpire = localStorage.getItem('IKTokenExpire');
+        const refreshToken = localStorage.getItem('IKRefreshToken');
 
-        // const refreshToken = localStorage.getItem('IKRefreshToken');
-
-        // Setup token keepalive:
-        // && refreshToken
-        if (isDesktopApp() && token && !isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
-            console.log('[components/root] desktop token is ok, setting up interval check'); // eslint-disable-line no-console
-
-            // set an interval to run every minute to check if token needs refresh soon.
-            this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
+        // Validate infinite token or setup token keepalive for older tokens
+        if (isDesktopApp()) {
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+                if (tokenExpire || refreshToken) {
+                    // Migrate to infinite token
+                    clearLocalStorageToken();
+                    getChallengeAndRedirectToLogin(true);
+                }
+            } else if (token && refreshToken) {
+                // set an interval to run every minute to check if token needs refresh soon.
+                this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
+            }
         }
 
         this.initiateMeRequests();
