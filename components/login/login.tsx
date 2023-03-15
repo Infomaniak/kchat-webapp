@@ -6,8 +6,6 @@ import React, {useEffect, useRef} from 'react';
 
 import {useSelector} from 'react-redux';
 
-// import * as Sentry from '@sentry/react';
-
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LoadingIk from 'components/loading_ik';
 
