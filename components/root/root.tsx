@@ -551,13 +551,15 @@ export default class Root extends React.PureComponent<Props, State> {
         // Validate infinite token or setup token keepalive for older tokens
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
-                if (tokenExpire || refreshToken) {
-                    // Migrate to infinite token
+                // If old token with expire still present
+                if (token && (tokenExpire || refreshToken)) {
+                    // Prepare migrate to infinite token by clearing all instances of old token
                     clearLocalStorageToken();
+                    window.authManager.resetToken();
                 }
 
-                // Need to reset teams before redirecting after token is cleared
-                // Refresh value since localstorage might of been cleared after last one was created
+                // Need to reset teams before redirecting to login after token is cleared
+                // If old token was present it should now be cleared so check it again.
                 token = localStorage.getItem('IKToken');
                 if (!token) {
                     if (isDefaultAuthServer()) {
@@ -573,7 +575,8 @@ export default class Root extends React.PureComponent<Props, State> {
                     }
                 }
             } else if (token && refreshToken) {
-                // set an interval to run every minute to check if token needs refresh soon.
+                // set an interval to run every minute to check if token needs refresh soon
+                // for older versions of app.
                 this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
             }
         }
