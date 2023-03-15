@@ -16,19 +16,26 @@ const v2DefaultAuthServer = process.env.BASE_URL;
 /**
  * Store IKToken infos in localStorage and update Client
  */
-export function storeTokenResponse(response: { expires_in?: number; access_token: string; refresh_token: string }) {
+export function storeTokenResponse(response: { expires_in?: number; access_token: string; refresh_token?: string }) {
     // TODO: store in redux
     const d = new Date();
     d.setHours(d.getHours() + 2);
+
     localStorage.setItem('IKToken', response.access_token);
-    if (!isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+
+    if (response.refresh_token) {
         localStorage.setItem('IKRefreshToken', response.refresh_token);
-        localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
     }
-    localStorage.setItem('tokenExpired', '0');
+
+    if (response.expires_in) {
+        localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
+        localStorage.setItem('tokenExpired', '0');
+    }
+
     Client4.setToken(response.access_token);
     Client4.setCSRF(response.access_token);
     Client4.setAuthHeader = true;
+
     console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
     Client4.setWebappVersion(GIT_RELEASE);
 }
@@ -147,16 +154,17 @@ export function isDefaultAuthServer() {
 }
 
 function storeTokenV2(tokenData: {token: string; refreshToken?: string; expiresAt?: number}) {
-    const {token} = tokenData;
-    localStorage.setItem('IKToken', token);
-    if (!isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
-        const {refreshToken, expiresAt} = tokenData;
-        localStorage.setItem('IKRefreshToken', refreshToken!);
-        localStorage.setItem('IKTokenExpire', expiresAt!);
+    localStorage.setItem('IKToken', tokenData.token);
+    if (tokenData.refreshToken) {
+        localStorage.setItem('IKRefreshToken', tokenData.refreshToken);
+    }
+    if (tokenData.expiresAt) {
+        localStorage.setItem('IKTokenExpire', tokenData.expiresAt);
         localStorage.setItem('tokenExpired', '0');
     }
-    Client4.setToken(token);
-    Client4.setCSRF(token);
+
+    Client4.setToken(tokenData.token);
+    Client4.setCSRF(tokenData.token);
     Client4.setAuthHeader = true;
 }
 
