@@ -5053,5 +5053,6 @@
   "pending_guests_dropdown.cancel": "Annuler l'invitation",
   "cancel_multiple_invites_modal.header": "Annuler plusieurs invitations",
   "cancel_multiple_invites_modal.content": "En annulant cette invitation, vous annulez également les invitations dans les canaux suivants :",
-  "channelLimitIndicator.text": "Vous avez atteint la limite de {type, select, O {canaux publics} P {canaux privés} other {}} ({usage, number}/{limit, number}) sur votre offre kSuite. {isAdmin, select, true {<modifyOffer>Modifier votre offre</modifyOffer> pour créer des canaux supplémentaires.} other {Veuillez contacter un administrateur pour qu'il modifie l'offre.}}"
+  "channelLimitIndicator.text": "Vous avez atteint la limite de {type, select, O {canaux publics} P {canaux privés} other {}} ({usage, number}/{limit, number}) sur votre offre kSuite. {isAdmin, select, true {<modifyOffer>Modifier votre offre</modifyOffer> pour créer des canaux supplémentaires.} other {Veuillez contacter un administrateur pour qu'il modifie l'offre.}}",
+  "get_the_app_announcement_bar.message": "<gta>Téléchargez l’application kChat</gta> pour {os} pour une meilleure expérience ! (<dnd>Ne plus me le rappeler</dnd>)"
 }

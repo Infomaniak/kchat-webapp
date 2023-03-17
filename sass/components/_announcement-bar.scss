@@ -136,6 +136,18 @@
     background-color: #3d3c40;
 }
 
+.announcement-bar.announcement-bar-infomaniak {
+    background: linear-gradient(91.45deg, #0088B2 0.11%, #0E5F78 100%), #0088B2;
+    min-height: 56px;
+    max-height: 56px;
+
+    .announcement-bar__close {
+        top: auto;
+        bottom: auto;
+        font-size: 30px;
+    }
+}
+
 .announcement-bar__link {
     margin-left: 4px;
 }
