@@ -16,8 +16,12 @@ type State = ThreadsState['threadsInTeam'] | ThreadsState['unreadThreadsInTeam']
 // furthermore manually adding older thread will BREAK pagination
 function shouldAddThreadId(ids: Array<UserThread['id']>, thread: UserThread, threads: IDMappedObjects<UserThread>, threadsInTeam: Array<UserThread['id']>, fromWebsocket?: boolean) {
     // FIX: live update threads
-    // always add threads if the threads array is empty and thread id is included or should be added to threadsInTeam
-    if (!ids.length && fromWebsocket && thread.last_reply_at && (threadsInTeam.includes(thread.id) || shouldBeAddedToThreadsInTeam(threadsInTeam, thread, threads))) {
+    // always add threads if the threads array is empty and
+    // - thread comes from thread_updated WS event
+    // - thread id is included or should be added to threadsInTeam
+    // ! Inserting outdated thread as first element will break pagination and prevent newer threads to be fetched
+
+    if (!ids.length && fromWebsocket && (threadsInTeam.includes(thread.id) || shouldBeAddedToThreadsInTeam(threadsInTeam, thread, threads))) {
         return true;
     }
     return ids.some((id) => {
