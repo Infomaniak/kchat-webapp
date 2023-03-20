@@ -1,3 +1,13 @@
+## 1.0.5 (2023-03-15)
+
+### Fixed (5 changes)
+
+- [Fix pdf preview](kchat/webapp@8822d214ae2d303f9d895554086d47a057a88fc3) by @leonard.jouve ([merge request](kchat/webapp!346))
+- [fix overlay displaying above post dropdown](kchat/webapp@c5202f1dc148e0e5fecd46a08395e245817604b9) by @leonard.jouve ([merge request](kchat/webapp!343))
+- [improve Global Threads page responsive on RHS opened](kchat/webapp@58d739329f1c001dddf7aea8680718c5f33861e9) by @leonard.jouve ([merge request](kchat/webapp!342))
+- [fix bottom white bar](kchat/webapp@288aaefe27f870cdfeddb6b2c5bbbd241cc35514) by @leonard.jouve ([merge request](kchat/webapp!341))
+- [fix file preview on mobile](kchat/webapp@a8842133b49eec455b5efa440a345bcfe3110759) by @leonard.jouve ([merge request](kchat/webapp!339))
+
 ## 1.0.4 (2023-03-09)
 
 ### Added (1 change)
