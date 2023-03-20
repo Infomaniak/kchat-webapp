@@ -1,0 +1,27 @@
+.get-app-annoucement-bar-mobile-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    width: 132px;
+    height: 51px;
+
+    &__logo {
+        height: 51px;
+        width: 51px;
+    }
+
+    &__title {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 69px;
+        height: 51px;
+        color: var(--center-channel-color);
+    }
+
+    &__product {
+        font-size: 20px;
+        font-weight: bold;
+    }
+}

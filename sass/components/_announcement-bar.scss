@@ -146,6 +146,25 @@
         bottom: auto;
         font-size: 30px;
     }
+
+    @media screen and (max-width: 768px) {
+        background: var(--center-channel-bg);
+        min-height: 74px;
+        max-height: 74px;
+
+        .announcement-bar__close {
+            color: var(--button-bg) !important;
+        }
+
+        button {
+            height: 51px;
+            padding: 4px 24px;
+            background-color: var(--button-bg) !important;
+            border-color: var(--button-bg) !important;
+            text-transform: uppercase;
+            border-radius: 7px;
+        }
+    }
 }
 
 .announcement-bar__link {

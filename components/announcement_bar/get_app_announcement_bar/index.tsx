@@ -2,33 +2,41 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import {useIntl} from 'react-intl';
+
+import {openModal} from 'actions/views/modals';
 
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
 import GetTheAppIcon from 'components/widgets/icons/get_the_app_icon';
+import GetTheAppModal from 'components/get_the_app_modal';
+import GetAppAnnoucementBarMobile from 'components/announcement_bar/get_app_announcement_bar/get_app_annoucement_bar_mobile';
 
-import {AnnouncementBarTypes} from 'utils/constants';
-import {isLinux, isWindows} from 'utils/user_agent';
+import {AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
+import {isLinux, isMobile, isWindows} from 'utils/user_agent';
 
 const GET_THE_APP_LAST_SEEN_AT = 'GetTheAppLastSeenAt';
 const DO_NOT_DISTURB = 'DoNotDisturb';
 const COOLDOWN = 172800000; // 48h
 
 const GetAppAnnoucementBar = () => {
+    const dispatch = useDispatch();
     const {formatMessage} = useIntl();
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState<boolean | null>(null);
 
     useEffect(() => {
         const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT);
         const shouldDisplayBanner = !lastSeenAt || Date.now() >= Number(lastSeenAt) + COOLDOWN;
         if (lastSeenAt !== DO_NOT_DISTURB && shouldDisplayBanner) {
             setShow(true);
+        } else {
+            setShow(false);
         }
     }, []);
 
     const handleClose = (doNotDisturb = false) => {
         localStorage.setItem(GET_THE_APP_LAST_SEEN_AT, doNotDisturb ? DO_NOT_DISTURB : Date.now().toString());
-        setShow(false);
+        setShow(null);
     };
 
     // Set default OS as Mac
@@ -58,8 +66,26 @@ const GetAppAnnoucementBar = () => {
                 {chunks}
             </a>
         ),
-
     });
+
+    if (isMobile()) {
+        if (show) {
+            dispatch(openModal({
+                modalId: ModalIdentifiers.GET_THE_APP,
+                dialogType: GetTheAppModal,
+                dialogProps: {
+                    onClose: handleClose,
+                },
+            }));
+            setShow(null);
+            return null;
+        }
+        if (show === false) {
+            return (
+                <GetAppAnnoucementBarMobile/>
+            );
+        }
+    }
 
     if (!show) {
         return null;

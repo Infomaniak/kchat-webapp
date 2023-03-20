@@ -1,0 +1,64 @@
+.get-the-app-modal {
+    display: flex;
+    justify-content: center;
+
+    .GenericModal__header {
+        padding: 16px;
+    }
+
+    .GenericModal__body {
+        padding: 0px 16px;
+    }
+
+    .modal-content {
+        width: 320px;
+        height: fit-content;
+    }
+
+    .modal-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px 16px !important;
+    }
+
+    .get-the-app-modal-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+        width: 132px;
+        height: 48px;
+
+        &__logo {
+            height: 43px;
+            width: 43px;
+        }
+
+        &__title {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 69px;
+            height: 30px;
+       }
+    }
+
+    .get-the-app-modal-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        &__icon {
+            width: 203px;
+            height: 168px;
+            margin-bottom: 16px;
+        }
+
+        &__content {
+            text-align: center;
+        }
+    }
+}
