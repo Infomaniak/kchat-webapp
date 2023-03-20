@@ -1,3 +1,9 @@
+## 1.0.6 (2023-03-20)
+
+### Fixed (1 change)
+
+- [Always fetch threads on websocket reconnect](kchat/webapp@78de53c539f290ae89f17e12e9f013f5e752de44) by @leonard.jouve ([merge request](kchat/webapp!349))
+
 ## 1.0.5 (2023-03-15)
 
 ### Fixed (5 changes)
