@@ -65,10 +65,10 @@ const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
     // Use smart banners on safari
     // https://developer.apple.com/documentation/webkit/promoting_apps_with_smart_app_banners
     if (isSafari()) {
-        const smartBanner = document.createElement('meta');
-        smartBanner.name = 'apple-itunes-app';
-        smartBanner.content = 'app-id=6443845553';
-        document.head.appendChild(smartBanner);
+        // const smartBanner = document.createElement('meta');
+        // smartBanner.name = 'apple-itunes-app';
+        // smartBanner.content = 'app-id=6443845553';
+        // document.head.appendChild(smartBanner);
         setShow(false);
         return null;
     }
