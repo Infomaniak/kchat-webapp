@@ -77,6 +77,10 @@ const GetAppAnnoucementBar = () => {
             return null;
         }
         if (show) {
+            const smartBanner = document.getElementsByName('apple-itunes-app');
+            if (smartBanner.length) {
+                smartBanner[0].remove();
+            }
             dispatch(openModal({
                 modalId: ModalIdentifiers.GET_THE_APP,
                 dialogType: GetTheAppModal,
