@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useState} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
@@ -18,8 +18,6 @@ type Props = {
 };
 
 const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
-    const [show, setShow] = useState(true);
-
     const handleClose = (doNotDisturb?: boolean) => onClose(doNotDisturb);
 
     const handleDownload = () => {
@@ -58,14 +56,9 @@ const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
         </button>
     );
 
-    if (!show) {
-        return null;
-    }
-
     // Smart banner is already displayed
     // https://developer.apple.com/documentation/webkit/promoting_apps_with_smart_app_banners
     if (isSafari()) {
-        setShow(false);
         return null;
     }
 
