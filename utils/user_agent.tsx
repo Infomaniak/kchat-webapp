@@ -142,6 +142,10 @@ export function isMac(): boolean {
     return userAgent().indexOf('Macintosh') !== -1;
 }
 
+export function isMobileWebviewApp(): boolean {
+    return userAgent().indexOf('com.infomaniak.chat') !== -1;
+}
+
 export function isWindows7(): boolean {
     const appVersion = navigator.appVersion;
 

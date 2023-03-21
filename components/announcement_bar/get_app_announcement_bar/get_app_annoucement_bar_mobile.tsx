@@ -16,7 +16,7 @@ import './get_app_annoucement_bar_mobile.scss';
 const redirectToShop = () => window.open('https://infomaniak.com/gtl/apps.kchat', '_blank', 'noopener,noreferrer');
 
 const GetAppAnnoucementBarMobile = () => {
-    const [show, setShow] = useState<boolean>(true);
+    const [show, setShow] = useState(true);
 
     const handleClose = () => {
         setShow(false);

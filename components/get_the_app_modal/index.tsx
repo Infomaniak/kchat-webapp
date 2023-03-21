@@ -13,7 +13,7 @@ import Header from 'components/widgets/header';
 import GetTheAppModalIcon from 'components/widgets/icons/get_the_app_modal_icon';
 
 import {ModalIdentifiers} from 'utils/constants';
-import {isIosWeb} from 'utils/user_agent';
+import {isIos} from 'utils/user_agent';
 
 import loaderkChat from 'images/logo_compact.png';
 import MattermostLogoSvg from 'images/logo.svg';
@@ -23,7 +23,7 @@ import {GlobalState} from 'types/store';
 import './get_the_app_modal.scss';
 
 type Props = {
-    onClose: () => void;
+    onClose: (doNotDisturb?: boolean) => void;
 };
 
 const GetTheAppModal = ({onClose}: Props) => {
@@ -31,13 +31,19 @@ const GetTheAppModal = ({onClose}: Props) => {
     const show = useSelector((state: GlobalState) => isModalOpen(state, ModalIdentifiers.GET_THE_APP));
     const {formatMessage} = useIntl();
 
-    const handleClose = () => {
+    const handleClose = (doNotDisturb?: boolean) => {
         dispatch(closeModal(ModalIdentifiers.GET_THE_APP));
-        onClose();
+        onClose(doNotDisturb);
     };
 
+    const handleConfirm = () => {
+        window.open('https://infomaniak.com/gtl/apps.kchat', '_blank', 'noopener,noreferrer');
+        handleClose(true);
+    };
+
+    // Set default mobile platform as Android
     let platform = 'Android';
-    if (isIosWeb()) {
+    if (isIos()) {
         platform = 'iOS';
     }
 
@@ -92,7 +98,7 @@ const GetTheAppModal = ({onClose}: Props) => {
             id='GetTheAppModal'
             show={show}
             onExited={handleClose}
-            handleConfirm={handleClose}
+            handleConfirm={handleConfirm}
             confirmButtonText={confirmButtonText}
             modalHeaderText={modalHeaderText}
         >

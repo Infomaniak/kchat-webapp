@@ -13,7 +13,8 @@ import GetTheAppModal from 'components/get_the_app_modal';
 import GetAppAnnoucementBarMobile from 'components/announcement_bar/get_app_announcement_bar/get_app_annoucement_bar_mobile';
 
 import {AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
-import {isLinux, isMobile, isWindows} from 'utils/user_agent';
+import {isLinux, isMobileWebviewApp, isWindows} from 'utils/user_agent';
+import {isMobile} from 'utils/utils';
 
 const GET_THE_APP_LAST_SEEN_AT = 'GetTheAppLastSeenAt';
 const DO_NOT_DISTURB = 'DoNotDisturb';
@@ -69,6 +70,10 @@ const GetAppAnnoucementBar = () => {
     });
 
     if (isMobile()) {
+        // Don't display the banner on mobile app
+        if (isMobileWebviewApp()) {
+            return null;
+        }
         if (show) {
             dispatch(openModal({
                 modalId: ModalIdentifiers.GET_THE_APP,
