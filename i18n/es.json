@@ -5288,5 +5288,9 @@
   "cancel_multiple_invites_modal.header": "Cancelar varias invitaciones",
   "cancel_multiple_invites_modal.content": "Al cancelar esta invitación, también cancelará las invitaciones en los siguientes canales :",
   "channelLimitIndicator.text": "Has alcanzado el límite de {type, select, O {canales públicos} P {canales privados} other {}} ({usage, number}/{limit, number}) en tu oferta kSuite. {isAdmin, select, true {<modifyOffer>Modifica tu oferta</modifyOffer> para crear canales adicionales.} other {Póngase en contacto con un administrador para modificar la oferta.}}",
-  "get_the_app_announcement_bar.message": "<gta>Descarga la aplicación kChat</gta> para {os} para disfrutar de una mejor experiencia ! (<dnd>No me lo vuelvas a recordar</dnd>)"
+  "get_the_app_announcement_bar.message": "<gta>Descarga la aplicación kChat</gta> para {os} para disfrutar de una mejor experiencia ! (<dnd>No me lo vuelvas a recordar</dnd>)",
+  "get_app_annoucement_bar_mobile.download": "Descargar{br}la aplicación",
+  "get_the_app_modal.header": "Descarga la aplicación kChat para {platform}",
+  "get_the_app_modal.content": "Le aconsejamos que instale la aplicación para disfrutar de una mejor experiencia.",
+  "get_the_app_modal.confirm": "Descargar kChat para {platform}"
 }

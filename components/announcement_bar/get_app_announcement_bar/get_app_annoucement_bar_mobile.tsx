@@ -13,13 +13,18 @@ import loaderkChat from 'images/logo_compact.png';
 
 import './get_app_annoucement_bar_mobile.scss';
 
-const redirectToShop = () => window.open('https://infomaniak.com/gtl/apps.kchat', '_blank', 'noopener,noreferrer');
+type Props = {
+    onClose: (doNotDisturb?: boolean) => void;
+};
 
-const GetAppAnnoucementBarMobile = () => {
+const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
     const [show, setShow] = useState(true);
 
-    const handleClose = () => {
-        setShow(false);
+    const handleClose = (doNotDisturb?: boolean) => onClose(doNotDisturb);
+
+    const handleDownload = () => {
+        window.open('https://infomaniak.com/gtl/apps.kchat', '_blank', 'noopener,noreferrer');
+        handleClose(true);
     };
 
     const icon = (
@@ -41,11 +46,11 @@ const GetAppAnnoucementBarMobile = () => {
     const button = (
         <button
             className='btn btn-primary'
-            onClick={redirectToShop}
+            onClick={handleDownload}
         >
             <FormattedMessage
                 id='get_app_annoucement_bar_mobile.download'
-                defaultMessage='Télécharger{br}l’application'
+                defaultMessage='Download{br}the app'
                 values={{
                     br: <br/>,
                 }}
@@ -58,6 +63,7 @@ const GetAppAnnoucementBarMobile = () => {
     }
 
     // Use smart banners on safari
+    // https://developer.apple.com/documentation/webkit/promoting_apps_with_smart_app_banners
     if (isSafari()) {
         const smartBanner = document.createElement('meta');
         smartBanner.name = 'apple-itunes-app';

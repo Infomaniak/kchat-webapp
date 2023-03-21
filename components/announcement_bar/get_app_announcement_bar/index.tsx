@@ -28,10 +28,12 @@ const GetAppAnnoucementBar = () => {
     useEffect(() => {
         const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT);
         const shouldDisplayBanner = !lastSeenAt || Date.now() >= Number(lastSeenAt) + COOLDOWN;
-        if (lastSeenAt !== DO_NOT_DISTURB && shouldDisplayBanner) {
-            setShow(true);
-        } else {
-            setShow(false);
+        if (lastSeenAt !== DO_NOT_DISTURB) {
+            if (shouldDisplayBanner) {
+                setShow(true);
+            } else {
+                setShow(false);
+            }
         }
     }, []);
 
@@ -87,7 +89,7 @@ const GetAppAnnoucementBar = () => {
         }
         if (show === false) {
             return (
-                <GetAppAnnoucementBarMobile/>
+                <GetAppAnnoucementBarMobile onClose={handleClose}/>
             );
         }
     }

@@ -36,6 +36,8 @@ const GetTheAppModal = ({onClose}: Props) => {
         onClose(doNotDisturb);
     };
 
+    const onExited = () => handleClose();
+
     const handleConfirm = () => {
         window.open('https://infomaniak.com/gtl/apps.kchat', '_blank', 'noopener,noreferrer');
         handleClose(true);
@@ -55,13 +57,13 @@ const GetTheAppModal = ({onClose}: Props) => {
                 level={2}
                 heading={formatMessage({
                     id: 'get_the_app_modal.header',
-                    defaultMessage: 'Télécharger l’application kChat pour {platform}',
+                    defaultMessage: 'Download the kChat application for {platform}',
                 }, {
                     platform,
                 })}
                 subtitle={formatMessage({
                     id: 'get_the_app_modal.content',
-                    defaultMessage: 'Nous vous conseillons d’installer l’application pour avoir une meilleure expérience !',
+                    defaultMessage: 'We advise you to install the application to have a better experience !',
                 })}
             />
         </div>
@@ -69,7 +71,7 @@ const GetTheAppModal = ({onClose}: Props) => {
 
     const confirmButtonText = formatMessage({
         id: 'get_the_app_modal.confirm',
-        defaultMessage: 'Télécharger kChat pour {platform}',
+        defaultMessage: 'Download kChat for {platform}',
     }, {
         platform,
     });
@@ -97,7 +99,7 @@ const GetTheAppModal = ({onClose}: Props) => {
             className='get-the-app-modal'
             id='GetTheAppModal'
             show={show}
-            onExited={handleClose}
+            onExited={onExited}
             handleConfirm={handleConfirm}
             confirmButtonText={confirmButtonText}
             modalHeaderText={modalHeaderText}
