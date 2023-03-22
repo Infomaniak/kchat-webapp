@@ -146,24 +146,36 @@
         bottom: auto;
         font-size: 30px;
     }
+}
 
-    @media screen and (max-width: 768px) {
-        background: var(--center-channel-bg);
-        min-height: 74px;
-        max-height: 74px;
+.announcement-bar.announcement-bar-infomaniak-mobile {
+    background: #F2F2F6;
+    min-height: 74px;
+    max-height: 74px;
 
-        .announcement-bar__close {
-            color: var(--button-bg) !important;
+    .announcement-bar__text {
+        justify-content: flex-start;
+        > span {
+            position: fixed;
+            right: 0px;
+            left: auto;
+
+            > a {
+                color: var(--button-bg) !important;
+                text-decoration: none !important;
+                padding: 0px 8px;
+            }
         }
+    }
 
-        button {
-            height: 51px;
-            padding: 4px 24px;
-            background-color: var(--button-bg) !important;
-            border-color: var(--button-bg) !important;
-            text-transform: uppercase;
-            border-radius: 7px;
-        }
+    .announcement-bar__close {
+        color: #9F9F9F !important;
+        top: auto;
+        bottom: auto;
+        left: 6px;
+        right: auto;
+        font-size: 30px;
+        font-weight: 400;
     }
 }
 

@@ -33,27 +33,21 @@ const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
                 alt='kchat logo'
             />
             <div className='get-app-annoucement-bar-mobile-header__title'>
-                {'Infomaniak'}
+                {'Infomaniak kChat'}
                 <span className='get-app-annoucement-bar-mobile-header__product'>
-                    {'kChat'}
+                    {'Infomaniak Network SA'}
                 </span>
             </div>
         </div>
     );
 
     const button = (
-        <button
-            className='btn btn-primary'
-            onClick={handleDownload}
-        >
+        <a onClick={handleDownload}>
             <FormattedMessage
                 id='get_app_annoucement_bar_mobile.download'
-                defaultMessage='Download{br}the app'
-                values={{
-                    br: <br/>,
-                }}
+                defaultMessage='Download'
             />
-        </button>
+        </a>
     );
 
     // Smart banner is already displayed
@@ -64,7 +58,7 @@ const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
 
     return (
         <AnnouncementBar
-            type={AnnouncementBarTypes.INFOMANIAK}
+            type={AnnouncementBarTypes.INFOMANIAK_MOBILE}
             showCloseButton={true}
             handleClose={handleClose}
             icon={icon}

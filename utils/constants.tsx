@@ -981,6 +981,7 @@ export const AnnouncementBarTypes = {
     ADVISOR_ACK: 'advisor-ack',
     GENERAL: 'general',
     INFOMANIAK: 'infomaniak',
+    INFOMANIAK_MOBILE: 'infomaniak-mobile',
 };
 
 export const AnnouncementBarMessages = {

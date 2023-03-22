@@ -5724,7 +5724,7 @@
   "cancel_multiple_invites_modal.content": "Wenn Sie diese Einladung stornieren, stornieren Sie auch die Einladungen in den folgenden Kanälen :",
   "channelLimitIndicator.text": "Sie haben das Limit von {type, select, O {öffentliche Kanäle} P {private Kanäle} other {}} ({usage, number}/{limit, number}) auf Ihrem kSuite-Angebot erreicht. {isAdmin, select, true {<modifyOffer>Bearbeiten Sie Ihr Angebot</modifyOffer>, um zusätzliche Kanäle zu erstellen.} other {Bitte wenden Sie sich an einen Administrator, damit er das Angebot ändert.}}",
   "get_the_app_announcement_bar.message": "<gta>Laden Sie die kChat-Anwendung</gta> für {os} herunter, um eine bessere Erfahrung zu machen ! (<dnd>Erinnere mich nicht mehr daran</dnd>)",
-  "get_app_annoucement_bar_mobile.download": "App{br}laden",
+  "get_app_annoucement_bar_mobile.download": "Herunterladen",
   "get_the_app_modal.header": "Herunterladen der kChat-Anwendung für {platform}",
   "get_the_app_modal.content": "Wir empfehlen Ihnen, die App zu installieren, um ein besseres Erlebnis zu haben !",
   "get_the_app_modal.confirm": "kChat herunterladen für {platform}"

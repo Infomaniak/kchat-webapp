@@ -72,7 +72,7 @@ const GetAppAnnoucementBar = () => {
     });
 
     if (isMobile()) {
-        // Don't display the banner on mobile app
+        // Don't display the banner or modal on mobile app
         if (isMobileWebviewApp()) {
             return null;
         }
