@@ -23,7 +23,7 @@ import {GlobalState} from 'types/store';
 import './get_the_app_modal.scss';
 
 type Props = {
-    onClose: (doNotDisturb?: boolean) => void;
+    onClose: () => void;
 };
 
 const GetTheAppModal = ({onClose}: Props) => {
@@ -31,23 +31,23 @@ const GetTheAppModal = ({onClose}: Props) => {
     const show = useSelector((state: GlobalState) => isModalOpen(state, ModalIdentifiers.GET_THE_APP));
     const {formatMessage} = useIntl();
 
-    const handleClose = (doNotDisturb?: boolean) => {
-        dispatch(closeModal(ModalIdentifiers.GET_THE_APP));
-        onClose(doNotDisturb);
-    };
-
-    const onExited = () => handleClose();
-
-    const handleConfirm = () => {
-        window.open('https://infomaniak.com/gtl/apps.kchat', '_blank', 'noopener,noreferrer');
-        handleClose(true);
-    };
-
     // Set default mobile platform as Android
     let platform = 'Android';
     if (isIos()) {
         platform = 'iOS';
     }
+
+    const handleClose = () => {
+        dispatch(closeModal(ModalIdentifiers.GET_THE_APP));
+        onClose();
+    };
+
+    const onExited = () => handleClose();
+
+    const handleConfirm = () => {
+        window.open('https://infomaniak.com/gtl/apps.kchat?appredirect=true', '_blank', 'noopener,noreferrer');
+        handleClose();
+    };
 
     const content = (
         <div className='get-the-app-modal-content'>

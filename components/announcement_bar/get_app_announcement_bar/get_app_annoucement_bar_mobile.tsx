@@ -6,7 +6,6 @@ import {FormattedMessage} from 'react-intl';
 
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
 
-import {isSafari} from 'utils/user_agent';
 import {AnnouncementBarTypes} from 'utils/constants';
 
 import loaderkChat from 'images/logo_compact.png';
@@ -18,11 +17,11 @@ type Props = {
 };
 
 const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
-    const handleClose = (doNotDisturb?: boolean) => onClose(doNotDisturb);
+    const handleClose = () => onClose(true);
 
     const handleDownload = () => {
-        window.open('https://infomaniak.com/gtl/apps.kchat', '_blank', 'noopener,noreferrer');
-        handleClose(true);
+        window.open('https://infomaniak.com/gtl/apps.kchat?appredirect=true', '_blank', 'noopener,noreferrer');
+        handleClose();
     };
 
     const icon = (
@@ -49,12 +48,6 @@ const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
             />
         </a>
     );
-
-    // Smart banner is already displayed
-    // https://developer.apple.com/documentation/webkit/promoting_apps_with_smart_app_banners
-    if (isSafari()) {
-        return null;
-    }
 
     return (
         <AnnouncementBar
