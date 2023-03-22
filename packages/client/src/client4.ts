@@ -4252,6 +4252,13 @@ export default class Client4 {
         );
     }
 
+    setPostReminder = (userId: string, postId: string, targetTime: number) => {
+        return this.doFetch(
+            `${this.getUserRoute(userId)}/posts/${postId}/reminder`,
+            {method: 'post', body: JSON.stringify({target_time: targetTime})},
+        );
+    }
+
     /**
      * @param query string query of graphQL, pass the json stringified version of the query
      * eg.  const query = JSON.stringify({query: `{license, config}`, operationName: 'queryForLicenseAndConfig'});

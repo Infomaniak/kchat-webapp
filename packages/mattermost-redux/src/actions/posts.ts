@@ -1402,3 +1402,14 @@ export function unacknowledgePost(postId: string) {
         return {data};
     };
 }
+
+export function setPostReminder(userId: string, postId: string, targetTime: number) {
+    return bindClientFunc({
+        clientFunc: Client4.setPostReminder,
+        params: [
+            userId,
+            postId,
+            targetTime,
+        ],
+    });
+}
