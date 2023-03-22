@@ -40,6 +40,7 @@ import {getCurrentDateTimeForTimezone, getCurrentMomentForTimezone} from 'utils/
 import {localizeMessage} from 'utils/utils';
 
 import './status_dropdown.scss';
+import ToggleNextModal from 'components/toggle_next_modal';
 
 type Props = {
     intl: IntlShape;
@@ -449,6 +450,8 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
             });
         }
 
+        const isNext = document.cookie.indexOf('KCHAT_NEXT=always') !== -1;
+
         return (
             <MenuWrapper
                 onToggle={this.onToggle}
@@ -595,6 +598,30 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                                 </div>
                             )}
                         </Menu.ItemAction>
+                        <Menu.ItemToggleModalRedux
+                            modalId={ModalIdentifiers.TOGGLE_NEXT}
+                            dialogType={ToggleNextModal}
+                            icon={(
+                                <Icon
+                                    size={16}
+                                    glyph={'laptop'}
+                                />
+                            )}
+                            text={(
+                                <div>
+                                    <FormattedMessage
+                                        id='toggle_next_modal.title'
+                                        defaultMessage='Switch to {version} version'
+                                        values={{
+                                            version: isNext ? 'STABLE' : 'NEXT',
+                                        }}
+                                    />
+                                    <span className='status-dropdown-menu__version-indicator'>
+                                        {isNext ? 'NEXT' : 'STABLE'}
+                                    </span>
+                                </div>
+                            )}
+                        />
                     </Menu.Group>
                     <Menu.Group>
                         <Menu.ItemAction
