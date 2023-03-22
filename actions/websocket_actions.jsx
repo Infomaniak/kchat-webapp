@@ -342,12 +342,17 @@ export async function reconnect(includeWebSocket = true) {
 function syncThreads(teamId, userId) {
     const state = getState();
     const newestThread = getNewestThreadInTeam(state, teamId);
-
-    // no need to sync if we have nothing yet
-    if (!newestThread) {
-        return;
+    let lastReplyAt;
+    if (newestThread) {
+        lastReplyAt = newestThread.last_reply_at;
     }
-    dispatch(getCountsAndThreadsSince(userId, teamId, newestThread.last_reply_at));
+
+    // Even if the store contains no thread in current team we should fetch threads
+    // Scenario:
+    // The user has no thread and disconnects on global threads page.
+    // He receives some threads while he is away.
+    // When he reconnects, the app should retreive potential new threads
+    dispatch(getCountsAndThreadsSince(userId, teamId, lastReplyAt));
 }
 
 export function registerPluginWebSocketEvent(pluginId, event, action) {
@@ -1797,7 +1802,7 @@ function handleThreadUpdated(msg) {
             dispatch(updateThreadRead(currentUserId, currentTeamId, threadData.id, lastViewedAt));
         }
 
-        handleThreadArrived(doDispatch, doGetState, threadData, msg.data.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions);
+        handleThreadArrived(doDispatch, doGetState, threadData, msg.data.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions, /*fromWebsocket*/ true);
     };
 }
 
