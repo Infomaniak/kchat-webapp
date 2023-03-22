@@ -31,8 +31,8 @@ const ToggleNextModal = () => {
             domain = '.preprod.dev.infomaniak.ch';
         }
 
-        // Give the cookie a 10 minutes lifetime so it is still available after the reload and as it will be overwritten on the next api call
-        document.cookie = `KCHAT_NEXT=${value}; path=/; domain=${domain}; secure; samesite=lax; max-age=600`;
+        // 1 year life time cookie
+        document.cookie = `KCHAT_NEXT=${value}; path=/; domain=${domain}; secure; samesite=lax; max-age=31536000`;
 
         window.location.reload();
     };
