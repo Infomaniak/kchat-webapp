@@ -6,6 +6,7 @@ import memoize from 'memoize-one';
 
 import {Post} from '@mattermost/types/posts';
 import {Channel} from '@mattermost/types/channels';
+import {Team} from '@mattermost/types/teams';
 
 import Markdown from 'components/markdown';
 
@@ -49,6 +50,9 @@ type Props = {
     hasPluginTooltips?: boolean;
     isUserCanManageMembers?: boolean;
     mentionKeys: MentionKey[];
+
+    currentTeam: Team;
+    isMilitaryTime: boolean;
 }
 
 export default class PostMarkdown extends React.PureComponent<Props> {
@@ -73,7 +77,7 @@ export default class PostMarkdown extends React.PureComponent<Props> {
         const {post, mentionKeys} = this.props;
 
         if (post) {
-            const renderedSystemMessage = renderSystemMessage(post, this.props.channel, this.props.isUserCanManageMembers);
+            const renderedSystemMessage = renderSystemMessage(post, this.props.currentTeam, this.props.channel, this.props.isUserCanManageMembers, this.props.isMilitaryTime);
             if (renderedSystemMessage) {
                 return <div>{renderedSystemMessage}</div>;
             }

@@ -24,6 +24,7 @@ type Props = {
     userId: string;
     post: Post;
     isMilitaryTime: boolean;
+    show: boolean;
     timezone?: string;
 }
 
@@ -107,6 +108,10 @@ export function PostReminderSubmenu(props: Props) {
                 action: id === 'custom' ? () => setCustomPostReminder() : () => setPostReminder(id),
             };
         });
+
+    if (!props.show) {
+        return null;
+    }
 
     return (
         <Menu.ItemSubMenu

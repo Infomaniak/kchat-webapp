@@ -549,14 +549,13 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                             onClick={this.handleAddReactionMenuItemActivated}
                         />
                     </ChannelPermissionGate>
-                    {!isSystemMessage && (
-                        <PostReminderSubmenu
-                            userId={this.props.userId}
-                            post={this.props.post}
-                            isMilitaryTime={this.props.isMilitaryTime}
-                            timezone={this.props.timezone}
-                        />
-                    )}
+                    <PostReminderSubmenu
+                        userId={this.props.userId}
+                        post={this.props.post}
+                        isMilitaryTime={this.props.isMilitaryTime}
+                        timezone={this.props.timezone}
+                        show={!isSystemMessage}
+                    />
                     <Menu.ItemAction
                         id={`unread_post_${this.props.post.id}`}
                         show={!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH}

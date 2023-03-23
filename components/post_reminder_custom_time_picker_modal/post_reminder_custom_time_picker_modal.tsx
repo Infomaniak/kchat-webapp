@@ -23,13 +23,13 @@ type Props = PropsFromRedux & {
 
 const modalHeaderText = (
     <FormattedMessage
-        id='post_reminder.custom_time_picker_modal.header'
+        id='post_reminder.custom_time_picker_modal.text'
         defaultMessage='Set a reminder'
     />
 );
 const confirmButtonText = (
     <FormattedMessage
-        id='post_reminder.custom_time_picker_modal.submit_button'
+        id='post_reminder.custom_time_picker_modal.text'
         defaultMessage='Set reminder'
     />
 );
@@ -44,7 +44,7 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
 
     return (
         <GenericModal
-            ariaLabel={localizeMessage('post_reminder_custom_time_picker_modal.defaultMsg', 'Set a reminder')}
+            ariaLabel={localizeMessage('post_reminder_custom_time_picker_modal.text', 'Set a reminder')}
             onExited={onExited}
             modalHeaderText={modalHeaderText}
             confirmButtonText={confirmButtonText}
