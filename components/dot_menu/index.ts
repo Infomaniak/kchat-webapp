@@ -11,14 +11,13 @@ import {getCurrentUserId, getCurrentUserMentionKeys} from 'mattermost-redux/sele
 import {getCurrentTeamId, getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {makeGetThreadOrSynthetic} from 'mattermost-redux/selectors/entities/threads';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
-import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import {isSystemMessage} from 'mattermost-redux/utils/post_utils';
 
 import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {setThreadFollow} from 'mattermost-redux/actions/threads';
-import {setPostReminder} from 'mattermost-redux/actions/posts';
 
 import {ModalData} from 'types/actions';
 import {GlobalState} from 'types/store';
@@ -35,6 +34,7 @@ import {
 } from 'actions/post_actions';
 
 import {getIsMobileView} from 'selectors/views/browser';
+import {getCurrentUserTimezone} from 'selectors/general';
 
 import * as PostUtils from 'utils/post_utils';
 
@@ -75,6 +75,7 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
     const currentTeam = getCurrentTeam(state) || {};
     const team = getTeam(state, channel.team_id);
     const teamUrl = `${getSiteURL()}/${team?.name || currentTeam.name}`;
+    const isMilitaryTime = getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false);
 
     const systemMessage = isSystemMessage(post);
     const collapsedThreads = isCollapsedThreadsEnabled(state);
@@ -131,6 +132,8 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
         threadReplyCount,
         isMobileView: getIsMobileView(state),
         showForwardPostNewLabel,
+        timezone: getCurrentUserTimezone(state),
+        isMilitaryTime,
         ...ownProps,
     };
 }
@@ -145,7 +148,6 @@ type Actions = {
     markPostAsUnread: (post: Post) => void;
     setThreadFollow: (userId: string, teamId: string, threadId: string, newState: boolean) => void;
     setGlobalItem: (name: string, value: any) => void;
-    setPostReminder: (userId: string, postId: string, targetAt: number) => void;
 }
 
 function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
@@ -160,7 +162,6 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             markPostAsUnread,
             setThreadFollow,
             setGlobalItem,
-            setPostReminder,
         }, dispatch),
     };
 }

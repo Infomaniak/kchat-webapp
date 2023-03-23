@@ -22,6 +22,7 @@ import ChannelPermissionGate from 'components/permissions_gates/channel_permissi
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import DotsHorizontalIcon from 'components/widgets/icons/dots_horizontal';
+import {PostReminderSubmenu} from 'components/dot_menu/post_reminder_submenu';
 import {ModalData} from 'types/actions';
 import {PluginComponent} from 'types/store/plugins';
 import ForwardPostModal from '../forward_post_modal';
@@ -61,6 +62,8 @@ type Props = {
     teamUrl?: string; // TechDebt: Made non-mandatory while converting to typescript
     isMobileView: boolean;
     showForwardPostNewLabel: boolean;
+    timezone?: string;
+    isMilitaryTime: boolean;
 
     /**
      * Components for overriding provided by plugins
@@ -115,9 +118,6 @@ type Props = {
          * Function to set a global storage item on the store
          */
         setGlobalItem: (name: string, value: any) => void;
-
-        setPostReminder: (userId: string, postId: string, targetTime: number) => void;
-
     }; // TechDebt: Made non-mandatory while converting to typescript
 
     canEdit: boolean;
@@ -460,8 +460,6 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     }
 
     render(): JSX.Element {
-        const {userId, post: {id: postId}, actions} = this.props;
-
         const isFollowingThread = this.props.isFollowingThread ?? this.props.isMentionedInRootPost;
         const isMobile = this.props.isMobileView;
         const isSystemMessage = PostUtils.isSystemMessage(this.props.post);
@@ -489,45 +487,6 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                 )} */}
             </span>
         );
-
-        const reminderSubMenu = [
-            {
-                id: `reminder_menu_thirty_minutes_${this.props.post.id}`,
-                direction: 'left',
-                text: Utils.localizeMessage('post_info.reminder_menu.thirty_minutes', '30 minutes'),
-                action: () => actions.setPostReminder(userId, postId, Math.floor(Date.now() / 1000) + /*30 minutes*/ 1_080),
-            },
-            {
-                id: `reminder_menu_1_hour_${this.props.post.id}`,
-                direction: 'left',
-                text: Utils.localizeMessage('post_info.reminder_menu.one_hour', '1 hour'),
-                action: () => actions.setPostReminder(userId, postId, Math.floor(Date.now() / 1000) + /*1 hour*/ 2_160),
-            },
-            {
-                id: `reminder_menu_two_hours_${this.props.post.id}`,
-                direction: 'left',
-                text: Utils.localizeMessage('post_info.reminder_menu.two_hours', '2 hours'),
-                action: () => actions.setPostReminder(userId, postId, Math.floor(Date.now() / 1000) + /*2 hours*/ 4_320),
-            },
-            {
-                id: `reminder_menu_tomorrow_${this.props.post.id}`,
-                direction: 'left',
-                text: Utils.localizeMessage('post_info.reminder_menu.tomorrow', 'Tomorrow'),
-                action: () => actions.setPostReminder(userId, postId, Math.floor(Date.now() / 1000) + /*1 day*/ 86_400),
-            },
-            {
-                id: `reminder_menu_next_week_${this.props.post.id}`,
-                direction: 'left',
-                text: Utils.localizeMessage('post_info.reminder_menu.next_week', 'Next week'),
-                action: () => actions.setPostReminder(userId, postId, Math.floor(Date.now() / 1000) + /*1 week*/ 604_800_000),
-            },
-            {
-                id: `reminder_menu_custom_${this.props.post.id}`,
-                direction: 'left',
-                text: Utils.localizeMessage('post_info.reminder_menu.custom', 'Custom'),
-                action: () => console.log('custom'), //eslint-disable-line no-console
-            },
-        ];
 
         return (
             <MenuWrapper
@@ -590,22 +549,14 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                             onClick={this.handleAddReactionMenuItemActivated}
                         />
                     </ChannelPermissionGate>
-                    <Menu.ItemSubMenu
-                        id={`reminder_post_${this.props.post.id}`}
-                        show={true}
-                        subMenu={reminderSubMenu}
-                        text={Utils.localizeMessage(
-                            'post_info.reminder_menu',
-                            'Remind me about this',
-                        )}
-                        icon={(
-                            <Icon
-                                className='post_info__reminder-icon'
-                                size={16}
-                                glyph='bell-outline'
-                            />
-                        )}
-                    />
+                    {!isSystemMessage && (
+                        <PostReminderSubmenu
+                            userId={this.props.userId}
+                            post={this.props.post}
+                            isMilitaryTime={this.props.isMilitaryTime}
+                            timezone={this.props.timezone}
+                        />
+                    )}
                     <Menu.ItemAction
                         id={`unread_post_${this.props.post.id}`}
                         show={!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH}

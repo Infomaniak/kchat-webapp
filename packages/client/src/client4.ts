@@ -4252,10 +4252,11 @@ export default class Client4 {
         );
     }
 
-    setPostReminder = (userId: string, postId: string, targetTime: number) => {
-        return this.doFetch(
+    addPostReminder = (userId: string, postId: string, timestamp: number) => {
+        this.trackEvent('api', 'api_post_set_reminder');
+        return this.doFetch<StatusOK>(
             `${this.getUserRoute(userId)}/posts/${postId}/reminder`,
-            {method: 'post', body: JSON.stringify({target_time: targetTime})},
+            {method: 'post', body: JSON.stringify({target_time: timestamp})},
         );
     }
 

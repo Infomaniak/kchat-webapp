@@ -1403,13 +1403,15 @@ export function unacknowledgePost(postId: string) {
     };
 }
 
-export function setPostReminder(userId: string, postId: string, targetTime: number) {
-    return bindClientFunc({
-        clientFunc: Client4.setPostReminder,
-        params: [
-            userId,
-            postId,
-            targetTime,
-        ],
-    });
+export function addPostReminder(userId: string, postId: string, timestamp: number) {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        try {
+            await Client4.addPostReminder(userId, postId, timestamp);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error};
+        }
+        return {data: true};
+    };
 }
