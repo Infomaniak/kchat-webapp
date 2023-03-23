@@ -5053,5 +5053,14 @@
   "pending_guests_dropdown.cancel": "Annuler l'invitation",
   "cancel_multiple_invites_modal.header": "Annuler plusieurs invitations",
   "cancel_multiple_invites_modal.content": "En annulant cette invitation, vous annulez également les invitations dans les canaux suivants :",
-  "channelLimitIndicator.text": "Vous avez atteint la limite de {type, select, O {canaux publics} P {canaux privés} other {}} ({usage, number}/{limit, number}) sur votre offre kSuite. {isAdmin, select, true {<modifyOffer>Modifier votre offre</modifyOffer> pour créer des canaux supplémentaires.} other {Veuillez contacter un administrateur pour qu'il modifie l'offre.}}"
+  "channelLimitIndicator.text": "Vous avez atteint la limite de {type, select, O {canaux publics} P {canaux privés} other {}} ({usage, number}/{limit, number}) sur votre offre kSuite. {isAdmin, select, true {<modifyOffer>Modifier votre offre</modifyOffer> pour créer des canaux supplémentaires.} other {Veuillez contacter un administrateur pour qu'il modifie l'offre.}}",
+  "post_info.post_reminder.menu": "Rappel",
+  "post_info.post_reminder.sub_menu.thirty_minutes": "30 mins",
+  "post_info.post_reminder.sub_menu.one_hour": "1 heure",
+  "post_info.post_reminder.sub_menu.two_hours": "2 heures",
+  "post_info.post_reminder.sub_menu.tomorrow": "Demain",
+  "post_info.post_reminder.sub_menu.custom": "Personnalisé",
+  "post_reminder.custom_time_picker_modal.text": "Définir un rappel",
+  "post.reminder.acknowledgement": "Ce message de {username} vous sera rappelé à {reminderTime}, {reminderDate}: {permaLink}",
+  "post.reminder.systemBot": "Bonjour, voici votre rappel concernant ce message de {username} : {permaLink}"
 }

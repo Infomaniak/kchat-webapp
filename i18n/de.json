@@ -5722,5 +5722,14 @@
   "pending_guests_dropdown.cancel": "Einladung abbrechen",
   "cancel_multiple_invites_modal.header": "Mehrere Einladungen absagen",
   "cancel_multiple_invites_modal.content": "Wenn Sie diese Einladung stornieren, stornieren Sie auch die Einladungen in den folgenden Kanälen :",
-  "channelLimitIndicator.text": "Sie haben das Limit von {type, select, O {öffentliche Kanäle} P {private Kanäle} other {}} ({usage, number}/{limit, number}) auf Ihrem kSuite-Angebot erreicht. {isAdmin, select, true {<modifyOffer>Bearbeiten Sie Ihr Angebot</modifyOffer>, um zusätzliche Kanäle zu erstellen.} other {Bitte wenden Sie sich an einen Administrator, damit er das Angebot ändert.}}"
+  "channelLimitIndicator.text": "Sie haben das Limit von {type, select, O {öffentliche Kanäle} P {private Kanäle} other {}} ({usage, number}/{limit, number}) auf Ihrem kSuite-Angebot erreicht. {isAdmin, select, true {<modifyOffer>Bearbeiten Sie Ihr Angebot</modifyOffer>, um zusätzliche Kanäle zu erstellen.} other {Bitte wenden Sie sich an einen Administrator, damit er das Angebot ändert.}}",
+  "post_info.post_reminder.menu": "Erinnerung",
+  "post_info.post_reminder.sub_menu.thirty_minutes": "30 Min",
+  "post_info.post_reminder.sub_menu.one_hour": "1 Std",
+  "post_info.post_reminder.sub_menu.two_hours": "2 Std",
+  "post_info.post_reminder.sub_menu.tomorrow": "Morgen",
+  "post_info.post_reminder.sub_menu.custom": "Benutzerdefiniert",
+  "post_reminder.custom_time_picker_modal.text": "Erinnerung einstellen",
+  "post.reminder.acknowledgement": "Sie werden um {reminderTime}, {reminderDate} an diese Nachricht von {username} erinnert: {permaLink}",
+  "post.reminder.systemBot": "Hallo, hier ist Ihre Erinnerung an diese Nachricht von {username}: {permaLink}"
 }

@@ -5727,5 +5727,14 @@
   "pending_guests_dropdown.cancel": "Cancel Invitation",
   "cancel_multiple_invites_modal.header": "Cancel multiple invitations",
   "cancel_multiple_invites_modal.content": "By cancelling this invitation, you will also cancel invitations in the following channels :",
-  "channelLimitIndicator.text": "You have reached the limit of {type, select, O {public channels} P {private channels} other {}} ({usage, number}/{limit, number}) on your kSuite offer. {isAdmin, select, true {<modifyOffer>Modify your offer</modifyOffer> to create additional channels.} other {Please contact an administrator to modify the offer.}}"
+  "channelLimitIndicator.text": "You have reached the limit of {type, select, O {public channels} P {private channels} other {}} ({usage, number}/{limit, number}) on your kSuite offer. {isAdmin, select, true {<modifyOffer>Modify your offer</modifyOffer> to create additional channels.} other {Please contact an administrator to modify the offer.}}",
+  "post_info.post_reminder.menu": "Remind",
+  "post_info.post_reminder.sub_menu.thirty_minutes": "30 mins",
+  "post_info.post_reminder.sub_menu.one_hour": "1 hour",
+  "post_info.post_reminder.sub_menu.two_hours": "2 hours",
+  "post_info.post_reminder.sub_menu.tomorrow": "Tomorrow",
+  "post_info.post_reminder.sub_menu.custom": "Custom",
+  "post_reminder.custom_time_picker_modal.text": "Set reminder",
+  "post.reminder.acknowledgement": "You will be reminded at {reminderTime}, {reminderDate} about this message from {username}: {permaLink}",
+  "post.reminder.systemBot": "Hi there, here's your reminder about this message from {username}: {permaLink}"
 }
