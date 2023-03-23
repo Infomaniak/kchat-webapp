@@ -27,11 +27,16 @@ const GetAppAnnoucementBar = () => {
 
     useEffect(() => {
         const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT);
-        const shouldDisplayBanner = !lastSeenAt || Date.now() >= Number(lastSeenAt) + COOLDOWN;
+        const shouldDisplayBanner = !lastSeenAt || (!isMobile() && Date.now() >= Number(lastSeenAt) + COOLDOWN);
         if (lastSeenAt !== DO_NOT_DISTURB) {
             if (shouldDisplayBanner) {
+                // Show banner (or modal on mobile)
+                // Desktop: every 48 hours
+                // Mobile: only if lastSeenAt is not defined as we show it only once
                 setShow(true);
             } else {
+                // Desktop: display nothing
+                // Mobile: show banner
                 setShow(false);
             }
         }
