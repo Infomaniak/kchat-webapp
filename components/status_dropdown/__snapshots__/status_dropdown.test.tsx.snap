@@ -205,35 +205,6 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
         sibling={false}
         text="Profile"
       />
-      <MenuItemToggleModalRedux
-        dialogType={[Function]}
-        icon={
-          <Icon
-            glyph="laptop"
-            size={16}
-          />
-        }
-        modalId="toggle_next"
-        show={true}
-        text={
-          <div>
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Switch to {version} version"
-              id="toggle_next_modal.title"
-              values={
-                Object {
-                  "version": "NEXT",
-                }
-              }
-            />
-            <span
-              className="status-dropdown-menu__version-indicator"
-            >
-              STABLE
-            </span>
-          </div>
-        }
-      />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
@@ -540,35 +511,6 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
         sibling={false}
         text="Profile"
       />
-      <MenuItemToggleModalRedux
-        dialogType={[Function]}
-        icon={
-          <Icon
-            glyph="laptop"
-            size={16}
-          />
-        }
-        modalId="toggle_next"
-        show={true}
-        text={
-          <div>
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Switch to {version} version"
-              id="toggle_next_modal.title"
-              values={
-                Object {
-                  "version": "NEXT",
-                }
-              }
-            />
-            <span
-              className="status-dropdown-menu__version-indicator"
-            >
-              STABLE
-            </span>
-          </div>
-        }
-      />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
@@ -827,35 +769,6 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
         sibling={false}
         text="Profile"
       />
-      <MenuItemToggleModalRedux
-        dialogType={[Function]}
-        icon={
-          <Icon
-            glyph="laptop"
-            size={16}
-          />
-        }
-        modalId="toggle_next"
-        show={true}
-        text={
-          <div>
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Switch to {version} version"
-              id="toggle_next_modal.title"
-              values={
-                Object {
-                  "version": "NEXT",
-                }
-              }
-            />
-            <span
-              className="status-dropdown-menu__version-indicator"
-            >
-              STABLE
-            </span>
-          </div>
-        }
-      />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
@@ -1113,35 +1026,6 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
         show={true}
         sibling={false}
         text="Profile"
-      />
-      <MenuItemToggleModalRedux
-        dialogType={[Function]}
-        icon={
-          <Icon
-            glyph="laptop"
-            size={16}
-          />
-        }
-        modalId="toggle_next"
-        show={true}
-        text={
-          <div>
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Switch to {version} version"
-              id="toggle_next_modal.title"
-              values={
-                Object {
-                  "version": "NEXT",
-                }
-              }
-            />
-            <span
-              className="status-dropdown-menu__version-indicator"
-            >
-              STABLE
-            </span>
-          </div>
-        }
       />
     </MenuGroup>
     <MenuGroup>
@@ -1402,35 +1286,6 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
         sibling={false}
         text="Profile"
       />
-      <MenuItemToggleModalRedux
-        dialogType={[Function]}
-        icon={
-          <Icon
-            glyph="laptop"
-            size={16}
-          />
-        }
-        modalId="toggle_next"
-        show={true}
-        text={
-          <div>
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Switch to {version} version"
-              id="toggle_next_modal.title"
-              values={
-                Object {
-                  "version": "NEXT",
-                }
-              }
-            />
-            <span
-              className="status-dropdown-menu__version-indicator"
-            >
-              STABLE
-            </span>
-          </div>
-        }
-      />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
@@ -1663,35 +1518,6 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         sibling={false}
         text="Profile"
       />
-      <MenuItemToggleModalRedux
-        dialogType={[Function]}
-        icon={
-          <Icon
-            glyph="laptop"
-            size={16}
-          />
-        }
-        modalId="toggle_next"
-        show={true}
-        text={
-          <div>
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Switch to {version} version"
-              id="toggle_next_modal.title"
-              values={
-                Object {
-                  "version": "NEXT",
-                }
-              }
-            />
-            <span
-              className="status-dropdown-menu__version-indicator"
-            >
-              STABLE
-            </span>
-          </div>
-        }
-      />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
@@ -1915,35 +1741,6 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
         show={true}
         sibling={false}
         text="Profile"
-      />
-      <MenuItemToggleModalRedux
-        dialogType={[Function]}
-        icon={
-          <Icon
-            glyph="laptop"
-            size={16}
-          />
-        }
-        modalId="toggle_next"
-        show={true}
-        text={
-          <div>
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Switch to {version} version"
-              id="toggle_next_modal.title"
-              values={
-                Object {
-                  "version": "NEXT",
-                }
-              }
-            />
-            <span
-              className="status-dropdown-menu__version-indicator"
-            >
-              STABLE
-            </span>
-          </div>
-        }
       />
     </MenuGroup>
     <MenuGroup>
@@ -2202,35 +1999,6 @@ exports[`components/StatusDropdown should not show clear status button when cust
         show={true}
         sibling={false}
         text="Profile"
-      />
-      <MenuItemToggleModalRedux
-        dialogType={[Function]}
-        icon={
-          <Icon
-            glyph="laptop"
-            size={16}
-          />
-        }
-        modalId="toggle_next"
-        show={true}
-        text={
-          <div>
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Switch to {version} version"
-              id="toggle_next_modal.title"
-              values={
-                Object {
-                  "version": "NEXT",
-                }
-              }
-            />
-            <span
-              className="status-dropdown-menu__version-indicator"
-            >
-              STABLE
-            </span>
-          </div>
-        }
       />
     </MenuGroup>
     <MenuGroup>
@@ -2537,35 +2305,6 @@ exports[`components/StatusDropdown should show clear status button when custom s
         show={true}
         sibling={false}
         text="Profile"
-      />
-      <MenuItemToggleModalRedux
-        dialogType={[Function]}
-        icon={
-          <Icon
-            glyph="laptop"
-            size={16}
-          />
-        }
-        modalId="toggle_next"
-        show={true}
-        text={
-          <div>
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Switch to {version} version"
-              id="toggle_next_modal.title"
-              values={
-                Object {
-                  "version": "NEXT",
-                }
-              }
-            />
-            <span
-              className="status-dropdown-menu__version-indicator"
-            >
-              STABLE
-            </span>
-          </div>
-        }
       />
     </MenuGroup>
     <MenuGroup>
