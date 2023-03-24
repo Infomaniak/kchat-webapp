@@ -40,7 +40,7 @@ function mapStateToProps(state: GlobalState) {
     const currentUser = getCurrentUser(state);
     const currentTeam = getCurrentTeam(state);
     const channelStats = getCurrentChannelStats(state) || EMPTY_CHANNEL_STATS;
-    const isArchived = Object.keys(channel).length ? isCurrentChannelArchived(state) : false;
+    const isArchived = channel.delete_at ? isCurrentChannelArchived(state) : false;
     const isFavorite = isCurrentChannelFavorite(state);
     const isMuted = isCurrentChannelMuted(state);
     const isInvitingPeople = isModalOpen(state, ModalIdentifiers.CHANNEL_INVITE) || isModalOpen(state, ModalIdentifiers.CREATE_DM_CHANNEL);
