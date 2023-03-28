@@ -53,6 +53,7 @@ describe('components/StatusDropdown', () => {
         showCompleteYourProfileTour: false,
         showProfileTutorialStep: false,
         showStatusTutorialStep: false,
+        showNextSwitch: false,
     };
 
     test('should match snapshot in default state', () => {

@@ -40,6 +40,7 @@ import {getCurrentDateTimeForTimezone, getCurrentMomentForTimezone} from 'utils/
 import {localizeMessage} from 'utils/utils';
 
 import './status_dropdown.scss';
+import ToggleNextModal from 'components/toggle_next_modal';
 
 type Props = {
     intl: IntlShape;
@@ -65,6 +66,7 @@ type Props = {
     timezone?: string;
     showProfileTutorialStep: boolean;
     showStatusTutorialStep: boolean;
+    showNextSwitch: boolean;
 }
 
 type State = {
@@ -344,7 +346,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
     }
 
     render = (): JSX.Element => {
-        const {intl} = this.props;
+        const {intl, showNextSwitch} = this.props;
         const needsConfirm = this.isUserOutOfOffice() && this.props.autoResetPref === '';
         const {status, customStatus, isCustomStatusExpired, currentUser, showProfileTutorialStep, showStatusTutorialStep} = this.props;
         const isStatusSet = customStatus && (customStatus.text.length > 0 || customStatus.emoji.length > 0) && !isCustomStatusExpired;
@@ -448,6 +450,8 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                 defaultMessage: 'Select to open profile and status menu.',
             });
         }
+
+        const isNext = document.cookie.indexOf('KCHAT_NEXT=always') !== -1;
 
         return (
             <MenuWrapper
@@ -595,6 +599,31 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                                 </div>
                             )}
                         </Menu.ItemAction>
+                        {showNextSwitch &&
+                            <Menu.ItemToggleModalRedux
+                                className='status-dropdown-menu__next-switch'
+                                modalId={ModalIdentifiers.TOGGLE_NEXT}
+                                dialogType={ToggleNextModal}
+                                icon={(
+                                    <Icon
+                                        size={16}
+                                        glyph={'laptop'}
+                                        className='status-dropdown-menu__next-icon'
+                                    />
+                                )}
+                                text={(
+                                    <div>
+                                        <FormattedMessage
+                                            id='toggle_next_modal.title'
+                                            defaultMessage='Switch to {version} version'
+                                            values={{
+                                                version: isNext ? 'STABLE' : 'NEXT',
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            />
+                        }
                     </Menu.Group>
                     <Menu.Group>
                         <Menu.ItemAction

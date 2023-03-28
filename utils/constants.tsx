@@ -484,6 +484,7 @@ export const ModalIdentifiers = {
     STORAGE_LIMIT_REACHED: 'storage_limit_reached',
     EXTERNAL_LIMIT_REACHED: 'external_limit_reached',
     CANCEL_MULTIPLE_INVITES: 'cancel_multiple_invites',
+    TOGGLE_NEXT: 'toggle_next',
 };
 
 export const UserStatuses = {
