@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 /* eslint-disable react/self-closing-comp */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useSelector} from 'react-redux';
 
 import styled from 'styled-components';
@@ -44,7 +44,6 @@ import AtMentionsButton from './at_mentions_button/at_mentions_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';
 import SettingsButton from './settings_button';
 
-
 // import PlanUpgradeButton from './plan_upgrade_button';
 
 const RightControlsContainer = styled.div`
@@ -82,6 +81,12 @@ const RightControlsContainer = styled.div`
 
 const ButtonWrapper = styled.div`
     height: 100%;
+`;
+
+const NewsWrapper = styled.div`
+    position: relative;
+    display: none;
+    --module-news-icon-bell-color: rgba(var(--center-channel-color-rgb),0.785);
 `;
 
 export type Props = {
@@ -143,6 +148,11 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
             id={'RightControlsContainer'}
         >
             {/* <PlanUpgradeButton/> */}
+            <NewsWrapper className='grey wc-trigger-news--flex'>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <module-news-component style={{marginLeft: '-3px'}}></module-news-component>
+            </NewsWrapper>
             {!isDesktopApp() && (
                 <div style={{position: 'relative'}}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
