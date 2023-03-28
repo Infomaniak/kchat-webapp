@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 /* eslint-disable react/self-closing-comp */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 
 import styled from 'styled-components';
