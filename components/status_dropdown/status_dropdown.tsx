@@ -601,12 +601,14 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                         </Menu.ItemAction>
                         {showNextSwitch &&
                             <Menu.ItemToggleModalRedux
+                                className='status-dropdown-menu__next-switch'
                                 modalId={ModalIdentifiers.TOGGLE_NEXT}
                                 dialogType={ToggleNextModal}
                                 icon={(
                                     <Icon
                                         size={16}
                                         glyph={'laptop'}
+                                        className='status-dropdown-menu__next-icon'
                                     />
                                 )}
                                 text={(
@@ -618,9 +620,6 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                                                 version: isNext ? 'STABLE' : 'NEXT',
                                             }}
                                         />
-                                        <span className='status-dropdown-menu__version-indicator'>
-                                            {isNext ? 'NEXT' : 'STABLE'}
-                                        </span>
                                     </div>
                                 )}
                             />

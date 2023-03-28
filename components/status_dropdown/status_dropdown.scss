@@ -39,15 +39,13 @@
         }
     }
 
-    .status-dropdown-menu__version-indicator {
-        position: fixed;
-        right: 5px;
-        background-color: #0198ff;
-        color: #FFFFFF;
-        border-radius: 5px;
-        font-size: 10px;
-        padding: 0px 7px;
-        margin-left: 5px;
+    .status-dropdown-menu__next-switch {
+        background-color: #7974B4;
+        color: white;
+
+        i {
+            color: white;
+        }
     }
 }
 
