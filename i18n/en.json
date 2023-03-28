@@ -5727,5 +5727,8 @@
   "pending_guests_dropdown.cancel": "Cancel Invitation",
   "cancel_multiple_invites_modal.header": "Cancel multiple invitations",
   "cancel_multiple_invites_modal.content": "By cancelling this invitation, you will also cancel invitations in the following channels :",
-  "channelLimitIndicator.text": "You have reached the limit of {type, select, O {public channels} P {private channels} other {}} ({usage, number}/{limit, number}) on your kSuite offer. {isAdmin, select, true {<modifyOffer>Modify your offer</modifyOffer> to create additional channels.} other {Please contact an administrator to modify the offer.}}"
+  "channelLimitIndicator.text": "You have reached the limit of {type, select, O {public channels} P {private channels} other {}} ({usage, number}/{limit, number}) on your kSuite offer. {isAdmin, select, true {<modifyOffer>Modify your offer</modifyOffer> to create additional channels.} other {Please contact an administrator to modify the offer.}}",
+  "toggle_next_modal.title": "Switch to {version} version",
+  "toggle_next_modal.message_stable": "STABLE is our default environment. If you are not interested by testing new features, we recommend going back to the STABLE version.",
+  "toggle_next_modal.message_next": "NEXT is our test environment. You might encounter some bugs, but will also access the latest content and updates. If you are not interested by testing new features, we recommend staying on the STABLE version."
 }

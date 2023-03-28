@@ -5053,5 +5053,8 @@
   "pending_guests_dropdown.cancel": "Annuler l'invitation",
   "cancel_multiple_invites_modal.header": "Annuler plusieurs invitations",
   "cancel_multiple_invites_modal.content": "En annulant cette invitation, vous annulez également les invitations dans les canaux suivants :",
-  "channelLimitIndicator.text": "Vous avez atteint la limite de {type, select, O {canaux publics} P {canaux privés} other {}} ({usage, number}/{limit, number}) sur votre offre kSuite. {isAdmin, select, true {<modifyOffer>Modifier votre offre</modifyOffer> pour créer des canaux supplémentaires.} other {Veuillez contacter un administrateur pour qu'il modifie l'offre.}}"
+  "channelLimitIndicator.text": "Vous avez atteint la limite de {type, select, O {canaux publics} P {canaux privés} other {}} ({usage, number}/{limit, number}) sur votre offre kSuite. {isAdmin, select, true {<modifyOffer>Modifier votre offre</modifyOffer> pour créer des canaux supplémentaires.} other {Veuillez contacter un administrateur pour qu'il modifie l'offre.}}",
+  "toggle_next_modal.title": "Passer à la version {version}",
+  "toggle_next_modal.message_stable": "STABLE est notre environnement par défaut. Si vous n'êtes pas intéressé par les tests de nouvelles fonctionnalités, nous vous recommandons de revenir à la version STABLE.",
+  "toggle_next_modal.message_next": "NEXT est notre environnement de test. Il se peut que vous rencontriez des bugs, mais vous aurez également accès en avance au dernier contenu et mises à jour. Si vous n'êtes pas intéressé par le test de nouvelles fonctionnalités, nous vous recommandons de rester sur la version STABLE."
 }
