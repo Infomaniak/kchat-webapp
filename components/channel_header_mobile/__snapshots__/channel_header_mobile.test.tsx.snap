@@ -66,6 +66,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <FlagNext />
     </div>
   </div>
 </nav>
@@ -137,6 +138,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <FlagNext />
     </div>
   </div>
 </nav>
@@ -208,6 +210,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <FlagNext />
     </div>
   </div>
 </nav>
@@ -279,6 +282,7 @@ exports[`components/ChannelHeaderMobile/ChannelHeaderMobile should match snapsho
         isDropdown={false}
       />
       <Connect(CollapseRhsButton) />
+      <FlagNext />
     </div>
   </div>
 </nav>
