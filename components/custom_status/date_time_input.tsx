@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect, useState, useCallback, CSSProperties} from 'react';
+import React, {useEffect, useState, CSSProperties} from 'react';
 import {useSelector} from 'react-redux';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import {DayModifiers, NavbarElementProps} from 'react-day-picker';
@@ -13,8 +13,6 @@ import type {ActionMeta, ValueType, ControlProps, OptionsType} from 'react-selec
 import moment, {Moment} from 'moment-timezone';
 import MomentUtils from 'react-day-picker/moment';
 
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import Menu from 'components/widgets/menu/menu';
 import Timestamp from 'components/timestamp';
 import {getCurrentLocale} from 'selectors/i18n';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
@@ -142,11 +140,6 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         }
     };
 
-    const handleTimeChange = useCallback((time: Date, e: React.MouseEvent) => {
-        e.preventDefault();
-        handleChange(moment(time));
-    }, [handleChange]);
-
     const isValidNewOption = (inputValue: string, _values: ValueType<CreatableOption>, options: OptionsType<CreatableOption>) => {
         const timeOption = moment(inputValue, 'HH:mm').day(time.day()).month(time.month()).year(time.year());
         const isValid = timeOption.isValid() && timeOption.isAfter(moment.now());
@@ -159,7 +152,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         today: currentTime,
     };
 
-    const onChange = (newOption: ValueType<CreatableOption>, {action}: ActionMeta<CreatableOption>) => {
+    const handleTimeChange = (newOption: ValueType<CreatableOption>, {action}: ActionMeta<CreatableOption>) => {
         if (!newOption || !('value' in newOption)) {
             return;
         }
@@ -205,6 +198,17 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         ),
     }));
 
+    const defaultTimeValue = {
+        value: time.toDate(),
+        label: (
+            <Timestamp
+                useRelative={false}
+                useDate={false}
+                value={time.toDate()}
+            />
+        ),
+    };
+
     return (
         <div className='dateTime'>
             <div className='dateTime__date'>
@@ -233,53 +237,13 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
                     }}
                 />
             </div>
-            {/* <div className='dateTime__time'>
-                <MenuWrapper
-                    className='dateTime__time-menu'
-                >
-                    <div>
-                        <span className='dateTime__input-title'>{formatMessage({id: 'custom_status.expiry.time_picker.title', defaultMessage: 'Time'})}</span>
-                        <span className='dateTime__time-icon'>
-                            <i className='icon-clock-outline'/>
-                        </span>
-                        <div
-                            className='dateTime__input'
-                        >
-                            <Timestamp
-                                useRelative={false}
-                                useDate={false}
-                                value={time.toString()}
-                            />
-                        </div>
-                    </div>
-                    <Menu
-                        ariaLabel={formatMessage({id: 'time_dropdown.choose_time', defaultMessage: 'Choose a time'})}
-                        id='expiryTimeMenu'
-                    >
-                        <Menu.Group>
-                            {Array.isArray(timeOptions) && timeOptions.map((option, index) => (
-                                <Menu.ItemAction
-                                    onClick={handleTimeChange.bind(this, option)}
-                                    key={index}
-                                    text={
-                                        <Timestamp
-                                            useRelative={false}
-                                            useDate={false}
-                                            value={option}
-                                        />
-                                    }
-                                />
-                            ))}
-                        </Menu.Group>
-                    </Menu>
-                </MenuWrapper>
-            </div> */}
             <div className='dateTime__custom-time'>
                 <Creatable
                     className='dateTime__custom-time-creatable'
                     components={{Control: CreatableControl}}
                     options={creatableTimeOptions}
-                    onChange={onChange}
+                    defaultValue={defaultTimeValue}
+                    onChange={handleTimeChange}
                     isValidNewOption={isValidNewOption}
                     onMenuOpen={() => onMenuChange(true)}
                     onMenuClose={() => onMenuChange(false)}
