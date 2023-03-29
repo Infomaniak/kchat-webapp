@@ -20,15 +20,8 @@ import {getCurrentMomentForTimezone} from 'utils/timezone';
 const CUSTOM_STATUS_TIME_PICKER_INTERVALS_IN_MINUTES = 30;
 
 type CreatableOption = {
-    value: Date;
+    value: Date | string;
     label: JSX.Element;
-};
-
-const styles = {
-    control: (css: CSSProperties) => ({
-        ...css,
-        minHeight: '40px',
-    }),
 };
 
 const Navbar: React.FC<Partial<NavbarElementProps>> = (navbarProps: Partial<NavbarElementProps>) => {
@@ -82,6 +75,21 @@ const Navbar: React.FC<Partial<NavbarElementProps>> = (navbarProps: Partial<Navb
     );
 };
 
+const CreatableControl = ({children, ...props}: ControlProps<CreatableOption>) => (
+    <components.Control {...props}>
+        <span className='dateTime__input-title'>
+            <FormattedMessage
+                id='custom_status.expiry.time_picker.title'
+                defaultMessage='Time'
+            />
+        </span>
+        <span className='dateTime__custom-time-icon'>
+            <i className='icon-clock-outline'/>
+        </span>
+        {children}
+    </components.Control>
+);
+
 export function getRoundedTime(value: Moment) {
     const roundedTo = CUSTOM_STATUS_TIME_PICKER_INTERVALS_IN_MINUTES;
     const start = moment(value);
@@ -93,18 +101,47 @@ export function getRoundedTime(value: Moment) {
     return start.add(remainder, 'm').seconds(0).milliseconds(0);
 }
 
-const getTimeInIntervals = (startTime: Moment): Date[] => {
+const getTimeInIntervals = (startTime: Moment): CreatableOption[] => {
     const interval = CUSTOM_STATUS_TIME_PICKER_INTERVALS_IN_MINUTES;
     let time = moment(startTime);
     const nextDay = moment(startTime).add(1, 'days').startOf('day');
-    const intervals: Date[] = [];
+    const intervals: CreatableOption[] = [];
     while (time.isBefore(nextDay)) {
-        intervals.push(time.toDate());
+        const date = time.toDate();
+        intervals.push({
+            value: date,
+            label: (
+                <Timestamp
+                    useRelative={false}
+                    useDate={false}
+                    value={date}
+                />
+            ),
+        });
         time = time.add(interval, 'minutes').seconds(0).milliseconds(0);
     }
 
     return intervals;
 };
+
+const setDateTime = (initialDate: Moment, newTime: string) => moment(newTime, 'HH:mm').
+    day(initialDate.day()).
+    month(initialDate.month()).
+    year(initialDate.year());
+
+const styles = {
+    control: (css: CSSProperties) => ({
+        ...css,
+        minHeight: '40px',
+    }),
+};
+
+const placeholder = (
+    <FormattedMessage
+        id='time_dropdown.choose_time'
+        defaultMessage='Choose a time'
+    />
+);
 
 type Props = {
     time: Moment;
@@ -115,7 +152,7 @@ type Props = {
 
 const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, onMenuChange}: Props) => {
     const locale = useSelector(getCurrentLocale);
-    const [timeOptions, setTimeOptions] = useState<Date[]>([]);
+    const [timeOptions, setTimeOptions] = useState<CreatableOption[]>([]);
     const {formatMessage} = useIntl();
 
     const setTimeAndOptions = () => {
@@ -140,16 +177,16 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         }
     };
 
+    const currentTime = getCurrentMomentForTimezone(timezone).toDate();
+    const modifiers = {
+        today: currentTime,
+    };
+
     const isValidNewOption = (inputValue: string, _values: ValueType<CreatableOption>, options: OptionsType<CreatableOption>) => {
         const timeOption = moment(inputValue, 'HH:mm').day(time.day()).month(time.month()).year(time.year());
         const isValid = timeOption.isValid() && timeOption.isAfter(moment.now());
         const alreadyExists = options.some((option) => moment(option.value).isSame(timeOption));
         return isValid && !alreadyExists;
-    };
-
-    const currentTime = getCurrentMomentForTimezone(timezone).toDate();
-    const modifiers = {
-        today: currentTime,
     };
 
     const handleTimeChange = (newOption: ValueType<CreatableOption>, {action}: ActionMeta<CreatableOption>) => {
@@ -158,21 +195,16 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         }
         const {value} = newOption;
         let newTime = moment(value);
-        if (action === 'create-option') {
-            newTime = moment(value, 'HH:mm').day(time.day()).month(time.month()).year(time.year());
+        if (action === 'create-option' && typeof value === 'string') {
+            newTime = setDateTime(time, value);
         }
         if (newTime.isValid()) {
             handleChange(newTime);
         }
     };
 
-    const noOptionsMessage = () => formatMessage({
-        id: 'custom_reminder.time_picker.no_option',
-        defaultMessage: 'Non valid date',
-    });
-
     const formatCreateLabel = (inputValue: string) => {
-        const timeOption = moment(inputValue, 'HH:mm').day(time.day()).month(time.month()).year(time.year()).toDate();
+        const timeOption = setDateTime(time, inputValue).toDate();
         return (
             <Timestamp
                 useRelative={false}
@@ -181,22 +213,6 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
             />
         );
     };
-
-    const placeholder = formatMessage({
-        id: 'time_dropdown.choose_time',
-        defaultMessage: 'Choose a time',
-    });
-
-    const creatableTimeOptions = timeOptions.map((timeOption: Date) => ({
-        value: timeOption,
-        label: (
-            <Timestamp
-                useRelative={false}
-                useDate={false}
-                value={timeOption}
-            />
-        ),
-    }));
 
     const defaultTimeValue = {
         value: time.toDate(),
@@ -239,16 +255,18 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
             </div>
             <div className='dateTime__custom-time'>
                 <Creatable
-                    className='dateTime__custom-time-creatable'
                     components={{Control: CreatableControl}}
-                    options={creatableTimeOptions}
+                    options={timeOptions}
                     defaultValue={defaultTimeValue}
                     onChange={handleTimeChange}
                     isValidNewOption={isValidNewOption}
                     onMenuOpen={() => onMenuChange(true)}
                     onMenuClose={() => onMenuChange(false)}
                     formatCreateLabel={formatCreateLabel}
-                    noOptionsMessage={noOptionsMessage}
+                    noOptionsMessage={() => formatMessage({
+                        id: 'custom_reminder.time_picker.no_option',
+                        defaultMessage: 'Non valid date',
+                    })}
                     placeholder={placeholder}
                     styles={styles}
                 />
@@ -256,20 +274,5 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         </div>
     );
 };
-
-const CreatableControl = (props: ControlProps<CreatableOption>) => (
-    <components.Control {...props}>
-        <span className='dateTime__input-title'>
-            <FormattedMessage
-                id='custom_status.expiry.time_picker.title'
-                defaultMessage='Time'
-            />
-        </span>
-        <span className='dateTime__custom-time-icon'>
-            <i className='icon-clock-outline'/>
-        </span>
-        {props.children}
-    </components.Control>
-);
 
 export default DateTimeInputContainer;
