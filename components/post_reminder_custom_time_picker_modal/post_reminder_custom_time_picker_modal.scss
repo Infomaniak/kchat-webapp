@@ -31,5 +31,16 @@
         .dateTime__input {
             width: 260px;
         }
+
+        .dateTime__custom-time {
+            width: 260px;
+            .dateTime__custom-time {
+                height: 40px;
+            }
+            .dateTime__custom-time-icon {
+                position: static;
+                margin-left: 10px;
+            }
+        }
     }
 }

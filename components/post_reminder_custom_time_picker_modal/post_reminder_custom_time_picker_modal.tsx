@@ -38,6 +38,7 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
     const currentTime = getCurrentMomentForTimezone(timezone);
     const initialReminderTime: Moment = getRoundedTime(currentTime);
     const [customReminderTime, setCustomReminderTime] = useState<Moment>(initialReminderTime);
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const handleConfirm = useCallback(() => {
         actions.addPostReminder(userId, postId, toUTCUnix(customReminderTime.toDate()));
     }, [customReminderTime]);
@@ -54,11 +55,13 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
             className={'post-reminder-modal'}
             compassDesign={true}
             enforceFocus={true}
+            isConfirmDisabled={isMenuOpen}
         >
             <DateTimeInput
                 time={customReminderTime}
                 handleChange={setCustomReminderTime}
                 timezone={timezone}
+                onMenuChange={setIsMenuOpen}
             />
         </GenericModal>
     );
