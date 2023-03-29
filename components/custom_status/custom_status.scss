@@ -325,4 +325,13 @@ span.emoticon[style]:hover {
             line-height: 16px;
         }
     }
+
+    &__custom-time {
+        width: 260px;
+
+        .dateTime__custom-time-icon {
+            position: static;
+            margin-left: 10px;
+        }
+    }
 }
