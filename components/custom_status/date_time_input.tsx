@@ -6,8 +6,8 @@ import {useSelector} from 'react-redux';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import {DayModifiers, NavbarElementProps} from 'react-day-picker';
 import {FormattedMessage, useIntl} from 'react-intl';
-import Creatable from 'react-select/Creatable';
 import {components} from 'react-select';
+import Creatable from 'react-select/creatable';
 import type {ActionMeta, ValueType, ControlProps, OptionsType} from 'react-select';
 
 import moment, {Moment} from 'moment-timezone';
