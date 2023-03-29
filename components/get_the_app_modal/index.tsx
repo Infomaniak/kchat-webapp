@@ -11,9 +11,9 @@ import {isModalOpen} from 'selectors/views/modals';
 import GenericModal from 'components/generic_modal';
 import Header from 'components/widgets/header';
 import GetTheAppModalIcon from 'components/widgets/icons/get_the_app_modal_icon';
+import useGetOs from 'components/common/hooks/useGetOs';
 
 import {ModalIdentifiers} from 'utils/constants';
-import {isIos} from 'utils/user_agent';
 
 import loaderkChat from 'images/logo_compact.png';
 import MattermostLogoSvg from 'images/logo.svg';
@@ -30,12 +30,7 @@ const GetTheAppModal = ({onClose}: Props) => {
     const dispatch = useDispatch();
     const show = useSelector((state: GlobalState) => isModalOpen(state, ModalIdentifiers.GET_THE_APP));
     const {formatMessage} = useIntl();
-
-    // Set default mobile platform as Android
-    let platform = 'Android';
-    if (isIos()) {
-        platform = 'iOS';
-    }
+    const platform = useGetOs();
 
     const handleClose = () => {
         dispatch(closeModal(ModalIdentifiers.GET_THE_APP));
