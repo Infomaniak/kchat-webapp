@@ -203,16 +203,25 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         }
     };
 
-    const formatCreateLabel = (inputValue: string) => {
-        const timeOption = setDateTime(time, inputValue).toDate();
-        return (
-            <Timestamp
-                useRelative={false}
-                useDate={false}
-                value={timeOption}
-            />
-        );
+    const formatOptionLabel = (option: CreatableOption) => {
+        const {value, label} = option;
+        if (typeof value === 'string') {
+            const newValue = setDateTime(time, value).toDate();
+            return (
+                <Timestamp
+                    useRelative={false}
+                    useDate={false}
+                    value={newValue}
+                />
+            );
+        }
+        return label;
     };
+
+    const noOptionsMessage = () => formatMessage({
+        id: 'custom_reminder.time_picker.no_option',
+        defaultMessage: 'Non valid date',
+    });
 
     const defaultTimeValue = {
         value: time.toDate(),
@@ -259,14 +268,11 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
                     options={timeOptions}
                     defaultValue={defaultTimeValue}
                     onChange={handleTimeChange}
+                    formatOptionLabel={formatOptionLabel}
                     isValidNewOption={isValidNewOption}
                     onMenuOpen={() => onMenuChange(true)}
                     onMenuClose={() => onMenuChange(false)}
-                    formatCreateLabel={formatCreateLabel}
-                    noOptionsMessage={() => formatMessage({
-                        id: 'custom_reminder.time_picker.no_option',
-                        defaultMessage: 'Non valid date',
-                    })}
+                    noOptionsMessage={noOptionsMessage}
                     placeholder={placeholder}
                     styles={styles}
                 />
