@@ -4083,6 +4083,7 @@
   "post_info.tooltip.add_reactions": "Ajouter une réaction",
   "post_info.unpin": "Désépingler du canal",
   "post_info.unread": "Marquer comme non lu",
+  "post_info.translate": "Traduire",
   "post_message_preview.channel": "Visible uniquement pour les utilisateurs dans ~{channel}",
   "post_message_view.edited": "Édité",
   "post_pre_header.flagged": "Sauvegardé",
