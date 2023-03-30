@@ -6,6 +6,12 @@ import {useState, useEffect} from 'react';
 const getOperatingSystem = (userAgent: string) => {
     const userAgentLC = userAgent.toLowerCase();
 
+    if (userAgentLC.includes('android')) {
+        return 'Android';
+    }
+    if ((/(iphone|ipad|ipod)/).test(userAgentLC)) {
+        return 'Ios';
+    }
     if (userAgentLC.includes('windows')) {
         return 'Windows';
     }
@@ -14,12 +20,6 @@ const getOperatingSystem = (userAgent: string) => {
     }
     if (userAgentLC.includes('linux') || userAgentLC.includes('x11')) {
         return 'Linux';
-    }
-    if (userAgentLC.includes('android')) {
-        return 'Android';
-    }
-    if ((/(iphone|ipad|ipod)/).test(userAgentLC)) {
-        return 'Ios';
     }
 
     return 'unknown';

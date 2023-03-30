@@ -14,8 +14,7 @@ import GetAppAnnoucementBarMobile from 'components/announcement_bar/get_app_anno
 import useGetOs from 'components/common/hooks/useGetOs';
 
 import {AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
-import {isMobile} from 'utils/utils';
+import {isDesktopApp, isMobile} from 'utils/user_agent';
 
 const GET_THE_APP_LAST_SEEN_AT = 'GetTheAppLastSeenAt';
 const DO_NOT_DISTURB = 'DoNotDisturb';
