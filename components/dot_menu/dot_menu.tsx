@@ -5,6 +5,8 @@ import React from 'react';
 import classNames from 'classnames';
 import {FormattedMessage, injectIntl, IntlShape} from 'react-intl';
 
+import Icon from '@infomaniak/compass-components/foundations/icon';
+
 import Permissions from 'mattermost-redux/constants/permissions';
 import {Post} from '@mattermost/types/posts';
 import {UserThread} from '@mattermost/types/threads';
@@ -114,6 +116,7 @@ type Props = {
          */
         setGlobalItem: (name: string, value: any) => void;
 
+        translatePost: (postId: string) => void;
     }; // TechDebt: Made non-mandatory while converting to typescript
 
     canEdit: boolean;
@@ -427,6 +430,12 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
             this.handleMarkPostAsUnread(e);
             this.props.handleDropdownOpened(false);
             break;
+
+        // translate post
+        case Utils.isKeyPressed(e, Constants.KeyCodes.T):
+            this.translatePost();
+            this.props.handleDropdownOpened(false);
+            break;
         }
     }
 
@@ -454,6 +463,11 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
             openUp: (spaceOnTop > spaceOnBottom),
         });
     }
+
+    translatePost = () => {
+        const {actions, post} = this.props;
+        actions.translatePost(post.id);
+    };
 
     render(): JSX.Element {
         const isFollowingThread = this.props.isFollowingThread ?? this.props.isMentionedInRootPost;
@@ -596,6 +610,19 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         icon={Utils.getMenuItemIcon('icon-pin-outline')}
                         rightDecorator={<ShortcutKey shortcutKey='P'/>}
                         onClick={this.handlePinMenuItemActivated}
+                    />
+                    <Menu.ItemAction
+                        show={!isSystemMessage}
+                        text={Utils.localizeMessage('post_info.translate', 'Translate')}
+                        icon={(
+                            <Icon
+                                className='post_info__translate-icon'
+                                size={16}
+                                glyph='format-letter-case'
+                            />
+                        )}
+                        rightDecorator={<ShortcutKey shortcutKey='T'/>}
+                        onClick={this.translatePost}
                     />
                     {!isSystemMessage && (this.state.canEdit || this.state.canDelete) && this.renderDivider('edit')}
                     <Menu.ItemAction

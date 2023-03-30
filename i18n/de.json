@@ -4405,6 +4405,7 @@
   "post_info.tooltip.add_reactions": "Reaktion hinzufügen",
   "post_info.unpin": "Vom Kanal abheften",
   "post_info.unread": "Als ungelesen markieren",
+  "post_info.translate": "Übersetzen",
   "post_message_preview.channel": "Nur sichtbar für Benutzer in ~{channel}",
   "post_message_view.edited": "Bearbeitet",
   "post_pre_header.flagged": "Gespeichert",

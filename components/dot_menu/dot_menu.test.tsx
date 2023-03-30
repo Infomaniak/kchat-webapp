@@ -37,6 +37,7 @@ describe('components/dot_menu/DotMenu', () => {
             postEphemeralCallResponseForPost: jest.fn(),
             setThreadFollow: jest.fn(),
             setGlobalItem: jest.fn(),
+            translatePost: jest.fn(),
         },
         canEdit: false,
         canDelete: false,
