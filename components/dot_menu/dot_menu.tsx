@@ -5,7 +5,7 @@ import React from 'react';
 import classNames from 'classnames';
 import {FormattedMessage, injectIntl, IntlShape} from 'react-intl';
 
-import {FormatLetterCaseIcon} from '@infomaniak/compass-icons/components';
+import Icon from '@infomaniak/compass-components/foundations/icon';
 
 import Permissions from 'mattermost-redux/constants/permissions';
 import {Post} from '@mattermost/types/posts';
@@ -615,12 +615,11 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         show={!isSystemMessage}
                         text={Utils.localizeMessage('post_info.translate', 'Translate')}
                         icon={(
-                            <span className='MenuItem__compass-icon'>
-                                <FormatLetterCaseIcon
-                                    size={18}
-                                    color='currentColor'
-                                />
-                            </span>
+                            <Icon
+                                className='post_info__translate-icon'
+                                size={16}
+                                glyph='format-letter-case'
+                            />
                         )}
                         rightDecorator={<ShortcutKey shortcutKey='T'/>}
                         onClick={this.translatePost}
