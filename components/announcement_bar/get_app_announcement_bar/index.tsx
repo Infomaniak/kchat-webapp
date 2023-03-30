@@ -26,7 +26,8 @@ const GetAppAnnoucementBar = () => {
     const {formatMessage} = useIntl();
     const os = useGetOs();
     const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT);
-    const shouldDisplayBanner = (!lastSeenAt || (!isMobile() && Date.now() >= Number(lastSeenAt) + COOLDOWN)) && !isDesktopApp();
+    const isCooldownExceeded = !isMobile() && Date.now() >= Number(lastSeenAt) + COOLDOWN;
+    const shouldDisplayBanner = !isDesktopApp() && (!lastSeenAt || isCooldownExceeded);
     const [show, setShow] = useState<boolean | null>(lastSeenAt === DO_NOT_DISTURB ? null : shouldDisplayBanner);
 
     const handleClose = (doNotDisturb = false) => {
