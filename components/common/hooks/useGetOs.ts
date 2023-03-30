@@ -9,8 +9,11 @@ const getOperatingSystem = (userAgent: string) => {
     if (userAgentLC.includes('android')) {
         return 'Android';
     }
-    if ((/(iphone|ipad|ipod)/).test(userAgentLC)) {
-        return 'Ios';
+    if (userAgentLC.includes('ipad')) {
+        return 'iPadOS';
+    }
+    if ((/(iphone|ipod)/).test(userAgentLC)) {
+        return 'iOS';
     }
     if (userAgentLC.includes('windows')) {
         return 'Windows';
