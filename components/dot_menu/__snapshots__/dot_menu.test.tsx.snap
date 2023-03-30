@@ -191,14 +191,11 @@ exports[`components/dot_menu/DotMenu should match snapshot, canDelete 1`] = `
     />
     <MenuItemAction
       icon={
-        <span
-          className="MenuItem__compass-icon"
-        >
-          <FormatLetterCaseIcon
-            color="currentColor"
-            size={18}
-          />
-        </span>
+        <Icon
+          className="post_info__translate-icon"
+          glyph="format-letter-case"
+          size={16}
+        />
       }
       onClick={[Function]}
       rightDecorator={
@@ -481,14 +478,11 @@ exports[`components/dot_menu/DotMenu should match snapshot, hide "New" badge on 
     />
     <MenuItemAction
       icon={
-        <span
-          className="MenuItem__compass-icon"
-        >
-          <FormatLetterCaseIcon
-            color="currentColor"
-            size={18}
-          />
-        </span>
+        <Icon
+          className="post_info__translate-icon"
+          glyph="format-letter-case"
+          size={16}
+        />
       }
       onClick={[Function]}
       rightDecorator={
@@ -766,14 +760,11 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
     />
     <MenuItemAction
       icon={
-        <span
-          className="MenuItem__compass-icon"
-        >
-          <FormatLetterCaseIcon
-            color="currentColor"
-            size={18}
-          />
-        </span>
+        <Icon
+          className="post_info__translate-icon"
+          glyph="format-letter-case"
+          size={16}
+        />
       }
       onClick={[Function]}
       rightDecorator={
@@ -1056,14 +1047,11 @@ exports[`components/dot_menu/DotMenu should match snapshot, show "New" badge on 
     />
     <MenuItemAction
       icon={
-        <span
-          className="MenuItem__compass-icon"
-        >
-          <FormatLetterCaseIcon
-            color="currentColor"
-            size={18}
-          />
-        </span>
+        <Icon
+          className="post_info__translate-icon"
+          glyph="format-letter-case"
+          size={16}
+        />
       }
       onClick={[Function]}
       rightDecorator={
