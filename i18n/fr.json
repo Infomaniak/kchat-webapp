@@ -3875,7 +3875,7 @@
   "mark_all_threads_as_read_modal.title": "Marquer tous les fils de discussion comme lus ?",
   "mark_all_threads_as_read_modal.confirm": "Marquer tous comme lus",
   "mark_all_threads_as_read_modal.cancel": "Annuler",
-  "mark_all_threads_as_read_modal.description": "Cela marquera les fils de discussion de  toutes vos discussions comme lus. Êtes-vous sûr ?",
+  "mark_all_threads_as_read_modal.description": "Cela marquera les fils de discussion de toutes vos discussions comme lus. Êtes-vous sûr ?",
   "navbar.addGroups": "Ajouter des groupes",
   "navbar.addMembers": "Ajouter Membres",
   "navbar.preferences": "Préférences de notification",
