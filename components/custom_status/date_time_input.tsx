@@ -235,48 +235,56 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
     };
 
     return (
-        <div className='dateTime'>
-            <div className='dateTime__date'>
-                <span className='dateTime__input-title'>{formatMessage({id: 'custom_status.expiry.date_picker.title', defaultMessage: 'Date'})}</span>
-                <span className='dateTime__date-icon'>
-                    <i className='icon-calendar-outline'/>
-                </span>
-                <DayPickerInput
-                    value={time.toDate()}
-                    format='yyyy-MM-DD'
-                    formatDate={MomentUtils.formatDate}
-                    onDayChange={handleDayChange}
-                    inputProps={{
-                        readOnly: true,
-                        className: 'dateTime__input',
-                    }}
-                    dayPickerProps={{
-                        navbarElement: <Navbar/>,
-                        fromMonth: currentTime,
-                        modifiers,
-                        localeUtils: MomentUtils,
-                        locale: locale.toLowerCase(),
-                        disabledDays: {
-                            before: currentTime,
-                        },
-                    }}
-                />
+        <div>
+            <div className='dateTime'>
+                <div className='dateTime__date'>
+                    <span className='dateTime__input-title'>{formatMessage({id: 'custom_status.expiry.date_picker.title', defaultMessage: 'Date'})}</span>
+                    <span className='dateTime__date-icon'>
+                        <i className='icon-calendar-outline'/>
+                    </span>
+                    <DayPickerInput
+                        value={time.toDate()}
+                        format='yyyy-MM-DD'
+                        formatDate={MomentUtils.formatDate}
+                        onDayChange={handleDayChange}
+                        inputProps={{
+                            readOnly: true,
+                            className: 'dateTime__input',
+                        }}
+                        dayPickerProps={{
+                            navbarElement: <Navbar/>,
+                            fromMonth: currentTime,
+                            modifiers,
+                            localeUtils: MomentUtils,
+                            locale: locale.toLowerCase(),
+                            disabledDays: {
+                                before: currentTime,
+                            },
+                        }}
+                    />
+                </div>
+                <div className='dateTime__custom-time'>
+                    <Creatable
+                        components={{Control: CreatableControl}}
+                        options={timeOptions}
+                        defaultValue={defaultTimeValue}
+                        onChange={handleTimeChange}
+                        formatOptionLabel={formatOptionLabel}
+                        isValidNewOption={isValidNewOption}
+                        onMenuOpen={() => onMenuChange(true)}
+                        onMenuClose={() => onMenuChange(false)}
+                        noOptionsMessage={noOptionsMessage}
+                        placeholder={placeholder}
+                        styles={styles}
+                    />
+                </div>
             </div>
-            <div className='dateTime__custom-time'>
-                <Creatable
-                    components={{Control: CreatableControl}}
-                    options={timeOptions}
-                    defaultValue={defaultTimeValue}
-                    onChange={handleTimeChange}
-                    formatOptionLabel={formatOptionLabel}
-                    isValidNewOption={isValidNewOption}
-                    onMenuOpen={() => onMenuChange(true)}
-                    onMenuClose={() => onMenuChange(false)}
-                    noOptionsMessage={noOptionsMessage}
-                    placeholder={placeholder}
-                    styles={styles}
+            <span className='dateTime__description'>
+                <FormattedMessage
+                    id='custom_status.expiry.time_picker.description'
+                    defaultMessage='Selectionnez ou écriver l’heure exacte à laquelle vous souhaitez effectuer cette action'
                 />
-            </div>
+            </span>
         </div>
     );
 };

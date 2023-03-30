@@ -12,24 +12,7 @@
     }
 
     .GenericModal__header {
-        padding: 28px 24px 0;
-    }
-
-    .modal &.GenericModal .modal {
-        &-body {
-            overflow: visible;
-        }
-
-        &-content {
-            width: 100%;
-            padding: 28px 8px 24px 24px;
-        }
-
-        &-footer {
-            padding: 0;
-            padding-right: 16px;
-            margin-top: 22px;
-        }
+        padding: 28px 24px;
     }
 
     .dateTime {
@@ -42,15 +25,6 @@
 
         .dateTime__input {
             width: 260px;
-        }
-
-        .dateTime__custom-time {
-            width: 260px;
-
-            .dateTime__custom-time-icon {
-                position: static;
-                margin-left: 10px;
-            }
         }
     }
 }

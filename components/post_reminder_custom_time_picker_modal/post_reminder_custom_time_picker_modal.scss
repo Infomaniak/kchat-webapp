@@ -16,7 +16,7 @@
         &-footer {
             padding: 0;
             padding-right: 16px;
-            margin-top: 22px;
+            margin-top: 0px;
         }
     }
 
@@ -30,15 +30,6 @@
 
         .dateTime__input {
             width: 260px;
-        }
-
-        .dateTime__custom-time {
-            width: 260px;
-
-            .dateTime__custom-time-icon {
-                position: static;
-                margin-left: 10px;
-            }
         }
     }
 }

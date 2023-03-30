@@ -334,4 +334,11 @@ span.emoticon[style]:hover {
             margin-left: 10px;
         }
     }
+
+    &__description {
+        font-size: 10px;
+        color: rgba(var(--center-channel-color-rgb), 0.64);
+        letter-spacing: 0.03em;
+        line-height: 25px;
+    }
 }
