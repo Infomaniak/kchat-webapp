@@ -50,6 +50,7 @@ describe('components/dot_menu/DotMenu', () => {
         threadReplyCount: 0,
         userId: 'user_id_1',
         showForwardPostNewLabel: false,
+        postTranslationEnabled: true,
     };
 
     test('should match snapshot, on Center', () => {

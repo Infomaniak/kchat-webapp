@@ -53,6 +53,7 @@ type Props = {
     handleAddReactionClick?: () => void;
     isMenuOpen?: boolean;
     isReadOnly?: boolean;
+    postTranslationEnabled: boolean;
     isLicensed?: boolean; // TechDebt: Made non-mandatory while converting to typescript
     postEditTimeLimit?: string; // TechDebt: Made non-mandatory while converting to typescript
     enableEmojiPicker?: boolean; // TechDebt: Made non-mandatory while converting to typescript
@@ -612,7 +613,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         onClick={this.handlePinMenuItemActivated}
                     />
                     <Menu.ItemAction
-                        show={!isSystemMessage}
+                        show={!isSystemMessage && this.props.postTranslationEnabled}
                         text={Utils.localizeMessage('post_info.translate', 'Translate')}
                         icon={(
                             <Icon

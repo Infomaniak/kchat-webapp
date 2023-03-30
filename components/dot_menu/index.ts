@@ -114,6 +114,7 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
     const showForwardPostNewLabel = getGlobalItem(state, Preferences.FORWARD_POST_VIEWED, true);
 
     return {
+        postTranslationEnabled: config.FeatureFlagTranslation === 'true',
         channelIsArchived: isArchivedChannel(channel),
         components: state.plugins.components,
         postEditTimeLimit: config.PostEditTimeLimit,
