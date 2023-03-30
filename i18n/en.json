@@ -5738,5 +5738,5 @@
   "post.reminder.acknowledgement": "You will be reminded at {reminderTime}, {reminderDate} about this message from {username}: {permaLink}",
   "post.reminder.systemBot": "Hi there, here's your reminder about this message from {username}: {permaLink}",
   "custom_reminder.time_picker.no_option": "Invalid date",
-  "custom_status.expiry.time_picker.description": "Select or enter the exact time you wish to perform this action."
+  "custom_status.expiry.time_picker.description": "To add a more precise time, input your desired time, and it will be added as a selectable option."
 }

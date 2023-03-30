@@ -5298,5 +5298,5 @@
   "post.reminder.acknowledgement": "Se le recordará en {reminderTime}, {reminderDate} sobre este mensaje de {username}: {permaLink}",
   "post.reminder.systemBot": "Hola, aquí tienes un recordatorio sobre este mensaje de {username}: {permaLink}",
   "custom_reminder.time_picker.no_option": "Fecha inválida",
-  "custom_status.expiry.time_picker.description": "Seleccione o introduzca la hora exacta a la que desea realizar esta acción."
+  "custom_status.expiry.time_picker.description": "Para añadir una hora más precisa, introduzca la hora deseada y se añadirá como opción seleccionable."
 }

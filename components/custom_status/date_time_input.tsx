@@ -282,7 +282,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
             <span className='dateTime__description'>
                 <FormattedMessage
                     id='custom_status.expiry.time_picker.description'
-                    defaultMessage='Select or enter the exact time you wish to perform this action.'
+                    defaultMessage='To add a more precise time, input your desired time, and it will be added as a selectable option.'
                 />
             </span>
         </div>
