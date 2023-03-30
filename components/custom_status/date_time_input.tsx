@@ -220,7 +220,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
 
     const noOptionsMessage = () => formatMessage({
         id: 'custom_reminder.time_picker.no_option',
-        defaultMessage: 'Non valid date',
+        defaultMessage: 'Invalid date',
     });
 
     const defaultTimeValue = {
@@ -282,7 +282,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
             <span className='dateTime__description'>
                 <FormattedMessage
                     id='custom_status.expiry.time_picker.description'
-                    defaultMessage='Selectionnez ou écriver l’heure exacte à laquelle vous souhaitez effectuer cette action'
+                    defaultMessage='Select or enter the exact time you wish to perform this action.'
                 />
             </span>
         </div>

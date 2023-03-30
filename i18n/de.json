@@ -5731,5 +5731,7 @@
   "post_info.post_reminder.sub_menu.custom": "Benutzerdefiniert",
   "post_reminder.custom_time_picker_modal.text": "Erinnerung einstellen",
   "post.reminder.acknowledgement": "Sie werden um {reminderTime}, {reminderDate} an diese Nachricht von {username} erinnert: {permaLink}",
-  "post.reminder.systemBot": "Hallo, hier ist Ihre Erinnerung an diese Nachricht von {username}: {permaLink}"
+  "post.reminder.systemBot": "Hallo, hier ist Ihre Erinnerung an diese Nachricht von {username}: {permaLink}",
+  "custom_reminder.time_picker.no_option": "Ungültiges Datum",
+  "custom_status.expiry.time_picker.description": "Wählen oder schreiben Sie die genaue Uhrzeit, zu der Sie diese Aktion durchführen möchten."
 }
