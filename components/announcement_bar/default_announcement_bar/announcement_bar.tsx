@@ -39,6 +39,7 @@ type Props = {
         decrementAnnouncementBarCount: () => void;
     };
     showCTA?: boolean;
+    isStringContainingUrl?: boolean;
 }
 
 type State = {
@@ -57,7 +58,7 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
 
         this.state = {
             showTooltip: false,
-            isStringContainingUrl: false,
+            isStringContainingUrl: this.props.isStringContainingUrl || false,
         };
     }
 

@@ -26,7 +26,7 @@ const getOperatingSystem = (userAgent: string) => {
     }
 
     return 'unknown';
-}
+};
 
 const useGetOs = () => {
     const [operatingSystem, setOperatingSystem] = useState('unknown');

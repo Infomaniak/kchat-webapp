@@ -84,7 +84,8 @@ const GetAppAnnoucementBar = () => {
             handleClose={handleClose}
             showCloseButton={true}
             message={message}
-            icon={<GetTheAppIcon/>}
+            icon={<GetTheAppIcon className='announcement-bar__ik-icon'/>}
+            isStringContainingUrl={true}
         />
     );
 };
