@@ -5294,5 +5294,17 @@
   "channelLimitIndicator.text": "Has alcanzado el límite de {type, select, O {canales públicos} P {canales privados} other {}} ({usage, number}/{limit, number}) en tu oferta kSuite. {isAdmin, select, true {<modifyOffer>Modifica tu oferta</modifyOffer> para crear canales adicionales.} other {Póngase en contacto con un administrador para modificar la oferta.}}",
   "toggle_next_modal.title": "Cambiar a la versión {version}",
   "toggle_next_modal.message_stable": "STABLE es nuestro entorno por defecto. Si no le interesa probar nuevas funciones, le recomendamos que vuelva a la versión STABLE.",
-  "toggle_next_modal.message_next": "NEXT es nuestro entorno de pruebas. Puede que encuentres algunos errores, pero también accederás a los últimos contenidos y actualizaciones. Si no te interesa probar nuevas funciones, te recomendamos que te quedes en la versión STABLE."
+  "toggle_next_modal.message_next": "NEXT es nuestro entorno de pruebas. Puede que encuentres algunos errores, pero también accederás a los últimos contenidos y actualizaciones. Si no te interesa probar nuevas funciones, te recomendamos que te quedes en la versión STABLE.",
+  "channelLimitIndicator.text": "Has alcanzado el límite de {type, select, O {canales públicos} P {canales privados} other {}} ({usage, number}/{limit, number}) en tu oferta kSuite. {isAdmin, select, true {<modifyOffer>Modifica tu oferta</modifyOffer> para crear canales adicionales.} other {Póngase en contacto con un administrador para modificar la oferta.}}",
+  "post_info.post_reminder.menu": "Recordatorio",
+  "post_info.post_reminder.sub_menu.thirty_minutes": "30 mins",
+  "post_info.post_reminder.sub_menu.one_hour": "1 hora",
+  "post_info.post_reminder.sub_menu.two_hours": "2 horas",
+  "post_info.post_reminder.sub_menu.tomorrow": "Mañana",
+  "post_info.post_reminder.sub_menu.custom": "Personalizar",
+  "post_reminder.custom_time_picker_modal.text": "Establecer recordatorio",
+  "post.reminder.acknowledgement": "Se le recordará en {reminderTime}, {reminderDate} sobre este mensaje de {username}: {permaLink}",
+  "post.reminder.systemBot": "Hola, aquí tienes un recordatorio sobre este mensaje de {username}: {permaLink}",
+  "custom_reminder.time_picker.no_option": "Fecha inválida",
+  "custom_status.expiry.time_picker.description": "Para añadir una hora más precisa, introduzca la hora deseada y se añadirá como opción seleccionable."
 }

@@ -4259,6 +4259,14 @@ export default class Client4 {
         );
     }
 
+    addPostReminder = (userId: string, postId: string, timestamp: number) => {
+        this.trackEvent('api', 'api_post_set_reminder');
+        return this.doFetch<StatusOK>(
+            `${this.getUserRoute(userId)}/posts/${postId}/reminder`,
+            {method: 'post', body: JSON.stringify({target_time: timestamp})},
+        );
+    }
+
     /**
      * @param query string query of graphQL, pass the json stringified version of the query
      * eg.  const query = JSON.stringify({query: `{license, config}`, operationName: 'queryForLicenseAndConfig'});
