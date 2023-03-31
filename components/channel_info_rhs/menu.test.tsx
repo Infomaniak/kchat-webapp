@@ -13,7 +13,7 @@ import Menu from './menu';
 describe('channel_info_rhs/menu', () => {
     const defaultProps = {
         channel: {type: Constants.OPEN_CHANNEL} as Channel,
-        channelStats: {files_count: 3, pinnedpost_count: 12, member_count: 32} as ChannelStats,
+        channelStats: {files_count: 3, pinnedpost_count: 12, member_count: 32, guest_count: 1} as ChannelStats,
         isArchived: false,
         actions: {
             openNotificationSettings: jest.fn(),
@@ -126,7 +126,7 @@ describe('channel_info_rhs/menu', () => {
 
         const membersItem = screen.getByText('Members');
         expect(membersItem).toBeInTheDocument();
-        expect(membersItem.parentElement).toHaveTextContent('32');
+        expect(membersItem.parentElement).toHaveTextContent('33');
 
         fireEvent.click(membersItem);
         expect(props.actions.showChannelMembers).toHaveBeenCalled();
