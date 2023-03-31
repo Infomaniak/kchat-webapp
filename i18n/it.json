@@ -3064,6 +3064,10 @@
   "mark_all_as_read_modal.title": "Contrassegnare tutti i messaggi come letti ",
   "mark_all_as_read_modal.message": "Sei sicuro di voler contrassegnare tutti i tuoi messaggi come letti ?",
   "mark_all_as_read_modal.confirm": "Si",
+  "mark_all_threads_as_read_modal.title": "Contrassegnare tutte le discussioni come lette?",
+  "mark_all_threads_as_read_modal.confirm": "Contrassegnare tutti come letti",
+  "mark_all_threads_as_read_modal.cancel": "Annullare",
+  "mark_all_threads_as_read_modal.description": "Questo cancellerà lo stato di non lettura e menzionerà i badge su tutte le discussioni. Sei sicuro?",
   "navbar.addGroups": "Aggiungi Gruppi",
   "navbar.addMembers": "Aggiungi membri",
   "navbar.preferences": "Preferenze delle Notifiche",
@@ -3182,6 +3186,7 @@
   "post_info.tooltip.add_reactions": "Aggiungi Reazione",
   "post_info.unpin": "Sblocca dal canale",
   "post_info.unread": "Segna con Non letto",
+  "post_info.translate": "Tradurre",
   "post_message_view.edited": "(modificato)",
   "post_pre_header.pinned": "Bloccato",
   "postlist.toast.history": "Mostra storico messaggi",
@@ -3925,5 +3930,8 @@
   "get_app_annoucement_bar_mobile.download": "Scaricare",
   "get_the_app_modal.header": "Scaricare l'applicazione kChat per {platform}",
   "get_the_app_modal.content": "Vi consigliamo di installare l'applicazione per un'esperienza migliore !",
-  "get_the_app_modal.confirm": "Scaricare kChat per {platform}"
+  "get_the_app_modal.confirm": "Scaricare kChat per {platform}",
+  "toggle_next_modal.title": "Passa alla versione {version}",
+  "toggle_next_modal.message_stable": "STABLE è il nostro ambiente predefinito. Se non siete interessati a testare nuove funzionalità, vi consigliamo di tornare alla versione STABLE.",
+  "toggle_next_modal.message_next": "NEXT è il nostro ambiente di prova. Potreste incontrare alcuni bug, ma avrete anche accesso agli ultimi contenuti e aggiornamenti. Se non siete interessati a testare nuove funzionalità, vi consigliamo di rimanere sulla versione STABILE."
 }
