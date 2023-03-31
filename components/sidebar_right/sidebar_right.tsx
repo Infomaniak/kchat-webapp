@@ -332,9 +332,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                                 {/* Sometimes the channel/team is not loaded yet, so we need to wait for it */}
                                 <LoadingScreen centered={true}/>
                             </div>
-                        ) : (
-                            rhs
-                        )}
+                        ) : rhs}
                     </div>
                 </div>
             </>
