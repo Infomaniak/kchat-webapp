@@ -4405,6 +4405,7 @@
   "post_info.tooltip.add_reactions": "Reaktion hinzufügen",
   "post_info.unpin": "Vom Kanal abheften",
   "post_info.unread": "Als ungelesen markieren",
+  "post_info.translate": "Übersetzen",
   "post_message_preview.channel": "Nur sichtbar für Benutzer in ~{channel}",
   "post_message_view.edited": "Bearbeitet",
   "post_pre_header.flagged": "Gespeichert",
@@ -5731,5 +5732,8 @@
   "post_info.post_reminder.sub_menu.custom": "Benutzerdefiniert",
   "post_reminder.custom_time_picker_modal.text": "Erinnerung einstellen",
   "post.reminder.acknowledgement": "Sie werden um {reminderTime}, {reminderDate} an diese Nachricht von {username} erinnert: {permaLink}",
-  "post.reminder.systemBot": "Hallo, hier ist Ihre Erinnerung an diese Nachricht von {username}: {permaLink}"
+  "post.reminder.systemBot": "Hallo, hier ist Ihre Erinnerung an diese Nachricht von {username}: {permaLink}",
+  "toggle_next_modal.title": "Zu {version} Version wechseln",
+  "toggle_next_modal.message_stable": "STABLE ist unsere Standardumgebung. Wenn Sie nicht daran interessiert sind, neue Funktionen zu testen, empfehlen wir Ihnen, auf die STABLE Version zurückzugreifen.",
+  "toggle_next_modal.message_next": "NEXT ist unsere Testumgebung. Sie können auf einige Bugs stoßen, haben aber auch Zugang zu den neuesten Inhalten und Updates. Wenn Sie nicht daran interessiert sind, neue Funktionen zu testen, empfehlen wir Ihnen, bei der STABLE Version zu bleiben."
 }

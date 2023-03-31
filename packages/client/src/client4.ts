@@ -4252,6 +4252,13 @@ export default class Client4 {
         );
     }
 
+    translatePost = (postId: string) => {
+        return this.doFetch(
+            `${this.getPostRoute(postId)}/translate`,
+            {method: 'POST'},
+        );
+    }
+
     addPostReminder = (userId: string, postId: string, timestamp: number) => {
         this.trackEvent('api', 'api_post_set_reminder');
         return this.doFetch<StatusOK>(
