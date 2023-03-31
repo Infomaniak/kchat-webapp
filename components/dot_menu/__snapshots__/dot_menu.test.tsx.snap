@@ -191,10 +191,8 @@ exports[`components/dot_menu/DotMenu should match snapshot, canDelete 1`] = `
     />
     <MenuItemAction
       icon={
-        <Icon
-          className="post_info__translate-icon"
-          glyph="format-letter-case"
-          size={16}
+        <span
+          className="icon-format-letter-case MenuItem__compass-icon"
         />
       }
       onClick={[Function]}
@@ -478,10 +476,8 @@ exports[`components/dot_menu/DotMenu should match snapshot, hide "New" badge on 
     />
     <MenuItemAction
       icon={
-        <Icon
-          className="post_info__translate-icon"
-          glyph="format-letter-case"
-          size={16}
+        <span
+          className="icon-format-letter-case MenuItem__compass-icon"
         />
       }
       onClick={[Function]}
@@ -760,10 +756,8 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
     />
     <MenuItemAction
       icon={
-        <Icon
-          className="post_info__translate-icon"
-          glyph="format-letter-case"
-          size={16}
+        <span
+          className="icon-format-letter-case MenuItem__compass-icon"
         />
       }
       onClick={[Function]}
@@ -1047,10 +1041,8 @@ exports[`components/dot_menu/DotMenu should match snapshot, show "New" badge on 
     />
     <MenuItemAction
       icon={
-        <Icon
-          className="post_info__translate-icon"
-          glyph="format-letter-case"
-          size={16}
+        <span
+          className="icon-format-letter-case MenuItem__compass-icon"
         />
       }
       onClick={[Function]}
