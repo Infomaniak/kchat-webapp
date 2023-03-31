@@ -18,6 +18,7 @@ import {isSystemMessage} from 'mattermost-redux/utils/post_utils';
 import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {setThreadFollow} from 'mattermost-redux/actions/threads';
+import {translatePost} from 'mattermost-redux/actions/posts';
 
 import {ModalData} from 'types/actions';
 import {GlobalState} from 'types/store';
@@ -113,6 +114,7 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
     const showForwardPostNewLabel = getGlobalItem(state, Preferences.FORWARD_POST_VIEWED, true);
 
     return {
+        postTranslationEnabled: config.FeatureFlagTranslation === 'true',
         channelIsArchived: isArchivedChannel(channel),
         components: state.plugins.components,
         postEditTimeLimit: config.PostEditTimeLimit,
@@ -144,6 +146,7 @@ type Actions = {
     markPostAsUnread: (post: Post) => void;
     setThreadFollow: (userId: string, teamId: string, threadId: string, newState: boolean) => void;
     setGlobalItem: (name: string, value: any) => void;
+    translatePost: (postId: string) => void;
 }
 
 function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
@@ -158,6 +161,7 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             markPostAsUnread,
             setThreadFollow,
             setGlobalItem,
+            translatePost,
         }, dispatch),
     };
 }

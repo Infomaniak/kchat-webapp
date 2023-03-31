@@ -11,6 +11,7 @@ import {UserProfile} from '@mattermost/types/users';
 
 import {MobileChannelHeaderDropdown} from 'components/channel_header_dropdown';
 import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
+import FlagNext from 'components/flag_next';
 
 import CollapseLhsButton from './collapse_lhs_button';
 import CollapseRhsButton from './collapse_rhs_button';
@@ -122,6 +123,7 @@ export default class ChannelHeaderMobile extends React.PureComponent<Props> {
                             />
                         )}
                         <CollapseRhsButton/>
+                        <FlagNext/>
                     </div>
                 </div>
             </nav>

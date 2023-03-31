@@ -37,6 +37,7 @@ import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 import Tooltip from 'components/tooltip';
 
 import OverlayTrigger from 'components/overlay_trigger';
+import FlagNext from 'components/flag_next';
 
 import Constants from 'utils/constants';
 
@@ -197,6 +198,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                 </a>
             </OverlayTrigger>
             <StatusDropdown/>
+            <FlagNext/>
         </RightControlsContainer>
     );
 };
