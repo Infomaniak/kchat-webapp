@@ -20,13 +20,16 @@ import Search from 'components/search/index';
 import RhsPlugin from 'plugins/rhs_plugin';
 
 import {Channel} from '@mattermost/types/channels';
+import {Team} from '@mattermost/types/teams';
 import {RhsState} from 'types/store/rhs';
 import RhsSettings from 'components/rhs_settings';
+import LoadingScreen from 'components/loading_screen';
 
 type Props = {
     isExpanded: boolean;
     isOpen: boolean;
     channel: Channel;
+    team: Team;
     teamId: string;
     productId: ProductIdentifier;
     postRightVisible: boolean;
@@ -241,13 +244,20 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             isChannelInfo,
             isChannelMembers,
             isExpanded,
+            team,
+            channel,
         } = this.props;
 
-        const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || isSettings ||  searchVisible) && isExpanded;
+        const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || isSettings || searchVisible) && isExpanded;
 
+        const teamNeeded = true;
+        let selectedChannelNeeded;
+        let currentChannelNeeded;
         let content = null;
+
         switch (true) {
         case postRightVisible:
+            selectedChannelNeeded = true;
             content = (
                 <div className='post-right__container'>
                     <FileUploadOverlay overlayType='right'/>
@@ -262,11 +272,13 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             content = <RhsPlugin/>;
             break;
         case isChannelInfo:
+            currentChannelNeeded = true;
             content = (
                 <ChannelInfoRhs/>
             );
             break;
         case isChannelMembers:
+            currentChannelNeeded = true;
             content = (
                 <ChannelMembersRhs/>
             );
@@ -277,11 +289,29 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             );
             break;
         }
+
+        const isRHSLoading = Boolean(
+            (teamNeeded && !team) ||
+            (selectedChannelNeeded && !rhsChannel) ||
+            (currentChannelNeeded && !channel),
+        );
+
         const channelDisplayName = rhsChannel ? rhsChannel.display_name : '';
         const containerClassName = classNames('sidebar--right', {
             'sidebar--right--expanded expanded': isSidebarRightExpanded,
             'move--left is-open': isOpen,
         });
+
+        const rhs = isSettings ? content : (
+            <Search
+                isSideBarRight={true}
+                isSideBarRightOpen={true}
+                getFocus={this.getSearchBarFocus}
+                channelDisplayName={channelDisplayName}
+            >
+                {content}
+            </Search>
+        );
 
         return isOpen && (
             <>
@@ -293,19 +323,12 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                     ref={this.sidebarRight}
                 >
                     <div className='sidebar-right-container'>
-                    { isSettings ? (
-                        <>
-                            {content}
-                        </>
-                    ) : <Search
-                        isSideBarRight={true}
-                        isSideBarRightOpen={true}
-                        getFocus={this.getSearchBarFocus}
-                        channelDisplayName={channelDisplayName}
-                    >
-                        {content}
-                    </Search>
-                    }
+                        {isRHSLoading ? (
+                            <div className='sidebar-right__body'>
+                                {/* Sometimes the channel/team is not loaded yet, so we need to wait for it */}
+                                <LoadingScreen centered={true}/>
+                            </div>
+                        ) : rhs}
                     </div>
                 </div>
             </>
