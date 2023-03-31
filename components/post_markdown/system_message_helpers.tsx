@@ -369,6 +369,21 @@ function renderMeMessage(post: Post): ReactNode {
     return renderFormattedText(message);
 }
 
+function renderReminderSystemBotMessage(post: Post): ReactNode {
+    const username = post.props.username ? renderUsername(post.props.username) : '';
+    const permaLink = renderFormattedText(`[${post.props.link}](${post.props.link})`);
+    return (
+        <FormattedMessage
+            id={'post.reminder.systemBot'}
+            defaultMessage="Hi there, here's your reminder about this message from {username}: {permaLink}"
+            values={{
+                username,
+                permaLink,
+            }}
+        />
+    );
+}
+
 const systemMessageRenderers = {
     [Posts.POST_TYPES.JOIN_CHANNEL]: renderJoinChannelMessage,
     [Posts.POST_TYPES.GUEST_JOIN_CHANNEL]: renderGuestJoinChannelMessage,
@@ -388,6 +403,7 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CHANNEL_UNARCHIVED]: renderChannelUnarchivedMessage,
     [Posts.POST_TYPES.ME]: renderMeMessage,
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
+    [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
 };
 
 export function renderSystemMessage(post: Post, currentTeam: Team, channel: Channel, isUserCanManageMembers?: boolean, isMilitaryTime?: boolean): ReactNode {
