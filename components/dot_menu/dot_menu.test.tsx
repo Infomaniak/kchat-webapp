@@ -37,6 +37,7 @@ describe('components/dot_menu/DotMenu', () => {
             postEphemeralCallResponseForPost: jest.fn(),
             setThreadFollow: jest.fn(),
             setGlobalItem: jest.fn(),
+            translatePost: jest.fn(),
         },
         canEdit: false,
         canDelete: false,
@@ -50,6 +51,7 @@ describe('components/dot_menu/DotMenu', () => {
         userId: 'user_id_1',
         showForwardPostNewLabel: false,
         isMilitaryTime: false,
+        postTranslationEnabled: true,
     };
 
     test('should match snapshot, on Center', () => {

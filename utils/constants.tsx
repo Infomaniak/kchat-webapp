@@ -485,6 +485,7 @@ export const ModalIdentifiers = {
     EXTERNAL_LIMIT_REACHED: 'external_limit_reached',
     CANCEL_MULTIPLE_INVITES: 'cancel_multiple_invites',
     POST_REMINDER_CUSTOM_TIME_PICKER: 'post_reminder_custom_time_picker',
+    TOGGLE_NEXT: 'toggle_next',
 };
 
 export const UserStatuses = {

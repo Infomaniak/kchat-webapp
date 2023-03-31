@@ -5,14 +5,13 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 import {FormattedMessage, FormattedDate, FormattedTime, useIntl} from 'react-intl';
 
-import Icon from '@infomaniak/compass-components/foundations/icon';
-
 import {addPostReminder} from 'mattermost-redux/actions/posts';
 import {openModal} from 'actions/views/modals';
 
 import Menu from 'components/widgets/menu/menu';
 import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal';
 
+import * as Utils from 'utils/utils';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 import {ModalIdentifiers} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';
@@ -36,12 +35,12 @@ const postReminderTimes = [
     {id: 'custom', label: t('post_info.post_reminder.sub_menu.custom'), labelDefault: 'Custom'},
 ];
 
-export function PostReminderSubmenu(props: Props) {
+export function PostReminderSubmenu({userId, post, isMilitaryTime, show, timezone}: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
 
     const setPostReminder = (id: string): void => {
-        const currentDate = getCurrentMomentForTimezone(props.timezone);
+        const currentDate = getCurrentMomentForTimezone(timezone);
         let endTime = currentDate;
         switch (id) {
         case 'thirty_minutes':
@@ -62,7 +61,7 @@ export function PostReminderSubmenu(props: Props) {
             break;
         }
 
-        dispatch(addPostReminder(props.userId, props.post.id, toUTCUnix(endTime.toDate())));
+        dispatch(addPostReminder(userId, post.id, toUTCUnix(endTime.toDate())));
     };
 
     const setCustomPostReminder = (): void => {
@@ -70,7 +69,7 @@ export function PostReminderSubmenu(props: Props) {
             modalId: ModalIdentifiers.POST_REMINDER_CUSTOM_TIME_PICKER,
             dialogType: PostReminderCustomTimePicker,
             dialogProps: {
-                postId: props.post.id,
+                postId: post.id,
             },
         };
         dispatch(openModal(postReminderCustomTimePicker));
@@ -81,7 +80,7 @@ export function PostReminderSubmenu(props: Props) {
             let labels: string | JSX.Element = formatMessage({id: label, defaultMessage: labelDefault});
 
             if (id === 'tomorrow') {
-                const tomorrow = getCurrentMomentForTimezone(props.timezone).add(1, 'day').toDate();
+                const tomorrow = getCurrentMomentForTimezone(timezone).add(1, 'day').toDate();
 
                 labels = (
                     <span>
@@ -95,7 +94,7 @@ export function PostReminderSubmenu(props: Props) {
                             <FormattedTime
                                 value={tomorrow}
                                 timeStyle='short'
-                                hour12={!props.isMilitaryTime}
+                                hour12={!isMilitaryTime}
                             />
                         </span>
                     </span>
@@ -109,26 +108,20 @@ export function PostReminderSubmenu(props: Props) {
             };
         });
 
-    if (!props.show) {
+    if (!show) {
         return null;
     }
 
     return (
         <Menu.ItemSubMenu
-            id={`remind_post_${props.post.id}`}
+            id={`remind_post_${post.id}`}
             direction='left'
             subMenu={postReminderSubMenuItems}
-            text={
+            icon={Utils.getMenuItemIcon('icon-bell-outline')}
+            text={(
                 <FormattedMessage
                     id='post_info.post_reminder.menu'
                     defaultMessage='Remind'
-                />
-            }
-            icon={(
-                <Icon
-                    className='post_info__reminder-icon'
-                    size={16}
-                    glyph='bell-outline'
                 />
             )}
         />

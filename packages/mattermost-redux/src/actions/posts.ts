@@ -1403,6 +1403,15 @@ export function unacknowledgePost(postId: string) {
     };
 }
 
+export function translatePost(postId: string) {
+    return bindClientFunc({
+        clientFunc: Client4.translatePost,
+        params: [
+            postId,
+        ],
+    });
+}
+
 export function addPostReminder(userId: string, postId: string, timestamp: number) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         try {
