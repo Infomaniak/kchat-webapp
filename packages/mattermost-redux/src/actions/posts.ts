@@ -1402,3 +1402,12 @@ export function unacknowledgePost(postId: string) {
         return {data};
     };
 }
+
+export function translatePost(postId: string) {
+    return bindClientFunc({
+        clientFunc: Client4.translatePost,
+        params: [
+            postId,
+        ],
+    });
+}

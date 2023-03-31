@@ -4252,6 +4252,13 @@ export default class Client4 {
         );
     }
 
+    translatePost = (postId: string) => {
+        return this.doFetch(
+            `${this.getPostRoute(postId)}/translate`,
+            {method: 'POST'},
+        );
+    }
+
     /**
      * @param query string query of graphQL, pass the json stringified version of the query
      * eg.  const query = JSON.stringify({query: `{license, config}`, operationName: 'queryForLicenseAndConfig'});

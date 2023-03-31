@@ -192,6 +192,7 @@ export type ClientConfig = {
     PostPriority: string;
     ReduceOnBoardingTaskList: string;
     PostAcknowledgements: string;
+    FeatureFlagTranslation: string;
 };
 
 export type License = {

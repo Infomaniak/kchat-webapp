@@ -4405,6 +4405,7 @@
   "post_info.tooltip.add_reactions": "Reaktion hinzufügen",
   "post_info.unpin": "Vom Kanal abheften",
   "post_info.unread": "Als ungelesen markieren",
+  "post_info.translate": "Übersetzen",
   "post_message_preview.channel": "Nur sichtbar für Benutzer in ~{channel}",
   "post_message_view.edited": "Bearbeitet",
   "post_pre_header.flagged": "Gespeichert",
@@ -5722,5 +5723,8 @@
   "pending_guests_dropdown.cancel": "Einladung abbrechen",
   "cancel_multiple_invites_modal.header": "Mehrere Einladungen absagen",
   "cancel_multiple_invites_modal.content": "Wenn Sie diese Einladung stornieren, stornieren Sie auch die Einladungen in den folgenden Kanälen :",
-  "channelLimitIndicator.text": "Sie haben das Limit von {type, select, O {öffentliche Kanäle} P {private Kanäle} other {}} ({usage, number}/{limit, number}) auf Ihrem kSuite-Angebot erreicht. {isAdmin, select, true {<modifyOffer>Bearbeiten Sie Ihr Angebot</modifyOffer>, um zusätzliche Kanäle zu erstellen.} other {Bitte wenden Sie sich an einen Administrator, damit er das Angebot ändert.}}"
+  "channelLimitIndicator.text": "Sie haben das Limit von {type, select, O {öffentliche Kanäle} P {private Kanäle} other {}} ({usage, number}/{limit, number}) auf Ihrem kSuite-Angebot erreicht. {isAdmin, select, true {<modifyOffer>Bearbeiten Sie Ihr Angebot</modifyOffer>, um zusätzliche Kanäle zu erstellen.} other {Bitte wenden Sie sich an einen Administrator, damit er das Angebot ändert.}}",
+  "toggle_next_modal.title": "Zu {version} Version wechseln",
+  "toggle_next_modal.message_stable": "STABLE ist unsere Standardumgebung. Wenn Sie nicht daran interessiert sind, neue Funktionen zu testen, empfehlen wir Ihnen, auf die STABLE Version zurückzugreifen.",
+  "toggle_next_modal.message_next": "NEXT ist unsere Testumgebung. Sie können auf einige Bugs stoßen, haben aber auch Zugang zu den neuesten Inhalten und Updates. Wenn Sie nicht daran interessiert sind, neue Funktionen zu testen, empfehlen wir Ihnen, bei der STABLE Version zu bleiben."
 }

@@ -1,3 +1,13 @@
+## 1.0.7 (2023-03-28)
+
+### Added (1 change)
+
+- [canary switch](kchat/webapp@3f4051fec47c606df83874224057c9b41558faa7) by @leonard.jouve ([merge request](kchat/webapp!354))
+
+### Chore (1 change)
+
+- [remove gh codeql workflow with missing config](kchat/webapp@8d84eaf5057fdc9aa3b4bba52df30c0b0834545f) by @antonbuksa ([merge request](kchat/webapp!345))
+
 ## 1.0.6 (2023-03-20)
 
 ### Fixed (1 change)
