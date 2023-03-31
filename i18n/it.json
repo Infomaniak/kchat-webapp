@@ -3937,5 +3937,7 @@
   "post.reminder.systemBot": "Salve, ecco il promemoria di questo messaggio da parte di {username}: {permaLink}",
   "toggle_next_modal.title": "Passa alla versione {version}",
   "toggle_next_modal.message_stable": "STABLE è il nostro ambiente predefinito. Se non siete interessati a testare nuove funzionalità, vi consigliamo di tornare alla versione STABLE.",
-  "toggle_next_modal.message_next": "NEXT è il nostro ambiente di prova. Potreste incontrare alcuni bug, ma avrete anche accesso agli ultimi contenuti e aggiornamenti. Se non siete interessati a testare nuove funzionalità, vi consigliamo di rimanere sulla versione STABILE."
+  "toggle_next_modal.message_next": "NEXT è il nostro ambiente di prova. Potreste incontrare alcuni bug, ma avrete anche accesso agli ultimi contenuti e aggiornamenti. Se non siete interessati a testare nuove funzionalità, vi consigliamo di rimanere sulla versione STABILE.",
+  "custom_reminder.time_picker.no_option": "Data non valida",
+  "custom_status.expiry.time_picker.description": "Per aggiungere un orario più preciso, inserire l'ora desiderata e verrà aggiunta come opzione selezionabile."
 }

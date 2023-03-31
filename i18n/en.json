@@ -5740,5 +5740,7 @@
   "post.reminder.systemBot": "Hi there, here's your reminder about this message from {username}: {permaLink}",
   "toggle_next_modal.title": "Switch to {version} version",
   "toggle_next_modal.message_stable": "STABLE is our default environment. If you are not interested by testing new features, we recommend going back to the STABLE version.",
-  "toggle_next_modal.message_next": "NEXT is our test environment. You might encounter some bugs, but will also access the latest content and updates. If you are not interested by testing new features, we recommend staying on the STABLE version."
+  "toggle_next_modal.message_next": "NEXT is our test environment. You might encounter some bugs, but will also access the latest content and updates. If you are not interested by testing new features, we recommend staying on the STABLE version.",
+  "custom_reminder.time_picker.no_option": "Invalid date",
+  "custom_status.expiry.time_picker.description": "To add a more precise time, input your desired time, and it will be added as a selectable option."
 }
