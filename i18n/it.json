@@ -3926,7 +3926,18 @@
   "cancel_multiple_invites_modal.header": "Annullare più inviti",
   "cancel_multiple_invites_modal.content": "Annullando questo invito, annullerete anche gli inviti nei seguenti canali :",
   "channelLimitIndicator.text": "È stato raggiunto il limite di {type, select, O {canali pubblici} P {canali privati} other {}} ({usage, number}/{limit, number}) sulla propria offerta kSuite. {isAdmin, select, true {<modifyOffer>Modifica la tua offerta</modifyOffer> per creare altri canali.} other {Contattare un amministratore per modificare l'offerta.}}",
+  "post_info.post_reminder.menu": "Promemoria",
+  "post_info.post_reminder.sub_menu.thirty_minutes": "30 min",
+  "post_info.post_reminder.sub_menu.one_hour": "1 ora",
+  "post_info.post_reminder.sub_menu.two_hours": "2 ore",
+  "post_info.post_reminder.sub_menu.tomorrow": "Domani",
+  "post_info.post_reminder.sub_menu.custom": "Personalizzato",
+  "post_reminder.custom_time_picker_modal.text": "Imposta promemoria",
+  "post.reminder.acknowledgement": "Ti verrà ricordato a {reminderTime}, {reminderDate} questo messaggio da {username}: {permaLink}",
+  "post.reminder.systemBot": "Salve, ecco il promemoria di questo messaggio da parte di {username}: {permaLink}",
   "toggle_next_modal.title": "Passa alla versione {version}",
   "toggle_next_modal.message_stable": "STABLE è il nostro ambiente predefinito. Se non siete interessati a testare nuove funzionalità, vi consigliamo di tornare alla versione STABLE.",
-  "toggle_next_modal.message_next": "NEXT è il nostro ambiente di prova. Potreste incontrare alcuni bug, ma avrete anche accesso agli ultimi contenuti e aggiornamenti. Se non siete interessati a testare nuove funzionalità, vi consigliamo di rimanere sulla versione STABILE."
+  "toggle_next_modal.message_next": "NEXT è il nostro ambiente di prova. Potreste incontrare alcuni bug, ma avrete anche accesso agli ultimi contenuti e aggiornamenti. Se non siete interessati a testare nuove funzionalità, vi consigliamo di rimanere sulla versione STABILE.",
+  "custom_reminder.time_picker.no_option": "Data non valida",
+  "custom_status.expiry.time_picker.description": "Per aggiungere un orario più preciso, inserire l'ora desiderata e verrà aggiunta come opzione selezionabile."
 }

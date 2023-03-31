@@ -23,6 +23,7 @@ describe('components/custom_status/date_time_input', () => {
         time: moment('2021-05-03T14:53:39.127Z'),
         handleChange: jest.fn(),
         timezone: 'Australia/Sydney',
+        onMenuChange: jest.fn(),
     };
 
     it('should match snapshot', () => {
