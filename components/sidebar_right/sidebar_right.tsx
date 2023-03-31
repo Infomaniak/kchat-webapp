@@ -248,7 +248,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             channel,
         } = this.props;
 
-        const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || isSettings ||  searchVisible) && isExpanded;
+        const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || isSettings || searchVisible) && isExpanded;
 
         const teamNeeded = true;
         let selectedChannelNeeded;
@@ -302,11 +302,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             'move--left is-open': isOpen,
         });
 
-        const rhs = isSettings ? (
-            <>
-                {content}
-            </>
-        ) : (
+        const rhs = isSettings ? content : (
             <Search
                 isSideBarRight={true}
                 isSideBarRightOpen={true}
