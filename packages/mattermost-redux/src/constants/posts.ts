@@ -32,8 +32,6 @@ export const PostTypes = {
     ADD_BOT_TEAMS_CHANNELS: 'add_bot_teams_channels' as PostType,
     SYSTEM_WARN_METRIC_STATUS: 'warn_metric_status' as PostType,
     CALL: 'custom_call' as PostType,
-    REMINDER: 'reminder' as PostType,
-    SYSTEM_POST_REMINDER: 'system_post_reminder' as PostType,
 };
 
 export default {

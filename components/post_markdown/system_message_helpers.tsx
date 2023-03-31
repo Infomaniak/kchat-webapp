@@ -369,56 +369,6 @@ function renderMeMessage(post: Post): ReactNode {
     return renderFormattedText(message);
 }
 
-function renderReminderACKMessage(post: Post, currentTeam: Team, isMilitaryTime: boolean): ReactNode {
-    const username = renderUsername(post.props.username);
-    const teamUrl = `${getSiteURL()}/${post.props.team_name || currentTeam.name}`;
-    const link = `${teamUrl}/pl/${post.props.post_id}`;
-    const permaLink = renderFormattedText(`[${link}](${link})`);
-    const localTime = new Date(post.props.target_time * 1000);
-
-    const reminderTime = (
-        <FormattedTime
-            value={localTime}
-            hour12={!isMilitaryTime}
-        />
-    );
-    const reminderDate = (
-        <FormattedDate
-            value={localTime}
-            day='2-digit'
-            month='short'
-            year='numeric'
-        />
-    );
-    return (
-        <FormattedMessage
-            id={'post.reminder.acknowledgement'}
-            defaultMessage='You will be reminded at {reminderTime}, {reminderDate} about this message from {username}: {permaLink}'
-            values={{
-                reminderTime,
-                reminderDate,
-                username,
-                permaLink,
-            }}
-        />
-    );
-}
-
-function renderReminderSystemBotMessage(post: Post): ReactNode {
-    const username = post.props.username ? renderUsername(post.props.username) : '';
-    const permaLink = renderFormattedText(`[${post.props.link}](${post.props.link})`);
-    return (
-        <FormattedMessage
-            id={'post.reminder.systemBot'}
-            defaultMessage="Hi there, here's your reminder about this message from {username}: {permaLink}"
-            values={{
-                username,
-                permaLink,
-            }}
-        />
-    );
-}
-
 const systemMessageRenderers = {
     [Posts.POST_TYPES.JOIN_CHANNEL]: renderJoinChannelMessage,
     [Posts.POST_TYPES.GUEST_JOIN_CHANNEL]: renderGuestJoinChannelMessage,
@@ -438,7 +388,6 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CHANNEL_UNARCHIVED]: renderChannelUnarchivedMessage,
     [Posts.POST_TYPES.ME]: renderMeMessage,
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
-    [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
 };
 
 export function renderSystemMessage(post: Post, currentTeam: Team, channel: Channel, isUserCanManageMembers?: boolean, isMilitaryTime?: boolean): ReactNode {
@@ -465,8 +414,6 @@ export function renderSystemMessage(post: Post, currentTeam: Team, channel: Chan
         return systemMessageRenderers[post.type](post);
     } else if (post.type === Posts.POST_TYPES.EPHEMERAL_ADD_TO_CHANNEL) {
         return renderAddToChannelMessage(post);
-    } else if (isEphemeral && post.props?.type === Posts.POST_TYPES.REMINDER && isMilitaryTime) {
-        return renderReminderACKMessage(post, currentTeam, isMilitaryTime);
     } else if (post.type === Posts.POST_TYPES.COMBINED_USER_ACTIVITY) {
         const {allUserIds, allUsernames, messageData} = post.props.user_activity;
 
