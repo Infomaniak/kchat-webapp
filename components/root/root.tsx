@@ -77,7 +77,7 @@ import {ActionResult} from 'mattermost-redux/types/actions';
 import {IKConstants} from 'utils/constants-ik';
 
 import WelcomePostRenderer from 'components/welcome_post_renderer';
-import {reconnectWebSocket} from 'actions/websocket_actions';
+import {close, initialize} from 'actions/websocket_actions';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -522,7 +522,8 @@ export default class Root extends React.PureComponent<Props, State> {
             console.log('[components/root] desktop token expiring soon'); // eslint-disable-line no-console
             refreshIKToken(/*redirectToReam*/false)?.then(() => {
                 console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console
-                reconnectWebSocket();
+                close();
+                initialize();
             }).catch((e: unknown) => {
                 console.warn('[components/root] desktop token refresh error: ', e); // eslint-disable-line no-console
             });
