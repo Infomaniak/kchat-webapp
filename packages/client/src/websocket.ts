@@ -261,12 +261,10 @@ export default class WebSocketClient {
 
         this.conn.connection.bind('connected', () => {
             this.subscribeToTeamChannel(teamId as string);
-
             this.subscribeToUserChannel(userId || currentUserId);
             this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId);
 
-            this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
-
+            this.bindPresenceChannel(presenceChannelId || currentPresenceChannelId);
             this.bindChannelGlobally(this.teamChannel);
             this.bindChannelGlobally(this.userChannel);
 
