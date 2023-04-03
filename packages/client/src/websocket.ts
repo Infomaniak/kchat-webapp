@@ -274,7 +274,6 @@ export default class WebSocketClient {
                 this.userTeamChannel.unbind_global();
             }
             this.bindChannelGlobally(this.userTeamChannel);
-            this.bindChannelGlobally(this.presenceChannel);
 
             console.log('[websocket] re-established connection');
             if (this.connectFailCount > 0) {
@@ -322,11 +321,6 @@ export default class WebSocketClient {
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
     }
 
-    subscribeToPresenceChannel(channelID: string) {
-        this.currentPresence = channelID;
-        this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
-    }
-
     bindPresenceChannel(channelID: string) {
         this.currentPresence = channelID;
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
@@ -336,7 +330,6 @@ export default class WebSocketClient {
     }
 
     unbindPresenceChannel(channelID: string) {
-        // @ts-ignore
         this.conn?.unsubscribe(`presence-channel.${channelID}`);
 
         if (this.presenceChannel) {
@@ -345,8 +338,7 @@ export default class WebSocketClient {
     }
 
     bindChannelGlobally(channel: Channel | null) {
-        // @ts-ignore
-        channel.bind_global((evt, data) => {
+        channel?.bind_global((evt, data) => {
             // console.error(`The event ${evt} was triggered with data`);
             // console.error(data);
 
