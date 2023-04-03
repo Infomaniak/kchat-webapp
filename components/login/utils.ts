@@ -6,12 +6,7 @@ import crypto from 'crypto';
 
 import {Client4} from 'mattermost-redux/client';
 import {IKConstants} from 'utils/constants-ik';
-import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-import {getDesktopVersion} from 'utils/user_agent';
-
-let REFRESH_PROMISE: Promise<any> | null = null;
 
 // eslint-disable-next-line no-process-env
 const v2DefaultAuthServer = process.env.BASE_URL;
@@ -141,7 +136,7 @@ export function isDefaultAuthServer() {
     return window.location.origin === v2DefaultAuthServer;
 }
 
-function storeTokenV2(tokenData: {token: string, refreshToken: string, expiresAt: number}) {
+function storeTokenV2(tokenData: {token: string; refreshToken: string; expiresAt: number}) {
     const {token, refreshToken, expiresAt} = tokenData;
     localStorage.setItem('IKToken', token);
     localStorage.setItem('IKRefreshToken', refreshToken);
@@ -152,11 +147,12 @@ function storeTokenV2(tokenData: {token: string, refreshToken: string, expiresAt
     Client4.setAuthHeader = true;
 }
 
-async function refreshTokenV2() {
+async function refreshTokenV2(): Promise<{token: string; refreshToken: string; expiresAt: number}> {
     try {
         const newToken = await window.authManager.refreshToken();
         console.log(newToken);
         storeTokenV2(newToken);
+        return newToken;
     } catch (error) {
         console.error(error);
         window.postMessage(
@@ -166,80 +162,41 @@ async function refreshTokenV2() {
             },
             window.origin,
         );
+        return Promise.reject(error);
     }
 }
 
-function isValidTokenV2(token: {token: string, refreshToken: string, expiresAt: number}) {
+function isValidTokenV2(token: {token: string; refreshToken: string; expiresAt: number}) {
     const isExpiredInOneMinute = token.expiresAt <= ((Date.now() / 1000) + 60);
 
     return !isExpiredInOneMinute;
 }
 
-export async function refreshIKToken(redirectToTeam = false): Promise<any> {
-    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
-        const updatedToken = await window.authManager.tokenRequest();
-        if (!Object.keys(updatedToken).length) {
-            clearLocalStorageToken();
-            return Promise.reject(new Error('missing refresh token'));
-        } else if (isValidTokenV2(updatedToken)) {
-            storeTokenV2(updatedToken);
-        } else {
-            await refreshTokenV2();
-        }
+export async function refreshIKToken(redirectToTeam = false): Promise<string> {
+    const updatedToken = await window.authManager.tokenRequest();
 
+    // If desktop doesn't have a valid token/refresh token
+    if (!Object.keys(updatedToken).length) {
+        // Clean token storage just in case and reject promise.
+        clearLocalStorageToken();
+        return Promise.reject(new Error('missing refresh token'));
+    } else if (isValidTokenV2(updatedToken)) {
+        // If desktop token still valid, use it.
+        storeTokenV2(updatedToken);
+        return updatedToken.token;
+    }
+
+    // Otherwise token is valid but expired, request a refresh.
+    try {
+        const {token} = await refreshTokenV2();
+
+        // Queue redirect before returning, otherwise it won't trigger.
         if (redirectToTeam) {
             redirectUserToDefaultTeam();
         }
-    } else {
-        const refreshToken = localStorage.getItem('IKRefreshToken');
 
-        if (!refreshToken) {
-            return Promise.reject(new Error('missing refresh token'));
-        }
-
-        if (REFRESH_PROMISE) {
-            return REFRESH_PROMISE as Promise<any>;
-        }
-
-        Client4.setToken('');
-        Client4.setCSRF('');
-
-        // eslint-disable-next-line consistent-return
-        REFRESH_PROMISE = new Promise((resolve, reject) => {
-            Client4.refreshIKLoginToken(
-                refreshToken,
-                `${IKConstants.LOGIN_URL}`,
-                `${IKConstants.CLIENT_ID}`,
-            ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
-                storeTokenResponse(resp);
-                LocalStorageStore.setWasLoggedIn(true);
-
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token: resp.access_token,
-                            refreshToken: resp.refresh_token,
-                            expiresAt: parseInt(Date.now() / 1000) + resp.expires_in,
-                        },
-                    },
-                    window.origin,
-                );
-
-                REFRESH_PROMISE = null;
-                if (redirectToTeam) {
-                    redirectUserToDefaultTeam();
-                }
-                resolve(resp);
-            }).catch((error: unknown) => {
-                console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
-                console.warn(error);
-                console.log('[login/utils > refreshIKToken] keeping old token');
-                REFRESH_PROMISE = null;
-                reject(error);
-            });
-        });
-
-        return REFRESH_PROMISE;
+        return token;
+    } catch (e) {
+        return Promise.reject(e);
     }
 }
