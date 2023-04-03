@@ -14,7 +14,7 @@ import GetAppAnnoucementBarMobile from 'components/announcement_bar/get_app_anno
 import useGetOs from 'components/common/hooks/useGetOs';
 
 import {AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
-import {isDesktopApp, isMobile} from 'utils/user_agent';
+import {isDesktopApp, isMobile as getIsMobile} from 'utils/user_agent';
 
 const GET_THE_APP_LAST_SEEN_AT = 'GetTheAppLastSeenAt';
 const DO_NOT_DISTURB = 'DoNotDisturb';
@@ -25,13 +25,16 @@ const GetAppAnnoucementBar = () => {
     const {formatMessage} = useIntl();
     const os = useGetOs();
     const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT);
-    const isCooldownExceeded = !isMobile() && Date.now() >= Number(lastSeenAt) + COOLDOWN;
-    const shouldDisplayBanner = !isDesktopApp() && (!lastSeenAt || isCooldownExceeded);
-    const [show, setShow] = useState<boolean | null>(lastSeenAt === DO_NOT_DISTURB ? null : shouldDisplayBanner);
+    const isMobile = getIsMobile();
+    const isCooldownExceeded = Date.now() >= Number(lastSeenAt) + COOLDOWN;
+    const shouldDisplayDesktopBanner = !isDesktopApp() && (!lastSeenAt || isCooldownExceeded);
+    const shouldDisplayMobileModal = isMobile && !lastSeenAt;
+    const shouldDisplayMobileBanner = isMobile && Boolean(lastSeenAt);
+    const [show, setShow] = useState<boolean>(lastSeenAt !== DO_NOT_DISTURB && (shouldDisplayDesktopBanner || shouldDisplayMobileModal || shouldDisplayMobileBanner));
 
     const handleClose = (doNotDisturb = false) => {
         localStorage.setItem(GET_THE_APP_LAST_SEEN_AT, doNotDisturb ? DO_NOT_DISTURB : Date.now().toString());
-        setShow(null);
+        setShow(false);
     };
 
     const message = formatMessage({
@@ -55,27 +58,26 @@ const GetAppAnnoucementBar = () => {
         ),
     });
 
-    if (isMobile()) {
-        if (show) {
-            dispatch(openModal({
-                modalId: ModalIdentifiers.GET_THE_APP,
-                dialogType: GetTheAppModal,
-                dialogProps: {
-                    onClose: handleClose,
-                },
-            }));
-            setShow(null);
-            return null;
-        }
-        if (show === false) {
-            return (
-                <GetAppAnnoucementBarMobile onClose={handleClose}/>
-            );
-        }
-    }
-
     if (!show) {
         return null;
+    }
+
+    if (shouldDisplayMobileModal) {
+        dispatch(openModal({
+            modalId: ModalIdentifiers.GET_THE_APP,
+            dialogType: GetTheAppModal,
+            dialogProps: {
+                onClose: handleClose,
+            },
+        }));
+        setShow(false);
+        return null;
+    }
+
+    if (shouldDisplayMobileBanner) {
+        return (
+            <GetAppAnnoucementBarMobile onClose={handleClose}/>
+        );
     }
 
     return (
