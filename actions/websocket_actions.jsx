@@ -202,7 +202,7 @@ export function initialize() {
 
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
-    WebSocketClient.addReconnectListener(() => reconnect(false));
+    WebSocketClient.addReconnectListener(reconnect);
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
@@ -211,19 +211,18 @@ export function initialize() {
         user.user_id,
         user.id,
         user.team_id,
-        null,
         token,
-        currentChannelId
+        currentChannelId,
     );
 }
 
 export function close() {
     WebSocketClient.close();
-}
-
-export function reconnectWebSocket() {
-    close();
-    initialize();
+    WebSocketClient.removeMessageListener(handleEvent);
+    WebSocketClient.removeFirstConnectListener(handleFirstConnect);
+    WebSocketClient.removeReconnectListener(reconnect);
+    WebSocketClient.removeMissedMessageListener(restart);
+    WebSocketClient.removeCloseListener(handleClose);
 }
 
 const pluginReconnectHandlers = {};
@@ -237,13 +236,15 @@ export function unregisterPluginReconnectHandler(pluginId) {
 }
 
 function restart() {
-    reconnect(false);
+    reconnect();
 
     // We fetch the client config again on the server restart.
     dispatch(getClientConfig());
 }
 
-export async function reconnect(includeWebSocket = true) {
+export async function reconnect() {
+    // eslint-disable-next-line
+    console.log('Reconnecting WebSocket');
     if (isDesktopApp()) {
         const tokenExpire = localStorage.getItem('IKTokenExpire');
         const token = localStorage.getItem('IKToken');
@@ -259,22 +260,18 @@ export async function reconnect(includeWebSocket = true) {
         if (checkIKTokenIsExpired()) {
             // eslint-disable-next-line no-console
             console.log('[websocket_actions > reconnect] token expired, calling refresh');
-            includeWebSocket = true; // eslint-disable-line no-param-reassign
             try {
                 await refreshIKToken(/*redirectToTeam**/false);
-            } catch {
-                // swallow
-                includeWebSocket = false; // eslint-disable-line no-param-reassign
+                const newToken = localStorage.getItem('IKToken');
+                if (newToken) {
+                    WebSocketClient.updateToken(newToken);
+                }
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.warn(e);
             }
         }
     }
-
-    if (includeWebSocket) {
-        // eslint-disable-next-line no-console
-        console.log('[websocket_actions > reconnect] reconnecting websocket with new token');
-        reconnectWebSocket();
-    }
-
     dispatch({
         type: GeneralTypes.WEBSOCKET_SUCCESS,
         timestamp: Date.now(),

@@ -134,7 +134,6 @@ export default class WebSocketClient {
         userId?: number,
         userTeamId?: string,
         teamId?: string,
-        token?: string,
         authToken?: string,
         presenceChannelId?: string,
     ) {
@@ -252,7 +251,6 @@ export default class WebSocketClient {
                         this.currentUser as number,
                         this.currentTeamUser,
                         this.currentTeam,
-                        token,
                         authToken,
                         this.currentPresence,
                     );
@@ -293,6 +291,21 @@ export default class WebSocketClient {
             this.errorCount = 0;
             this.socketId = this.conn?.connection.socket_id as string;
         });
+    }
+
+    updateToken(token: string) {
+        if (this.conn) {
+            this.conn.disconnect();
+            this.conn = null;
+            this.initialize(
+                this.connectionUrl,
+                this.currentUser as number,
+                this.currentTeamUser,
+                this.currentTeam,
+                token,
+                this.currentPresence,
+            );
+        }
     }
 
     subscribeToTeamChannel(teamId: string) {
@@ -398,6 +411,10 @@ export default class WebSocketClient {
 
     addMessageListener(listener: MessageListener) {
         this.messageListeners.add(listener);
+        if (this.messageListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.messageListeners.size} message listeners registered`);
+        }
     }
 
     removeMessageListener(listener: MessageListener) {
@@ -413,6 +430,11 @@ export default class WebSocketClient {
 
     addFirstConnectListener(listener: FirstConnectListener) {
         this.firstConnectListeners.add(listener);
+
+        if (this.firstConnectListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.firstConnectListeners.size} first connect listeners registered`);
+        }
     }
 
     removeFirstConnectListener(listener: FirstConnectListener) {
@@ -428,6 +450,11 @@ export default class WebSocketClient {
 
     addReconnectListener(listener: ReconnectListener) {
         this.reconnectListeners.add(listener);
+
+        if (this.reconnectListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.reconnectListeners.size} reconnect listeners registered`);
+        }
     }
 
     removeReconnectListener(listener: ReconnectListener) {
@@ -443,6 +470,11 @@ export default class WebSocketClient {
 
     addMissedMessageListener(listener: MissedMessageListener) {
         this.missedMessageListeners.add(listener);
+
+        if (this.missedMessageListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.missedMessageListeners.size} missed message listeners registered`);
+        }
     }
 
     removeMissedMessageListener(listener: MissedMessageListener) {
@@ -458,6 +490,11 @@ export default class WebSocketClient {
 
     addErrorListener(listener: ErrorListener) {
         this.errorListeners.add(listener);
+
+        if (this.errorListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.errorListeners.size} error listeners registered`);
+        }
     }
 
     removeErrorListener(listener: ErrorListener) {
@@ -473,6 +510,11 @@ export default class WebSocketClient {
 
     addCloseListener(listener: CloseListener) {
         this.closeListeners.add(listener);
+
+        if (this.closeListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.closeListeners.size} close listeners registered`);
+        }
     }
 
     removeCloseListener(listener: CloseListener) {
