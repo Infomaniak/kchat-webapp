@@ -338,6 +338,7 @@ export default class WebSocketClient {
     }
 
     bindChannelGlobally(channel: Channel | null) {
+        // @ts-ignore
         channel?.bind_global((evt, data) => {
             // console.error(`The event ${evt} was triggered with data`);
             // console.error(data);
