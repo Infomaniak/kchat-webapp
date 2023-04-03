@@ -271,6 +271,7 @@ export default class WebSocketClient {
             this.bindChannelGlobally(this.userChannel);
 
             // unbind previous listeners if needed to prevent duplicated callbacks
+            // TODO: obsolete, remove now that disconnect does a global unbind
             if (this.userTeamChannel && this.userTeamChannel.global_callbacks.length > 0) {
                 this.userTeamChannel.unbind_global();
             }
@@ -340,9 +341,9 @@ export default class WebSocketClient {
         // @ts-ignore
         this.conn?.unsubscribe(`presence-channel.${channelID}`);
 
-        // if (this.presenceChannel) {
-        //     this.unbindChannelGlobally(this.presenceChannel);
-        // }
+        if (this.presenceChannel) {
+            this.unbindChannelGlobally(this.presenceChannel);
+        }
     }
 
     bindChannelGlobally(channel: Channel | null) {
