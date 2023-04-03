@@ -154,7 +154,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
                 className='close'
                 type='button'
                 aria-label='Close'
-                onClick={() => this.props.onExited()}
+                onClick={this.onHide}
             >
                 <CloseIcon
                     size={16}
