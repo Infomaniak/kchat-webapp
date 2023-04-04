@@ -28,7 +28,7 @@ const getOperatingSystem = (userAgent: string) => {
     return 'unknown';
 };
 
-const useGetOs = () => {
+const useGetOperatingSystem = () => {
     const [operatingSystem, setOperatingSystem] = useState('unknown');
 
     useEffect(() => {
@@ -39,4 +39,4 @@ const useGetOs = () => {
     return operatingSystem;
 };
 
-export default useGetOs;
+export default useGetOperatingSystem;

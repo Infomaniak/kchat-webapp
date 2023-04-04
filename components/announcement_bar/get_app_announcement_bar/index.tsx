@@ -11,7 +11,7 @@ import AnnouncementBar from 'components/announcement_bar/default_announcement_ba
 import GetTheAppIcon from 'components/widgets/icons/get_the_app_icon';
 import GetTheAppModal from 'components/get_the_app_modal';
 import GetAppAnnoucementBarMobile from 'components/announcement_bar/get_app_announcement_bar/get_app_annoucement_bar_mobile';
-import useGetOs from 'components/common/hooks/useGetOs';
+import useGetOperatingSystem from 'components/common/hooks/useGetOperatingSystem';
 
 import {AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
 import {isDesktopApp, isMobile as getIsMobile} from 'utils/user_agent';
@@ -23,11 +23,11 @@ const COOLDOWN = 172800000; // 48h
 const GetAppAnnoucementBar = () => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
-    const os = useGetOs();
+    const os = useGetOperatingSystem();
     const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT);
     const isMobile = getIsMobile();
     const isCooldownExceeded = Date.now() >= Number(lastSeenAt) + COOLDOWN;
-    const shouldDisplayDesktopBanner = !isDesktopApp() && (!lastSeenAt || isCooldownExceeded);
+    const shouldDisplayDesktopBanner = !isDesktopApp() && !isMobile && (!lastSeenAt || isCooldownExceeded);
     const shouldDisplayMobileModal = isMobile && !lastSeenAt;
     const shouldDisplayMobileBanner = isMobile && Boolean(lastSeenAt);
     const [show, setShow] = useState(lastSeenAt !== DO_NOT_DISTURB && (shouldDisplayDesktopBanner || shouldDisplayMobileModal || shouldDisplayMobileBanner));

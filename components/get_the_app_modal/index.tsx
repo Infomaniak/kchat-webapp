@@ -11,7 +11,7 @@ import {isModalOpen} from 'selectors/views/modals';
 import GenericModal from 'components/generic_modal';
 import Header from 'components/widgets/header';
 import GetTheAppModalIcon from 'components/widgets/icons/get_the_app_modal_icon';
-import useGetOs from 'components/common/hooks/useGetOs';
+import useGetOperatingSystem from 'components/common/hooks/useGetOperatingSystem';
 
 import {ModalIdentifiers} from 'utils/constants';
 
@@ -30,7 +30,7 @@ const GetTheAppModal = ({onClose}: Props) => {
     const dispatch = useDispatch();
     const show = useSelector((state: GlobalState) => isModalOpen(state, ModalIdentifiers.GET_THE_APP));
     const {formatMessage} = useIntl();
-    const platform = useGetOs();
+    const platform = useGetOperatingSystem();
 
     const handleClose = () => {
         dispatch(closeModal(ModalIdentifiers.GET_THE_APP));
