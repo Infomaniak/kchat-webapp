@@ -147,6 +147,14 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     private editDisableAction: DelayedAction;
     private buttonRef: React.RefObject<HTMLButtonElement>;
     private canPostBeForwarded: boolean;
+    private canReplyToPost: boolean;
+    private canMarkAsUnread: boolean;
+    private canFollowPost: boolean;
+    private canSavePost: boolean;
+    private canPinPost: boolean;
+    private canTranslatePost: boolean;
+    private canCopyLink: boolean;
+    private canCopyText: boolean;
 
     constructor(props: Props) {
         super(props);
@@ -162,6 +170,14 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
         this.buttonRef = React.createRef<HTMLButtonElement>();
 
         this.canPostBeForwarded = false;
+        this.canReplyToPost = false;
+        this.canMarkAsUnread = false;
+        this.canFollowPost = false;
+        this.canSavePost = false;
+        this.canPinPost = false;
+        this.canTranslatePost = false;
+        this.canCopyLink = false;
+        this.canCopyText = false;
     }
 
     static getDerivedStateFromProps(props: Props) {
@@ -213,6 +229,9 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     }
 
     handleFlagMenuItemActivated = (e: ChangeEvent): void => {
+        if (!this.canSavePost) {
+            return;
+        }
         if (this.props.isFlagged) {
             trackDotMenuEvent(e, TELEMETRY_LABELS.UNSAVE);
             this.props.actions.unflagPost(this.props.post.id);
@@ -233,16 +252,25 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     }
 
     copyLink = (e: ChangeEvent) => {
+        if (!this.canCopyLink) {
+            return;
+        }
         trackDotMenuEvent(e, TELEMETRY_LABELS.COPY_LINK);
         Utils.copyToClipboard(`${this.props.teamUrl}/pl/${this.props.post.id}`);
     }
 
     copyText = (e: ChangeEvent) => {
+        if (!this.canCopyText) {
+            return;
+        }
         trackDotMenuEvent(e, TELEMETRY_LABELS.COPY_TEXT);
         Utils.copyToClipboard(this.props.post.message);
     }
 
     handlePinMenuItemActivated = (e: ChangeEvent): void => {
+        if (!this.canPinPost) {
+            return;
+        }
         if (this.props.post.is_pinned) {
             trackDotMenuEvent(e, TELEMETRY_LABELS.UNPIN);
             this.props.actions.unpinPost(this.props.post.id);
@@ -254,13 +282,18 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
 
     handleMarkPostAsUnread = (e: ChangeEvent): void => {
         e.preventDefault();
+        if (!this.canMarkAsUnread) {
+            return;
+        }
         trackDotMenuEvent(e, TELEMETRY_LABELS.UNREAD);
         this.props.actions.markPostAsUnread(this.props.post, this.props.location);
     }
 
     handleDeleteMenuItemActivated = (e: ChangeEvent): void => {
         e.preventDefault();
-
+        if (!this.state.canDelete) {
+            return;
+        }
         trackDotMenuEvent(e, TELEMETRY_LABELS.DELETE);
         const deletePostModalData = {
             modalId: ModalIdentifiers.DELETE_POST,
@@ -299,6 +332,9 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     }
 
     handleEditMenuItemActivated = (e: ChangeEvent): void => {
+        if (!this.state.canEdit) {
+            return;
+        }
         trackDotMenuEvent(e, TELEMETRY_LABELS.EDIT);
         this.props.handleDropdownOpened?.(false);
         this.props.actions.setEditingPost(
@@ -310,6 +346,9 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     }
 
     handleSetThreadFollow = (e: ChangeEvent) => {
+        if (!this.canFollowPost) {
+            return;
+        }
         const {actions, teamId, threadId, userId, isFollowingThread, isMentionedInRootPost} = this.props;
         let followingThread: boolean;
 
@@ -335,6 +374,9 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     }
 
     handleCommentClick = (e: ChangeEvent) => {
+        if (!this.canReplyToPost) {
+            return;
+        }
         trackDotMenuEvent(e, TELEMETRY_LABELS.REPLY);
         this.props.handleCommentClick?.(e);
     }
@@ -467,6 +509,9 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     }
 
     translatePost = () => {
+        if (!this.canTranslatePost) {
+            return;
+        }
         const {actions, post} = this.props;
         actions.translatePost(post.id);
     };
@@ -482,6 +527,14 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
         );
 
         this.canPostBeForwarded = !(isSystemMessage);
+        this.canReplyToPost = !isSystemMessage && this.props.location === Locations.CENTER;
+        this.canMarkAsUnread = !isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH;
+        this.canFollowPost = !isSystemMessage && this.props.isCollapsedThreadsEnabled && (this.props.location === Locations.CENTER || this.props.location === Locations.RHS_ROOT || this.props.location === Locations.RHS_COMMENT);
+        this.canSavePost = !isSystemMessage;
+        this.canPinPost = !isSystemMessage && !this.props.isReadOnly;
+        this.canTranslatePost = !isSystemMessage && this.props.postTranslationEnabled;
+        this.canCopyLink = !isSystemMessage;
+        this.canCopyText = !isSystemMessage;
 
         const forwardPostItemText = (
             <span className={'title-with-new-badge'}>
@@ -535,7 +588,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                 >
                     <Menu.ItemAction
                         className={'MenuItem'}
-                        show={!isSystemMessage && this.props.location === Locations.CENTER}
+                        show={this.canReplyToPost}
                         text={Utils.localizeMessage('post_info.reply', 'Reply')}
                         icon={Utils.getMenuItemIcon('icon-reply-outline')}
                         rightDecorator={<ShortcutKey shortcutKey='R'/>}
@@ -570,7 +623,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                     />
                     <Menu.ItemAction
                         id={`unread_post_${this.props.post.id}`}
-                        show={!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH}
+                        show={this.canMarkAsUnread}
                         text={Utils.localizeMessage('post_info.unread', 'Mark as Unread')}
                         icon={Utils.getMenuItemIcon('icon-mark-as-unread')}
                         rightDecorator={<ShortcutKey shortcutKey='U'/>}
@@ -580,15 +633,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         id={`follow_post_thread_${this.props.post.id}`}
                         rightDecorator={<ShortcutKey shortcutKey='F'/>}
                         onClick={this.handleSetThreadFollow}
-                        show={(
-                            !isSystemMessage &&
-                            this.props.isCollapsedThreadsEnabled &&
-                                (
-                                    this.props.location === Locations.CENTER ||
-                                    this.props.location === Locations.RHS_ROOT ||
-                                    this.props.location === Locations.RHS_COMMENT
-                                )
-                        )}
+                        show={this.canFollowPost}
                         {...isFollowingThread ? {
                             icon: Utils.getMenuItemIcon('icon-message-minus-outline'),
                             text: this.props.threadReplyCount ? Utils.localizeMessage('threading.threadMenu.unfollow', 'Unfollow thread') : Utils.localizeMessage('threading.threadMenu.unfollowMessage', 'Unfollow message'),
@@ -598,7 +643,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         }}
                     />
                     <Menu.ItemAction
-                        show={!isSystemMessage}
+                        show={this.canSavePost}
                         text={this.props.isFlagged ? Utils.localizeMessage('rhs_root.mobile.unflag', 'Remove from Saved') : Utils.localizeMessage('rhs_root.mobile.flag', 'Save')}
                         icon={this.props.isFlagged ? Utils.getMenuItemIcon('icon-bookmark') : Utils.getMenuItemIcon('icon-bookmark-outline')}
                         rightDecorator={<ShortcutKey shortcutKey='S'/>}
@@ -606,7 +651,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                     />
                     <Menu.ItemAction
                         id={`unpin_post_${this.props.post.id}`}
-                        show={!isSystemMessage && !this.props.isReadOnly && this.props.post.is_pinned}
+                        show={this.canPinPost && this.props.post.is_pinned}
                         text={Utils.localizeMessage('post_info.unpin', 'Unpin')}
                         icon={Utils.getMenuItemIcon('icon-pin')}
                         rightDecorator={<ShortcutKey shortcutKey='P'/>}
@@ -614,14 +659,14 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                     />
                     <Menu.ItemAction
                         id={`pin_post_${this.props.post.id}`}
-                        show={!isSystemMessage && !this.props.isReadOnly && !this.props.post.is_pinned}
+                        show={this.canPinPost && !this.props.post.is_pinned}
                         text={Utils.localizeMessage('post_info.pin', 'Pin')}
                         icon={Utils.getMenuItemIcon('icon-pin-outline')}
                         rightDecorator={<ShortcutKey shortcutKey='P'/>}
                         onClick={this.handlePinMenuItemActivated}
                     />
                     <Menu.ItemAction
-                        show={!isSystemMessage && this.props.postTranslationEnabled}
+                        show={this.canTranslatePost}
                         text={Utils.localizeMessage('post_info.translate', 'Translate')}
                         icon={Utils.getMenuItemIcon('icon-format-letter-case')}
                         rightDecorator={<ShortcutKey shortcutKey='T'/>}
@@ -630,7 +675,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                     {!isSystemMessage && (this.state.canEdit || this.state.canDelete) && this.renderDivider('edit')}
                     <Menu.ItemAction
                         id={`permalink_${this.props.post.id}`}
-                        show={!isSystemMessage}
+                        show={this.canCopyLink}
                         text={Utils.localizeMessage('post_info.permalink', 'Copy Link')}
                         icon={Utils.getMenuItemIcon('icon-link-variant')}
                         rightDecorator={<ShortcutKey shortcutKey='K'/>}
@@ -647,7 +692,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                     />
                     <Menu.ItemAction
                         id={`copy_${this.props.post.id}`}
-                        show={!isSystemMessage}
+                        show={this.canCopyText}
                         text={Utils.localizeMessage('post_info.copy', 'Copy Text')}
                         icon={Utils.getMenuItemIcon('icon-content-copy')}
                         rightDecorator={<ShortcutKey shortcutKey='C'/>}
