@@ -11,7 +11,7 @@ import {getCurrentUserId, getCurrentUserMentionKeys} from 'mattermost-redux/sele
 import {getCurrentTeamId, getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {makeGetThreadOrSynthetic} from 'mattermost-redux/selectors/entities/threads';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
-import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import {isSystemMessage} from 'mattermost-redux/utils/post_utils';
 
@@ -35,6 +35,7 @@ import {
 } from 'actions/post_actions';
 
 import {getIsMobileView} from 'selectors/views/browser';
+import {getCurrentUserTimezone} from 'selectors/general';
 
 import * as PostUtils from 'utils/post_utils';
 
@@ -75,6 +76,7 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
     const currentTeam = getCurrentTeam(state) || {};
     const team = getTeam(state, channel.team_id);
     const teamUrl = `${getSiteURL()}/${team?.name || currentTeam.name}`;
+    const isMilitaryTime = getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false);
 
     const systemMessage = isSystemMessage(post);
     const collapsedThreads = isCollapsedThreadsEnabled(state);
@@ -132,6 +134,8 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
         threadReplyCount,
         isMobileView: getIsMobileView(state),
         showForwardPostNewLabel,
+        timezone: getCurrentUserTimezone(state),
+        isMilitaryTime,
         ...ownProps,
     };
 }

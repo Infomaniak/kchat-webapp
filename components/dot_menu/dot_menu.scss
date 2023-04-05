@@ -19,8 +19,15 @@
                 gap: 4px;
             }
         }
-        .post_info__translate-icon {
-            color: rgba(var(--center-channel-color-rgb), 0.56);
-        }
+    }
+
+    .post_info__reminder-icon {
+        color: rgba(var(--center-channel-color-rgb), 0.56);
+    }
+
+    .remind_menu__right_decorator {
+        position: absolute;
+        right: 10px;
+        font-size: 12px;
     }
 }

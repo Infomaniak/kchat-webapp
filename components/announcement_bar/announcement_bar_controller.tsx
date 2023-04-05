@@ -19,6 +19,7 @@ import CloudDelinquencyAnnouncementBar from './cloud_delinquency';
 import ShowThreeDaysLeftTrialModal from './show_tree_days_left_trial_modal/show_three_days_left_trial_modal';
 import NotifyAdminDowngradeDelinquencyBar from './notify_admin_downgrade_delinquency_bar';
 import OverageUsersBanner from './overage_users_banner';
+import GetAppAnnoucementBar from './get_app_announcement_bar';
 
 type Props = {
     license?: ClientLicense;
@@ -113,6 +114,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
                     canViewSystemErrors={this.props.canViewSystemErrors}
                     warnMetricsStatus={this.props.warnMetricsStatus}
                 />
+                <GetAppAnnoucementBar/>
             </>
         );
     }

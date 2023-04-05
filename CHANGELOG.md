@@ -1,3 +1,21 @@
+## 1.0.8 (2023-03-31)
+
+### Added (4 changes)
+
+- [add feature flag for translation feature](kchat/webapp@1deb135eb2b7f344c81c2c1912c4c84ec414229c) by @antonbuksa ([merge request](kchat/webapp!364))
+- [add translate post menu action](kchat/webapp@1620dd109da871d9888cf762c43888ce7df1fe07) by @leonard.jouve ([merge request](kchat/webapp!363))
+- [add reminders custom time picker](kchat/webapp@4f016b7f662c3eb1182518f9327e5172f19bee34) by @leonard.jouve ([merge request](kchat/webapp!355))
+- [reminders](kchat/webapp@3ae8cf47888fae8b9fa6d1289571b52626c92783) by @leonard.jouve ([merge request](kchat/webapp!355))
+
+### Fixed (6 changes)
+
+- [Unify translation menu icon](kchat/webapp@b8522a5b604a28b94b4ec96559de7955d1f04882) by @leonard.jouve ([merge request](kchat/webapp!365))
+- [Mark threads as unread trads](kchat/webapp@12204bfe000cbb211a585b54414d1599650d18e6) by @leonard.jouve ([merge request](kchat/webapp!361))
+- [badge guests](kchat/webapp@1a706c06f71bdf8c06ede9541318aff5b3ee9028) by @leonard.jouve ([merge request](kchat/webapp!358))
+- [Include guests in RHS channel info member count](kchat/webapp@c78ef3b593d1cf82d3d61d6afe3e40386a0d7fcd) by @leonard.jouve ([merge request](kchat/webapp!357))
+- [Fix RHS crash MM-49162](kchat/webapp@cd94348279732e813fa8b56d972ac5bbd031f25c) by @leonard.jouve ([merge request](kchat/webapp!356))
+- [Fix channel info crash](kchat/webapp@93738b3f59e74f947c4dcc5ee7669243286440d5) by @leonard.jouve ([merge request](kchat/webapp!356))
+
 ## 1.0.7 (2023-03-28)
 
 ### Added (1 change)

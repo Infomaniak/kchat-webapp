@@ -136,6 +136,53 @@
     background-color: #3d3c40;
 }
 
+.announcement-bar.announcement-bar-infomaniak {
+    max-height: $ik-announcement-bar-height;
+    min-height: $ik-announcement-bar-height;
+    background: linear-gradient(91.45deg, #0088B2 0.11%, #0E5F78 100%), #0088B2;
+
+    .announcement-bar__close {
+        top: auto;
+        bottom: auto;
+        font-size: 30px;
+    }
+
+    .announcement-bar__ik-icon {
+        min-width: fit-content;
+    }
+}
+
+.announcement-bar.announcement-bar-infomaniak-mobile {
+    max-height: $ik-mobile-announcement-bar-height;
+    min-height: $ik-mobile-announcement-bar-height;
+    background: #F2F2F6;
+
+    .announcement-bar__text {
+        justify-content: flex-start;
+        > span {
+            position: fixed;
+            right: 0px;
+            left: auto;
+
+            > a {
+                color: var(--button-bg) !important;
+                text-decoration: none !important;
+                padding: 0px 8px;
+            }
+        }
+    }
+
+    .announcement-bar__close {
+        color: #9F9F9F !important;
+        top: auto;
+        bottom: auto;
+        left: 6px;
+        right: auto;
+        font-size: 30px;
+        font-weight: 400;
+    }
+}
+
 .announcement-bar__link {
     margin-left: 4px;
 }

@@ -5,8 +5,6 @@ import React from 'react';
 import classNames from 'classnames';
 import {FormattedMessage, injectIntl, IntlShape} from 'react-intl';
 
-import Icon from '@infomaniak/compass-components/foundations/icon';
-
 import Permissions from 'mattermost-redux/constants/permissions';
 import {Post} from '@mattermost/types/posts';
 import {UserThread} from '@mattermost/types/threads';
@@ -22,6 +20,7 @@ import ChannelPermissionGate from 'components/permissions_gates/channel_permissi
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import DotsHorizontalIcon from 'components/widgets/icons/dots_horizontal';
+import {PostReminderSubmenu} from 'components/dot_menu/post_reminder_submenu';
 import {ModalData} from 'types/actions';
 import {PluginComponent} from 'types/store/plugins';
 import ForwardPostModal from '../forward_post_modal';
@@ -62,6 +61,8 @@ type Props = {
     teamUrl?: string; // TechDebt: Made non-mandatory while converting to typescript
     isMobileView: boolean;
     showForwardPostNewLabel: boolean;
+    timezone?: string;
+    isMilitaryTime: boolean;
 
     /**
      * Components for overriding provided by plugins
@@ -560,6 +561,13 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                             onClick={this.handleAddReactionMenuItemActivated}
                         />
                     </ChannelPermissionGate>
+                    <PostReminderSubmenu
+                        userId={this.props.userId}
+                        post={this.props.post}
+                        isMilitaryTime={this.props.isMilitaryTime}
+                        timezone={this.props.timezone}
+                        show={!isSystemMessage}
+                    />
                     <Menu.ItemAction
                         id={`unread_post_${this.props.post.id}`}
                         show={!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH}
@@ -615,13 +623,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                     <Menu.ItemAction
                         show={!isSystemMessage && this.props.postTranslationEnabled}
                         text={Utils.localizeMessage('post_info.translate', 'Translate')}
-                        icon={(
-                            <Icon
-                                className='post_info__translate-icon'
-                                size={16}
-                                glyph='format-letter-case'
-                            />
-                        )}
+                        icon={Utils.getMenuItemIcon('icon-format-letter-case')}
                         rightDecorator={<ShortcutKey shortcutKey='T'/>}
                         onClick={this.translatePost}
                     />
