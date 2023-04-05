@@ -5073,5 +5073,10 @@
   "post.reminder.acknowledgement": "Ce message de {username} vous sera rappelé à {reminderTime}, {reminderDate}: {permaLink}",
   "post.reminder.systemBot": "Bonjour, voici votre rappel concernant ce message de {username} : {permaLink}",
   "custom_reminder.time_picker.no_option": "Date invalide",
-  "custom_status.expiry.time_picker.description": "Pour ajouter une heure plus précise, saisissez l'heure souhaitée et elle sera ajoutée en tant qu'option sélectionnable."
+  "custom_status.expiry.time_picker.description": "Pour ajouter une heure plus précise, saisissez l'heure souhaitée et elle sera ajoutée en tant qu'option sélectionnable.",
+  "get_the_app_announcement_bar.message": "<gta>Téléchargez l’application kChat</gta> pour {os} pour une meilleure expérience ! (<dnd>Ne plus me le rappeler</dnd>)",
+  "get_app_annoucement_bar_mobile.download": "Télécharger",
+  "get_the_app_modal.header": "Télécharger l’application kChat pour {platform}",
+  "get_the_app_modal.content": "Nous vous conseillons d’installer l’application pour avoir une meilleure expérience !",
+  "get_the_app_modal.confirm": "Télécharger kChat pour {platform}"
 }
