@@ -47,8 +47,18 @@
                 transition: all 0.35s ease;
 
                 body.announcement-bar--fixed & {
-                    top: calc(48px + var(--announcement-bar-height));
-                    height: calc(100% - 48px - var(--announcement-bar-height));
+                    top: calc(48px + #{$announcement-bar-height});
+                    height: calc(100% - 48px - #{$announcement-bar-height});
+                }
+
+                .announcement-bar.announcement-bar-infomaniak-mobile ~ .channel-view & {
+                    top: calc(48px + #{$ik-mobile-announcement-bar-height});
+                    height: calc(100% - 48px - #{$ik-mobile-announcement-bar-height});
+                }
+
+                .announcement-bar.announcement-bar-infomaniak ~ .channel-view & {
+                    top: calc(48px + #{$ik-announcement-bar-height});
+                    height: calc(100% - 48px - #{$ik-announcement-bar-height});
                 }
             }
 
@@ -85,7 +95,15 @@
                 text-shadow: none;
 
                 body.announcement-bar--fixed & {
-                    top: calc(70px + var(--announcement-bar-height));
+                    top: calc(70px + #{$announcement-bar-height});
+                }
+
+                .announcement-bar.announcement-bar-infomaniak-mobile ~ .channel-view & {
+                    top: calc(70px + #{$ik-mobile-announcement-bar-height});
+                }
+
+                .announcement-bar.announcement-bar-infomaniak ~ .channel-view & {
+                    top: calc(70px + #{$ik-announcement-bar-height});
                 }
             }
 
@@ -1432,7 +1450,15 @@
         visibility: hidden;
 
         body.announcement-bar--fixed & {
-            top: var(--announcement-bar-height);
+            top: $announcement-bar-height;
+        }
+
+        .announcement-bar.announcement-bar-infomaniak-mobile ~ & {
+            top: $ik-mobile-announcement-bar-height;
+        }
+
+        .announcement-bar.announcement-bar-infomaniak ~ & {
+            top: $ik-announcement-bar-height;
         }
 
         &.visible {
@@ -1912,7 +1938,7 @@
     .app__body {
         &.announcement-bar--fixed {
             .modal {
-                padding-top: var(--announcement-bar-height);
+                padding-top: $announcement-bar-height;
             }
         }
 
