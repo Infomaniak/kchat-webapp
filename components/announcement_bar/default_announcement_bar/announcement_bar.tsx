@@ -5,6 +5,8 @@ import React from 'react';
 
 import {FormattedMessage} from 'react-intl';
 
+import cssVars from 'css-vars-ponyfill';
+
 import {WarnMetricStatus} from '@mattermost/types/config';
 
 import {Constants, AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
@@ -49,6 +51,18 @@ type State = {
 
 const OVERLAY_ANNOUNCEMENT_HIDE_DELAY = 600;
 
+const DEFAULT_ANNOUNCEMENT_BAR_HEIGHT = '40px';
+
+function getAnnoucementBarHeight(type: string) {
+    if (type === AnnouncementBarTypes.INFOMANIAK) {
+        return '56px';
+    }
+    if (type === AnnouncementBarTypes.INFOMANIAK_MOBILE) {
+        return '74px';
+    }
+    return null;
+}
+
 export default class AnnouncementBar extends React.PureComponent<Props, State> {
     messageRef: React.RefObject<HTMLDivElement>;
     constructor(props: Props) {
@@ -88,6 +102,12 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
     componentDidMount() {
         this.props.actions.incrementAnnouncementBarCount();
         document.body.classList.add('announcement-bar--fixed');
+        const announcementBarHeight = getAnnoucementBarHeight(this.props.type);
+        if (announcementBarHeight) {
+            cssVars({variables: {
+                'announcement-bar-height': announcementBarHeight,
+            }});
+        }
     }
 
     componentDidUpdate() {
@@ -101,6 +121,9 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
             document.body.classList.remove('announcement-bar--fixed');
         }
         this.props.actions.decrementAnnouncementBarCount();
+        cssVars({variables: {
+            'announcement-bar-height': DEFAULT_ANNOUNCEMENT_BAR_HEIGHT,
+        }});
     }
 
     handleClose = (e: any) => {

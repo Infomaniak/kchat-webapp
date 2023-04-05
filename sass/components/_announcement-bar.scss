@@ -5,8 +5,8 @@
     display: flex;
     overflow: hidden;
     width: 100%;
-    min-height: $announcement-bar-height;
-    max-height: $announcement-bar-height;
+    min-height: var(--announcement-bar-height);
+    max-height: var(--announcement-bar-height);
     align-items: center;
     justify-content: center;
     background-color: #579eff;
@@ -138,8 +138,6 @@
 
 .announcement-bar.announcement-bar-infomaniak {
     background: linear-gradient(91.45deg, #0088B2 0.11%, #0E5F78 100%), #0088B2;
-    min-height: 56px;
-    max-height: 56px;
 
     .announcement-bar__close {
         top: auto;
@@ -154,8 +152,6 @@
 
 .announcement-bar.announcement-bar-infomaniak-mobile {
     background: #F2F2F6;
-    min-height: 74px;
-    max-height: 74px;
 
     .announcement-bar__text {
         justify-content: flex-start;

@@ -47,8 +47,8 @@
                 transition: all 0.35s ease;
 
                 body.announcement-bar--fixed & {
-                    top: calc(48px + #{$announcement-bar-height});
-                    height: calc(100% - 48px - #{$announcement-bar-height});
+                    top: calc(48px + var(--announcement-bar-height));
+                    height: calc(100% - 48px - var(--announcement-bar-height));
                 }
             }
 
@@ -83,6 +83,10 @@
                 opacity: 1;
                 text-align: center;
                 text-shadow: none;
+
+                body.announcement-bar--fixed & {
+                    top: calc(70px + var(--announcement-bar-height));
+                }
             }
 
             .dropdown-menu {
@@ -1427,6 +1431,10 @@
         transition: transform 0.35s ease;
         visibility: hidden;
 
+        body.announcement-bar--fixed & {
+            top: var(--announcement-bar-height);
+        }
+
         &.visible {
             display: block;
             visibility: visible;
@@ -1904,7 +1912,7 @@
     .app__body {
         &.announcement-bar--fixed {
             .modal {
-                padding-top: $announcement-bar-height;
+                padding-top: var(--announcement-bar-height);
             }
         }
 

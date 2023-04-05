@@ -623,8 +623,8 @@
     }
 
     body.announcement-bar--fixed & {
-        top: $announcement-bar-height + $backstage-bar-height;
-        padding-bottom: $announcement-bar-height;
+        top: var(--announcement-bar-height) + $backstage-bar-height;
+        padding-bottom: var(--announcement-bar-height);
     }
 
     .dropdown-menu {

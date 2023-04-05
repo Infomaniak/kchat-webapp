@@ -528,11 +528,11 @@ $tip-index: 1000;
 body.announcement-bar--fixed {
     .tip-overlay {
         &.tip-overlay--add-channels {
-            margin-top: $announcement-bar-height;
+            margin-top: var(--announcement-bar-height);
         }
 
         &.tip-overlay--header--left {
-            margin-top: 10px + $announcement-bar-height;
+            margin-top: 10px + var(--announcement-bar-height);
         }
     }
 }
