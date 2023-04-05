@@ -30,7 +30,7 @@ import {isChannels} from 'utils/products';
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentLocale} from 'selectors/i18n';
 
-import {isDesktopApp} from 'utils/user_agent';
+import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
 
 import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 
@@ -129,6 +129,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
     const showAtMentionsTutorialStep = useShowOnboardingTutorialStep(atMentionsTourStep);
     const settingsTourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SETTINGS : OnboardingTourSteps.SETTINGS;
     const showSettingsTutorialStep = useShowOnboardingTutorialStep(settingsTourStep);
+    const isDesktopApp = getIsDesktopApp();
     let userReportHref = 'https://feedback.userreport.com/6b7737f6-0cc1-410f-993f-be2ffbf73a05#ideas/popular';
     if (userReportHrefs[locale]) {
         userReportHref = userReportHrefs[locale];
@@ -158,12 +159,14 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
             id={'RightControlsContainer'}
         >
             {/* <PlanUpgradeButton/> */}
-            <NewsWrapper className='grey wc-trigger-news--flex'>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <module-news-component style={{marginLeft: '-3px'}}></module-news-component>
-            </NewsWrapper>
-            {!isDesktopApp() && (
+            {!isDesktopApp && (
+                <NewsWrapper className='grey wc-trigger-news--flex'>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
+                    <module-news-component style={{marginLeft: '-3px'}}></module-news-component>
+                </NewsWrapper>
+            )}
+            {!isDesktopApp && (
                 <div style={{position: 'relative'}}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
@@ -189,7 +192,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                 </ButtonWrapper>
                 {showCustomizeTip && <CustomizeYourExperienceTour/>}
             </>
-            {!isDesktopApp() && (
+            {!isDesktopApp && (
                 <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
