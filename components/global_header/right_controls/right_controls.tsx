@@ -90,6 +90,15 @@ const NewsWrapper = styled.div`
     --module-news-icon-bell-color: rgba(var(--center-channel-color-rgb),0.785);
 `;
 
+const ReportingToolsWrapper = styled.div`
+    height: 46px;
+    width: 42px;
+    background: #7974B4;
+    display: none;
+    justify-content: center;
+    align-items: center
+`;
+
 export type Props = {
     productId?: ProductIdentifier;
 }
@@ -181,11 +190,11 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                 {showCustomizeTip && <CustomizeYourExperienceTour/>}
             </>
             {!isDesktopApp() && (
-                <div style={{height: 46, width: 42, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
                     <module-reporting-tools-component size='26'></module-reporting-tools-component>
-                </div>
+                </ReportingToolsWrapper>
             )}
             <OverlayTrigger
                 trigger={['hover', 'focus']}
