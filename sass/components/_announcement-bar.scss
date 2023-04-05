@@ -5,8 +5,8 @@
     display: flex;
     overflow: hidden;
     width: 100%;
-    min-height: var(--announcement-bar-height);
-    max-height: var(--announcement-bar-height);
+    min-height: $announcement-bar-height;
+    max-height: $announcement-bar-height;
     align-items: center;
     justify-content: center;
     background-color: #579eff;
@@ -137,6 +137,8 @@
 }
 
 .announcement-bar.announcement-bar-infomaniak {
+    max-height: $ik-announcement-bar-height;
+    min-height: $ik-announcement-bar-height;
     background: linear-gradient(91.45deg, #0088B2 0.11%, #0E5F78 100%), #0088B2;
 
     .announcement-bar__close {
@@ -151,6 +153,8 @@
 }
 
 .announcement-bar.announcement-bar-infomaniak-mobile {
+    max-height: $ik-mobile-announcement-bar-height;
+    min-height: $ik-mobile-announcement-bar-height;
     background: #F2F2F6;
 
     .announcement-bar__text {
