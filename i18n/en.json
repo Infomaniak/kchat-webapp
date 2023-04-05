@@ -5742,5 +5742,10 @@
   "toggle_next_modal.message_stable": "STABLE is our default environment. If you are not interested by testing new features, we recommend going back to the STABLE version.",
   "toggle_next_modal.message_next": "NEXT is our test environment. You might encounter some bugs, but will also access the latest content and updates. If you are not interested by testing new features, we recommend staying on the STABLE version.",
   "custom_reminder.time_picker.no_option": "Invalid date",
-  "custom_status.expiry.time_picker.description": "To add a more precise time, input your desired time, and it will be added as a selectable option."
+  "custom_status.expiry.time_picker.description": "To add a more precise time, input your desired time, and it will be added as a selectable option.",
+  "get_the_app_announcement_bar.message": "<gta>Download the kChat application</gta> for {os} for a better experience ! (<dnd>Don't remind me again</dnd>)",
+  "get_app_annoucement_bar_mobile.download": "Download",
+  "get_the_app_modal.header": "Download the kChat application for {platform}",
+  "get_the_app_modal.content": "We advise you to install the application to have a better experience !",
+  "get_the_app_modal.confirm": "Download kChat for {platform}"
 }
