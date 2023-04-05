@@ -195,6 +195,7 @@ describe('components/dot_menu/DotMenu', () => {
                 ...baseProps,
                 ...caseProps,
                 location: Locations.RHS_ROOT,
+                isCollapsedThreadsEnabled: true,
                 actions: {
                     ...baseProps.actions,
                     setThreadFollow: spySetThreadFollow,
