@@ -1,3 +1,17 @@
+## 1.0.9 (2023-04-05)
+
+### Added (1 change)
+
+- [add get app banner](kchat/webapp@4efaf0a1fe168bd9b346e64017d940afb436489c) by @leonard.jouve ([merge request](kchat/webapp!351))
+
+### Fixed (1 change)
+
+- [Add translations for version bar](kchat/webapp@1a304e591d0bbe237a315cd3cf9e66ffb8f64416) by @leonard.jouve ([merge request](kchat/webapp!367))
+
+### Chore (1 change)
+
+- [remove codeowners file](kchat/webapp@bba0796d4a92592f934a41359019b1ca115c2bae) by @antonbuksa ([merge request](kchat/webapp!351))
+
 ## 1.0.8 (2023-03-31)
 
 ### Added (4 changes)
