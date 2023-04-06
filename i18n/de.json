@@ -5743,5 +5743,5 @@
   "toggle_next_modal.title": "Zu {version} Version wechseln",
   "toggle_next_modal.message_stable": "STABLE ist unsere Standardumgebung. Wenn Sie nicht daran interessiert sind, neue Funktionen zu testen, empfehlen wir Ihnen, auf die STABLE Version zurückzugreifen.",
   "toggle_next_modal.message_next": "NEXT ist unsere Testumgebung. Sie können auf einige Bugs stoßen, haben aber auch Zugang zu den neuesten Inhalten und Updates. Wenn Sie nicht daran interessiert sind, neue Funktionen zu testen, empfehlen wir Ihnen, bei der STABLE Version zu bleiben.",
-  "api.change_channel_privacy": "Dieser Kanal wurde in einen {type, select, public {Öffentlichen} other {Privaten}} Kanal umgewandelt."
+  "api.change_channel_privacy": "Dieser Kanal wurde in einen {type, select, Public {Öffentlichen} other {Privaten}} Kanal umgewandelt."
 }

@@ -5311,5 +5311,5 @@
   "get_the_app_modal.header": "Descarga la aplicación kChat para {platform}",
   "get_the_app_modal.content": "Le aconsejamos que instale la aplicación para disfrutar de una mejor experiencia.",
   "get_the_app_modal.confirm": "Descargar kChat para {platform}",
-  "api.change_channel_privacy": "Este canal se ha convertido en un Canal {type, select, public {Público} other {Privado}}."
+  "api.change_channel_privacy": "Este canal se ha convertido en un Canal {type, select, Public {Público} other {Privado}}."
 }

@@ -3945,5 +3945,5 @@
   "toggle_next_modal.message_next": "NEXT è il nostro ambiente di prova. Potreste incontrare alcuni bug, ma avrete anche accesso agli ultimi contenuti e aggiornamenti. Se non siete interessati a testare nuove funzionalità, vi consigliamo di rimanere sulla versione STABILE.",
   "custom_reminder.time_picker.no_option": "Data non valida",
   "custom_status.expiry.time_picker.description": "Per aggiungere un orario più preciso, inserire l'ora desiderata e verrà aggiunta come opzione selezionabile.",
-  "api.change_channel_privacy": "Questo canale è stato convertito in un Canale {type, select, public {Pubblico} other {Privato}}."
+  "api.change_channel_privacy": "Questo canale è stato convertito in un Canale {type, select, Public {Pubblico} other {Privato}}."
 }

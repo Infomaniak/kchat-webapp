@@ -391,7 +391,7 @@ function renderChangeChannelPrivacyMessage(post: Post) {
     return (
         <FormattedMessage
             id='api.change_channel_privacy'
-            defaultMessage='This channel has been converted to a {type, select, public {Public} other {Private}} Channel.'
+            defaultMessage='This channel has been converted to a {type} Channel.'
             values={{
                 type: post.props.channel_type,
             }}
