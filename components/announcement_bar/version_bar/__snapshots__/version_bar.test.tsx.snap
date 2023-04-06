@@ -7,7 +7,7 @@ exports[`components/VersionBar should match snapshot - bar rendered after build 
   message={
     <React.Fragment>
       <Memo(MemoizedFormattedMessage)
-        defaultMessage="A new version of Mattermost is available."
+        defaultMessage="A new version of kChat is available."
         id="version_bar.new"
       />
       <a

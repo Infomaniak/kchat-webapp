@@ -332,6 +332,13 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentDidUpdate(prevProps: Props) {
         if (!deepEqual(prevProps.theme, this.props.theme)) {
+            // add body class for webcomponents theming
+            if (document.body.className.match(/kchat-.+-theme/)) {
+                document.body.className = document.body.className.replace(/kchat-.+-theme/, `kchat-${this.props.theme.ikType}-theme`);
+            } else {
+                document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
+            }
+
             Utils.applyTheme(this.props.theme);
         }
         if (
