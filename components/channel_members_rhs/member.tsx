@@ -18,7 +18,7 @@ import Constants from 'utils/constants';
 
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import GuestBadge from 'components/widgets/badges/guest_badge';
-import MailIcon from 'components/widgets/icons/mail_icon';
+import PendingGuestIcon from 'components/widgets/icons/pending_guest_icon';
 
 import {Channel, PendingGuest as PendingGuestType} from '@mattermost/types/channels';
 import {UserProfile} from '@mattermost/types/users';
@@ -224,7 +224,7 @@ const StyledPendingGuest = styled.div`
     }
 `;
 
-const StyledMailIcon = styled(MailIcon)`
+const StyledPendingGuestIcon = styled(PendingGuestIcon)`
     width: 24px;
     height: 24px;
 `;
@@ -240,7 +240,7 @@ type PendingGuestProp = {
 export const PendingGuest = ({channel, pendingGuest, editing, index, totalUsers}: PendingGuestProp) => {
     return (
         <StyledPendingGuest>
-            <StyledMailIcon/>
+            <StyledPendingGuestIcon/>
             <UserInfo>
                 <DisplayName>
                     {pendingGuest.email}
