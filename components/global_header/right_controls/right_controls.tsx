@@ -154,20 +154,18 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                 {/* @ts-ignore */}
                 <module-news-component style={{marginLeft: '-3px'}}></module-news-component>
             </NewsWrapper>
-            {!isDesktopApp() && (
-                <div style={{position: 'relative'}}>
+            <div style={{position: 'relative'}}>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <module-products-component
+                    position='right'
+                    style={{height: '100%'}}
+                >
+                    {trigger}
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
-                    <module-products-component
-                        position='right'
-                        style={{height: '100%'}}
-                    >
-                        {trigger}
-                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                        {/* @ts-ignore */}
-                    </module-products-component>
-                </div>
-            )}
+                </module-products-component>
+            </div>
             <>
                 <ButtonWrapper>
                     {showAtMentionsTutorialStep && <AtMentionsTour/>}
