@@ -384,6 +384,21 @@ function renderReminderSystemBotMessage(post: Post): ReactNode {
     );
 }
 
+function renderChangeChannelPrivacyMessage(post: Post) {
+    if (!post.props.channel_type) {
+        return null;
+    }
+    return (
+        <FormattedMessage
+            id='api.change_channel_privacy'
+            defaultMessage='This channel has been converted to a {type, select, public {Public} other {Private}} Channel.'
+            values={{
+                type: post.props.channel_type,
+            }}
+        />
+    );
+}
+
 const systemMessageRenderers = {
     [Posts.POST_TYPES.JOIN_CHANNEL]: renderJoinChannelMessage,
     [Posts.POST_TYPES.GUEST_JOIN_CHANNEL]: renderGuestJoinChannelMessage,
@@ -404,6 +419,7 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.ME]: renderMeMessage,
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
     [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
+    [Posts.POST_TYPES.CHANGE_CHANNEL_PRIVACY]: renderChangeChannelPrivacyMessage,
 };
 
 export function renderSystemMessage(post: Post, currentTeam: Team, channel: Channel, isUserCanManageMembers?: boolean, isMilitaryTime?: boolean): ReactNode {

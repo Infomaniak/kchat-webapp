@@ -5062,7 +5062,6 @@
   "toggle_next_modal.title": "Passer à la version {version}",
   "toggle_next_modal.message_stable": "STABLE est notre environnement par défaut. Si vous n'êtes pas intéressé par les tests de nouvelles fonctionnalités, nous vous recommandons de revenir à la version STABLE.",
   "toggle_next_modal.message_next": "NEXT est notre environnement de test. Il se peut que vous rencontriez des bugs, mais vous aurez également accès en avance au dernier contenu et mises à jour. Si vous n'êtes pas intéressé par le test de nouvelles fonctionnalités, nous vous recommandons de rester sur la version STABLE.",
-  "channelLimitIndicator.text": "Vous avez atteint la limite de {type, select, O {canaux publics} P {canaux privés} other {}} ({usage, number}/{limit, number}) sur votre offre kSuite. {isAdmin, select, true {<modifyOffer>Modifier votre offre</modifyOffer> pour créer des canaux supplémentaires.} other {Veuillez contacter un administrateur pour qu'il modifie l'offre.}}",
   "post_info.post_reminder.menu": "Rappel",
   "post_info.post_reminder.sub_menu.thirty_minutes": "30 mins",
   "post_info.post_reminder.sub_menu.one_hour": "1 heure",
@@ -5078,5 +5077,6 @@
   "get_app_annoucement_bar_mobile.download": "Télécharger",
   "get_the_app_modal.header": "Télécharger l’application kChat pour {platform}",
   "get_the_app_modal.content": "Nous vous conseillons d’installer l’application pour avoir une meilleure expérience !",
-  "get_the_app_modal.confirm": "Télécharger kChat pour {platform}"
+  "get_the_app_modal.confirm": "Télécharger kChat pour {platform}",
+  "api.change_channel_privacy": "Ce canal à été converti en Canal {type, select, public {Public} other {Privé}}."
 }
