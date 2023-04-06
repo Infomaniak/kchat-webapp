@@ -45,7 +45,6 @@ import AtMentionsButton from './at_mentions_button/at_mentions_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';
 import SettingsButton from './settings_button';
 
-
 // import PlanUpgradeButton from './plan_upgrade_button';
 
 const RightControlsContainer = styled.div`
@@ -144,20 +143,18 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
             id={'RightControlsContainer'}
         >
             {/* <PlanUpgradeButton/> */}
-            {!isDesktopApp() && (
-                <div style={{position: 'relative'}}>
+            <div style={{position: 'relative'}}>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <module-products-component
+                    position='right'
+                    style={{height: '100%'}}
+                >
+                    {trigger}
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
-                    <module-products-component
-                        position='right'
-                        style={{height: '100%'}}
-                    >
-                        {trigger}
-                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                        {/* @ts-ignore */}
-                    </module-products-component>
-                </div>
-            )}
+                </module-products-component>
+            </div>
             <>
                 <ButtonWrapper>
                     {showAtMentionsTutorialStep && <AtMentionsTour/>}
