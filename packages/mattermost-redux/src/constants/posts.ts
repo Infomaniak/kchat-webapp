@@ -33,6 +33,7 @@ export const PostTypes = {
     SYSTEM_WARN_METRIC_STATUS: 'warn_metric_status' as PostType,
     CALL: 'custom_call' as PostType,
     SYSTEM_POST_REMINDER: 'system_post_reminder' as PostType,
+    CHANGE_CHANNEL_PRIVACY: 'system_change_chan_privacy' as PostType,
 };
 
 export default {
