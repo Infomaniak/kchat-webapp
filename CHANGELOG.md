@@ -1,3 +1,16 @@
+## 1.1.0 (2023-04-11)
+
+### Fixed (1 change)
+
+- [fix presence unbind global on channel switch](kchat/webapp@2cdf9357f658e055619481bc1a116e45ea1d3844) by @antonbuksa ([merge request](kchat/webapp!362))
+
+### Changed (4 changes)
+
+- [refactor token refresh to correctly return a promised string](kchat/webapp@0bfdea963322c572ea5ffd2cf387a597fcafe0d7) by @antonbuksa ([merge request](kchat/webapp!362))
+- [port mattermost issue 12227 changes to improve websocket reconnect](kchat/webapp@f00153ccb5328e36ce6055ce4b9ada0c56ec510e) by @antonbuksa ([merge request](kchat/webapp!362))
+- [unbind channels and pusher callbacks in ws error state before reconnect](kchat/webapp@3e49adc69a13003876744f0242f9504f0b6d970b) by @antonbuksa ([merge request](kchat/webapp!362))
+- [test using non expiring tokens for desktop v2.1](kchat/webapp@b36ba337062e37bc8d9f74d774bfb402b2e270f5) by @antonbuksa ([merge request](kchat/webapp!344))
+
 ## 1.0.10 (2023-04-06)
 
 ### Added (1 change)
