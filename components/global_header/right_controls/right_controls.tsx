@@ -30,7 +30,7 @@ import {isChannels} from 'utils/products';
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentLocale} from 'selectors/i18n';
 
-import {isDesktopApp} from 'utils/user_agent';
+import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
 
 import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 
@@ -90,6 +90,15 @@ const NewsWrapper = styled.div`
     --module-news-icon-bell-color: rgba(var(--center-channel-color-rgb),0.785);
 `;
 
+const ReportingToolsWrapper = styled.div`
+    height: 46px;
+    width: 42px;
+    background: #7974B4;
+    display: none;
+    justify-content: center;
+    align-items: center
+`;
+
 export type Props = {
     productId?: ProductIdentifier;
 }
@@ -120,6 +129,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
     const showAtMentionsTutorialStep = useShowOnboardingTutorialStep(atMentionsTourStep);
     const settingsTourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SETTINGS : OnboardingTourSteps.SETTINGS;
     const showSettingsTutorialStep = useShowOnboardingTutorialStep(settingsTourStep);
+    const isDesktopApp = getIsDesktopApp();
     let userReportHref = 'https://feedback.userreport.com/6b7737f6-0cc1-410f-993f-be2ffbf73a05#ideas/popular';
     if (userReportHrefs[locale]) {
         userReportHref = userReportHrefs[locale];
@@ -149,11 +159,13 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
             id={'RightControlsContainer'}
         >
             {/* <PlanUpgradeButton/> */}
-            <NewsWrapper className='grey wc-trigger-news--flex'>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <module-news-component style={{marginLeft: '-3px'}}></module-news-component>
-            </NewsWrapper>
+            {!isDesktopApp && (
+                <NewsWrapper className='grey wc-trigger-news--flex'>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
+                    <module-news-component style={{marginLeft: '-3px'}}></module-news-component>
+                </NewsWrapper>
+            )}
             <div style={{position: 'relative'}}>
                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
@@ -178,12 +190,12 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                 </ButtonWrapper>
                 {showCustomizeTip && <CustomizeYourExperienceTour/>}
             </>
-            {!isDesktopApp() && (
-                <div style={{height: 46, width: 42, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            {!isDesktopApp && (
+                <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
                     <module-reporting-tools-component size='26'></module-reporting-tools-component>
-                </div>
+                </ReportingToolsWrapper>
             )}
             <OverlayTrigger
                 trigger={['hover', 'focus']}

@@ -1,3 +1,15 @@
+## 1.0.10 (2023-04-06)
+
+### Added (1 change)
+
+- [add whats new WC](kchat/webapp@4a52c68d5883c9f86110a9b12e3b67effeec4d19) by @leonard.jouve ([merge request](kchat/webapp!359))
+
+### Fixed (3 changes)
+
+- [System convert channel trads](kchat/webapp@c31a9c3ce039c7c80627186d2fff057f18b08ccc) by @leonard.jouve ([merge request](kchat/webapp!372))
+- [Pending guest icon](kchat/webapp@0696f17acb138b235198e59d66d4b78cf3b3db0c) by @leonard.jouve ([merge request](kchat/webapp!371))
+- [fix mobile next flag position](kchat/webapp@d202148f5e11a2cf9e84de8a601c89873ff118e7) by @leonard.jouve ([merge request](kchat/webapp!370))
+
 ## 1.0.9 (2023-04-05)
 
 ### Added (1 change)
