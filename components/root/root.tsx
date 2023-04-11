@@ -48,7 +48,7 @@ import Pluggable from 'plugins/pluggable';
 import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import * as Utils from 'utils/utils';
-import {isDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import webSocketClient from 'client/web_websocket_client.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
@@ -68,7 +68,7 @@ import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, refreshIKToken, storeTokenResponse} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 
@@ -78,6 +78,8 @@ import {IKConstants} from 'utils/constants-ik';
 
 import WelcomePostRenderer from 'components/welcome_post_renderer';
 import {close, initialize} from 'actions/websocket_actions';
+
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -433,7 +435,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     async componentDidMount() {
         if (isDesktopApp()) {
-            // Rely on initial client calls to 401 here for the first redirect to login,
+            // Rely on initial client calls to 401 for the first redirect to login,
             // we dont need to do it manually.
             // Login will send us back here with a code after we give it the challange.
             // Use code to refresh token.
@@ -463,14 +465,14 @@ export default class Root extends React.PureComponent<Props, State> {
         console.log('[component/root] try get token count', this.retryGetToken); // eslint-disable-line no-console
         try { // Get new token
             const response: {
-                expires_in: string;
+                expires_in?: number;
                 access_token: string;
                 refresh_token: string;
             } = await Client4.getIKLoginToken(
                 loginCode as string,
                 challenge?.challenge,
                 challenge?.verifier,
-                IKConstants.LOGIN_URL,
+                IKConstants.LOGIN_URL!,
                 IKConstants.CLIENT_ID,
             );
 
@@ -485,15 +487,24 @@ export default class Root extends React.PureComponent<Props, State> {
             LocalStorageStore.setWasLoggedIn(true);
             this.IKLoginCode = undefined;
 
+            let newToken;
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+                newToken = {
+                    token: response.access_token,
+                };
+            } else {
+                newToken = {
+                    token: response.access_token,
+                    refreshToken: response.refresh_token,
+                    expiresAt: (Date.now() / 1000) + response.expires_in, // ignore as its never undefined in 2.0
+                };
+            }
+
             // Store in desktop storage.
             window.postMessage(
                 {
                     type: 'token-refreshed',
-                    message: {
-                        token: response.access_token,
-                        refreshToken: response.refresh_token,
-                        expiresAt: parseInt(Date.now() / 1000) + response.expires_in,
-                    },
+                    message: newToken,
                 },
                 window.origin,
             );
@@ -523,6 +534,7 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     }
 
+    // Does not run in 2.1 and up
     doTokenCheck = () => {
         // If expiring soon but not expired, refresh before we start hitting errors.
         if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
@@ -541,14 +553,42 @@ export default class Root extends React.PureComponent<Props, State> {
         this.mounted = true;
 
         const token = localStorage.getItem('IKToken');
+        const tokenExpire = localStorage.getItem('IKTokenExpire');
         const refreshToken = localStorage.getItem('IKRefreshToken');
 
-        // Setup token keepalive:
-        if (isDesktopApp() && token && refreshToken) {
-            console.log('[components/root] desktop token is ok, setting up interval check'); // eslint-disable-line no-console
+        // Validate infinite token or setup token keepalive for older tokens
+        if (isDesktopApp()) {
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+                // TODO: find a way to clean this if into an else below, since its counterintuitive
+                // The reset teams will retrigger this func
+                if (isDefaultAuthServer() && !token) {
+                    getChallengeAndRedirectToLogin(true);
+                }
 
-            // set an interval to run every minute to check if token needs refresh soon.
-            this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
+                // If old token with expire still present
+                if (token && (tokenExpire || refreshToken)) {
+                    // Prepare migrate to infinite token by clearing all instances of old token
+                    clearLocalStorageToken();
+                    window.authManager.resetToken();
+
+                    // Need to reset teams before redirecting to login after token is cleared
+                    if (isDefaultAuthServer()) {
+                        getChallengeAndRedirectToLogin(true);
+                    } else {
+                        window.postMessage(
+                            {
+                                type: 'reset-teams',
+                                message: {},
+                            },
+                            window.origin,
+                        );
+                    }
+                }
+            } else if (token && refreshToken) {
+                // set an interval to run every minute to check if token needs refresh soon
+                // for older versions of app.
+                this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
+            }
         }
 
         this.initiateMeRequests();
