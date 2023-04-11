@@ -202,7 +202,7 @@ export async function refreshIKToken(redirectToTeam = false): Promise<string> {
         clearLocalStorageToken();
         return Promise.reject(new Error('missing refresh token'));
     } else if (!updatedToken.expiresAt || isValidTokenV2(updatedToken)) {
-        // If desktop token still valid, use it.
+        // If 2.1 and above and no token expiration, or 2.0 token is valid, use it.
         storeTokenV2(updatedToken);
         return updatedToken.token;
     }
