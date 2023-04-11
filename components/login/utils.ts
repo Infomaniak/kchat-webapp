@@ -187,6 +187,7 @@ async function refreshTokenV2(): Promise<{token: string; refreshToken: string; e
     }
 }
 
+// TODO: change types here since it is only used for 2.0 and below tokens which always have expire and refresh.
 function isValidTokenV2(token: {token: string; refreshToken?: string; expiresAt?: number}) {
     const isExpiredInOneMinute = token.expiresAt! <= ((Date.now() / 1000) + 60);
 
