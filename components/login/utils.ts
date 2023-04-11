@@ -168,11 +168,12 @@ function storeTokenV2(tokenData: {token: string; refreshToken?: string; expiresA
     Client4.setAuthHeader = true;
 }
 
-async function refreshTokenV2() {
+async function refreshTokenV2(): Promise<{token: string; refreshToken: string; expiresAt: number}> {
     try {
         const newToken = await window.authManager.refreshToken();
         console.log(newToken);
         storeTokenV2(newToken);
+        return newToken;
     } catch (error) {
         console.error(error);
         window.postMessage(
@@ -182,6 +183,7 @@ async function refreshTokenV2() {
             },
             window.origin,
         );
+        return Promise.reject(error);
     }
 }
 
@@ -191,19 +193,31 @@ function isValidTokenV2(token: {token: string; refreshToken?: string; expiresAt?
     return !isExpiredInOneMinute;
 }
 
-// TODO: type correctly
-export async function refreshIKToken(redirectToTeam = false): Promise<any> {
+export async function refreshIKToken(redirectToTeam = false): Promise<string> {
     const updatedToken: {token: string; refreshToken?: string; expiresAt?: number} = await window.authManager.tokenRequest();
+
+    // If desktop doesn't have a valid token/refresh token
     if (!Object.keys(updatedToken).length) {
+        // Clean token storage just in case and reject promise.
         clearLocalStorageToken();
-        return Promise.reject(new Error('token empty'));
+        return Promise.reject(new Error('missing refresh token'));
     } else if (!updatedToken.expiresAt || isValidTokenV2(updatedToken)) {
+        // If desktop token still valid, use it.
         storeTokenV2(updatedToken);
-    } else {
-        await refreshTokenV2();
+        return updatedToken.token;
     }
 
-    if (redirectToTeam) {
-        redirectUserToDefaultTeam();
+    // Otherwise token is valid but expired, request a refresh.
+    try {
+        const {token} = await refreshTokenV2();
+
+        // Queue redirect before returning, otherwise it won't trigger.
+        if (redirectToTeam) {
+            redirectUserToDefaultTeam();
+        }
+
+        return token;
+    } catch (e) {
+        return Promise.reject(e);
     }
 }

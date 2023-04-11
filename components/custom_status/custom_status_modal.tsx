@@ -111,6 +111,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
     const [emoji, setEmoji] = useState<string>(isCurrentCustomStatusSet ? currentCustomStatus?.emoji : '');
     const initialDuration = isCurrentCustomStatusSet ? currentCustomStatus?.duration : defaultDuration;
     const [duration, setDuration] = useState<CustomStatusDuration>(initialDuration === undefined ? defaultDuration : initialDuration);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const isStatusSet = Boolean(emoji || text);
     const firstTimeModalOpened = useSelector(showStatusDropdownPulsatingDot);
     const timezone = useSelector(getCurrentUserTimezone);
@@ -295,7 +296,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
 
     const showSuggestions = !isStatusSet || areSelectedAndSetStatusSame;
 
-    const disableSetStatus = !isStatusSet || text.length > CUSTOM_STATUS_TEXT_CHARACTER_LIMIT;
+    const disableSetStatus = !isStatusSet || text.length > CUSTOM_STATUS_TEXT_CHARACTER_LIMIT || isMenuOpen;
 
     const showDateAndTimeField = !showSuggestions && (duration === CUSTOM_DATE_TIME || duration === DATE_AND_TIME);
 
@@ -392,6 +393,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                         time={customExpiryTime}
                         handleChange={setCustomExpiryTime}
                         timezone={timezone}
+                        onMenuChange={setIsMenuOpen}
                     />
                 )}
                 {isStatusSet && (

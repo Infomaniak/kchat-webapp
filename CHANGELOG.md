@@ -1,3 +1,47 @@
+## 1.0.10 (2023-04-06)
+
+### Added (1 change)
+
+- [add whats new WC](kchat/webapp@4a52c68d5883c9f86110a9b12e3b67effeec4d19) by @leonard.jouve ([merge request](kchat/webapp!359))
+
+### Fixed (3 changes)
+
+- [System convert channel trads](kchat/webapp@c31a9c3ce039c7c80627186d2fff057f18b08ccc) by @leonard.jouve ([merge request](kchat/webapp!372))
+- [Pending guest icon](kchat/webapp@0696f17acb138b235198e59d66d4b78cf3b3db0c) by @leonard.jouve ([merge request](kchat/webapp!371))
+- [fix mobile next flag position](kchat/webapp@d202148f5e11a2cf9e84de8a601c89873ff118e7) by @leonard.jouve ([merge request](kchat/webapp!370))
+
+## 1.0.9 (2023-04-05)
+
+### Added (1 change)
+
+- [add get app banner](kchat/webapp@4efaf0a1fe168bd9b346e64017d940afb436489c) by @leonard.jouve ([merge request](kchat/webapp!351))
+
+### Fixed (1 change)
+
+- [Add translations for version bar](kchat/webapp@1a304e591d0bbe237a315cd3cf9e66ffb8f64416) by @leonard.jouve ([merge request](kchat/webapp!367))
+
+### Chore (1 change)
+
+- [remove codeowners file](kchat/webapp@bba0796d4a92592f934a41359019b1ca115c2bae) by @antonbuksa ([merge request](kchat/webapp!351))
+
+## 1.0.8 (2023-03-31)
+
+### Added (4 changes)
+
+- [add feature flag for translation feature](kchat/webapp@1deb135eb2b7f344c81c2c1912c4c84ec414229c) by @antonbuksa ([merge request](kchat/webapp!364))
+- [add translate post menu action](kchat/webapp@1620dd109da871d9888cf762c43888ce7df1fe07) by @leonard.jouve ([merge request](kchat/webapp!363))
+- [add reminders custom time picker](kchat/webapp@4f016b7f662c3eb1182518f9327e5172f19bee34) by @leonard.jouve ([merge request](kchat/webapp!355))
+- [reminders](kchat/webapp@3ae8cf47888fae8b9fa6d1289571b52626c92783) by @leonard.jouve ([merge request](kchat/webapp!355))
+
+### Fixed (6 changes)
+
+- [Unify translation menu icon](kchat/webapp@b8522a5b604a28b94b4ec96559de7955d1f04882) by @leonard.jouve ([merge request](kchat/webapp!365))
+- [Mark threads as unread trads](kchat/webapp@12204bfe000cbb211a585b54414d1599650d18e6) by @leonard.jouve ([merge request](kchat/webapp!361))
+- [badge guests](kchat/webapp@1a706c06f71bdf8c06ede9541318aff5b3ee9028) by @leonard.jouve ([merge request](kchat/webapp!358))
+- [Include guests in RHS channel info member count](kchat/webapp@c78ef3b593d1cf82d3d61d6afe3e40386a0d7fcd) by @leonard.jouve ([merge request](kchat/webapp!357))
+- [Fix RHS crash MM-49162](kchat/webapp@cd94348279732e813fa8b56d972ac5bbd031f25c) by @leonard.jouve ([merge request](kchat/webapp!356))
+- [Fix channel info crash](kchat/webapp@93738b3f59e74f947c4dcc5ee7669243286440d5) by @leonard.jouve ([merge request](kchat/webapp!356))
+
 ## 1.0.7 (2023-03-28)
 
 ### Added (1 change)

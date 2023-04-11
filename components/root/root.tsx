@@ -77,7 +77,7 @@ import {ActionResult} from 'mattermost-redux/types/actions';
 import {IKConstants} from 'utils/constants-ik';
 
 import WelcomePostRenderer from 'components/welcome_post_renderer';
-import {reconnectWebSocket} from 'actions/websocket_actions';
+import {close, initialize} from 'actions/websocket_actions';
 
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
@@ -332,6 +332,13 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentDidUpdate(prevProps: Props) {
         if (!deepEqual(prevProps.theme, this.props.theme)) {
+            // add body class for webcomponents theming
+            if (document.body.className.match(/kchat-.+-theme/)) {
+                document.body.className = document.body.className.replace(/kchat-.+-theme/, `kchat-${this.props.theme.ikType}-theme`);
+            } else {
+                document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
+            }
+
             Utils.applyTheme(this.props.theme);
         }
         if (
@@ -534,7 +541,8 @@ export default class Root extends React.PureComponent<Props, State> {
             console.log('[components/root] desktop token expiring soon'); // eslint-disable-line no-console
             refreshIKToken(/*redirectToReam*/false)?.then(() => {
                 console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console
-                reconnectWebSocket();
+                close();
+                initialize();
             }).catch((e: unknown) => {
                 console.warn('[components/root] desktop token refresh error: ', e); // eslint-disable-line no-console
             });

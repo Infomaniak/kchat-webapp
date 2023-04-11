@@ -1,23 +1,28 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, CSSProperties} from 'react';
 import {useSelector} from 'react-redux';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import MomentLocaleUtils from 'react-day-picker/moment';
 import {DayModifiers, NavbarElementProps} from 'react-day-picker';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {components} from 'react-select';
+import Creatable from 'react-select/creatable';
+import type {ActionMeta, ValueType, ControlProps, OptionsType} from 'react-select';
 
 import moment, {Moment} from 'moment-timezone';
 import MomentUtils from 'react-day-picker/moment';
 
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import Menu from 'components/widgets/menu/menu';
 import Timestamp from 'components/timestamp';
 import {getCurrentLocale} from 'selectors/i18n';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 const CUSTOM_STATUS_TIME_PICKER_INTERVALS_IN_MINUTES = 30;
+
+type CreatableOption = {
+    value: Date | string;
+    label: JSX.Element;
+};
 
 const Navbar: React.FC<Partial<NavbarElementProps>> = (navbarProps: Partial<NavbarElementProps>) => {
     const {
@@ -70,6 +75,21 @@ const Navbar: React.FC<Partial<NavbarElementProps>> = (navbarProps: Partial<Navb
     );
 };
 
+const CreatableControl = ({children, ...props}: ControlProps<CreatableOption>) => (
+    <components.Control {...props}>
+        <span className='dateTime__input-title'>
+            <FormattedMessage
+                id='custom_status.expiry.time_picker.title'
+                defaultMessage='Time'
+            />
+        </span>
+        <span className='dateTime__custom-time-icon'>
+            <i className='icon-clock-outline'/>
+        </span>
+        {children}
+    </components.Control>
+);
+
 export function getRoundedTime(value: Moment) {
     const roundedTo = CUSTOM_STATUS_TIME_PICKER_INTERVALS_IN_MINUTES;
     const start = moment(value);
@@ -81,29 +101,58 @@ export function getRoundedTime(value: Moment) {
     return start.add(remainder, 'm').seconds(0).milliseconds(0);
 }
 
-const getTimeInIntervals = (startTime: Moment): Date[] => {
+const getTimeInIntervals = (startTime: Moment): CreatableOption[] => {
     const interval = CUSTOM_STATUS_TIME_PICKER_INTERVALS_IN_MINUTES;
     let time = moment(startTime);
     const nextDay = moment(startTime).add(1, 'days').startOf('day');
-    const intervals: Date[] = [];
+    const intervals: CreatableOption[] = [];
     while (time.isBefore(nextDay)) {
-        intervals.push(time.toDate());
+        const date = time.toDate();
+        intervals.push({
+            value: date,
+            label: (
+                <Timestamp
+                    useRelative={false}
+                    useDate={false}
+                    value={date}
+                />
+            ),
+        });
         time = time.add(interval, 'minutes').seconds(0).milliseconds(0);
     }
 
     return intervals;
 };
 
+const setDateTime = (initialDate: Moment, newTime: string) => moment(newTime, 'HH:mm').
+    day(initialDate.day()).
+    month(initialDate.month()).
+    year(initialDate.year());
+
+const styles = {
+    control: (css: CSSProperties) => ({
+        ...css,
+        minHeight: '40px',
+    }),
+};
+
+const placeholder = (
+    <FormattedMessage
+        id='time_dropdown.choose_time'
+        defaultMessage='Choose a time'
+    />
+);
+
 type Props = {
     time: Moment;
     handleChange: (date: Moment) => void;
     timezone?: string;
+    onMenuChange: (open: boolean) => void;
 }
 
-const DateTimeInputContainer: React.FC<Props> = (props: Props) => {
+const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, onMenuChange}: Props) => {
     const locale = useSelector(getCurrentLocale);
-    const {time, handleChange, timezone} = props;
-    const [timeOptions, setTimeOptions] = useState<Date[]>([]);
+    const [timeOptions, setTimeOptions] = useState<CreatableOption[]>([]);
     const {formatMessage} = useIntl();
 
     const setTimeAndOptions = () => {
@@ -128,85 +177,114 @@ const DateTimeInputContainer: React.FC<Props> = (props: Props) => {
         }
     };
 
-    const handleTimeChange = useCallback((time: Date, e: React.MouseEvent) => {
-        e.preventDefault();
-        handleChange(moment(time));
-    }, [handleChange]);
-
     const currentTime = getCurrentMomentForTimezone(timezone).toDate();
     const modifiers = {
         today: currentTime,
     };
 
-    return (
-        <div className='dateTime'>
-            <div className='dateTime__date'>
-                <span className='dateTime__input-title'>{formatMessage({id: 'custom_status.expiry.date_picker.title', defaultMessage: 'Date'})}</span>
-                <span className='dateTime__date-icon'>
-                    <i className='icon-calendar-outline'/>
-                </span>
-                <DayPickerInput
-                    value={time.toDate()}
-                    format='yyyy-MM-DD'
-                    formatDate={MomentUtils.formatDate}
-                    onDayChange={handleDayChange}
-                    inputProps={{
-                        readOnly: true,
-                        className: 'dateTime__input',
-                    }}
-                    dayPickerProps={{
-                        navbarElement: <Navbar/>,
-                        fromMonth: currentTime,
-                        modifiers,
-                        localeUtils: MomentLocaleUtils,
-                        locale: locale.toLowerCase(),
-                        disabledDays: {
-                            before: currentTime,
-                        },
-                    }}
+    const isValidNewOption = (inputValue: string, _values: ValueType<CreatableOption>, options: OptionsType<CreatableOption>) => {
+        const timeOption = moment(inputValue, 'HH:mm').day(time.day()).month(time.month()).year(time.year());
+        const isValid = timeOption.isValid() && timeOption.isAfter(moment.now());
+        const alreadyExists = options.some((option) => moment(option.value).isSame(timeOption));
+        return isValid && !alreadyExists;
+    };
+
+    const handleTimeChange = (newOption: ValueType<CreatableOption>, {action}: ActionMeta<CreatableOption>) => {
+        if (!newOption || !('value' in newOption)) {
+            return;
+        }
+        const {value} = newOption;
+        let newTime = moment(value);
+        if (action === 'create-option' && typeof value === 'string') {
+            newTime = setDateTime(time, value);
+        }
+        if (newTime.isValid()) {
+            handleChange(newTime);
+        }
+    };
+
+    const formatOptionLabel = (option: CreatableOption) => {
+        const {value, label} = option;
+        if (typeof value === 'string') {
+            const newValue = setDateTime(time, value).toDate();
+            return (
+                <Timestamp
+                    useRelative={false}
+                    useDate={false}
+                    value={newValue}
                 />
+            );
+        }
+        return label;
+    };
+
+    const noOptionsMessage = () => formatMessage({
+        id: 'custom_reminder.time_picker.no_option',
+        defaultMessage: 'Invalid date',
+    });
+
+    const defaultTimeValue = {
+        value: time.toDate(),
+        label: (
+            <Timestamp
+                useRelative={false}
+                useDate={false}
+                value={time.toDate()}
+            />
+        ),
+    };
+
+    return (
+        <div>
+            <div className='dateTime'>
+                <div className='dateTime__date'>
+                    <span className='dateTime__input-title'>{formatMessage({id: 'custom_status.expiry.date_picker.title', defaultMessage: 'Date'})}</span>
+                    <span className='dateTime__date-icon'>
+                        <i className='icon-calendar-outline'/>
+                    </span>
+                    <DayPickerInput
+                        value={time.toDate()}
+                        format='yyyy-MM-DD'
+                        formatDate={MomentUtils.formatDate}
+                        onDayChange={handleDayChange}
+                        inputProps={{
+                            readOnly: true,
+                            className: 'dateTime__input',
+                        }}
+                        dayPickerProps={{
+                            navbarElement: <Navbar/>,
+                            fromMonth: currentTime,
+                            modifiers,
+                            localeUtils: MomentUtils,
+                            locale: locale.toLowerCase(),
+                            disabledDays: {
+                                before: currentTime,
+                            },
+                        }}
+                    />
+                </div>
+                <div className='dateTime__custom-time'>
+                    <Creatable
+                        components={{Control: CreatableControl}}
+                        options={timeOptions}
+                        defaultValue={defaultTimeValue}
+                        onChange={handleTimeChange}
+                        formatOptionLabel={formatOptionLabel}
+                        isValidNewOption={isValidNewOption}
+                        onMenuOpen={() => onMenuChange(true)}
+                        onMenuClose={() => onMenuChange(false)}
+                        noOptionsMessage={noOptionsMessage}
+                        placeholder={placeholder}
+                        styles={styles}
+                    />
+                </div>
             </div>
-            <div className='dateTime__time'>
-                <MenuWrapper
-                    className='dateTime__time-menu'
-                >
-                    <div>
-                        <span className='dateTime__input-title'>{formatMessage({id: 'custom_status.expiry.time_picker.title', defaultMessage: 'Time'})}</span>
-                        <span className='dateTime__time-icon'>
-                            <i className='icon-clock-outline'/>
-                        </span>
-                        <div
-                            className='dateTime__input'
-                        >
-                            <Timestamp
-                                useRelative={false}
-                                useDate={false}
-                                value={time.toString()}
-                            />
-                        </div>
-                    </div>
-                    <Menu
-                        ariaLabel={formatMessage({id: 'time_dropdown.choose_time', defaultMessage: 'Choose a time'})}
-                        id='expiryTimeMenu'
-                    >
-                        <Menu.Group>
-                            {Array.isArray(timeOptions) && timeOptions.map((option, index) => (
-                                <Menu.ItemAction
-                                    onClick={handleTimeChange.bind(this, option)}
-                                    key={index}
-                                    text={
-                                        <Timestamp
-                                            useRelative={false}
-                                            useDate={false}
-                                            value={option}
-                                        />
-                                    }
-                                />
-                            ))}
-                        </Menu.Group>
-                    </Menu>
-                </MenuWrapper>
-            </div>
+            <span className='dateTime__description'>
+                <FormattedMessage
+                    id='custom_status.expiry.time_picker.description'
+                    defaultMessage='To add a more precise time, input your desired time, and it will be added as a selectable option.'
+                />
+            </span>
         </div>
     );
 };

@@ -484,6 +484,8 @@ export const ModalIdentifiers = {
     STORAGE_LIMIT_REACHED: 'storage_limit_reached',
     EXTERNAL_LIMIT_REACHED: 'external_limit_reached',
     CANCEL_MULTIPLE_INVITES: 'cancel_multiple_invites',
+    POST_REMINDER_CUSTOM_TIME_PICKER: 'post_reminder_custom_time_picker',
+    GET_THE_APP: 'get_the_app',
     TOGGLE_NEXT: 'toggle_next',
 };
 
@@ -980,6 +982,8 @@ export const AnnouncementBarTypes = {
     ADVISOR: 'advisor',
     ADVISOR_ACK: 'advisor-ack',
     GENERAL: 'general',
+    INFOMANIAK: 'infomaniak',
+    INFOMANIAK_MOBILE: 'infomaniak-mobile',
 };
 
 export const AnnouncementBarMessages = {

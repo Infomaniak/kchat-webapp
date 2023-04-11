@@ -2351,6 +2351,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@infomaniak/compass-icons@npm:0.10.0":
+  version: 0.10.0
+  resolution: "@infomaniak/compass-icons@npm:0.10.0"
+  dependencies:
+    esm: 3.2.25
+    fontello-batch-cli: 4.0.0
+    fontello-cli: 0.6.2
+    lodash: 4.17.21
+    needle: 3.0.0
+    open: 8.4.0
+    svgpath: 2.5.0
+    unzip: 0.1.11
+    xmldom: 0.6.0
+  checksum: ea8e48685b374fbda334149d695030eb574124c08e60f12267dedb4409c7a76731de76b0826ebeed5657b4dadfc8e2740f0e7d6aad2adfec47aa4c4d5a417d5f
+  languageName: node
+  linkType: hard
+
 "@infomaniak/compass-icons@npm:0.8.0":
   version: 0.8.0
   resolution: "@infomaniak/compass-icons@npm:0.8.0"
@@ -13510,7 +13527,7 @@ __metadata:
     "@guyplusplus/turndown-plugin-gfm": 1.0.7
     "@hot-loader/react-dom": 17.0.2
     "@infomaniak/compass-components": 0.9.0
-    "@infomaniak/compass-icons": 0.8.0
+    "@infomaniak/compass-icons": 0.10.0
     "@infomaniak/marked": ^0.2.0
     "@mattermost/client": "workspace:packages/client"
     "@mattermost/components": "workspace:packages/components"
