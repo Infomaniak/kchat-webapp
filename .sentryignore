@@ -4,3 +4,5 @@ i18n
 images
 *.png
 *.txt
+*.css
+*.css.map
