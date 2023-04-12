@@ -237,8 +237,9 @@ sentry_release:
   script:
     - sentry-cli releases new ${CI_COMMIT_TAG}
     - sentry-cli releases set-commits --auto --ignore-empty --ignore-missing ${CI_COMMIT_TAG}
-    - sentry-cli sourcemaps inject ./dist
-    - sentry-cli sourcemaps upload --use-artifact-bundle --release=${CI_COMMIT_TAG} ./dist
+    # - sentry-cli sourcemaps inject ./dist
+    # - sentry-cli sourcemaps upload --use-artifact-bundle --release=${CI_COMMIT_TAG} ./dist
+    - sentry-cli releases files ${CI_COMMIT_TAG} upload-sourcemaps ./dist
     - sentry-cli releases finalize ${CI_COMMIT_TAG}
 
 changelog:
