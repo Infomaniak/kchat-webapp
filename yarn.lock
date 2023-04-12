@@ -3670,15 +3670,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/tracing@npm:7.47.0":
-  version: 7.47.0
-  resolution: "@sentry/tracing@npm:7.47.0"
-  dependencies:
-    "@sentry-internal/tracing": 7.47.0
-  checksum: dd21b1399811b02f759cb71b39899372ba118934f922f0db75f8e295cf2e81c9b3d7e3cb8cd9f06ed42b86d933610fac9032db37b999146116a9decaaa21ca8d
-  languageName: node
-  linkType: hard
-
 "@sentry/types@npm:7.47.0":
   version: 7.47.0
   resolution: "@sentry/types@npm:7.47.0"
@@ -13556,7 +13547,6 @@ __metadata:
     "@mattermost/types": "workspace:packages/types"
     "@redux-devtools/extension": 3.2.3
     "@sentry/react": 7.47.0
-    "@sentry/tracing": 7.47.0
     "@sentry/types": 7.47.0
     "@stripe/react-stripe-js": 1.13.0
     "@stripe/stripe-js": 1.41.0
