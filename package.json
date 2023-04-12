@@ -20,7 +20,6 @@
     "@mattermost/components": "workspace:packages/components",
     "@mattermost/types": "workspace:packages/types",
     "@sentry/react": "7.47.0",
-    "@sentry/tracing": "7.47.0",
     "@sentry/types": "7.47.0",
     "@stripe/react-stripe-js": "1.13.0",
     "@stripe/stripe-js": "1.41.0",
