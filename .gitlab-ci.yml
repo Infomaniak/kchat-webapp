@@ -2,9 +2,6 @@ include:
   - template: Security/SAST.gitlab-ci.yml
   # - template: Security/Container-Scanning.gitlab-ci.yml
   # - template: Code-Quality.gitlab-ci.yml
-  - project: 'docker-public/gitlab-ci-dev-scripts'
-    ref: master
-    file: '/sentry-release.yaml'
 
 variables:
   SAST_DISABLED: "true"
@@ -216,8 +213,12 @@ unit_test:
 #       - public
 
 sentry_release:
+  stage: .post
+  image: getsentry/sentry-cli:2.5.0
   needs:
     - build_front
+  environment:
+    name: "$DEPLOY_VARIABLE"
   rules:
     - if: $DEPLOY_VARIABLE == "prod"
       when: on_success
@@ -229,6 +230,16 @@ sentry_release:
       when: on_success
       allow_failure: false
     - when: never
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  script:
+    - sentry-cli releases new ${CI_COMMIT_TAG}
+    - sentry-cli releases set-commits --auto --ignore-empty --ignore-missing ${CI_COMMIT_TAG}
+    - sentry-cli sourcemaps inject ./dist
+    - sentry-cli sourcemaps upload --use-artifact-bundle --release=${CI_COMMIT_TAG} ./dist
+    - sentry-cli releases finalize ${CI_COMMIT_TAG}
 
 changelog:
   stage: release
