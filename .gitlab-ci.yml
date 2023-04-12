@@ -214,7 +214,7 @@ unit_test:
 
 sentry_release:
   stage: .post
-  image: getsentry/sentry-cli:2.5.0
+  image: getsentry/sentry-cli:2.17.1
   needs:
     - build_front
   environment:
