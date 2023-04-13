@@ -47,6 +47,7 @@ const STANDARD_EXCLUDE = [
 
 const CSP_UNSAFE_EVAL_IF_DEV = ' \'unsafe-eval\'';
 const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
+const CSP_WORKER_SRC = ' \'worker-src\'';
 
 var MYSTATS = {
 
@@ -439,7 +440,7 @@ var config = {
 };
 
 function generateCSP() {
-    let csp = 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.preprod.dev.infomaniak.ch/ ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV;
+    let csp = 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.preprod.dev.infomaniak.ch/ ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV + CSP_WORKER_SRC;
 
     // if (DEV) {
     //     // react-hot-loader and development source maps require eval
