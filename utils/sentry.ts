@@ -27,13 +27,11 @@ export default function init({SENTRY_DSN}: Args) {
         normalizeDepth: 5,
         integrations: [
             new Sentry.BrowserTracing(),
-
-            // new Sentry.Replay(),
+            new Sentry.Replay(),
         ],
         tracesSampleRate: 1.0,
-
-        // replaysSessionSampleRate: 0.1,
-        // replaysOnErrorSampleRate: 1.0,
+        replaysSessionSampleRate: 0.1,
+        replaysOnErrorSampleRate: 1.0,
         ignoreErrors: [
 
             // Ignore random plugins/extensions
