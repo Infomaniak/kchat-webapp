@@ -112,7 +112,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
                     values={{
                         link: (msg: string) => (
                             <a
-                                href='https://developers.mattermost.com/integrate/admin-guide/admin-webhooks-incoming/'
+                                href='https://developers.mattermost.com/integrate/webhooks/incoming/'
                                 target='_blank'
                                 rel='noreferrer'
                             >
