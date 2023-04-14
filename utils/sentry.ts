@@ -25,10 +25,15 @@ export default function init({SENTRY_DSN}: Args) {
         release: GIT_RELEASE, //eslint-disable-line no-process-env
         environment: host.split('.').splice(1).join('.'),
         normalizeDepth: 5,
-        integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+        integrations: [
+            new Sentry.BrowserTracing(),
+
+            // new Sentry.Replay(),
+        ],
         tracesSampleRate: 1.0,
-        replaysSessionSampleRate: 0.1,
-        replaysOnErrorSampleRate: 1.0,
+
+        // replaysSessionSampleRate: 0.1,
+        // replaysOnErrorSampleRate: 1.0,
         ignoreErrors: [
 
             // Ignore random plugins/extensions
