@@ -188,7 +188,7 @@ const RightControls = (): JSX.Element => {
                 <NewsWrapper className='grey wc-trigger-news--flex'>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
-                    <module-news-component style={{marginLeft: '-3px'}}></module-news-component>
+                    <module-news-component></module-news-component>
                 </NewsWrapper>
             )}
             <ButtonWrapper>
