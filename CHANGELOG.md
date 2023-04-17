@@ -1,3 +1,10 @@
+## 1.1.2 (2023-04-17)
+
+### Changed (2 changes)
+
+- [change order of right_controls to syncro with other products](kchat/webapp@ce15bb9c5bff5356ada36ab74d53aaaef3d0617e) by @antonbuksa ([merge request](kchat/webapp!377))
+- [swap position of settings icon in right_controls](kchat/webapp@3bafd25ee657b5ec06d4484f5ffdf6f7207765d1) by @antonbuksa ([merge request](kchat/webapp!377))
+
 ## 1.1.1 (2023-04-14)
 
 ### Added (1 change)
