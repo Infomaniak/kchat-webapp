@@ -166,6 +166,10 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     <module-news-component style={{marginLeft: '-3px'}}></module-news-component>
                 </NewsWrapper>
             )}
+            <ButtonWrapper>
+                {showSettingsTutorialStep && <SettingsTour/>}
+                <SettingsButton/>
+            </ButtonWrapper>
             {!isDesktopApp && (
                 <div style={{position: 'relative'}}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
@@ -186,10 +190,6 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     <AtMentionsButton/>
                 </ButtonWrapper>
                 <SavedPostsButton/>
-                <ButtonWrapper>
-                    {showSettingsTutorialStep && <SettingsTour/>}
-                    <SettingsButton/>
-                </ButtonWrapper>
                 {showCustomizeTip && <CustomizeYourExperienceTour/>}
             </>
             {!isDesktopApp && (
