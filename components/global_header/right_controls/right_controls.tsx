@@ -11,11 +11,8 @@ import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {FormattedMessage} from 'react-intl';
 
-import {ProductIdentifier} from '@mattermost/types/products';
-
 import {GlobalState} from 'types/store';
 
-import Pluggable from 'plugins/pluggable';
 import {
     AtMentionsTour,
     CustomizeYourExperienceTour,
@@ -24,8 +21,6 @@ import {
 } from 'components/tours/onboarding_tour';
 import StatusDropdown from 'components/status_dropdown';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
-
-import {isChannels} from 'utils/products';
 
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentLocale} from 'selectors/i18n';
@@ -99,10 +94,6 @@ const ReportingToolsWrapper = styled.div`
     align-items: center
 `;
 
-export type Props = {
-    productId?: ProductIdentifier;
-}
-
 const tooltipUserReport = (
     <Tooltip id='userReport'>
         <FormattedMessage
@@ -120,7 +111,7 @@ const userReportHrefs: Record<string, string> = {
     de: 'https://feedback.userreport.com/e68afd5f-31f2-4327-af79-fb0b665aee68#ideas/popular',
 };
 
-const RightControls = ({productId = null}: Props): JSX.Element => {
+const RightControls = (): JSX.Element => {
     // guest validation to see which point the messaging tour tip starts
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.CUSTOMIZE_EXPERIENCE : OnboardingTourSteps.CUSTOMIZE_EXPERIENCE;
