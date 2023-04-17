@@ -20,6 +20,7 @@ import ChannelPermissionGate from 'components/permissions_gates/channel_permissi
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import DotsHorizontalIcon from 'components/widgets/icons/dots_horizontal';
+import {PostReminderSubmenu} from 'components/dot_menu/post_reminder_submenu';
 import {ModalData} from 'types/actions';
 import {PluginComponent} from 'types/store/plugins';
 import ForwardPostModal from '../forward_post_modal';
@@ -51,6 +52,7 @@ type Props = {
     handleAddReactionClick?: () => void;
     isMenuOpen?: boolean;
     isReadOnly?: boolean;
+    postTranslationEnabled: boolean;
     isLicensed?: boolean; // TechDebt: Made non-mandatory while converting to typescript
     postEditTimeLimit?: string; // TechDebt: Made non-mandatory while converting to typescript
     enableEmojiPicker?: boolean; // TechDebt: Made non-mandatory while converting to typescript
@@ -59,6 +61,8 @@ type Props = {
     teamUrl?: string; // TechDebt: Made non-mandatory while converting to typescript
     isMobileView: boolean;
     showForwardPostNewLabel: boolean;
+    timezone?: string;
+    isMilitaryTime: boolean;
 
     /**
      * Components for overriding provided by plugins
@@ -114,6 +118,7 @@ type Props = {
          */
         setGlobalItem: (name: string, value: any) => void;
 
+        translatePost: (postId: string) => void;
     }; // TechDebt: Made non-mandatory while converting to typescript
 
     canEdit: boolean;
@@ -427,6 +432,12 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
             this.handleMarkPostAsUnread(e);
             this.props.handleDropdownOpened(false);
             break;
+
+        // translate post
+        case Utils.isKeyPressed(e, Constants.KeyCodes.T):
+            this.translatePost();
+            this.props.handleDropdownOpened(false);
+            break;
         }
     }
 
@@ -454,6 +465,11 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
             openUp: (spaceOnTop > spaceOnBottom),
         });
     }
+
+    translatePost = () => {
+        const {actions, post} = this.props;
+        actions.translatePost(post.id);
+    };
 
     render(): JSX.Element {
         const isFollowingThread = this.props.isFollowingThread ?? this.props.isMentionedInRootPost;
@@ -545,6 +561,13 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                             onClick={this.handleAddReactionMenuItemActivated}
                         />
                     </ChannelPermissionGate>
+                    <PostReminderSubmenu
+                        userId={this.props.userId}
+                        post={this.props.post}
+                        isMilitaryTime={this.props.isMilitaryTime}
+                        timezone={this.props.timezone}
+                        show={!isSystemMessage}
+                    />
                     <Menu.ItemAction
                         id={`unread_post_${this.props.post.id}`}
                         show={!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH}
@@ -596,6 +619,13 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         icon={Utils.getMenuItemIcon('icon-pin-outline')}
                         rightDecorator={<ShortcutKey shortcutKey='P'/>}
                         onClick={this.handlePinMenuItemActivated}
+                    />
+                    <Menu.ItemAction
+                        show={!isSystemMessage && this.props.postTranslationEnabled}
+                        text={Utils.localizeMessage('post_info.translate', 'Translate')}
+                        icon={Utils.getMenuItemIcon('icon-format-letter-case')}
+                        rightDecorator={<ShortcutKey shortcutKey='T'/>}
+                        onClick={this.translatePost}
                     />
                     {!isSystemMessage && (this.state.canEdit || this.state.canDelete) && this.renderDivider('edit')}
                     <Menu.ItemAction

@@ -7,6 +7,9 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTeamDefaultChannelId} from 'mattermost-redux/selectors/entities/channels';
+import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
+import {ChannelCategory} from '@mattermost/types/channel_categories';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {close as closeLhs, open as openLhs} from 'actions/views/lhs';
@@ -14,6 +17,8 @@ import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 import {switchToChannels} from 'actions/views/onboarding_tasks';
 import {getHistory} from 'utils/browser_history';
 import {GlobalState} from 'types/store';
+import {setStatusDropdown} from 'actions/views/status_dropdown';
+import {collapseAllCategoriesExcept} from 'actions/views/channel_sidebar';
 
 import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from '../onboarding_tasks';
 
@@ -24,12 +29,12 @@ import {
     ExploreOtherToolsTourSteps,
     FINISHED,
     OnboardingTourSteps,
+    OnboardingTourStepsForGuestUsers,
     TTNameMapToTourSteps,
     TutorialTourName,
 } from './constant';
 
 export const useGetTourSteps = (tourCategory: string) => {
-    const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const pluginsList = useSelector((state: GlobalState) => state.plugins.plugins);
 
     let tourSteps: Record<string, number> = TTNameMapToTourSteps[tourCategory];
@@ -46,19 +51,19 @@ export const useGetTourSteps = (tourCategory: string) => {
             delete steps.BOARDS_TOUR;
         }
         tourSteps = steps;
-    } else if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP && isGuestUser) {
-        // restrict the 'learn more about messaging' tour when user is guest (townSquare, channel creation and user invite are restricted to guests)
-        tourSteps = TTNameMapToTourSteps[TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS];
     }
     return tourSteps;
 };
 export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
     const dispatch = useDispatch();
     const currentUserId = useSelector(getCurrentUserId);
+    const defaultChannelId = useSelector(getCurrentTeamDefaultChannelId);
     const teamUrl = useSelector((state: GlobalState) => getCurrentRelativeTeamUrl(state));
+    const isGuest = useSelector(isCurrentUserGuestUser);
 
     const nextStepActions = useCallback((step: number) => {
-        if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP) {
+        if (tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP || tourCategory === TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS) {
+            const tourSteps = isGuest ? OnboardingTourStepsForGuestUsers : OnboardingTourSteps;
             switch (step) {
             case OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES : {
                 dispatch(openLhs());
@@ -76,7 +81,42 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
                 dispatch(switchToChannels());
                 break;
             }
-            case OnboardingTourSteps.FINISHED: {
+            case tourSteps.CHANNELS: {
+                dispatch(openLhs());
+                dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => category.type !== CategoryTypes.CHANNELS));
+                break;
+            }
+            case isGuest ? null : OnboardingTourSteps.JOIN_CHANNELS: {
+                dispatch(setAddChannelDropdown(true));
+                break;
+            }
+            case isGuest ? null : OnboardingTourSteps.CREATE_CHANNELS: {
+                dispatch(setAddChannelDropdown(true));
+                break;
+            }
+            case tourSteps.CHANNEL_HEADER: {
+                dispatch(switchToChannels());
+                dispatch(setAddChannelDropdown(false));
+                break;
+            }
+            case tourSteps.DIRECT_MESSAGES: {
+                dispatch(openLhs());
+                dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => category.type !== CategoryTypes.DIRECT_MESSAGES));
+                break;
+            }
+            case tourSteps.KMEET: {
+                dispatch(switchToChannels());
+                break;
+            }
+            case tourSteps.STATUS: {
+                dispatch(setStatusDropdown(true));
+                break;
+            }
+            case tourSteps.PROFILE: {
+                dispatch(setStatusDropdown(true));
+                break;
+            }
+            case tourSteps.FINISHED: {
                 let preferences = [
                     {
                         user_id: currentUserId,
@@ -94,6 +134,7 @@ export const useHandleNavigationAndExtraActions = (tourCategory: string) => {
                     },
                 ];
                 dispatch(savePreferences(currentUserId, preferences));
+                dispatch(setStatusDropdown(false));
                 break;
             }
             default:

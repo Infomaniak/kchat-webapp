@@ -6,12 +6,9 @@ import crypto from 'crypto';
 
 import {Client4} from 'mattermost-redux/client';
 import {IKConstants} from 'utils/constants-ik';
-import LocalStorageStore from 'stores/local_storage_store';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion} from 'utils/user_agent';
-
-let REFRESH_PROMISE: Promise<any> | null = null;
 
 // eslint-disable-next-line no-process-env
 const v2DefaultAuthServer = process.env.BASE_URL;
@@ -19,17 +16,26 @@ const v2DefaultAuthServer = process.env.BASE_URL;
 /**
  * Store IKToken infos in localStorage and update Client
  */
-export function storeTokenResponse(response: { expires_in?: any; access_token?: any; refresh_token?: any }) {
+export function storeTokenResponse(response: { expires_in?: number; access_token: string; refresh_token?: string }) {
     // TODO: store in redux
     const d = new Date();
     d.setHours(d.getHours() + 2);
+
     localStorage.setItem('IKToken', response.access_token);
-    localStorage.setItem('IKRefreshToken', response.refresh_token);
-    localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
-    localStorage.setItem('tokenExpired', '0');
+
+    if (response.refresh_token) {
+        localStorage.setItem('IKRefreshToken', response.refresh_token);
+    }
+
+    if (response.expires_in) {
+        localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
+        localStorage.setItem('tokenExpired', '0');
+    }
+
     Client4.setToken(response.access_token);
     Client4.setCSRF(response.access_token);
     Client4.setAuthHeader = true;
+
     console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
     Client4.setWebappVersion(GIT_RELEASE);
 }
@@ -85,7 +91,7 @@ export async function generateCodeChallenge(codeVerifier: string) {
 /**
  * get code_challenge and redirect to IK Login
  */
-export function getChallengeAndRedirectToLogin() {
+export function getChallengeAndRedirectToLogin(infinite = false) {
     const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
     const codeVerifier = getCodeVerifier();
     let codeChallenge = '';
@@ -96,8 +102,7 @@ export function getChallengeAndRedirectToLogin() {
         // TODO: store in redux instead of localstorage
         localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
 
-        // TODO: add env for login url and/or current server
-        window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
+        window.location.assign(`${IKConstants.LOGIN_URL}authorize?code_challenge=${codeChallenge}${infinite ? '' : '&access_type=offline'}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
     }).catch(() => {
         console.log('[login/utils > getChallengeAndRedirectToLogin] error redirect');
     });
@@ -108,8 +113,16 @@ export function getChallengeAndRedirectToLogin() {
  * @returns bool
  */
 export function checkIKTokenIsExpired() {
+    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+        return false;
+    }
+
     const tokenExpire = localStorage.getItem('IKTokenExpire');
-    const isExpired = tokenExpire <= parseInt(Date.now() / 1000, 10);
+    if (!tokenExpire) {
+        return true;
+    }
+
+    const isExpired = parseInt(tokenExpire, 10) <= Date.now() / 1000;
 
     if (isExpired) {
         console.log('[login/utils > checkIKTokenIsExpired] token is expired');
@@ -123,40 +136,44 @@ export function checkIKTokenIsExpired() {
  * @returns bool
  */
 export function checkIKTokenExpiresSoon(): boolean {
+    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+        return false;
+    }
+
     const tokenExpire = localStorage.getItem('IKTokenExpire');
-    const isExpiredInOneMinute = parseInt(tokenExpire as string, 10) <= ((Date.now() / 1000) + 60);
+    if (!tokenExpire) {
+        return true;
+    }
 
+    const isExpiredInOneMinute = parseInt(tokenExpire, 10) <= ((Date.now() / 1000) + 60);
     return isExpiredInOneMinute;
-}
-
-/**
- * check if token is expired once
- * @returns bool
- */
-export function needRefreshToken() {
-    return localStorage.getItem('tokenExpired') === '0' && checkIKTokenIsExpired();
 }
 
 export function isDefaultAuthServer() {
     return window.location.origin === v2DefaultAuthServer;
 }
 
-function storeTokenV2(tokenData: {token: string, refreshToken: string, expiresAt: number}) {
-    const {token, refreshToken, expiresAt} = tokenData;
-    localStorage.setItem('IKToken', token);
-    localStorage.setItem('IKRefreshToken', refreshToken);
-    localStorage.setItem('IKTokenExpire', expiresAt);
-    localStorage.setItem('tokenExpired', '0');
-    Client4.setToken(token);
-    Client4.setCSRF(token);
+function storeTokenV2(tokenData: {token: string; refreshToken?: string; expiresAt?: number}) {
+    localStorage.setItem('IKToken', tokenData.token);
+    if (tokenData.refreshToken) {
+        localStorage.setItem('IKRefreshToken', tokenData.refreshToken);
+    }
+    if (tokenData.expiresAt) {
+        localStorage.setItem('IKTokenExpire', tokenData.expiresAt);
+        localStorage.setItem('tokenExpired', '0');
+    }
+
+    Client4.setToken(tokenData.token);
+    Client4.setCSRF(tokenData.token);
     Client4.setAuthHeader = true;
 }
 
-async function refreshTokenV2() {
+async function refreshTokenV2(): Promise<{token: string; refreshToken: string; expiresAt: number}> {
     try {
         const newToken = await window.authManager.refreshToken();
         console.log(newToken);
         storeTokenV2(newToken);
+        return newToken;
     } catch (error) {
         console.error(error);
         window.postMessage(
@@ -166,80 +183,42 @@ async function refreshTokenV2() {
             },
             window.origin,
         );
+        return Promise.reject(error);
     }
 }
 
-function isValidTokenV2(token: {token: string, refreshToken: string, expiresAt: number}) {
-    const isExpiredInOneMinute = token.expiresAt <= ((Date.now() / 1000) + 60);
+// TODO: change types here since it is only used for 2.0 and below tokens which always have expire and refresh.
+function isValidTokenV2(token: {token: string; refreshToken?: string; expiresAt?: number}) {
+    const isExpiredInOneMinute = token.expiresAt! <= ((Date.now() / 1000) + 60);
 
     return !isExpiredInOneMinute;
 }
 
-export async function refreshIKToken(redirectToTeam = false): Promise<any> {
-    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
-        const updatedToken = await window.authManager.tokenRequest();
-        if (!Object.keys(updatedToken).length) {
-            clearLocalStorageToken();
-            return Promise.reject(new Error('missing refresh token'));
-        } else if (isValidTokenV2(updatedToken)) {
-            storeTokenV2(updatedToken);
-        } else {
-            await refreshTokenV2();
-        }
+export async function refreshIKToken(redirectToTeam = false): Promise<string> {
+    const updatedToken: {token: string; refreshToken?: string; expiresAt?: number} = await window.authManager.tokenRequest();
 
+    // If desktop doesn't have a valid token/refresh token
+    if (!Object.keys(updatedToken).length) {
+        // Clean token storage just in case and reject promise.
+        clearLocalStorageToken();
+        return Promise.reject(new Error('missing refresh token'));
+    } else if (!updatedToken.expiresAt || isValidTokenV2(updatedToken)) {
+        // If 2.1 and above and no token expiration, or 2.0 token is valid, use it.
+        storeTokenV2(updatedToken);
+        return updatedToken.token;
+    }
+
+    // Otherwise token is valid but expired, request a refresh.
+    try {
+        const {token} = await refreshTokenV2();
+
+        // Queue redirect before returning, otherwise it won't trigger.
         if (redirectToTeam) {
             redirectUserToDefaultTeam();
         }
-    } else {
-        const refreshToken = localStorage.getItem('IKRefreshToken');
 
-        if (!refreshToken) {
-            return Promise.reject(new Error('missing refresh token'));
-        }
-
-        if (REFRESH_PROMISE) {
-            return REFRESH_PROMISE as Promise<any>;
-        }
-
-        Client4.setToken('');
-        Client4.setCSRF('');
-
-        // eslint-disable-next-line consistent-return
-        REFRESH_PROMISE = new Promise((resolve, reject) => {
-            Client4.refreshIKLoginToken(
-                refreshToken,
-                `${IKConstants.LOGIN_URL}`,
-                `${IKConstants.CLIENT_ID}`,
-            ).then((resp: { expires_in: string; access_token: string; refresh_token: string }) => {
-                storeTokenResponse(resp);
-                LocalStorageStore.setWasLoggedIn(true);
-
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token: resp.access_token,
-                            refreshToken: resp.refresh_token,
-                            expiresAt: parseInt(Date.now() / 1000) + resp.expires_in,
-                        },
-                    },
-                    window.origin,
-                );
-
-                REFRESH_PROMISE = null;
-                if (redirectToTeam) {
-                    redirectUserToDefaultTeam();
-                }
-                resolve(resp);
-            }).catch((error: unknown) => {
-                console.log('[login/utils > refreshIKToken] refresh token error at: ', new Date());
-                console.warn(error);
-                console.log('[login/utils > refreshIKToken] keeping old token');
-                REFRESH_PROMISE = null;
-                reject(error);
-            });
-        });
-
-        return REFRESH_PROMISE;
+        return token;
+    } catch (e) {
+        return Promise.reject(e);
     }
 }

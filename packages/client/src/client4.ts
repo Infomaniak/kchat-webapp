@@ -43,6 +43,7 @@ import {
     ChannelWithTeamData,
     ChannelSearchOpts,
     ServerChannel,
+    PendingGuests,
 } from '@mattermost/types/channels';
 import {Options, StatusOK, ClientResponse, LogLevel, FetchPaginatedThreadOptions} from '@mattermost/types/client4';
 import {Compliance} from '@mattermost/types/compliance';
@@ -828,6 +829,17 @@ export default class Client4 {
         return this.doFetch<UserProfile>(
             `${this.getUsersRoute()}/login`,
             {method: 'post', body: JSON.stringify(body)},
+        );
+    };
+
+    registerDevice = (device_id: string) => {
+        const body: any = {
+            device_id,
+        };
+
+        return this.doFetch<UserProfile>(
+            `${this.getUsersRoute()}/sessions/device`,
+            {method: 'put', body: JSON.stringify(body)},
         );
     };
 
@@ -4240,6 +4252,21 @@ export default class Client4 {
         );
     }
 
+    translatePost = (postId: string) => {
+        return this.doFetch(
+            `${this.getPostRoute(postId)}/translate`,
+            {method: 'POST'},
+        );
+    }
+
+    addPostReminder = (userId: string, postId: string, timestamp: number) => {
+        this.trackEvent('api', 'api_post_set_reminder');
+        return this.doFetch<StatusOK>(
+            `${this.getUserRoute(userId)}/posts/${postId}/reminder`,
+            {method: 'post', body: JSON.stringify({target_time: timestamp})},
+        );
+    }
+
     /**
      * @param query string query of graphQL, pass the json stringified version of the query
      * eg.  const query = JSON.stringify({query: `{license, config}`, operationName: 'queryForLicenseAndConfig'});
@@ -4308,6 +4335,7 @@ export default class Client4 {
             message: msg,
             server_error_id: data.id,
             status_code: data.status_code ? data.status_code : response.status,
+            error: data.error ? data.error : null,
             url,
         });
     };
@@ -4345,19 +4373,15 @@ export default class Client4 {
         formData.append('code_verifier', verifier);
         formData.append('client_id', clientId);
         formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
-        // formData.append('redirect_uri', 'ktalk://auth-desktop' );
 
         if (this.defaultHeaders['Webapp-Version']) {
             delete this.defaultHeaders['Webapp-Version'];
         }
 
         return this.doFetch<any>(
-
             `${loginUrl}token`,
             {
                 method: 'post',
-
-                // mode: 'no-cors',
                 body: formData,
             },
         );
@@ -4503,6 +4527,20 @@ export default class Client4 {
             },
         );
     };
+
+    getChannelPendingGuests = (channelId: string) => {
+        return this.doFetch<PendingGuests>(
+            `${this.getChannelMembersRoute(channelId)}/pending_guest`,
+            {method: 'GET'},
+        );
+    };
+
+    cancelPendingGuestInvite = (invitationKey: string) => {
+        return this.doFetch(
+            `${this.getTeamsRoute()}/invites/email`,
+            {method: 'DELETE', body: JSON.stringify({invitation_key: invitationKey})},
+        );
+    };
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {
@@ -4528,6 +4566,7 @@ export class ClientError extends Error implements ServerError {
     url?: string;
     server_error_id?: string;
     status_code?: number;
+    error?: {code: string};
 
     constructor(baseUrl: string, data: ServerError) {
         super(data.message + ': ' + cleanUrlForLogging(baseUrl, data.url || ''));
@@ -4536,6 +4575,7 @@ export class ClientError extends Error implements ServerError {
         this.url = data.url;
         this.server_error_id = data.server_error_id;
         this.status_code = data.status_code;
+        this.error = data.error;
 
         // Ensure message is treated as a property of this class when object spreading. Without this,
         // copying the object by using `{...error}` would not include the message.

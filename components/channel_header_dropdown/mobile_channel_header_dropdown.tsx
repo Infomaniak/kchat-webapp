@@ -18,6 +18,8 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
 import MobileChannelHeaderDropdownAnimation from './mobile_channel_header_dropdown_animation';
 
+import './mobile_channel_header_dropdown.scss';
+
 type Props = {
     user: UserProfile;
     channel: Channel;
@@ -70,7 +72,10 @@ class MobileChannelHeaderDropdown extends React.PureComponent<Props> {
                     />
                 </a>
 
-                <Menu ariaLabel={this.props.intl.formatMessage({id: 'channel_header.menuAriaLabel', defaultMessage: 'Channel Menu'})}>
+                <Menu
+                    className='mt-8 mobile-channel-header-dropdown'
+                    ariaLabel={this.props.intl.formatMessage({id: 'channel_header.menuAriaLabel', defaultMessage: 'Channel Menu'})}
+                >
                     <ChannelHeaderDropdownItems isMobile={true}/>
                     <div className='Menu__close visible-xs-block'>
                         {'×'}

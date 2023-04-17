@@ -33,7 +33,7 @@ import {
 
 import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
@@ -42,6 +42,7 @@ import {General} from 'mattermost-redux/constants';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
+import {useSelector} from 'react-redux';
 
 function isIkBaseUrl() {
     const whitelist = [
@@ -91,7 +92,7 @@ export function loadMeREST(): ActionFunc {
         dispatch(setServerVersion(serverVersion));
 
         try {
-            await dispatch(getMyKSuites());
+            const kSuiteCall = await dispatch(getMyKSuites());
             const kSuites = getTeams(getState());
 
             const suiteArr = Object.values(kSuites);
@@ -119,7 +120,9 @@ export function loadMeREST(): ActionFunc {
                 await dispatch(getMyTeamUnreads(isCollapsedThreads));
             } else if (!isDesktopApp()) {
                 // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
-                getHistory().push('/error?type=no_ksuite');
+                if (kSuiteCall && kSuiteCall.data) {
+                    getHistory().push('/error?type=no_ksuite');
+                }
             }
         } catch (error) {
             dispatch(logError(error as ServerError));
@@ -547,7 +550,7 @@ export function getMe(): ActionFunc {
         const me = await getMeFunc(dispatch, getState);
         if ('error' in me) {
             if (me.error?.status_code && me.error?.status_code === 404 && (window && !window.location.pathname.includes('static/call'))) {
-                getHistory().push('/error?type=team_not_found');
+                getHistory().push('/error?type=page_not_found');
             }
             return me;
         }
@@ -1466,11 +1469,6 @@ export function checkForModifiedUsers() {
         const state = getState();
         const users = getUsers(state);
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
-        const serverVersion = getServerVersion(state);
-
-        if (!isMinimumServerVersion(serverVersion, 5, 14)) {
-            return {data: true};
-        }
 
         await dispatch(getProfilesByIds(Object.keys(users), {since: lastDisconnectAt}));
         return {data: true};

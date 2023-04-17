@@ -1,3 +1,246 @@
+## 1.1.1 (2023-04-14)
+
+### Added (1 change)
+
+- [add sourcemaps to sentry releases](kchat/webapp@c79255e632bf19105d82d6c18241cab2c02fadc2) by @antonbuksa ([merge request](kchat/webapp!375))
+
+### Fixed (1 change)
+
+- [set lang window const for webcomponents](kchat/webapp@eb6f3fd73aeb7c60787994829147d59f7bf73fca) by @antonbuksa ([merge request](kchat/webapp!373))
+
+### Changed (2 changes)
+
+- [update incoming webhook doc url](kchat/webapp@09994270f498150a5f78fee3fd39d07cd76445a3) by @antonbuksa ([merge request](kchat/webapp!376))
+- [update sentry sdk and migrate to private dsn](kchat/webapp@f8bdff1cdc0a4adae03e4b0d8468322eca156bd9) by @antonbuksa ([merge request](kchat/webapp!374))
+
+### Removed (1 change)
+
+- [remove obsolete sentry tracing package](kchat/webapp@c59353ccd52681fab9a256e220d98681c1e34b25) by @antonbuksa ([merge request](kchat/webapp!374))
+
+## 1.1.0 (2023-04-11)
+
+### Fixed (1 change)
+
+- [fix presence unbind global on channel switch](kchat/webapp@2cdf9357f658e055619481bc1a116e45ea1d3844) by @antonbuksa ([merge request](kchat/webapp!362))
+
+### Changed (4 changes)
+
+- [refactor token refresh to correctly return a promised string](kchat/webapp@0bfdea963322c572ea5ffd2cf387a597fcafe0d7) by @antonbuksa ([merge request](kchat/webapp!362))
+- [port mattermost issue 12227 changes to improve websocket reconnect](kchat/webapp@f00153ccb5328e36ce6055ce4b9ada0c56ec510e) by @antonbuksa ([merge request](kchat/webapp!362))
+- [unbind channels and pusher callbacks in ws error state before reconnect](kchat/webapp@3e49adc69a13003876744f0242f9504f0b6d970b) by @antonbuksa ([merge request](kchat/webapp!362))
+- [test using non expiring tokens for desktop v2.1](kchat/webapp@b36ba337062e37bc8d9f74d774bfb402b2e270f5) by @antonbuksa ([merge request](kchat/webapp!344))
+
+## 1.0.10 (2023-04-06)
+
+### Added (1 change)
+
+- [add whats new WC](kchat/webapp@4a52c68d5883c9f86110a9b12e3b67effeec4d19) by @leonard.jouve ([merge request](kchat/webapp!359))
+
+### Fixed (3 changes)
+
+- [System convert channel trads](kchat/webapp@c31a9c3ce039c7c80627186d2fff057f18b08ccc) by @leonard.jouve ([merge request](kchat/webapp!372))
+- [Pending guest icon](kchat/webapp@0696f17acb138b235198e59d66d4b78cf3b3db0c) by @leonard.jouve ([merge request](kchat/webapp!371))
+- [fix mobile next flag position](kchat/webapp@d202148f5e11a2cf9e84de8a601c89873ff118e7) by @leonard.jouve ([merge request](kchat/webapp!370))
+
+## 1.0.9 (2023-04-05)
+
+### Added (1 change)
+
+- [add get app banner](kchat/webapp@4efaf0a1fe168bd9b346e64017d940afb436489c) by @leonard.jouve ([merge request](kchat/webapp!351))
+
+### Fixed (1 change)
+
+- [Add translations for version bar](kchat/webapp@1a304e591d0bbe237a315cd3cf9e66ffb8f64416) by @leonard.jouve ([merge request](kchat/webapp!367))
+
+### Chore (1 change)
+
+- [remove codeowners file](kchat/webapp@bba0796d4a92592f934a41359019b1ca115c2bae) by @antonbuksa ([merge request](kchat/webapp!351))
+
+## 1.0.8 (2023-03-31)
+
+### Added (4 changes)
+
+- [add feature flag for translation feature](kchat/webapp@1deb135eb2b7f344c81c2c1912c4c84ec414229c) by @antonbuksa ([merge request](kchat/webapp!364))
+- [add translate post menu action](kchat/webapp@1620dd109da871d9888cf762c43888ce7df1fe07) by @leonard.jouve ([merge request](kchat/webapp!363))
+- [add reminders custom time picker](kchat/webapp@4f016b7f662c3eb1182518f9327e5172f19bee34) by @leonard.jouve ([merge request](kchat/webapp!355))
+- [reminders](kchat/webapp@3ae8cf47888fae8b9fa6d1289571b52626c92783) by @leonard.jouve ([merge request](kchat/webapp!355))
+
+### Fixed (6 changes)
+
+- [Unify translation menu icon](kchat/webapp@b8522a5b604a28b94b4ec96559de7955d1f04882) by @leonard.jouve ([merge request](kchat/webapp!365))
+- [Mark threads as unread trads](kchat/webapp@12204bfe000cbb211a585b54414d1599650d18e6) by @leonard.jouve ([merge request](kchat/webapp!361))
+- [badge guests](kchat/webapp@1a706c06f71bdf8c06ede9541318aff5b3ee9028) by @leonard.jouve ([merge request](kchat/webapp!358))
+- [Include guests in RHS channel info member count](kchat/webapp@c78ef3b593d1cf82d3d61d6afe3e40386a0d7fcd) by @leonard.jouve ([merge request](kchat/webapp!357))
+- [Fix RHS crash MM-49162](kchat/webapp@cd94348279732e813fa8b56d972ac5bbd031f25c) by @leonard.jouve ([merge request](kchat/webapp!356))
+- [Fix channel info crash](kchat/webapp@93738b3f59e74f947c4dcc5ee7669243286440d5) by @leonard.jouve ([merge request](kchat/webapp!356))
+
+## 1.0.7 (2023-03-28)
+
+### Added (1 change)
+
+- [canary switch](kchat/webapp@3f4051fec47c606df83874224057c9b41558faa7) by @leonard.jouve ([merge request](kchat/webapp!354))
+
+### Chore (1 change)
+
+- [remove gh codeql workflow with missing config](kchat/webapp@8d84eaf5057fdc9aa3b4bba52df30c0b0834545f) by @antonbuksa ([merge request](kchat/webapp!345))
+
+## 1.0.6 (2023-03-20)
+
+### Fixed (1 change)
+
+- [Always fetch threads on websocket reconnect](kchat/webapp@78de53c539f290ae89f17e12e9f013f5e752de44) by @leonard.jouve ([merge request](kchat/webapp!349))
+
+## 1.0.5 (2023-03-15)
+
+### Fixed (5 changes)
+
+- [Fix pdf preview](kchat/webapp@8822d214ae2d303f9d895554086d47a057a88fc3) by @leonard.jouve ([merge request](kchat/webapp!346))
+- [fix overlay displaying above post dropdown](kchat/webapp@c5202f1dc148e0e5fecd46a08395e245817604b9) by @leonard.jouve ([merge request](kchat/webapp!343))
+- [improve Global Threads page responsive on RHS opened](kchat/webapp@58d739329f1c001dddf7aea8680718c5f33861e9) by @leonard.jouve ([merge request](kchat/webapp!342))
+- [fix bottom white bar](kchat/webapp@288aaefe27f870cdfeddb6b2c5bbbd241cc35514) by @leonard.jouve ([merge request](kchat/webapp!341))
+- [fix file preview on mobile](kchat/webapp@a8842133b49eec455b5efa440a345bcfe3110759) by @leonard.jouve ([merge request](kchat/webapp!339))
+
+## 1.0.4 (2023-03-09)
+
+### Added (1 change)
+
+- [add kmeet button in channel header dropdown on mobile](kchat/webapp@ad0c8a93b49b2782c40822d8278975a0dca858ef) by @leonard.jouve ([merge request](kchat/webapp!334))
+
+### Fixed (5 changes)
+
+- [fix mobile team sidebar padding](kchat/webapp@e9637273efbaa96a01ad42369324eabf1c66a3f1) by @leonard.jouve ([merge request](kchat/webapp!337))
+- [Add margin to mobile channel header dropdown](kchat/webapp@62c7a7cfdf3b7381008c08de9db9fefa87871ba0) by @leonard.jouve ([merge request](kchat/webapp!336))
+- [Clean mobile right sidebar menu](kchat/webapp@8bb1a49d1692160add6c8cbe31690e376b8891e4) by @leonard.jouve ([merge request](kchat/webapp!335))
+- [fix file preview container size](kchat/webapp@4c1a04426860f476804a9e93fcb3174079af226d) by @leonard.jouve ([merge request](kchat/webapp!331))
+- [fix svg container size](kchat/webapp@693ff0ef4e6e27cd4837448075b8ee8c54aeadc4) by @leonard.jouve ([merge request](kchat/webapp!330))
+
+### Performance (1 change)
+
+- [perf: clean s3 buckets](kchat/webapp@6be24ebdc15ab3f3a6696dd3bb745c01b4ed4880) by @leopold.jacquot
+
+## 1.0.3 (2023-03-07)
+
+No changes.
+
+## 1.0.2 (2023-03-07)
+
+### Fixed (2 changes)
+
+- [edit post trads](kchat/webapp@832f6efb3599e986be51bab5fc7cc716e38d01e9) by @leonard.jouve ([merge request](kchat/webapp!326))
+- [fr insights trads](kchat/webapp@107e8037e946d965187cb8e8c38c84b1b281f72c) by @leonard.jouve ([merge request](kchat/webapp!325))
+
+## 1.0.1 (2023-03-03)
+
+No changes.
+
+## 1.0.0 (2023-03-03)
+
+### Chore (1 change)
+
+- Prod release by @antonbuksa
+
+## 0.9.15 (2023-03-02)
+
+### Added (1 change)
+
+- [channel limit indicator](kchat/webapp@83f08c3ce960462da69cce4da45d2228045a87c2) by @leonard.jouve ([merge request](kchat/webapp!296))
+
+### Fixed (3 changes)
+
+- [default channel intro message wording](kchat/webapp@ac2c585cf706c3483f4afb4026f2395a0a60f888) by @leonard.jouve ([merge request](kchat/webapp!314))
+- [Multiselect not found wording](kchat/webapp@903f861c100cd03dd97af8d5a4fc211da09bc03e) by @leonard.jouve ([merge request](kchat/webapp!313))
+- [Remove mattermost doc from integrations](kchat/webapp@2db3f68b61960e7b59c79c64d01e38ad4de99d27) by @leonard.jouve ([merge request](kchat/webapp!312))
+
+## 0.9.14 (2023-02-27)
+
+### Fixed (2 changes)
+
+- [remove server check in checkForModifiedUsers](kchat/webapp@c51e057c28eff0ec31f60a582eaebadfb5298aae) by @antonbuksa
+- [Live update unread threads](kchat/webapp@2f21e0c5eb453ac0b29c724097dfbdcecabdfd3e) by @leonard.jouve ([merge request](kchat/webapp!310))
+
+### Changed (2 changes)
+
+- [hide web team switch for app 2.1 for new desktop switch](kchat/webapp@57aff4e72d93405d60010c41656f9d186ba3e5ce) by @antonbuksa
+- [condition teamsidebar only for webapp](kchat/webapp@fa669f9e9a47d63413eeb8a091df8f6b51e7465b) by @leonard.jouve
+
+## 0.9.13 (2023-02-24)
+
+### Fixed (4 changes)
+
+- [disable onboarding when completed](kchat/webapp@9070bd545db3de0a6283e47eb06396b416ac04b9) by @leonard.jouve ([merge request](kchat/webapp!308))
+- [External invitation: filter archived channels](kchat/webapp@81851a5a182963fdc8c892f3860d47eaa70a9cfc) by @leonard.jouve ([merge request](kchat/webapp!306))
+- [Convert channel modal wording](kchat/webapp@9328346784556ab36ebb83b380da51bfd4e3a5d1) by @leonard.jouve ([merge request](kchat/webapp!303))
+- [Adapted icons style to match others + fixed bug svg](kchat/webapp@9438e7b182ad7ba335c3fee01dbc22246336b439) by @olivier.thuymans ([merge request](kchat/webapp!280))
+
+### Changed (2 changes)
+
+- [change add members button modal](kchat/webapp@3c0cdf8af1e68620955dcdbef1ff7ba1a702f401) by @leonard.jouve ([merge request](kchat/webapp!295))
+- [changed illustrations for pins and files tabs when empty](kchat/webapp@b891b6baceb42a717ce2e48592760c0d085a895c) by @olivier.thuymans ([merge request](kchat/webapp!280))
+
+### Removed (1 change)
+
+- [remove mattermost help menu and EnableAskCommunity config flag](kchat/webapp@d27cfa41d4375a7a6a54a3bec31990321f641ac9) by @antonbuksa ([merge request](kchat/webapp!309))
+
+## 0.9.12 (2023-02-23)
+
+### Changed (1 change)
+
+- [disable deeplink page for now](kchat/webapp@7b7305b3ee9dd108b0d6502aa5455324c34c4a07) by @antonbuksa ([merge request](kchat/webapp!302))
+
+### Chore (3 changes)
+
+- [clean redirects to mfa and ToS](kchat/webapp@d310ae95564af5f8cc6a5a4c6f22472143cdac4b) by @antonbuksa ([merge request](kchat/webapp!302))
+- [clean old imports](kchat/webapp@7410e78ed3cf5ff1feb25083bce99e2cbf30784a) by @antonbuksa ([merge request](kchat/webapp!302))
+- [clean routes and types in root controller](kchat/webapp@2073b6c646a875423220e22422f3d10e39630ada) by @antonbuksa ([merge request](kchat/webapp!302))
+
+## 0.9.11 (2023-02-22)
+
+### Fixed (2 changes)
+
+- [Added missing emoji](kchat/webapp@3c4d919b3e598733d130338d3208e8a158eb2ee1) by @olivier.thuymans ([merge request](kchat/webapp!293))
+- [fix add/delete teams from websocket](kchat/webapp@8a2e534dd1570bd27aeb15081d6b317df5f8794e) by @antonbuksa ([merge request](kchat/webapp!299))
+
+## 0.9.10 (2023-02-20)
+
+### Fixed (1 change)
+
+- [archive channel secondary class](kchat/webapp@9a8ea73382e4b3e883c2aa0667ce2577fd8f0f79) by @leonard.jouve ([merge request](kchat/webapp!292))
+
+## 0.9.9 (2023-02-20)
+
+### Added (2 changes)
+
+- [add tests for limitation modals](kchat/webapp@357c30a0e06597a7ff275d95580c8955eb5aedca) by @leonard.jouve ([merge request](kchat/webapp!288))
+- [add new error pages](kchat/webapp@4e9ea2ca6fdad67617aa983daf94ea384bc094ee) by @leonard.jouve ([merge request](kchat/webapp!264))
+
+### Fixed (3 changes)
+
+- [Fixed missing french translation in toast_wrapper](kchat/webapp@d8b8d27179006c8742eacad9a4a0eb58c3539f0c) by @olivier.thuymans ([merge request](kchat/webapp!285))
+- [handle limit when converting channel to private](kchat/webapp@e9f408dbf53f3b9613f52104b5d686c172108d8d) by @leonard.jouve ([merge request](kchat/webapp!288))
+- [trad guest ChannelInviteModal](kchat/webapp@75e54710b716b0b19888753ee9fb010019e4ca1f) by @leonard.jouve ([merge request](kchat/webapp!289))
+
+### Changed (1 change)
+
+- [tweak error implementation to handle api custom codes](kchat/webapp@da0521d08d432e2d76bb6a6d3d5895736cf9706e) by @antonbuksa ([merge request](kchat/webapp!264))
+
+## 0.9.8 (2023-02-15)
+
+### Removed (1 change)
+
+- [remove invite to team cta when inviting to channel](kchat/webapp@c0d5c180b148b336a826b4991367bdfa1007f5ff) by @antonbuksa ([merge request](kchat/webapp!287))
+
+## 0.9.7 (2023-02-13)
+
+### Fixed (2 changes)
+
+- [fix WS channel with duplicated callbacks on reconnect](kchat/webapp@56e2d50e1ef5ff518bcf49c7dda637a9102eb3cd) by @leonard.jouve ([merge request](kchat/webapp!284))
+- [Added missing translation](kchat/webapp@d3ea5241da0954aa0e994ce323a717519d20ed1e) by @olivier.thuymans ([merge request](kchat/webapp!283))
+
+### Changed (2 changes)
+
+- [update readme to prepare for gh mirror](kchat/webapp@1e13ccfb40e1d48f486fd84facdbc904b9eee470) by @antonbuksa
+- [swap changelog webhook to new url](kchat/webapp@fffff02c4e7ec0b63d28a79d0d05bfc8622ec6d8) by @antonbuksa
+
 ## 0.9.6 (2023-02-10)
 
 ### Fixed (3 changes)

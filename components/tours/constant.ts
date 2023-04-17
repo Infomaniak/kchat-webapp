@@ -27,17 +27,41 @@ export const TutorialTourName = {
 };
 
 export const OnboardingTourSteps = {
-    CHANNELS_AND_DIRECT_MESSAGES: 0,
-    CREATE_AND_JOIN_CHANNELS: 1,
-    INVITE_PEOPLE: 2,
-    SEND_MESSAGE: 3,
-    CUSTOMIZE_EXPERIENCE: 4,
+
+    // CHANNELS_AND_DIRECT_MESSAGES: 0,
+    // CREATE_AND_JOIN_CHANNELS: 1,
+    // INVITE_PEOPLE: 2,
+    // SEND_MESSAGE: 3,
+    // CUSTOMIZE_EXPERIENCE: 4,
+
+    CHANNELS: 0,
+    JOIN_CHANNELS: 1,
+    CREATE_CHANNELS: 2,
+    CHANNEL_HEADER: 3,
+    DIRECT_MESSAGES: 4,
+    AT_MENTIONS: 5,
+    KMEET: 6,
+    SETTINGS: 7,
+    STATUS: 8,
+    PROFILE: 9,
+
     FINISHED,
 };
 
 export const OnboardingTourStepsForGuestUsers = {
-    SEND_MESSAGE: 0,
-    CUSTOMIZE_EXPERIENCE: 1,
+
+    // SEND_MESSAGE: 0,
+    // CUSTOMIZE_EXPERIENCE: 1,
+
+    CHANNELS: 0,
+    CHANNEL_HEADER: 1,
+    DIRECT_MESSAGES: 2,
+    AT_MENTIONS: 3,
+    KMEET: 4,
+    SETTINGS: 5,
+    STATUS: 6,
+    PROFILE: 7,
+
     FINISHED,
 };
 
@@ -62,6 +86,7 @@ export const CrtTutorialTriggerSteps = {
 
 export const TTNameMapToATStatusKey = {
     [TutorialTourName.ONBOARDING_TUTORIAL_STEP]: TutorialTourName.ONBOARDING_TUTORIAL_STEP + AutoStatusSuffix,
+    [TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS]: TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS + AutoStatusSuffix,
     [TutorialTourName.CRT_TUTORIAL_STEP]: 'crt_tutorial_auto_tour_status',
     [TutorialTourName.CRT_THREAD_PANE_STEP]: TutorialTourName.CRT_THREAD_PANE_STEP + AutoStatusSuffix,
     [TutorialTourName.EXPLORE_OTHER_TOOLS]: TutorialTourName.EXPLORE_OTHER_TOOLS + AutoStatusSuffix,

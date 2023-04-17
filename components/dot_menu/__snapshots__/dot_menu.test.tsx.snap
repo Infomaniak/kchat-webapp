@@ -110,6 +110,38 @@ exports[`components/dot_menu/DotMenu should match snapshot, canDelete 1`] = `
         text="Add Reaction"
       />
     </Connect(ChannelPermissionGate)>
+    <PostReminderSubmenu
+      isMilitaryTime={false}
+      post={
+        Object {
+          "channel_id": "",
+          "create_at": 0,
+          "delete_at": 0,
+          "edit_at": 0,
+          "hashtags": "",
+          "id": "post_id_1",
+          "is_pinned": false,
+          "message": "post message",
+          "metadata": Object {
+            "embeds": Array [],
+            "emojis": Array [],
+            "files": Array [],
+            "images": Object {},
+            "reactions": Array [],
+          },
+          "original_id": "",
+          "pending_post_id": "",
+          "props": Object {},
+          "reply_count": 0,
+          "root_id": "",
+          "type": "",
+          "update_at": 0,
+          "user_id": "user_id",
+        }
+      }
+      show={true}
+      userId="user_id_1"
+    />
     <MenuItemAction
       icon={
         <span
@@ -188,6 +220,21 @@ exports[`components/dot_menu/DotMenu should match snapshot, canDelete 1`] = `
       }
       show={true}
       text="Pin"
+    />
+    <MenuItemAction
+      icon={
+        <span
+          className="icon-format-letter-case MenuItem__compass-icon"
+        />
+      }
+      onClick={[Function]}
+      rightDecorator={
+        <ShortcutKey
+          shortcutKey="T"
+        />
+      }
+      show={true}
+      text="Translate"
     />
     <li
       className="MenuItem__divider"
@@ -380,6 +427,38 @@ exports[`components/dot_menu/DotMenu should match snapshot, hide "New" badge on 
         text="Add Reaction"
       />
     </Connect(ChannelPermissionGate)>
+    <PostReminderSubmenu
+      isMilitaryTime={false}
+      post={
+        Object {
+          "channel_id": "",
+          "create_at": 0,
+          "delete_at": 0,
+          "edit_at": 0,
+          "hashtags": "",
+          "id": "post_id_1",
+          "is_pinned": false,
+          "message": "post message",
+          "metadata": Object {
+            "embeds": Array [],
+            "emojis": Array [],
+            "files": Array [],
+            "images": Object {},
+            "reactions": Array [],
+          },
+          "original_id": "",
+          "pending_post_id": "",
+          "props": Object {},
+          "reply_count": 0,
+          "root_id": "",
+          "type": "",
+          "update_at": 0,
+          "user_id": "user_id",
+        }
+      }
+      show={true}
+      userId="user_id_1"
+    />
     <MenuItemAction
       icon={
         <span
@@ -458,6 +537,21 @@ exports[`components/dot_menu/DotMenu should match snapshot, hide "New" badge on 
       }
       show={true}
       text="Pin"
+    />
+    <MenuItemAction
+      icon={
+        <span
+          className="icon-format-letter-case MenuItem__compass-icon"
+        />
+      }
+      onClick={[Function]}
+      rightDecorator={
+        <ShortcutKey
+          shortcutKey="T"
+        />
+      }
+      show={true}
+      text="Translate"
     />
     <MenuItemAction
       icon={
@@ -645,6 +739,38 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
         text="Add Reaction"
       />
     </Connect(ChannelPermissionGate)>
+    <PostReminderSubmenu
+      isMilitaryTime={false}
+      post={
+        Object {
+          "channel_id": "",
+          "create_at": 0,
+          "delete_at": 0,
+          "edit_at": 0,
+          "hashtags": "",
+          "id": "post_id_1",
+          "is_pinned": false,
+          "message": "post message",
+          "metadata": Object {
+            "embeds": Array [],
+            "emojis": Array [],
+            "files": Array [],
+            "images": Object {},
+            "reactions": Array [],
+          },
+          "original_id": "",
+          "pending_post_id": "",
+          "props": Object {},
+          "reply_count": 0,
+          "root_id": "",
+          "type": "",
+          "update_at": 0,
+          "user_id": "user_id",
+        }
+      }
+      show={true}
+      userId="user_id_1"
+    />
     <MenuItemAction
       icon={
         <span
@@ -723,6 +849,21 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
       }
       show={true}
       text="Pin"
+    />
+    <MenuItemAction
+      icon={
+        <span
+          className="icon-format-letter-case MenuItem__compass-icon"
+        />
+      }
+      onClick={[Function]}
+      rightDecorator={
+        <ShortcutKey
+          shortcutKey="T"
+        />
+      }
+      show={true}
+      text="Translate"
     />
     <li
       className="MenuItem__divider"
@@ -915,6 +1056,38 @@ exports[`components/dot_menu/DotMenu should match snapshot, show "New" badge on 
         text="Add Reaction"
       />
     </Connect(ChannelPermissionGate)>
+    <PostReminderSubmenu
+      isMilitaryTime={false}
+      post={
+        Object {
+          "channel_id": "",
+          "create_at": 0,
+          "delete_at": 0,
+          "edit_at": 0,
+          "hashtags": "",
+          "id": "post_id_1",
+          "is_pinned": false,
+          "message": "post message",
+          "metadata": Object {
+            "embeds": Array [],
+            "emojis": Array [],
+            "files": Array [],
+            "images": Object {},
+            "reactions": Array [],
+          },
+          "original_id": "",
+          "pending_post_id": "",
+          "props": Object {},
+          "reply_count": 0,
+          "root_id": "",
+          "type": "",
+          "update_at": 0,
+          "user_id": "user_id",
+        }
+      }
+      show={true}
+      userId="user_id_1"
+    />
     <MenuItemAction
       icon={
         <span
@@ -993,6 +1166,21 @@ exports[`components/dot_menu/DotMenu should match snapshot, show "New" badge on 
       }
       show={true}
       text="Pin"
+    />
+    <MenuItemAction
+      icon={
+        <span
+          className="icon-format-letter-case MenuItem__compass-icon"
+        />
+      }
+      onClick={[Function]}
+      rightDecorator={
+        <ShortcutKey
+          shortcutKey="T"
+        />
+      }
+      show={true}
+      text="Translate"
     />
     <MenuItemAction
       icon={

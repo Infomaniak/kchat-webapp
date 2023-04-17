@@ -15,6 +15,8 @@ import Permissions from 'mattermost-redux/constants/permissions';
 import {Constants} from 'utils/constants';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import * as Utils from 'utils/utils';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import Pluggable from 'plugins/pluggable';
 
@@ -203,6 +205,9 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
     }
 
     render() {
+        // if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+        //     return null;
+        // }
         const root: Element | null = document.querySelector('#root');
         if (this.props.myTeams.length <= 1) {
             root!.classList.remove('multi-teams');

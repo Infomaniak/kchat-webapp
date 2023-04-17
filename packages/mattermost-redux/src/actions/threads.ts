@@ -163,7 +163,7 @@ export function getCountsAndThreadsSince(userId: string, teamId: string, since?:
     };
 }
 
-export function handleThreadArrived(dispatch: DispatchFunc, getState: GetStateFunc, threadData: UserThread, teamId: string, previousUnreadReplies?: number, previousUnreadMentions?: number) {
+export function handleThreadArrived(dispatch: DispatchFunc, getState: GetStateFunc, threadData: UserThread, teamId: string, previousUnreadReplies?: number, previousUnreadMentions?: number, fromWebsocket?: boolean) {
     const state = getState();
     const currentUserId = getCurrentUserId(state);
     const crtEnabled = isCollapsedThreadsEnabled(state);
@@ -185,6 +185,7 @@ export function handleThreadArrived(dispatch: DispatchFunc, getState: GetStateFu
         data: {
             thread,
             team_id: teamId,
+            fromWebsocket,
         },
     });
 

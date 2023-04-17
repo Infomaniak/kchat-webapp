@@ -11,9 +11,7 @@ const MIN_WEBSOCKET_RETRY_TIME = 3000; // 3 sec
 const MAX_WEBSOCKET_RETRY_TIME = 300000; // 5 mins
 const JITTER_RANGE = 2000; // 2 sec
 
-// const WEBSOCKET_HELLO = 'pusher:subscription_succeeded';
-
-// Fix error import
+// TODO: Fix error import
 // eslint-disable-next-line no-warning-comments
 // TODO update isDesktopApp() with callback
 function isDesktopApp(): boolean {
@@ -111,6 +109,23 @@ export default class WebSocketClient {
         this.currentTeam = '';
     }
 
+    unbindPusherEvents() {
+        this.conn?.connection.unbind('state_change');
+        this.conn?.connection.unbind('error');
+        this.conn?.connection.unbind('connected');
+    }
+
+    unbindGlobalsAndReset() {
+        this.teamChannel?.unbind_global();
+        this.userChannel?.unbind_global();
+        this.userTeamChannel?.unbind_global();
+        this.presenceChannel?.unbind_global();
+        this.teamChannel = null;
+        this.userChannel = null;
+        this.userTeamChannel = null;
+        this.presenceChannel = null;
+    }
+
     // on connect, only send auth cookie and blank state.
     // on hello, get the connectionID and store it.
     // on reconnect, send cookie, connectionID, sequence number.
@@ -119,9 +134,8 @@ export default class WebSocketClient {
         userId?: number,
         userTeamId?: string,
         teamId?: string,
-        token?: string,
         authToken?: string,
-        presenceChannelId?: string
+        presenceChannelId?: string,
     ) {
         let currentUserId: any;
         let currentUserTeamId: any;
@@ -164,8 +178,6 @@ export default class WebSocketClient {
                 authEndpoint: '/broadcasting/auth',
                 auth: {
                     headers: {
-
-                        // @ts-ignore
                         Authorization: `Bearer ${authToken}`,
                     },
                 },
@@ -207,6 +219,9 @@ export default class WebSocketClient {
             this.errorCount++;
             this.connectFailCount++;
 
+            // Unbind any Pusher event listeners before disconnecting Pusher instance
+            this.unbindPusherEvents();
+            this.unbindGlobalsAndReset();
             this.conn?.disconnect();
             this.conn = null;
             console.log('websocket closed');
@@ -236,7 +251,6 @@ export default class WebSocketClient {
                         this.currentUser as number,
                         this.currentTeamUser,
                         this.currentTeam,
-                        token,
                         authToken,
                         this.currentPresence,
                     );
@@ -245,27 +259,21 @@ export default class WebSocketClient {
             );
         });
 
-        this.conn.connection.bind('connecting', () => {
-            // eslint-disable-next-line no-console
-            console.log('[websocket] connecting with connectFailCount: ', this.connectFailCount);
-        });
-
         this.conn.connection.bind('connected', () => {
             this.subscribeToTeamChannel(teamId as string);
-
             this.subscribeToUserChannel(userId || currentUserId);
-            this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId)
+            this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId);
 
-            this.subscribeToPresenceChannel(presenceChannelId || currentPresenceChannelId);
-
-            // if ((presenceChannelId || currentPresenceChannelId) && !this.presenceChannel) {
-            //     this.bindPresenceChannel(presenceChannelId || currentPresenceChannelId);
-            // }
-
+            this.bindPresenceChannel(presenceChannelId || currentPresenceChannelId);
             this.bindChannelGlobally(this.teamChannel);
             this.bindChannelGlobally(this.userChannel);
+
+            // unbind previous listeners if needed to prevent duplicated callbacks
+            // TODO: obsolete, remove now that disconnect does a global unbind
+            if (this.userTeamChannel && this.userTeamChannel.global_callbacks.length > 0) {
+                this.userTeamChannel.unbind_global();
+            }
             this.bindChannelGlobally(this.userTeamChannel);
-            this.bindChannelGlobally(this.presenceChannel);
 
             console.log('[websocket] re-established connection');
             if (this.connectFailCount > 0) {
@@ -283,6 +291,21 @@ export default class WebSocketClient {
         });
     }
 
+    updateToken(token: string) {
+        if (this.conn) {
+            this.conn.disconnect();
+            this.conn = null;
+            this.initialize(
+                this.connectionUrl,
+                this.currentUser as number,
+                this.currentTeamUser,
+                this.currentTeam,
+                token,
+                this.currentPresence,
+            );
+        }
+    }
+
     subscribeToTeamChannel(teamId: string) {
         this.currentTeam = teamId;
         this.teamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
@@ -298,11 +321,6 @@ export default class WebSocketClient {
         this.userTeamChannel = this.conn?.subscribe(`presence-teamUser.${teamUserId}`) as Channel;
     }
 
-    subscribeToPresenceChannel(channelID: string) {
-        this.currentPresence = channelID;
-        this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
-    }
-
     bindPresenceChannel(channelID: string) {
         this.currentPresence = channelID;
         this.presenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
@@ -312,17 +330,16 @@ export default class WebSocketClient {
     }
 
     unbindPresenceChannel(channelID: string) {
-        // @ts-ignore
         this.conn?.unsubscribe(`presence-channel.${channelID}`);
 
-        // if (this.presenceChannel) {
-        //     this.unbindChannelGlobally(this.presenceChannel);
-        // }
+        if (this.presenceChannel) {
+            this.unbindChannelGlobally(this.presenceChannel);
+        }
     }
 
     bindChannelGlobally(channel: Channel | null) {
         // @ts-ignore
-        channel.bind_global((evt, data) => {
+        channel?.bind_global((evt, data) => {
             // console.error(`The event ${evt} was triggered with data`);
             // console.error(data);
 
@@ -343,39 +360,6 @@ export default class WebSocketClient {
                     Reflect.deleteProperty(this.responseCallbacks, data.seq_reply);
                 }
             } else if (this.eventCallback || this.messageListeners.size > 0) {
-                // We check the hello packet, which is always the first packet in a stream.
-                // if (evt === WEBSOCKET_HELLO && (this.missedEventCallback || this.missedMessageListeners.size > 0)) {
-                //     console.log('got connection id ', data.connection_id); //eslint-disable-line no-console
-                //     // If we already have a connectionId present, and server sends a different one,
-                //     // that means it's either a long timeout, or server restart, or sequence number is not found.
-                //     // Then we do the sync calls, and reset sequence number to 0.
-                //     if (this.connectionId !== '' && this.connectionId !== data.connection_id) {
-                //         console.log('long timeout, or server restart, or sequence number is not found.'); //eslint-disable-line no-console
-
-                //         this.missedEventCallback?.();
-                //         this.missedMessageListeners.forEach((listener) => listener());
-
-                //         this.serverSequence = 0;
-                //     }
-
-                //     // If it's a fresh connection, we have to set the connectionId regardless.
-                //     // And if it's an existing connection, setting it again is harmless, and keeps the code simple.
-                //     this.connectionId = data.connection_id;
-                // }
-
-                // TODO check if we need this
-                // Now we check for sequence number, and if it does not match,
-                // we just disconnect and reconnect.
-                // if (data.seq !== this.serverSequence) {
-                //     console.log('missed websocket event, act_seq=' + data.seq + ' exp_seq=' + this.serverSequence); //eslint-disable-line no-console
-                //     // We are not calling this.close() because we need to auto-restart.
-                //     this.connectFailCount = 0;
-                //     this.responseSequence = 1;
-                //     this.conn?.disconnect(); // Will auto-reconnect after MIN_WEBSOCKET_RETRY_TIME.
-                //     return;
-                // }
-                // this.serverSequence = data.seq + 1;
-
                 // @ts-ignore
                 this.eventCallback?.({event: evt, data});
 
@@ -419,6 +403,10 @@ export default class WebSocketClient {
 
     addMessageListener(listener: MessageListener) {
         this.messageListeners.add(listener);
+        if (this.messageListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.messageListeners.size} message listeners registered`);
+        }
     }
 
     removeMessageListener(listener: MessageListener) {
@@ -434,6 +422,11 @@ export default class WebSocketClient {
 
     addFirstConnectListener(listener: FirstConnectListener) {
         this.firstConnectListeners.add(listener);
+
+        if (this.firstConnectListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.firstConnectListeners.size} first connect listeners registered`);
+        }
     }
 
     removeFirstConnectListener(listener: FirstConnectListener) {
@@ -449,6 +442,11 @@ export default class WebSocketClient {
 
     addReconnectListener(listener: ReconnectListener) {
         this.reconnectListeners.add(listener);
+
+        if (this.reconnectListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.reconnectListeners.size} reconnect listeners registered`);
+        }
     }
 
     removeReconnectListener(listener: ReconnectListener) {
@@ -464,6 +462,11 @@ export default class WebSocketClient {
 
     addMissedMessageListener(listener: MissedMessageListener) {
         this.missedMessageListeners.add(listener);
+
+        if (this.missedMessageListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.missedMessageListeners.size} missed message listeners registered`);
+        }
     }
 
     removeMissedMessageListener(listener: MissedMessageListener) {
@@ -479,6 +482,11 @@ export default class WebSocketClient {
 
     addErrorListener(listener: ErrorListener) {
         this.errorListeners.add(listener);
+
+        if (this.errorListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.errorListeners.size} error listeners registered`);
+        }
     }
 
     removeErrorListener(listener: ErrorListener) {
@@ -494,6 +502,11 @@ export default class WebSocketClient {
 
     addCloseListener(listener: CloseListener) {
         this.closeListeners.add(listener);
+
+        if (this.closeListeners.size > 5) {
+            // eslint-disable-next-line no-console
+            console.warn(`WebSocketClient has ${this.closeListeners.size} close listeners registered`);
+        }
     }
 
     removeCloseListener(listener: CloseListener) {
@@ -505,6 +518,9 @@ export default class WebSocketClient {
         this.responseSequence = 1;
 
         if (this.conn && this.conn.connection.state === 'connected') {
+            // Unbind any Pusher event listeners before disconnecting Pusher instance
+            this.unbindPusherEvents();
+            this.unbindGlobalsAndReset();
             this.conn.disconnect();
             this.conn = null;
             console.log('websocket closed'); //eslint-disable-line no-console

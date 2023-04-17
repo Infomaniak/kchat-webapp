@@ -98,4 +98,6 @@ export default keyMirror({
     DECREMENT_PINNED_POST_COUNT: null,
 
     INCREMENT_FILE_COUNT: null,
+    RECEIVED_CHANNEL_PENDING_GUESTS: null,
+    CANCELED_PENDING_GUEST_INVITE: null,
 });

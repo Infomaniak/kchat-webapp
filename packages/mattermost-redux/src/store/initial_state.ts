@@ -58,6 +58,7 @@ const state: GlobalState = {
             channelModerations: {},
             channelMemberCountsByGroup: {},
             messageCounts: {},
+            pendingGuests: {},
         },
         posts: {
             expandedURLs: {},
@@ -208,7 +209,13 @@ const state: GlobalState = {
         },
         cloud: {
             limits: {
-                limits: {},
+                limits: {
+                    public_channels: 0,
+                    private_channels: 0,
+                    members: 0,
+                    guests: 0,
+                    storage: 0,
+                },
                 limitsLoaded: false,
             },
             errors: {},
@@ -233,6 +240,7 @@ const state: GlobalState = {
             public_channels: 0,
             private_channels: 0,
             guests: 0,
+            pending_guests: 0,
             members: 0,
             usageLoaded: false,
             files: {
@@ -313,6 +321,10 @@ const state: GlobalState = {
         },
         teams: {
             getMyTeams: {
+                status: 'not_started',
+                error: null,
+            },
+            getMyKSuites: {
                 status: 'not_started',
                 error: null,
             },

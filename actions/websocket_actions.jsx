@@ -120,7 +120,7 @@ import InteractiveDialog from 'components/interactive_dialog';
 // import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {checkIKTokenIsExpired, needRefreshToken, refreshIKToken} from 'components/login/utils';
+import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
@@ -184,13 +184,9 @@ export function initialize() {
 
     // connUrl += Client4.getUrlVersion() + '/websocket';
 
-    // const authToken = Client4.getToken();
-
-    const tokenExpire = localStorage.getItem('IKTokenExpire');
     const token = localStorage.getItem('IKToken');
-    const refreshToken = localStorage.getItem('IKRefreshToken');
 
-    if (isDesktopApp() && (!token || !refreshToken || !tokenExpire)) {
+    if (isDesktopApp() && !token) {
         // eslint-disable-next-line no-console
         console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
         getHistory().push('/login');
@@ -202,7 +198,7 @@ export function initialize() {
 
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
-    WebSocketClient.addReconnectListener(() => reconnect(false));
+    WebSocketClient.addReconnectListener(reconnect);
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
@@ -211,19 +207,18 @@ export function initialize() {
         user.user_id,
         user.id,
         user.team_id,
-        null,
         token,
-        currentChannelId
+        currentChannelId,
     );
 }
 
 export function close() {
     WebSocketClient.close();
-}
-
-export function reconnectWebSocket() {
-    close();
-    initialize();
+    WebSocketClient.removeMessageListener(handleEvent);
+    WebSocketClient.removeFirstConnectListener(handleFirstConnect);
+    WebSocketClient.removeReconnectListener(reconnect);
+    WebSocketClient.removeMissedMessageListener(restart);
+    WebSocketClient.removeCloseListener(handleClose);
 }
 
 const pluginReconnectHandlers = {};
@@ -237,19 +232,18 @@ export function unregisterPluginReconnectHandler(pluginId) {
 }
 
 function restart() {
-    reconnect(false);
+    reconnect();
 
     // We fetch the client config again on the server restart.
     dispatch(getClientConfig());
 }
 
-export async function reconnect(includeWebSocket = true) {
+export async function reconnect() {
+    // eslint-disable-next-line
+    console.log('Reconnecting WebSocket');
     if (isDesktopApp()) {
-        const tokenExpire = localStorage.getItem('IKTokenExpire');
         const token = localStorage.getItem('IKToken');
-        const refreshToken = localStorage.getItem('IKRefreshToken');
-
-        if (!token || !refreshToken || !tokenExpire) {
+        if (!token) {
             // eslint-disable-next-line no-console
             console.log('[websocket_actions > reconnect] token storage corrupt, redirecting to login');
             getHistory().push('/login');
@@ -259,22 +253,19 @@ export async function reconnect(includeWebSocket = true) {
         if (checkIKTokenIsExpired()) {
             // eslint-disable-next-line no-console
             console.log('[websocket_actions > reconnect] token expired, calling refresh');
-            includeWebSocket = true; // eslint-disable-line no-param-reassign
             try {
-                await refreshIKToken(/*redirectToTeam**/false);
-            } catch {
-                // swallow
-                includeWebSocket = false; // eslint-disable-line no-param-reassign
+                const newToken = await refreshIKToken(/*redirectToTeam**/false);
+                // eslint-disable-next-line no-console
+                console.log('[websocket_actions > reconnect] token refreshed, new token: ', newToken);
+                if (newToken) {
+                    WebSocketClient.updateToken(newToken);
+                }
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.warn(e);
             }
         }
     }
-
-    if (includeWebSocket) {
-        // eslint-disable-next-line no-console
-        console.log('[websocket_actions > reconnect] reconnecting websocket with new token');
-        reconnectWebSocket();
-    }
-
     dispatch({
         type: GeneralTypes.WEBSOCKET_SUCCESS,
         timestamp: Date.now(),
@@ -332,6 +323,7 @@ export async function reconnect(includeWebSocket = true) {
         // eslint-disable-next-line no-console
         console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
         dispatch(checkForModifiedUsers());
+        dispatch(TeamActions.getMyKSuites());
     }
 
     dispatch(resetWsErrorCount());
@@ -341,12 +333,17 @@ export async function reconnect(includeWebSocket = true) {
 function syncThreads(teamId, userId) {
     const state = getState();
     const newestThread = getNewestThreadInTeam(state, teamId);
-
-    // no need to sync if we have nothing yet
-    if (!newestThread) {
-        return;
+    let lastReplyAt;
+    if (newestThread) {
+        lastReplyAt = newestThread.last_reply_at;
     }
-    dispatch(getCountsAndThreadsSince(userId, teamId, newestThread.last_reply_at));
+
+    // Even if the store contains no thread in current team we should fetch threads
+    // Scenario:
+    // The user has no thread and disconnects on global threads page.
+    // He receives some threads while he is away.
+    // When he reconnects, the app should retreive potential new threads
+    dispatch(getCountsAndThreadsSince(userId, teamId, lastReplyAt));
 }
 
 export function registerPluginWebSocketEvent(pluginId, event, action) {
@@ -669,12 +666,13 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED:
         dispatch(handleHostedCustomerSignupProgressUpdated(msg));
-        // break;
-    // case SocketEvents.KSUITE_ADDED:
-    //     handleKSuiteAdded(msg)
-    //     break;
-    // case SocketEvents.KSUITE_DELETED:
-    //     handleKSuiteDeleted(msg)
+        break;
+    case SocketEvents.KSUITE_ADDED:
+        dispatch(handleKSuiteAdded(msg));
+        break;
+    case SocketEvents.KSUITE_DELETED:
+        dispatch(handleKSuiteDeleted(msg));
+        break;
     default:
     }
 
@@ -893,12 +891,45 @@ export function handlePostUnreadEvent(msg) {
     );
 }
 
-async function handleKSuiteAdded(msg) {
-    window.authManager.addTeam(msg.data.team)
+function handleKSuiteAdded(msg) {
+    return (doDispatch, doGetState) => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams: [
+                            ...getMyKSuites(doGetState()),
+                            msg.data.team,
+                        ],
+                    },
+                },
+                window.origin,
+            );
+        }
+        doDispatch({type: TeamTypes.RECEIVED_TEAM, data: msg.data.team});
+    };
 }
 
-async function handleKSuiteDeleted(msg) {
-    window.authManager.deleteTeam(msg.data.team)
+function handleKSuiteDeleted(msg) {
+    return (doDispatch, doGetState) => {
+        if (isDesktopApp()) {
+            const currentTeams = getMyKSuites(doGetState());
+            const newTeams = currentTeams.filter((team) => team.id !== msg.data.team.id);
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams: newTeams,
+                    },
+                },
+                window.origin,
+            );
+        }
+
+        doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}});
+        doDispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
+    };
 }
 
 async function handleTeamAddedEvent(msg) {
@@ -1762,7 +1793,7 @@ function handleThreadUpdated(msg) {
             dispatch(updateThreadRead(currentUserId, currentTeamId, threadData.id, lastViewedAt));
         }
 
-        handleThreadArrived(doDispatch, doGetState, threadData, msg.data.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions);
+        handleThreadArrived(doDispatch, doGetState, threadData, msg.data.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions, /*fromWebsocket*/ true);
     };
 }
 

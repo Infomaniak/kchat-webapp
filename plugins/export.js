@@ -11,7 +11,7 @@ import {getHistory} from 'utils/browser_history';
 import {openModal} from 'actions/views/modals';
 import {ModalIdentifiers} from 'utils/constants';
 import {useWebSocket, useWebSocketClient, WebSocketContext} from 'utils/use_websocket';
-import {imageURLForUser} from 'utils/utils';
+import {imageURLForUser,registerDevice} from 'utils/utils';
 
 import ChannelInviteModal from 'components/channel_invite_modal';
 import ChannelMembersModal from 'components/channel_members_modal';
@@ -20,8 +20,6 @@ import {useNotifyAdmin} from 'components/notify_admin_cta/notify_admin_cta';
 import Timestamp from 'components/timestamp';
 import Avatar from 'components/widgets/users/avatar';
 import BotBadge from 'components/widgets/badges/bot_badge';
-
-import {openPricingModal} from '../components/global_header/right_controls/plan_upgrade_button';
 
 import Textbox from './textbox';
 
@@ -51,12 +49,6 @@ Object.defineProperty(window.WebappUtils, 'browserHistory', {
     get: () => getHistory(),
 });
 
-// This need to be a function because `openPricingModal`
-// is initialized when `UpgradeCloudButton` is loaded.
-// So if we export `openPricingModal` directly, it will be locked
-// to the initial value of undefined.
-window.openPricingModal = () => openPricingModal;
-
 // Components exposed on window FOR INTERNAL PLUGIN USE ONLY. These components may have breaking changes in the future
 // outside of major releases. They will be replaced by common components once that project is more mature and able to
 // guarantee better compatibility.
@@ -68,6 +60,7 @@ window.Components = {
     ChannelMembersModal,
     Avatar,
     imageURLForUser,
+    registerDevice,
     BotBadge,
 };
 

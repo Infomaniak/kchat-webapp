@@ -5,6 +5,7 @@ import React from 'react';
 import classNames from 'classnames';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import {CloseIcon} from '@infomaniak/compass-icons/components';
 
 export type Props = {
     className?: string;
@@ -79,7 +80,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
     }
 
     private onEnterKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !this.props.isConfirmDisabled) {
             if (this.props.autoCloseOnConfirmButton) {
                 this.onHide();
             }
@@ -148,6 +149,20 @@ export class GenericModal extends React.PureComponent<Props, State> {
             </div>
         );
 
+        const closeButton = (
+            <button
+                className='close'
+                type='button'
+                aria-label='Close'
+                onClick={this.onHide}
+            >
+                <CloseIcon
+                    size={16}
+                    color={'rgba(var(--center-channel-color-rgb), 0.56)'}
+                />
+            </button>
+        );
+
         return (
             <Modal
                 dialogClassName={classNames('a11y__modal GenericModal', {GenericModal__compassDesign: this.props.compassDesign}, this.props.className)}
@@ -169,7 +184,8 @@ export class GenericModal extends React.PureComponent<Props, State> {
                     tabIndex={0}
                     className='GenericModal__wrapper-enter-key-press-catcher'
                 >
-                    <Modal.Header closeButton={true}>
+                    <Modal.Header closeButton={false}>
+                        {closeButton}
                         {this.props.compassDesign && headerText}
                     </Modal.Header>
                     <Modal.Body>

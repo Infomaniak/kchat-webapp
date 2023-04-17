@@ -28,7 +28,9 @@ import {
 } from 'mattermost-redux/selectors/entities/preferences';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {isCurrentUserGuestUser, isCurrentUserSystemAdmin, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentTeamDefaultChannelId} from 'mattermost-redux/selectors/entities/channels';
 
+import {ChannelCategory} from '@mattermost/types/channel_categories';
 import {GlobalState} from 'types/store';
 import {
     openInvitationsModal,
@@ -36,15 +38,15 @@ import {
     setShowOnboardingVisitConsoleTour,
     switchToChannels,
 } from 'actions/views/onboarding_tasks';
+import {collapseAllCategoriesExcept} from 'actions/views/channel_sidebar';
+import {open as openLhs} from 'actions/views/lhs';
 
 import {ModalIdentifiers, TELEMETRY_CATEGORIES, ExploreOtherToolsTourSteps} from 'utils/constants';
 
 import BullsEye from 'components/common/svg_images_components/bulls_eye_svg';
-import Channels from 'components/common/svg_images_components/channels_svg';
 import Clipboard from 'components/common/svg_images_components/clipboard_svg';
 import Gears from 'components/common/svg_images_components/gears_svg';
 import Handshake from 'components/common/svg_images_components/handshake_svg';
-import Phone from 'components/common/svg_images_components/phone_svg';
 import Security from 'components/common/svg_images_components/security_svg';
 import Sunglasses from 'components/common/svg_images_components/sunglasses_svg';
 import Wrench from 'components/common/svg_images_components/wrench_svg';
@@ -59,9 +61,8 @@ const useGetTaskDetails = () => {
     return {
         [OnboardingTasksName.CHANNELS_TOUR]: {
             id: 'task_learn_more_about_messaging',
-            svg: Channels,
             message: formatMessage({
-                id: 'onboardingTask.checklist.task_learn_more_about_messaging',
+                id: 'onboardingTask.taskList.introduction',
                 defaultMessage: 'Take a tour of Channels.',
             }),
         },
@@ -109,9 +110,8 @@ const useGetTaskDetails = () => {
 
         [OnboardingTasksName.DOWNLOAD_APP]: {
             id: 'task_download_mm_apps',
-            svg: Phone,
             message: formatMessage({
-                id: 'onboardingTask.checklist.task_download_mm_apps',
+                id: 'onboardingTask.taskList.download',
                 defaultMessage: 'Download the Desktop and Mobile Apps.',
             }),
         },
@@ -149,33 +149,28 @@ export const useTasksList = () => {
     });
 
     // Cloud conditions
-    const subscription = useSelector((state: GlobalState) => state.entities.cloud.subscription);
-    const isCloud = license?.Cloud === 'true';
-    const isFreeTrial = subscription?.is_free_trial === 'true';
-    const hadPrevCloudTrial = subscription?.is_free_trial === 'false' && subscription?.trial_end_at > 0;
+    // const subscription = useSelector((state: GlobalState) => state.entities.cloud.subscription);
+    // const isCloud = license?.Cloud === 'true';
+    // const isFreeTrial = subscription?.is_free_trial === 'true';
+    // const hadPrevCloudTrial = subscription?.is_free_trial === 'false' && subscription?.trial_end_at > 0;
 
     // Show this CTA if the instance is currently not licensed and has never had a trial license loaded before
     // if Cloud, show if not in trial and had never been on trial
-    const selfHostedTrialCondition = isCurrentLicensed === 'false' && isPrevLicensed === 'false';
-    const cloudTrialCondition = isCloud && !isFreeTrial && !hadPrevCloudTrial;
+    // const selfHostedTrialCondition = isCurrentLicensed === 'false' && isPrevLicensed === 'false';
+    // const cloudTrialCondition = isCloud && !isFreeTrial && !hadPrevCloudTrial;
 
-    const showStartTrialTask = selfHostedTrialCondition || cloudTrialCondition;
+    // const showStartTrialTask = selfHostedTrialCondition || cloudTrialCondition;
 
     const list: Record<string, string> = {...OnboardingTasksName};
-    if (!pluginsList.focalboard || !isUserFirstAdmin) {
-        delete list.BOARDS_TOUR;
-    }
-    if (!pluginsList.playbooks || !isUserFirstAdmin) {
-        delete list.PLAYBOOKS_TOUR;
-    }
-    if (!showStartTrialTask) {
-        delete list.START_TRIAL;
-    }
 
-    if (!isUserFirstAdmin && !isUserAdmin) {
-        delete list.VISIT_SYSTEM_CONSOLE;
-        delete list.START_TRIAL;
-    }
+    delete list.BOARDS_TOUR;
+    delete list.PLAYBOOKS_TOUR;
+    delete list.START_TRIAL;
+
+    // if (!isUserFirstAdmin && !isUserAdmin) {
+    //     delete list.VISIT_SYSTEM_CONSOLE;
+    //     delete list.START_TRIAL;
+    // }
 
     // explore other tools tour is only shown to subsequent admins and end users
     if (isUserFirstAdmin || (!pluginsList.playbooks && !pluginsList.focalboard)) {
@@ -183,15 +178,17 @@ export const useTasksList = () => {
     }
 
     // invite other users is hidden for guest users
-    if (isGuestUser) {
-        delete list.INVITE_PEOPLE;
-    }
+    // if (isGuestUser) {
+    // }
+
+    delete list.INVITE_PEOPLE;
 
     if (isThinOnBoardingTaskList) {
         delete list.DOWNLOAD_APP;
-        delete list.COMPLETE_YOUR_PROFILE;
-        delete list.VISIT_SYSTEM_CONSOLE;
     }
+
+    delete list.COMPLETE_YOUR_PROFILE;
+    delete list.VISIT_SYSTEM_CONSOLE;
     return Object.values(list);
 };
 
@@ -209,9 +206,9 @@ export const useTasksListWithStatus = () => {
                     const {id, svg, message} = getTaskDetails[task];
                     return (
                         <div key={id}>
-                            <picture>
+                            {svg && <picture>
                                 {React.createElement(svg, {width: 24, height: 24})}
-                            </picture>
+                            </picture>}
                             <span>{message}</span>
                         </div>
                     );
@@ -261,6 +258,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
 
     const handleSaveData = useHandleOnBoardingTaskData();
     const currentUserId = useSelector(getCurrentUserId);
+    const currentTeamDefaultChannelId = useSelector(getCurrentTeamDefaultChannelId);
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const inAdminConsole = matchPath(pathname, {path: '/admin_console'}) != null;
     const inChannels = matchPath(pathname, {path: '/:team/channels/:chanelId'}) != null;
@@ -271,7 +269,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
         switch (taskName) {
         case OnboardingTasksName.CHANNELS_TOUR: {
             handleSaveData(taskName, TaskNameMapToSteps[taskName].STARTED, true);
-            const tourCategory = TutorialTourName.ONBOARDING_TUTORIAL_STEP;
+            const tourCategory = isGuestUser ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP;
             const preferences = [
                 {
                     user_id: currentUserId,
@@ -279,7 +277,8 @@ export const useHandleOnBoardingTaskTrigger = () => {
                     name: currentUserId,
 
                     // use SEND_MESSAGE when user is guest (channel creation and invitation are restricted), so only message box and the configure tips are shown
-                    value: isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE.toString() : OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES.toString(),
+                    // value: isGuestUser ? OnboardingTourStepsForGuestUsers.SEND_MESSAGE.toString() : OnboardingTourSteps.CHANNELS_AND_DIRECT_MESSAGES.toString(),
+                    value: OnboardingTourSteps.CHANNELS.toString(),
                 },
                 {
                     user_id: currentUserId,
@@ -292,6 +291,8 @@ export const useHandleOnBoardingTaskTrigger = () => {
             if (!inChannels) {
                 dispatch(switchToChannels());
             }
+            dispatch(openLhs());
+            dispatch(collapseAllCategoriesExcept((category: ChannelCategory) => !category.channel_ids.includes(currentTeamDefaultChannelId)));
             break;
         }
         case OnboardingTasksName.BOARDS_TOUR: {
@@ -365,7 +366,7 @@ export const useHandleOnBoardingTaskTrigger = () => {
                 value: 'true',
             }];
             dispatch(savePreferences(currentUserId, preferences));
-            window.open('https://mattermost.com/download/', '_blank', 'noopener,noreferrer');
+            window.open('https://infomaniak.com/gtl/apps.kchat', '_blank', 'noopener,noreferrer');
             break;
         }
         case OnboardingTasksName.START_TRIAL: {

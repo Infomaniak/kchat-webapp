@@ -95,6 +95,10 @@ export function isLinux() {
     return navigator.platform.toUpperCase().indexOf('LINUX') >= 0;
 }
 
+export function registerDevice(device_id: string) {
+    return Client4.registerDevice(device_id);
+}
+
 export function createSafeId(prop: {props: {defaultMessage: string}} | string): string | undefined {
     let str = '';
 
@@ -719,6 +723,8 @@ export function applyTheme(theme: Theme) {
             'ik-illustration-grey-13': theme.ikIllustrationGreyThirteen,
             'ik-illustration-grey-14': theme.ikIllustrationGreyFourteen,
             'ik-illustration-grey-15': theme.ikIllustrationGreyFifteen,
+            'ik-illustration-grey-16': theme.ikIllustrationGreySixteen,
+            'ik-illustration-grey-17': theme.ikIllustrationGreySeventeen,
         },
     });
 }

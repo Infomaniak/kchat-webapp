@@ -68,6 +68,9 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
     const currentTeam = currentTeamId === '' && props.channelToInvite ? getTeam(state, props.channelToInvite.team_id) : getCurrentTeam(state);
     const currentChannel = getCurrentChannel(state);
     const invitableChannels = channels.filter((channel) => {
+        if (channel.delete_at > 0) {
+            return false;
+        }
         if (channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) {
             return false;
         }

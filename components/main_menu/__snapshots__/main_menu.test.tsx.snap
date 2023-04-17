@@ -76,12 +76,6 @@ exports[`components/Menu should match snapshot with guest access disabled and no
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <MenuItemLink
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
   </MenuGroup>
   <MenuGroup />
   <MenuGroup>
@@ -168,12 +162,6 @@ exports[`components/Menu should match snapshot with id 1`] = `
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <MenuItemLink
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
   </MenuGroup>
   <MenuGroup />
   <MenuGroup>
@@ -259,12 +247,6 @@ exports[`components/Menu should match snapshot with most of the thing disabled 1
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <MenuItemLink
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
   </MenuGroup>
   <MenuGroup />
   <MenuGroup>
@@ -282,32 +264,6 @@ exports[`components/Menu should match snapshot with most of the thing disabled i
 <Menu
   ariaLabel="main menu"
 >
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "sysconsole_write_billing",
-        ]
-      }
-    >
-      <MenuCloudTrial
-        id="menuCloudTrial"
-      />
-    </Connect(SystemPermissionGate)>
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "sysconsole_write_about_edition_and_license",
-        ]
-      }
-    >
-      <MenuStartTrial
-        id="startTrial"
-      />
-    </Connect(SystemPermissionGate)>
-  </MenuGroup>
   <MenuGroup>
     <MenuItemAction
       icon={
@@ -380,22 +336,6 @@ exports[`components/Menu should match snapshot with most of the thing disabled i
   </MenuGroup>
   <MenuGroup />
   <MenuGroup />
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          undefined,
-        ]
-      }
-    >
-      <MenuItemAction
-        id="dashboardManager"
-        onClick={[Function]}
-        show={true}
-        text="Tableau de bord"
-      />
-    </Connect(SystemPermissionGate)>
-  </MenuGroup>
   <MenuGroup>
     <MenuItemLink
       id="integrations"
@@ -492,12 +432,6 @@ exports[`components/Menu should match snapshot with most of the thing enabled 1`
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <MenuItemLink
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
   </MenuGroup>
   <MenuGroup />
   <MenuGroup>
@@ -515,32 +449,6 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
 <Menu
   ariaLabel="main menu"
 >
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "sysconsole_write_billing",
-        ]
-      }
-    >
-      <MenuCloudTrial
-        id="menuCloudTrial"
-      />
-    </Connect(SystemPermissionGate)>
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "sysconsole_write_about_edition_and_license",
-        ]
-      }
-    >
-      <MenuStartTrial
-        id="startTrial"
-      />
-    </Connect(SystemPermissionGate)>
-  </MenuGroup>
   <MenuGroup>
     <MenuItemAction
       icon={
@@ -613,22 +521,6 @@ exports[`components/Menu should match snapshot with most of the thing enabled in
   </MenuGroup>
   <MenuGroup />
   <MenuGroup />
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          undefined,
-        ]
-      }
-    >
-      <MenuItemAction
-        id="dashboardManager"
-        onClick={[Function]}
-        show={true}
-        text="Tableau de bord"
-      />
-    </Connect(SystemPermissionGate)>
-  </MenuGroup>
   <MenuGroup>
     <MenuItemLink
       id="integrations"
@@ -725,12 +617,6 @@ exports[`components/Menu should match snapshot with plugins 1`] = `
         text="Manage Groups"
       />
     </Connect(TeamPermissionGate)>
-    <MenuItemLink
-      id="joinTeam"
-      show={false}
-      text="Join Another Team"
-      to="/select_team"
-    />
   </MenuGroup>
   <MenuGroup>
     <MenuItemAction
@@ -763,32 +649,6 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
 <Menu
   ariaLabel="main menu"
 >
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "sysconsole_write_billing",
-        ]
-      }
-    >
-      <MenuCloudTrial
-        id="menuCloudTrial"
-      />
-    </Connect(SystemPermissionGate)>
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          "sysconsole_write_about_edition_and_license",
-        ]
-      }
-    >
-      <MenuStartTrial
-        id="startTrial"
-      />
-    </Connect(SystemPermissionGate)>
-  </MenuGroup>
   <MenuGroup>
     <MenuItemAction
       icon={
@@ -873,22 +733,6 @@ exports[`components/Menu should match snapshot with plugins in mobile 1`] = `
       onClick={[Function]}
       show={true}
     />
-  </MenuGroup>
-  <MenuGroup>
-    <Connect(SystemPermissionGate)
-      permissions={
-        Array [
-          undefined,
-        ]
-      }
-    >
-      <MenuItemAction
-        id="dashboardManager"
-        onClick={[Function]}
-        show={true}
-        text="Tableau de bord"
-      />
-    </Connect(SystemPermissionGate)>
   </MenuGroup>
   <MenuGroup>
     <MenuItemLink

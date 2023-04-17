@@ -12,32 +12,6 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
     style={Object {}}
   >
     <MenuGroup>
-      <Connect(SystemPermissionGate)
-        permissions={
-          Array [
-            "sysconsole_write_billing",
-          ]
-        }
-      >
-        <MenuCloudTrial
-          id="menuCloudTrial"
-        />
-      </Connect(SystemPermissionGate)>
-    </MenuGroup>
-    <MenuGroup>
-      <Connect(SystemPermissionGate)
-        permissions={
-          Array [
-            "sysconsole_write_about_edition_and_license",
-          ]
-        }
-      >
-        <MenuStartTrial
-          id="startTrial"
-        />
-      </Connect(SystemPermissionGate)>
-    </MenuGroup>
-    <MenuGroup>
       <MenuItemAction
         icon={
           <i
@@ -116,22 +90,6 @@ exports[`plugins/MainMenuActions should match snapshot in mobile view with some 
         show={true}
         text="some plugin text"
       />
-    </MenuGroup>
-    <MenuGroup>
-      <Connect(SystemPermissionGate)
-        permissions={
-          Array [
-            undefined,
-          ]
-        }
-      >
-        <MenuItemAction
-          id="dashboardManager"
-          onClick={[Function]}
-          show={true}
-          text="Tableau de bord"
-        />
-      </Connect(SystemPermissionGate)>
     </MenuGroup>
     <MenuGroup>
       <MenuItemLink
@@ -237,12 +195,6 @@ exports[`plugins/MainMenuActions should match snapshot in web view 1`] = `
           text="Manage Groups"
         />
       </Connect(TeamPermissionGate)>
-      <MenuItemLink
-        id="joinTeam"
-        show={true}
-        text="Join Another Team"
-        to="/select_team"
-      />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction

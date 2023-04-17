@@ -14,11 +14,10 @@ import {openModal} from 'actions/views/modals';
 import UserGuideDropdown from './user_guide_dropdown';
 
 function mapStateToProps(state: GlobalState) {
-    const {HelpLink, ReportAProblemLink, EnableAskCommunityLink} = getConfig(state);
+    const {HelpLink, ReportAProblemLink} = getConfig(state);
     return {
         helpLink: HelpLink!,
         reportAProblemLink: ReportAProblemLink!,
-        enableAskCommunityLink: EnableAskCommunityLink!,
     };
 }
 

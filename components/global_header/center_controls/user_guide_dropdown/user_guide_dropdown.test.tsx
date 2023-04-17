@@ -24,7 +24,6 @@ describe('components/channel_header/components/UserGuideDropdown', () => {
         helpLink: 'helpLink',
         isMobileView: false,
         reportAProblemLink: 'reportAProblemLink',
-        enableAskCommunityLink: 'true',
         location: {
             pathname: '/team/channel/channelId',
         },
@@ -40,19 +39,6 @@ describe('components/channel_header/components/UserGuideDropdown', () => {
     test('should match snapshot', () => {
         const wrapper = shallowWithIntl(
             <UserGuideDropdown {...baseProps}/>,
-        );
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should match snapshot for false of enableAskCommunityLink', () => {
-        const props = {
-            ...baseProps,
-            enableAskCommunityLink: 'false',
-        };
-
-        const wrapper = shallowWithIntl(
-            <UserGuideDropdown {...props}/>,
         );
 
         expect(wrapper).toMatchSnapshot();
@@ -90,16 +76,6 @@ describe('components/channel_header/components/UserGuideDropdown', () => {
         wrapper.find(Menu.ItemAction).find('#keyboardShortcuts').prop('onClick')!({preventDefault: jest.fn()} as unknown as React.MouseEvent);
         expect(baseProps.actions.openModal).toHaveBeenCalled();
     });
-
-    // btn removed temporary
-    // test('Should call for track event on click of askTheCommunityLink', () => {
-    //     const wrapper = shallowWithIntl(
-    //         <UserGuideDropdown {...baseProps}/>,
-    //     );
-    //
-    //     wrapper.find(Menu.ItemExternalLink).find('#askTheCommunityLink').prop('onClick')!({} as unknown as React.MouseEvent);
-    //     expect(trackEvent).toBeCalledWith('ui', 'help_ask_the_community');
-    // });
 
     test('should have plugin menu items appended to the menu', () => {
         const props = {

@@ -11,6 +11,7 @@ const https = require('https');
 const path = require('path');
 
 const url = require('url');
+
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExternalTemplateRemotesPlugin = require('external-remotes-plugin');
 const webpack = require('webpack');
@@ -46,6 +47,7 @@ const STANDARD_EXCLUDE = [
 
 const CSP_UNSAFE_EVAL_IF_DEV = ' \'unsafe-eval\'';
 const CSP_UNSAFE_INLINE = ' \'unsafe-inline\'';
+const CSP_WORKER_SRC = ' \'worker-src\'';
 
 var MYSTATS = {
 
@@ -159,6 +161,7 @@ var config = {
         chunkFilename: '[name].[contenthash].js',
         clean: true,
     },
+    devtool: 'source-map',
     stats: {
         warnings: false,
     },
@@ -680,16 +683,6 @@ if (targetIsDevServer) {
             server: 'https',
             allowedHosts: 'all',
             liveReload: true,
-            // proxy: {
-
-            //     // Forward these requests to the server
-            //     '/api': {
-            //         ...proxyToServer,
-            //         ws: true,
-            //     },
-            //     '/plugins': proxyToServer,
-            //     '/static/plugins': proxyToServer,
-            // },
             proxy: [{
                 context: () => true,
                 bypass(req) {
@@ -708,7 +701,7 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: process.env.BASE_URL || 'https://kchat.infomaniak.com', //eslint-disable-line no-process-env
+                target: process.env.BASE_URL || 'https://infomaniak.kchat.infomaniak.com/', //eslint-disable-line no-process-env
                 changeOrigin: true,
                 xfwd: true,
                 ws: false,

@@ -410,7 +410,7 @@ export async function redirectUserToDefaultTeam() {
 
     let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
-        getHistory().push('/select_team');
+        getHistory().push('/error?type=no_ksuite');
         return;
     }
 
@@ -440,17 +440,29 @@ export async function redirectUserToDefaultTeam() {
         }
     }
 
-    getHistory().push('/select_team');
+    getHistory().push('/error?type=team_not_found');
 }
 
 export function redirectToManagerDashboard(groupId: number) {
     window.open(`${IKConstants.MANAGER_URL}v3/${groupId}/ng/kchat`, '_blank');
 }
 
-export function redirectToManagerProfile() {
-    window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
+export function redirectToShop() {
+    window.open('https://www.infomaniak.com/gtl/kchat', '_blank');
 }
 
-export function redirectTokSuiteDashboard() {
-    window.open(`${IKConstants.MANAGER_URL}/v3/ng/k-suite/dashboard`, '_blank');
+export function redirectToKSuite() {
+    window.open('https://www.infomaniak.com/gtl/ksuite', '_blank');
+}
+
+export function redirectToManagerProfile() {
+    window.open(`${IKConstants.MANAGER_URL}v3/ng/profile/user/dashboard`, '_blank');
+}
+
+export function redirectTokSuiteDashboard(accountId?: number) {
+    window.open(`${IKConstants.MANAGER_URL}v3${accountId ? `/${accountId}` : ''}/ng/k-suite/dashboard`, '_blank');
+}
+
+export function redirectToDeveloperDocumentation() {
+    window.open('https://developer.infomaniak.com', '_blank', 'noopener,noreferrer');
 }

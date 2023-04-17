@@ -119,6 +119,11 @@ describe('actions/invite_actions', () => {
                 },
             },
         },
+        views: {
+            rhs: {
+                isSidebarOpen: false,
+            },
+        },
     });
 
     describe('sendGuestsInvites', () => {

@@ -42,7 +42,6 @@ export type ClientConfig = {
     EmailLoginButtonColor: string;
     EmailLoginButtonTextColor: string;
     EmailNotificationContentsType: string;
-    EnableAskCommunityLink: string;
     EnableBanner: string;
     EnableBotAccountCreation: string;
     EnableChannelViewedMessages: string;
@@ -193,6 +192,7 @@ export type ClientConfig = {
     PostPriority: string;
     ReduceOnBoardingTaskList: string;
     PostAcknowledgements: string;
+    FeatureFlagTranslation: string;
 };
 
 export type License = {
@@ -542,7 +542,6 @@ export type SupportSettings = {
     SupportEmail: string;
     CustomTermsOfServiceEnabled: boolean;
     CustomTermsOfServiceReAcceptancePeriod: number;
-    EnableAskCommunityLink: boolean;
 };
 
 export type AnnouncementSettings = {

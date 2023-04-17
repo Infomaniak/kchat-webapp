@@ -13,6 +13,7 @@ import {Team} from '@mattermost/types/teams';
 import {getSiteURL} from 'utils/url';
 import * as Utils from 'utils/utils';
 import Constants from 'utils/constants';
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 
 import BackstageList from 'components/backstage/components/backstage_list';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
@@ -246,17 +247,19 @@ export default class Bots extends React.PureComponent<Props, State> {
                     <React.Fragment>
                         <FormattedMessage
                             id='bots.manage.help1'
-                            defaultMessage='Use {botAccounts} to integrate with Mattermost through plugins or the API. Bot accounts are available to everyone on your server. '
+                            defaultMessage='Use {botAccounts} to integrate with Mattermost through plugins or the API. Bot accounts are available to everyone on your server. {learnMore}'
                             values={{
                                 botAccounts: (
-                                    <a
-                                        target='_blank'
-                                        rel='noopener noreferrer'
-                                        href='https://mattermost.com/pl/default-bot-accounts'
-                                    >
+                                    <FormattedMessage
+                                        id='bots.manage.bot_accounts'
+                                        defaultMessage='Bot Accounts'
+                                    />
+                                ),
+                                learnMore: (
+                                    <a onClick={redirectToDeveloperDocumentation}>
                                         <FormattedMessage
-                                            id='bots.manage.bot_accounts'
-                                            defaultMessage='Bot Accounts'
+                                            id='developer_documentation.learn_more'
+                                            defaultMessage='Learn more'
                                         />
                                     </a>
                                 ),

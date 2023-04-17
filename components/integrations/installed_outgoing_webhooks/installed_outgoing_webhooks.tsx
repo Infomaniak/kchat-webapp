@@ -6,6 +6,7 @@ import {FormattedMessage} from 'react-intl';
 
 import {localizeMessage} from 'utils/utils';
 import Constants from 'utils/constants';
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 
 import BackstageList from 'components/backstage/components/backstage_list';
 import InstalledOutgoingWebhook, {matchesFilter} from 'components/integrations/installed_outgoing_webhook';
@@ -186,29 +187,13 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
                 helpText={
                     <FormattedMessage
                         id='installed_outgoing_webhooks.help'
-                        defaultMessage='Use outgoing webhooks to connect external tools to Mattermost. {buildYourOwn} or visit the {appDirectory} to find self-hosted, third-party apps and integrations.'
+                        defaultMessage='Use outgoing webhooks to connect external tools to kChat. {learnMore}'
                         values={{
-                            buildYourOwn: (
-                                <a
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-webhooks-outgoing/'
-                                >
+                            learnMore: (
+                                <a onClick={redirectToDeveloperDocumentation}>
                                     <FormattedMessage
-                                        id='installed_outgoing_webhooks.help.buildYourOwn'
-                                        defaultMessage='Build your own'
-                                    />
-                                </a>
-                            ),
-                            appDirectory: (
-                                <a
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    href='https://mattermost.com/marketplace'
-                                >
-                                    <FormattedMessage
-                                        id='installed_outgoing_webhooks.help.appDirectory'
-                                        defaultMessage='App Directory'
+                                        id='developer_documentation.learn_more'
+                                        defaultMessage='Learn more'
                                     />
                                 </a>
                             ),

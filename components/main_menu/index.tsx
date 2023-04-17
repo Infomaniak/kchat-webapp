@@ -3,31 +3,24 @@
 
 import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
-import {withRouter} from 'react-router-dom';
 
 import {GenericAction} from 'mattermost-redux/types/actions';
 
-import {
-    getConfig,
-    getLicense,
-} from 'mattermost-redux/selectors/entities/general';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {
     getJoinableTeamIds,
     getCurrentTeam,
-    getCurrentRelativeTeamUrl,
 } from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUser, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import {haveICurrentTeamPermission, haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCloudSubscription as selectCloudSubscription, getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
 
 import {Permissions} from 'mattermost-redux/constants';
 
-import {RHSStates, CloudProducts} from 'utils/constants';
+import {RHSStates} from 'utils/constants';
 
 import {showMentions, showFlaggedPosts, showSettings, closeRightHandSide, closeMenu as closeRhsMenu} from 'actions/views/rhs';
 import {openModal} from 'actions/views/modals';
 import {getRhsState} from 'selectors/rhs';
-import {isCloudLicense} from 'utils/license_utils';
 
 import {GlobalState} from 'types/store';
 
@@ -40,7 +33,6 @@ function mapStateToProps(state: GlobalState) {
 
     const appDownloadLink = config.AppDownloadLink;
     const enableCommands = config.EnableCommands === 'true';
-    const siteName = config.SiteName;
     const enableIncomingWebhooks = config.EnableIncomingWebhooks === 'true';
     const enableOAuthServiceProvider = config.EnableOAuthServiceProvider === 'true';
     const enableOutgoingWebhooks = config.EnableOutgoingWebhooks === 'true';
@@ -57,13 +49,6 @@ function mapStateToProps(state: GlobalState) {
     const moreTeamsToJoin = joinableTeams && joinableTeams.length > 0;
     const rhsState = getRhsState(state);
 
-    const subscription = selectCloudSubscription(state);
-    const license = getLicense(state);
-    const subscriptionProduct = getSubscriptionProduct(state);
-
-    const isCloud = isCloudLicense(license);
-    const isStarterFree = isCloud && subscriptionProduct?.sku === CloudProducts.STARTER;
-    const isFreeTrial = isCloud && subscription?.is_free_trial === 'true';
     const ikGroupId = state.entities.teams.teams[currentTeam.id].account_id;
 
     return {
@@ -79,7 +64,6 @@ function mapStateToProps(state: GlobalState) {
         reportAProblemLink,
         pluginMenuItems: state.plugins.components.MainMenu,
         moreTeamsToJoin,
-        siteName,
         teamId: currentTeam.id,
         teamName: currentTeam.name,
         currentUser,
@@ -87,13 +71,8 @@ function mapStateToProps(state: GlobalState) {
         isRhsSettings: rhsState === RHSStates.SETTINGS,
         teamIsGroupConstrained: Boolean(currentTeam.group_constrained),
         isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
-        teamUrl: getCurrentRelativeTeamUrl(state),
         guestAccessEnabled: config.EnableGuestAccounts === 'true',
         canInviteTeamMember,
-        isFirstAdmin: isFirstAdmin(state),
-        isCloud,
-        isStarterFree,
-        isFreeTrial,
         ikGroupId,
     };
 }
@@ -111,4 +90,4 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
     };
 }
 
-export default withRouter<any, any>(connect(mapStateToProps, mapDispatchToProps)(MainMenu));
+export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);

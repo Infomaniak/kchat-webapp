@@ -92,11 +92,11 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             if (this.props.channelIsArchived && !this.props.viewArchivedChannels) {
                 this.props.goToLastViewedChannel();
             }
-            if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
-                WebSocketClient.bindPresenceChannel(this.props.channelId);
-            }
             if (prevProps.channelId) {
                 WebSocketClient.unbindPresenceChannel(prevProps.channelId);
+            }
+            if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
+                WebSocketClient.bindPresenceChannel(this.props.channelId);
             }
         }
     }

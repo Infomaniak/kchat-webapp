@@ -2351,6 +2351,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@infomaniak/compass-icons@npm:0.10.0":
+  version: 0.10.0
+  resolution: "@infomaniak/compass-icons@npm:0.10.0"
+  dependencies:
+    esm: 3.2.25
+    fontello-batch-cli: 4.0.0
+    fontello-cli: 0.6.2
+    lodash: 4.17.21
+    needle: 3.0.0
+    open: 8.4.0
+    svgpath: 2.5.0
+    unzip: 0.1.11
+    xmldom: 0.6.0
+  checksum: ea8e48685b374fbda334149d695030eb574124c08e60f12267dedb4409c7a76731de76b0826ebeed5657b4dadfc8e2740f0e7d6aad2adfec47aa4c4d5a417d5f
+  languageName: node
+  linkType: hard
+
 "@infomaniak/compass-icons@npm:0.8.0":
   version: 0.8.0
   resolution: "@infomaniak/compass-icons@npm:0.8.0"
@@ -3590,70 +3607,83 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:7.18.0":
-  version: 7.18.0
-  resolution: "@sentry/browser@npm:7.18.0"
+"@sentry-internal/tracing@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry-internal/tracing@npm:7.47.0"
   dependencies:
-    "@sentry/core": 7.18.0
-    "@sentry/types": 7.18.0
-    "@sentry/utils": 7.18.0
+    "@sentry/core": 7.47.0
+    "@sentry/types": 7.47.0
+    "@sentry/utils": 7.47.0
     tslib: ^1.9.3
-  checksum: deee6b9bbd361d6d29cebdd13bf56968f6ef08746028f599199ee3617dd295721adc1491a12af2abd8ab016e2f48a4fe89b828b5c61c15fa43f5e1952a67c502
+  checksum: 46cb6cdd5b64841acd7b38cdde156e15dcf2c225ccd36219ea5796b7ebad34a3c0db1f4c7545e1fec1a1e5897d4368003b1101845404bcd1c27a21c09784cbd3
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:7.18.0":
-  version: 7.18.0
-  resolution: "@sentry/core@npm:7.18.0"
+"@sentry/browser@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/browser@npm:7.47.0"
   dependencies:
-    "@sentry/types": 7.18.0
-    "@sentry/utils": 7.18.0
+    "@sentry-internal/tracing": 7.47.0
+    "@sentry/core": 7.47.0
+    "@sentry/replay": 7.47.0
+    "@sentry/types": 7.47.0
+    "@sentry/utils": 7.47.0
     tslib: ^1.9.3
-  checksum: 93976398a746c7761c856e3f1e192bf9d2a18f965855979d88c32a8b555c851414220d8536b3acd68e44ac680f8ca2246873a62313846b49bd762a497d1e0f6c
+  checksum: fdceac3a68195b4fcc58ab9d7907009cb73350646314100853ed56f4f2f6e00b2916c35037ea055c3d583accdf2356ed0690b59bf63038043b85e737a38382dc
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:7.18.0":
-  version: 7.18.0
-  resolution: "@sentry/react@npm:7.18.0"
+"@sentry/core@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/core@npm:7.47.0"
   dependencies:
-    "@sentry/browser": 7.18.0
-    "@sentry/types": 7.18.0
-    "@sentry/utils": 7.18.0
+    "@sentry/types": 7.47.0
+    "@sentry/utils": 7.47.0
+    tslib: ^1.9.3
+  checksum: 1cfd41020e5707c7e142dbb7c99118a264bcc5fa64fc06f1e51d8c6166dea0a50fd5896ce5287a4805d088257dc3757cc53ab4f5092166cd759ffeeea1cd8d2e
+  languageName: node
+  linkType: hard
+
+"@sentry/react@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/react@npm:7.47.0"
+  dependencies:
+    "@sentry/browser": 7.47.0
+    "@sentry/types": 7.47.0
+    "@sentry/utils": 7.47.0
     hoist-non-react-statics: ^3.3.2
     tslib: ^1.9.3
   peerDependencies:
     react: 15.x || 16.x || 17.x || 18.x
-  checksum: 03fd2bcfdb3707f0e397a49731bde7b05db463abeee21b093d393175928d9b48b0a49ce4a2aa6676ea1b981e05a5666a73c46b3db4c2e0b8826d750db437cee9
+  checksum: 7e42c91c48cf84e36d20433a1b28bf03c801ebed67ccd18e40de279c3a800e8f0818b4af9b9f40471070636a0aa1f58a77610383908f780e0b98efe8eb6c6ebd
   languageName: node
   linkType: hard
 
-"@sentry/tracing@npm:7.18.0":
-  version: 7.18.0
-  resolution: "@sentry/tracing@npm:7.18.0"
+"@sentry/replay@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/replay@npm:7.47.0"
   dependencies:
-    "@sentry/core": 7.18.0
-    "@sentry/types": 7.18.0
-    "@sentry/utils": 7.18.0
-    tslib: ^1.9.3
-  checksum: cb0e0148d903756a9aa2be93cfe87f7a873f88fa2c65c26347ee3faa68e0d5f57065c22e85c92f35f6f77b0a18158f99116069f7d8d9ad8906d39e3d8c965a80
+    "@sentry/core": 7.47.0
+    "@sentry/types": 7.47.0
+    "@sentry/utils": 7.47.0
+  checksum: e4f69a6b698bd38eda4bd16275987d69948ded1dc34253eb804e3b6d09be675fa3c0fcfb85fbfef02c2e863eb80b7148da18b0dd1a7dadaab4353a315733e931
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:7.18.0":
-  version: 7.18.0
-  resolution: "@sentry/types@npm:7.18.0"
-  checksum: e05581cd6eb1b79208fe85ba7043f9b2606b49eab64d7207ad2490061aebd66bc1a29a6234001c74b3098221564fa68c5d1b1be2566cf6328c576ada7240b190
+"@sentry/types@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/types@npm:7.47.0"
+  checksum: 42f1f58bebb2689d609ebc614a04462cb15f749d304dcadc2c93b851ecb88a20d59853b01f22b91f37c7cfb41ed7d0992843043ada7a7592ea1043191092e350
   languageName: node
   linkType: hard
 
-"@sentry/utils@npm:7.18.0":
-  version: 7.18.0
-  resolution: "@sentry/utils@npm:7.18.0"
+"@sentry/utils@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/utils@npm:7.47.0"
   dependencies:
-    "@sentry/types": 7.18.0
+    "@sentry/types": 7.47.0
     tslib: ^1.9.3
-  checksum: 61adde1094b86d57ce85620349c33ec513edcfc59081457e8f9532ca3d63c96fc284fa0b4ee189298c44b1ced85897c0e9edddec08a8003660cecb029f1a2ee8
+  checksum: d37d6299ef28c7ce32b1af7644f59ab5a5fd7a8155e97b3758c87d11a4b2cb406d4e3d2b260afcd200dadef99582f92b08ef6b89543f11611d2e034b3940d7b3
   languageName: node
   linkType: hard
 
@@ -13510,15 +13540,14 @@ __metadata:
     "@guyplusplus/turndown-plugin-gfm": 1.0.7
     "@hot-loader/react-dom": 17.0.2
     "@infomaniak/compass-components": 0.9.0
-    "@infomaniak/compass-icons": 0.8.0
+    "@infomaniak/compass-icons": 0.10.0
     "@infomaniak/marked": ^0.2.0
     "@mattermost/client": "workspace:packages/client"
     "@mattermost/components": "workspace:packages/components"
     "@mattermost/types": "workspace:packages/types"
     "@redux-devtools/extension": 3.2.3
-    "@sentry/react": 7.18.0
-    "@sentry/tracing": 7.18.0
-    "@sentry/types": 7.18.0
+    "@sentry/react": 7.47.0
+    "@sentry/types": 7.47.0
     "@stripe/react-stripe-js": 1.13.0
     "@stripe/stripe-js": 1.41.0
     "@testing-library/jest-dom": 5.16.4

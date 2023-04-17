@@ -50,6 +50,16 @@
                     top: calc(48px + #{$announcement-bar-height});
                     height: calc(100% - 48px - #{$announcement-bar-height});
                 }
+
+                .announcement-bar.announcement-bar-infomaniak-mobile ~ .channel-view & {
+                    top: calc(48px + #{$ik-mobile-announcement-bar-height});
+                    height: calc(100% - 48px - #{$ik-mobile-announcement-bar-height});
+                }
+
+                .announcement-bar.announcement-bar-infomaniak ~ .channel-view & {
+                    top: calc(48px + #{$ik-announcement-bar-height});
+                    height: calc(100% - 48px - #{$ik-announcement-bar-height});
+                }
             }
 
             .Menu__content {
@@ -83,6 +93,18 @@
                 opacity: 1;
                 text-align: center;
                 text-shadow: none;
+
+                body.announcement-bar--fixed & {
+                    top: calc(70px + #{$announcement-bar-height});
+                }
+
+                .announcement-bar.announcement-bar-infomaniak-mobile ~ .channel-view & {
+                    top: calc(70px + #{$ik-mobile-announcement-bar-height});
+                }
+
+                .announcement-bar.announcement-bar-infomaniak ~ .channel-view & {
+                    top: calc(70px + #{$ik-announcement-bar-height});
+                }
             }
 
             .dropdown-menu {
@@ -478,13 +500,6 @@
         margin: 8px 0;
     }
 
-    .backstage-list__item {
-        .item-actions,
-        .actions {
-            margin: 10px 0;
-        }
-    }
-
     .integration__icon {
         &.integration-list__icon {
             position: relative;
@@ -699,8 +714,6 @@
     .integration-option {
         width: 100%;
         height: auto;
-        flex: 0 0 100%;
-        margin: 0 0 30px;
         margin-left: 0;
     }
 
@@ -1436,6 +1449,18 @@
         transition: transform 0.35s ease;
         visibility: hidden;
 
+        body.announcement-bar--fixed & {
+            top: $announcement-bar-height;
+        }
+
+        .announcement-bar.announcement-bar-infomaniak-mobile ~ & {
+            top: $ik-mobile-announcement-bar-height;
+        }
+
+        .announcement-bar.announcement-bar-infomaniak ~ & {
+            top: $ik-announcement-bar-height;
+        }
+
         &.visible {
             display: block;
             visibility: visible;
@@ -2089,6 +2114,12 @@
         left: 15px;
         width: calc(100% - 30px);
     }
+
+    .backstage-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -2244,6 +2275,9 @@
             height: calc(100vh - 138px - 4em);
             min-height: calc(100vh - 138px - 4em);
         }
+    }
+    .integrations-list {
+        gap: 15px;
     }
 }
 

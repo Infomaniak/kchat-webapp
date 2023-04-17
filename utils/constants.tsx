@@ -483,6 +483,10 @@ export const ModalIdentifiers = {
     CHANNEL_LIMIT_REACHED: 'channel_limit_reached',
     STORAGE_LIMIT_REACHED: 'storage_limit_reached',
     EXTERNAL_LIMIT_REACHED: 'external_limit_reached',
+    CANCEL_MULTIPLE_INVITES: 'cancel_multiple_invites',
+    POST_REMINDER_CUSTOM_TIME_PICKER: 'post_reminder_custom_time_picker',
+    GET_THE_APP: 'get_the_app',
+    TOGGLE_NEXT: 'toggle_next',
 };
 
 export const UserStatuses = {
@@ -947,6 +951,9 @@ export const ErrorPageTypes = {
     TEAM_NOT_FOUND: 'team_not_found',
     CHANNEL_NOT_FOUND: 'channel_not_found',
     CLOUD_ARCHIVED: 'cloud_archived',
+    NO_KSUITE: 'no_ksuite',
+    MAINTENANCE: 'maintenance',
+    BLOCKED: 'blocked',
 };
 
 export const JobTypes = {
@@ -975,6 +982,8 @@ export const AnnouncementBarTypes = {
     ADVISOR: 'advisor',
     ADVISOR_ACK: 'advisor-ack',
     GENERAL: 'general',
+    INFOMANIAK: 'infomaniak',
+    INFOMANIAK_MOBILE: 'infomaniak-mobile',
 };
 
 export const AnnouncementBarMessages = {
