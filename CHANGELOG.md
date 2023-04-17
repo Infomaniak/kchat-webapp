@@ -1,3 +1,22 @@
+## 1.1.1 (2023-04-14)
+
+### Added (1 change)
+
+- [add sourcemaps to sentry releases](kchat/webapp@c79255e632bf19105d82d6c18241cab2c02fadc2) by @antonbuksa ([merge request](kchat/webapp!375))
+
+### Fixed (1 change)
+
+- [set lang window const for webcomponents](kchat/webapp@eb6f3fd73aeb7c60787994829147d59f7bf73fca) by @antonbuksa ([merge request](kchat/webapp!373))
+
+### Changed (2 changes)
+
+- [update incoming webhook doc url](kchat/webapp@09994270f498150a5f78fee3fd39d07cd76445a3) by @antonbuksa ([merge request](kchat/webapp!376))
+- [update sentry sdk and migrate to private dsn](kchat/webapp@f8bdff1cdc0a4adae03e4b0d8468322eca156bd9) by @antonbuksa ([merge request](kchat/webapp!374))
+
+### Removed (1 change)
+
+- [remove obsolete sentry tracing package](kchat/webapp@c59353ccd52681fab9a256e220d98681c1e34b25) by @antonbuksa ([merge request](kchat/webapp!374))
+
 ## 1.1.0 (2023-04-11)
 
 ### Fixed (1 change)
