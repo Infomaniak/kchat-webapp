@@ -158,40 +158,6 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
         <RightControlsContainer
             id={'RightControlsContainer'}
         >
-            {/* <PlanUpgradeButton/> */}
-            {!isDesktopApp && (
-                <NewsWrapper className='grey wc-trigger-news--flex'>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                    <module-news-component style={{marginLeft: '-3px'}}></module-news-component>
-                </NewsWrapper>
-            )}
-            <ButtonWrapper>
-                {showSettingsTutorialStep && <SettingsTour/>}
-                <SettingsButton/>
-            </ButtonWrapper>
-            {!isDesktopApp && (
-                <div style={{position: 'relative'}}>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                    <module-products-component
-                        position='right'
-                        style={{height: '100%'}}
-                    >
-                        {trigger}
-                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                        {/* @ts-ignore */}
-                    </module-products-component>
-                </div>
-            )}
-            <>
-                <ButtonWrapper>
-                    {showAtMentionsTutorialStep && <AtMentionsTour/>}
-                    <AtMentionsButton/>
-                </ButtonWrapper>
-                <SavedPostsButton/>
-                {showCustomizeTip && <CustomizeYourExperienceTour/>}
-            </>
             {!isDesktopApp && (
                 <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
@@ -219,6 +185,39 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     />
                 </a>
             </OverlayTrigger>
+            <>
+                <ButtonWrapper>
+                    {showAtMentionsTutorialStep && <AtMentionsTour/>}
+                    <AtMentionsButton/>
+                </ButtonWrapper>
+                <SavedPostsButton/>
+                {showCustomizeTip && <CustomizeYourExperienceTour/>}
+            </>
+            {!isDesktopApp && (
+                <NewsWrapper className='grey wc-trigger-news--flex'>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
+                    <module-news-component style={{marginLeft: '-3px'}}></module-news-component>
+                </NewsWrapper>
+            )}
+            <ButtonWrapper>
+                {showSettingsTutorialStep && <SettingsTour/>}
+                <SettingsButton/>
+            </ButtonWrapper>
+            {!isDesktopApp && (
+                <div style={{position: 'relative'}}>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
+                    <module-products-component
+                        position='right'
+                        style={{height: '100%'}}
+                    >
+                        {trigger}
+                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                        {/* @ts-ignore */}
+                    </module-products-component>
+                </div>
+            )}
             <StatusDropdown/>
             <FlagNext/>
         </RightControlsContainer>
