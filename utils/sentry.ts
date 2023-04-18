@@ -8,10 +8,12 @@ interface Args {
 }
 
 // Webpack global var
-// declare const COMMIT_HASH: string;
 declare const GIT_RELEASE: string;
 
 const isLocalhost = (host: string) => host.startsWith('localhost') || host.startsWith('local.') || host.startsWith('kchat.devd');
+const isCanaryOrPreprod = GIT_RELEASE.includes('-next') || GIT_RELEASE.includes('-rc');
+
+const bool = <T>(x: T | false | undefined | null | '' | 0): x is T => Boolean(x);
 
 export default function init({SENTRY_DSN}: Args) {
     const {host} = window.location;
@@ -20,20 +22,16 @@ export default function init({SENTRY_DSN}: Args) {
         return;
     }
 
-    Sentry.init({
+    const config: Sentry.BrowserOptions = {
         dsn: SENTRY_DSN,
         release: GIT_RELEASE, //eslint-disable-line no-process-env
         environment: host.split('.').splice(1).join('.'),
         normalizeDepth: 5,
         integrations: [
-            new Sentry.BrowserTracing(),
-
-            // new Sentry.Replay(),
-        ],
+            true && new Sentry.BrowserTracing(),
+            isCanaryOrPreprod && new Sentry.Replay(),
+        ].filter(bool),
         tracesSampleRate: 0.1,
-
-        // replaysSessionSampleRate: 0.1,
-        // replaysOnErrorSampleRate: 1.0,
         ignoreErrors: [
 
             // Ignore random plugins/extensions
@@ -54,5 +52,12 @@ export default function init({SENTRY_DSN}: Args) {
             /moz-extension/,
             /ResizeObserver loop/,
         ],
-    });
+    };
+
+    if (isCanaryOrPreprod) {
+        config.replaysSessionSampleRate = 0.1;
+        config.replaysOnErrorSampleRate = 1.0;
+    }
+
+    Sentry.init(config);
 }
