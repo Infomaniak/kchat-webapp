@@ -28,6 +28,9 @@ const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 const packageJson = require('./package.json');
 
 const NPM_TARGET = process.env.npm_lifecycle_event;
+const GIT_RELEASE = JSON.stringify(childProcess.execSync('git describe --tags --abbrev=0').toString());
+const IS_CANARY = GIT_RELEASE.includes('-next');
+const IS_PREPROD = GIT_RELEASE.includes('-rc');
 
 const targetIsRun = NPM_TARGET?.startsWith('run');
 const targetIsTest = NPM_TARGET === 'test';
@@ -291,7 +294,7 @@ var config = {
         }),
         new webpack.DefinePlugin({
             COMMIT_HASH: JSON.stringify(childProcess.execSync('git rev-parse HEAD || echo dev').toString()),
-            GIT_RELEASE: JSON.stringify(childProcess.execSync('git describe --tags --abbrev=0').toString()),
+            GIT_RELEASE,
         }),
         new MiniCssExtractPlugin({
             filename: '[name].[contenthash].css',
@@ -441,6 +444,10 @@ var config = {
 
 function generateCSP() {
     let csp = 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.preprod.dev.infomaniak.ch/ ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV;
+
+    if (IS_CANARY || IS_PREPROD) {
+        csp += CSP_WORKER_SRC;
+    }
 
     // if (DEV) {
     //     // react-hot-loader and development source maps require eval
