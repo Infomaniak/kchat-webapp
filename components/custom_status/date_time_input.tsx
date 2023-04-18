@@ -14,14 +14,13 @@ import moment, {Moment} from 'moment-timezone';
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
 
-
 import Input from 'components/widgets/inputs/input/input';
 import DatePicker from 'components/date_picker';
 import Timestamp from 'components/timestamp';
 import {getCurrentLocale} from 'selectors/i18n';
 import {isKeyPressed, localizeMessage} from 'utils/utils';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
-import Constants, {A11yCustomEventTypes, A11yFocusEventDetail} from 'utils/constants';
+import Constants from 'utils/constants';
 
 const CUSTOM_STATUS_TIME_PICKER_INTERVALS_IN_MINUTES = 30;
 
@@ -233,28 +232,27 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         ),
     };
 
-
     return (
         <div>
             <div className='dateTime'>
                 <div className='dateTime__date'>
-                <DatePicker
-                    isPopperOpen={isPopperOpen}
-                    handlePopperOpenState={handlePopperOpenState}
-                    locale={locale}
-                    datePickerProps={datePickerProps}
-                >
-                    <Input
-                        value={formatDate(time.toDate())}
-                        id='customStatus__calendar-input'
-                        readOnly={true}
-                        className='dateTime__calendar-input'
-                        label={localizeMessage('dnd_custom_time_picker_modal.date', 'Date')}
-                        onClick={() => handlePopperOpenState(true)}
-                        tabIndex={-1}
-                        inputPrefix={inputIcon}
-                    />
-                </DatePicker>
+                    <DatePicker
+                        isPopperOpen={isPopperOpen}
+                        handlePopperOpenState={handlePopperOpenState}
+                        locale={locale}
+                        datePickerProps={datePickerProps}
+                    >
+                        <Input
+                            value={formatDate(time.toDate())}
+                            id='customStatus__calendar-input'
+                            readOnly={true}
+                            className='dateTime__calendar-input'
+                            label={localizeMessage('dnd_custom_time_picker_modal.date', 'Date')}
+                            onClick={() => handlePopperOpenState(true)}
+                            tabIndex={-1}
+                            inputPrefix={inputIcon}
+                        />
+                    </DatePicker>
                 </div>
                 <div className='dateTime__custom-time'>
                     <Creatable

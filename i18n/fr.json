@@ -3625,7 +3625,7 @@
   "invitation_modal.guests.custom-message.link": "Définir un message personnalisé",
   "invitation_modal.guests.custom-message.title": "Message personnalisé",
   "invitation_modal.guests.users_emails_input.valid_email": "Inviter **{email}** en tant qu'utilisateur invité",
-  "invitation_modal.invite.more": "Inivitez plus de personnes",
+  "invitation_modal.invite.more": "Inviter plus de personnes",
   "invitation_modal.invite_members.exceeded_max_add_members_batch": "Pas plus de **{text}** personnes peuvent être invitées en une fois",
   "invitation_modal.members.search-and-add.placeholder-email-disabled": "Ajouter des membres",
   "invitation_modal.members.search_and_add.title": "Ajouter ou inviter des personnes",
