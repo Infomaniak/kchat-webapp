@@ -425,8 +425,8 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
       />
     }
     leadingElement={
-      <span
-        className="icon-format-letter-case MenuItem__compass-icon"
+      <FormatLetterCaseIcon
+        size={18}
       />
     }
     onClick={[Function]}
