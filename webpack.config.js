@@ -448,6 +448,8 @@ function generateCSP() {
         csp += CSP_WORKER_SRC;
     }
 
+    console.log('csp for html plugin: ', csp);
+
     // if (DEV) {
     //     // react-hot-loader and development source maps require eval
     //     csp += ' \'unsafe-eval\'';

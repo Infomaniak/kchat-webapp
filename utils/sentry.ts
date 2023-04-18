@@ -11,7 +11,7 @@ interface Args {
 declare const GIT_RELEASE: string;
 
 const isLocalhost = (host: string) => host.startsWith('localhost') || host.startsWith('local.') || host.startsWith('kchat.devd');
-const isCanaryOrPreprod = GIT_RELEASE.includes('-next') || GIT_RELEASE.includes('-rc');
+const isCanaryOrPreprod = GIT_RELEASE.includes('-next'); // || GIT_RELEASE.includes('-rc');
 
 const bool = <T>(x: T | false | undefined | null | '' | 0): x is T => Boolean(x);
 
