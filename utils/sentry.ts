@@ -22,6 +22,14 @@ export default function init({SENTRY_DSN}: Args) {
         return;
     }
 
+    const logIntegrations = [
+        true && 'bt',
+        isCanaryOrPreprod && 'replay',
+    ].filter(bool);
+
+    // eslint-disable-next-line no-console
+    console.log('[sentry integrations]', logIntegrations);
+
     const config: Sentry.BrowserOptions = {
         dsn: SENTRY_DSN,
         release: GIT_RELEASE, //eslint-disable-line no-process-env
@@ -57,6 +65,8 @@ export default function init({SENTRY_DSN}: Args) {
     if (isCanaryOrPreprod) {
         config.replaysSessionSampleRate = 0.01;
         config.replaysOnErrorSampleRate = 1.0;
+        // eslint-disable-next-line no-console
+        console.log('[sentry replay]', {replaysSessionSampleRate: config.replaysSessionSampleRate, replaysOnErrorSampleRate: config.replaysOnErrorSampleRate});
     }
 
     Sentry.init(config);
