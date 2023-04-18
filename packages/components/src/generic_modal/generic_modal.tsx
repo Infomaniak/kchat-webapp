@@ -184,6 +184,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
                     size={16}
                     color={'rgba(var(--center-channel-color-rgb), 0.56)'}
                 />
+                <span className='sr-only'>{'Close'}</span>
             </button>
         );
 
@@ -213,7 +214,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
                     >
                         <Modal.Header closeButton={false}>
                             {closeButton}
-                        {this.props.compassDesign && headerText}
+                            {this.props.compassDesign && headerText}
                         </Modal.Header>
                         <Modal.Body>
                             {this.props.compassDesign ? (
