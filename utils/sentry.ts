@@ -55,7 +55,7 @@ export default function init({SENTRY_DSN}: Args) {
     };
 
     if (isCanaryOrPreprod) {
-        config.replaysSessionSampleRate = 0.1;
+        config.replaysSessionSampleRate = 0.01;
         config.replaysOnErrorSampleRate = 1.0;
     }
 
