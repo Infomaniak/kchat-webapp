@@ -68,16 +68,17 @@ const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0, po
             className='hidden-xs'
         >
             {`${editedText} ${formattedTime}`}
-            {postOwnerTooltipInfo}
+            {/* {postOwnerTooltipInfo} */}
         </Tooltip>
     );
 
     const showPostEditHistory = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        if (post?.id) {
-            actions.getPostEditHistory(post.id);
-            actions.openShowEditHistory(post);
-        }
+
+        // if (post?.id) {
+        //     actions.getPostEditHistory(post.id);
+        //     actions.openShowEditHistory(post);
+        // }
     };
 
     const editedIndicatorContent = (
