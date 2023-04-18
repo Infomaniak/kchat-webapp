@@ -128,7 +128,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
 
     const handleKeyDown = useCallback((event: KeyboardEvent) => {
-        if (isKeyPressed(event, Constants.KeyCodes.ESCAPE) && !isDatePickerOpen) {
+        if (isKeyPressed(event, Constants.KeyCodes.ESCAPE) && !isDatePickerOpen && !isMenuOpen) {
             props.onExited();
         }
     }, [isDatePickerOpen, props.onExited]);

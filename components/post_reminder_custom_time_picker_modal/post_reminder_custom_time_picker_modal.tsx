@@ -40,7 +40,6 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
     const initialReminderTime: Moment = getRoundedTime(currentTime);
     const [customReminderTime, setCustomReminderTime] = useState<Moment>(initialReminderTime);
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
 
     const handleKeyDown = useCallback((event: KeyboardEvent) => {

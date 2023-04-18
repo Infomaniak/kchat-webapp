@@ -58,14 +58,8 @@ export default class DndCustomTimePicker extends React.PureComponent<Props, Stat
     }
 
     handleKeyDown = (event: KeyboardEvent) => {
-        if (isKeyPressed(event, Constants.KeyCodes.ESCAPE)) {
-            if (this.state.isPopperOpen) {
-                this.handlePopperOpenState(false);
-            } else if (this.state.isMenuOpen) {
-                this.setIsMenuOpen(false);
-            } else {
-                this.props.onExited();
-            }
+        if (isKeyPressed(event, Constants.KeyCodes.ESCAPE) && !this.state.isPopperOpen && !this.state.isMenuOpen) {
+            this.props.onExited();
         }
     };
 
