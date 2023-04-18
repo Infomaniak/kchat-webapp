@@ -30,7 +30,7 @@ export default function init({SENTRY_DSN}: Args) {
 
             // new Sentry.Replay(),
         ],
-        tracesSampleRate: 1.0,
+        tracesSampleRate: 0.1,
 
         // replaysSessionSampleRate: 0.1,
         // replaysOnErrorSampleRate: 1.0,
