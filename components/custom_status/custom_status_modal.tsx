@@ -441,7 +441,6 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                         tooltipPosition='top'
                         onChange={handleTextChange}
                         placeholder={formatMessage({id: 'custom_status.set_status', defaultMessage: 'Set a status'})}
-                        autoFocus={true}
                     />
                 </div>
                 {showSuggestions && suggestion}
