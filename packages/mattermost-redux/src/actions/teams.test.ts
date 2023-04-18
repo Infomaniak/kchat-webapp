@@ -98,7 +98,7 @@ describe('Actions.Teams', () => {
         team = await Client4.createTeam(team);
 
         nock(Client4.getBaseRoute()).
-            get('/teams').
+            get('/servers').
             query(true).
             reply(200, [team]);
         await Actions.getTeams()(store.dispatch, store.getState);
@@ -122,7 +122,7 @@ describe('Actions.Teams', () => {
         team = await Client4.createTeam(team);
 
         nock(Client4.getBaseRoute()).
-            get('/teams').
+            get('/servers').
             query(true).
             reply(200, {teams: [team], total_count: 43});
         await Actions.getTeams(0, 1, true)(store.dispatch, store.getState);

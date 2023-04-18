@@ -734,7 +734,7 @@ class TestHelper {
             reply(200, [{team_id: this.basicTeam!.id, msg_count: 0, mention_count: 0}]);
 
         nock(clientBaseRoute).
-            get('/users/me/teams').
+            get('/users/me/servers').
             reply(200, [this.basicTeam]);
 
         nock(clientBaseRoute).
