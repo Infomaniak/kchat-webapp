@@ -204,7 +204,14 @@ const SearchResults: React.FC<Props> = (props: Props): JSX.Element => {
         titleDescriptor.defaultMessage = 'Saved Posts';
     } else if (isPinnedPosts) {
         noResultsProps.variant = NoResultsVariant.PinnedPosts;
-        noResultsProps.subtitleValues = {text: <strong>{'Pin to Channel'}</strong>};
+        noResultsProps.subtitleValues = {text: (
+            <strong>
+                <FormattedMessage
+                    id='post_info.pin'
+                    defaultMessage='Pin'
+                />
+            </strong>
+        )};
 
         sortedResults = [...results];
         sortedResults.sort((postA: Post|FileSearchResultItemType, postB: Post|FileSearchResultItemType) => postB.create_at - postA.create_at);
