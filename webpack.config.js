@@ -21,7 +21,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 
 // const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 
