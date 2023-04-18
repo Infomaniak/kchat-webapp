@@ -567,10 +567,11 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
         );
         dataContent.push(
             <div
-                className='pb-1 user-popover__id'
+                className='user-popover__id'
                 key='user-popover-userid'
             >
-                {formatMessage({id: 'channel_info_rhs.about_area_id', defaultMessage: 'ID:'})} {this.props.user?.id}
+                <span className='user-popover__subtitle' >{'ID'}</span>
+                {this.props.user.id}
             </div>,
         );
         dataContent.push(
