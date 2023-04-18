@@ -452,7 +452,6 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                         handleDurationChange={setDuration}
                     />
                 )}
-                {showSuggestions && suggestion}
                 {showDateAndTimeField && (
                     <DateTimeInput
                         time={customExpiryTime}
