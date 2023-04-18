@@ -55,6 +55,11 @@ exports[`components/GenericModal should match snapshot for base case 1`] = `
             color="rgba(var(--center-channel-color-rgb), 0.56)"
             size={16}
           />
+          <span
+            className="sr-only"
+          >
+            Close
+          </span>
         </button>
       </ModalHeader>
       <ModalBody
@@ -134,6 +139,11 @@ exports[`components/GenericModal should match snapshot with both buttons 1`] = `
             color="rgba(var(--center-channel-color-rgb), 0.56)"
             size={16}
           />
+          <span
+            className="sr-only"
+          >
+            Close
+          </span>
         </button>
       </ModalHeader>
       <ModalBody
@@ -238,6 +248,11 @@ exports[`components/GenericModal should match snapshot with disabled confirm but
             color="rgba(var(--center-channel-color-rgb), 0.56)"
             size={16}
           />
+          <span
+            className="sr-only"
+          >
+            Close
+          </span>
         </button>
       </ModalHeader>
       <ModalBody

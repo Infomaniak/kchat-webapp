@@ -110,11 +110,14 @@ exports[`components/ProfilePopover should disable start call button when user is
         key="user-popover-hr"
       />
       <div
-        className="pb-1 user-popover__id"
+        className="user-popover__id"
         key="user-popover-userid"
       >
-        ID:
-         
+        <span
+          className="user-popover__subtitle"
+        >
+          ID
+        </span>
         user_id
       </div>
       <Connect(Pluggable)
@@ -463,11 +466,14 @@ exports[`components/ProfilePopover should hide add-to-channel option if not on t
         key="user-popover-hr"
       />
       <div
-        className="pb-1 user-popover__id"
+        className="user-popover__id"
         key="user-popover-userid"
       >
-        ID:
-         
+        <span
+          className="user-popover__subtitle"
+        >
+          ID
+        </span>
         user_id
       </div>
       <Connect(Pluggable)
@@ -737,11 +743,14 @@ exports[`components/ProfilePopover should match snapshot 1`] = `
         key="user-popover-hr"
       />
       <div
-        className="pb-1 user-popover__id"
+        className="user-popover__id"
         key="user-popover-userid"
       >
-        ID:
-         
+        <span
+          className="user-popover__subtitle"
+        >
+          ID
+        </span>
         user_id
       </div>
       <Connect(Pluggable)
@@ -1109,11 +1118,14 @@ exports[`components/ProfilePopover should match snapshot for shared user 1`] = `
         key="user-popover-hr"
       />
       <div
-        className="pb-1 user-popover__id"
+        className="user-popover__id"
         key="user-popover-userid"
       >
-        ID:
-         
+        <span
+          className="user-popover__subtitle"
+        >
+          ID
+        </span>
         user_id
       </div>
       <Connect(Pluggable)
@@ -1469,11 +1481,14 @@ exports[`components/ProfilePopover should match snapshot when calls are disabled
         key="user-popover-hr"
       />
       <div
-        className="pb-1 user-popover__id"
+        className="user-popover__id"
         key="user-popover-userid"
       >
-        ID:
-         
+        <span
+          className="user-popover__subtitle"
+        >
+          ID
+        </span>
         user_id
       </div>
       <Connect(Pluggable)
@@ -1799,11 +1814,14 @@ exports[`components/ProfilePopover should match snapshot with custom status 1`] 
         key="user-popover-hr"
       />
       <div
-        className="pb-1 user-popover__id"
+        className="user-popover__id"
         key="user-popover-userid"
       >
-        ID:
-         
+        <span
+          className="user-popover__subtitle"
+        >
+          ID
+        </span>
         user_id
       </div>
       <Connect(Pluggable)
@@ -2201,11 +2219,14 @@ exports[`components/ProfilePopover should match snapshot with custom status expi
         key="user-popover-hr"
       />
       <div
-        className="pb-1 user-popover__id"
+        className="user-popover__id"
         key="user-popover-userid"
       >
-        ID:
-         
+        <span
+          className="user-popover__subtitle"
+        >
+          ID
+        </span>
         user_id
       </div>
       <Connect(Pluggable)
@@ -2558,11 +2579,14 @@ exports[`components/ProfilePopover should match snapshot with custom status not 
         key="user-popover-hr"
       />
       <div
-        className="pb-1 user-popover__id"
+        className="user-popover__id"
         key="user-popover-userid"
       >
-        ID:
-         
+        <span
+          className="user-popover__subtitle"
+        >
+          ID
+        </span>
       </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
@@ -2850,11 +2874,14 @@ exports[`components/ProfilePopover should match snapshot with last active displa
         key="user-popover-hr"
       />
       <div
-        className="pb-1 user-popover__id"
+        className="user-popover__id"
         key="user-popover-userid"
       >
-        ID:
-         
+        <span
+          className="user-popover__subtitle"
+        >
+          ID
+        </span>
         user_id
       </div>
       <Connect(Pluggable)
@@ -3182,11 +3209,14 @@ exports[`components/ProfilePopover should match snapshot with no last active dis
         key="user-popover-hr"
       />
       <div
-        className="pb-1 user-popover__id"
+        className="user-popover__id"
         key="user-popover-userid"
       >
-        ID:
-         
+        <span
+          className="user-popover__subtitle"
+        >
+          ID
+        </span>
         user_id
       </div>
       <Connect(Pluggable)
@@ -3962,11 +3992,14 @@ exports[`components/ProfilePopover should show the start call button when isCall
                     key="user-popover-hr"
                   />
                   <div
-                    className="pb-1 user-popover__id"
+                    className="user-popover__id"
                     key="user-popover-userid"
                   >
-                    ID:
-                     
+                    <span
+                      className="user-popover__subtitle"
+                    >
+                      ID
+                    </span>
                     user_id
                   </div>
                   <Connect(Pluggable)

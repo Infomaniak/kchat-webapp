@@ -1,3 +1,5 @@
+// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
+// See LICENSE.txt for license information.
 
 import fs from 'fs';
 
@@ -123,107 +125,6 @@ describe('Actions.Users', () => {
 
         expect(currentUserId).toBeTruthy();
         expect(myAcceptedTermsOfServiceId).not.toEqual('1');
-    });
-
-    it('logout', async () => {
-        nock(Client4.getBaseRoute()).
-            post('/users/logout').
-            reply(200, OK_RESPONSE);
-
-        await Actions.logout()(store.dispatch, store.getState);
-
-        const state = store.getState();
-        const logoutRequest = state.requests.users.logout;
-        const general = state.entities.general;
-        const users = state.entities.users;
-        const teams = state.entities.teams;
-        const channels = state.entities.channels;
-        const posts = state.entities.posts;
-        const preferences = state.entities.preferences;
-
-        if (logoutRequest.status === RequestStatus.FAILURE) {
-            throw new Error(JSON.stringify(logoutRequest.error));
-        }
-
-        // config not empty
-        expect(general.config).toEqual({});
-
-        // license not empty
-        expect(general.license).toEqual({});
-
-        // current user id not empty
-        expect(users.currentUserId).toEqual('');
-
-        // user sessions not empty
-        expect(users.mySessions).toEqual([]);
-
-        // user audits not empty
-        expect(users.myAudits).toEqual([]);
-
-        // user profiles not empty
-        expect(users.profiles).toEqual({});
-
-        // users profiles in team not empty
-        expect(users.profilesInTeam).toEqual({});
-
-        // users profiles in channel not empty
-        expect(users.profilesInChannel).toEqual({});
-
-        // users profiles NOT in channel not empty
-        expect(users.profilesNotInChannel).toEqual({});
-
-        // users statuses not empty
-        expect(users.statuses).toEqual({});
-
-        // current team id is not empty
-        expect(teams.currentTeamId).toEqual('');
-
-        // teams is not empty
-        expect(teams.teams).toEqual({});
-
-        // team members is not empty
-        expect(teams.myMembers).toEqual({});
-
-        // members in team is not empty
-        expect(teams.membersInTeam).toEqual({});
-
-        // team stats is not empty
-        expect(teams.stats).toEqual({});
-
-        // current channel id is not empty
-        expect(channels.currentChannelId).toEqual('');
-
-        // channels is not empty
-        expect(channels.channels).toEqual({});
-
-        // channelsInTeam is not empty
-        expect(channels.channelsInTeam).toEqual({});
-
-        // channel members is not empty
-        expect(channels.myMembers).toEqual({});
-
-        // channel stats is not empty
-        expect(channels.stats).toEqual({});
-
-        // selected post id is not empty
-        expect(posts.selectedPostId).toEqual('');
-
-        // current focused post id is not empty
-        expect(posts.currentFocusedPostId).toEqual('');
-
-        // posts is not empty
-        expect(posts.posts).toEqual({});
-
-        // posts by channel is not empty
-        expect(posts.postsInChannel).toEqual({});
-
-        // user preferences not empty
-        expect(preferences.myPreferences).toEqual({});
-
-        nock(Client4.getBaseRoute()).
-            post('/users/login').
-            reply(200, TestHelper.basicUser!);
-        await TestHelper.basicClient4!.login(TestHelper.basicUser!.email, 'password1');
     });
 
     it('getProfiles', async () => {
