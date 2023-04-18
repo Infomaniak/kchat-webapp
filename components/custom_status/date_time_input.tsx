@@ -22,6 +22,8 @@ import {isKeyPressed, localizeMessage} from 'utils/utils';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 import Constants from 'utils/constants';
 
+import './date_time_input.scss';
+
 const CUSTOM_STATUS_TIME_PICKER_INTERVALS_IN_MINUTES = 30;
 
 type CreatableOption = {
@@ -87,6 +89,7 @@ const styles = {
     control: (css: CSSProperties) => ({
         ...css,
         minHeight: '40px',
+        border: '2px solid var(--button-bg)',
     }),
 };
 
@@ -244,7 +247,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
                     >
                         <Input
                             value={formatDate(time.toDate())}
-                            id='customStatus__calendar-input'
+                            id='dateTime__calendar-input'
                             readOnly={true}
                             className='dateTime__calendar-input'
                             label={localizeMessage('dnd_custom_time_picker_modal.date', 'Date')}

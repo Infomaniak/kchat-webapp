@@ -14,19 +14,6 @@
     .GenericModal__header {
         padding: 28px 24px;
     }
-
-    .dateTime {
-        width: 100%;
-        margin: unset;
-
-        .dateTime__date {
-            margin-right: 16px;
-        }
-
-        .dateTime__input {
-            width: 260px;
-        }
-    }
 }
 
 .DndModal__input--no-border {
@@ -43,44 +30,4 @@
     background: rgba(var(--center-channel-bg-rgb), 1);
     color: rgba(var(--center-channel-color-rgb), 0.64);
     font-size: 10px;
-}
-
-.DndModal__calendar-input {
-    height: 40px;
-
-    &:hover {
-        cursor: pointer;
-    }
-
-    &.popper-open {
-        border-color: var(--button-bg);
-        box-shadow: inset 0 0 0 1px var(--button-bg);
-        color: var(--button-bg);
-    }
-
-    .Input_wrapper {
-        padding-left: 8px;
-
-        button.dateTime__calendar-icon {
-            margin: 0 8px 0 0;
-            color: rgba(var(--center-channel-color-rgb), 0.72);
-
-            &:active {
-                background-color: transparent;
-            }
-        }
-
-        input#DndModal__calendar-input {
-            height: auto;
-            border: 0;
-
-            &[readonly] {
-                background: transparent;
-            }
-
-            &:hover {
-                cursor: pointer;
-            }
-        }
-    }
 }
