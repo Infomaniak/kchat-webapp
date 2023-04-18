@@ -115,7 +115,7 @@ export default class DndCustomTimePicker extends React.PureComponent<Props, Stat
         } = this.getText();
         const {time, isMenuOpen, isPopperOpen} = this.state;
 
-        const isConfirmDisabled = isMenuOpen  || isPopperOpen;
+        const isConfirmDisabled = isMenuOpen || isPopperOpen;
 
         return (
             <GenericModal
