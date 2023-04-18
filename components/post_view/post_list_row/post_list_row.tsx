@@ -13,7 +13,7 @@ import {CloudUsage, Limits} from '@mattermost/types/cloud';
 import type {emitShortcutReactToLastPostFrom} from 'actions/post_actions';
 
 import CombinedUserActivityPost from 'components/post_view/combined_user_activity_post';
-import Post from 'components/post_view/post';
+import {Post} from '@mattermost/types/posts';
 import DateSeparator from 'components/post_view/date_separator';
 import NewMessageSeparator from 'components/post_view/new_message_separator/new_message_separator';
 import ChannelIntroMessage from 'components/post_view/channel_intro_message/';
@@ -21,6 +21,8 @@ import ChannelMessageLimitationBanner from '../channel_message_limitation_banner
 import {isIdNotPost} from 'utils/post_utils';
 import {PostListRowListIds, Locations} from 'utils/constants';
 import CenterMessageLock from 'components/center_message_lock';
+import PostComponent from 'components/post';
+import {UserProfile} from '@mattermost/types/users';
 
 export type PostListRowProps = {
     listId: string;
@@ -30,6 +32,8 @@ export type PostListRowProps = {
     loadOlderPosts: () => void;
     loadNewerPosts: () => void;
     togglePostMenu: (opened: boolean) => void;
+    post: Post;
+    currentUserId: UserProfile['id'];
 
     /**
      * To Check if the current post is last in the list
@@ -174,6 +178,7 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
         if (PostListUtils.isCombinedUserActivityPost(listId)) {
             return (
                 <CombinedUserActivityPost
+                    location={Locations.CENTER}
                     combinedId={listId}
                     {...postProps}
                 />
@@ -181,8 +186,9 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
         }
 
         return (
-            <Post
-                postId={listId}
+            <PostComponent
+                post={this.props.post}
+                location={Locations.CENTER}
                 {...postProps}
             />
         );

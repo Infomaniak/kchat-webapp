@@ -10,6 +10,10 @@ import cssVars from 'css-vars-ponyfill';
 
 import moment from 'moment';
 
+import type {Locale} from 'date-fns';
+
+import {getName} from 'country-list';
+
 import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes, A11yFocusEventDetail} from 'utils/constants';
 
 import {
@@ -47,6 +51,7 @@ import {addUserToTeam} from 'actions/team_actions';
 import {searchForTerm} from 'actions/post_actions';
 import {getHistory} from 'utils/browser_history';
 import * as UserAgent from 'utils/user_agent';
+import {isDesktopApp} from 'utils/user_agent';
 import bing from 'sounds/bing.mp3';
 import crackle from 'sounds/crackle.mp3';
 import down from 'sounds/down.mp3';
@@ -59,7 +64,6 @@ import store from 'stores/redux_store.jsx';
 import {getCurrentLocale, getTranslations} from 'selectors/i18n';
 import {getIsMobileView} from 'selectors/views/browser';
 
-import {isDesktopApp} from 'utils/user_agent';
 import {FileInfo} from '@mattermost/types/files';
 import {Team} from '@mattermost/types/teams';
 import {Post} from '@mattermost/types/posts';
@@ -74,7 +78,7 @@ import {focusPost} from 'components/permalink_view/actions';
 
 import {TextboxElement} from '../components/textbox';
 
-import {buildQueryString} from 'packages/client/src/helpers';
+import {Address} from '@mattermost/types/cloud';
 
 import {joinPrivateChannelPrompt} from './channel_utils';
 
@@ -493,41 +497,6 @@ export function applyTheme(theme: Theme) {
         changeCss('.app__body .emoji-picker .nav-tabs li a', 'fill:' + theme.centerChannelColor);
         changeCss('.app__body .post .post-collapse__show-more-button', `border-color:${changeOpacity(theme.centerChannelColor, 0.1)}`);
         changeCss('.app__body .post .post-collapse__show-more-line', `background-color:${changeOpacity(theme.centerChannelColor, 0.1)}`);
-
-        if (theme.centerChannelBg) {
-            const hoveredPostBg = blendColors(theme.centerChannelBg, theme.centerChannelColor, 0.04);
-            const hoveredPostBgLight = blendColors(theme.centerChannelBg, theme.centerChannelColor, 0.04);
-
-            // Fade out effect for collapsed posts that are being hovered over
-            changeCss(
-                '@media(min-width: 768px){.app__body .post-list__table .post:hover .post-collapse__gradient, ' +
-                '.app__body .sidebar-right__body .post:hover .post-collapse__gradient, ' +
-                '.app__body .ThreadPane .post:hover .post-collapse__gradient ',
-                `background:linear-gradient(${changeOpacity(hoveredPostBg, 0)}, ${hoveredPostBg})`,
-            );
-            changeCss(
-                '@media(min-width: 768px){.app__body .post-list__table .post:hover .post-collapse__show-more, ' +
-                '.app__body .sidebar-right__body .post:hover .post-collapse__show-more, ' +
-                '.app__body .ThreadPane .post:hover .post-collapse__show-more',
-                `background:${hoveredPostBg}`,
-            );
-            changeCss(
-                '@media(max-width: 768px){.app__body .post-list__table .post.current--user:hover .post-collapse__show-more',
-                `background:${hoveredPostBgLight}`,
-            );
-            changeCss(
-                '.app__body .post-list__table .post.post--hovered .post-collapse__gradient, ' +
-                '.app__body .sidebar-right__body .post.post--hovered .post-collapse__gradient, ' +
-                '.app__body .ThreadPane .post.post--hovered .post-collapse__gradient',
-                `background:linear-gradient(${changeOpacity(hoveredPostBg, 0)}, ${hoveredPostBg})`,
-            );
-            changeCss(
-                '.app__body .post-list__table .post.post--hovered .post-collapse__show-more, ' +
-                '.app__body .sidebar-right__body .post.post--hovered .post-collapse__show-more, ' +
-                '.app__body .ThreadPane .post.post--hovered .post-collapse__show-more',
-                `background:${hoveredPostBg}`,
-            );
-        }
     }
 
     if (theme.newMessageSeparator) {
@@ -578,8 +547,6 @@ export function applyTheme(theme: Theme) {
         changeCss('.app__body .search-highlight', 'background:' + theme.mentionHighlightBg);
         changeCss('.app__body .post.post--comment .post__body.mention-comment', 'border-color:' + theme.mentionHighlightBg);
         changeCss('.app__body .post.post--highlight', 'background:' + changeOpacity(theme.mentionHighlightBg, 0.5));
-        changeCss('.app__body .post.post--highlight .post-collapse__gradient', 'background:' + changeOpacity(theme.mentionHighlightBg, 0.5));
-        changeCss('.app__body .post.post--highlight .post-collapse__show-more', 'background:' + changeOpacity(theme.mentionHighlightBg, 0.5));
     }
 
     if (theme.mentionHighlightLink) {
@@ -1893,6 +1860,46 @@ export function getRoleFromTrackFlow() {
     return {started_by_role: startedByRole};
 }
 
+export function getDatePickerLocalesForDateFns(locale: string, loadedLocales: Record<string, Locale>) {
+    if (locale && locale !== 'en' && !loadedLocales[locale]) {
+        try {
+            /* eslint-disable global-require */
+            loadedLocales[locale] = require(`date-fns/locale/${locale}/index.js`);
+            /* eslint-disable global-require */
+        } catch (e) {
+            console.log(e); // eslint-disable-line no-console
+        }
+    }
+
+    return loadedLocales;
+}
+
+export function getMediumFromTrackFlow() {
+    const params = new URLSearchParams(window.location.search);
+    const source = params.get('md') ?? '';
+
+    return {source};
+}
+
+const TrackFlowSources: Record<string, string> = {
+    wd: 'webapp-desktop',
+    wm: 'webapp-mobile',
+    d: 'desktop-app',
+};
+
+function getTrackFlowSource() {
+    if (isMobile()) {
+        return TrackFlowSources.wm;
+    } else if (isDesktopApp()) {
+        return TrackFlowSources.d;
+    }
+    return TrackFlowSources.wd;
+}
+
+export function getSourceForTrackFlow() {
+    return {source: getTrackFlowSource()};
+}
+
 export function a11yFocus(element: HTMLElement | null | undefined, keyboardOnly = true) {
     document.dispatchEvent(new CustomEvent<A11yFocusEventDetail>(
         A11yCustomEventTypes.FOCUS, {
@@ -1902,4 +1909,19 @@ export function a11yFocus(element: HTMLElement | null | undefined, keyboardOnly 
             },
         },
     ));
+}
+
+export function getBlankAddressWithCountry(country?: string): Address {
+    let c = '';
+    if (country) {
+        c = getName(country) || '';
+    }
+    return {
+        city: '',
+        country: c || '',
+        line1: '',
+        line2: '',
+        postal_code: '',
+        state: '',
+    };
 }

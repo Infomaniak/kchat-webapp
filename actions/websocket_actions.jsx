@@ -137,9 +137,13 @@ const pluginEventHandlers = {};
 
 export function initialize() {
     if (!window.WebSocket) {
-        console.log('Browser does not support websocket'); //eslint-disable-line no-console
+        // eslint-disable-next-line no-console
+        console.log('Browser does not support WebSocket');
         return;
     }
+
+    // eslint-disable-next-line no-console
+    console.log('Initializing or re-initializing WebSocket');
 
     const config = getConfig(getState());
     const user = getCurrentUser(getState());
@@ -1700,6 +1704,8 @@ function handleRefreshAppsBindings() {
 }
 
 export function handleAppsPluginEnabled() {
+    dispatch(handleRefreshAppsBindings());
+
     return {
         type: AppsTypes.APPS_PLUGIN_ENABLED,
     };

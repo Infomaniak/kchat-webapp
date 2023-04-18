@@ -67,6 +67,7 @@ const state: GlobalState = {
             postsInChannel: {},
             postsInThread: {},
             pendingPostIds: [],
+            postEditHistory: [],
             reactions: {},
             openGraph: {},
             selectedPostId: '',
@@ -234,6 +235,15 @@ const state: GlobalState = {
                 invoices: {},
                 invoicesLoaded: false,
             },
+            trueUpReviewProfile: {
+                content: '',
+                getRequestState: 'IDLE',
+            },
+            trueUpReviewStatus: {
+                complete: false,
+                due_date: 0,
+                getRequestState: 'IDLE',
+            },
         },
         usage: {
             storage: 0,
@@ -256,10 +266,6 @@ const state: GlobalState = {
                 cloudArchived: 0,
                 teamsLoaded: true,
             },
-            boards: {
-                cards: 0,
-                cardsLoaded: true,
-            },
         },
         insights: {
             topReactions: {},
@@ -269,6 +275,7 @@ const state: GlobalState = {
             categories: [],
             templatesInCategory: {},
             playbookTemplates: [],
+            linkedProducts: {},
         },
     },
     errors: [],
@@ -291,10 +298,6 @@ const state: GlobalState = {
                 error: null,
             },
             updateChannel: {
-                status: 'not_started',
-                error: null,
-            },
-            getChannelsAndChannelMembers: {
                 status: 'not_started',
                 error: null,
             },

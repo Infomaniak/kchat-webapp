@@ -18,8 +18,7 @@ import {applyTheme} from 'utils/utils';
 
 import {ModalData} from 'types/actions';
 
-// import CustomThemeChooser from './custom_theme_chooser/custom_theme_chooser';
-
+//import CustomThemeChooser from './custom_theme_chooser/custom_theme_chooser';
 import PremadeThemeChooser from './premade_theme_chooser';
 
 type Props = {

@@ -40,6 +40,7 @@ export type PluginsState = {
         UserGuideDropdownItem: PluginComponent[];
         FilesWillUploadHook: PluginComponent[];
         NeedsTeamComponent: NeedsTeamComponent[];
+        CreateBoardFromTemplate: PluginComponent[];
     };
 
     postTypes: {
@@ -81,6 +82,7 @@ export type Menu = {
 export type PluginComponent = {
     id: string;
     pluginId: string;
+    title?: string;
 
     /** @default null - which means 'channels'*/
     supportedProductIds?: ProductScope;
@@ -115,7 +117,7 @@ export type FilePreviewComponent = {
     id: string;
     pluginId: string;
     override: (fileInfo: FileInfo, post?: Post) => boolean;
-    component: React.ComponentType<{fileInfo: FileInfo; post?: Post}>;
+    component: React.ComponentType<{fileInfo: FileInfo; post?: Post; onModalDismissed: () => void}>;
 }
 
 export type FileDropdownPluginComponent = {
