@@ -448,12 +448,7 @@ function generateCSP() {
         csp += CSP_WORKER_SRC;
     }
 
-    // if (DEV) {
-    //     // react-hot-loader and development source maps require eval
-    //     csp += ' \'unsafe-eval\'';
-
-    //     csp += ' ' + boardsDevServerUrl;
-    // }
+    console.log('csp for html: ', csp);
 
     return csp;
 }
