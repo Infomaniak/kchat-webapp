@@ -1315,6 +1315,10 @@ $sidebarOpacityAnimationDuration: 0.15s;
         left: 65px;
         width: 255px;
 
+        .SidebarChannel .SidebarLink {
+            width: 255px !important;
+        }
+
         ~ .inner-wrap {
             #app-content {
                 margin-left: 320px;
