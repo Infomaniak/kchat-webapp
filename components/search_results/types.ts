@@ -42,7 +42,7 @@ export type StateProps = {
     isSearchGettingMore: boolean;
     isSearchAtEnd: boolean;
     isSearchFilesAtEnd: boolean;
-    hasLimitations: string | null;
+    hasLimitDate: string | number;
 }
 
 export type IntlProps = {
