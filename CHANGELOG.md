@@ -1,3 +1,15 @@
+## 1.1.3 (2023-04-20)
+
+### Fixed (1 change)
+
+- [Fix settings ui bugs](kchat/webapp@1182d817a4ce1e7ee78f02f7fb4c679c63f0f5e0) by @leonard.jouve ([merge request](kchat/webapp!383))
+
+### Changed (3 changes)
+
+- [remove email mention from dnd description translation in fr](kchat/webapp@f466000c929fba409dc9bf06a5bee736b494db22) by @antonbuksa ([merge request](kchat/webapp!381))
+- [toggle sentry replay dynamically based on tag](kchat/webapp@a9b1befbfc7ee7d0d5eadd6b4dd4688224191f5d) by @antonbuksa ([merge request](kchat/webapp!379))
+- [sentry browsertracing sample at 10%](kchat/webapp@12d5d922c00e151421e664889896a28b8fac7c2d) by @antonbuksa ([merge request](kchat/webapp!379))
+
 ## 1.1.2 (2023-04-17)
 
 ### Changed (2 changes)
