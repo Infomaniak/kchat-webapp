@@ -308,7 +308,7 @@ export function getMissingProfilesByUsernames(usernames: string[]): ActionFunc {
     };
 }
 
-export function getProfilesByIds(userIds: string[], options?: any, includeCurrentUser?: boolean): ActionFunc {
+export function getProfilesByIds(userIds: string[], options?: any, includeCurrentUser = false): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {currentUserId} = getState().entities.users;
         let profiles: UserProfile[];
@@ -1466,7 +1466,7 @@ export function clearUserAccessTokens(): ActionFunc {
     };
 }
 
-export function checkForModifiedUsers(includeCurrentUser?: boolean) {
+export function checkForModifiedUsers(includeCurrentUser = false) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
         const users = getUsers(state);
