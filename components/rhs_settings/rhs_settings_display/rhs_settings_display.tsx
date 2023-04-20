@@ -512,7 +512,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                         onChange={(e) => this.handleOnChange({[display]: e.value})}
                         value={options.filter((opt: { value: string | boolean }) => opt.value === value)}
                         isSearchable={false}
-                        menuPortalTarget={document.body}
                         styles={reactStyles}
                     />
                 }

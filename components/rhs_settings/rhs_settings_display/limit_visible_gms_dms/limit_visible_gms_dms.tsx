@@ -86,7 +86,6 @@ export default class RhsLimitVisibleGMsDMs extends React.PureComponent<Props, St
                 defaultMessage='Number of direct messages to show'
             />
         );
-        const parent: HTMLElement | null = document.body.querySelector('#displaySettings');
         return (
             <RhsSettingsItem
                 key='limitVisibleGMsDMs'
@@ -101,7 +100,6 @@ export default class RhsLimitVisibleGMsDMs extends React.PureComponent<Props, St
                         onChange={(e) => this.handleChange(e)}
                         value={this.state.limit}
                         isSearchable={false}
-                        menuPortalTarget={parent}
                         styles={reactStyles}
                     />
                 }
