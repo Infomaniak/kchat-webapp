@@ -138,13 +138,13 @@ const MenuItemStyled = styled(MuiMenuItem, {
             '&.MuiMenuItem-root': {
                 fontFamily: '"Open Sans", sans-serif',
                 color: isRegular ? 'var(--center-channel-color)' : 'var(--error-text)',
-                padding: '6px 20px',
+                padding: '5px 10px',
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'nowrap',
                 justifyContent: 'flex-start',
                 alignItems: hasOnlyPrimaryLabel || isLabelsRowLayout ? 'center' : 'flex-start',
-                minHeight: '36px',
+                minHeight: '32px',
                 maxHeight: '56px',
 
                 // aria expanded to add the active styling on parent sub menu item
