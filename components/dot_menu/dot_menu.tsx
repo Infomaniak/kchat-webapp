@@ -597,22 +597,12 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         />
                     }
                 </ChannelPermissionGate>
-                {Boolean(
-                    !isSystemMessage &&
-                        this.props.isCollapsedThreadsEnabled &&
-                        (
-                            this.props.location === Locations.CENTER ||
-                            this.props.location === Locations.RHS_ROOT ||
-                            this.props.location === Locations.RHS_COMMENT
-                        ),
-                ) &&
-                    <Menu.Item
-                        id={`follow_post_thread_${this.props.post.id}`}
-                        data-testid={`follow_post_thread_${this.props.post.id}`}
-                        trailingElements={<ShortcutKey shortcutKey='F'/>}
-                        labels={followPostLabel()}
-                        leadingElement={isFollowingThread ? <MessageMinusOutlineIcon size={18}/> : <MessageCheckOutlineIcon size={18}/>}
-                        onClick={this.handleSetThreadFollow}
+                {!isSystemMessage &&
+                    <PostReminderSubmenu
+                        userId={this.props.userId}
+                        post={this.props.post}
+                        isMilitaryTime={this.props.isMilitaryTime}
+                        timezone={this.props.timezone}
                     />
                 }
                 {Boolean(!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH) &&
@@ -630,12 +620,22 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         onClick={this.handleMarkPostAsUnread}
                     />
                 }
-                {!isSystemMessage &&
-                    <PostReminderSubmenu
-                        userId={this.props.userId}
-                        post={this.props.post}
-                        isMilitaryTime={this.props.isMilitaryTime}
-                        timezone={this.props.timezone}
+                {Boolean(
+                    !isSystemMessage &&
+                        this.props.isCollapsedThreadsEnabled &&
+                        (
+                            this.props.location === Locations.CENTER ||
+                            this.props.location === Locations.RHS_ROOT ||
+                            this.props.location === Locations.RHS_COMMENT
+                        ),
+                ) &&
+                    <Menu.Item
+                        id={`follow_post_thread_${this.props.post.id}`}
+                        data-testid={`follow_post_thread_${this.props.post.id}`}
+                        trailingElements={<ShortcutKey shortcutKey='F'/>}
+                        labels={followPostLabel()}
+                        leadingElement={isFollowingThread ? <MessageMinusOutlineIcon size={18}/> : <MessageCheckOutlineIcon size={18}/>}
+                        onClick={this.handleSetThreadFollow}
                     />
                 }
                 {!isSystemMessage &&
@@ -658,7 +658,6 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         onClick={this.handlePinMenuItemActivated}
                     />
                 }
-                {!isSystemMessage && (this.state.canEdit || this.state.canDelete) && <Menu.Separator/>}
                 {!isSystemMessage && this.props.postTranslationEnabled &&
                     <Menu.Item
                         labels={
@@ -672,6 +671,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         onClick={this.translatePost}
                     />
                 }
+                {!isSystemMessage && (this.state.canEdit || this.state.canDelete) && <Menu.Separator/>}
                 {!isSystemMessage &&
                     <Menu.Item
                         id={`permalink_${this.props.post.id}`}
