@@ -806,7 +806,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             });
         }
 
-        const clockSection = this.createSection({
+        const clockSection = this.createSelect({
             section: 'clock',
             display: 'militaryTime',
             value: this.state.militaryTime,
@@ -815,20 +815,10 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 id: t('user.settings.display.clockDisplay'),
                 message: 'Clock Display',
             },
-            firstOption: {
-                value: 'false',
-                radionButtonText: {
-                    id: t('user.settings.display.normalClock'),
-                    message: '12-hour clock (example: 4:00 PM)',
-                },
-            },
-            secondOption: {
-                value: 'true',
-                radionButtonText: {
-                    id: t('user.settings.display.militaryClock'),
-                    message: '24-hour clock (example: 16:00)',
-                },
-            },
+            options: [
+                {value: 'false', label: localizeMessage('user.settings.display.normalClock', '12-hour clock (example: 4:00 PM)')},
+                {value: 'true', label: localizeMessage('user.settings.display.militaryClock', '24-hour clock (example: 16:00)')},
+            ],
             description: {
                 id: t('user.settings.display.preferTime'),
                 message: 'Select how you prefer time displayed. When disabled, displays a clock ranging from 0 to 24 hours (e.g. 16:00)',
@@ -899,9 +889,9 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     {linkPreviewSection}
                     {oneClickReactionsOnPostsSection}
                     {showUnreadSection}
-                    {clockSection}
                     {channelDisplayModeSection}
                     {UnreadScrollPositionSection}
+                    {clockSection}
                     {teammateNameDisplaySection}
                     {/*{lastActiveSection}*/}
                     <RhsLimitVisibleGMsDMs/>
