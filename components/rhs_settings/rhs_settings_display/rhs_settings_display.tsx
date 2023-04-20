@@ -37,7 +37,7 @@ const Preferences = Constants.Preferences;
 
 function getDisplayStateFromProps(props: Props) {
     return {
-        // lastActiveDisplay: props.lastActiveDisplay.toString(),
+        lastActiveDisplay: props.lastActiveDisplay.toString(),
         militaryTime: props.militaryTime,
         teammateNameDisplay: props.teammateNameDisplay,
         availabilityStatusOnPosts: props.availabilityStatusOnPosts,
@@ -846,38 +846,38 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             disabled: this.props.lockTeammateNameDisplay,
         });
 
-        // let lastActiveSection = null;
+        let lastActiveSection = null;
 
-        // if (this.props.lastActiveTimeEnabled) {
-        //     lastActiveSection = this.createSection({
-        //         section: 'lastactive',
-        //         display: 'lastActiveDisplay',
-        //         value: this.state.lastActiveDisplay,
-        //         defaultDisplay: 'true',
-        //         title: {
-        //             id: t('user.settings.display.lastActiveDisplay'),
-        //             message: 'Share last active time',
-        //         },
-        //         firstOption: {
-        //             value: 'false',
-        //             radionButtonText: {
-        //                 id: t('user.settings.display.lastActiveOff'),
-        //                 message: 'Off',
-        //             },
-        //         },
-        //         secondOption: {
-        //             value: 'true',
-        //             radionButtonText: {
-        //                 id: t('user.settings.display.lastActiveOn'),
-        //                 message: 'On',
-        //             },
-        //         },
-        //         description: {
-        //             id: t('user.settings.display.lastActiveDesc'),
-        //             message: 'When enabled, other users will see when you were last active.',
-        //         },
-        //     });
-        // }
+        if (this.props.lastActiveTimeEnabled) {
+            lastActiveSection = this.createSection({
+                section: 'lastactive',
+                display: 'lastActiveDisplay',
+                value: this.state.lastActiveDisplay,
+                defaultDisplay: 'true',
+                title: {
+                    id: t('user.settings.display.lastActiveDisplay'),
+                    message: 'Share last active time',
+                },
+                firstOption: {
+                    value: 'false',
+                    radionButtonText: {
+                        id: t('user.settings.display.lastActiveOff'),
+                        message: 'Off',
+                    },
+                },
+                secondOption: {
+                    value: 'true',
+                    radionButtonText: {
+                        id: t('user.settings.display.lastActiveOn'),
+                        message: 'On',
+                    },
+                },
+                description: {
+                    id: t('user.settings.display.lastActiveDesc'),
+                    message: 'When enabled, other users will see when you were last active.',
+                },
+            });
+        }
 
         return (
             <div id='displaySettings'>
@@ -889,11 +889,11 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     {linkPreviewSection}
                     {oneClickReactionsOnPostsSection}
                     {showUnreadSection}
+                    {lastActiveSection}
                     {channelDisplayModeSection}
                     {UnreadScrollPositionSection}
                     {clockSection}
                     {teammateNameDisplaySection}
-                    {/*{lastActiveSection}*/}
                     <RhsLimitVisibleGMsDMs/>
                 </div>
             </div>
