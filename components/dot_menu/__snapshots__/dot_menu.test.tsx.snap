@@ -301,48 +301,6 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
     }
     teamId="team_id_1"
   />
-  <MenuItem
-    data-testid="follow_post_thread_post_id_1"
-    id="follow_post_thread_post_id_1"
-    labels={
-      <Memo(MemoizedFormattedMessage)
-        defaultMessage="Follow message"
-        id="threading.threadMenu.followMessage"
-      />
-    }
-    leadingElement={
-      <MessageCheckOutlineIcon
-        size={18}
-      />
-    }
-    onClick={[Function]}
-    trailingElements={
-      <ShortcutKey
-        shortcutKey="F"
-      />
-    }
-  />
-  <MenuItem
-    data-testid="unread_post_post_id_1"
-    id="unread_post_post_id_1"
-    labels={
-      <Memo(MemoizedFormattedMessage)
-        defaultMessage="Mark as Unread"
-        id="post_info.unread"
-      />
-    }
-    leadingElement={
-      <MarkAsUnreadIcon
-        size={18}
-      />
-    }
-    onClick={[Function]}
-    trailingElements={
-      <ShortcutKey
-        shortcutKey="U"
-      />
-    }
-  />
   <PostReminderSubmenu
     isMilitaryTime={false}
     post={
@@ -373,6 +331,48 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
       }
     }
     userId="user_id_1"
+  />
+  <MenuItem
+    data-testid="unread_post_post_id_1"
+    id="unread_post_post_id_1"
+    labels={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Mark as Unread"
+        id="post_info.unread"
+      />
+    }
+    leadingElement={
+      <MarkAsUnreadIcon
+        size={18}
+      />
+    }
+    onClick={[Function]}
+    trailingElements={
+      <ShortcutKey
+        shortcutKey="U"
+      />
+    }
+  />
+  <MenuItem
+    data-testid="follow_post_thread_post_id_1"
+    id="follow_post_thread_post_id_1"
+    labels={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Follow message"
+        id="threading.threadMenu.followMessage"
+      />
+    }
+    leadingElement={
+      <MessageCheckOutlineIcon
+        size={18}
+      />
+    }
+    onClick={[Function]}
+    trailingElements={
+      <ShortcutKey
+        shortcutKey="F"
+      />
+    }
   />
   <MenuItem
     data-testid="save_post_post_id_1"
@@ -416,7 +416,6 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
       />
     }
   />
-  <MenuItemSeparator />
   <MenuItem
     labels={
       <Memo(MemoizedFormattedMessage)
@@ -436,6 +435,7 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
       />
     }
   />
+  <MenuItemSeparator />
   <MenuItem
     data-testid="permalink_post_id_1"
     id="permalink_post_id_1"
