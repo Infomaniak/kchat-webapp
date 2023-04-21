@@ -51,6 +51,11 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
           "user_id": "",
         }
       }
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
     />
   </SidebarCategoryHeader>
   <div
@@ -126,6 +131,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
           "user_id": "",
         }
       }
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
     />
   </SidebarCategoryHeader>
   <div
@@ -197,6 +207,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
           "team_id": "team1",
           "type": "custom",
           "user_id": "",
+        }
+      }
+      menuTriggerRef={
+        Object {
+          "current": null,
         }
       }
     />
@@ -298,6 +313,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
         }
       }
       handleOpenDirectMessagesModal={[Function]}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
     />
     <OverlayTrigger
       defaultOverlayShown={false}
@@ -425,6 +445,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
         }
       }
       handleOpenDirectMessagesModal={[Function]}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
     />
     <OverlayTrigger
       defaultOverlayShown={false}

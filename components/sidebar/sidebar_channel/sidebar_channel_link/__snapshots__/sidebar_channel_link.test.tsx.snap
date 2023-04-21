@@ -77,6 +77,11 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       }
       channelLink="http://a.fake.link"
       isUnread={false}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
       onMenuToggle={[Function]}
     />
   </div>
@@ -160,6 +165,11 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       }
       channelLink="http://a.fake.link"
       isUnread={false}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
       onMenuToggle={[Function]}
     />
   </div>
@@ -267,6 +277,11 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       }
       channelLink="http://a.fake.link"
       isUnread={false}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
       onMenuToggle={[Function]}
     />
   </div>
@@ -350,6 +365,11 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_link should match sn
       }
       channelLink="http://a.fake.link"
       isUnread={true}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
       onMenuToggle={[Function]}
     />
   </div>
