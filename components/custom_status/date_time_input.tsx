@@ -133,6 +133,19 @@ const styles = {
     control: (css: CSSProperties) => ({
         ...css,
         minHeight: '40px',
+        background: 'var(--center-channel-bg)',
+        border: '2px solid var(--button-bg)',
+        boxShadow: 'none',
+        '&:hover': {
+            border: '2px solid var(--button-bg)',
+        },
+        '&:focus': {
+            border: '2px solid var(--button-bg)',
+        },
+    }),
+    singleValue: (css: CSSProperties) => ({
+        ...css,
+        color: 'var(--center-channel-color)',
     }),
 };
 
@@ -266,6 +279,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
                 <div className='dateTime__custom-time'>
                     <Creatable
                         components={{Control: CreatableControl}}
+                        classNamePrefix='react-select'
                         options={timeOptions}
                         defaultValue={defaultTimeValue}
                         onChange={handleTimeChange}
