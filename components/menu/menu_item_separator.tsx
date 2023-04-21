@@ -16,6 +16,12 @@ export function MenuItemSeparator() {
         <Divider
             component='li'
             aria-orientation='vertical'
+            sx={() => ({
+                '&.MuiDivider-root': {
+                    marginTop: '3px',
+                    marginBottom: '3px',
+                },
+            })}
         />
     );
 }
