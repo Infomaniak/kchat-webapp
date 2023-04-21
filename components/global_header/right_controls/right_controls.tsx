@@ -11,11 +11,8 @@ import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {FormattedMessage} from 'react-intl';
 
-import {ProductIdentifier} from '@mattermost/types/products';
-
 import {GlobalState} from 'types/store';
 
-import Pluggable from 'plugins/pluggable';
 import {
     AtMentionsTour,
     CustomizeYourExperienceTour,
@@ -25,25 +22,23 @@ import {
 import StatusDropdown from 'components/status_dropdown';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 
-import {isChannels} from 'utils/products';
-
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentLocale} from 'selectors/i18n';
 
-import {isDesktopApp} from 'utils/user_agent';
+import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
 
 import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 
 import Tooltip from 'components/tooltip';
 
 import OverlayTrigger from 'components/overlay_trigger';
+import FlagNext from 'components/flag_next';
 
 import Constants from 'utils/constants';
 
 import AtMentionsButton from './at_mentions_button/at_mentions_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';
 import SettingsButton from './settings_button';
-
 
 // import PlanUpgradeButton from './plan_upgrade_button';
 
@@ -84,9 +79,20 @@ const ButtonWrapper = styled.div`
     height: 100%;
 `;
 
-export type Props = {
-    productId?: ProductIdentifier;
-}
+const NewsWrapper = styled.div`
+    position: relative;
+    display: none;
+    --module-news-icon-bell-color: rgba(var(--center-channel-color-rgb),0.785);
+`;
+
+const ReportingToolsWrapper = styled.div`
+    height: 46px;
+    width: 42px;
+    background: #7974B4;
+    display: none;
+    justify-content: center;
+    align-items: center
+`;
 
 const tooltipUserReport = (
     <Tooltip id='userReport'>
@@ -105,7 +111,7 @@ const userReportHrefs: Record<string, string> = {
     de: 'https://feedback.userreport.com/e68afd5f-31f2-4327-af79-fb0b665aee68#ideas/popular',
 };
 
-const RightControls = ({productId = null}: Props): JSX.Element => {
+const RightControls = (): JSX.Element => {
     // guest validation to see which point the messaging tour tip starts
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
     const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.CUSTOMIZE_EXPERIENCE : OnboardingTourSteps.CUSTOMIZE_EXPERIENCE;
@@ -114,6 +120,7 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
     const showAtMentionsTutorialStep = useShowOnboardingTutorialStep(atMentionsTourStep);
     const settingsTourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SETTINGS : OnboardingTourSteps.SETTINGS;
     const showSettingsTutorialStep = useShowOnboardingTutorialStep(settingsTourStep);
+    const isDesktopApp = getIsDesktopApp();
     let userReportHref = 'https://feedback.userreport.com/6b7737f6-0cc1-410f-993f-be2ffbf73a05#ideas/popular';
     if (userReportHrefs[locale]) {
         userReportHref = userReportHrefs[locale];
@@ -142,39 +149,12 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
         <RightControlsContainer
             id={'RightControlsContainer'}
         >
-            {/* <PlanUpgradeButton/> */}
-            {!isDesktopApp() && (
-                <div style={{position: 'relative'}}>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                    <module-products-component
-                        position='right'
-                        style={{height: '100%'}}
-                    >
-                        {trigger}
-                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                        {/* @ts-ignore */}
-                    </module-products-component>
-                </div>
-            )}
-            <>
-                <ButtonWrapper>
-                    {showAtMentionsTutorialStep && <AtMentionsTour/>}
-                    <AtMentionsButton/>
-                </ButtonWrapper>
-                <SavedPostsButton/>
-                <ButtonWrapper>
-                    {showSettingsTutorialStep && <SettingsTour/>}
-                    <SettingsButton/>
-                </ButtonWrapper>
-                {showCustomizeTip && <CustomizeYourExperienceTour/>}
-            </>
-            {!isDesktopApp() && (
-                <div style={{height: 46, width: 42, background: '#7974B4', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            {!isDesktopApp && (
+                <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
                     <module-reporting-tools-component size='26'></module-reporting-tools-component>
-                </div>
+                </ReportingToolsWrapper>
             )}
             <OverlayTrigger
                 trigger={['hover', 'focus']}
@@ -196,7 +176,41 @@ const RightControls = ({productId = null}: Props): JSX.Element => {
                     />
                 </a>
             </OverlayTrigger>
+            <>
+                <ButtonWrapper>
+                    {showAtMentionsTutorialStep && <AtMentionsTour/>}
+                    <AtMentionsButton/>
+                </ButtonWrapper>
+                <SavedPostsButton/>
+                {showCustomizeTip && <CustomizeYourExperienceTour/>}
+            </>
+            {!isDesktopApp && (
+                <NewsWrapper className='grey wc-trigger-news--flex'>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
+                    <module-news-component></module-news-component>
+                </NewsWrapper>
+            )}
+            <ButtonWrapper>
+                {showSettingsTutorialStep && <SettingsTour/>}
+                <SettingsButton/>
+            </ButtonWrapper>
+            {!isDesktopApp && (
+                <div style={{position: 'relative'}}>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
+                    <module-products-component
+                        position='right'
+                        style={{height: '100%'}}
+                    >
+                        {trigger}
+                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                        {/* @ts-ignore */}
+                    </module-products-component>
+                </div>
+            )}
             <StatusDropdown/>
+            <FlagNext/>
         </RightControlsContainer>
     );
 };

@@ -1,0 +1,23 @@
+.flag-next {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    z-index: 100;
+    border-top: 40px solid #0198ff;
+    border-left: 40px solid transparent;
+    pointer-events: none;
+
+    &__text {
+        position: relative;
+        transform: rotate(45deg);
+        top: -31px;
+        left: -29px;
+        width: 35px;
+        height: 14px;
+        color: white;
+        font-size: 11px;
+        font-weight: 600;
+    }
+}

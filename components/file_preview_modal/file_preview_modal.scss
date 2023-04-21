@@ -26,7 +26,7 @@
         background: rgba(0, 0, 0, 0.9);
 
         @media screen and (max-width: 768px) {
-            height: calc(100% - 108px);
+            height: calc(100vh - 108px);
             padding: 0;
             background: rgb(0, 0, 0);
         }
@@ -39,6 +39,10 @@
     &__content-image {
         overflow: hidden;
         height: calc(100vh - 120px);
+
+        @media screen and (max-width: 768px) {
+            height: calc(100vh - 156px);
+        }
     }
 
     &__scrollable {

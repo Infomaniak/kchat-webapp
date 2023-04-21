@@ -12,6 +12,7 @@ import {Preferences} from 'mattermost-redux/constants';
 
 import {get, getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, getStatusForUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import {openModal} from 'actions/views/modals';
 import {setStatusDropdown} from 'actions/views/status_dropdown';
@@ -26,6 +27,10 @@ import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName}
 import {getShowTutorialStep} from 'selectors/onboarding';
 
 import StatusDropdown from './status_dropdown';
+
+const STAFF_ONLY_TEAM_NAME_WHITELIST = [
+    'infomaniak',
+];
 
 function makeMapStateToProps() {
     const getCustomStatus = makeGetCustomStatus();
@@ -48,6 +53,9 @@ function makeMapStateToProps() {
             tourStep: isGuest ? OnboardingTourStepsForGuestUsers.PROFILE : OnboardingTourSteps.PROFILE,
         });
 
+        const currentTeam = getCurrentTeam(state);
+        const showNextSwitch = currentTeam ? STAFF_ONLY_TEAM_NAME_WHITELIST.includes(currentTeam.name) : false;
+
         return {
             userId,
             profilePicture: Client4.getProfilePictureUrl(userId, currentUser?.last_picture_update),
@@ -64,6 +72,7 @@ function makeMapStateToProps() {
             timezone: getCurrentUserTimezone(state),
             showStatusTutorialStep,
             showProfileTutorialStep,
+            showNextSwitch,
         };
     };
 }

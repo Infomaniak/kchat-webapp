@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
+import {bindActionCreators, Dispatch} from 'redux';
 
 import {createSelector} from 'reselect';
 
@@ -20,8 +21,12 @@ import {
     isCurrentChannelArchived,
     getRedirectChannelNameForTeam,
 } from 'mattermost-redux/selectors/entities/channels';
+import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
+
+import {startOrJoinKmeetCallInChannel} from 'actions/views/kmeet_calls';
 
 import {getPenultimateViewedChannelName} from 'selectors/local_storage';
+import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
@@ -60,18 +65,33 @@ const getTeammateStatus = createSelector(
     },
 );
 
-const mapStateToProps = (state: GlobalState) => ({
-    user: getCurrentUser(state),
-    channel: getCurrentChannel(state),
-    isDefault: isCurrentChannelDefault(state),
-    isFavorite: isCurrentChannelFavorite(state),
-    isMuted: isCurrentChannelMuted(state),
-    isReadonly: false,
-    isArchived: isCurrentChannelArchived(state),
-    penultimateViewedChannelName: getPenultimateViewedChannelName(state) || getRedirectChannelNameForTeam(state, getCurrentTeamId(state)),
-    pluginMenuItems: getChannelHeaderMenuPluginComponents(state),
-    isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
-});
+const mapStateToProps = (state: GlobalState) => {
+    const user = getCurrentUser(state);
+    const channel = getCurrentChannel(state);
+    return {
+        user,
+        channel,
+        dmUserId: getUserIdFromChannelName(user.id, channel.name),
+        isDefault: isCurrentChannelDefault(state),
+        isFavorite: isCurrentChannelFavorite(state),
+        isMuted: isCurrentChannelMuted(state),
+        isReadonly: false,
+        isArchived: isCurrentChannelArchived(state),
+        penultimateViewedChannelName: getPenultimateViewedChannelName(state) || getRedirectChannelNameForTeam(state, getCurrentTeamId(state)),
+        pluginMenuItems: getChannelHeaderMenuPluginComponents(state),
+        isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
+        hasCall: connectedKmeetCallUrl(state, channel.id) != null,
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+
+        actions: bindActionCreators({
+            startOrJoinKmeetCallInChannel,
+        }, dispatch),
+    };
+};
 
 const mobileMapStateToProps = (state: GlobalState) => {
     const user = getCurrentUser(state);
@@ -97,5 +117,5 @@ const mobileMapStateToProps = (state: GlobalState) => {
 };
 
 export const ChannelHeaderDropdown = Desktop;
-export const ChannelHeaderDropdownItems = connect(mapStateToProps)(Items);
+export const ChannelHeaderDropdownItems = connect(mapStateToProps, mapDispatchToProps)(Items);
 export const MobileChannelHeaderDropdown = connect(mobileMapStateToProps)(Mobile);

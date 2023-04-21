@@ -553,7 +553,7 @@ describe('handleNewPostEvents', () => {
 
 describe('reconnect', () => {
     test('should call syncPostsInChannel when socket reconnects', () => {
-        reconnect(false);
+        reconnect();
         expect(syncPostsInChannel).toHaveBeenCalledWith('otherChannel', '12345');
     });
 });

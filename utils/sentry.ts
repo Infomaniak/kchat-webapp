@@ -2,17 +2,18 @@
 // See LICENSE.txt for license information.
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as Sentry from '@sentry/react';
-import {BrowserTracing} from '@sentry/tracing';
 
 interface Args {
     SENTRY_DSN: string;
 }
 
 // Webpack global var
-// declare const COMMIT_HASH: string;
 declare const GIT_RELEASE: string;
 
 const isLocalhost = (host: string) => host.startsWith('localhost') || host.startsWith('local.') || host.startsWith('kchat.devd');
+const isCanaryOrPreprod = GIT_RELEASE.includes('-next') || GIT_RELEASE.includes('-rc');
+
+const bool = <T>(x: T | false | undefined | null | '' | 0): x is T => Boolean(x);
 
 export default function init({SENTRY_DSN}: Args) {
     const {host} = window.location;
@@ -21,13 +22,24 @@ export default function init({SENTRY_DSN}: Args) {
         return;
     }
 
-    Sentry.init({
+    const logIntegrations = [
+        true && 'bt',
+        isCanaryOrPreprod && 'replay',
+    ].filter(bool);
+
+    // eslint-disable-next-line no-console
+    console.log('[sentry integrations]', logIntegrations);
+
+    const config: Sentry.BrowserOptions = {
         dsn: SENTRY_DSN,
         release: GIT_RELEASE, //eslint-disable-line no-process-env
         environment: host.split('.').splice(1).join('.'),
         normalizeDepth: 5,
-        integrations: [new BrowserTracing()],
-        tracesSampleRate: 1.0,
+        integrations: [
+            true && new Sentry.BrowserTracing(),
+            isCanaryOrPreprod && new Sentry.Replay(),
+        ].filter(bool),
+        tracesSampleRate: 0.1,
         ignoreErrors: [
 
             // Ignore random plugins/extensions
@@ -48,5 +60,14 @@ export default function init({SENTRY_DSN}: Args) {
             /moz-extension/,
             /ResizeObserver loop/,
         ],
-    });
+    };
+
+    if (isCanaryOrPreprod) {
+        config.replaysSessionSampleRate = 0.01;
+        config.replaysOnErrorSampleRate = 1.0;
+        // eslint-disable-next-line no-console
+        console.log('[sentry replay]', {replaysSessionSampleRate: config.replaysSessionSampleRate, replaysOnErrorSampleRate: config.replaysOnErrorSampleRate});
+    }
+
+    Sentry.init(config);
 }
