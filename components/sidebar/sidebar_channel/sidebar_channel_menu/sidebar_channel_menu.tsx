@@ -300,6 +300,7 @@ const SidebarChannelMenu = (props: Props) => {
                 'aria-label': formatMessage({id: 'sidebar_left.sidebar_channel_menu.dropdownAriaLabel', defaultMessage: 'Edit channel menu'}),
                 onToggle: props.onMenuToggle,
             }}
+            menuButtonRef={props.menuTriggerRef}
         >
             {markAsReadUnreadMenuItem}
             {favoriteUnfavoriteMenuItem}

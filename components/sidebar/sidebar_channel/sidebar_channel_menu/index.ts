@@ -31,6 +31,7 @@ export type OwnProps = {
     channel: Channel;
     channelLink: string;
     isUnread: boolean;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
     channelLeaveHandler?: (callback: () => void) => void;
     onMenuToggle: (open: boolean) => void;
 }

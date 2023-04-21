@@ -263,6 +263,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                         isUnread={isUnread}
                         channelLeaveHandler={this.props.channelLeaveHandler}
                         onMenuToggle={this.handleMenuToggle}
+                        menuTriggerRef={this.menuTriggerRef}
                     />
                 </div>
             </>
@@ -287,7 +288,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 onClick={this.handleChannelClick}
                 onContextMenu={(event) => {
                     event.preventDefault();
-                    this.menuTriggerRef && this.menuTriggerRef.current?.click();
+                    this.menuTriggerRef && this.menuTriggerRef.current?.click(); // eslint-disable-line @babel/no-unused-expressions
                 }}
                 tabIndex={0}
             >
