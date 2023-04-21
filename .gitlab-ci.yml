@@ -97,7 +97,6 @@ build_front:
     name: "$DEPLOY_VARIABLE"
   before_script:
     - export ENVIRONMENT=${DEPLOY_VARIABLE}
-    - npx yarn
   script:
     - yarn
     - yarn workspace @mattermost/types build
