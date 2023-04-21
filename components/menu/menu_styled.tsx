@@ -27,5 +27,8 @@ export const MuiMenuStyled = styled(MuiMenu, {
             maxHeight: '80vh',
             width,
         },
+        '& .MuiList-root': {
+            padding: '3px 0',
+        },
     }),
 );
