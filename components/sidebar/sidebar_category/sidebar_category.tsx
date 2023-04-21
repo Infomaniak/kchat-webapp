@@ -266,7 +266,12 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
             //     </div>
             // );
 
-            categoryMenu = <SidebarCategoryMenu category={category}/>;
+            categoryMenu = (
+                <SidebarCategoryMenu
+                    category={category}
+                    menuTriggerRef={this.menuTriggerRef}
+                />
+            );
         } else if (category.type === CategoryTypes.DIRECT_MESSAGES) {
             const addHelpLabel = localizeMessage('sidebar.createDirectMessage', 'Create new direct message');
 
@@ -289,6 +294,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                     <SidebarCategorySortingMenu
                         category={category}
                         handleOpenDirectMessagesModal={this.handleOpenDirectMessagesModal}
+                        menuTriggerRef={this.menuTriggerRef}
                     />
                     <OverlayTrigger
                         delayShow={500}
@@ -310,7 +316,12 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                 isCollapsible = false;
             }
         } else {
-            categoryMenu = <SidebarCategoryMenu category={category}/>;
+            categoryMenu = (
+                <SidebarCategoryMenu
+                    category={category}
+                    menuTriggerRef={this.menuTriggerRef}
+                />
+            );
         }
 
         let displayName = category.display_name;
@@ -389,7 +400,7 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                                 onClick={this.handleCollapse}
                                                 onContextMenu={(event) => {
                                                     event.preventDefault();
-                                                    this.menuTriggerRef && this.menuTriggerRef.current?.click();
+                                                    this.menuTriggerRef && this.menuTriggerRef.current?.click(); // eslint-disable-line @babel/no-unused-expressions
                                                 }}
                                             >
                                                 {directMessagesModalButton}

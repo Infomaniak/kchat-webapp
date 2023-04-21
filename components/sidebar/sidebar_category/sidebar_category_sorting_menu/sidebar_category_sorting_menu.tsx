@@ -29,6 +29,7 @@ import type {PropsFromRedux} from './index';
 type OwnProps = {
     category: ChannelCategory;
     handleOpenDirectMessagesModal: (e: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) => void;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
 };
 
 type Props = OwnProps & PropsFromRedux;
@@ -208,6 +209,7 @@ const SidebarCategorySortingMenu = (props: Props) => {
                     'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.dropdownAriaLabel', defaultMessage: 'Edit category menu'}),
                     onToggle: handleMenuToggle,
                 }}
+                menuButtonRef={props.menuTriggerRef}
             >
                 {sortDirectMessagesMenuItem}
                 {showMessagesCountMenuItem}

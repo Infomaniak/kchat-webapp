@@ -33,6 +33,7 @@ import type {PropsFromRedux} from './index';
 
 type OwnProps = {
     category: ChannelCategory;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
 };
 
 type Props = OwnProps & PropsFromRedux;
@@ -266,6 +267,7 @@ const SidebarCategoryMenu = (props: Props) => {
                     'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.dropdownAriaLabel', defaultMessage: 'Edit category menu'}),
                     onToggle: handleMenuToggle,
                 }}
+                menuButtonRef={props.menuTriggerRef}
             >
                 {muteUnmuteCategoryMenuItem}
                 {renameCategoryMenuItem}
