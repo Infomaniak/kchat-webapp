@@ -4047,7 +4047,7 @@
   "post_info.del": "Supprimer",
   "post_info.dot_menu.tooltip.more_actions": "Plus",
   "post_info.edit": "Modifier",
-  "post_info.guest": "EXTERNE",
+  "tag.default.guest": "EXTERNE",
   "post_info.info.view_additional_info": "Afficher plus d'infos",
   "post_info.marketplace": "Place de marché des applications",
   "post_info.menuAriaLabel": "Options additionnelles du message",
