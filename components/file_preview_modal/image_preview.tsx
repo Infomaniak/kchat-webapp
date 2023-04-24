@@ -139,13 +139,14 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     return (
         <div style={containerStyle}>
             <img
+                className={`image_preview image_preview__${cursorType} ${imageOverflows ? 'image_preview__fullscreen' : ''}`}
+                ref={imgRef}
+                src={previewUrl}
+                loading='lazy'
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
                 onMouseMove={handleMouseMove}
                 onWheel={handleWheel}
-                ref={imgRef}
-                src={previewUrl}
-                className={`image_preview image_preview__${cursorType} ${imageOverflows ? 'image_preview__fullscreen' : ''}`}
             />
         </div>
     );
