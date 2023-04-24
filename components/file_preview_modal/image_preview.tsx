@@ -12,14 +12,12 @@ import {FileInfo} from '@mattermost/types/files';
 
 import './image_preview.scss';
 
-const HORIZONTAL_PADDING = 48;
-const VERTICAL_PADDING = 168;
 const SCROLL_SENSITIVITY = 0.003;
 const MAX_SCALE = 5;
 const MIN_SCALE = 1;
 
 let zoomExport: number;
-let minZoomExport: number;
+const minZoomExport = MIN_SCALE;
 
 interface Props {
     fileInfo: FileInfo & LinkInfo;
@@ -27,86 +25,54 @@ interface Props {
     setToolbarZoom: (toolbarZoom: ZoomValue) => void;
 }
 
-const getWindowDimensions = () => {
-    const maxWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0) - HORIZONTAL_PADDING;
-    const maxHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) - VERTICAL_PADDING;
-    return {maxWidth, maxHeight};
-};
-
-const fitImage = (width: number, height: number) => {
-    const {maxWidth, maxHeight} = getWindowDimensions();
-    const scaleX = maxWidth / width;
-    const scaleY = maxHeight / height;
+const getMaxContainerScale = (imageWidth: number, imageHeight: number, containerWidth: number, containerHeight: number) => {
+    const scaleX = containerWidth / imageWidth;
+    const scaleY = containerHeight / imageHeight;
     return Math.round(Math.min(scaleX, scaleY) * 100) / 100;
 };
 
 export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Props) {
     const [dragging, setDragging] = useState(false);
-    const [offset, setOffset] = useState({x: 0, y: 0});
-
-    const containerRef = useRef<HTMLDivElement>(null);
+    const [offset, setOffset] = useState({offsetX: 0, offsetY: 0});
     const imgRef = useRef<HTMLImageElement>(null);
     const scale = useRef(1);
     const isMouseDown = useRef(false);
-    const touch = useRef({x: 0, y: 0});
-    const imageBorder = useRef({w: 0, h: 0});
+    const touch = useRef({touchX: 0, touchY: 0});
 
-    const clampOffset = (x: number, y: number) => {
-        const {w, h} = imageBorder.current;
-        const {horizontal, vertical} = isFullscreen;
+    const imageWidth = imgRef.current?.width || 1;
+    const imageHeight = imgRef.current?.height || 1;
+    const containerWidth = imgRef.current?.parentElement?.parentElement?.clientWidth || window.innerWidth;
+    const containerHeight = imgRef.current?.parentElement?.parentElement?.clientHeight || window.innerHeight;
+    const maxContainerScale = getMaxContainerScale(imageWidth, imageHeight, containerWidth, containerHeight);
+    const imageOverflows = scale.current > maxContainerScale;
 
-        if (scale.current <= maxZoom) {
-            return {xPos: 0, yPos: 0};
-        }
+    const clampOffset = (offsetX: number, offsetY: number) => {
+        const overflowWidth = ((imageWidth * scale.current) - containerWidth) / 2;
+        const overflowHeight = ((imageHeight * scale.current) - containerHeight) / 2;
+        const isFullscreenHorizontaly = overflowWidth >= 0;
+        const isFullscreenVerticaly = overflowHeight >= 0;
 
         return {
-            xPos: horizontal ? clamp(x, w, -w) : 0,
-            yPos: vertical ? clamp(y, h, -h) : 0,
+            clampedOffsetX: isFullscreenHorizontaly ? clamp(offsetX, -overflowWidth, overflowWidth) : 0,
+            clampedOffsetY: isFullscreenVerticaly ? clamp(offsetY, -overflowHeight, overflowHeight) : 0,
         };
     };
 
-    const maxZoom = fitImage(fileInfo.width, fileInfo.height);
-    let isFullscreen = {horizontal: false, vertical: false};
-
     if (imgRef.current) {
-        const {maxWidth, maxHeight} = getWindowDimensions();
-        const {width, height} = imgRef.current;
-
         switch (toolbarZoom) {
         case 'A':
             scale.current = MIN_SCALE;
             break;
         case 'W':
-            scale.current = clamp(getWindowDimensions().maxWidth / width, MIN_SCALE, MAX_SCALE);
+            scale.current = clamp(containerWidth / imageWidth, MIN_SCALE, MAX_SCALE);
             break;
         case 'H':
-            scale.current = clamp(getWindowDimensions().maxHeight / height, MIN_SCALE, MAX_SCALE);
+            scale.current = clamp(containerHeight / imageHeight, MIN_SCALE, MAX_SCALE);
             break;
         default:
             scale.current = toolbarZoom;
             break;
         }
-
-        imageBorder.current = {
-            w: (maxWidth - (width * scale.current)) / 2,
-            h: (maxHeight - (height * scale.current)) / 2,
-        };
-        isFullscreen = {
-            horizontal: imageBorder.current.w <= 0,
-            vertical: imageBorder.current.h <= 0,
-        };
-    }
-
-    const isExternalFile = !fileInfo.id;
-
-    let fileUrl;
-    let previewUrl: string;
-    if (isExternalFile) {
-        fileUrl = fileInfo.link;
-        previewUrl = fileInfo.link;
-    } else {
-        fileUrl = getFileDownloadUrl(fileInfo.id);
-        previewUrl = fileInfo.has_preview_image ? getFilePreviewUrl(fileInfo.id) : fileUrl;
     }
 
     const handleWheel = (event: React.WheelEvent) => {
@@ -114,8 +80,9 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         const {deltaY} = event;
         if (!dragging) {
             scale.current = clamp(scale.current + (deltaY * SCROLL_SENSITIVITY * -1), MIN_SCALE, MAX_SCALE);
-            const {xPos, yPos} = clampOffset(offset.x, offset.y);
-            setOffset({x: xPos, y: yPos});
+            const {offsetX, offsetY} = offset;
+            const {clampedOffsetX, clampedOffsetY} = clampOffset(offsetX, offsetY);
+            setOffset({offsetX: clampedOffsetX, offsetY: clampedOffsetY});
             setToolbarZoom(scale.current === MIN_SCALE ? 'A' : scale.current);
         }
     };
@@ -124,17 +91,18 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         if (!dragging || scale.current === MIN_SCALE) {
             return;
         }
-        const {x, y} = touch.current;
+        const {touchX, touchY} = touch.current;
         const {clientX, clientY} = event;
-        const {xPos, yPos} = clampOffset(offset.x + (clientX - x), offset.y + (clientY - y));
-        setOffset({x: xPos, y: yPos});
-        touch.current = {x: clientX, y: clientY};
+        const {offsetX, offsetY} = offset;
+        const {clampedOffsetX, clampedOffsetY} = clampOffset(offsetX + (clientX - touchX), offsetY + (clientY - touchY));
+        setOffset({offsetX: clampedOffsetX, offsetY: clampedOffsetY});
+        touch.current = {touchX: clientX, touchY: clientY};
     };
 
     const handleMouseDown = (event: React.MouseEvent) => {
         event.preventDefault();
         const {clientX, clientY} = event;
-        touch.current = {x: clientX, y: clientY};
+        touch.current = {touchX: clientX, touchY: clientY};
         isMouseDown.current = true;
         setDragging(true);
     };
@@ -144,28 +112,32 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         setDragging(false);
     };
 
-    zoomExport = scale.current;
-    minZoomExport = MIN_SCALE;
+    const isExternalFile = !fileInfo.id;
+    let fileUrl = getFileDownloadUrl(fileInfo.id);
+    let previewUrl = fileInfo.has_preview_image ? getFilePreviewUrl(fileInfo.id) : fileUrl;
+    if (isExternalFile) {
+        fileUrl = fileInfo.link;
+        previewUrl = fileInfo.link;
+    }
 
-    const {xPos, yPos} = clampOffset(offset.x, offset.y);
+    const {offsetX, offsetY} = offset;
+    const {clampedOffsetX, clampedOffsetY} = clampOffset(offsetX, offsetY);
     const containerStyle = {
         transform: `
-            translate(${xPos}px, ${yPos}px)
+            translate(${clampedOffsetX}px, ${clampedOffsetY}px)
             scale(${scale.current})
         `,
     };
 
     let cursorType = 'normal';
-
-    if (scale.current !== 1) {
+    if (imageOverflows) {
         cursorType = dragging ? 'dragging' : 'hover';
     }
 
+    zoomExport = scale.current;
+
     return (
-        <div
-            ref={containerRef}
-            style={containerStyle}
-        >
+        <div style={containerStyle}>
             <img
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
@@ -173,7 +145,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
                 onWheel={handleWheel}
                 ref={imgRef}
                 src={previewUrl}
-                className={`image_preview image_preview__${cursorType} ${isFullscreen.horizontal || isFullscreen.vertical ? 'image_preview__fullscreen' : ''}`}
+                className={`image_preview image_preview__${cursorType} ${imageOverflows ? 'image_preview__fullscreen' : ''}`}
             />
         </div>
     );
