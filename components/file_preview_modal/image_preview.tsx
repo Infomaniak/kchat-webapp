@@ -14,7 +14,7 @@ import './image_preview.scss';
 
 const PADDING = 48;
 const SCROLL_SENSITIVITY = 0.003;
-const MAX_SCALE = 5;
+const DEFAULT_MAX_SCALE = 5;
 const DEFAULT_MIN_SCALE = 1;
 
 let zoomExport: number;
@@ -39,24 +39,22 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     const scale = useRef(1);
     const isMouseDown = useRef(false);
     const touch = useRef({touchX: 0, touchY: 0});
+    const maxScale = useRef(1);
     const minScale = useRef(1);
 
     useEffect(() => {
-        window.addEventListener('mousedown', handleMouseDown);
         window.addEventListener('mouseup', handleMouseUp);
         return () => {
-            window.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mouseup', handleMouseUp);
         };
     }, []);
 
-    const imageWidth = imgRef.current?.naturalWidth || 1;
-    const imageHeight = imgRef.current?.naturalHeight || 1;
+    const imageWidth = imgRef.current?.width || 1;
+    const imageHeight = imgRef.current?.height || 1;
     const containerWidth = imgRef.current?.parentElement?.parentElement?.clientWidth || window.innerWidth;
     const containerHeight = imgRef.current?.parentElement?.parentElement?.clientHeight || window.innerHeight;
     const maxContainerScale = getMaxContainerScale(imageWidth, imageHeight, containerWidth - PADDING, containerHeight - PADDING);
     minScale.current = Math.min(maxContainerScale, DEFAULT_MIN_SCALE);
-    const imageOverflows = scale.current > maxContainerScale;
 
     const clampOffset = (offsetX: number, offsetY: number) => {
         const overflowWidth = ((imageWidth * scale.current) - containerWidth) / 2;
@@ -71,18 +69,21 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     };
 
     if (imgRef.current) {
+        const imageRatio = Math.round(DEFAULT_MAX_SCALE * (imgRef.current.naturalWidth / imgRef.current.width));
+        maxScale.current = Math.max(imageRatio, DEFAULT_MAX_SCALE);
+
         switch (toolbarZoom) {
         case 'A':
             scale.current = minScale.current;
             break;
         case 'W':
-            scale.current = clamp(containerWidth / imageWidth, minScale.current, MAX_SCALE);
+            scale.current = clamp(containerWidth / imageWidth, minScale.current, maxScale.current);
             break;
         case 'H':
-            scale.current = clamp(containerHeight / imageHeight, minScale.current, MAX_SCALE);
+            scale.current = clamp(containerHeight / imageHeight, minScale.current, maxScale.current);
             break;
         default:
-            scale.current = toolbarZoom;
+            scale.current = toolbarZoom * (maxScale.current / DEFAULT_MAX_SCALE);
             break;
         }
     }
@@ -91,11 +92,11 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         event.persist();
         const {deltaY} = event;
         if (!dragging) {
-            scale.current = clamp(scale.current + (deltaY * SCROLL_SENSITIVITY * -1), minScale.current, MAX_SCALE);
+            scale.current = clamp(scale.current + (deltaY * -SCROLL_SENSITIVITY), minScale.current, maxScale.current);
             const {offsetX, offsetY} = offset;
             const {clampedOffsetX, clampedOffsetY} = clampOffset(offsetX, offsetY);
             setOffset({offsetX: clampedOffsetX, offsetY: clampedOffsetY});
-            setToolbarZoom(scale.current === minScale.current ? 'A' : scale.current);
+            setToolbarZoom(scale.current === minScale.current ? 'A' : scale.current / (maxScale.current / DEFAULT_MAX_SCALE));
         }
     };
 
@@ -123,7 +124,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         }
     };
 
-    const handleMouseDown = (event: MouseEvent) => {
+    const handleMouseDown = (event: React.MouseEvent) => {
         event.preventDefault();
         const {clientX, clientY} = event;
         touch.current = {touchX: clientX, touchY: clientY};
@@ -153,6 +154,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         `,
     };
 
+    const imageOverflows = scale.current > getMaxContainerScale(imageWidth, imageHeight, containerWidth, containerHeight);
     let cursorType = 'normal';
     if (imageOverflows) {
         cursorType = dragging ? 'dragging' : 'hover';
@@ -166,11 +168,10 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
             <img
                 className={`image_preview image_preview__${cursorType} ${imageOverflows ? 'image_preview__fullscreen' : ''}`}
                 ref={imgRef}
-                width={imgRef.current?.naturalWidth}
-                height={imgRef.current?.naturalHeight}
                 src={previewUrl}
                 loading='lazy'
                 onMouseMove={handleMouseMove}
+                onMouseDown={handleMouseDown}
                 onMouseLeave={handleMouseLeave}
                 onMouseEnter={handleMouseEnter}
                 onWheel={handleWheel}
