@@ -255,8 +255,6 @@ export async function reconnect() {
             console.log('[websocket_actions > reconnect] token expired, calling refresh');
             try {
                 const newToken = await refreshIKToken(/*redirectToTeam**/false);
-                // eslint-disable-next-line no-console
-                console.log('[websocket_actions > reconnect] token refreshed, new token: ', newToken);
                 if (newToken) {
                     WebSocketClient.updateToken(newToken);
                 }

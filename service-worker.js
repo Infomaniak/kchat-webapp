@@ -33,11 +33,6 @@ function injectBearer(event, encodeBody = false) {
         return responsePromise;
     }
 
-    // const newRequest = new Request(event.request, {
-    //     mode: 'cors',
-    //     headers: {Authorization: 'Bearer ' + self.token},
-    // });
-
     return fetch(event.request.url, {
         mode: 'cors',
         headers: {Authorization: 'Bearer ' + self.token},
