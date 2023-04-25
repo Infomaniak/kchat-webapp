@@ -4,7 +4,7 @@
 import {UserProfile} from '@mattermost/types/users';
 import {Team} from '@mattermost/types/teams';
 
-import {browserHistory} from 'utils/browser_history';
+import {getHistory} from 'utils/browser_history';
 import {closeRightHandSide, closeMenu as closeRhsMenu} from 'actions/views/rhs';
 import {close as closeLhs} from 'actions/views/lhs';
 import LocalStorageStore from 'stores/local_storage_store';
@@ -35,7 +35,7 @@ jest.mock('stores/redux_store', () => {
 
 describe('actions/global_actions', () => {
     describe('redirectUserToDefaultTeam', () => {
-        it('should redirect to /select_team when no team is available', async () => {
+        it('should redirect to /error?type=no_ksuite when no team is available', async () => {
             const store = mockStore({
                 entities: {
                     general: {
@@ -66,9 +66,8 @@ describe('actions/global_actions', () => {
 
             reduxStore.getState.mockImplementation(store.getState);
 
-            browserHistory.push = jest.fn();
             await redirectUserToDefaultTeam();
-            expect(browserHistory.push).toHaveBeenCalledWith('/select_team');
+            expect(getHistory().push).toHaveBeenCalledWith('/error?type=no_ksuite');
         });
 
         it('should redirect to last viewed channel in the last viewed team when the user have access to that team', async () => {
@@ -141,9 +140,8 @@ describe('actions/global_actions', () => {
 
             reduxStore.getState.mockImplementation(store.getState);
 
-            browserHistory.push = jest.fn();
             await redirectUserToDefaultTeam();
-            expect(browserHistory.push).toHaveBeenCalledWith('/team2/channels/channel-in-team-2');
+            expect(getHistory().push).toHaveBeenCalledWith('/team2/channels/channel-in-team-2');
         });
 
         it('should redirect to last channel on first team with channels when the user have no channels in the current team', async () => {
@@ -215,12 +213,11 @@ describe('actions/global_actions', () => {
 
             reduxStore.getState.mockImplementation(store.getState);
 
-            browserHistory.push = jest.fn();
             await redirectUserToDefaultTeam();
-            expect(browserHistory.push).toHaveBeenCalledWith('/team2/channels/channel-in-team-2');
+            expect(getHistory().push).toHaveBeenCalledWith('/team2/channels/channel-in-team-2');
         });
 
-        it('should redirect to /select_team when the user have no channels in the any of his teams', async () => {
+        it('should redirect to /error?type=team_not_found when the user have no channels in the any of his teams', async () => {
             const userId = 'user1';
             LocalStorageStore.setPreviousTeamId(userId, 'team1');
             LocalStorageStore.setPreviousChannelName(userId, 'team1', 'channel-in-team-1');
@@ -288,9 +285,8 @@ describe('actions/global_actions', () => {
 
             reduxStore.getState.mockImplementation(store.getState);
 
-            browserHistory.push = jest.fn();
             await redirectUserToDefaultTeam();
-            expect(browserHistory.push).toHaveBeenCalledWith('/select_team');
+            expect(getHistory().push).toHaveBeenCalledWith('/error?type=team_not_found');
         });
 
         it('should do nothing if there is not current user', async () => {
@@ -321,9 +317,8 @@ describe('actions/global_actions', () => {
 
             reduxStore.getState.mockImplementation(store.getState);
 
-            browserHistory.push = jest.fn();
             await redirectUserToDefaultTeam();
-            expect(browserHistory.push).not.toHaveBeenCalled();
+            expect(getHistory().push).not.toHaveBeenCalled();
         });
 
         it('should redirect to direct message if that\'s the most recently used', async () => {
@@ -574,9 +569,8 @@ describe('actions/global_actions', () => {
 
             reduxStore.getState.mockImplementation(store.getState);
 
-            browserHistory.push = jest.fn();
             await redirectUserToDefaultTeam();
-            expect(browserHistory.push).toHaveBeenCalledWith('/team1/channels/channel-in-team-1');
+            expect(getHistory().push).toHaveBeenCalledWith('/team1/channels/channel-in-team-1');
         });
     });
 

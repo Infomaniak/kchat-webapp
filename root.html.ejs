@@ -20,11 +20,12 @@
     <link rel="icon" type="image/png" href="/static/images/favicon/favicon-default-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="/static/images/favicon/favicon-default-64x64.png" sizes="64x64">
     <link rel="icon" type="image/png" href="/static/images/favicon/favicon-default-96x96.png" sizes="96x96">
-    <script>
-        window.WEBCOMPONENT_API_ENDPOINT = "<%= WEBCOMPONENT_API_ENDPOINT %>";
+    <script type="text/javascript">
+        var WEB_COMPONENT_API_ENDPOINT = "<%= WEBCOMPONENT_API_ENDPOINT %>";
+        var WEBCOMPONENT_API_ENDPOINT = "<%= WEBCOMPONENT_API_ENDPOINT %>";
         window.CURRENT_PROJECT = 'kchat';
     </script>
-    <script id="webComponents" src="<%= WEBCOMPONENT_ENDPOINT %>/init.js?project=kchat"></script>
+    <script type="text/javascript" async id="webComponents" src="<%= WEBCOMPONENT_ENDPOINT %>/init.js?project=kchat" charset="UTF-8"></script>
 
     <!-- CSS Should always go first -->
     <link rel='stylesheet' class='code_theme'>

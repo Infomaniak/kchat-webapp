@@ -28,13 +28,21 @@ import {makeAsyncComponent} from 'components/async_load';
 import {Channel} from '@mattermost/types/channels';
 import {UserProfile} from '@mattermost/types/users';
 import {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {ServerError} from '@mattermost/types/errors';
 
 import {GlobalState} from 'types/store';
 
 import type {InviteResults} from './result_view';
+import {InviteType} from './invite_as';
+
 const InvitationModal = makeAsyncComponent('InvitationModal', React.lazy(() => import('./invitation_modal')));
 
-const searchProfiles = (term: string, options = {}) => {
+const searchProfiles = (term: string, options = {}, inviteType?: InviteType) => {
+    if (inviteType && inviteType === InviteType.GUEST) {
+        //disable users autocomplete
+        return () => Promise.resolve({data: []});
+    }
+
     if (!term) {
         return getProfiles(0, 20, options);
     }
@@ -60,6 +68,9 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
     const currentTeam = currentTeamId === '' && props.channelToInvite ? getTeam(state, props.channelToInvite.team_id) : getCurrentTeam(state);
     const currentChannel = getCurrentChannel(state);
     const invitableChannels = channels.filter((channel) => {
+        if (channel.delete_at > 0) {
+            return false;
+        }
         if (channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) {
             return false;
         }
@@ -70,9 +81,9 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
     });
     const guestAccountsEnabled = config.EnableGuestAccounts === 'true';
     const emailInvitationsEnabled = config.EnableEmailInvitations === 'true';
-    const isLicensed = license && license.IsLicensed === 'true';
+    const isEnterpriseReady = config.BuildEnterpriseReady === 'true';
     const isGroupConstrained = Boolean(currentTeam.group_constrained);
-    const canInviteGuests = !isGroupConstrained && isLicensed && guestAccountsEnabled && haveICurrentTeamPermission(state, Permissions.INVITE_GUEST);
+    const canInviteGuests = !isGroupConstrained && isEnterpriseReady && guestAccountsEnabled && haveICurrentTeamPermission(state, Permissions.INVITE_GUEST);
     const isCloud = license.Cloud === 'true';
 
     const canAddUsers = haveICurrentTeamPermission(state, Permissions.ADD_USER_TO_TEAM);
@@ -91,11 +102,11 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
 }
 
 type Actions = {
-    sendGuestsInvites: (teamId: string, channels: Channel[], users: UserProfile[], emails: string[], message: string) => Promise<{data: InviteResults}>;
+    sendGuestsInvites: (teamId: string, channels: Channel[], users: UserProfile[], emails: string[], message: string, openExternalLimitModalIfNeeded: (error: ServerError) => ActionFunc) => Promise<{data: InviteResults}>;
     sendMembersInvites: (teamId: string, users: UserProfile[], emails: string[]) => Promise<{data: InviteResults}>;
     sendMembersInvitesToChannels: (teamId: string, channels: Channel[], users: UserProfile[], emails: string[], message: string) => Promise<{data: InviteResults}>;
     regenerateTeamInviteId: (teamId: string) => void;
-    searchProfiles: (term: string, options?: Record<string, string>) => Promise<{data: UserProfile[]}>;
+    searchProfiles: (term: string, options?: Record<string, string>, inviteType?: InviteType) => Promise<{data: UserProfile[]}>;
     searchChannels: (teamId: string, term: string) => ActionFunc;
 }
 

@@ -6,21 +6,15 @@ import {Redirect} from 'react-router-dom';
 
 import semver from 'semver';
 
-import {viewChannel} from 'mattermost-redux/actions/channels';
-
 import * as GlobalActions from 'actions/global_actions';
 import * as WebSocketActions from 'actions/websocket_actions.jsx';
 import * as UserAgent from 'utils/user_agent';
 import LoadingScreen from 'components/loading_screen';
-import {getBrowserTimezone} from 'utils/timezone.jsx';
-import store from 'stores/redux_store.jsx';
+import {getBrowserTimezone} from 'utils/timezone';
 import WebSocketClient from 'client/web_websocket_client.jsx';
 import BrowserStore from 'stores/browser_store';
 import {UserProfile} from '@mattermost/types/users';
 import {Channel} from '@mattermost/types/channels';
-
-const dispatch = store.dispatch;
-const getState = store.getState;
 
 const BACKSPACE_CHAR = 8;
 
@@ -36,13 +30,12 @@ export type Props = {
     currentUser?: UserProfile;
     currentChannelId?: string;
     children?: React.ReactNode;
-    mfaRequired: boolean;
     enableTimezone: boolean;
     actions: {
         autoUpdateTimezone: (deviceTimezone: string) => void;
         getChannelURLAction: (channel: Channel, teamId: string, url: string) => void;
+        viewChannel: (channelId: string, prevChannelId?: string) => void;
     };
-    showTermsOfService: boolean;
     location: {
         pathname: string;
         search: string;
@@ -145,18 +138,6 @@ export default class LoggedIn extends React.PureComponent<Props> {
             return <LoadingScreen/>;
         }
 
-        if (this.props.mfaRequired) {
-            if (this.props.location.pathname !== '/mfa/setup') {
-                return <Redirect to={'/mfa/setup'}/>;
-            }
-        } else if (this.props.location.pathname === '/mfa/confirm') {
-            // Nothing to do. Wait for MFA flow to complete before prompting TOS.
-        } else if (this.props.showTermsOfService) {
-            if (this.props.location.pathname !== '/terms_of_service') {
-                return <Redirect to={'/terms_of_service?redirect_to=' + encodeURIComponent(this.props.location.pathname)}/>;
-            }
-        }
-
         return this.props.children;
     }
 
@@ -217,7 +198,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
     private handleBeforeUnload = (): void => {
         // remove the event listener to prevent getting stuck in a loop
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
-        viewChannel('', this.props.currentChannelId || '')(dispatch, getState);
+        this.props.actions.viewChannel('', this.props.currentChannelId || '');
         WebSocketActions.close();
     }
 }

@@ -26,6 +26,7 @@ import BotBadge from 'components/widgets/badges/bot_badge';
 import Popover from 'components/widgets/popover';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import CustomStatusText from 'components/custom_status/custom_status_text';
+import Timestamp from 'components/timestamp';
 import ChannelHeaderPlug from 'plugins/channel_header_plug';
 
 import {
@@ -38,6 +39,7 @@ import {handleFormattedTextClick, localizeMessage, isEmptyObject, toTitleCase} f
 import {t} from 'utils/i18n';
 
 import MeetButton from 'components/meet_button';
+import {ChannelHeaderTour, KmeetTour} from 'components/tours/onboarding_tour';
 import {UserCustomStatus, UserProfile} from '@mattermost/types/users';
 import {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
 import {RhsState} from 'types/store/rhs';
@@ -90,6 +92,10 @@ export type Props = {
     isCustomStatusEnabled: boolean;
     isCustomStatusExpired: boolean;
     isFileAttachmentsEnabled: boolean;
+    isLastActiveEnabled: boolean;
+    timestampUnits?: string[];
+    lastActivityTimestamp?: number;
+    showChannelHeaderTutorialStep: boolean;
 };
 
 type State = {
@@ -256,7 +262,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
         }
 
         return (
-            <>
+            <div className='custom-emoji__wrapper'>
                 <CustomStatusEmoji
                     userID={this.props.dmUser?.id}
                     showTooltip={true}
@@ -269,7 +275,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                 <CustomStatusText
                     text={customStatus?.text}
                 />
-            </>
+            </div>
         );
     }
 
@@ -287,6 +293,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             rhsState,
             hasGuests,
             teammateNameDisplaySetting,
+            showChannelHeaderTutorialStep,
         } = this.props;
         const {formatMessage} = this.props.intl;
         const ariaLabelChannelHeader = localizeMessage('accessibility.sections.channelHeader', 'channel header region');
@@ -421,6 +428,30 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     {this.renderCustomStatus()}
                 </span>
             );
+
+            if (this.props.isLastActiveEnabled && this.props.lastActivityTimestamp && this.props.timestampUnits) {
+                dmHeaderTextStatus = (
+                    <span className='header-status__text'>
+                        <span className='last-active__text'>
+                            <FormattedMessage
+                                id='channel_header.lastActive'
+                                defaultMessage='Active {timestamp}'
+                                values={{
+                                    timestamp: (
+                                        <Timestamp
+                                            value={this.props.lastActivityTimestamp}
+                                            units={this.props.timestampUnits}
+                                            useTime={false}
+                                            style={'short'}
+                                        />
+                                    ),
+                                }}
+                            />
+                        </span>
+                        {this.renderCustomStatus()}
+                    </span>
+                );
+            }
         }
 
         const channelFilesIconClass = classNames('channel-header__icon channel-header__icon--wide channel-header__icon--left', {
@@ -498,6 +529,9 @@ class ChannelHeader extends React.PureComponent<Props, State> {
         let headerTextContainer;
         const headerText = (isDirect && dmUser?.is_bot) ? dmUser.bot_description : channel.header;
         if (headerText) {
+            const imageProps = {
+                hideUtilities: true,
+            };
             const popoverContent = (
                 <Popover
                     id='header-popover'
@@ -513,6 +547,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         <Markdown
                             message={headerText}
                             options={this.getPopoverMarkdownOptions(channelNamesMap)}
+                            imageProps={imageProps}
                         />
                     </span>
                 </Popover>
@@ -524,6 +559,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     className='channel-header__description'
                     dir='auto'
                 >
+                    {showChannelHeaderTutorialStep && <ChannelHeaderTour/>}
                     {dmHeaderIconStatus}
                     {dmHeaderTextStatus}
                     {memberListButton}
@@ -554,6 +590,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         <Markdown
                             message={headerText.replace(/\n+/g, ' ')}
                             options={this.getHeaderMarkdownOptions(channelNamesMap)}
+                            imageProps={imageProps}
                         /></div>
                     <span
                         className='header-description__text'
@@ -578,6 +615,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         <Markdown
                             message={headerText}
                             options={this.getHeaderMarkdownOptions(channelNamesMap)}
+                            imageProps={imageProps}
                         />
                     </span>
                 </div>
@@ -632,6 +670,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     id='channelHeaderDescription'
                     className='channel-header__description light'
                 >
+                    {showChannelHeaderTutorialStep && <ChannelHeaderTour/>}
                     {dmHeaderIconStatus}
                     {dmHeaderTextStatus}
                     {memberListButton}
@@ -823,9 +862,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         channel={channel}
                         channelMember={channelMember}
                     />
-                    {showMeetBtn &&
-                        <MeetButton/>
-                    }
+                    {showMeetBtn && <MeetButton/>}
                     <ChannelInfoButton channel={channel}/>
                 </div>
             </div>

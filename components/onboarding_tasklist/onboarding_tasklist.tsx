@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import React, {useRef, useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled, {css} from 'styled-components';
@@ -16,16 +17,13 @@ import {getMyPreferences, savePreferences} from 'mattermost-redux/actions/prefer
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {trackEvent} from 'actions/telemetry_actions';
-import checklistImg from 'images/onboarding-checklist.svg';
 import {
     useTasksListWithStatus,
     OnboardingTaskCategory,
     OnboardingTaskList,
 } from 'components/onboarding_tasks';
 import {useHandleOnBoardingTaskTrigger} from 'components/onboarding_tasks/onboarding_tasks_manager';
-import {openModal} from 'actions/views/modals';
 import {GlobalState} from 'types/store';
-import OnBoardingVideoModal from 'components/onboarding_tasks/onboarding_video_modal/onboarding_video_modal';
 
 import {Preferences, RecommendedNextStepsLegacy} from 'utils/constants';
 
@@ -33,12 +31,13 @@ import {TaskListPopover} from './onboarding_tasklist_popover';
 import {Task} from './onboarding_tasklist_task';
 import Completed from './onboarding_tasklist_completed';
 import {CompletedAnimation} from './onboarding_tasklist_animations';
+import TasklistIcon from './tasklist_icon';
 
 const TaskItems = styled.div`
     border-radius: 4px;
     border: solid 1px rgba(var(--center-channel-color-rgb), 0.16);
     background-color: var(--center-channel-bg);
-    width: 352px;
+    width: 400px;
     padding: 24px 0;
     transform: scale(0);
     opacity: 0;
@@ -93,15 +92,15 @@ const Button = styled.button<{open: boolean}>(({open}) => {
         background: var(--center-channel-bg);
         border: solid 1px rgba(var(--center-channel-color-rgb), 0.16);
         box-shadow: var(--elevation-3);
-        
+
         i {
             color: rgba(var(--center-channel-color-rgb), 0.56);
         }
-        
+
         &:hover {
             border-color: rgba(var(--center-channel-color-rgb), 0.24);
             box-shadow: var(--elevation-4);
-            
+
             i {
                 color: rgba(var(--center-channel-color-rgb), 0.72)
             }
@@ -124,36 +123,8 @@ const Button = styled.button<{open: boolean}>(({open}) => {
     `;
 });
 
-const PlayButton = styled.button`
-    padding: 10px 20px;
-    max-width: 175px;
-    background: var(--button-bg);
-    border-radius: 4px;
-    color: var(--button-color);
-    border: none;
-    font-weight: bold;
-    position: absolute;
-    z-index: 1;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    top: 48px;
-  
-    &:hover {
-        border-color: rgba(var(--center-channel-color-rgb), 0.24);
-        box-shadow: var(--elevation-4);
-    }
-
-    i {
-        margin-right: 10px;
-        vertical-align: middle;
-    }
-`;
-
 const Skeleton = styled.div`
     height: auto;
-    margin: 0 auto;
     padding: 0 20px;
     position: relative;
 `;
@@ -217,7 +188,13 @@ const OnBoardingTaskList = (): JSX.Element | null => {
         if (firstTimeOnboarding) {
             initOnboardingPrefs();
         }
-    }, [firstTimeOnboarding]);
+    }, []);
+
+    useEffect(() => {
+        if (firstTimeOnboarding && showTaskList && isEnableOnboardingFlow) {
+            trackEvent(OnboardingTaskCategory, OnboardingTaskList.ONBOARDING_TASK_LIST_SHOW);
+        }
+    }, [firstTimeOnboarding, showTaskList, isEnableOnboardingFlow]);
 
     useEffect(() => {
         if (firstTimeOnboarding && showTaskList && isEnableOnboardingFlow) {
@@ -268,17 +245,19 @@ const OnBoardingTaskList = (): JSX.Element | null => {
             name: OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN,
             value: String(!open),
         }];
-        dispatch(savePreferences(currentUserId, preferences));
-    }, [open, currentUserId]);
 
-    const openVideoModal = useCallback(() => {
-        toggleTaskList();
-        dispatch(openModal({
-            modalId: OnboardingTaskList.ONBOARDING_VIDEO_MODAL,
-            dialogType: OnBoardingVideoModal,
-            dialogProps: {},
-        }));
-    }, []);
+        // disable onboarding if the user completed every steps
+        if (open && completedCount === tasksList.length) {
+            preferences.push({
+                user_id: currentUserId,
+                category: OnboardingTaskCategory,
+                name: OnboardingTaskList.ONBOARDING_TASK_LIST_SHOW,
+                value: 'false',
+            });
+        }
+        dispatch(savePreferences(currentUserId, preferences));
+        trackEvent(OnboardingTaskCategory, open ? OnboardingTaskList.ONBOARDING_TASK_LIST_CLOSE : OnboardingTaskList.ONBOARDING_TASK_LIST_OPEN);
+    }, [open, currentUserId, completedCount, tasksList]);
 
     if (Object.keys(myPreferences).length === 0 || !showTaskList || !isEnableOnboardingFlow) {
         return null;
@@ -312,38 +291,22 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                                 <h1>
                                     <FormattedMessage
                                         id='next_steps_view.welcomeToMattermost'
-                                        defaultMessage='Welcome to Mattermost'
+                                        defaultMessage='Welcome to KChat'
                                     />
                                 </h1>
                                 <p>
                                     <FormattedMessage
-                                        id='onboardingTask.checklist.main_subtitle'
+                                        id='onboardingTour.taskList.subtitle'
                                         defaultMessage="Let's get up and running."
                                     />
                                 </p>
                                 <Skeleton>
-                                    <img
-                                        src={checklistImg}
-                                        alt={'On Boarding video'}
-                                        style={{display: 'block', margin: '1rem auto', borderRadius: '4px'}}
-                                    />
-                                    <PlayButton
-                                        onClick={openVideoModal}
-                                    >
-                                        <Icon
-                                            glyph={'play'}
-                                            size={16}
-                                        />
-                                        <FormattedMessage
-                                            id='onboardingTask.checklist.video_title'
-                                            defaultMessage='Watch overview'
-                                        />
-                                    </PlayButton>
+                                    <TasklistIcon/>
                                 </Skeleton>
                                 {tasksList.map((task) => (
                                     <Task
                                         key={OnboardingTaskCategory + task.name}
-                                        label={task.label}
+                                        label={task.label()}
                                         onClick={() => {
                                             startTask(task.name);
                                         }}
@@ -355,7 +318,7 @@ const OnBoardingTaskList = (): JSX.Element | null => {
                                     onClick={dismissChecklist}
                                 >
                                     <FormattedMessage
-                                        id='onboardingTask.checklist.dismiss_link'
+                                        id='onboardingTask.taskList.dismiss_link'
                                         defaultMessage='No thanks, I’ll figure it out myself'
                                     />
                                 </span>

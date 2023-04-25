@@ -7,7 +7,7 @@ import {General, Preferences} from 'mattermost-redux/constants';
 
 import {getConfig, getFeatureFlagValue, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-import {isGuest} from 'mattermost-redux/utils/user_utils';
+import {isAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {PreferenceType} from '@mattermost/types/preferences';
 import {GlobalState} from '@mattermost/types/store';
@@ -111,11 +111,11 @@ const getThemePreference = createSelector(
     },
 );
 
-export type ThemeKey = 'denim' | 'sapphire' | 'quartz' | 'indigo' | 'onyx';
+export type ThemeKey = 'denim' | 'sapphire' | 'quartz' | 'indigo' | 'onyx' | 'infomaniak';
 
 export type LegacyThemeType = 'Mattermost' | 'Organization' | 'Mattermost Dark' | 'Windows Dark';
 
-export type ThemeType = 'Denim' | 'Sapphire' | 'Quartz' | 'Indigo' | 'Onyx';
+export type ThemeType = 'Denim' | 'Sapphire' | 'Quartz' | 'Indigo' | 'Onyx' | 'Infomaniak';
 
 export type Theme = {
     [key: string]: string | undefined;
@@ -145,6 +145,21 @@ export type Theme = {
     mentionHighlightBg: string;
     mentionHighlightLink: string;
     codeTheme: string;
+    ikIllustrationGreyOne: string;
+    ikIllustrationGreyTwo: string;
+    ikIllustrationGreyThree: string;
+    ikIllustrationGreyFour: string;
+    ikIllustrationGreyFive: string;
+    ikIllustrationGreySix: string;
+    ikIllustrationGreySeven: string;
+    ikIllustrationGreyEight: string;
+    ikIllustrationGreyNine: string;
+    ikIllustrationGreyTen: string;
+    ikIllustrationGreyEleven: string;
+    ikIllustrationGreyTwelve: string;
+    ikIllustrationGreyThirteen: string;
+    ikIllustrationGreyFourteen: string;
+    ikIllustrationGreyFifteen: string;
 };
 
 const getDefaultTheme = createSelector('getDefaultTheme', getConfig, (config): Theme => {
@@ -227,10 +242,7 @@ export function getCollapsedThreadsPreference(state: GlobalState): string {
 }
 
 export function isCollapsedThreadsAllowed(state: GlobalState): boolean {
-    return (
-        getFeatureFlagValue(state, 'CollapsedThreads') === 'true' &&
-        getConfig(state).CollapsedThreads !== CollapsedThreads.DISABLED
-    );
+    return Boolean(getConfig(state)) && getConfig(state).CollapsedThreads !== undefined && getConfig(state).CollapsedThreads !== CollapsedThreads.DISABLED;
 }
 
 export function isCollapsedThreadsEnabled(state: GlobalState): boolean {
@@ -249,7 +261,7 @@ export function isGroupChannelManuallyVisible(state: GlobalState, channelId: str
 }
 
 export function isCustomGroupsEnabled(state: GlobalState): boolean {
-    return getFeatureFlagValue(state, 'CustomGroups') === 'true' && getConfig(state).EnableCustomGroups === 'true';
+    return getConfig(state).EnableCustomGroups === 'true';
 }
 
 export function getUseCaseOnboarding(state: GlobalState): boolean {
@@ -259,18 +271,46 @@ export function getUseCaseOnboarding(state: GlobalState): boolean {
 export function insightsAreEnabled(state: GlobalState): boolean {
     const isConfiguredForFeature = getConfig(state).InsightsEnabled === 'true';
     const featureIsEnabled = getFeatureFlagValue(state, 'InsightsEnabled') === 'true';
-    const currentUserIsGuest = isGuest(getCurrentUser(state).roles);
-    return featureIsEnabled && isConfiguredForFeature && !currentUserIsGuest;
+    const currentUserIsAdmin = isAdmin(getCurrentUser(state).roles);
+    return featureIsEnabled && isConfiguredForFeature && currentUserIsAdmin;
 }
 
 export function isGraphQLEnabled(state: GlobalState): boolean {
     return getFeatureFlagValue(state, 'GraphQL') === 'true';
 }
 
-export function getIsAdvancedTextEditorEnabled(state: GlobalState): boolean {
-    return getFeatureFlagValue(state, 'AdvancedTextEditor') === 'true';
+export function isAnnualSubscriptionEnabled(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'AnnualSubscription') === 'true';
 }
 
 export function getHasDismissedSystemConsoleLimitReached(state: GlobalState): boolean {
     return getBool(state, Preferences.CATEGORY_UPGRADE_CLOUD, Preferences.SYSTEM_CONSOLE_LIMIT_REACHED, false);
+}
+
+export function syncedDraftsAreAllowed(state: GlobalState): boolean {
+    const isFeatureEnabled = getFeatureFlagValue(state, 'GlobalDrafts') === 'true';
+    const isConfiguredForFeature = getConfig(state).AllowSyncedDrafts === 'true';
+
+    return isFeatureEnabled && isConfiguredForFeature;
+}
+
+export function syncedDraftsAreAllowedAndEnabled(state: GlobalState): boolean {
+    const isFeatureEnabled = getFeatureFlagValue(state, 'GlobalDrafts') === 'true';
+    const isConfiguredForFeature = getConfig(state).AllowSyncedDrafts === 'true';
+    const isConfiguredForUser = getBool(state, Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_SYNC_DRAFTS, true);
+
+    return isFeatureEnabled && isConfiguredForFeature && isConfiguredForUser;
+}
+
+export function localDraftsAreEnabled(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'GlobalDrafts') === 'true';
+}
+
+export function isReduceOnBoardingTaskList(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'ReduceOnBoardingTaskList') === 'true';
+}
+
+export function getVisibleDmGmLimit(state: GlobalState) {
+    const defaultLimit = 40;
+    return getInt(state, Preferences.CATEGORY_SIDEBAR_SETTINGS, Preferences.LIMIT_VISIBLE_DMS_GMS, defaultLimit);
 }

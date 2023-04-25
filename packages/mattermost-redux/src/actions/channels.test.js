@@ -32,7 +32,6 @@ describe('Actions.Channels', () => {
             entities: {
                 general: {
                     config: {
-                        FeatureFlagCollapsedThreads: 'true',
                         CollapsedThreads: 'always_on',
                     },
                 },
@@ -59,7 +58,7 @@ describe('Actions.Channels', () => {
             post('/channels').
             reply(201, TestHelper.fakeChannelWithId(TestHelper.basicTeam.id));
 
-        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam.id), TestHelper.basicUser.id));
+        await store.dispatch(Actions.createChannel(TestHelper.fakeChannel(TestHelper.basicTeam.id), TestHelper.basicUser.id, jest.fn));
 
         const createRequest = store.getState().requests.channels.createChannel;
 
@@ -263,7 +262,7 @@ describe('Actions.Channels', () => {
 
         assert.equal(publicChannel.type, General.OPEN_CHANNEL);
 
-        await store.dispatch(Actions.updateChannelPrivacy(publicChannel.id, General.PRIVATE_CHANNEL));
+        await store.dispatch(Actions.updateChannelPrivacy(publicChannel.id, General.PRIVATE_CHANNEL, jest.fn));
 
         const updateRequest = store.getState().requests.channels.updateChannel;
         if (updateRequest.status === RequestStatus.FAILURE) {
@@ -315,7 +314,7 @@ describe('Actions.Channels', () => {
         assert.ok(myMembers[TestHelper.basicChannel.id]);
     });
 
-    it('fetchMyChannelsAndMembers', async () => {
+    it('fetchMyChannelsAndMembersREST', async () => {
         nock(Client4.getBaseRoute()).
             post('/users').
             query(true).
@@ -343,7 +342,7 @@ describe('Actions.Channels', () => {
             get(`/users/me/teams/${TestHelper.basicTeam.id}/channels/members`).
             reply(200, [{user_id: TestHelper.basicUser.id, roles: 'channel_user', channel_id: directChannel.id}, TestHelper.basicChannelMember]);
 
-        await store.dispatch(Actions.fetchMyChannelsAndMembers(TestHelper.basicTeam.id));
+        await store.dispatch(Actions.fetchMyChannelsAndMembersREST(TestHelper.basicTeam.id));
 
         const {channels, channelsInTeam, myMembers} = store.getState().entities.channels;
         assert.ok(channels);
@@ -369,7 +368,7 @@ describe('Actions.Channels', () => {
             get(`/users/me/teams/${TestHelper.basicTeam.id}/channels/members`).
             reply(200, [TestHelper.basicChannelMember]);
 
-        await store.dispatch(Actions.fetchMyChannelsAndMembers(TestHelper.basicTeam.id));
+        await store.dispatch(Actions.fetchMyChannelsAndMembersREST(TestHelper.basicTeam.id));
 
         nock(Client4.getBaseRoute()).
             put(`/channels/${TestHelper.basicChannel.id}/members/${TestHelper.basicUser.id}/notify_props`).
@@ -432,7 +431,7 @@ describe('Actions.Channels', () => {
             get(`/users/me/teams/${TestHelper.basicTeam.id}/channels/members`).
             reply(200, [{user_id: TestHelper.basicUser.id, roles: 'channel_user', channel_id: secondChannel.id}, TestHelper.basicChannelMember]);
 
-        await store.dispatch(Actions.fetchMyChannelsAndMembers(TestHelper.basicTeam.id));
+        await store.dispatch(Actions.fetchMyChannelsAndMembersREST(TestHelper.basicTeam.id));
 
         nock(Client4.getBaseRoute()).
             post('/hooks/incoming').
@@ -532,7 +531,7 @@ describe('Actions.Channels', () => {
             get(`/users/me/teams/${TestHelper.basicTeam.id}/channels/members`).
             reply(200, [{user_id: TestHelper.basicUser.id, roles: 'channel_user', channel_id: secondChannel.id}, TestHelper.basicChannelMember]);
 
-        await store.dispatch(Actions.fetchMyChannelsAndMembers(TestHelper.basicTeam.id));
+        await store.dispatch(Actions.fetchMyChannelsAndMembersREST(TestHelper.basicTeam.id));
 
         nock(Client4.getBaseRoute()).
             post('/hooks/incoming').
@@ -579,7 +578,9 @@ describe('Actions.Channels', () => {
             delete(`/channels/${secondChannel.id}`).
             reply(200, OK_RESPONSE);
 
-        await store.dispatch(Actions.unarchiveChannel(secondChannel.id));
+        const openChannelLimitModalIfNeeded = jest.fn(() => ({type: ''}));
+
+        await store.dispatch(Actions.unarchiveChannel(secondChannel.id, openChannelLimitModalIfNeeded));
 
         const {incomingHooks, outgoingHooks} = store.getState().entities.integrations;
 
@@ -730,7 +731,7 @@ describe('Actions.Channels', () => {
             get(`/users/me/teams/${TestHelper.basicTeam.id}/channels/members`).
             reply(200, [{user_id: TestHelper.basicUser.id, roles: 'channel_user', channel_id: userChannel.id}, TestHelper.basicChannelMember]);
 
-        await store.dispatch(Actions.fetchMyChannelsAndMembers(TestHelper.basicTeam.id));
+        await store.dispatch(Actions.fetchMyChannelsAndMembersREST(TestHelper.basicTeam.id));
 
         const timestamp = Date.now();
         let members = store.getState().entities.channels.myMembers;
@@ -2658,5 +2659,57 @@ describe('Actions.Channels', () => {
         assert.equal(channelMemberCounts['group-2'].group_id, 'group-2');
         assert.equal(channelMemberCounts['group-2'].channel_member_count, 999);
         assert.equal(channelMemberCounts['group-2'].channel_member_timezones_count, 131);
+    });
+
+    it('should display limit modal if reached when converting channel', async () => {
+        const openChannelLimitModalIfNeeded = jest.fn(() => ({type: ''}));
+        const channelID = 'cid10000000000000000000000';
+        const statusCode = 409;
+        const id = 'quota-exceeded';
+        store = configureStore({
+            entities: {
+                channels: {
+                    channels: {
+                        [channelID]: {type: General.OPEN_CHANNEL},
+                    },
+                },
+            },
+        });
+        nock(Client4.getBaseRoute()).
+            put(`/channels/${channelID}/privacy`).
+            reply(statusCode, {status_code: statusCode, id});
+        await store.dispatch(Actions.updateChannelPrivacy(channelID, General.PRIVATE_CHANNEL, openChannelLimitModalIfNeeded));
+        expect(openChannelLimitModalIfNeeded).toBeCalledTimes(1);
+        const {status_code: responseStatusCode, server_error_id: responseServerErrorId} = openChannelLimitModalIfNeeded.mock.calls[0][0];
+        const type = openChannelLimitModalIfNeeded.mock.calls[0][1];
+        expect(responseStatusCode).toEqual(statusCode);
+        expect(responseServerErrorId).toEqual(id);
+        expect(type).toEqual(General.PRIVATE_CHANNEL);
+    });
+
+    it('should display limit modal if reached when unarchiving channel', async () => {
+        const openChannelLimitModalIfNeeded = jest.fn(() => ({type: ''}));
+        const channelID = 'cid10000000000000000000000';
+        const statusCode = 409;
+        const id = 'quota-exceeded';
+        store = configureStore({
+            entities: {
+                channels: {
+                    channels: {
+                        [channelID]: {type: General.OPEN_CHANNEL},
+                    },
+                },
+            },
+        });
+        nock(Client4.getBaseRoute()).
+            post(`/channels/${channelID}/restore`).
+            reply(statusCode, {status_code: statusCode, id});
+        await store.dispatch(Actions.unarchiveChannel(channelID, openChannelLimitModalIfNeeded));
+        expect(openChannelLimitModalIfNeeded).toBeCalledTimes(1);
+        const {status_code: responseStatusCode, server_error_id: responseServerErrorId} = openChannelLimitModalIfNeeded.mock.calls[0][0];
+        const type = openChannelLimitModalIfNeeded.mock.calls[0][1];
+        expect(responseStatusCode).toEqual(statusCode);
+        expect(responseServerErrorId).toEqual(id);
+        expect(type).toEqual(General.OPEN_CHANNEL);
     });
 });

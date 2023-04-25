@@ -74,27 +74,18 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
 
         return (
             <Menu.Group>
-                {/* Hide this (Mattermost) links until we have help pages */}
-                {/*{this.props.enableAskCommunityLink === 'true' && (*/}
-                {/*    <Menu.ItemExternalLink*/}
-                {/*        id='askTheCommunityLink'*/}
-                {/*        url={askTheCommunityUrl}*/}
-                {/*        text={intl.formatMessage({id: 'userGuideHelp.askTheCommunity', defaultMessage: 'Ask the community'})}*/}
-                {/*        onClick={this.askTheCommunityClick}*/}
-                {/*    />*/}
-                {/*)}*/}
-                {/*<Menu.ItemExternalLink*/}
-                {/*    id='helpResourcesLink'*/}
-                {/*    url={this.props.helpLink}*/}
-                {/*    text={intl.formatMessage({id: 'userGuideHelp.helpResources', defaultMessage: 'Help resources'})}*/}
-                {/*/>*/}
-                {/*{this.props.reportAProblemLink && (*/}
-                {/*    <Menu.ItemExternalLink*/}
-                {/*        id='reportAProblemLink'*/}
-                {/*        url={this.props.reportAProblemLink}*/}
-                {/*        text={intl.formatMessage({id: 'userGuideHelp.reportAProblem', defaultMessage: 'Report a problem'})}*/}
-                {/*    />*/}
-                {/*)}*/}
+                <Menu.ItemExternalLink
+                    id='helpResourcesLink'
+                    url={this.props.helpLink}
+                    text={intl.formatMessage({id: 'userGuideHelp.helpResources', defaultMessage: 'Help resources'})}
+                />
+                {this.props.reportAProblemLink && (
+                    <Menu.ItemExternalLink
+                        id='reportAProblemLink'
+                        url={this.props.reportAProblemLink}
+                        text={intl.formatMessage({id: 'userGuideHelp.reportAProblem', defaultMessage: 'Report a problem'})}
+                    />
+                )}
                 <Menu.ItemAction
                     id='keyboardShortcuts'
                     onClick={this.openKeyboardShortcutsModal}
@@ -131,13 +122,16 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                     overlay={this.state.buttonActive ? <></> : tooltip}
                 >
                     <IconButton
+                        className='color-grey'
                         size={'sm'}
                         icon={'help-circle-outline'}
                         onClick={() => {}} // icon button currently requires onclick ... needs to revisit
                         active={this.state.buttonActive}
                         inverted={true}
                         compact={true}
-                        aria-label='Select to toggle the help menu.' // proper wording and translation needed
+                        aria-controls='AddChannelDropdown'
+                        aria-expanded={this.state.buttonActive}
+                        aria-label={intl.formatMessage({id: 'channel_header.userHelpGuide', defaultMessage: 'Help'})}
                     />
                 </OverlayTrigger>
                 <Menu

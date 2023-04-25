@@ -39,14 +39,13 @@ type State = {
 }
 
 export default class SingleImageView extends React.PureComponent<Props, State> {
-    private mounted: boolean;
+    private mounted = false;
     static defaultProps = {
         compactDisplay: false,
     };
 
     constructor(props: Props) {
         super(props);
-        this.mounted = true;
         this.state = {
             loaded: false,
             dimensions: {
@@ -61,7 +60,10 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
     }
 
     static getDerivedStateFromProps(props: Props, state: State) {
-        if ((props.fileInfo?.width !== state.dimensions.width) || props.fileInfo.height !== state.dimensions.height) {
+        if (
+            props.fileInfo?.width && props.fileInfo?.height &&
+            ((props.fileInfo?.width !== state.dimensions.width) || props.fileInfo.height !== state.dimensions.height)
+        ) {
             return {
                 dimensions: {
                     width: props.fileInfo?.width,
@@ -76,9 +78,9 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
         this.mounted = false;
     }
 
-    imageLoaded = () => {
+    imageLoaded = (dimensions: State['dimensions']) => {
         if (this.mounted) {
-            this.setState({loaded: true});
+            this.setState({loaded: true, dimensions});
         }
     }
 

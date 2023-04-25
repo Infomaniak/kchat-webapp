@@ -1,6 +1,10 @@
 @charset "utf-8";
 
 @media screen and (max-width: 960px) {
+    .integrations-list {
+        justify-content: center;
+    }
+
     .system-users__filter-row {
         flex-direction: column;
 
@@ -29,7 +33,7 @@
                         max-height: calc(100vh - 108px);
                     }
 
-                    >div {
+                    > div {
                         min-width: 250px;
                         font-size: 12px;
                     }
@@ -111,6 +115,12 @@
     }
 }
 
+@media (min-width: 960px) {
+    .backstage-content {
+        margin: 46px 46px 46px 150px;
+    }
+}
+
 @media (min-width: 880px) {
     .post-collapse__show-more {
         padding-right: 60px;
@@ -130,25 +140,13 @@
 
 // Tablet and desktop
 @media screen and (min-width: 769px) {
-    // ensure the global header always sits on top of it's immediate sibling
+    // ensure the global header always sits on top of its immediate sibling
     > header {
         z-index: 2;
 
         + * {
             position: relative;
             z-index: 1;
-        }
-    }
-
-    .channel__wrap {
-
-        // indicates the RHS is open
-        &.move--left {
-
-            // adjust channel header width
-            #channel-header {
-                width: calc(100% - 400px);
-            }
         }
     }
 
@@ -180,12 +178,6 @@
     }
 
     .sidebar--right {
-        top: 63px;
-
-        .announcement-bar--fixed & {
-            top: 95px;
-        }
-
         &.move--left {
             transform: translateX(0);
 
@@ -195,11 +187,7 @@
         }
 
         &.sidebar--right--expanded {
-            width: calc(100% - 220px - 48px);
-
-            .multi-teams & {
-                width: calc(100% - 285px - 48px);
-            }
+            width: min(60vw, 75rem);
 
             .search-bar__container {
                 padding-left: 10px;
@@ -218,18 +206,6 @@
                 .icon-arrow-collapse {
                     display: inline-block;
                 }
-            }
-        }
-    }
-
-    .move--left {
-        #post-list {
-            margin-right: 400px;
-        }
-
-        .app__content {
-            > .post-create__container {
-                width: calc(100% - 400px);
             }
         }
     }
@@ -378,7 +354,7 @@
                     }
 
                     .post-menu {
-                        top: -12px;
+                        top: -34px;
                     }
                 }
 
@@ -390,7 +366,7 @@
                     &.post--comment {
                         .post__header {
                             .post-menu {
-                                top: -12px;
+                                top: -34px;
                             }
                         }
                     }
@@ -426,7 +402,7 @@
                     float: left;
 
                     .post-menu {
-                        top: -32px;
+                        top: -34px;
                     }
                 }
 
@@ -479,10 +455,6 @@
         transform: translateX(100%);
         transition: all 0.35s ease;
 
-        .announcement-bar--fixed & {
-            top: 32px;
-        }
-
         .sidebar-right-container {
             height: 100%;
         }
@@ -533,6 +505,7 @@
             }
 
             .app__content {
+                > .Drafts__main,
                 > #post-list {
                     margin-right: 0 !important;
                 }

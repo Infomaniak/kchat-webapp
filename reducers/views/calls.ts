@@ -3,8 +3,8 @@
 import {combineReducers} from 'redux';
 
 import {UserProfile} from 'mattermost-redux/types/users';
+
 import {ActionTypes} from 'utils/constants';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 export type UserState = {
     voice: boolean;
@@ -167,6 +167,7 @@ const voiceConnectedChannels = (state: ConnectedChannelsState = {}, action: Conn
 const connectedChannelID = (state: string | null = null, action: {type: string; data: {channelID: string; currentUserID: string; userID: string}}) => {
     switch (action.type) {
     case ActionTypes.VOICE_CHANNEL_UNINIT:
+    case ActionTypes.VOICE_CHANNEL_DELETED:
         return null;
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
         if (action.data.currentUserID === action.data.userID) {
@@ -197,6 +198,22 @@ const connectedCallID = (state: string | null = null, action: {type: string; dat
             return null;
         }
         return state;
+    default:
+        return state;
+    }
+};
+
+const connectedCallUrl = (state: string | null = null, action: {type: string; data: {channelID: string; currentUserID: string; userID: string; url: string}}) => {
+    switch (action.type) {
+    case ActionTypes.VOICE_CHANNEL_UNINIT:
+        return null;
+    case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
+    case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED:
+    case ActionTypes.VOICE_CHANNEL_ADDED:
+        return action.data.url;
+    case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED:
+    case ActionTypes.VOICE_CHANNEL_DELETED:
+        return null;
     default:
         return state;
     }
@@ -248,21 +265,26 @@ const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatuse
         // }
         return state;
     case ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED: {
-        const call = state[action.data.callID];
+        /*const call = state[action.data.callID];
         if (call) {
             const newCall = Object.entries(call).filter(([key, val]) => key !== action.data.userID);
             return {
                 ...state,
                 [action.data.callID]: Object.fromEntries(newCall),
             };
+        }*/
+        if (action.data.currentUserID === action.data.userID) {
+            return {};
         }
         return state;
     }
     case ActionTypes.VOICE_CHANNEL_DELETED: {
         if (action.data.callID) {
+            /*
             const filteredCallsIds = Object.entries(state).filter(([key, val]) => key !== action.data.callID);
-
             return filteredCallsIds.length > 0 ? Object.fromEntries(filteredCallsIds) : {};
+*/
+            return {};
         }
         return state;
     }
@@ -466,6 +488,7 @@ export default combineReducers({
     voiceConnectedChannels,
     connectedChannelID,
     connectedCallID,
+    connectedCallUrl,
     voiceConnectedProfiles,
     voiceUsersStatuses,
     callStartAt,

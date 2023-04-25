@@ -7,8 +7,6 @@ import classNames from 'classnames';
 
 import Pluggable from 'plugins/pluggable';
 
-import {Channel} from '@mattermost/types/channels';
-
 import {mark, trackEvent} from 'actions/telemetry_actions';
 
 import CopyUrlContextMenu from 'components/copy_url_context_menu';
@@ -19,12 +17,15 @@ import Constants from 'utils/constants';
 import {wrapEmojis} from 'utils/emoji_utils';
 import {isDesktopApp} from 'utils/user_agent';
 import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
-import {ChannelsAndDirectMessagesTour} from 'components/onboarding_tour';
+import {ChannelsTour} from 'components/tours/onboarding_tour';
+
+import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 
 import ChannelMentionBadge from '../channel_mention_badge';
+import ChannelPencilIcon from '../channel_pencil_icon';
 import SidebarChannelIcon from '../sidebar_channel_icon';
 import SidebarChannelMenu from '../sidebar_channel_menu';
-import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
+import {Channel} from '@mattermost/types/channels';
 
 type Props = {
     channel: Channel;
@@ -49,20 +50,14 @@ type Props = {
      */
     isMuted: boolean;
 
-    /**
-     * Checks if channel is collapsed
-     */
-    isCollapsed: boolean;
-
     isChannelSelected: boolean;
 
     teammateId?: string;
 
-    firstChannelName?: string;
-
-    showChannelsTutorialStep: boolean;
+    hasUrgent: boolean;
 
     actions: {
+        markMostRecentPostInChannelAsUnread: (channelId: string) => void;
         clearChannelSelection: () => void;
         multiSelectChannelTo: (channelId: string) => void;
         multiSelectChannelAdd: (channelId: string) => void;
@@ -136,9 +131,11 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
 
     handleChannelClick = (event: React.MouseEvent<HTMLAnchorElement>): void => {
         mark('SidebarChannelLink#click');
-        trackEvent('ui', 'ui_channel_selected_v2');
-
         this.handleSelectChannel(event);
+
+        setTimeout(() => {
+            trackEvent('ui', 'ui_channel_selected_v2');
+        }, 0);
     }
 
     handleSelectChannel = (event: React.MouseEvent<HTMLAnchorElement>): void => {
@@ -152,8 +149,10 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
         } else if (event.shiftKey) {
             event.preventDefault();
             this.props.actions.multiSelectChannelTo(this.props.channel.id);
+        } else if (event.altKey && !this.props.isUnread) {
+            event.preventDefault();
+            this.props.actions.markMostRecentPostInChannelAsUnread(this.props.channel.id);
         } else {
-            this.props.actions.unsetEditingPost();
             this.props.actions.clearChannelSelection();
         }
     }
@@ -176,17 +175,8 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
             label,
             link,
             unreadMentions,
-            firstChannelName,
-            showChannelsTutorialStep,
+            hasUrgent,
         } = this.props;
-
-        let channelsTutorialTip: JSX.Element | null = null;
-
-        // firstChannelName is based on channel.name,
-        // but we want to display `display_name` to the user, so we check against `.name` for channel equality but pass in the .display_name value
-        if (firstChannelName === channel.name || (!firstChannelName && showChannelsTutorialStep && channel.name === Constants.DEFAULT_CHANNEL)) {
-            channelsTutorialTip = firstChannelName ? (<ChannelsAndDirectMessagesTour firstChannelName={channel.display_name}/>) : <ChannelsAndDirectMessagesTour/>;
-        }
 
         let labelElement: JSX.Element = (
             <span className='SidebarChannelLinkLabel'>
@@ -235,7 +225,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
         const content = (
             <>
                 <SidebarChannelIcon
-                    channel={channel}
+                    isDeleted={channel.delete_at !== 0}
                     icon={icon}
                 />
                 <div
@@ -249,16 +239,17 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                         channel={this.props.channel}
                     />
                 </div>
+                <ChannelPencilIcon id={channel.id}/>
                 <ChannelMentionBadge
                     unreadMentions={unreadMentions}
+                    hasUrgent={hasUrgent}
                 />
                 <SidebarChannelMenu
                     channel={channel}
-                    isUnread={isUnread}
-                    isCollapsed={this.props.isCollapsed}
-                    closeHandler={this.props.closeHandler}
                     channelLink={link}
                     isMenuOpen={this.state.isMenuOpen}
+                    isUnread={isUnread}
+                    closeHandler={this.props.closeHandler}
                     onToggleMenu={this.handleMenuToggle}
                     menuTriggerRef={this.menuTriggerRef}
                 />
@@ -286,10 +277,9 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                     event.preventDefault();
                     this.menuTriggerRef && this.menuTriggerRef.current?.click();
                 }}
-                tabIndex={this.props.isCollapsed ? -1 : 0}
+                tabIndex={0}
             >
                 {content}
-                {channelsTutorialTip}
             </Link>
         );
 

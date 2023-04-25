@@ -6,14 +6,17 @@ import {batchActions} from 'redux-batched-actions';
 import {FileInfo} from '@mattermost/types/files';
 import {ServerError} from '@mattermost/types/errors';
 
+import {openModal} from 'actions/views/modals';
 import {FileTypes} from 'mattermost-redux/action_types';
 import {getLogErrorAction} from 'mattermost-redux/actions/errors';
 import {forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
 import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import {Client4} from 'mattermost-redux/client';
 import {FilePreviewInfo} from 'components/file_preview/file_preview';
+import StorageLimitReachedModal from 'components/limits/storage_limit_reached_modal';
 
 import {localizeMessage} from 'utils/utils';
+import {ModalIdentifiers} from 'utils/constants';
 
 export interface UploadFile {
     file: File;
@@ -87,6 +90,30 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                     ]));
 
                     onSuccess(response, channelId, rootId);
+                } else if (xhr.status === 409) {
+                    const errorResponse = JSON.parse(xhr.response);
+                    if (errorResponse.server_error_id === 'quota-exceeded' || errorResponse.id === 'quota-exceeded') {
+                        if (onError) {
+                            onError('', clientId, channelId, rootId);
+                        }
+                        dispatch(openModal({
+                            modalId: ModalIdentifiers.STORAGE_LIMIT_REACHED,
+                            dialogType: StorageLimitReachedModal,
+                        }));
+                    }
+                } else {
+                    dispatch({
+                        type: FileTypes.UPLOAD_FILES_FAILURE,
+                        clientIds: [clientId],
+                        channelId,
+                        rootId,
+                    });
+                    const errorResponse = JSON.parse(xhr.response);
+                    if (errorResponse.message) {
+                        onError(errorResponse.message, clientId, channelId, rootId);
+                    } else {
+                        onError(localizeMessage('channel_loader.unknown_error', 'We received an unexpected status code from the server.') + ' (' + xhr.status + ')', clientId, channelId, rootId);
+                    }
                 }
             };
         }
@@ -107,6 +134,7 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                     };
 
                     dispatch(batchActions([uploadFailureAction, getLogErrorAction(errorResponse)]));
+
                     onError(errorResponse, clientId, channelId, rootId);
                 } else {
                     const errorMessage = xhr.status === 0 || !xhr.status ?

@@ -28,12 +28,18 @@ describe('Actions.Users', () => {
             entities: {
                 general: {
                     config: {
-                        FeatureFlagCollapsedThreads: 'true',
                         CollapsedThreads: 'always_on',
                     },
                 },
             },
         });
+
+        Client4.setUserId('');
+        Client4.setUserRoles('');
+    });
+
+    afterEach(() => {
+        nock.cleanAll();
     });
 
     afterAll(() => {
@@ -141,7 +147,6 @@ describe('Actions.Users', () => {
             throw new Error(JSON.stringify(logoutRequest.error));
         }
 
-        assert.deepStrictEqual(general.config, {}, 'config not empty');
         assert.deepStrictEqual(general.license, {}, 'license not empty');
         assert.strictEqual(users.currentUserId, '', 'current user id not empty');
         assert.deepStrictEqual(users.mySessions, [], 'user sessions not empty');

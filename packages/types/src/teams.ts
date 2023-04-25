@@ -24,6 +24,7 @@ export type TeamType = 'O' | 'I';
 
 export type Team = {
     id: string;
+    account_id: number;
     create_at: number;
     update_at: number;
     delete_at: number;
@@ -39,6 +40,7 @@ export type Team = {
     scheme_id: string;
     group_constrained: boolean;
     policy_id?: string | null;
+    url: string;
 };
 
 export type TeamsState = {
@@ -78,6 +80,7 @@ export type TeamUnread = {
 
     thread_count?: number;
     thread_mention_count?: number;
+    thread_urgent_mention_count?: number;
 };
 
 export type GetTeamMembersOpts = {

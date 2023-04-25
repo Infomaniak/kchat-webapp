@@ -38,9 +38,21 @@ exports[`components/GenericModal should match snapshot for base case 1`] = `
   >
     <ModalHeader
       bsClass="modal-header"
-      closeButton={true}
+      closeButton={false}
       closeLabel="Close"
-    />
+    >
+      <button
+        aria-label="Close"
+        className="close"
+        onClick={[Function]}
+        type="button"
+      >
+        <CloseIcon
+          color="rgba(var(--center-channel-color-rgb), 0.56)"
+          size={16}
+        />
+      </button>
+    </ModalHeader>
     <ModalBody
       bsClass="modal-body"
       componentClass="div"
@@ -100,9 +112,21 @@ exports[`components/GenericModal should match snapshot with both buttons 1`] = `
   >
     <ModalHeader
       bsClass="modal-header"
-      closeButton={true}
+      closeButton={false}
       closeLabel="Close"
-    />
+    >
+      <button
+        aria-label="Close"
+        className="close"
+        onClick={[Function]}
+        type="button"
+      >
+        <CloseIcon
+          color="rgba(var(--center-channel-color-rgb), 0.56)"
+          size={16}
+        />
+      </button>
+    </ModalHeader>
     <ModalBody
       bsClass="modal-body"
       componentClass="div"
@@ -125,7 +149,7 @@ exports[`components/GenericModal should match snapshot with both buttons 1`] = `
       componentClass="div"
     >
       <button
-        className="GenericModal__button cancel"
+        className="GenericModal__button cancel secondary"
         onClick={[Function]}
         type="button"
       >
@@ -135,7 +159,7 @@ exports[`components/GenericModal should match snapshot with both buttons 1`] = `
         />
       </button>
       <button
-        className="GenericModal__button confirm undefined"
+        className="GenericModal__button confirm"
         onClick={[Function]}
         type="submit"
       >
@@ -187,9 +211,21 @@ exports[`components/GenericModal should match snapshot with disabled confirm but
   >
     <ModalHeader
       bsClass="modal-header"
-      closeButton={true}
+      closeButton={false}
       closeLabel="Close"
-    />
+    >
+      <button
+        aria-label="Close"
+        className="close"
+        onClick={[Function]}
+        type="button"
+      >
+        <CloseIcon
+          color="rgba(var(--center-channel-color-rgb), 0.56)"
+          size={16}
+        />
+      </button>
+    </ModalHeader>
     <ModalBody
       bsClass="modal-body"
       componentClass="div"
@@ -212,7 +248,7 @@ exports[`components/GenericModal should match snapshot with disabled confirm but
       componentClass="div"
     >
       <button
-        className="GenericModal__button confirm undefined disabled"
+        className="GenericModal__button confirm disabled"
         disabled={true}
         onClick={[Function]}
         type="submit"

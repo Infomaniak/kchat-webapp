@@ -3,8 +3,8 @@
 /* eslint-disable max-lines */
 
 import React, {ReactNode} from 'react';
+import {IntlShape, injectIntl, FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 import classNames from 'classnames';
-import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
 import StatusIcon from '@infomaniak/compass-components/components/status-icon';
 import Text from '@infomaniak/compass-components/components/text';
@@ -12,6 +12,7 @@ import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
 import {TUserStatus} from '@infomaniak/compass-components/shared';
 
 import {PreferenceType} from '@mattermost/types/preferences';
+import {PulsatingDot} from '@mattermost/components';
 import {ActionFunc} from 'mattermost-redux/types/actions';
 import {CustomStatusDuration, UserCustomStatus, UserProfile, UserStatus} from '@mattermost/types/users';
 
@@ -26,10 +27,10 @@ import ResetStatusModal from 'components/reset_status_modal';
 import EmojiIcon from 'components/widgets/icons/emoji_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import PulsatingDot from 'components/widgets/pulsating_dot';
 import Avatar, {TAvatarSizeToken} from 'components/widgets/users/avatar/avatar';
 import {OnboardingTaskCategory, OnboardingTasksName, TaskNameMapToSteps, CompleteYourProfileTour} from 'components/onboarding_tasks';
 import Tooltip from 'components/tooltip';
+import {ProfileTour, StatusTour} from 'components/tours/onboarding_tour';
 
 import {ModalData} from 'types/actions';
 
@@ -39,12 +40,13 @@ import {getCurrentDateTimeForTimezone, getCurrentMomentForTimezone} from 'utils/
 import {localizeMessage} from 'utils/utils';
 
 import './status_dropdown.scss';
+import ToggleNextModal from 'components/toggle_next_modal';
 
 type Props = {
+    intl: IntlShape;
     status?: string;
     userId: string;
-    profilePicture: string;
-    // profilePicture: Promise<string> | string;
+    profilePicture?: string;
     autoResetPref?: string;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
@@ -62,6 +64,9 @@ type Props = {
     showCompleteYourProfileTour: boolean;
     showCustomStatusPulsatingDot: boolean;
     timezone?: string;
+    showProfileTutorialStep: boolean;
+    showStatusTutorialStep: boolean;
+    showNextSwitch: boolean;
 }
 
 type State = {
@@ -70,7 +75,7 @@ type State = {
     isStatusSet: boolean;
 };
 
-export default class StatusDropdown extends React.PureComponent<Props, State> {
+export class StatusDropdown extends React.PureComponent<Props, State> {
     dndTimes = [
         {id: 'thirty_minutes', label: t('status_dropdown.dnd_sub_menu_item.thirty_minutes'), labelDefault: '30 mins'},
         {id: 'one_hour', label: t('status_dropdown.dnd_sub_menu_item.one_hour'), labelDefault: '1 hour'},
@@ -183,6 +188,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
             <Avatar
                 size={size}
                 url={this.props.profilePicture}
+                tabIndex={undefined}
             />
         );
     }
@@ -340,8 +346,9 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
     }
 
     render = (): JSX.Element => {
+        const {intl, showNextSwitch} = this.props;
         const needsConfirm = this.isUserOutOfOffice() && this.props.autoResetPref === '';
-        const {status, customStatus, isCustomStatusExpired, currentUser} = this.props;
+        const {status, customStatus, isCustomStatusExpired, currentUser, showProfileTutorialStep, showStatusTutorialStep} = this.props;
         const isStatusSet = customStatus && (customStatus.text.length > 0 || customStatus.emoji.length > 0) && !isCustomStatusExpired;
 
         const setOnline = needsConfirm ? () => this.showStatusChangeConfirmation('online') : this.setOnline;
@@ -405,15 +412,61 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
 
         const customStatusComponent = this.renderCustomStatus(isStatusSet);
 
+        let menuAriaLabeltext;
+        switch (this.props.status) {
+        case UserStatuses.AWAY:
+            menuAriaLabeltext = intl.formatMessage({
+                id: 'status_dropdown.profile_button_label.away',
+                defaultMessage: 'Current status: Away. Select to open profile and status menu.',
+            });
+            break;
+        case UserStatuses.DND:
+            menuAriaLabeltext = intl.formatMessage({
+                id: 'status_dropdown.profile_button_label.dnd',
+                defaultMessage: 'Current status: Do not disturb. Select to open profile and status menu.',
+            });
+            break;
+        case UserStatuses.OFFLINE:
+            menuAriaLabeltext = intl.formatMessage({
+                id: 'status_dropdown.profile_button_label.offline',
+                defaultMessage: 'Current status: Offline. Select to open profile and status menu.',
+            });
+            break;
+        case UserStatuses.ONLINE:
+            menuAriaLabeltext = intl.formatMessage({
+                id: 'status_dropdown.profile_button_label.online',
+                defaultMessage: 'Current status: Online. Select to open profile and status menu.',
+            });
+            break;
+        case UserStatuses.OUT_OF_OFFICE:
+            menuAriaLabeltext = intl.formatMessage({
+                id: 'status_dropdown.profile_button_label.ooo',
+                defaultMessage: 'Current status: Out of office. Select to open profile and status menu.',
+            });
+            break;
+        default:
+            menuAriaLabeltext = intl.formatMessage({
+                id: 'status_dropdown.profile_button_label',
+                defaultMessage: 'Select to open profile and status menu.',
+            });
+        }
+
+        const isNext = document.cookie.indexOf('KCHAT_NEXT=always') !== -1;
+
         return (
             <MenuWrapper
                 onToggle={this.onToggle}
                 open={this.props.isStatusDropdownOpen}
                 className={classNames('status-dropdown-menu status-dropdown-menu-global-header', {
-                    active: this.props.isStatusDropdownOpen || isStatusSet,
+                    active: this.props.isStatusDropdownOpen,
                 })}
             >
-                <div className='status-wrapper'>
+                <button
+                    className='status-wrapper style--none'
+                    aria-label={menuAriaLabeltext}
+                    aria-expanded={this.props.isStatusDropdownOpen}
+                    aria-controls='statusDropdownMenu'
+                >
                     <CustomStatusEmoji
                         showTooltip={true}
                         tooltipDirection={'bottom'}
@@ -421,23 +474,24 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                         onClick={this.handleCustomStatusEmojiClick as () => void}
                     />
                     {this.renderProfilePicture('sm')}
-                    <button
-                        className='status style--none'
-                        aria-label={localizeMessage('status_dropdown.menuAriaLabel', 'Set a status')}
+                    <div
+                        className='status'
                     >
                         <StatusIcon
                             size={'sm'}
                             status={(this.props.status || 'offline') as TUserStatus}
                         />
-                    </button>
-                </div>
+                    </div>
+                </button>
                 <Menu
                     ariaLabel={localizeMessage('status_dropdown.menuAriaLabel', 'Set a status')}
                     id={'statusDropdownMenu'}
                     listId={'status-drop-down-menu-list'}
                 >
                     {currentUser && (
-                        <Menu.Header onClick={this.openProfileModal}>
+                        <Menu.Header
+                            // onClick={this.openProfileModal}
+                        >
                             {this.renderProfilePicture('lg')}
                             <div className={'username-wrapper'}>
                                 <Text
@@ -477,6 +531,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                             )}
                             rightDecorator={status === 'online' && selectedIndicator}
                             id={'status-menu-online'}
+                            sibling={showStatusTutorialStep && <StatusTour/>}
                         />
                         <Menu.ItemAction
                             onClick={setAway}
@@ -533,6 +588,7 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                                     glyph={'account-outline'}
                                 />
                             )}
+                            sibling={showProfileTutorialStep && <ProfileTour/>}
                         >
                             {this.props.showCompleteYourProfileTour && (
                                 <div
@@ -543,6 +599,31 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
                                 </div>
                             )}
                         </Menu.ItemAction>
+                        {showNextSwitch &&
+                            <Menu.ItemToggleModalRedux
+                                className='status-dropdown-menu__next-switch'
+                                modalId={ModalIdentifiers.TOGGLE_NEXT}
+                                dialogType={ToggleNextModal}
+                                icon={(
+                                    <Icon
+                                        size={16}
+                                        glyph={'laptop'}
+                                        className='status-dropdown-menu__next-icon'
+                                    />
+                                )}
+                                text={(
+                                    <div>
+                                        <FormattedMessage
+                                            id='toggle_next_modal.title'
+                                            defaultMessage='Switch to {version} version'
+                                            values={{
+                                                version: isNext ? 'STABLE' : 'NEXT',
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            />
+                        }
                     </Menu.Group>
                     <Menu.Group>
                         <Menu.ItemAction
@@ -562,3 +643,4 @@ export default class StatusDropdown extends React.PureComponent<Props, State> {
         );
     }
 }
+export default injectIntl(StatusDropdown);

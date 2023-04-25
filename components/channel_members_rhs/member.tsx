@@ -6,11 +6,10 @@ import styled, {css} from 'styled-components';
 import classNames from 'classnames';
 import {FormattedMessage} from 'react-intl';
 
-import {UserProfile} from '@mattermost/types/users';
 import ProfilePicture from 'components/profile_picture';
 import {Client4} from 'mattermost-redux/client';
 import ChannelMembersDropdown from 'components/channel_members_dropdown';
-import {Channel} from '@mattermost/types/channels';
+import PendingGuestsDropdown from 'components/pending_guests_dropdown';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
@@ -19,6 +18,10 @@ import Constants from 'utils/constants';
 
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import GuestBadge from 'components/widgets/badges/guest_badge';
+import PendingGuestIcon from 'components/widgets/icons/pending_guest_icon';
+
+import {Channel, PendingGuest as PendingGuestType} from '@mattermost/types/channels';
+import {UserProfile} from '@mattermost/types/users';
 
 import {ChannelMember} from './channel_members_rhs';
 
@@ -81,7 +84,7 @@ const RoleChooser = styled.div`
             background: rgba(var(--button-bg-rgb), 0.16);
         }
         &:not(.MenuWrapper--open):hover {
-            background: rgba(var(--center-channel-text-rgb), 0.08);
+            background: rgba(var(--center-channel-color-rgb), 0.08);
         }
     }
 `;
@@ -121,7 +124,8 @@ const Member = ({className, channel, member, index, totalUsers, editing, actions
                     {member.displayName}
                     <GuestBadge show={isGuest(member.user.roles)}/>
                 </DisplayName>
-                <Username>{'@'}{member.user.username}</Username>
+                {member.displayName === member.user.username ? null : <Username>{'@'}{member.user.username}</Username>
+                }
             </UserInfo>
             <RoleChooser
                 className={classNames({editing}, 'member-role-chooser')}
@@ -185,8 +189,8 @@ export default styled(Member)`
     border-radius: 4px;
 
     &:hover {
-        background: rgba(var(--center-channel-text-rgb), 0.08);
-        color: rgba(var(--center-channel-text-rgb), 0.56);
+        background: rgba(var(--center-channel-color-rgb), 0.08);
+        color: rgba(var(--center-channel-color-rgb), 0.56);
         ${() => {
         return css`
             ${SendMessage} {
@@ -201,3 +205,56 @@ export default styled(Member)`
         font-size: 11px;
     }
 `;
+
+const StyledPendingGuest = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    &:hover {
+        background: rgba(var(--center-channel-color-rgb), 0.08);
+        color: rgba(var(--center-channel-color-rgb), 0.56);
+    }
+
+    .MenuWrapper {
+        font-weight: 600;
+        font-size: 11px;
+    }
+`;
+
+const StyledPendingGuestIcon = styled(PendingGuestIcon)`
+    width: 24px;
+    height: 24px;
+`;
+
+type PendingGuestProp = {
+    channel: Channel;
+    pendingGuest: PendingGuestType;
+    editing: boolean;
+    index: number;
+    totalUsers: number;
+};
+
+export const PendingGuest = ({channel, pendingGuest, editing, index, totalUsers}: PendingGuestProp) => {
+    return (
+        <StyledPendingGuest>
+            <StyledPendingGuestIcon/>
+            <UserInfo>
+                <DisplayName>
+                    {pendingGuest.email}
+                    <GuestBadge show={true}/>
+                </DisplayName>
+            </UserInfo>
+            <RoleChooser className={classNames({editing}, 'member-role-chooser')}>
+                <PendingGuestsDropdown
+                    channel={channel}
+                    pendingGuest={pendingGuest}
+                    index={index}
+                    totalUsers={totalUsers}
+                />
+            </RoleChooser>
+        </StyledPendingGuest>
+    );
+};

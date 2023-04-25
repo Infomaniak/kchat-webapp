@@ -25,6 +25,13 @@ export default function useGetUsageDeltas(): CloudUsage {
     const usageDelta = useMemo(() => {
         return (
             {
+                storage: usage.storage - withBackupValue(limits.storage, limitsLoaded),
+                public_channels: usage.public_channels - withBackupValue(limits.public_channels, limitsLoaded),
+                private_channels: usage.private_channels - withBackupValue(limits.private_channels, limitsLoaded),
+                guests: usage.guests - withBackupValue(limits.guests, limitsLoaded),
+                pending_guests: -usage.pending_guests,
+                members: usage.members - withBackupValue(limits.members, limitsLoaded),
+                usageLoaded: usage.usageLoaded,
                 files: {
                     totalStorage: usage.files.totalStorage - withBackupValue(limits.files?.total_storage, limitsLoaded),
                     totalStorageLoaded: usage.files.totalStorageLoaded,
@@ -44,13 +51,9 @@ export default function useGetUsageDeltas(): CloudUsage {
                     cloudArchived: usage.teams.cloudArchived,
                     teamsLoaded: usage.teams.teamsLoaded,
                 },
-                integrations: {
-                    enabled: usage.integrations.enabled - withBackupValue(limits.integrations?.enabled, limitsLoaded),
-                    enabledLoaded: usage.integrations.enabledLoaded,
-                },
             }
         );
-    }, [usage, limits]);
+    }, [usage, limits, limitsLoaded]);
 
     return usageDelta;
 }

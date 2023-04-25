@@ -4,127 +4,72 @@ import React from 'react';
 import moment from 'moment-timezone';
 import styled from 'styled-components';
 
-import {UserProfile} from 'mattermost-redux/types/users';
-
-import ActiveCallIcon from 'components/widgets/icons/active_call_icon';
-import CallIcon from 'components/widgets/icons/call_icon';
-import LeaveCallIcon from 'components/widgets/icons/leave_call_icon';
-import ConnectedProfiles from '../connected_profiles';
-
 import {Post} from 'mattermost-redux/types/posts';
-import {isDesktopApp} from 'utils/user_agent';
+
+import {FormattedMessage, useIntl} from 'react-intl';
+
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
 interface Props {
     post: Post;
-    connectedID: string;
-    hasCall: boolean;
-    pictures: string[];
-    profiles: UserProfile[];
-    showSwitchCallModal: (targetID: string) => void;
-    onJoinCall: (channelID: string) => void;
-    leaveCallInChannel: (channelID: string, callId: string) => Promise<any>;
-
-    // disconnect: (channedID: string) => void;
+    connectedKmeetUrl: string;
 }
 
-const PostType = ({post, connectedID, hasCall, pictures, profiles, onJoinCall, leaveCallInChannel}: Props) => {
-    const client = window;
-
-    window.addEventListener('beforeunload', (e) => {
-        window.postMessage(
-            {
-                type: 'window-will-unloaded',
-            },
-            window.origin,
-        );
-        if (hasCall && connectedID === post.props.conference_id && !post.props.end_at) {
-            e.stopPropagation();
-            e.preventDefault();
-            leaveCallInChannel(post.channel_id, connectedID).then(() => {
-                if (client.executeCommand) {
-                    client.executeCommand('hangup');
-                }
-            });
-        }
-    });
-
+const PostType = ({post, connectedKmeetUrl}: Props) => {
+    const intl = useIntl();
     const onJoinCallClick = () => {
-        onJoinCall(post.channel_id);
+        const kmeetUrl = new URL(connectedKmeetUrl);
+        window.open(kmeetUrl.href, '_blank', 'noopener');
     };
 
-    const onLeaveButtonClick = () => {
-        if (client.executeCommand) {
-            client.executeCommand('hangup');
-        }
-    };
+    moment.locale(String(intl.locale));
 
     const subMessage = post.props.end_at ? (
         <>
             <Duration>
-                {`Ended at ${moment(post.props.end_at).format('h:mm A')}`}
-            </Duration>
-            <span style={{margin: '0 4px'}}>{'•'}</span>
-            <Duration>
-                {`Lasted ${moment.duration(post.props.end_at - post.props.start_at).humanize(false)}`}
+                <FormattedMessage
+                    id='kmeet.calls.ended'
+                    defaultMessage='Terminée à {time}'
+                    values={{
+                        time: moment(post.props.end_at).format('LT'),
+                    }}
+                />
             </Duration>
         </>
     ) : (
-        <Duration>{moment(post.props.create_at).fromNow()}</Duration>
+        <Duration>
+            {moment(post.props.start_at).fromNow()}
+        </Duration>
     );
 
-    // console.log(post)
     return (
         <Main data-testid={'call-thread'}>
             <SubMain ended={Boolean(post.props.end_at)}>
                 <Left>
                     <CallIndicator ended={Boolean(post.props.end_at)}>
-                        {/* {!post.props.end_at &&
-                            <ActiveCallIcon
-                                fill='var(--center-channel-bg)'
-                                style={{width: '100%', height: '100%'}}
-                            />
-                        }
-                        {post.props.end_at &&
-                            <LeaveCallIcon
-                                fill={'rgba(var(--center-channel-color-rgb), 0.56)'}
-                                style={{width: '100%', height: '100%'}}
-                            />
-                        } */}
                         <KMeetIcon style={{width: '100%', height: '100%'}}/>
                     </CallIndicator>
                     <MessageWrapper>
-                        <Message>{post.message}</Message>
+                        <Message>
+                            <FormattedMessage
+                                id='kmeet.calls.started'
+                                defaultMessage='Réunion kMeet démarrée'
+                            />
+                        </Message>
                         <SubMessage>{subMessage}</SubMessage>
                     </MessageWrapper>
                 </Left>
                 <Right>
                     {
-                        hasCall &&
-                        <Profiles>
-                            <ConnectedProfiles
-                                profiles={profiles}
-                                pictures={pictures}
-                                size={32}
-                                fontSize={12}
-                                border={true}
-                                maxShowedProfiles={2}
-                            />
-                        </Profiles>
-                    }
-                    {
-                        hasCall && !connectedID &&
+                        connectedKmeetUrl &&
                         <JoinButton onClick={onJoinCallClick}>
-                            <CallIcon fill='var(--center-channel-bg)'/>
-                            <ButtonText>{'Join call'}</ButtonText>
+                            <ButtonText>
+                                <FormattedMessage
+                                    id='kmeet.calls.open'
+                                    defaultMessage='Ouvrir'
+                                />
+                            </ButtonText>
                         </JoinButton>
-                    }
-                    {
-                        hasCall && connectedID && connectedID === post.props.conference_id &&
-                        <LeaveButton onClick={onLeaveButtonClick}>
-                            <LeaveCallIcon fill='var(--error-text)'/>
-                            <ButtonText>{'Leave call'}</ButtonText>
-                        </LeaveButton>
                     }
                 </Right>
             </SubMain>
@@ -213,7 +158,7 @@ const Button = styled.button`
 
 const JoinButton = styled(Button)`
     color: var(--center-channel-bg);
-    background: var(--online-indicator);
+    background: var(--button-bg);
 `;
 
 const LeaveButton = styled(Button)`

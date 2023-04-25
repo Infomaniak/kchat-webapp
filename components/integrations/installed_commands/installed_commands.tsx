@@ -4,16 +4,17 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import {ActionResult} from 'mattermost-redux/types/actions';
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
+import * as Utils from 'utils/utils';
+import BackstageList from 'components/backstage/components/backstage_list';
+import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
 import {Team} from '@mattermost/types/teams';
 import {UserProfile} from '@mattermost/types/users';
 import {RelationOneToOne} from '@mattermost/types/utilities';
 import {Command} from '@mattermost/types/integrations';
-import {ActionResult} from 'mattermost-redux/types/actions';
-
-import * as Utils from 'utils/utils';
-import BackstageList from 'components/backstage/components/backstage_list.jsx';
-import InstalledCommand, {matchesFilter} from '../installed_command.jsx';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+import InstalledCommand, {matchesFilter} from '../installed_command';
 
 type Props = {
     team: Team;
@@ -110,29 +111,13 @@ export default class InstalledCommands extends React.PureComponent<Props> {
                 helpText={
                     <FormattedMessage
                         id='installed_commands.help'
-                        defaultMessage='Use slash commands to connect external tools to Mattermost. {buildYourOwn} or visit the {appDirectory} to find self-hosted, third-party apps and integrations.'
+                        defaultMessage='Use slash commands to connect external tools to kChat. {learnMore}'
                         values={{
-                            buildYourOwn: (
-                                <a
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-slash-commands/'
-                                >
+                            learnMore: (
+                                <a onClick={redirectToDeveloperDocumentation}>
                                     <FormattedMessage
-                                        id='installed_commands.help.buildYourOwn'
-                                        defaultMessage='Build Your Own'
-                                    />
-                                </a>
-                            ),
-                            appDirectory: (
-                                <a
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    href='https://mattermost.com/marketplace'
-                                >
-                                    <FormattedMessage
-                                        id='installed_commands.help.appDirectory'
-                                        defaultMessage='App Directory'
+                                        id='developer_documentation.learn_more'
+                                        defaultMessage='Learn more'
                                     />
                                 </a>
                             ),

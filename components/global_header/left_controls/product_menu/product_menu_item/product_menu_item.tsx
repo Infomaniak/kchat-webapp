@@ -6,6 +6,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 import styled from 'styled-components';
+
 import Icon, {TIconGlyph} from '@infomaniak/compass-components/foundations/icon';
 
 export interface ProductMenuItemProps {
@@ -32,6 +33,7 @@ const MenuItem = styled(Link)`
     display: flex;
     align-items: center;
     cursor: pointer;
+    position: relative;
 
     &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.08);

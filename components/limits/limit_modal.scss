@@ -1,0 +1,38 @@
+.limit-modal {
+    .limit-modal-header {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        &__icon {
+            display: flex;
+            justify-content: center;
+        }
+
+        &__title {
+            text-align: center;
+        }
+    }
+
+    .limit-modal-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+        padding-bottom: 20px;
+
+        &__wrapper {
+            display: flex;
+            gap: 5px;
+        }
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        &::before, &::after {
+            display: none;
+        }
+    }
+}

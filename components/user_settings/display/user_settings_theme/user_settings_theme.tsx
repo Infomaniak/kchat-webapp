@@ -1,14 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, {RefObject} from 'react';
 
 import {FormattedMessage} from 'react-intl';
 
+import SettingItemMax from 'components/setting_item_max';
+import SettingItemMin from 'components/setting_item_min';
+import SettingItemMinComponent from 'components/setting_item_min/setting_item_min';
+
 import {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
-import SettingItemMax from 'components/setting_item_max.jsx';
-import SettingItemMin from 'components/setting_item_min';
 import ImportThemeModal from 'components/user_settings/import_theme_modal';
 
 import {Constants, ModalIdentifiers} from 'utils/constants';
@@ -24,6 +26,7 @@ type Props = {
     currentTeamId: string;
     theme: Theme;
     selected: boolean;
+    areAllSectionsInactive: boolean;
     updateSection: (section: string) => void;
     setRequireConfirm?: (requireConfirm: boolean) => void;
     setEnforceFocus?: (enforceFocus: boolean) => void;
@@ -47,6 +50,7 @@ type State = {
 };
 
 export default class ThemeSetting extends React.PureComponent<Props, State> {
+    minRef: RefObject<SettingItemMinComponent>;
     originalTheme: Theme;
     constructor(props: Props) {
         super(props);
@@ -58,11 +62,15 @@ export default class ThemeSetting extends React.PureComponent<Props, State> {
         };
 
         this.originalTheme = Object.assign({}, this.state.theme);
+        this.minRef = React.createRef();
     }
 
     componentDidUpdate(prevProps: Props) {
         if (prevProps.selected && !this.props.selected) {
             this.resetFields();
+        }
+        if (prevProps.selected && !this.props.selected && this.props.areAllSectionsInactive) {
+            this.focusEditButton();
         }
     }
 
@@ -86,6 +94,10 @@ export default class ThemeSetting extends React.PureComponent<Props, State> {
             serverError: '',
             isSaving: false,
         };
+    }
+
+    focusEditButton(): void {
+        this.minRef.current?.focus();
     }
 
     submitTheme = async (): Promise<void> => {
@@ -225,7 +237,7 @@ export default class ThemeSetting extends React.PureComponent<Props, State> {
                     submit={this.submitTheme}
                     disableEnterSubmit={true}
                     saving={this.state.isSaving}
-                    server_error={serverError}
+                    serverError={serverError}
                     width='full'
                     updateSection={this.handleUpdateSection}
                 />
@@ -247,6 +259,7 @@ export default class ThemeSetting extends React.PureComponent<Props, State> {
                     }
                     section={'theme'}
                     updateSection={this.handleUpdateSection}
+                    ref={this.minRef}
                 />
             );
         }

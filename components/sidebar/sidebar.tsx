@@ -24,9 +24,11 @@ import CreateUserGroupsModal from 'components/create_user_groups_modal';
 import KeyboardShortcutsModal from '../keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal';
 
 import ChannelNavigator from './channel_navigator';
-import SidebarChannelList from './sidebar_channel_list';
+import SidebarList from './sidebar_list';
 import SidebarHeader from './sidebar_header';
 import MobileSidebarHeader from './mobile_sidebar_header';
+import { isDesktopApp } from 'utils/user_agent';
+import {closeRightHandSide, showSettings} from '../../actions/views/rhs';
 
 type Props = {
     teamId: string;
@@ -35,12 +37,15 @@ type Props = {
     canJoinPublicChannel: boolean;
     isOpen: boolean;
     hasSeenModal: boolean;
+    isRhsSettings?: boolean;
     actions: {
         fetchMyCategories: (teamId: string) => {data: boolean};
         createCategory: (teamId: string, categoryName: string) => {data: string};
         openModal: <P>(modalData: ModalData<P>) => void;
         closeModal: (modalId: string) => void;
         clearChannelSelection: () => void;
+        showSettings?: () => void;
+        closeRightHandSide?: () => void;
     };
     isCloud: boolean;
     unreadFilterEnabled: boolean;
@@ -114,13 +119,11 @@ export default class Sidebar extends React.PureComponent<Props, State> {
             } else if (Utils.isKeyPressed(event, Constants.KeyCodes.A) && event.shiftKey) {
                 event.preventDefault();
 
-                this.props.actions.openModal({
-                    modalId: ModalIdentifiers.USER_SETTINGS,
-                    dialogType: UserSettingsModal,
-                    dialogProps: {
-                        isContentProductSettings: true,
-                    },
-                });
+                if (this.props.isRhsSettings) {
+                    this.props.actions.closeRightHandSide();
+                } else {
+                    this.props.actions.showSettings();
+                }
             }
         }
     }
@@ -215,8 +218,14 @@ export default class Sidebar extends React.PureComponent<Props, State> {
     }
 
     render() {
+        const root: Element | null = document.querySelector('#root');
+
         if (!this.props.teamId) {
             return (<div/>);
+        }
+
+        if (isDesktopApp()) {
+            root!.classList.add('no-webcomponents');
         }
 
         const ariaLabel = Utils.localizeMessage('accessibility.sections.lhsNavigator', 'channel navigator region');
@@ -267,7 +276,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                 <div className='sidebar--left__icons'>
                     <Pluggable pluggableName='LeftSidebarHeader'/>
                 </div>
-                <SidebarChannelList
+                <SidebarList
                     handleOpenMoreDirectChannelsModal={this.handleOpenMoreDirectChannelsModal}
                     onDragStart={this.onDragStart}
                     onDragEnd={this.onDragEnd}

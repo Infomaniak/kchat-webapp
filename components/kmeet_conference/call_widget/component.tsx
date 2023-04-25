@@ -970,7 +970,8 @@ export default class CallWidget extends React.PureComponent<Props, State> {
 
     onChannelLinkClick = (ev: React.MouseEvent<HTMLElement>) => {
         ev.preventDefault();
-        window.postMessage({type: 'browser-history-push-return', message: {pathName: this.props.channelURL}}, window.origin);
+
+        // window.postMessage({type: 'browser-history-push-return', message: {pathName: this.props.channelURL}}, window.origin);
     }
 
     renderChannelName = (hasTeamSidebar: boolean) => {

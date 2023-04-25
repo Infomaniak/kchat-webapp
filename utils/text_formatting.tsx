@@ -6,6 +6,8 @@
 import emojiRegex from 'emoji-regex';
 import {Renderer} from 'marked';
 
+import {SystemEmoji} from '@mattermost/types/emojis';
+
 import {formatWithRenderer} from 'utils/markdown';
 
 import * as Emoticons from './emoticons';
@@ -177,6 +179,20 @@ interface TextFormattingOptionsBase {
      */
     editedAt: number;
     postId: string;
+
+    /**
+     * Whether or not to render sum of members mentions e.g. "5 members..." into spans with a data-sum-of-members-mention attribute.
+     *
+     * Defaults to `false`.
+     */
+    atSumOfMembersMentions: boolean;
+
+    /**
+     * Whether or not to render plan mentions e.g. "Professional plan, Enterprise plan, Starter plan" into spans with a data-plan-mention attribute.
+     *
+     * Defaults to `false`.
+     */
+    atPlanMentions: boolean;
 }
 
 export type TextFormattingOptions = Partial<TextFormattingOptionsBase>;
@@ -188,6 +204,8 @@ const DEFAULT_OPTIONS: TextFormattingOptions = {
     emoticons: true,
     markdown: true,
     atMentions: false,
+    atSumOfMembersMentions: false,
+    atPlanMentions: false,
     minimumHashtagLength: 3,
     proxyImages: false,
     editedAt: 0,
@@ -297,6 +315,14 @@ export function doFormatText(text: string, options: TextFormattingOptions, emoji
         output = autolinkAtMentions(output, tokens);
     }
 
+    if (options.atSumOfMembersMentions) {
+        output = autoLinkSumOfMembersMentions(output, tokens);
+    }
+
+    if (options.atPlanMentions) {
+        output = autoPlanMentions(output, tokens);
+    }
+
     if (options.channelNamesMap) {
         output = autolinkChannelMentions(
             output,
@@ -369,6 +395,50 @@ function autolinkEmails(text: string, tokens: Tokens) {
     }
 
     return text.replace(emailRegex, replaceEmailWithToken);
+}
+
+export function autoLinkSumOfMembersMentions(text: string, tokens: Tokens): string {
+    function replaceSumOfMembersMentionWithToken(fullMatch: string) {
+        const index = tokens.size;
+        const alias = `$MM_SUMOFMEMBERSMENTION${index}$`;
+
+        tokens.set(alias, {
+            value: `<span data-sum-of-members-mention="${fullMatch}">${fullMatch}</span>`,
+            originalText: fullMatch,
+        });
+
+        return alias;
+    }
+
+    let output = text;
+    output = output.replace(
+        Constants.SUM_OF_MEMBERS_MENTION_REGEX,
+        replaceSumOfMembersMentionWithToken,
+    );
+
+    return output;
+}
+
+export function autoPlanMentions(text: string, tokens: Tokens): string {
+    function replacePlanMentionWithToken(fullMatch: string) {
+        const index = tokens.size;
+        const alias = `$MM_PLANMENTION${index}$`;
+
+        tokens.set(alias, {
+            value: `<span data-plan-mention="${fullMatch}">${fullMatch}</span>`,
+            originalText: fullMatch,
+        });
+
+        return alias;
+    }
+
+    let output = text;
+    output = output.replace(
+        Constants.PLAN_MENTIONS,
+        replacePlanMentionWithToken,
+    );
+
+    return output;
 }
 
 export function autolinkAtMentions(text: string, tokens: Tokens): string {
@@ -889,7 +959,8 @@ export function handleUnicodeEmoji(text: string, emojiMap: EmojiMap, searchPatte
 
         // convert emoji to image if supported, or wrap in span to apply appropriate formatting
         if (emojiMap && emojiMap.hasUnicode(emojiCode)) {
-            const emoji = emojiMap.getUnicode(emojiCode);
+            // we typecasted here because we know that the emojiMap has the emoji with given emojiCode
+            const emoji = emojiMap.getUnicode(emojiCode) as SystemEmoji;
 
             return Emoticons.renderEmoji(emoji.short_names[0], emojiMatch);
         }
@@ -933,12 +1004,5 @@ function fixedCharCodeAt(str: string, idx = 0) {
 export function fixedEncodeURIComponent(str: string) {
     return str.replace(/[-._~:/?#[\]@!$&'()*+,;=]/g, (c: string) => {
         return '%' + c.charCodeAt(0).toString(16).toUpperCase();
-    });
-}
-
-export function fixedDecodeURIComponent(str: string) {
-    return str.replace(/%(2D|2E|5F|7E|3A|2F|3F|23|5B|5C|5D|40|21|24|26|27|28|29|2A|2B|2C|3B|3D)/g, (inChar) => {
-        const c = inChar.substring(1);
-        return String.fromCharCode(parseInt(c, 16));
     });
 }

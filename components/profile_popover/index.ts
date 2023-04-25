@@ -4,7 +4,7 @@
 import {connect} from 'react-redux';
 import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import {getCurrentUserId, getStatusForUserId, getUser} from 'mattermost-redux/selectors/entities/users';
+import {displayLastActiveLabel, getCurrentUserId, getLastActiveTimestampUnits, getLastActivityForUserId, getStatusForUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 import {
     getCurrentTeam,
     getCurrentRelativeTeamUrl,
@@ -15,14 +15,16 @@ import {
     canManageAnyChannelMembersInCurrentTeam,
     getCurrentChannelId,
 } from 'mattermost-redux/selectors/entities/channels';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 
-import {openDirectChannelToUserId} from 'actions/channel_actions.jsx';
+import {openDirectChannelToUserId} from 'actions/channel_actions';
 import {getMembershipForEntities} from 'actions/views/profile_popover';
 import {closeModal, openModal} from 'actions/views/modals';
 
 import {areTimezonesEnabledAndSupported, getCurrentUserTimezone} from 'selectors/general';
 import {getRhsState, getSelectedPost} from 'selectors/rhs';
 import {getIsMobileView} from 'selectors/views/browser';
+import {isAnyModalOpen} from 'selectors/views/modals';
 
 import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 'selectors/views/custom_status';
 import {Action} from 'mattermost-redux/types/actions';
@@ -60,6 +62,12 @@ function makeMapStateToProps() {
         }
 
         const customStatus = getCustomStatus(state, userId);
+        const status = getStatusForUserId(state, userId);
+        const user = getUser(state, userId);
+
+        const lastActivityTimestamp = getLastActivityForUserId(state, userId);
+        const timestampUnits = getLastActiveTimestampUnits(state, userId);
+        const enableLastActiveTime = displayLastActiveLabel(state, userId);
         return {
             currentTeamId: team.id,
             currentUserId: getCurrentUserId(state),
@@ -68,16 +76,21 @@ function makeMapStateToProps() {
             isChannelAdmin,
             isInCurrentTeam: Boolean(teamMember) && teamMember?.delete_at === 0,
             canManageAnyChannelMembersInCurrentTeam: canManageAnyChannelMembersInCurrentTeam(state),
-            status: getStatusForUserId(state, userId),
+            status,
             teamUrl: getCurrentRelativeTeamUrl(state),
-            user: getUser(state, userId),
+            user,
             modals: state.views.modals,
             customStatus,
             isCustomStatusEnabled: isCustomStatusEnabled(state),
             isCustomStatusExpired: isCustomStatusExpired(state, customStatus),
             channelId,
             currentUserTimezone: getCurrentUserTimezone(state),
+            lastActivityTimestamp,
+            enableLastActiveTime,
+            timestampUnits,
             isMobileView: getIsMobileView(state),
+            teammateNameDisplay: getTeammateNameDisplaySetting(state),
+            isAnyModalOpen: isAnyModalOpen(state),
         };
     };
 }

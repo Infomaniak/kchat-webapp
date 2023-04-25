@@ -1,5 +1,8 @@
 .dropdown-menu__dotmenu {
     .Menu__content {
+        // fix overlay displaying above the dropdown if the content overflows on Safari
+        -webkit-transform: translateZ(0);
+
         width: 264px;
     }
 
@@ -16,5 +19,15 @@
                 gap: 4px;
             }
         }
+    }
+
+    .post_info__reminder-icon {
+        color: rgba(var(--center-channel-color-rgb), 0.56);
+    }
+
+    .remind_menu__right_decorator {
+        position: absolute;
+        right: 10px;
+        font-size: 12px;
     }
 }

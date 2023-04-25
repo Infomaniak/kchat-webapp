@@ -55,7 +55,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#1e325c"
+          value="#292E3D"
         />
       </div>
       <div
@@ -71,7 +71,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#ffffff"
+          value="#e0e0e0"
         />
       </div>
       <div
@@ -87,7 +87,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#192a4d"
+          value="#181C28"
         />
       </div>
       <div
@@ -103,7 +103,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#14213e"
+          value="#181C28"
         />
       </div>
       <div
@@ -151,7 +151,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#28427b"
+          value="#3E435B"
         />
       </div>
       <div
@@ -167,7 +167,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#5d89ea"
+          value="#4CB7FF"
         />
       </div>
       <div
@@ -199,7 +199,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#3db887"
+          value="#3EBF4D"
         />
       </div>
       <div
@@ -215,7 +215,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#ffbc1f"
+          value="#FF8500"
         />
       </div>
       <div
@@ -231,7 +231,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#d24b4e"
+          value="#F44336"
         />
       </div>
       <div
@@ -368,7 +368,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#d24b4e"
+          value="#F44336"
         />
       </div>
       <div
@@ -539,7 +539,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#386fe5"
+          value="#0098ff"
         />
       </div>
       <div
@@ -555,7 +555,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
             />
           }
           onChange={[Function]}
-          value="#1c58d9"
+          value="#0098ff"
         />
       </div>
       <div
@@ -597,7 +597,7 @@ exports[`components/user_settings/display/CustomThemeChooser should match, init 
         onClick={[Function]}
         onCopy={[Function]}
         onPaste={[Function]}
-        value="{\\"sidebarBg\\":\\"#1e325c\\",\\"sidebarText\\":\\"#ffffff\\",\\"sidebarUnreadText\\":\\"#ffffff\\",\\"sidebarTextHoverBg\\":\\"#28427b\\",\\"sidebarTextActiveBorder\\":\\"#5d89ea\\",\\"sidebarTextActiveColor\\":\\"#ffffff\\",\\"sidebarHeaderBg\\":\\"#192a4d\\",\\"sidebarHeaderTextColor\\":\\"#ffffff\\",\\"sidebarTeamBarBg\\":\\"#14213e\\",\\"onlineIndicator\\":\\"#3db887\\",\\"awayIndicator\\":\\"#ffbc1f\\",\\"dndIndicator\\":\\"#d24b4e\\",\\"mentionBg\\":\\"#ffffff\\",\\"mentionBj\\":\\"#ffffff\\",\\"mentionColor\\":\\"#1e325c\\",\\"centerChannelBg\\":\\"#ffffff\\",\\"centerChannelColor\\":\\"#3f4350\\",\\"newMessageSeparator\\":\\"#cc8f00\\",\\"linkColor\\":\\"#386fe5\\",\\"buttonBg\\":\\"#1c58d9\\",\\"buttonColor\\":\\"#ffffff\\",\\"errorTextColor\\":\\"#d24b4e\\",\\"mentionHighlightBg\\":\\"#ffd470\\",\\"mentionHighlightLink\\":\\"#1b1d22\\",\\"codeTheme\\":\\"github\\"}"
+        value="{\\"ikType\\":\\"medium\\",\\"sidebarBg\\":\\"#292E3D\\",\\"sidebarText\\":\\"#e0e0e0\\",\\"sidebarUnreadText\\":\\"#ffffff\\",\\"sidebarTextHoverBg\\":\\"#3E435B\\",\\"sidebarTextActiveBorder\\":\\"#4CB7FF\\",\\"sidebarTextActiveColor\\":\\"#ffffff\\",\\"sidebarHeaderBg\\":\\"#181C28\\",\\"sidebarHeaderTextColor\\":\\"#ffffff\\",\\"sidebarTeamBarBg\\":\\"#181C28\\",\\"onlineIndicator\\":\\"#3EBF4D\\",\\"awayIndicator\\":\\"#FF8500\\",\\"dndIndicator\\":\\"#F44336\\",\\"mentionBg\\":\\"#ffffff\\",\\"mentionBj\\":\\"#ffffff\\",\\"mentionColor\\":\\"#1e325c\\",\\"centerChannelBg\\":\\"#ffffff\\",\\"centerChannelColor\\":\\"#3f4350\\",\\"newMessageSeparator\\":\\"#cc8f00\\",\\"linkColor\\":\\"#0098ff\\",\\"buttonBg\\":\\"#0098ff\\",\\"buttonColor\\":\\"#ffffff\\",\\"errorTextColor\\":\\"#F44336\\",\\"mentionHighlightBg\\":\\"#ffd470\\",\\"mentionHighlightLink\\":\\"#1b1d22\\",\\"codeTheme\\":\\"github\\",\\"ikIllustrationGreyOne\\":\\"#F5F5F5\\",\\"ikIllustrationGreyTwo\\":\\"#FFFFFF\\",\\"ikIllustrationGreyThree\\":\\"#E0E0E0\\",\\"ikIllustrationGreyFour\\":\\"#FAFAFA\\",\\"ikIllustrationGreyFive\\":\\"#F1F1F1\\",\\"ikIllustrationGreySix\\":\\"#FAFAFA\\",\\"ikIllustrationGreySeven\\":\\"#E0E0E0\\",\\"ikIllustrationGreyEight\\":\\"#F1F1F1\\",\\"ikIllustrationGreyNine\\":\\"#F5F5F5\\",\\"ikIllustrationGreyTen\\":\\"#E0E0E0\\",\\"ikIllustrationGreyEleven\\":\\"#FFFFFF\\",\\"ikIllustrationGreyTwelve\\":\\"#FFFFFF\\",\\"ikIllustrationGreyThirteen\\":\\"#F1F1F1\\",\\"ikIllustrationGreyFourteen\\":\\"#FFFFFF\\",\\"ikIllustrationGreyFifteen\\":\\"#F1F1F1\\",\\"ikIllustrationGreySixteen\\":\\"#F1F1F1\\",\\"ikIllustrationGreySeventeen\\":\\"#F5F5F5\\"}"
       />
       <div
         className="mt-3"

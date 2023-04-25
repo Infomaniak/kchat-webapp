@@ -4,14 +4,20 @@
 import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
+import {UserProfile, UserStatus, GetFilteredUsersStatsOpts, UsersStats, UserCustomStatus} from '@mattermost/types/users';
+import {ServerError} from '@mattermost/types/errors';
+import {ClientConfig, ClientLicense} from '@mattermost/types/config';
+import {Role} from '@mattermost/types/roles';
+import {PreferenceType} from '@mattermost/types/preferences';
+import {Team, TeamMembership} from '@mattermost/types/teams';
+
 import {Client4} from 'mattermost-redux/client';
 
 import {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
-import {UserProfile, UserStatus, GetFilteredUsersStatsOpts, UsersStats, UserCustomStatus} from '@mattermost/types/users';
 import {UserTypes, AdminTypes, GeneralTypes, PreferenceTypes, TeamTypes, RoleTypes} from 'mattermost-redux/action_types';
 
 import {setServerVersion, getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
-import {getMyTeams, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
+import {getMyKSuites, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 import {bindClientFunc, forceLogoutIfNecessary, debounce} from 'mattermost-redux/actions/helpers';
 import {logError} from 'mattermost-redux/actions/errors';
@@ -19,23 +25,32 @@ import {getMyPreferences} from 'mattermost-redux/actions/preferences';
 import {
     currentUserInfoQuery,
     CurrentUserInfoQueryResponseType,
-    convertRolesNamesArrayToString,
     transformToRecievedMeReducerPayload,
     transformToRecievedTeamsListReducerPayload,
-    transformToRecievedRolesReducerPayload,
+    transformToReceivedUserAndTeamRolesReducerPayload,
     transformToRecievedMyTeamMembersReducerPayload,
 } from 'mattermost-redux/actions/users_queries';
 
+import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 import {General} from 'mattermost-redux/constants';
-import {clearLocalStorageToken} from '../../../../components/login/utils';
-import {IKConstants} from '../../../../utils/constants-ik';
-import {isDesktopApp} from '../../../../utils/user_agent';
+
+import {getHistory} from 'utils/browser_history';
+import {isDesktopApp} from 'utils/user_agent';
+import {useSelector} from 'react-redux';
+
+function isIkBaseUrl() {
+    const whitelist = [
+        'https://do-not-replace-kchat.infomaniak.com'.replace('do-not-replace-', ''),
+        'https://do-not-replace-kchat.preprod.dev.infomaniak.ch'.replace('do-not-replace-', ''),
+    ];
+    return whitelist.includes(window.origin);
+}
 
 export function generateMfaSecret(userId: string): ActionFunc {
     return bindClientFunc({
@@ -71,38 +86,47 @@ export function createUser(user: UserProfile, token: string, inviteId: string, r
 
 export function loadMeREST(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState();
-
         // Sometimes the server version is set in one or the other
         // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
         const serverVersion = Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
 
         try {
-            await Promise.all([
-                dispatch(getClientConfig()),
-                dispatch(getLicenseConfig()),
-                dispatch(getMe()),
-                dispatch(getMyPreferences()),
-                dispatch(getMyTeams()),
-                dispatch(getMyTeamMembers()),
-            ]);
+            const kSuiteCall = await dispatch(getMyKSuites());
+            const kSuites = getTeams(getState());
 
-            const isCollapsedThreads = isCollapsedThreadsEnabled(state);
-            await dispatch(getMyTeamUnreads(isCollapsedThreads));
+            const suiteArr = Object.values(kSuites);
+
+            // allow through in tests to launch promise.all but not trigger redirect
+            if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
+                // don't redirect to the error page if it is a testing environment
+                if (!isDesktopApp() && isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                    // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
+                    const orderedKSuite = suiteArr.sort((a, b) => b.update_at - a.update_at);
+
+                    const {url} = orderedKSuite[0];
+                    window.open(url, '_self');
+                }
+
+                await Promise.all([
+                    dispatch(getClientConfig()),
+                    dispatch(getLicenseConfig()),
+                    dispatch(getMe()),
+                    dispatch(getMyPreferences()),
+                    dispatch(getMyTeamMembers()),
+                ]);
+
+                const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
+                await dispatch(getMyTeamUnreads(isCollapsedThreads));
+            } else if (!isDesktopApp()) {
+                // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
+                if (kSuiteCall && kSuiteCall.data) {
+                    getHistory().push('/error?type=no_ksuite');
+                }
+            }
         } catch (error) {
-            dispatch(logError(error));
-            return {error};
-        }
-
-        const {currentUserId} = state.entities.users;
-        if (currentUserId) {
-            Client4.setUserId(currentUserId);
-        }
-
-        const user = state.entities.users.profiles[currentUserId];
-        if (user) {
-            Client4.setUserRoles(user.roles);
+            dispatch(logError(error as ServerError));
+            return {error: error as ServerError};
         }
 
         return {data: true};
@@ -111,63 +135,70 @@ export function loadMeREST(): ActionFunc {
 
 export function loadMe(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState();
-
         // Sometimes the server version is set in one or the other
         // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
         const serverVersion = Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
 
-        let responseData: CurrentUserInfoQueryResponseType['data'] | null = null;
-        try {
-            const {data} = await Client4.fetchWithGraphQL<CurrentUserInfoQueryResponseType>(currentUserInfoQuery);
-            responseData = data;
-        } catch (error) {
-            dispatch(logError(error));
-            return {error};
-        }
+        let clientLicense: ClientLicense;
+        let clientConfig: ClientConfig;
+        let userProfile: UserProfile;
+        let roles: Role[];
+        let preferences: PreferenceType[];
+        let teams: Team[];
+        let teamMemberships: TeamMembership[];
 
-        if (!responseData) {
-            return {data: false};
+        try {
+            const {data, errors} = await Client4.fetchWithGraphQL<CurrentUserInfoQueryResponseType>(currentUserInfoQuery);
+
+            if (errors || !data) {
+                throw new Error('Error returned in fetching current user info with graphQL');
+            }
+
+            clientLicense = Object.assign({}, data.license);
+            clientConfig = Object.assign({}, data.config);
+            userProfile = transformToRecievedMeReducerPayload(data.user);
+            roles = transformToReceivedUserAndTeamRolesReducerPayload(data.user.roles, data.teamMembers);
+            preferences = [...data.user.preferences];
+            teams = transformToRecievedTeamsListReducerPayload(data.teamMembers);
+            teamMemberships = transformToRecievedMyTeamMembersReducerPayload(data.teamMembers, data.user.id);
+        } catch (error) {
+            dispatch(logError(error as ServerError));
+            return {error: error as ServerError};
         }
 
         dispatch(
             batchActions([
                 {
                     type: GeneralTypes.CLIENT_LICENSE_RECEIVED,
-                    data: responseData.license,
+                    data: clientLicense,
                 },
                 {
                     type: GeneralTypes.CLIENT_CONFIG_RECEIVED,
-                    data: responseData.config,
+                    data: clientConfig,
                 },
                 {
                     type: UserTypes.RECEIVED_ME,
-                    data: transformToRecievedMeReducerPayload(responseData.user),
+                    data: userProfile,
                 },
                 {
                     type: RoleTypes.RECEIVED_ROLES,
-                    data: transformToRecievedRolesReducerPayload(responseData.user.roles, responseData.teamMembers),
+                    data: roles,
                 },
                 {
                     type: PreferenceTypes.RECEIVED_ALL_PREFERENCES,
-                    data: responseData.user.preferences,
+                    data: preferences,
                 },
                 {
                     type: TeamTypes.RECEIVED_TEAMS_LIST,
-                    data: transformToRecievedTeamsListReducerPayload(responseData.teamMembers),
+                    data: teams,
                 },
                 {
                     type: TeamTypes.RECEIVED_MY_TEAM_MEMBERS,
-                    data: transformToRecievedMyTeamMembersReducerPayload(responseData.teamMembers, responseData.user.id),
+                    data: teamMemberships,
                 },
             ]),
         );
-
-        if (responseData.user.id) {
-            Client4.setUserId(responseData.user.id);
-            Client4.setUserRoles(convertRolesNamesArrayToString(responseData.user.roles));
-        }
 
         return {data: true};
     };
@@ -177,11 +208,7 @@ export function logout(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
 
-        if (isDesktopApp()) {
-            clearLocalStorageToken();
-        }
-
-        dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null});
+        // dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null}); // on s'en fou du success on est redirect sur login
 
         return {data: true};
     };
@@ -194,7 +221,7 @@ export function getTotalUsersStats(): ActionFunc {
     });
 }
 
-export function getFilteredUsersStats(options: GetFilteredUsersStatsOpts = {}): ActionFunc {
+export function getFilteredUsersStats(options: GetFilteredUsersStatsOpts = {}, updateGlobalState = true): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let stats: UsersStats;
         try {
@@ -205,10 +232,12 @@ export function getFilteredUsersStats(options: GetFilteredUsersStatsOpts = {}): 
             return {error};
         }
 
-        dispatch({
-            type: UserTypes.RECEIVED_FILTERED_USER_STATS,
-            data: stats,
-        });
+        if (updateGlobalState) {
+            dispatch({
+                type: UserTypes.RECEIVED_FILTERED_USER_STATS,
+                data: stats,
+            });
+        }
 
         return {data: stats};
     };
@@ -279,14 +308,16 @@ export function getMissingProfilesByUsernames(usernames: string[]): ActionFunc {
     };
 }
 
-export function getProfilesByIds(userIds: string[], options?: any): ActionFunc {
+export function getProfilesByIds(userIds: string[], options?: any, includeCurrentUser = false): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {currentUserId} = getState().entities.users;
         let profiles: UserProfile[];
 
         try {
             profiles = await Client4.getProfilesByIds(userIds, options);
-            removeUserFromList(currentUserId, profiles);
+            if (!includeCurrentUser) {
+                removeUserFromList(currentUserId, profiles);
+            }
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -519,8 +550,10 @@ export function getMe(): ActionFunc {
             onSuccess: UserTypes.RECEIVED_ME,
         });
         const me = await getMeFunc(dispatch, getState);
-
         if ('error' in me) {
+            if (me.error?.status_code && me.error?.status_code === 404 && (window && !window.location.pathname.includes('static/call'))) {
+                getHistory().push('/error?type=page_not_found');
+            }
             return me;
         }
         if ('data' in me) {
@@ -563,13 +596,13 @@ export function updateMyTermsOfServiceStatus(termsOfServiceId: string, accepted:
     };
 }
 
-export function getProfilesInGroup(groupId: string, page = 0, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFunc {
+export function getProfilesInGroup(groupId: string, page = 0, perPage: number = General.PROFILE_CHUNK_SIZE, sort = ''): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {currentUserId} = getState().entities.users;
         let profiles;
 
         try {
-            profiles = await Client4.getProfilesInGroup(groupId, page, perPage);
+            profiles = await Client4.getProfilesInGroup(groupId, page, perPage, sort);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -1433,18 +1466,13 @@ export function clearUserAccessTokens(): ActionFunc {
     };
 }
 
-export function checkForModifiedUsers() {
+export function checkForModifiedUsers(includeCurrentUser = false) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
         const users = getUsers(state);
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
-        const serverVersion = getServerVersion(state);
 
-        if (!isMinimumServerVersion(serverVersion, 5, 14)) {
-            return {data: true};
-        }
-
-        await dispatch(getProfilesByIds(Object.keys(users), {since: lastDisconnectAt}));
+        await dispatch(getProfilesByIds(Object.keys(users), {since: lastDisconnectAt}, includeCurrentUser));
         return {data: true};
     };
 }

@@ -1,8 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import {FormatNumberOptions} from 'react-intl';
 
 import {CloudUsage, Limits} from '@mattermost/types/cloud';
+import {ServerError} from '@mattermost/types/errors';
 
 import {FileSizes} from './file_utils';
 
@@ -27,26 +29,14 @@ export const fallbackStarterLimits = {
         history: 10000,
     },
     files: {
-        totalStorage: FileSizes.Gigabyte * 10,
+        totalStorage: Number(FileSizes.Gigabyte),
     },
     teams: {
         active: 1,
     },
-    integrations: {
-        enabled: 5,
-    },
     boards: {
         cards: 500,
         views: 5,
-    },
-};
-
-// These are to be used when we need values
-// even if network requests are failing for some reason.
-// Use as a fallback.
-export const fallbackProfessionalLimits = {
-    files: {
-        totalStorage: FileSizes.Gigabyte * 250,
     },
 };
 
@@ -68,9 +58,22 @@ export function hasSomeLimits(limits: Limits): boolean {
     return Object.keys(limits).length > 0;
 }
 
+export const isLimited = (limits: Limits) => {
+    return Object.values(limits).some((limit) => typeof limit === 'number' && limit > 0);
+};
+
+export const isLimitExceeded = (error: ServerError): boolean => error.status_code === 409 && (error.server_error_id === 'quota-exceeded' || error.id === 'quota-exceeded');
+
 export const limitThresholds = Object.freeze({
     ok: 0,
     warn: 50,
     danger: 66,
+    reached: 100,
     exceeded: 100.000001,
 });
+
+export const LimitTypes = {
+    messageHistory: 'messageHistory',
+    fileStorage: 'fileStorage',
+    boardsCards: 'boardsCards',
+} as const;

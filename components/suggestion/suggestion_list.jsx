@@ -117,6 +117,8 @@ export default class SuggestionList extends React.PureComponent {
             }
         } else if (item.type === 'mention.channels') {
             this.currentLabel = item.channel.display_name;
+        } else if (item.emoji) {
+            this.currentLabel = item.name;
         }
 
         if (this.currentLabel) {
@@ -185,6 +187,20 @@ export default class SuggestionList extends React.PureComponent {
         return {
             transform: `translate(${pixelsToMoveX}px, ${pixelsToMoveY}px)`,
         };
+    }
+
+    renderDivider(type) {
+        const id = type ? 'suggestion.' + type : 'suggestion.default';
+        return (
+            <div
+                key={type + '-divider'}
+                className='suggestion-list__divider'
+            >
+                <span>
+                    <FormattedMessage id={id}/>
+                </span>
+            </div>
+        );
     }
 
     renderNoResults() {

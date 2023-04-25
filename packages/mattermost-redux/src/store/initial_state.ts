@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {SelfHostedSignupProgress} from '@mattermost/types/hosted_customer';
 import {GlobalState} from '@mattermost/types/store';
 
 import {zeroStateLimitedViews} from '../reducers/entities/posts';
@@ -32,6 +33,7 @@ const state: GlobalState = {
             statuses: {},
             stats: {},
             myUserAccessTokens: {},
+            lastActivity: {},
         },
         teams: {
             currentTeamId: '',
@@ -56,6 +58,7 @@ const state: GlobalState = {
             channelModerations: {},
             channelMemberCountsByGroup: {},
             messageCounts: {},
+            pendingGuests: {},
         },
         posts: {
             expandedURLs: {},
@@ -76,6 +79,7 @@ const state: GlobalState = {
                 },
             },
             limitedViews: zeroStateLimitedViews,
+            acknowledgements: {},
         },
         threads: {
             threadsInTeam: {},
@@ -147,9 +151,25 @@ const state: GlobalState = {
             pending: new Set(),
         },
         gifs: {
+            app: {
+                appClassName: '',
+                appId: '',
+                appName: '',
+                basePath: '',
+                enableHistory: false,
+                header: {
+                    tabs: [],
+                    displayText: false,
+                },
+                itemTapType: 0,
+                shareEvent: '',
+            },
             categories: {
                 tagsList: [],
                 tagsDict: {},
+                cursor: '',
+                hasMore: false,
+                isFetching: false,
             },
             cache: {
                 gifs: {},
@@ -189,36 +209,66 @@ const state: GlobalState = {
         },
         cloud: {
             limits: {
-                limits: {},
+                limits: {
+                    public_channels: 0,
+                    private_channels: 0,
+                    members: 0,
+                    guests: 0,
+                    storage: 0,
+                },
                 limitsLoaded: false,
+            },
+            errors: {},
+            selfHostedSignup: {
+                progress: SelfHostedSignupProgress.START,
+            },
+        },
+        hostedCustomer: {
+            signupProgress: SelfHostedSignupProgress.START,
+            products: {
+                products: {},
+                productsLoaded: false,
+            },
+            errors: {},
+            invoices: {
+                invoices: {},
+                invoicesLoaded: false,
             },
         },
         usage: {
+            storage: 0,
+            public_channels: 0,
+            private_channels: 0,
+            guests: 0,
+            pending_guests: 0,
+            members: 0,
+            usageLoaded: false,
             files: {
                 totalStorage: 0,
-                totalStorageLoaded: false,
+                totalStorageLoaded: true,
             },
             messages: {
                 history: 0,
-                historyLoaded: false,
+                historyLoaded: true,
             },
             teams: {
                 active: 0,
                 cloudArchived: 0,
-                teamsLoaded: false,
+                teamsLoaded: true,
             },
             boards: {
                 cards: 0,
-                cardsLoaded: false,
-            },
-            integrations: {
-                enabled: 0,
-                enabledLoaded: false,
+                cardsLoaded: true,
             },
         },
         insights: {
             topReactions: {},
             myTopReactions: {},
+        },
+        worktemplates: {
+            categories: [],
+            templatesInCategory: {},
+            playbookTemplates: [],
         },
     },
     errors: [],
@@ -241,6 +291,10 @@ const state: GlobalState = {
                 error: null,
             },
             updateChannel: {
+                status: 'not_started',
+                error: null,
+            },
+            getChannelsAndChannelMembers: {
                 status: 'not_started',
                 error: null,
             },
@@ -267,6 +321,10 @@ const state: GlobalState = {
         },
         teams: {
             getMyTeams: {
+                status: 'not_started',
+                error: null,
+            },
+            getMyKSuites: {
                 status: 'not_started',
                 error: null,
             },
@@ -327,29 +385,12 @@ const state: GlobalState = {
                 error: null,
             },
         },
-        jobs: {
-            createJob: {
-                status: 'not_started',
-                error: null,
-            },
-            getJob: {
-                status: 'not_started',
-                error: null,
-            },
-            getJobs: {
-                status: 'not_started',
-                error: null,
-            },
-            cancelJob: {
-                status: 'not_started',
-                error: null,
-            },
-        },
     },
     websocket: {
         connected: false,
         lastConnectAt: 0,
         lastDisconnectAt: 0,
+        connectionId: '',
     },
 };
 export default state;

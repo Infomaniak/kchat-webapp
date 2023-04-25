@@ -17,7 +17,7 @@
 .modal-body {
     overflow: auto;
     max-height: calc(90vh - 80px);
-    padding: 20px 15px;
+    padding: 25px 25px 0;
 
     &.overflow--visible {
         overflow: visible;
@@ -42,16 +42,74 @@
 .app__body {
     .modal {
         .modal-content {
-            border-color: rgba(var(--center-channel-color-rgb), 0.16);
+            // border-color: rgba(var(--center-channel-color-rgb), 0.16);
             background: v(center-channel-bg);
             color: v(center-channel-color);
+            border: unset;
+            border-radius: 12px 12px;
         }
 
         .modal-header {
             background: var(--sidebar-header-bg);
-
+            border-radius: 12px 12px 0 0;
+            padding: 20px 32px 16px;
+            align-items: center;
             .close {
                 color: var(--sidebar-header-text-color);
+            }
+        }
+        .modal-footer {
+            border-radius: 0 0 12px 12px;
+            padding: 18px 32px;
+        }
+        .modal-body .filter-row .save-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            background: var(--button-bg);
+            border-radius: 4px;
+            color: var(--button-color);
+            font-weight: 600;
+            transition: all .15s ease-out;
+            height: 40px;
+            padding: 0 20px;
+            padding-top: 0px;
+            padding-right: 20px;
+            padding-bottom: 0px;
+            padding-left: 20px;
+            font-size: 14px;
+            line-height: 14px;
+        }
+        .modal-footer,
+        // .modal-header,
+        .filter-controls {
+            button:not(.close) {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border: 0;
+                background: var(--button-bg);
+                border-radius: 4px;
+                color: var(--button-color);
+                font-weight: 600;
+                transition: all .15s ease-out;
+                height: 40px;
+                padding: 0 20px;
+                padding-top: 0px;
+                padding-right: 20px;
+                padding-bottom: 0px;
+                padding-left: 20px;
+                font-size: 14px;
+                line-height: 14px;
+            }
+            button.secondary:not(.close) {
+                margin-right: 8px;
+                background: var(--center-channel-bg);
+                background: rgba(var(--button-bg-rgb), 0.08);
+                color: var(--button-bg);
             }
         }
     }
@@ -243,7 +301,7 @@
         display: flex;
         min-height: 56px;
         padding: 14px 48px 11px 15px;
-        border: 1px solid $light-gray;
+        // border: 1px solid $light-gray;
         background: #333;
         border-radius: 0;
         border-radius: 3px 3px 0 0;
@@ -254,9 +312,9 @@
         .modal-title {
             overflow: hidden;
             max-width: calc(100% - 80px);
-            flex: 1;
+            flex: 0.9;
             color: var(--sidebar-header-text-color);
-            font-size: 17px;
+            font-size: 20px;
             line-height: 27px;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -287,11 +345,11 @@
         .close {
             position: absolute;
             z-index: 5;
-            right: 10px;
+            right: 18px;
             width: 30px;
             height: 30px;
             color: white;
-            font-size: 24px;
+            font-size: 30px;
             line-height: 30px;
             opacity: 0.7;
             text-shadow: none;
@@ -336,7 +394,7 @@
     }
 
     .modal-content {
-        border: 1px solid #777;
+        // border: 1px solid #777;
         background: #fff;
         border-radius: 4px;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -700,7 +758,7 @@
     }
 
     .filter-row {
-        width: 300px;
+        width: 400px;
         margin: 5px 0 10px;
 
         &.filter-row--full {

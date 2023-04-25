@@ -13,7 +13,7 @@ import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {
     getCurrentTeamId,
     getJoinableTeamIds,
-    getMyTeams,
+    getMyKSuites,
 } from 'mattermost-redux/selectors/entities/teams';
 import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {getTeamsUnreadStatuses} from 'mattermost-redux/selectors/entities/channels';
@@ -25,7 +25,7 @@ import {GlobalState} from 'types/store';
 import {getCurrentLocale} from 'selectors/i18n';
 import {getIsLhsOpen} from 'selectors/lhs';
 
-import {switchTeam, updateTeamsOrderForUser} from 'actions/team_actions.jsx';
+import {switchTeam, updateTeamsOrderForUser} from 'actions/team_actions';
 
 import {Preferences} from 'utils/constants';
 
@@ -39,11 +39,11 @@ function mapStateToProps(state: GlobalState) {
     const moreTeamsToJoin: boolean = joinableTeams && joinableTeams.length > 0;
     const products = state.plugins.components.Product || [];
 
-    const [unreadTeamsSet, mentionsInTeamMap] = getTeamsUnreadStatuses(state);
+    const [unreadTeamsSet, mentionsInTeamMap, teamHasUrgentMap] = getTeamsUnreadStatuses(state);
 
     return {
         currentTeamId: getCurrentTeamId(state),
-        myTeams: getMyTeams(state),
+        myTeams: getMyKSuites(state),
         isOpen: getIsLhsOpen(state),
         experimentalPrimaryTeam,
         locale: getCurrentLocale(state),
@@ -52,6 +52,7 @@ function mapStateToProps(state: GlobalState) {
         products,
         unreadTeamsSet,
         mentionsInTeamMap,
+        teamHasUrgentMap,
     };
 }
 

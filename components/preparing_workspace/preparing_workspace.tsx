@@ -13,7 +13,7 @@ import {ActionResult} from 'mattermost-redux/types/actions';
 import {Team} from '@mattermost/types/teams';
 import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
 import {isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
-import {getCurrentTeam, getMyTeams} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTeam, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 import {getFirstAdminSetupComplete, getConfig} from 'mattermost-redux/selectors/entities/general';
 import {Client4} from 'mattermost-redux/client';
 
@@ -101,7 +101,7 @@ const PreparingWorkspace = (props: Props) => {
     const useCaseOnboarding = useSelector(getUseCaseOnboarding);
 
     const currentTeam = useSelector(getCurrentTeam);
-    const myTeams = useSelector(getMyTeams);
+    const myTeams = useSelector(getMyKSuites);
 
     // In cloud instances created from portal,
     // new admin user has a team in myTeams but not in currentTeam.

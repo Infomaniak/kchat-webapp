@@ -2,20 +2,22 @@
 // See LICENSE.txt for license information.
 
 import React, {ReactNode} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
 import {General, Posts} from 'mattermost-redux/constants';
 import {Post} from '@mattermost/types/posts';
 
 import {Channel} from '@mattermost/types/channels';
+import {Team} from '@mattermost/types/teams';
 
 import * as Utils from 'utils/utils';
 import {TextFormattingOptions} from 'utils/text_formatting';
+import {getSiteURL} from 'utils/url';
 
 import Markdown from 'components/markdown';
 import CombinedSystemMessage from 'components/post_view/combined_system_message';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member';
-import CallNotificationMessage from 'components/kmeet_conference/post_type'
+import CallNotificationMessage from 'components/kmeet_conference/post_type';
 
 function renderUsername(value: string): ReactNode {
     const username = (value[0] === '@') ? value : `@${value}`;
@@ -367,6 +369,36 @@ function renderMeMessage(post: Post): ReactNode {
     return renderFormattedText(message);
 }
 
+function renderReminderSystemBotMessage(post: Post): ReactNode {
+    const username = post.props.username ? renderUsername(post.props.username) : '';
+    const permaLink = renderFormattedText(`[${post.props.link}](${post.props.link})`);
+    return (
+        <FormattedMessage
+            id={'post.reminder.systemBot'}
+            defaultMessage="Hi there, here's your reminder about this message from {username}: {permaLink}"
+            values={{
+                username,
+                permaLink,
+            }}
+        />
+    );
+}
+
+function renderChangeChannelPrivacyMessage(post: Post) {
+    if (!post.props.channel_type) {
+        return null;
+    }
+    return (
+        <FormattedMessage
+            id='api.change_channel_privacy'
+            defaultMessage='This channel has been converted to a {type} Channel.'
+            values={{
+                type: post.props.channel_type,
+            }}
+        />
+    );
+}
+
 const systemMessageRenderers = {
     [Posts.POST_TYPES.JOIN_CHANNEL]: renderJoinChannelMessage,
     [Posts.POST_TYPES.GUEST_JOIN_CHANNEL]: renderGuestJoinChannelMessage,
@@ -386,12 +418,14 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CHANNEL_UNARCHIVED]: renderChannelUnarchivedMessage,
     [Posts.POST_TYPES.ME]: renderMeMessage,
     [Posts.POST_TYPES.CALL]: renderCallNotificationMessage,
+    [Posts.POST_TYPES.SYSTEM_POST_REMINDER]: renderReminderSystemBotMessage,
+    [Posts.POST_TYPES.CHANGE_CHANNEL_PRIVACY]: renderChangeChannelPrivacyMessage,
 };
 
-export function renderSystemMessage(post: Post, channel: Channel, isUserCanManageMembers?: boolean): ReactNode {
-    if (post.props && post.props.add_channel_member) {
-        const isEphemeral = Utils.isPostEphemeral(post);
+export function renderSystemMessage(post: Post, currentTeam: Team, channel: Channel, isUserCanManageMembers?: boolean, isMilitaryTime?: boolean): ReactNode {
+    const isEphemeral = Utils.isPostEphemeral(post);
 
+    if (post.props && post.props.add_channel_member) {
         if (channel && (channel.type === General.PRIVATE_CHANNEL || channel.type === General.OPEN_CHANNEL) &&
             isUserCanManageMembers &&
             isEphemeral

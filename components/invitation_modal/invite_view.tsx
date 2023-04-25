@@ -10,18 +10,16 @@ import {Channel} from '@mattermost/types/channels';
 import {UserProfile} from '@mattermost/types/users';
 import {Team} from '@mattermost/types/teams';
 
-import {getSiteURL} from 'utils/url';
 import {Constants} from 'utils/constants';
 
-import {trackEvent} from 'actions/telemetry_actions';
-import useCopyText from 'components/common/hooks/useCopyText';
 import UsersEmailsInput from 'components/widgets/inputs/users_emails_input';
-import {getAnalyticsCategory} from 'components/onboarding_tasks';
 
 import {t} from 'utils/i18n';
 
 import AddToChannels, {CustomMessageProps, InviteChannels, defaultCustomMessage, defaultInviteChannels} from './add_to_channels';
 import InviteAs, {InviteType} from './invite_as';
+import OverageUsersBannerNotice from './overage_users_banner_notice';
+
 import './invite_view.scss';
 
 export const initializeInviteState = (initialSearchValue = '', inviteAsGuest = false): InviteState => {
@@ -66,6 +64,7 @@ export type Props = InviteState & {
     canAddUsers: boolean;
     townSquareDisplayName: string;
     channelToInvite?: Channel;
+    shouldOpenMenu: boolean;
 }
 
 export default function InviteView(props: Props) {
@@ -76,43 +75,6 @@ export default function InviteView(props: Props) {
     }, [props.currentTeam.id, props.currentTeam.invite_id, props.regenerateTeamInviteId]);
 
     const {formatMessage} = useIntl();
-
-    const inviteURL = useMemo(() => {
-        return `${getSiteURL()}/signup_user_complete/?id=${props.currentTeam.invite_id}`;
-    }, [props.currentTeam.invite_id]);
-
-    const copyText = useCopyText({
-        trackCallback: () => trackEvent(getAnalyticsCategory(props.isAdmin), 'click_copy_invite_link'),
-        text: inviteURL,
-    });
-
-    const copyButton = (
-        <button
-            onClick={copyText.onClick}
-            data-testid='InviteView__copyInviteLink'
-            aria-label='team invite link'
-            className='InviteView__copyLink'
-        >
-            {!copyText.copiedRecently && (
-                <>
-                    <i className='icon icon-link-variant'/>
-                    <FormattedMessage
-                        id='invite_modal.copy_link'
-                        defaultMessage='Copy invite link'
-                    />
-                </>
-            )}
-            {copyText.copiedRecently && (
-                <>
-                    <i className='icon icon-check'/>
-                    <FormattedMessage
-                        id='invite_modal.copied'
-                        defaultMessage='Copied'
-                    />
-                </>
-            )}
-        </button>
-    );
 
     const errorProperties = {
         showError: false,
@@ -133,7 +95,10 @@ export default function InviteView(props: Props) {
         errorProperties.errorMessageValues.text = Constants.MAX_ADD_MEMBERS_BATCH.toString();
     }
 
-    let placeholder = formatMessage({
+    let placeholder = props.inviteType === InviteType.GUEST ? formatMessage({
+        id: 'invite_modal.add_invites.email',
+        defaultMessage: 'Enter an email address',
+    }) : formatMessage({
         id: 'invite_modal.add_invites',
         defaultMessage: 'Enter a name or email address',
     });
@@ -161,6 +126,16 @@ export default function InviteView(props: Props) {
         return props.usersEmails.length > 0;
     }, [props.inviteType, props.inviteChannels.channels, props.usersEmails]);
 
+    const inviteModalPeople = formatMessage({
+        id: 'invite_modal.people',
+        defaultMessage: 'people',
+    });
+
+    const inviteModalGuest = formatMessage({
+        id: 'invite_modal.guests',
+        defaultMessage: 'guests',
+    });
+
     return (
         <>
             <Modal.Header className={props.headerClass}>
@@ -170,15 +145,7 @@ export default function InviteView(props: Props) {
                         defaultMessage={'Invite {inviteType} to {team_name}'}
                         values={{
                             inviteType: (
-                                props.inviteType === InviteType.MEMBER ?
-                                    <FormattedMessage
-                                        id='invite_modal.people'
-                                        defaultMessage='people'
-                                    /> :
-                                    <FormattedMessage
-                                        id='invite_modal.guests'
-                                        defaultMessage='guests'
-                                    />
+                                props.inviteType === InviteType.MEMBER ? inviteModalPeople : inviteModalGuest
                             ),
                             team_name: props.currentTeam.display_name,
                         }}
@@ -221,6 +188,7 @@ export default function InviteView(props: Props) {
                     inputValue={props.usersEmailsSearch}
                     emailInvitationsEnabled={props.emailInvitationsEnabled}
                     autoFocus={true}
+                    isMenuOpen={props.shouldOpenMenu}
                 />
                 {props.canInviteGuests && props.canAddUsers &&
                 <InviteAs
@@ -245,9 +213,9 @@ export default function InviteView(props: Props) {
                         inviteType={props.inviteType}
                     />
                 )}
+                <OverageUsersBannerNotice/>
             </Modal.Body>
             <Modal.Footer className={'InviteView__footer ' + props.footerClass}>
-                {copyButton}
                 <button
                     disabled={!isInviteValid}
                     onClick={props.invite}

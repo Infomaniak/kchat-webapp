@@ -5,11 +5,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import {useCurrentProductId} from 'utils/products';
+
 import CenterControls from './center_controls/center_controls';
 import LeftControls from './left_controls/left_controls';
 import RightControls from './right_controls/right_controls';
 
-import {useCurrentProductId, useIsLoggedIn, useProducts} from './hooks';
+import {useIsLoggedIn} from './hooks';
 
 const GlobalHeaderContainer = styled.header`
     position: relative;
@@ -17,26 +19,44 @@ const GlobalHeaderContainer = styled.header`
     flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
-    height: 40px;
+    height: 46px;
     background: var(--global-header-background);
-    border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.08);
     color: rgba(var(--global-header-text-rgb), 0.64);
-    padding: 0 12px;
     z-index: 99;
 
     > * + * {
-        margin-left: 12px;
+        padding-left: 12px;
+    }
+
+    & .grey {
+        color: rgba(var(--center-channel-color-rgb), 0.785);
+        background: transparent;
+        padding-top: 0;
+        padding-bottom: 0;
+        height: 100%;
+        border-radius: unset;
+        width: 42px;
+        &:hover {
+            color: rgba(var(--center-channel-color-rgb), 0.84);
+            background: rgba(var(--center-channel-color-rgb), 0.08);
+        }
+        &.active {
+            color: rgba(var(--center-channel-color-rgb), 0.84);
+            background: rgba(var(--center-channel-color-rgb), 0.08);
+        }
     }
 
     @media screen and (max-width: 768px) {
         display: none;
     }
+    .multi-teams & {
+        margin-left: 65px;
+    }
 `;
 
 const GlobalHeader = (): JSX.Element | null => {
     const isLoggedIn = useIsLoggedIn();
-    const products = useProducts();
-    const currentProductID = useCurrentProductId(products);
+    const currentProductID = useCurrentProductId();
 
     if (!isLoggedIn) {
         return null;
@@ -45,7 +65,7 @@ const GlobalHeader = (): JSX.Element | null => {
     return (
         <GlobalHeaderContainer id='global-header'>
             <LeftControls/>
-            <CenterControls productId={currentProductID}/>
+            <CenterControls/>
             <RightControls productId={currentProductID}/>
         </GlobalHeaderContainer>
     );

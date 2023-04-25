@@ -5,6 +5,7 @@ import {GlobalState} from 'types/store';
 
 export const connectedChannelID = (state: GlobalState) => state.views.calls.connectedChannelID;
 export const connectedCallID = (state: GlobalState) => state.views.calls.connectedCallID;
+export const connectedCallUrl = (state: GlobalState) => state.views.calls.connectedCallUrl;
 export const voiceConnectedChannels = (state: GlobalState) => state.views.calls.voiceConnectedChannels;
 
 export const voiceConnectedUsers = (state: GlobalState) => {

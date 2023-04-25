@@ -1,14 +1,10 @@
-.backstage {
-    width: 100vw;
-    height: 100vh;
-}
-
 .backstage-navbar {
-    z-index: 10;
+    z-index: 100;
     height: $backstage-bar-height;
     padding: 10px 20px;
     border-bottom: 1px solid $light-gray;
     background: $white;
+    grid-area: header;
 }
 
 .backstage-navbar__back {
@@ -29,18 +25,10 @@
 }
 
 .backstage-body {
-    top: 0;
-    bottom: 0;
-    display: inline-block;
-    overflow: auto;
+    overflow-y: scroll;
     width: 100%;
-    height: calc(100% - #{$announcement-bar-height});
-
-    body.announcement-bar--fixed & {
-        height: calc(100vh - #{$announcement-bar-height} - #{$backstage-bar-height});
-    }
-
     background-color: $bg--gray;
+    grid-area: center;
 }
 
 .backstage-content {
@@ -49,13 +37,19 @@
     margin: 46px auto;
     background-color: $bg--gray;
     vertical-align: top;
+
+    @media screen and (min-width: 1920px) {
+        max-width: 1600px;
+    }
 }
 
 .backstage-sidebar {
     position: absolute;
     width: 260px;
+    height: 100vh;
     padding: 46px 20px;
     vertical-align: top;
+    background-color: $bg--gray;
 
     ul {
         padding: 0;
@@ -232,9 +226,12 @@
         text-overflow: ellipsis;
     }
 
+    .item-details__row {
+        justify-content: space-between;
+    }
+
     .item-details__row + .item-details__row {
         @include clearfix;
-
         text-overflow: ellipsis;
     }
 
@@ -332,6 +329,16 @@
     }
 }
 
+.integrations-list {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
 .integration__icon {
     position: absolute;
     right: 20px;
@@ -344,14 +351,25 @@
 }
 
 .integration-option {
-    flex: 0 0 30%;
+    flex: 0 0 45%;
     padding: 20px;
     border: 1px solid $light-gray;
-    margin: 0 30px 30px 0;
     background-color: $white;
     border-radius: 4px;
     text-align: center;
     transition: all 0.2s ease;
+
+    @media screen and (max-width: 360px) {
+        flex: 0 0 100%;
+    }
+
+    @media screen and (min-width: 1280px) {
+        flex: 0 0 30%;
+    }
+
+    @media screen and (min-width: 1920px) {
+        flex: 0 0 20%;
+    }
 
     &:hover {
         @extend %box-shadow-1;
@@ -555,13 +573,4 @@
 
 .bot-token-has-error {
     color: #a94442;
-}
-
-// global header style adjustments
-@media screen and (min-width: 769px) {
-    .backstage {
-        position: relative;
-        z-index: 110;
-        margin-top: -40px;
-    }
 }

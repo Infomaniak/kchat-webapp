@@ -1,55 +1,26 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-/* eslint-disable max-lines */
-
 import React from 'react';
-import {useDispatch} from 'react-redux';
-import {FormattedDate, FormattedMessage} from 'react-intl';
+import {useSelector} from 'react-redux';
+import {FormattedMessage} from 'react-intl';
 
-import {DispatchFunc} from 'mattermost-redux/types/actions';
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 
-import {openModal} from 'actions/views/modals';
-import {ModalIdentifiers} from 'utils/constants';
-import {getMonthLong} from 'utils/i18n';
-import {getCurrentLocale} from 'selectors/i18n';
-import store from 'stores/redux_store.jsx';
+import {redirectTokSuiteDashboard} from 'actions/global_actions';
 
-import OffersModal from 'components/offers_modal/offers_modal';
 import MaxMessagesIconSvg from 'components/common/svg_images_components/max_messages_icon_svg';
 
 import './channel_message_limitation_banner.scss';
 
-const getState = store.getState;
-
-type Props = {
-    olderMessagesDate: string;
-}
-
-export default function ChannelMessageLimitationBanner(props: Props) {
-    const dispatch = useDispatch<DispatchFunc>();
-
-    const {
-        olderMessagesDate,
-    } = props;
+export default function ChannelMessageLimitationBanner() {
+    const isAdmin = useSelector(isCurrentUserSystemAdmin);
+    const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
 
     function handleButtonClick() {
-        dispatch(openModal({
-            modalId: ModalIdentifiers.OFFERS,
-            dialogType: OffersModal,
-        }));
+        redirectTokSuiteDashboard(currentTeamAccountId);
     }
-
-    const locale = getCurrentLocale(getState());
-    const epochDate = Math.floor(new Date(olderMessagesDate).getTime());
-    const date = (
-        <FormattedDate
-            value={epochDate}
-            month={getMonthLong(locale)}
-            day='2-digit'
-            year='numeric'
-        />
-    );
 
     return (
         <p className='channel-limitation-banner'>
@@ -59,21 +30,12 @@ export default function ChannelMessageLimitationBanner(props: Props) {
             <span>
                 <FormattedMessage
                     id='channel_limitation.messages'
-                    defaultMessage='Messages before {date} may not appear because your kChat has reached the 10,000 message limit. To display more messages, subscribe to a higher plan.'
+                    defaultMessage='Messages and files older than 3 months are hidden. To view more posts, {isAdmin, select, true {subscribe to a higher offer. <modifyOffer>Change my offer</modifyOffer>} other {contact an administrator to subscribe to a higher offer}}'
                     values={{
-                        date,
+                        isAdmin,
+                        modifyOffer: (chunks: string[]) => (<a onClick={handleButtonClick}>{chunks}</a>),
                     }}
                 />
-                {' '}
-                <button
-                    className='channel-limitation-banner__button'
-                    onClick={handleButtonClick}
-                >
-                    <FormattedMessage
-                        id='channel_limitation.messages_button'
-                        defaultMessage='Modify my offer'
-                    />
-                </button>
             </span>
         </p>
     );

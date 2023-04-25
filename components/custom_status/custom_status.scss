@@ -40,6 +40,7 @@
         }
 
         &__button {
+            vertical-align: middle;
             &.btn:disabled,
             &.btn:disabled:hover {
                 background: rgba(var(--center-channel-color-rgb), 0.08);
@@ -273,6 +274,7 @@ span.emoticon[style]:hover {
     display: flex;
     width: calc(100% - 24px);
     margin-top: 45px;
+    padding-bottom: 5px;
 
     & &__date {
         position: relative;
@@ -323,5 +325,20 @@ span.emoticon[style]:hover {
             letter-spacing: 0.03em;
             line-height: 16px;
         }
+    }
+
+    &__custom-time {
+        width: 260px;
+
+        .dateTime__custom-time-icon {
+            position: static;
+            margin-left: 10px;
+        }
+    }
+
+    &__description {
+        font-size: 10px;
+        color: rgba(var(--center-channel-color-rgb), 0.64);
+        letter-spacing: 0.03em;
     }
 }

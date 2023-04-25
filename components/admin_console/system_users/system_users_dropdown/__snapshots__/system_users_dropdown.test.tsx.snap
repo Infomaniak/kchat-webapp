@@ -49,16 +49,18 @@ exports[`components/admin_console/system_users/system_users_dropdown/system_user
 exports[`components/admin_console/system_users/system_users_dropdown/system_users_dropdown renderDeactivateMemberModal should render the bot accounts warning. owner_id has enabled bot accounts 1`] = `
 <div>
   <React.Fragment>
-    <Memo(MemoizedFormattedMessage)
-      defaultMessage="This action deactivates {username}.\\\\n \\\\n * They will be logged out and not have access to any teams or channels on this system.\\\\n * Bot accounts they manage will be disabled along with their integrations. To enable them again, go to [Integrations > Bot Accounts]({siteURL}/_redirect/integrations/bots). <link>Learn more about bot accounts</link>.\\\\n \\\\n \\\\n"
-      id="deactivate_member_modal.desc.for_users_with_bot_accounts1"
-      values={
-        Object {
-          "username": "some-user",
-        }
-      }
-    />
     <ul>
+      <li>
+        <Memo(MemoizedFormattedMessage)
+          defaultMessage="This action deactivates {username}"
+          id="deactivate_member_modal.desc.for_users_with_bot_accounts1"
+          values={
+            Object {
+              "username": "some-user",
+            }
+          }
+        />
+      </li>
       <li>
         <Memo(MemoizedFormattedMessage)
           defaultMessage="They will be logged out and not have access to any teams or channels on this system."
@@ -67,7 +69,7 @@ exports[`components/admin_console/system_users/system_users_dropdown/system_user
       </li>
       <li>
         <Memo(MemoizedFormattedMessage)
-          defaultMessage="Bot accounts they manage will be disabled along with their integrations. To enable them again, go to <linkBots>Integrations > Bot Accounts</link>. <linkDocumentation>Learn more about bot accounts</linkDocumentation>. \\\\n \\\\n \\\\n"
+          defaultMessage="Bot accounts they manage will be disabled along with their integrations. To enable them again, go to <linkBots>Integrations > Bot Accounts</linkBots>. <linkDocumentation>Learn more about bot accounts</linkDocumentation>."
           id="deactivate_member_modal.desc.for_users_with_bot_accounts3"
           values={
             Object {
@@ -79,6 +81,8 @@ exports[`components/admin_console/system_users/system_users_dropdown/system_user
         />
       </li>
     </ul>
+    <p />
+    <p />
   </React.Fragment>
   <FormattedMarkdownMessage
     defaultMessage="Are you sure you want to deactivate {username}?"
@@ -245,6 +249,47 @@ exports[`components/admin_console/system_users/system_users_dropdown/system_user
       />
     }
   />
+  <ConfirmModal
+    cancelButtonText={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="No"
+        id="create_group_memberships_modal.cancel"
+      />
+    }
+    confirmButtonClass="btn btn-danger"
+    confirmButtonText={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Yes"
+        id="create_group_memberships_modal.create"
+      />
+    }
+    message={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="You're about to add or re-add {username} to teams and channels based on their LDAP group membership. You can revert this change at any time."
+        id="create_group_memberships_modal.desc"
+        values={
+          Object {
+            "username": "some-user",
+          }
+        }
+      />
+    }
+    modalClass=""
+    onCancel={[Function]}
+    onConfirm={[Function]}
+    show={false}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Re-add {username} to teams and channels"
+        id="create_group_memberships_modal.title"
+        values={
+          Object {
+            "username": "some-user",
+          }
+        }
+      />
+    }
+  />
   <MenuWrapper
     animationComponent={[Function]}
     className=""
@@ -339,6 +384,19 @@ exports[`components/admin_console/system_users/system_users_dropdown/system_user
           onClick={[Function]}
           show={true}
           text="Revoke Sessions"
+        />
+      </Connect(SystemPermissionGate)>
+      <Connect(SystemPermissionGate)
+        permissions={
+          Array [
+            "sysconsole_write_user_management_groups",
+          ]
+        }
+      >
+        <MenuItemAction
+          onClick={[Function]}
+          show={false}
+          text="Re-sync user via LDAP groups"
         />
       </Connect(SystemPermissionGate)>
     </Menu>
@@ -499,6 +557,47 @@ exports[`components/admin_console/system_users/system_users_dropdown/system_user
       />
     }
   />
+  <ConfirmModal
+    cancelButtonText={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="No"
+        id="create_group_memberships_modal.cancel"
+      />
+    }
+    confirmButtonClass="btn btn-danger"
+    confirmButtonText={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Yes"
+        id="create_group_memberships_modal.create"
+      />
+    }
+    message={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="You're about to add or re-add {username} to teams and channels based on their LDAP group membership. You can revert this change at any time."
+        id="create_group_memberships_modal.desc"
+        values={
+          Object {
+            "username": "some-user",
+          }
+        }
+      />
+    }
+    modalClass=""
+    onCancel={[Function]}
+    onConfirm={[Function]}
+    show={false}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Re-add {username} to teams and channels"
+        id="create_group_memberships_modal.title"
+        values={
+          Object {
+            "username": "some-user",
+          }
+        }
+      />
+    }
+  />
   <MenuWrapper
     animationComponent={[Function]}
     className=""
@@ -593,6 +692,19 @@ exports[`components/admin_console/system_users/system_users_dropdown/system_user
           onClick={[Function]}
           show={true}
           text="Revoke Sessions"
+        />
+      </Connect(SystemPermissionGate)>
+      <Connect(SystemPermissionGate)
+        permissions={
+          Array [
+            "sysconsole_write_user_management_groups",
+          ]
+        }
+      >
+        <MenuItemAction
+          onClick={[Function]}
+          show={false}
+          text="Re-sync user via LDAP groups"
         />
       </Connect(SystemPermissionGate)>
     </Menu>

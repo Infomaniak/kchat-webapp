@@ -20,6 +20,7 @@ import {
     PreferenceTypes,
     AppsTypes,
     CloudTypes,
+    HostedCustomerTypes,
 } from 'mattermost-redux/action_types';
 import {General, Permissions} from 'mattermost-redux/constants';
 import {addChannelToInitialCategory, fetchMyCategories, receivedCategoryOrder} from 'mattermost-redux/actions/channel_categories';
@@ -69,9 +70,12 @@ import {
     getUser as loadUser,
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
-import {getCurrentUser, getCurrentUserId, getStatusForUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
+import {setGlobalItem} from 'actions/storage';
+import {transformServerDraft} from 'actions/views/drafts';
+
 import {Client4} from 'mattermost-redux/client';
-import {getMyTeams, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getMyKSuites, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {
     getChannel,
@@ -88,6 +92,7 @@ import {getStandardAnalytics} from 'mattermost-redux/actions/admin';
 
 import {fetchAppBindings, fetchRHSAppsBindings} from 'mattermost-redux/actions/apps';
 
+import {getConnectionId} from 'selectors/general';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
 
@@ -96,8 +101,8 @@ import {closeRightHandSide} from 'actions/views/rhs';
 import {syncPostsInChannel} from 'actions/views/channel';
 import {updateThreadLastOpened} from 'actions/views/threads';
 
-import {browserHistory} from 'utils/browser_history';
-import {loadChannelsForCurrentUser} from 'actions/channel_actions.jsx';
+import {getHistory} from 'utils/browser_history';
+import {loadChannelsForCurrentUser} from 'actions/channel_actions';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import {handleNewPost} from 'actions/post_actions';
@@ -111,14 +116,17 @@ import {getSiteURL} from 'utils/url';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
-import DialingModal from 'components/kmeet_conference/ringing_dialog';
+
+// import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
 
-import {needRefreshToken, refreshIKToken} from 'components/login/utils';
+import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
+
+// import {isDesktopApp} from 'utils/user_agent';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -147,20 +155,24 @@ export function initialize() {
         connUrl = new URL(getSiteURL());
 
         // replace the protocol with a websocket one
-        if (connUrl.protocol === 'https:') {
-            connUrl.protocol = 'wss:';
-        } else {
-            connUrl.protocol = 'ws:';
-        }
+        connUrl.protocol = 'wss:';
+
+        // if (connUrl.protocol === 'https:') {
+        //     connUrl.protocol = 'wss:';
+        // } else {
+        //     connUrl.protocol = 'ws:';
+        // }
 
         // append a port number if one isn't already specified
-        if (!(/:\d+$/).test(connUrl.host)) {
-            if (connUrl.protocol === 'wss:') {
-                connUrl.host += ':' + config.WebsocketSecurePort;
-            } else {
-                connUrl.host += ':' + config.WebsocketPort;
-            }
-        }
+        connUrl.host += ':' + config.WebsocketSecurePort;
+
+        // if (!(/:\d+$/).test(connUrl.host)) {
+        //     if (connUrl.protocol === 'wss:') {
+        //         connUrl.host += ':' + config.WebsocketSecurePort;
+        //     } else {
+        //         connUrl.host += ':' + config.WebsocketPort;
+        //     }
+        // }
 
         connUrl = connUrl.toString();
     }
@@ -171,23 +183,42 @@ export function initialize() {
     }
 
     // connUrl += Client4.getUrlVersion() + '/websocket';
-    const authToken = Client4.getToken();
+
+    const token = localStorage.getItem('IKToken');
+
+    if (isDesktopApp() && !token) {
+        // eslint-disable-next-line no-console
+        console.log('[websocket_actions > initialize] token storage corrupt, redirecting to login');
+        getHistory().push('/login');
+        return;
+    }
+
+    // eslint-disable-next-line no-console
+    console.log('[websocket_actions > initialize] init called, ws will reauth');
+
     WebSocketClient.addMessageListener(handleEvent);
     WebSocketClient.addFirstConnectListener(handleFirstConnect);
-    WebSocketClient.addReconnectListener(() => reconnect(false));
+    WebSocketClient.addReconnectListener(reconnect);
     WebSocketClient.addMissedMessageListener(restart);
     WebSocketClient.addCloseListener(handleClose);
 
-    WebSocketClient.initialize(connUrl, user.user_id, user.team_id, null, authToken, currentChannelId);
+    WebSocketClient.initialize(
+        connUrl,
+        user.user_id,
+        user.id,
+        user.team_id,
+        token,
+        currentChannelId,
+    );
 }
 
 export function close() {
     WebSocketClient.close();
-}
-
-export function reconnectWebSocket() {
-    close();
-    initialize();
+    WebSocketClient.removeMessageListener(handleEvent);
+    WebSocketClient.removeFirstConnectListener(handleFirstConnect);
+    WebSocketClient.removeReconnectListener(reconnect);
+    WebSocketClient.removeMissedMessageListener(restart);
+    WebSocketClient.removeCloseListener(handleClose);
 }
 
 const pluginReconnectHandlers = {};
@@ -201,22 +232,40 @@ export function unregisterPluginReconnectHandler(pluginId) {
 }
 
 function restart() {
-    reconnect(false);
+    reconnect();
 
     // We fetch the client config again on the server restart.
     dispatch(getClientConfig());
 }
 
-export function reconnect(includeWebSocket = true) {
-    if (includeWebSocket) {
-        // if (isDesktopApp()) {
-        // refreshIKToken();
-        // } else {
-        reconnectWebSocket();
+export async function reconnect() {
+    // eslint-disable-next-line
+    console.log('Reconnecting WebSocket');
+    if (isDesktopApp()) {
+        const token = localStorage.getItem('IKToken');
+        if (!token) {
+            // eslint-disable-next-line no-console
+            console.log('[websocket_actions > reconnect] token storage corrupt, redirecting to login');
+            getHistory().push('/login');
+            return;
+        }
 
-        // }
+        if (checkIKTokenIsExpired()) {
+            // eslint-disable-next-line no-console
+            console.log('[websocket_actions > reconnect] token expired, calling refresh');
+            try {
+                const newToken = await refreshIKToken(/*redirectToTeam**/false);
+                // eslint-disable-next-line no-console
+                console.log('[websocket_actions > reconnect] token refreshed, new token: ', newToken);
+                if (newToken) {
+                    WebSocketClient.updateToken(newToken);
+                }
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.warn(e);
+            }
+        }
     }
-
     dispatch({
         type: GeneralTypes.WEBSOCKET_SUCCESS,
         timestamp: Date.now(),
@@ -230,25 +279,27 @@ export function reconnect(includeWebSocket = true) {
         const mostRecentId = getMostRecentPostIdInChannel(state, currentChannelId);
         const mostRecentPost = getPost(state, mostRecentId);
 
-        if (appsFeatureFlagEnabled(state)) {
-            dispatch(handleRefreshAppsBindings());
-        }
+        // if (appsFeatureFlagEnabled(state)) {
+        //     dispatch(handleRefreshAppsBindings());
+        // }
 
         dispatch(loadChannelsForCurrentUser());
 
         if (mostRecentPost) {
+            // eslint-disable-next-line no-console
+            console.log('[websocket_actions] dispatch syncPostsInChannel');
             dispatch(syncPostsInChannel(currentChannelId, mostRecentPost.create_at));
         } else if (currentChannelId) {
             // if network timed-out the first time when loading a channel
             // we can request for getPosts again when socket is connected
             dispatch(getPosts(currentChannelId));
         }
-        StatusActions.loadStatusesForChannelAndSidebar();
+        dispatch(StatusActions.loadStatusesForChannelAndSidebar());
 
         const crtEnabled = isCollapsedThreadsEnabled(state);
         dispatch(TeamActions.getMyTeamUnreads(crtEnabled, true));
         if (crtEnabled) {
-            const teams = getMyTeams(state);
+            const teams = getMyKSuites(state);
             syncThreads(currentTeamId, currentUserId);
 
             for (const team of teams) {
@@ -269,7 +320,10 @@ export function reconnect(includeWebSocket = true) {
     });
 
     if (state.websocket.lastDisconnectAt) {
-        dispatch(checkForModifiedUsers());
+        // eslint-disable-next-line no-console
+        console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
+        dispatch(checkForModifiedUsers(true));
+        dispatch(TeamActions.getMyKSuites());
     }
 
     dispatch(resetWsErrorCount());
@@ -279,12 +333,17 @@ export function reconnect(includeWebSocket = true) {
 function syncThreads(teamId, userId) {
     const state = getState();
     const newestThread = getNewestThreadInTeam(state, teamId);
-
-    // no need to sync if we have nothing yet
-    if (!newestThread) {
-        return;
+    let lastReplyAt;
+    if (newestThread) {
+        lastReplyAt = newestThread.last_reply_at;
     }
-    dispatch(getCountsAndThreadsSince(userId, teamId, newestThread.last_reply_at));
+
+    // Even if the store contains no thread in current team we should fetch threads
+    // Scenario:
+    // The user has no thread and disconnects on global threads page.
+    // He receives some threads while he is away.
+    // When he reconnects, the app should retreive potential new threads
+    dispatch(getCountsAndThreadsSince(userId, teamId, lastReplyAt));
 }
 
 export function registerPluginWebSocketEvent(pluginId, event, action) {
@@ -493,10 +552,6 @@ export function handleEvent(msg) {
         handlePluginStatusesChangedEvent(msg);
         break;
 
-    case SocketEvents.INTEGRATIONS_USAGE_CHANGED:
-        handleIntegrationsUsageChangedEvent(msg);
-        break;
-
     case SocketEvents.OPEN_DIALOG:
         handleOpenDialogEvent(msg);
         break;
@@ -596,8 +651,27 @@ export function handleEvent(msg) {
     case SocketEvents.PUSHER_MEMBER_REMOVED:
         handlePusherMemberRemoved(msg);
         break;
-    case SocketEvents.PUSHER_PONG:
-        handlePusherPong(msg);
+    case SocketEvents.POST_ACKNOWLEDGEMENT_ADDED:
+        dispatch(handlePostAcknowledgementAdded(msg));
+        break;
+    case SocketEvents.POST_ACKNOWLEDGEMENT_REMOVED:
+        dispatch(handlePostAcknowledgementRemoved(msg));
+        break;
+    case SocketEvents.DRAFT_CREATED:
+    case SocketEvents.DRAFT_UPDATED:
+        dispatch(handleUpsertDraftEvent(msg));
+        break;
+    case SocketEvents.DRAFT_DELETED:
+        dispatch(handleDeleteDraftEvent(msg));
+        break;
+    case SocketEvents.HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED:
+        dispatch(handleHostedCustomerSignupProgressUpdated(msg));
+        break;
+    case SocketEvents.KSUITE_ADDED:
+        dispatch(handleKSuiteAdded(msg));
+        break;
+    case SocketEvents.KSUITE_DELETED:
+        dispatch(handleKSuiteDeleted(msg));
         break;
     default:
     }
@@ -635,7 +709,7 @@ export function handleChannelUpdatedEvent(msg) {
 
         const state = doGetState();
         if (channel.id === getCurrentChannelId(state)) {
-            browserHistory.replace(`${getCurrentRelativeTeamUrl(state)}/channels/${channel.name}`);
+            getHistory().replace(`${getCurrentRelativeTeamUrl(state)}/channels/${channel.name}`);
         }
     };
 }
@@ -811,9 +885,51 @@ export function handlePostUnreadEvent(msg) {
                 msgCountRoot: msg.data.msg_count_root,
                 mentionCount: msg.data.mention_count,
                 mentionCountRoot: msg.data.mention_count_root,
+                urgentMentionCount: msg.data.urgent_mention_count,
             },
         },
     );
+}
+
+function handleKSuiteAdded(msg) {
+    return (doDispatch, doGetState) => {
+        if (isDesktopApp()) {
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams: [
+                            ...getMyKSuites(doGetState()),
+                            msg.data.team,
+                        ],
+                    },
+                },
+                window.origin,
+            );
+        }
+        doDispatch({type: TeamTypes.RECEIVED_TEAM, data: msg.data.team});
+    };
+}
+
+function handleKSuiteDeleted(msg) {
+    return (doDispatch, doGetState) => {
+        if (isDesktopApp()) {
+            const currentTeams = getMyKSuites(doGetState());
+            const newTeams = currentTeams.filter((team) => team.id !== msg.data.team.id);
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams: newTeams,
+                    },
+                },
+                window.origin,
+            );
+        }
+
+        doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}});
+        doDispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
+    };
 }
 
 async function handleTeamAddedEvent(msg) {
@@ -924,7 +1040,7 @@ function handleDeleteTeamEvent(msg) {
             deletedTeam.id === teamMember.team_id
         ) {
             const myTeams = {};
-            getMyTeams(state).forEach((t) => {
+            getMyKSuites(state).forEach((t) => {
                 myTeams[t.id] = t;
             });
 
@@ -952,9 +1068,9 @@ function handleDeleteTeamEvent(msg) {
                 dispatch({type: TeamTypes.SELECT_TEAM, data: newTeamId});
                 const globalState = getState();
                 const redirectChannel = getRedirectChannelNameForTeam(globalState, newTeamId);
-                browserHistory.push(`${getCurrentTeamUrl(globalState)}/channels/${redirectChannel}`);
+                getHistory().push(`${getCurrentTeamUrl(globalState)}/channels/${redirectChannel}`);
             } else {
-                browserHistory.push('/');
+                getHistory().push('/');
             }
         }
     }
@@ -993,7 +1109,7 @@ function handleUserAddedEvent(msg) {
                 type: UserTypes.RECEIVED_PROFILE_IN_CHANNEL,
                 data: {id: msg.data.channel_id, user_id: msg.data.user_id},
             });
-            if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true') {
+            if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
                 doDispatch(getChannelMemberCountsByGroup(currentChannelId, isTimezoneEnabled));
             }
         }
@@ -1080,7 +1196,7 @@ export function handleUserRemovedEvent(msg) {
             type: UserTypes.RECEIVED_PROFILE_NOT_IN_CHANNEL,
             data: {id: msg.data.channel_id, user_id: msg.data.user_id},
         });
-        if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true') {
+        if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
             dispatch(getChannelMemberCountsByGroup(currentChannel.id, isTimezoneEnabled));
         }
     }
@@ -1210,7 +1326,7 @@ function handleChannelDeletedEvent(msg) {
         const teamUrl = getCurrentRelativeTeamUrl(state);
         const currentTeamId = getCurrentTeamId(state);
         const redirectChannel = getRedirectChannelNameForTeam(state, currentTeamId);
-        browserHistory.push(teamUrl + '/channels/' + redirectChannel);
+        getHistory().push(teamUrl + '/channels/' + redirectChannel);
     }
 
     dispatch({type: ChannelTypes.RECEIVED_CHANNEL_DELETED, data: {id: msg.data.channel_id, team_id: msg.team_id, deleteAt: msg.data.delete_at, viewArchivedChannels}});
@@ -1251,57 +1367,7 @@ function addedNewDmUser(preference) {
     return preference.category === Constants.Preferences.CATEGORY_DIRECT_CHANNEL_SHOW && preference.value === 'true';
 }
 
-export function handleUserTypingEvent(msg) {
-    return async (doDispatch, doGetState) => {
-        const state = doGetState();
-        const config = getConfig(state);
-        const currentUserId = getCurrentUserId(state);
-        const userId = msg.data.data.user_id;
-
-        if (
-            isPerformanceDebuggingEnabled(state) &&
-            getBool(state, Preferences.CATEGORY_PERFORMANCE_DEBUGGING, Preferences.NAME_DISABLE_TYPING_MESSAGES)
-        ) {
-            return;
-        }
-
-        const data = {
-            id: msg.data.data.channel_id + msg.data.data.parent_id,
-            userId,
-            now: Date.now(),
-        };
-
-        doDispatch({
-            type: WebsocketEvents.TYPING,
-            data,
-        });
-
-        setTimeout(() => {
-            doDispatch({
-                type: WebsocketEvents.STOP_TYPING,
-                data,
-            });
-        }, parseInt(config.TimeBetweenUserTypingUpdatesMilliseconds, 10));
-
-        if (userId !== currentUserId) {
-            const result = await doDispatch(getMissingProfilesByIds([userId]));
-            if (result.data && result.data.length > 0) {
-                // Already loaded the user status
-                return;
-            }
-        }
-
-        const status = getStatusForUserId(state, userId);
-        if (status !== General.ONLINE) {
-            doDispatch(getStatusesByIds([userId]));
-        }
-    };
-}
-
 function handleStatusChangedEvent(msg) {
-    if (needRefreshToken()) {
-        refreshIKToken();
-    }
     dispatch({
         type: UserTypes.RECEIVED_STATUSES,
         data: [{user_id: msg.data.user_id, status: msg.data.status}],
@@ -1310,6 +1376,7 @@ function handleStatusChangedEvent(msg) {
 
 function handleHelloEvent(msg) {
     setServerVersion(msg.data.server_version)(dispatch, getState);
+    dispatch(setConnectionId(msg.data.connection_id));
 }
 
 function handleReactionAddedEvent(msg) {
@@ -1321,6 +1388,13 @@ function handleReactionAddedEvent(msg) {
         type: PostTypes.RECEIVED_REACTION,
         data: reaction,
     });
+}
+
+function setConnectionId(connectionId) {
+    return {
+        type: GeneralTypes.SET_CONNECTION_ID,
+        payload: {connectionId},
+    };
 }
 
 function handleAddEmoji(msg) {
@@ -1351,6 +1425,7 @@ function handleChannelViewedEvent(msg) {
 
 export function handlePluginEnabled(msg) {
     const manifest = msg.data.manifest;
+    dispatch({type: ActionTypes.RECEIVED_WEBAPP_PLUGIN, data: manifest});
 
     loadPlugin(manifest).catch((error) => {
         console.error(error.message); //eslint-disable-line no-console
@@ -1391,18 +1466,6 @@ function handlePluginStatusesChangedEvent(msg) {
     store.dispatch({type: AdminTypes.RECEIVED_PLUGIN_STATUSES, data: msg.data.plugin_statuses});
 }
 
-function handleIntegrationsUsageChangedEvent(msg) {
-    const state = store.getState();
-    const license = getLicense(state);
-
-    if (license.Cloud === 'true') {
-        store.dispatch({
-            type: CloudTypes.RECEIVED_INTEGRATIONS_USAGE,
-            data: msg.data.usage.enabled,
-        });
-    }
-}
-
 function handleOpenDialogEvent(msg) {
     const data = (msg.data && msg.data.dialog) || {};
     const dialog = data;
@@ -1432,7 +1495,7 @@ function handleGroupAddedMemberEvent(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const data = JSON.parse(msg.data.group_member);
+        const data = msg.data.group_member;
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1450,7 +1513,7 @@ function handleGroupDeletedMemberEvent(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const data = JSON.parse(msg.data.group_member);
+        const data = msg.data.group_member;
 
         if (currentUserId === data.user_id) {
             dispatch(
@@ -1666,7 +1729,6 @@ function handleThreadReadChanged(msg) {
 
             doDispatch(
                 handleReadChanged(
-                    doDispatch,
                     msg.data.thread_id,
                     msg.data.team_id,
                     msg.data.channel_id,
@@ -1731,7 +1793,7 @@ function handleThreadUpdated(msg) {
             dispatch(updateThreadRead(currentUserId, currentTeamId, threadData.id, lastViewedAt));
         }
 
-        handleThreadArrived(doDispatch, doGetState, threadData, msg.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions);
+        handleThreadArrived(doDispatch, doGetState, threadData, msg.data.team_id, msg.data.previous_unread_replies, msg.data.previous_unread_mentions, /*fromWebsocket*/ true);
     };
 }
 
@@ -1801,17 +1863,20 @@ function handleIncomingConferenceCall(msg) {
     return (doDispatch, doGetState) => {
         // Pop calling modal for user to accept or deny call
         // const data = await Client4
-        const doGetProfilesInChannel = makeGetProfilesInChannel();
+        // const doGetProfilesInChannel = makeGetProfilesInChannel();
+
         const state = doGetState();
-        let users = [];
+
+        // let users = [];
 
         // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
         const channel = getChannel(state, connectedChannelID(doGetState()));
-        users = doGetProfilesInChannel(state, msg.data.channel_id, true);
 
-        if (users.length <= 0) {
-            users.push(getUser(state, msg.data.user_id));
-        }
+        // users = doGetProfilesInChannel(state, msg.data.channel_id, true);
+
+        // if (users.length <= 0) {
+        //     users.push(getUser(state, msg.data.user_id));
+        // }
 
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_ADDED,
@@ -1821,18 +1886,19 @@ function handleIncomingConferenceCall(msg) {
                 participants: msg.data.participants,
                 userID: msg.data.user_id,
                 currentUserID: getCurrentUserId(getState()),
+                url: msg.data.url,
             },
         });
 
-        if (!channel || channel.id !== msg.data.channel_id) {
-            doDispatch(openModal({
-                modalId: ModalIdentifiers.INCOMING_CALL,
-                dialogType: DialingModal,
-                dialogProps: {
-                    calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
-                },
-            }));
-        }
+        // if (!channel || channel.id !== msg.data.channel_id) {
+        //     doDispatch(openModal({
+        //         modalId: ModalIdentifiers.INCOMING_CALL,
+        //         dialogType: DialingModal,
+        //         dialogProps: {
+        //             calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
+        //         },
+        //     }));
+        // }
     };
 }
 
@@ -1840,8 +1906,55 @@ function handlePusherMemberRemoved(msg) {
     // console.log('pusher member removed', msg);
 }
 
-function handlePusherPong() {
-    if (needRefreshToken()) {
-        refreshIKToken();
-    }
+function handlePostAcknowledgementAdded(msg) {
+    const data = msg.data.acknowledgement;
+
+    return {
+        type: PostTypes.CREATE_ACK_POST_SUCCESS,
+        data,
+    };
 }
+
+function handlePostAcknowledgementRemoved(msg) {
+    const data = msg.data.acknowledgement;
+
+    return {
+        type: PostTypes.DELETE_ACK_POST_SUCCESS,
+        data,
+    };
+}
+
+function handleUpsertDraftEvent(msg) {
+    return async (doDispatch, doGetState) => {
+        //const state = doGetState();
+        //const connectionId = getConnectionId(state);
+
+        const draft = msg.data.draft;
+        const {key, value} = transformServerDraft(draft);
+        value.show = true;
+        value.remote = false;
+
+        // if (msg.broadcast.omit_connection_id !== connectionId) {
+        //     value.remote = true;
+        // }
+
+        doDispatch(setGlobalItem(key, value));
+    };
+}
+
+function handleDeleteDraftEvent(msg) {
+    return async (doDispatch) => {
+        const draft = msg.data.draft;
+        const {key} = transformServerDraft(draft);
+
+        doDispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: [], remote: true}));
+    };
+}
+
+function handleHostedCustomerSignupProgressUpdated(msg) {
+    return {
+        type: HostedCustomerTypes.RECEIVED_SELF_HOSTED_SIGNUP_PROGRESS,
+        data: msg.data.progress,
+    };
+}
+

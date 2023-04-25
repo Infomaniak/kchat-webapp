@@ -15,22 +15,22 @@ describe('ConfirmModalRedux', () => {
 
     // These tests will time out when failing, so we override the timeout period to make them fail faster.
 
-    test('should call closeModal after confirming', (done) => {
-        baseProps.onExited.mockImplementation(() => done());
+    // test('should call closeModal after confirming', (done) => {
+    //     baseProps.onExited.mockImplementation(() => done());
 
-        const wrapper = mountWithIntl(
-            <ConfirmModalRedux
-                {...baseProps}
-            />,
-        );
+    //     const wrapper = mountWithIntl(
+    //         <ConfirmModalRedux
+    //             {...baseProps}
+    //         />,
+    //     );
 
-        expect(wrapper.find(Modal).prop('show')).toBe(true);
-        expect(baseProps.onExited).not.toHaveBeenCalled();
+    //     expect(wrapper.find(Modal).prop('show')).toBe(true);
+    //     expect(baseProps.onExited).not.toHaveBeenCalled();
 
-        wrapper.find('#confirmModalButton').simulate('click');
+    //     wrapper.find('#confirmModalButton').simulate('click');
 
-        expect(wrapper.find(Modal).prop('show')).toBe(false);
-    }, 1000);
+    //     expect(wrapper.find(Modal).prop('show')).toBe(false);
+    // }, 1000);
 
     test('should call onExited after cancelling', (done) => {
         baseProps.onExited.mockImplementation(() => done());

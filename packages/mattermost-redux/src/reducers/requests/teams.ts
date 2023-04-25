@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import {combineReducers} from 'redux';
 
 import {TeamTypes} from 'mattermost-redux/action_types';
@@ -10,6 +11,16 @@ import {TeamsRequestsStatuses, RequestStatusType} from '@mattermost/types/reques
 import {handleRequest, initialRequestState} from './helpers';
 
 function getMyTeams(state: RequestStatusType = initialRequestState(), action: GenericAction): RequestStatusType {
+    return handleRequest(
+        TeamTypes.MY_TEAMS_REQUEST,
+        TeamTypes.MY_TEAMS_SUCCESS,
+        TeamTypes.MY_TEAMS_FAILURE,
+        state,
+        action,
+    );
+}
+
+function getMyKSuites(state: RequestStatusType = initialRequestState(), action: GenericAction): RequestStatusType {
     return handleRequest(
         TeamTypes.MY_TEAMS_REQUEST,
         TeamTypes.MY_TEAMS_SUCCESS,
@@ -41,6 +52,7 @@ function joinTeam(state: RequestStatusType = initialRequestState(), action: Gene
 
 export default (combineReducers({
     getTeams,
+    getMyKSuites,
     getMyTeams,
     joinTeam,
 }) as (b: TeamsRequestsStatuses, a: GenericAction) => TeamsRequestsStatuses);

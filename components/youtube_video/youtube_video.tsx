@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import React from 'react';
 
 import {getVideoId, ytRegex, handleYoutubeTime} from 'utils/youtube';
@@ -69,8 +70,8 @@ export default class YoutubeVideo extends React.PureComponent<Props, State> {
             content = (
                 <iframe
                     src={'https://www.youtube.com/embed/' + videoId + '?autoplay=1&autohide=1&border=0&wmode=opaque&fs=1&enablejsapi=1' + time}
-                    width='480px'
-                    height='360px'
+                    width='380px'
+                    height='290px'
                     frameBorder='0'
                     allowFullScreen={true}
                 />

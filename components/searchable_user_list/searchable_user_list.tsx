@@ -10,7 +10,7 @@ import {Channel, ChannelMembership} from '@mattermost/types/channels';
 import {TeamMembership} from '@mattermost/types/teams';
 
 import QuickInput from 'components/quick_input';
-import UserList from 'components/user_list.jsx';
+import UserList from 'components/user_list';
 import LocalizedInput from 'components/localized_input/localized_input';
 
 import {t} from 'utils/i18n';
@@ -248,7 +248,7 @@ class SearchableUserList extends React.PureComponent<Props, State> {
                 nextButton = (
                     <button
                         id='searchableUserListNextBtn'
-                        className='btn btn-link filter-control filter-control__next'
+                        className='btn secondary filter-control filter-control__next'
                         onClick={this.nextPage}
                         disabled={this.state.nextDisabled}
                     >
@@ -264,7 +264,7 @@ class SearchableUserList extends React.PureComponent<Props, State> {
                 previousButton = (
                     <button
                         id='searchableUserListPrevBtn'
-                        className='btn btn-link filter-control filter-control__prev'
+                        className='btn secondary filter-control filter-control__prev'
                         onClick={this.previousPage}
                     >
                         <FormattedMessage

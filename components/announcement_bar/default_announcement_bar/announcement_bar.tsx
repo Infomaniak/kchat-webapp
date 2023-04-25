@@ -28,7 +28,7 @@ type Props = {
     handleClose?: (e?: any) => void;
     showModal?: boolean;
     announcementBarCount?: number;
-    onButtonClick?: () => void;
+    onButtonClick?: (e?: any) => void;
     modalButtonText?: string;
     modalButtonDefaultText?: string;
     showLinkAsButton: boolean;
@@ -38,6 +38,8 @@ type Props = {
         incrementAnnouncementBarCount: () => void;
         decrementAnnouncementBarCount: () => void;
     };
+    showCTA?: boolean;
+    isStringContainingUrl?: boolean;
 }
 
 type State = {
@@ -56,7 +58,7 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
 
         this.state = {
             showTooltip: false,
-            isStringContainingUrl: false,
+            isStringContainingUrl: this.props.isStringContainingUrl || false,
         };
     }
 
@@ -67,6 +69,7 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
         type: AnnouncementBarTypes.CRITICAL,
         showLinkAsButton: false,
         isTallBanner: false,
+        showCTA: true,
     }
 
     enableToolTipIfNeeded = () => {
@@ -131,6 +134,10 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
             barClass = 'announcement-bar announcement-bar-advisor-ack';
         } else if (this.props.type === AnnouncementBarTypes.GENERAL) {
             barClass = 'announcement-bar announcement-bar-general';
+        } else if (this.props.type === AnnouncementBarTypes.INFOMANIAK) {
+            barClass = 'announcement-bar announcement-bar-infomaniak';
+        } else if (this.props.type === AnnouncementBarTypes.INFOMANIAK_MOBILE) {
+            barClass = 'announcement-bar announcement-bar-infomaniak-mobile';
         }
 
         let closeButton;
@@ -168,6 +175,8 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
             <div
                 className={barClass}
                 style={barStyle}
+                // eslint-disable-next-line react/no-unknown-property
+                css={{gridArea: 'announcement'}}
             >
                 <OverlayTrigger
                     delayShow={Constants.OVERLAY_TIME_DELAY}
@@ -184,7 +193,7 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
                             {message}
                         </span>
                         {
-                            !this.props.showLinkAsButton &&
+                            !this.props.showLinkAsButton && this.props.showCTA &&
                             <span className='announcement-bar__link'>
                                 {this.props.showModal &&
                                 <FormattedMessage
@@ -193,7 +202,7 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
                                 >
                                     {(linkmessage) => (
                                         <ToggleModalButton
-                                            ariaLabel={linkmessage}
+                                            ariaLabel={linkmessage as unknown as string}
                                             className={'color--link--adminack'}
                                             dialogType={WarnMetricAckModal}
                                             onClick={() => trackEvent('admin', 'click_warn_metric_learn_more')}
@@ -211,7 +220,7 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
                             </span>
                         }
                         {
-                            this.props.showLinkAsButton &&
+                            this.props.showLinkAsButton && this.props.showCTA &&
                             <button
                                 className='upgrade-button'
                                 onClick={this.props.onButtonClick}

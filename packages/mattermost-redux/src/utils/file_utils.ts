@@ -4,8 +4,6 @@
 import {Files, General} from '../constants';
 import {Client4} from 'mattermost-redux/client';
 import {FileInfo} from '@mattermost/types/files';
-import {isDesktopApp} from 'utils/user_agent';
-import {buildQueryString} from 'packages/client/src/helpers';
 
 export function getFormattedFileSize(file: FileInfo): string {
     const bytes = file.size;
@@ -53,22 +51,11 @@ export function getFileType(file: FileInfo): string {
 }
 
 export function getFileUrl(fileId: string): string {
-    const params: any = {};
-
-    if (isDesktopApp() && Client4.getToken()) {
-        params.access_token = Client4.getToken();
-    }
-    return `${Client4.getFileRoute(fileId)}${buildQueryString(params)}`;
+    return Client4.getFileRoute(fileId);
 }
 
 export function getFileDownloadUrl(fileId: string): string {
-    const params: any = {};
-    params.download = 1;
-
-    if (isDesktopApp() && Client4.getToken()) {
-        params.access_token = Client4.getToken();
-    }
-    return `${Client4.getFileRoute(fileId)}${buildQueryString(params)}`;
+    return `${Client4.getFileRoute(fileId)}?download=1`;
 }
 
 export function getFileThumbnailUrl(fileId: string): string {
@@ -77,6 +64,13 @@ export function getFileThumbnailUrl(fileId: string): string {
 
 export function getFilePreviewUrl(fileId: string): string {
     return `${Client4.getFileRoute(fileId)}/preview`;
+}
+
+export function getFileMiniPreviewUrl(fileInfo?: FileInfo): string | undefined {
+    if (!fileInfo?.mini_preview || !fileInfo?.mime_type) {
+        return undefined;
+    }
+    return `data:${fileInfo.mime_type};base64,${fileInfo.mini_preview}`;
 }
 
 export function sortFileInfos(fileInfos: FileInfo[] = [], locale: string = General.DEFAULT_LOCALE): FileInfo[] {

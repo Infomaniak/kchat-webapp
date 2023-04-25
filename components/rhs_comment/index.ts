@@ -80,10 +80,12 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         teamId,
         pluginPostTypes: state.plugins.postTypes,
         channelIsArchived: isArchivedChannel(channel),
-        isConsecutivePost: isConsecutivePost(state, ownProps),
+        // isConsecutivePost: isConsecutivePost(state, ownProps),
+        isConsecutivePost: false,
         isFlagged: get(state, Preferences.CATEGORY_FLAGGED_POST, ownProps.post.id, null) != null,
         compactDisplay: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.MESSAGE_DISPLAY, Preferences.MESSAGE_DISPLAY_DEFAULT) === Preferences.MESSAGE_DISPLAY_COMPACT,
         colorizeUsernames: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.COLORIZE_USERNAMES, Preferences.COLORIZE_USERNAMES_DEFAULT) === 'true',
+        // Todo: check this, it's hiding the only action in this action menu which is the marketplace access.
         shouldShowActionsMenu: false, //shouldShowActionsMenu(state, ownProps.post),
         showActionsMenuPulsatingDot,
         shortcutReactToLastPostEmittedFrom,

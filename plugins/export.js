@@ -1,23 +1,25 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {closeRightHandSide, selectPostById} from 'actions/views/rhs';
+import {getSelectedPostId, getIsRhsOpen} from 'selectors/rhs';
+
 import messageHtmlToComponent from 'utils/message_html_to_component';
 import {formatText} from 'utils/text_formatting';
-import {browserHistory} from 'utils/browser_history';
+import {getHistory} from 'utils/browser_history';
 
 import {openModal} from 'actions/views/modals';
 import {ModalIdentifiers} from 'utils/constants';
 import {useWebSocket, useWebSocketClient, WebSocketContext} from 'utils/use_websocket';
-import {imageURLForUser} from 'utils/utils';
+import {imageURLForUser,registerDevice} from 'utils/utils';
 
 import ChannelInviteModal from 'components/channel_invite_modal';
 import ChannelMembersModal from 'components/channel_members_modal';
 import PurchaseModal from 'components/purchase_modal';
+import {useNotifyAdmin} from 'components/notify_admin_cta/notify_admin_cta';
 import Timestamp from 'components/timestamp';
 import Avatar from 'components/widgets/users/avatar';
 import BotBadge from 'components/widgets/badges/bot_badge';
-
-import {openPricingModal} from '../components/global_header/right_controls/plan_upgrade_button';
 
 import Textbox from './textbox';
 
@@ -39,16 +41,13 @@ window.StyledComponents = require('styled-components');
 // Functions exposed on window for plugins to use.
 window.PostUtils = {formatText, messageHtmlToComponent};
 window.openInteractiveDialog = openInteractiveDialog;
+window.useNotifyAdmin = useNotifyAdmin;
 window.WebappUtils = {
-    browserHistory,
     modals: {openModal, ModalIdentifiers},
 };
-
-// This need to be a function because `openPricingModal`
-// is initialized when `UpgradeCloudButton` is loaded.
-// So if we export `openPricingModal` directly, it will be locked
-// to the initial value of undefined.
-window.openPricingModal = () => openPricingModal;
+Object.defineProperty(window.WebappUtils, 'browserHistory', {
+    get: () => getHistory(),
+});
 
 // Components exposed on window FOR INTERNAL PLUGIN USE ONLY. These components may have breaking changes in the future
 // outside of major releases. They will be replaced by common components once that project is more mature and able to
@@ -61,6 +60,7 @@ window.Components = {
     ChannelMembersModal,
     Avatar,
     imageURLForUser,
+    registerDevice,
     BotBadge,
 };
 
@@ -70,4 +70,8 @@ window.ProductApi = {
     useWebSocket,
     useWebSocketClient,
     WebSocketProvider: WebSocketContext,
+    closeRhs: closeRightHandSide,
+    selectRhsPost: selectPostById,
+    getRhsSelectedPostId: getSelectedPostId,
+    getIsRhsOpen,
 };

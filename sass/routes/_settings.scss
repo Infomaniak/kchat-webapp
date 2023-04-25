@@ -1,4 +1,5 @@
 @charset 'UTF-8';
+@import 'utils/variables';
 
 .user-settings {
     min-height: 300px;
@@ -45,6 +46,54 @@
 
     textarea {
         resize: vertical;
+    }
+
+    .title-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &.user-rhs-container {
+        max-width: 100%;
+        width: 100%;
+        margin-top: 40px;
+    }
+
+    .rhs-settings-section {
+        padding-bottom: 16px;
+    }
+
+    .settings-select {
+        max-width: 50%;
+        min-width: 150px;
+        margin-left: 8px;
+        cursor: pointer;
+    }
+
+    .advanced-select {
+        max-width: 40%;
+        min-width: 200px;
+        cursor: pointer;
+    }
+
+    .settings-title {
+        font-weight: 600;
+    }
+
+    .settings-desc {
+        font-size: 12px;
+        color: rgba(var(--center-channel-color-rgb),0.785)
+    }
+    .title-select {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .settings-title {
+            max-width: 60%;
+            line-height: 1.3;
+        }
     }
 }
 

@@ -5,24 +5,30 @@ import React from 'react';
 import {act} from 'react-dom/test-utils';
 import {shallow} from 'enzyme';
 
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+
 import GenericModal from 'components/generic_modal';
 import Input from 'components/widgets/inputs/input/input';
 import URLInput from 'components/widgets/inputs/url_input/url_input';
 import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
 
-import Constants from 'utils/constants';
+import Constants, {suitePluginIds} from 'utils/constants';
 import {cleanUpUrlable} from 'utils/url';
 import {GlobalState} from 'types/store';
 import Permissions from 'mattermost-redux/constants/permissions';
-import {ChannelType} from '@mattermost/types/channels';
 import {createChannel} from 'mattermost-redux/actions/channels';
-jest.mock('mattermost-redux/actions/channels');
+import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import {ChannelType} from '@mattermost/types/channels';
+
+jest.mock('mattermost-redux/actions/channels');
+jest.mock('mattermost-redux/actions/cloud', () => ({
+    openChannelLimitModalIfNeeded: jest.fn,
+}));
 
 import NewChannelModal from './new_channel_modal';
 
-const mockDispatch = jest.fn();
+const mockDispatch = jest.fn((action) => action());
 let mockState: GlobalState;
 
 jest.mock('react-redux', () => ({
@@ -104,6 +110,42 @@ describe('components/new_channel_modal', () => {
                         },
                     },
                 },
+                usage: {
+                    storage: 0,
+                    public_channels: 0,
+                    private_channels: 0,
+                    guests: 0,
+                    members: 0,
+                    files: {
+                        totalStorage: 0,
+                    },
+                    messages: {
+                        history: 0,
+                    },
+                    teams: {
+                        active: 0,
+                        cloudArchived: 0,
+                    },
+                    boards: {
+                        cards: 0,
+                    },
+                    usageLoaded: true,
+                },
+                cloud: {
+                    limits: {
+                        limits: {
+                            storage: 10,
+                            public_channels: 10,
+                            private_channels: 10,
+                            guests: 10,
+                            members: 10,
+                        },
+                        limitsLoaded: true,
+                    },
+                },
+            },
+            plugins: {
+                plugins: {focalboard: {id: suitePluginIds.focalboard}},
             },
         } as unknown as GlobalState;
     });
@@ -434,6 +476,6 @@ describe('components/new_channel_modal', () => {
             team_id: 'current_team_id',
             type: 'O',
             update_at: 0,
-        }, '');
+        }, '', openChannelLimitModalIfNeeded);
     });
 });

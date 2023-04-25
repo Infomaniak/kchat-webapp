@@ -1,19 +1,18 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useEffect, useState} from 'react';
-import styled from 'styled-components';
 import {debounce} from 'lodash';
-
+import React, {useCallback, useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useHistory} from 'react-router-dom';
+import styled from 'styled-components';
 
 import {UserProfile} from '@mattermost/types/users';
-import {Channel, ChannelMembership} from '@mattermost/types/channels';
+import {Channel, ChannelMembership, PendingGuest, PendingGuests} from '@mattermost/types/channels';
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import MoreDirectChannels from 'components/more_direct_channels';
 import ChannelInviteModal from 'components/channel_invite_modal';
 import {ModalData} from 'types/actions';
-import {browserHistory} from 'utils/browser_history';
 
 import {ProfilesInChannelSortBy} from 'mattermost-redux/actions/users';
 
@@ -41,12 +40,14 @@ export interface Props {
     channel: Channel;
     currentUserIsChannelAdmin: boolean;
     membersCount: number;
+    guestsCount: number;
     searchTerms: string;
     canGoBack: boolean;
     teamUrl: string;
     channelMembers: ChannelMember[];
     canManageMembers: boolean;
     editing: boolean;
+    pendingGuests: PendingGuests;
 
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
@@ -54,23 +55,24 @@ export interface Props {
         closeRightHandSide: () => void;
         goBack: () => void;
         setChannelMembersRhsSearchTerm: (terms: string) => void;
-        loadProfilesAndReloadChannelMembersAll: (membersCount: number, perParge: number, channelId: string) => void;
-        // loadProfilesAndReloadChannelMembers: (page: number, perParge: number, channelId: string, sort: string) => void;
+        loadProfilesAndReloadChannelMembers: (page: number, perParge: number, channelId: string, sort: string) => void;
         loadMyChannelMemberAndRole: (channelId: string) => void;
         setEditChannelMembers: (active: boolean) => void;
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;
+        getChannelPendingGuests: (channelId: string) => void;
     };
 }
 
 export enum ListItemType {
     Member = 'member',
+    PendingGuest = 'pending-guest',
     FirstSeparator = 'first-separator',
     Separator = 'separator',
 }
 
 export interface ListItem {
     type: ListItemType;
-    data: ChannelMember | JSX.Element;
+    data: ChannelMember | PendingGuest | JSX.Element;
 }
 
 export default function ChannelMembersRHS({
@@ -78,13 +80,17 @@ export default function ChannelMembersRHS({
     currentUserIsChannelAdmin,
     searchTerms,
     membersCount,
+    guestsCount,
     canGoBack,
     teamUrl,
     channelMembers,
     canManageMembers,
     editing = false,
+    pendingGuests,
     actions,
 }: Props) {
+    const history = useHistory();
+
     const [list, setList] = useState<ListItem[]>([]);
 
     const [page, setPage] = useState(0);
@@ -97,6 +103,12 @@ export default function ChannelMembersRHS({
 
     // show search if there's more than 20 or if the user have an active search.
     const showSearch = searching || membersCount >= 20;
+
+    const pendingGuestsCount = Object.keys(pendingGuests).length;
+
+    useEffect(() => {
+        actions.getChannelPendingGuests(channel.id);
+    }, [channel, actions]);
 
     useEffect(() => {
         return () => {
@@ -148,8 +160,24 @@ export default function ChannelMembersRHS({
 
             listcp.push({type: ListItemType.Member, data: member});
         }
+        Object.keys(pendingGuests).forEach((key, index) => {
+            const pendingGuest = pendingGuests[key];
+            if (index === 0) {
+                const text = (
+                    <FormattedMessage
+                        id='channel_members_rhs.list.channel_pending_guests_title'
+                        defaultMessage='PENDING INVITATIONS'
+                    />
+                );
+                listcp.push({
+                    type: ListItemType.Separator,
+                    data: <MemberListSeparator>{text}</MemberListSeparator>,
+                });
+            }
+            listcp.push({type: ListItemType.PendingGuest, data: pendingGuest});
+        });
         setList(listcp);
-    }, [channelMembers]);
+    }, [channelMembers, pendingGuests]);
 
     useEffect(() => {
         if (channel.type === Constants.DM_CHANNEL) {
@@ -164,7 +192,7 @@ export default function ChannelMembersRHS({
         setPage(0);
         setIsNextPageLoading(false);
         actions.setChannelMembersRhsSearchTerm('');
-        actions.loadProfilesAndReloadChannelMembersAll(membersCount, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
+        actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
         actions.loadMyChannelMemberAndRole(channel.id);
     }, [channel.id, channel.type]);
 
@@ -202,8 +230,8 @@ export default function ChannelMembersRHS({
         // we first prepare the DM channel...
         await actions.openDirectChannelToUserId(user.id);
 
-        // ... qnd then redirect to it
-        browserHistory.push(teamUrl + '/messages/@' + user.username);
+        // ... and then redirect to it
+        history.push(teamUrl + '/messages/@' + user.username);
 
         await actions.closeRightHandSide();
     };
@@ -233,6 +261,8 @@ export default function ChannelMembersRHS({
             <ActionBar
                 channelType={channel.type}
                 membersCount={membersCount}
+                guestsCount={guestsCount}
+                pendingGuestsCount={pendingGuestsCount}
                 canManageMembers={canManageMembers}
                 editing={editing}
                 actions={{
@@ -253,13 +283,7 @@ export default function ChannelMembersRHS({
                             defaultMessage: 'In this channel, you can only remove guests. Only <link>channel admins</link> can manage other members.',
                         }, {
                             link: (msg: React.ReactNode) => (
-                                <a
-                                    href='https://docs.mattermost.com/welcome/about-user-roles.html#channel-admin'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
+                                <span>{msg}</span>
                             ),
                         })}
                     />
@@ -281,7 +305,7 @@ export default function ChannelMembersRHS({
                         editing={editing}
                         channel={channel}
                         actions={{openDirectMessage, loadMore}}
-                        hasNextPage={channelMembers.length < membersCount}
+                        hasNextPage={channelMembers.length < membersCount + guestsCount}
                         isNextPageLoading={isNextPageLoading}
                     />
                 )}

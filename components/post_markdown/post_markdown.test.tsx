@@ -20,6 +20,8 @@ describe('components/PostMarkdown', () => {
         mentionKeys: [{key: 'a'}, {key: 'b'}, {key: 'c'}],
         channelId: 'channel-id',
         channel: TestHelper.getChannelMock(),
+        currentTeam: TestHelper.getTeamMock(),
+        isMilitaryTime: false,
     };
 
     test('should not error when rendering without a post', () => {

@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import React from 'react';
 import {fireEvent, screen} from '@testing-library/react';
 
@@ -12,6 +13,8 @@ describe('channel_members_rhs/action_bar', () => {
     const actionBarDefaultProps: Props = {
         channelType: Constants.OPEN_CHANNEL,
         membersCount: 12,
+        guestsCount: 0,
+        pendingGuestsCount: 0,
         canManageMembers: true,
         editing: false,
         actions: {

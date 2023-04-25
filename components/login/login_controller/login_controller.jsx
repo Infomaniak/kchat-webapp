@@ -107,27 +107,6 @@ class LoginController extends React.PureComponent {
                 GlobalActions.redirectUserToDefaultTeam();
             }
 
-            // If need to refresh the token
-            // if (tokenExpire && tokenExpire <= Date.now()) {
-            //     if (!refreshToken) return
-
-            //     this.setState({loading: true})
-            //     Client4.refreshIKLoginToken(
-            //         refreshToken,
-            //         "https://login.devd281.dev.infomaniak.ch",
-            //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
-            //     ).then((resp) => {
-            //         return
-            //         this.storeTokenResponse(resp)
-            //         this.finishSignin();
-            //     }).catch((error) => {
-            //         console.log(error)
-            //         return;
-            //     }
-            //     ).finally(this.setState({loading: false}))
-            //     return;
-            // }
-
             // Receive login code from login redirect
             if (hash) {
                 const hash2Obj = {};
@@ -145,28 +124,6 @@ class LoginController extends React.PureComponent {
                 this.finishSignin();
 
                 return;
-
-                //     const challenge = JSON.parse(localStorage.getItem('challenge'));
-                //     this.setState({ loading: true })
-                //     return
-                // //    Get token
-                //     Client4.getIKLoginToken(
-                //         loginCode,
-                //         challenge?.challenge,
-                //         challenge?.verifier,
-                //         "https://login.devd281.dev.infomaniak.ch",
-                //         "A7376A6D-9A79-4B06-A837-7D92DB93965B"
-                //     ).then((resp) => {
-                //         this.storeTokenResponse(resp)
-                //         localStorage.removeItem('challenge')
-                //         this.finishSignin();
-                //     }).catch((error) => {
-                //         console.log(error)
-                //     }
-                //     ).finally(this.setState({ loading: false }))
-
-            //     localStorage.removeItem('challenge');
-            //     return
             }
 
             if (!token || !refreshToken || !tokenExpire || (tokenExpire && tokenExpire <= parseInt(Date.now() / 1000, 10))) {

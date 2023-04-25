@@ -104,7 +104,12 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "connectFailCount": 0,
         "connectionId": "",
         "connectionUrl": null,
+        "currentPresence": "",
+        "currentTeam": "",
+        "currentTeamUser": "",
+        "currentUser": null,
         "errorCallback": null,
+        "errorCount": 0,
         "errorListeners": Set {},
         "eventCallback": null,
         "firstConnectCallback": null,
@@ -118,8 +123,10 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "responseCallbacks": Object {},
         "responseSequence": 1,
         "serverSequence": 0,
+        "socketId": null,
         "teamChannel": null,
         "userChannel": null,
+        "userTeamChannel": null,
       }
     }
   />
@@ -153,7 +160,12 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "connectFailCount": 0,
         "connectionId": "",
         "connectionUrl": null,
+        "currentPresence": "",
+        "currentTeam": "",
+        "currentTeamUser": "",
+        "currentUser": null,
         "errorCallback": null,
+        "errorCount": 0,
         "errorListeners": Set {},
         "eventCallback": null,
         "firstConnectCallback": null,
@@ -167,8 +179,10 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "responseCallbacks": Object {},
         "responseSequence": 1,
         "serverSequence": 0,
+        "socketId": null,
         "teamChannel": null,
         "userChannel": null,
+        "userTeamChannel": null,
       }
     }
   />

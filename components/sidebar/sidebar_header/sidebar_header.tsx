@@ -12,22 +12,22 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {GlobalState} from 'types/store';
 import Constants from 'utils/constants';
 
-import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import MainMenu from 'components/main_menu';
 import AddChannelDropdown from 'components/sidebar/add_channel_dropdown';
 import {isAddChannelDropdownOpen} from 'selectors/views/add_channel_dropdown';
-import {OnboardingTourSteps, useShowOnboardingTutorialStep} from 'components/onboarding_tour';
-import {setAddChannelDropdown} from '../../../actions/views/add_channel_dropdown';
+import {useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
+import {OnboardingTourSteps} from 'components/tours';
+
+import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
 
 type SidebarHeaderContainerProps = {
     id?: string;
 }
 
-type SidebarHeaderProps = {
-}
+type SidebarHeaderProps = Record<string, unknown>;
 
 const SidebarHeaderContainer = styled(Flex).attrs(() => ({
     element: 'header',
@@ -35,15 +35,15 @@ const SidebarHeaderContainer = styled(Flex).attrs(() => ({
     justify: 'space-between',
     alignment: 'center',
 }))<SidebarHeaderContainerProps>`
-    height: 52px;
-    padding: 0 16px;
+    height: 46px;
+    width: 100%;
+    padding: 0 16px !important;
 
     .dropdown-menu {
         position: absolute;
         transform: translate(0, 0);
         margin-left: 0;
         min-width: 210px;
-        max-width: 250px;
     }
 
     #SidebarContainer & .AddChannelDropdown_dropdownButton {
@@ -62,7 +62,7 @@ const SidebarHeading = styled(Heading).attrs(() => ({
     margin: 'none',
     size: 200,
 }))<SidebarHeaderProps>`
-    color: var(--sidebar-header-text-color);
+    color: var(--sidebar-header-text-color) !important;
     cursor: pointer;
     display: flex;
 
@@ -101,9 +101,9 @@ export type Props = {
 const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
     const dispatch = useDispatch();
     const currentTeam = useSelector((state: GlobalState) => getCurrentTeam(state));
-    const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_AND_JOIN_CHANNELS);
-    const showInviteTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.INVITE_PEOPLE);
-    const usageDeltas = useGetUsageDeltas();
+    const showJoinChannelTourTip = useShowOnboardingTutorialStep(OnboardingTourSteps.JOIN_CHANNELS);
+    const showCreateTutorialTip = useShowOnboardingTutorialStep(OnboardingTourSteps.CREATE_CHANNELS);
+    const showInviteTutorialTip = false;
     const isAddChannelOpen = useSelector(isAddChannelDropdownOpen);
     const openAddChannelOpen = useCallback((open: boolean) => {
         dispatch(setAddChannelDropdown(open));
@@ -121,6 +121,7 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                 id={'sidebar-header-container'}
             >
                 <OverlayTrigger
+
                     delayShow={Constants.OVERLAY_TIME_DELAY}
                     placement='bottom'
                     overlay={currentTeam.description?.length ? (
@@ -132,13 +133,12 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                         className='SidebarHeaderMenuWrapper test-team-header'
                     >
                         <SidebarHeading>
-                            <span className='title'>{currentTeam.display_name}</span>
-                            <i className='icon icon-chevron-down'/>
+                            <button className='style--none sidebar-header'>
+                                <span className='title'>{currentTeam.display_name}</span>
+                                <i className='icon icon-chevron-down'/>
+                            </button>
                         </SidebarHeading>
-                        <MainMenu
-                            id='sidebarDropdownMenu'
-                            usageDeltaTeams={usageDeltas.teams.active}
-                        />
+                        <MainMenu id='sidebarDropdownMenu'/>
                     </MenuWrapper>
                 </OverlayTrigger>
                 <AddChannelDropdown
@@ -150,6 +150,7 @@ const SidebarHeader: React.FC<Props> = (props: Props): JSX.Element => {
                     canJoinPublicChannel={props.canJoinPublicChannel}
                     handleOpenDirectMessagesModal={props.handleOpenDirectMessagesModal}
                     unreadFilterEnabled={props.unreadFilterEnabled}
+                    showJoinChannelTutorialTip={showJoinChannelTourTip}
                     showCreateTutorialTip={showCreateTutorialTip}
                     showInviteTutorialTip={showInviteTutorialTip}
                     isAddChannelOpen={isAddChannelOpen}

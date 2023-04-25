@@ -48,6 +48,7 @@ const AdminPanelWithLink = (props: Props) => {
             titleDefault={props.titleDefault}
             subtitleId={props.subtitleId}
             subtitleDefault={props.subtitleDefault}
+            subtitleValues={props.subtitleValues}
             button={button}
         >
             {props.children}

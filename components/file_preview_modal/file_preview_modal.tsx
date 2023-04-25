@@ -74,6 +74,7 @@ type State = {
     showCloseBtn: boolean;
     showZoomControls: boolean;
     scale: Record<number, number>;
+    content: string;
 }
 
 export default class FilePreviewModal extends React.PureComponent<Props, State> {
@@ -97,6 +98,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
             showCloseBtn: false,
             showZoomControls: false,
             scale: Utils.fillRecord(ZoomSettings.DEFAULT_SCALE, this.props.fileInfos.length),
+            content: '',
         };
     }
 
@@ -251,6 +253,10 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
         this.setState({show: false});
     }
 
+    getContent = (content: string) => {
+        this.setState({content});
+    }
+
     handleBgClose = (e: React.MouseEvent) => {
         if (e.currentTarget === e.target) {
             this.handleModalClose();
@@ -270,6 +276,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
         let fileUrl;
         let fileDownloadUrl;
         let isExternalFile;
+        let canCopyContent = false;
         if (isFileInfo(fileInfo)) {
             showPublicLink = true;
             fileName = fileInfo.name;
@@ -289,57 +296,75 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
         let content;
         let zoomBar;
 
-        if (this.state.loaded[this.state.imageIndex]) {
-            if (fileType === FileTypes.IMAGE || fileType === FileTypes.SVG) {
-                content = (
-                    <ImagePreview
-                        fileInfo={fileInfo as FileInfo & LinkInfo}
-                        toolbarZoom={this.state.toolbarZoom}
-                        setToolbarZoom={this.setToolbarZoom}
-                    />
-                );
-            } else if (fileType === FileTypes.VIDEO || fileType === FileTypes.AUDIO) {
-                content = (
-                    <AudioVideoPreview
-                        fileInfo={fileInfo as FileInfo}
-                        fileUrl={fileUrl}
-                    />
-                );
-            } else if (fileType === FileTypes.PDF) {
-                modalImageClass = ' file-preview-modal__content-scrollable';
-                content = (
-                    <div
-                        className='file-preview-modal__scrollable'
-                        onClick={this.handleBgClose}
-                    >
-                        <React.Suspense fallback={null}>
-                            <PDFPreview
-                                fileInfo={fileInfo}
-                                fileUrl={fileUrl}
-                                scale={this.state.scale[this.state.imageIndex]}
-                                handleBgClose={this.handleBgClose}
-                            />
-                        </React.Suspense>
-                    </div>
-                );
-                zoomBar = (
-                    <PopoverBar
-                        scale={this.state.scale[this.state.imageIndex]}
-                        showZoomControls={this.state.showZoomControls}
-                        handleZoomIn={this.handleZoomIn}
-                        handleZoomOut={this.handleZoomOut}
-                        handleZoomReset={this.handleZoomReset}
-                    />
-                );
-            } else if (CodePreview.supports(fileInfo)) {
-                dialogClassName += ' modal-code';
-                content = (
-                    <CodePreview
-                        fileInfo={fileInfo}
-                        fileUrl={fileUrl}
-                        className='file-preview-modal__code-preview'
-                    />
-                );
+        if (isFileInfo(fileInfo) && fileInfo.archived) {
+            content = (
+                <ArchivedPreview
+                    fileInfo={fileInfo}
+                />
+            );
+        }
+
+        if (!isFileInfo(fileInfo) || !fileInfo.archived) {
+            if (this.state.loaded[this.state.imageIndex]) {
+                if (fileType === FileTypes.IMAGE || fileType === FileTypes.SVG) {
+                    content = (
+                        <ImagePreview
+                            fileInfo={fileInfo as FileInfo & LinkInfo}
+                            toolbarZoom={this.state.toolbarZoom}
+                            setToolbarZoom={this.setToolbarZoom}
+                        />
+                    );
+                } else if (fileType === FileTypes.VIDEO || fileType === FileTypes.AUDIO) {
+                    content = (
+                        <AudioVideoPreview
+                            fileInfo={fileInfo as FileInfo}
+                            fileUrl={fileUrl}
+                        />
+                    );
+                } else if (fileType === FileTypes.PDF) {
+                    content = (
+                        <div
+                            className='file-preview-modal__scrollable'
+                            onClick={this.handleBgClose}
+                        >
+                            <React.Suspense fallback={null}>
+                                <PDFPreview
+                                    fileInfo={fileInfo}
+                                    fileUrl={fileUrl}
+                                    scale={this.state.scale[this.state.imageIndex]}
+                                    handleBgClose={this.handleBgClose}
+                                />
+                            </React.Suspense>
+                        </div>
+                    );
+                    zoomBar = (
+                        <PopoverBar
+                            scale={this.state.scale[this.state.imageIndex]}
+                            showZoomControls={this.state.showZoomControls}
+                            handleZoomIn={this.handleZoomIn}
+                            handleZoomOut={this.handleZoomOut}
+                            handleZoomReset={this.handleZoomReset}
+                        />
+                    );
+                } else if (CodePreview.supports(fileInfo)) {
+                    dialogClassName += ' modal-code';
+                    canCopyContent = true;
+                    content = (
+                        <CodePreview
+                            fileInfo={fileInfo as FileInfo}
+                            fileUrl={fileUrl}
+                            getContent={this.getContent}
+                            className='file-preview-modal__code-preview'
+                        />
+                    );
+                } else {
+                    content = (
+                        <FileInfoPreview
+                            fileInfo={fileInfo as FileInfo}
+                            fileUrl={fileUrl}
+                        />
+                    );
+                }
             } else {
                 // display a progress indicator when the preview for an image is still loading
                 const loading = Utils.localizeMessage('view_image.loading', 'Loading');
@@ -411,10 +436,12 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                                     fileInfo={fileInfo}
                                     enablePublicLink={this.props.enablePublicLink}
                                     canDownloadFiles={this.props.canDownloadFiles}
+                                    canCopyContent={canCopyContent}
                                     isExternalFile={isExternalFile}
                                     handlePrev={this.handlePrev}
                                     handleNext={this.handleNext}
                                     handleModalClose={this.handleModalClose}
+                                    content={this.state.content}
                                 />
                                 {zoomBar}
                             </Modal.Title>
@@ -423,6 +450,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                                     'file-preview-modal__content',
                                     {
                                         'file-preview-modal__content-scrollable': (!isFileInfo(fileInfo) || !fileInfo.archived) && this.state.loaded[this.state.imageIndex] && (fileType === FileTypes.PDF),
+                                        'file-preview-modal__content-image': (fileType === FileTypes.IMAGE || fileType === FileTypes.SVG),
                                     },
                                 )}
                                 onClick={this.handleBgClose}
@@ -438,8 +466,10 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                                     fileInfo={fileInfo}
                                     enablePublicLink={this.props.enablePublicLink}
                                     canDownloadFiles={this.props.canDownloadFiles}
+                                    canCopyContent={canCopyContent}
                                     isExternalFile={isExternalFile}
                                     handleModalClose={this.handleModalClose}
+                                    content={this.state.content}
                                 />
                             }
                         </div>

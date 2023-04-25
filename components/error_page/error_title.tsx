@@ -10,9 +10,10 @@ import * as Utils from 'utils/utils';
 type Props = {
     type?: string | null;
     title: string;
+    groupName?: string;
 }
 
-const ErrorTitle: React.FC<Props> = ({type, title}: Props) => {
+const ErrorTitle: React.FC<Props> = ({type, title, groupName}: Props) => {
     let errorTitle = null;
     if (type) {
         switch (type) {
@@ -29,6 +30,14 @@ const ErrorTitle: React.FC<Props> = ({type, title}: Props) => {
                 <FormattedMessage
                     id='permalink.error.title'
                     defaultMessage='Message Not Found'
+                />
+            );
+            break;
+        case ErrorPageTypes.CLOUD_ARCHIVED:
+            errorTitle = (
+                <FormattedMessage
+                    id='cloud_archived.error.title'
+                    defaultMessage='Message Archived'
                 />
             );
             break;
@@ -70,6 +79,36 @@ const ErrorTitle: React.FC<Props> = ({type, title}: Props) => {
                 <FormattedMessage
                     id='error.channel_not_found.title'
                     defaultMessage='Channel Not Found'
+                />
+            );
+            break;
+        case ErrorPageTypes.NO_KSUITE:
+            errorTitle = (
+                <FormattedMessage
+                    id='error.no_team.title'
+                    defaultMessage='You don’t have any kChat, discover it with kSuite'
+                />
+            );
+            break;
+        case ErrorPageTypes.MAINTENANCE:
+            errorTitle = (
+                <FormattedMessage
+                    id='error.maintenance.title'
+                    defaultMessage='The kChat {groupName} is currently under maintenance'
+                    values={{
+                        groupName,
+                    }}
+                />
+            );
+            break;
+        case ErrorPageTypes.BLOCKED:
+            errorTitle = (
+                <FormattedMessage
+                    id='error.blocked.title'
+                    defaultMessage='The kChat {groupName} is currently blocked'
+                    values={{
+                        groupName,
+                    }}
                 />
             );
             break;

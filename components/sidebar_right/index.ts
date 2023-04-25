@@ -4,9 +4,24 @@
 import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
 
-import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
+import {withRouter, RouteComponentProps} from 'react-router-dom';
 
-import {setRhsExpanded, showChannelInfo, showPinnedPosts, showChannelFiles, openRHSSearch, closeRightHandSide, openAtPrevious, updateSearchTerms} from 'actions/views/rhs';
+import {memo} from 'react';
+
+import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+
+import {
+    setRhsExpanded,
+    showChannelInfo,
+    showPinnedPosts,
+    showChannelFiles,
+    openRHSSearch,
+    closeRightHandSide,
+    openAtPrevious,
+    updateSearchTerms,
+    showSettings,
+} from 'actions/views/rhs';
 import {
     getIsRhsExpanded,
     getIsRhsOpen,
@@ -20,11 +35,16 @@ import {RHSStates} from 'utils/constants';
 
 import {GlobalState} from 'types/store';
 
+import {selectCurrentProductId} from 'selectors/products';
+
 import SidebarRight from './sidebar_right';
 
-function mapStateToProps(state: GlobalState) {
+function mapStateToProps(state: GlobalState, props: RouteComponentProps) {
     const rhsState = getRhsState(state);
     const channel = getCurrentChannel(state);
+    const team = getCurrentTeam(state);
+    const teamId = team?.id ?? '';
+    const productId = selectCurrentProductId(state, props.location.pathname);
 
     const selectedPostId = getSelectedPostId(state);
     const selectedPostCardId = getSelectedPostCardId(state);
@@ -35,16 +55,20 @@ function mapStateToProps(state: GlobalState) {
         channel,
         postRightVisible: Boolean(selectedPostId),
         postCardVisible: Boolean(selectedPostCardId),
-        searchVisible: Boolean(rhsState) && rhsState !== RHSStates.PLUGIN,
+        searchVisible: Boolean(rhsState) && rhsState !== RHSStates.PLUGIN && rhsState !== RHSStates.SETTINGS,
         previousRhsState: getPreviousRhsState(state),
         isPinnedPosts: rhsState === RHSStates.PIN,
         isChannelFiles: rhsState === RHSStates.CHANNEL_FILES,
         isChannelInfo: rhsState === RHSStates.CHANNEL_INFO,
         isChannelMembers: rhsState === RHSStates.CHANNEL_MEMBERS,
         isPluginView: rhsState === RHSStates.PLUGIN,
+        isSettings: rhsState === RHSStates.SETTINGS,
         rhsChannel: getSelectedChannel(state),
         selectedPostId,
         selectedPostCardId,
+        team,
+        teamId,
+        productId,
     };
 }
 
@@ -59,8 +83,9 @@ function mapDispatchToProps(dispatch: Dispatch) {
             updateSearchTerms,
             showChannelFiles,
             showChannelInfo,
+            showSettings,
         }, dispatch),
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SidebarRight);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(memo(SidebarRight)));

@@ -22,15 +22,17 @@ import {
     getMyChannelMember as getMyChannelMemberSelector,
     getRedirectChannelNameForTeam,
     isManuallyUnread,
+    getUnreadChannelIds,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getServerVersion} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
-import {Channel, ChannelNotifyProps, ChannelMembership, ChannelModerationPatch, ChannelsWithTotalCount, ChannelSearchOpts} from '@mattermost/types/channels';
+import {Channel, ChannelNotifyProps, ChannelMembership, ChannelModerationPatch, ChannelsWithTotalCount, ChannelSearchOpts, ChannelType} from '@mattermost/types/channels';
 
 import {PreferenceType} from '@mattermost/types/preferences';
+import {ServerError} from '@mattermost/types/errors';
 
 import {getChannelsIdForTeam, getChannelByName} from 'mattermost-redux/utils/channel_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
@@ -51,7 +53,7 @@ export function selectChannel(channelId: string) {
     };
 }
 
-export function createChannel(channel: Channel, userId: string): ActionFunc {
+export function createChannel(channel: Channel, userId: string, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let created;
         try {
@@ -63,6 +65,7 @@ export function createChannel(channel: Channel, userId: string): ActionFunc {
                 error,
             });
             dispatch(logError(error));
+            dispatch(openLimitModalIfNeeded(error, channel.type));
             return {error};
         }
 
@@ -312,7 +315,7 @@ export function updateChannel(channel: Channel): ActionFunc {
     };
 }
 
-export function updateChannelPrivacy(channelId: string, privacy: string): ActionFunc {
+export function updateChannelPrivacy(channelId: string, privacy: ChannelType, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         dispatch({type: ChannelTypes.UPDATE_CHANNEL_REQUEST, data: null});
 
@@ -324,6 +327,7 @@ export function updateChannelPrivacy(channelId: string, privacy: string): Action
 
             dispatch({type: ChannelTypes.UPDATE_CHANNEL_FAILURE, error});
             dispatch(logError(error));
+            dispatch(openLimitModalIfNeeded(error, privacy));
             return {error};
         }
 
@@ -341,7 +345,7 @@ export function updateChannelPrivacy(channelId: string, privacy: string): Action
     };
 }
 
-export function updateChannelNotifyProps(userId: string, channelId: string, props: ChannelNotifyProps): ActionFunc {
+export function updateChannelNotifyProps(userId: string, channelId: string, props: Partial<ChannelNotifyProps>): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const notifyProps = {
             user_id: userId,
@@ -465,7 +469,7 @@ export function getChannelTimezones(channelId: string): ActionFunc {
     };
 }
 
-export function fetchMyChannelsAndMembers(teamId: string): ActionFunc {
+export function fetchMyChannelsAndMembersREST(teamId: string): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         dispatch({
             type: ChannelTypes.CHANNELS_REQUEST,
@@ -525,7 +529,7 @@ export function fetchMyChannelsAndMembers(teamId: string): ActionFunc {
     };
 }
 
-export function fetchAllMyTeamsChannelsAndChannelMembers(): ActionFunc {
+export function fetchAllMyTeamsChannelsAndChannelMembersREST(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
         const {currentUserId} = state.entities.users;
@@ -560,6 +564,7 @@ export function fetchAllMyTeamsChannelsAndChannelMembers(): ActionFunc {
                     data: {
                         channelID: conferences[i].channel_id,
                         id: conferences[i].id,
+                        url: conferences[i].url,
                         users: conferences[i].participants,
                     },
                 });
@@ -736,12 +741,13 @@ export function deleteChannel(channelId: string): ActionFunc {
     };
 }
 
-export function unarchiveChannel(channelId: string): ActionFunc {
+export function unarchiveChannel(channelId: string, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         try {
             await Client4.unarchiveChannel(channelId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(openLimitModalIfNeeded(error, getChannelSelector(getState(), channelId).type));
             dispatch(logError(error));
             return {error};
         }
@@ -1265,6 +1271,15 @@ export function markChannelAsRead(channelId: string, prevChannelId?: string, upd
     };
 }
 
+export function markAllChannelsAsRead(prevChannelId?: string, updateLastViewedAt = true): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const unreadChannelIds = getUnreadChannelIds(getState());
+        for (const unreadChannelId of unreadChannelIds) {
+            dispatch(markChannelAsRead(unreadChannelId, prevChannelId, updateLastViewedAt));
+        }
+    };
+}
+
 export function markChannelAsViewedOnServer(channelId: string, prevChannelId?: string): ActionFunc {
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
         Client4.viewMyChannel(channelId, prevChannelId).then().catch((error) => {
@@ -1313,6 +1328,7 @@ export function actionsToMarkChannelAsRead(getState: GetStateFunc, channelId: st
                 channelId,
                 amount: channelMember.mention_count,
                 amountRoot: channelMember.mention_count_root,
+                amountUrgent: channelMember.urgent_mention_count,
             },
         });
     }
@@ -1342,6 +1358,7 @@ export function actionsToMarkChannelAsRead(getState: GetStateFunc, channelId: st
                 channelId: prevChannelId,
                 amount: prevChannelMember.mention_count,
                 amountRoot: prevChannelMember.mention_count_root,
+                amountUrgent: prevChannelMember.urgent_mention_count,
             },
         });
     }
@@ -1399,7 +1416,7 @@ export function markChannelAsUnread(teamId: string, channelId: string, mentions:
     };
 }
 
-export function actionsToMarkChannelAsUnread(getState: GetStateFunc, teamId: string, channelId: string, mentions: string[], fetchedChannelMember = false, isRoot = false) {
+export function actionsToMarkChannelAsUnread(getState: GetStateFunc, teamId: string, channelId: string, mentions: string[], fetchedChannelMember = false, isRoot = false, priority = '') {
     const state = getState();
     const {myMembers} = state.entities.channels;
     const {currentUserId} = state.entities.users;
@@ -1436,6 +1453,7 @@ export function actionsToMarkChannelAsUnread(getState: GetStateFunc, teamId: str
                 channelId,
                 amountRoot: isRoot ? 1 : 0,
                 amount: 1,
+                amountUrgent: priority === 'urgent' ? 1 : 0,
                 fetchedChannelMember,
             },
         });
@@ -1597,6 +1615,26 @@ export function getChannelMemberCountsByGroup(channelId: string, includeTimezone
     });
 }
 
+export function getChannelPendingGuests(channelId: string) {
+    return bindClientFunc({
+        clientFunc: async () => {
+            const pendingGuests = await Client4.getChannelPendingGuests(channelId);
+            return {channelId, pendingGuests};
+        },
+        onSuccess: ChannelTypes.RECEIVED_CHANNEL_PENDING_GUESTS,
+    });
+}
+
+export function cancelPendingGuestInvite(channelId: string, invitationKey: string) {
+    return bindClientFunc({
+        clientFunc: async () => {
+            await Client4.cancelPendingGuestInvite(invitationKey);
+            return {channelId, invitationKey};
+        },
+        onSuccess: ChannelTypes.CANCELED_PENDING_GUEST_INVITE,
+    });
+}
+
 export default {
     selectChannel,
     createChannel,
@@ -1605,7 +1643,7 @@ export default {
     patchChannel,
     updateChannelNotifyProps,
     getChannel,
-    fetchMyChannelsAndMembers,
+    fetchMyChannelsAndMembersREST,
     getChannelTimezones,
     getChannelMembersByIds,
     leaveChannel,

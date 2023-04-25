@@ -139,6 +139,7 @@ describe('threads', () => {
             total: 3,
             total_unread_threads: 0,
             total_unread_mentions: 0,
+            total_unread_urgent_mentions: 0,
         });
     });
 
@@ -457,6 +458,14 @@ describe('threads', () => {
                 b: ['t4', 't5', 't6'],
             },
             threads: {
+                t0: {
+                    id: 't0',
+                    unread_replies: 0,
+                    unread_mentions: 0,
+                    post: {
+                        channel_id: 'ch1',
+                    },
+                },
                 t1: {
                     id: 't1',
                     unread_replies: 1,
@@ -508,7 +517,7 @@ describe('threads', () => {
             },
             counts: {
                 a: {
-                    total: 3,
+                    total: 4,
                     total_unread_threads: 3,
                     total_unread_mentions: 2,
                 },
@@ -520,7 +529,7 @@ describe('threads', () => {
             },
             countsIncludingDirect: {
                 a: {
-                    total: 3,
+                    total: 4,
                     total_unread_threads: 3,
                     total_unread_mentions: 2,
                 },
@@ -553,12 +562,14 @@ describe('threads', () => {
             total: 1,
             total_unread_threads: 1,
             total_unread_mentions: 0,
+            total_unread_urgent_mentions: 0,
         });
 
         expect(nextState.countsIncludingDirect.a).toEqual({
             total: 1,
             total_unread_threads: 1,
             total_unread_mentions: 0,
+            total_unread_urgent_mentions: 0,
         });
 
         expect(nextState.threadsInTeam.b).toBe(state.threadsInTeam.b);
@@ -615,12 +626,20 @@ describe('threads', () => {
             [undefined, {id: 't2', last_reply_at: 40, unread_mentions: 0, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1', 't2'], unread: []}}],
             [undefined, {id: 't2', last_reply_at: 5, unread_mentions: 0, unread_replies: 0}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}}],
             [undefined, {id: 't2', last_reply_at: 5, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}}],
-        ])('should handle "%s" team and thread %o', (teamId, thread, expected) => {
+
+            // should add unread thread if unreadThreadsInTeam is empty
+            ['b', {id: 't1', last_reply_at: 40, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: ['t1']}}, true],
+
+            // should not add unread thread if the thread should not be added in threadsInTeam
+            ['b', {id: 't2', last_reply_at: 5, unread_mentions: 1, unread_replies: 1}, {a: {all: ['t1', 't2'], unread: ['t2']}, b: {all: ['t1'], unread: []}}, true],
+
+        ])('should handle "%s" team and thread %o', (teamId, thread, expected, fromWebsocket = false) => {
             const nextState = threadsReducer(state, {
                 type: ThreadTypes.RECEIVED_THREAD,
                 data: {
                     thread,
                     team_id: teamId,
+                    fromWebsocket,
                 },
             });
 
@@ -633,8 +652,8 @@ describe('threads', () => {
             expect(nextState.unreadThreadsInTeam.b).toEqual(expected.b.unread);
 
             // team c
-            expect(nextState.threadsInTeam.c).toEqual([]);
-            expect(nextState.unreadThreadsInTeam.c).toEqual([]);
+            expect(nextState.threadsInTeam.c).toEqual(expected.c?.all ?? []);
+            expect(nextState.unreadThreadsInTeam.c).toEqual(expected.c?.unread ?? []);
         });
     });
 

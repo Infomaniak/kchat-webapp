@@ -4,13 +4,8 @@ exports[`components/ResetStatusModal should match snapshot 1`] = `
 <ConfirmModal
   cancelButtonText={
     <Memo(MemoizedFormattedMessage)
-      defaultMessage="No, keep it as \\"{status}\\""
+      defaultMessage="Keep my status"
       id="modal.manual_status.cancel_"
-      values={
-        Object {
-          "status": "",
-        }
-      }
     />
   }
   checkboxText={
@@ -22,7 +17,7 @@ exports[`components/ResetStatusModal should match snapshot 1`] = `
   confirmButtonClass="btn btn-primary"
   confirmButtonText={
     <Memo(MemoizedFormattedMessage)
-      defaultMessage="Yes, set my status to \\"{status}\\""
+      defaultMessage="Set my status to \\"{status}\\""
       id="modal.manual_status.button_online"
       values={
         Object {
@@ -65,13 +60,8 @@ exports[`components/ResetStatusModal should match snapshot, render modal for OOF
 <ConfirmModal
   cancelButtonText={
     <Memo(MemoizedFormattedMessage)
-      defaultMessage="No, keep it as \\"{status}\\""
+      defaultMessage="Keep my status"
       id="modal.manual_status.cancel_"
-      values={
-        Object {
-          "status": "",
-        }
-      }
     />
   }
   checkboxText={
@@ -83,7 +73,7 @@ exports[`components/ResetStatusModal should match snapshot, render modal for OOF
   confirmButtonClass="btn btn-primary"
   confirmButtonText={
     <Memo(MemoizedFormattedMessage)
-      defaultMessage="Yes, set my status to \\"{status}\\""
+      defaultMessage="Set my status to \\"{status}\\""
       id="modal.manual_status.button_online"
       values={
         Object {

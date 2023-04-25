@@ -9,6 +9,7 @@
     --center-channel-color: #3d3c40;
     --dnd-indicator: #FB472E;
     --error-text: #fd5960;
+    --warning-text: #cc8f00;
     --link-color: #0098FF;
     --mention-bg: #fff;
     --mention-color: #006AB2;
@@ -29,7 +30,6 @@
     --denim-button-bg: #1c58d9;
     --denim-status-online: #3db887;
     --denim-sidebar-active-border: #5d89ea;
-    --center-channel-text: #3f4350;
     --title-color-indigo-500: #1e325c;
 
     // Default RGB values to be replaced by applyTheme() (do not add opacity mutations here)
@@ -38,7 +38,7 @@
     --button-bg-rgb: 0, 152, 255;
     --button-color-rgb: 255, 255, 255;
     --center-channel-bg-rgb: 255, 255, 255;
-    --center-channel-color-rgb: 61, 60, 64;
+    --center-channel-color-rgb: 60, 60, 60;
     --dnd-indicator-rgb: 244, 67, 54;
     --error-text-color-rgb: 244, 67, 54;
     --link-color-rgb: 0, 152, 215;
@@ -61,7 +61,7 @@
     --secondary-blue-rgb: 34, 64, 109;
     --denim-status-online-rgb: 61, 184, 135;
     --denim-button-bg-rgb: 28, 88, 217;
-    --center-channel-text-rgb: 63, 67, 80;
+    --title-color-indigo-500-rgb: 30, 50, 92;
 
     // offline indicator color stays the same in all themes, that's why it is separated from the other variables
     // the color specified here is the new hard-coded color from the compass design system
@@ -77,16 +77,42 @@
     --elevation-6: 0 20px 32px 0 rgba(0, 0, 0, 0.12);
 
     // Global Header variables
-    --global-header-background: var(--sidebar-teambar-bg);
+    --global-header-background: var(--center-channel-bg);
+    // --global-header-background: var(--sidebar-teambar-bg);
     --global-header-text: var(--sidebar-header-text-color);
     --global-header-background-rgb: var(--sidebar-teambar-bg-rgb);
-    --global-header-text-rgb: var(--sidebar-header-text-color-rgb);
+    --global-header-text-rgb: var(--center-channel-text-rgb);
 
     // semantic colors
     // not to be overwritten, since they are shared among themes
     --semantic-color-general: var(--center-channel-color-rgb);
-    --semantic-color-info: 87, 158, 255;
+    --semantic-color-info: 93, 137, 234;
     --semantic-color-success: 61, 184, 135;
-    --semantic-color-warning: 255, 188, 31;
-    --semantic-color-danger: 247, 67, 67;
+    --semantic-color-warning: 245, 171, 0;
+    --semantic-color-danger: 210, 75, 78;
+
+    // Do not use these variables
+    // use --center-channel-color instead
+    --center-channel-text: var(--center-channel-color);
+    // use --center-channel-color-rgb instead
+    --center-channel-text-rgb: var(--center-channel-color-rgb);
+
+    //IK Variables
+    --ik-illustration-grey-1: #F5F5F5;
+    --ik-illustration-grey-2: #FFFFFF;
+    --ik-illustration-grey-3: #E0E0E0;
+    --ik-illustration-grey-4: #FAFAFA;
+    --ik-illustration-grey-5: #F1F1F1;
+    --ik-illustration-grey-6: #FAFAFA;
+    --ik-illustration-grey-7: #E0E0E0;
+    --ik-illustration-grey-8: #F1F1F1;
+    --ik-illustration-grey-9: #F5F5F5;
+    --ik-illustration-grey-10: #E0E0E0;
+    --ik-illustration-grey-11: #FFFFFF;
+    --ik-illustration-grey-12: #FFFFFF;
+    --ik-illustration-grey-13: #F1F1F1;
+    --ik-illustration-grey-14: #FFFFFF;
+    --ik-illustration-grey-15: #F1F1F1;
+    --ik-illustration-grey-16: #F1F1F1;
+    --ik-illustration-grey-17: #F5F5F5;
 }

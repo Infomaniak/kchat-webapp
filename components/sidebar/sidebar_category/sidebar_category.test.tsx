@@ -24,9 +24,9 @@ describe('components/sidebar/sidebar_category', () => {
         },
         channelIds: ['channel_id'],
         categoryIndex: 0,
+        isLastCategory: true,
         draggingState: {},
         setChannelRef: jest.fn(),
-        getChannelRef: jest.fn(),
         handleOpenMoreDirectChannelsModal: jest.fn(),
         isNewCategory: false,
         isDisabled: false,
@@ -36,6 +36,8 @@ describe('components/sidebar/sidebar_category', () => {
         menuButtonRef: {
             current: null,
         },
+        showDirectMessagesTutorialStep: false,
+        showChannelsTutorialStep: false,
         actions: {
             setCategoryCollapsed: jest.fn(),
             setCategorySorting: jest.fn(),

@@ -101,7 +101,7 @@ export function loadProfilesAndReloadChannelMembersAll(membersCount: number, per
     };
 }
 
-export function loadProfilesAndTeamMembers(page: number, perPage: number, teamId: string, options: Record<string, string | boolean>) {
+export function loadProfilesAndTeamMembers(page: number, perPage: number, teamId: string, options: Record<string, any>) {
     return async (doDispatch: DispatchFunc, doGetState: GetStateFunc) => {
         const newTeamId = teamId || getCurrentTeamId(doGetState());
         const {data} = await doDispatch(UserActions.getProfilesInTeam(newTeamId, page, perPage, '', options));

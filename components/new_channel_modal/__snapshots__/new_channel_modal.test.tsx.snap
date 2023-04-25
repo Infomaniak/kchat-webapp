@@ -4,6 +4,7 @@ exports[`components/new_channel_modal should match snapshot 1`] = `
 <GenericModal
   autoCloseOnCancelButton={true}
   autoCloseOnConfirmButton={false}
+  cancelButtonClassName="secondary"
   cancelButtonText="Cancel"
   className="new-channel-modal"
   compassDesign={true}
@@ -66,6 +67,10 @@ exports[`components/new_channel_modal should match snapshot 1`] = `
         }
       }
       selected="O"
+    />
+    <ChannelLimitIndicator
+      setLimitations={[Function]}
+      type="O"
     />
     <div
       className="new-channel-modal-purpose-container"

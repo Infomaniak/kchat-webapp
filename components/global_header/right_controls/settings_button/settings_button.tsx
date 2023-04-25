@@ -2,25 +2,34 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
 
+import {useDispatch, useSelector} from 'react-redux';
+
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import UserSettingsModal from 'components/user_settings/modal';
 
-import {ModalData} from 'types/actions';
+import Constants, {RHSStates} from 'utils/constants';
+import {GlobalState} from 'types/store';
+import {getRhsState} from 'selectors/rhs';
+import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
+const SettingsButton = (): JSX.Element | null => {
+    const dispatch = useDispatch();
+    const {formatMessage} = useIntl();
+    const rhsState = useSelector((state: GlobalState) => getRhsState(state));
 
-type Props = {
-    actions: {
-        openModal: <P>(modalData: ModalData<P>) => void;
+    const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        if (rhsState === RHSStates.SETTINGS) {
+            dispatch(closeRightHandSide());
+        } else {
+            dispatch(showSettings());
+        }
     };
-};
 
-const SettingsButton = (props: Props): JSX.Element | null => {
     const tooltip = (
         <Tooltip id='productSettings'>
             <FormattedMessage
@@ -38,15 +47,18 @@ const SettingsButton = (props: Props): JSX.Element | null => {
             overlay={tooltip}
         >
             <IconButton
+                id='right-controls-settings'
+                className={`grey ${rhsState === RHSStates.SETTINGS ? 'active' : ''}`}
                 size={'sm'}
-                icon={'settings-outline'}
-                onClick={(): void => {
-                    props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}});
-                }}
+                icon={'cog'}
+                toggled={rhsState === RHSStates.SETTINGS}
+                onClick={settingButtonClick}
                 inverted={true}
                 compact={true}
-                aria-label='Select to open the settings modal.' // proper wording and translation needed
+                aria-haspopup='dialog'
+                aria-label={formatMessage({id: 'global_header.productSettings', defaultMessage: 'Settings'})}
             />
+
         </OverlayTrigger>
     );
 };

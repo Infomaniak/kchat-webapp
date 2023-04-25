@@ -4,15 +4,17 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import InstalledIncomingWebhook, {matchesFilter} from 'components/integrations/installed_incoming_webhook';
+
 import {Team} from '@mattermost/types/teams';
 import {Channel} from '@mattermost/types/channels';
 import {IncomingWebhook} from '@mattermost/types/integrations';
 import {ActionResult} from 'mattermost-redux/types/actions';
 import {UserProfile} from '@mattermost/types/users';
 import {IDMappedObjects} from '@mattermost/types/utilities';
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 
-import BackstageList from 'components/backstage/components/backstage_list.jsx';
-import InstalledIncomingWebhook, {matchesFilter} from 'components/integrations/installed_incoming_webhook.jsx';
+import BackstageList from 'components/backstage/components/backstage_list';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 import Constants from 'utils/constants';
@@ -129,29 +131,13 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
                 helpText={
                     <FormattedMessage
                         id='installed_incoming_webhooks.help'
-                        defaultMessage='Use incoming webhooks to connect external tools to Mattermost. {buildYourOwn} or visit the {appDirectory} to find self-hosted, third-party apps and integrations.'
+                        defaultMessage='Use incoming webhooks to connect external tools to kChat. {learnMore}'
                         values={{
-                            buildYourOwn: (
-                                <a
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-webhooks-incoming/'
-                                >
+                            learnMore: (
+                                <a onClick={redirectToDeveloperDocumentation}>
                                     <FormattedMessage
-                                        id='installed_incoming_webhooks.help.buildYourOwn'
-                                        defaultMessage='Build Your Own'
-                                    />
-                                </a>
-                            ),
-                            appDirectory: (
-                                <a
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    href='https://mattermost.com/marketplace'
-                                >
-                                    <FormattedMessage
-                                        id='installed_incoming_webhooks.help.appDirectory'
-                                        defaultMessage='App Directory'
+                                        id='developer_documentation.learn_more'
+                                        defaultMessage='Learn more'
                                     />
                                 </a>
                             ),

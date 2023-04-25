@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+// @ts-nocheck
 
 export function buildQueryString(parameters: Record<string, any>): string {
     const keys = Object.keys(parameters);

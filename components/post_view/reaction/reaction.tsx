@@ -217,7 +217,10 @@ export default class Reaction extends React.PureComponent<Props, State> {
                 placement='top'
                 shouldUpdatePosition={true}
                 overlay={
-                    <Tooltip id={`${this.props.post.id}-${this.props.emojiName}-reaction`}>
+                    <Tooltip
+                        id={`${this.props.post.id}-${this.props.emojiName}-reaction`}
+                        style={{opacity: '1'}}
+                    >
                         <ReactionTooltip
                             canAddReactions={canAddReactions}
                             canRemoveReactions={canRemoveReactions}
@@ -237,9 +240,9 @@ export default class Reaction extends React.PureComponent<Props, State> {
                     ref={this.reactionButtonRef}
                 >
                     <span className='d-flex align-items-center'>
-                        <span
+                        <img
                             className='Reaction__emoji emoticon'
-                            style={{backgroundImage: 'url(' + emojiUrl + ')'}}
+                            src={this.props.emojiImageUrl}
                         />
                         <span
                             ref={this.reactionCountRef}

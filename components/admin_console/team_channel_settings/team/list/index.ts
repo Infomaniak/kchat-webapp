@@ -6,7 +6,7 @@ import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
 import {createSelector} from 'reselect';
 
-import {getTeams as fetchTeams, searchTeams} from 'mattermost-redux/actions/teams';
+import {getKSuites as fetchTeams, searchTeams} from 'mattermost-redux/actions/teams';
 import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 
 import {ActionFunc} from 'mattermost-redux/types/actions';

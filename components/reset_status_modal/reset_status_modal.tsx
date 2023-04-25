@@ -184,20 +184,17 @@ export default class ResetStatusModal extends React.PureComponent<Props, State> 
         const manualStatusButton = (
             <FormattedMessage
                 id={`modal.manual_status.button_${this.state.newStatus}`}
-                defaultMessage='Yes, set my status to "{status}"'
+                defaultMessage='Set my status to "{status}"'
                 values={{
                     status: toTitleCase(this.state.newStatus),
                 }}
             />
         );
-        const manualStatusId = 'modal.manual_status.cancel_' + userStatus;
+        const manualStatusId = 'modal.manual_status.cancel_';
         const manualStatusCancel = (
             <FormattedMessage
                 id={manualStatusId}
-                defaultMessage='No, keep it as "{status}"'
-                values={{
-                    status: toTitleCase(userStatus),
-                }}
+                defaultMessage='Keep my status'
             />
         );
 

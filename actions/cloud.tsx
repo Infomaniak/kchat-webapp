@@ -4,15 +4,28 @@
 import {Stripe} from '@stripe/stripe-js';
 import {getCode} from 'country-list';
 
+import {getCloudCustomer, getCloudProducts, getCloudSubscription, getInvoices} from 'mattermost-redux/actions/cloud';
 import {Client4} from 'mattermost-redux/client';
-import {ActionFunc, DispatchFunc} from 'mattermost-redux/types/actions';
+import {getCloudErrors} from 'mattermost-redux/selectors/entities/cloud';
+import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {getConfirmCardSetup} from 'components/payment_form/stripe';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
+import {closeModal, openModal} from 'actions/views/modals';
 
 import {StripeSetupIntent, BillingDetails} from 'types/cloud/sku';
 import {CloudTypes} from 'mattermost-redux/action_types';
+import {ServerError} from '@mattermost/types/errors';
+import {ChannelType} from '@mattermost/types/channels';
+import {isModalOpen} from 'selectors/views/modals';
+
+import {isLimitExceeded} from 'utils/limits';
+import {ModalIdentifiers} from 'utils/constants';
+import {General} from 'mattermost-redux/constants';
+
+import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
+import ExternalLimitReachedModal from 'components/limits/external_limit_reached_modal';
 
 // Returns true for success, and false for any error
 export function completeStripeAddPaymentMethod(
@@ -78,10 +91,10 @@ export function completeStripeAddPaymentMethod(
     };
 }
 
-export function subscribeCloudSubscription(productId: string) {
+export function subscribeCloudSubscription(productId: string, seats = 0) {
     return async () => {
         try {
-            await Client4.subscribeCloudProduct(productId);
+            await Client4.subscribeCloudProduct(productId, seats);
         } catch (error) {
             return error;
         }
@@ -132,6 +145,9 @@ export function validateWorkspaceBusinessEmail() {
 export function getCloudLimits(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         try {
+            dispatch({
+                type: CloudTypes.CLOUD_LIMITS_REQUEST,
+            });
             const result = await Client4.getCloudLimits();
             if (result) {
                 dispatch({
@@ -140,9 +156,29 @@ export function getCloudLimits(): ActionFunc {
                 });
             }
         } catch (error) {
+            dispatch({
+                type: CloudTypes.CLOUD_LIMITS_FAILED,
+            });
             return error;
         }
         return true;
+    };
+}
+
+export function getUsage(): ActionFunc {
+    return async (dispatch: DispatchFunc) => {
+        try {
+            const result = await Client4.getUsage();
+            if (result) {
+                dispatch({
+                    type: CloudTypes.RECEIVED_USAGE,
+                    data: result,
+                });
+            }
+        } catch (e) {
+            return e;
+        }
+        return {data: true};
     };
 }
 
@@ -183,18 +219,6 @@ export function getFilesUsage(): ActionFunc {
     };
 }
 
-export function getIntegrationsUsage(): ActionFunc {
-    return async (dispatch: DispatchFunc) => {
-        const data = await Client4.getIntegrationsUsage();
-        dispatch({
-            type: CloudTypes.RECEIVED_INTEGRATIONS_USAGE,
-            data: data.enabled,
-        });
-
-        return {data: true};
-    };
-}
-
 export function getBoardsUsage(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         try {
@@ -229,5 +253,72 @@ export function getTeamsUsage(): ActionFunc {
             return error;
         }
         return {data: false};
+    };
+}
+
+export function retryFailedCloudFetches() {
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const errors = getCloudErrors(getState());
+        if (Object.keys(errors).length === 0) {
+            return {data: true};
+        }
+
+        if (errors.subscription) {
+            dispatch(getCloudSubscription());
+        }
+
+        if (errors.products) {
+            dispatch(getCloudProducts());
+        }
+
+        if (errors.customer) {
+            dispatch(getCloudCustomer());
+        }
+
+        if (errors.invoices) {
+            dispatch(getInvoices());
+        }
+
+        if (errors.limits) {
+            getCloudLimits()(dispatch, getState);
+        }
+
+        return {data: true};
+    };
+}
+
+export function openChannelLimitModalIfNeeded(error: ServerError, type: ChannelType) {
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        if (isLimitExceeded(error)) {
+            if (isModalOpen(getState(), ModalIdentifiers.NEW_CHANNEL_MODAL)) {
+                dispatch(closeModal(ModalIdentifiers.NEW_CHANNEL_MODAL));
+            } else if (isModalOpen(getState(), ModalIdentifiers.UNARCHIVE_CHANNEL)) {
+                dispatch(closeModal(ModalIdentifiers.UNARCHIVE_CHANNEL));
+            }
+            dispatch(openModal({
+                modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
+                dialogType: ChannelLimitReachedModal,
+                dialogProps: {
+                    isPublicLimited: type === General.OPEN_CHANNEL,
+                    isPrivateLimited: type === General.PRIVATE_CHANNEL,
+                },
+            }));
+        }
+        return {data: true};
+    };
+}
+
+export function openExternalLimitModalIfNeeded(error: ServerError) {
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        if (isLimitExceeded(error)) {
+            if (isModalOpen(getState(), ModalIdentifiers.INVITATION)) {
+                dispatch(closeModal(ModalIdentifiers.INVITATION));
+            }
+            dispatch(openModal({
+                modalId: ModalIdentifiers.EXTERNAL_LIMIT_REACHED,
+                dialogType: ExternalLimitReachedModal,
+            }));
+        }
+        return {data: true};
     };
 }

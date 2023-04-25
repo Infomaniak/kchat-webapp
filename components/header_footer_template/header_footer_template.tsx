@@ -112,7 +112,7 @@ export default class NotLoggedIn extends React.PureComponent<Props> {
                 <div className='row content'>
                     {this.props.children}
                 </div>
-                <div className='row footer'>
+                {/* <div className='row footer'>
                     <div
                         id='footer_section'
                         className='footer-pane col-xs-12'
@@ -137,7 +137,7 @@ export default class NotLoggedIn extends React.PureComponent<Props> {
                             </span>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     }

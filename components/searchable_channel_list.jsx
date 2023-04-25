@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 /* eslint-disable react/no-string-refs */
 
 import PropTypes from 'prop-types';
@@ -107,7 +108,7 @@ export default class SearchableChannelList extends React.PureComponent {
                 <div className='more-modal__actions'>
                     <button
                         onClick={this.handleJoin.bind(this, channel)}
-                        className='btn btn-primary'
+                        className='btn'
                         disabled={this.state.joiningChannel}
                     >
                         <LoadingWrapper
@@ -281,7 +282,6 @@ export default class SearchableChannelList extends React.PureComponent {
                 {channelDropdown}
                 <div
                     role='application'
-                    ref='channelList'
                     className='more-modal__list'
                 >
                     <div
@@ -319,4 +319,3 @@ SearchableChannelList.propTypes = {
     shouldShowArchivedChannels: PropTypes.bool.isRequired,
     canShowArchivedChannels: PropTypes.bool.isRequired,
 };
-/* eslint-enable react/no-string-refs */

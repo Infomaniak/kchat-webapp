@@ -23,8 +23,6 @@ describe('components/channel_layout/CenterChannel', () => {
         rhsMenuOpen: true,
         isCollapsedThreadsEnabled: true,
         currentUserId: 'testUserId',
-        isOnboardingHidden: true,
-        enableTipsViewRoute: false,
         callChannel: {
             create_at: 1508265709607,
             creator_id: 'zaktnt8bpbgu8mb6ez9k64r7sa',

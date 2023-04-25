@@ -104,7 +104,7 @@ const Search: React.FC<Props> = (props: Props): JSX.Element => {
         new SearchUserProvider(actions.autocompleteUsersInTeam),
     ]);
 
-    const isDesktop = isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '4.7.0');
+    const isDesktop = isDesktopApp(); // && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '4.7.0');
     useEffect(() => {
         if (!enableFindShortcut) {
             return undefined;

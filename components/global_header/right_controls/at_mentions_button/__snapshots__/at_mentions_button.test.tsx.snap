@@ -39,9 +39,13 @@ exports[`components/global/AtMentionsButton should match snapshot 1`] = `
   }
 >
   <ForwardRef
-    aria-label="Select to toggle a list of recent mentions."
+    aria-controls="searchContainer"
+    aria-expanded={false}
+    aria-label="Recent mentions"
+    className="grey "
     compact={true}
-    icon="at"
+    icon="mentions"
+    id="right-controls-at-mentions"
     inverted={true}
     onClick={[Function]}
     size="sm"

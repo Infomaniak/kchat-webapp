@@ -1,0 +1,540 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/user_settings/notifications/DesktopNotificationSettings should match snapshot, on createNotificationsSelect 1`] = `
+<RhsSettingsItem
+  containerStyle=""
+  infoPosition="bottom"
+  inputs={
+    <StateManager
+      className="react-select settings-select advanced-select"
+      classNamePrefix="react-select"
+      clearable={false}
+      defaultInputValue=""
+      defaultMenuIsOpen={false}
+      defaultValue={null}
+      id="desktopNotificationLevel"
+      isSearchable={false}
+      menuPortalTarget={<body />}
+      onChange={[Function]}
+      options={
+        Array [
+          Object {
+            "label": "For all activity",
+            "value": "all",
+          },
+          Object {
+            "label": "Only for mentions and direct messages",
+            "value": "mention",
+          },
+          Object {
+            "label": "Never",
+            "value": "none",
+          },
+        ]
+      }
+      styles={
+        Object {
+          "menuPortal": [Function],
+        }
+      }
+      value={
+        Array [
+          Object {
+            "label": "Only for mentions and direct messages",
+            "value": "mention",
+          },
+        ]
+      }
+    />
+  }
+  saving={false}
+  section=""
+  title={
+    <Memo(MemoizedFormattedMessage)
+      defaultMessage="Send desktop notifications"
+      id="user.settings.notifications.desktop"
+    />
+  }
+  updateSection={[MockFunction]}
+/>
+`;
+
+exports[`components/user_settings/notifications/DesktopNotificationSettings should match snapshot, on createNotificationsSelect 2`] = `
+<RhsSettingsItem
+  containerStyle=""
+  infoPosition="bottom"
+  inputs={
+    <StateManager
+      className="react-select settings-select advanced-select"
+      classNamePrefix="react-select"
+      clearable={false}
+      defaultInputValue=""
+      defaultMenuIsOpen={false}
+      defaultValue={null}
+      id="desktopNotificationLevel"
+      isSearchable={false}
+      menuPortalTarget={<body />}
+      onChange={[Function]}
+      options={
+        Array [
+          Object {
+            "label": "For all activity",
+            "value": "all",
+          },
+          Object {
+            "label": "Only for mentions and direct messages",
+            "value": "mention",
+          },
+          Object {
+            "label": "Never",
+            "value": "none",
+          },
+        ]
+      }
+      styles={
+        Object {
+          "menuPortal": [Function],
+        }
+      }
+      value={
+        Array [
+          Object {
+            "label": "Never",
+            "value": "none",
+          },
+        ]
+      }
+    />
+  }
+  saving={false}
+  section=""
+  title={
+    <Memo(MemoizedFormattedMessage)
+      defaultMessage="Send desktop notifications"
+      id="user.settings.notifications.desktop"
+    />
+  }
+  updateSection={[MockFunction]}
+/>
+`;
+
+exports[`components/user_settings/notifications/DesktopNotificationSettings should match snapshot, on max setting 1`] = `
+<Fragment>
+  <RhsSettingsItem
+    containerStyle=""
+    infoPosition="bottom"
+    inputs={
+      <StateManager
+        className="react-select settings-select advanced-select"
+        classNamePrefix="react-select"
+        clearable={false}
+        defaultInputValue=""
+        defaultMenuIsOpen={false}
+        defaultValue={null}
+        id="desktopNotificationLevel"
+        isSearchable={false}
+        menuPortalTarget={<body />}
+        onChange={[Function]}
+        options={
+          Array [
+            Object {
+              "label": "For all activity",
+              "value": "all",
+            },
+            Object {
+              "label": "Only for mentions and direct messages",
+              "value": "mention",
+            },
+            Object {
+              "label": "Never",
+              "value": "none",
+            },
+          ]
+        }
+        styles={
+          Object {
+            "menuPortal": [Function],
+          }
+        }
+        value={
+          Array [
+            Object {
+              "label": "Only for mentions and direct messages",
+              "value": "mention",
+            },
+          ]
+        }
+      />
+    }
+    key="desktopNotifications"
+    saving={false}
+    section=""
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Send desktop notifications"
+        id="user.settings.notifications.desktop"
+      />
+    }
+    updateSection={[MockFunction]}
+  />
+  <RhsSettingsItem
+    containerStyle=""
+    id="desktopNotificationThread"
+    infoPosition="bottom"
+    inputs={
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={true}
+      />
+    }
+    messageDesc={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="When enabled, any reply to a thread you're following will send a desktop notification."
+        id="user.settings.notifications.threads"
+      />
+    }
+    saving={false}
+    section=""
+    server_error=""
+    submit={[MockFunction]}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Thread reply notifications"
+        id="user.settings.notifications.threads.desktop"
+      />
+    }
+    updateSection={[Function]}
+  />
+  <RhsSettingsItem
+    containerStyle=""
+    id="desktopNotificationSoundToggle"
+    infoPosition="bottom"
+    inputs={
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={false}
+      />
+    }
+    saving={false}
+    section=""
+    server_error=""
+    submit={[MockFunction]}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Notification sound"
+        id="user.settings.notifications.desktop.sound"
+      />
+    }
+    updateSection={[Function]}
+  />
+  <section
+    className="row rhs-settings-section"
+  >
+    <div
+      className="col-sm-12"
+    >
+      <div
+        className="setting-list"
+      />
+    </div>
+  </section>
+</Fragment>
+`;
+
+exports[`components/user_settings/notifications/DesktopNotificationSettings should match snapshot, on max setting with sound enabled 1`] = `
+<Fragment>
+  <RhsSettingsItem
+    containerStyle=""
+    infoPosition="bottom"
+    inputs={
+      <StateManager
+        className="react-select settings-select advanced-select"
+        classNamePrefix="react-select"
+        clearable={false}
+        defaultInputValue=""
+        defaultMenuIsOpen={false}
+        defaultValue={null}
+        id="desktopNotificationLevel"
+        isSearchable={false}
+        menuPortalTarget={<body />}
+        onChange={[Function]}
+        options={
+          Array [
+            Object {
+              "label": "For all activity",
+              "value": "all",
+            },
+            Object {
+              "label": "Only for mentions and direct messages",
+              "value": "mention",
+            },
+            Object {
+              "label": "Never",
+              "value": "none",
+            },
+          ]
+        }
+        styles={
+          Object {
+            "menuPortal": [Function],
+          }
+        }
+        value={
+          Array [
+            Object {
+              "label": "Only for mentions and direct messages",
+              "value": "mention",
+            },
+          ]
+        }
+      />
+    }
+    key="desktopNotifications"
+    saving={false}
+    section=""
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Send desktop notifications"
+        id="user.settings.notifications.desktop"
+      />
+    }
+    updateSection={[MockFunction]}
+  />
+  <RhsSettingsItem
+    containerStyle=""
+    id="desktopNotificationThread"
+    infoPosition="bottom"
+    inputs={
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={true}
+      />
+    }
+    messageDesc={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="When enabled, any reply to a thread you're following will send a desktop notification."
+        id="user.settings.notifications.threads"
+      />
+    }
+    saving={false}
+    section=""
+    server_error=""
+    submit={[MockFunction]}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Thread reply notifications"
+        id="user.settings.notifications.threads.desktop"
+      />
+    }
+    updateSection={[Function]}
+  />
+  <RhsSettingsItem
+    containerStyle=""
+    id="desktopNotificationSoundToggle"
+    infoPosition="bottom"
+    inputs={
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={true}
+      />
+    }
+    saving={false}
+    section=""
+    server_error=""
+    submit={[MockFunction]}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Notification sound"
+        id="user.settings.notifications.desktop.sound"
+      />
+    }
+    updateSection={[Function]}
+  />
+  <section
+    className="row rhs-settings-section"
+  >
+    <div
+      className="col-sm-12"
+    >
+      <div
+        className="setting-list"
+      >
+        <StateManager
+          className="react-select notification-sound-dropdown"
+          classNamePrefix="react-select"
+          clearable={false}
+          defaultInputValue=""
+          defaultMenuIsOpen={false}
+          defaultValue={null}
+          id="displaySoundNotification"
+          isSearchable={false}
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Bing",
+                "value": "Bing",
+              },
+              Object {
+                "label": "Crackle",
+                "value": "Crackle",
+              },
+              Object {
+                "label": "Down",
+                "value": "Down",
+              },
+              Object {
+                "label": "Hello",
+                "value": "Hello",
+              },
+              Object {
+                "label": "Ripple",
+                "value": "Ripple",
+              },
+              Object {
+                "label": "Upstairs",
+                "value": "Upstairs",
+              },
+            ]
+          }
+          value={
+            Object {
+              "label": "Bing",
+              "value": "Bing",
+            }
+          }
+        />
+      </div>
+    </div>
+  </section>
+</Fragment>
+`;
+
+exports[`components/user_settings/notifications/DesktopNotificationSettings should match snapshot, on min setting 1`] = `
+<Fragment>
+  <RhsSettingsItem
+    containerStyle=""
+    infoPosition="bottom"
+    inputs={
+      <StateManager
+        className="react-select settings-select advanced-select"
+        classNamePrefix="react-select"
+        clearable={false}
+        defaultInputValue=""
+        defaultMenuIsOpen={false}
+        defaultValue={null}
+        id="desktopNotificationLevel"
+        isSearchable={false}
+        menuPortalTarget={<body />}
+        onChange={[Function]}
+        options={
+          Array [
+            Object {
+              "label": "For all activity",
+              "value": "all",
+            },
+            Object {
+              "label": "Only for mentions and direct messages",
+              "value": "mention",
+            },
+            Object {
+              "label": "Never",
+              "value": "none",
+            },
+          ]
+        }
+        styles={
+          Object {
+            "menuPortal": [Function],
+          }
+        }
+        value={
+          Array [
+            Object {
+              "label": "Only for mentions and direct messages",
+              "value": "mention",
+            },
+          ]
+        }
+      />
+    }
+    key="desktopNotifications"
+    saving={false}
+    section=""
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Send desktop notifications"
+        id="user.settings.notifications.desktop"
+      />
+    }
+    updateSection={[MockFunction]}
+  />
+  <RhsSettingsItem
+    containerStyle=""
+    id="desktopNotificationThread"
+    infoPosition="bottom"
+    inputs={
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={true}
+      />
+    }
+    messageDesc={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="When enabled, any reply to a thread you're following will send a desktop notification."
+        id="user.settings.notifications.threads"
+      />
+    }
+    saving={false}
+    section=""
+    server_error=""
+    submit={[MockFunction]}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Thread reply notifications"
+        id="user.settings.notifications.threads.desktop"
+      />
+    }
+    updateSection={[Function]}
+  />
+  <RhsSettingsItem
+    containerStyle=""
+    id="desktopNotificationSoundToggle"
+    infoPosition="bottom"
+    inputs={
+      <Toggle
+        id="childOption"
+        onToggle={[Function]}
+        toggled={false}
+      />
+    }
+    saving={false}
+    section=""
+    server_error=""
+    submit={[MockFunction]}
+    title={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Notification sound"
+        id="user.settings.notifications.desktop.sound"
+      />
+    }
+    updateSection={[Function]}
+  />
+  <section
+    className="row rhs-settings-section"
+  >
+    <div
+      className="col-sm-12"
+    >
+      <div
+        className="setting-list"
+      />
+    </div>
+  </section>
+</Fragment>
+`;

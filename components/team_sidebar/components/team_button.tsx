@@ -1,15 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+// import {Link} from 'react-router-dom';
+
 import React from 'react';
 import {injectIntl, IntlShape} from 'react-intl';
-import {Link} from 'react-router-dom';
 import {Draggable} from 'react-beautiful-dnd';
 import classNames from 'classnames';
 
 import {mark, trackEvent} from 'actions/telemetry_actions.jsx';
 import Constants from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {localizeMessage} from 'utils/utils';
 import CopyUrlContextMenu from 'components/copy_url_context_menu';
 import OverlayTrigger from 'components/overlay_trigger';
@@ -18,6 +19,7 @@ import TeamIcon from '../../widgets/team_icon/team_icon';
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 interface Props {
     btnClass?: string;
@@ -28,30 +30,28 @@ interface Props {
     order?: number;
     showOrder?: boolean;
     active?: boolean;
-    disabled?: boolean;
     unread?: boolean;
     mentions?: number;
     placement?: 'left' | 'right' | 'top' | 'bottom';
     teamIconUrl?: string | null;
-    switchTeam: (url: string) => void;
+    switchTeam: (name: string) => void;
     intl: IntlShape;
     isDraggable?: boolean;
     teamIndex?: number;
     teamId?: string;
     isInProduct?: boolean;
+    hasUrgent?: boolean;
 }
 
 // eslint-disable-next-line react/require-optimization
 class TeamButton extends React.PureComponent<Props> {
-    handleSwitch = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault();
+    handleSwitch = () => {
         mark('TeamLink#click');
-        trackEvent('ui', 'ui_team_sidebar_switch_team');
-        this.props.switchTeam(this.props.url);
-    }
+        this.props.switchTeam(this.props.displayName);
 
-    handleDisabled = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault();
+        setTimeout(() => {
+            trackEvent('ui', 'ui_team_sidebar_switch_team');
+        }, 0);
     }
 
     render() {
@@ -59,9 +59,7 @@ class TeamButton extends React.PureComponent<Props> {
         const {formatMessage} = this.props.intl;
 
         let teamClass: string = this.props.active ? 'active' : '';
-        const disabled: string = this.props.disabled ? 'team-disabled' : '';
         const isNotCreateTeamButton: boolean = !this.props.url.endsWith('create_team') && !this.props.url.endsWith('select_team');
-        const handleClick = (this.props.active || this.props.disabled) ? this.handleDisabled : this.handleSwitch;
 
         let badge: JSX.Element | undefined;
 
@@ -104,7 +102,7 @@ class TeamButton extends React.PureComponent<Props> {
                 });
 
                 badge = (
-                    <span className={'badge badge-max-number pull-right small'}>{mentions > 99 ? '99+' : mentions}</span>
+                    <span className={classNames('badge badge-max-number pull-right small', {urgent: this.props.hasUrgent})}>{mentions > 99 ? '99+' : mentions}</span>
                 );
             }
         }
@@ -161,17 +159,29 @@ class TeamButton extends React.PureComponent<Props> {
             </OverlayTrigger>
         );
 
-        let teamButton = (
-            <Link
-                id={`${this.props.url.slice(1)}TeamButton`}
-                aria-label={ariaLabel}
-                className={disabled}
-                to={this.props.url}
-                onClick={handleClick}
-            >
-                {btn}
-            </Link>
-        );
+        let teamButton;
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+            teamButton = (
+                <a
+                    id={`${this.props.url.slice(1)}TeamButton`}
+                    aria-label={ariaLabel}
+                    to={this.props.url}
+                    onClick={this.handleSwitch}
+                >
+                    {btn}
+                </a>
+            )
+        } else {
+            teamButton = (
+                <a
+                    id={`${this.props.url.slice(1)}TeamButton`}
+                    aria-label={ariaLabel}
+                    href={this.props.url}
+                >
+                    {btn}
+                </a>
+            )
+        }
 
         if (isDesktopApp()) {
             // if this is not a "special" team button, give it a context menu

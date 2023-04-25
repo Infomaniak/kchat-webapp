@@ -1,12 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import {CloseIcon} from '@infomaniak/compass-icons/components';
 
-type Props = {
+export type Props = {
     className?: string;
     onExited: () => void;
     modalHeaderText?: React.ReactNode;
@@ -19,6 +20,7 @@ type Props = {
     cancelButtonText?: React.ReactNode;
     cancelButtonClassName?: string;
     isConfirmDisabled?: boolean;
+    isDeleteModal?: boolean;
     id: string;
     autoCloseOnCancelButton?: boolean;
     autoCloseOnConfirmButton?: boolean;
@@ -29,6 +31,7 @@ type Props = {
     compassDesign?: boolean;
     backdrop?: boolean;
     backdropClassName?: string;
+    children: React.ReactNode;
 };
 
 type State = {
@@ -77,7 +80,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
     }
 
     private onEnterKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !this.props.isConfirmDisabled) {
             if (this.props.autoCloseOnConfirmButton) {
                 this.onHide();
             }
@@ -90,6 +93,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
     render() {
         let confirmButton;
         if (this.props.handleConfirm) {
+            const isConfirmOrDeleteClassName = this.props.isDeleteModal ? 'delete' : 'confirm';
             let confirmButtonText: React.ReactNode = (
                 <FormattedMessage
                     id='generic_modal.confirm'
@@ -103,7 +107,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
             confirmButton = (
                 <button
                     type='submit'
-                    className={classNames(`GenericModal__button confirm ${this.props.confirmButtonClassName}`, {
+                    className={classNames('GenericModal__button', isConfirmOrDeleteClassName, this.props.confirmButtonClassName, {
                         disabled: this.props.isConfirmDisabled,
                     })}
                     onClick={this.handleConfirm}
@@ -129,7 +133,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
             cancelButton = (
                 <button
                     type='button'
-                    className={classNames('GenericModal__button cancel', this.props.cancelButtonClassName)}
+                    className={classNames('GenericModal__button cancel secondary', this.props.cancelButtonClassName)}
                     onClick={this.handleCancel}
                 >
                     {cancelButtonText}
@@ -143,6 +147,20 @@ export class GenericModal extends React.PureComponent<Props, State> {
                     {this.props.modalHeaderText}
                 </h1>
             </div>
+        );
+
+        const closeButton = (
+            <button
+                className='close'
+                type='button'
+                aria-label='Close'
+                onClick={this.onHide}
+            >
+                <CloseIcon
+                    size={16}
+                    color={'rgba(var(--center-channel-color-rgb), 0.56)'}
+                />
+            </button>
         );
 
         return (
@@ -166,7 +184,8 @@ export class GenericModal extends React.PureComponent<Props, State> {
                     tabIndex={0}
                     className='GenericModal__wrapper-enter-key-press-catcher'
                 >
-                    <Modal.Header closeButton={true}>
+                    <Modal.Header closeButton={false}>
+                        {closeButton}
                         {this.props.compassDesign && headerText}
                     </Modal.Header>
                     <Modal.Body>

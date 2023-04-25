@@ -119,42 +119,5 @@ export default function AddToChannels(props: Props) {
             inputValue={props.inviteChannels.search}
             value={props.inviteChannels.channels}
         />
-        <div
-            className='AddToChannels__customMessage'
-            data-testid='customMessage'
-        >
-            {!props.customMessage.open && (
-                <div className={'AddToChannels__customMessageTitle ' + props.titleClass}>
-                    <a
-                        onClick={props.toggleCustomMessage}
-                        href='#'
-                    >
-                        <FormattedMessage
-                            id='invitation_modal.guests.custom-message.link'
-                            defaultMessage='Set a custom message'
-                        />
-                    </a>
-                </div>
-            )}
-            {props.customMessage.open && (
-                <React.Fragment>
-                    <div className={'AddToChannels__customMessageTitle ' + props.titleClass}>
-                        <FormattedMessage
-                            id='invitation_modal.guests.custom-message.title'
-                            defaultMessage='Custom message'
-                        />
-                        <CloseCircleIcon
-                            onClick={props.toggleCustomMessage}
-                        />
-                    </div>
-                    <textarea
-                        className='AddToChannels__messageInput'
-                        id='invite-members-to-channels'
-                        onChange={(e) => props.setCustomMessage(e.target.value)}
-                        value={props.customMessage.message}
-                    />
-                </React.Fragment>
-            )}
-        </div>
     </div>);
 }

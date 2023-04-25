@@ -31,7 +31,10 @@ exports[`components/channel_header/components/UserGuideDropdown should match sna
   >
     <ForwardRef
       active={false}
-      aria-label="Select to toggle the help menu."
+      aria-controls="AddChannelDropdown"
+      aria-expanded={false}
+      aria-label="Help"
+      className="color-grey"
       compact={true}
       icon="help-circle-outline"
       inverted={true}
@@ -46,63 +49,18 @@ exports[`components/channel_header/components/UserGuideDropdown should match sna
     openUp={false}
   >
     <MenuGroup>
-      <MenuItemAction
-        id="keyboardShortcuts"
-        onClick={[Function]}
+      <MenuItemExternalLink
+        id="helpResourcesLink"
         show={true}
-        text="Keyboard shortcuts"
+        text="Help resources"
+        url="helpLink"
       />
-    </MenuGroup>
-  </Menu>
-</MenuWrapper>
-`;
-
-exports[`components/channel_header/components/UserGuideDropdown should match snapshot for false of enableAskCommunityLink 1`] = `
-<MenuWrapper
-  animationComponent={[Function]}
-  className="userGuideHelp"
-  id="helpMenuPortal"
-  onToggle={[Function]}
->
-  <OverlayTrigger
-    defaultOverlayShown={false}
-    delayShow={500}
-    overlay={
-      <Tooltip
-        className="hidden-xs"
-        id="userGuideHelpTooltip"
-      >
-        <Memo(MemoizedFormattedMessage)
-          defaultMessage="Help"
-          id="channel_header.userHelpGuide"
-        />
-      </Tooltip>
-    }
-    placement="bottom"
-    trigger={
-      Array [
-        "hover",
-        "focus",
-      ]
-    }
-  >
-    <ForwardRef
-      active={false}
-      aria-label="Select to toggle the help menu."
-      compact={true}
-      icon="help-circle-outline"
-      inverted={true}
-      onClick={[Function]}
-      size="sm"
-    />
-  </OverlayTrigger>
-  <Menu
-    ariaLabel="Add Channel Dropdown"
-    id="AddChannelDropdown"
-    openLeft={true}
-    openUp={false}
-  >
-    <MenuGroup>
+      <MenuItemExternalLink
+        id="reportAProblemLink"
+        show={true}
+        text="Report a problem"
+        url="reportAProblemLink"
+      />
       <MenuItemAction
         id="keyboardShortcuts"
         onClick={[Function]}
@@ -145,7 +103,10 @@ exports[`components/channel_header/components/UserGuideDropdown should match sna
   >
     <ForwardRef
       active={false}
-      aria-label="Select to toggle the help menu."
+      aria-controls="AddChannelDropdown"
+      aria-expanded={false}
+      aria-label="Help"
+      className="color-grey"
       compact={true}
       icon="help-circle-outline"
       inverted={true}
@@ -160,6 +121,18 @@ exports[`components/channel_header/components/UserGuideDropdown should match sna
     openUp={false}
   >
     <MenuGroup>
+      <MenuItemExternalLink
+        id="helpResourcesLink"
+        show={true}
+        text="Help resources"
+        url="helpLink"
+      />
+      <MenuItemExternalLink
+        id="reportAProblemLink"
+        show={true}
+        text="Report a problem"
+        url="reportAProblemLink"
+      />
       <MenuItemAction
         id="keyboardShortcuts"
         onClick={[Function]}

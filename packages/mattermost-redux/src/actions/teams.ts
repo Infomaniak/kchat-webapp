@@ -4,30 +4,28 @@
 import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
+import {ServerError} from '@mattermost/types/errors';
+import {UserProfile} from '@mattermost/types/users';
+import {Team, TeamMembership, TeamMemberWithError, GetTeamMembersOpts, TeamsWithCount, TeamSearchOpts} from '@mattermost/types/teams';
+
 import {Client4} from 'mattermost-redux/client';
-import {General} from '../constants';
+
+import {General} from 'mattermost-redux/constants';
 import {ChannelTypes, TeamTypes, UserTypes} from 'mattermost-redux/action_types';
+import {GetStateFunc, DispatchFunc, ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+
 import EventEmitter from 'mattermost-redux/utils/event_emitter';
 
 import {isCompatibleWithJoinViewTeamPermissions} from 'mattermost-redux/selectors/entities/general';
-
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
-import {GetStateFunc, DispatchFunc, ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
-
-import {Team, TeamMembership, TeamMemberWithError, GetTeamMembersOpts, TeamsWithCount, TeamSearchOpts} from '@mattermost/types/teams';
-
-import {UserProfile} from '@mattermost/types/users';
-
-import {isCollapsedThreadsEnabled} from '../selectors/entities/preferences';
-
-import {selectChannel} from './channels';
-import {logError} from './errors';
-import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
-import {getProfilesByIds, getStatusesByIds} from './users';
-import {loadRolesIfNeeded} from './roles';
+import {getProfilesByIds, getStatusesByIds} from 'mattermost-redux/actions/users';
+import {logError} from 'mattermost-redux/actions/errors';
+import {selectChannel} from 'mattermost-redux/actions/channels';
+import {bindClientFunc, forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
+import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 
 async function getProfilesAndStatusesForMembers(userIds: string[], dispatch: DispatchFunc, getState: GetStateFunc) {
     const {
@@ -59,7 +57,7 @@ async function getProfilesAndStatusesForMembers(userIds: string[], dispatch: Dis
     await Promise.all(requests);
 }
 
-export function selectTeam(team: Team | string) {
+export function selectTeam(team: Team | Team['id']) {
     const teamId = (typeof team === 'string') ? team : team.id;
     return {
         type: TeamTypes.SELECT_TEAM,
@@ -70,6 +68,15 @@ export function selectTeam(team: Team | string) {
 export function getMyTeams(): ActionFunc {
     return bindClientFunc({
         clientFunc: Client4.getMyTeams,
+        onRequest: TeamTypes.MY_TEAMS_REQUEST,
+        onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, TeamTypes.MY_TEAMS_SUCCESS],
+        onFailure: TeamTypes.MY_TEAMS_FAILURE,
+    });
+}
+
+export function getMyKSuites(): ActionFunc {
+    return bindClientFunc({
+        clientFunc: Client4.getMyKSuites,
         onRequest: TeamTypes.MY_TEAMS_REQUEST,
         onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, TeamTypes.MY_TEAMS_SUCCESS],
         onFailure: TeamTypes.MY_TEAMS_FAILURE,
@@ -111,7 +118,7 @@ export function getMyTeamUnreads(collapsedThreads: boolean, skipCurrentTeam = fa
     };
 }
 
-export function getTeam(teamId: string): ActionFunc {
+export function getTeam(teamId: string): ActionFunc<Team, ServerError> {
     return bindClientFunc({
         clientFunc: Client4.getTeam,
         onSuccess: TeamTypes.RECEIVED_TEAM,
@@ -121,7 +128,7 @@ export function getTeam(teamId: string): ActionFunc {
     });
 }
 
-export function getTeamByName(teamName: string): ActionFunc {
+export function getTeamByName(teamName: string): ActionFunc<Team, ServerError> {
     return bindClientFunc({
         clientFunc: Client4.getTeamByName,
         onSuccess: TeamTypes.RECEIVED_TEAM,
@@ -129,6 +136,45 @@ export function getTeamByName(teamName: string): ActionFunc {
             teamName,
         ],
     });
+}
+
+export function getKSuites(page = 0, perPage: number = General.TEAMS_CHUNK_SIZE, includeTotalCount = false, excludePolicyConstrained = false): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let data;
+
+        dispatch({type: TeamTypes.GET_TEAMS_REQUEST, data});
+
+        try {
+            data = await Client4.getKSuites(page, perPage, includeTotalCount, excludePolicyConstrained) as TeamsWithCount;
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch({type: TeamTypes.GET_TEAMS_FAILURE, data});
+            dispatch(logError(error));
+            return {error};
+        }
+
+        const actions: AnyAction[] = [
+            {
+                type: TeamTypes.RECEIVED_TEAMS_LIST,
+                data: includeTotalCount ? data.teams : data,
+            },
+            {
+                type: TeamTypes.GET_TEAMS_SUCCESS,
+                data,
+            },
+        ];
+
+        // if (includeTotalCount) {
+        //     actions.push({
+        //         type: TeamTypes.RECEIVED_TOTAL_TEAM_COUNT,
+        //         data: data.total_count,
+        //     });
+        // }
+
+        dispatch(batchActions(actions));
+
+        return {data};
+    };
 }
 
 export function getTeams(page = 0, perPage: number = General.TEAMS_CHUNK_SIZE, includeTotalCount = false, excludePolicyConstrained = false): ActionFunc {
@@ -366,7 +412,7 @@ export function getMyTeamMembers(): ActionFunc {
     };
 }
 
-export function getTeamMembers(teamId: string, page = 0, perPage: number = General.TEAMS_CHUNK_SIZE, options: GetTeamMembersOpts): ActionFunc {
+export function getTeamMembers(teamId: string, page = 0, perPage: number = General.TEAMS_CHUNK_SIZE, options: GetTeamMembersOpts): ActionFunc<TeamMembership[], ServerError> {
     return bindClientFunc({
         clientFunc: Client4.getTeamMembers,
         onRequest: TeamTypes.GET_TEAM_MEMBERS_REQUEST,
@@ -474,15 +520,15 @@ export function addUserToTeamFromInvite(token: string, inviteId: string): Action
     });
 }
 
-export function addUserToTeam(teamId: string, userId: string): ActionFunc {
+export function addUserToTeam(teamId: string, userId: string): ActionFunc<TeamMembership, ServerError> {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let member;
         try {
             member = await Client4.addToTeam(teamId, userId);
         } catch (error) {
-            forceLogoutIfNecessary(error, dispatch, getState);
-            dispatch(logError(error));
-            return {error};
+            forceLogoutIfNecessary(error as ServerError, dispatch, getState);
+            dispatch(logError(error as ServerError));
+            return {error: error as ServerError};
         }
 
         dispatch(batchActions([

@@ -20,7 +20,7 @@ describe('channel_info_rhs', () => {
     const OriginalProps = {
         channel: {display_name: 'my channel title', type: 'O'} as Channel,
         isArchived: false,
-        channelStats: {} as ChannelStats,
+        channelStats: {member_count: 0, guest_count: 0} as ChannelStats,
         currentUser: {} as UserProfile,
         currentTeam: {} as Team,
         isFavorite: false,

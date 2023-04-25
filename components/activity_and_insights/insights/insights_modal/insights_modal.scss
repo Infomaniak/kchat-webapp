@@ -66,6 +66,16 @@
                     }
                 }
 
+                &.LeastActiveChannelsTable {
+                    .DataGrid_header {
+                        .DataGrid_cell {
+                            &:nth-of-type(4) {
+                                text-align: right;
+                            }
+                        }
+                    }
+                }
+
                 .DataGrid_header {
                     padding: 12px 0;
                     border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
@@ -339,6 +349,40 @@
                             }
                         }
                     }
+
+                    &:nth-of-type(1) {
+                        margin-right: 4px;
+                    }
+
+                    i {
+                        width: 16px;
+                        height: 16px;
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            .button-footer {
+                padding-top: 24px;
+                text-align: right;
+
+                button {
+                    height: 40px;
+                    border-radius: 4px;
+                    font-size: 14px;
+                    font-weight: 600;
+
+                    &.join-channel-cancel {
+                        padding: 13px 20px;
+                        margin-right: 8px;
+                        background: rgba(var(--button-bg-rgb), 0.08);
+                        color: rgb(var(--button-bg-rgb));
+                        line-height: 14px;
+                    }
+
+                    &.save-button {
+                        padding: 0 20px;
+                    }
                 }
             }
 
@@ -432,6 +476,192 @@
 
                     &.save-button {
                         padding: 0 20px;
+                    }
+                }
+            }
+
+            .pagination-buttons {
+                display: flex;
+                align-items: center;
+                justify-content: end;
+
+                .pagination {
+                    margin-right: 4px;
+                    color: var(--center-channel-color);
+                    font-family: 'Open Sans';
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 20px;
+                }
+
+                .pagination-button {
+                    padding: 8px;
+                    border: none;
+                    background: none;
+                    border-radius: 4px;
+                    color: rgba(var(--center-channel-color-rgb), 0.56);
+
+                    &:hover {
+                        background-color: rgba(var(--center-channel-color-rgb), 0.08);
+                        color: rgba(var(--center-channel-color-rgb), 0.56);
+                    }
+
+                    &:disabled {
+                        &:hover {
+                            background-color: transparent;
+                            color: rgba(var(--center-channel-color-rgb), 0.56);
+                        }
+                    }
+
+                    &:nth-of-type(1) {
+                        margin-right: 4px;
+                    }
+
+                    i {
+                        width: 16px;
+                        height: 16px;
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            .button-footer {
+                padding-top: 24px;
+                text-align: right;
+
+                button {
+                    height: 40px;
+                    border-radius: 4px;
+                    font-size: 14px;
+                    font-weight: 600;
+
+                    &.join-channel-cancel {
+                        padding: 13px 20px;
+                        margin-right: 8px;
+                        background: rgba(var(--button-bg-rgb), 0.08);
+                        color: rgb(var(--button-bg-rgb));
+                        line-height: 14px;
+                    }
+
+                    &.save-button {
+                        padding: 0 20px;
+                    }
+                }
+            }
+
+            .pagination-buttons {
+                display: flex;
+                align-items: center;
+                justify-content: end;
+
+                .pagination {
+                    margin-right: 4px;
+                    color: var(--center-channel-color);
+                    font-family: 'Open Sans';
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 20px;
+                }
+
+                .pagination-button {
+                    padding: 8px;
+                    border: none;
+                    background: none;
+                    border-radius: 4px;
+                    color: rgba(var(--center-channel-color-rgb), 0.56);
+
+                    &:hover {
+                        background-color: rgba(var(--center-channel-color-rgb), 0.08);
+                        color: rgba(var(--center-channel-color-rgb), 0.56);
+                    }
+
+                    &:disabled {
+                        &:hover {
+                            background-color: transparent;
+                            color: rgba(var(--center-channel-color-rgb), 0.56);
+                        }
+                    }
+
+                    &:nth-of-type(1) {
+                        margin-right: 4px;
+                    }
+
+                    i {
+                        width: 16px;
+                        height: 16px;
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            .button-footer {
+                padding-top: 24px;
+                text-align: right;
+
+                button {
+                    height: 40px;
+                    border-radius: 4px;
+                    font-size: 14px;
+                    font-weight: 600;
+
+                    &.join-channel-cancel {
+                        padding: 13px 20px;
+                        margin-right: 8px;
+                        background: rgba(var(--button-bg-rgb), 0.08);
+                        color: rgb(var(--button-bg-rgb));
+                        line-height: 14px;
+                    }
+
+                    &.save-button {
+                        padding: 0 20px;
+                    }
+                }
+            }
+
+            .pagination-buttons {
+                display: flex;
+                align-items: center;
+                justify-content: end;
+
+                .pagination {
+                    margin-right: 4px;
+                    color: var(--center-channel-color);
+                    font-family: 'Open Sans';
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 20px;
+                }
+
+                .pagination-button {
+                    padding: 8px;
+                    border: none;
+                    background: none;
+                    border-radius: 4px;
+                    color: rgba(var(--center-channel-color-rgb), 0.56);
+
+                    &:hover {
+                        background-color: rgba(var(--center-channel-color-rgb), 0.08);
+                        color: rgba(var(--center-channel-color-rgb), 0.56);
+                    }
+
+                    &:disabled {
+                        &:hover {
+                            background-color: transparent;
+                            color: rgba(var(--center-channel-color-rgb), 0.56);
+                        }
+                    }
+
+                    &:nth-of-type(1) {
+                        margin-right: 4px;
+                    }
+
+                    i {
+                        width: 16px;
+                        height: 16px;
+                        font-size: 16px;
                     }
                 }
             }

@@ -249,28 +249,16 @@ exports[`components/integrations/InstalledOutgoingWebhooks should match snapshot
   }
   helpText={
     <Memo(MemoizedFormattedMessage)
-      defaultMessage="Use outgoing webhooks to connect external tools to Mattermost. {buildYourOwn} or visit the {appDirectory} to find self-hosted, third-party apps and integrations."
+      defaultMessage="Use outgoing webhooks to connect external tools to kChat. {learnMore}"
       id="installed_outgoing_webhooks.help"
       values={
         Object {
-          "appDirectory": <a
-            href="https://mattermost.com/marketplace"
-            rel="noopener noreferrer"
-            target="_blank"
+          "learnMore": <a
+            onClick={[Function]}
           >
             <Memo(MemoizedFormattedMessage)
-              defaultMessage="App Directory"
-              id="installed_outgoing_webhooks.help.appDirectory"
-            />
-          </a>,
-          "buildYourOwn": <a
-            href="https://developers.mattermost.com/integrate/admin-guide/admin-webhooks-outgoing/"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <Memo(MemoizedFormattedMessage)
-              defaultMessage="Build your own"
-              id="installed_outgoing_webhooks.help.buildYourOwn"
+              defaultMessage="Learn more"
+              id="developer_documentation.learn_more"
             />
           </a>,
         }

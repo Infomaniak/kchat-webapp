@@ -15,21 +15,23 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {isThreadOpen} from 'selectors/views/threads';
 
-import {browserHistory} from 'utils/browser_history';
+import {getHistory} from 'utils/browser_history';
 import Constants, {NotificationLevels, UserStatuses} from 'utils/constants';
 import {showNotification} from 'utils/notifications';
-import {isDesktopApp, isMobileApp} from 'utils/user_agent';
+import {isDesktopApp, isMobileApp, isWindowsApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 import {t} from 'utils/i18n';
 import {stripMarkdown} from 'utils/markdown';
 
 const NOTIFY_TEXT_MAX_LENGTH = 50;
 
+// windows notification length is based windows chrome which supports 128 characters and is the lowest length of windows browsers
+const WINDOWS_NOTIFY_TEXT_MAX_LENGTH = 120;
+
 export function sendDesktopNotification(post, msgProps) {
     return async (dispatch, getState) => {
         const state = getState();
         const currentUserId = getCurrentUserId(state);
-
         if ((currentUserId === post.user_id && post.props.from_webhook !== 'true')) {
             return;
         }
@@ -135,8 +137,10 @@ export function sendDesktopNotification(post, msgProps) {
         });
 
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);
-        if (strippedMarkdownNotifyText.length > NOTIFY_TEXT_MAX_LENGTH) {
-            strippedMarkdownNotifyText = strippedMarkdownNotifyText.substring(0, NOTIFY_TEXT_MAX_LENGTH - 1) + '...';
+
+        const notifyTextMaxLength = isWindowsApp() ? WINDOWS_NOTIFY_TEXT_MAX_LENGTH : NOTIFY_TEXT_MAX_LENGTH;
+        if (strippedMarkdownNotifyText.length > notifyTextMaxLength) {
+            strippedMarkdownNotifyText = strippedMarkdownNotifyText.substring(0, notifyTextMaxLength - 1) + '...';
         }
 
         let body = `@${username}`;
@@ -192,7 +196,7 @@ export function sendDesktopNotification(post, msgProps) {
 
 const notifyMe = (title, body, channel, teamId, silent, soundName, url) => (dispatch) => {
     // handle notifications in desktop app >= 4.3.0
-    if (isDesktopApp() && window.desktop && semver.gte(window.desktop.version, '4.3.0')) {
+    if (isDesktopApp()) {
         const msg = {
             title,
             body,
@@ -201,15 +205,8 @@ const notifyMe = (title, body, channel, teamId, silent, soundName, url) => (disp
             silent,
         };
 
-        if (isDesktopApp() && window.desktop) {
-            if (semver.gte(window.desktop.version, '4.6.0')) {
-                msg.data = {soundName};
-            }
-
-            if (semver.gte(window.desktop.version, '4.7.2')) {
-                msg.url = url;
-            }
-        }
+        msg.data = {soundName};
+        msg.url = url;
 
         // get the desktop app to trigger the notification
         window.postMessage(
@@ -227,7 +224,7 @@ const notifyMe = (title, body, channel, teamId, silent, soundName, url) => (disp
             silent,
             onClick: () => {
                 window.focus();
-                browserHistory.push(url);
+                getHistory().push(url);
             },
         }).catch((error) => {
             dispatch(logError(error));

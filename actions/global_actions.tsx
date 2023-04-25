@@ -4,7 +4,7 @@
 import {batchActions} from 'redux-batched-actions';
 
 import {
-    fetchMyChannelsAndMembers,
+    fetchMyChannelsAndMembersREST,
     getChannelByNameAndTeamName,
     getChannelStats,
     selectChannel,
@@ -12,7 +12,7 @@ import {
 import {logout, loadMe, loadMeREST} from 'mattermost-redux/actions/users';
 import {Preferences} from 'mattermost-redux/constants';
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentTeamId, getMyTeams, getTeam, getMyTeamMember, getTeamMemberships} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentTeamId, getMyKSuites, getTeam, getMyTeamMember, getTeamMemberships} from 'mattermost-redux/selectors/entities/teams';
 import {getBool, isCollapsedThreadsEnabled, isGraphQLEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedirectChannelNameForTeam, getChannelsNameMapInTeam, getAllDirectChannels, getChannelMessageCount} from 'mattermost-redux/selectors/entities/channels';
@@ -26,7 +26,7 @@ import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/act
 import {Team} from '@mattermost/types/teams';
 import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
-import {browserHistory} from 'utils/browser_history';
+import {getHistory} from 'utils/browser_history';
 import {handleNewPost} from 'actions/post_actions';
 import {stopPeriodicStatusUpdates} from 'actions/status_actions';
 import {loadProfilesForSidebar} from 'actions/user_actions';
@@ -48,8 +48,11 @@ import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import * as Utils from 'utils/utils';
 import SubMenuModal from '../components/widgets/menu/menu_modals/submenu_modal/submenu_modal';
 
-import {isDesktopApp} from '../utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from '../utils/user_agent';
 import {IKConstants} from '../utils/constants-ik';
+
+import {clearLocalStorageToken} from '../components/login/utils';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import {openModal} from './views/modals';
 
@@ -189,6 +192,25 @@ export function sendEphemeralPost(message: string, channelId?: string, parentId?
     };
 }
 
+export function sendGenericPostMessage(message: string, channelId?: string, parentId?: string, userId?: string): ActionFunc {
+    return (doDispatch: DispatchFunc, doGetState: GetStateFunc) => {
+        const timestamp = Utils.getTimestamp();
+        const post = {
+            id: Utils.generateId(),
+            user_id: userId || '0',
+            channel_id: channelId || getCurrentChannelId(doGetState()),
+            message,
+            type: PostTypes.SYSTEM_GENERIC,
+            create_at: timestamp,
+            update_at: timestamp,
+            root_id: parentId || '',
+            props: {},
+        } as Post;
+
+        return doDispatch(handleNewPost(post));
+    };
+}
+
 export function sendAddToChannelEphemeralPost(user: UserProfile, addedUsername: string, addedUserId: string, channelId: string, postRootId = '', timestamp: number) {
     const post = {
         id: Utils.generateId(),
@@ -253,33 +275,45 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         if (shouldSignalLogout) {
             BrowserStore.signalLogout();
         }
+
+        // Waiting for deleteToken login ik
+        if (isDesktopApp() && userAction) {
+            clearLocalStorageToken();
+            window.authManager.logout();
+        }
+
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
 
         clearUserCookie();
 
-        if (isDesktopApp()) {
-            if (redirectTo && redirectTo !== 'ikLogout') {
-                browserHistory.push(redirectTo);
-            } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+        if (redirectTo && redirectTo !== 'ikLogout') {
+            getHistory().push(redirectTo);
+        } else if (userAction) {
+            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
+                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
+                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+
+            // Desktop version 2.0 and up handles logout through authManager
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+                return;
             }
-        } else if (redirectTo && redirectTo !== 'ikLogout') {
-            browserHistory.push(redirectTo);
-        } else {
-            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+
+            window.location.assign(url);
         }
     }).catch(() => {
-        if (isDesktopApp()) {
-            if (redirectTo && redirectTo !== 'ikLogout') {
-                browserHistory.push(redirectTo);
-            } else {
-                window.location.assign(`${IKConstants.LOGOUT_URL}?redirect=${window.location.origin}/login`);
+        if (redirectTo && redirectTo !== 'ikLogout') {
+            getHistory().push(redirectTo);
+        } else if (userAction) {
+            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
+                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
+                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+
+            // Desktop version 2.0 and up handles logout through authManager
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+                return;
             }
-        } else if (redirectTo && redirectTo !== 'ikLogout') {
-            browserHistory.push(redirectTo);
-        } else {
-            window.location.assign(`${IKConstants.MANAGER_URL}shared/superadmin/logout.php`);
+            window.location.assign(url);
         }
     });
 }
@@ -311,7 +345,7 @@ export async function getTeamRedirectChannelIfIsAccesible(user: UserProfile, tea
     let teamChannels = getChannelsNameMapInTeam(state, team.id);
     if (!teamChannels || Object.keys(teamChannels).length === 0) {
         // This should be executed in pretty limited scenarios (empty teams)
-        await dispatch(fetchMyChannelsAndMembers(team.id)); // eslint-disable-line no-await-in-loop
+        await dispatch(fetchMyChannelsAndMembersREST(team.id)); // eslint-disable-line no-await-in-loop
         state = getState();
         teamChannels = getChannelsNameMapInTeam(state, team.id);
     }
@@ -374,9 +408,9 @@ export async function redirectUserToDefaultTeam() {
     const locale = getCurrentLocale(state);
     const teamId = LocalStorageStore.getPreviousTeamId(user.id);
 
-    let myTeams = getMyTeams(state);
+    let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
-        browserHistory.push('/select_team');
+        getHistory().push('/error?type=no_ksuite');
         return;
     }
 
@@ -389,7 +423,7 @@ export async function redirectUserToDefaultTeam() {
         const channel = await getTeamRedirectChannelIfIsAccesible(user, team);
         if (channel) {
             dispatch(selectChannel(channel.id));
-            browserHistory.push(`/${team.name}/channels/${channel.name}`);
+            getHistory().push(`/${team.name}/channels/${channel.name}`);
             return;
         }
     }
@@ -401,10 +435,34 @@ export async function redirectUserToDefaultTeam() {
         const channel = await getTeamRedirectChannelIfIsAccesible(user, myTeam); // eslint-disable-line no-await-in-loop
         if (channel) {
             dispatch(selectChannel(channel.id));
-            browserHistory.push(`/${myTeam.name}/channels/${channel.name}`);
+            getHistory().push(`/${myTeam.name}/channels/${channel.name}`);
             return;
         }
     }
 
-    browserHistory.push('/select_team');
+    getHistory().push('/error?type=team_not_found');
+}
+
+export function redirectToManagerDashboard(groupId: number) {
+    window.open(`${IKConstants.MANAGER_URL}v3/${groupId}/ng/kchat`, '_blank');
+}
+
+export function redirectToShop() {
+    window.open('https://www.infomaniak.com/gtl/kchat', '_blank');
+}
+
+export function redirectToKSuite() {
+    window.open('https://www.infomaniak.com/gtl/ksuite', '_blank');
+}
+
+export function redirectToManagerProfile() {
+    window.open(`${IKConstants.MANAGER_URL}v3/ng/profile/user/dashboard`, '_blank');
+}
+
+export function redirectTokSuiteDashboard(accountId?: number) {
+    window.open(`${IKConstants.MANAGER_URL}v3${accountId ? `/${accountId}` : ''}/ng/k-suite/dashboard`, '_blank');
+}
+
+export function redirectToDeveloperDocumentation() {
+    window.open('https://developer.infomaniak.com', '_blank', 'noopener,noreferrer');
 }

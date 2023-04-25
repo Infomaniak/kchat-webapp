@@ -111,7 +111,7 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
             );
         }
 
-        // mattermost version
+        // todo: mattermost version
         // if (this.props.exceededLimitChannelId) {
         //     return (
         //         <CenterMessageLock

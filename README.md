@@ -1,63 +1,46 @@
-# ktalk-webapp
+# kchat-webapp
 
-## install + watch
+Infomaniak fork of the mattermost web client modified to work with our internal API as part of the kSuite.
+
+:warning: This project is still in beta.    
+
+## Running the project
+
+### Prerequisites
+
+ - Node 16
+ - Yarn
+
+### Environment
+
+Create a .env file with the following variables
+
+```dotenv
+WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current
+WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com
+MANAGER_ENDPOINT=https://manager.infomaniak.com
+LOGIN_ENDPOINT=https://login.infomaniak.com
+```
+
+### Installing and building dependencies
+
+We are using yarn berry with workspace tools for monorepo support building and better module caching between builds
 
 ```shell
-nvm use 16
-npm install
+yarn
+yarn workspace @mattermost/types build
+yarn workspace @mattermost/client build
+yarn workspace @mattermost/components build
 ```
 
-## run the project
-
-### new way (webpack server on your host)
+### Running with webpack dev server
 
 ```shell
-npm run dev-server
+export $(xargs < ./.env) && yarn dev-server:webapp
 ```
 
-Be sure to edit `/etc/hosts` file to add a record for your fake devd endpoint.
-
-127.0.0.1 local.devdXXX.dev.infomaniak.ch
-
-Then go on https://local.devdXXX.dev.infomaniak.ch:9005/
-
-If you are redirected to the preprod, then check you are connected to the manager on your devd host (https://manager.devdXXX.dev.infomaniak.ch/v3).
-
-### old way (docker/dev-local)
-
-#### run the build
+### Running prod build
 
 ```shell
-make build
-npm run run
+export $(xargs < ./.env) && yarn build:webapp
 ```
-
-#### setup dev-local
-
-`config-remote`
-
-```yaml
-SERVICES=(
-  applications/ktalk/proxy-api
-  applications/ktalk/webapp
-)
-```
-
-`docker-compose.develop-remote.yml`
-
-```yaml
-version: '2.2'
-
-services:
-  proxy-api-ktalk:
-    volumes:
-      - /home/code/src/dev-local/container-config/ktalk/proxy-api-ktalk/000-default.conf:/etc/apache2/sites-available/000-default.conf
-  ktalk-webapp:
-    volumes:
-      - /home/code/src/dev-local/container-config/ktalk/webapp/default.conf.template:/etc/nginx/templates/default.conf.template
-      - /home/code/src/ktalk-webapp/dist:/var/www/static
-```
-
-Then go on https://ktalk.devdXXX.dev.infomaniak.ch
-
-### Changelog

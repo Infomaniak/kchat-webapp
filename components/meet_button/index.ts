@@ -5,30 +5,26 @@ import {connect} from 'react-redux';
 
 import {GlobalState} from 'types/store';
 
-import {connectedCallID, voiceConnectedChannels} from 'selectors/calls';
+import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
-import {getCurrentChannelId, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {connectedKmeetCallUrl} from '../../selectors/kmeet_calls';
 
-import {startOrJoinCallInChannel} from 'actions/calls';
+import {startOrJoinKmeetCallInChannel} from '../../actions/views/kmeet_calls';
 
 import MeetButton from './meet_button';
 
 function mapStateToProps(state: GlobalState) {
-    const connectedCall = connectedCallID(state);
     const currentChannelID = getCurrentChannelId(state);
-    const channels = voiceConnectedChannels(state);
+    const connectedKmeetUrl = connectedKmeetCallUrl(state, currentChannelID);
 
     return {
         currentChannelID,
-        hasCall: channels[currentChannelID],
-        isInCall: channels[currentChannelID] &&
-            channels[currentChannelID][connectedCall] &&
-            channels[currentChannelID][connectedCall].includes(getCurrentUserId(state)),
+        hasCall: connectedKmeetUrl != null,
     };
 }
 
 const actions = {
-    startCallInChannel: startOrJoinCallInChannel,
+    startCallInChannel: startOrJoinKmeetCallInChannel,
 };
 
 export default connect(mapStateToProps, actions)(MeetButton);

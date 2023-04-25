@@ -1,124 +1,132 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import deepEqual from 'fast-deep-equal';
 import React from 'react';
+import deepEqual from 'fast-deep-equal';
 import {Route, Switch, Redirect, RouteComponentProps} from 'react-router-dom';
 import throttle from 'lodash/throttle';
-
+import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 
+import {Client4} from 'mattermost-redux/client';
+import {rudderAnalytics, RudderTelemetryHandler} from 'mattermost-redux/client/rudder';
+import {General} from 'mattermost-redux/constants';
 import {Theme, getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getCurrentUser, isCurrentUserSystemAdmin, checkIsFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {setUrl} from 'mattermost-redux/actions/general';
+import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 
 import {ProductComponent, PluginComponent} from 'types/store/plugins';
 
-import {rudderAnalytics, RudderTelemetryHandler} from 'mattermost-redux/client/rudder';
-import {Client4} from 'mattermost-redux/client';
-import {setUrl} from 'mattermost-redux/actions/general';
-import {General} from 'mattermost-redux/constants';
-import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentUser, isCurrentUserSystemAdmin, checkIsFirstAdmin} from 'mattermost-redux/selectors/entities/users';
-
 import {loadRecentlyUsedCustomEmojis} from 'actions/emoji_actions';
 import * as GlobalActions from 'actions/global_actions';
-import {measurePageLoadTelemetry, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
+import {measurePageLoadTelemetry, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
+
+import SidebarRight from 'components/sidebar_right';
+import AppBar from 'components/app_bar/app_bar';
+import SidebarRightMenu from 'components/sidebar_right_menu';
+import AnnouncementBarController from 'components/announcement_bar';
+import SystemNotice from 'components/system_notice';
 
 import {makeAsyncComponent} from 'components/async_load';
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
 import GlobalHeader from 'components/global_header/global_header';
-import CloudEffects from 'components/cloud_effects';
 import ModalController from 'components/modal_controller';
-import {HFTRoute, LoggedInHFTRoute} from 'components/header_footer_template_route';
+import {HFTRoute} from 'components/header_footer_template_route';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
-import NeedsTeam from 'components/needs_team';
-import OnBoardingTaskList from 'components/onboarding_tasklist';
 import LaunchingWorkspace, {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_workspace/launching_workspace';
 import {Animations} from 'components/preparing_workspace/steps';
 import OpenPricingModalPost from 'components/custom_open_pricing_modal_post_renderer';
+import AccessProblem from 'components/access_problem';
 
 import {initializePlugins} from 'plugins';
-import 'plugins/export.js';
 import Pluggable from 'plugins/pluggable';
-import BrowserStore from 'stores/browser_store';
+
+// import BrowserStore from 'stores/browser_store';
+
 import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
-import {EmojiIndicesByAlias} from 'utils/emoji.jsx';
-import * as UserAgent from 'utils/user_agent';
+import {EmojiIndicesByAlias} from 'utils/emoji';
 import * as Utils from 'utils/utils';
-import {isDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import webSocketClient from 'client/web_websocket_client.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
-const LazyErrorPage = React.lazy(() => import('components/error_page'));
+import 'plugins/export.js';
 
-// const LazyLoginDesktopController = React.lazy(() => import('components/login-desktop/login_desktop_controller'));
+const LazyErrorPage = React.lazy(() => import('components/error_page'));
 const LazyLogin = React.lazy(() => import('components/login/login'));
-const LazyAdminConsole = React.lazy(() => import('components/admin_console'));
 const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
-const LazyPasswordResetSendLink = React.lazy(() => import('components/password_reset_send_link'));
-const LazyPasswordResetForm = React.lazy(() => import('components/password_reset_form'));
-const LazySignup = React.lazy(() => import('components/signup/signup'));
-const LazyTermsOfService = React.lazy(() => import('components/terms_of_service'));
-const LazyShouldVerifyEmail = React.lazy(() => import('components/should_verify_email/should_verify_email'));
-const LazyDoVerifyEmail = React.lazy(() => import('components/do_verify_email/do_verify_email'));
-const LazyClaimController = React.lazy(() => import('components/claim'));
 const LazyHelpController = React.lazy(() => import('components/help/help_controller'));
-const LazyLinkingLandingPage = React.lazy(() => import('components/linking_landing_page'));
-const LazySelectTeam = React.lazy(() => import('components/select_team'));
-const LazyAuthorize = React.lazy(() => import('components/authorize'));
-const LazyCreateTeam = React.lazy(() => import('components/create_team'));
-const LazyMfa = React.lazy(() => import('components/mfa/mfa_controller'));
+
+// const LazyLinkingLandingPage = React.lazy(() => import('components/linking_landing_page'));
 const LazyPreparingWorkspace = React.lazy(() => import('components/preparing_workspace'));
+const LazyTeamController = React.lazy(() => import('components/team_controller'));
+const LazyOnBoardingTaskList = React.lazy(() => import('components/onboarding_tasklist'));
 
 import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
 import A11yController from 'utils/a11y_controller';
 import TeamSidebar from 'components/team_sidebar';
-import {checkIKTokenIsExpired, refreshIKToken} from '../login/utils';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
 import {UserProfile} from '@mattermost/types/users';
 
 import {ActionResult} from 'mattermost-redux/types/actions';
+
+import {IKConstants} from 'utils/constants-ik';
+
+import WelcomePostRenderer from 'components/welcome_post_renderer';
+import {close, initialize} from 'actions/websocket_actions';
+
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
 
-const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
-const TermsOfService = makeAsyncComponent('TermsOfService', LazyTermsOfService);
-
-// const LoginDesktopController = makeAsyncComponent('LoginDesktopController', LazyLoginDesktopController);
 const Login = makeAsyncComponent('LoginController', LazyLogin);
-const AdminConsole = makeAsyncComponent('AdminConsole', LazyAdminConsole);
 const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
-const PasswordResetSendLink = makeAsyncComponent('PasswordResedSendLink', LazyPasswordResetSendLink);
-const PasswordResetForm = makeAsyncComponent('PasswordResetForm', LazyPasswordResetForm);
-const Signup = makeAsyncComponent('SignupController', LazySignup);
-const ShouldVerifyEmail = makeAsyncComponent('ShouldVerifyEmail', LazyShouldVerifyEmail);
-const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
-const ClaimController = makeAsyncComponent('ClaimController', LazyClaimController);
 const HelpController = makeAsyncComponent('HelpController', LazyHelpController);
-const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', LazyLinkingLandingPage);
-const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
-const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
-const Mfa = makeAsyncComponent('Mfa', LazyMfa);
-const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 
-const REFRESH_TOKEN_TIME_MARGIN = 30000; // How many miliseconds to refresh before token expires (default is 30 seconds)
+// const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', LazyLinkingLandingPage);
+const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
+const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
+const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
+
+const MAX_GET_TOKEN_FAILS = 5;
+const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
+
+// const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
+// const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
+// const ClaimController = makeAsyncComponent('ClaimController', LazyClaimController);
+// const PasswordResetForm = makeAsyncComponent('PasswordResetForm', LazyPasswordResetForm);
+// const ShouldVerifyEmail = makeAsyncComponent('ShouldVerifyEmail', LazyShouldVerifyEmail);
+// const PasswordResetSendLink = makeAsyncComponent('PasswordResedSendLink', LazyPasswordResetSendLink);
+// const Signup = makeAsyncComponent('SignupController', LazySignup);
+// const TermsOfService = makeAsyncComponent('TermsOfService', LazyTermsOfService);
+// const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
+// const AdminConsole = makeAsyncComponent('AdminConsole', LazyAdminConsole);
+// const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
+// const DelinquencyModalController = makeAsyncComponent('DelinquencyModalController', LazyDelinquencyModalController);
 
 type LoggedInRouteProps<T> = {
     component: React.ComponentType<T>;
     path: string;
+    theme?: Theme; // the routes that send the theme are the ones that will actually need to show the onboarding tasklist
 };
 function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
-    const {component: Component, ...rest} = props;
+    const {component: Component, theme, ...rest} = props;
     return (
         <Route
             {...rest}
             render={(routeProps: RouteComponentProps) => (
                 <LoggedIn {...routeProps}>
+                    {theme && <CompassThemeProvider theme={theme}>
+                        <OnBoardingTaskList/>
+                    </CompassThemeProvider>}
                     <Component {...(routeProps as unknown as T)}/>
                 </LoggedIn>
             )}
@@ -135,6 +143,7 @@ export type Actions = {
     migrateRecentEmojis: () => void;
     loadConfigAndMe: () => Promise<{data: boolean}>;
     registerCustomPostRenderer: (type: string, component: any, id: string) => Promise<ActionResult>;
+    initializeProducts: () => Promise<void[]>;
 }
 
 type Props = {
@@ -146,9 +155,12 @@ type Props = {
     permalinkRedirectTeamName: string;
     isCloud: boolean;
     actions: Actions;
-    plugins: PluginComponent[];
+    plugins?: PluginComponent[];
     products: ProductComponent[];
     showLaunchingWorkspace: boolean;
+    rhsIsExpanded: boolean;
+    rhsIsOpen: boolean;
+    shouldShowAppBar: boolean;
 } & RouteComponentProps
 
 interface State {
@@ -161,6 +173,10 @@ export default class Root extends React.PureComponent<Props, State> {
     private tabletMediaQuery: MediaQueryList;
     private mobileMediaQuery: MediaQueryList;
     private mounted: boolean;
+    private retryGetToken: number;
+    private IKLoginCode: string | undefined;
+    private loginCodeInterval: NodeJS.Timer | undefined;
+    private tokenCheckInterval: NodeJS.Timer | undefined;
 
     // The constructor adds a bunch of event listeners,
     // so we do need this.
@@ -169,46 +185,15 @@ export default class Root extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.mounted = false;
+        this.retryGetToken = 0;
+        this.IKLoginCode = undefined;
+        this.loginCodeInterval = undefined;
+        this.tokenCheckInterval = undefined;
 
         // Redux
         setUrl(getSiteURL());
 
-        if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
-
-            // Enable authHeader and set bearer token
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                LocalStorageStore.setWasLoggedIn(true);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token: token,
-                        },
-                    },
-                    window.origin,
-                );
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
-            }
-
-            // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
-            }
-
-            if (!token && !refreshToken) {
-                console.log('[TOKEN] No token, redirect to login 1')
-                this.props.history.push('/login' + this.props.location.search);
-            }
-        } else {
+        if (!isDesktopApp()) {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
 
@@ -226,7 +211,7 @@ export default class Root extends React.PureComponent<Props, State> {
         });
 
         document.addEventListener('dragover', (e) => {
-            if (!document.body.classList.contains('focalboard-body')) {
+            if (!Utils.isTextDroppableEvent(e) && !document.body.classList.contains('focalboard-body')) {
                 e.preventDefault();
                 e.stopPropagation();
             }
@@ -304,11 +289,13 @@ export default class Root extends React.PureComponent<Props, State> {
             });
         }
 
-        if (this.props.location.pathname === '/' && this.props.noAccounts) {
-            this.props.history.push('/signup_user_complete');
-        }
+        // This needs to be called as early as possible to ensure that a redirect won't remove the query string
+        this.trackUTMCampaign();
 
-        initializePlugins().then(() => {
+        Promise.all([
+            this.props.actions.initializeProducts(),
+            initializePlugins(),
+        ]).then(() => {
             if (this.mounted) {
                 // supports enzyme tests, set state if and only if
                 // the component is still mounted on screen
@@ -319,81 +306,47 @@ export default class Root extends React.PureComponent<Props, State> {
         this.props.actions.migrateRecentEmojis();
         loadRecentlyUsedCustomEmojis()(store.dispatch, store.getState);
 
-        const iosDownloadLink = getConfig(store.getState()).IosAppDownloadLink;
-        const androidDownloadLink = getConfig(store.getState()).AndroidAppDownloadLink;
-        const desktopAppDownloadLink = getConfig(store.getState()).AppDownloadLink;
+        // const iosDownloadLink = getConfig(store.getState()).IosAppDownloadLink;
+        // const androidDownloadLink = getConfig(store.getState()).AndroidAppDownloadLink;
+        // const desktopAppDownloadLink = getConfig(store.getState()).AppDownloadLink;
 
-        const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
+        // const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
 
         // redirect to the mobile landing page if the user hasn't seen it before
-        let landing;
-        if (UserAgent.isAndroidWeb()) {
-            landing = androidDownloadLink;
-        } else if (UserAgent.isIosWeb()) {
-            landing = iosDownloadLink;
-        } else {
-            landing = desktopAppDownloadLink;
-        }
+        // let landing;
+        // if (UserAgent.isAndroidWeb()) {
+        //     landing = androidDownloadLink;
+        // } else if (UserAgent.isIosWeb()) {
+        //     landing = iosDownloadLink;
+        // } else {
+        //     landing = desktopAppDownloadLink;
+        // }
 
-        if (landing && !this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp()) {
-            this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
-            BrowserStore.setLandingPageSeen(true);
-        }
-
-        if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
-            const tokenExpireIn = (1000 * tokenExpire) - Date.now();
-
-            // Enable authHeader and set bearer token
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                LocalStorageStore.setWasLoggedIn(true);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token: token,
-                        },
-                    },
-                    window.origin,
-                );
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
-
-                // Set a callback to refresh token a little while before it expires
-                setTimeout(refreshIKToken, tokenExpireIn - REFRESH_TOKEN_TIME_MARGIN, false, true);
-            }
-
-            // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
-            }
-
-            if (!token && !refreshToken) {
-                console.log('[TOKEN] No token, redirect to login 2')
-                this.props.history.push('/login' + this.props.location.search);
-            }
-        }
+        // if (landing && !this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
+        //     this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
+        //     BrowserStore.setLandingPageSeen(true);
+        // }
 
         Utils.applyTheme(this.props.theme);
     }
 
     componentDidUpdate(prevProps: Props) {
         if (!deepEqual(prevProps.theme, this.props.theme)) {
+            // add body class for webcomponents theming
+            if (document.body.className.match(/kchat-.+-theme/)) {
+                document.body.className = document.body.className.replace(/kchat-.+-theme/, `kchat-${this.props.theme.ikType}-theme`);
+            } else {
+                document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
+            }
+
             Utils.applyTheme(this.props.theme);
         }
-        if (this.props.location.pathname === '/') {
-            if (this.props.noAccounts) {
-                prevProps.history.push('/signup_user_complete');
-            } else if (this.props.showTermsOfService) {
-                prevProps.history.push('/terms_of_service');
-            }
+        if (
+            this.props.shouldShowAppBar !== prevProps.shouldShowAppBar ||
+            this.props.rhsIsOpen !== prevProps.rhsIsOpen ||
+            this.props.rhsIsExpanded !== prevProps.rhsIsExpanded
+        ) {
+            this.setRootMeta();
         }
     }
 
@@ -438,61 +391,209 @@ export default class Root extends React.PureComponent<Props, State> {
         GlobalActions.redirectUserToDefaultTeam();
     }
 
+    trackUTMCampaign() {
+        const qs = new URLSearchParams(window.location.search);
+
+        // list of key that we want to track
+        const keys = ['utm_source', 'utm_medium', 'utm_campaign'];
+
+        const campaign = keys.reduce((acc, key) => {
+            if (qs.has(key)) {
+                const value = qs.get(key);
+                if (value) {
+                    acc[key] = value;
+                }
+                qs.delete(key);
+            }
+            return acc;
+        }, {} as Record<string, string>);
+
+        if (Object.keys(campaign).length > 0) {
+            trackEvent('utm_params', 'utm_params', campaign);
+            this.props.history.replace({search: qs.toString()});
+        }
+    }
+
     initiateMeRequests = async () => {
         const {data: isMeLoaded} = await this.props.actions.loadConfigAndMe();
 
-        if (isMeLoaded && this.props.location.pathname === '/') {
-            this.redirectToOnboardingOrDefaultTeam();
+        if (isMeLoaded) {
+            const currentUser = getCurrentUser(store.getState());
+            if (currentUser) {
+                const {email, id, username} = currentUser;
+                console.log('[components/root] set user for sentry', {email, id, username}); // eslint-disable-line no-console
+                Sentry.setUser({ip_address: '{{auto}}', email, id, username});
+            }
+
+            if (this.props.location.pathname === '/') {
+                this.redirectToOnboardingOrDefaultTeam();
+            }
         }
 
         this.onConfigLoaded();
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if (isDesktopApp()) {
-            const token = localStorage.getItem('IKToken');
-            const refreshToken = localStorage.getItem('IKRefreshToken');
-            const tokenExpire = localStorage.getItem('IKTokenExpire');
+            // Rely on initial client calls to 401 for the first redirect to login,
+            // we dont need to do it manually.
+            // Login will send us back here with a code after we give it the challange.
+            // Use code to refresh token.
+            const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
 
-            // Enable authHeader and set bearer token
-            if (token && tokenExpire && !checkIKTokenIsExpired()) {
-                Client4.setAuthHeader = true;
-                Client4.setToken(token);
-                Client4.setCSRF(token);
-                LocalStorageStore.setWasLoggedIn(true);
-                window.postMessage(
-                    {
-                        type: 'token-refreshed',
-                        message: {
-                            token: token,
-                        },
-                    },
-                    window.origin,
-                );
-                navigator.serviceWorker.controller?.postMessage({
-                    type: 'TOKEN_REFRESHED',
-                    token: token || '',
-                });
+            if (loginCode) {
+                console.log('[components/root] login with code'); // eslint-disable-line no-console
+                this.storeLoginCode(loginCode);
+                this.tryGetNewToken();
+            } else {
+                this.runMounted();
+            }
+        } else {
+            // Allow through initial requests for web.
+            this.runMounted();
+        }
+    }
+
+    storeLoginCode = (code: string) => {
+        console.log('[components/root] store login code'); // eslint-disable-line no-console
+        this.IKLoginCode = code;
+    }
+
+    tryGetNewToken = async () => {
+        const challenge = JSON.parse(localStorage.getItem('challenge') as string);
+        const loginCode = this.IKLoginCode;
+        console.log('[component/root] try get token count', this.retryGetToken); // eslint-disable-line no-console
+        try { // Get new token
+            const response: {
+                expires_in?: number;
+                access_token: string;
+                refresh_token: string;
+            } = await Client4.getIKLoginToken(
+                loginCode as string,
+                challenge?.challenge,
+                challenge?.verifier,
+                IKConstants.LOGIN_URL!,
+                IKConstants.CLIENT_ID,
+            );
+
+            // Store in localstorage
+            storeTokenResponse(response);
+
+            // Remove challenge, loginCode and set logged in.
+            localStorage.removeItem('challenge');
+            localStorage.setItem('tokenExpired', '0');
+            LocalStorageStore.setWasLoggedIn(true);
+            this.IKLoginCode = undefined;
+
+            let newToken;
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+                newToken = {
+                    token: response.access_token,
+                };
+            } else {
+                newToken = {
+                    token: response.access_token,
+                    refreshToken: response.refresh_token,
+                    expiresAt: (Date.now() / 1000) + response.expires_in, // ignore as its never undefined in 2.0
+                };
             }
 
-            // If need to refresh the token
-            if (tokenExpire && checkIKTokenIsExpired()) {
-                refreshIKToken(true);
-            }
+            // Store in desktop storage.
+            window.postMessage(
+                {
+                    type: 'token-refreshed',
+                    message: newToken,
+                },
+                window.origin,
+            );
 
-            if (!token && !refreshToken) {
-                console.log('[TOKEN] No token, redirect to login 3')
-                this.props.history.push('/login' + this.props.location.search);
+            this.retryGetToken = 0;
+            clearInterval(this.loginCodeInterval as NodeJS.Timer);
+
+            // Allow through initial requests anyway to receive new errors.
+            this.runMounted();
+        } catch (error) {
+            console.log('[components/root] post token fail ', error); // eslint-disable-line no-console
+
+            if (this.retryGetToken < MAX_GET_TOKEN_FAILS) {
+                console.log('[components/root] will retry token post with fail count: ', this.retryGetToken); // eslint-disable-line no-console
+                this.retryGetToken += 1;
+                const retryTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken;
+                clearInterval(this.loginCodeInterval as NodeJS.Timer);
+                this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), retryTime);
+            } else {
+                console.log('[components/root] max retry count reached, continuing with mount to reach login'); // eslint-disable-line no-console
+                clearInterval(this.loginCodeInterval as NodeJS.Timer);
+                this.IKLoginCode = undefined;
+
+                Sentry.captureException(new Error('Get token max error count. Redirect to login'));
+                this.runMounted();
             }
         }
+    }
 
-        // }
+    // Does not run in 2.1 and up
+    doTokenCheck = () => {
+        // If expiring soon but not expired, refresh before we start hitting errors.
+        if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
+            console.log('[components/root] desktop token expiring soon'); // eslint-disable-line no-console
+            refreshIKToken(/*redirectToReam*/false)?.then(() => {
+                console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console
+                close();
+                initialize();
+            }).catch((e: unknown) => {
+                console.warn('[components/root] desktop token refresh error: ', e); // eslint-disable-line no-console
+            });
+        }
+    }
+
+    runMounted = () => {
         this.mounted = true;
+
+        const token = localStorage.getItem('IKToken');
+        const tokenExpire = localStorage.getItem('IKTokenExpire');
+        const refreshToken = localStorage.getItem('IKRefreshToken');
+
+        // Validate infinite token or setup token keepalive for older tokens
+        if (isDesktopApp()) {
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+                // TODO: find a way to clean this if into an else below, since its counterintuitive
+                // The reset teams will retrigger this func
+                if (isDefaultAuthServer() && !token) {
+                    getChallengeAndRedirectToLogin(true);
+                }
+
+                // If old token with expire still present
+                if (token && (tokenExpire || refreshToken)) {
+                    // Prepare migrate to infinite token by clearing all instances of old token
+                    clearLocalStorageToken();
+                    window.authManager.resetToken();
+
+                    // Need to reset teams before redirecting to login after token is cleared
+                    if (isDefaultAuthServer()) {
+                        getChallengeAndRedirectToLogin(true);
+                    } else {
+                        window.postMessage(
+                            {
+                                type: 'reset-teams',
+                                message: {},
+                            },
+                            window.origin,
+                        );
+                    }
+                }
+            } else if (token && refreshToken) {
+                // set an interval to run every minute to check if token needs refresh soon
+                // for older versions of app.
+                this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
+            }
+        }
 
         this.initiateMeRequests();
 
         // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
         this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
+        this.props.actions.registerCustomPostRenderer('system_welcome_post', WelcomePostRenderer, 'welcome_post_renderer');
 
         if (this.desktopMediaQuery.addEventListener) {
             this.desktopMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
@@ -514,7 +615,18 @@ export default class Root extends React.PureComponent<Props, State> {
 
     componentWillUnmount() {
         this.mounted = false;
+        this.retryGetToken = 0;
+        this.IKLoginCode = undefined;
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
+        if (this.tokenCheckInterval) {
+            console.log('[components/root] destroy token interval check'); // eslint-disable-line no-console
+            clearInterval(this.tokenCheckInterval);
+        }
+
+        if (this.loginCodeInterval) {
+            console.log('[components/root] destroy login with code interval'); // eslint-disable-line no-console
+            clearInterval(this.loginCodeInterval);
+        }
 
         if (this.desktopMediaQuery.removeEventListener) {
             this.desktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
@@ -566,6 +678,18 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     }
 
+    setRootMeta = () => {
+        const root = document.getElementById('root')!;
+
+        for (const [className, enabled] of Object.entries({
+            'app-bar-enabled': this.props.shouldShowAppBar,
+            'rhs-open': this.props.rhsIsOpen,
+            'rhs-open-expanded': this.props.rhsIsExpanded,
+        })) {
+            root.classList.toggle(className, enabled);
+        }
+    }
+
     updateWindowSize = () => {
         switch (true) {
         case this.desktopMediaQuery.matches:
@@ -599,74 +723,18 @@ export default class Root extends React.PureComponent<Props, State> {
                         path={'/login'}
                         component={Login}
                     />
-                    <HFTRoute
-                        path={'/reset_password'}
-                        component={PasswordResetSendLink}
-                    />
-                    <HFTRoute
-                        path={'/reset_password_complete'}
-                        component={PasswordResetForm}
-                    />
                     <HFRoute
-                        path={'/signup_user_complete'}
-                        component={Signup}
-                    />
-                    <HFRoute
-                        path={'/should_verify_email'}
-                        component={ShouldVerifyEmail}
-                    />
-                    <HFRoute
-                        path={'/do_verify_email'}
-                        component={DoVerifyEmail}
-                    />
-                    <HFTRoute
-                        path={'/claim'}
-                        component={ClaimController}
+                        path={'/access_problem'}
+                        component={AccessProblem}
                     />
                     <HFTRoute
                         path={'/help'}
                         component={HelpController}
                     />
-                    <LoggedInRoute
-                        path={'/terms_of_service'}
-                        component={TermsOfService}
-                    />
-                    <Route
+                    {/* <Route
                         path={'/landing'}
                         component={LinkingLandingPage}
-                    />
-                    <Route
-                        path={'/admin_console'}
-                    >
-                        <>
-                            <Switch>
-                                <LoggedInRoute
-                                    path={'/admin_console'}
-                                    component={AdminConsole}
-                                />
-                                <RootRedirect/>
-                            </Switch>
-                            <CompassThemeProvider theme={this.props.theme}>
-                                <OnBoardingTaskList/>
-                            </CompassThemeProvider>
-                        </>
-                    </Route>
-                    <LoggedInHFTRoute
-                        path={'/select_team'}
-                        component={SelectTeam}
-                    />
-                    <LoggedInHFTRoute
-                        path={'/oauth/authorize'}
-                        component={Authorize}
-                    />
-                    <LoggedInHFTRoute
-                        path={'/create_team'}
-                        component={CreateTeam}
-                    />
-                    <LoggedInRoute
-                        path={'/mfa'}
-                        component={Mfa}
-                    />
+                    /> */}
                     <LoggedInRoute
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
@@ -690,27 +758,38 @@ export default class Root extends React.PureComponent<Props, State> {
                             />
                         )}
                         <ModalController/>
+                        <AnnouncementBarController/>
+                        <SystemNotice/>
                         <GlobalHeader/>
-                        {/* <CloudEffects/>
-                        <OnBoardingTaskList/> */}
                         <TeamSidebar/>
                         <Switch>
                             {this.props.products?.map((product) => (
                                 <Route
                                     key={product.id}
                                     path={product.baseURL}
-                                    render={(props) => (
-                                        <LoggedIn {...props}>
-                                            <div className={classNames(['product-wrapper', {wide: !product.showTeamSidebar}])}>
-                                                <Pluggable
-                                                    pluggableName={'Product'}
-                                                    subComponentName={'mainComponent'}
-                                                    pluggableId={product.id}
-                                                    webSocketClient={webSocketClient}
-                                                />
-                                            </div>
-                                        </LoggedIn>
-                                    )}
+                                    render={(props) => {
+                                        let pluggable = (
+                                            <Pluggable
+                                                pluggableName={'Product'}
+                                                subComponentName={'mainComponent'}
+                                                pluggableId={product.id}
+                                                webSocketClient={webSocketClient}
+                                                css={product.wrapped ? undefined : {gridArea: 'center'}}
+                                            />
+                                        );
+                                        if (product.wrapped) {
+                                            pluggable = (
+                                                <div className={classNames(['product-wrapper', {wide: !product.showTeamSidebar}])}>
+                                                    {pluggable}
+                                                </div>
+                                            );
+                                        }
+                                        return (
+                                            <LoggedIn {...props}>
+                                                {pluggable}
+                                            </LoggedIn>
+                                        );
+                                    }}
                                 />
                             ))}
                             {this.props.plugins?.map((plugin) => (
@@ -721,17 +800,22 @@ export default class Root extends React.PureComponent<Props, State> {
                                         <Pluggable
                                             pluggableName={'CustomRouteComponent'}
                                             pluggableId={plugin.id}
+                                            css={{gridArea: 'center'}}
                                         />
                                     )}
                                 />
                             ))}
                             <LoggedInRoute
+                                theme={this.props.theme}
                                 path={'/:team'}
-                                component={NeedsTeam}
+                                component={TeamController}
                             />
                             <RootRedirect/>
                         </Switch>
                         <Pluggable pluggableName='Global'/>
+                        <SidebarRight/>
+                        <AppBar/>
+                        <SidebarRightMenu/>
                     </CompassThemeProvider>
                 </Switch>
             </RootProvider>

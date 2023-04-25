@@ -4,7 +4,7 @@
 import {connect} from 'react-redux';
 
 import {haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getMyTeams} from 'mattermost-redux/selectors/entities/teams';
+import {getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 import {GlobalState} from '@mattermost/types/store';
 
 import AnyTeamPermissionGate from './any_team_permission_gate';
@@ -14,7 +14,7 @@ type Props = {
 }
 
 function mapStateToProps(state: GlobalState, ownProps: Props) {
-    const teams = getMyTeams(state);
+    const teams = getMyKSuites(state);
     for (const team of teams) {
         for (const permission of ownProps.permissions) {
             if (haveITeamPermission(state, team.id, permission)) {
