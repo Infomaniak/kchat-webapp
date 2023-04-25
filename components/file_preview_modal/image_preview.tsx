@@ -69,7 +69,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     };
 
     if (imgRef.current) {
-        const imageRatio = Math.round(DEFAULT_MAX_SCALE * (imgRef.current.naturalWidth / imgRef.current.width));
+        const imageRatio = Math.round(DEFAULT_MAX_SCALE * (imgRef.current.naturalWidth / imgRef.current.width) * 100) / 100;
         maxScale.current = Math.max(imageRatio, DEFAULT_MAX_SCALE);
 
         switch (toolbarZoom) {
