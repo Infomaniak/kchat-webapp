@@ -41,7 +41,6 @@ resource_rules:
             - 📝 testing
         actions:
           comment: >
-            This branch has been inactive for over a month. It will soon be closed as stale.
-            If you would like to keep it open, please add a 🚧 wip or 📝 testing tag to
-            the merge request.
+            This issue has been inactive for over a month. It will be closed as stale.
+            If you would like to keep it open, please add a 🚧 wip or 📝 testing tag and reopen.
           status: close
