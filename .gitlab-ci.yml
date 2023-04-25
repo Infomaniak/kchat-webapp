@@ -164,6 +164,8 @@ unit_test:
   environment:
     name: "$DEPLOY_VARIABLE"
   rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - if: $DEPLOY_VARIABLE == "prodsec"
