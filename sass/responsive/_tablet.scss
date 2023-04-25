@@ -29,7 +29,7 @@
         .modal {
             .modal-image {
                 .modal-image__wrapper {
-                    img {
+                    img:not(.image_preview) {
                         max-height: calc(100vh - 108px);
                     }
 

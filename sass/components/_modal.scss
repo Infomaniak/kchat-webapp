@@ -597,7 +597,7 @@
                 max-height: calc(100vh - 80px);
             }
 
-            img {
+            img:not(.image_preview) {
                 max-width: 100%;
                 max-height: calc(100vh - 168px);
             }
