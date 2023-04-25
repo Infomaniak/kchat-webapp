@@ -11,9 +11,13 @@ exports[`components/view_image/ImagePreview should match snapshot, with preview 
     }
   }
 >
+  <LoadingSpinner
+    text={null}
+  />
   <img
-    className="image_preview image_preview__normal "
+    className="image_preview_loading image_preview__normal "
     loading="lazy"
+    onLoad={[Function]}
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -35,9 +39,13 @@ exports[`components/view_image/ImagePreview should match snapshot, with preview,
     }
   }
 >
+  <LoadingSpinner
+    text={null}
+  />
   <img
-    className="image_preview image_preview__normal "
+    className="image_preview_loading image_preview__normal "
     loading="lazy"
+    onLoad={[Function]}
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -59,9 +67,13 @@ exports[`components/view_image/ImagePreview should match snapshot, without previ
     }
   }
 >
+  <LoadingSpinner
+    text={null}
+  />
   <img
-    className="image_preview image_preview__normal "
+    className="image_preview_loading image_preview__normal "
     loading="lazy"
+    onLoad={[Function]}
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -83,9 +95,13 @@ exports[`components/view_image/ImagePreview should match snapshot, without previ
     }
   }
 >
+  <LoadingSpinner
+    text={null}
+  />
   <img
-    className="image_preview image_preview__normal "
+    className="image_preview_loading image_preview__normal "
     loading="lazy"
+    onLoad={[Function]}
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
