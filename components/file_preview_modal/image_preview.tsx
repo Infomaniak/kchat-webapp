@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {clamp} from 'lodash';
 
 import {ZoomValue} from 'components/file_preview_modal/file_preview_modal_image_controls/file_preview_modal_image_controls';
@@ -40,6 +40,15 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     const isMouseDown = useRef(false);
     const touch = useRef({touchX: 0, touchY: 0});
     const minScale = useRef(1);
+
+    useEffect(() => {
+        window.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mouseup', handleMouseUp);
+        return () => {
+            window.removeEventListener('mousedown', handleMouseDown);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, []);
 
     const imageWidth = imgRef.current?.naturalWidth || 1;
     const imageHeight = imgRef.current?.naturalHeight || 1;
@@ -91,7 +100,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     };
 
     const handleMouseMove = (event: React.MouseEvent) => {
-        if (!dragging || scale.current === minScale.current) {
+        if (!dragging || !imageOverflows) {
             return;
         }
         const {touchX, touchY} = touch.current;
@@ -102,7 +111,19 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         touch.current = {touchX: clientX, touchY: clientY};
     };
 
-    const handleMouseDown = (event: React.MouseEvent) => {
+    const handleMouseLeave = () => {
+        if (dragging) {
+            setDragging(false);
+        }
+    };
+
+    const handleMouseEnter = () => {
+        if (dragging !== isMouseDown.current) {
+            setDragging(isMouseDown.current);
+        }
+    };
+
+    const handleMouseDown = (event: MouseEvent) => {
         event.preventDefault();
         const {clientX, clientY} = event;
         touch.current = {touchX: clientX, touchY: clientY};
@@ -149,9 +170,9 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
                 height={imgRef.current?.naturalHeight}
                 src={previewUrl}
                 loading='lazy'
-                onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
                 onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                onMouseEnter={handleMouseEnter}
                 onWheel={handleWheel}
             />
         </div>
