@@ -1936,20 +1936,6 @@
     }
 
     .app__body {
-        &.announcement-bar--fixed {
-            .modal {
-                padding-top: $announcement-bar-height;
-            }
-
-            & #root:has(.announcement-bar-infomaniak) ~ [role=dialog] .modal {
-                padding-top: $ik-announcement-bar-height;
-            }
-
-            & #root:has(.announcement-bar-infomaniak-mobile) ~ [role=dialog] .modal {
-                padding-top: $ik-mobile-announcement-bar-height;
-            }
-        }
-
         .modal {
             overflow: hidden;
             padding: 0;
