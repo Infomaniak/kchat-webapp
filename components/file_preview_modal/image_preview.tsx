@@ -6,6 +6,7 @@ import {clamp} from 'lodash';
 
 import {ZoomValue} from 'components/file_preview_modal/file_preview_modal_image_controls/file_preview_modal_image_controls';
 import {LinkInfo} from 'components/file_preview_modal/types';
+import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
 import {getFilePreviewUrl, getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 import {FileInfo} from '@mattermost/types/files';
@@ -33,6 +34,7 @@ const getMaxContainerScale = (imageWidth: number, imageHeight: number, container
 };
 
 export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Props) {
+    const [loaded, setLoaded] = useState(false);
     const [dragging, setDragging] = useState(false);
     const [offset, setOffset] = useState({offsetX: 0, offsetY: 0});
     const imgRef = useRef<HTMLImageElement>(null);
@@ -137,6 +139,8 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         setDragging(false);
     };
 
+    const handleLoad = () => setLoaded(true);
+
     const isExternalFile = !fileInfo.id;
     let fileUrl = getFileDownloadUrl(fileInfo.id);
     let previewUrl = fileInfo.has_preview_image ? getFilePreviewUrl(fileInfo.id) : fileUrl;
@@ -165,11 +169,13 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
 
     return (
         <div style={containerStyle}>
+            {!loaded && <LoadingSpinner/>}
             <img
-                className={`image_preview image_preview__${cursorType} ${imageOverflows ? 'image_preview__fullscreen' : ''}`}
+                className={`image_preview${loaded ? '' : '_loading'} image_preview__${cursorType} ${imageOverflows ? 'image_preview__fullscreen' : ''}`}
                 ref={imgRef}
                 src={previewUrl}
                 loading='lazy'
+                onLoad={handleLoad}
                 onMouseMove={handleMouseMove}
                 onMouseDown={handleMouseDown}
                 onMouseLeave={handleMouseLeave}

@@ -3,6 +3,10 @@
     max-height: none;
     border-radius: 8px;
 
+    &_loading {
+        display: none;
+    }
+
     &__fullscreen {
         border-radius: 0px;
     }
