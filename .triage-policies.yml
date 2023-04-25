@@ -3,44 +3,45 @@ resource_rules:
     rules:
       - name: "Weekly Prioritization"
         conditions:
-          - "created_at > -7 days"
-          - "!milestone?"
+          milestone: none
+          date:
+            attribute: created_at
+            condition: newer_than
+            interval_type: days
+            interval: 7
         actions:
-          set_milestone: "Weekly Tasks"
-          add_comment: >
-            This issue has been added to the 'Weekly Tasks' milestone. 
+          comment: |
+            This issue has been added to the 'Weekly Tasks' milestone.
             Let's try to address it within the week.
+
+            /milestone %"Weekly Tasks"
       - name: "Remind on Pull Request Updates"
         conditions:
-          - "state? =opened"
-          - "assignee_username?"
-          - "updated_at < -7 days"
+          state: opened
+          date:
+            attribute: updated_at
+            condition: older_than
+            interval_type: days
+            interval: 7
+          ruby:  "resource[:assignees].any?"
         actions:
-          add_comment: >
-            This pull request has been inactive for over a week. 
-            @assignee, please provide an update or discuss any roadblocks with the team.
+          comment: >
+            This pull request has been inactive for over a week.
+            {{assignees}}, please provide an update or discuss any roadblocks with the team.
       - name: "Warn about close Stale Branches"
         conditions:
-          - "created_at < -1 months"
-          - "!label? ~🚧 wip"
-          - "!label? ~📝 testing"
-          - "state? =opened"
+          state: opened
+          date:
+            attribute: updated_at
+            condition: older_than
+            interval_type: months
+            interval: 1
+          forbidden_labels:
+            - 🚧 wip
+            - 📝 testing
         actions:
-          add_comment: >
+          comment: >
             This branch has been inactive for over a month. It will soon be closed as stale.
-            If you would like to keep it open, please add a 🚧 wip or 📝 testing tag to 
+            If you would like to keep it open, please add a 🚧 wip or 📝 testing tag to
             the merge request.
-          close_issue: true
-      # - name: "Close Stale Branches"
-      #   conditions:
-      #     - "created_at < -2 months"
-      #     - "!label? ~🚧 wip"
-      #     - "!label? ~📝 testing"
-      #     - "state? =opened"
-      #   actions:
-      #     add_labels:
-      #       - "💀 stale"
-      #     add_comment: >
-      #       This branch has been inactive for over two month and has been marked as stale.
-      #       Feel free to reopen the branch if needed.
-      #     close_issue: true
+          status: close
