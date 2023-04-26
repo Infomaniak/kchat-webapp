@@ -22,6 +22,16 @@ const DEFAULT_MIN_SCALE = 1;
 let zoomExport: number;
 let minZoomExport: number;
 
+type Offset = {
+    offsetX: number;
+    offsetY: number;
+};
+
+type Touch = {
+    touchX: number;
+    touchY: number;
+};
+
 interface Props {
     fileInfo: FileInfo & LinkInfo;
     toolbarZoom: ZoomValue;
@@ -37,11 +47,11 @@ const getMaxContainerScale = (imageWidth: number, imageHeight: number, container
 export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Props) {
     const [loaded, setLoaded] = useState(false);
     const [dragging, setDragging] = useState(false);
-    const [offset, setOffset] = useState({offsetX: 0, offsetY: 0});
+    const [offset, setOffset] = useState<Offset>({offsetX: 0, offsetY: 0});
     const imgRef = useRef<HTMLImageElement>(null);
     const scale = useRef(1);
     const isMouseDown = useRef(false);
-    const touch = useRef({touchX: 0, touchY: 0});
+    const touch = useRef<Touch>({touchX: 0, touchY: 0});
     const maxScale = useRef(1);
     const minScale = useRef(1);
 
