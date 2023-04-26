@@ -44,12 +44,25 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     const maxScale = useRef(1);
     const minScale = useRef(1);
 
+    const isExternalFile = !fileInfo.id;
+    let fileUrl = getFileDownloadUrl(fileInfo.id);
+    let previewUrl = fileInfo.has_preview_image ? getFilePreviewUrl(fileInfo.id) : fileUrl;
+    if (isExternalFile) {
+        fileUrl = fileInfo.link;
+        previewUrl = fileInfo.link;
+    }
+
     useEffect(() => {
         window.addEventListener('mouseup', handleMouseUp);
         return () => {
             window.removeEventListener('mouseup', handleMouseUp);
         };
     }, []);
+
+    useEffect(() => {
+        setLoaded(false);
+        setToolbarZoom('A');
+    }, [previewUrl]);
 
     const imageWidth = imgRef.current?.width || 1;
     const imageHeight = imgRef.current?.height || 1;
@@ -140,14 +153,6 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     };
 
     const handleLoad = () => setLoaded(true);
-
-    const isExternalFile = !fileInfo.id;
-    let fileUrl = getFileDownloadUrl(fileInfo.id);
-    let previewUrl = fileInfo.has_preview_image ? getFilePreviewUrl(fileInfo.id) : fileUrl;
-    if (isExternalFile) {
-        fileUrl = fileInfo.link;
-        previewUrl = fileInfo.link;
-    }
 
     const {offsetX, offsetY} = offset;
     const {clampedOffsetX, clampedOffsetY} = clampOffset(offsetX, offsetY);
