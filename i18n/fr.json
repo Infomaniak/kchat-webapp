@@ -3134,7 +3134,7 @@
   "emoji_skin.medium_skin_tone": "Teinte de peau moyenne",
   "emoji_skin_item.emoji_aria_label": "{skinName} émoticône",
   "error.channelNotFound.guest_link": "Précédent",
-  "error.channelNotFound.link": "Retourner à {defaultChannelName}",
+  "error.channelNotFound.link": "Retourner au {defaultChannelName}",
   "error.channel_not_found.message": "Le canal que vous avez demandé est privé ou n'existe pas. Veuillez contacter un administrateur pour être rajouté à ce canal le cas échéant.",
   "error.channel_not_found.message_guest": "Votre compte utilisateur invité n'a pas de canal assigné. Veuillez contacter un administrateur.",
   "error.channel_not_found.title": "Canal introuvable",
