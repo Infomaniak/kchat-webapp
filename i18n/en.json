@@ -1652,7 +1652,7 @@
   "admin.permissions.roles.channel_user.name": "Channel User",
   "admin.permissions.roles.edit": "Edit",
   "admin.permissions.roles.system_admin.description": "Access to modifying everything.",
-  "admin.permissions.roles.system_admin.name": "System Admin",
+  "admin.permissions.roles.system_admin.name": "Administrator",
   "admin.permissions.roles.system_admin.type": "System Role",
   "admin.permissions.roles.system_custom_group_admin.description": "Administers all Custom Groups across the system.",
   "admin.permissions.roles.system_custom_group_admin.detail_text": "The built-in Custom Group Manager role can be used to delegate the administration of [Custom Groups](https://docs.mattermost.com/welcome/manage-custom-groups.html) to users other than the System Admin.\n \nDon't forget to deauthorize all other system users from administering Custom Groups by unchecking the associated permissions checkbox in System console > User Management > Permissions.\n \nThis role has permission to create, edit, and delete custom user groups by selecting **User groups** from the Products menu.",
