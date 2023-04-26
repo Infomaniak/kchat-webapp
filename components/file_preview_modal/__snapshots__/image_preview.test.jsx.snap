@@ -11,8 +11,8 @@ exports[`components/view_image/ImagePreview should match snapshot, with preview 
     }
   }
 >
-  <LoadingSpinner
-    text={null}
+  <LoadingImagePreview
+    containerClass="view-image__loading"
   />
   <img
     className="image_preview image_preview__normal image_preview_loading"
@@ -39,8 +39,8 @@ exports[`components/view_image/ImagePreview should match snapshot, with preview,
     }
   }
 >
-  <LoadingSpinner
-    text={null}
+  <LoadingImagePreview
+    containerClass="view-image__loading"
   />
   <img
     className="image_preview image_preview__normal image_preview_loading"
@@ -67,8 +67,8 @@ exports[`components/view_image/ImagePreview should match snapshot, without previ
     }
   }
 >
-  <LoadingSpinner
-    text={null}
+  <LoadingImagePreview
+    containerClass="view-image__loading"
   />
   <img
     className="image_preview image_preview__normal image_preview_loading"
@@ -95,8 +95,8 @@ exports[`components/view_image/ImagePreview should match snapshot, without previ
     }
   }
 >
-  <LoadingSpinner
-    text={null}
+  <LoadingImagePreview
+    containerClass="view-image__loading"
   />
   <img
     className="image_preview image_preview__normal image_preview_loading"
