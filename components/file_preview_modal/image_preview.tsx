@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import {ZoomValue} from 'components/file_preview_modal/file_preview_modal_image_controls/file_preview_modal_image_controls';
 import {LinkInfo} from 'components/file_preview_modal/types';
-import LoadingSpinner from 'components/widgets/loading/loading_spinner';
+import LoadingImagePreview from 'components/loading_image_preview';
 
 import {getFilePreviewUrl, getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 import {FileInfo} from '@mattermost/types/files';
@@ -185,7 +185,7 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
 
     return (
         <div style={containerStyle}>
-            {!loaded && <LoadingSpinner/>}
+            {!loaded && <LoadingImagePreview/>}
             <img
                 className={classNames(`image_preview image_preview__${cursorType}`, {
                     image_preview_loading: !loaded,
