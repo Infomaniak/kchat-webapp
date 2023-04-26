@@ -15,7 +15,7 @@ exports[`components/view_image/ImagePreview should match snapshot, with preview 
     text={null}
   />
   <img
-    className="image_preview_loading image_preview__normal "
+    className="image_preview image_preview__normal image_preview_loading"
     loading="lazy"
     onLoad={[Function]}
     onMouseDown={[Function]}
@@ -43,7 +43,7 @@ exports[`components/view_image/ImagePreview should match snapshot, with preview,
     text={null}
   />
   <img
-    className="image_preview_loading image_preview__normal "
+    className="image_preview image_preview__normal image_preview_loading"
     loading="lazy"
     onLoad={[Function]}
     onMouseDown={[Function]}
@@ -71,7 +71,7 @@ exports[`components/view_image/ImagePreview should match snapshot, without previ
     text={null}
   />
   <img
-    className="image_preview_loading image_preview__normal "
+    className="image_preview image_preview__normal image_preview_loading"
     loading="lazy"
     onLoad={[Function]}
     onMouseDown={[Function]}
@@ -99,7 +99,7 @@ exports[`components/view_image/ImagePreview should match snapshot, without previ
     text={null}
   />
   <img
-    className="image_preview_loading image_preview__normal "
+    className="image_preview image_preview__normal image_preview_loading"
     loading="lazy"
     onLoad={[Function]}
     onMouseDown={[Function]}
