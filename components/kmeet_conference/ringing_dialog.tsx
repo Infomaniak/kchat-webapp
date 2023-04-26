@@ -45,16 +45,15 @@ function DialingModal(props: Props) {
         }
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
     };
-    const onHandleAccept = (e: MouseEvent) => {
+    const onHandleAccept = (e: React.SyntheticEvent) => {
         // const data = await Client4.acceptIncomingMeetCall(channelID);
-        // console.log(data);
 
         e.preventDefault();
         e.stopPropagation();
-        dispatch(startOrJoinCallInChannel(channelID, props.calling.channelID));
+        dispatch(startOrJoinCallInChannel(channelID));
         handleOnClose();
     };
-    const onHandleDecline = (e: MouseEvent) => {
+    const onHandleDecline = (e: React.SyntheticEvent<HTMLButtonElement | HTMLAnchorElement>) => {
         e.preventDefault();
         e.stopPropagation();
         handleOnClose();
