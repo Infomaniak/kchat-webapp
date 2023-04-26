@@ -1,17 +1,34 @@
 @charset 'UTF-8';
 
 .alert {
-    padding: 8px 12px;
+    padding: 16px 16px;
     border-radius: $border-rad;
 
     .alert-transparent {
         background: var(--center-channel-bg);
+    }
+    &.alert-with-icon {
+        display: flex;
+        justify-content: space-between;
+        i {
+            // 5px is directly on the pseudo element, +7 to make 12px
+            padding-right: 7px;
+        }
     }
 }
 
 .alert-grey {
     background: #f2f2f2;
     color: #999;
+    .icon {
+        background: rgb(0, 152, 255);
+    }
+}
+
+.alert-danger {
+    background: rgb(244, 246, 253);
+    color: var(--center-channel-color);
+    border: none;
 }
 
 .alert--confirm {

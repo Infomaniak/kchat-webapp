@@ -10,7 +10,8 @@ import {FormattedMessage} from 'react-intl';
 import {ArchiveOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import LoadingScreen from 'components/loading_screen';
-import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
+
+// import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
 import QuickInput from 'components/quick_input';
 import * as UserAgent from 'utils/user_agent';
 import {localizeMessage} from 'utils/utils';
@@ -20,8 +21,15 @@ import SharedChannelIndicator from 'components/shared_channel_indicator';
 
 import {t} from 'utils/i18n';
 
+import Tooltip from 'components/tooltip';
+
+import OverlayTrigger from 'components/overlay_trigger';
+
+import Constants from 'utils/constants';
+
 import MenuWrapper from './widgets/menu/menu_wrapper';
 import Menu from './widgets/menu/menu';
+import LoadingSpinner from './widgets/loading/loading_spinner';
 
 const NEXT_BUTTON_TIMEOUT_MILLISECONDS = 500;
 
@@ -106,21 +114,47 @@ export default class SearchableChannelList extends React.PureComponent {
                     <p className='more-modal__description'>{channel.purpose}</p>
                 </div>
                 <div className='more-modal__actions'>
-                    <button
-                        onClick={this.handleJoin.bind(this, channel)}
-                        className='btn'
-                        disabled={this.state.joiningChannel}
+                    <OverlayTrigger
+                        trigger={['hover', 'focus']}
+                        delayShow={Constants.OVERLAY_TIME_DELAY}
+                        placement='left'
+                        overlay={(
+                            <Tooltip id={`tooltip-${channel.id}`}>
+                                <FormattedMessage
+                                    id={shouldShowArchivedChannels ? t('more_channels.view') : t('more_channels.join')}
+                                    defaultMessage={shouldShowArchivedChannels ? 'View' : 'Join'}
+                                />
+                            </Tooltip>
+                        )}
                     >
-                        <LoadingWrapper
-                            loading={this.state.joiningChannel === channel.id}
-                            text={localizeMessage('more_channels.joining', 'Joining...')}
+                        <button
+                            onClick={this.handleJoin.bind(this, channel)}
+                            className='btn'
+                            disabled={this.state.joiningChannel}
+                            style={{
+                                borderRadius: '16px',
+                                fontSize: '16px',
+                                padding: 0,
+                                background: 'rgb(0, 152, 255)',
+                                color: 'white',
+                            }}
                         >
-                            <FormattedMessage
-                                id={shouldShowArchivedChannels ? t('more_channels.view') : t('more_channels.join')}
-                                defaultMessage={shouldShowArchivedChannels ? 'View' : 'Join'}
-                            />
-                        </LoadingWrapper>
-                    </button>
+                            {this.state.joiningChannel === channel.id ? (
+                                <LoadingSpinner/>
+                            ) : (
+                                <i className='icon icon-plus'/>
+                            )}
+                            {/* <LoadingWrapper
+                                loading={this.state.joiningChannel === channel.id}
+                                text={localizeMessage('more_channels.joining', 'Joining...')}
+                            >
+                                <FormattedMessage
+                                    id={shouldShowArchivedChannels ? t('more_channels.view') : t('more_channels.join')}
+                                    defaultMessage={shouldShowArchivedChannels ? 'View' : 'Join'}
+                                />
+                            </LoadingWrapper> */}
+                        </button>
+                    </OverlayTrigger>
                 </div>
             </div>
         );
@@ -184,7 +218,7 @@ export default class SearchableChannelList extends React.PureComponent {
             if (channelsToDisplay.length >= this.props.channelsPerPage && pageEnd < this.props.channels.length) {
                 nextButton = (
                     <button
-                        className='btn btn-link filter-control filter-control__next'
+                        className='btn btn-link filter-control filter-control__next secondary'
                         onClick={this.nextPage}
                         disabled={this.state.nextDisabled}
                     >
