@@ -3,6 +3,7 @@
 
 import React, {useEffect, useRef, useState} from 'react';
 import {clamp} from 'lodash';
+import classNames from 'classnames';
 
 import {ZoomValue} from 'components/file_preview_modal/file_preview_modal_image_controls/file_preview_modal_image_controls';
 import {LinkInfo} from 'components/file_preview_modal/types';
@@ -176,7 +177,10 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
         <div style={containerStyle}>
             {!loaded && <LoadingSpinner/>}
             <img
-                className={`image_preview${loaded ? '' : '_loading'} image_preview__${cursorType} ${imageOverflows ? 'image_preview__fullscreen' : ''}`}
+                className={classNames(`image_preview image_preview__${cursorType}`, {
+                    image_preview_loading: !loaded,
+                    image_preview__fullscreen: imageOverflows,
+                })}
                 ref={imgRef}
                 src={previewUrl}
                 loading='lazy'
