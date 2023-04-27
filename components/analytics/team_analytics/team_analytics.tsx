@@ -310,7 +310,7 @@ export default class TeamAnalytics extends React.PureComponent<Props, State> {
 
                 <div className='admin-console__wrapper'>
                     <div className='admin-console__content'>
-                        <TrueUpReview/>
+                        {/* <TrueUpReview/> */}
                         {banner}
                         <div className='grid-statistics'>
                             <ActivatedUserCard
