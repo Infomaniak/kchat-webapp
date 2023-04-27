@@ -481,8 +481,6 @@ export default class Root extends React.PureComponent<Props, State> {
                 IKConstants.CLIENT_ID,
             );
 
-            console.log('[components/root] get token response with code ', response); // eslint-disable-line no-console
-
             // Store in localstorage
             storeTokenResponse(response);
 

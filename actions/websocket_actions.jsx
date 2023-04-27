@@ -259,8 +259,6 @@ export async function reconnect() {
             console.log('[websocket_actions > reconnect] token expired, calling refresh');
             try {
                 const newToken = await refreshIKToken(/*redirectToTeam**/false);
-                // eslint-disable-next-line no-console
-                console.log('[websocket_actions > reconnect] token refreshed, new token: ', newToken);
                 if (newToken) {
                     WebSocketClient.updateToken(newToken);
                 }
@@ -298,7 +296,7 @@ export async function reconnect() {
             // we can request for getPosts again when socket is connected
             dispatch(getPosts(currentChannelId));
         }
-        StatusActions.loadStatusesForChannelAndSidebar();
+        dispatch(StatusActions.loadStatusesForChannelAndSidebar());
 
         const crtEnabled = isCollapsedThreadsEnabled(state);
         dispatch(TeamActions.getMyTeamUnreads(crtEnabled, true));
@@ -326,7 +324,7 @@ export async function reconnect() {
     if (state.websocket.lastDisconnectAt) {
         // eslint-disable-next-line no-console
         console.log('[websocket_actions] lastDisconnectAt: ', state.websocket.lastDisconnectAt);
-        dispatch(checkForModifiedUsers());
+        dispatch(checkForModifiedUsers(true));
         dispatch(TeamActions.getMyKSuites());
     }
 

@@ -3,7 +3,9 @@
 
 import {Client4} from 'mattermost-redux/client';
 import {getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
-import {loadMe, loadMeREST} from 'mattermost-redux/actions/users';
+
+// import {loadMe} from 'mattermost-redux/actions/users';
+import {loadMeREST} from 'mattermost-redux/actions/users';
 import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import {GlobalState} from 'types/store';
 
@@ -23,14 +25,12 @@ export function loadConfigAndMe() {
         // If expired, refresh token
         if (isDesktopApp() && checkIKTokenIsExpired()) {
             console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
-            await refreshIKToken(/*redirectToReam*/false)?.then(() => {
-                console.log('[actions/view/root] desktop token refreshed'); // eslint-disable-line no-console
-            }).catch((e: unknown) => {
+            await refreshIKToken(/*redirectToReam*/false)?.catch((e: unknown) => {
                 console.warn('[actions/view/root] desktop token refresh error: ', e); // eslint-disable-line no-console
             });
         }
 
-        const [{data: clientConfig}] = await Promise.all([
+        await Promise.all([
             dispatch(getClientConfig()),
             dispatch(getLicenseConfig()),
         ]);

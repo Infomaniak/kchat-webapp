@@ -35,23 +35,6 @@ import RhsLimitVisibleGMsDMs from 'components/rhs_settings/rhs_settings_display/
 
 const Preferences = Constants.Preferences;
 
-function getDisplayStateFromProps(props: Props) {
-    return {
-        // lastActiveDisplay: props.lastActiveDisplay.toString(),
-        // militaryTime: props.militaryTime,
-        teammateNameDisplay: props.teammateNameDisplay,
-        availabilityStatusOnPosts: props.availabilityStatusOnPosts,
-        channelDisplayMode: props.channelDisplayMode ? props.channelDisplayMode : Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
-        messageDisplay: props.messageDisplay ? props.messageDisplay : Preferences.MESSAGE_DISPLAY_CLEAN,
-        colorizeUsernames: props.colorizeUsernames ? props.colorizeUsernames : 'true',
-        collapseDisplay: props.collapseDisplay ? props.collapseDisplay : 'false',
-        linkPreviewDisplay: props.linkPreviewDisplay ? props.linkPreviewDisplay : 'true',
-        oneClickReactionsOnPosts: props.oneClickReactionsOnPosts ? props.oneClickReactionsOnPosts : 'true',
-        showUnreadsCategory: props.showUnreadsCategory ? props.showUnreadsCategory : 'true',
-        unreadScrollPosition: props.unreadScrollPosition ? props.unreadScrollPosition : Preferences.UNREAD_SCROLL_POSITION,
-    };
-}
-
 type ChildOption = {
     id: string;
     message: string;
@@ -156,7 +139,7 @@ type Props = {
     showUnreadsCategory: string;
     unreadScrollPosition: string;
     militaryTime: string;
-    lastActiveDisplay: boolean;
+    lastActiveDisplay: string;
     lastActiveTimeEnabled: boolean;
     actions: {
         savePreferences: (userId: string, preferences: PreferenceType[]) => void;
@@ -185,6 +168,23 @@ type State = {
 }
 
 export default class RhsSettingsDisplay extends React.PureComponent<Props, State> {
+    static getDerivedStateFromProps(props: Props) {
+        return {
+            lastActiveDisplay: props.lastActiveDisplay,
+            militaryTime: props.militaryTime,
+            teammateNameDisplay: props.teammateNameDisplay,
+            availabilityStatusOnPosts: props.availabilityStatusOnPosts,
+            channelDisplayMode: props.channelDisplayMode ?? Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
+            messageDisplay: props.messageDisplay ? props.messageDisplay : Preferences.MESSAGE_DISPLAY_CLEAN,
+            colorizeUsernames: props.colorizeUsernames ? props.colorizeUsernames : 'true',
+            collapseDisplay: props.collapseDisplay ? props.collapseDisplay : 'false',
+            linkPreviewDisplay: props.linkPreviewDisplay ? props.linkPreviewDisplay : 'true',
+            oneClickReactionsOnPosts: props.oneClickReactionsOnPosts ? props.oneClickReactionsOnPosts : 'true',
+            showUnreadsCategory: props.showUnreadsCategory ? props.showUnreadsCategory : 'true',
+            unreadScrollPosition: props.unreadScrollPosition ? props.unreadScrollPosition : Preferences.UNREAD_SCROLL_POSITION,
+        };
+    }
+
     public prevSections: {
         theme: string;
         clock: string;
@@ -198,7 +198,18 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         super(props);
 
         this.state = {
-            ...getDisplayStateFromProps(props),
+            lastActiveDisplay: props.lastActiveDisplay,
+            militaryTime: props.militaryTime,
+            teammateNameDisplay: props.teammateNameDisplay,
+            availabilityStatusOnPosts: props.availabilityStatusOnPosts,
+            channelDisplayMode: props.channelDisplayMode ? props.channelDisplayMode : Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
+            messageDisplay: props.messageDisplay ? props.messageDisplay : Preferences.MESSAGE_DISPLAY_CLEAN,
+            colorizeUsernames: props.colorizeUsernames ? props.colorizeUsernames : 'true',
+            collapseDisplay: props.collapseDisplay ? props.collapseDisplay : 'false',
+            linkPreviewDisplay: props.linkPreviewDisplay ? props.linkPreviewDisplay : 'true',
+            oneClickReactionsOnPosts: props.oneClickReactionsOnPosts ? props.oneClickReactionsOnPosts : 'true',
+            showUnreadsCategory: props.showUnreadsCategory ? props.showUnreadsCategory : 'true',
+            unreadScrollPosition: props.unreadScrollPosition ? props.unreadScrollPosition : Preferences.UNREAD_SCROLL_POSITION,
             isSaving: false,
         };
 
@@ -220,12 +231,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         }
     }
 
-    componentDidUpdate(prevProps: Props) {
-        if (this.props.teammateNameDisplay !== prevProps.teammateNameDisplay) {
-            this.updateState();
-        }
-    }
-
     trackChangeIfNecessary(preference: PreferenceType, oldValue: any): void {
         const props = {
             field: 'display.' + preference.name,
@@ -237,79 +242,115 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         }
     }
 
-    handleSubmit = async () => {
+    /**
+     * Called every time an option changes.
+     * TODO: simplify the options batching since only 1 option gets updated at a time.
+     */
+    handleSubmit = async (newSettingsState: State) => {
         const {user, actions} = this.props;
         const userId = user.id;
+
+        // User preferences patch user and don't need to update preferences
+        if (newSettingsState.lastActiveDisplay !== this.props.lastActiveDisplay) {
+            const updatedUser = {
+                ...user,
+                props: {
+                    ...user.props,
+                    show_last_active: newSettingsState.lastActiveDisplay,
+                },
+            };
+
+            actions.updateMe(updatedUser).
+                then((res) => {
+                    if ('data' in res) {
+                        this.props.updateSection('');
+                    } else if ('error' in res) {
+                        const {error} = res;
+                        let serverError;
+                        if (error instanceof Error) {
+                            serverError = error.message;
+                        } else {
+                            serverError = error as string;
+                        }
+                        this.setState({serverError, isSaving: false});
+                    }
+                });
+
+            this.updateSection('');
+
+            this.setState({isSaving: false});
+            return;
+        }
 
         const collapseDisplayPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
             name: Preferences.COLLAPSE_DISPLAY,
-            value: this.state.collapseDisplay,
+            value: newSettingsState.collapseDisplay,
         };
         const availabilityStatusOnPostsPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
             name: Preferences.AVAILABILITY_STATUS_ON_POSTS,
-            value: this.state.availabilityStatusOnPosts,
+            value: newSettingsState.availabilityStatusOnPosts,
         };
         const teammateNameDisplayPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
             name: Preferences.NAME_NAME_FORMAT,
-            value: this.state.teammateNameDisplay,
+            value: newSettingsState.teammateNameDisplay,
         };
         const channelDisplayModePreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
             name: Preferences.CHANNEL_DISPLAY_MODE,
-            value: this.state.channelDisplayMode,
+            value: newSettingsState.channelDisplayMode,
         };
         const messageDisplayPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
             name: Preferences.MESSAGE_DISPLAY,
-            value: this.state.messageDisplay,
+            value: newSettingsState.messageDisplay,
         };
         const colorizeUsernamesPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
             name: Preferences.COLORIZE_USERNAMES,
-            value: this.state.colorizeUsernames,
+            value: newSettingsState.colorizeUsernames,
         };
         const linkPreviewDisplayPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
             name: Preferences.LINK_PREVIEW_DISPLAY,
-            value: this.state.linkPreviewDisplay,
+            value: newSettingsState.linkPreviewDisplay,
         };
         const oneClickReactionsOnPostsPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_DISPLAY_SETTINGS,
             name: Preferences.ONE_CLICK_REACTIONS_ENABLED,
-            value: this.state.oneClickReactionsOnPosts,
+            value: newSettingsState.oneClickReactionsOnPosts,
         };
 
         const showUnreadPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_SIDEBAR_SETTINGS,
             name: 'show_unread_section',
-            value: this.state.showUnreadsCategory,
+            value: newSettingsState.showUnreadsCategory,
         };
 
         const unreadScrollPositionPreference = {
             user_id: userId,
             category: Preferences.CATEGORY_ADVANCED_SETTINGS,
             name: Preferences.UNREAD_SCROLL_POSITION,
-            value: this.state.unreadScrollPosition,
+            value: newSettingsState.unreadScrollPosition,
         };
 
-        // const timePreference = {
-        //     user_id: userId,
-        //     category: Preferences.CATEGORY_DISPLAY_SETTINGS,
-        //     name: Preferences.USE_MILITARY_TIME,
-        //     value: this.state.militaryTime,
-        // };
+        const timePreference = {
+            user_id: userId,
+            category: Preferences.CATEGORY_DISPLAY_SETTINGS,
+            name: Preferences.USE_MILITARY_TIME,
+            value: newSettingsState.militaryTime,
+        };
 
         this.setState({isSaving: true});
 
@@ -324,55 +365,25 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             teammateNameDisplayPreference,
             availabilityStatusOnPostsPreference,
             colorizeUsernamesPreference,
-            // timePreference,
+            timePreference,
         ];
 
         await this.props.actions.savePreferences(userId, preferences);
 
         this.updateSection('');
 
-        const updatedUser = {
-            ...user,
-            props: {
-                ...user.props,
-                show_last_active: this.state.lastActiveDisplay,
-            },
-        };
-
-        actions.updateMe(updatedUser).
-            then((res) => {
-                if ('data' in res) {
-                    this.props.updateSection('');
-                } else if ('error' in res) {
-                    const {error} = res;
-                    let serverError;
-                    if (error instanceof Error) {
-                        serverError = error.message;
-                    } else {
-                        serverError = error as string;
-                    }
-                    this.setState({serverError, isSaving: false});
-                }
-            });
+        this.setState({isSaving: false});
     }
 
     handleOnChange(display: {[key: string]: any}) {
-        this.setState({...display}, () => {
-            this.handleSubmit();
-        });
+        this.handleSubmit({...this.state, ...display});
     }
 
     updateSection = (section: string) => {
-        this.updateState();
         this.props.updateSection(section);
     }
 
     updateState = () => {
-        const newState = getDisplayStateFromProps(this.props);
-        if (!deepEqual(newState, this.state)) {
-            this.setState(newState);
-        }
-
         this.setState({isSaving: false});
     }
 
@@ -388,7 +399,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             description,
         } = props;
         const extraInfo = null;
-        const submit: (() => Promise<void>) | null = this.handleSubmit;
 
         const messageTitle = (
             <FormattedMessage
@@ -472,7 +482,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 key={display}
                 title={messageTitle}
                 inputs={inputs}
-                submit={submit}
                 saving={this.state.isSaving}
                 server_error={this.state.serverError}
                 updateSection={this.updateSection}
@@ -512,7 +521,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                         onChange={(e) => this.handleOnChange({[display]: e.value})}
                         value={options.filter((opt: { value: string | boolean }) => opt.value === value)}
                         isSearchable={false}
-                        menuPortalTarget={document.body}
                         styles={reactStyles}
                     />
                 }
@@ -806,88 +814,79 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             });
         }
 
-        // const clockSection = this.createSection({
-        //     section: 'clock',
-        //     display: 'militaryTime',
-        //     value: this.state.militaryTime,
-        //     defaultDisplay: 'false',
-        //     title: {
-        //         id: t('user.settings.display.clockDisplay'),
-        //         message: 'Clock Display',
-        //     },
-        //     firstOption: {
-        //         value: 'false',
-        //         radionButtonText: {
-        //             id: t('user.settings.display.normalClock'),
-        //             message: '12-hour clock (example: 4:00 PM)',
-        //         },
-        //     },
-        //     secondOption: {
-        //         value: 'true',
-        //         radionButtonText: {
-        //             id: t('user.settings.display.militaryClock'),
-        //             message: '24-hour clock (example: 16:00)',
-        //         },
-        //     },
-        //     description: {
-        //         id: t('user.settings.display.preferTime'),
-        //         message: 'Select how you prefer time displayed. When disabled, displays a clock ranging from 0 to 24 hours (e.g. 16:00)',
-        //     },
-        // });
+        const clockSection = this.createSelect({
+            section: 'clock',
+            display: 'militaryTime',
+            value: this.state.militaryTime,
+            defaultDisplay: 'false',
+            title: {
+                id: t('user.settings.display.clockDisplay'),
+                message: 'Clock Display',
+            },
+            options: [
+                {value: 'false', label: localizeMessage('user.settings.display.normalClock', '12-hour clock (example: 4:00 PM)')},
+                {value: 'true', label: localizeMessage('user.settings.display.militaryClock', '24-hour clock (example: 16:00)')},
+            ],
+            description: {
+                id: t('user.settings.display.preferTime'),
+                message: 'Select how you prefer time displayed. When disabled, displays a clock ranging from 0 to 24 hours (e.g. 16:00)',
+            },
+        });
 
-        // const teammateNameDisplaySection = this.createSelect({
-        //     section: Preferences.NAME_NAME_FORMAT,
-        //     display: 'teammateNameDisplay',
-        //     value: this.props.lockTeammateNameDisplay ? this.props.configTeammateNameDisplay : this.state.teammateNameDisplay,
-        //     defaultDisplay: this.props.configTeammateNameDisplay,
-        //     title: {
-        //         id: t('user.settings.display.teammateNameDisplayTitle'),
-        //         message: 'Teammate Name Display',
-        //     },
-        //     options: [
-        //         {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME, label: localizeMessage('user.settings.display.teammateNameDisplayUsername', 'Show username')},
-        //         {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayNicknameFullname', 'Show nickname if one exists, otherwise show first and last name')},
-        //         {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayFullname', 'Show first and last name')},
-        //     ],
-        //     description: {
-        //         id: t('user.settings.display.teammateNameDisplayDescription'),
-        //         message: 'Set how to display other user\'s names in posts and the Direct Messages list.',
-        //     },
-        //     disabled: this.props.lockTeammateNameDisplay,
-        // });
-        //
-        // let lastActiveSection = null;
+        const teammateNameDisplaySection = this.createSelect({
+            section: Preferences.NAME_NAME_FORMAT,
+            display: 'teammateNameDisplay',
+            value: this.props.lockTeammateNameDisplay ? this.props.configTeammateNameDisplay : this.state.teammateNameDisplay,
+            defaultDisplay: this.props.configTeammateNameDisplay,
+            title: {
+                id: t('user.settings.display.teammateNameDisplayTitle'),
+                message: 'Teammate Name Display',
+            },
+            options: [
+                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME, label: localizeMessage('user.settings.display.teammateNameDisplayUsername', 'Show username')},
 
-        // if (this.props.lastActiveTimeEnabled) {
-        //     lastActiveSection = this.createSection({
-        //         section: 'lastactive',
-        //         display: 'lastActiveDisplay',
-        //         value: this.state.lastActiveDisplay,
-        //         defaultDisplay: 'true',
-        //         title: {
-        //             id: t('user.settings.display.lastActiveDisplay'),
-        //             message: 'Share last active time',
-        //         },
-        //         firstOption: {
-        //             value: 'false',
-        //             radionButtonText: {
-        //                 id: t('user.settings.display.lastActiveOff'),
-        //                 message: 'Off',
-        //             },
-        //         },
-        //         secondOption: {
-        //             value: 'true',
-        //             radionButtonText: {
-        //                 id: t('user.settings.display.lastActiveOn'),
-        //                 message: 'On',
-        //             },
-        //         },
-        //         description: {
-        //             id: t('user.settings.display.lastActiveDesc'),
-        //             message: 'When enabled, other users will see when you were last active.',
-        //         },
-        //     });
-        // }
+                // {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayNicknameFullname', 'Show nickname if one exists, otherwise show first and last name')},
+                {value: Constants.TEAMMATE_NAME_DISPLAY.SHOW_FULLNAME, label: localizeMessage('user.settings.display.teammateNameDisplayFullname', 'Show first and last name')},
+            ],
+            description: {
+                id: t('user.settings.display.teammateNameDisplayDescription'),
+                message: 'Set how to display other user\'s names in posts and the Direct Messages list.',
+            },
+            disabled: this.props.lockTeammateNameDisplay,
+        });
+
+        let lastActiveSection = null;
+
+        if (this.props.lastActiveTimeEnabled) {
+            lastActiveSection = this.createSection({
+                section: 'lastactive',
+                display: 'lastActiveDisplay',
+                value: this.state.lastActiveDisplay,
+                defaultDisplay: 'true',
+                title: {
+                    id: t('user.settings.display.lastActiveDisplay'),
+                    message: 'Share last active time',
+                },
+                firstOption: {
+                    value: 'false',
+                    radionButtonText: {
+                        id: t('user.settings.display.lastActiveOff'),
+                        message: 'Off',
+                    },
+                },
+                secondOption: {
+                    value: 'true',
+                    radionButtonText: {
+                        id: t('user.settings.display.lastActiveOn'),
+                        message: 'On',
+                    },
+                },
+                description: {
+                    id: t('user.settings.display.lastActiveDesc'),
+                    message: 'When enabled, other users will see when you were last active.',
+                },
+            });
+        }
 
         return (
             <div id='displaySettings'>
@@ -899,11 +898,11 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     {linkPreviewSection}
                     {oneClickReactionsOnPostsSection}
                     {showUnreadSection}
+                    {lastActiveSection}
                     {channelDisplayModeSection}
                     {UnreadScrollPositionSection}
-                    {/*{clockSection}*/}
-                    {/*{teammateNameDisplaySection}*/}
-                    {/*{lastActiveSection}*/}
+                    {clockSection}
+                    {teammateNameDisplaySection}
                     <RhsLimitVisibleGMsDMs/>
                 </div>
             </div>

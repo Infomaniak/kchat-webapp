@@ -4386,7 +4386,7 @@
   "status_dropdown.set_custom": "Choisir un statut personnalisé",
   "status_dropdown.set_custom_text": "Définir un texte de statut personnalisé…",
   "status_dropdown.set_dnd": "Ne pas déranger",
-  "status_dropdown.set_dnd.extra": "Désactive les notifications (sauf e-mails)",
+  "status_dropdown.set_dnd.extra": "Désactive les notifications",
   "status_dropdown.set_offline": "Hors ligne",
   "status_dropdown.set_online": "En ligne",
   "status_dropdown.set_ooo": "Absent du bureau",
@@ -5058,5 +5058,7 @@
   "get_the_app_modal.header": "Télécharger l’application kChat pour {platform}",
   "get_the_app_modal.content": "Nous vous conseillons d’installer l’application pour avoir une meilleure expérience !",
   "get_the_app_modal.confirm": "Télécharger kChat pour {platform}",
-  "api.change_channel_privacy": "Ce canal à été converti en Canal {type, select, Public {Public} other {Privé}}."
+  "api.change_channel_privacy": "Ce canal à été converti en Canal {type, select, Public {Public} other {Privé}}.",
+  "user.settings.display.lastActiveDisplay": "Partager l'heure de votre dernière activité",
+  "user.settings.display.lastActiveDesc": "Si cette option est activée, les autres utilisateurs verront à quel moment vous avez été actif pour la dernière fois."
 }

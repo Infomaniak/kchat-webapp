@@ -1,0 +1,46 @@
+resource_rules:
+  issues:
+    rules:
+      - name: "Weekly Prioritization"
+        conditions:
+          milestone: none
+          date:
+            attribute: created_at
+            condition: newer_than
+            interval_type: days
+            interval: 7
+        actions:
+          comment: |
+            This issue has been added to the 'Weekly Tasks' milestone.
+            Let's try to address it within the week.
+
+            /milestone %"Weekly Tasks"
+      - name: "Remind on Pull Request Updates"
+        conditions:
+          state: opened
+          date:
+            attribute: updated_at
+            condition: older_than
+            interval_type: days
+            interval: 7
+          ruby:  "resource[:assignees].any?"
+        actions:
+          comment: >
+            This pull request has been inactive for over a week.
+            {{assignees}}, please provide an update or discuss any roadblocks with the team.
+      - name: "Warn about close Stale Branches"
+        conditions:
+          state: opened
+          date:
+            attribute: updated_at
+            condition: older_than
+            interval_type: months
+            interval: 1
+          forbidden_labels:
+            - 🚧 wip
+            - 📝 testing
+        actions:
+          comment: >
+            This issue has been inactive for over a month. It will be closed as stale.
+            If you would like to keep it open, please add a 🚧 wip or 📝 testing tag and reopen.
+          status: close
