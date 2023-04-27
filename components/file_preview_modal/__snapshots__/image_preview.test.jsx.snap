@@ -6,16 +6,13 @@ exports[`components/view_image/ImagePreview should match snapshot, with preview 
     Object {
       "transform": "
             translate(0px, 0px)
-            scale(1)
+            scale(0)
         ",
     }
   }
 >
-  <LoadingImagePreview
-    containerClass="view-image__loading"
-  />
   <img
-    className="image_preview image_preview__normal image_preview_loading"
+    className="image_preview image_preview__normal"
     onLoad={[Function]}
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
@@ -33,16 +30,13 @@ exports[`components/view_image/ImagePreview should match snapshot, with preview,
     Object {
       "transform": "
             translate(0px, 0px)
-            scale(1)
+            scale(0)
         ",
     }
   }
 >
-  <LoadingImagePreview
-    containerClass="view-image__loading"
-  />
   <img
-    className="image_preview image_preview__normal image_preview_loading"
+    className="image_preview image_preview__normal"
     onLoad={[Function]}
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
@@ -60,16 +54,13 @@ exports[`components/view_image/ImagePreview should match snapshot, without previ
     Object {
       "transform": "
             translate(0px, 0px)
-            scale(1)
+            scale(0)
         ",
     }
   }
 >
-  <LoadingImagePreview
-    containerClass="view-image__loading"
-  />
   <img
-    className="image_preview image_preview__normal image_preview_loading"
+    className="image_preview image_preview__normal"
     onLoad={[Function]}
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
@@ -87,16 +78,13 @@ exports[`components/view_image/ImagePreview should match snapshot, without previ
     Object {
       "transform": "
             translate(0px, 0px)
-            scale(1)
+            scale(0)
         ",
     }
   }
 >
-  <LoadingImagePreview
-    containerClass="view-image__loading"
-  />
   <img
-    className="image_preview image_preview__normal image_preview_loading"
+    className="image_preview image_preview__normal"
     onLoad={[Function]}
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
