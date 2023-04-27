@@ -193,7 +193,6 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
                 })}
                 ref={imgRef}
                 src={previewUrl}
-                loading='lazy'
                 onLoad={handleLoad}
                 onMouseMove={handleMouseMove}
                 onMouseDown={handleMouseDown}
