@@ -66,7 +66,6 @@ export function executeCommand(message: string, args: CommandArgs): ActionFunc {
         // Add track event for certain slash commands
         const commandsWithTelemetry = [
             {command: '/help', telemetry: 'slash-command-help'},
-            {command: '/marketplace', telemetry: 'slash-command-marketplace'},
         ];
         for (const command of commandsWithTelemetry) {
             if (msg.startsWith(command.command)) {
@@ -129,41 +128,16 @@ export function executeCommand(message: string, args: CommandArgs): ActionFunc {
         case '/settings':
             dispatch(showSettings());
             return {data: true};
-        case '/marketplace':
-            // check if user has permissions to access the read plugins
-            if (!haveICurrentTeamPermission(state, Permissions.SYSCONSOLE_READ_PLUGINS)) {
-                return {error: {message: localizeMessage('marketplace_command.no_permission', 'You do not have the appropriate permissions to access the marketplace.')}};
-            }
 
-            // check config to see if marketplace is enabled
-            if (!isMarketplaceEnabled(state)) {
-                return {error: {message: localizeMessage('marketplace_command.disabled', 'The marketplace is disabled. Please contact your System Administrator for details.')}};
-            }
+            // case '/templates': {
+            //     const workTemplateEnabled = areWorkTemplatesEnabled(state);
+            //     if (!workTemplateEnabled) {
+            //         return {error: {message: localizeMessage('templates_command.disabled', 'Templates are disabled. Please contact your System Administrator for details.')}};
+            //     }
 
-            dispatch(openModal({modalId: ModalIdentifiers.PLUGIN_MARKETPLACE, dialogType: MarketplaceModal}));
-            return {data: true};
-        case '/marketplace':
-            // check if user has permissions to access the read plugins
-            if (!haveICurrentTeamPermission(state, Permissions.SYSCONSOLE_READ_PLUGINS)) {
-                return {error: {message: localizeMessage('marketplace_command.no_permission', 'You do not have the appropriate permissions to access the marketplace.')}};
-            }
-
-            // check config to see if marketplace is enabled
-            if (!isMarketplaceEnabled(state)) {
-                return {error: {message: localizeMessage('marketplace_command.disabled', 'The marketplace is disabled. Please contact your System Administrator for details.')}};
-            }
-
-            dispatch(openModal({modalId: ModalIdentifiers.PLUGIN_MARKETPLACE, dialogType: MarketplaceModal}));
-            return {data: true};
-        case '/templates': {
-            const workTemplateEnabled = areWorkTemplatesEnabled(state);
-            if (!workTemplateEnabled) {
-                return {error: {message: localizeMessage('templates_command.disabled', 'Templates are disabled. Please contact your System Administrator for details.')}};
-            }
-
-            dispatch(openModal({modalId: ModalIdentifiers.WORK_TEMPLATE, dialogType: WorkTemplateModal}));
-            return {data: true};
-        }
+        //     dispatch(openModal({modalId: ModalIdentifiers.WORK_TEMPLATE, dialogType: WorkTemplateModal}));
+        //     return {data: true};
+        // }
         case '/collapse':
         case '/expand':
             dispatch(PostActions.resetEmbedVisibility());
