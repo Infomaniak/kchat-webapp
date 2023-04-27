@@ -7,7 +7,6 @@ import classNames from 'classnames';
 
 import {ZoomValue} from 'components/file_preview_modal/file_preview_modal_image_controls/file_preview_modal_image_controls';
 import {LinkInfo} from 'components/file_preview_modal/types';
-import LoadingImagePreview from 'components/loading_image_preview';
 
 import {getFilePreviewUrl, getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 import {FileInfo} from '@mattermost/types/files';
@@ -45,11 +44,11 @@ const getMaxContainerScale = (imageWidth: number, imageHeight: number, container
 };
 
 export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Props) {
-    const [loaded, setLoaded] = useState(false);
+    const [, setLoaded] = useState(false);
     const [dragging, setDragging] = useState(false);
     const [offset, setOffset] = useState<Offset>({offsetX: 0, offsetY: 0});
     const imgRef = useRef<HTMLImageElement>(null);
-    const scale = useRef(1);
+    const scale = useRef(0);
     const isMouseDown = useRef(false);
     const touch = useRef<Touch>({touchX: 0, touchY: 0});
     const maxScale = useRef(1);
@@ -79,7 +78,10 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     const imageHeight = imgRef.current?.height || 1;
     const containerWidth = imgRef.current?.parentElement?.parentElement?.clientWidth || window.innerWidth;
     const containerHeight = imgRef.current?.parentElement?.parentElement?.clientHeight || window.innerHeight;
-    const maxContainerScale = getMaxContainerScale(imageWidth, imageHeight, containerWidth - PADDING, containerHeight - PADDING);
+    let maxContainerScale = 0;
+    if (imgRef.current) {
+        maxContainerScale = getMaxContainerScale(imageWidth, imageHeight, containerWidth - PADDING, containerHeight - PADDING);
+    }
     minScale.current = Math.min(maxContainerScale, DEFAULT_MIN_SCALE);
 
     const clampOffset = (offsetX: number, offsetY: number) => {
@@ -185,10 +187,8 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
 
     return (
         <div style={containerStyle}>
-            {!loaded && <LoadingImagePreview/>}
             <img
                 className={classNames(`image_preview image_preview__${cursorType}`, {
-                    image_preview_loading: !loaded,
                     image_preview__fullscreen: imageOverflows,
                 })}
                 ref={imgRef}
