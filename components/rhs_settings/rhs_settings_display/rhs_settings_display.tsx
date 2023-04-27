@@ -174,7 +174,7 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             militaryTime: props.militaryTime,
             teammateNameDisplay: props.teammateNameDisplay,
             availabilityStatusOnPosts: props.availabilityStatusOnPosts,
-            channelDisplayMode: props.channelDisplayMode ? props.channelDisplayMode : Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
+            channelDisplayMode: props.channelDisplayMode ?? Preferences.CHANNEL_DISPLAY_MODE_FULL_SCREEN,
             messageDisplay: props.messageDisplay ? props.messageDisplay : Preferences.MESSAGE_DISPLAY_CLEAN,
             colorizeUsernames: props.colorizeUsernames ? props.colorizeUsernames : 'true',
             collapseDisplay: props.collapseDisplay ? props.collapseDisplay : 'false',
@@ -399,7 +399,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
             description,
         } = props;
         const extraInfo = null;
-        const submit: (() => Promise<void>) | null = this.handleSubmit;
 
         const messageTitle = (
             <FormattedMessage
@@ -483,7 +482,6 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                 key={display}
                 title={messageTitle}
                 inputs={inputs}
-                submit={submit}
                 saving={this.state.isSaving}
                 server_error={this.state.serverError}
                 updateSection={this.updateSection}
