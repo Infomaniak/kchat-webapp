@@ -26,7 +26,6 @@ import * as UserAgent from 'utils/user_agent';
 import {Constants, ModalIdentifiers} from 'utils/constants';
 import {getHistory} from 'utils/browser_history';
 
-import UserSettingsModal from 'components/user_settings/modal';
 import {AppCommandParser} from 'components/suggestion/command_provider/app_command_parser/app_command_parser';
 import {intlShim} from 'components/suggestion/command_provider/app_command_parser/app_command_parser_dependencies';
 import LeaveChannelModal from 'components/leave_channel_modal';
@@ -35,12 +34,9 @@ import KeyboardShortcutsModal from 'components/keyboard_shortcuts/keyboard_short
 import {GlobalState} from 'types/store';
 
 import {t} from 'utils/i18n';
-import MarketplaceModal from 'components/plugin_marketplace';
-import WorkTemplateModal from 'components/work_templates';
-import {haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {Permissions} from 'mattermost-redux/constants';
-import {isMarketplaceEnabled} from 'mattermost-redux/selectors/entities/general';
-import {areWorkTemplatesEnabled} from 'selectors/work_template';
+
+// import WorkTemplateModal from 'components/work_templates';
+// import {areWorkTemplatesEnabled} from 'selectors/work_template';
 
 import {doAppSubmit, openAppsModal, postEphemeralCallResponseForCommandArgs} from './apps';
 import {trackEvent} from './telemetry_actions';
