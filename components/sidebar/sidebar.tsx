@@ -16,8 +16,9 @@ import UserSettingsModal from 'components/user_settings/modal';
 import Pluggable from 'plugins/pluggable';
 
 import {ModalData} from 'types/actions';
+import {RhsState} from 'types/store/rhs';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
+import Constants, {ModalIdentifiers, RHSStates} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
 import CreateUserGroupsModal from 'components/create_user_groups_modal';
@@ -53,6 +54,9 @@ type Props = {
     isKeyBoardShortcutModalOpen: boolean;
     userGroupsEnabled: boolean;
     canCreateCustomGroups: boolean;
+    rhsState?: RhsState;
+    rhsOpen?: boolean;
+    showWorkTemplateButton: boolean;
 };
 
 type State = {
@@ -171,6 +175,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
             modalId: ModalIdentifiers.NEW_CHANNEL_MODAL,
             dialogType: NewChannelModal,
         });
+        this.closeEditRHS();
         trackEvent('ui', 'ui_channels_create_channel_v2');
     }
 
@@ -188,6 +193,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
             this.hideMoreDirectChannelsModal();
         } else {
             this.showMoreDirectChannelsModal();
+            this.closeEditRHS();
         }
     }
 
@@ -216,6 +222,12 @@ export default class Sidebar extends React.PureComponent<Props, State> {
             </React.Fragment>
         );
     }
+
+    closeEditRHS = () => {
+        if (this.props.rhsOpen && this.props.rhsState === RHSStates.EDIT_HISTORY) {
+            this.props.actions.closeRightHandSide();
+        }
+    };
 
     render() {
         const root: Element | null = document.querySelector('#root');
@@ -251,6 +263,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                         unreadFilterEnabled={this.props.unreadFilterEnabled}
                         userGroupsEnabled={this.props.userGroupsEnabled}
                         canCreateCustomGroups={this.props.canCreateCustomGroups}
+                        showWorkTemplateButton={this.props.showWorkTemplateButton}
                     />
                 )}
                 <div

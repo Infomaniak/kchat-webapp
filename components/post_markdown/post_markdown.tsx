@@ -4,15 +4,18 @@
 import React from 'react';
 import memoize from 'memoize-one';
 
-import {Post} from '@mattermost/types/posts';
-import {Channel} from '@mattermost/types/channels';
-import {Team} from '@mattermost/types/teams';
-
 import Markdown from 'components/markdown';
 
 import {MentionKey, TextFormattingOptions} from 'utils/text_formatting';
 
-import {renderSystemMessage} from './system_message_helpers';
+import {Posts} from 'mattermost-redux/constants';
+
+import {Post} from '@mattermost/types/posts';
+import {Channel} from '@mattermost/types/channels';
+
+import {Team} from '@mattermost/types/teams';
+
+import {renderReminderSystemBotMessage, renderSystemMessage} from './system_message_helpers';
 
 type Props = {
 
@@ -41,6 +44,7 @@ type Props = {
      */
     channelId?: string;
     channel: Channel;
+    currentTeam: Team;
     options?: TextFormattingOptions;
     pluginHooks?: Array<Record<string, any>>;
 
@@ -51,8 +55,17 @@ type Props = {
     isUserCanManageMembers?: boolean;
     mentionKeys: MentionKey[];
 
-    currentTeam: Team;
-    isMilitaryTime: boolean;
+    /**
+     * Whether or not to render the post edited indicator
+     * @default true
+     */
+    showPostEditedIndicator?: boolean;
+
+    /**
+     * Whether the user prefers Military time
+     */
+    isMilitaryTime?: boolean;
+    timezone?: string;
 }
 
 export default class PostMarkdown extends React.PureComponent<Props> {
@@ -60,6 +73,7 @@ export default class PostMarkdown extends React.PureComponent<Props> {
         isRHS: false,
         pluginHooks: [],
         options: {},
+        showPostEditedIndicator: true,
     };
 
     getOptions = memoize(
@@ -77,7 +91,12 @@ export default class PostMarkdown extends React.PureComponent<Props> {
         const {post, mentionKeys} = this.props;
 
         if (post) {
-            const renderedSystemMessage = renderSystemMessage(post, this.props.currentTeam, this.props.channel, this.props.isUserCanManageMembers, this.props.isMilitaryTime);
+            const renderedSystemMessage = renderSystemMessage(post,
+                this.props.currentTeam,
+                this.props.channel,
+                this.props.isUserCanManageMembers,
+                this.props.isMilitaryTime,
+                this.props.timezone);
             if (renderedSystemMessage) {
                 return <div>{renderedSystemMessage}</div>;
             }
@@ -100,7 +119,7 @@ export default class PostMarkdown extends React.PureComponent<Props> {
 
         const options = this.getOptions(
             this.props.options,
-            post?.props?.disable_group_highlight === true, // eslint-disable-line camelcase
+            post?.props?.disable_group_highlight === true,
             mentionHighlight,
             post?.edit_at,
         );
@@ -117,7 +136,7 @@ export default class PostMarkdown extends React.PureComponent<Props> {
                 hasPluginTooltips={this.props.hasPluginTooltips}
                 imagesMetadata={this.props.post?.metadata?.images}
                 postId={this.props.post?.id}
-                editedAt={this.props.post?.edit_at}
+                editedAt={this.props.showPostEditedIndicator ? this.props.post?.edit_at : undefined}
             />
         );
     }

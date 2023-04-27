@@ -19,6 +19,7 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 import Constants from 'utils/constants';
 import * as Utils from 'utils/utils';
+import ExternalLink from 'components/external_link';
 
 type Props = {
     team: Team;

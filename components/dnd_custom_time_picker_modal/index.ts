@@ -11,6 +11,7 @@ import {setStatus} from 'mattermost-redux/actions/users';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentUserTimezone} from 'selectors/general';
 
+import {getCurrentLocale} from 'selectors/i18n';
 import {GlobalState} from 'types/store';
 import {makeAsyncComponent} from 'components/async_load';
 

@@ -7,11 +7,13 @@ import Icon from '@infomaniak/compass-components/foundations/icon';
 
 import {getDateForTimezone} from 'mattermost-redux/utils/timezone_utils';
 import {isSameDay, isWithinLastWeek, isYesterday} from 'utils/datetime';
+
 import OverlayTrigger from '../../overlay_trigger';
 import Tooltip from '../../tooltip';
 
 import {Props} from './index';
 
+// TODO: post edit histoiry {postOwner, post, canEdit, actions}
 const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0}: Props): JSX.Element | null => {
     const {formatMessage, formatDate, formatTime} = useIntl();
 
@@ -53,14 +55,66 @@ const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0}: P
         time,
     });
 
+    // TODO: post edit history
+    // const viewHistoryText = formatMessage({
+    //     id: 'post_message_view.view_post_edit_history',
+    //     defaultMessage: 'Click to view history',
+    // });
+
+    const postOwnerTooltipInfo = null;
+
+    // TODO: post edit history
+    // const postOwnerTooltipInfo = (postOwner && canEdit) ? (
+    //     <span className='view-history__text'>{viewHistoryText}</span>
+    // ) : null;
+
     const tooltip = (
         <Tooltip
             id={`edited-post-tooltip_${postId}`}
             className='hidden-xs'
         >
             {`${editedText} ${formattedTime}`}
+            {postOwnerTooltipInfo}
         </Tooltip>
     );
+
+    // TODO: post edit history
+    // const showPostEditHistory = (e: MouseEvent<HTMLButtonElement>) => {
+    //     e.preventDefault();
+
+    //     if (post?.id) {
+    //         actions.getPostEditHistory(post.id);
+    //         actions.openShowEditHistory(post);
+    //     }
+    // };
+
+    const editedIndicatorContent = (
+        <span
+            id={`postEdited_${postId}`}
+            className='post-edited__indicator'
+            data-post-id={postId}
+            data-edited-at={editedAt}
+        >
+            <Icon
+                glyph={'pencil-outline'}
+                size={10}
+            />
+            {editedText}
+        </span>
+    );
+
+    const editedIndicator = editedIndicatorContent;
+
+    // TODO: post edit history
+    // const editedIndicator = (postOwner && canEdit) ? (
+    //     <button
+    //         className={'style--none'}
+    //         tabIndex={-1}
+    //         onClick={showPostEditHistory}
+    //     >
+    //         {editedIndicatorContent}
+    //     </button>
+    // ) : editedIndicatorContent;
 
     return !postId || editedAt === 0 ? null : (
         <OverlayTrigger
@@ -68,18 +122,7 @@ const PostEditedIndicator = ({postId, isMilitaryTime, timeZone, editedAt = 0}: P
             placement='top'
             overlay={tooltip}
         >
-            <span
-                id={`postEdited_${postId}`}
-                className='post-edited__indicator'
-                data-post-id={postId}
-                data-edited-at={editedAt}
-            >
-                <Icon
-                    glyph={'pencil-outline'}
-                    size={10}
-                />
-                {editedText}
-            </span>
+            {editedIndicator}
         </OverlayTrigger>
     );
 };

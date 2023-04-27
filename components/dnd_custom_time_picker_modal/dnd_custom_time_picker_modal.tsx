@@ -10,11 +10,12 @@ import {UserStatus} from '@mattermost/types/users';
 
 import GenericModal from 'components/generic_modal';
 
-import {UserStatuses} from 'utils/constants';
+import Constants, {UserStatuses} from 'utils/constants';
+
 import DateTimeInputContainer, {getRoundedTime} from 'components/custom_status/date_time_input';
 
 import {toUTCUnix} from 'utils/datetime';
-import {localizeMessage} from 'utils/utils';
+import {isKeyPressed, localizeMessage} from 'utils/utils';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import './dnd_custom_time_picker_modal.scss';
@@ -32,9 +33,11 @@ type Props = {
 type State = {
     time: Moment;
     isMenuOpen: boolean;
+    isPopperOpen: boolean;
 }
 
 export default class DndCustomTimePicker extends React.PureComponent<Props, State> {
+    private buttonRef = React.createRef<HTMLButtonElement>();
     constructor(props: Props) {
         super(props);
         const currentTime = getCurrentMomentForTimezone(props.timezone);
@@ -42,8 +45,23 @@ export default class DndCustomTimePicker extends React.PureComponent<Props, Stat
         this.state = {
             time: initialTime,
             isMenuOpen: false,
+            isPopperOpen: false,
         };
     }
+
+    componentDidMount() {
+        document.addEventListener('keydown', this.handleKeyDown);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
+    }
+
+    handleKeyDown = (event: KeyboardEvent) => {
+        if (isKeyPressed(event, Constants.KeyCodes.ESCAPE) && !this.state.isPopperOpen && !this.state.isMenuOpen) {
+            this.props.onExited();
+        }
+    };
 
     getText = () => {
         const modalHeaderText = (
@@ -65,26 +83,33 @@ export default class DndCustomTimePicker extends React.PureComponent<Props, Stat
         };
     }
 
-    handleConfirm = () => {
-        this.props.actions.setStatus({
+    handleConfirm = async () => {
+        await this.props.actions.setStatus({
             user_id: this.props.userId,
             status: UserStatuses.DND,
             dnd_end_time: toUTCUnix(this.state.time.toDate()),
             manual: true,
             last_activity_at: toUTCUnix(this.props.currentDate),
         });
+        this.props.onExited();
     }
 
     setTime = (time: Moment) => this.setState({time});
 
     setIsMenuOpen = (isMenuOpen: boolean) => this.setState({isMenuOpen});
 
+    handlePopperOpenState= (isPopperOpen: boolean) => {
+        this.setState({isPopperOpen});
+    };
+
     render() {
         const {
             modalHeaderText,
             confirmButtonText,
         } = this.getText();
-        const {time, isMenuOpen} = this.state;
+        const {time, isMenuOpen, isPopperOpen} = this.state;
+
+        const isConfirmDisabled = isMenuOpen || isPopperOpen;
 
         return (
             <GenericModal
@@ -96,13 +121,16 @@ export default class DndCustomTimePicker extends React.PureComponent<Props, Stat
                 handleEnterKeyPress={this.handleConfirm}
                 id='dndCustomTimePickerModal'
                 className={'DndModal modal-overflow'}
-                isConfirmDisabled={isMenuOpen}
+                tabIndex={-1}
+                keyboardEscape={false}
+                isConfirmDisabled={isConfirmDisabled}
             >
                 <DateTimeInputContainer
                     time={time}
                     timezone={this.props.timezone}
                     handleChange={this.setTime}
                     onMenuChange={this.setIsMenuOpen}
+                    setIsDatePickerOpen={this.handlePopperOpenState}
                 />
             </GenericModal>
         );

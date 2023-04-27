@@ -31,6 +31,7 @@ export type PostType = 'system_add_remove' |
 'system_generic' |
 'system_post_reminder' |
 'system_change_chan_privacy' |
+'reminder' |
 '';
 
 export type PostEmbedType = 'image' | 'link' | 'message_attachment' | 'opengraph' | 'permalink';
@@ -146,6 +147,7 @@ export type PostsState = {
     openGraph: RelationOneToOne<Post, Record<string, OpenGraphMetadata>>;
     pendingPostIds: string[];
     selectedPostId: string;
+    postEditHistory: Post[];
     currentFocusedPostId: string;
     messagesHistory: MessageHistory;
     expandedURLs: Record<string, string>;

@@ -16,6 +16,8 @@ import {closeModal, openModal} from 'actions/views/modals';
 
 import {StripeSetupIntent, BillingDetails} from 'types/cloud/sku';
 import {CloudTypes} from 'mattermost-redux/action_types';
+import {getBlankAddressWithCountry} from 'utils/utils';
+import {Address, Feedback, WorkspaceDeletionRequest} from '@mattermost/types/cloud';
 import {ServerError} from '@mattermost/types/errors';
 import {ChannelType} from '@mattermost/types/channels';
 import {isModalOpen} from 'selectors/views/modals';
@@ -91,14 +93,26 @@ export function completeStripeAddPaymentMethod(
     };
 }
 
-export function subscribeCloudSubscription(productId: string, seats = 0) {
+export function subscribeCloudSubscription(
+    productId: string,
+    shippingAddress: Address = getBlankAddressWithCountry(),
+    seats = 0,
+    downgradeFeedback?: Feedback,
+) {
     return async () => {
         try {
-            await Client4.subscribeCloudProduct(productId, seats);
-        } catch (error) {
-            return error;
+            const subscription = await Client4.subscribeCloudProduct(
+                productId,
+                shippingAddress,
+                seats,
+                downgradeFeedback,
+            );
+
+            return {data: subscription};
+        } catch (e: any) {
+            // In the event that the status code returned is 422, this request has been blocked by export compliance
+            return {data: false, error: {error: e.message, status: e.status_code}};
         }
-        return true;
     };
 }
 
@@ -219,26 +233,6 @@ export function getFilesUsage(): ActionFunc {
     };
 }
 
-export function getBoardsUsage(): ActionFunc {
-    return async (dispatch: DispatchFunc) => {
-        try {
-            const result = await Client4.getBoardsUsage();
-            if (result) {
-                dispatch({
-                    type: CloudTypes.RECEIVED_BOARDS_USAGE,
-
-                    // the views and cards properties are the limits, not usage.
-                    // So they are not passed in to the usage.
-                    data: result.used_cards,
-                });
-            }
-        } catch (error) {
-            return error;
-        }
-        return {data: true};
-    };
-}
-
 export function getTeamsUsage(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         try {
@@ -253,6 +247,17 @@ export function getTeamsUsage(): ActionFunc {
             return error;
         }
         return {data: false};
+    };
+}
+
+export function deleteWorkspace(deletionRequest: WorkspaceDeletionRequest) {
+    return async () => {
+        try {
+            await Client4.deleteWorkspace(deletionRequest);
+        } catch (error) {
+            return error;
+        }
+        return true;
     };
 }
 
