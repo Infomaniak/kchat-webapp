@@ -1105,9 +1105,10 @@ export const DraggingStateTypes = {
     MIXED_CHANNELS: 'mixed_channels',
 };
 
+// TODO: clean, used primarily for obsolete pricing and trial components+tests
 export const AboutLinks = {
-    TERMS_OF_SERVICE: 'https://mattermost.com/terms-of-use/',
-    PRIVACY_POLICY: 'https://mattermost.com/privacy-policy/',
+    TERMS_OF_SERVICE: 'https://infomaniak.com/terms-of-use/',
+    PRIVACY_POLICY: 'https://infomaniak.com/privacy-policy/',
 };
 
 export const CloudLinks = {
@@ -1141,11 +1142,12 @@ export const DocLinks = {
     TRUE_UP_REVIEW: 'https://mattermost.com/pl/true-up-documentation',
 };
 
+// TODO: clean, used primarily for obsolete pricing and trial components+tests
 export const LicenseLinks = {
-    CONTACT_SALES: 'https://mattermost.com/contact-sales/',
-    TRIAL_INFO_LINK: 'https://mattermost.com/trial',
-    EMBARGOED_COUNTRIES: 'https://mattermost.com/pl/limitations-for-embargoed-countries',
-    SOFTWARE_SERVICES_LICENSE_AGREEMENT: 'https://mattermost.com/pl/software-and-services-license-agreement',
+    CONTACT_SALES: 'https://infomaniak.com/contact-sales/',
+    TRIAL_INFO_LINK: 'https://infomaniak.com/trial',
+    EMBARGOED_COUNTRIES: 'https://infomaniak.com/pl/limitations-for-embargoed-countries',
+    SOFTWARE_SERVICES_LICENSE_AGREEMENT: 'https://infomaniak.com/pl/software-and-services-license-agreement',
     SOFTWARE_SERVICES_LICENSE_AGREEMENT_TEXT: 'Software Services and License Agreement',
 };
 
