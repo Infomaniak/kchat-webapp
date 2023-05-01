@@ -69,6 +69,10 @@
             &::before, &::after {
                 display: none;
             }
+            .btn-link {
+                // remove text underline on all modals
+                text-decoration: none;
+            }
         }
         .modal-body .filter-row .save-button {
             position: relative;
