@@ -17,7 +17,7 @@
 .modal-body {
     overflow: auto;
     max-height: calc(90vh - 80px);
-    padding: 25px 25px 0;
+    padding: 32px 40px 0;
 
     &.overflow--visible {
         overflow: visible;
@@ -50,17 +50,22 @@
         }
 
         .modal-header {
-            background: var(--sidebar-header-bg);
+            background: var(--center-channel-bg);
             border-radius: 12px 12px 0 0;
-            padding: 20px 32px 16px;
+            padding: 16px 40px 16px;
             align-items: center;
             .close {
-                color: var(--sidebar-header-text-color);
+                color: var(--center-channel-color);
             }
         }
         .modal-footer {
             border-radius: 0 0 12px 12px;
             padding: 18px 32px;
+            display: flex;
+            justify-content: space-between;
+            &::before, &::after {
+                display: none;
+            }
         }
         .modal-body .filter-row .save-button {
             position: relative;
@@ -68,7 +73,6 @@
             align-items: center;
             justify-content: center;
             border: 0;
-            background: var(--button-bg);
             border-radius: 4px;
             color: var(--button-color);
             font-weight: 600;
@@ -91,7 +95,6 @@
                 align-items: center;
                 justify-content: center;
                 border: 0;
-                background: var(--button-bg);
                 border-radius: 4px;
                 color: var(--button-color);
                 font-weight: 600;
@@ -107,9 +110,8 @@
             }
             button.secondary:not(.close) {
                 margin-right: 8px;
-                background: var(--center-channel-bg);
-                background: rgba(var(--button-bg-rgb), 0.08);
-                color: var(--button-bg);
+                background: rgb(var(--ik-btn-secondary));
+                color: rgb(var(--ik-btn-secondary-color));
             }
         }
     }
@@ -195,6 +197,7 @@
 
     .modal-footer {
         background: var(--center-channel-bg);
+        border-top: none;
 
         &.modal-footer--invisible {
             overflow: hidden;
@@ -313,7 +316,7 @@
             overflow: hidden;
             max-width: calc(100% - 80px);
             flex: 0.9;
-            color: var(--sidebar-header-text-color);
+            color: var(--center-channel-color);
             font-size: 20px;
             line-height: 27px;
             text-overflow: ellipsis;
