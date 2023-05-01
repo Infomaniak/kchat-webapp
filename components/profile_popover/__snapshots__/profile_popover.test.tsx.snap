@@ -109,17 +109,6 @@ exports[`components/ProfilePopover should disable start call button when user is
         className="divider divider--expanded"
         key="user-popover-hr"
       />
-      <div
-        className="user-popover__id"
-        key="user-popover-userid"
-      >
-        <span
-          className="user-popover__subtitle"
-        >
-          ID
-        </span>
-        user_id
-      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -465,17 +454,6 @@ exports[`components/ProfilePopover should hide add-to-channel option if not on t
         className="divider divider--expanded"
         key="user-popover-hr"
       />
-      <div
-        className="user-popover__id"
-        key="user-popover-userid"
-      >
-        <span
-          className="user-popover__subtitle"
-        >
-          ID
-        </span>
-        user_id
-      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -742,17 +720,6 @@ exports[`components/ProfilePopover should match snapshot 1`] = `
         className="divider divider--expanded"
         key="user-popover-hr"
       />
-      <div
-        className="user-popover__id"
-        key="user-popover-userid"
-      >
-        <span
-          className="user-popover__subtitle"
-        >
-          ID
-        </span>
-        user_id
-      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -1117,17 +1084,6 @@ exports[`components/ProfilePopover should match snapshot for shared user 1`] = `
         className="divider divider--expanded"
         key="user-popover-hr"
       />
-      <div
-        className="user-popover__id"
-        key="user-popover-userid"
-      >
-        <span
-          className="user-popover__subtitle"
-        >
-          ID
-        </span>
-        user_id
-      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -1480,17 +1436,6 @@ exports[`components/ProfilePopover should match snapshot when calls are disabled
         className="divider divider--expanded"
         key="user-popover-hr"
       />
-      <div
-        className="user-popover__id"
-        key="user-popover-userid"
-      >
-        <span
-          className="user-popover__subtitle"
-        >
-          ID
-        </span>
-        user_id
-      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -1813,17 +1758,6 @@ exports[`components/ProfilePopover should match snapshot with custom status 1`] 
         className="divider divider--expanded"
         key="user-popover-hr"
       />
-      <div
-        className="user-popover__id"
-        key="user-popover-userid"
-      >
-        <span
-          className="user-popover__subtitle"
-        >
-          ID
-        </span>
-        user_id
-      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -2218,17 +2152,6 @@ exports[`components/ProfilePopover should match snapshot with custom status expi
         className="divider divider--expanded"
         key="user-popover-hr"
       />
-      <div
-        className="user-popover__id"
-        key="user-popover-userid"
-      >
-        <span
-          className="user-popover__subtitle"
-        >
-          ID
-        </span>
-        user_id
-      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -2578,16 +2501,6 @@ exports[`components/ProfilePopover should match snapshot with custom status not 
         className="divider divider--expanded"
         key="user-popover-hr"
       />
-      <div
-        className="user-popover__id"
-        key="user-popover-userid"
-      >
-        <span
-          className="user-popover__subtitle"
-        >
-          ID
-        </span>
-      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -2873,17 +2786,6 @@ exports[`components/ProfilePopover should match snapshot with last active displa
         className="divider divider--expanded"
         key="user-popover-hr"
       />
-      <div
-        className="user-popover__id"
-        key="user-popover-userid"
-      >
-        <span
-          className="user-popover__subtitle"
-        >
-          ID
-        </span>
-        user_id
-      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -3208,17 +3110,6 @@ exports[`components/ProfilePopover should match snapshot with no last active dis
         className="divider divider--expanded"
         key="user-popover-hr"
       />
-      <div
-        className="user-popover__id"
-        key="user-popover-userid"
-      >
-        <span
-          className="user-popover__subtitle"
-        >
-          ID
-        </span>
-        user_id
-      </div>
       <Connect(Pluggable)
         hide={[MockFunction]}
         key="profilePopoverPluggable2"
@@ -3991,17 +3882,6 @@ exports[`components/ProfilePopover should show the start call button when isCall
                     className="divider divider--expanded"
                     key="user-popover-hr"
                   />
-                  <div
-                    className="user-popover__id"
-                    key="user-popover-userid"
-                  >
-                    <span
-                      className="user-popover__subtitle"
-                    >
-                      ID
-                    </span>
-                    user_id
-                  </div>
                   <Connect(Pluggable)
                     hide={[MockFunction]}
                     key="profilePopoverPluggable2"
