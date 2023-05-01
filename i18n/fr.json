@@ -5058,5 +5058,15 @@
   "get_the_app_modal.header": "Télécharger l’application kChat pour {platform}",
   "get_the_app_modal.content": "Nous vous conseillons d’installer l’application pour avoir une meilleure expérience !",
   "get_the_app_modal.confirm": "Télécharger kChat pour {platform}",
-  "api.change_channel_privacy": "Ce canal à été converti en Canal {type, select, Public {Public} other {Privé}}."
+  "api.change_channel_privacy": "Ce canal à été converti en Canal {type, select, Public {Public} other {Privé}}.",
+  "more_channels.hide_joined": "Cacher les canaux déjà rejoints",
+  "more_channels.searchError": "Essayez de rechercher des mots-clés différents, de vérifier les fautes de frappe ou d'ajuster les filtres.",
+  "more_channels.joined": "Rejoint",
+  "joinChannel.JoinButton": "Rejoindre",
+  "joinChannel.joiningButton": "Rejoindre...",
+  "more_channels.noArchived": "Pas de canaux archivés",
+  "more_channels.noPublic": "Pas de canaux publics",
+  "more_channels.count_zero": "0 Résultats",
+  "more_channels.count_one": "0 Résultat",
+  "more_channels.count": "{count} Résultats"
 }
