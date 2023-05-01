@@ -97,7 +97,7 @@ export default class DeleteChannelModal extends React.PureComponent<Props, State
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className='alert alert-with-icon alert-danger'>
+                    <div className='alert alert-with-icon alert-grey'>
                         <i className='icon-information-outline'/>
                         {!canViewArchivedChannels &&
                             <FormattedMarkdownMessage

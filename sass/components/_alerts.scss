@@ -2,7 +2,9 @@
 
 .alert {
     padding: 16px 16px;
-    border-radius: $border-rad;
+    border-radius: 10px;
+    background: rgb(244, 246, 253);
+    color: var(--center-channel-color);
 
     .alert-transparent {
         background: var(--center-channel-bg);
@@ -11,24 +13,24 @@
         display: flex;
         justify-content: space-between;
         i {
-            // 5px is directly on the pseudo element, +7 to make 12px
-            padding-right: 7px;
+            font-size: 16px;
+            // 3px is directly on the pseudo element, +7 to make 12px
+            padding-right: 9px;
         }
     }
 }
 
 .alert-grey {
-    background: #f2f2f2;
-    color: #999;
-    .icon {
-        background: rgb(0, 152, 255);
+    i {
+        color: rgb(0, 152, 255);
     }
 }
 
 .alert-danger {
-    background: rgb(244, 246, 253);
-    color: var(--center-channel-color);
     border: none;
+    i {
+        color: rgb(255, 133, 0);
+    }
 }
 
 .alert--confirm {
