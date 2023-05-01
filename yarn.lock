@@ -2329,9 +2329,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@infomaniak/compass-components@npm:0.10.0":
-  version: 0.10.0
-  resolution: "@infomaniak/compass-components@npm:0.10.0"
+"@infomaniak/compass-components@npm:0.11.0":
+  version: 0.11.0
+  resolution: "@infomaniak/compass-components@npm:0.11.0"
   dependencies:
     "@infomaniak/compass-icons": 0.8.0
     "@popperjs/core": ^2.9.2
@@ -2347,7 +2347,7 @@ __metadata:
   peerDependencies:
     react: 16.13.1 || ^17.0.1
     react-dom: 16.13.1 || ^17.0.1
-  checksum: 8269a5d5ec970e42d1da4e27a4821f26c78ae365372322c4b7dd4061ec101b82b65485173f628c715d335887d8a3cd81fe28722ad735de6ed0b2208533961cb8
+  checksum: f3b70fcdbda25dec0cfaffc10cd4a32d61504cf6cb0e15ea33099497b8d3d5f8dc1cff7615e52feb2911fe20e87d3a7a1baba81c322fd69ffc506eaccff4e08e
   languageName: node
   linkType: hard
 
@@ -13539,7 +13539,7 @@ __metadata:
     "@floating-ui/react-dom-interactions": 0.10.3
     "@guyplusplus/turndown-plugin-gfm": 1.0.7
     "@hot-loader/react-dom": 17.0.2
-    "@infomaniak/compass-components": 0.10.0
+    "@infomaniak/compass-components": 0.11.0
     "@infomaniak/compass-icons": 0.10.0
     "@infomaniak/marked": ^0.2.0
     "@mattermost/client": "workspace:packages/client"
