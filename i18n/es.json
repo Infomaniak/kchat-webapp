@@ -3101,7 +3101,7 @@
   "delete_category_modal.deleteCategory": "¿Eliminar esta Categoría?",
   "delete_category_modal.helpText": "Canales en **{category_name}** serán movidos nuevamente a las categorías de Canales y Mensajes directos. No eres eliminado de ninguno de los canales.",
   "delete_channel.cancel": "Cancelar",
-  "delete_channel.confirm": "Confirmar ARCHIVAR Canal",
+  "delete_channel.confirm": "Archivar el canal {visibility} <strong>{channel}</strong>",
   "delete_channel.del": "Archivar",
   "delete_channel.question": "Esto archivará el canal del equipo y lo eliminará de la interfaz de usuario. Los canales archivados pueden ser restaurados de ser necesario.\n \n¿Estás seguro de que quieres archivar el canal **{display_name}**?",
   "delete_channel.viewArchived.question": "Esta operación archivará el canal para su equipo. El contenido del canal seguirá estando disponibles para los miembros del canal.\n\n¿Estás seguro que quieres archivar el canal **{display_name}**?",

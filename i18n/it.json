@@ -2364,7 +2364,7 @@
   "delete_category_modal.deleteCategory": "Eliminare la categoria?",
   "delete_category_modal.helpText": "I canali in **{category_name}** torneranno nelle categorie Canali e Messaggi Diretti. Non sarai rimosso da nessun canale.",
   "delete_channel.cancel": "Annulla",
-  "delete_channel.confirm": "Conferma ARCHIVIAZIONE Canale",
+  "delete_channel.confirm": "Archiviare il canale {visibility} <strong>{channel}</strong>",
   "delete_channel.del": "Archivia",
   "delete_channel.question": "Questo archivierà il canale dal gruppo e renderà il suo contenuto inaccessibile a tutti gli utenti.",
   "delete_channel.viewArchived.question": "Questa operazione archivierà il canale dalla squadra. I contenuti del canale rimarranno visibili ai membri del canale.",

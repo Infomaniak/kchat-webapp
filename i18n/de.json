@@ -3210,7 +3210,7 @@
   "delete_category_modal.deleteCategory": "Soll diese Kategorie gelöscht werden?",
   "delete_category_modal.helpText": "Kanäle in **{category_name}** erscheinen wieder unter Kanäle und Direktnachrichten. Du wirst nicht aus den Kanälen entfernt.",
   "delete_channel.cancel": "Abbrechen",
-  "delete_channel.confirm": "ARCHIVIERUNG des Kanals bestätigen",
+  "delete_channel.confirm": "Archiviere den {visibility} <strong>{channel}</strong> Kanal",
   "delete_channel.del": "Archivieren",
   "delete_channel.question": "Dies wird den Kanal aus dem Team archivieren und die Inhalte für alle Benutzer unzugänglich machen.",
   "delete_channel.viewArchived.question": "Dies wird den Kanal archivieren. Kanalinhalte werden weiterhin für Kanalmitglieder verfügbar sein.",
