@@ -5070,5 +5070,6 @@
   "more_channels.noPublic": "Pas de canaux publics",
   "more_channels.count_zero": "0 Résultats",
   "more_channels.count_one": "0 Résultat",
-  "more_channels.count": "{count} Résultats"
+  "more_channels.count": "{count} Résultats",
+  "user_profile.send.dm.yourself": "Envoyez-vous un message"
 }

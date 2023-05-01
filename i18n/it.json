@@ -4008,5 +4008,6 @@
   "more_channels.noPublic": "Nessun canale pubblico",
   "more_channels.count_zero": "0 Risultati",
   "more_channels.count_one": "1 Risultato",
-  "more_channels.count": "{count} Risultati"
+  "more_channels.count": "{count} Risultati",
+  "user_profile.send.dm.yourself": "Invia un messaggio a te stesso"
 }
