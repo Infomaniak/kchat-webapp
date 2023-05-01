@@ -566,15 +566,6 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
             />,
         );
         dataContent.push(
-            <div
-                className='user-popover__id'
-                key='user-popover-userid'
-            >
-                <span className='user-popover__subtitle' >{'ID'}</span>
-                {this.props.user.id}
-            </div>,
-        );
-        dataContent.push(
             <Pluggable
                 key='profilePopoverPluggable2'
                 pluggableName='PopoverUserAttributes'
