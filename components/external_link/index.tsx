@@ -7,7 +7,9 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {trackEvent} from 'actions/telemetry_actions';
-import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
+
+// import {getLicense} from 'mattermost-redux/selectors/entities/general';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 
 type ExternalLinkQueryParams = {
@@ -31,15 +33,18 @@ type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
 export default function ExternalLink(props: Props) {
     const userId = useSelector(getCurrentUserId);
     const config = useSelector(getConfig);
-    const license = useSelector(getLicense);
+
+    // const license = useSelector(getLicense);
     let href = props.href;
     let queryParams = {};
-    if (href?.includes('mattermost.com')) {
+    if (href?.includes('infomaniak.com')) {
         const existingURLSearchParams = new URL(href).searchParams;
         const existingQueryParamsObj = Object.fromEntries(existingURLSearchParams.entries());
         queryParams = {
-            utm_source: 'mattermost',
-            utm_medium: license.Cloud === 'true' ? 'in-product-cloud' : 'in-product',
+            utm_source: 'infomaniak',
+
+            // utm_medium: license.Cloud === 'true' ? 'in-product-cloud' : 'in-product',
+            utm_medium: 'in-product',
             utm_content: props.location || '',
             uid: userId,
             sid: config.TelemetryId || '',

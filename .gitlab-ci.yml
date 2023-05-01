@@ -2,6 +2,9 @@ include:
   - template: Security/SAST.gitlab-ci.yml
   # - template: Security/Container-Scanning.gitlab-ci.yml
   # - template: Code-Quality.gitlab-ci.yml
+  - project: 'docker-public/gitlab-triage'
+    ref: master
+    file: '/gitlab-triage.yaml'
 
 variables:
   SAST_DISABLED: "true"
@@ -16,21 +19,22 @@ workflow:
     - if: "$CI_COMMIT_TAG =~ /\\-rc.*/"
       variables:
         DEPLOY_VARIABLE: preprod
-        SLACK_NOTIFY_CHANNEL: https://infomaniak.kchat.infomaniak.com/hooks/986f3435-6c53-4648-a86c-33c64fc14daf
+        SLACK_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
     - if: "$CI_COMMIT_TAG =~ /\\-next.*/"
       variables:
         DEPLOY_VARIABLE: canary
-        SLACK_NOTIFY_CHANNEL: https://infomaniak.kchat.infomaniak.com/hooks/986f3435-6c53-4648-a86c-33c64fc14daf
+        SLACK_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
     - if: "$CI_COMMIT_TAG"
       variables:
         DEPLOY_VARIABLE: prod
-        SLACK_NOTIFY_CHANNEL: https://infomaniak.kchat.infomaniak.com/hooks/986f3435-6c53-4648-a86c-33c64fc14daf
+        SLACK_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
     - if: $CI_COMMIT_BRANCH == "master"
       variables:
         DEPLOY_VARIABLE: prodsec
     - if: "$CI_MERGE_REQUEST_ID"
       variables:
         DEPLOY_VARIABLE: "staging/${CI_COMMIT_REF_SLUG}"
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - when: never
 
 # eslint-sast:
@@ -97,7 +101,6 @@ build_front:
     name: "$DEPLOY_VARIABLE"
   before_script:
     - export ENVIRONMENT=${DEPLOY_VARIABLE}
-    - npx yarn
   script:
     - yarn
     - yarn workspace @mattermost/types build
@@ -161,6 +164,8 @@ unit_test:
   environment:
     name: "$DEPLOY_VARIABLE"
   rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - if: $DEPLOY_VARIABLE == "prodsec"

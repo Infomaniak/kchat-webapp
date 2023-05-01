@@ -26,7 +26,6 @@ import * as UserAgent from 'utils/user_agent';
 import {Constants, ModalIdentifiers} from 'utils/constants';
 import {getHistory} from 'utils/browser_history';
 
-import UserSettingsModal from 'components/user_settings/modal';
 import {AppCommandParser} from 'components/suggestion/command_provider/app_command_parser/app_command_parser';
 import {intlShim} from 'components/suggestion/command_provider/app_command_parser/app_command_parser_dependencies';
 import LeaveChannelModal from 'components/leave_channel_modal';
@@ -35,12 +34,9 @@ import KeyboardShortcutsModal from 'components/keyboard_shortcuts/keyboard_short
 import {GlobalState} from 'types/store';
 
 import {t} from 'utils/i18n';
-import MarketplaceModal from 'components/plugin_marketplace';
-import WorkTemplateModal from 'components/work_templates';
-import {haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {Permissions} from 'mattermost-redux/constants';
-import {isMarketplaceEnabled} from 'mattermost-redux/selectors/entities/general';
-import {areWorkTemplatesEnabled} from 'selectors/work_template';
+
+// import WorkTemplateModal from 'components/work_templates';
+// import {areWorkTemplatesEnabled} from 'selectors/work_template';
 
 import {doAppSubmit, openAppsModal, postEphemeralCallResponseForCommandArgs} from './apps';
 import {trackEvent} from './telemetry_actions';
@@ -66,7 +62,6 @@ export function executeCommand(message: string, args: CommandArgs): ActionFunc {
         // Add track event for certain slash commands
         const commandsWithTelemetry = [
             {command: '/help', telemetry: 'slash-command-help'},
-            {command: '/marketplace', telemetry: 'slash-command-marketplace'},
         ];
         for (const command of commandsWithTelemetry) {
             if (msg.startsWith(command.command)) {
@@ -129,41 +124,16 @@ export function executeCommand(message: string, args: CommandArgs): ActionFunc {
         case '/settings':
             dispatch(showSettings());
             return {data: true};
-        case '/marketplace':
-            // check if user has permissions to access the read plugins
-            if (!haveICurrentTeamPermission(state, Permissions.SYSCONSOLE_READ_PLUGINS)) {
-                return {error: {message: localizeMessage('marketplace_command.no_permission', 'You do not have the appropriate permissions to access the marketplace.')}};
-            }
 
-            // check config to see if marketplace is enabled
-            if (!isMarketplaceEnabled(state)) {
-                return {error: {message: localizeMessage('marketplace_command.disabled', 'The marketplace is disabled. Please contact your System Administrator for details.')}};
-            }
+            // case '/templates': {
+            //     const workTemplateEnabled = areWorkTemplatesEnabled(state);
+            //     if (!workTemplateEnabled) {
+            //         return {error: {message: localizeMessage('templates_command.disabled', 'Templates are disabled. Please contact your System Administrator for details.')}};
+            //     }
 
-            dispatch(openModal({modalId: ModalIdentifiers.PLUGIN_MARKETPLACE, dialogType: MarketplaceModal}));
-            return {data: true};
-        case '/marketplace':
-            // check if user has permissions to access the read plugins
-            if (!haveICurrentTeamPermission(state, Permissions.SYSCONSOLE_READ_PLUGINS)) {
-                return {error: {message: localizeMessage('marketplace_command.no_permission', 'You do not have the appropriate permissions to access the marketplace.')}};
-            }
-
-            // check config to see if marketplace is enabled
-            if (!isMarketplaceEnabled(state)) {
-                return {error: {message: localizeMessage('marketplace_command.disabled', 'The marketplace is disabled. Please contact your System Administrator for details.')}};
-            }
-
-            dispatch(openModal({modalId: ModalIdentifiers.PLUGIN_MARKETPLACE, dialogType: MarketplaceModal}));
-            return {data: true};
-        case '/templates': {
-            const workTemplateEnabled = areWorkTemplatesEnabled(state);
-            if (!workTemplateEnabled) {
-                return {error: {message: localizeMessage('templates_command.disabled', 'Templates are disabled. Please contact your System Administrator for details.')}};
-            }
-
-            dispatch(openModal({modalId: ModalIdentifiers.WORK_TEMPLATE, dialogType: WorkTemplateModal}));
-            return {data: true};
-        }
+        //     dispatch(openModal({modalId: ModalIdentifiers.WORK_TEMPLATE, dialogType: WorkTemplateModal}));
+        //     return {data: true};
+        // }
         case '/collapse':
         case '/expand':
             dispatch(PostActions.resetEmbedVisibility());

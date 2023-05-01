@@ -5294,5 +5294,7 @@
   "more_channels.noPublic": "No hay canales públicos",
   "more_channels.count_zero": "0 Resultados",
   "more_channels.count_one": "1 Resultado",
-  "more_channels.count": "{count} Resultados"
+  "more_channels.count": "{count} Resultados",
+  "user.settings.display.lastActiveDisplay": "Compartir la última hora activa",
+  "user.settings.display.lastActiveDesc": "Cuando está activada, otros usuarios verán cuándo estuviste activo por última vez."
 }

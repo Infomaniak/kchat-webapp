@@ -225,7 +225,7 @@ exports[`components/AboutBuildModal should match snapshot for enterprise edition
           className="about-modal__links"
         >
           <ExternalLink
-            href="https://mattermost.com/terms-of-use/"
+            href="https://infomaniak.com/terms-of-use/"
             id="tosLink"
             location="about_build_modal"
           >
@@ -236,7 +236,7 @@ exports[`components/AboutBuildModal should match snapshot for enterprise edition
           </ExternalLink>
            - 
           <ExternalLink
-            href="https://mattermost.com/privacy-policy/"
+            href="https://infomaniak.com/privacy-policy/"
             id="privacyLink"
             location="about_build_modal"
           >
@@ -457,7 +457,7 @@ exports[`components/AboutBuildModal should match snapshot for team edition 1`] =
           className="about-modal__links"
         >
           <ExternalLink
-            href="https://mattermost.com/terms-of-use/"
+            href="https://infomaniak.com/terms-of-use/"
             id="tosLink"
             location="about_build_modal"
           >
@@ -468,7 +468,7 @@ exports[`components/AboutBuildModal should match snapshot for team edition 1`] =
           </ExternalLink>
            - 
           <ExternalLink
-            href="https://mattermost.com/privacy-policy/"
+            href="https://infomaniak.com/privacy-policy/"
             id="privacyLink"
             location="about_build_modal"
           >
@@ -699,7 +699,7 @@ exports[`components/AboutBuildModal should show ci if a ci build 1`] = `
           className="about-modal__links"
         >
           <ExternalLink
-            href="https://mattermost.com/terms-of-use/"
+            href="https://infomaniak.com/terms-of-use/"
             id="tosLink"
             location="about_build_modal"
           >
@@ -710,7 +710,7 @@ exports[`components/AboutBuildModal should show ci if a ci build 1`] = `
           </ExternalLink>
            - 
           <ExternalLink
-            href="https://mattermost.com/privacy-policy/"
+            href="https://infomaniak.com/privacy-policy/"
             id="privacyLink"
             location="about_build_modal"
           >
@@ -930,7 +930,7 @@ exports[`components/AboutBuildModal should show dev if this is a dev build 1`] =
           className="about-modal__links"
         >
           <ExternalLink
-            href="https://mattermost.com/terms-of-use/"
+            href="https://infomaniak.com/terms-of-use/"
             id="tosLink"
             location="about_build_modal"
           >
@@ -941,7 +941,7 @@ exports[`components/AboutBuildModal should show dev if this is a dev build 1`] =
           </ExternalLink>
            - 
           <ExternalLink
-            href="https://mattermost.com/privacy-policy/"
+            href="https://infomaniak.com/privacy-policy/"
             id="privacyLink"
             location="about_build_modal"
           >

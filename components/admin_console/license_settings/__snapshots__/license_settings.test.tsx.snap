@@ -64,7 +64,7 @@ exports[`components/admin_console/license_settings/LicenseSettings load screen a
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -72,7 +72,7 @@ exports[`components/admin_console/license_settings/LicenseSettings load screen a
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -168,7 +168,7 @@ exports[`components/admin_console/license_settings/LicenseSettings load screen w
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -176,7 +176,7 @@ exports[`components/admin_console/license_settings/LicenseSettings load screen w
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -276,7 +276,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -284,7 +284,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -397,7 +397,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -405,7 +405,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -532,7 +532,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -540,7 +540,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -655,7 +655,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -663,7 +663,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -778,7 +778,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -786,7 +786,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -901,7 +901,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -909,7 +909,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1024,7 +1024,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1032,7 +1032,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1238,7 +1238,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1246,7 +1246,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1350,7 +1350,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1358,7 +1358,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1457,7 +1457,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1465,7 +1465,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1559,7 +1559,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1567,7 +1567,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1664,7 +1664,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1672,7 +1672,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1768,7 +1768,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1776,7 +1776,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1892,7 +1892,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
           >
             See also 
             <ExternalLink
-              href="https://mattermost.com/terms-of-use/"
+              href="https://infomaniak.com/terms-of-use/"
               id="privacyLink"
               location="license_settings"
             >
@@ -1900,7 +1900,7 @@ exports[`components/admin_console/license_settings/LicenseSettings should match 
             </ExternalLink>
              and 
             <ExternalLink
-              href="https://mattermost.com/privacy-policy/"
+              href="https://infomaniak.com/privacy-policy/"
               id="privacyLink"
               location="license_settings"
             >

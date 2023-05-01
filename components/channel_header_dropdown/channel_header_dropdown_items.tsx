@@ -289,12 +289,6 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                             text={localizeMessage('channel_header.convert', 'Convert to Private Channel')}
                         />
                     </ChannelPermissionGate>
-                    <MenuItemLeaveChannel
-                        id='channelLeaveChannel'
-                        channel={channel}
-                        isDefault={isDefault}
-                        isGuestUser={isGuest(user.roles)}
-                    />
                     <ChannelPermissionGate
                         channelId={channel.id}
                         teamId={channel.team_id}
@@ -318,6 +312,12 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                             channel={channel}
                             isDropdown={true}
                         />}
+                    <MenuItemLeaveChannel
+                        id='channelLeaveChannel'
+                        channel={channel}
+                        isDefault={isDefault}
+                        isGuestUser={isGuest(user.roles)}
+                    />
                     <MenuItemCloseMessage
                         id='channelCloseMessage'
                         channel={channel}

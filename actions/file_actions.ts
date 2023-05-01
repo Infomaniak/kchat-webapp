@@ -101,6 +101,19 @@ export function uploadFile({file, name, type, rootId, channelId, clientId, onPro
                             dialogType: StorageLimitReachedModal,
                         }));
                     }
+                } else {
+                    dispatch({
+                        type: FileTypes.UPLOAD_FILES_FAILURE,
+                        clientIds: [clientId],
+                        channelId,
+                        rootId,
+                    });
+                    const errorResponse = JSON.parse(xhr.response);
+                    if (errorResponse.message) {
+                        onError(errorResponse.message, clientId, channelId, rootId);
+                    } else {
+                        onError(localizeMessage('channel_loader.unknown_error', 'We received an unexpected status code from the server.') + ' (' + xhr.status + ')', clientId, channelId, rootId);
+                    }
                 }
             };
         }

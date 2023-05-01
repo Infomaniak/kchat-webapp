@@ -3997,6 +3997,8 @@
   "custom_reminder.time_picker.no_option": "Data non valida",
   "custom_status.expiry.time_picker.description": "Per aggiungere un orario più preciso, inserire l'ora desiderata e verrà aggiunta come opzione selezionabile.",
   "api.change_channel_privacy": "Questo canale è stato convertito in un Canale {type, select, Public {Pubblico} other {Privato}}.",
+  "user.settings.display.lastActiveDisplay": "Condividi l'ultimo tempo attivo",
+  "user.settings.display.lastActiveDesc": "Se attivata, gli altri utenti vedranno quando siete stati attivi l'ultima volta.",
   "more_channels.hide_joined": "Nascondere i canali già iscritti",
   "more_channels.searchError": "Provate a cercare parole chiave diverse, a controllare gli errori di battitura o a regolare i filtri.",
   "more_channels.joined": "Iscritto",

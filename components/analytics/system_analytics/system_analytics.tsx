@@ -476,7 +476,7 @@ export default class SystemAnalytics extends React.PureComponent<Props, State> {
                 <div className='admin-console__wrapper'>
                     <div className='admin-console__content'>
                         {banner}
-                        <TrueUpReview/>
+                        {/* <TrueUpReview/> */}
                         <div className='grid-statistics'>
                             {systemCards}
                             {dailyActiveUsers}
