@@ -54,7 +54,6 @@ button {
 
     &.btn-danger {
         color: $white;
-        background-color: rgb(244, 67, 54);
 
         .app__body & {
             color: $white;
@@ -63,7 +62,6 @@ button {
             &:focus,
             &:active {
                 color: $white;
-                background-color: rgb(219, 60, 48);
             }
         }
 
