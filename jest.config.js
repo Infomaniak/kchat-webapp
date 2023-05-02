@@ -22,7 +22,7 @@ const config = {
         'utils/**/*.{js,jsx,ts,tsx}',
         '!e2e/**',
     ],
-    coverageReporters: ['lcov', 'text-summary'],
+    reporters: ['lcov', 'text-summary', ['jest-junit', {outputName: 'junit.xml'}], 'cobertura'],
     moduleNameMapper: {
         '^@mattermost/(components)$': '<rootDir>/packages/$1/src',
         '^@mattermost/(client)$': '<rootDir>/packages/$1/src',

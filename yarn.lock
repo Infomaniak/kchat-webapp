@@ -5456,13 +5456,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-regex@npm:^4.1.0":
-  version: 4.1.1
-  resolution: "ansi-regex@npm:4.1.1"
-  checksum: b1a6ee44cb6ecdabaa770b2ed500542714d4395d71c7e5c25baa631f680fb2ad322eb9ba697548d498a6fd366949fc8b5bfcf48d49a32803611f648005b01888
-  languageName: node
-  linkType: hard
-
 "ansi-regex@npm:^5.0.0, ansi-regex@npm:^5.0.1":
   version: 5.0.1
   resolution: "ansi-regex@npm:5.0.1"
@@ -8797,6 +8790,18 @@ __metadata:
     escodegen: bin/escodegen.js
     esgenerate: bin/esgenerate.js
   checksum: 5aa6b2966fafe0545e4e77936300cc94ad57cfe4dc4ebff9950492eaba83eef634503f12d7e3cbd644ecc1bab388ad0e92b06fd32222c9281a75d1cf02ec6cef
+  languageName: node
+  linkType: hard
+
+"eslint-formatter-gitlab@npm:4.0.0":
+  version: 4.0.0
+  resolution: "eslint-formatter-gitlab@npm:4.0.0"
+  dependencies:
+    chalk: ^4.0.0
+    yaml: ^2.0.0
+  peerDependencies:
+    eslint: ^5 || ^6 || ^7 || ^8
+  checksum: 066f5e2a9770cd707a93bfadbe80b6455dd14f644cd652ce0201b3102cdc3a539889a55344615a5138f2e5783c3c5e061d9374f1df32f756ede8225342fe7062
   languageName: node
   linkType: hard
 
@@ -12238,15 +12243,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-junit@npm:12.2.0":
-  version: 12.2.0
-  resolution: "jest-junit@npm:12.2.0"
+"jest-junit@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "jest-junit@npm:16.0.0"
   dependencies:
     mkdirp: ^1.0.4
-    strip-ansi: ^5.2.0
+    strip-ansi: ^6.0.1
     uuid: ^8.3.2
     xml: ^1.0.1
-  checksum: 6a666b017eac77fd549a64ec68fda858d078e016405318684361392eac4c4d189a42f8dd9d9d1266ceab2245b1d9c7c63ea76827cd6429705ccdc1675b049d7d
+  checksum: 412aa4bfeec4254a9b34f417fda79107c7cbd295e56ffeb299ac9c977545910fbabe57c91c6cd1f12b700d4a1f60f79872b0075003f02da87d463e30fc2d9d78
   languageName: node
   linkType: hard
 
@@ -13620,6 +13625,7 @@ __metadata:
     enzyme-adapter-react-17-updated: 1.0.2
     enzyme-to-json: 3.6.2
     eslint: 7.32.0
+    eslint-formatter-gitlab: 4.0.0
     eslint-import-resolver-webpack: 0.13.2
     eslint-plugin-cypress: 2.11.3
     eslint-plugin-formatjs: 4.3.4
@@ -13649,7 +13655,7 @@ __metadata:
     jest: 27.1.0
     jest-canvas-mock: 2.4.0
     jest-cli: 27.1.0
-    jest-junit: 12.2.0
+    jest-junit: ^16.0.0
     jest-styled-components: 7.1.1
     jest-watch-typeahead: 0.6.4
     katex: 0.16.3
@@ -18131,15 +18137,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strip-ansi@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "strip-ansi@npm:5.2.0"
-  dependencies:
-    ansi-regex: ^4.1.0
-  checksum: bdb5f76ade97062bd88e7723aa019adbfacdcba42223b19ccb528ffb9fb0b89a5be442c663c4a3fb25268eaa3f6ea19c7c3fbae830bd1562d55adccae1fcec46
-  languageName: node
-  linkType: hard
-
 "strip-bom@npm:^3.0.0":
   version: 3.0.0
   resolution: "strip-bom@npm:3.0.0"
@@ -20179,6 +20176,13 @@ __metadata:
   version: 1.10.2
   resolution: "yaml@npm:1.10.2"
   checksum: ce4ada136e8a78a0b08dc10b4b900936912d15de59905b2bf415b4d33c63df1d555d23acb2a41b23cf9fb5da41c256441afca3d6509de7247daa062fd2c5ea5f
+  languageName: node
+  linkType: hard
+
+"yaml@npm:^2.0.0":
+  version: 2.2.2
+  resolution: "yaml@npm:2.2.2"
+  checksum: d90c235e099e30094dcff61ba3350437aef53325db4a6bcd04ca96e1bfe7e348b191f6a7a52b5211e2dbc4eeedb22a00b291527da030de7c189728ef3f2b4eb3
   languageName: node
   linkType: hard
 

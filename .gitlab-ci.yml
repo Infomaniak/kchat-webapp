@@ -176,8 +176,11 @@ unit_test:
       - coverage/
     when: on_success
     reports:
-      junit:
-        - coverage/junit.xml
+      codequality: gl-codequality.json
+      junit: junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   cache:
     key:
@@ -194,10 +197,11 @@ unit_test:
     # - npm run check-types
 
     # lint
-    # - npm run check
+    # TODO: uncomment when ran once on master
+    # - yarn lint-ci
 
     # unit tests
-    - npm run test-ci
+    - yarn test-ci
 
 # pages:
 #   stage: test
