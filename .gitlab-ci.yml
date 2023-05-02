@@ -155,8 +155,7 @@ unit_test:
       - coverage/
     when: on_success
     reports:
-      codequality: gl-codequality.json
-      junit: junit.xml
+      junit: coverage/junit.xml
       coverage_report:
         coverage_format: cobertura
         path: coverage/cobertura-coverage.xml
@@ -175,12 +174,43 @@ unit_test:
     # typescript
     # - npm run check-types
 
-    # lint
-    # TODO: uncomment when ran once on master
-    - yarn lint-ci
-
     # unit tests
     - yarn test-ci
+
+eslint:
+  stage: test
+  image: node:16.10.0
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
+    - when: never
+  artifacts:
+    paths:
+      - gl-codequality.json
+    when: on_success
+    reports:
+      codequality: gl-codequality.json
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - .yarn/cache/
+      - .yarn/install-state.gz
+  before_script:
+    - yarn
+  script:
+    - yarn lint-ci
 
 sentry_release:
   stage: .post
