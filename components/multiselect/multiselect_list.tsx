@@ -172,7 +172,7 @@ export default class MultiSelectList<T extends Value> extends React.PureComponen
             renderOutput = (
                 <div aria-hidden={true}>
                     <LoadingScreen
-                        position='absolute'
+                        // position='absolute'
                         key='loading'
                     />
                 </div>
