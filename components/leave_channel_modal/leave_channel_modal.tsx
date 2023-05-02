@@ -66,7 +66,7 @@ const LeaveChannelModal = ({actions, channel, callback, onExited}: Props) => {
             message = (
                 <FormattedMessage
                     id='leave_private_channel_modal.message'
-                    defaultMessage='Are you sure you wish to leave the private channel {channel}? You must be re-invited in order to re-join this channel in the future.'
+                    defaultMessage='Do you really want to leave the {channel} channel?'
                     values={{
                         channel: <b>{channel.display_name}</b>,
                     }}
@@ -85,11 +85,24 @@ const LeaveChannelModal = ({actions, channel, callback, onExited}: Props) => {
         }
     }
 
+    const content = (
+        <div>
+            <div className='alert alert-with-icon alert-grey'>
+                <i className='icon-information-outline'/>
+                <FormattedMessage
+                    id='leave_private_channel_modal.information'
+                    defaultMessage='Only a channel administrator can invite you to join this channel again.'
+                />
+            </div>
+            {message}
+        </div>
+    );
+
     const buttonClass = 'btn btn-danger';
     const button = (
         <FormattedMessage
             id='leave_private_channel_modal.leave'
-            defaultMessage='Yes, leave channel'
+            defaultMessage='Leave'
         />
     );
 
@@ -97,7 +110,7 @@ const LeaveChannelModal = ({actions, channel, callback, onExited}: Props) => {
         <ConfirmModal
             show={show}
             title={title}
-            message={message}
+            message={content}
             confirmButtonClass={buttonClass}
             confirmButtonText={button}
             onConfirm={handleSubmit}
