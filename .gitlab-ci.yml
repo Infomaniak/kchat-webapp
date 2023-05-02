@@ -37,27 +37,6 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - when: never
 
-# eslint-sast:
-#   artifacts:
-#     reports:
-#       sast: gl-sast-report.json
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "prodsec"
-#       when: on_success
-#     - when: never
-
-# code_quality:
-#   artifacts:
-#     paths: [gl-code-quality-report.json]
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "prodsec"
-#       when: on_success
-#     - when: never
-
 build_docker_image:
   stage: release
   tags:
@@ -198,28 +177,10 @@ unit_test:
 
     # lint
     # TODO: uncomment when ran once on master
-    # - yarn lint-ci
+    - yarn lint-ci
 
     # unit tests
     - yarn test-ci
-
-# pages:
-#   stage: test
-#   needs:
-#     - unit_test
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-#       when: on_success
-#     - when: never
-#   script:
-#     - mkdir .public
-#     - cp -r coverage/* .public
-#     - mv .public public
-#   artifacts:
-#     paths:
-#       - public
 
 sentry_release:
   stage: .post
