@@ -105,9 +105,11 @@
 
     &.GenericModal__compassDesign {
         .modal-content {
+            padding: 0;
             border-radius: 12px;
 
             .modal-header {
+                padding: 26px 32px 7px;
 
                 .close {
                     top: 20px;
@@ -128,6 +130,8 @@
                 }
 
                 .GenericModal__header {
+                    width: 85%;
+                    padding: 0;
                     border-top-left-radius: 12px;
                     border-top-right-radius: 12px;
 
@@ -138,7 +142,16 @@
                 }
             }
 
+            .modal-body {
+                padding: 15px 32px 0;
+
+                .GenericModal__body {
+                    padding: 0;
+                }
+            }
+
             .modal-footer {
+                padding: 24px 32px;
                 border-bottom-left-radius: 12px;
                 border-bottom-right-radius: 12px;
             }
