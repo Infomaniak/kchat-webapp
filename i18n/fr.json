@@ -1587,7 +1587,7 @@
   "admin.permissions.roles.channel_user.name": "Utilisateur (membre du canal)",
   "admin.permissions.roles.edit": "Modifier",
   "admin.permissions.roles.system_admin.description": "Autorise la modification de tous les paramètres.",
-  "admin.permissions.roles.system_admin.name": "Administrateur système",
+  "admin.permissions.roles.system_admin.name": "Administrateur",
   "admin.permissions.roles.system_admin.type": "Rôle système",
   "admin.permissions.roles.system_manager.description": "Attribue un peu moins d'accès qu'un administrateur système.",
   "admin.permissions.roles.system_manager.name": "Gestionnaire système",

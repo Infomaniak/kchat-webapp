@@ -1679,7 +1679,7 @@
   "admin.permissions.roles.channel_user.name": "Kanalbenutzer",
   "admin.permissions.roles.edit": "Bearbeiten",
   "admin.permissions.roles.system_admin.description": "Zugang zum Ändern von allem.",
-  "admin.permissions.roles.system_admin.name": "Systemadministrator",
+  "admin.permissions.roles.system_admin.name": "Administrator",
   "admin.permissions.roles.system_admin.type": "System-Rolle",
   "admin.permissions.roles.system_custom_group_admin.description": "Verwaltet alle benutzerdefinierten Gruppen im gesamten System.",
   "admin.permissions.roles.system_custom_group_admin.detail_text": "Die eingebaute Rolle \"Custom Group Manager\" kann verwendet werden, um die Verwaltung von [benutzerdefinierten Gruppen] (https://docs.mattermost.com/welcome/manage-custom-groups.html) an andere Benutzer als den Systemadministrator zu delegieren.\n \nVergessen Sie nicht, allen anderen Systembenutzern die Berechtigung zur Verwaltung von benutzerdefinierten Gruppen zu entziehen, indem Sie das Kontrollkästchen für die entsprechenden Berechtigungen in der Systemkonsole > Benutzerverwaltung > Berechtigungen deaktivieren.\n \nDiese Rolle hat die Berechtigung, benutzerdefinierte Gruppen zu erstellen, zu bearbeiten und zu löschen, indem sie **Benutzergruppen** aus dem Menü Produkte auswählt.",
