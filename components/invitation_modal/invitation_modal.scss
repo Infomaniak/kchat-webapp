@@ -14,29 +14,18 @@
         transform: translate(-50%, -50%) !important;
     }
 
-    .modal-header,
-    .modal-footer {
-        padding: 24px;
-    }
-
     .modal-body {
         overflow: visible;
         max-height: none;
-        padding: 0 24px;
     }
 
     .InvitationModal__header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border: none;
-        font-size: 22px;
-        font-weight: 600;
 
         h1 {
             margin: 0;
-            font-size: 22px;
-            font-weight: 600;
         }
 
         &::before,

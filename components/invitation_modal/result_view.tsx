@@ -44,7 +44,10 @@ export default function ResultView(props: Props) {
     return (
         <>
             <Modal.Header className={props.headerClass}>
-                <h1 id='invitation_modal_title'>
+                <Modal.Title
+                    componentClass='h1'
+                    id='invitation_modal_title'
+                >
                     <FormattedMessage
                         id='invite_modal.invited'
                         defaultMessage='{inviteType} invited to {team_name}'
@@ -56,7 +59,7 @@ export default function ResultView(props: Props) {
                             team_name: props.currentTeamName,
                         }}
                     />
-                </h1>
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {props.notSent.length > 0 && (
