@@ -55,7 +55,7 @@
             padding: 16px 40px 16px;
             align-items: center;
             .close {
-                color: var(--center-channel-color);
+                color: rgba(var(--center-channel-color-rgb), 0.56);
             }
             .modal-title {
                 font-weight: 400;
@@ -63,7 +63,7 @@
         }
         .modal-footer {
             border-radius: 0 0 12px 12px;
-            padding: 18px 32px;
+            padding: 40px;
             display: flex;
             justify-content: space-between;
             & > :only-child {
@@ -278,6 +278,7 @@
 
     .modal-dialog {
         max-width: 95%;
+        margin-top: calc(50vh - 240px);
         margin-right: auto;
         margin-bottom: 0;
         margin-left: auto;

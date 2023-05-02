@@ -18,17 +18,6 @@
             &-body {
                 overflow: visible;
             }
-
-            &-content {
-                width: 100%;
-                padding: 28px 8px 24px 24px;
-            }
-
-            &-footer {
-                padding: 0;
-                padding-right: 16px;
-                margin-top: 22px;
-            }
         }
 
         .emoji-quick-input {
@@ -47,14 +36,6 @@
     }
 
     .GenericModal {
-        &__header {
-            padding: 0 0 20px;
-        }
-
-        &__body {
-            padding: 0;
-        }
-
         &__button {
             vertical-align: middle;
             &.btn:disabled,

@@ -2,18 +2,6 @@
 
 .DndModal {
     width: 600px;
-
-    .btn-primary {
-        height: 4rem;
-        padding: 0 2rem;
-        border-radius: $border-rad*2;
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-    .GenericModal__header {
-        padding: 28px 24px;
-    }
 }
 
 .DndModal__input--no-border {
