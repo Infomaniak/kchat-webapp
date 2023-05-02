@@ -66,6 +66,10 @@
             padding: 18px 32px;
             display: flex;
             justify-content: space-between;
+            & > :only-child {
+                // align element to the right if it is the only child
+                margin-left: auto;
+            }
             &::before, &::after {
                 display: none;
             }
