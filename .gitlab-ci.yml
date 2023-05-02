@@ -239,7 +239,7 @@ sentry_release:
   script:
     - sentry-cli releases new ${CI_COMMIT_TAG}
     - sentry-cli releases set-commits --auto --ignore-empty --ignore-missing ${CI_COMMIT_TAG}
-    - sentry-cli releases files ${CI_COMMIT_TAG} upload-sourcemaps ./dist --ignore-file .sentryignore
+    - sentry-cli releases files ${CI_COMMIT_TAG} upload-sourcemaps --url-prefix '~/static/' ./dist --ignore-file .sentryignore
     - sentry-cli releases finalize ${CI_COMMIT_TAG}
 
 changelog:
