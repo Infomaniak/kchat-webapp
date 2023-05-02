@@ -190,7 +190,7 @@ eslint:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
       when: never
     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-      when: on_success
+      when: manual
       allow_failure: true
     - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
@@ -199,6 +199,7 @@ eslint:
   artifacts:
     paths:
       - gl-codequality.json
+    when: always
     reports:
       codequality: gl-codequality.json
   cache:
