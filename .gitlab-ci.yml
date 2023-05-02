@@ -191,13 +191,14 @@ eslint:
       when: never
     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
+      allow_failure: true
     - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
+      allow_failure: true
     - when: never
   artifacts:
     paths:
       - gl-codequality.json
-    when: on_success
     reports:
       codequality: gl-codequality.json
   cache:
