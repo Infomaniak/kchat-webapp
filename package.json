@@ -225,7 +225,7 @@
   },
   "scripts": {
     "check": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --cache && stylelint \"**/*.{css,scss}\" --cache",
-    "lint-ci": "eslint --ext .js,.jsx,.tsx,.ts --format gitlab . --cache",
+    "lint-ci": "eslint --ext .js,.jsx,.tsx,.ts --format gitlab . --quiet --cache",
     "fix": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --fix --cache && stylelint \"**/*.{css,scss}\" --fix --cache",
     "build": "node scripts/build",
     "build:webapp": "cross-env NODE_ENV=production webpack",
