@@ -175,7 +175,7 @@ unit_test:
     # - npm run check-types
 
     # unit tests
-    - yarn test-ci
+    - npm run test-ci
 
 eslint:
   stage: test
@@ -212,7 +212,7 @@ eslint:
   before_script:
     - yarn
   script:
-    - yarn lint-ci
+    - npm run lint-ci
 
 sentry_release:
   stage: .post
