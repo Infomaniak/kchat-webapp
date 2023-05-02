@@ -37,27 +37,6 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - when: never
 
-# eslint-sast:
-#   artifacts:
-#     reports:
-#       sast: gl-sast-report.json
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "prodsec"
-#       when: on_success
-#     - when: never
-
-# code_quality:
-#   artifacts:
-#     paths: [gl-code-quality-report.json]
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "prodsec"
-#       when: on_success
-#     - when: never
-
 build_docker_image:
   stage: release
   tags:
@@ -176,8 +155,10 @@ unit_test:
       - coverage/
     when: on_success
     reports:
-      junit:
-        - coverage/junit.xml
+      junit: coverage/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   cache:
     key:
@@ -193,29 +174,45 @@ unit_test:
     # typescript
     # - npm run check-types
 
-    # lint
-    # - npm run check
-
     # unit tests
     - npm run test-ci
 
-# pages:
-#   stage: test
-#   needs:
-#     - unit_test
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-#       when: on_success
-#     - when: never
-#   script:
-#     - mkdir .public
-#     - cp -r coverage/* .public
-#     - mv .public public
-#   artifacts:
-#     paths:
-#       - public
+eslint:
+  stage: test
+  image: node:16.10.0
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+      when: manual
+      allow_failure: true
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
+      allow_failure: true
+    - when: never
+  artifacts:
+    paths:
+      - gl-codequality.json
+    when: always
+    reports:
+      codequality: gl-codequality.json
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - .yarn/cache/
+      - .yarn/install-state.gz
+  before_script:
+    - yarn
+  script:
+    - npm run lint-ci
 
 sentry_release:
   stage: .post
@@ -242,7 +239,7 @@ sentry_release:
   script:
     - sentry-cli releases new ${CI_COMMIT_TAG}
     - sentry-cli releases set-commits --auto --ignore-empty --ignore-missing ${CI_COMMIT_TAG}
-    - sentry-cli releases files ${CI_COMMIT_TAG} upload-sourcemaps ./dist --ignore-file .sentryignore
+    - sentry-cli releases files ${CI_COMMIT_TAG} upload-sourcemaps --url-prefix '~/static/' ./dist --ignore-file .sentryignore
     - sentry-cli releases finalize ${CI_COMMIT_TAG}
 
 changelog:
@@ -254,6 +251,8 @@ changelog:
     name: "$DEPLOY_VARIABLE"
   rules:
     - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "canary"
       when: on_success
     - when: never
   script:
