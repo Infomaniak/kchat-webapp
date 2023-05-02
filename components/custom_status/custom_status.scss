@@ -49,7 +49,7 @@
 
     & &__input {
         position: relative;
-        width: 100%;
+        width: calc(100% - 16px);
     }
 
     &__emoji-container {

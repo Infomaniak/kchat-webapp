@@ -139,14 +139,8 @@ export default function InviteView(props: Props) {
 
     return (
         <>
-            <Modal.Header
-                className={props.headerClass}
-                closeButton={true}
-            >
-                <Modal.Title
-                    componentClass='h1'
-                    id='invitation_modal_title'
-                >
+            <Modal.Header className={props.headerClass}>
+                <h1 id='invitation_modal_title'>
                     <FormattedMessage
                         id='invite_modal.title'
                         defaultMessage={'Invite {inviteType} to {team_name}'}
@@ -157,7 +151,14 @@ export default function InviteView(props: Props) {
                             team_name: props.currentTeam.display_name,
                         }}
                     />
-                </Modal.Title>
+                </h1>
+                <button
+                    id='closeIcon'
+                    className='icon icon-close'
+                    aria-label='Close'
+                    title='Close'
+                    onClick={props.onClose}
+                />
             </Modal.Header>
             <Modal.Body>
                 <div className='InviteView__sectionTitle InviteView__sectionTitle--first'>
