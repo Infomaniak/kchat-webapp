@@ -400,7 +400,9 @@ export default class SidebarCategory extends React.PureComponent<Props, State> {
                                                 onClick={this.handleCollapse}
                                                 onContextMenu={(event) => {
                                                     event.preventDefault();
-                                                    this.menuTriggerRef && this.menuTriggerRef.current?.click(); // eslint-disable-line @babel/no-unused-expressions
+                                                    if (this.menuTriggerRef) {
+                                                        this.menuTriggerRef.current?.click();
+                                                    }
                                                 }}
                                             >
                                                 {directMessagesModalButton}

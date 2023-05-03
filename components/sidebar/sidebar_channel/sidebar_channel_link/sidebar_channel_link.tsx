@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -9,15 +9,12 @@ import Pluggable from 'plugins/pluggable';
 
 import {mark, trackEvent} from 'actions/telemetry_actions';
 
-import CopyUrlContextMenu from 'components/copy_url_context_menu';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
 import Constants, {RHSStates} from 'utils/constants';
 import {wrapEmojis} from 'utils/emoji_utils';
-import {isDesktopApp} from 'utils/user_agent';
 import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
-import {ChannelsTour} from 'components/tours/onboarding_tour';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 
@@ -288,7 +285,9 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 onClick={this.handleChannelClick}
                 onContextMenu={(event) => {
                     event.preventDefault();
-                    this.menuTriggerRef && this.menuTriggerRef.current?.click(); // eslint-disable-line @babel/no-unused-expressions
+                    if (this.menuTriggerRef) {
+                        this.menuTriggerRef.current?.click();
+                    }
                 }}
                 tabIndex={0}
             >

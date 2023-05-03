@@ -1,3 +1,20 @@
+## 1.1.4 (2023-04-27)
+
+### Added (1 change)
+
+- [add clock and name display preference settings](kchat/webapp@4238d652030a272dce90e04277e161f81690b1e6) by @leonard.jouve ([merge request](kchat/webapp!384))
+
+### Fixed (4 changes)
+
+- [improve state of rhs display settings + patch user only when user pref changes](kchat/webapp@9647eedd294cf88399db3727930f3118f0576ddf) by @antonbuksa ([merge request](kchat/webapp!384))
+- [date time input theming support](kchat/webapp@69ea382ea0ee69b107c94845b40bd268e65f0bdd) by @leonard.jouve ([merge request](kchat/webapp!385))
+- [update status on reconnect](kchat/webapp@a499194d023f8911dc10396f64cac3a22b00c0db) by @leonard.jouve ([merge request](kchat/webapp!382))
+- [fix multi team sidebar link width](kchat/webapp@d31ec4f3bb9a647a4f0a71ed5ca449307ef942be) by @leonard.jouve ([merge request](kchat/webapp!380))
+
+### Chore (1 change)
+
+- [fix ci double install](kchat/webapp@60fb44fd2e9f46243c556b999043be49b2f70812) by @antonbuksa
+
 ## 1.1.3 (2023-04-20)
 
 ### Fixed (1 change)

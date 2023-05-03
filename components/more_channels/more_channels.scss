@@ -263,6 +263,8 @@
 
     .filter-controls {
         padding: 0;
+        display: flex;
+        justify-content: space-between;
 
         button {
             min-width: 72px;

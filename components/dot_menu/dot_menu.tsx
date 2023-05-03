@@ -438,7 +438,6 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     };
 
     render(): JSX.Element {
-        const {formatMessage} = this.props.intl;
         const isFollowingThread = this.props.isFollowingThread ?? this.props.isMentionedInRootPost;
         const isMobile = this.props.isMobileView;
         const isSystemMessage = PostUtils.isSystemMessage(this.props.post);

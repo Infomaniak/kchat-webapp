@@ -1679,7 +1679,7 @@
   "admin.permissions.roles.channel_user.name": "Kanalbenutzer",
   "admin.permissions.roles.edit": "Bearbeiten",
   "admin.permissions.roles.system_admin.description": "Zugang zum Ändern von allem.",
-  "admin.permissions.roles.system_admin.name": "Systemadministrator",
+  "admin.permissions.roles.system_admin.name": "Administrator",
   "admin.permissions.roles.system_admin.type": "System-Rolle",
   "admin.permissions.roles.system_custom_group_admin.description": "Verwaltet alle benutzerdefinierten Gruppen im gesamten System.",
   "admin.permissions.roles.system_custom_group_admin.detail_text": "Die eingebaute Rolle \"Custom Group Manager\" kann verwendet werden, um die Verwaltung von [benutzerdefinierten Gruppen] (https://docs.mattermost.com/welcome/manage-custom-groups.html) an andere Benutzer als den Systemadministrator zu delegieren.\n \nVergessen Sie nicht, allen anderen Systembenutzern die Berechtigung zur Verwaltung von benutzerdefinierten Gruppen zu entziehen, indem Sie das Kontrollkästchen für die entsprechenden Berechtigungen in der Systemkonsole > Benutzerverwaltung > Berechtigungen deaktivieren.\n \nDiese Rolle hat die Berechtigung, benutzerdefinierte Gruppen zu erstellen, zu bearbeiten und zu löschen, indem sie **Benutzergruppen** aus dem Menü Produkte auswählt.",
@@ -5845,5 +5845,13 @@
   "toggle_next_modal.title": "Zu {version} Version wechseln",
   "toggle_next_modal.message_stable": "STABLE ist unsere Standardumgebung. Wenn Sie nicht daran interessiert sind, neue Funktionen zu testen, empfehlen wir Ihnen, auf die STABLE Version zurückzugreifen.",
   "toggle_next_modal.message_next": "NEXT ist unsere Testumgebung. Sie können auf einige Bugs stoßen, haben aber auch Zugang zu den neuesten Inhalten und Updates. Wenn Sie nicht daran interessiert sind, neue Funktionen zu testen, empfehlen wir Ihnen, bei der STABLE Version zu bleiben.",
-  "api.change_channel_privacy": "Dieser Kanal wurde in einen {type, select, Public {Öffentlichen} other {Privaten}} Kanal umgewandelt."
+  "api.change_channel_privacy": "Dieser Kanal wurde in einen {type, select, Public {Öffentlichen} other {Privaten}} Kanal umgewandelt.",
+  "more_channels.hide_joined": "Verbundene ausblenden",
+  "more_channels.searchError": "Versuchen Sie, nach anderen Stichworten zu suchen, nach Tippfehlern zu suchen oder die Filter anzupassen.",
+  "more_channels.joined": "Beitritt",
+  "more_channels.noArchived": "Keine archivierten Kanäle",
+  "more_channels.noPublic": "Keine öffentlichen Kanäle",
+  "more_channels.count_zero": "0 Ergebnisse",
+  "more_channels.count_one": "1 Ergebnis",
+  "more_channels.count": "{count} Ergebnisse"
 }

@@ -271,9 +271,7 @@ export default class SearchableChannelList extends React.PureComponent {
             listContent = (
                 <div
                     className='no-channel-message'
-                    aria-label={this.state.channelSearchValue.length > 0 ?
-                        localizeAndFormatMessage(t('more_channels.noMore'), 'No results for {text}', {text: this.state.channelSearchValue}) :
-                        localizeMessage('widgets.channels_input.empty', 'No channels found')
+                    aria-label={this.state.channelSearchValue.length > 0 ? localizeAndFormatMessage(t('more_channels.noMore'), 'No results for {text}', {text: this.state.channelSearchValue}) : localizeMessage('widgets.channels_input.empty', 'No channels found')
                     }
                 >
                     <MagnifyingGlassSVG/>
@@ -296,29 +294,24 @@ export default class SearchableChannelList extends React.PureComponent {
                         onClick={this.nextPage}
                         disabled={this.state.nextDisabled}
                         aria-label={localizeMessage('more_channels.next', 'Next')}
+                        style={{marginLeft: 0}}
                     >
-                        <FormattedMessage
-                            id='more_channels.next'
-                            defaultMessage='Next'
-                        />
+                        <i className='icon icon-chevron-right'/>
                     </button>
                 );
             }
 
-            if (this.state.page > 0) {
-                previousButton = (
-                    <button
-                        className='btn filter-control filter-control__prev outlineButton'
-                        onClick={this.previousPage}
-                        aria-label={localizeMessage('more_channels.prev', 'Previous')}
-                    >
-                        <FormattedMessage
-                            id='more_channels.prev'
-                            defaultMessage='Previous'
-                        />
-                    </button>
-                );
-            }
+            previousButton = (
+                <button
+                    className='btn filter-control filter-control__prev outlineButton'
+                    disabled={!this.state.page > 0}
+                    onClick={this.previousPage}
+                    aria-label={localizeMessage('more_channels.prev', 'Previous')}
+                    style={{marginRight: 10}}
+                >
+                    <i className='icon icon-chevron-left'/>
+                </button>
+            );
         }
 
         const input = (
@@ -449,8 +442,11 @@ export default class SearchableChannelList extends React.PureComponent {
                     </div>
                 </div>
                 <div className='filter-controls'>
-                    {previousButton}
-                    {nextButton}
+                    {this.props.createChannelButton}
+                    <span>
+                        {previousButton}
+                        {nextButton}
+                    </span>
                 </div>
             </div>
         );
@@ -465,6 +461,7 @@ SearchableChannelList.defaultProps = {
 SearchableChannelList.propTypes = {
     channels: PropTypes.arrayOf(PropTypes.object),
     channelsPerPage: PropTypes.number,
+    createChannelButton: PropTypes.node,
     nextPage: PropTypes.func.isRequired,
     isSearch: PropTypes.bool,
     search: PropTypes.func.isRequired,
