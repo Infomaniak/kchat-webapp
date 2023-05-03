@@ -77,6 +77,8 @@ exports[`components/SearchableChannelList should match init snapshot 1`] = `
   </div>
   <div
     className="filter-controls"
-  />
+  >
+    <span />
+  </div>
 </div>
 `;

@@ -297,6 +297,7 @@ export default class MoreChannels extends React.PureComponent<Props, State> {
                 <SearchableChannelList
                     channels={this.activeChannels}
                     channelsPerPage={CHANNELS_PER_PAGE}
+                    createChannelButton={createNewChannelButton('outlineButton')}
                     nextPage={this.nextPage}
                     isSearch={search}
                     search={this.search}
@@ -330,7 +331,6 @@ export default class MoreChannels extends React.PureComponent<Props, State> {
                 id='moreChannelsModal'
                 aria-labelledby='moreChannelsModalLabel'
                 modalHeaderText={title}
-                headerButton={createNewChannelButton('outlineButton')}
                 autoCloseOnConfirmButton={false}
                 aria-modal={true}
                 enforceFocus={false}

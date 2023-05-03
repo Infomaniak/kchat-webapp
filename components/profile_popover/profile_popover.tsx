@@ -439,7 +439,7 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
         const popoverProps: React.ComponentProps<typeof Popover> = Utils.deleteKeysFromObject({...this.props},
             keysToBeRemoved);
         const {formatMessage} = this.props.intl;
-        const dataContent = [];
+        const dataContent: React.ReactElement[] = [];
         const urlSrc = this.props.overwriteIcon ? this.props.overwriteIcon : this.props.src;
         dataContent.push(
             <div
@@ -684,7 +684,7 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
                 <div
                     data-toggle='tooltip'
                     key='user-popover-settings'
-                    className='popover__row first'
+                    className='pb-5 pt-5'
                 >
                     <FormattedMessage
                         id='user_profile.account.post_was_created'
