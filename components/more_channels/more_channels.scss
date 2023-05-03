@@ -131,7 +131,7 @@
         padding: 15px 0 0;
 
         .filtered-user-list {
-            height: 500px;
+            height: 510px;
         }
 
         .more-modal__row {
@@ -213,7 +213,8 @@
 
             .more-modal__actions {
                 .primaryButton,
-                .outlineButton {
+                .outlineButton,
+                .filledButton {
                     display: inline-block;
                 }
             }
@@ -255,9 +256,14 @@
         font-size: 12px;
         font-weight: 600;
         line-height: 16px;
+        &.iconButton {
+            min-width: 56px !important;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
     }
 
-    .outlineButton:hover {
+    .outlineButton:hover:not([disabled]) {
         background-color: rgba(var(--button-bg-rgb), 0.08);
     }
 
@@ -265,6 +271,7 @@
         padding: 0;
         display: flex;
         justify-content: space-between;
+        margin-top: 8px;
 
         button {
             min-width: 72px;
