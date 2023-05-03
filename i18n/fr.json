@@ -5048,6 +5048,7 @@
   "post_info.post_reminder.sub_menu.two_hours": "2 heures",
   "post_info.post_reminder.sub_menu.tomorrow": "Demain",
   "post_info.post_reminder.sub_menu.custom": "Personnalisé",
+  "post_info.post_reminder.sub_menu.header": "Fixer un rappel pour :",
   "post_reminder.custom_time_picker_modal.text": "Définir un rappel",
   "post.reminder.acknowledgement": "Ce message de {username} vous sera rappelé à {reminderTime}, {reminderDate}: {permaLink}",
   "post.reminder.systemBot": "Bonjour, voici votre rappel concernant ce message de {username} : {permaLink}",
