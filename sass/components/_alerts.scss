@@ -3,7 +3,7 @@
 .alert {
     padding: 16px 16px;
     border-radius: 10px;
-    background: rgb(244, 246, 253);
+    background: var(--ik-illustration-grey-15);
     color: var(--center-channel-color);
 
     .alert-transparent {
