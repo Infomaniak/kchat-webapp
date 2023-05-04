@@ -65,6 +65,7 @@ function ThreadViewerRow({
                 teamId={teamId}
                 timestampProps={timestampProps}
                 location={Locations.RHS_ROOT}
+                disableConsecutive={true}
             />
         );
     case PostListUtils.isCombinedUserActivityPost(listId): {

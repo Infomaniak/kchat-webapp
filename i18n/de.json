@@ -3114,6 +3114,7 @@
   "copied.message": "Kopiert",
   "copy.code.message": "Code kopieren",
   "copy.text.message": "Text kopieren",
+  "copy.text.userid": "Benutzer-ID kopieren",
   "copy_url_context_menu.getChannelLink": "Link kopieren",
   "create_category_modal.create": "Erstellen",
   "create_category_modal.createCategory": "Neue Kategorie erstellen",

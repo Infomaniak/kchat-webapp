@@ -3119,6 +3119,7 @@
   "copy_url_context_menu.getChannelLink": "Copy Link",
   "copy.code.message": "Copy code",
   "copy.text.message": "Copy text",
+  "copy.text.userid": "Copy user ID",
   "create_category_modal.create": "Create",
   "create_category_modal.createCategory": "Create New Category",
   "create_comment.addComment": "Reply to this thread...",

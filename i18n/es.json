@@ -3016,6 +3016,7 @@
   "copied.message": "Copiado",
   "copy.code.message": "Copiar código",
   "copy.text.message": "Copiar texto",
+  "copy.text.userid": "Copiar ID de usuario",
   "copy_url_context_menu.getChannelLink": "Copiar Enlace",
   "create_category_modal.create": "Crear",
   "create_category_modal.createCategory": "Crear Nueva Categoría",
