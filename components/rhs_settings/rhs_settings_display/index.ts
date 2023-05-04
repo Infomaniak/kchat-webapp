@@ -45,11 +45,6 @@ export function makeMapStateToProps() {
         const emojiPickerEnabled = config.EnableEmojiPicker === 'true';
         const lastActiveTimeEnabled = config.EnableLastActiveTime === 'true';
 
-        let lastActiveDisplay = true;
-        if (getUser(state, currentUserId).props?.show_last_active === 'false') {
-            lastActiveDisplay = false;
-        }
-
         return {
             lockTeammateNameDisplay,
             allowCustomThemes,
@@ -78,7 +73,7 @@ export function makeMapStateToProps() {
             showUnreadsCategory: get(state, Preferences.CATEGORY_SIDEBAR_SETTINGS, 'show_unread_section'),
             unreadScrollPosition: get(state, Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.UNREAD_SCROLL_POSITION),
             militaryTime: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, Preferences.USE_MILITARY_TIME_DEFAULT),
-            lastActiveDisplay,
+            lastActiveDisplay: getUser(state, currentUserId).props?.show_last_active,
             lastActiveTimeEnabled,
         };
     };

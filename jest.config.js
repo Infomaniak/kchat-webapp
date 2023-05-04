@@ -22,7 +22,8 @@ const config = {
         'utils/**/*.{js,jsx,ts,tsx}',
         '!e2e/**',
     ],
-    coverageReporters: ['lcov', 'text-summary'],
+    coverageReporters: ['text', 'lcov', 'cobertura'],
+    reporters: ['default', ['jest-junit', {outputDirectory: 'coverage', outputName: 'junit.xml'}]],
     moduleNameMapper: {
         '^@mattermost/(components)$': '<rootDir>/packages/$1/src',
         '^@mattermost/(client)$': '<rootDir>/packages/$1/src',
@@ -40,10 +41,6 @@ const config = {
     },
     moduleDirectories: ['', 'node_modules'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-    reporters: [
-        'default',
-        ['jest-junit', {outputDirectory: 'build', outputName: 'test-results.xml'}],
-    ],
     transformIgnorePatterns: [
         'node_modules/(?!react-native|react-router|p-queue|p-timeout|@infomaniak/compass-components|@infomaniak/compass-icons)',
     ],

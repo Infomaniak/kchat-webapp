@@ -1599,7 +1599,7 @@
   "admin.permissions.roles.channel_user.name": "Utilisateur (membre du canal)",
   "admin.permissions.roles.edit": "Modifier",
   "admin.permissions.roles.system_admin.description": "Autorise la modification de tous les paramètres.",
-  "admin.permissions.roles.system_admin.name": "Administrateur système",
+  "admin.permissions.roles.system_admin.name": "Administrateur",
   "admin.permissions.roles.system_admin.type": "Rôle système",
   "admin.permissions.roles.system_manager.description": "Attribue un peu moins d'accès qu'un administrateur système.",
   "admin.permissions.roles.system_manager.name": "Gestionnaire système",
@@ -3134,7 +3134,7 @@
   "emoji_skin.medium_skin_tone": "Teinte de peau moyenne",
   "emoji_skin_item.emoji_aria_label": "{skinName} émoticône",
   "error.channelNotFound.guest_link": "Précédent",
-  "error.channelNotFound.link": "Retourner à {defaultChannelName}",
+  "error.channelNotFound.link": "Retourner au {defaultChannelName}",
   "error.channel_not_found.message": "Le canal que vous avez demandé est privé ou n'existe pas. Veuillez contacter un administrateur pour être rajouté à ce canal le cas échéant.",
   "error.channel_not_found.message_guest": "Votre compte utilisateur invité n'a pas de canal assigné. Veuillez contacter un administrateur.",
   "error.channel_not_found.title": "Canal introuvable",
@@ -5078,5 +5078,7 @@
   "get_the_app_modal.header": "Télécharger l’application kChat pour {platform}",
   "get_the_app_modal.content": "Nous vous conseillons d’installer l’application pour avoir une meilleure expérience !",
   "get_the_app_modal.confirm": "Télécharger kChat pour {platform}",
-  "api.change_channel_privacy": "Ce canal à été converti en Canal {type, select, Public {Public} other {Privé}}."
+  "api.change_channel_privacy": "Ce canal à été converti en Canal {type, select, Public {Public} other {Privé}}.",
+  "user.settings.display.lastActiveDisplay": "Partager l'heure de votre dernière activité",
+  "user.settings.display.lastActiveDesc": "Si cette option est activée, les autres utilisateurs verront à quel moment vous avez été actif pour la dernière fois."
 }

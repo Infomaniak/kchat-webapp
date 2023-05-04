@@ -1625,7 +1625,7 @@
   "admin.permissions.roles.channel_user.name": "Usuario del canal",
   "admin.permissions.roles.edit": "Editar",
   "admin.permissions.roles.system_admin.description": "Acceso a modificar todo.",
-  "admin.permissions.roles.system_admin.name": "Admin del Sistema",
+  "admin.permissions.roles.system_admin.name": "Administrador",
   "admin.permissions.roles.system_admin.type": "Rol del Sistema",
   "admin.permissions.roles.system_custom_group_admin.description": "Administra todos los Grupos Personalizados a través del sistema.",
   "admin.permissions.roles.system_custom_group_admin.detail_text": "El rol integrado de Administrado de Grupo Personalizado puede ser usado para delegar la administración de [Grupos Personalizados](https://docs.mattermost.com/welcome/manage-custom-groups.html) a usuarios que no sean el Administrador del Sistema. \n  \nNo olvides desautorizar a todos los demás usuarios del sistema para que no administren Grupos Personalizados desmarcando la caja el checkbox en consola del Sistema > Administración de Usuario > Permisos. \n  \nEste rol tiene permisos para crear, editar, y eliminar grupos de usuarios personalizados al seleccionar **grupos de Usuarios** del menú Productos.",
@@ -5311,5 +5311,7 @@
   "get_the_app_modal.header": "Descarga la aplicación kChat para {platform}",
   "get_the_app_modal.content": "Le aconsejamos que instale la aplicación para disfrutar de una mejor experiencia.",
   "get_the_app_modal.confirm": "Descargar kChat para {platform}",
-  "api.change_channel_privacy": "Este canal se ha convertido en un Canal {type, select, Public {Público} other {Privado}}."
+  "api.change_channel_privacy": "Este canal se ha convertido en un Canal {type, select, Public {Público} other {Privado}}.",
+  "user.settings.display.lastActiveDisplay": "Compartir la última hora activa",
+  "user.settings.display.lastActiveDesc": "Cuando está activada, otros usuarios verán cuándo estuviste activo por última vez."
 }

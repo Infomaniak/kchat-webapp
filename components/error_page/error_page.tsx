@@ -170,7 +170,7 @@ export default class ErrorPage extends React.PureComponent<Props> {
                         id='error.channelNotFound.link'
                         defaultMessage='Back to {defaultChannelName}'
                         values={{
-                            defaultChannelName: Constants.DEFAULT_CHANNEL_UI_NAME,
+                            defaultChannelName: 'kChat',
                         }}
                     />
                 </Link>

@@ -1,3 +1,50 @@
+## 1.2.0-next.3 (2023-05-03)
+
+### Fixed (1 change)
+
+- [admin badge wording](kchat/webapp@1ffcddc2961a5ae846df3bc36197bd6d27aa9837) by @leonard.jouve ([merge request](kchat/webapp!391))
+
+### Changed (1 change)
+
+- [run release and changelog for canary](kchat/webapp@93fd072279d8e51d08b8cfb932f5532c68ec54bf) by @antonbuksa ([merge request](kchat/webapp!395))
+
+### Chore (2 changes)
+
+- [specify url prefix for sentry maps](kchat/webapp@9e436dd3eb20bfcad5f91e5579ad7056df996892) by @antonbuksa ([merge request](kchat/webapp!395))
+- [fix test report collection](kchat/webapp@fdd7b9d96a99a490a18e2e9f0ebfcc70804ec97a) by @antonbuksa ([merge request](kchat/webapp!395))
+
+## 1.2.0-next.2 (2023-05-03)
+
+### Fixed (1 change)
+
+- [admin badge wording](kchat/webapp@1ffcddc2961a5ae846df3bc36197bd6d27aa9837) by @leonard.jouve ([merge request](kchat/webapp!391))
+
+### Changed (1 change)
+
+- [run release and changelog for canary](kchat/webapp@93fd072279d8e51d08b8cfb932f5532c68ec54bf) by @antonbuksa ([merge request](kchat/webapp!395))
+
+### Chore (2 changes)
+
+- [specify url prefix for sentry maps](kchat/webapp@9e436dd3eb20bfcad5f91e5579ad7056df996892) by @antonbuksa ([merge request](kchat/webapp!395))
+- [fix test report collection](kchat/webapp@fdd7b9d96a99a490a18e2e9f0ebfcc70804ec97a) by @antonbuksa ([merge request](kchat/webapp!395))
+
+## 1.1.4 (2023-04-27)
+
+### Added (1 change)
+
+- [add clock and name display preference settings](kchat/webapp@4238d652030a272dce90e04277e161f81690b1e6) by @leonard.jouve ([merge request](kchat/webapp!384))
+
+### Fixed (4 changes)
+
+- [improve state of rhs display settings + patch user only when user pref changes](kchat/webapp@9647eedd294cf88399db3727930f3118f0576ddf) by @antonbuksa ([merge request](kchat/webapp!384))
+- [date time input theming support](kchat/webapp@69ea382ea0ee69b107c94845b40bd268e65f0bdd) by @leonard.jouve ([merge request](kchat/webapp!385))
+- [update status on reconnect](kchat/webapp@a499194d023f8911dc10396f64cac3a22b00c0db) by @leonard.jouve ([merge request](kchat/webapp!382))
+- [fix multi team sidebar link width](kchat/webapp@d31ec4f3bb9a647a4f0a71ed5ca449307ef942be) by @leonard.jouve ([merge request](kchat/webapp!380))
+
+### Chore (1 change)
+
+- [fix ci double install](kchat/webapp@60fb44fd2e9f46243c556b999043be49b2f70812) by @antonbuksa
+
 ## 1.1.3 (2023-04-20)
 
 ### Fixed (1 change)
