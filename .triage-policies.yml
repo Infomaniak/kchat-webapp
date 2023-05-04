@@ -57,6 +57,8 @@ resource_rules:
               Monthly technical debt summary:
 
               {{items}}
+          comment: |
+            /label ~info
       - name: Technical debts
         conditions:
           state: merged
