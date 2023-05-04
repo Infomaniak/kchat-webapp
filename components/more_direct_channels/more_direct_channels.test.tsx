@@ -78,11 +78,9 @@ describe('components/MoreDirectChannels', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should call for modal data on callback of modal onEntered', () => {
+    test('should call for modal data on mount', () => {
         const props = {...baseProps, actions: {...baseProps.actions, loadProfilesMissingStatus: jest.fn()}};
         const wrapper = shallow<MoreDirectChannels>(<MoreDirectChannels {...props}/>);
-
-        wrapper.instance().loadModalData();
 
         expect(props.actions.getProfiles).toHaveBeenCalledTimes(1);
         expect(props.actions.getTotalUsersStats).toHaveBeenCalledTimes(1);
@@ -102,7 +100,7 @@ describe('components/MoreDirectChannels', () => {
         }];
 
         wrapper.setProps({users: newUsers});
-        expect(props.actions.loadProfilesMissingStatus).toHaveBeenCalledTimes(1);
+        expect(props.actions.loadProfilesMissingStatus).toHaveBeenCalledTimes(2);
         expect(props.actions.loadProfilesMissingStatus).toBeCalledWith(newUsers);
     });
 
