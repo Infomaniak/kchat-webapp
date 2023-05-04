@@ -43,6 +43,17 @@ exports[`components/ProfilePopover should disable start call button when user is
       <span
         data-testid="profilePopoverTitle_some_username"
       >
+        <div
+          className="user-popover__copyID"
+        >
+          <CopyButton
+            afterCopyText="Copied"
+            content="user_id"
+            icon="icon-link-variant"
+            placement="top"
+            tooltipText="copy.text.userid"
+          />
+        </div>
         <button
           className="user-popover__close"
           onClick={[Function]}
@@ -388,6 +399,17 @@ exports[`components/ProfilePopover should hide add-to-channel option if not on t
       <span
         data-testid="profilePopoverTitle_some_username"
       >
+        <div
+          className="user-popover__copyID"
+        >
+          <CopyButton
+            afterCopyText="Copied"
+            content="user_id"
+            icon="icon-link-variant"
+            placement="top"
+            tooltipText="copy.text.userid"
+          />
+        </div>
         <button
           className="user-popover__close"
           onClick={[Function]}
@@ -654,6 +676,17 @@ exports[`components/ProfilePopover should match snapshot 1`] = `
       <span
         data-testid="profilePopoverTitle_some_username"
       >
+        <div
+          className="user-popover__copyID"
+        >
+          <CopyButton
+            afterCopyText="Copied"
+            content="user_id"
+            icon="icon-link-variant"
+            placement="top"
+            tooltipText="copy.text.userid"
+          />
+        </div>
         <button
           className="user-popover__close"
           onClick={[Function]}
@@ -1003,6 +1036,17 @@ exports[`components/ProfilePopover should match snapshot for shared user 1`] = `
       <span
         data-testid="profilePopoverTitle_shared_user"
       >
+        <div
+          className="user-popover__copyID"
+        >
+          <CopyButton
+            afterCopyText="Copied"
+            content="user_id"
+            icon="icon-link-variant"
+            placement="top"
+            tooltipText="copy.text.userid"
+          />
+        </div>
         <button
           className="user-popover__close"
           onClick={[Function]}
@@ -1370,6 +1414,17 @@ exports[`components/ProfilePopover should match snapshot when calls are disabled
       <span
         data-testid="profilePopoverTitle_some_username"
       >
+        <div
+          className="user-popover__copyID"
+        >
+          <CopyButton
+            afterCopyText="Copied"
+            content="user_id"
+            icon="icon-link-variant"
+            placement="top"
+            tooltipText="copy.text.userid"
+          />
+        </div>
         <button
           className="user-popover__close"
           onClick={[Function]}
@@ -1692,6 +1747,17 @@ exports[`components/ProfilePopover should match snapshot with custom status 1`] 
       <span
         data-testid="profilePopoverTitle_some_username"
       >
+        <div
+          className="user-popover__copyID"
+        >
+          <CopyButton
+            afterCopyText="Copied"
+            content="user_id"
+            icon="icon-link-variant"
+            placement="top"
+            tooltipText="copy.text.userid"
+          />
+        </div>
         <button
           className="user-popover__close"
           onClick={[Function]}
@@ -2086,6 +2152,17 @@ exports[`components/ProfilePopover should match snapshot with custom status expi
       <span
         data-testid="profilePopoverTitle_some_username"
       >
+        <div
+          className="user-popover__copyID"
+        >
+          <CopyButton
+            afterCopyText="Copied"
+            content="user_id"
+            icon="icon-link-variant"
+            placement="top"
+            tooltipText="copy.text.userid"
+          />
+        </div>
         <button
           className="user-popover__close"
           onClick={[Function]}
@@ -2435,6 +2512,17 @@ exports[`components/ProfilePopover should match snapshot with custom status not 
       <span
         data-testid="profilePopoverTitle_some_username"
       >
+        <div
+          className="user-popover__copyID"
+        >
+          <CopyButton
+            afterCopyText="Copied"
+            content=""
+            icon="icon-link-variant"
+            placement="top"
+            tooltipText="copy.text.userid"
+          />
+        </div>
         <button
           className="user-popover__close"
           onClick={[Function]}
@@ -2720,6 +2808,17 @@ exports[`components/ProfilePopover should match snapshot with last active displa
       <span
         data-testid="profilePopoverTitle_some_username"
       >
+        <div
+          className="user-popover__copyID"
+        >
+          <CopyButton
+            afterCopyText="Copied"
+            content="user_id"
+            icon="icon-link-variant"
+            placement="top"
+            tooltipText="copy.text.userid"
+          />
+        </div>
         <button
           className="user-popover__close"
           onClick={[Function]}
@@ -3069,6 +3168,17 @@ exports[`components/ProfilePopover should match snapshot with no last active dis
       <span
         data-testid="profilePopoverTitle_some_username"
       >
+        <div
+          className="user-popover__copyID"
+        >
+          <CopyButton
+            afterCopyText="Copied"
+            content="user_id"
+            icon="icon-link-variant"
+            placement="top"
+            tooltipText="copy.text.userid"
+          />
+        </div>
         <button
           className="user-popover__close"
           onClick={[Function]}
@@ -3661,6 +3771,117 @@ exports[`components/ProfilePopover should show the start call button when isCall
                   <span
                     data-testid="profilePopoverTitle_some_username"
                   >
+                    <div
+                      className="user-popover__copyID"
+                    >
+                      <CopyButton
+                        afterCopyText="Copied"
+                        content="user_id"
+                        icon="icon-link-variant"
+                        placement="top"
+                        tooltipText="copy.text.userid"
+                      >
+                        <OverlayTrigger
+                          defaultOverlayShown={false}
+                          delayShow={400}
+                          overlay={
+                            <Tooltip
+                              bsClass="tooltip"
+                              id="copyButton"
+                              placement="right"
+                            >
+                              <Memo(MemoizedFormattedMessage)
+                                defaultMessage="Copy code"
+                                id="copy.text.userid"
+                              />
+                            </Tooltip>
+                          }
+                          placement="top"
+                          shouldUpdatePosition={true}
+                          trigger={
+                            Array [
+                              "hover",
+                              "focus",
+                            ]
+                          }
+                        >
+                          <OverlayTrigger
+                            defaultOverlayShown={false}
+                            delayShow={400}
+                            overlay={
+                              <OverlayWrapper
+                                bsClass="tooltip"
+                                id="copyButton"
+                                intl={
+                                  Object {
+                                    "defaultFormats": Object {},
+                                    "defaultLocale": "en",
+                                    "defaultRichTextElements": undefined,
+                                    "formatDate": [Function],
+                                    "formatDateTimeRange": [Function],
+                                    "formatDateToParts": [Function],
+                                    "formatDisplayName": [Function],
+                                    "formatList": [Function],
+                                    "formatListToParts": [Function],
+                                    "formatMessage": [Function],
+                                    "formatNumber": [Function],
+                                    "formatNumberToParts": [Function],
+                                    "formatPlural": [Function],
+                                    "formatRelativeTime": [Function],
+                                    "formatTime": [Function],
+                                    "formatTimeToParts": [Function],
+                                    "formats": Object {},
+                                    "formatters": Object {
+                                      "getDateTimeFormat": [Function],
+                                      "getDisplayNames": [Function],
+                                      "getListFormat": [Function],
+                                      "getMessageFormat": [Function],
+                                      "getNumberFormat": [Function],
+                                      "getPluralRules": [Function],
+                                      "getRelativeTimeFormat": [Function],
+                                    },
+                                    "locale": "en",
+                                    "messages": Object {},
+                                    "onError": [Function],
+                                    "textComponent": "span",
+                                    "timeZone": "Etc/UTC",
+                                    "wrapRichTextChunksInFragment": undefined,
+                                  }
+                                }
+                                placement="right"
+                              >
+                                <Memo(MemoizedFormattedMessage)
+                                  defaultMessage="Copy code"
+                                  id="copy.text.userid"
+                                />
+                              </OverlayWrapper>
+                            }
+                            placement="top"
+                            shouldUpdatePosition={true}
+                            trigger={
+                              Array [
+                                "hover",
+                                "focus",
+                              ]
+                            }
+                          >
+                            <span
+                              className="post-code__clipboard"
+                              onBlur={[Function]}
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onMouseOut={[Function]}
+                              onMouseOver={[Function]}
+                            >
+                              <i
+                                className="icon icon-link-variant"
+                                role="button"
+                              />
+                            </span>
+                          </OverlayTrigger>
+                        </OverlayTrigger>
+                      </CopyButton>
+                    </div>
                     <button
                       className="user-popover__close"
                       onClick={[Function]}
