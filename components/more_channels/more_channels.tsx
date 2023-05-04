@@ -139,8 +139,11 @@ export default class MoreChannels extends React.PureComponent<Props, State> {
         });
     }
 
-    nextPage = (page: number) => {
-        this.props.actions.getChannels(this.props.teamId, page + 1, CHANNELS_PER_PAGE);
+    nextPage = async (page: number) => {
+        const statsStartIdx = (CHANNELS_CHUNK_SIZE * 2) + ((page - 1) * Number(CHANNELS_CHUNK_SIZE));
+        await this.props.actions.getChannels(this.props.teamId, page + 1, CHANNELS_PER_PAGE);
+
+        this.props.channels.slice(statsStartIdx, this.props.channels.length - 1).forEach((channel) => this.props.actions.getChannelStats(channel.id));
     }
 
     handleJoin = async (channel: Channel, done: () => void) => {

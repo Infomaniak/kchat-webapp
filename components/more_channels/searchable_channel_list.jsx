@@ -26,6 +26,7 @@ import Constants, {ModalIdentifiers} from 'utils/constants';
 import {isKeyPressed, localizeMessage, localizeAndFormatMessage} from 'utils/utils';
 
 import {isArchivedChannel} from 'utils/channel_utils';
+import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
 const NEXT_BUTTON_TIMEOUT_MILLISECONDS = 500;
 
@@ -287,24 +288,22 @@ export default class SearchableChannelList extends React.PureComponent {
             const channelsToDisplay = this.props.channels.slice(pageStart, pageEnd);
             listContent = channelsToDisplay.map(this.createChannelRow);
 
-            if (channelsToDisplay.length >= this.props.channelsPerPage && pageEnd < this.props.channels.length) {
-                nextButton = (
-                    <button
-                        className='btn filter-control filter-control__next outlineButton'
-                        onClick={this.nextPage}
-                        disabled={this.state.nextDisabled}
-                        aria-label={localizeMessage('more_channels.next', 'Next')}
-                        style={{marginLeft: 0}}
-                    >
-                        <i className='icon icon-chevron-right'/>
-                    </button>
-                );
-            }
+            nextButton = (
+                <button
+                    className='btn filter-control filter-control__next outlineButton iconButton'
+                    disabled={this.state.nextDisabled || channelsToDisplay.length < this.props.channelsPerPage || pageEnd >= this.props.channels.length}
+                    onClick={this.nextPage}
+                    aria-label={localizeMessage('more_channels.next', 'Next')}
+                    style={{marginLeft: 0}}
+                >
+                    {this.state.nextDisabled ? <LoadingSpinner/> : <i className='icon icon-chevron-right'/>}
+                </button>
+            );
 
             previousButton = (
                 <button
-                    className='btn filter-control filter-control__prev outlineButton'
-                    disabled={!this.state.page > 0}
+                    className='btn filter-control filter-control__prev outlineButton iconButton'
+                    disabled={this.state.page <= 0}
                     onClick={this.previousPage}
                     aria-label={localizeMessage('more_channels.prev', 'Previous')}
                     style={{marginRight: 10}}
