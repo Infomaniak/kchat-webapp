@@ -19,7 +19,6 @@ exports[`components/new_channel_modal should match snapshot 1`] = `
   keyboardEscape={true}
   modalHeaderText="Create a new channel"
   onExited={[Function]}
-  show={true}
 >
   <div
     className="new-channel-modal-body"
