@@ -50,7 +50,7 @@
         }
 
         .modal-header {
-            background: var(--center-channel-bg);
+            background: var(--ik-modal-header);
             border-radius: 12px 12px 0 0;
             padding: 16px 40px 16px;
             align-items: center;
@@ -119,12 +119,13 @@
                 line-height: 14px;
                 &:not(.btn-danger) {
                     color: var(--button-color);
+                    background-color: var(--button-bg);
                 }
             }
             button.secondary:not(.close) {
                 margin-right: 8px;
-                background: rgb(var(--ik-btn-secondary));
-                color: rgb(var(--ik-btn-secondary-color));
+                background: var(--ik-btn-secondary);
+                color: var(--ik-btn-secondary-color);
             }
         }
     }

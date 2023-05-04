@@ -198,17 +198,8 @@
 
                 &.cancel {
                     margin-right: 8px;
-                    background: var(--center-channel-bg);
-                    background: rgba(var(--button-bg-rgb), 0.08);
-                    color: var(--button-bg);
-
-                    &:hover {
-                        background: rgba(var(--button-bg-rgb), 0.12);
-                    }
-
-                    &:active {
-                        background: rgba(var(--button-bg-rgb), 0.16);
-                    }
+                    background: var(--ik-btn-secondary);
+                    color: var(--ik-btn-secondary-color);
 
                     &:focus {
                         box-sizing: border-box;
@@ -227,7 +218,6 @@
                         padding: 11px 18px;
                     }
 
-                    &:hover,
                     &:focus,
                     &:active {
                         background: linear-gradient(0deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08)), var(--dnd-indicator) !important;
@@ -291,8 +281,8 @@
     line-height: 12px;
 
     &.cancel {
-        background: var(--center-channel-bg);
-        color: var(--button-bg);
+        background: var(--ik-btn-secondary);
+        color: var(--ik-btn-secondary-color);
     }
 
     &.confirm {

@@ -132,10 +132,6 @@
     font-weight: 600;
     transition: all 0.15s ease-out;
 
-    &:hover {
-        background: linear-gradient(0deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08)), var(--button-bg);
-    }
-
     &:active {
         background: linear-gradient(0deg, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.16)), var(--button-bg);
     }
@@ -163,16 +159,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--denim-button-bg);
-    background: var(--center-channel-bg);
+    background: var(--ik-btn-secondary);
     border-radius: 4px;
-    color: var(--button-bg);
+    color: var(--ik-btn-secondary-color);
     font-weight: 600;
     transition: all 0.15s ease-out;
-
-    &:hover {
-        background: rgba(var(--denim-button-bg-rgb), 0.08);
-    }
 
     &:active {
         background: rgba(var(--denim-button-bg-rgb), 0.16);
