@@ -3179,7 +3179,7 @@
   "file_info_preview.type": "Type de fichier ",
   "file_preview_modal_info.shared_in": "Partagé dans ~{name}",
   "file_preview_modal_main_actions.public_link-copied": "Lien public partagé",
-  "file_preview_modal_main_nav.file": "{count, number} parmi {total, number}",
+  "file_preview_modal_main_nav.file": "{count, number} sur {total, number}",
   "file_search_result_item.copy_link": "Copier le lien",
   "file_search_result_item.download": "Télécharger",
   "file_search_result_item.more_actions": "Plus d'actions",
