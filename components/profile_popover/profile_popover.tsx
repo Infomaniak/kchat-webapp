@@ -884,7 +884,6 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
         const title = (
             <span data-testid={`profilePopoverTitle_${this.props.user.username}`}>
                 <div className='user-popover__copyID'>
-                    {/* <CopyIDBtn id={this.props.user.id}/> */}
                     <CopyButton
                         content={this.props.user.id}
                         tooltipText='copy.text.userid'
