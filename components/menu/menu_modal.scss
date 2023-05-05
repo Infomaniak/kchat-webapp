@@ -1,9 +1,15 @@
-.modal .GenericModal.menuModal.modal-dialog {
-    position: absolute;
-    height: auto;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
+.modal{
+    &.fade:not(.in) .menuModal.modal-dialog {
+        transform: translate(0, 25%);
+    }
+
+    .GenericModal.menuModal.modal-dialog {
+        position: absolute;
+        height: auto;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+    }
 }
