@@ -26,5 +26,5 @@ resource_rules:
                 interval: 1
             actions:
               summarize:
-                item: "- [ ] [{{title}}]({{web_url}}) {{merged_at}}"
+                item: "- [{{title}}]({{web_url}})"
                 summary: "{{items}}"
