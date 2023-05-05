@@ -48,28 +48,3 @@ resource_rules:
             - "bot-rebase"
           comment: |
             /rebase
-    summaries:
-      - name: Resolved technical debt
-        actions:
-          summarize:
-            title: "Resolved technical debt summary"
-            summary: |
-              Monthly technical debt summary:
-
-              {{items}}
-          comment: |
-            /label ~info
-      - name: Technical debts
-        conditions:
-          state: merged
-          labels:
-            - 🪛 tech debt
-          date:
-            attribute: merged_at
-            condition: newer_than
-            interval_type: months
-            interval: 1
-        actions:
-          summarize:
-            item: "- [ ] [{{title}}]({{web_url}}) {{merged_at}}"
-            summary: "{{items}}"
