@@ -44,6 +44,7 @@ exports[`components/sidebar/sidebar_category/sidebar_category_sorting_menu shoul
         />
       }
       menuId="sortDirectMessages-category_id-menu"
+      parentMenuId="SidebarCategorySortingMenu-MenuList-category_id"
       trailingElements={
         <React.Fragment>
           <Memo(MemoizedFormattedMessage)
@@ -91,6 +92,7 @@ exports[`components/sidebar/sidebar_category/sidebar_category_sorting_menu shoul
         />
       }
       menuId="showMessagesCount-category_id-menu"
+      parentMenuId="SidebarCategorySortingMenu-MenuList-category_id"
       trailingElements={
         <React.Fragment>
           <span>

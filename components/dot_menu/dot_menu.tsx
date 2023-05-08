@@ -525,6 +525,8 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
             />
         );
 
+        const menuId = `${this.props.location}_dropdown_${this.props.post.id}`;
+
         return (
             <Menu.Container
                 menuButton={{
@@ -537,7 +539,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                     children: <DotsHorizontalIcon size={16}/>,
                 }}
                 menu={{
-                    id: `${this.props.location}_dropdown_${this.props.post.id}`,
+                    id: menuId,
                     'aria-label': this.props.intl.formatMessage({id: 'post_info.menuAriaLabel', defaultMessage: 'Post extra options'}),
                     onKeyDown: this.onShortcutKeyDown,
                     width: '264px',
@@ -602,6 +604,7 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         post={this.props.post}
                         isMilitaryTime={this.props.isMilitaryTime}
                         timezone={this.props.timezone}
+                        parentMenuId={menuId}
                     />
                 }
                 {Boolean(!isSystemMessage && !this.props.channelIsArchived && this.props.location !== Locations.SEARCH) &&

@@ -6,8 +6,9 @@ import classNames from 'classnames';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import {FocusTrap} from '../focus_trap';
 import {CloseIcon} from '@infomaniak/compass-icons/components';
+
+import {FocusTrap} from '../focus_trap';
 
 export type Props = {
     className?: string;
@@ -43,6 +44,7 @@ export type Props = {
     tabIndex?: number;
     children: React.ReactNode;
     keyboardEscape?: boolean;
+    onEnter?: (node: HTMLElement) => void;
 };
 
 type State = {
@@ -205,6 +207,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
                 backdropClassName={this.props.backdropClassName}
                 container={this.props.container}
                 keyboard={this.props.keyboardEscape}
+                onEnter={this.props.onEnter}
             >
                 <FocusTrap active={isFocusTrapActive}>
                     <div
