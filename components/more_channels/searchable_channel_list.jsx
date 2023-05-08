@@ -223,6 +223,7 @@ export default class SearchableChannelList extends React.PureComponent {
     }
 
     toggleArchivedChannelsOn = () => {
+        this.setState({page: 0});
         this.props.toggleArchivedChannels(true);
     }
 

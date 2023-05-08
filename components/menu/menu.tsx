@@ -29,6 +29,8 @@ import GenericModal from 'components/generic_modal';
 
 import {MuiMenuStyled} from './menu_styled';
 
+import './menu_modal.scss';
+
 const OVERLAY_TIME_DELAY = 500;
 const MENU_OPEN_ANIMATION_DURATION = 150;
 const MENU_CLOSE_ANIMATION_DURATION = 100;

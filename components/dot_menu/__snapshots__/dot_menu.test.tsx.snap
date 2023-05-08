@@ -303,6 +303,7 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
   />
   <PostReminderSubmenu
     isMilitaryTime={false}
+    parentMenuId="CENTER_dropdown_post_id_1"
     post={
       Object {
         "channel_id": "",

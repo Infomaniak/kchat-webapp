@@ -11,6 +11,10 @@
         color: var(--center-channel-color);
         font-weight: bold;
         pointer-events: none;
+
+        @media screen and (max-width: 768px) {
+            padding: 6px 8px;
+        }
     }
 
     &__item-trailing-icon {
