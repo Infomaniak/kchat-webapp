@@ -27,6 +27,9 @@ export function modalState(state: ViewsState['modals']['modalState'] = {}, actio
         return newState;
     }
     case ActionTypes.MODAL_TOGGLE: {
+        if (!state[action.modalId]) {
+            return state;
+        }
         return {
             ...state,
             [action.modalId]: {
