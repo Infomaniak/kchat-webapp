@@ -6,6 +6,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import MuiMenuList from '@mui/material/MenuList';
 import {PopoverOrigin} from '@mui/material/Popover';
 
+import {ChevronLeftIcon} from '@infomaniak/compass-icons/components';
+
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {getIsMobileView} from 'selectors/views/browser';
@@ -179,11 +181,8 @@ function SubMenuModal(props: SubMenuModalProps) {
 
     const theme = useSelector(getTheme);
 
-    function handleModalClose(reopenParentMenu = true) {
+    function handleModalClose() {
         dispatch(closeModal(props.menuId));
-        if (props.parentMenuId && reopenParentMenu) {
-            dispatch(toggleModalVisibility(props.parentMenuId, true));
-        }
     }
 
     const handleModalEnter = () => {
@@ -191,6 +190,27 @@ function SubMenuModal(props: SubMenuModalProps) {
             dispatch(toggleModalVisibility(props.parentMenuId, false));
         }
     };
+
+    const handleArrowBack = () => {
+        if (props.parentMenuId) {
+            dispatch(toggleModalVisibility(props.parentMenuId, true));
+        }
+    };
+
+    let arrowBack;
+    if (props.parentMenuId) {
+        arrowBack = (
+            <button
+                className='menuModal__arrow-back'
+                onClick={handleArrowBack}
+            >
+                <ChevronLeftIcon
+                    size={20}
+                    color='var(--center-channel-color)'
+                />
+            </button>
+        );
+    }
 
     return (
         <CompassDesignProvider theme={theme}>
@@ -204,8 +224,9 @@ function SubMenuModal(props: SubMenuModalProps) {
             >
                 <MuiMenuList
                     aria-hidden={true}
-                    onClick={() => handleModalClose(false)}
+                    onClick={handleModalClose}
                 >
+                    {arrowBack}
                     {props.children}
                 </MuiMenuList>
             </GenericModal>
