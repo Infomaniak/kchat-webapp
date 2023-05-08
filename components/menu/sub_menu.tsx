@@ -35,6 +35,12 @@ interface Props {
     menuId: string;
     menuAriaLabel?: string;
     forceOpenOnLeft?: boolean; // Most of the times this is not needed, since submenu position is calculated and placed
+
+    /**
+     * Id of the parent menu
+     *
+     * If defined, hides the parent menu while the submenu is opened on responsive menu modal
+    */
     parentMenuId?: string;
 
     children: ReactNode;
