@@ -93,6 +93,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should match sn
         "update_at": 0,
       }
     }
+    parentMenuId="SidebarChannelMenu-MenuList-channel_id"
   />
   <MenuItemSeparator />
   <MenuItem
@@ -239,6 +240,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should match sn
         "update_at": 0,
       }
     }
+    parentMenuId="SidebarChannelMenu-MenuList-channel_id"
   />
   <MenuItemSeparator />
   <MenuItem
@@ -385,6 +387,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should match sn
         "update_at": 0,
       }
     }
+    parentMenuId="SidebarChannelMenu-MenuList-channel_id"
   />
   <MenuItemSeparator />
   <MenuItem
@@ -531,6 +534,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
         "update_at": 0,
       }
     }
+    parentMenuId="SidebarChannelMenu-MenuList-channel_id"
   />
   <MenuItemSeparator />
   <MenuItem
@@ -645,6 +649,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
         "update_at": 0,
       }
     }
+    parentMenuId="SidebarChannelMenu-MenuList-channel_id"
   />
   <MenuItemSeparator />
   <MenuItem
@@ -774,6 +779,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
         "update_at": 0,
       }
     }
+    parentMenuId="SidebarChannelMenu-MenuList-channel_id"
   />
   <MenuItemSeparator />
   <MenuItem
@@ -920,6 +926,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
         "update_at": 0,
       }
     }
+    parentMenuId="SidebarChannelMenu-MenuList-channel_id"
   />
   <MenuItemSeparator />
   <MenuItem
@@ -1066,6 +1073,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
         "update_at": 0,
       }
     }
+    parentMenuId="SidebarChannelMenu-MenuList-channel_id"
   />
   <MenuItemSeparator />
   <MenuItem
@@ -1212,6 +1220,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
         "update_at": 0,
       }
     }
+    parentMenuId="SidebarChannelMenu-MenuList-channel_id"
   />
   <MenuItemSeparator />
   <MenuItem
@@ -1358,6 +1367,7 @@ exports[`components/sidebar/sidebar_channel/sidebar_channel_menu should show cor
         "update_at": 0,
       }
     }
+    parentMenuId="SidebarChannelMenu-MenuList-channel_id"
   />
   <MenuItemSeparator />
   <MenuItem
