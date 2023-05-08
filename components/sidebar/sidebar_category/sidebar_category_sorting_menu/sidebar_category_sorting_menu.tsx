@@ -38,6 +38,8 @@ const SidebarCategorySortingMenu = (props: Props) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const {formatMessage} = useIntl();
 
+    const menuId = `SidebarCategorySortingMenu-MenuList-${props.category.id}`;
+
     function handleSortDirectMessages(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>, sorting: CategorySorting) {
         event.preventDefault();
 
@@ -79,6 +81,7 @@ const SidebarCategorySortingMenu = (props: Props) => {
                 </>
             }
             menuId={`sortDirectMessages-${props.category.id}-menu`}
+            parentMenuId={menuId}
         >
             <Menu.Item
                 id={`sortAlphabetical-${props.category.id}`}
@@ -141,6 +144,7 @@ const SidebarCategorySortingMenu = (props: Props) => {
                 </>
             )}
             menuId={`showMessagesCount-${props.category.id}-menu`}
+            parentMenuId={menuId}
         >
             <Menu.Item
                 id={`showAllDms-${props.category.id}`}
@@ -205,7 +209,7 @@ const SidebarCategorySortingMenu = (props: Props) => {
                     class: 'hidden-xs',
                 }}
                 menu={{
-                    id: `SidebarCategorySortingMenu-MenuList-${props.category.id}`,
+                    id: menuId,
                     'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.dropdownAriaLabel', defaultMessage: 'Edit category menu'}),
                     onToggle: handleMenuToggle,
                 }}
