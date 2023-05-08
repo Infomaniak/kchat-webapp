@@ -26,6 +26,15 @@ export function modalState(state: ViewsState['modals']['modalState'] = {}, actio
         Reflect.deleteProperty(newState, action.modalId);
         return newState;
     }
+    case ActionTypes.MODAL_TOGGLE: {
+        return {
+            ...state,
+            [action.modalId]: {
+                ...state[action.modalId],
+                open: action.open,
+            },
+        };
+    }
 
     case UserTypes.LOGOUT_SUCCESS:
         return {};

@@ -282,6 +282,8 @@ const SidebarChannelMenu = (props: Props) => {
         );
     }
 
+    const menuId = `SidebarChannelMenu-MenuList-${props.channel.id}`;
+
     return (
         <Menu.Container
             menuButton={{
@@ -296,7 +298,7 @@ const SidebarChannelMenu = (props: Props) => {
                 text: formatMessage({id: 'sidebar_left.sidebar_channel_menu.editChannel', defaultMessage: 'Channel options'}),
             }}
             menu={{
-                id: `SidebarChannelMenu-MenuList-${props.channel.id}`,
+                id: menuId,
                 'aria-label': formatMessage({id: 'sidebar_left.sidebar_channel_menu.dropdownAriaLabel', defaultMessage: 'Edit channel menu'}),
                 onToggle: props.onMenuToggle,
             }}
@@ -306,7 +308,10 @@ const SidebarChannelMenu = (props: Props) => {
             {favoriteUnfavoriteMenuItem}
             {muteUnmuteChannelMenuItem}
             <Menu.Separator/>
-            <ChannelMoveToSubmenu channel={props.channel}/>
+            <ChannelMoveToSubmenu
+                channel={props.channel}
+                parentMenuId={menuId}
+            />
             {(copyLinkMenuItem || addMembersMenuItem) && <Menu.Separator/>}
             {copyLinkMenuItem}
             {addMembersMenuItem}

@@ -17,7 +17,7 @@ import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {getIsMobileView} from 'selectors/views/browser';
 
-import {openModal, closeModal} from 'actions/views/modals';
+import {openModal, closeModal, toggleModal} from 'actions/views/modals';
 
 import Constants, {A11yClassNames} from 'utils/constants';
 import {isKeyPressed} from 'utils/utils';
