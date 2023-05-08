@@ -179,9 +179,9 @@ function SubMenuModal(props: SubMenuModalProps) {
 
     const theme = useSelector(getTheme);
 
-    function handleModalClose() {
+    function handleModalClose(reopenParentMenu = true) {
         dispatch(closeModal(props.menuId));
-        if (props.parentMenuId) {
+        if (props.parentMenuId && reopenParentMenu) {
             dispatch(toggleModalVisibility(props.parentMenuId, true));
         }
     }
@@ -204,7 +204,7 @@ function SubMenuModal(props: SubMenuModalProps) {
             >
                 <MuiMenuList
                     aria-hidden={true}
-                    onClick={handleModalClose}
+                    onClick={() => handleModalClose(false)}
                 >
                     {props.children}
                 </MuiMenuList>
