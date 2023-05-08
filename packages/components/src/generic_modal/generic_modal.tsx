@@ -44,7 +44,7 @@ export type Props = {
     tabIndex?: number;
     children: React.ReactNode;
     keyboardEscape?: boolean;
-    onEnter: (node: HTMLElement) => void;
+    onEnter?: (node: HTMLElement) => void;
 };
 
 type State = {
