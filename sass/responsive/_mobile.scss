@@ -1943,12 +1943,6 @@
     }
 
     .app__body {
-        &.announcement-bar--fixed {
-            .modal {
-                padding-top: $announcement-bar-height;
-            }
-        }
-
         .modal {
             overflow: hidden;
             padding: 0;
