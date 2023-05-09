@@ -95,7 +95,7 @@ const FilePreviewModalImageControls = ({toolbarZoom, setToolbarZoom}: Props) => 
             zoomOutButtonDisabled.current = true;
         }
 
-        if (zoomLevels.has(toolbarZoom)) {
+        if (zoomLevels.has(String(toolbarZoom))) {
             setSelectedZoomValue(toolbarZoom);
         } else {
             setSelectedZoomValue('customZoom');
