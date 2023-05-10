@@ -1,3 +1,37 @@
+## 1.2.0-next.6 (2023-05-09)
+
+### Fixed (2 changes)
+
+- [admin badge wording](kchat/webapp@1ffcddc2961a5ae846df3bc36197bd6d27aa9837) by @leonard.jouve ([merge request](kchat/webapp!391))
+- [fix channel not found error page wording](kchat/webapp@5b1a2de7154136001a0aa3c80985ba5775fe3b70) by @leonard.jouve ([merge request](kchat/webapp!389))
+
+### Changed (1 change)
+
+- [run release and changelog for canary](kchat/webapp@93fd072279d8e51d08b8cfb932f5532c68ec54bf) by @antonbuksa ([merge request](kchat/webapp!395))
+
+### Chore (3 changes)
+
+- [add summary policy](kchat/webapp@cb24dfb8bb73356a931ebbb1a2ec9f5d5f0d85fd) by @antonbuksa
+- [specify url prefix for sentry maps](kchat/webapp@9e436dd3eb20bfcad5f91e5579ad7056df996892) by @antonbuksa ([merge request](kchat/webapp!395))
+- [fix test report collection](kchat/webapp@fdd7b9d96a99a490a18e2e9f0ebfcc70804ec97a) by @antonbuksa ([merge request](kchat/webapp!395))
+
+## 1.2.0-next.5 (2023-05-08)
+
+### Fixed (2 changes)
+
+- [admin badge wording](kchat/webapp@1ffcddc2961a5ae846df3bc36197bd6d27aa9837) by @leonard.jouve ([merge request](kchat/webapp!391))
+- [fix channel not found error page wording](kchat/webapp@5b1a2de7154136001a0aa3c80985ba5775fe3b70) by @leonard.jouve ([merge request](kchat/webapp!389))
+
+### Changed (1 change)
+
+- [run release and changelog for canary](kchat/webapp@93fd072279d8e51d08b8cfb932f5532c68ec54bf) by @antonbuksa ([merge request](kchat/webapp!395))
+
+### Chore (3 changes)
+
+- [add summary policy](kchat/webapp@cb24dfb8bb73356a931ebbb1a2ec9f5d5f0d85fd) by @antonbuksa
+- [specify url prefix for sentry maps](kchat/webapp@9e436dd3eb20bfcad5f91e5579ad7056df996892) by @antonbuksa ([merge request](kchat/webapp!395))
+- [fix test report collection](kchat/webapp@fdd7b9d96a99a490a18e2e9f0ebfcc70804ec97a) by @antonbuksa ([merge request](kchat/webapp!395))
+
 ## 1.2.0-next.4 (2023-05-04)
 
 ### Fixed (2 changes)

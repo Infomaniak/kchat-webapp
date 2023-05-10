@@ -12,25 +12,13 @@ resource_rules:
             interval: 7
           forbidden_labels:
             - 💀 stale
+            - info
         actions:
           comment: |
             This issue has been added to the 'Weekly Tasks' milestone.
             Let's try to address it within the week.
 
             /milestone %"Weekly Tasks"
-      - name: "Remind on Pull Request Updates"
-        conditions:
-          state: opened
-          date:
-            attribute: updated_at
-            condition: older_than
-            interval_type: days
-            interval: 7
-          ruby:  "resource[:assignees].any?"
-        actions:
-          comment: >
-            This pull request has been inactive for over a week.
-            {{assignees}}, any updates to share ?
       - name: "Warn about close Stale Branches"
         conditions:
           state: opened
@@ -42,6 +30,7 @@ resource_rules:
           forbidden_labels:
             - 🚧 wip
             - 📝 testing
+            - info
         actions:
           comment: >
             This issue has been inactive for over a month. It will be closed as stale.
