@@ -8,8 +8,7 @@
     border: none;
     background: transparent;
     color: var(--button-bg);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 14px;
     gap: 6px;
     line-height: 10px;
 }
@@ -110,7 +109,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px;
+            padding: 16px 15px;
             gap: 12px;
 
             &.first {
@@ -161,6 +160,7 @@
                 display: flex;
                 gap: 5px;
                 align-items: center;
+                font-size: 14px;
             }
         }
     }
