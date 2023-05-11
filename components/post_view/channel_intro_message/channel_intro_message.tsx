@@ -196,7 +196,7 @@ function createDMIntroMessage(channel: Channel, centeredIntro: string, teammate?
                         </span>
                         <FormattedMarkdownMessage
                             id='intro_messages.botGPT'
-                            defaultMessage='ChatGPT is an application developed and hosted by OpenAl. The data is sent and analysed on their servers and not those of Infomaniak. We advise you not to not to share sensitive information. ChatGPT may produce inaccurate information about people, places or facts.'
+                            defaultMessage='ChatGPT is an application developed and hosted by OpenAl. The data is sent and analysed on their servers and not those of Infomaniak. We advise you not to not to share sensitive information. ChatGPT may produce inaccurate information about people, places or facts. This feature is included free of charge in your kChat until 25 Nov. 2023 with a limit of 10 messages per day and per user.'
                         />
                     </p>
                 ) : null}
