@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {MenuItem, MenuList, Popover} from '@mui/material';
+import {MenuItem, MenuList, Popover, PopoverProps} from '@mui/material';
 import React from 'react';
 
 type Props = {
@@ -12,6 +12,17 @@ type Props = {
 
 const schedulePostItems = ['1', '2', '3'];
 
+const popoverProps: Partial<PopoverProps> = {
+    anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right',
+    },
+    transformOrigin: {
+        vertical: 'bottom',
+        horizontal: 'right',
+    },
+};
+
 const SchedulePostMenu = ({open, getAnchorEl, onClose}: Props) => {
     const renderedScheduledPostItems = schedulePostItems.map((item) => <MenuItem key={item}>{item}</MenuItem>);
     return (
@@ -19,14 +30,7 @@ const SchedulePostMenu = ({open, getAnchorEl, onClose}: Props) => {
             open={open}
             anchorEl={getAnchorEl()}
             onClose={onClose}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-            }}
+            {...popoverProps}
         >
             <MenuList id='schedule-post-menu'>
                 {renderedScheduledPostItems}
