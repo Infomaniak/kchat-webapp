@@ -359,6 +359,7 @@ var config = {
                 {from: 'images/payment-method-illustration.png', to: 'images'},
                 {from: 'images/cloud-laptop.png', to: 'images'},
                 {from: 'images/bot_default_icon.png', to: 'images'},
+                {from: 'images/chat_gpt.png', to: 'images'},
                 {from: 'images/cloud-laptop-error.png', to: 'images'},
                 {from: 'images/cloud-laptop-warning.png', to: 'images'},
                 {from: 'images/cloud-upgrade-person-hand-to-face.png', to: 'images'},
