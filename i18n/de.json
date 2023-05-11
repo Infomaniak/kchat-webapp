@@ -3906,7 +3906,7 @@
   "interactive_dialog.submitting": "Sende...",
   "intro_messages.DM": "Dies ist der Start des Direktnachrichtenverlaufs mit {teammate}.\nDirektnachrichten und hier geteilte Dateien sind für Personen außerhalb dieses Bereichs nicht sichtbar.",
   "intro_messages.GM": "Dies ist der Start des Gruppennachrichtenverlaufs mit {names}.\nGruppennachrichten und hier geteilte Dateien sind für Personen außerhalb dieses Bereichs nicht sichtbar.",
-  "intro_messages.botGPT": "ChatGPT ist eine LA, die von OpenAl entwickelt und gehostet wird. Die Daten werden auf deren Servern und nicht auf denen von Infomaniak gesendet und analysiert. Wir empfehlen Ihnen, nicht keine sensiblen Informationen zu teilen. ChatGPT kann unzutreffende Informationen über Personen, Orte oder Fakten produzieren.",
+  "intro_messages.botGPT": "ChatGPT ist eine KI, die von OpenAI entwickelt und gehostet wird. Die Daten werden auf deren Servern und nicht auf denen von Infomaniak gesendet und analysiert. Wir raten Ihnen, keine sensiblen Daten zu teilen. ChatGPT kann unzutreffende Informationen über Personen, Orte oder Fakten produzieren. Diese Funktion ist bis zum 25. Nov. 2023 kostenlos in Ihrem kChat enthalten, mit einer Begrenzung auf 10 Nachrichten pro Tag und Benutzer.",
   "intro_messages.addGroupsToTeam": "Andere Gruppen zu diesem Team hinzufügen",
   "intro_messages.anyMember": " Jedes Mitglied kann diesem Kanal beitreten und folgen.",
   "intro_messages.beginning": "Start von {name}",
