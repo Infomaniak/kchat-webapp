@@ -189,7 +189,7 @@ function createDMIntroMessage(channel: Channel, centeredIntro: string, teammate?
                 </p>
                 {pluggableButton}
                 {setHeaderButton}
-                {teammate?.username === 'ChatGPT' ? (
+                {teammate?.username === 'chat.gpt' ? (
                     <p className='channel-limitation-banner'>
                         <span style={{alignSelf: 'baseline'}}>
                             <i className='icon-information-outline'/>
