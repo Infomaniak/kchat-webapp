@@ -3,9 +3,11 @@
 
 import React, {useState} from 'react';
 import {useIntl} from 'react-intl';
-import {Button, MenuItem, MenuList, Popover, styled} from '@mui/material';
+import {Button, styled} from '@mui/material';
 
 import {ChevronUpIcon} from '@infomaniak/compass-icons/components';
+
+import SchedulePostMenu from 'components/schedule_post/schedule_post_menu';
 
 const SchedulePostButton = styled(Button)`
     display: flex;
@@ -43,8 +45,6 @@ type Props = {
     getAnchorEl: () => HTMLDivElement | null;
 };
 
-const schedulePostItems = ['1', '2', '3'];
-
 const SchedulePost = ({disabled, getAnchorEl}: Props) => {
     const {formatMessage} = useIntl();
     const [open, setOpen] = useState(false);
@@ -55,8 +55,6 @@ const SchedulePost = ({disabled, getAnchorEl}: Props) => {
     };
 
     const handleClose = () => setOpen(false);
-
-    const renderedScheduledPostItems = schedulePostItems.map((item) => <MenuItem key={item}>{item}</MenuItem>);
 
     return (
         <>
@@ -70,23 +68,11 @@ const SchedulePost = ({disabled, getAnchorEl}: Props) => {
             >
                 <ChevronUpIcon size={16}/>
             </SchedulePostButton>
-            <Popover
+            <SchedulePostMenu
+                getAnchorEl={getAnchorEl}
                 open={open}
-                anchorEl={getAnchorEl()}
                 onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-            >
-                <MenuList id='schedule-post-menu'>
-                    {renderedScheduledPostItems}
-                </MenuList>
-            </Popover>
+            />
         </>
     );
 };
