@@ -56,8 +56,8 @@ export function PostReminderSubmenu({userId, post, isMilitaryTime, show, timezon
             endTime = currentDate.add(2, 'hours');
             break;
         case 'tomorrow':
-            // add one day in current date
-            endTime = currentDate.add(1, 'day');
+            // tomorrow 9:00
+            endTime = currentDate.add(1, 'day').hours(9).minutes(0).seconds(0);
             break;
         }
 
@@ -80,7 +80,7 @@ export function PostReminderSubmenu({userId, post, isMilitaryTime, show, timezon
             let labels: string | JSX.Element = formatMessage({id: label, defaultMessage: labelDefault});
 
             if (id === 'tomorrow') {
-                const tomorrow = getCurrentMomentForTimezone(timezone).add(1, 'day').toDate();
+                const tomorrow = getCurrentMomentForTimezone(timezone).add(1, 'day').hours(9).minutes(0).seconds(0).toDate();
 
                 labels = (
                     <span>
