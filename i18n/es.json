@@ -3727,6 +3727,7 @@
   "interactive_dialog.submitting": "Enviando...",
   "intro_messages.DM": "Este es el inicio de tu historial de mensajes directos con {teammate}.\nLos mensajes directos y archivos que se comparten aquí no son mostrados a personas fuera de esta área.",
   "intro_messages.GM": "Este es el inicio de tu historial de mensajes de grupo con {names}.\nLos mensajes y archivos que se comparten aquí no son mostrados a personas fuera de esta área.",
+  "intro_messages.botGPT": "ChatGPT es una aplicación desarrollada y alojada por OpenAl. Los datos se envían y analizan en sus servidores y no en los de Infomaniak. Le aconsejamos que no no compartir información sensible. ChatGPT puede producir información inexacta sobre personas, lugares o hechos.",
   "intro_messages.addGroupsToTeam": "Agregar otros grupos a este equipo",
   "intro_messages.anyMember": " Cualquier miembro se puede unir y leer este canal.",
   "intro_messages.beginning": "Inicio de {name}",
