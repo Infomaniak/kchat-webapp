@@ -75,6 +75,10 @@
         border: 2px solid var(--button-bg);
         font-size: 14px;
 
+        @media screen and (max-width: 768px) {
+            width: auto;
+        }
+
         &:hover {
             border: 2px solid var(--button-bg);
             cursor: pointer;

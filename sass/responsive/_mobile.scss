@@ -1652,15 +1652,15 @@
                 }
 
                 .SidebarChannel {
-                    height: 45px;
+                    height: 40px;
 
                     .SidebarLink {
                         width: 290px;
-                        height: 45px;
+                        height: 40px;
                         align-items: center;
 
                         &::before {
-                            height: 45px;
+                            height: 40px;
                         }
 
                         .badge + .SidebarMenu {
