@@ -257,3 +257,20 @@ changelog:
     - when: never
   script:
     - "./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_NOTIFY_CHANNEL}"
+
+gitlab_triage:
+  rules:
+    - if: '$GITLAB_TRIAGE'
+      when: on_success
+    - when: never
+  variables:
+    TRIAGE_POLICY_FILE: .gitlab/triage-policies.yml
+
+technical_debt:
+  extends: gitlab_triage
+  rules:
+    - if: '$TRIAGE_TECHNICAL_DEBT'
+      when: on_success
+    - when: never
+  variables:
+    TRIAGE_POLICY_FILE: .gitlab/summaries-technical-debt.yml
