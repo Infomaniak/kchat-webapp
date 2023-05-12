@@ -135,7 +135,7 @@ publish_front:
 
 unit_test:
   stage: test
-  image: node:16.10.0
+  image: node:16.14.2
   tags:
     - docker-executor
     - kubernetes
@@ -170,6 +170,9 @@ unit_test:
       - coverage/
   before_script:
     - yarn
+    - yarn workspace @mattermost/types build
+    - yarn workspace @mattermost/client build
+    - yarn workspace @mattermost/components build
   script:
     # typescript
     # - npm run check-types
