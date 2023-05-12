@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {forwardRef, memo, useRef} from 'react';
+import React, {memo, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 import {Button, ButtonGroup, styled} from '@mui/material';
@@ -13,11 +13,6 @@ import CompassDesignProvider from 'components/compass_design_provider';
 
 import {t} from 'utils/i18n';
 import SchedulePost from 'components/schedule_post';
-
-type SendButtonProps = {
-    handleSubmit: (e: React.FormEvent) => void;
-    disabled: boolean;
-}
 
 const SendButtonContainer = styled(Button)`
     display: flex;
@@ -53,7 +48,13 @@ const StyledButtonGroup = styled(ButtonGroup)`
     border-radius: 4px;
 `;
 
-const SendButton = ({disabled, handleSubmit}: SendButtonProps) => {
+type SendButtonProps = {
+    handleSubmit: (e: React.FormEvent) => void;
+    disabled: boolean;
+    message: string;
+}
+
+const SendButton = ({disabled, handleSubmit, message}: SendButtonProps) => {
     const theme = useSelector(getTheme);
     const {formatMessage} = useIntl();
     const buttonGroupRef = useRef<HTMLDivElement>(null);
@@ -92,6 +93,7 @@ const SendButton = ({disabled, handleSubmit}: SendButtonProps) => {
                 <SchedulePost
                     disabled={disabled}
                     getAnchorEl={getButonGroupRef}
+                    message={message}
                 />
             </StyledButtonGroup>
         </CompassDesignProvider>

@@ -7,7 +7,7 @@ import {Button, styled} from '@mui/material';
 
 import {ChevronUpIcon} from '@infomaniak/compass-icons/components';
 
-import SchedulePostMenu from 'components/schedule_post/schedule_post_menu';
+import SchedulePostMenu, {SchedulePostMenuOption} from 'components/schedule_post/schedule_post_menu';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
@@ -46,19 +46,13 @@ const SchedulePostButton = styled(Button)`
 
 type Props = {
     disabled: boolean;
+    message: string;
     getAnchorEl: () => HTMLDivElement | null;
 };
 
-const SchedulePost = ({disabled, getAnchorEl}: Props) => {
+const SchedulePost = ({disabled, message, getAnchorEl}: Props) => {
     const {formatMessage} = useIntl();
     const [open, setOpen] = useState(false);
-
-    const handleSchedulePost = (e: React.MouseEvent) => {
-        e.preventDefault();
-        setOpen(true);
-    };
-
-    const handleClose = () => setOpen(false);
 
     const tooltip = (
         <Tooltip id='schedule-post-tooltip'>
@@ -68,6 +62,18 @@ const SchedulePost = ({disabled, getAnchorEl}: Props) => {
             })}
         </Tooltip>
     );
+
+    const handleMenu = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setOpen(true);
+    };
+
+    const handleClose = () => setOpen(false);
+
+    const handleSchedulePost = (option: SchedulePostMenuOption) => {
+        setOpen(false);
+        console.log(option, message); //eslint-disable-line no-console
+    };
 
     return (
         <>
@@ -80,10 +86,10 @@ const SchedulePost = ({disabled, getAnchorEl}: Props) => {
                 <SchedulePostButton
                     disableRipple={true}
                     disabled={disabled}
-                    onClick={handleSchedulePost}
+                    onClick={handleMenu}
                     aria-label={formatMessage({
                         id: 'create_post.schedule_post.aria',
-                        defaultMessage: 'Schedule post',
+                        defaultMessage: 'Schedule a post',
                     })}
                 >
                     <ChevronUpIcon size={16}/>
@@ -93,6 +99,7 @@ const SchedulePost = ({disabled, getAnchorEl}: Props) => {
                 getAnchorEl={getAnchorEl}
                 open={open}
                 onClose={handleClose}
+                handleSchedulePost={handleSchedulePost}
             />
         </>
     );
