@@ -38,6 +38,9 @@
     }
 
     &__repeat-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
         > div {
             display: flex;
             align-items: center;
@@ -45,6 +48,9 @@
             > label {
                 width: 100px;
                 margin: 0;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 20px;
             }
         }
 

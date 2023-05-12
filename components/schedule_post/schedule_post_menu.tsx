@@ -29,6 +29,7 @@ export type SchedulePostMenuOption = {
     title: IntlMessage;
 };
 
+// TODO: format tomorrow / monday title using moment
 const schedulePostItems: SchedulePostMenuOption[] = [
     {name: 'tomorrow', title: {id: 'create_post.schedule_post.menu.options.tomorrow.title', defaultMessage: 'Tomorrow at 9:00 AM'}},
     {name: 'monday', title: {id: 'create_post.schedule_post.menu.options.monday.title', defaultMessage: 'Monday at 9:00 AM'}},
