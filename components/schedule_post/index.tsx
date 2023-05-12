@@ -59,6 +59,7 @@ const SchedulePost = ({disabled, getAnchorEl}: Props) => {
     return (
         <>
             <SchedulePostButton
+                disableRipple={true}
                 disabled={disabled}
                 onClick={handleSchedulePost}
                 aria-label={formatMessage({

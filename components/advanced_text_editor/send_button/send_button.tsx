@@ -70,6 +70,7 @@ const SendButton = ({disabled, handleSubmit}: SendButtonProps) => {
         <CompassDesignProvider theme={theme}>
             <StyledButtonGroup ref={buttonGroupRef}>
                 <SendButtonContainer
+                    disableRipple={true}
                     data-testid='SendMessageButton'
                     tabIndex={0}
                     aria-label={formatMessage({
