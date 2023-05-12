@@ -5,11 +5,12 @@ import React from 'react';
 import {shallow} from 'enzyme';
 
 import {Posts} from 'mattermost-redux/constants';
-import {Post, PostType} from '@mattermost/types/posts';
 
 import PostMarkdown from 'components/post_markdown/post_markdown';
 import Markdown from 'components/markdown';
 import {TestHelper} from 'utils/test_helper';
+
+import {Post, PostType} from '@mattermost/types/posts';
 
 describe('components/PostMarkdown', () => {
     const baseProps = {
@@ -21,7 +22,6 @@ describe('components/PostMarkdown', () => {
         channelId: 'channel-id',
         channel: TestHelper.getChannelMock(),
         currentTeam: TestHelper.getTeamMock(),
-        isMilitaryTime: false,
     };
 
     test('should not error when rendering without a post', () => {

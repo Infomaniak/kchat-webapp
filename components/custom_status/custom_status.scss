@@ -13,20 +13,36 @@
         margin: auto;
     }
 
-    .modal &.GenericModal .modal {
-        &-body {
-            overflow: visible;
+    .modal &.GenericModal {
+        .modal {
+            &-body {
+                overflow: visible;
+            }
+
+            &-content {
+                width: 100%;
+                padding: 28px 8px 24px 24px;
+            }
+
+            &-footer {
+                padding: 0;
+                padding-right: 16px;
+                margin-top: 22px;
+            }
         }
 
-        &-content {
-            width: 100%;
-            padding: 28px 8px 24px 24px;
-        }
+        .emoji-quick-input {
+            &.form-control {
+                height: 4.8rem;
+                padding: 0 5.2rem;
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 600;
 
-        &-footer {
-            padding: 0;
-            padding-right: 16px;
-            margin-top: 22px;
+                &:focus {
+                    border-color: var(--button-bg);
+                }
+            }
         }
     }
 
@@ -47,18 +63,6 @@
                 color: rgba(var(--center-channel-color-rgb), 0.32);
                 opacity: 1;
             }
-        }
-    }
-
-    .form-control {
-        height: 4.8rem !important;
-        padding: 0 5.2rem;
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: 600;
-
-        &:focus {
-            border-color: var(--button-bg);
         }
     }
 
@@ -121,8 +125,13 @@
             font-weight: 600;
         }
     }
+
+    .dateTime {
+        margin-top: 45px;
+    }
 }
 
+.statusSuggestion__row,
 .status-dropdown-menu,
 .StatusModal__input {
     .input-clear-x {
@@ -181,6 +190,8 @@
         align-items: center;
         padding-right: 10px;
         padding-left: 18px;
+        border: none;
+        background: transparent;
         color: var(--center-channel-color);
         font-size: inherit;
 
@@ -267,78 +278,5 @@ span.emoticon[style]:hover {
             margin-right: 4px;
             font-weight: 600;
         }
-    }
-}
-
-.dateTime {
-    display: flex;
-    width: calc(100% - 24px);
-    margin-top: 45px;
-    padding-bottom: 5px;
-
-    & &__date {
-        position: relative;
-        margin-right: 20px;
-
-        &-icon {
-            position: absolute;
-            top: 11.3px;
-            left: 15px;
-        }
-    }
-
-    & &__time {
-        position: relative;
-
-        #expiryTimeMenu .dropdown-menu {
-            overflow: auto;
-            min-width: 266px;
-            max-height: 268px;
-        }
-
-        &-icon {
-            position: absolute;
-            top: 11.3px;
-            left: 15px;
-        }
-    }
-
-    & &__input {
-        width: 266px;
-        height: 40px;
-        padding: 10px 40px;
-        border: 2px solid var(--button-bg);
-        background: var(--center-channel-bg);
-        border-radius: 4px;
-        color: var(--center-channel-color);
-        cursor: pointer;
-        font-size: 14px;
-
-        &-title {
-            position: absolute;
-            bottom: 32px;
-            left: 12px;
-            padding: 0 4px;
-            background: var(--center-channel-bg);
-            color: rgba(var(--center-channel-color-rgb), 0.64);
-            font-size: 10px;
-            letter-spacing: 0.03em;
-            line-height: 16px;
-        }
-    }
-
-    &__custom-time {
-        width: 260px;
-
-        .dateTime__custom-time-icon {
-            position: static;
-            margin-left: 10px;
-        }
-    }
-
-    &__description {
-        font-size: 10px;
-        color: rgba(var(--center-channel-color-rgb), 0.64);
-        letter-spacing: 0.03em;
     }
 }

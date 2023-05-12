@@ -5,19 +5,18 @@ import React, {ReactNode} from 'react';
 import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
 import {General, Posts} from 'mattermost-redux/constants';
-import {Post} from '@mattermost/types/posts';
-
-import {Channel} from '@mattermost/types/channels';
-import {Team} from '@mattermost/types/teams';
 
 import * as Utils from 'utils/utils';
 import {TextFormattingOptions} from 'utils/text_formatting';
 import {getSiteURL} from 'utils/url';
-
 import Markdown from 'components/markdown';
 import CombinedSystemMessage from 'components/post_view/combined_system_message';
 import PostAddChannelMember from 'components/post_view/post_add_channel_member';
 import CallNotificationMessage from 'components/kmeet_conference/post_type';
+
+import {Channel} from '@mattermost/types/channels';
+import {Post} from '@mattermost/types/posts';
+import {Team} from '@mattermost/types/teams';
 
 function renderUsername(value: string): ReactNode {
     const username = (value[0] === '@') ? value : `@${value}`;
@@ -422,7 +421,7 @@ const systemMessageRenderers = {
     [Posts.POST_TYPES.CHANGE_CHANNEL_PRIVACY]: renderChangeChannelPrivacyMessage,
 };
 
-export function renderSystemMessage(post: Post, currentTeam: Team, channel: Channel, isUserCanManageMembers?: boolean, isMilitaryTime?: boolean): ReactNode {
+export function renderSystemMessage(post: Post, currentTeam: Team, channel: Channel, isUserCanManageMembers?: boolean, isMilitaryTime?: boolean, timezone?: string): ReactNode {
     const isEphemeral = Utils.isPostEphemeral(post);
 
     if (post.props && post.props.add_channel_member) {
@@ -460,3 +459,4 @@ export function renderSystemMessage(post: Post, currentTeam: Team, channel: Chan
 
     return null;
 }
+

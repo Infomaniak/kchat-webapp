@@ -34,6 +34,7 @@ import {ChannelCategory} from '@mattermost/types/channel_categories';
 import {GlobalState} from 'types/store';
 import {
     openInvitationsModal,
+    openWorkTemplateModal,
     setShowOnboardingCompleteProfileTour,
     setShowOnboardingVisitConsoleTour,
     switchToChannels,
@@ -45,11 +46,13 @@ import {ModalIdentifiers, TELEMETRY_CATEGORIES, ExploreOtherToolsTourSteps} from
 
 import BullsEye from 'components/common/svg_images_components/bulls_eye_svg';
 import Clipboard from 'components/common/svg_images_components/clipboard_svg';
+import Newspaper from 'components/common/svg_images_components/newspaper_svg';
 import Gears from 'components/common/svg_images_components/gears_svg';
 import Handshake from 'components/common/svg_images_components/handshake_svg';
 import Security from 'components/common/svg_images_components/security_svg';
 import Sunglasses from 'components/common/svg_images_components/sunglasses_svg';
 import Wrench from 'components/common/svg_images_components/wrench_svg';
+import {areWorkTemplatesEnabled} from 'selectors/work_template';
 
 import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName, TaskNameMapToSteps} from './constants';
 import {generateTelemetryTag} from './utils';
@@ -59,6 +62,14 @@ const getCategory = makeGetCategory();
 const useGetTaskDetails = () => {
     const {formatMessage} = useIntl();
     return {
+        [OnboardingTasksName.CREATE_FROM_WORK_TEMPLATE]: {
+            id: 'task_create_from_work_template',
+            svg: Newspaper,
+            message: formatMessage({
+                id: 'onboardingTask.checklist.task_create_from_work_template',
+                defaultMessage: 'Create from a template - set up a channel with linked boards and playbooks.',
+            }),
+        },
         [OnboardingTasksName.CHANNELS_TOUR]: {
             id: 'task_learn_more_about_messaging',
             message: formatMessage({
@@ -147,6 +158,7 @@ export const useTasksList = () => {
     const isThinOnBoardingTaskList = useSelector((state: GlobalState) => {
         return isReduceOnBoardingTaskList(state);
     });
+    const workTemplateEnabled = useSelector(areWorkTemplatesEnabled);
 
     // Cloud conditions
     // const subscription = useSelector((state: GlobalState) => state.entities.cloud.subscription);
@@ -189,6 +201,11 @@ export const useTasksList = () => {
 
     delete list.COMPLETE_YOUR_PROFILE;
     delete list.VISIT_SYSTEM_CONSOLE;
+
+    if (!workTemplateEnabled) {
+        delete list.CREATE_FROM_WORK_TEMPLATE;
+    }
+
     return Object.values(list);
 };
 
@@ -267,6 +284,12 @@ export const useHandleOnBoardingTaskTrigger = () => {
 
     return (taskName: string) => {
         switch (taskName) {
+        case OnboardingTasksName.CREATE_FROM_WORK_TEMPLATE: {
+            localStorage.setItem(OnboardingTaskCategory, 'true');
+            dispatch(openWorkTemplateModal(inAdminConsole));
+            handleSaveData(taskName, TaskNameMapToSteps[taskName].FINISHED, true);
+            break;
+        }
         case OnboardingTasksName.CHANNELS_TOUR: {
             handleSaveData(taskName, TaskNameMapToSteps[taskName].STARTED, true);
             const tourCategory = isGuestUser ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP;

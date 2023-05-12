@@ -1,0 +1,117 @@
+.dateTime {
+    display: flex;
+    width: calc(100% - 24px);
+    padding-bottom: 5px;
+
+    & &__date {
+        position: relative;
+        margin-right: 20px;
+
+        &-icon {
+            position: absolute;
+            top: 11.3px;
+            left: 15px;
+        }
+    }
+
+    & &__time {
+        position: relative;
+
+        #expiryTimeMenu .dropdown-menu {
+            overflow: auto;
+            min-width: 266px;
+            max-height: 268px;
+        }
+
+        &-icon {
+            position: absolute;
+            top: 11.3px;
+            left: 15px;
+        }
+    }
+
+    & &__input {
+        width: 266px;
+        height: 40px;
+        padding: 10px 40px;
+        border: 2px solid var(--button-bg);
+        background: var(--center-channel-bg);
+        border-radius: 4px;
+        color: var(--center-channel-color);
+        cursor: pointer;
+        font-size: 14px;
+        text-align: left;
+
+        &-title {
+            position: absolute;
+            bottom: 32px;
+            left: 12px;
+            padding: 0 4px;
+            background: var(--center-channel-bg);
+            color: rgba(var(--center-channel-color-rgb), 0.64);
+            font-size: 10px;
+            letter-spacing: 0.03em;
+            line-height: 16px;
+        }
+    }
+
+    &__custom-time {
+        width: 260px;
+
+        .dateTime__custom-time-icon {
+            position: static;
+            margin-left: 10px;
+        }
+    }
+
+    &__description {
+        font-size: 10px;
+        color: rgba(var(--center-channel-color-rgb), 0.64);
+        letter-spacing: 0.03em;
+    }
+
+    .dateTime__calendar-input {
+        width: 266px;
+        border: 2px solid var(--button-bg);
+        font-size: 14px;
+
+        @media screen and (max-width: 768px) {
+            width: auto;
+        }
+
+        &:hover {
+            border: 2px solid var(--button-bg);
+            cursor: pointer;
+        }
+
+        &:focus-within {
+            box-shadow: 0;
+        }
+
+        .Input_wrapper {
+            padding: 0 10px;
+        }
+
+        button.dateTime__calendar-icon {
+            margin: 0 8px 0 0;
+            color: rgba(var(--center-channel-color-rgb), 0.72);
+        }
+
+        input#dateTime__calendar-input {
+            &.form-control {
+                height: auto;
+                padding: 0;
+                border: 0;
+                font-weight: 400;
+
+                &[readonly] {
+                    background: transparent;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

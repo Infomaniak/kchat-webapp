@@ -7,11 +7,13 @@ import {FormattedMessage} from 'react-intl';
 import {ChannelCategory} from '@mattermost/types/channel_categories';
 
 import {trackEvent} from 'actions/telemetry_actions';
+
 import QuickInput, {MaxLengthInput} from 'components/quick_input';
+import GenericModal from 'components/generic_modal';
+
 import {localizeMessage} from 'utils/utils';
 
 import '../category_modal.scss';
-import GenericModal from 'components/generic_modal';
 
 const MAX_LENGTH = 22;
 
@@ -121,17 +123,18 @@ export default class EditCategoryModal extends React.PureComponent<Props, State>
 
         return (
             <GenericModal
+                id='editCategoryModal'
                 ariaLabel={localizeMessage('rename_category_modal.renameCategory', 'Rename Category')}
-                onExited={this.props.onExited}
                 modalHeaderText={modalHeaderText}
-                handleConfirm={this.handleConfirm}
-                handleEnterKeyPress={this.handleConfirm}
-                handleCancel={this.handleCancel}
                 confirmButtonText={editButtonText}
+                onExited={this.props.onExited}
+                handleEnterKeyPress={this.handleConfirm}
+                handleConfirm={this.handleConfirm}
+                handleCancel={this.handleCancel}
                 cancelButtonClassName='secondary'
                 compassDesign={true}
                 isConfirmDisabled={this.isConfirmDisabled()}
-                id='editCategoryModal'
+                enforceFocus={false}
             >
                 <QuickInput
                     inputComponent={MaxLengthInput}

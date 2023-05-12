@@ -16,6 +16,7 @@ import RhsCard from 'components/rhs_card';
 import ChannelInfoRhs from 'components/channel_info_rhs';
 import ChannelMembersRhs from 'components/channel_members_rhs';
 import Search from 'components/search/index';
+import PostEditHistory from 'components/post_edit_history';
 
 import RhsPlugin from 'plugins/rhs_plugin';
 
@@ -40,6 +41,7 @@ type Props = {
     isChannelInfo: boolean;
     isChannelMembers: boolean;
     isPluginView: boolean;
+    isPostEditHistory: boolean;
     isSettings: boolean;
     previousRhsState: RhsState;
     rhsChannel: Channel;
@@ -86,6 +88,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             isChannelFiles: this.props.isChannelFiles,
             isChannelInfo: this.props.isChannelInfo,
             isChannelMembers: this.props.isChannelMembers,
+            isPostEditHistory: this.props.isPostEditHistory,
             isSettings: this.props.isSettings,
             selectedPostId: this.props.selectedPostId,
             selectedPostCardId: this.props.selectedPostCardId,
@@ -246,9 +249,8 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             isExpanded,
             team,
             channel,
+            isPostEditHistory,
         } = this.props;
-
-        const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || isSettings || searchVisible) && isExpanded;
 
         const teamNeeded = true;
         let selectedChannelNeeded;
@@ -288,6 +290,9 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                 <RhsSettings/>
             );
             break;
+        case isPostEditHistory:
+            content = <PostEditHistory/>;
+            break;
         }
 
         const isRHSLoading = Boolean(
@@ -297,7 +302,9 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         );
 
         const channelDisplayName = rhsChannel ? rhsChannel.display_name : '';
-        const containerClassName = classNames('sidebar--right', {
+
+        const isSidebarRightExpanded = (postRightVisible || postCardVisible || isPluginView || searchVisible || isPostEditHistory) && isExpanded;
+        const containerClassName = classNames('sidebar--right', 'move--left is-open', {
             'sidebar--right--expanded expanded': isSidebarRightExpanded,
             'move--left is-open': isOpen,
         });

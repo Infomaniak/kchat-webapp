@@ -17,6 +17,7 @@ import {Team} from '@mattermost/types/teams';
 import {OutgoingWebhook} from '@mattermost/types/integrations';
 import {IDMappedObjects} from '@mattermost/types/utilities';
 import {Channel} from '@mattermost/types/channels';
+import ExternalLink from 'components/external_link';
 
 export type Props = {
 
@@ -170,7 +171,11 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
                         defaultMessage='Add Outgoing Webhook'
                     />
                 }
-                addLink={'/' + this.props.team.name + '/integrations/outgoing_webhooks/add'}
+                addLink={
+                    '/' +
+                    this.props.team.name +
+                    '/integrations/outgoing_webhooks/add'
+                }
                 addButtonId='addOutgoingWebhook'
                 emptyText={
                     <FormattedMessage
@@ -200,7 +205,10 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
                         }}
                     />
                 }
-                searchPlaceholder={localizeMessage('installed_outgoing_webhooks.search', 'Search Outgoing Webhooks')}
+                searchPlaceholder={localizeMessage(
+                    'installed_outgoing_webhooks.search',
+                    'Search Outgoing Webhooks',
+                )}
                 loading={this.state.loading}
             >
                 {(filter: string) => {

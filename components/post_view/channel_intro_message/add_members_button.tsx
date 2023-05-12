@@ -10,6 +10,8 @@ import EmptyStateThemeableSvg from 'components/common/svg_images_components/empt
 import {Channel} from '@mattermost/types/channels';
 import {Permissions} from 'mattermost-redux/constants';
 
+import {trackEvent} from 'actions/telemetry_actions';
+
 import ToggleModalButton from 'components/toggle_modal_button';
 import ChannelInviteModal from 'components/channel_invite_modal';
 import AddGroupsToChannelModal from 'components/add_groups_to_channel_modal';

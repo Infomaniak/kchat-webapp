@@ -37,7 +37,10 @@ import {HFTRoute} from 'components/header_footer_template_route';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
 import LaunchingWorkspace, {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_workspace/launching_workspace';
 import {Animations} from 'components/preparing_workspace/steps';
-import OpenPricingModalPost from 'components/custom_open_pricing_modal_post_renderer';
+
+// import OpenPricingModalPost from 'components/custom_open_pricing_modal_post_renderer';
+// import OpenPluginInstallPost from 'components/custom_open_plugin_install_post_renderer';
+
 import AccessProblem from 'components/access_problem';
 
 import {initializePlugins} from 'plugins';
@@ -134,7 +137,7 @@ function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
     );
 }
 
-const noop = () => {}; // eslint-disable-line no-empty-function
+const noop = () => {};
 
 export type Actions = {
     emitBrowserWindowResized: (size?: string) => void;
@@ -180,7 +183,7 @@ export default class Root extends React.PureComponent<Props, State> {
 
     // The constructor adds a bunch of event listeners,
     // so we do need this.
-    private a11yController: A11yController; // eslint-disable-line no-unused-vars
+    private a11yController: A11yController;
 
     constructor(props: Props) {
         super(props);
@@ -284,13 +287,14 @@ export default class Root extends React.PureComponent<Props, State> {
                 anonymousId: '00000000000000000000000000',
             });
 
+            const utmParams = this.captureUTMParams();
             rudderAnalytics.ready(() => {
                 Client4.setTelemetryHandler(new RudderTelemetryHandler());
+                if (utmParams) {
+                    trackEvent('utm_params', 'utm_params', utmParams);
+                }
             });
         }
-
-        // This needs to be called as early as possible to ensure that a redirect won't remove the query string
-        this.trackUTMCampaign();
 
         Promise.all([
             this.props.actions.initializeProducts(),
@@ -391,7 +395,7 @@ export default class Root extends React.PureComponent<Props, State> {
         GlobalActions.redirectUserToDefaultTeam();
     }
 
-    trackUTMCampaign() {
+    captureUTMParams() {
         const qs = new URLSearchParams(window.location.search);
 
         // list of key that we want to track
@@ -409,9 +413,10 @@ export default class Root extends React.PureComponent<Props, State> {
         }, {} as Record<string, string>);
 
         if (Object.keys(campaign).length > 0) {
-            trackEvent('utm_params', 'utm_params', campaign);
             this.props.history.replace({search: qs.toString()});
+            return campaign;
         }
+        return null;
     }
 
     initiateMeRequests = async () => {
@@ -592,7 +597,8 @@ export default class Root extends React.PureComponent<Props, State> {
         this.initiateMeRequests();
 
         // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
-        this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
+        // this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
+        // this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
         this.props.actions.registerCustomPostRenderer('system_welcome_post', WelcomePostRenderer, 'welcome_post_renderer');
 
         if (this.desktopMediaQuery.addEventListener) {
