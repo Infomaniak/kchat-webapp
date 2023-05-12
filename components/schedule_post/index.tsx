@@ -2,16 +2,21 @@
 // See LICENSE.txt for license information.
 
 import React, {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 import {Button, styled} from '@mui/material';
-
 import {ChevronUpIcon} from '@infomaniak/compass-icons/components';
+
+import {schedulePost} from 'mattermost-redux/actions/posts';
+import {getCurrentUserTimezone} from 'selectors/general';
 
 import SchedulePostMenu, {SchedulePostMenuOption} from 'components/schedule_post/schedule_post_menu';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
 import Constants from 'utils/constants';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
+import {toUTCUnix} from 'utils/datetime';
 
 const SchedulePostButton = styled(Button)`
     display: flex;
@@ -45,12 +50,15 @@ const SchedulePostButton = styled(Button)`
 `;
 
 type Props = {
-    disabled: boolean;
     message: string;
+    channelId: string;
+    disabled: boolean;
     getAnchorEl: () => HTMLDivElement | null;
 };
 
-const SchedulePost = ({disabled, message, getAnchorEl}: Props) => {
+const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
+    const dispatch = useDispatch();
+    const timezone = useSelector(getCurrentUserTimezone);
     const {formatMessage} = useIntl();
     const [open, setOpen] = useState(false);
 
@@ -72,7 +80,18 @@ const SchedulePost = ({disabled, message, getAnchorEl}: Props) => {
 
     const handleSchedulePost = (option: SchedulePostMenuOption) => {
         setOpen(false);
-        console.log(option, message); //eslint-disable-line no-console
+        const timestamp = getCurrentMomentForTimezone(timezone);
+        switch (option.name) {
+        case 'tomorrow':
+            timestamp.add(1, 'day').hours(9).minutes(0).seconds(0);
+            break;
+        case 'monday':
+            timestamp.add(1, 'week').day('Monday').hours(9).minutes(0).seconds(0);
+            break;
+        case 'custom':
+            return;
+        }
+        dispatch(schedulePost(channelId, message, toUTCUnix(timestamp.toDate())));
     };
 
     return (

@@ -297,6 +297,7 @@ const AdvanceTextEditor = ({
             disabled={disableSendButton}
             handleSubmit={handleSubmit}
             message={message}
+            channelId={channelId}
         />
     );
 

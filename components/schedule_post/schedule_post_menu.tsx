@@ -25,11 +25,11 @@ type IntlMessage = {
 };
 
 export type SchedulePostMenuOption = {
-    name: string;
+    name: 'tomorrow' | 'monday' | 'custom';
     title: IntlMessage;
 };
 
-const schedulePostItems = [
+const schedulePostItems: SchedulePostMenuOption[] = [
     {name: 'tomorrow', title: {id: 'create_post.schedule_post.menu.options.tomorrow.title', defaultMessage: 'Tomorrow at 9:00 AM'}},
     {name: 'monday', title: {id: 'create_post.schedule_post.menu.options.monday.title', defaultMessage: 'Monday at 9:00 AM'}},
     {name: 'custom', title: {id: 'create_post.schedule_post.menu.options.custom.title', defaultMessage: 'Custom'}},

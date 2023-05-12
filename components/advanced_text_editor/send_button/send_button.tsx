@@ -52,9 +52,10 @@ type SendButtonProps = {
     handleSubmit: (e: React.FormEvent) => void;
     disabled: boolean;
     message: string;
+    channelId: string;
 }
 
-const SendButton = ({disabled, handleSubmit, message}: SendButtonProps) => {
+const SendButton = ({disabled, message, channelId, handleSubmit}: SendButtonProps) => {
     const theme = useSelector(getTheme);
     const {formatMessage} = useIntl();
     const buttonGroupRef = useRef<HTMLDivElement>(null);
@@ -91,9 +92,10 @@ const SendButton = ({disabled, handleSubmit, message}: SendButtonProps) => {
                     />
                 </SendButtonContainer>
                 <SchedulePost
+                    message={message}
+                    channelId={channelId}
                     disabled={disabled}
                     getAnchorEl={getButonGroupRef}
-                    message={message}
                 />
             </StyledButtonGroup>
         </CompassDesignProvider>
