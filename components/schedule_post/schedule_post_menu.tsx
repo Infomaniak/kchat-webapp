@@ -3,8 +3,9 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {MenuList, Popover, PopoverProps} from '@mui/material';
+import {Fade, MenuProps} from '@mui/material';
 
+import {MuiMenuStyled} from 'components/menu/menu_styled';
 import {MenuItem} from 'components/menu/menu_item';
 
 import {A11yClassNames} from 'utils/constants';
@@ -32,7 +33,13 @@ const schedulePostItems = [
     {name: 'custom', title: {id: 'create_post.schedule_post.menu.options.custom.title', defaultMessage: 'Custom'}},
 ];
 
-const popoverProps: Partial<PopoverProps> = {
+const menuProps: Partial<MenuProps> = {
+    className: A11yClassNames.POPUP,
+    TransitionComponent: Fade,
+    TransitionProps: {timeout: {
+        enter: 150,
+        exit: 100,
+    }},
     anchorOrigin: {
         vertical: 'top',
         horizontal: 'right',
@@ -52,25 +59,20 @@ const SchedulePostMenu = ({open, getAnchorEl, onClose, handleSchedulePost}: Prop
         />
     ));
     return (
-        <Popover
+        <MuiMenuStyled
             open={open}
-            anchorEl={getAnchorEl()}
             onClose={onClose}
-            {...popoverProps}
+            anchorEl={getAnchorEl()}
+            {...menuProps}
         >
-            <MenuList
-                id='schedule-post-menu'
-                className={A11yClassNames.POPUP}
-            >
-                <h5>
-                    <FormattedMessage
-                        id='create_post.schedule_post.menu.title'
-                        defaultMessage='Schedule draft:'
-                    />
-                </h5>
-                {renderedScheduledPostItems}
-            </MenuList>
-        </Popover>
+            <h5>
+                <FormattedMessage
+                    id='create_post.schedule_post.menu.title'
+                    defaultMessage='Schedule draft:'
+                />
+            </h5>
+            {renderedScheduledPostItems}
+        </MuiMenuStyled>
     );
 };
 

@@ -296,6 +296,7 @@ const AdvanceTextEditor = ({
         <SendButton
             disabled={disableSendButton}
             handleSubmit={handleSubmit}
+            message={message}
         />
     );
 
