@@ -1,3 +1,24 @@
+## 1.2.2-next.1 (2023-05-12)
+
+### Fixed (2 changes)
+
+- [improve trad fr favorites insights](kchat/webapp@8b6ea17131c4074cc9c6959c2da0023722e9dbf6) by @antonbuksa ([merge request](kchat/webapp!405))
+- [fix mobile modal height with announcement bar](kchat/webapp@92e34128748aa769455c47ba6d4fb4ab5733878c) by @leonard.jouve ([merge request](kchat/webapp!387))
+
+### Changed (2 changes)
+
+- [improve mobile submenu](kchat/webapp@fb8375689bb82cd03c85ae2e7526348dc4452400) by @leonard.jouve ([merge request](kchat/webapp!398))
+- [move id into a copy btn in profile popover](kchat/webapp@4e13994081f753f385c5573d914378bc4ee3c15c) by @antonbuksa ([merge request](kchat/webapp!403))
+
+### Removed (2 changes)
+
+- [do not register post types for pricing modals](kchat/webapp@805ebf504004f6922108fe4d84cedfd2dc27bf1d) by @antonbuksa ([merge request](kchat/webapp!403))
+- [clean commands, remove marketplace and comment templates](kchat/webapp@0a9e795462caf9d77ba552edfa0ddc0189147041) by @antonbuksa ([merge request](kchat/webapp!403))
+
+### updated (1 change)
+
+- [Update to latest Mattermost webapp version](kchat/webapp@e6e63db6bbe4c2c17204ce553b2113fdf0b42df2) by @leonard.jouve ([merge request](kchat/webapp!403))
+
 ## 1.2.1-next.1 (2023-05-11)
 
 No changes.
