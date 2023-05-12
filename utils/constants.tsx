@@ -497,6 +497,7 @@ export const ModalIdentifiers = {
     CANCEL_MULTIPLE_INVITES: 'cancel_multiple_invites',
     GET_THE_APP: 'get_the_app',
     TOGGLE_NEXT: 'toggle_next',
+    SCHEDULE_POST: 'schedule_post',
 };
 
 export const UserStatuses = {

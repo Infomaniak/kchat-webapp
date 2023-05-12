@@ -12,7 +12,7 @@ import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import CompassDesignProvider from 'components/compass_design_provider';
 
 import {t} from 'utils/i18n';
-import SchedulePost from 'components/schedule_post';
+import SchedulePost from 'components/schedule_post/schedule_post_button';
 
 const SendButtonContainer = styled(Button)`
     display: flex;
