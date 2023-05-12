@@ -10,7 +10,56 @@
                     line-height: 16px;
                 }
             }
+
+            .GenericModal__body {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+        }
+    }
+
+    &__repeat-checkbox {
+        display: flex;
+        gap: 10px;
+
+        > input {
+            align-self: center;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+        }
+        > label {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            margin: 0;
+        }
+    }
+
+    &__repeat-actions {
+        > div {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            > label {
+                width: 100px;
+                margin: 0;
+            }
         }
 
+        &-on {
+            > button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 20px;
+            }
+        }
     }
 }

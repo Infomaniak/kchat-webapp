@@ -7,11 +7,14 @@ import {useIntl} from 'react-intl';
 import {Moment} from 'moment-timezone';
 
 import {schedulePost} from 'mattermost-redux/actions/posts';
+import {closeModal} from 'actions/views/modals';
 
 import GenericModal from 'components/generic_modal';
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
+import RepeatActions from 'components/schedule_post/repeat_actions';
 
 import {toUTCUnix} from 'utils/datetime';
+import {ModalIdentifiers} from 'utils/constants';
 
 import './schedule_post_modal.scss';
 
@@ -28,8 +31,13 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
     const [scheduleTimestamp, setScheduleTimestamp] = useState<Moment>(getRoundedTime(timestamp));
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
+    const [isRepeatChecked, setIsRepeatChecked] = useState<boolean>(false);
 
     const handleConfirm = () => dispatch(schedulePost(channelId, message, toUTCUnix(scheduleTimestamp.toDate())));
+
+    const handleRepeatChange = (e: React.ChangeEvent<HTMLInputElement>) => setIsRepeatChecked(e.target.checked);
+
+    const handleExit = () => dispatch(closeModal(ModalIdentifiers.SCHEDULE_POST));
 
     const modalHeaderText = (
         <div>
@@ -48,6 +56,11 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
         defaultMessage: 'Schedule',
     });
 
+    const repeatCheckboxLabel = formatMessage({
+        id: 'create_post.schedule_post.modal.repeat.checkbox',
+        defaultMessage: 'Repeat',
+    });
+
     const isConfirmDisabled = isMenuOpen || isDatePickerOpen;
 
     return (
@@ -57,6 +70,8 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
             confirmButtonText={confirmButtonText}
             isConfirmDisabled={isConfirmDisabled}
             handleConfirm={handleConfirm}
+            handleCancel={handleExit}
+            onExited={handleExit}
         >
             <DateTimeInput
                 time={scheduleTimestamp}
@@ -64,6 +79,18 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
                 timezone={timezone}
                 onMenuChange={setIsMenuOpen}
                 setIsDatePickerOpen={setIsDatePickerOpen}
+            />
+            <div className='schedule-post-modal__repeat-checkbox'>
+                <input
+                    type='checkbox'
+                    checked={isRepeatChecked}
+                    onChange={handleRepeatChange}
+                />
+                <label>{repeatCheckboxLabel}</label>
+            </div>
+            <RepeatActions
+                show={isRepeatChecked}
+                timestamp={scheduleTimestamp}
             />
         </GenericModal>
     );

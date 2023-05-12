@@ -104,6 +104,9 @@ const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
             return;
         }
         dispatch(schedulePost(channelId, message, toUTCUnix(timestamp.toDate())));
+
+        // TODO: clear input
+        // TODO: handle errors
     };
 
     return (

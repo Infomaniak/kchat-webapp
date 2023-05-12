@@ -55,7 +55,7 @@ const menuProps: Partial<MenuProps> = {
 const SchedulePostMenu = ({open, getAnchorEl, onClose, handleSchedulePost}: Props) => {
     const renderedScheduledPostItems = schedulePostItems.map((option) => (
         <MenuItem
-            key={'schedule-post-menu' + option.name}
+            key={'schedule-post-menu-' + option.name}
             labels={<FormattedMessage {...option.title}/>}
             onClick={() => handleSchedulePost(option)}
         />
