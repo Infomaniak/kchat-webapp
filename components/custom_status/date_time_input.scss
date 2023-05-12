@@ -4,6 +4,7 @@
     padding-bottom: 5px;
 
     & &__date {
+        flex: 1;
         position: relative;
         margin-right: 20px;
 
@@ -56,7 +57,7 @@
     }
 
     &__custom-time {
-        width: 260px;
+        flex: 1;
 
         .dateTime__custom-time-icon {
             position: static;
@@ -71,7 +72,6 @@
     }
 
     .dateTime__calendar-input {
-        width: 266px;
         border: 2px solid var(--button-bg);
         font-size: 14px;
 
