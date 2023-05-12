@@ -8,6 +8,10 @@ import {Button, styled} from '@mui/material';
 import {ChevronUpIcon} from '@infomaniak/compass-icons/components';
 
 import SchedulePostMenu from 'components/schedule_post/schedule_post_menu';
+import OverlayTrigger from 'components/overlay_trigger';
+import Tooltip from 'components/tooltip';
+
+import Constants from 'utils/constants';
 
 const SchedulePostButton = styled(Button)`
     display: flex;
@@ -56,19 +60,35 @@ const SchedulePost = ({disabled, getAnchorEl}: Props) => {
 
     const handleClose = () => setOpen(false);
 
+    const tooltip = (
+        <Tooltip id='schedule-post-tooltip'>
+            {formatMessage({
+                id: 'create_post.schedule_post.tooltip',
+                defaultMessage: 'Schedule a post',
+            })}
+        </Tooltip>
+    );
+
     return (
         <>
-            <SchedulePostButton
-                disableRipple={true}
-                disabled={disabled}
-                onClick={handleSchedulePost}
-                aria-label={formatMessage({
-                    id: 'create_post.schedule_post',
-                    defaultMessage: 'Schedule post',
-                })}
+            <OverlayTrigger
+                overlay={tooltip}
+                delayShow={Constants.OVERLAY_TIME_DELAY}
+                placement='top'
+                trigger={'hover'}
             >
-                <ChevronUpIcon size={16}/>
-            </SchedulePostButton>
+                <SchedulePostButton
+                    disableRipple={true}
+                    disabled={disabled}
+                    onClick={handleSchedulePost}
+                    aria-label={formatMessage({
+                        id: 'create_post.schedule_post.aria',
+                        defaultMessage: 'Schedule post',
+                    })}
+                >
+                    <ChevronUpIcon size={16}/>
+                </SchedulePostButton>
+            </OverlayTrigger>
             <SchedulePostMenu
                 getAnchorEl={getAnchorEl}
                 open={open}
