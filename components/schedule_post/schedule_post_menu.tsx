@@ -10,6 +10,8 @@ import {MenuItem} from 'components/menu/menu_item';
 
 import {A11yClassNames} from 'utils/constants';
 
+import './schedule_post_menu.scss';
+
 type Props = {
     open: boolean;
     getAnchorEl: () => HTMLDivElement | null;
@@ -34,7 +36,7 @@ const schedulePostItems = [
 ];
 
 const menuProps: Partial<MenuProps> = {
-    className: A11yClassNames.POPUP,
+    className: `${A11yClassNames.POPUP} schedule-post`,
     TransitionComponent: Fade,
     TransitionProps: {timeout: {
         enter: 150,
@@ -65,7 +67,7 @@ const SchedulePostMenu = ({open, getAnchorEl, onClose, handleSchedulePost}: Prop
             anchorEl={getAnchorEl()}
             {...menuProps}
         >
-            <h5>
+            <h5 className='schedule-post__menu-header'>
                 <FormattedMessage
                     id='create_post.schedule_post.menu.title'
                     defaultMessage='Schedule draft:'
