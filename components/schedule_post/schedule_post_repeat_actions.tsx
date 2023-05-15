@@ -7,6 +7,8 @@ import classNames from 'classnames';
 import moment, {Moment} from 'moment-timezone';
 import ReactSelect, {ValueType} from 'react-select';
 
+import {getRoundedTime} from 'components/custom_status/date_time_input';
+
 type Props = {
     show: boolean;
     timestamp: Moment;
@@ -14,25 +16,29 @@ type Props = {
 };
 
 type EveryIntervalOption = {
-    name: 'day' | 'week' | 'month';
+    value: 'day' | 'week' | 'month';
     label: {
         id: string;
         defaultMessage: string;
     };
 };
 
+type EndRadioOption = 'never' | 'on';
+
 const everyIntervalOptions: EveryIntervalOption[] = [
-    {name: 'day', label: {id: 'create_post.schedule_post.modal.repeat.every.day', defaultMessage: 'Day'}},
-    {name: 'week', label: {id: 'create_post.schedule_post.modal.repeat.every.week', defaultMessage: 'Week'}},
-    {name: 'month', label: {id: 'create_post.schedule_post.modal.repeat.every.month', defaultMessage: 'Month'}},
+    {value: 'day', label: {id: 'create_post.schedule_post.modal.repeat.every.day', defaultMessage: 'Day'}},
+    {value: 'week', label: {id: 'create_post.schedule_post.modal.repeat.every.week', defaultMessage: 'Week'}},
+    {value: 'month', label: {id: 'create_post.schedule_post.modal.repeat.every.month', defaultMessage: 'Month'}},
 ];
 
 const momentInstance = moment();
 
 const RepeatActions = ({show, timestamp, timezone}: Props) => {
     const {formatMessage, formatDate} = useIntl();
-    const [everyInterval, setEveryInterval] = useState<EveryIntervalOption['name']>('week');
+    const [everyInterval, setEveryInterval] = useState<EveryIntervalOption['value']>('week');
     const [daySelected, setDaySelected] = useState<Record<number, boolean>>({});
+    const [endRadioSelected, setEndRadioSelected] = useState<EndRadioOption>('never');
+    const [endMoment, setEndMoment] = useState<Moment>(getRoundedTime(timestamp));
 
     const handleDaySelection = (day: number) => setDaySelected({
         ...daySelected,
@@ -44,7 +50,7 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
         const dayInitial = formatDate(momentInstance.weekday(i).toDate(), {
             weekday: 'narrow',
             timeZone: timezone,
-        })[0];
+        });
         dayPicker.push(
             <button
                 className={classNames('btn', {
@@ -59,35 +65,58 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
         );
     }
 
-    // const selectEveryAmount = (
-    //     <ReactSelect
-    //         options={}
-    //     />
-    // );
-
     const handleEveryIntervalChange = (option: ValueType<EveryIntervalOption>) => {
-        if (!option || !('name' in option)) {
+        if (!option || !('value' in option)) {
             return;
         }
-        setEveryInterval(option.name);
+        setEveryInterval(option.value);
+        setDaySelected({});
     };
 
     const formatEveryIntervalOptionLabel = (option: EveryIntervalOption) => formatMessage(option.label);
 
-    const isEveryIntervalOptionSelected = (option: EveryIntervalOption) => option.name === everyInterval;
-
-    const selectEveryInterval = (
+    const everyIntervalSelect = (
         <ReactSelect
-            className='react-select'
+            className='schedule-every-select'
             classNamePrefix='react-select'
             isClearable={false}
             isSearchable={false}
             onChange={handleEveryIntervalChange}
-            isOptionSelected={isEveryIntervalOptionSelected}
             formatOptionLabel={formatEveryIntervalOptionLabel}
-            value={everyIntervalOptions.find((option) => option.name === everyInterval)}
+            value={everyIntervalOptions.find((option) => option.value === everyInterval)}
             options={everyIntervalOptions}
         />
+    );
+
+    const endRadio = (
+        <div className='schedule-ends-radio'>
+            <div>
+                <input
+                    type='radio'
+                    checked={endRadioSelected === 'never'}
+                    onChange={() => setEndRadioSelected('never')}
+                />
+                <label>
+                    {formatMessage({
+                        id: 'create_post.schedule_post.modal.repeat.ends.never',
+                        defaultMessage: 'Never',
+                    })}
+                </label>
+            </div>
+            <div>
+                <input
+                    type='radio'
+                    checked={endRadioSelected === 'on'}
+                    onChange={() => setEndRadioSelected('on')}
+                />
+                <label>
+                    {formatMessage({
+                        id: 'create_post.schedule_post.modal.repeat.ends.on',
+                        defaultMessage: 'On',
+                    })}
+                </label>
+            </div>
+        </div>
     );
 
     const repeatEveryLabel = formatMessage({
@@ -113,15 +142,18 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
         <div className='schedule-post-modal__repeat-actions'>
             <div className='schedule-post-modal__repeat-actions-every'>
                 <label>{repeatEveryLabel}</label>
-                {/* {selectEveryAmount} */}
-                {selectEveryInterval}
+                {/* {everyAmountInput} */}
+                {everyIntervalSelect}
             </div>
-            <div className='schedule-post-modal__repeat-actions-on'>
-                <label>{repeatOnLabel}</label>
-                {dayPicker}
-            </div>
+            {everyInterval === 'week' && (
+                <div className='schedule-post-modal__repeat-actions-on'>
+                    <label>{repeatOnLabel}</label>
+                    {dayPicker}
+                </div>
+            )}
             <div className='schedule-post-modal__repeat-actions-ends'>
                 <label>{repeatEndsLabel}</label>
+                {endRadio}
             </div>
         </div>
     );

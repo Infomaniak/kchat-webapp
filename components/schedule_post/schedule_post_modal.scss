@@ -54,6 +54,13 @@
             }
         }
 
+        &-every {
+            .schedule-every-select {
+                min-width: 126px;
+                min-height: 40px;
+            }
+        }
+
         &-on {
             > button {
                 display: flex;
@@ -65,6 +72,24 @@
                 font-weight: 600;
                 font-size: 14px;
                 line-height: 20px;
+            }
+        }
+
+        &-ends {
+            > label {
+                align-self: flex-start;
+            }
+            .schedule-ends-radio {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                > div {
+                    display: flex;
+                    gap: 10px;
+                }
+                input, label {
+                    margin: 0;
+                }
             }
         }
     }

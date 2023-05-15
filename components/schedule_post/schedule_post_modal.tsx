@@ -11,7 +11,7 @@ import {closeModal} from 'actions/views/modals';
 
 import GenericModal from 'components/generic_modal';
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
-import SchedulePostRepeatActions from 'components/schedule_post/shcedule_post_repeat_actions';
+import SchedulePostRepeatActions from 'components/schedule_post/schedule_post_repeat_actions';
 
 import {toUTCUnix} from 'utils/datetime';
 import {ModalIdentifiers} from 'utils/constants';
@@ -81,6 +81,7 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
                 onMenuChange={setIsMenuOpen}
                 setIsDatePickerOpen={setIsDatePickerOpen}
             />
+            {/* TODO: reset repeat props on deselection*/}
             <div className='schedule-post-modal__repeat-checkbox'>
                 <input
                     type='checkbox'
