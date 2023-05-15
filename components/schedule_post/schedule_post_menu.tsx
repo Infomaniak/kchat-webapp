@@ -60,6 +60,7 @@ const menuProps: Partial<MenuProps> = {
 
 const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleSchedulePost}: Props) => {
     const isMilitaryTime = useSelector((state: GlobalState) => getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false));
+
     const getMenuItemLabel = ({name, title}: SchedulePostMenuOption) => {
         if (name === 'custom') {
             return <FormattedMessage {...title}/>;

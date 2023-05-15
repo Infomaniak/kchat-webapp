@@ -11,7 +11,7 @@ import {closeModal} from 'actions/views/modals';
 
 import GenericModal from 'components/generic_modal';
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
-import RepeatActions from 'components/schedule_post/repeat_actions';
+import SchedulePostRepeatActions from 'components/schedule_post/shcedule_post_repeat_actions';
 
 import {toUTCUnix} from 'utils/datetime';
 import {ModalIdentifiers} from 'utils/constants';
@@ -33,6 +33,7 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
     const [isRepeatChecked, setIsRepeatChecked] = useState<boolean>(false);
 
+    // TODO: clear input
     const handleConfirm = () => dispatch(schedulePost(channelId, message, toUTCUnix(scheduleTimestamp.toDate())));
 
     const handleRepeatChange = (e: React.ChangeEvent<HTMLInputElement>) => setIsRepeatChecked(e.target.checked);
@@ -88,9 +89,10 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
                 />
                 <label>{repeatCheckboxLabel}</label>
             </div>
-            <RepeatActions
+            <SchedulePostRepeatActions
                 show={isRepeatChecked}
                 timestamp={scheduleTimestamp}
+                timezone={timezone}
             />
         </GenericModal>
     );
