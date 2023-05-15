@@ -1,13 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import classNames from 'classnames';
 import moment, {Moment} from 'moment-timezone';
 import ReactSelect, {ValueType} from 'react-select';
 
 import {getRoundedTime} from 'components/custom_status/date_time_input';
+import DatePicker from 'components/date_picker';
 
 type Props = {
     show: boolean;
@@ -49,6 +50,12 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
     const [daySelected, setDaySelected] = useState<Record<number, boolean>>({});
     const [endRadioSelected, setEndRadioSelected] = useState<EndRadioOption>('never');
     const [endMoment, setEndMoment] = useState<Moment>(getRoundedTime(timestamp));
+
+    useEffect(() => {
+        if (endMoment.isBefore(timestamp)) {
+            setEndMoment(timestamp);
+        }
+    }, [timestamp]);
 
     const handleDaySelection = (day: number) => setDaySelected({
         ...daySelected,
@@ -163,6 +170,7 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
                         defaultMessage: 'On',
                     })}
                 </label>
+                <span className='schedule-ends-date-picker'>{'test'}</span>
             </div>
         </div>
     );

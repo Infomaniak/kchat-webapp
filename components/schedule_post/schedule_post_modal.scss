@@ -83,6 +83,9 @@
         }
 
         &-on {
+            display: flex;
+            align-items: center;
+            min-height: 40px;
             > label {
                 align-self: center;
             }
@@ -100,16 +103,24 @@
         }
 
         &-ends {
+            > label {
+                padding: 10px 0;
+            }
             .schedule-ends-radio {
                 display: flex;
                 flex-direction: column;
-                gap: 20px;
+                // gap: 20px;
                 > div {
                     display: flex;
+                    align-items: center;
+                    min-height: 40px;
                     gap: 10px;
                 }
                 input, label {
                     margin: 0;
+                }
+                .schedule-ends-date-picker {
+                    margin-left: 20px;
                 }
             }
         }
