@@ -2,18 +2,24 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {useSelector} from 'react-redux';
+import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 import {Fade, MenuProps} from '@mui/material';
+
+import {getBool} from 'mattermost-redux/selectors/entities/preferences';
+import {GlobalState} from '@mattermost/types/store';
 
 import {MuiMenuStyled} from 'components/menu/menu_styled';
 import {MenuItem} from 'components/menu/menu_item';
 
-import {A11yClassNames} from 'utils/constants';
+import {A11yClassNames, Preferences} from 'utils/constants';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import './schedule_post_menu.scss';
 
 type Props = {
     open: boolean;
+    timezone?: string;
     getAnchorEl: () => HTMLDivElement | null;
     onClose: () => void;
     handleSchedulePost: (option: SchedulePostMenuOption) => void;
@@ -26,14 +32,13 @@ type IntlMessage = {
 
 export type SchedulePostMenuOption = {
     name: 'tomorrow' | 'monday' | 'custom';
-    title: IntlMessage;
+    title?: IntlMessage;
 };
 
-// TODO: format tomorrow / monday title using moment
 const schedulePostItems: SchedulePostMenuOption[] = [
-    {name: 'tomorrow', title: {id: 'create_post.schedule_post.menu.options.tomorrow.title', defaultMessage: 'Tomorrow at 9:00 AM'}},
-    {name: 'monday', title: {id: 'create_post.schedule_post.menu.options.monday.title', defaultMessage: 'Monday at 9:00 AM'}},
-    {name: 'custom', title: {id: 'create_post.schedule_post.menu.options.custom.title', defaultMessage: 'Custom'}},
+    {name: 'tomorrow'},
+    {name: 'monday'},
+    {name: 'custom', title: {id: 'create_post.schedule_post.menu.options.custom.title', defaultMessage: 'Custom Time'}},
 ];
 
 const menuProps: Partial<MenuProps> = {
@@ -53,11 +58,49 @@ const menuProps: Partial<MenuProps> = {
     },
 };
 
-const SchedulePostMenu = ({open, getAnchorEl, onClose, handleSchedulePost}: Props) => {
+const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleSchedulePost}: Props) => {
+    const isMilitaryTime = useSelector((state: GlobalState) => getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false));
+    const getMenuItemLabel = ({name, title}: SchedulePostMenuOption) => {
+        if (name === 'custom') {
+            return <FormattedMessage {...title}/>;
+        }
+        const timestamp = getCurrentMomentForTimezone(timezone).hours(9).minutes(0).seconds(0);
+        switch (name) {
+        case 'tomorrow':
+            timestamp.add(1, 'day');
+            break;
+        case 'monday':
+            timestamp.add(1, 'week').day('Monday');
+            break;
+        }
+        return (
+            <FormattedMessage
+                id='create_post.schedule_post.menu.options.date.title'
+                defaultMessage='{date} at {time}'
+                values={{
+                    date: (
+                        <FormattedDate
+                            value={timestamp.toDate()}
+                            weekday='short'
+                            timeZone={timezone}
+                        />
+                    ),
+                    time: (
+                        <FormattedTime
+                            value={timestamp.toDate()}
+                            timeStyle='short'
+                            hour12={!isMilitaryTime}
+                            timeZone={timezone}
+                        />
+                    ),
+                }}
+            />
+        );
+    };
     const renderedScheduledPostItems = schedulePostItems.map((option) => (
         <MenuItem
             key={'schedule-post-menu-' + option.name}
-            labels={<FormattedMessage {...option.title}/>}
+            labels={getMenuItemLabel(option)}
             onClick={() => handleSchedulePost(option)}
         />
     ));

@@ -22,7 +22,7 @@ type Props = {
     channelId: string;
     message: string;
     timestamp: Moment;
-    timezone: string | undefined;
+    timezone?: string;
 }
 
 const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => {

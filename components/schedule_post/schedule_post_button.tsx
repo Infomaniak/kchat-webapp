@@ -130,8 +130,9 @@ const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
                 </SchedulePostButton>
             </OverlayTrigger>
             <SchedulePostMenu
-                getAnchorEl={getAnchorEl}
                 open={open}
+                timezone={timezone}
+                getAnchorEl={getAnchorEl}
                 onClose={handleClose}
                 handleSchedulePost={handleSchedulePost}
             />
