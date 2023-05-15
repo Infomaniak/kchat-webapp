@@ -43,7 +43,7 @@
         gap: 24px;
         > div {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 16px;
             > label {
                 width: 100px;
@@ -53,15 +53,39 @@
                 line-height: 20px;
             }
         }
-
-        &-every {
-            .schedule-every-select {
-                min-width: 126px;
+        .react-select {
+            flex: 1;
+            .react-select__control {
                 min-height: 40px;
             }
         }
 
+        &-every {
+            > label {
+                padding: 10px 0;
+            }
+            .schedule-every {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                > div {
+                    display: flex;
+                    gap: 16px;
+                    .schedule-every-interval-select > .react-select__control {
+                        min-width: 126px;
+                    }
+                }
+                .schedule-every-month-select > .react-select__control {
+                    min-width: 150px;
+                }
+            }
+
+        }
+
         &-on {
+            > label {
+                align-self: center;
+            }
             > button {
                 display: flex;
                 justify-content: center;
@@ -76,9 +100,6 @@
         }
 
         &-ends {
-            > label {
-                align-self: flex-start;
-            }
             .schedule-ends-radio {
                 display: flex;
                 flex-direction: column;

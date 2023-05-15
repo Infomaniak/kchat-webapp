@@ -5,7 +5,7 @@ import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 import {Button, styled} from '@mui/material';
-import {ChevronUpIcon} from '@infomaniak/compass-icons/components';
+import {ChevronDownIcon} from '@infomaniak/compass-icons/components';
 
 import {schedulePost} from 'mattermost-redux/actions/posts';
 import {openModal} from 'actions/views/modals';
@@ -126,7 +126,7 @@ const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
                         defaultMessage: 'Schedule a post',
                     })}
                 >
-                    <ChevronUpIcon size={16}/>
+                    <ChevronDownIcon size={16}/>
                 </SchedulePostButton>
             </OverlayTrigger>
             <SchedulePostMenu

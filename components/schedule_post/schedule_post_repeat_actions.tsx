@@ -15,13 +15,17 @@ type Props = {
     timezone?: string;
 };
 
-type EveryIntervalOption = {
-    value: 'day' | 'week' | 'month';
+type SelectOption<K> = {
+    value: K;
     label: {
         id: string;
         defaultMessage: string;
     };
-};
+}
+
+type EveryIntervalOption = SelectOption<'day' | 'week' | 'month'>;
+
+type EveryMonthOption = SelectOption<'weekday' | 'date'>;
 
 type EndRadioOption = 'never' | 'on';
 
@@ -31,11 +35,17 @@ const everyIntervalOptions: EveryIntervalOption[] = [
     {value: 'month', label: {id: 'create_post.schedule_post.modal.repeat.every.month', defaultMessage: 'Month'}},
 ];
 
+const everyMonthOptions: EveryMonthOption[] = [
+    {value: 'date', label: {id: 'create_post.schedule_post.modal.repeat.every.date', defaultMessage: 'On the {date, select, 1 {{date, number}st} 2 {{date, number}nd} other {{date, number}th}}'}},
+    {value: 'weekday', label: {id: 'create_post.schedule_post.modal.repeat.every.weekday', defaultMessage: 'On the 1st {day}'}},
+];
+
 const momentInstance = moment();
 
 const RepeatActions = ({show, timestamp, timezone}: Props) => {
     const {formatMessage, formatDate} = useIntl();
     const [everyInterval, setEveryInterval] = useState<EveryIntervalOption['value']>('week');
+    const [everyMonth, setEveryMonth] = useState<EveryMonthOption['value']>('date');
     const [daySelected, setDaySelected] = useState<Record<number, boolean>>({});
     const [endRadioSelected, setEndRadioSelected] = useState<EndRadioOption>('never');
     const [endMoment, setEndMoment] = useState<Moment>(getRoundedTime(timestamp));
@@ -65,6 +75,8 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
         );
     }
 
+    const everyAmountInput = null;
+
     const handleEveryIntervalChange = (option: ValueType<EveryIntervalOption>) => {
         if (!option || !('value' in option)) {
             return;
@@ -77,14 +89,50 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
 
     const everyIntervalSelect = (
         <ReactSelect
-            className='schedule-every-select'
+            className='schedule-every-interval-select react-select'
             classNamePrefix='react-select'
             isClearable={false}
             isSearchable={false}
+            options={everyIntervalOptions}
+            value={everyIntervalOptions.find((option) => option.value === everyInterval)}
             onChange={handleEveryIntervalChange}
             formatOptionLabel={formatEveryIntervalOptionLabel}
-            value={everyIntervalOptions.find((option) => option.value === everyInterval)}
-            options={everyIntervalOptions}
+        />
+    );
+
+    const handleEveryMonthChange = (option: ValueType<EveryMonthOption>) => {
+        if (!option || !('value' in option)) {
+            return;
+        }
+        setEveryMonth(option.value);
+    };
+
+    const formatEveryMonthOptionLabel = (option: EveryMonthOption) => {
+        const values: Record<string, string | number> = {};
+        switch (option.value) {
+        case 'date':
+            values.date = timestamp.date();
+            break;
+        case 'weekday':
+            values.day = formatDate(timestamp.toDate(), {
+                weekday: 'long',
+                timeZone: timezone,
+            });
+            break;
+        }
+        return formatMessage(option.label, values);
+    };
+
+    const everyMonthSelect = (
+        <ReactSelect
+            className='schedule-every-month-select react-select'
+            classNamePrefix='react-select'
+            isClearable={false}
+            isSearchable={false}
+            options={everyMonthOptions}
+            value={everyMonthOptions.find((option: EveryMonthOption) => option.value === everyMonth)}
+            onChange={handleEveryMonthChange}
+            formatOptionLabel={formatEveryMonthOptionLabel}
         />
     );
 
@@ -142,8 +190,13 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
         <div className='schedule-post-modal__repeat-actions'>
             <div className='schedule-post-modal__repeat-actions-every'>
                 <label>{repeatEveryLabel}</label>
-                {/* {everyAmountInput} */}
-                {everyIntervalSelect}
+                <div className='schedule-every'>
+                    <div>
+                        {everyAmountInput}
+                        {everyIntervalSelect}
+                    </div>
+                    {everyInterval === 'month' && everyMonthSelect}
+                </div>
             </div>
             {everyInterval === 'week' && (
                 <div className='schedule-post-modal__repeat-actions-on'>
