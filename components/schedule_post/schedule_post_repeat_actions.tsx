@@ -6,7 +6,6 @@ import {useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 import classNames from 'classnames';
 import moment, {Moment} from 'moment-timezone';
-import {DateTime} from 'luxon';
 import ReactSelect, {ValueType} from 'react-select';
 import {DayPickerProps} from 'react-day-picker';
 import IconButton from '@infomaniak/compass-components/components/icon-button';
@@ -236,7 +235,7 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
                     datePickerProps={datePickerProps}
                 >
                     <Input
-                        value={DateTime.fromJSDate(endMoment.toDate()).toFormat('yyyy-MM-dd')} // TODO: use moment instead of luxon
+                        value={endMoment.format('YYYY-MM-DD')}
                         readOnly={true}
                         containerClassName='schedule-ends-date-picker'
                         className='schedule-ends-date-picker__fieldset'
