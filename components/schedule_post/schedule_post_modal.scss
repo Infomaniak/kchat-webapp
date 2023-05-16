@@ -134,12 +134,6 @@
                             &:focus-within {
                                 box-shadow: 0;
                             }
-                            &-disabled {
-                                border: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
-                                &:hover {
-                                    border: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
-                                }
-                            }
                         }
                         &__input {
                             height: auto !important;
@@ -147,10 +141,6 @@
                             color: rgba(var(--center-channel-color-rgb), 0.72);
                             font-weight: 400;
                             padding: 0;
-
-                            &-disabled {
-                                color: rgba(var(--center-channel-color-rgb), 0.16);
-                            }
 
                             &[readonly] {
                                 background: transparent;
@@ -164,8 +154,21 @@
                         &__icon {
                             margin: 0 8px 0 0;
                             color: rgba(var(--center-channel-color-rgb), 0.72);
-                            &-disabled {
-                                color: rgba(var(--center-channel-color-rgb), 0.16);
+                        }
+                        &.disabled {
+                            .schedule-ends-date-picker {
+                                &__fieldset {
+                                    border: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
+                                    &:hover {
+                                        border: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
+                                    }
+                                }
+                                &__input {
+                                    color: rgba(var(--center-channel-color-rgb), 0.16);
+                                }
+                                &__icon {
+                                    color: rgba(var(--center-channel-color-rgb), 0.16);
+                                }
                             }
                         }
                     }

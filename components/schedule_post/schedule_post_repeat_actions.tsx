@@ -214,12 +214,8 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
                         value={DateTime.fromJSDate(endMoment.toDate()).toFormat('yyyy-MM-dd')} // TODO: use moment instead of luxon
                         readOnly={true}
                         containerClassName='schedule-ends-date-picker'
-                        className={classNames('schedule-ends-date-picker__fieldset', {
-                            'schedule-ends-date-picker__fieldset-disabled': isEndDatePickerDisabled,
-                        })}
-                        inputClassName={classNames('schedule-ends-date-picker__input', {
-                            'schedule-ends-date-picker__input-disabled': isEndDatePickerDisabled,
-                        })}
+                        className='schedule-ends-date-picker__fieldset'
+                        inputClassName='schedule-ends-date-picker__input'
                         label={formatMessage({
                             id: 'dnd_custom_time_picker_modal.date',
                             defaultMessage: 'Date',
@@ -231,9 +227,7 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
                             <IconButton
                                 onClick={toggleEndDatePicker}
                                 icon={'calendar-outline'}
-                                className={classNames('schedule-ends-date-picker__icon', {
-                                    'schedule-ends-date-picker__icon-disabled': isEndDatePickerDisabled,
-                                })}
+                                className='schedule-ends-date-picker__icon'
                                 size={'sm'}
                                 aria-haspopup='grid'
                             />
