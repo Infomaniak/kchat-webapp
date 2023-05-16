@@ -103,6 +103,10 @@ const styles = {
         ...css,
         color: 'var(--center-channel-color)',
     }),
+    indicatorSeparator: (style: CSSProperties) => ({
+        ...style,
+        display: 'none',
+    }),
 };
 
 const placeholder = (

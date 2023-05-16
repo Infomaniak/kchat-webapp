@@ -70,13 +70,32 @@
                 > div {
                     display: flex;
                     gap: 16px;
-                    .schedule-every-interval-select {
+                    .schedule-every-amount {
                         flex: 1;
+                        &__fieldset {
+                            height: 40px;
+                            &:hover {
+                                cursor: default;
+                            }
+                        }
+                        &__input {
+                            height: auto !important;
+                            border: 0 !important;
+                            color: rgba(var(--center-channel-color-rgb), 0.72);
+                            font-weight: 400;
+                            padding: 0;
+                            &:hover {
+                                cursor: default;
+                            }
+                        }
+
+                    }
+                    .schedule-every-interval-select {
+                        flex: 2;
                         > .react-select__control {
                             min-width: 126px;
                         }
                     }
-
                 }
                 .schedule-every-month-select > .react-select__control {
                     flex: 1;
@@ -129,7 +148,7 @@
                             border: 2px solid var(--button-bg);
                             &:hover {
                                 border: 2px solid var(--button-bg);
-                                cursor: pointer;
+                                cursor: default;
                             }
                             &:focus-within {
                                 box-shadow: 0;
@@ -147,13 +166,16 @@
                             }
 
                             &:hover {
-                                cursor: pointer;
+                                cursor: default;
                             }
                         }
 
                         &__icon {
                             margin: 0 8px 0 0;
                             color: rgba(var(--center-channel-color-rgb), 0.72);
+                            &:hover {
+                                cursor: default;
+                            }
                         }
                         &.disabled {
                             .schedule-ends-date-picker {

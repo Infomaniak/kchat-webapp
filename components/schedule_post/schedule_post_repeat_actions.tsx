@@ -48,11 +48,23 @@ const everyMonthOptions: EveryMonthOption[] = [
     {value: 'weekday', label: {id: 'create_post.schedule_post.modal.repeat.every.weekday', defaultMessage: 'On the 1st {day}'}},
 ];
 
+const selectStyle = {
+    indicatorSeparator: (style: React.CSSProperties) => ({
+        ...style,
+        display: 'none',
+    }),
+    menu: (style: React.CSSProperties) => ({
+        ...style,
+        zIndex: 1000,
+    }),
+};
+
 const momentInstance = moment();
 
 const RepeatActions = ({show, timestamp, timezone}: Props) => {
     const locale = useSelector(getCurrentLocale);
     const {formatMessage, formatDate} = useIntl();
+    const [everyAmount, setEveryAmount] = useState<number>(1);
     const [everyInterval, setEveryInterval] = useState<EveryIntervalOption['value']>('week');
     const [everyMonth, setEveryMonth] = useState<EveryMonthOption['value']>('date');
     const [daySelected, setDaySelected] = useState<Record<number, boolean>>({});
@@ -91,7 +103,18 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
         );
     }
 
-    const everyAmountInput = null;
+    const handleEveryAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => setEveryAmount(parseInt(e.currentTarget.value, 10));
+
+    const everyAmountInput = (
+        <Input
+            containerClassName='schedule-every-amount'
+            className='schedule-every-amount__fieldset'
+            inputClassName='schedule-every-amount__input'
+            onChange={handleEveryAmountChange}
+            value={everyAmount}
+            type='number'
+        />
+    );
 
     const handleEveryIntervalChange = (option: ValueType<EveryIntervalOption>) => {
         if (!option || !('value' in option)) {
@@ -113,6 +136,7 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
             value={everyIntervalOptions.find((option) => option.value === everyInterval)}
             onChange={handleEveryIntervalChange}
             formatOptionLabel={formatEveryIntervalOptionLabel}
+            styles={selectStyle}
         />
     );
 
@@ -149,6 +173,7 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
             value={everyMonthOptions.find((option: EveryMonthOption) => option.value === everyMonth)}
             onChange={handleEveryMonthChange}
             formatOptionLabel={formatEveryMonthOptionLabel}
+            styles={selectStyle}
         />
     );
 
@@ -222,8 +247,8 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
                         })}
                         onClick={toggleEndDatePicker}
                         tabIndex={-1}
-                        disabled={isEndDatePickerDisabled} // TODO: style disabled input
-                        inputPrefix={( // TODO: use compass icon instead
+                        disabled={isEndDatePickerDisabled}
+                        inputPrefix={(
                             <IconButton
                                 onClick={toggleEndDatePicker}
                                 icon={'calendar-outline'}
