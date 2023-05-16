@@ -14,12 +14,16 @@ import {getCurrentLocale} from 'selectors/i18n';
 
 import {getRoundedTime} from 'components/custom_status/date_time_input';
 import DatePicker from 'components/date_picker';
-import Input from 'components/widgets/inputs/input/input';
+import Input, {CustomMessageInputType} from 'components/widgets/inputs/input/input';
+
+import {ItemStatus} from 'utils/constants';
 
 type Props = {
     show: boolean;
     timestamp: Moment;
     timezone?: string;
+    isValidEveryAmount: boolean;
+    setIsValidEveryAmount: (isValid: boolean) => void;
 };
 
 type SelectOption<K> = {
@@ -60,7 +64,8 @@ const selectStyle = {
 
 const momentInstance = moment();
 
-const RepeatActions = ({show, timestamp, timezone}: Props) => {
+// TODO: improve theming support
+const RepeatActions = ({show, timestamp, timezone, isValidEveryAmount, setIsValidEveryAmount}: Props) => {
     const locale = useSelector(getCurrentLocale);
     const {formatMessage, formatDate} = useIntl();
     const [everyAmount, setEveryAmount] = useState<number>(1);
@@ -102,7 +107,25 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
         );
     }
 
-    const handleEveryAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => setEveryAmount(parseInt(e.currentTarget.value, 10));
+    const handleEveryAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseInt(e.currentTarget.value, 10);
+        const isValid = Boolean(value);
+        setEveryAmount(value);
+        if (isValidEveryAmount !== isValid) {
+            setIsValidEveryAmount(isValid);
+        }
+    };
+
+    let everyAmountCustomMessage: CustomMessageInputType = null;
+    if (!isValidEveryAmount) {
+        everyAmountCustomMessage = {
+            type: ItemStatus.ERROR,
+            value: formatMessage({
+                id: 'create_post.schedule_post.modal.repeat.every.amount_invalid',
+                defaultMessage: 'Enter a valid number',
+            }),
+        };
+    }
 
     const everyAmountInput = (
         <Input
@@ -112,6 +135,8 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
             onChange={handleEveryAmountChange}
             value={everyAmount}
             type='number'
+            hasError={!isValidEveryAmount} // TODO: fix blur issue / placement
+            customMessage={everyAmountCustomMessage}
         />
     );
 

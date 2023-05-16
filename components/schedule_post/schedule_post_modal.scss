@@ -1,6 +1,7 @@
 .schedule-post-modal {
     .modal &.GenericModal .modal {
         &-body {
+            padding-bottom: 28px;
             overflow: visible;
 
             .GenericModal__header {
@@ -73,7 +74,7 @@
                     .schedule-every-amount {
                         flex: 1;
                         &__fieldset {
-                            height: 40px;
+                            min-height: 40px;
                             &:hover {
                                 cursor: default;
                             }
@@ -84,6 +85,14 @@
                             color: rgba(var(--center-channel-color-rgb), 0.72);
                             font-weight: 400;
                             padding: 0;
+                            &::-webkit-outer-spin-button,
+                            &::-webkit-inner-spin-button {
+                                margin: 0;
+                                -webkit-appearance: none;
+                            }
+                            &[type=number] {
+                                -moz-appearance: textfield;
+                            }
                             &:hover {
                                 cursor: default;
                             }
@@ -141,8 +150,10 @@
                     align-items: center;
                     min-height: 40px;
                     gap: 10px;
-                    .schedule-ends-date-picker {
+                    > div {
                         margin-left: 20px;
+                    }
+                    .schedule-ends-date-picker {
                         &__fieldset {
                             font-size: 14px;
                             border: 2px solid var(--button-bg);
