@@ -170,9 +170,6 @@ unit_test:
       - coverage/
   before_script:
     - yarn
-    - yarn workspace @mattermost/types build
-    - yarn workspace @mattermost/client build
-    - yarn workspace @mattermost/components build
   script:
     # typescript
     # - npm run check-types
