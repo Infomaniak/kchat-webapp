@@ -54,7 +54,6 @@
             }
         }
         .react-select {
-            flex: 1;
             .react-select__control {
                 min-height: 40px;
             }
@@ -71,11 +70,16 @@
                 > div {
                     display: flex;
                     gap: 16px;
-                    .schedule-every-interval-select > .react-select__control {
-                        min-width: 126px;
+                    .schedule-every-interval-select {
+                        flex: 1;
+                        > .react-select__control {
+                            min-width: 126px;
+                        }
                     }
+
                 }
                 .schedule-every-month-select > .react-select__control {
+                    flex: 1;
                     min-width: 150px;
                 }
             }
@@ -95,6 +99,7 @@
                 align-items: center;
                 width: 32px;
                 height: 32px;
+                padding: 0;
                 border-radius: 50%;
                 font-weight: 600;
                 font-size: 14px;
@@ -109,18 +114,47 @@
             .schedule-ends-radio {
                 display: flex;
                 flex-direction: column;
-                // gap: 20px;
+                input, label {
+                    margin: 0;
+                }
                 > div {
                     display: flex;
                     align-items: center;
                     min-height: 40px;
                     gap: 10px;
-                }
-                input, label {
-                    margin: 0;
-                }
-                .schedule-ends-date-picker {
-                    margin-left: 20px;
+                    .schedule-ends-date-picker {
+                        margin-left: 20px;
+                        border: 2px solid var(--button-bg);
+                        font-size: 14px;
+
+                        &:hover {
+                            border: 2px solid var(--button-bg);
+                            cursor: pointer;
+                        }
+
+                        &:focus-within {
+                            box-shadow: 0;
+                        }
+                        &__input.form-control {
+                            height: auto !important;
+                            padding: 0;
+                            border: 0 !important;
+                            font-weight: 400;
+
+                            &[readonly] {
+                                background: transparent;
+                            }
+
+                            &:hover {
+                                cursor: pointer;
+                            }
+                        }
+
+                        &__icon {
+                            margin: 0 8px 0 0;
+                            color: rgba(var(--center-channel-color-rgb), 0.72);
+                        }
+                    }
                 }
             }
         }

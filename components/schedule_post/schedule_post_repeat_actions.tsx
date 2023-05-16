@@ -2,13 +2,20 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 import classNames from 'classnames';
 import moment, {Moment} from 'moment-timezone';
+import {DateTime} from 'luxon';
 import ReactSelect, {ValueType} from 'react-select';
+import {DayPickerProps} from 'react-day-picker';
+import IconButton from '@infomaniak/compass-components/components/icon-button';
+
+import {getCurrentLocale} from 'selectors/i18n';
 
 import {getRoundedTime} from 'components/custom_status/date_time_input';
 import DatePicker from 'components/date_picker';
+import Input from 'components/widgets/inputs/input/input';
 
 type Props = {
     show: boolean;
@@ -44,12 +51,14 @@ const everyMonthOptions: EveryMonthOption[] = [
 const momentInstance = moment();
 
 const RepeatActions = ({show, timestamp, timezone}: Props) => {
+    const locale = useSelector(getCurrentLocale);
     const {formatMessage, formatDate} = useIntl();
     const [everyInterval, setEveryInterval] = useState<EveryIntervalOption['value']>('week');
     const [everyMonth, setEveryMonth] = useState<EveryMonthOption['value']>('date');
     const [daySelected, setDaySelected] = useState<Record<number, boolean>>({});
     const [endRadioSelected, setEndRadioSelected] = useState<EndRadioOption>('never');
     const [endMoment, setEndMoment] = useState<Moment>(getRoundedTime(timestamp));
+    const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (endMoment.isBefore(timestamp)) {
@@ -143,6 +152,25 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
         />
     );
 
+    const handleEndDateChange = (date: Date) => {
+        const time = timezone ? moment.tz(date, timezone) : moment(date);
+        setEndMoment(time.startOf('day'));
+        setIsEndDatePickerOpen(false);
+    };
+
+    const datePickerProps: DayPickerProps = {
+        initialFocus: isEndDatePickerOpen,
+        mode: 'single',
+        selected: endMoment.toDate(),
+        onDayClick: handleEndDateChange,
+        disabled: [{
+            before: timestamp.toDate(),
+        }],
+        showOutsideDays: true,
+    };
+
+    const toggleEndDatePicker = () => setIsEndDatePickerOpen(true);
+
     const endRadio = (
         <div className='schedule-ends-radio'>
             <div>
@@ -170,7 +198,34 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
                         defaultMessage: 'On',
                     })}
                 </label>
-                <span className='schedule-ends-date-picker'>{'test'}</span>
+                <DatePicker
+                    isPopperOpen={isEndDatePickerOpen}
+                    handlePopperOpenState={setIsEndDatePickerOpen}
+                    locale={locale}
+                    datePickerProps={datePickerProps}
+                >
+                    <Input
+                        value={DateTime.fromJSDate(endMoment.toDate()).toFormat('yyyy-MM-dd')} // TODO: use moment instead of luxon
+                        readOnly={true}
+                        className='schedule-ends-date-picker'
+                        inputClassName='schedule-ends-date-picker__input'
+                        label={formatMessage({
+                            id: 'dnd_custom_time_picker_modal.date',
+                            defaultMessage: 'Date',
+                        })}
+                        onClick={toggleEndDatePicker}
+                        tabIndex={-1}
+                        inputPrefix={(
+                            <IconButton
+                                onClick={toggleEndDatePicker}
+                                icon={'calendar-outline'}
+                                className='schedule-ends-date-picker__icon'
+                                size={'sm'}
+                                aria-haspopup='grid'
+                            />
+                        )}
+                    />
+                </DatePicker>
             </div>
         </div>
     );
