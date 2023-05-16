@@ -168,6 +168,7 @@ unit_test:
       - .yarn/cache/
       - .yarn/install-state.gz
       - coverage/
+      - .jestcache
   before_script:
     - yarn
   script:

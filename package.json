@@ -238,7 +238,7 @@
     "dev-server": "node scripts/dev-server",
     "dev-server:webapp": "webpack serve --mode development",
     "test": "cross-env TZ=Etc/UTC jest --maxWorkers=50% --collectCoverage --coverageDirectory=\"./coverage\"",
-    "test-ci": "cross-env TZ=Etc/UTC jest --collectCoverage --coverageDirectory=\"./coverage\" --ci --maxWorkers=8",
+    "test-ci": "cross-env TZ=Etc/UTC jest --collectCoverage --coverageDirectory=\"./coverage\" --ci --maxWorkers=8 --cacheDirectory \".jestcache\"",
     "stats": "cross-env NODE_ENV=production webpack --profile --json > webpack_stats.json",
     "updatesnapshot": "cross-env TZ=Etc/UTC jest --updateSnapshot",
     "test:debug": "cross-env TZ=Etc/UTC jest --forceExit --detectOpenHandles",
