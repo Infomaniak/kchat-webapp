@@ -169,7 +169,13 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
         showOutsideDays: true,
     };
 
-    const toggleEndDatePicker = () => setIsEndDatePickerOpen(true);
+    const isEndDatePickerDisabled = endRadioSelected !== 'on';
+
+    const toggleEndDatePicker = () => {
+        if (!isEndDatePickerDisabled) {
+            setIsEndDatePickerOpen(true);
+        }
+    };
 
     const endRadio = (
         <div className='schedule-ends-radio'>
@@ -207,19 +213,27 @@ const RepeatActions = ({show, timestamp, timezone}: Props) => {
                     <Input
                         value={DateTime.fromJSDate(endMoment.toDate()).toFormat('yyyy-MM-dd')} // TODO: use moment instead of luxon
                         readOnly={true}
-                        className='schedule-ends-date-picker'
-                        inputClassName='schedule-ends-date-picker__input'
+                        containerClassName='schedule-ends-date-picker'
+                        className={classNames('schedule-ends-date-picker__fieldset', {
+                            'schedule-ends-date-picker__fieldset-disabled': isEndDatePickerDisabled,
+                        })}
+                        inputClassName={classNames('schedule-ends-date-picker__input', {
+                            'schedule-ends-date-picker__input-disabled': isEndDatePickerDisabled,
+                        })}
                         label={formatMessage({
                             id: 'dnd_custom_time_picker_modal.date',
                             defaultMessage: 'Date',
                         })}
                         onClick={toggleEndDatePicker}
                         tabIndex={-1}
-                        inputPrefix={(
+                        disabled={isEndDatePickerDisabled} // TODO: style disabled input
+                        inputPrefix={( // TODO: use compass icon instead
                             <IconButton
                                 onClick={toggleEndDatePicker}
                                 icon={'calendar-outline'}
-                                className='schedule-ends-date-picker__icon'
+                                className={classNames('schedule-ends-date-picker__icon', {
+                                    'schedule-ends-date-picker__icon-disabled': isEndDatePickerDisabled,
+                                })}
                                 size={'sm'}
                                 aria-haspopup='grid'
                             />

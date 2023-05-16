@@ -124,22 +124,33 @@
                     gap: 10px;
                     .schedule-ends-date-picker {
                         margin-left: 20px;
-                        border: 2px solid var(--button-bg);
-                        font-size: 14px;
-
-                        &:hover {
+                        &__fieldset {
+                            font-size: 14px;
                             border: 2px solid var(--button-bg);
-                            cursor: pointer;
+                            &:hover {
+                                border: 2px solid var(--button-bg);
+                                cursor: pointer;
+                            }
+                            &:focus-within {
+                                box-shadow: 0;
+                            }
+                            &-disabled {
+                                border: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
+                                &:hover {
+                                    border: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
+                                }
+                            }
                         }
-
-                        &:focus-within {
-                            box-shadow: 0;
-                        }
-                        &__input.form-control {
+                        &__input {
                             height: auto !important;
-                            padding: 0;
                             border: 0 !important;
+                            color: rgba(var(--center-channel-color-rgb), 0.72);
                             font-weight: 400;
+                            padding: 0;
+
+                            &-disabled {
+                                color: rgba(var(--center-channel-color-rgb), 0.16);
+                            }
 
                             &[readonly] {
                                 background: transparent;
@@ -153,6 +164,9 @@
                         &__icon {
                             margin: 0 8px 0 0;
                             color: rgba(var(--center-channel-color-rgb), 0.72);
+                            &-disabled {
+                                color: rgba(var(--center-channel-color-rgb), 0.16);
+                            }
                         }
                     }
                 }
