@@ -1,3 +1,13 @@
+## 1.2.3-next.1 (2023-05-17)
+
+### Fixed (1 change)
+
+- [ensure react and react-dom types use the correct version](kchat/webapp@33b871384358ede0eb3f31f1a1a85125f7fcdaab) by @antonbuksa ([merge request](kchat/webapp!413))
+
+### Changed (1 change)
+
+- [custom message for when gpt bot is disabled](kchat/webapp@d9224fab025f5c96a2334846c09c9ceaa6e11181) by @antonbuksa ([merge request](kchat/webapp!414))
+
 ## 1.2.2-next.1 (2023-05-12)
 
 ### Fixed (2 changes)
