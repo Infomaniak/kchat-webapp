@@ -22,7 +22,7 @@ type Props = {
     timezone?: string;
     getAnchorEl: () => HTMLDivElement | null;
     onClose: () => void;
-    handleSchedulePost: (option: SchedulePostMenuOption) => void;
+    handleSchedulePostMenu: (optionName: SchedulePostMenuOption['name']) => void;
 };
 
 type IntlMessage = {
@@ -58,7 +58,7 @@ const menuProps: Partial<MenuProps> = {
     },
 };
 
-const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleSchedulePost}: Props) => {
+const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleSchedulePostMenu}: Props) => {
     const isMilitaryTime = useSelector((state: GlobalState) => getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false));
 
     const getMenuItemLabel = ({name, title}: SchedulePostMenuOption) => {
@@ -102,7 +102,7 @@ const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleScheduleP
         <MenuItem
             key={'schedule-post-menu-' + option.name}
             labels={getMenuItemLabel(option)}
-            onClick={() => handleSchedulePost(option)}
+            onClick={() => handleSchedulePostMenu(option.name)}
         />
     ));
     return (

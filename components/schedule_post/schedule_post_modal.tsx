@@ -6,26 +6,25 @@ import {useDispatch} from 'react-redux';
 import {useIntl} from 'react-intl';
 import {Moment} from 'moment-timezone';
 
-import {schedulePost} from 'mattermost-redux/actions/posts';
 import {closeModal} from 'actions/views/modals';
 
 import GenericModal from 'components/generic_modal';
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
 import SchedulePostRepeatActions from 'components/schedule_post/schedule_post_repeat_actions';
 
-import {toUTCUnix} from 'utils/datetime';
 import {ModalIdentifiers} from 'utils/constants';
 
 import './schedule_post_modal.scss';
 
+export type SchedulePostOptions = any; // TODO: use proper type
+
 type Props = {
-    channelId: string;
-    message: string;
     timestamp: Moment;
     timezone?: string;
+    onConfirm: (date: Date, options?: SchedulePostOptions) => void;
 }
 
-const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => {
+const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const [scheduleTimestamp, setScheduleTimestamp] = useState<Moment>(getRoundedTime(timestamp));
@@ -34,8 +33,7 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
     const [isRepeatChecked, setIsRepeatChecked] = useState<boolean>(false);
     const [areRepeatOptionsValid, setAreRepeatOptionsValid] = useState<boolean>(true);
 
-    // TODO: clear input
-    const handleConfirm = () => dispatch(schedulePost(channelId, message, toUTCUnix(scheduleTimestamp.toDate())));
+    const handleConfirm = () => onConfirm(scheduleTimestamp.toDate());
 
     const handleRepeatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsRepeatChecked(e.target.checked);
@@ -90,7 +88,6 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
                 onMenuChange={setIsMenuOpen}
                 setIsDatePickerOpen={setIsDatePickerOpen}
             />
-            {/* TODO: reset repeat props on deselection*/}
             <div className='schedule-post-modal__repeat-checkbox'>
                 <label>
                     <input

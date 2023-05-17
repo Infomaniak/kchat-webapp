@@ -12,7 +12,7 @@ import {openModal} from 'actions/views/modals';
 import {getCurrentUserTimezone} from 'selectors/general';
 
 import SchedulePostMenu, {SchedulePostMenuOption} from 'components/schedule_post/schedule_post_menu';
-import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
+import SchedulePostModal, {SchedulePostOptions} from 'components/schedule_post/schedule_post_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
@@ -80,10 +80,19 @@ const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
 
     const handleClose = () => setOpen(false);
 
-    const handleSchedulePost = (option: SchedulePostMenuOption) => {
+    const handleSchedulePost = (date: Date, options?: SchedulePostOptions) => {
+        // TODO: handle options
+        // TODO: include files attachments ?
+        dispatch(schedulePost(channelId, message, toUTCUnix(date)));
+
+        // TODO: display errors
+        // TODO: clear input if no error
+    };
+
+    const handleSchedulePostMenu = (optionName: SchedulePostMenuOption['name']) => {
         setOpen(false);
         const timestamp = getCurrentMomentForTimezone(timezone);
-        switch (option.name) {
+        switch (optionName) {
         case 'tomorrow':
             timestamp.add(1, 'day').hours(9).minutes(0).seconds(0);
             break;
@@ -95,18 +104,14 @@ const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
                 modalId: ModalIdentifiers.SCHEDULE_POST,
                 dialogType: SchedulePostModal,
                 dialogProps: {
-                    channelId,
-                    message,
                     timestamp,
                     timezone,
+                    onConfirm: handleSchedulePost,
                 },
             }));
             return;
         }
-        dispatch(schedulePost(channelId, message, toUTCUnix(timestamp.toDate())));
-
-        // TODO: clear input
-        // TODO: handle errors
+        handleSchedulePost(timestamp.toDate());
     };
 
     return (
@@ -134,7 +139,7 @@ const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
                 timezone={timezone}
                 getAnchorEl={getAnchorEl}
                 onClose={handleClose}
-                handleSchedulePost={handleSchedulePost}
+                handleSchedulePostMenu={handleSchedulePostMenu}
             />
         </>
     );

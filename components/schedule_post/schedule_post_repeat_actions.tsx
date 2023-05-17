@@ -252,7 +252,7 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
                         defaultMessage: 'On',
                     })}
                 </label>
-                <DatePicker
+                <DatePicker // TODO: remove border
                     isPopperOpen={isEndDatePickerOpen}
                     handlePopperOpenState={setIsEndDatePickerOpen}
                     locale={locale}
