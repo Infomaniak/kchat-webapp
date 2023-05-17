@@ -1,16 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Moment} from 'moment-timezone';
 
 import GenericModal from 'components/generic_modal';
-import {localizeMessage} from 'utils/utils';
+import {isKeyPressed, localizeMessage} from 'utils/utils';
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
 
 import {toUTCUnix} from 'utils/datetime';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
+import Constants from 'utils/constants';
 
 import {PropsFromRedux} from './index';
 
@@ -39,9 +40,27 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
     const initialReminderTime: Moment = getRoundedTime(currentTime);
     const [customReminderTime, setCustomReminderTime] = useState<Moment>(initialReminderTime);
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+    const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
+
+    const handleKeyDown = useCallback((event: KeyboardEvent) => {
+        if (isKeyPressed(event, Constants.KeyCodes.ESCAPE) && !isDatePickerOpen && !isMenuOpen) {
+            onExited();
+        }
+    }, [isDatePickerOpen, onExited]);
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleKeyDown]);
+
     const handleConfirm = useCallback(() => {
         actions.addPostReminder(userId, postId, toUTCUnix(customReminderTime.toDate()));
     }, [customReminderTime]);
+
+    const isConfirmDisabled = isMenuOpen || isDatePickerOpen;
 
     return (
         <GenericModal
@@ -55,13 +74,15 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
             className={'post-reminder-modal'}
             compassDesign={true}
             enforceFocus={true}
-            isConfirmDisabled={isMenuOpen}
+            keyboardEscape={false}
+            isConfirmDisabled={isConfirmDisabled}
         >
             <DateTimeInput
                 time={customReminderTime}
                 handleChange={setCustomReminderTime}
                 timezone={timezone}
                 onMenuChange={setIsMenuOpen}
+                setIsDatePickerOpen={setIsDatePickerOpen}
             />
         </GenericModal>
     );

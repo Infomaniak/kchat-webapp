@@ -18,6 +18,8 @@ import {ProfilesInChannelSortBy} from 'mattermost-redux/actions/users';
 
 import AlertBanner from 'components/alert_banner';
 
+import ExternalLink from 'components/external_link';
+
 import ActionBar from './action_bar';
 import Header from './header';
 import MemberList from './member_list';

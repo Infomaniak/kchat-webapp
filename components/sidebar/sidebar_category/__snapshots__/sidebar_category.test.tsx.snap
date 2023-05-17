@@ -51,13 +51,11 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
           "user_id": "",
         }
       }
-      isMenuOpen={false}
       menuTriggerRef={
         Object {
           "current": null,
         }
       }
-      onToggleMenu={[Function]}
     />
   </SidebarCategoryHeader>
   <div
@@ -133,13 +131,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
           "user_id": "",
         }
       }
-      isMenuOpen={false}
       menuTriggerRef={
         Object {
           "current": null,
         }
       }
-      onToggleMenu={[Function]}
     />
   </SidebarCategoryHeader>
   <div
@@ -213,13 +209,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
           "user_id": "",
         }
       }
-      isMenuOpen={false}
       menuTriggerRef={
         Object {
           "current": null,
         }
       }
-      onToggleMenu={[Function]}
     />
   </SidebarCategoryHeader>
   <div
@@ -281,6 +275,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
   </Connect(Droppable)>
   <InviteMembersButton
     className="followingSibling"
+    isAdmin={false}
     onClick={[Function]}
     touchedInviteMembersButton={false}
   />
@@ -318,14 +313,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
         }
       }
       handleOpenDirectMessagesModal={[Function]}
-      isCollapsed={false}
-      isMenuOpen={false}
       menuTriggerRef={
         Object {
           "current": null,
         }
       }
-      onToggleMenu={[Function]}
     />
     <OverlayTrigger
       defaultOverlayShown={false}
@@ -415,6 +407,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
   </Connect(Droppable)>
   <InviteMembersButton
     className="followingSibling"
+    isAdmin={false}
     onClick={[Function]}
     touchedInviteMembersButton={false}
   />
@@ -452,14 +445,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
         }
       }
       handleOpenDirectMessagesModal={[Function]}
-      isCollapsed={false}
-      isMenuOpen={false}
       menuTriggerRef={
         Object {
           "current": null,
         }
       }
-      onToggleMenu={[Function]}
     />
     <OverlayTrigger
       defaultOverlayShown={false}

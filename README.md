@@ -2,7 +2,7 @@
 
 Infomaniak fork of the mattermost web client modified to work with our internal API as part of the kSuite.
 
-:warning: This project is still in beta.    
+:warning: This project is still in beta.
 
 ## Running the project
 

@@ -1,0 +1,20 @@
+.menuModal {
+    & .modal-header {
+        & > .close {
+            visibility: hidden;
+        }
+    }
+
+    & .GenericModal__body {
+        padding: 0;
+    }
+
+    &__arrow-back {
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        width: 20px;
+        height: 20px;
+        margin: 0 8px 8px;
+    }
+}

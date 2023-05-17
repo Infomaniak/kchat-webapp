@@ -64,6 +64,7 @@ export type Props = InviteState & {
     canAddUsers: boolean;
     townSquareDisplayName: string;
     channelToInvite?: Channel;
+    onPaste?: (e: ClipboardEvent) => void;
     shouldOpenMenu: boolean;
 }
 
@@ -188,6 +189,7 @@ export default function InviteView(props: Props) {
                     inputValue={props.usersEmailsSearch}
                     emailInvitationsEnabled={props.emailInvitationsEnabled}
                     autoFocus={true}
+                    onPaste={props.onPaste}
                     isMenuOpen={props.shouldOpenMenu}
                 />
                 {props.canInviteGuests && props.canAddUsers &&

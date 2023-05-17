@@ -15,6 +15,7 @@ import {UserProfile} from '@mattermost/types/users';
 import {RelationOneToOne} from '@mattermost/types/utilities';
 import {Command} from '@mattermost/types/integrations';
 import InstalledCommand, {matchesFilter} from '../installed_command';
+import ExternalLink from 'components/external_link';
 
 type Props = {
     team: Team;

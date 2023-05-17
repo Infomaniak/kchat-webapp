@@ -9,7 +9,8 @@ import {GenericAction} from 'mattermost-redux/types/actions';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {ChannelCategory} from '@mattermost/types/channel_categories';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser, getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
+import {isAdmin} from 'mattermost-redux/utils/user_utils';
 import {Preferences, Touched} from 'utils/constants';
 
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours';
@@ -47,6 +48,7 @@ function makeMapStateToProps() {
             draggingState: getDraggingState(state),
             touchedInviteMembersButton: getBool(state, Preferences.TOUCHED, Touched.INVITE_MEMBERS),
             currentUserId: getCurrentUserId(state),
+            isAdmin: isAdmin(getCurrentUser(state).roles),
             showDirectMessagesTutorialStep,
             showChannelsTutorialStep,
         };

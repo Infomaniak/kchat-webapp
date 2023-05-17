@@ -14,17 +14,20 @@
     .GenericModal__header {
         padding: 28px 24px;
     }
+}
 
-    .dateTime {
-        width: 100%;
-        margin: unset;
+.DndModal__input--no-border {
+    border: none;
+}
 
-        .dateTime__date {
-            margin-right: 16px;
-        }
-
-        .dateTime__input {
-            width: 260px;
-        }
-    }
+.DndModal__input__label {
+    position: absolute;
+    z-index: 1;
+    top: -11px;
+    left: 0;
+    padding: 0 4px;
+    margin: 0 14px;
+    background: rgba(var(--center-channel-bg-rgb), 1);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    font-size: 10px;
 }

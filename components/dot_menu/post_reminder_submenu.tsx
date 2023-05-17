@@ -3,18 +3,17 @@
 
 import React from 'react';
 import {useDispatch} from 'react-redux';
+
 import {FormattedMessage, FormattedDate, FormattedTime, useIntl} from 'react-intl';
+import {ChevronRightIcon, ClockOutlineIcon} from '@infomaniak/compass-icons/components';
 
-import {addPostReminder} from 'mattermost-redux/actions/posts';
-import {openModal} from 'actions/views/modals';
-
-import Menu from 'components/widgets/menu/menu';
-import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal';
-
-import * as Utils from 'utils/utils';
+import * as Menu from 'components/menu';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
+import {openModal} from 'actions/views/modals';
 import {ModalIdentifiers} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';
+import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal';
+import {addPostReminder} from 'mattermost-redux/actions/posts';
 import {t} from 'utils/i18n';
 
 import {Post} from '@mattermost/types/posts';
@@ -23,8 +22,8 @@ type Props = {
     userId: string;
     post: Post;
     isMilitaryTime: boolean;
-    show: boolean;
     timezone?: string;
+    parentMenuId: string;
 }
 
 const postReminderTimes = [
@@ -35,12 +34,12 @@ const postReminderTimes = [
     {id: 'custom', label: t('post_info.post_reminder.sub_menu.custom'), labelDefault: 'Custom'},
 ];
 
-export function PostReminderSubmenu({userId, post, isMilitaryTime, show, timezone}: Props) {
+export function PostReminderSubmenu(props: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
 
     const setPostReminder = (id: string): void => {
-        const currentDate = getCurrentMomentForTimezone(timezone);
+        const currentDate = getCurrentMomentForTimezone(props.timezone);
         let endTime = currentDate;
         switch (id) {
         case 'thirty_minutes':
@@ -56,12 +55,12 @@ export function PostReminderSubmenu({userId, post, isMilitaryTime, show, timezon
             endTime = currentDate.add(2, 'hours');
             break;
         case 'tomorrow':
-            // add one day in current date
-            endTime = currentDate.add(1, 'day');
+            // tomorrow 9:00
+            endTime = currentDate.add(1, 'day').hours(9).minutes(0).seconds(0);
             break;
         }
 
-        dispatch(addPostReminder(userId, post.id, toUTCUnix(endTime.toDate())));
+        dispatch(addPostReminder(props.userId, props.post.id, toUTCUnix(endTime.toDate())));
     };
 
     const setCustomPostReminder = (): void => {
@@ -69,7 +68,7 @@ export function PostReminderSubmenu({userId, post, isMilitaryTime, show, timezon
             modalId: ModalIdentifiers.POST_REMINDER_CUSTOM_TIME_PICKER,
             dialogType: PostReminderCustomTimePicker,
             dialogProps: {
-                postId: post.id,
+                postId: props.post.id,
             },
         };
         dispatch(openModal(postReminderCustomTimePicker));
@@ -77,53 +76,66 @@ export function PostReminderSubmenu({userId, post, isMilitaryTime, show, timezon
 
     const postReminderSubMenuItems =
         postReminderTimes.map(({id, label, labelDefault}) => {
-            let labels: string | JSX.Element = formatMessage({id: label, defaultMessage: labelDefault});
+            const labels = (
+                <FormattedMessage
+                    id={label}
+                    defaultMessage={labelDefault}
+                />
+            );
 
+            let trailing: React.ReactNode;
             if (id === 'tomorrow') {
-                const tomorrow = getCurrentMomentForTimezone(timezone).add(1, 'day').toDate();
+                const tomorrow = getCurrentMomentForTimezone(props.timezone).add(1, 'day').hours(9).minutes(0).seconds(0).toDate();
 
-                labels = (
-                    <span>
-                        {labels}
-                        <span className='MenuItem__opacity remind_menu__right_decorator'>
-                            <FormattedDate
-                                value={tomorrow}
-                                weekday='short'
-                            />
-                            {', '}
-                            <FormattedTime
-                                value={tomorrow}
-                                timeStyle='short'
-                                hour12={!isMilitaryTime}
-                            />
-                        </span>
+                trailing = (
+                    <span className={`postReminder-${id}_timestamp`}>
+                        <FormattedDate
+                            value={tomorrow}
+                            weekday='short'
+                            timeZone={props.timezone}
+                        />
+                        {', '}
+                        <FormattedTime
+                            value={tomorrow}
+                            timeStyle='short'
+                            hour12={!props.isMilitaryTime}
+                            timeZone={props.timezone}
+                        />
                     </span>
                 );
             }
-
-            return {
-                id: `remind_post_options_${id}`,
-                text: labels,
-                action: id === 'custom' ? () => setCustomPostReminder() : () => setPostReminder(id),
-            };
+            return (
+                <Menu.Item
+                    key={`remind_post_options_${id}`}
+                    id={`remind_post_options_${id}`}
+                    labels={labels}
+                    trailingElements={trailing}
+                    onClick={id === 'custom' ? () => setCustomPostReminder() : () => setPostReminder(id)}
+                />
+            );
         });
 
-    if (!show) {
-        return null;
-    }
-
     return (
-        <Menu.ItemSubMenu
-            id={`remind_post_${post.id}`}
-            direction='left'
-            subMenu={postReminderSubMenuItems}
-            icon={Utils.getMenuItemIcon('icon-bell-outline')}
-            text={(
+        <Menu.SubMenu
+            id={`remind_post_${props.post.id}`}
+            labels={
                 <FormattedMessage
                     id='post_info.post_reminder.menu'
                     defaultMessage='Remind'
                 />
-            )}
-        />
+            }
+            leadingElement={<ClockOutlineIcon size={18}/>}
+            trailingElements={<span className={'dot-menu__item-trailing-icon'}><ChevronRightIcon size={16}/></span>}
+            menuId={`remind_post_${props.post.id}-menu`}
+            parentMenuId={props.parentMenuId}
+        >
+            <h5 className={'dot-menu__post-reminder-menu-header'}>
+                {formatMessage(
+                    {id: 'post_info.post_reminder.sub_menu.header',
+                        defaultMessage: 'Set a reminder for:'},
+                )}
+            </h5>
+            {postReminderSubMenuItems}
+        </Menu.SubMenu>
     );
 }

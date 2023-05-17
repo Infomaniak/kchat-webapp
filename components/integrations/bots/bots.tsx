@@ -18,6 +18,8 @@ import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 import BackstageList from 'components/backstage/components/backstage_list';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
+import ExternalLink from 'components/external_link';
+
 import Bot, {matchesFilter} from './bot';
 
 type Props = {

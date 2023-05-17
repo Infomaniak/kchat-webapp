@@ -403,6 +403,7 @@ export default class WebSocketClient {
 
     addMessageListener(listener: MessageListener) {
         this.messageListeners.add(listener);
+
         if (this.messageListeners.size > 5) {
             // eslint-disable-next-line no-console
             console.warn(`WebSocketClient has ${this.messageListeners.size} message listeners registered`);

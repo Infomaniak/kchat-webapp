@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/external_link should match snapshot 1`] = `
+<Provider
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+>
+  <ExternalLink
+    href="https://infomaniak.com"
+  >
+    <a
+      href="https://infomaniak.com?utm_source=infomaniak&utm_medium=in-product&utm_content=&uid=currentUserId&sid="
+      onClick={[Function]}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      Click Me
+    </a>
+  </ExternalLink>
+</Provider>
+`;

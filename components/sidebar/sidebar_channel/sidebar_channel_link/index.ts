@@ -11,7 +11,9 @@ import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 import {makeGetChannelUnreadCount} from 'mattermost-redux/selectors/entities/channels';
 import {clearChannelSelection, multiSelectChannelAdd, multiSelectChannelTo} from 'actions/views/channel_sidebar';
 import {markMostRecentPostInChannelAsUnread, unsetEditingPost} from 'actions/post_actions';
+import {closeRightHandSide} from 'actions/views/rhs';
 import {isChannelSelected} from 'selectors/views/channel_sidebar';
+import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
 import {GlobalState} from 'types/store';
 import {Channel} from '@mattermost/types/channels';
 
@@ -35,6 +37,8 @@ function makeMapStateToProps() {
             isMuted: isChannelMuted(member),
             hasUrgent: unreadCount.hasUrgent,
             isChannelSelected: isChannelSelected(state, ownProps.channel.id),
+            rhsState: getRhsState(state),
+            rhsOpen: getIsRhsOpen(state),
         };
     };
 }
@@ -47,6 +51,7 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             clearChannelSelection,
             multiSelectChannelTo,
             multiSelectChannelAdd,
+            closeRightHandSide,
         }, dispatch),
     };
 }

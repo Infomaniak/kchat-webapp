@@ -135,7 +135,7 @@ publish_front:
 
 unit_test:
   stage: test
-  image: node:16.10.0
+  image: node:16.14.2
   tags:
     - docker-executor
     - kubernetes
@@ -167,7 +167,7 @@ unit_test:
     paths:
       - .yarn/cache/
       - .yarn/install-state.gz
-      - coverage/
+      - .jestcache
   before_script:
     - yarn
   script:

@@ -18,6 +18,8 @@ type Props = {
     afterCopyText?: string;
     placement?: string;
     className?: string;
+    tooltipText?: string;
+    icon?: string;
 };
 
 const CopyButton: React.FC<Props> = (props: Props) => {
@@ -34,9 +36,12 @@ const CopyButton: React.FC<Props> = (props: Props) => {
         copyToClipboard(props.content);
     };
 
-    const getId = () => {
+    const getId = (tooltipText?: string) => {
         if (isCopied) {
             return t('copied.message');
+        }
+        if (tooltipText) {
+            return t(tooltipText);
         }
         return props.beforeCopyText ? t('copy.text.message') : t('copy.code.message');
     };
@@ -51,7 +56,7 @@ const CopyButton: React.FC<Props> = (props: Props) => {
     const tooltip = (
         <Tooltip id='copyButton'>
             <FormattedMessage
-                id={getId()}
+                id={getId(props.tooltipText)}
                 defaultMessage={getDefaultMessage()}
             />
         </Tooltip>
@@ -73,7 +78,7 @@ const CopyButton: React.FC<Props> = (props: Props) => {
                 {!isCopied &&
                     <i
                         role='button'
-                        className='icon icon-content-copy'
+                        className={`icon ${props.icon ?? 'icon-content-copy'}`}
                     />
                 }
                 {isCopied &&

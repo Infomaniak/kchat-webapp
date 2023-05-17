@@ -21,6 +21,8 @@ import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
 import Menu from 'components/widgets/menu/menu';
 import TeamGroupsManageModal from 'components/team_groups_manage_modal';
 
+// import {trackEvent} from 'actions/telemetry_actions';
+
 import {ModalData} from 'types/actions';
 import {PluginComponent} from 'types/store/plugins';
 import {UserProfile} from '@mattermost/types/users';
@@ -175,6 +177,7 @@ export class MainMenu extends React.PureComponent<Props> {
         //                 defaultMessage: 'Add people to the team',
         //             })}
         //             icon={this.props.mobile && <i className='fa fa-user-plus'/>}
+        //            onClick={() => trackEvent('ui', 'click_sidebar_team_dropdown_invite_people')}
         //         />
         //     );
         // }
