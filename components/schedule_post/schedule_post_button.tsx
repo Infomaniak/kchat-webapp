@@ -12,7 +12,8 @@ import {openModal} from 'actions/views/modals';
 import {getCurrentUserTimezone} from 'selectors/general';
 
 import SchedulePostMenu, {SchedulePostMenuOption} from 'components/schedule_post/schedule_post_menu';
-import SchedulePostModal, {SchedulePostOptions} from 'components/schedule_post/schedule_post_modal';
+import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
+import {SchedulePostOptions} from 'components/schedule_post/schedule_post_repeat_actions';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 

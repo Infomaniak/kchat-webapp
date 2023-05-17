@@ -10,13 +10,11 @@ import {closeModal} from 'actions/views/modals';
 
 import GenericModal from 'components/generic_modal';
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
-import SchedulePostRepeatActions from 'components/schedule_post/schedule_post_repeat_actions';
+import SchedulePostRepeatActions, {SchedulePostOptions} from 'components/schedule_post/schedule_post_repeat_actions';
 
 import {ModalIdentifiers} from 'utils/constants';
 
 import './schedule_post_modal.scss';
-
-export type SchedulePostOptions = any; // TODO: use proper type
 
 type Props = {
     timestamp: Moment;
@@ -32,8 +30,22 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
     const [isRepeatChecked, setIsRepeatChecked] = useState<boolean>(false);
     const [areRepeatOptionsValid, setAreRepeatOptionsValid] = useState<boolean>(true);
+    const [schedulePostOptions, setSchedulePostOptions] = useState<SchedulePostOptions>({
+        everyAmount: 1,
+        everyInterval: 'week',
+        everyMonth: 'date',
+        daySelected: {},
+        endRadioSelected: 'never',
+        endMoment: getRoundedTime(timestamp),
+        isEndDatePickerOpen: false,
+    });
 
-    const handleConfirm = () => onConfirm(scheduleTimestamp.toDate());
+    const handleConfirm = () => {
+        if (isRepeatChecked) {
+            onConfirm(scheduleTimestamp.toDate(), schedulePostOptions);
+        }
+        onConfirm(scheduleTimestamp.toDate());
+    };
 
     const handleRepeatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsRepeatChecked(e.target.checked);
@@ -45,6 +57,10 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
         if (areRepeatOptionsValid !== isValid) {
             setAreRepeatOptionsValid(isValid);
         }
+    };
+
+    const handleRepeatOptionsChange = (newOptions: Partial<SchedulePostOptions>) => {
+        setSchedulePostOptions({...schedulePostOptions, ...newOptions});
     };
 
     const modalHeaderText = (
@@ -69,7 +85,7 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
         defaultMessage: 'Repeat',
     });
 
-    const isConfirmDisabled = isMenuOpen || isDatePickerOpen || (isRepeatChecked && !areRepeatOptionsValid);
+    const isConfirmDisabled = isMenuOpen || isDatePickerOpen || schedulePostOptions.isEndDatePickerOpen || (isRepeatChecked && !areRepeatOptionsValid);
 
     return (
         <GenericModal
@@ -81,7 +97,7 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
             handleCancel={handleExit}
             onExited={handleExit}
         >
-            <DateTimeInput
+            <DateTimeInput // TODO: remove border
                 time={scheduleTimestamp}
                 handleChange={setScheduleTimestamp}
                 timezone={timezone}
@@ -103,6 +119,8 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
                 timestamp={scheduleTimestamp}
                 timezone={timezone}
                 setAreRepeatOptionsValid={handleRepeatOptionsValidation}
+                schedulePostOptions={schedulePostOptions}
+                setSchedulePostOptions={handleRepeatOptionsChange}
             />
         </GenericModal>
     );

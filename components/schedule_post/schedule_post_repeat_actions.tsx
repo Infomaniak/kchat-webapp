@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 import classNames from 'classnames';
@@ -12,7 +12,6 @@ import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {getCurrentLocale} from 'selectors/i18n';
 
-import {getRoundedTime} from 'components/custom_status/date_time_input';
 import DatePicker from 'components/date_picker';
 import Input, {CustomMessageInputType} from 'components/widgets/inputs/input/input';
 
@@ -22,7 +21,9 @@ type Props = {
     show: boolean;
     timestamp: Moment;
     timezone?: string;
-    setAreRepeatOptionsValid: (isValid: boolean) => void;
+    schedulePostOptions: SchedulePostOptions;
+    setSchedulePostOptions: (options: Partial<SchedulePostOptions>) => void;
+    setAreRepeatOptionsValid: (areValid: boolean) => void;
 };
 
 type SelectOption<K> = {
@@ -38,6 +39,16 @@ type EveryIntervalOption = SelectOption<'day' | 'week' | 'month'>;
 type EveryMonthOption = SelectOption<'weekday' | 'date'>;
 
 type EndRadioOption = 'never' | 'on';
+
+export type SchedulePostOptions = {
+    everyAmount: number;
+    everyInterval: EveryIntervalOption['value'];
+    everyMonth: EveryMonthOption['value'];
+    daySelected: Record<number, boolean>;
+    endRadioSelected: EndRadioOption;
+    endMoment: Moment;
+    isEndDatePickerOpen: boolean;
+};
 
 const everyIntervalOptions: EveryIntervalOption[] = [
     {value: 'day', label: {id: 'create_post.schedule_post.modal.repeat.every.day', defaultMessage: 'Day'}},
@@ -64,52 +75,29 @@ const selectStyle = {
 const momentInstance = moment();
 
 // TODO: improve theming support
-const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Props) => {
+const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid, schedulePostOptions, setSchedulePostOptions}: Props) => {
+    const {
+        everyAmount,
+        everyInterval,
+        everyMonth,
+        daySelected,
+        endRadioSelected,
+        endMoment,
+        isEndDatePickerOpen,
+    } = schedulePostOptions;
     const locale = useSelector(getCurrentLocale);
     const {formatMessage, formatDate} = useIntl();
-    const [everyAmount, setEveryAmount] = useState<number>(1);
-    const [everyInterval, setEveryInterval] = useState<EveryIntervalOption['value']>('week');
-    const [everyMonth, setEveryMonth] = useState<EveryMonthOption['value']>('date');
-    const [daySelected, setDaySelected] = useState<Record<number, boolean>>({});
-    const [endRadioSelected, setEndRadioSelected] = useState<EndRadioOption>('never');
-    const [endMoment, setEndMoment] = useState<Moment>(getRoundedTime(timestamp));
-    const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (endMoment.isBefore(timestamp)) {
-            setEndMoment(timestamp);
+            setSchedulePostOptions({endMoment: timestamp});
         }
     }, [timestamp]);
-
-    const handleDaySelection = (day: number) => setDaySelected({
-        ...daySelected,
-        [day]: !daySelected[day] ?? true,
-    });
-
-    const dayPicker = [];
-    for (let i = 1; i <= 7; i++) {
-        const dayInitial = formatDate(momentInstance.weekday(i).toDate(), {
-            weekday: 'narrow',
-            timeZone: timezone,
-        });
-        dayPicker.push(
-            <button
-                className={classNames('btn', {
-                    'btn-primary': daySelected[i],
-                    'btn-secondary': !daySelected[i],
-                })}
-                key={'schedule-post-repeat-day-' + i}
-                onClick={() => handleDaySelection(i)}
-            >
-                {dayInitial}
-            </button>,
-        );
-    }
 
     const handleOptionsValidity = () => setAreRepeatOptionsValid(everyAmount > 0);
 
     const handleEveryAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEveryAmount(parseInt(e.currentTarget.value, 10));
+        setSchedulePostOptions({everyAmount: parseInt(e.currentTarget.value, 10)});
         handleOptionsValidity();
     };
 
@@ -143,8 +131,10 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
         if (!option || !('value' in option)) {
             return;
         }
-        setEveryInterval(option.value);
-        setDaySelected({});
+        setSchedulePostOptions({
+            everyInterval: option.value,
+            daySelected: {},
+        });
     };
 
     const formatEveryIntervalOptionLabel = (option: EveryIntervalOption) => formatMessage(option.label);
@@ -167,7 +157,7 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
         if (!option || !('value' in option)) {
             return;
         }
-        setEveryMonth(option.value);
+        setSchedulePostOptions({everyMonth: option.value});
     };
 
     const formatEveryMonthOptionLabel = (option: EveryMonthOption) => {
@@ -200,10 +190,37 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
         />
     );
 
+    const handleDaySelection = (day: number) => setSchedulePostOptions({daySelected: {
+        ...daySelected,
+        [day]: !daySelected[day] ?? true,
+    }});
+
+    const dayPicker = [];
+    for (let i = 1; i <= 7; i++) {
+        const dayInitial = formatDate(momentInstance.weekday(i).toDate(), {
+            weekday: 'narrow',
+            timeZone: timezone,
+        });
+        dayPicker.push(
+            <button
+                className={classNames('btn', {
+                    'btn-primary': daySelected[i],
+                    'btn-secondary': !daySelected[i],
+                })}
+                key={'schedule-post-repeat-day-' + i}
+                onClick={() => handleDaySelection(i)}
+            >
+                {dayInitial}
+            </button>,
+        );
+    }
+
     const handleEndDateChange = (date: Date) => {
         const time = timezone ? moment.tz(date, timezone) : moment(date);
-        setEndMoment(time.startOf('day'));
-        setIsEndDatePickerOpen(false);
+        setSchedulePostOptions({
+            endMoment: time.startOf('day'),
+            isEndDatePickerOpen: false,
+        });
     };
 
     const datePickerProps: DayPickerProps = {
@@ -221,7 +238,7 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
 
     const toggleEndDatePicker = () => {
         if (!isEndDatePickerDisabled) {
-            setIsEndDatePickerOpen(true);
+            setSchedulePostOptions({isEndDatePickerOpen: true});
         }
     };
 
@@ -232,7 +249,7 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
                     <input
                         type='radio'
                         checked={endRadioSelected === 'never'}
-                        onChange={() => setEndRadioSelected('never')}
+                        onChange={() => setSchedulePostOptions({endRadioSelected: 'never'})}
                     />
                     {formatMessage({
                         id: 'create_post.schedule_post.modal.repeat.ends.never',
@@ -245,7 +262,7 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
                     <input
                         type='radio'
                         checked={endRadioSelected === 'on'}
-                        onChange={() => setEndRadioSelected('on')}
+                        onChange={() => setSchedulePostOptions({endRadioSelected: 'on'})}
                     />
                     {formatMessage({
                         id: 'create_post.schedule_post.modal.repeat.ends.on',
@@ -254,7 +271,7 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
                 </label>
                 <DatePicker // TODO: remove border
                     isPopperOpen={isEndDatePickerOpen}
-                    handlePopperOpenState={setIsEndDatePickerOpen}
+                    handlePopperOpenState={(open: boolean) => setSchedulePostOptions({isEndDatePickerOpen: open})}
                     locale={locale}
                     datePickerProps={datePickerProps}
                 >
