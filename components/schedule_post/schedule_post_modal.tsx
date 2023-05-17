@@ -92,12 +92,14 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
             />
             {/* TODO: reset repeat props on deselection*/}
             <div className='schedule-post-modal__repeat-checkbox'>
-                <input
-                    type='checkbox'
-                    checked={isRepeatChecked}
-                    onChange={handleRepeatChange}
-                />
-                <label>{repeatCheckboxLabel}</label>
+                <label>
+                    <input
+                        type='checkbox'
+                        checked={isRepeatChecked}
+                        onChange={handleRepeatChange}
+                    />
+                    {repeatCheckboxLabel}
+                </label>
             </div>
             <SchedulePostRepeatActions
                 show={isRepeatChecked}

@@ -134,7 +134,7 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
             value={everyAmount}
             type='number'
             min={1}
-            hasError={!isValidEveryAmount} // TODO: fix blur issue / placement
+            hasError={!isValidEveryAmount}
             customMessage={everyAmountCustomMessage}
         />
     );
@@ -228,12 +228,12 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
     const endRadio = (
         <div className='schedule-ends-radio'>
             <div>
-                <input
-                    type='radio'
-                    checked={endRadioSelected === 'never'}
-                    onChange={() => setEndRadioSelected('never')}
-                />
                 <label>
+                    <input
+                        type='radio'
+                        checked={endRadioSelected === 'never'}
+                        onChange={() => setEndRadioSelected('never')}
+                    />
                     {formatMessage({
                         id: 'create_post.schedule_post.modal.repeat.ends.never',
                         defaultMessage: 'Never',
@@ -241,12 +241,12 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Pr
                 </label>
             </div>
             <div>
-                <input
-                    type='radio'
-                    checked={endRadioSelected === 'on'}
-                    onChange={() => setEndRadioSelected('on')}
-                />
                 <label>
+                    <input
+                        type='radio'
+                        checked={endRadioSelected === 'on'}
+                        onChange={() => setEndRadioSelected('on')}
+                    />
                     {formatMessage({
                         id: 'create_post.schedule_post.modal.repeat.ends.on',
                         defaultMessage: 'On',
