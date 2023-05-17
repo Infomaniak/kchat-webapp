@@ -113,8 +113,8 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                         className='channel-archived__message'
                     >
                         <FormattedMarkdownMessage
-                            id='create_post.deactivated'
-                            defaultMessage='You are viewing an archived channel with a **deactivated user**. New messages cannot be posted.'
+                            id={this.props.isGptBot ? 'create_post.deactivated_gpt' : 'create_post.deactivated'}
+                            defaultMessage={this.props.isGptBot ? 'ChatGPT is disabled in your kChat. Contact an administrator to enable this feature.' : 'You are viewing an archived channel with a **deactivated user**. New messages cannot be posted.'}
                         />
                         <button
                             className='btn btn-primary channel-archived__close-btn'

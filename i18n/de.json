@@ -3126,6 +3126,7 @@
   "create_group_memberships_modal.title": "Erneutes Hinzufügen von {username} zu Teams und Kanälen",
   "create_post.comment": "Kommentar",
   "create_post.deactivated": "Du betrachtest einen archivierten Kanal mit einem **deaktivierten Benutzer**. Neue Nachrichten können nicht gesendet werden.",
+  "create_post.deactivated_gpt": "ChatGPT ist in Ihrem kChat deaktiviert. Wenden Sie sich an einen Administrator, damit er diese Funktion aktiviert.",
   "create_post.error_message": "Deine Nachricht ist zu lang. Zeichenanzahl: {length}/{limit}",
   "create_post.fileProcessing": "Verarbeitung...",
   "create_post.file_limit_sticky_banner.admin_message": "Neue Uploads werden alte Dateien automatisch archivieren. Um diese nochmal zu betrachten, kannst du alte Dateien löschen oder <a>auf einen kostenpflichtigen Plan upgraden.</a>",
