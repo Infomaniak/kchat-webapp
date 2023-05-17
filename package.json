@@ -227,6 +227,10 @@
     "yargs": "16.2.0",
     "yup": "0.32.11"
   },
+  "resolutions": {
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2"
+  },
   "scripts": {
     "check": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --cache && stylelint \"**/*.{css,scss}\" --cache",
     "lint-ci": "eslint --ext .js,.jsx,.tsx,.ts --format gitlab . --quiet --cache",
