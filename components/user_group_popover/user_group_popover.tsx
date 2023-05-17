@@ -302,7 +302,7 @@ const CloseButton = styled.button`
     z-index: 9;
 
     svg {
-        width: 18px;
+        width: 14px;
     }
 `;
 
