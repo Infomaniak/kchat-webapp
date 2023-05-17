@@ -116,9 +116,9 @@
 
         &-on {
             display: flex;
-            align-items: center;
             min-height: 40px;
-            > label {
+            > label,
+            > button {
                 align-self: center;
             }
             > button {
@@ -161,10 +161,13 @@
                             border: 2px solid var(--button-bg);
                             &:hover {
                                 border: 2px solid var(--button-bg);
-                                cursor: default;
+                                cursor: pointer;
                             }
                             &:focus-within {
-                                box-shadow: 0;
+                                box-shadow: none;
+                                .Input_legend {
+                                    color: rgba(var(--center-channel-color-rgb), 0.64);
+                                }
                             }
                         }
                         &__input {
@@ -179,7 +182,7 @@
                             }
 
                             &:hover {
-                                cursor: default;
+                                cursor: pointer;
                             }
                         }
 
@@ -187,7 +190,7 @@
                             margin: 0 8px 0 0;
                             color: rgba(var(--center-channel-color-rgb), 0.72);
                             &:hover {
-                                cursor: default;
+                                cursor: pointer;
                             }
                         }
                         &.disabled {
@@ -196,13 +199,20 @@
                                     border: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
                                     &:hover {
                                         border: 2px solid rgba(var(--center-channel-color-rgb), 0.16);
+                                        cursor: not-allowed;
                                     }
                                 }
                                 &__input {
                                     color: rgba(var(--center-channel-color-rgb), 0.16);
+                                    &:hover {
+                                        cursor: not-allowed;
+                                    }
                                 }
                                 &__icon {
                                     color: rgba(var(--center-channel-color-rgb), 0.16);
+                                    &:hover {
+                                        cursor: not-allowed;
+                                    }
                                 }
                             }
                         }

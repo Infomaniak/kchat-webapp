@@ -238,7 +238,7 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid, sch
 
     const toggleEndDatePicker = () => {
         if (!isEndDatePickerDisabled) {
-            setSchedulePostOptions({isEndDatePickerOpen: true});
+            setSchedulePostOptions({isEndDatePickerOpen: !isEndDatePickerOpen});
         }
     };
 

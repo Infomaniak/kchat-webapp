@@ -107,6 +107,10 @@ const styles = {
         ...style,
         display: 'none',
     }),
+    menu: (style: CSSProperties) => ({
+        ...style,
+        zIndex: 1000,
+    }),
 };
 
 const placeholder = (
@@ -180,7 +184,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
 
     const inputIcon = (
         <IconButton
-            onClick={() => handlePopperOpenState(true)}
+            onClick={() => handlePopperOpenState(!isPopperOpen)}
             icon={'calendar-outline'}
             className='dateTime__calendar-icon'
             size={'sm'}
@@ -267,7 +271,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
                             readOnly={true}
                             className='dateTime__calendar-input'
                             label={localizeMessage('dnd_custom_time_picker_modal.date', 'Date')}
-                            onClick={() => handlePopperOpenState(true)}
+                            onClick={() => handlePopperOpenState(!isPopperOpen)}
                             tabIndex={-1}
                             inputPrefix={inputIcon}
                         />
