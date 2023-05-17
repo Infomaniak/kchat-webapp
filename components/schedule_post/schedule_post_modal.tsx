@@ -36,7 +36,7 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
         everyMonth: 'date',
         daySelected: {},
         endRadioSelected: 'never',
-        endMoment: getRoundedTime(timestamp),
+        endMoment: getRoundedTime(timestamp).add(3, 'months'),
         isEndDatePickerOpen: false,
     });
 

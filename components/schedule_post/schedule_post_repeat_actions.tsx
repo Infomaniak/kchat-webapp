@@ -132,9 +132,23 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid, sch
         if (!option || !('value' in option)) {
             return;
         }
+        const {value} = option;
+        const endTime = timestamp.clone();
+        switch (value) {
+        case 'day':
+            endTime.add(1, 'month');
+            break;
+        case 'week':
+            endTime.add(3, 'months');
+            break;
+        case 'month':
+            endTime.add(1, 'year');
+            break;
+        }
         setSchedulePostOptions({
-            everyInterval: option.value,
+            everyInterval: value,
             daySelected: {},
+            endMoment: endTime,
         });
     };
 
