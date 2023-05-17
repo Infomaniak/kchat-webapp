@@ -21,8 +21,7 @@ import Constants, {ModalIdentifiers} from 'utils/constants';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 import {toUTCUnix} from 'utils/datetime';
 
-// TODO: hover with theme support
-const SchedulePostButton = styled(Button)`
+const StyledSchedulePostButton = styled(Button)`
     display: flex;
     height: 32px;
     min-width: 26px !important;
@@ -33,9 +32,11 @@ const SchedulePostButton = styled(Button)`
     place-content: center;
     place-items: center;
     transition: color 150ms;
+    border-color: var(--button-color-16);
 
     :hover {
         background-color: var(--button-bg);
+        border-color: var(--button-color-16);
     }
 
     &--disabled,
@@ -60,7 +61,7 @@ type Props = {
     getAnchorEl: () => HTMLDivElement | null;
 };
 
-const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
+const SchedulePostButton = ({message, channelId, disabled, getAnchorEl}: Props) => {
     const dispatch = useDispatch();
     const timezone = useSelector(getCurrentUserTimezone);
     const {formatMessage} = useIntl();
@@ -124,7 +125,7 @@ const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
                 placement='top'
                 trigger={'hover'}
             >
-                <SchedulePostButton
+                <StyledSchedulePostButton
                     disableRipple={true}
                     disabled={disabled}
                     onClick={handleMenu}
@@ -134,7 +135,7 @@ const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
                     })}
                 >
                     <ChevronDownIcon size={16}/>
-                </SchedulePostButton>
+                </StyledSchedulePostButton>
             </OverlayTrigger>
             <SchedulePostMenu
                 open={open}
@@ -147,4 +148,4 @@ const SchedulePost = ({message, channelId, disabled, getAnchorEl}: Props) => {
     );
 };
 
-export default SchedulePost;
+export default SchedulePostButton;

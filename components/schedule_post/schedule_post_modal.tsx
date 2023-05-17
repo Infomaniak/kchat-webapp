@@ -59,9 +59,7 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
         }
     };
 
-    const handleRepeatOptionsChange = (newOptions: Partial<SchedulePostOptions>) => {
-        setSchedulePostOptions({...schedulePostOptions, ...newOptions});
-    };
+    const handleRepeatOptionsChange = (newOptions: Partial<SchedulePostOptions>) => setSchedulePostOptions({...schedulePostOptions, ...newOptions});
 
     const modalHeaderText = (
         <div>

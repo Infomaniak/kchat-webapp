@@ -75,6 +75,7 @@ const selectStyle = {
 const momentInstance = moment();
 
 // TODO: improve theming support
+// TODO: improve responsive
 const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid, schedulePostOptions, setSchedulePostOptions}: Props) => {
     const {
         everyAmount,

@@ -12,7 +12,7 @@ import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import CompassDesignProvider from 'components/compass_design_provider';
 
 import {t} from 'utils/i18n';
-import SchedulePost from 'components/schedule_post/schedule_post_button';
+import SchedulePostButton from 'components/schedule_post/schedule_post_button';
 
 const SendButtonContainer = styled(Button)`
     display: flex;
@@ -24,9 +24,11 @@ const SendButtonContainer = styled(Button)`
     place-content: center;
     place-items: center;
     transition: color 150ms;
+    border-color: var(--button-color-16);
 
     :hover {
         background-color: var(--button-bg);
+        border-color: var(--button-color-16);
     }
 
     &--disabled,
@@ -91,7 +93,7 @@ const SendButton = ({disabled, message, channelId, handleSubmit}: SendButtonProp
                         })}
                     />
                 </SendButtonContainer>
-                <SchedulePost
+                <SchedulePostButton
                     message={message}
                     channelId={channelId}
                     disabled={disabled}
