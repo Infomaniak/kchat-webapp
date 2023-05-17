@@ -47,7 +47,7 @@
             align-items: flex-start;
             gap: 16px;
             > label {
-                width: 100px;
+                width: 130px;
                 margin: 0;
                 font-weight: 600;
                 font-size: 14px;
@@ -77,6 +77,9 @@
                             min-height: 40px;
                             &:hover {
                                 cursor: default;
+                                &:not(:focus-within) {
+                                    border-color: rgba(var(--center-channel-color-rgb), 0.16);
+                                }
                             }
                         }
                         &__input {

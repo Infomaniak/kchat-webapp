@@ -21,6 +21,7 @@ import Constants, {ModalIdentifiers} from 'utils/constants';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 import {toUTCUnix} from 'utils/datetime';
 
+// TODO: hover with theme support
 const SchedulePostButton = styled(Button)`
     display: flex;
     height: 32px;
