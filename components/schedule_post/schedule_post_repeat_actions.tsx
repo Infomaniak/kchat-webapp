@@ -22,8 +22,7 @@ type Props = {
     show: boolean;
     timestamp: Moment;
     timezone?: string;
-    isValidEveryAmount: boolean;
-    setIsValidEveryAmount: (isValid: boolean) => void;
+    setAreRepeatOptionsValid: (isValid: boolean) => void;
 };
 
 type SelectOption<K> = {
@@ -65,7 +64,7 @@ const selectStyle = {
 const momentInstance = moment();
 
 // TODO: improve theming support
-const RepeatActions = ({show, timestamp, timezone, isValidEveryAmount, setIsValidEveryAmount}: Props) => {
+const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid}: Props) => {
     const locale = useSelector(getCurrentLocale);
     const {formatMessage, formatDate} = useIntl();
     const [everyAmount, setEveryAmount] = useState<number>(1);
@@ -107,15 +106,14 @@ const RepeatActions = ({show, timestamp, timezone, isValidEveryAmount, setIsVali
         );
     }
 
+    const handleOptionsValidity = () => setAreRepeatOptionsValid(everyAmount > 0);
+
     const handleEveryAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = parseInt(e.currentTarget.value, 10);
-        const isValid = Boolean(value);
-        setEveryAmount(value);
-        if (isValidEveryAmount !== isValid) {
-            setIsValidEveryAmount(isValid);
-        }
+        setEveryAmount(parseInt(e.currentTarget.value, 10));
+        handleOptionsValidity();
     };
 
+    const isValidEveryAmount = everyAmount > 0;
     let everyAmountCustomMessage: CustomMessageInputType = null;
     if (!isValidEveryAmount) {
         everyAmountCustomMessage = {
@@ -135,6 +133,7 @@ const RepeatActions = ({show, timestamp, timezone, isValidEveryAmount, setIsVali
             onChange={handleEveryAmountChange}
             value={everyAmount}
             type='number'
+            min={1}
             hasError={!isValidEveryAmount} // TODO: fix blur issue / placement
             customMessage={everyAmountCustomMessage}
         />

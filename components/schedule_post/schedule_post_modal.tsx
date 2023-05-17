@@ -32,19 +32,22 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
     const [isRepeatChecked, setIsRepeatChecked] = useState<boolean>(false);
-    const [isValidEveryAmount, setIsValidEveryAmount] = useState<boolean>(true);
+    const [areRepeatOptionsValid, setAreRepeatOptionsValid] = useState<boolean>(true);
 
     // TODO: clear input
     const handleConfirm = () => dispatch(schedulePost(channelId, message, toUTCUnix(scheduleTimestamp.toDate())));
 
     const handleRepeatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsRepeatChecked(e.target.checked);
-        if (e.target.checked && !isValidEveryAmount) {
-            setIsValidEveryAmount(true);
-        }
     };
 
     const handleExit = () => dispatch(closeModal(ModalIdentifiers.SCHEDULE_POST));
+
+    const handleRepeatOptionsValidation = (isValid: boolean) => {
+        if (areRepeatOptionsValid !== isValid) {
+            setAreRepeatOptionsValid(isValid);
+        }
+    };
 
     const modalHeaderText = (
         <div>
@@ -68,7 +71,7 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
         defaultMessage: 'Repeat',
     });
 
-    const isConfirmDisabled = isMenuOpen || isDatePickerOpen || !isValidEveryAmount;
+    const isConfirmDisabled = isMenuOpen || isDatePickerOpen || (isRepeatChecked && !areRepeatOptionsValid);
 
     return (
         <GenericModal
@@ -100,8 +103,7 @@ const SchedulePostModal = ({channelId, message, timestamp, timezone}: Props) => 
                 show={isRepeatChecked}
                 timestamp={scheduleTimestamp}
                 timezone={timezone}
-                isValidEveryAmount={isValidEveryAmount}
-                setIsValidEveryAmount={setIsValidEveryAmount}
+                setAreRepeatOptionsValid={handleRepeatOptionsValidation}
             />
         </GenericModal>
     );
