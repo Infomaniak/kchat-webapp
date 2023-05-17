@@ -167,12 +167,9 @@ unit_test:
     paths:
       - .yarn/cache/
       - .yarn/install-state.gz
-      - coverage/
+      - .jestcache
   before_script:
     - yarn
-    - yarn workspace @mattermost/types build
-    - yarn workspace @mattermost/client build
-    - yarn workspace @mattermost/components build
   script:
     # typescript
     # - npm run check-types

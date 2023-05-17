@@ -2939,6 +2939,7 @@
   "create_comment.commentTitle": "Commentaire",
   "create_post.comment": "Commentaire",
   "create_post.deactivated": "Ceci est un canal de messages personnels archivé contenant une discussion avec un utilisateur désactivé.",
+  "create_post.deactivated_gpt": "ChatGPT est désactivé dans votre kChat. Contactez un administrateur pour qu'il active cette fonctionnalité.",
   "create_post.error_message": "Votre message est trop long. Nombre de caractères : {length}/{limit}",
   "create_post.fileProcessing": "Traitement en cours...",
   "create_post.icon": "Créer un message",
