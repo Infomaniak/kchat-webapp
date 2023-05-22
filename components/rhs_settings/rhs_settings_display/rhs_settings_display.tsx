@@ -868,17 +868,17 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     message: 'Share last active time',
                 },
                 firstOption: {
-                    value: 'false',
-                    radionButtonText: {
-                        id: t('user.settings.display.lastActiveOff'),
-                        message: 'Off',
-                    },
-                },
-                secondOption: {
                     value: 'true',
                     radionButtonText: {
                         id: t('user.settings.display.lastActiveOn'),
                         message: 'On',
+                    },
+                },
+                secondOption: {
+                    value: 'false',
+                    radionButtonText: {
+                        id: t('user.settings.display.lastActiveOff'),
+                        message: 'Off',
                     },
                 },
                 description: {
