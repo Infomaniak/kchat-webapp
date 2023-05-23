@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 import {debounce} from 'lodash';
 
@@ -10,7 +9,7 @@ import {UserProfile} from '@mattermost/types/users';
 import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {getHistory} from 'utils/browser_history';
-import Constants from 'utils/constants';
+import Constants, {ModalIdentifiers} from 'utils/constants';
 import MultiSelect from 'components/multiselect/multiselect';
 import GenericModal from 'components/generic_modal';
 
@@ -62,6 +61,7 @@ export type Props = {
         searchProfiles: (term: string, options?: any) => Promise<any>;
         searchGroupChannels: (term: string) => Promise<any>;
         setModalSearchTerm: (term: any) => GenericAction;
+        closeModal: (modalId: string) => void;
     };
 }
 
@@ -178,6 +178,8 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
         this.props.onModalDismissed?.();
         this.props.onExited?.();
+
+        this.props.actions.closeModal(ModalIdentifiers.MORE_DMS);
     }
 
     handleSubmit = (values = this.state.values) => {
@@ -290,7 +292,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
         return (
             <GenericModal
-                id='moreDmModal'
+                id={ModalIdentifiers.MORE_DMS}
                 className='more-modal more-direct-channels'
                 show={this.state.show}
                 onExited={this.handleExit}
