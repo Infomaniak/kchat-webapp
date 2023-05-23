@@ -1,5 +1,8 @@
 .modal-dialog.more-direct-channels.more-modal.GenericModal {
-    margin-top: calc(45vh - 240px);
+    margin-top: calc(45vh - 280px);
+    @media screen and (min-width: 1280px) {
+        margin-top: calc(45vh - 340px);
+    }
     .modal-content {
         padding: 0;
     }
