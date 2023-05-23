@@ -6,12 +6,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import MuiMenuList from '@mui/material/MenuList';
 import {PopoverOrigin} from '@mui/material/Popover';
 
+import {ChevronLeftIcon} from '@infomaniak/compass-icons/components';
+
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {getIsMobileView} from 'selectors/views/browser';
 import {isAnyModalOpen} from 'selectors/views/modals';
 
-import {openModal, closeModal} from 'actions/views/modals';
+import {openModal, closeModal, toggleModalVisibility} from 'actions/views/modals';
 
 import Constants, {A11yClassNames} from 'utils/constants';
 import {isKeyPressed} from 'utils/utils';
@@ -36,10 +38,17 @@ interface Props {
     menuAriaLabel?: string;
     forceOpenOnLeft?: boolean; // Most of the times this is not needed, since submenu position is calculated and placed
 
+    /**
+     * Id of the parent menu
+     *
+     * If defined, hides the parent menu while the submenu is opened on responsive menu modal
+    */
+    parentMenuId?: string;
+
     children: ReactNode;
 }
 
-export function SubMenu({id, leadingElement, labels, trailingElements, isDestructive, menuId, menuAriaLabel, forceOpenOnLeft, children, ...rest}: Props) {
+export function SubMenu({id, leadingElement, labels, trailingElements, isDestructive, menuId, menuAriaLabel, forceOpenOnLeft, parentMenuId, children, ...rest}: Props) {
     const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
     const isSubMenuOpen = Boolean(anchorElement);
 
@@ -59,6 +68,7 @@ export function SubMenu({id, leadingElement, labels, trailingElements, isDestruc
                 dialogProps: {
                     menuId,
                     menuAriaLabel,
+                    parentMenuId,
                     children,
                 },
             }));
@@ -162,6 +172,7 @@ export function SubMenu({id, leadingElement, labels, trailingElements, isDestruc
 interface SubMenuModalProps {
     menuId: Props['menuId'];
     menuAriaLabel?: Props['menuAriaLabel'];
+    parentMenuId?: Props['parentMenuId'];
     children: Props['children'];
 }
 
@@ -174,6 +185,33 @@ function SubMenuModal(props: SubMenuModalProps) {
         dispatch(closeModal(props.menuId));
     }
 
+    const handleModalEnter = () => {
+        if (props.parentMenuId) {
+            dispatch(toggleModalVisibility(props.parentMenuId, false));
+        }
+    };
+
+    const handleArrowBack = () => {
+        if (props.parentMenuId) {
+            dispatch(toggleModalVisibility(props.parentMenuId, true));
+        }
+    };
+
+    let arrowBack;
+    if (props.parentMenuId) {
+        arrowBack = (
+            <button
+                className='menuModal__arrow-back'
+                onClick={handleArrowBack}
+            >
+                <ChevronLeftIcon
+                    size={20}
+                    color='var(--center-channel-color)'
+                />
+            </button>
+        );
+    }
+
     return (
         <CompassDesignProvider theme={theme}>
             <GenericModal
@@ -182,11 +220,13 @@ function SubMenuModal(props: SubMenuModalProps) {
                 onExited={handleModalClose}
                 backdrop={true}
                 className='menuModal'
+                onEnter={handleModalEnter}
             >
                 <MuiMenuList
                     aria-hidden={true}
                     onClick={handleModalClose}
                 >
+                    {arrowBack}
                     {props.children}
                 </MuiMenuList>
             </GenericModal>

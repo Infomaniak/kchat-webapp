@@ -6,11 +6,15 @@
     }
 
     &__post-reminder-menu-header {
-        padding: 6px 20px;
+        padding: 6px 10px;
         margin: 0;
         color: var(--center-channel-color);
         font-weight: bold;
         pointer-events: none;
+
+        @media screen and (max-width: 768px) {
+            padding: 6px 8px;
+        }
     }
 
     &__item-trailing-icon {

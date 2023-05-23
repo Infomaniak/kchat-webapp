@@ -74,6 +74,7 @@ type State = {
     searching: boolean;
     searchTerm: string;
     loading: boolean;
+    archievedStatsFetched: boolean;
 }
 
 export default class MoreChannels extends React.PureComponent<Props, State> {
@@ -93,7 +94,15 @@ export default class MoreChannels extends React.PureComponent<Props, State> {
             searching: false,
             searchTerm: '',
             loading: true,
+            archievedStatsFetched: false,
         };
+    }
+
+    componentDidUpdate() {
+        if (!this.state.archievedStatsFetched && this.state.shouldShowArchivedChannels) {
+            this.props.archivedChannels.forEach((channel) => this.props.actions.getChannelStats(channel.id));
+            this.setState({archievedStatsFetched: true});
+        }
     }
 
     async componentDidMount() {
@@ -101,7 +110,7 @@ export default class MoreChannels extends React.PureComponent<Props, State> {
         if (this.props.canShowArchivedChannels) {
             await this.props.actions.getArchivedChannels(this.props.teamId, 0, CHANNELS_CHUNK_SIZE * 2);
         }
-        await this.props.channels.forEach((channel) => this.props.actions.getChannelStats(channel.id));
+        await this.props.channels.filter((f) => !this.props.allChannelStats[f.id]).forEach((channel) => this.props.actions.getChannelStats(channel.id));
         this.loadComplete();
     }
 
@@ -143,7 +152,9 @@ export default class MoreChannels extends React.PureComponent<Props, State> {
         const statsStartIdx = (CHANNELS_CHUNK_SIZE * 2) + ((page - 1) * Number(CHANNELS_CHUNK_SIZE));
         await this.props.actions.getChannels(this.props.teamId, page + 1, CHANNELS_PER_PAGE);
 
-        this.props.channels.slice(statsStartIdx, this.props.channels.length - 1).forEach((channel) => this.props.actions.getChannelStats(channel.id));
+        const channelArr = this.state.shouldShowArchivedChannels ? this.props.archivedChannels : this.props.channels;
+
+        channelArr.slice(statsStartIdx, channelArr.length - 1).filter((f) => !this.props.allChannelStats[f.id]).forEach((channel) => this.props.actions.getChannelStats(channel.id));
     }
 
     handleJoin = async (channel: Channel, done: () => void) => {

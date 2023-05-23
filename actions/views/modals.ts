@@ -25,3 +25,11 @@ export function closeModal(modalId: string): CloseModalType {
         modalId,
     };
 }
+
+export function toggleModalVisibility(modalId: string, open: boolean) {
+    return {
+        type: ActionTypes.MODAL_TOGGLE,
+        modalId,
+        open,
+    };
+}

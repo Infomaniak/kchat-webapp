@@ -13,6 +13,8 @@ import React, {
 import {useDispatch, useSelector} from 'react-redux';
 import MuiMenuList from '@mui/material/MenuList';
 
+import {Fade} from '@mui/material';
+
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {getIsMobileView} from 'selectors/views/browser';
@@ -28,6 +30,8 @@ import OverlayTrigger from 'components/overlay_trigger';
 import GenericModal from 'components/generic_modal';
 
 import {MuiMenuStyled} from './menu_styled';
+
+import './menu_modal.scss';
 
 const OVERLAY_TIME_DELAY = 500;
 const MENU_OPEN_ANIMATION_DURATION = 150;
@@ -226,9 +230,11 @@ export function Menu(props: Props) {
                     id: props.menu.id,
                     'aria-label': props.menu?.['aria-label'] ?? '',
                 }}
+                TransitionComponent={Fade}
                 TransitionProps={{
-                    mountOnEnter: true,
-                    unmountOnExit: true,
+
+                    // mountOnEnter: true,
+                    // unmountOnExit: true,
                     timeout: {
                         enter: MENU_OPEN_ANIMATION_DURATION,
                         exit: MENU_CLOSE_ANIMATION_DURATION,

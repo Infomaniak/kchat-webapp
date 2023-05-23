@@ -227,6 +227,10 @@
     "yargs": "16.2.0",
     "yup": "0.32.11"
   },
+  "resolutions": {
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2"
+  },
   "scripts": {
     "check": "eslint --ext .js,.jsx,.tsx,.ts . --quiet --cache && stylelint \"**/*.{css,scss}\" --cache",
     "lint-ci": "eslint --ext .js,.jsx,.tsx,.ts --format gitlab . --quiet --cache",
@@ -238,7 +242,7 @@
     "dev-server": "node scripts/dev-server",
     "dev-server:webapp": "webpack serve --mode development",
     "test": "cross-env TZ=Etc/UTC jest --maxWorkers=50% --collectCoverage --coverageDirectory=\"./coverage\"",
-    "test-ci": "cross-env jest --collectCoverage --coverageDirectory=\"./coverage\" --ci",
+    "test-ci": "cross-env TZ=Etc/UTC jest --collectCoverage --coverageDirectory=\"./coverage\" --ci --maxWorkers=8 --cacheDirectory \".jestcache\"",
     "stats": "cross-env NODE_ENV=production webpack --profile --json > webpack_stats.json",
     "updatesnapshot": "cross-env TZ=Etc/UTC jest --updateSnapshot",
     "test:debug": "cross-env TZ=Etc/UTC jest --forceExit --detectOpenHandles",

@@ -52,6 +52,7 @@ interface OwnProps {
     postId?: string;
     teamId?: string;
     shouldHighlight?: boolean;
+    disableConsecutive?: boolean;
     location: keyof typeof Locations;
 }
 
@@ -197,7 +198,7 @@ function makeMapStateToProps() {
             canReply,
             pluginPostTypes: state.plugins.postTypes,
             channelIsArchived: isArchivedChannel(channel),
-            isConsecutivePost: isConsecutivePost(state, ownProps),
+            isConsecutivePost: ownProps.disableConsecutive ? false : isConsecutivePost(state, ownProps),
             previousPostIsComment,
             isFlagged: get(state, Preferences.CATEGORY_FLAGGED_POST, post.id, null) !== null,
             compactDisplay: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.MESSAGE_DISPLAY, Preferences.MESSAGE_DISPLAY_DEFAULT) === Preferences.MESSAGE_DISPLAY_COMPACT,

@@ -10,7 +10,7 @@ Object {
         aria-expanded="false"
         aria-haspopup="true"
         aria-label="Actions"
-        class="post-menu__item"
+        class="post-menu__item post-menu__item--wide"
         data-testid="PostDotMenu-Button-post_id_1"
         id="CENTER_button_post_id_1"
       >
@@ -35,7 +35,7 @@ Object {
       aria-expanded="false"
       aria-haspopup="true"
       aria-label="Actions"
-      class="post-menu__item"
+      class="post-menu__item post-menu__item--wide"
       data-testid="PostDotMenu-Button-post_id_1"
       id="CENTER_button_post_id_1"
     >
@@ -117,7 +117,7 @@ Object {
         aria-expanded="false"
         aria-haspopup="true"
         aria-label="Actions"
-        class="post-menu__item"
+        class="post-menu__item post-menu__item--wide"
         data-testid="PostDotMenu-Button-post_id_1"
         id="CENTER_button_post_id_1"
       >
@@ -142,7 +142,7 @@ Object {
       aria-expanded="false"
       aria-haspopup="true"
       aria-label="Actions"
-      class="post-menu__item"
+      class="post-menu__item post-menu__item--wide"
       data-testid="PostDotMenu-Button-post_id_1"
       id="CENTER_button_post_id_1"
     >
@@ -232,7 +232,7 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
       "children": <DotsHorizontalIcon
         size={16}
       />,
-      "class": "post-menu__item",
+      "class": "post-menu__item post-menu__item--wide",
       "dateTestId": "PostDotMenu-Button-post_id_1",
       "id": "CENTER_button_post_id_1",
     }
@@ -303,6 +303,7 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
   />
   <PostReminderSubmenu
     isMilitaryTime={false}
+    parentMenuId="CENTER_dropdown_post_id_1"
     post={
       Object {
         "channel_id": "",
@@ -513,7 +514,7 @@ Object {
         aria-expanded="false"
         aria-haspopup="true"
         aria-label="Actions"
-        class="post-menu__item"
+        class="post-menu__item post-menu__item--wide"
         data-testid="PostDotMenu-Button-post_id_1"
         id="CENTER_button_post_id_1"
       >
@@ -538,7 +539,7 @@ Object {
       aria-expanded="false"
       aria-haspopup="true"
       aria-label="Actions"
-      class="post-menu__item"
+      class="post-menu__item post-menu__item--wide"
       data-testid="PostDotMenu-Button-post_id_1"
       id="CENTER_button_post_id_1"
     >

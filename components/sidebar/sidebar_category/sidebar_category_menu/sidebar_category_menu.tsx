@@ -43,6 +43,8 @@ const SidebarCategoryMenu = (props: Props) => {
 
     const {formatMessage} = useIntl();
 
+    const menuId = `SidebarChannelMenu-MenuList-${props.category.id}`;
+
     let muteUnmuteCategoryMenuItem: JSX.Element | null = null;
     if (props.category.type !== CategoryTypes.DIRECT_MESSAGES) {
         function toggleCategoryMute(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
@@ -178,6 +180,7 @@ const SidebarCategoryMenu = (props: Props) => {
             )}
             menuId={`sortChannels-${props.category.id}-menu`}
             menuAriaLabel={formatMessage({id: 'sidebar_left.sidebar_category_menu.sort.dropdownAriaLabel', defaultMessage: 'Sort submenu'})}
+            parentMenuId={menuId}
         >
             <Menu.Item
                 id={`sortAplhabetical-${props.category.id}`}
@@ -263,7 +266,7 @@ const SidebarCategoryMenu = (props: Props) => {
                     class: 'hidden-xs',
                 }}
                 menu={{
-                    id: `SidebarChannelMenu-MenuList-${props.category.id}`,
+                    id: menuId,
                     'aria-label': formatMessage({id: 'sidebar_left.sidebar_category_menu.dropdownAriaLabel', defaultMessage: 'Edit category menu'}),
                     onToggle: handleMenuToggle,
                 }}

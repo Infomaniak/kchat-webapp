@@ -46,7 +46,9 @@ import './profile_popover.scss';
 import BotTag from '../widgets/tag/bot_tag';
 import GuestTag from '../widgets/tag/guest_tag';
 import Tag from '../widgets/tag/tag';
-import {IKConstants} from '../../utils/constants-ik';
+import {IKConstants} from 'utils/constants-ik';
+
+import CopyButton from 'components/copy_button';
 
 interface ProfilePopoverProps extends Omit<React.ComponentProps<typeof Popover>, 'id'> {
 
@@ -851,7 +853,7 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
                     size={'sm'}
                     text={Utils.localizeMessage(
                         'admin.permissions.roles.system_admin.name',
-                        'System Admin',
+                        'Administrator',
                     )}
                 />
             );
@@ -878,8 +880,16 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
                 />
             );
         }
+
         const title = (
             <span data-testid={`profilePopoverTitle_${this.props.user.username}`}>
+                <div className='user-popover__copyID'>
+                    <CopyButton
+                        content={this.props.user.id}
+                        tooltipText='copy.text.userid'
+                        icon='icon-link-variant'
+                    />
+                </div>
                 {roleTitle}
                 <button
                     ref={this.closeButtonRef}

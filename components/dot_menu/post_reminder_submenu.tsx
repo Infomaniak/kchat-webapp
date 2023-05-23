@@ -23,6 +23,7 @@ type Props = {
     post: Post;
     isMilitaryTime: boolean;
     timezone?: string;
+    parentMenuId: string;
 }
 
 const postReminderTimes = [
@@ -54,8 +55,8 @@ export function PostReminderSubmenu(props: Props) {
             endTime = currentDate.add(2, 'hours');
             break;
         case 'tomorrow':
-            // add one day in current date
-            endTime = currentDate.add(1, 'day');
+            // tomorrow 9:00
+            endTime = currentDate.add(1, 'day').hours(9).minutes(0).seconds(0);
             break;
         }
 
@@ -84,7 +85,8 @@ export function PostReminderSubmenu(props: Props) {
 
             let trailing: React.ReactNode;
             if (id === 'tomorrow') {
-                const tomorrow = getCurrentMomentForTimezone(props.timezone).add(1, 'day').toDate();
+                const tomorrow = getCurrentMomentForTimezone(props.timezone).add(1, 'day').hours(9).minutes(0).seconds(0).toDate();
+
                 trailing = (
                     <span className={`postReminder-${id}_timestamp`}>
                         <FormattedDate
@@ -125,6 +127,7 @@ export function PostReminderSubmenu(props: Props) {
             leadingElement={<ClockOutlineIcon size={18}/>}
             trailingElements={<span className={'dot-menu__item-trailing-icon'}><ChevronRightIcon size={16}/></span>}
             menuId={`remind_post_${props.post.id}-menu`}
+            parentMenuId={props.parentMenuId}
         >
             <h5 className={'dot-menu__post-reminder-menu-header'}>
                 {formatMessage(

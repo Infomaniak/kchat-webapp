@@ -44,6 +44,7 @@ export type Props = {
     tabIndex?: number;
     children: React.ReactNode;
     keyboardEscape?: boolean;
+    onEnter?: (node: HTMLElement) => void;
 };
 
 type State = {
@@ -215,6 +216,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
                 backdropClassName={this.props.backdropClassName}
                 container={this.props.container}
                 keyboard={this.props.keyboardEscape}
+                onEnter={this.props.onEnter}
             >
                 <FocusTrap active={isFocusTrapActive}>
                     <div
