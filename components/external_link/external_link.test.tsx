@@ -69,7 +69,7 @@ describe('components/external_link', () => {
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
             'href',
-            expect.stringMatching('utm_source=infomaniak&utm_medium=in-product&utm_content=&uid=currentUserId&sid='),
+            expect.stringMatching('https://infomaniak.com'),
         );
     });
 
@@ -96,7 +96,9 @@ describe('components/external_link', () => {
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
             'href',
-            'https://infomaniak.com?utm_source=infomaniak&utm_medium=in-product&utm_content=&uid=currentUserId&sid=&test=true',
+
+            // ?utm_source=infomaniak&utm_medium=in-product&utm_content=&uid=currentUserId&sid=&
+            'https://infomaniak.com?test=true',
         );
     });
 

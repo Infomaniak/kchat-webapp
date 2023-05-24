@@ -4,13 +4,14 @@
 /* eslint-disable mattermost/use-external-link */
 
 import React from 'react';
-import {useSelector} from 'react-redux';
+
+// import {useSelector} from 'react-redux';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
 // import {getLicense} from 'mattermost-redux/selectors/entities/general';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+// import {getConfig} from 'mattermost-redux/selectors/entities/general';
+// import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 
 type ExternalLinkQueryParams = {
     utm_source?: string;
@@ -31,8 +32,8 @@ type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
 };
 
 export default function ExternalLink(props: Props) {
-    const userId = useSelector(getCurrentUserId);
-    const config = useSelector(getConfig);
+    // const userId = useSelector(getCurrentUserId);
+    // const config = useSelector(getConfig);
 
     // const license = useSelector(getLicense);
     let href = props.href;
@@ -41,13 +42,13 @@ export default function ExternalLink(props: Props) {
         const existingURLSearchParams = new URL(href).searchParams;
         const existingQueryParamsObj = Object.fromEntries(existingURLSearchParams.entries());
         queryParams = {
-            utm_source: 'infomaniak',
 
+            // utm_source: 'infomaniak',
             // utm_medium: license.Cloud === 'true' ? 'in-product-cloud' : 'in-product',
-            utm_medium: 'in-product',
-            utm_content: props.location || '',
-            uid: userId,
-            sid: config.TelemetryId || '',
+            // utm_medium: 'in-product',
+            // utm_content: props.location || '',
+            // uid: userId,
+            // sid: config.TelemetryId || '',
             ...props.queryParams,
             ...existingQueryParamsObj,
         };
@@ -57,7 +58,7 @@ export default function ExternalLink(props: Props) {
             // If the href already has query params, remove them before adding them back with the addition of the new ones
             href = href?.split('?')[0];
         }
-        href = `${href}?${queryString}`;
+        href = `${href}${queryString.length ? '?' + queryString : ''}`;
     }
 
     const handleClick = (e: React.MouseEvent<HTMLElement>) => {
