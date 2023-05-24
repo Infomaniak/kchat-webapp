@@ -31,7 +31,7 @@ def move_trello_card(card_id, list_id)
   uri = URI.parse("https://api.trello.com/1/cards/#{card_id}?idList=#{list_id}&key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
-  request = Net::HTTP::Put.new(uri.path)
+  request = Net::HTTP::Put.new(uri)
   http.request(request)
 end
 
