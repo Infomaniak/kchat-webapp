@@ -16,8 +16,12 @@ def get_trello_card_details(card_id)
   # Call the Trello API to get card details
   uri = URI.parse("https://api.trello.com/1/cards/#{card_id}?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
   response = Net::HTTP.get_response(uri)
-  card = JSON.parse(response.body)
+  # Check the HTTP response status
+  if response.code.to_i >= 400
+    raise "HTTP Error: #{response.code} #{response.message}"
+  end
 
+  card = JSON.parse(response.body)
   # Call the Trello API to get list details
   uri = URI.parse("https://api.trello.com/1/lists/#{card['idList']}?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
   response = Net::HTTP.get_response(uri)
@@ -25,6 +29,8 @@ def get_trello_card_details(card_id)
 
   # Return card details and list name
   { card: card, list_name: list['name'] }
+rescue JSON::ParserError
+  raise "Invalid JSON response from Trello API"
 end
 
 def move_trello_card(card_id, list_id)
@@ -66,7 +72,12 @@ merge_requests.each do |merge_request|
   trello_links = description_without_comments.scan(/https:\/\/trello.com\/c\/[^\s]+/)
   trello_links.each do |link|
     card_id = get_trello_card_id(link)
-    card_details = get_trello_card_details(card_id)
+    begin
+      card_details = get_trello_card_details(card_id)
+    rescue StandardError => e
+      puts "Error getting details for card #{card_id}: #{e.message}"
+      next
+    end
     
     # Check if existing labels match the Trello column
     existing_labels = merge_request['labels']
