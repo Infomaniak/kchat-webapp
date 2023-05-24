@@ -190,14 +190,12 @@ describe('components/AboutBuildModal', () => {
         expect(
             wrapper.find(AboutBuildModal).find('a#tosLink').props().href,
         ).toBe(
-            AboutLinks.TERMS_OF_SERVICE +
-                '?utm_source=infomaniak&utm_medium=in-product&utm_content=about_build_modal&uid=currentUserId&sid=',
+            AboutLinks.TERMS_OF_SERVICE,
         );
         expect(
             wrapper.find(AboutBuildModal).find('a#privacyLink').props().href,
         ).toBe(
-            AboutLinks.PRIVACY_POLICY +
-                '?utm_source=infomaniak&utm_medium=in-product&utm_content=about_build_modal&uid=currentUserId&sid=',
+            AboutLinks.PRIVACY_POLICY,
         );
 
         expect(wrapper.find(AboutBuildModal).find('a#tosLink').props().href).not.toBe(config?.TermsOfServiceLink);
