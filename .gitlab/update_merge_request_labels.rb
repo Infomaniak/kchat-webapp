@@ -45,6 +45,12 @@ def update_gitlab_merge_request(project_id, merge_request_id, labels)
   http.request(request)
 end
 
+def get_board_lists(board_id)
+  uri = URI.parse("https://api.trello.com/1/boards/#{board_id}/lists?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
+  response = Net::HTTP.get_response(uri)
+  JSON.parse(response.body)
+end
+
 # Get a list of merge requests from GitLab API
 project_id = 3225
 uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests?state=opened&private_token=#{GITLAB_API_KEY}")
@@ -67,9 +73,22 @@ merge_requests.each do |merge_request|
 
     if existing_trello_label
       if existing_trello_label != "trello::#{card_details[:list_name]}"
-        # If the labels don't match, move the Trello card to match the GitLab label
-        new_list_id = existing_trello_label.split('::').last
-        move_trello_card(card_id, new_list_id)
+        # Get the list name from the label
+        list_name_from_label = existing_trello_label.split('::').last
+
+        # Get all lists on the board
+        board_id = 'zdeB0uhM'
+        lists = get_board_lists(board_id)
+
+        # Find the list with the matching name
+        list = lists.find { |list| list['name'] == list_name_from_label }
+
+        if list
+          # If a list with the matching name was found, move the card to it
+          move_trello_card(card_id, list['id'])
+        else
+          puts "No list found with name: #{list_name_from_label}"
+        end
       end
     else
       # If there is no existing Trello label, add the correct one
