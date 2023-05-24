@@ -199,7 +199,7 @@ export default class MarkdownImage extends React.PureComponent {
                     );
 
                     const actualHeight = this.getHeight();
-                    if (actualHeight >= Constants.EXPANDABLE_INLINE_IMAGE_MIN_HEIGHT) {
+                    if (!actualHeight || actualHeight >= Constants.EXPANDABLE_INLINE_IMAGE_MIN_HEIGHT) {
                         imageElement = (
                             <MarkdownImageExpand
                                 alt={alt || safeSrc}
