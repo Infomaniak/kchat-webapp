@@ -54,7 +54,7 @@ end
 
 # Get a list of merge requests from GitLab API
 project_id = 3225
-uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests?state=opened&private_token=#{GITLAB_API_KEY}")
+uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests?private_token=#{GITLAB_API_KEY}")
 response = Net::HTTP.get_response(uri)
 merge_requests = JSON.parse(response.body)
 
