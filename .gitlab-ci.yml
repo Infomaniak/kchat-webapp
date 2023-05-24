@@ -261,8 +261,10 @@ changelog:
 update_labels:
   script: 
     - ruby ./.gitlab/update_merge_request_labels.rb
-  only:
-    - schedules
+  rules:
+    - if: '$UPDATE_LABELS_SCHEDULE'
+      when: on_success
+    - when: never
 
 gitlab_triage:
   rules:
