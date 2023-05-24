@@ -48,13 +48,9 @@ resource_rules:
           state: merged
           labels:
             - trello::To merge
-            - trello::En cours
-            - trello::FEEDBACKS
         actions:
           remove_labels:
             - trello::To merge
-            - trello::En cours
-            - trello::FEEDBACKS
           labels:
             - trello::To prod
       # Faster rebasing with labels
