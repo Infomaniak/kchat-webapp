@@ -1,6 +1,8 @@
 resource_rules:
+  # Issue Policies
   issues:
     rules:
+      # Quick add to a weekly milestone
       - name: "Weekly Prioritization"
         conditions:
           state: opened
@@ -19,6 +21,7 @@ resource_rules:
             Let's try to address it within the week.
 
             /milestone %"Weekly Tasks"
+      # Close stale issues
       - name: "Warn about close Stale Branches"
         conditions:
           state: opened
@@ -36,15 +39,36 @@ resource_rules:
             This issue has been inactive for over a month. It will be closed as stale.
             If you would like to keep it open, please add a 🚧 wip or 📝 testing tag and reopen.
           status: close
+  # Merge Request Policies
   merge_requests:
     rules:
+      # Update labels for trello tickets in merged MRs for schedule CI
+      - name: "Update Trello for merged MRs"
+        conditions:
+          state: merged
+          labels:
+            - trello::To merge
+            - trello::To prod
+            - trello::En cours
+            - trello::FEEDBACKS
+          forbidden_labels:
+            - trello::All - Done
+        actions:
+          remove_labels:
+            - trello::To merge
+            - trello::To prod
+            - trello::En cours
+            - trello::FEEDBACKS
+          labels:
+            - trello::All - Done
+      # Faster rebasing with labels
       - name: "Rebase stale"
         conditions:
           state: opened
           labels:
-            - "bot-rebase"
+            - bot-rebase
         actions:
           remove_labels:
-            - "bot-rebase"
+            - bot-rebase
           comment: |
             /rebase
