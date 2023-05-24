@@ -4,6 +4,7 @@ require 'json'
 
 TRELLO_API_KEY = ENV['TRELLO_API_KEY']
 TRELLO_TOKEN = ENV['TRELLO_TOKEN']
+TRELLO_BOARD_ID = ENV['TRELLO_BOARD_ID']
 GITLAB_API_KEY = ENV['GITLAB_API_KEY']
 
 def get_trello_card_id(url)
@@ -45,8 +46,8 @@ def update_gitlab_merge_request(project_id, merge_request_id, labels)
   http.request(request)
 end
 
-def get_board_lists(board_id)
-  uri = URI.parse("https://api.trello.com/1/boards/#{board_id}/lists?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
+def get_board_lists()
+  uri = URI.parse("https://api.trello.com/1/boards/#{TRELLO_BOARD_ID}/lists?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
   response = Net::HTTP.get_response(uri)
   JSON.parse(response.body)
 end
@@ -77,8 +78,7 @@ merge_requests.each do |merge_request|
         list_name_from_label = existing_trello_label.split('::').last
 
         # Get all lists on the board
-        board_id = 'zdeB0uhM'
-        lists = get_board_lists(board_id)
+        lists = get_board_lists()
 
         # Find the list with the matching name
         list = lists.find { |list| list['name'] == list_name_from_label }
