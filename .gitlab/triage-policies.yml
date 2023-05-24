@@ -48,19 +48,15 @@ resource_rules:
           state: merged
           labels:
             - trello::To merge
-            - trello::To prod
             - trello::En cours
             - trello::FEEDBACKS
-          forbidden_labels:
-            - trello::All - Done
         actions:
           remove_labels:
             - trello::To merge
-            - trello::To prod
             - trello::En cours
             - trello::FEEDBACKS
           labels:
-            - trello::All - Done
+            - trello::To prod
       # Faster rebasing with labels
       - name: "Rebase stale"
         conditions:
