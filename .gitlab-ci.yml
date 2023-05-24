@@ -258,6 +258,14 @@ changelog:
   script:
     - "./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_NOTIFY_CHANNEL}"
 
+update_labels:
+  script: 
+    - ruby ./.gitlab/update_merge_request_labels.rb
+  rules:
+    - if: '$UPDATE_LABELS_SCHEDULE'
+      when: on_success
+    - when: never
+
 gitlab_triage:
   rules:
     - if: '$GITLAB_TRIAGE'
