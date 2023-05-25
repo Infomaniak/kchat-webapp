@@ -61,6 +61,7 @@ end
 def execute_issue_cpmeta(merge_request, mr_iid)
   # Check if the merge request is attached to an issue
   description = merge_request['description']
+  project_id = merge_request['project_id']
   issue_iid = description[/Related to #(\d+)/, 1] || description[/Related to \[#(\d+)\]/, 1]
 
   if issue_iid
