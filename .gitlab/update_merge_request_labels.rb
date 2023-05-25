@@ -93,15 +93,12 @@ merge_requests.each do |merge_request|
     # Check if existing labels match the Trello column
     existing_labels = merge_request['labels']
     existing_trello_label = existing_labels.find { |label| label.start_with?('trello::') }
-
     if existing_trello_label
       if existing_trello_label != "trello::#{card_details[:list_name]}"
         # Get the list name from the label
         list_name_from_label = existing_trello_label.split('::').last
-
         # Get all lists on the board
         lists = get_board_lists()
-
         # Find the list with the matching name
         list = lists.find { |list| list['name'] == list_name_from_label }
 
@@ -121,13 +118,13 @@ merge_requests.each do |merge_request|
         # Get the first attached issue's IID
         issue_iid = mr_details['issues'][0]['iid']
 
-        # Add a comment to the issue
+        # Execute /copy_metadata on related issue to copy trello labels
         uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}/notes")
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true
         request = Net::HTTP::Post.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_TOKEN })
         request.set_form_data({ 'body' => '/copy_metadata #{mr_iid}' })
-        response = http.request(request)
+        http.request(request)
       end
     end
   end
