@@ -21,6 +21,18 @@ resource_rules:
             Let's try to address it within the week.
 
             /milestone %"Weekly Tasks"
+      - name: Copy metadata from merge request
+        conditions:
+          state: opened
+          draft: true
+          ruby: resource[:merge_requests_count] > 0
+          labels:
+            - bot-update-meta
+        actions:
+          remove_labels:
+            - bot-update-meta
+          comment: |
+            /copy_metadata !#{resource[:related_merge_requests][0][:iid]}
       # Close stale issues
       - name: "Warn about close Stale Branches"
         conditions:
