@@ -2,10 +2,24 @@ require 'net/http'
 require 'uri'
 require 'json'
 
+
+# --------------
+# --- Trello ---
+
 TRELLO_API_KEY = ENV['TRELLO_API_KEY']
 TRELLO_TOKEN = ENV['TRELLO_TOKEN']
 TRELLO_BOARD_ID = ENV['TRELLO_BOARD_ID']
-GITLAB_API_KEY = ENV['GITLAB_API_KEY']
+
+TRELLO_BASE_URL = "https://api.trello.com/1"
+trello_uri = URI.parse(TRELLO_BASE_URL)
+TRELLO_HTTP = Net::HTTP.new(trello_uri.host, trello_uri.port)
+TRELLO_HTTP.use_ssl = true
+
+TRELLO_HEADERS = {
+  'Content-Type' => 'application/json',
+  'key' => TRELLO_API_KEY,
+  'token' => TRELLO_TOKEN
+}
 
 def get_trello_card_id(url)
   # Extract the card id from the URL
@@ -14,8 +28,9 @@ end
 
 def get_trello_card_details(card_id)
   # Call the Trello API to get card details
-  uri = URI.parse("https://api.trello.com/1/cards/#{card_id}?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
-  response = Net::HTTP.get_response(uri)
+  uri = URI.parse("#{TRELLO_BASE_URL}/cards/#{card_id}")
+  request = Net::HTTP::Get.new(uri.request_uri, TRELLO_HEADERS)
+  response = TRELLO_HTTP.request(request)
   # Check the HTTP response status
   if response.code.to_i >= 400
     raise "HTTP Error: #{response.code} #{response.message}"
@@ -23,8 +38,9 @@ def get_trello_card_details(card_id)
 
   card = JSON.parse(response.body)
   # Call the Trello API to get list details
-  uri = URI.parse("https://api.trello.com/1/lists/#{card['idList']}?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
-  response = Net::HTTP.get_response(uri)
+  uri = URI.parse("#{TRELLO_BASE_URL}/lists/#{card['idList']}")
+  request = Net::HTTP::Get.new(uri.request_uri, TRELLO_HEADERS)
+  response = TRELLO_HTTP.request(request)
   list = JSON.parse(response.body)
 
   # Return card details and list name
@@ -35,27 +51,49 @@ end
 
 def move_trello_card(card_id, list_id)
   # Call the Trello API to move the card to the new list
-  uri = URI.parse("https://api.trello.com/1/cards/#{card_id}?idList=#{list_id}&key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
-  http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
-  request = Net::HTTP::Put.new(uri)
-  http.request(request)
-end
-
-def update_gitlab_merge_request(project_id, merge_request_id, labels)
-  # Call the GitLab API to update the merge request
-  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests/#{merge_request_id}")
-  http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
-  request = Net::HTTP::Put.new(uri.path, { 'Private-Token' => GITLAB_API_KEY, 'Content-Type' => 'application/json' })
-  request.body = { labels: labels }.to_json
+  uri = URI.parse("#{TRELLO_BASE_URL}/cards/#{card_id}?idList=#{list_id}")
+  request = Net::HTTP::Put.new(uri.request_uri, TRELLO_HEADERS)
+  response = TRELLO_HTTP.request(request)
   http.request(request)
 end
 
 def get_board_lists()
-  uri = URI.parse("https://api.trello.com/1/boards/#{TRELLO_BOARD_ID}/lists?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
-  response = Net::HTTP.get_response(uri)
-  JSON.parse(response.body)
+  uri = URI.parse("#{TRELLO_BASE_URL}/boards/#{TRELLO_BOARD_ID}/lists")
+  request = Net::HTTP::Get.new(uri.request_uri, TRELLO_HEADERS)
+  response = TRELLO_HTTP.request(request)
+  if response.code.to_i != 200
+    puts "Failed to get board lists: #{response.body}"
+    return []
+  else
+    return JSON.parse(response.body)
+  end
+end
+
+# --------------
+# --- Gitlab ---
+
+GITLAB_API_KEY = ENV['GITLAB_API_KEY']
+GITLAB_BASE_URL = "https://gitlab.infomaniak.ch/api/v4"
+gitlab_uri = URI.parse(GITLAB_BASE_URL)
+GITLAB_HTTP = Net::HTTP.new(gitlab_uri.host, gitlab_uri.port)
+GITLAB_HTTP.use_ssl = true
+
+GITLAB_HEADERS = {
+  'Content-Type' => 'application/json',
+  'PRIVATE-TOKEN' => GITLAB_API_KEY
+}
+
+def update_gitlab_merge_request_labels(project_id, mr_iid, labels)
+  # Call the GitLab API to update the merge request
+  uri = URI.parse("#{GITLAB_BASE_URL}/projects/#{project_id}/merge_requests/#{mr_iid}")
+  request = Net::HTTP::Put.new(uri.request_uri, GITLAB_HEADERS)
+  request.body = { labels: labels }.to_json
+  response = GITLAB_HTTP.request(request)
+  if response.code.to_i != 200
+    puts "Failed to update merge request: #{response.body}"
+  else
+    puts "Successfully updated merge request #{mr_iid} labels to #{labels.join(', ')}"
+  end
 end
 
 def execute_issue_cpmeta(merge_request, mr_iid)
@@ -68,42 +106,37 @@ def execute_issue_cpmeta(merge_request, mr_iid)
     issue_iid = issue_iid.to_i
 
     # Execute /copy_metadata on related issue to copy trello labels
-    uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}/notes")
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    request = Net::HTTP::Post.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_KEY })
+    uri = URI.parse("#{GITLAB_BASE_URL}/projects/#{project_id}/issues/#{issue_iid}/notes")
+    request = Net::HTTP::Post.new(uri.request_uri, GITLAB_HEADERS)
     request.set_form_data({ 'body' => '/copy_metadata #{mr_iid}' })
-    http.request(request)
+    response = GITLAB_HTTP.request(request)
   end
 end
 
 def get_issue_labels(project_id, issue_iid)
-  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}")
+  uri = URI.parse("#{GITLAB_BASE_URL}/projects/#{project_id}/issues/#{issue_iid}")
   http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
-  request = Net::HTTP::Get.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_KEY })
-  response = http.request(request)
+  request = Net::HTTP::Get.new(uri.request_uri, GITLAB_HEADERS)
+  response = GITLAB_HTTP.request(request)
   issue_details = JSON.parse(response.body)
   issue_details['labels']
 end
 
 def get_mr_labels(project_id, mr_iid)
-  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests/#{mr_iid}")
+  uri = URI.parse("#{GITLAB_BASE_URL}/projects/#{project_id}/merge_requests/#{mr_iid}")
   http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
-  request = Net::HTTP::Get.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_KEY })
-  response = http.request(request)
+  request = Net::HTTP::Get.new(uri.request_uri, GITLAB_HEADERS)
+  response = GITLAB_HTTP.request(request)
   mr_details = JSON.parse(response.body)
   mr_details['labels']
 end
 
 def add_issue_label(project_id, issue_iid, labels)
-  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}")
+  uri = URI.parse("#{GITLAB_BASE_URL}/projects/#{project_id}/issues/#{issue_iid}")
   http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
-  request = Net::HTTP::Put.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_KEY })
+  request = Net::HTTP::Put.new(uri.request_uri, GITLAB_HEADERS)
   request.set_form_data({ 'add_labels' => labels.join(',') }) # Add the new labels without removing the existing ones
-  response = http.request(request)
+  response = GITLAB_HTTP.request(request)
   if response.code.to_i != 200
     puts "Failed to add labels to issue: #{response.body}"
   else
@@ -112,12 +145,11 @@ def add_issue_label(project_id, issue_iid, labels)
 end
 
 def remove_issue_label(project_id, issue_iid, labels)
-  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}")
+  uri = URI.parse("#{GITLAB_BASE_URL}/projects/#{project_id}/issues/#{issue_iid}")
   http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
-  request = Net::HTTP::Put.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_KEY })
+  request = Net::HTTP::Put.new(uri.request_uri, GITLAB_HEADERS)
   request.set_form_data({ 'remove_labels' => labels.join(',') }) # Remove the extra labels without affecting the other ones
-  response = http.request(request)
+  response = GITLAB_HTTP.request(request)
   if response.code.to_i != 200
     puts "Failed to remove labels from issue: #{response.body}"
   else
@@ -154,8 +186,9 @@ end
 
 # Get a list of merge requests from GitLab API
 project_id = 3225
-uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests?private_token=#{GITLAB_API_KEY}")
-response = Net::HTTP.get_response(uri)
+uri = URI.parse("#{GITLAB_BASE_URL}/projects/#{project_id}/merge_requests")
+request = Net::HTTP::Get.new(uri.request_uri, GITLAB_HEADERS)
+response = GITLAB_HTTP.request(request)
 merge_requests = JSON.parse(response.body)
 
 # Go through each merge request
@@ -167,11 +200,9 @@ merge_requests.each do |merge_request|
   sync_issue_metadata(merge_request, project_id, mr_iid)
 
   # Get merge request details
-  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests/#{mr_iid}")
-  http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
-  request = Net::HTTP::Get.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_KEY })
-  response = http.request(request)
+  uri = URI.parse("#{GITLAB_BASE_URL}/projects/#{project_id}/merge_requests/#{mr_iid}")
+  request = Net::HTTP::Get.new(uri.request_uri, GITLAB_HEADERS)
+  response = GITLAB_HTTP.request(request)
   mr_details = JSON.parse(response.body)
 
   # Remove HTML comments
@@ -208,7 +239,7 @@ merge_requests.each do |merge_request|
     else
       # If there is no existing Trello label, add the correct one
       labels = existing_labels.append("trello::#{card_details[:list_name]}")
-      update_gitlab_merge_request(merge_request['project_id'], merge_request['iid'], labels)
+      update_gitlab_merge_request_labels(merge_request['project_id'], merge_request['iid'], labels)
       execute_issue_cpmeta(mr_details, mr_iid)
     end
   end
