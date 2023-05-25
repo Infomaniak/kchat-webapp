@@ -67,6 +67,17 @@ merge_requests = JSON.parse(response.body)
 # Go through each merge request
 merge_requests.each do |merge_request|
   description = merge_request['description']
+  mr_iid = merge_request['iid']
+  project_id = merge_request['project_id']
+
+  # Get merge request details
+  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests/#{mr_iid}")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  request = Net::HTTP::Get.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_TOKEN })
+  response = http.request(request)
+  mr_details = JSON.parse(response.body)
+
   # Remove HTML comments
   description_without_comments = description.gsub(/<!--.*?-->/m, '')
   trello_links = description_without_comments.scan(/https:\/\/trello.com\/c\/[^\s]+/)
@@ -105,6 +116,19 @@ merge_requests.each do |merge_request|
       # If there is no existing Trello label, add the correct one
       labels = existing_labels.append("trello::#{card_details[:list_name]}")
       update_gitlab_merge_request(merge_request['project_id'], merge_request['iid'], labels)
+      # Check if the merge request is attached to an issue
+      if mr_details['issues'].any?
+        # Get the first attached issue's IID
+        issue_iid = mr_details['issues'][0]['iid']
+
+        # Add a comment to the issue
+        uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}/notes")
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true
+        request = Net::HTTP::Post.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_TOKEN })
+        request.set_form_data({ 'body' => '/copy_metadata #{mr_iid}' })
+        response = http.request(request)
+      end
     end
   end
 end
