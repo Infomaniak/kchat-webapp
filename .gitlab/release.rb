@@ -12,7 +12,7 @@ NOTIFY_CHANNEL = ARGV[3]
 def get_http(uri)
   Net::HTTP.new(uri.host, uri.port).tap do |http|
     http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
   end
 end
 
@@ -54,7 +54,7 @@ end
 def get_merge_request(mr_iid)
   url = "#{GITLAB_BASE_URL}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{mr_iid}"
   uri = URI.parse(url)
-  http.use_ssl = true
+  http = get_http(uri)
   request = Net::HTTP::Get.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_ACCESS_TOKEN })
   response = http.request(request)
 
@@ -86,7 +86,7 @@ changelog = get_changelog(GIT_RELEASE_TAG)
 
 # Update labels if the tag is not a pre-release
 if /\d+\.\d+\.\d+/.match?(GIT_RELEASE_TAG)
-  puts "Processing full release tag: #{tag}"
+  puts "Processing full release tag: #{GIT_RELEASE_TAG}"
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
   mr_numbers.each do |mr_number|
@@ -99,7 +99,7 @@ end
 
 # Update labels if the tag is a pre-release
 if tag =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
-  puts "Processing prerelease tag: #{tag}"
+  puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
   mr_numbers.each do |mr_number|
