@@ -58,11 +58,11 @@ def get_board_lists()
   JSON.parse(response.body)
 end
 
-def update_gh_issue_meta_if_exists(mr, iid)
+def update_gh_issue_meta(merge_request, iid)
   # Check if the merge request is attached to an issue
-  if mr['issues'].any?
+  if merge_request['issues'].any?
     # Get the first attached issue's IID
-    issue_iid = mr['issues'][0]['iid']
+    issue_iid = merge_request['issues'][0]['iid']
 
     # Execute /copy_metadata on related issue to copy trello labels
     uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}/notes")
@@ -71,6 +71,51 @@ def update_gh_issue_meta_if_exists(mr, iid)
     request = Net::HTTP::Post.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_TOKEN })
     request.set_form_data({ 'body' => '/copy_metadata #{iid}' })
     http.request(request)
+  end
+end
+
+def get_issue_labels(project_id, issue_iid)
+  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  request = Net::HTTP::Get.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_TOKEN })
+  response = http.request(request)
+  issue_details = JSON.parse(response.body)
+  issue_details['labels']
+end
+
+def get_mr_labels(project_id, mr_iid)
+  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests/#{mr_iid}")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  request = Net::HTTP::Get.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_TOKEN })
+  response = http.request(request)
+  mr_details = JSON.parse(response.body)
+  mr_details['labels']
+end
+
+def update_issue_label(project_id, issue_iid, label)
+  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  request = Net::HTTP::Put.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_TOKEN })
+  request.set_form_data({ 'labels' => label })
+  http.request(request)
+end
+
+def sync_issue_metadata(merge_request, project_id, mr_iid)
+  if merge_request['issues'].any?
+    issue_iid = merge_request['issues'][0]['iid']
+    mr_labels = get_mr_labels(project_id, mr_iid)
+    issue_labels = get_issue_labels(project_id, issue_iid)
+    
+    trello_mr_label = mr_labels.find { |label| label.start_with?('trello::') }
+    trello_issue_label = issue_labels.find { |label| label.start_with?('trello::') }
+
+    if trello_mr_label != trello_issue_label
+      # The labels don't match - update the issue label
+      update_issue_label(project_id, issue_iid, trello_mr_label)
+    end
   end
 end
 
@@ -85,6 +130,8 @@ merge_requests.each do |merge_request|
   description = merge_request['description']
   mr_iid = merge_request['iid']
   project_id = merge_request['project_id']
+
+  sync_issue_metadata(merge_request, project_id, mr_iid)
 
   # Get merge request details
   uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests/#{mr_iid}")
@@ -120,7 +167,7 @@ merge_requests.each do |merge_request|
         if list
           # If a list with the matching name was found, move the card to it
           move_trello_card(card_id, list['id'])
-          update_gh_issue_meta_if_exists(mr_details, mr_iid)
+          update_gh_issue_meta(mr_details, mr_iid)
         else
           puts "No list found with name: #{list_name_from_label}"
         end
@@ -129,7 +176,7 @@ merge_requests.each do |merge_request|
       # If there is no existing Trello label, add the correct one
       labels = existing_labels.append("trello::#{card_details[:list_name]}")
       update_gitlab_merge_request(merge_request['project_id'], merge_request['iid'], labels)
-      update_gh_issue_meta_if_exists(mr_details, mr_iid)
+      update_gh_issue_meta(mr_details, mr_iid)
     end
   end
 end
