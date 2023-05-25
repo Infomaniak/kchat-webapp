@@ -24,7 +24,6 @@ resource_rules:
       - name: Copy metadata from merge request
         conditions:
           state: opened
-          draft: true
           ruby: resource[:merge_requests_count] > 0
           labels:
             - bot-update-meta
