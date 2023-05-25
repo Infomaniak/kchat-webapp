@@ -104,6 +104,11 @@ def add_issue_label(project_id, issue_iid, labels)
   request = Net::HTTP::Put.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_KEY })
   request.set_form_data({ 'add_labels' => labels.join(',') }) # Add the new labels without removing the existing ones
   response = http.request(request)
+  if response.code.to_i != 200
+    puts "Failed to add labels to issue: #{response.body}"
+  else
+    puts "Successfully added labels #{labels.join(', ')} to issue #{issue_iid}"
+  end
 end
 
 def remove_issue_label(project_id, issue_iid, labels)
@@ -113,6 +118,11 @@ def remove_issue_label(project_id, issue_iid, labels)
   request = Net::HTTP::Put.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_KEY })
   request.set_form_data({ 'remove_labels' => labels.join(',') }) # Remove the extra labels without affecting the other ones
   response = http.request(request)
+  if response.code.to_i != 200
+    puts "Failed to remove labels from issue: #{response.body}"
+  else
+    puts "Successfully removed labels #{labels.join(', ')} from issue #{issue_iid}"
+  end
 end
 
 def sync_issue_metadata(merge_request, project_id, mr_iid)
@@ -130,11 +140,13 @@ def sync_issue_metadata(merge_request, project_id, mr_iid)
 
     missing_labels = trello_mr_labels - trello_issue_labels
     if missing_labels.any?
+      puts "Adding labels #{missing_labels.join(', ')} to issue #{issue_iid} related to merge request #{mr_iid}"
       add_issue_label(project_id, issue_iid, missing_labels)
     end
 
     extra_labels = trello_issue_labels - trello_mr_labels
     if extra_labels.any?
+      puts "Removing labels #{extra_labels.join(', ')} from issue #{issue_iid} related to merge request #{mr_iid}"
       remove_issue_label(project_id, issue_iid, extra_labels)
     end
   end
