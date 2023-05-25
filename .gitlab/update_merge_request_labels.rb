@@ -58,6 +58,22 @@ def get_board_lists()
   JSON.parse(response.body)
 end
 
+def update_gh_issue_meta_if_exists(mr, iid)
+  # Check if the merge request is attached to an issue
+  if mr['issues'].any?
+    # Get the first attached issue's IID
+    issue_iid = mr['issues'][0]['iid']
+
+    # Execute /copy_metadata on related issue to copy trello labels
+    uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}/notes")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_TOKEN })
+    request.set_form_data({ 'body' => '/copy_metadata #{iid}' })
+    http.request(request)
+  end
+end
+
 # Get a list of merge requests from GitLab API
 project_id = 3225
 uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests?private_token=#{GITLAB_API_KEY}")
@@ -101,10 +117,10 @@ merge_requests.each do |merge_request|
         lists = get_board_lists()
         # Find the list with the matching name
         list = lists.find { |list| list['name'] == list_name_from_label }
-
         if list
           # If a list with the matching name was found, move the card to it
           move_trello_card(card_id, list['id'])
+          update_gh_issue_meta_if_exists(mr_details, mr_iid)
         else
           puts "No list found with name: #{list_name_from_label}"
         end
@@ -113,19 +129,7 @@ merge_requests.each do |merge_request|
       # If there is no existing Trello label, add the correct one
       labels = existing_labels.append("trello::#{card_details[:list_name]}")
       update_gitlab_merge_request(merge_request['project_id'], merge_request['iid'], labels)
-      # Check if the merge request is attached to an issue
-      if mr_details['issues'].any?
-        # Get the first attached issue's IID
-        issue_iid = mr_details['issues'][0]['iid']
-
-        # Execute /copy_metadata on related issue to copy trello labels
-        uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_iid}/notes")
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
-        request = Net::HTTP::Post.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_TOKEN })
-        request.set_form_data({ 'body' => '/copy_metadata #{mr_iid}' })
-        http.request(request)
-      end
+      update_gh_issue_meta_if_exists(mr_details, mr_iid)
     end
   end
 end
