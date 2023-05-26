@@ -209,7 +209,7 @@ merge_requests.each do |merge_request|
     else
       # If there is no existing Trello label, add the correct one
       labels = existing_labels.append("trello::#{card_details[:list_name]}")
-      update_gitlab_merge_request(merge_request['project_id'], merge_request['iid'], labels)
+      update_gitlab_merge_request(mr_details['project_id'], mr_details['iid'], labels)
       execute_issue_cpmeta(mr_details, mr_iid)
     end
   end
