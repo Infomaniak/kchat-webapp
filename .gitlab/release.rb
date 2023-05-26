@@ -16,12 +16,12 @@ def get_http(uri)
   end
 end
 
-def create_changelog(access_token, tag)
+def create_changelog(tag)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Post.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
   request.set_form_data("version" => tag)
-  
+
   response = get_http(uri).request(request)
   response.body if response.code.to_i == 201
 end
@@ -31,7 +31,7 @@ def get_changelog(tag)
   request = Net::HTTP::Get.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
   request.set_form_data("version" => tag)
-  
+
   response = get_http(uri).request(request)
   JSON.parse(response.body)["notes"] if response.code.to_i == 200
 end
@@ -68,7 +68,7 @@ def get_merge_request(mr_iid)
 rescue JSON::ParserError
   raise "Invalid JSON response from GitLab API"
 end
-  
+
 
 def update_merge_request_labels(mr_iid, labels)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{mr_iid}")
