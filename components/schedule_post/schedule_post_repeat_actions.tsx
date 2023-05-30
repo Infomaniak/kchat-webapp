@@ -75,8 +75,7 @@ const selectStyle = {
 const momentInstance = moment();
 
 // TODO: improve theming support
-// TODO: responsive position "ends date time picker" correctly
-const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid, schedulePostOptions, setSchedulePostOptions}: Props) => {
+const RepeatActions = ({show, timestamp, timezone, schedulePostOptions, setSchedulePostOptions, setAreRepeatOptionsValid}: Props) => {
     const {
         everyAmount,
         everyInterval,
@@ -95,11 +94,12 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid, sch
         }
     }, [timestamp]);
 
-    const handleOptionsValidity = () => setAreRepeatOptionsValid(everyAmount > 0);
+    const handleOptionsValidity = (newEveryAmount: number) => setAreRepeatOptionsValid(newEveryAmount > 0);
 
     const handleEveryAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSchedulePostOptions({everyAmount: parseInt(e.currentTarget.value, 10)});
-        handleOptionsValidity();
+        const newEveryAmount = parseInt(e.currentTarget.value, 10);
+        setSchedulePostOptions({everyAmount: newEveryAmount});
+        handleOptionsValidity(newEveryAmount);
     };
 
     const isValidEveryAmount = everyAmount > 0;

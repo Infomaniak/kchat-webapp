@@ -4017,6 +4017,7 @@
   "create_post.schedule_post.aria": "Pianifica un post",
   "create_post.schedule_post.tooltip": "Pianifica un post",
   "create_post.schedule_post.menu.options.date.title": "{date} alle {time}",
+  "create_post.schedule_post.menu.options.tomorrow": "Domani",
   "create_post.schedule_post.menu.title": "Pianifica una bozza:",
   "create_post.schedule_post.modal.header": "Pianifica una bozza",
   "create_post.schedule_post.modal.confirm": "Pianifica",

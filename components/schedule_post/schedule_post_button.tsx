@@ -86,10 +86,9 @@ const SchedulePostButton = ({message, channelId, disabled, getAnchorEl}: Props) 
     const handleSchedulePost = (date: Date, options?: SchedulePostOptions) => {
         // TODO: handle options
         // TODO: include files attachments ?
-        dispatch(schedulePost(channelId, message, toUTCUnix(date)));
-
         // TODO: display errors
         // TODO: clear input if no error
+        dispatch(schedulePost(channelId, message, toUTCUnix(date)));
     };
 
     const handleSchedulePostMenu = (optionName: SchedulePostMenuOption['name']) => {

@@ -5303,6 +5303,7 @@
   "create_post.schedule_post.aria": "Programar una entrada",
   "create_post.schedule_post.tooltip": "Programar una entrada",
   "create_post.schedule_post.menu.options.date.title": "{date} a las {time}",
+  "create_post.schedule_post.menu.options.tomorrow": "Mañana",
   "create_post.schedule_post.menu.title": "Programar un borrador:",
   "create_post.schedule_post.modal.header": "Programar un borrador",
   "create_post.schedule_post.modal.confirm": "Programar",

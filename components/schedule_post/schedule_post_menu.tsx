@@ -66,20 +66,20 @@ const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleScheduleP
             return <FormattedMessage {...title}/>;
         }
         const timestamp = getCurrentMomentForTimezone(timezone).hours(9).minutes(0).seconds(0);
-        switch (name) {
-        case 'tomorrow':
-            timestamp.add(1, 'day');
-            break;
-        case 'monday':
-            timestamp.add(1, 'week').day('Monday');
-            break;
+        if (name === 'monday') {
+            timestamp.day('Monday');
         }
         return (
             <FormattedMessage
                 id='create_post.schedule_post.menu.options.date.title'
                 defaultMessage='{date} at {time}'
                 values={{
-                    date: (
+                    date: name === 'tomorrow' ? (
+                        <FormattedMessage
+                            id='create_post.schedule_post.menu.options.tomorrow'
+                            defaultMessage='Tomorrow'
+                        />
+                    ) : (
                         <FormattedDate
                             value={timestamp.toDate()}
                             weekday='short'

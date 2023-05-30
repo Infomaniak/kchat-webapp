@@ -5079,6 +5079,7 @@
   "create_post.schedule_post.aria": "Planifier un message",
   "create_post.schedule_post.tooltip": "Planifier un message",
   "create_post.schedule_post.menu.options.date.title": "{date} à {time}",
+  "create_post.schedule_post.menu.options.tomorrow": "Demain",
   "create_post.schedule_post.menu.title": "Planifier un brouillon:",
   "create_post.schedule_post.modal.header": "Planifier un brouillon",
   "create_post.schedule_post.modal.confirm": "Planifier",
