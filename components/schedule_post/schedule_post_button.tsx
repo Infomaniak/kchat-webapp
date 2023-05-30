@@ -7,13 +7,11 @@ import {useIntl} from 'react-intl';
 import {Button, styled} from '@mui/material';
 import {ChevronDownIcon} from '@infomaniak/compass-icons/components';
 
-import {schedulePost} from 'mattermost-redux/actions/posts';
 import {openModal} from 'actions/views/modals';
 import {getCurrentUserTimezone} from 'selectors/general';
 
 import SchedulePostMenu, {SchedulePostMenuOption} from 'components/schedule_post/schedule_post_menu';
 import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
-import {SchedulePostOptions} from 'components/schedule_post/schedule_post_repeat_actions';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
@@ -55,13 +53,12 @@ const StyledSchedulePostButton = styled(Button)`
 `;
 
 type Props = {
-    message: string;
-    channelId: string;
     disabled: boolean;
     getAnchorEl: () => HTMLDivElement | null;
+    handleSchedulePost: (scheduleUTCTimestamp: number) => void;
 };
 
-const SchedulePostButton = ({message, channelId, disabled, getAnchorEl}: Props) => {
+const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) => {
     const dispatch = useDispatch();
     const timezone = useSelector(getCurrentUserTimezone);
     const {formatMessage} = useIntl();
@@ -82,14 +79,6 @@ const SchedulePostButton = ({message, channelId, disabled, getAnchorEl}: Props) 
     };
 
     const handleClose = () => setOpen(false);
-
-    const handleSchedulePost = (date: Date, options?: SchedulePostOptions) => {
-        // TODO: handle options
-        // TODO: include files attachments ?
-        // TODO: display errors
-        // TODO: clear input if no error
-        dispatch(schedulePost(channelId, message, toUTCUnix(date)));
-    };
 
     const handleSchedulePostMenu = (optionName: SchedulePostMenuOption['name']) => {
         setOpen(false);
@@ -113,7 +102,7 @@ const SchedulePostButton = ({message, channelId, disabled, getAnchorEl}: Props) 
             }));
             return;
         }
-        handleSchedulePost(timestamp.toDate());
+        handleSchedulePost(toUTCUnix(timestamp.toDate()));
     };
 
     return (

@@ -349,6 +349,22 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.props.onUpdateCommentDraft(updatedDraft, true);
     }
 
+    handleSchedulePost = (scheduleUTCTimestamp: number) => {
+        // TODO: handle options
+        // TODO: include files attachments ?
+        // TODO: display errors
+        // TODO: clear input if no error
+        const channelId = this.props.channelId;
+        if (!channelId) {
+            return;
+        }
+        const updatedDraft = {
+            ...this.state.draft ?? this.props.draft,
+            timestamp: scheduleUTCTimestamp,
+        };
+        this.handleDraftChange(updatedDraft, this.props.rootId, true, true);
+    };
+
     saveDraftWithShow = () => {
         this.setState((prev) => {
             if (prev.draft) {
@@ -1236,6 +1252,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     getFileUploadTarget={this.getFileUploadTarget}
                     fileUploadRef={this.fileUploadRef}
                     isThreadView={this.props.isThreadView}
+                    handleSchedulePost={this.handleSchedulePost}
                 />
             </form>
         );

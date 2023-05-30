@@ -107,7 +107,8 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
 
         dispatch(setGlobalItem(key, updatedValue));
 
-        if (syncedDraftsAreAllowedAndEnabled(state) && save && updatedValue) {
+        // TODO remove '|| updatedValue?.timestamp' once drafts are reenabled
+        if ((syncedDraftsAreAllowedAndEnabled(state) || updatedValue?.timestamp) && save && updatedValue) {
             const connectionId = getConnectionId(state);
             const userId = getCurrentUserId(state);
             try {
@@ -132,6 +133,7 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', c
         message: draft.message,
         props: draft.props,
         file_ids: fileIds,
+        timestamp: draft.timestamp,
         priority: draft.metadata?.priority as PostPriorityMetadata,
     };
 

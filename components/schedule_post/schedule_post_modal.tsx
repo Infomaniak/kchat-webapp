@@ -13,13 +13,14 @@ import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_
 import SchedulePostRepeatActions, {SchedulePostOptions} from 'components/schedule_post/schedule_post_repeat_actions';
 
 import {ModalIdentifiers} from 'utils/constants';
+import {toUTCUnix} from 'utils/datetime';
 
 import './schedule_post_modal.scss';
 
 type Props = {
     timestamp: Moment;
     timezone?: string;
-    onConfirm: (date: Date, options?: SchedulePostOptions) => void;
+    onConfirm: (scheduleUTCTimestamp: number, options?: SchedulePostOptions) => void;
 }
 
 const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
@@ -41,10 +42,11 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
     });
 
     const handleConfirm = () => {
+        const scheduleUTCTimestamp = toUTCUnix(scheduleTimestamp.toDate());
         if (isRepeatChecked) {
-            onConfirm(scheduleTimestamp.toDate(), schedulePostOptions);
+            onConfirm(scheduleUTCTimestamp, schedulePostOptions);
         }
-        onConfirm(scheduleTimestamp.toDate());
+        onConfirm(scheduleUTCTimestamp);
     };
 
     const handleRepeatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +104,7 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
                 onMenuChange={setIsMenuOpen}
                 setIsDatePickerOpen={setIsDatePickerOpen}
             />
-            <div className='schedule-post-modal__repeat-checkbox'>
+            {/* <div className='schedule-post-modal__repeat-checkbox'>
                 <label>
                     <input
                         type='checkbox'
@@ -119,7 +121,7 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
                 setAreRepeatOptionsValid={handleRepeatOptionsValidation}
                 schedulePostOptions={schedulePostOptions}
                 setSchedulePostOptions={handleRepeatOptionsChange}
-            />
+            /> */}
         </GenericModal>
     );
 };

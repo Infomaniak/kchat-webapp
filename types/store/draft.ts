@@ -21,6 +21,7 @@ export type PostDraft = {
     updateAt: number;
     show?: boolean;
     remote?: boolean;
+    timestamp?: number;
     metadata?: {
         priority?: {
             priority: PostPriority|'';

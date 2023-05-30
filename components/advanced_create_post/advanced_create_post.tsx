@@ -378,7 +378,23 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.saveDraftWithShow();
     }
 
-    saveDraftWithShow = (props = this.props) => {
+    handleSchedulePost = (scheduleUTCTimestamp: number) => {
+        // TODO: handle options
+        // TODO: include files attachments ?
+        // TODO: display errors
+        // TODO: clear input if no error
+        const currentChannelId = this.props.currentChannel.id;
+        if (!currentChannelId) {
+            return;
+        }
+        const updatedDraft = {
+            ...this.draftsForChannel[currentChannelId] ?? this.props.draft,
+            timestamp: scheduleUTCTimestamp,
+        };
+        this.handleDraftChange(updatedDraft, true, true);
+    };
+
+    saveDraftWithShow = async (props = this.props) => {
         if (this.saveDraftFrame && props.currentChannel) {
             const channelId = props.currentChannel.id;
             const draft = this.draftsForChannel[channelId];
@@ -880,7 +896,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.handleDraftChange(draft);
     }
 
-    handleDraftChange = (draft: PostDraft, instant = false) => {
+    handleDraftChange = (draft: PostDraft, instant = false, save?: boolean) => {
         const channelId = this.props.currentChannel.id;
 
         if (this.saveDraftFrame) {
@@ -888,10 +904,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         if (instant) {
-            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
+            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
         } else {
             this.saveDraftFrame = window.setTimeout(() => {
-                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
+                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
             }, Constants.SAVE_DRAFT_TIMEOUT);
         }
 
@@ -1670,6 +1686,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     prefillMessage={this.prefillMessage}
                     textboxRef={this.textboxRef}
                     labels={priorityLabels}
+                    handleSchedulePost={this.handleSchedulePost}
                     additionalControls={[
                         this.props.isPostPriorityEnabled && (
                             <React.Fragment key='PostPriorityPicker'>

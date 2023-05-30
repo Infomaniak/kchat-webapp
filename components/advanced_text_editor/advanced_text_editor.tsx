@@ -101,6 +101,7 @@ type Props = {
     isThreadView?: boolean;
     additionalControls?: React.ReactNodeArray;
     labels?: React.ReactNode;
+    handleSchedulePost: (scheduleUTCTimestamp: number) => void;
 }
 
 const AdvanceTextEditor = ({
@@ -156,6 +157,7 @@ const AdvanceTextEditor = ({
     isThreadView,
     additionalControls,
     labels,
+    handleSchedulePost,
 }: Props) => {
     const readOnlyChannel = !canPost;
     const {formatMessage} = useIntl();
@@ -296,8 +298,7 @@ const AdvanceTextEditor = ({
         <SendButton
             disabled={disableSendButton}
             handleSubmit={handleSubmit}
-            message={message}
-            channelId={channelId}
+            handleSchedulePost={handleSchedulePost}
         />
     );
 

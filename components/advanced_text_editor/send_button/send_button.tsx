@@ -51,13 +51,12 @@ const StyledButtonGroup = styled(ButtonGroup)`
 `;
 
 type SendButtonProps = {
-    handleSubmit: (e: React.FormEvent) => void;
     disabled: boolean;
-    message: string;
-    channelId: string;
+    handleSubmit: (e: React.FormEvent) => void;
+    handleSchedulePost: (scheduleUTCTimestamp: number) => void;
 }
 
-const SendButton = ({disabled, message, channelId, handleSubmit}: SendButtonProps) => {
+const SendButton = ({disabled, handleSubmit, handleSchedulePost}: SendButtonProps) => {
     const theme = useSelector(getTheme);
     const {formatMessage} = useIntl();
     const buttonGroupRef = useRef<HTMLDivElement>(null);
@@ -94,9 +93,8 @@ const SendButton = ({disabled, message, channelId, handleSubmit}: SendButtonProp
                     />
                 </SendButtonContainer>
                 <SchedulePostButton
-                    message={message}
-                    channelId={channelId}
                     disabled={disabled}
+                    handleSchedulePost={handleSchedulePost}
                     getAnchorEl={getButonGroupRef}
                 />
             </StyledButtonGroup>

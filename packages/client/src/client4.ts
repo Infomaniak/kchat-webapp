@@ -2229,13 +2229,6 @@ export default class Client4 {
         );
     }
 
-    schedulePost = (channelId: string, message: string, timestamp: number) => {
-        return this.doFetch<StatusOK>(
-            `${this.getChannelRoute(channelId)}/posts/schedule`,
-            {method: 'post', body: JSON.stringify({channel_id: channelId, message, timestamp})},
-        );
-    };
-
     pinPost = (postId: string) => {
         this.trackEvent('api', 'api_posts_pin');
 
