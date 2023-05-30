@@ -1,33 +1,27 @@
 resource_rules:
+  # Issue Policies
   issues:
     rules:
+      # Quick add to a weekly milestone
       - name: "Weekly Prioritization"
         conditions:
+          state: opened
           milestone: none
           date:
             attribute: created_at
             condition: newer_than
             interval_type: days
             interval: 7
+          forbidden_labels:
+            - 💀 stale
+            - info
         actions:
           comment: |
             This issue has been added to the 'Weekly Tasks' milestone.
             Let's try to address it within the week.
 
             /milestone %"Weekly Tasks"
-      - name: "Remind on Pull Request Updates"
-        conditions:
-          state: opened
-          date:
-            attribute: updated_at
-            condition: older_than
-            interval_type: days
-            interval: 7
-          ruby:  "resource[:assignees].any?"
-        actions:
-          comment: >
-            This pull request has been inactive for over a week.
-            {{assignees}}, please provide an update or discuss any roadblocks with the team.
+      # Close stale issues
       - name: "Warn about close Stale Branches"
         conditions:
           state: opened
@@ -39,20 +33,34 @@ resource_rules:
           forbidden_labels:
             - 🚧 wip
             - 📝 testing
+            - info
         actions:
           comment: >
             This issue has been inactive for over a month. It will be closed as stale.
             If you would like to keep it open, please add a 🚧 wip or 📝 testing tag and reopen.
           status: close
+  # Merge Request Policies
   merge_requests:
     rules:
+      # Update labels for trello tickets in merged MRs for schedule CI
+      - name: "Update Trello for merged MRs"
+        conditions:
+          state: merged
+          labels:
+            - trello::To merge
+        actions:
+          remove_labels:
+            - trello::To merge
+          labels:
+            - trello::To prod
+      # Faster rebasing with labels
       - name: "Rebase stale"
         conditions:
           state: opened
           labels:
-            - "bot-rebase"
+            - bot-rebase
         actions:
           remove_labels:
-            - "bot-rebase"
+            - bot-rebase
           comment: |
             /rebase
