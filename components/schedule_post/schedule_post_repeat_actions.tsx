@@ -242,6 +242,7 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid, sch
         initialFocus: isEndDatePickerOpen,
         mode: 'single',
         selected: endMoment.toDate(),
+        defaultMonth: endMoment.toDate(),
         onDayClick: handleEndDateChange,
         disabled: [{
             before: timestamp.toDate(),
