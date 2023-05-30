@@ -75,7 +75,7 @@ const selectStyle = {
 const momentInstance = moment();
 
 // TODO: improve theming support
-// TODO: improve responsive
+// TODO: responsive position "ends date time picker" correctly
 const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid, schedulePostOptions, setSchedulePostOptions}: Props) => {
     const {
         everyAmount,
@@ -352,7 +352,9 @@ const RepeatActions = ({show, timestamp, timezone, setAreRepeatOptionsValid, sch
             {everyInterval === 'week' && (
                 <div className='schedule-post-modal__repeat-actions-on'>
                     <label>{repeatOnLabel}</label>
-                    {dayPicker}
+                    <div className='schedule-on'>
+                        {dayPicker}
+                    </div>
                 </div>
             )}
             <div className='schedule-post-modal__repeat-actions-ends'>

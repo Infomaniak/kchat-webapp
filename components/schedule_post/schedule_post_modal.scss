@@ -1,6 +1,12 @@
 .schedule-post-modal {
-    .modal &.GenericModal .modal {
-        &-body {
+    .modal &.GenericModal {
+        @media screen and (max-width: 768px) {
+            &.modal-dialog {
+                margin: auto;
+            }
+        }
+
+        & .modal-body {
             padding-bottom: 28px;
             overflow: visible;
 
@@ -43,15 +49,26 @@
         flex-direction: column;
         gap: 24px;
         > div {
-            display: flex;
+            display: grid;
+            grid-template-columns: 130px auto;
             align-items: flex-start;
             gap: 16px;
             > label {
+                grid-column: 1 / 2;
                 width: 130px;
                 margin: 0;
                 font-weight: 600;
                 font-size: 14px;
                 line-height: 20px;
+            }
+            > div {
+                grid-column: 2 / 2;
+            }
+            @media screen and (max-width: 768px) {
+                grid-template-columns: 30% auto;
+                > label {
+                    width: 30%;
+                }
             }
         }
         .react-select {
@@ -65,16 +82,24 @@
                 padding: 10px 0;
             }
             .schedule-every {
-                display: flex;
-                flex-direction: column;
+                display: grid;
                 gap: 16px;
                 > div {
                     display: flex;
                     gap: 16px;
+                    grid-row: 1/ 2;
                     .schedule-every-amount {
                         flex: 1;
+                        max-width: 50px;
+                        .Input_wrapper {
+                            padding: 0 5px;
+                        }
+                        .Input___error {
+                            width: max-content;
+                        }
                         &__fieldset {
                             min-height: 40px;
+                            min-width: 40px;
                             &:hover {
                                 cursor: default;
                                 &:not(:focus-within) {
@@ -83,6 +108,7 @@
                             }
                         }
                         &__input {
+                            text-align: center;
                             height: auto !important;
                             border: 0 !important;
                             color: rgba(var(--center-channel-color-rgb), 0.72);
@@ -104,14 +130,20 @@
                     }
                     .schedule-every-interval-select {
                         flex: 2;
+                        max-width: 150px;
                         > .react-select__control {
                             min-width: 126px;
                         }
                     }
                 }
-                .schedule-every-month-select > .react-select__control {
-                    flex: 1;
-                    min-width: 150px;
+                .schedule-every-month-select {
+                    grid-row: 2 / 2;
+                    max-width: 216px;
+                    >  .react-select__control {
+                        flex: 1;
+                        min-width: 150px;
+                        max-width: 216px;
+                    }
                 }
             }
 
@@ -120,21 +152,26 @@
         &-on {
             display: flex;
             min-height: 40px;
-            > label,
-            > button {
-                align-self: center;
+            > label {
+                padding: 10px 0;
             }
-            > button {
+            .schedule-on {
                 display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 32px;
-                height: 32px;
-                padding: 0;
-                border-radius: 50%;
-                font-weight: 600;
-                font-size: 14px;
-                line-height: 20px;
+                flex-wrap: wrap;
+                padding: 4px;
+                gap: 8px;
+                > button {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 32px;
+                    height: 32px;
+                    padding: 0;
+                    border-radius: 50%;
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 20px;
+                }
             }
         }
 
