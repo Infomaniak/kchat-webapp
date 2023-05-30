@@ -107,6 +107,7 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
 
         dispatch(setGlobalItem(key, updatedValue));
 
+        // Temporary bypass GlobalDrafts config check for scheduled posts
         // TODO remove '|| updatedValue?.timestamp' once drafts are reenabled
         if ((syncedDraftsAreAllowedAndEnabled(state) || updatedValue?.timestamp) && save && updatedValue) {
             const connectionId = getConnectionId(state);

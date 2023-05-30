@@ -12,6 +12,7 @@ import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
 import * as GlobalActions from 'actions/global_actions';
 
 import Constants, {AdvancedTextEditor as AdvancedTextEditorConst, Locations, ModalIdentifiers, Preferences} from 'utils/constants';
+import {ClientError} from '@mattermost/client';
 import {PreferenceType} from '@mattermost/types/preferences';
 import * as UserAgent from 'utils/user_agent';
 import {isMac} from 'utils/utils';
@@ -102,10 +103,10 @@ type Props = {
     clearCommentDraftUploads: () => void;
 
     // Called when comment draft needs to be updated
-    onUpdateCommentDraft: (draft?: PostDraft, save?: boolean) => void;
+    onUpdateCommentDraft: (draft?: PostDraft, save?: boolean) => Promise<ActionResult>;
 
     // Called when comment draft needs to be updated for a specific root ID
-    updateCommentDraftWithRootId: (rootID: string, draft: PostDraft, save?: boolean) => void;
+    updateCommentDraftWithRootId: (rootID: string, draft: PostDraft, save?: boolean) => Promise<ActionResult>;
 
     // Called when submitting the comment
     onSubmit: (draft: PostDraft, options: {ignoreSlash: boolean}) => void;
@@ -350,10 +351,6 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
     }
 
     handleSchedulePost = (scheduleUTCTimestamp: number) => {
-        // TODO: handle options
-        // TODO: include files attachments ?
-        // TODO: display errors
-        // TODO: clear input if no error
         const channelId = this.props.channelId;
         if (!channelId) {
             return;
@@ -362,7 +359,14 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             ...this.state.draft ?? this.props.draft,
             timestamp: scheduleUTCTimestamp,
         };
-        this.handleDraftChange(updatedDraft, this.props.rootId, true, true);
+        this.handleDraftChange(updatedDraft, this.props.rootId, true, true, ({error}: ActionResult<boolean, ClientError>) => {
+            if (error) {
+                this.setState({serverError: error});
+            }
+
+            // TODO: cleanup
+            this.setShowPreview(false);
+        });
     };
 
     saveDraftWithShow = () => {
@@ -799,7 +803,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.draftsForPost[this.props.rootId] = updatedDraft;
     }
 
-    handleDraftChange = (draft: PostDraft, rootId?: string, save = false, instant = false) => {
+    handleDraftChange = (draft: PostDraft, rootId?: string, save = false, instant = false, callback?: (actionResult: ActionResult) => void) => {
         this.isDraftEdited = true;
 
         if (this.saveDraftFrame) {
@@ -808,9 +812,9 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         const saveDraft = () => {
             if (typeof rootId == 'undefined') {
-                this.props.onUpdateCommentDraft(draft);
+                this.props.onUpdateCommentDraft(draft).then(callback);
             } else {
-                this.props.updateCommentDraftWithRootId(rootId, draft, save);
+                this.props.updateCommentDraftWithRootId(rootId, draft, save).then(callback);
             }
         };
 

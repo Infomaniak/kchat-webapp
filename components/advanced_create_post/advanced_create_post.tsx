@@ -55,6 +55,7 @@ import {PostDraft} from 'types/store/draft';
 
 import {ModalData} from 'types/actions';
 
+import {ClientError} from '@mattermost/client';
 import {Channel, ChannelMemberCountsByGroup} from '@mattermost/types/channels';
 import {Post, PostMetadata, PostPriorityMetadata} from '@mattermost/types/posts';
 import {PreferenceType} from '@mattermost/types/preferences';
@@ -205,7 +206,7 @@ type Props = {
         runSlashCommandWillBePostedHooks: (originalMessage: string, originalArgs: CommandArgs) => ActionResult;
 
         // func called for setting drafts
-        setDraft: (name: string, value: PostDraft | null, draftChannelId: string, save?: boolean) => void;
+        setDraft: (name: string, value: PostDraft | null, draftChannelId: string, save?: boolean) => Promise<ActionResult>;
 
         // func called for editing posts
         setEditingPost: (postId?: string, refocusId?: string, title?: string, isRHS?: boolean) => void;
@@ -379,10 +380,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     handleSchedulePost = (scheduleUTCTimestamp: number) => {
-        // TODO: handle options
-        // TODO: include files attachments ?
-        // TODO: display errors
-        // TODO: clear input if no error
         const currentChannelId = this.props.currentChannel.id;
         if (!currentChannelId) {
             return;
@@ -391,7 +388,15 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             ...this.draftsForChannel[currentChannelId] ?? this.props.draft,
             timestamp: scheduleUTCTimestamp,
         };
-        this.handleDraftChange(updatedDraft, true, true);
+        this.handleDraftChange(updatedDraft, true, true, ({error}: ActionResult<boolean, ClientError>) => {
+            if (error) {
+                this.setState({serverError: error});
+                return;
+            }
+
+            // TODO: cleanup
+            this.setShowPreview(false);
+        });
     };
 
     saveDraftWithShow = async (props = this.props) => {
@@ -896,7 +901,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.handleDraftChange(draft);
     }
 
-    handleDraftChange = (draft: PostDraft, instant = false, save?: boolean) => {
+    handleDraftChange = (draft: PostDraft, instant = false, save?: boolean, callback?: (actionResult: ActionResult) => void) => {
         const channelId = this.props.currentChannel.id;
 
         if (this.saveDraftFrame) {
@@ -904,10 +909,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         if (instant) {
-            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
+            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save).then(callback);
         } else {
             this.saveDraftFrame = window.setTimeout(() => {
-                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
+                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save).then(callback);
             }, Constants.SAVE_DRAFT_TIMEOUT);
         }
 
