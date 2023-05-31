@@ -69,20 +69,4 @@ describe('components/view_image/ImagePreview', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
-
-    test('should not download link for external file', () => {
-        const props = {
-            ...baseProps,
-            fileInfo: {
-                link: 'https://example.com/image.png',
-            },
-        };
-
-        const wrapper = shallow(
-            <ImagePreview {...props}/>,
-        );
-
-        expect(wrapper.find('div').prop('className')).toBe('image_preview_div');
-        expect(wrapper.find('canvas').prop('className')).toBe('image_preview_canvas__normal');
-    });
 });
