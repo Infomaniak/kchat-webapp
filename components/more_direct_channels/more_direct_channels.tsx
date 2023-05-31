@@ -178,8 +178,6 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
         this.props.onModalDismissed?.();
         this.props.onExited?.();
-
-        this.props.actions.closeModal(ModalIdentifiers.MORE_DMS);
     }
 
     handleSubmit = (values = this.state.values) => {

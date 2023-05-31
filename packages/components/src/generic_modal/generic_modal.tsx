@@ -54,10 +54,10 @@ type State = {
 
 export class GenericModal extends React.PureComponent<Props, State> {
     static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-        if (nextProps.show !== undefined && nextProps.show !== prevState.show) {
+        if (nextProps.show === false && prevState.show === true) {
             return {
                 ...prevState,
-                show: nextProps.show ?? prevState.show,
+                show: false,
             };
         }
         return null;
