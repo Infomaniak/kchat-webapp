@@ -446,12 +446,12 @@ describe('components/advanced_create_post', () => {
         });
 
         const showNotifyAllModal = wrapper.instance().showNotifyAllModal;
-        wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount));
+        wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp));
 
         const form = wrapper.find('#create_post');
         form.simulate('Submit', {preventDefault: jest.fn()});
         expect(wrapper.instance().props.actions.openModal).toHaveBeenCalled();
-        expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers'], 0, 10);
+        expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers'], 0, 10, false, undefined);
     });
 
     it('onSubmit test for several @groups', () => {
@@ -508,12 +508,12 @@ describe('components/advanced_create_post', () => {
         });
 
         const showNotifyAllModal = wrapper.instance().showNotifyAllModal;
-        wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount));
+        wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp));
 
         const form = wrapper.find('#create_post');
         form.simulate('Submit', {preventDefault: jest.fn()});
         expect(wrapper.instance().props.actions.openModal).toHaveBeenCalled();
-        expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers', '@boss', '@love', '@you', '@software-developers'], 0, 40);
+        expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers', '@boss', '@love', '@you', '@software-developers'], 0, 40, false, undefined);
     });
 
     it('onSubmit test for several @groups with timezone', () => {
@@ -562,12 +562,12 @@ describe('components/advanced_create_post', () => {
         });
 
         const showNotifyAllModal = wrapper.instance().showNotifyAllModal;
-        wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount));
+        wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp));
 
         const form = wrapper.find('#create_post');
         form.simulate('Submit', {preventDefault: jest.fn()});
         expect(wrapper.instance().props.actions.openModal).toHaveBeenCalled();
-        expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers', '@boss', '@love', '@you'], 5, 40);
+        expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers', '@boss', '@love', '@you'], 5, 40, false, undefined);
     });
 
     it('Should set mentionHighlightDisabled prop when useChannelMentions disabled before calling actions.onSubmitPost', async () => {
@@ -647,13 +647,13 @@ describe('components/advanced_create_post', () => {
         });
 
         const showNotifyAllModal = wrapper.instance().showNotifyAllModal;
-        wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount));
+        wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp));
 
         const form = wrapper.find('#create_post');
         await form.simulate('Submit', {preventDefault: jest.fn()});
 
         expect(wrapper.instance().props.actions.openModal).toHaveBeenCalledTimes(1);
-        expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@all'], 4, 8);
+        expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@all'], 4, 8, false, undefined);
 
         wrapper.setProps({
             currentChannelMembersCount: 2,

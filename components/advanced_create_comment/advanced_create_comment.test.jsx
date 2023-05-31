@@ -817,14 +817,14 @@ describe('components/AdvancedCreateComment', () => {
                 <AdvancedCreateComment {...props}/>,
             );
             const showNotifyAllModal = wrapper.instance().showNotifyAllModal;
-            wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount));
+            wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp));
 
             await wrapper.instance().handleSubmit({preventDefault});
 
             expect(onSubmit).not.toHaveBeenCalled();
             expect(preventDefault).toHaveBeenCalled();
             expect(baseProps.getChannelTimezones).toHaveBeenCalledTimes(0);
-            expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers'], 0, 10);
+            expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers'], 0, 10, false, undefined);
             expect(props.openModal).toHaveBeenCalled();
         });
 
@@ -891,14 +891,14 @@ describe('components/AdvancedCreateComment', () => {
             );
 
             const showNotifyAllModal = wrapper.instance().showNotifyAllModal;
-            wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount));
+            wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp));
 
             await wrapper.instance().handleSubmit({preventDefault});
 
             expect(onSubmit).not.toHaveBeenCalled();
             expect(preventDefault).toHaveBeenCalled();
             expect(baseProps.getChannelTimezones).toHaveBeenCalledTimes(0);
-            expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers', '@boss', '@love', '@you', '@software-developers'], 0, 40);
+            expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers', '@boss', '@love', '@you', '@software-developers'], 0, 40, false, undefined);
             expect(props.openModal).toHaveBeenCalled();
         });
 
@@ -933,14 +933,14 @@ describe('components/AdvancedCreateComment', () => {
             );
 
             const showNotifyAllModal = wrapper.instance().showNotifyAllModal;
-            wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount));
+            wrapper.instance().showNotifyAllModal = jest.fn((mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp) => showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp));
 
             await wrapper.instance().handleSubmit({preventDefault});
 
             expect(onSubmit).not.toHaveBeenCalled();
             expect(preventDefault).toHaveBeenCalled();
             expect(baseProps.getChannelTimezones).toHaveBeenCalledTimes(0);
-            expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers'], 5, 10);
+            expect(wrapper.instance().showNotifyAllModal).toHaveBeenCalledWith(['@developers'], 5, 10, false, undefined);
             expect(props.openModal).toHaveBeenCalled();
         });
 
