@@ -80,12 +80,12 @@ def update_merge_request_labels(mr_iid, labels)
 end
 
 # main
-create_changelog(GIT_RELEASE_TAG)
-changelog = get_changelog(GIT_RELEASE_TAG)
 
 # Update labels if the tag is not a pre-release
 if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   puts "Processing full release tag: #{GIT_RELEASE_TAG}"
+  create_changelog(GIT_RELEASE_TAG)
+  changelog = get_changelog(GIT_RELEASE_TAG)
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
   mr_numbers.each do |mr_number|
@@ -94,11 +94,15 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
     update_merge_request_labels(mr["iid"], labels)
     puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
   end
+  create_release(changelog)
+  puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
 
 # Update labels if the tag is a pre-release
 if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
+  create_changelog(GIT_RELEASE_TAG)
+  changelog = get_changelog(GIT_RELEASE_TAG)
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
   mr_numbers.each do |mr_number|
@@ -107,32 +111,33 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
     update_merge_request_labels(mr["iid"], labels)
     puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
   end
+  create_release(changelog)
+  puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
 
 ## Test if the tag is a preprod release
-if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
-  puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
-  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+# if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
+#   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
+#   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
-  mr_numbers.each do |mr_number|
-    mr = get_merge_request(mr_number)
-    labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::preprod"]
-    update_merge_request_labels(mr["iid"], labels)
-    puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
-  end
+#   mr_numbers.each do |mr_number|
+#     mr = get_merge_request(mr_number)
+#     labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::preprod"]
+#     update_merge_request_labels(mr["iid"], labels)
+#     puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
+#   end
+# end
+
+# Notify only for prod or next tags
+if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG) || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+  commit_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/commit/"
+  mr_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/"
+  formatted_changelog = changelog.gsub(/kchat\/webapp@/, commit_url).gsub(/kchat\/webapp!/, mr_url)
+  data = { "text" => formatted_changelog }.to_json
+  notify_uri = URI.parse(NOTIFY_CHANNEL)
+  notify_request = Net::HTTP::Post.new(notify_uri.request_uri, { "Content-Type" => "application/json" })
+  notify_request.body = data
+
+  get_http(notify_uri).request(notify_request)
+  puts "Posted changelog to notification channel"
 end
-
-create_release(changelog)
-puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
-
-commit_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/commit/"
-mr_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/"
-
-formatted_changelog = changelog.gsub(/kchat\/webapp@/, commit_url).gsub(/kchat\/webapp!/, mr_url)
-data = { "text" => formatted_changelog }.to_json
-notify_uri = URI.parse(NOTIFY_CHANNEL)
-notify_request = Net::HTTP::Post.new(notify_uri.request_uri, { "Content-Type" => "application/json" })
-notify_request.body = data
-
-get_http(notify_uri).request(notify_request)
-puts "Posted changelog to notification channel"
