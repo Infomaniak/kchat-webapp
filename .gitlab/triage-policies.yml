@@ -53,6 +53,7 @@ resource_rules:
             - trello::To merge
           labels:
             - trello::To prod
+            - trello-sync
       # Faster rebasing with labels
       - name: "Rebase stale"
         conditions:
