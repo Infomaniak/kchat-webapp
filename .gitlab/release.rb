@@ -52,11 +52,10 @@ def create_release(changelog)
 end
 
 def get_merge_request(mr_iid)
-  url = "#{GITLAB_BASE_URL}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{mr_iid}"
-  uri = URI.parse(url)
-  http = get_http(uri)
-  request = Net::HTTP::Get.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_ACCESS_TOKEN })
-  response = http.request(request)
+  uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{mr_iid}")
+  request = Net::HTTP::Get.new(uri.request_uri)
+  request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
+  response = get_http(uri).request(request)
 
   # Check the HTTP response status
   if response.code.to_i >= 400
