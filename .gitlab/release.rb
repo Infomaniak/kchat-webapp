@@ -110,6 +110,19 @@ if tag =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   end
 end
 
+## Test if the tag is a preprod release
+if tag =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
+  puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
+  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+
+  mr_numbers.each do |mr_number|
+    mr = get_merge_request(mr_number)
+    labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::preprod"]
+    update_merge_request_labels(mr["iid"], labels)
+    puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
+  end
+end
+
 create_release(changelog)
 puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 
