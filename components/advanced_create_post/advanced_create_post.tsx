@@ -379,13 +379,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.saveDraftWithShow();
     }
 
-    handleSchedulePost = (scheduleUTCTimestamp: number) => {
-        const currentChannelId = this.props.currentChannel.id;
-        if (!currentChannelId) {
-            return;
-        }
-        this.handleSubmit(undefined, true, scheduleUTCTimestamp);
-    };
+    handleSchedulePost = (scheduleUTCTimestamp: number) => this.handleSubmit(undefined, true, scheduleUTCTimestamp);
 
     saveDraftWithShow = async (props = this.props) => {
         if (this.saveDraftFrame && props.currentChannel) {

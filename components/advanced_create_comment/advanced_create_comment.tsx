@@ -350,9 +350,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.props.onUpdateCommentDraft(updatedDraft, true);
     }
 
-    handleSchedulePost = (scheduleUTCTimestamp: number) => {
-        this.handleSubmit(undefined, true, scheduleUTCTimestamp);
-    };
+    handleSchedulePost = (scheduleUTCTimestamp: number) => this.handleSubmit(undefined, true, scheduleUTCTimestamp);
 
     saveDraftWithShow = () => {
         this.setState((prev) => {
