@@ -46,13 +46,14 @@ resource_rules:
       - name: "Update Trello for merged MRs"
         conditions:
           state: merged
-          ruby: "labels.none? { |l| l.name == 'trello::To merge' ||  l.name == 'trello::En cours' }"
+          labels:
+            - trello::To merge
         actions:
           remove_labels:
-            - trello::*
+            - trello::To merge
           labels:
-            - trello-sync
             - trello::To prod
+            - trello-sync
       # Faster rebasing with labels
       - name: "Rebase stale"
         conditions:
