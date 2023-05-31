@@ -50,6 +50,7 @@ describe('components/MoreDirectChannels', () => {
         onModalDismissed: jest.fn(),
         onExited: jest.fn(),
         actions: {
+            closeModal: jest.fn(),
             getProfiles: jest.fn(() => {
                 return new Promise<void>((resolve) => {
                     process.nextTick(() => resolve());
