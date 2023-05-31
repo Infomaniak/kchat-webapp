@@ -4,10 +4,10 @@ require 'net/http'
 GITLAB_API_BASE = "https://gitlab.infomaniak.ch/api/v4"
 # todo: maybe use env
 GITLAB_PROJECT_ID = 3225
-GITLAB_ACCESS_TOKEN = ARGV[0]
-GIT_RELEASE_TAG = ARGV[1]
-MILESTONE = ARGV[2]
-NOTIFY_CHANNEL = ARGV[3]
+GITLAB_ACCESS_TOKEN = ENV['GITLAB_API_TOKEN']
+GIT_RELEASE_TAG = ARGV[0]
+MILESTONE = ARGV[1]
+NOTIFY_CHANNEL = ARGV[2]
 
 def get_http(uri)
   Net::HTTP.new(uri.host, uri.port).tap do |http|
