@@ -59,7 +59,6 @@ type Props = {
 };
 
 type State = {
-    showDirectChannelsModal: boolean;
     isDragging: boolean;
 };
 
@@ -67,7 +66,6 @@ export default class Sidebar extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            showDirectChannelsModal: false,
             isDragging: false,
         };
     }

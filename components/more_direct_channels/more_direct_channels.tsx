@@ -176,7 +176,6 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         if (this.exitToChannel) {
             getHistory().push(this.exitToChannel);
         }
-
         this.props.onModalDismissed?.();
         this.props.onExited?.();
     }
