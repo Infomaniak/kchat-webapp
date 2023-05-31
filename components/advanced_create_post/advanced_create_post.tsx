@@ -384,19 +384,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         if (!currentChannelId) {
             return;
         }
-        const updatedDraft = {
-            ...this.draftsForChannel[currentChannelId] ?? this.props.draft,
-            timestamp: scheduleUTCTimestamp,
-        };
-        this.handleDraftChange(updatedDraft, true, true, ({error}: ActionResult<boolean, ClientError>) => {
-            if (error) {
-                this.setState({serverError: error});
-                return;
-            }
-
-            // TODO: cleanup
-            this.setShowPreview(false);
-        });
+        this.handleSubmit(undefined, true, scheduleUTCTimestamp);
     };
 
     saveDraftWithShow = async (props = this.props) => {
@@ -486,7 +474,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.handleEmojiClose();
     }
 
-    doSubmit = async (e?: React.FormEvent) => {
+    doSubmit = async (e?: React.FormEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
         const channelId = this.props.currentChannel.id;
         if (e) {
             e.preventDefault();
@@ -533,7 +521,35 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.focusTextbox(forceFocus);
 
         const isReaction = Utils.REACTION_PATTERN.exec(post.message);
-        if (post.message.indexOf('/') === 0 && !ignoreSlash) {
+        if (isSchedule) {
+            // Should we merge post in the updatedDraft ? If so, we must update the upsertDraft action
+            const updatedDraft = {
+                ...this.draftsForChannel[channelId] ?? this.props.draft,
+                timestamp: scheduleUTCTimestamp,
+            };
+            this.handleDraftChange(updatedDraft, true, true, ({error}: ActionResult<boolean, ClientError>) => {
+                if (error) {
+                    this.setState({serverError: {
+                        ...error,
+                        submittedMessage: updatedDraft.message,
+                    }});
+                    this.isDraftSubmitting = false;
+                    this.draftsForChannel[channelId] = null;
+                    return;
+                }
+
+                this.setState({
+                    message: '',
+                    submitting: false,
+                    postError: null,
+                    showFormat: false,
+                });
+
+                this.isDraftSubmitting = false;
+                this.draftsForChannel[channelId] = null;
+            });
+            return;
+        } else if (post.message.indexOf('/') === 0 && !ignoreSlash) {
             this.setState({message: '', postError: null});
             let args: CommandArgs = {
                 channel_id: channelId,
@@ -599,11 +615,11 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.draftsForChannel[channelId] = null;
     }
 
-    handleNotifyAllConfirmation = () => {
-        this.doSubmit();
+    handleNotifyAllConfirmation = (isSchedule = false, scheduleUTCTimestamp?: number) => {
+        this.doSubmit(undefined, isSchedule, scheduleUTCTimestamp);
     }
 
-    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number) => {
+    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number, isSchedule = false, scheduleUTCTimestamp?: number) => {
         this.props.actions.openModal({
             modalId: ModalIdentifiers.NOTIFY_CONFIRM_MODAL,
             dialogType: NotifyConfirmModal,
@@ -611,7 +627,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 mentions,
                 channelTimezoneCount,
                 memberNotifyCount,
-                onConfirm: () => this.handleNotifyAllConfirmation(),
+                onConfirm: () => this.handleNotifyAllConfirmation(isSchedule, scheduleUTCTimestamp),
             },
         });
     }
@@ -630,7 +646,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         return command === 'online' || command === 'away' || command === 'dnd' || command === 'offline';
     };
 
-    handleSubmit = async (e: React.FormEvent) => {
+    handleSubmit = async (e?: React.FormEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
         const {
             currentChannel: updateChannel,
             userIsOutOfOffice,
@@ -691,7 +707,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         if (memberNotifyCount > 0) {
-            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount);
+            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp);
             this.isDraftSubmitting = false;
             return;
         }
@@ -741,7 +757,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             return;
         }
 
-        await this.doSubmit(e);
+        await this.doSubmit(e, isSchedule, scheduleUTCTimestamp);
     }
 
     sendMessage = async (originalPost: Post) => {

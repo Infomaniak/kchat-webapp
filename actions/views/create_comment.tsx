@@ -169,7 +169,12 @@ export function makeOnSubmit(channelId: string, rootId: string, latestPostId: st
         const emojis = getCustomEmojisByName(getState());
         const emojiMap = new EmojiMap(emojis);
 
-        if (isReaction && emojiMap.has(isReaction[2])) {
+        if (draft.timestamp) {
+            dispatch(updateCommentDraft(rootId, {
+                ...draft,
+                channelId,
+            }, true));
+        } else if (isReaction && emojiMap.has(isReaction[2])) {
             dispatch(submitReaction(latestPostId, isReaction[1], isReaction[2]));
         } else if (message.indexOf('/') === 0 && !options.ignoreSlash) {
             try {

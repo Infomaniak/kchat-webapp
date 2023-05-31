@@ -351,22 +351,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
     }
 
     handleSchedulePost = (scheduleUTCTimestamp: number) => {
-        const channelId = this.props.channelId;
-        if (!channelId) {
-            return;
-        }
-        const updatedDraft = {
-            ...this.state.draft ?? this.props.draft,
-            timestamp: scheduleUTCTimestamp,
-        };
-        this.handleDraftChange(updatedDraft, this.props.rootId, true, true, ({error}: ActionResult<boolean, ClientError>) => {
-            if (error) {
-                this.setState({serverError: error});
-            }
-
-            // TODO: cleanup
-            this.setShowPreview(false);
-        });
+        this.handleSubmit(undefined, true, scheduleUTCTimestamp);
     };
 
     saveDraftWithShow = () => {
@@ -470,11 +455,11 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.setState({draft: updatedDraft});
     }
 
-    handleNotifyAllConfirmation = () => {
-        this.doSubmit();
+    handleNotifyAllConfirmation = (isSchedule = false, scheduleUTCTimestamp?: number) => {
+        this.doSubmit(undefined, isSchedule, scheduleUTCTimestamp);
     }
 
-    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number) => {
+    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number, isSchedule = false, scheduleUTCTimestamp?: number) => {
         this.props.openModal({
             modalId: ModalIdentifiers.NOTIFY_CONFIRM_MODAL,
             dialogType: NotifyConfirmModal,
@@ -482,7 +467,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                 mentions,
                 channelTimezoneCount,
                 memberNotifyCount,
-                onConfirm: () => this.handleNotifyAllConfirmation(),
+                onConfirm: () => this.handleNotifyAllConfirmation(isSchedule, scheduleUTCTimestamp),
             },
         });
     }
@@ -567,8 +552,10 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.setState({postError});
     }
 
-    handleSubmit = async (e: React.FormEvent | React.MouseEvent) => {
-        e.preventDefault();
+    handleSubmit = async (e?: React.FormEvent | React.MouseEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
+        if (e) {
+            e.preventDefault();
+        }
         this.setShowPreview(false);
         this.isDraftSubmitting = true;
 
@@ -657,15 +644,15 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         }
 
         if (memberNotifyCount > 0) {
-            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount);
+            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp);
             this.isDraftSubmitting = false;
             return;
         }
 
-        await this.doSubmit(e);
+        await this.doSubmit(e, isSchedule, scheduleUTCTimestamp);
     }
 
-    doSubmit = async (e?: React.FormEvent) => {
+    doSubmit = async (e?: React.FormEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
         if (e) {
             e.preventDefault();
         }
@@ -701,6 +688,10 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         const fasterThanHumanWillClick = 150;
         const forceFocus = (Date.now() - this.lastBlurAt < fasterThanHumanWillClick);
         this.focusTextbox(forceFocus);
+
+        if (isSchedule) {
+            draft.timestamp = scheduleUTCTimestamp;
+        }
 
         const serverError = this.state.serverError;
         let ignoreSlash = false;

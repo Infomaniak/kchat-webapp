@@ -138,7 +138,8 @@ export function makeGetChannelDraft() {
         if (
             typeof draft.message !== 'undefined' &&
             typeof draft.uploadsInProgress !== 'undefined' &&
-            typeof draft.fileInfos !== 'undefined'
+            typeof draft.fileInfos !== 'undefined' &&
+            !draft.timestamp // If the draft is a scheduled post return a new empty draft
         ) {
             return draft;
         }
@@ -158,7 +159,8 @@ export function getPostDraft(state: GlobalState, prefixId: string, suffixId: str
     if (
         typeof draft.message !== 'undefined' &&
         typeof draft.uploadsInProgress !== 'undefined' &&
-        typeof draft.fileInfos !== 'undefined'
+        typeof draft.fileInfos !== 'undefined' &&
+        !draft.timestamp // If the draft is a scheduled post return a new empty draft
     ) {
         return draft;
     }
