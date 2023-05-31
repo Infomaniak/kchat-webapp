@@ -84,7 +84,7 @@ create_changelog(GIT_RELEASE_TAG)
 changelog = get_changelog(GIT_RELEASE_TAG)
 
 # Update labels if the tag is not a pre-release
-if /\d+\.\d+\.\d+/.match?(GIT_RELEASE_TAG)
+if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   puts "Processing full release tag: #{GIT_RELEASE_TAG}"
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
