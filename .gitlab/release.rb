@@ -97,7 +97,7 @@ if /\d+\.\d+\.\d+/.match?(GIT_RELEASE_TAG)
 end
 
 # Update labels if the tag is a pre-release
-if tag =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
@@ -110,7 +110,7 @@ if tag =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
 end
 
 ## Test if the tag is a preprod release
-if tag =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
+if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
