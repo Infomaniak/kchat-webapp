@@ -6,7 +6,7 @@ exports[`components/MoreDirectChannels should exclude deleted users if there is 
   autoCloseOnConfirmButton={true}
   className="more-modal more-direct-channels"
   enforceFocus={true}
-  id="more_dms"
+  id="create_dm_channel"
   keyboardEscape={true}
   modalHeaderText={
     <Memo(MemoizedFormattedMessage)
@@ -233,7 +233,7 @@ exports[`components/MoreDirectChannels should match snapshot 1`] = `
   autoCloseOnConfirmButton={true}
   className="more-modal more-direct-channels"
   enforceFocus={true}
-  id="more_dms"
+  id="create_dm_channel"
   keyboardEscape={true}
   modalHeaderText={
     <Memo(MemoizedFormattedMessage)
