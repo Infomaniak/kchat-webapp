@@ -224,8 +224,7 @@ describe('components/invitation_modal/overage_users_banner_notice', () => {
         fireEvent.click(screen.getByText(contactSalesTextLink));
         expect(screen.getByRole('link')).toHaveAttribute(
             'href',
-            LicenseLinks.CONTACT_SALES +
-                '?utm_source=infomaniak&utm_medium=in-product&utm_content=&uid=current_user&sid=',
+            LicenseLinks.CONTACT_SALES,
         );
         expect(trackEvent).toBeCalledTimes(2);
         expect(trackEvent).toBeCalledWith('insights', 'click_true_up_warning', {
@@ -330,8 +329,7 @@ describe('components/invitation_modal/overage_users_banner_notice', () => {
         fireEvent.click(screen.getByText(contactSalesTextLink));
         expect(screen.getByRole('link')).toHaveAttribute(
             'href',
-            LicenseLinks.CONTACT_SALES +
-                '?utm_source=infomaniak&utm_medium=in-product&utm_content=&uid=current_user&sid=',
+            LicenseLinks.CONTACT_SALES,
         );
         expect(trackEvent).toBeCalledTimes(2);
         expect(trackEvent).toBeCalledWith('insights', 'click_true_up_error', {
