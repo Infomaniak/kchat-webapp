@@ -135,7 +135,7 @@ def sync_issue_metadata(merge_request, project_id, mr_iid)
     issue_iid = issue_iid.to_i
     mr_labels = get_mr_labels(project_id, mr_iid)
     issue_labels = get_issue_labels(project_id, issue_iid)
-    
+
     trello_mr_labels = mr_labels.select { |label| label.start_with?('trello::') }
     trello_issue_labels = issue_labels.select { |label| label.start_with?('trello::') }
 
@@ -186,31 +186,53 @@ merge_requests.each do |merge_request|
       puts "Error getting details for card #{card_id}: #{e.message}"
       next
     end
-    
+
+    # Get the list name from the card details
+    list_name_from_card = card_details[:list_name]
+    # Prepare the new label
+    new_label = "trello::#{list_name_from_card}"
+
     # Check if existing labels match the Trello column
     existing_labels = merge_request['labels']
     existing_trello_label = existing_labels.find { |label| label.start_with?('trello::') }
-    if existing_trello_label
-      if existing_trello_label != "trello::#{card_details[:list_name]}"
-        # Get the list name from the label
-        list_name_from_label = existing_trello_label.split('::').last
+
+    if existing_labels.include?('trello-sync')
+      # Move the Trello card only if the merge request has a trello-sync label and the Trello list name does not match the existing label
+      if existing_trello_label != new_label
         # Get all lists on the board
         lists = get_board_lists()
         # Find the list with the matching name
-        list = lists.find { |list| list['name'] == list_name_from_label }
+        list = lists.find { |list| list['name'] == card_details[:list_name] }
         if list
           # If a list with the matching name was found, move the card to it
           move_trello_card(card_id, list['id'])
-          execute_issue_cpmeta(mr_details, mr_iid)
+          puts "Moved card #{card_id} to list #{card_details[:list_name]}"
+
+          # Remove the 'trello-sync' label from the merge request
+          existing_labels.delete('trello-sync')
+          update_gitlab_merge_request(project_id, mr_iid, existing_labels)
+          puts "Removed 'trello-sync' label for merge request id #{mr_iid}. New labels: #{existing_labels.join(', ')}"
         else
-          puts "No list found with name: #{list_name_from_label}"
+          puts "No list found with name: #{card_details[:list_name]}"
         end
       end
     else
-      # If there is no existing Trello label, add the correct one
-      labels = existing_labels.append("trello::#{card_details[:list_name]}")
-      update_gitlab_merge_request(mr_details['project_id'], mr_details['iid'], labels)
-      execute_issue_cpmeta(mr_details, mr_iid)
+      # Update the labels in GitLab if no Trello label exists or if the Trello list does not match the existing label
+      if existing_trello_label != new_label
+        # Remove the old Trello label if it exists
+        existing_labels.delete(existing_trello_label) if existing_trello_label
+
+        # Add the new label
+        existing_labels << new_label
+
+        # Update the labels in GitLab
+        update_gitlab_merge_request(project_id, mr_iid, existing_labels)
+        puts "Updated labels for merge request id #{mr_iid}. New labels: #{existing_labels.join(', ')}"
+      else
+        puts "Trello list matches GitLab label: #{new_label}"
+      end
     end
+
+    execute_issue_cpmeta(mr_details, mr_iid)
   end
 end
