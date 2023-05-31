@@ -198,23 +198,30 @@ merge_requests.each do |merge_request|
 
     if existing_labels.include?('trello-sync')
       # Move the Trello card only if the merge request has a trello-sync label and the Trello list name does not match the existing label
-      if existing_trello_label != new_label
+      if existing_trello_label && existing_trello_label != "trello::#{card_details[:list_name]}"
+        # Get the list name from the existing label
+        list_name_from_label = existing_trello_label.split('::').last
+
         # Get all lists on the board
         lists = get_board_lists()
+
         # Find the list with the matching name
-        list = lists.find { |list| list['name'] == card_details[:list_name] }
+        list = lists.find { |list| list['name'] == list_name_from_label }
+
         if list
           # If a list with the matching name was found, move the card to it
           move_trello_card(card_id, list['id'])
-          puts "Moved card #{card_id} to list #{card_details[:list_name]}"
+          puts "Moved card #{card_id} to list #{list_name_from_label}"
 
           # Remove the 'trello-sync' label from the merge request
           existing_labels.delete('trello-sync')
           update_gitlab_merge_request(project_id, mr_iid, existing_labels)
           puts "Removed 'trello-sync' label for merge request id #{mr_iid}. New labels: #{existing_labels.join(', ')}"
         else
-          puts "No list found with name: #{card_details[:list_name]}"
+          puts "No list found with name: #{list_name_from_label}"
         end
+      else
+        puts "Trello list matches GitLab label for #{mr_iid} or 'trello-sync' label is not present"
       end
     else
       # Update the labels in GitLab if no Trello label exists or if the Trello list does not match the existing label
@@ -229,7 +236,7 @@ merge_requests.each do |merge_request|
         update_gitlab_merge_request(project_id, mr_iid, existing_labels)
         puts "Updated labels for merge request id #{mr_iid}. New labels: #{existing_labels.join(', ')}"
       else
-        puts "Trello list matches GitLab label: #{new_label}"
+        puts "#{mr_iid} Trello list matches GitLab label: #{new_label}"
       end
     end
 
