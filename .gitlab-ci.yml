@@ -167,12 +167,9 @@ unit_test:
     paths:
       - .yarn/cache/
       - .yarn/install-state.gz
-      - coverage/
+      - .jestcache
   before_script:
     - yarn
-    - yarn workspace @mattermost/types build
-    - yarn workspace @mattermost/client build
-    - yarn workspace @mattermost/components build
   script:
     # typescript
     # - npm run check-types
@@ -260,6 +257,15 @@ changelog:
     - when: never
   script:
     - "./release.sh ${GITLAB_API_TOKEN} ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${SLACK_NOTIFY_CHANNEL}"
+
+update_labels:
+  image: ruby:latest
+  script: 
+    - ruby ./.gitlab/update_merge_request_labels.rb
+  rules:
+    - if: '$UPDATE_LABELS_SCHEDULE'
+      when: on_success
+    - when: never
 
 gitlab_triage:
   rules:

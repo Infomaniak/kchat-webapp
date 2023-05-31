@@ -21,6 +21,12 @@ function isDeactivatedChannel(state: GlobalState, channelId: string) {
     return Boolean(teammate && teammate.delete_at);
 }
 
+function isGpt(state: GlobalState, channelId: string) {
+    const teammate = getDirectTeammate(state, channelId);
+
+    return teammate?.username === 'chat.gpt';
+}
+
 function mapStateToProps(state: GlobalState) {
     const channel = getCurrentChannel(state);
 
@@ -31,6 +37,7 @@ function mapStateToProps(state: GlobalState) {
 
     return {
         channelId: channel ? channel.id : '',
+        isGptBot: channel ? isGpt(state, channel.id) : false,
         deactivatedChannel: channel ? isDeactivatedChannel(state, channel.id) : false,
         enableOnboardingFlow,
         channelIsArchived: channel ? channel.delete_at !== 0 : false,
