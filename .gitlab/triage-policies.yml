@@ -43,6 +43,22 @@ resource_rules:
   merge_requests:
     rules:
       # Update trello::To merge MRs for trello tickets in merged MRs for schedule CI
+      - name: "Update Trello for wip MRs"
+        conditions:
+          state: opened
+          assignee_member:
+            source: project
+            condition: member_of
+            source_id: 3225
+          labels:
+            - trello::FEEDBACKS
+        actions:
+          remove_labels:
+            - trello::FEEDBACKS
+          labels:
+            - trello::En cours
+            - trello-sync
+      # Update trello::To merge MRs for trello tickets in merged MRs for schedule CI
       - name: "Update Trello for merged MRs"
         conditions:
           state: merged
