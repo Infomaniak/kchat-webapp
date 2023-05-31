@@ -901,7 +901,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.handleDraftChange(draft);
     }
 
-    handleDraftChange = (draft: PostDraft, instant = false, save?: boolean, callback?: (actionResult: ActionResult) => void) => {
+    handleDraftChange = (draft: PostDraft, instant = false, save = false, callback?: (actionResult: ActionResult) => void) => {
         const channelId = this.props.currentChannel.id;
 
         if (this.saveDraftFrame) {

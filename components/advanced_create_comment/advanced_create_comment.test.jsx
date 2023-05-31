@@ -45,7 +45,7 @@ describe('components/AdvancedCreateComment', () => {
         latestPostId,
         locale: 'en',
         clearCommentDraftUploads: jest.fn(),
-        onUpdateCommentDraft: jest.fn(),
+        onUpdateCommentDraft: jest.fn(() => Promise.resolve()),
         updateCommentDraftWithRootId: jest.fn(),
         onSubmit: jest.fn(),
         onResetHistoryIndex: jest.fn(),
@@ -207,7 +207,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('should correctly update draft when handleEmojiClick is called', () => {
-        const onUpdateCommentDraft = jest.fn();
+        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
         const draft = emptyDraft;
         const enableAddButton = false;
         const props = {...baseProps, draft, onUpdateCommentDraft, enableAddButton};
@@ -355,7 +355,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('handleFileUploadComplete should update comment draft correctly', () => {
-        const updateCommentDraftWithRootId = jest.fn();
+        const updateCommentDraftWithRootId = jest.fn(() => Promise.resolve());
         const fileInfos = [{id: '1', name: 'aaa', create_at: 100}, {id: '2', name: 'bbb', create_at: 200}];
         const draft = {
             message: 'Test message',

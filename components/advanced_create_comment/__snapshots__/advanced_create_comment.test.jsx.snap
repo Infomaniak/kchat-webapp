@@ -43,6 +43,7 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
     handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
+    handleSchedulePost={[Function]}
     handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
@@ -110,6 +111,7 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
     handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
+    handleSchedulePost={[Function]}
     handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
@@ -184,6 +186,7 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
     handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
+    handleSchedulePost={[Function]}
     handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
@@ -251,6 +254,7 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
     handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
+    handleSchedulePost={[Function]}
     handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
@@ -325,6 +329,7 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
     handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
+    handleSchedulePost={[Function]}
     handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
