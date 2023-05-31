@@ -1,3 +1,18 @@
+## 1.2.5-rc.6 (2023-05-31)
+
+### Added (2 changes)
+
+- [add trads for message ack popper](kchat/webapp@fd14dd898ab82d44a3b47b05ad8f2a9f1144890a) by @antonbuksa ([merge request](kchat/webapp!408))
+- [add trello mr label script](kchat/webapp@61110cfa257ac593da8d958244b7f1e0cb44cb7a) by @antonbuksa
+
+### Fixed (1 change)
+
+- [fix date picker selected month MM-52881](kchat/webapp@070d7d280e3df4a422927773bdc94b85b65765e5) by @leonard.jouve ([merge request](kchat/webapp!422))
+
+### Removed (1 change)
+
+- [dont add any utm params in ExternalLink](kchat/webapp@45c49399230044c17661e87b6ded954400f00cb7) by @antonbuksa ([merge request](kchat/webapp!420))
+
 ## 1.2.5-rc.5 (2023-05-31)
 
 ### Added (2 changes)
