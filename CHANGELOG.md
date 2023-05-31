@@ -1,3 +1,27 @@
+## 1.2.5-next.4 (2023-05-31)
+
+### Added (2 changes)
+
+- [add trads for message ack popper](kchat/webapp@fd14dd898ab82d44a3b47b05ad8f2a9f1144890a) by @antonbuksa ([merge request](kchat/webapp!408))
+- [add trello mr label script](kchat/webapp@61110cfa257ac593da8d958244b7f1e0cb44cb7a) by @antonbuksa
+
+### Fixed (5 changes)
+
+- [fix regex for prod tags in release script](kchat/webapp@e0aa53236f1e9854f99afcee1c89b036c60c1680) by @antonbuksa ([merge request](kchat/webapp!421))
+- [fix tag check in release script](kchat/webapp@54695d9cd529dd8c36cf14161b0d4dfe21bcde06) by @antonbuksa ([merge request](kchat/webapp!421))
+- [fix release get_merge_request func](kchat/webapp@471c86e1b989b21ef306bbb08f405f7d23e235eb) by @antonbuksa ([merge request](kchat/webapp!421))
+- [fix date picker selected month MM-52881](kchat/webapp@070d7d280e3df4a422927773bdc94b85b65765e5) by @leonard.jouve ([merge request](kchat/webapp!422))
+- [improve image preview quality](kchat/webapp@b58ca7f1be735e1d1acaffae8713a3523222d10c) by @leonard.jouve ([merge request](kchat/webapp!332))
+
+### Changed (2 changes)
+
+- [update gpt bot daily msg limit in gpt banner notice](kchat/webapp@1092a480c8353a6c96a3de522e47775c86481b7f) by @antonbuksa ([merge request](kchat/webapp!423))
+- [ruby release script](kchat/webapp@527db9893fafe490cd778d115238e57aa7f1890d) by @antonbuksa ([merge request](kchat/webapp!421))
+
+### Removed (1 change)
+
+- [dont add any utm params in ExternalLink](kchat/webapp@45c49399230044c17661e87b6ded954400f00cb7) by @antonbuksa ([merge request](kchat/webapp!420))
+
 ## 1.2.5-next.3 (2023-05-31)
 
 ### Added (2 changes)
