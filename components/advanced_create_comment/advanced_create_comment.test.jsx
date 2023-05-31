@@ -46,7 +46,7 @@ describe('components/AdvancedCreateComment', () => {
         locale: 'en',
         clearCommentDraftUploads: jest.fn(),
         onUpdateCommentDraft: jest.fn(() => Promise.resolve()),
-        updateCommentDraftWithRootId: jest.fn(),
+        updateCommentDraftWithRootId: jest.fn(() => Promise.resolve()),
         onSubmit: jest.fn(),
         onResetHistoryIndex: jest.fn(),
         onMoveHistoryIndexBack: jest.fn(),
@@ -281,7 +281,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('handleUploadError should update state with the correct error', () => {
-        const updateCommentDraftWithRootId = jest.fn();
+        const updateCommentDraftWithRootId = jest.fn(() => Promise.resolve());
         const draft = {
             message: 'Test message',
             uploadsInProgress: [1, 2, 3],
@@ -328,7 +328,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('handleUploadStart should update comment draft correctly', () => {
-        const onUpdateCommentDraft = jest.fn();
+        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
         const draft = {
             message: 'Test message',
             uploadsInProgress: [1, 2, 3],
@@ -388,7 +388,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('should open PostDeletedModal when createPostErrorId === api.post.create_post.root_id.app_error', () => {
-        const onUpdateCommentDraft = jest.fn();
+        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
         const draft = {
             message: 'Test message',
             uploadsInProgress: [1, 2, 3],
@@ -409,7 +409,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('should open PostDeletedModal when message is submitted to deleted root', () => {
-        const onUpdateCommentDraft = jest.fn();
+        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
         const draft = {
             message: 'Test message',
             uploadsInProgress: [1, 2, 3],
@@ -526,7 +526,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     it('handleChange should throw away invalid command error if user resumes typing', async () => {
-        const onUpdateCommentDraft = jest.fn();
+        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
 
         const error = new Error('No command found');
         error.server_error_id = 'api.command.execute_command.not_found.app_error';
@@ -1077,7 +1077,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('removePreview should remove file info and upload in progress with corresponding id', () => {
-        const onUpdateCommentDraft = jest.fn();
+        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
         const draft = {
             message: 'Test message',
             uploadsInProgress: [4, 5, 6],

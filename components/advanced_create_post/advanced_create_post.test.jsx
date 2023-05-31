@@ -61,7 +61,7 @@ const actionsProp = {
     clearDraftUploads: jest.fn(),
     onSubmitPost: jest.fn(),
     selectPostFromRightHandSideSearchByPostId: jest.fn(),
-    setDraft: jest.fn(),
+    setDraft: jest.fn(() => Promise.resolve()),
     setEditingPost: jest.fn(),
     openModal: jest.fn(),
     setShowPreview: jest.fn(),
@@ -817,7 +817,7 @@ describe('components/advanced_create_post', () => {
     });
 
     it('check for handleFileUploadStart callback', () => {
-        const setDraft = jest.fn();
+        const setDraft = jest.fn(() => Promise.resolve());
 
         const wrapper = shallow(
             advancedCreatePost({
@@ -885,7 +885,7 @@ describe('components/advanced_create_post', () => {
     });
 
     it('check for handleUploadError callback', () => {
-        const setDraft = jest.fn();
+        const setDraft = jest.fn(() => Promise.resolve());
 
         const wrapper = shallow(
             advancedCreatePost({
@@ -928,7 +928,7 @@ describe('components/advanced_create_post', () => {
     // });
 
     it('Remove preview from fileInfos', () => {
-        const setDraft = jest.fn();
+        const setDraft = jest.fn(() => Promise.resolve());
         const fileInfos = {
             id: 'a',
             extension: 'jpg',
@@ -1494,7 +1494,7 @@ describe('components/advanced_create_post', () => {
     });
 
     it('should update draft when handlePostPasteDraft is called', () => {
-        const setDraft = jest.fn();
+        const setDraft = jest.fn(() => Promise.resolve());
 
         const wrapper = shallow(
             advancedCreatePost({
