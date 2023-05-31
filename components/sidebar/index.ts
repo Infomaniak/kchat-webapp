@@ -46,6 +46,8 @@ function mapStateToProps(state: GlobalState) {
 
     const showWorkTemplateButton = areWorkTemplatesEnabled(state);
     const isRhsSettings = rhsState === RHSStates.SETTINGS;
+    const isMoreDmsModalOpen = isModalOpen(state, ModalIdentifiers.CREATE_DM_CHANNEL);
+
     return {
         teamId: currentTeam ? currentTeam.id : '',
         canCreatePrivateChannel,
@@ -64,10 +66,11 @@ function mapStateToProps(state: GlobalState) {
         isKeyBoardShortcutModalOpen: isModalOpen(state, ModalIdentifiers.KEYBOARD_SHORTCUTS_MODAL),
         userGroupsEnabled,
         canCreateCustomGroups,
-        rhsState: rhsState,
+        rhsState,
         rhsOpen: getIsRhsOpen(state),
         showWorkTemplateButton,
         isRhsSettings,
+        isMoreDmsModalOpen,
     };
 }
 

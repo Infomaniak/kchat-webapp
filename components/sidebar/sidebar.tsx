@@ -11,7 +11,6 @@ import DataPrefetch from 'components/data_prefetch';
 import MoreChannels from 'components/more_channels';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import InvitationModal from 'components/invitation_modal';
-import UserSettingsModal from 'components/user_settings/modal';
 
 import Pluggable from 'plugins/pluggable';
 
@@ -20,6 +19,7 @@ import {RhsState} from 'types/store/rhs';
 
 import Constants, {ModalIdentifiers, RHSStates} from 'utils/constants';
 import * as Utils from 'utils/utils';
+import {isDesktopApp} from 'utils/user_agent';
 
 import CreateUserGroupsModal from 'components/create_user_groups_modal';
 import KeyboardShortcutsModal from '../keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal';
@@ -28,8 +28,6 @@ import ChannelNavigator from './channel_navigator';
 import SidebarList from './sidebar_list';
 import SidebarHeader from './sidebar_header';
 import MobileSidebarHeader from './mobile_sidebar_header';
-import { isDesktopApp } from 'utils/user_agent';
-import {closeRightHandSide, showSettings} from '../../actions/views/rhs';
 
 type Props = {
     teamId: string;
@@ -45,8 +43,8 @@ type Props = {
         openModal: <P>(modalData: ModalData<P>) => void;
         closeModal: (modalId: string) => void;
         clearChannelSelection: () => void;
-        showSettings?: () => void;
-        closeRightHandSide?: () => void;
+        showSettings: () => void;
+        closeRightHandSide: () => void;
     };
     isCloud: boolean;
     unreadFilterEnabled: boolean;
@@ -57,6 +55,7 @@ type Props = {
     rhsState?: RhsState;
     rhsOpen?: boolean;
     showWorkTemplateButton: boolean;
+    isMoreDmsModalOpen: boolean;
 };
 
 type State = {
@@ -132,13 +131,17 @@ export default class Sidebar extends React.PureComponent<Props, State> {
         }
     }
 
-    showMoreDirectChannelsModal = () => {
-        this.setState({showDirectChannelsModal: true});
-        trackEvent('ui', 'ui_channels_more_direct_v2');
-    }
-
-    hideMoreDirectChannelsModal = () => {
-        this.setState({showDirectChannelsModal: false});
+    toggleMoreDirectChannelsModal = () => {
+        if (this.props.isMoreDmsModalOpen) {
+            this.props.actions.closeModal(ModalIdentifiers.CREATE_DM_CHANNEL);
+            return;
+        }
+        this.closeEditRHS();
+        this.props.actions.openModal({
+            modalId: ModalIdentifiers.CREATE_DM_CHANNEL,
+            dialogType: MoreDirectChannels,
+            dialogProps: {isExistingChannel: false},
+        });
     }
 
     showCreateCategoryModal = () => {
@@ -189,12 +192,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
 
     handleOpenMoreDirectChannelsModal = (e: Event) => {
         e.preventDefault();
-        if (this.state.showDirectChannelsModal) {
-            this.hideMoreDirectChannelsModal();
-        } else {
-            this.showMoreDirectChannelsModal();
-            this.closeEditRHS();
-        }
+        this.toggleMoreDirectChannelsModal();
     }
 
     onDragStart = () => {
@@ -203,24 +201,6 @@ export default class Sidebar extends React.PureComponent<Props, State> {
 
     onDragEnd = () => {
         this.setState({isDragging: false});
-    }
-
-    renderModals = () => {
-        let moreDirectChannelsModal;
-        if (this.state.showDirectChannelsModal) {
-            moreDirectChannelsModal = (
-                <MoreDirectChannels
-                    onModalDismissed={this.hideMoreDirectChannelsModal}
-                    isExistingChannel={false}
-                />
-            );
-        }
-
-        return (
-            <React.Fragment>
-                {moreDirectChannelsModal}
-            </React.Fragment>
-        );
     }
 
     closeEditRHS = () => {
@@ -295,7 +275,6 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                     onDragEnd={this.onDragEnd}
                 />
                 <DataPrefetch/>
-                {this.renderModals()}
             </div>
         );
     }

@@ -172,6 +172,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
     }
 
     handleExit = () => {
+        this.props.actions.closeModal(ModalIdentifiers.CREATE_DM_CHANNEL);
         if (this.exitToChannel) {
             getHistory().push(this.exitToChannel);
         }
@@ -290,7 +291,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
         return (
             <GenericModal
-                id={ModalIdentifiers.MORE_DMS}
+                id={ModalIdentifiers.CREATE_DM_CHANNEL}
                 className='more-modal more-direct-channels'
                 show={this.state.show}
                 onExited={this.handleExit}
