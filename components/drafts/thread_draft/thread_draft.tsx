@@ -33,6 +33,8 @@ type Props = {
     type: 'channel' | 'thread';
     user: UserProfile;
     value: PostDraft;
+    isScheduled: boolean;
+    scheduledWillNotBeSent: boolean;
 }
 
 function ThreadDraft({
@@ -45,6 +47,8 @@ function ThreadDraft({
     type,
     user,
     value,
+    isScheduled,
+    scheduledWillNotBeSent,
 }: Props) {
     const dispatch = useDispatch();
 
@@ -77,12 +81,19 @@ function ThreadDraft({
         handleOnEdit();
     }, [value, onSubmit]);
 
+    const handleOnSchedule = (scheduleUTCTimestamp: number) => {};
+
+    const handleOnScheduleDelete = () => {};
+
     if (!thread) {
         return null;
     }
 
     return (
-        <Panel onClick={handleOnEdit}>
+        <Panel
+            onClick={handleOnEdit}
+            isDangerous={scheduledWillNotBeSent}
+        >
             {({hover}) => (
                 <>
                     <Header
@@ -97,6 +108,9 @@ function ThreadDraft({
                                 onDelete={handleOnDelete}
                                 onEdit={handleOnEdit}
                                 onSend={handleOnSend}
+                                onSchedule={handleOnSchedule}
+                                onScheduleDelete={handleOnScheduleDelete}
+                                isInvalid={scheduledWillNotBeSent}
                             />
                         )}
                         title={(
@@ -108,6 +122,8 @@ function ThreadDraft({
                         )}
                         timestamp={value.updateAt}
                         remote={value.remote || false}
+                        isScheduled={isScheduled}
+                        scheduledWillNotBeSent={scheduledWillNotBeSent}
                     />
                     <PanelBody
                         channelId={channel.id}

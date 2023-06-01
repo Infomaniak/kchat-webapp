@@ -4,9 +4,13 @@
 import React, {memo, useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
+import moment from 'moment-timezone';
 
 import {openModal} from 'actions/views/modals';
 import {ModalIdentifiers} from 'utils/constants';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
+
+import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
 
 import Action from './action';
 import SendDraftModal from './send_draft_modal';
@@ -15,17 +19,27 @@ import DeleteDraftModal from './delete_draft_modal';
 type Props = {
     displayName: string;
     draftId: string;
+    isInvalid: boolean;
+    timezone?: string;
+    scheduleTimestamp?: number;
     onDelete: (draftId: string) => void;
     onEdit: () => void;
     onSend: (draftId: string) => void;
-}
+    onSchedule: (scheduleUTCTimestamp: number) => void;
+    onScheduleDelete: () => void;
+};
 
 function DraftActions({
     displayName,
     draftId,
+    isInvalid,
+    timezone,
+    scheduleTimestamp,
     onDelete,
     onEdit,
     onSend,
+    onSchedule,
+    onScheduleDelete,
 }: Props) {
     const dispatch = useDispatch();
 
@@ -51,20 +65,41 @@ function DraftActions({
         }));
     }, [displayName]);
 
+    const handleSchedule = () => {
+        dispatch(openModal({
+            modalId: ModalIdentifiers.SCHEDULE_POST,
+            dialogType: SchedulePostModal,
+            dialogProps: {
+                timestamp: scheduleTimestamp ? moment.utc(scheduleTimestamp) : getCurrentMomentForTimezone(timezone),
+                draftId,
+                onConfirm: onSchedule,
+                onDelete: onScheduleDelete,
+            },
+        }));
+    };
+
+    const deleteAction = (
+        <Action
+            icon='icon-trash-can-outline'
+            id='delete'
+            name='delete'
+            tooltipText={(
+                <FormattedMessage
+                    id='drafts.actions.delete'
+                    defaultMessage='Delete draft'
+                />
+            )}
+            onClick={handleDelete}
+        />
+    );
+
+    if (isInvalid) {
+        return deleteAction;
+    }
+
     return (
         <>
-            <Action
-                icon='icon-trash-can-outline'
-                id='delete'
-                name='delete'
-                tooltipText={(
-                    <FormattedMessage
-                        id='drafts.actions.delete'
-                        defaultMessage='Delete draft'
-                    />
-                )}
-                onClick={handleDelete}
-            />
+            {deleteAction}
             <Action
                 icon='icon-pencil-outline'
                 id='edit'
@@ -76,6 +111,18 @@ function DraftActions({
                     />
                 )}
                 onClick={onEdit}
+            />
+            <Action
+                icon='icon-clock-outline'
+                id='schedule'
+                name='schedule'
+                tooltipText={(
+                    <FormattedMessage
+                        id='drafts.actions.schedule'
+                        defaultMessage='Schedule draft'
+                    />
+                )}
+                onClick={handleSchedule}
             />
             <Action
                 icon='icon-send-outline'

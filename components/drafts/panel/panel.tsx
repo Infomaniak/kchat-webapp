@@ -5,15 +5,17 @@ import React, {memo, useState} from 'react';
 
 import {makeIsEligibleForClick} from 'utils/utils';
 import './panel.scss';
+import classNames from 'classnames';
 
 type Props = {
+    isDangerous: boolean;
     children: ({hover}: {hover: boolean}) => React.ReactNode;
     onClick: () => void;
 };
 
 const isEligibleForClick = makeIsEligibleForClick('.hljs, code');
 
-function Panel({children, onClick}: Props) {
+function Panel({isDangerous, children, onClick}: Props) {
     const [hover, setHover] = useState(false);
 
     const handleMouseEnter = () => {
@@ -32,7 +34,7 @@ function Panel({children, onClick}: Props) {
 
     return (
         <article
-            className='Panel'
+            className={classNames('Panel', {Pannel__dangerous: isDangerous})}
             onMouseEnter={handleMouseEnter}
             onClick={handleOnClick}
             onMouseLeave={handleMouseLeave}

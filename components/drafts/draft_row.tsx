@@ -2,7 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React, {memo} from 'react';
+import {useSelector} from 'react-redux';
 
+import {haveICurrentChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import {Permissions} from 'mattermost-redux/constants';
+import type {GlobalState} from '@mattermost/types/store';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 import type {Draft} from 'selectors/drafts';
 
@@ -17,6 +21,8 @@ type Props = {
 }
 
 function DraftRow({draft, user, status, displayName}: Props) {
+    const scheduledWillNotBeSent = useSelector((state: GlobalState) => !haveICurrentChannelPermission(state, Permissions.CREATE_POST));
+    const isScheduled = Boolean(draft.value.timestamp);
     switch (draft.type) {
     case 'channel':
         return (
@@ -26,6 +32,8 @@ function DraftRow({draft, user, status, displayName}: Props) {
                 user={user}
                 status={status}
                 displayName={displayName}
+                isScheduled={isScheduled}
+                scheduledWillNotBeSent={scheduledWillNotBeSent}
             />
         );
     case 'thread':
@@ -37,6 +45,8 @@ function DraftRow({draft, user, status, displayName}: Props) {
                 user={user}
                 status={status}
                 displayName={displayName}
+                isScheduled={isScheduled}
+                scheduledWillNotBeSent={scheduledWillNotBeSent}
             />
         );
     default:

@@ -38,6 +38,8 @@ type Props = {
     timestamp: number;
     remote: boolean;
     title: React.ReactNode;
+    isScheduled: boolean;
+    scheduledWillNotBeSent: boolean;
 }
 
 function PanelHeader({
@@ -46,6 +48,8 @@ function PanelHeader({
     timestamp,
     remote,
     title,
+    isScheduled,
+    scheduledWillNotBeSent,
 }: Props) {
     const syncTooltip = (
         <Tooltip id='drafts-sync-tooltip'>
@@ -55,6 +59,34 @@ function PanelHeader({
             />
         </Tooltip>
     );
+
+    let tag = (
+        <FormattedMessage
+            id='drafts.info.tag.not_scheduled'
+            defaultMessage='Not scheduled'
+        />
+    );
+    if (isScheduled) {
+        const tagVariant = scheduledWillNotBeSent ? 'danger' : 'info';
+        const tagText = scheduledWillNotBeSent ? (
+            <FormattedMessage
+                id='drafts.info.tag.will_not_be_sent'
+                defaultMessage='will not be sent'
+            />
+        ) : (
+            <FormattedMessage
+                id='drafts.info.tag.scheduled'
+                defaultMessage='scheduled'
+            />
+        );
+        tag = (
+            <Tag
+                variant={tagVariant}
+                text={tagText}
+                uppercase={true}
+            />
+        );
+    }
 
     return (
         <header className='PanelHeader'>
@@ -86,11 +118,7 @@ function PanelHeader({
                             />
                         )}
                     </div>
-                    <Tag
-                        variant={'danger'}
-                        uppercase={true}
-                        text={'draft'}
-                    />
+                    {tag}
                 </div>
             </div>
         </header>
