@@ -144,7 +144,7 @@ def print_weekly_summary(weekly_summary)
 
   output << "#### Weekly summary:\n🚧  **Working on:**"
   weekly_summary['working_on'].each do |id, mr|
-    output << "- [#{mr['title']}](#{mr['link']}) #{mr['time_spent']} #{mr['user']}"
+    output << "- [#{mr['title']}](#{mr['link']}) #{mr['time_spent']} @#{mr['user']}"
   end
 
   if weekly_summary['issues'].any?
@@ -155,9 +155,9 @@ def print_weekly_summary(weekly_summary)
     end
   end
 
-  output << "\n**Released in prod:**"
+  output << "\n🚀 **Released in prod:**"
   weekly_summary['prod_releases'].each do |mr|
-    output << "- [#{mr['title']}](#{mr['link']})"
+    output << "- [#{mr['title']}](#{mr['link']}) @#{mr['user']}"
   end
 
   output.join("\n")
