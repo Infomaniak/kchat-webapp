@@ -135,19 +135,6 @@ def extract_trello_link(description)
   description.match(trello_regex)&.captures&.first
 end
 
-# Sample output
-#### Weekly summary:
-# **Working on:**
-# - [improve release script](gitlab.example.com/api/v4/1/merge_requests/421) 1d 1h 30m user1
-# - [Resolve "external link adding params that break links"](gitlab.example.com/api/v4/1/merge_requests/420) 30m user1
-# - [Draft: Resolve "some gifs returned from gfycat have no metadata"](gitlab.example.com/api/v4/1/merge_requests/419) 30m user1
-#
-# ❗️ **Blockers** (see issue discussion or trello)
-#
-# **Prod Releases:**
-# - [Resolve "add notice for chat gpt bot"]() user1
-# - [Set 'tomorrow' post reminder at 9:00]() user2
-#
 def print_weekly_summary(weekly_summary)
   output = []
 
