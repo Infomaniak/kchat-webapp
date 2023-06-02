@@ -157,10 +157,10 @@ def print_weekly_summary(weekly_summary)
 
   output << "\n**Released in prod:**"
   weekly_summary['prod_releases'].each do |mr|
-    output << "- [#{mr['title']}](#{mr['link']}) #{mr['user']}"
+    output << "- [#{mr['title']}](#{mr['link']})"
   end
 
-  puts output.join("\n")
+  output.join("\n")
 end
 
 def main
