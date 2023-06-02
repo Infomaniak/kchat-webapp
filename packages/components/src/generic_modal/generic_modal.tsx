@@ -6,9 +6,8 @@ import classNames from 'classnames';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import {CloseIcon} from '@infomaniak/compass-icons/components';
-
 import {FocusTrap} from '../focus_trap';
+import {CloseIcon} from '@infomaniak/compass-icons/components';
 
 export type Props = {
     className?: string;
@@ -53,14 +52,8 @@ type State = {
 }
 
 export class GenericModal extends React.PureComponent<Props, State> {
-    static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-        return {
-            ...prevState,
-            show: nextProps.show ?? prevState.show,
-        };
-    }
-
     static defaultProps: Partial<Props> = {
+        show: true,
         id: 'genericModal',
         autoCloseOnCancelButton: true,
         autoCloseOnConfirmButton: true,
@@ -72,7 +65,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            show: props.show ?? true,
+            show: props.show!,
             isFocalTrapActive: false,
         };
     }
