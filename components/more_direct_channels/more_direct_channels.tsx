@@ -67,7 +67,6 @@ export type Props = {
 
 type State = {
     values: OptionValue[];
-    show: boolean;
     search: boolean;
     saving: boolean;
     loadingUsers: boolean;
@@ -101,7 +100,6 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
         this.state = {
             values,
-            show: true,
             search: false,
             saving: false,
             loadingUsers: true,
@@ -162,7 +160,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
     handleHide = () => {
         this.props.actions.setModalSearchTerm('');
-        this.setState({show: false});
+        this.props.actions.closeModal(ModalIdentifiers.CREATE_DM_CHANNEL);
     }
 
     setUsersLoadingState = (loadingState: boolean) => {
@@ -292,7 +290,6 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
             <GenericModal
                 id={ModalIdentifiers.CREATE_DM_CHANNEL}
                 className='more-modal more-direct-channels'
-                show={this.state.show}
                 onExited={this.handleExit}
                 modalHeaderText={
                     <FormattedMessage
