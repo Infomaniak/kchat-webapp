@@ -126,6 +126,15 @@ def seconds_to_human_readable(total_seconds)
   return result.join(' ')
 end
 
+def extract_trello_link(description)
+  return nil if description.nil?
+
+  # This regex will capture Trello URLs
+  trello_regex = /(https:\/\/trello.com\/c\/[a-zA-Z0-9]+)/
+
+  description.match(trello_regex)&.captures&.first
+end
+
 # Sample output
 #### Weekly summary:
 # **Working on:**
@@ -144,20 +153,27 @@ def print_weekly_summary(weekly_summary)
 
   output << "#### Weekly summary:\n🚧  **Working on:**"
   weekly_summary['working_on'].each do |id, mr|
-    output << "- [#{mr['title']}](#{mr['link']}) #{mr['time_spent']} @#{mr['user']}"
+    trello_link = extract_trello_link(mr['description'])
+    puts trello_link
+    trello_text = trello_link ? " - ([Trello](#{trello_link}))" : ""
+    output << "- [#{mr['title']}](#{mr['web_url']})#{trello_text} - 🕑 #{mr['time_spent']} logged by @#{mr['user']} this week"
   end
 
   if weekly_summary['issues'].any?
     output << "\n❗️ **Blockers** (see issue discussion or trello)"
     weekly_summary['issues'].each do |id, issue|
+      trello_link = extract_trello_link(issue['description'])
+      trello_text = trello_link ? " - ([Trello](#{trello_link}))" : ""
       assignees = issue['assignees'].empty? ? "" : "(assigned to @#{issue['assignees'].join(", @")})"
-      output << "- [#{issue['title']}](#{issue['web_url']}) #{assignees}"
+      output << "- [#{issue['title']}](#{issue['web_url']})#{trello_text} #{assignees}"
     end
   end
 
   output << "\n🚀 **Released in prod:**"
   weekly_summary['prod_releases'].each do |mr|
-    output << "- [#{mr['title']}](#{mr['link']}) @#{mr['user']}"
+    trello_link = extract_trello_link(mr['description'])
+    trello_text = trello_link ? " - ([Trello](#{trello_link}))" : ""
+    output << "- [#{mr['title']}](#{mr['web_url']})#{trello_text} by @#{mr['user']}"
   end
 
   output.join("\n")
@@ -183,6 +199,7 @@ def main
     if mr['labels'].include?('stage::prod')
       weekly_summary['prod_releases'] << {
         'title' => mr['title'],
+        'description' => mr['description'],
         'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/merge_requests/#{mr['iid']}",
         'user' => mr['author']['username']
       }
@@ -193,6 +210,7 @@ def main
     human_readable_time_spent = seconds_to_human_readable(total_time_spent)
     weekly_summary['working_on'][mr['iid']] = {
       'title' => mr['title'],
+      'description' => mr['description'],
       'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/merge_requests/#{mr['iid']}",
       'time_spent' => human_readable_time_spent,
       'user' => mr['author']['username']
@@ -206,6 +224,7 @@ def main
     important_issues.each do |issue|
       weekly_summary['issues'][issue['iid']] = {
         'title' => issue['title'],
+        'description' => issue['description'],
         'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/issues/#{issue['iid']}",
         'assignees' => issue['assignees'].map { |a| a['username'] }
       }
