@@ -8,6 +8,7 @@ include:
 
 variables:
   SAST_DISABLED: "true"
+  WEEKLY_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/994e7a29-4b7f-4fd5-a194-5eea8ac49bc2
 
 stages:
   - test
@@ -266,6 +267,15 @@ update_labels:
     - ruby ./.gitlab/update_merge_request_labels.rb
   rules:
     - if: '$UPDATE_LABELS_SCHEDULE'
+      when: on_success
+    - when: never
+
+weekly_summary:
+  image: ruby:latest
+  script:
+    - ruby ./.gitlab/weekly_stats.rb ${WEEKLY_NOTIFY_CHANNEL}
+  rules:
+    - if: '$WEEKLY_SCHEDULE'
       when: on_success
     - when: never
 

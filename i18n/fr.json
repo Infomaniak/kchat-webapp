@@ -3598,7 +3598,7 @@
   "interactive_dialog.submitting": "Envoi en cours...",
   "intro_messages.DM": "Vous êtes au début de votre historique de messages avec {teammate}.\nLes messages personnels et les fichiers partagés ici ne sont pas visibles par les autres utilisateurs.",
   "intro_messages.GM": "Vous êtes au début de votre historique de messages avec {names}.\nLes messages et les fichiers partagés ici ne sont pas visibles par les autres utilisateurs.",
-  "intro_messages.botGPT": "ChatGPT est une IA développée et hébergée par OpenAI. Les données sont envoyées et analysées sur leurs serveurs et non ceux d’Infomaniak. Nous vous conseillons de ne pas partager des informations sensibles. ChatGPT peut produire des informations inexactes sur des personnes, des lieux ou des faits. Cette fonctionnalité est incluse gratuitement dans votre kChat jusqu’au 23 nov. 2023 avec une limite de 10 messages par jour et par utilisateur.",
+  "intro_messages.botGPT": "ChatGPT est une IA développée et hébergée par OpenAI. Les données sont envoyées et analysées sur leurs serveurs et non ceux d’Infomaniak. Nous vous conseillons de ne pas partager des informations sensibles. ChatGPT peut produire des informations inexactes sur des personnes, des lieux ou des faits. Cette fonctionnalité est incluse gratuitement dans votre kChat jusqu’au 23 nov. 2023 avec une limite de 100 messages par jour et par utilisateur.",
   "intro_messages.addGroupsToTeam": "Ajouter des autres groupes à cette équipe",
   "intro_messages.anyMember": " Tout membre peut rejoindre et lire ce canal.",
   "intro_messages.beginning": "Début de {name}",

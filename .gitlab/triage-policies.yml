@@ -42,7 +42,23 @@ resource_rules:
   # Merge Request Policies
   merge_requests:
     rules:
-      # Update labels for trello tickets in merged MRs for schedule CI
+      # Update trello::To merge MRs for trello tickets in merged MRs for schedule CI
+      - name: "Update Trello for wip MRs"
+        conditions:
+          state: opened
+          assignee_member:
+            source: project
+            condition: member_of
+            source_id: 3225
+          labels:
+            - trello::FEEDBACKS
+        actions:
+          remove_labels:
+            - trello::FEEDBACKS
+          labels:
+            - trello::En cours
+            - trello-sync
+      # Update trello::To merge MRs for trello tickets in merged MRs for schedule CI
       - name: "Update Trello for merged MRs"
         conditions:
           state: merged
@@ -51,6 +67,18 @@ resource_rules:
         actions:
           remove_labels:
             - trello::To merge
+          labels:
+            - trello::To prod
+            - trello-sync
+      # Update trello::En cours MRs for trello tickets in merged MRs for schedule CI
+      - name: "Update Trello for wip MRs"
+        conditions:
+          state: merged
+          labels:
+            - trello::En cours
+        actions:
+          remove_labels:
+            - trello::En cours
           labels:
             - trello::To prod
             - trello-sync
