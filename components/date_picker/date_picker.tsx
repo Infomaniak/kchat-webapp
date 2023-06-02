@@ -13,7 +13,6 @@ import {
     useInteractions,
     FloatingFocusManager,
     useDismiss,
-    Placement,
 } from '@floating-ui/react-dom-interactions';
 import type {Locale} from 'date-fns';
 
@@ -27,20 +26,19 @@ type Props = {
     datePickerProps: DayPickerProps;
     isPopperOpen: boolean;
     locale: string;
-    placement?: Placement;
     handlePopperOpenState: (isOpen: boolean) => void;
 }
 
-const DatePicker = ({children, datePickerProps, isPopperOpen, handlePopperOpenState, locale, placement = 'bottom-start'}: Props) => {
+const DatePicker = ({children, datePickerProps, isPopperOpen, handlePopperOpenState, locale}: Props) => {
     const [loadedLocales, setLoadedLocales] = useState<Record<string, Locale>>({});
     const {x, y, reference, floating, strategy, context} = useFloating({
         open: isPopperOpen,
         onOpenChange: () => handlePopperOpenState(false),
-        placement,
+        placement: 'bottom-start',
         whileElementsMounted: autoUpdate,
         middleware: [
             offset(5),
-            flip({fallbackPlacements: ['top-start', 'right-start', 'left-start', placement], padding: 5}),
+            flip({fallbackPlacements: ['bottom-end', 'top-start', 'top-end', 'right-start', 'left-start'], padding: 5}),
             shift(),
         ],
     });
