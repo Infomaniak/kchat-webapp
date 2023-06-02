@@ -90,9 +90,12 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
 
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
-    labels = mr["labels"].reject { |label| label.start_with?('trello::') } + ["trello::All - Done", "trello-sync"]
-    update_merge_request_labels(mr["iid"], labels)
-    puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
+    labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::prod"]
+    if mr["labels"].any? { |label| label.start_with?("trello::") }
+      labels = mr["labels"].reject { |label| label.start_with?("trello::") } + ["trello::All - Done", "trello-sync"]
+      update_merge_request_labels(mr["iid"], labels)
+      puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
+    end
   end
   create_release(changelog)
   puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
