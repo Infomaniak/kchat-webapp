@@ -187,6 +187,7 @@ def main
       weekly_summary['prod_releases'] << {
         'title' => mr['title'],
         'description' => mr['description'],
+        'web_url' => mr['web_url'],
         'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/merge_requests/#{mr['iid']}",
         'user' => mr['author']['username']
       }
@@ -198,6 +199,7 @@ def main
     weekly_summary['working_on'][mr['iid']] = {
       'title' => mr['title'],
       'description' => mr['description'],
+      'web_url' => mr['web_url'],
       'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/merge_requests/#{mr['iid']}",
       'time_spent' => human_readable_time_spent,
       'user' => mr['author']['username']
@@ -212,6 +214,7 @@ def main
       weekly_summary['issues'][issue['iid']] = {
         'title' => issue['title'],
         'description' => issue['description'],
+        'web_url' => issue['web_url'],
         'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/issues/#{issue['iid']}",
         'assignees' => issue['assignees'].map { |a| a['username'] }
       }
