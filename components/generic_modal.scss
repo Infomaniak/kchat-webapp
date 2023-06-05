@@ -74,30 +74,6 @@
         padding: 0;
         border: none;
         background: transparent;
-
-        .close {
-            top: 6px;
-            right: 6px;
-            display: flex;
-            width: 4rem;
-            height: 4rem;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            color: rgba(var(--center-channel-color-rgb), 0.56);
-            font-size: 32px;
-            font-weight: 400;
-
-            &:hover {
-                background-color: rgba(var(--center-channel-color-rgb), 0.08);
-                color: rgba(var(--center-channel-color-rgb), 0.72);
-            }
-
-            &:active {
-                background-color: rgba(var(--button-bg-rgb), 0.08);
-                color: v(button-bg);
-            }
-        }
     }
 
     .modal-footer {
@@ -114,34 +90,11 @@
             .modal-header {
                 padding: 26px 32px 7px;
 
-                .close {
-                    top: 20px;
-                    right: 18px;
-                    width: 40px;
-                    height: 40px;
-                    box-shadow: none;
-
-                    &:active {
-                        background: rgba(var(--button-bg-rgb), 0.08);
-                        color: var(--button-bg);
-                    }
-
-                    &:focus {
-                        box-sizing: border-box;
-                        border: 2px solid var(--sidebar-text-active-border);
-                    }
-                }
-
                 .GenericModal__header {
                     width: 85%;
                     padding: 0;
                     border-top-left-radius: 12px;
                     border-top-right-radius: 12px;
-
-                    h1 {
-                        color: var(--center-channel-color);
-                        font-size: 22px;
-                    }
                 }
             }
 
@@ -257,7 +210,8 @@
         margin: 0;
         font-size: 20px;
         font-weight: 400;
-        line-height: 28px;
+        line-height: 27px;
+        color: var(--center-channel-color);
     }
 }
 

@@ -160,7 +160,7 @@ export default class LeaveTeamModal extends React.PureComponent<Props, State> {
                 role='dialog'
                 aria-labelledby='leaveTeamModalLabel'
             >
-                <Modal.Header closeButton={false}>
+                <Modal.Header closeButton={true}>
                     <Modal.Title
                         componentClass='h1'
                         id='leaveTeamModalLabel'

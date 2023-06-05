@@ -21,22 +21,6 @@
         min-height: 0;
         padding: 0;
         border: none;
-
-        .close {
-            top: -12px;
-            right: -12px;
-            border-radius: 16px;
-            opacity: 0.8;
-
-            :hover {
-                opacity: 1;
-            }
-
-            .app__body .modal & {
-                background: var(--center-channel-bg);
-                color: var(--center-channel-color);
-            }
-        }
     }
 
     .modal-content {
