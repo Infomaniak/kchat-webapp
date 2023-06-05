@@ -10,7 +10,6 @@ import {closeModal} from 'actions/views/modals';
 
 import GenericModal from 'components/generic_modal';
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
-import SchedulePostRepeatActions, {SchedulePostOptions} from 'components/schedule_post/schedule_post_repeat_actions';
 
 import {ModalIdentifiers} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';
@@ -20,7 +19,7 @@ import './schedule_post_modal.scss';
 type Props = {
     timestamp: Moment;
     timezone?: string;
-    onConfirm: (scheduleUTCTimestamp: number, options?: SchedulePostOptions) => void;
+    onConfirm: (scheduleUTCTimestamp: number) => void;
 }
 
 const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
@@ -29,39 +28,10 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
     const [scheduleTimestamp, setScheduleTimestamp] = useState<Moment>(getRoundedTime(timestamp));
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
-    const [isRepeatChecked, setIsRepeatChecked] = useState<boolean>(false);
-    const [areRepeatOptionsValid, setAreRepeatOptionsValid] = useState<boolean>(true);
-    const [schedulePostOptions, setSchedulePostOptions] = useState<SchedulePostOptions>({
-        everyAmount: 1,
-        everyInterval: 'week',
-        everyMonth: 'date',
-        daySelected: {},
-        endRadioSelected: 'never',
-        endMoment: getRoundedTime(timestamp).add(3, 'months'),
-        isEndDatePickerOpen: false,
-    });
 
-    const handleConfirm = () => {
-        const scheduleUTCTimestamp = toUTCUnix(scheduleTimestamp.toDate());
-        if (isRepeatChecked) {
-            onConfirm(scheduleUTCTimestamp, schedulePostOptions);
-        }
-        onConfirm(scheduleUTCTimestamp);
-    };
-
-    const handleRepeatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setIsRepeatChecked(e.target.checked);
-    };
+    const handleConfirm = () => onConfirm(toUTCUnix(scheduleTimestamp.toDate()));
 
     const handleExit = () => dispatch(closeModal(ModalIdentifiers.SCHEDULE_POST));
-
-    const handleRepeatOptionsValidation = (isValid: boolean) => {
-        if (areRepeatOptionsValid !== isValid) {
-            setAreRepeatOptionsValid(isValid);
-        }
-    };
-
-    const handleRepeatOptionsChange = (newOptions: Partial<SchedulePostOptions>) => setSchedulePostOptions({...schedulePostOptions, ...newOptions});
 
     const modalHeaderText = (
         <div>
@@ -80,12 +50,7 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
         defaultMessage: 'Schedule',
     });
 
-    const repeatCheckboxLabel = formatMessage({
-        id: 'create_post.schedule_post.modal.repeat.checkbox',
-        defaultMessage: 'Repeat',
-    });
-
-    const isConfirmDisabled = isMenuOpen || isDatePickerOpen || schedulePostOptions.isEndDatePickerOpen || (isRepeatChecked && !areRepeatOptionsValid);
+    const isConfirmDisabled = isMenuOpen || isDatePickerOpen;
 
     return (
         <GenericModal
@@ -104,24 +69,6 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
                 onMenuChange={setIsMenuOpen}
                 setIsDatePickerOpen={setIsDatePickerOpen}
             />
-            {/* <div className='schedule-post-modal__repeat-checkbox'>
-                <label>
-                    <input
-                        type='checkbox'
-                        checked={isRepeatChecked}
-                        onChange={handleRepeatChange}
-                    />
-                    {repeatCheckboxLabel}
-                </label>
-            </div>
-            <SchedulePostRepeatActions
-                show={isRepeatChecked}
-                timestamp={scheduleTimestamp}
-                timezone={timezone}
-                setAreRepeatOptionsValid={handleRepeatOptionsValidation}
-                schedulePostOptions={schedulePostOptions}
-                setSchedulePostOptions={handleRepeatOptionsChange}
-            /> */}
         </GenericModal>
     );
 };
