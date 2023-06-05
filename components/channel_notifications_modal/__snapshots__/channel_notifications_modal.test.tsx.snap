@@ -65,9 +65,6 @@ exports[`components/channel_notifications_modal/ChannelNotificationsModal should
           className="user-settings"
         >
           <br />
-          <div
-            className="divider-dark first"
-          />
           <NotificationSection
             expand={false}
             memberNotificationLevel="all"

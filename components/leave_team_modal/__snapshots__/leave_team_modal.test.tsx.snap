@@ -34,7 +34,7 @@ exports[`components/LeaveTeamModal should render the leave team model 1`] = `
 >
   <ModalHeader
     bsClass="modal-header"
-    closeButton={false}
+    closeButton={true}
     closeLabel="Close"
   >
     <ModalTitle
