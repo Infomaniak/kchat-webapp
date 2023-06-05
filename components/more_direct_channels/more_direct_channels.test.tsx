@@ -7,6 +7,7 @@ import {shallow} from 'enzyme';
 import MoreDirectChannels from 'components/more_direct_channels/more_direct_channels';
 import {UserProfile} from '@mattermost/types/users';
 import {TestHelper} from 'utils/test_helper';
+import {ModalIdentifiers} from 'utils/constants';
 
 jest.useFakeTimers();
 const mockedUser = TestHelper.getUserMock();
@@ -106,7 +107,7 @@ describe('components/MoreDirectChannels', () => {
     });
 
     test('should call actions.setModalSearchTerm and match state on handleHide', () => {
-        const props = {...baseProps, actions: {...baseProps.actions, setModalSearchTerm: jest.fn()}};
+        const props = {...baseProps, actions: {...baseProps.actions, setModalSearchTerm: jest.fn(), closeModal: jest.fn()}};
         const wrapper = shallow<MoreDirectChannels>(<MoreDirectChannels {...props}/>);
 
         wrapper.setState({show: true});
@@ -114,7 +115,8 @@ describe('components/MoreDirectChannels', () => {
         wrapper.instance().handleHide();
         expect(props.actions.setModalSearchTerm).toHaveBeenCalledTimes(1);
         expect(props.actions.setModalSearchTerm).toBeCalledWith('');
-        expect(wrapper.state('show')).toEqual(false);
+        expect(props.actions.closeModal).toHaveBeenCalledTimes(1);
+        expect(props.actions.closeModal).toBeCalledWith(ModalIdentifiers.CREATE_DM_CHANNEL);
     });
 
     test('should match state on setUsersLoadingState', () => {
