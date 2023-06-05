@@ -37,6 +37,7 @@
     }
 
     &__content-image {
+        overflow: hidden;
         height: calc(100vh - 120px);
 
         @media screen and (max-width: 768px) {
@@ -65,5 +66,9 @@
 
     .modal.fade & {
         transform: translate(0, 0);
+    }
+
+    .view-image__loading {
+        background: none;
     }
 }

@@ -196,6 +196,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         initialFocus: isPopperOpen,
         mode: 'single',
         selected: time.toDate(),
+        defaultMonth: time.toDate(),
         onDayClick: handleDayChange,
         disabled: [{
             before: currentTime,

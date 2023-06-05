@@ -52,6 +52,26 @@ def update_gitlab_merge_request(project_id, merge_request_id, labels)
   http.request(request)
 end
 
+def update_gitlab_issue(project_id, issue_id, description)
+  # Call the GitLab API to update the merge request
+  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_id}")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  request = Net::HTTP::Put.new(uri.path, { 'Private-Token' => GITLAB_API_KEY, 'Content-Type' => 'application/json' })
+  request.body = { description: description }.to_json
+  http.request(request)
+end
+
+def update_gitlab_issue_labels(project_id, issue_id, labels)
+  # Call the GitLab API to update the merge request
+  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues/#{issue_id}")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  request = Net::HTTP::Put.new(uri.path, { 'Private-Token' => GITLAB_API_KEY, 'Content-Type' => 'application/json' })
+  request.body = { labels: labels }.to_json
+  http.request(request)
+end
+
 def get_board_lists()
   uri = URI.parse("https://api.trello.com/1/boards/#{TRELLO_BOARD_ID}/lists?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}")
   response = Net::HTTP.get_response(uri)
@@ -135,7 +155,7 @@ def sync_issue_metadata(merge_request, project_id, mr_iid)
     issue_iid = issue_iid.to_i
     mr_labels = get_mr_labels(project_id, mr_iid)
     issue_labels = get_issue_labels(project_id, issue_iid)
-    
+
     trello_mr_labels = mr_labels.select { |label| label.start_with?('trello::') }
     trello_issue_labels = issue_labels.select { |label| label.start_with?('trello::') }
 
@@ -153,8 +173,84 @@ def sync_issue_metadata(merge_request, project_id, mr_iid)
   end
 end
 
-# Get a list of merge requests from GitLab API
+def get_all_gitlab_issues(project_id)
+  uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/issues?per_page=1000")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  request = Net::HTTP::Get.new(uri.path, { 'PRIVATE-TOKEN' => GITLAB_API_KEY })
+  response = http.request(request)
+  issues = JSON.parse(response.body)
+end
+
+def create_trello_card(name, description, list_name)
+  # Fetch the list ID by its name
+  lists = get_board_lists()
+  list = lists.find { |list| list['name'] == list_name }
+
+  if list.nil?
+    puts "Failed to create Trello card: No list found with name #{list_name}"
+    return nil
+  end
+
+  list_id = list['id']
+
+  puts list
+  puts list_id
+
+  uri = URI.parse("https://api.trello.com/1/cards")
+  request = Net::HTTP::Post.new(uri.request_uri, {
+    "Content-Type" => "application/x-www-form-urlencoded"
+  })
+  request.set_form_data({
+    "key" => TRELLO_API_KEY,
+    "token" => TRELLO_TOKEN,
+    "name" => name,
+    "desc" => description,
+    "idList" => list_id,
+  })
+
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  response = http.request(request)
+
+  if response.code.to_i != 200
+    puts "Failed to create Trello card: #{response.body}"
+    return nil
+  end
+
+  card = JSON.parse(response.body)
+  card
+end
+
 project_id = 3225
+issues = get_all_gitlab_issues(project_id)
+
+# Loop over all issues
+issues.each do |issue|
+  # Check if issue has 'new-trello' label
+  if issue['labels'].include?('new-trello')
+    # Create a new Trello card in the 'FEEDBACKS' list with the issue description
+    card_response = create_trello_card(issue['title'], issue['description'], 'FEEDBACKS')
+    if card_response
+      card_id = card_response['id']
+      # Get the shortlink of the new Trello card
+      card_details = get_trello_card_details(card_id)
+      trello_card_link = card_details[:card]['shortUrl']
+
+      # Append the Trello card link to the GitLab issue description
+      updated_description = (issue['description'] || '') + "\n\n#### Ticket link\n" + (trello_card_link || '')
+      update_gitlab_issue(project_id, issue['iid'], updated_description)
+
+      # Update labels to remove 'new-trello' and add 'trello::FEEDBACKS'
+      labels = issue['labels'].reject { |label| label == 'new-trello' } + ['trello::FEEDBACKS']
+      update_gitlab_issue_labels(project_id, issue['iid'], labels)
+
+      puts "Created Trello card for issue id #{issue['iid']}. New description: #{updated_description}"
+    end
+  end
+end
+
+# Get a list of merge requests from GitLab API
 uri = URI.parse("https://gitlab.infomaniak.ch/api/v4/projects/#{project_id}/merge_requests?private_token=#{GITLAB_API_KEY}&per_page=1000")
 response = Net::HTTP.get_response(uri)
 merge_requests = JSON.parse(response.body)
@@ -163,7 +259,6 @@ merge_requests = JSON.parse(response.body)
 merge_requests.each do |merge_request|
   description = merge_request['description']
   mr_iid = merge_request['iid']
-  project_id = merge_request['project_id']
 
   sync_issue_metadata(merge_request, project_id, mr_iid)
 
@@ -186,31 +281,60 @@ merge_requests.each do |merge_request|
       puts "Error getting details for card #{card_id}: #{e.message}"
       next
     end
-    
+
+    # Get the list name from the card details
+    list_name_from_card = card_details[:list_name]
+    # Prepare the new label
+    new_label = "trello::#{list_name_from_card}"
+
     # Check if existing labels match the Trello column
     existing_labels = merge_request['labels']
     existing_trello_label = existing_labels.find { |label| label.start_with?('trello::') }
-    if existing_trello_label
-      if existing_trello_label != "trello::#{card_details[:list_name]}"
-        # Get the list name from the label
+
+    if existing_labels.include?('trello-sync')
+      # Move the Trello card only if the merge request has a trello-sync label and the Trello list name does not match the existing label
+      if existing_trello_label && existing_trello_label != "trello::#{card_details[:list_name]}"
+        # Get the list name from the existing label
         list_name_from_label = existing_trello_label.split('::').last
+
         # Get all lists on the board
         lists = get_board_lists()
+
         # Find the list with the matching name
         list = lists.find { |list| list['name'] == list_name_from_label }
+
         if list
           # If a list with the matching name was found, move the card to it
           move_trello_card(card_id, list['id'])
-          execute_issue_cpmeta(mr_details, mr_iid)
+          puts "Moved card #{card_id} to list #{list_name_from_label}"
+
+          # Remove the 'trello-sync' label from the merge request
+          existing_labels.delete('trello-sync')
+          update_gitlab_merge_request(project_id, mr_iid, existing_labels)
+          puts "Removed 'trello-sync' label for merge request id #{mr_iid}. New labels: #{existing_labels.join(', ')}"
         else
           puts "No list found with name: #{list_name_from_label}"
         end
+      else
+        puts "Trello list matches GitLab label for #{mr_iid} or 'trello-sync' label is not present"
       end
     else
-      # If there is no existing Trello label, add the correct one
-      labels = existing_labels.append("trello::#{card_details[:list_name]}")
-      update_gitlab_merge_request(mr_details['project_id'], mr_details['iid'], labels)
-      execute_issue_cpmeta(mr_details, mr_iid)
+      # Update the labels in GitLab if no Trello label exists or if the Trello list does not match the existing label
+      if existing_trello_label != new_label
+        # Remove the old Trello label if it exists
+        existing_labels.delete(existing_trello_label) if existing_trello_label
+
+        # Add the new label
+        existing_labels << new_label
+
+        # Update the labels in GitLab
+        update_gitlab_merge_request(project_id, mr_iid, existing_labels)
+        puts "Updated labels for merge request id #{mr_iid}. New labels: #{existing_labels.join(', ')}"
+      else
+        puts "#{mr_iid} Trello list matches GitLab label: #{new_label}"
+      end
     end
+
+    execute_issue_cpmeta(mr_details, mr_iid)
   end
 end
