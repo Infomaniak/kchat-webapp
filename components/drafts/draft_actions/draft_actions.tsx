@@ -11,6 +11,7 @@ import {ModalIdentifiers} from 'utils/constants';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
+import ScheduleIcon from 'components/widgets/icons/schedule_icon';
 
 import Action from './action';
 import SendDraftModal from './send_draft_modal';
@@ -116,7 +117,7 @@ function DraftActions({
                 onClick={onEdit}
             />
             <Action
-                icon='icon-clock-outline'
+                icon={ScheduleIcon}
                 id='schedule'
                 name='schedule'
                 tooltipText={(

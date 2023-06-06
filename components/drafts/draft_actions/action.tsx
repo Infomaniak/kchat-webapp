@@ -11,7 +11,7 @@ import Constants from 'utils/constants';
 import './action.scss';
 
 type Props = {
-    icon: string;
+    icon: string | React.FC<React.HTMLAttributes<HTMLSpanElement>>;
     id: string;
     name: string;
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -19,6 +19,7 @@ type Props = {
 };
 
 function Action({name, icon, onClick, id, tooltipText}: Props) {
+    const Icon = typeof icon === 'string' ? undefined : icon;
     return (
         <div className='DraftAction'>
             <OverlayTrigger
@@ -42,7 +43,7 @@ function Action({name, icon, onClick, id, tooltipText}: Props) {
                     id={`draft_{icon}_${id}`}
                     onClick={onClick}
                 >
-                    <i className={`icon ${icon}`}/>
+                    {Icon ? <Icon className='DraftAction__icon icon'/> : <i className={`icon ${icon}`}/>}
                 </button>
             </OverlayTrigger>
         </div>
