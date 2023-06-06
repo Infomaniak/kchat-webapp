@@ -1,3 +1,10 @@
+## 1.2.6-next.2 (2023-06-06)
+
+### Changed (2 changes)
+
+- [make bot name clickable in ai bot notices](kchat/webapp@1e16433606052ef374a17d09dbc021b178a4a872) by @antonbuksa
+- [update ai notice info for gpt and add one for kchat bot](kchat/webapp@428f0cb446ead1a3a42799ab0bf18de70b4c9d74) by @antonbuksa ([merge request](kchat/webapp!426))
+
 ## 1.2.6-next.1 (2023-06-06)
 
 ### Changed (1 change)
