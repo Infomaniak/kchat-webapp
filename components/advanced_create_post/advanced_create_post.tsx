@@ -55,7 +55,6 @@ import {PostDraft} from 'types/store/draft';
 
 import {ModalData} from 'types/actions';
 
-import {ClientError} from '@mattermost/client';
 import {Channel, ChannelMemberCountsByGroup} from '@mattermost/types/channels';
 import {Post, PostMetadata, PostPriorityMetadata} from '@mattermost/types/posts';
 import {PreferenceType} from '@mattermost/types/preferences';
@@ -207,6 +206,8 @@ type Props = {
 
         // func called for setting drafts
         setDraft: (name: string, value: PostDraft | null, draftChannelId: string, save?: boolean) => Promise<ActionResult>;
+
+        upsertScheduleDraft: (key: string, value: PostDraft) => Promise<ActionResult>;
 
         // func called for editing posts
         setEditingPost: (postId?: string, refocusId?: string, title?: string, isRHS?: boolean) => void;
@@ -520,28 +521,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             const updatedDraft = {
                 ...this.draftsForChannel[channelId] ?? this.props.draft,
                 timestamp: scheduleUTCTimestamp,
+                channelId,
+                remote: false,
             };
-            this.handleDraftChange(updatedDraft, true, true, ({error}: ActionResult<boolean, ClientError>) => {
-                if (error) {
-                    this.setState({serverError: {
-                        ...error,
-                        submittedMessage: updatedDraft.message,
-                    }});
-                    this.isDraftSubmitting = false;
-                    this.draftsForChannel[channelId] = null;
-                    return;
-                }
-
-                this.setState({
-                    message: '',
-                    submitting: false,
-                    postError: null,
-                    showFormat: false,
-                });
-
-                this.isDraftSubmitting = false;
-                this.draftsForChannel[channelId] = null;
-            });
+            this.scheduleDraft(updatedDraft);
             return;
         } else if (post.message.indexOf('/') === 0 && !ignoreSlash) {
             this.setState({message: '', postError: null});
@@ -928,6 +911,31 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
         this.draftsForChannel[channelId] = draft;
     }
+
+    scheduleDraft = async (draft: PostDraft) => {
+        const channelId = this.props.currentChannel.id;
+
+        const {error} = await this.props.actions.upsertScheduleDraft(StoragePrefixes.DRAFT + channelId, draft);
+        if (error) {
+            this.setState({serverError: {
+                ...error,
+                submittedMessage: draft.message,
+            }});
+            this.isDraftSubmitting = false;
+            this.draftsForChannel[channelId] = null;
+            return;
+        }
+
+        this.setState({
+            message: '',
+            submitting: false,
+            postError: null,
+            showFormat: false,
+        });
+
+        this.isDraftSubmitting = false;
+        this.draftsForChannel[channelId] = null;
+    };
 
     pasteHandler = (e: ClipboardEvent) => {
         /**

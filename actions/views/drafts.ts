@@ -75,10 +75,8 @@ export function removeDraft(key: string, channelId: string, rootId = '') {
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
         if (syncedDraftsAreAllowedAndEnabled(state)) {
-            const connectionId = getConnectionId(getState() as GlobalState);
-
             try {
-                await Client4.deleteDraft(channelId, rootId, connectionId);
+                await Client4.deleteDraft(channelId, rootId);
             } catch (error) {
                 return {
                     data: false,
@@ -105,24 +103,47 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
             };
         }
 
-        dispatch(setGlobalItem(key, updatedValue));
-
-        // Temporary bypass GlobalDrafts config check for scheduled posts
-        // TODO remove '|| updatedValue?.timestamp' once drafts are reenabled
-        if ((syncedDraftsAreAllowedAndEnabled(state) || updatedValue?.timestamp) && save && updatedValue) {
-            const connectionId = getConnectionId(state);
+        if (syncedDraftsAreAllowedAndEnabled(state) && save && updatedValue) {
             const userId = getCurrentUserId(state);
             try {
-                await upsertDraft(updatedValue, userId, rootId, connectionId);
+                const {id} = await upsertDraft(updatedValue, userId, rootId);
+                updatedValue.id = id;
             } catch (error) {
                 return {data: false, error};
             }
+        }
+        dispatch(setGlobalItem(key, updatedValue));
+        return {data: true};
+    };
+}
+
+export function upsertScheduleDraft(key: string, value: PostDraft, rootId = '') {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const state = getState() as GlobalState;
+        if (!syncedDraftsAreAllowedAndEnabled(state)) {
+            return {error: new Error('Drafts are not allowed on the current server')};
+        }
+        const userId = getCurrentUserId(state);
+        const draft = getGlobalItem(state, key, {});
+
+        if (draft.channelId) {
+            dispatch(removeDraft(key, draft.channelId, rootId));
+        }
+
+        try {
+            const {id} = await upsertDraft(value, userId, rootId);
+            dispatch(setGlobalItem(`${key}_${id}`, {
+                ...value,
+                id,
+            }));
+        } catch (error) {
+            return {error};
         }
         return {data: true};
     };
 }
 
-function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', connectionId: string) {
+function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '') {
     const fileIds = draft.fileInfos.map((file) => file.id);
     const newDraft = {
         create_at: draft.createAt || 0,
@@ -136,9 +157,14 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', c
         file_ids: fileIds,
         timestamp: draft.timestamp,
         priority: draft.metadata?.priority as PostPriorityMetadata,
-    };
+    } as ServerDraft;
 
-    return Client4.upsertDraft(newDraft, connectionId);
+    if (draft.id) {
+        newDraft.id = draft.id;
+        return Client4.updateDraft(newDraft);
+    }
+
+    return Client4.createDraft(newDraft);
 }
 
 export function setDraftsTourTipPreference(initializationState: Record<string, boolean>): ActionFunc {

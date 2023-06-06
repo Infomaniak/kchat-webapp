@@ -7,7 +7,7 @@ import {useIntl} from 'react-intl';
 import {Button, ButtonGroup, styled} from '@mui/material';
 import {SendIcon} from '@infomaniak/compass-icons/components';
 
-import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {getTheme, syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import CompassDesignProvider from 'components/compass_design_provider';
 
@@ -58,6 +58,7 @@ type SendButtonProps = {
 
 const SendButton = ({disabled, handleSubmit, handleSchedulePost}: SendButtonProps) => {
     const theme = useSelector(getTheme);
+    const draftsAreAllowed = useSelector(syncedDraftsAreAllowedAndEnabled);
     const {formatMessage} = useIntl();
     const buttonGroupRef = useRef<HTMLDivElement>(null);
 
@@ -92,11 +93,13 @@ const SendButton = ({disabled, handleSubmit, handleSchedulePost}: SendButtonProp
                         })}
                     />
                 </SendButtonContainer>
-                <SchedulePostButton
-                    disabled={disabled}
-                    handleSchedulePost={handleSchedulePost}
-                    getAnchorEl={getButonGroupRef}
-                />
+                {draftsAreAllowed && (
+                    <SchedulePostButton
+                        disabled={disabled}
+                        handleSchedulePost={handleSchedulePost}
+                        getAnchorEl={getButonGroupRef}
+                    />
+                )}
             </StyledButtonGroup>
         </CompassDesignProvider>
     );

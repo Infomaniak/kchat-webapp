@@ -26,7 +26,7 @@ import * as PostActions from 'actions/post_actions';
 import {executeCommand} from 'actions/command';
 import {runMessageWillBePostedHooks, runSlashCommandWillBePostedHooks} from 'actions/hooks';
 import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
-import {updateDraft, removeDraft} from 'actions/views/drafts';
+import {updateDraft, removeDraft, upsertScheduleDraft} from 'actions/views/drafts';
 import EmojiMap from 'utils/emoji_map';
 import {getPostDraft} from 'selectors/rhs';
 
@@ -44,6 +44,11 @@ export function clearCommentDraftUploads() {
 
         return {...draft, uploadsInProgress: []};
     });
+}
+
+function updateCommentScheduleDraft(rootId: string, draft: PostDraft) {
+    const key = `${StoragePrefixes.COMMENT_DRAFT}${rootId}`;
+    return upsertScheduleDraft(key, draft, rootId);
 }
 
 // Temporarily store draft manually in localStorage since the current version of redux-persist
@@ -170,10 +175,10 @@ export function makeOnSubmit(channelId: string, rootId: string, latestPostId: st
         const emojiMap = new EmojiMap(emojis);
 
         if (draft.timestamp) {
-            dispatch(updateCommentDraft(rootId, {
+            dispatch(updateCommentScheduleDraft(rootId, {
                 ...draft,
                 channelId,
-            }, true));
+            }));
         } else if (isReaction && emojiMap.has(isReaction[2])) {
             dispatch(submitReaction(latestPostId, isReaction[1], isReaction[2]));
         } else if (message.indexOf('/') === 0 && !options.ignoreSlash) {

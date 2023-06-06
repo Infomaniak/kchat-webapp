@@ -6,12 +6,13 @@ import {useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
 import {createPost} from 'actions/post_actions';
-import {removeDraft} from 'actions/views/drafts';
+import {removeDraft, upsertScheduleDraft, updateDraft} from 'actions/views/drafts';
 import {PostDraft} from 'types/store/draft';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 import {Post, PostMetadata} from '@mattermost/types/posts';
+import {StoragePrefixes} from 'utils/constants';
 
 import DraftTitle from '../draft_title';
 import DraftActions from '../draft_actions';
@@ -75,9 +76,22 @@ function ChannelDraft({
         history.push(channelUrl);
     }, [value, channelUrl, user.id, channel.id]);
 
-    const handleOnSchedule = (scheduleUTCTimestamp: number) => null;
+    const handleOnSchedule = (scheduleUTCTimestamp: number) => {
+        const newDraft = {
+            ...value,
+            timestamp: scheduleUTCTimestamp,
+        };
+        dispatch(upsertScheduleDraft(StoragePrefixes.DRAFT, newDraft));
+    };
 
-    const handleOnScheduleDelete = () => null;
+    const handleOnScheduleDelete = () => {
+        const newDraft = {...value};
+        Reflect.deleteProperty(newDraft, 'timestamp');
+        if (value.id) {
+            dispatch(removeDraft(`${StoragePrefixes.DRAFT}_${value.id}`, value.channelId));
+        }
+        dispatch(updateDraft(StoragePrefixes.DRAFT, newDraft));
+    };
 
     if (!channel) {
         return null;
