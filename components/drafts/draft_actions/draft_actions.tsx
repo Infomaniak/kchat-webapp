@@ -3,10 +3,9 @@
 
 import React, {memo, useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import moment from 'moment-timezone';
 
-import {syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {openModal} from 'actions/views/modals';
 import {ModalIdentifiers} from 'utils/constants';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
@@ -46,7 +45,6 @@ function DraftActions({
     onScheduleDelete,
 }: Props) {
     const dispatch = useDispatch();
-    const draftsAreAllowed = useSelector(syncedDraftsAreAllowedAndEnabled);
 
     const handleDelete = useCallback(() => {
         dispatch(openModal({
@@ -118,20 +116,18 @@ function DraftActions({
                 )}
                 onClick={onEdit}
             />
-            {draftsAreAllowed && (
-                <Action
-                    icon={ScheduleIcon}
-                    id='schedule'
-                    name='schedule'
-                    tooltipText={(
-                        <FormattedMessage
-                            id='drafts.actions.schedule'
-                            defaultMessage='Schedule draft'
-                        />
-                    )}
-                    onClick={handleSchedule}
-                />
-            )}
+            <Action
+                icon={ScheduleIcon}
+                id='schedule'
+                name='schedule'
+                tooltipText={(
+                    <FormattedMessage
+                        id='drafts.actions.schedule'
+                        defaultMessage='Schedule draft'
+                    />
+                )}
+                onClick={handleSchedule}
+            />
             <Action
                 icon='icon-send-outline'
                 id='send'
