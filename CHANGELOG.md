@@ -1,3 +1,9 @@
+## 1.2.6-next.1 (2023-06-06)
+
+### Changed (1 change)
+
+- [update ai notice info for gpt and add one for kchat bot](kchat/webapp@428f0cb446ead1a3a42799ab0bf18de70b4c9d74) by @antonbuksa ([merge request](kchat/webapp!426))
+
 ## 1.2.5-next.4 (2023-05-31)
 
 ### Added (2 changes)
