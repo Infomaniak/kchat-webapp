@@ -81,9 +81,9 @@ function ThreadDraft({
         handleOnEdit();
     }, [value, onSubmit]);
 
-    const handleOnSchedule = (scheduleUTCTimestamp: number) => {};
+    const handleOnSchedule = (scheduleUTCTimestamp: number) => null;
 
-    const handleOnScheduleDelete = () => {};
+    const handleOnScheduleDelete = () => null;
 
     if (!thread) {
         return null;
@@ -92,7 +92,7 @@ function ThreadDraft({
     return (
         <Panel
             onClick={handleOnEdit}
-            isDangerous={scheduledWillNotBeSent}
+            isInvalid={scheduledWillNotBeSent}
         >
             {({hover}) => (
                 <>
@@ -105,12 +105,14 @@ function ThreadDraft({
                                 channelType={channel.type}
                                 userId={user.id}
                                 draftId={draftId}
+                                isScheduled={isScheduled}
+                                scheduleTimestamp={value.timestamp}
+                                isInvalid={scheduledWillNotBeSent}
                                 onDelete={handleOnDelete}
                                 onEdit={handleOnEdit}
                                 onSend={handleOnSend}
                                 onSchedule={handleOnSchedule}
                                 onScheduleDelete={handleOnScheduleDelete}
-                                isInvalid={scheduledWillNotBeSent}
                             />
                         )}
                         title={(

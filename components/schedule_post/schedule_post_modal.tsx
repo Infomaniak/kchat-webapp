@@ -5,6 +5,7 @@ import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useIntl} from 'react-intl';
 import {Moment} from 'moment-timezone';
+import classNames from 'classnames';
 
 import {closeModal} from 'actions/views/modals';
 
@@ -19,19 +20,37 @@ import './schedule_post_modal.scss';
 type Props = {
     timestamp: Moment;
     timezone?: string;
+    isScheduledDraft?: boolean;
     onConfirm: (scheduleUTCTimestamp: number) => void;
+    onDelete?: () => void;
 }
 
-const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
+const SchedulePostModal = ({
+    timestamp,
+    timezone,
+    isScheduledDraft = false,
+    onConfirm,
+    onDelete,
+}: Props) => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const [scheduleTimestamp, setScheduleTimestamp] = useState<Moment>(getRoundedTime(timestamp));
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
 
-    const handleConfirm = () => onConfirm(toUTCUnix(scheduleTimestamp.toDate()));
+    const handleRemoveSchedule = () => {
+        onDelete?.();
+        handleExit();
+    };
 
     const handleExit = () => dispatch(closeModal(ModalIdentifiers.SCHEDULE_POST));
+
+    const handleConfirm = (close?: boolean) => {
+        onConfirm(toUTCUnix(scheduleTimestamp.toDate()));
+        if (close) {
+            handleExit();
+        }
+    };
 
     const modalHeaderText = (
         <div>
@@ -45,12 +64,56 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
         </div>
     );
 
+    const removeScheduleButtonText = formatMessage({
+        id: 'create_post.schedule_post.modal.remove_schedule',
+        defaultMessage: 'Remove schedule',
+    });
+
+    const cancelButtonText = formatMessage({
+        id: 'generic_modal.cancel',
+        defaultMessage: 'Cancel',
+    });
+
     const confirmButtonText = formatMessage({
         id: 'create_post.schedule_post.modal.confirm',
         defaultMessage: 'Schedule',
     });
 
     const isConfirmDisabled = isMenuOpen || isDatePickerOpen;
+
+    let footer;
+    if (isScheduledDraft) {
+        footer = (
+            <>
+                <button
+                    type='button'
+                    className='GenericModal__button delete'
+                    onClick={handleRemoveSchedule}
+                >
+                    {removeScheduleButtonText}
+                </button>
+                <div>
+                    <button
+                        type='button'
+                        className='GenericModal__button cancel secondary'
+                        onClick={handleExit}
+                    >
+                        {cancelButtonText}
+                    </button>
+                    <button
+                        type='submit'
+                        className={classNames('GenericModal__button confirm', {
+                            disabled: isConfirmDisabled,
+                        })}
+                        onClick={() => handleConfirm(true)}
+                        disabled={isConfirmDisabled}
+                    >
+                        {confirmButtonText}
+                    </button>
+                </div>
+            </>
+        );
+    }
 
     return (
         <GenericModal
@@ -61,6 +124,7 @@ const SchedulePostModal = ({timestamp, timezone, onConfirm}: Props) => {
             handleConfirm={handleConfirm}
             handleCancel={handleExit}
             onExited={handleExit}
+            footer={footer}
         >
             <DateTimeInput // TODO: remove border
                 time={scheduleTimestamp}

@@ -24,5 +24,14 @@
                 gap: 24px;
             }
         }
+
+        & .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            &::before,
+            &::after {
+                display: none;
+            }
+        }
     }
 }

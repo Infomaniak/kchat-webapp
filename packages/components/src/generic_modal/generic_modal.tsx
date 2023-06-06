@@ -45,6 +45,7 @@ export type Props = {
     children: React.ReactNode;
     keyboardEscape?: boolean;
     onEnter?: (node: HTMLElement) => void;
+    footer?: JSX.Element;
 };
 
 type State = {
@@ -234,9 +235,11 @@ export class GenericModal extends React.PureComponent<Props, State> {
                                 {this.props.children}
                             </div>
                         </Modal.Body>
-                        {(cancelButton || confirmButton) && <Modal.Footer>
-                            {cancelButton}
-                            {confirmButton}
+                        {(cancelButton || confirmButton || this.props.footer) && <Modal.Footer>
+                            {this.props.footer ?? <>
+                                {cancelButton}
+                                {confirmButton}
+                            </>}
                         </Modal.Footer>}
                     </div>
                 </FocusTrap>

@@ -21,6 +21,7 @@ type Props = {
     draftId: string;
     isInvalid: boolean;
     timezone?: string;
+    isScheduled: boolean;
     scheduleTimestamp?: number;
     onDelete: (draftId: string) => void;
     onEdit: () => void;
@@ -34,6 +35,7 @@ function DraftActions({
     draftId,
     isInvalid,
     timezone,
+    isScheduled,
     scheduleTimestamp,
     onDelete,
     onEdit,
@@ -71,7 +73,8 @@ function DraftActions({
             dialogType: SchedulePostModal,
             dialogProps: {
                 timestamp: scheduleTimestamp ? moment.utc(scheduleTimestamp) : getCurrentMomentForTimezone(timezone),
-                draftId,
+                timezone,
+                isScheduledDraft: isScheduled,
                 onConfirm: onSchedule,
                 onDelete: onScheduleDelete,
             },
