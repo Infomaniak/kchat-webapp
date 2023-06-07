@@ -73,12 +73,12 @@ function PanelHeader({
         const tagText = scheduledWillNotBeSent ? (
             <FormattedMessage
                 id='drafts.info.tag.will_not_be_sent'
-                defaultMessage='will not be sent'
+                defaultMessage='Will not be sent'
             />
         ) : (
             <FormattedMessage
                 id='drafts.info.tag.scheduled'
-                defaultMessage='scheduled'
+                defaultMessage='Scheduled'
             />
         );
         tag = (

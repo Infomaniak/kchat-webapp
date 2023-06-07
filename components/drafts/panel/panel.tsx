@@ -29,9 +29,7 @@ function Panel({isInvalid, children, onClick}: Props) {
 
     const handleOnClick = (e: React.MouseEvent<HTMLElement>) => {
         if (isEligibleForClick(e)) {
-            // TODO: remove comment
-            // Temporary disable on click as it crashes after using schedule actions
-            // onClick();
+            onClick();
         }
     };
 

@@ -5877,5 +5877,11 @@
   "create_post.schedule_post.modal.repeat.every": "Repeat every",
   "create_post.schedule_post.modal.repeat.on": "Repeat on",
   "create_post.schedule_post.modal.repeat.ends": "Repeat ends",
-  "create_post.schedule_post.menu.options.custom.title": "Custom Time"
+  "create_post.schedule_post.menu.options.custom.title": "Custom Time",
+  "drafts.actions.schedule": "Schedule draft",
+  "create_post.schedule_post.modal.remove_schedule": "Remove schedule",
+  "drafts.info.tag.not_scheduled": "Not scheduled",
+  "drafts.info.tag.will_not_be_sent": "Will not be sent",
+  "drafts.info.tag.scheduled": "Scheduled",
+  "draft.info.scheduled_timestamp": "Send on {timestamp}"
 }

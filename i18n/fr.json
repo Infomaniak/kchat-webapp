@@ -5112,5 +5112,11 @@
   "create_post.schedule_post.modal.repeat.every": "Répéter chaque",
   "create_post.schedule_post.modal.repeat.on": "Répéter le",
   "create_post.schedule_post.modal.repeat.ends": "Répéter jusqu'au",
-  "create_post.schedule_post.menu.options.custom.title": "Horaire personnalisé"
+  "create_post.schedule_post.menu.options.custom.title": "Horaire personnalisé",
+  "drafts.actions.schedule": "Planifier un brouillon",
+  "create_post.schedule_post.modal.remove_schedule": "Supprimer la planification",
+  "drafts.info.tag.not_scheduled": "Non planifié",
+  "drafts.info.tag.will_not_be_sent": "Ne sera pas envoyé",
+  "drafts.info.tag.scheduled": "Planifié",
+  "draft.info.scheduled_timestamp": "Envoie le {timestamp}"
 }

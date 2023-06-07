@@ -4050,5 +4050,11 @@
   "create_post.schedule_post.modal.repeat.every": "Ripetere ogni",
   "create_post.schedule_post.modal.repeat.on": "Ripetere",
   "create_post.schedule_post.modal.repeat.ends": "Ripetere fino a",
-  "create_post.schedule_post.menu.options.custom.title": "Tempo personalizzato"
+  "create_post.schedule_post.menu.options.custom.title": "Tempo personalizzato",
+  "drafts.actions.schedule": "Pianifica una bozza",
+  "create_post.schedule_post.modal.remove_schedule": "Cancellare la pianificazione",
+  "drafts.info.tag.not_scheduled": "Non in programma",
+  "drafts.info.tag.will_not_be_sent": "Non verrà inviato",
+  "drafts.info.tag.scheduled": "In programma",
+  "draft.info.scheduled_timestamp": "Inviare il {timestamp}"
 }

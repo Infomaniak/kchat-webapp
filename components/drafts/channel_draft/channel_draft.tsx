@@ -51,7 +51,8 @@ function ChannelDraft({
     const history = useHistory();
 
     const handleOnEdit = useCallback(() => {
-        history.push(channelUrl);
+        // Temporary disable as it crashes after using schedule actions
+        // history.push(channelUrl);
     }, [channelUrl]);
 
     const handleOnDelete = useCallback((id: string) => {

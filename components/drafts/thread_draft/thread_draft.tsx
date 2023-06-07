@@ -74,7 +74,8 @@ function ThreadDraft({
     }, [channel.id, rootId]);
 
     const handleOnEdit = useCallback(() => {
-        dispatch(selectPost({id: rootId, channel_id: channel.id} as Post));
+        // Temporary disable as it crashes after using schedule actions
+        // dispatch(selectPost({id: rootId, channel_id: channel.id} as Post));
     }, [channel]);
 
     const handleOnSend = useCallback(async (id: string) => {

@@ -5332,5 +5332,11 @@
   "create_post.schedule_post.modal.repeat.every": "Repite cada",
   "create_post.schedule_post.modal.repeat.on": "Repetir el",
   "create_post.schedule_post.modal.repeat.ends": "Repetir hasta",
-  "create_post.schedule_post.menu.options.custom.title": "Hora personalizada"
+  "create_post.schedule_post.menu.options.custom.title": "Hora personalizada",
+  "drafts.actions.schedule": "Programar un borrador",
+  "create_post.schedule_post.modal.remove_schedule": "Borrar la programación",
+  "drafts.info.tag.not_scheduled": "No previsto",
+  "drafts.info.tag.will_not_be_sent": "No se enviará",
+  "drafts.info.tag.scheduled": "Previsto",
+  "draft.info.scheduled_timestamp": "Enviar el {timestamp}"
 }

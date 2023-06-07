@@ -5876,5 +5876,11 @@
   "create_post.schedule_post.modal.repeat.every": "Wiederholen jeden",
   "create_post.schedule_post.modal.repeat.on": "Wiederholen am",
   "create_post.schedule_post.modal.repeat.ends": "Wiederholen bis",
-  "create_post.schedule_post.menu.options.custom.title": "Benutzerdefinierte Zeit"
+  "create_post.schedule_post.menu.options.custom.title": "Benutzerdefinierte Zeit",
+  "drafts.actions.schedule": "Zeitplanentwurf",
+  "create_post.schedule_post.modal.remove_schedule": "Zeitplan entfernen",
+  "drafts.info.tag.not_scheduled": "Nicht geplant",
+  "drafts.info.tag.will_not_be_sent": "Wird nicht versendet",
+  "drafts.info.tag.scheduled": "Geplant",
+  "draft.info.scheduled_timestamp": "Senden am {timestamp}"
 }
