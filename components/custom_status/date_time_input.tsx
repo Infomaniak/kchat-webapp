@@ -113,13 +113,6 @@ const styles = {
     }),
 };
 
-const placeholder = (
-    <FormattedMessage
-        id='time_dropdown.choose_time'
-        defaultMessage='Choose a time'
-    />
-);
-
 type Props = {
     time: Moment;
     handleChange: (date: Moment) => void;
@@ -156,7 +149,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
     const setTimeAndOptions = () => {
         const currentTime = getCurrentMomentForTimezone(timezone);
         let startTime = moment(time).startOf('day');
-        if (time.date() === currentTime.date()) {
+        if (time.date() === currentTime.date() && time.month() === currentTime.month() && time.year() === currentTime.year()) {
             startTime = getRoundedTime(currentTime);
         }
         setTimeOptions(getTimeInIntervals(startTime));
@@ -245,16 +238,13 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         defaultMessage: 'Invalid date',
     });
 
-    const defaultTimeValue = {
-        value: time.toDate(),
-        label: (
-            <Timestamp
-                useRelative={false}
-                useDate={false}
-                value={time.toDate()}
-            />
-        ),
-    };
+    const placeholder = (
+        <Timestamp
+            useRelative={false}
+            useDate={false}
+            value={time.toDate()}
+        />
+    );
 
     return (
         <div>
@@ -283,7 +273,6 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
                         components={{Control: CreatableControl}}
                         classNamePrefix='react-select'
                         options={timeOptions}
-                        defaultValue={defaultTimeValue}
                         onChange={handleTimeChange}
                         formatOptionLabel={formatOptionLabel}
                         isValidNewOption={isValidNewOption}

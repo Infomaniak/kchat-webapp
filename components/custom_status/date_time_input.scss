@@ -63,6 +63,9 @@
             position: static;
             margin-left: 10px;
         }
+        .react-select__placeholder {
+            color: var(--center-channel-color);
+        }
     }
 
     &__description {
