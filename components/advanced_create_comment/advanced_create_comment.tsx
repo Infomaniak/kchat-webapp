@@ -237,6 +237,9 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         if (rootChanged || messageInHistoryChanged || props.draft.remote) {
             updatedState = {...updatedState, draft: {...props.draft, uploadsInProgress: rootChanged ? [] : props.draft.uploadsInProgress}};
         }
+        if (updatedState.draft && updatedState.draft.id !== props.draft.id) {
+            updatedState.draft.id = props.draft.id;
+        }
 
         return updatedState;
     }
