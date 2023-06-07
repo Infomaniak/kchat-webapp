@@ -138,6 +138,7 @@ function ChannelDraft({
                         timestamp={value.updateAt}
                         remote={value.remote || false}
                         isScheduled={isScheduled}
+                        scheduledTimestamp={value.timestamp}
                         scheduledWillNotBeSent={scheduledWillNotBeSent}
                     />
                     <PanelBody

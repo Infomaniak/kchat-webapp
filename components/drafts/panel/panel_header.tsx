@@ -39,6 +39,7 @@ type Props = {
     remote: boolean;
     title: React.ReactNode;
     isScheduled: boolean;
+    scheduledTimestamp?: number;
     scheduledWillNotBeSent: boolean;
 }
 
@@ -49,6 +50,7 @@ function PanelHeader({
     remote,
     title,
     isScheduled,
+    scheduledTimestamp,
     scheduledWillNotBeSent,
 }: Props) {
     const syncTooltip = (
@@ -88,6 +90,27 @@ function PanelHeader({
         );
     }
 
+    let time;
+    if (timestamp) {
+        time = (
+            <Timestamp
+                value={new Date(timestamp)}
+                {...TIMESTAMP_PROPS}
+            />
+        );
+    }
+    if (isScheduled && scheduledTimestamp) {
+        time = (
+            <FormattedMessage
+                id='draft.info.scheduled_timestamp'
+                defaultMessage='Send on {timestamp}'
+                values={{
+                    timestamp: <Timestamp value={new Date(scheduledTimestamp * 1000)}/>,
+                }}
+            />
+        );
+    }
+
     return (
         <header className='PanelHeader'>
             <div className='PanelHeader__left'>
@@ -111,12 +134,7 @@ function PanelHeader({
                         </OverlayTrigger>
                     </div>}
                     <div className='PanelHeader__timestamp'>
-                        {Boolean(timestamp) && (
-                            <Timestamp
-                                value={new Date(timestamp)}
-                                {...TIMESTAMP_PROPS}
-                            />
-                        )}
+                        {time}
                     </div>
                     {tag}
                 </div>

@@ -14,8 +14,11 @@ import type {PostDraft} from 'types/store/draft';
 import {getPost} from 'mattermost-redux/actions/posts';
 
 import {selectPost} from 'actions/views/rhs';
-import {removeDraft} from 'actions/views/drafts';
+import {removeDraft, updateDraft, upsertScheduleDraft} from 'actions/views/drafts';
 import {makeOnSubmit} from 'actions/views/create_comment';
+import {setGlobalItem} from 'actions/storage';
+
+import {StoragePrefixes} from 'utils/constants';
 
 import DraftTitle from '../draft_title';
 import DraftActions from '../draft_actions';
@@ -81,9 +84,26 @@ function ThreadDraft({
         handleOnEdit();
     }, [value, onSubmit]);
 
-    const handleOnSchedule = (scheduleUTCTimestamp: number) => null;
+    const handleOnSchedule = (scheduleUTCTimestamp: number) => {
+        const newDraft = {
+            ...value,
+            timestamp: scheduleUTCTimestamp,
+        };
+        dispatch(upsertScheduleDraft(`${StoragePrefixes.COMMENT_DRAFT}${rootId}`, newDraft, rootId));
+    };
 
-    const handleOnScheduleDelete = () => null;
+    const handleOnScheduleDelete = () => {
+        const newDraft = {...value};
+        Reflect.deleteProperty(newDraft, 'timestamp');
+
+        // Delete scheduled draft from store
+        if (value.id) {
+            dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${rootId}_${value.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
+        }
+
+        // Update channel draft remote
+        dispatch(updateDraft(StoragePrefixes.COMMENT_DRAFT + rootId, newDraft, rootId, true));
+    };
 
     if (!thread) {
         return null;
@@ -125,6 +145,7 @@ function ThreadDraft({
                         timestamp={value.updateAt}
                         remote={value.remote || false}
                         isScheduled={isScheduled}
+                        scheduledTimestamp={value.timestamp}
                         scheduledWillNotBeSent={scheduledWillNotBeSent}
                     />
                     <PanelBody

@@ -46,11 +46,6 @@ export function clearCommentDraftUploads() {
     });
 }
 
-function updateCommentScheduleDraft(rootId: string, draft: PostDraft) {
-    const key = `${StoragePrefixes.COMMENT_DRAFT}${rootId}`;
-    return upsertScheduleDraft(key, draft, rootId);
-}
-
 // Temporarily store draft manually in localStorage since the current version of redux-persist
 // we're on will not save the draft quickly enough on page unload.
 export function updateCommentDraft(rootId: string, draft?: PostDraft, save = false) {
@@ -167,6 +162,15 @@ export function makeOnSubmit(channelId: string, rootId: string, latestPostId: st
         dispatch(addMessageIntoHistory(message));
 
         const key = `${StoragePrefixes.COMMENT_DRAFT}${rootId}`;
+
+        if (draft.timestamp) {
+            const newDraft = {
+                ...draft,
+                channelId,
+            };
+            return dispatch(upsertScheduleDraft(key, newDraft, rootId));
+        }
+
         dispatch(removeDraft(key, channelId, rootId));
 
         const isReaction = Utils.REACTION_PATTERN.exec(message);
@@ -174,12 +178,7 @@ export function makeOnSubmit(channelId: string, rootId: string, latestPostId: st
         const emojis = getCustomEmojisByName(getState());
         const emojiMap = new EmojiMap(emojis);
 
-        if (draft.timestamp) {
-            dispatch(updateCommentScheduleDraft(rootId, {
-                ...draft,
-                channelId,
-            }));
-        } else if (isReaction && emojiMap.has(isReaction[2])) {
+        if (isReaction && emojiMap.has(isReaction[2])) {
             dispatch(submitReaction(latestPostId, isReaction[1], isReaction[2]));
         } else if (message.indexOf('/') === 0 && !options.ignoreSlash) {
             try {

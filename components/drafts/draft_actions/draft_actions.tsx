@@ -73,7 +73,7 @@ function DraftActions({
             modalId: ModalIdentifiers.SCHEDULE_POST,
             dialogType: SchedulePostModal,
             dialogProps: {
-                timestamp: scheduleTimestamp ? moment.utc(scheduleTimestamp) : getCurrentMomentForTimezone(timezone),
+                timestamp: scheduleTimestamp ? moment.unix(scheduleTimestamp) : getCurrentMomentForTimezone(timezone),
                 timezone,
                 isScheduledDraft: isScheduled,
                 onConfirm: onSchedule,

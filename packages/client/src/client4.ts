@@ -4490,7 +4490,7 @@ export default class Client4 {
 
     updateDraft = (draft: Draft) => {
         return this.doFetch<Draft>(
-            `${this.getDraftsRoute()}`,
+            `${this.getDraftsRoute()}/${draft.id}`,
             {method: 'put', body: JSON.stringify(draft)},
         );
     };
