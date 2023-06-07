@@ -124,11 +124,8 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = '') 
             return {error: new Error('Drafts are not allowed on the current server')};
         }
         const userId = getCurrentUserId(state);
-        const draft = getGlobalItem(state, key, {});
 
-        if (draft.channelId) {
-            dispatch(removeDraft(key, draft.channelId, rootId));
-        }
+        dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
         try {
             const {id} = await upsertDraft(value, userId, rootId);
@@ -146,6 +143,7 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = '') 
 function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '') {
     const fileIds = draft.fileInfos.map((file) => file.id);
     const newDraft = {
+        id: draft.id,
         create_at: draft.createAt || 0,
         update_at: draft.updateAt || 0,
         delete_at: 0,
@@ -157,11 +155,10 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '') {
         file_ids: fileIds,
         timestamp: draft.timestamp,
         priority: draft.metadata?.priority as PostPriorityMetadata,
-    } as ServerDraft;
+    };
 
-    if (draft.id) {
-        newDraft.id = draft.id;
-        return Client4.updateDraft(newDraft);
+    if (newDraft.id) {
+        return Client4.updateDraft(newDraft as ServerDraft);
     }
 
     return Client4.createDraft(newDraft);
@@ -189,6 +186,10 @@ export function transformServerDraft(draft: ServerDraft): Draft {
         key = `${StoragePrefixes.COMMENT_DRAFT}${draft.root_id}`;
     }
 
+    if (draft.timestamp) {
+        key += `_${draft.id}`;
+    }
+
     let fileInfos: FileInfo[] = [];
     if (draft.metadata?.files) {
         fileInfos = draft.metadata.files;
@@ -203,7 +204,9 @@ export function transformServerDraft(draft: ServerDraft): Draft {
         key,
         timestamp: new Date(draft.update_at),
         value: {
+            id: draft.id,
             message: draft.message,
+            timestamp: draft.timestamp,
             fileInfos,
             props: draft.props,
             uploadsInProgress: [],

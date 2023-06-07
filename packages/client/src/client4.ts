@@ -4481,14 +4481,14 @@ export default class Client4 {
         return this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
     }
 
-    createDraft = async (draft: Omit<Draft, 'id'>) => {
+    createDraft = (draft: Omit<Draft, 'id'>) => {
         return this.doFetch<Draft>(
             `${this.getDraftsRoute()}`,
             {method: 'post', body: JSON.stringify(draft)},
         );
     };
 
-    updateDraft = async (draft: Draft) => {
+    updateDraft = (draft: Draft) => {
         return this.doFetch<Draft>(
             `${this.getDraftsRoute()}`,
             {method: 'put', body: JSON.stringify(draft)},
