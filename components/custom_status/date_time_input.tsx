@@ -149,7 +149,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
     const setTimeAndOptions = () => {
         const currentTime = getCurrentMomentForTimezone(timezone);
         let startTime = moment(time).startOf('day');
-        if (time.date() === currentTime.date() && time.month() === currentTime.month() && time.year() === currentTime.year()) {
+        if (time.dayOfYear() === currentTime.dayOfYear() && time.year() === currentTime.year()) {
             startTime = getRoundedTime(currentTime);
         }
         setTimeOptions(getTimeInIntervals(startTime));
@@ -157,14 +157,15 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
 
     useEffect(setTimeAndOptions, [time]);
 
-    const handleDayChange = (day: Date, modifiers: DayModifiers) => {
-        if (modifiers.today) {
-            const currentTime = getCurrentMomentForTimezone(timezone);
-            const roundedTime = getRoundedTime(currentTime);
+    const handleDayChange = (day: Date) => {
+        const currentMoment = getCurrentMomentForTimezone(timezone);
+        const dayWithTimezone = timezone ? moment.tz(day, timezone) : moment(day);
+        if (dayWithTimezone.isBefore(currentMoment)) {
+            const roundedTime = getRoundedTime(currentMoment);
             handleChange(roundedTime);
         } else {
-            const dayWithTimezone = timezone ? moment.tz(day, timezone) : moment(day);
-            handleChange(dayWithTimezone.startOf('day'));
+            const newMoment = time.clone().dayOfYear(dayWithTimezone.dayOfYear()).year(dayWithTimezone.year());
+            handleChange(newMoment);
         }
         handlePopperOpenState(false);
     };
