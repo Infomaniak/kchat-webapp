@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useEffect} from 'react';
+import React, {memo, useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useIntl} from 'react-intl';
 
@@ -18,6 +18,7 @@ import type {UserProfile, UserStatus} from '@mattermost/types/users';
 
 import DraftRow from './draft_row';
 import DraftsIllustration from './drafts_illustration';
+import DraftFilterMenu, {DraftFilter} from './draft_filter_menu/draft_filter_menu';
 
 import './drafts.scss';
 
@@ -38,6 +39,17 @@ function Drafts({
 }: Props) {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
+    const [filter, setFilter] = useState<DraftFilter>(DraftFilter.ALL);
+    const filteredDrafts = useMemo(() => {
+        switch (filter) {
+        case DraftFilter.SCHEDULED:
+            return drafts.filter((draft) => draft.value.timestamp);
+        case DraftFilter.NOT_SCHEDULED:
+            return drafts.filter((draft) => !draft.value.timestamp);
+        default:
+            return drafts;
+        }
+    }, [drafts, filter]);
 
     useEffect(() => {
         dispatch(selectLhsItem(LhsItemType.Page, LhsPage.Drafts));
@@ -68,9 +80,15 @@ function Drafts({
                     id: 'drafts.subtitle',
                     defaultMessage: 'Any messages you\'ve started will show here',
                 })}
+                right={(
+                    <DraftFilterMenu
+                        filter={filter}
+                        setFilter={setFilter}
+                    />
+                )}
             />
             <div className='Drafts__main'>
-                {drafts.map((d) => (
+                {filteredDrafts.map((d) => (
                     <DraftRow
                         key={d.key}
                         displayName={displayName}
@@ -79,7 +97,7 @@ function Drafts({
                         status={status}
                     />
                 ))}
-                {drafts.length === 0 && (
+                {filteredDrafts.length === 0 && (
                     <NoResultsIndicator
                         expanded={true}
                         iconGraphic={DraftsIllustration}

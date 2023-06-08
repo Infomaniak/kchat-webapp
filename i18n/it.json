@@ -4060,5 +4060,10 @@
   "create_post.schedule_post.indicator": "Hai programmato {count} {count, plural, one {bozza} other {bozze}} da inviare su questo {type}. La prossima sarà inviata su {timestamp}. <GoToDrafts>Vedi tutti i messaggi in bozza</GoToDrafts>",
   "create_post.schedule_post.indicator.channel": "canale",
   "create_post.schedule_post.indicator.thread": "filo",
-  "drafts.actions.reschedule": "Riprogrammare la bozza"
+  "drafts.actions.reschedule": "Riprogrammare la bozza",
+  "drafts.filter.menu_button_aria": "Aprire il menu del filtro bozza",
+  "drafts.filter.menu.title": "Mostra",
+  "drafts.filter.menu.all": "Tutte le bozze",
+  "drafts.filter.menu.scheduled": "In programma",
+  "drafts.filter.menu.not_scheduled": "Non in programma"
 }

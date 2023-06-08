@@ -5886,5 +5886,10 @@
   "create_post.schedule_post.indicator": "Sie haben {count} {count, plural, one {Entwurf} other {Entwürfe}} für den Versand auf diesem {type} geplant. Der nächste wird am {timestamp} versendet. <GoToDrafts>Alle Entwürfe anzeigen</GoToDrafts>",
   "create_post.schedule_post.indicator.channel": "Kanal",
   "create_post.schedule_post.indicator.thread": "Unterhaltung",
-  "drafts.actions.reschedule": "Entwurf umplanen"
+  "drafts.actions.reschedule": "Entwurf umplanen",
+  "drafts.filter.menu_button_aria": "Menü Entwurfsfilter öffnen",
+  "drafts.filter.menu.title": "Zeige",
+  "drafts.filter.menu.all": "Alle Entwürfe",
+  "drafts.filter.menu.scheduled": "Geplant",
+  "drafts.filter.menu.not_scheduled": "Nicht geplant"
 }

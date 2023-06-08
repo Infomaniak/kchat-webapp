@@ -5342,5 +5342,10 @@
   "create_post.schedule_post.indicator": "Ha programado el envío de {count} {count, plural, one {borrador} other {borradores}} en este {type}. El siguiente se enviará el {timestamp}. <GoToDrafts>Ver todos los borradores</GoToDrafts>",
   "create_post.schedule_post.indicator.channel": "canal",
   "create_post.schedule_post.indicator.thread": "hilo",
-  "drafts.actions.reschedule": "Reprogramar borrador"
+  "drafts.actions.reschedule": "Reprogramar borrador",
+  "drafts.filter.menu_button_aria": "Abrir el menú del filtro de borradores",
+  "drafts.filter.menu.title": "Mostrar",
+  "drafts.filter.menu.all": "Todos los borradores",
+  "drafts.filter.menu.scheduled": "Previsto",
+  "drafts.filter.menu.not_scheduled": "No previsto"
 }

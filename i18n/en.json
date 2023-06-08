@@ -5887,5 +5887,10 @@
   "create_post.schedule_post.indicator": "You have scheduled {count} {count, plural, one {draft} other {drafts}} to be sent on this {type}. The next will be sent on {timestamp}. <GoToDrafts>See all draft messages</GoToDrafts>",
   "create_post.schedule_post.indicator.channel": "channel",
   "create_post.schedule_post.indicator.thread": "thread",
-  "drafts.actions.reschedule": "Reschedule draft"
+  "drafts.actions.reschedule": "Reschedule draft",
+  "drafts.filter.menu_button_aria": "Open draft filter menu",
+  "drafts.filter.menu.title": "Show",
+  "drafts.filter.menu.all": "All drafts",
+  "drafts.filter.menu.scheduled": "Scheduled",
+  "drafts.filter.menu.not_scheduled": "Not scheduled"
 }
