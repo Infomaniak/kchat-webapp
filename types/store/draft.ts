@@ -10,6 +10,10 @@ export type DraftInfo = {
 }
 
 export type PostDraft = {
+
+    /**
+     * Every server draft has an id
+     */
     id?: string;
     message: string;
     fileInfos: FileInfo[];
@@ -22,6 +26,10 @@ export type PostDraft = {
     updateAt: number;
     show?: boolean;
     remote?: boolean;
+
+    /**
+     * Every scheduled draft as a unix timestamp
+     */
     timestamp?: number;
     metadata?: {
         priority?: {
