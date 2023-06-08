@@ -69,6 +69,7 @@ import {IconContainer} from '../advanced_text_editor/formatting_bar/formatting_i
 
 import FileLimitStickyBanner from '../file_limit_sticky_banner';
 import {FilePreviewInfo} from '../file_preview/file_preview';
+import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 const KeyCodes = Constants.KeyCodes;
 
 function isDraftEmpty(draft: PostDraft): boolean {
@@ -1659,6 +1660,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     (this.props.draft.fileInfos.length > 0 || this.props.draft.uploadsInProgress.length > 0) &&
                     <FileLimitStickyBanner/>
                 }
+                <ScheduledIndicator
+                    type={ScheduledIndicatorType.CHANNEL}
+                    channelId={this.props.currentChannel.id}
+                />
                 <AdvancedTextEditor
                     location={Locations.CENTER}
                     currentUserId={this.props.currentUserId}

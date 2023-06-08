@@ -5882,5 +5882,8 @@
   "drafts.info.tag.not_scheduled": "Nicht geplant",
   "drafts.info.tag.will_not_be_sent": "Wird nicht versendet",
   "drafts.info.tag.scheduled": "Geplant",
-  "draft.info.scheduled_timestamp": "Senden am {timestamp}"
+  "draft.info.scheduled_timestamp": "Senden am {timestamp}",
+  "create_post.schedule_post.indicator": "Sie haben {count} {count, plural, one {Entwurf} other {Entwürfe}} für den Versand auf diesem {type} geplant. Der nächste wird am {timestamp} versendet. <GoToDrafts>Alle Entwürfe anzeigen</GoToDrafts>",
+  "create_post.schedule_post.indicator.channel": "Kanal",
+  "create_post.schedule_post.indicator.thread": "Unterhaltung"
 }

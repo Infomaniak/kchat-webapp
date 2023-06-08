@@ -48,6 +48,7 @@ import AdvancedTextEditor from '../advanced_text_editor/advanced_text_editor';
 import {TextboxClass, TextboxElement} from '../textbox';
 
 import FileLimitStickyBanner from '../file_limit_sticky_banner';
+import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 
 const KeyCodes = Constants.KeyCodes;
 
@@ -1201,6 +1202,10 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     (this.props.draft.fileInfos.length > 0 || this.props.draft.uploadsInProgress.length > 0) &&
                     <FileLimitStickyBanner/>
                 }
+                <ScheduledIndicator
+                    type={ScheduledIndicatorType.THREAD}
+                    rootId={this.props.rootId}
+                />
                 <AdvancedTextEditor
                     location={Locations.RHS_COMMENT}
                     textboxRef={this.textboxRef}
