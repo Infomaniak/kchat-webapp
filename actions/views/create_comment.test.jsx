@@ -384,7 +384,7 @@ describe('rhs view actions', () => {
 
             const testStore = mockStore(initialState);
             const key = `${StoragePrefixes.COMMENT_DRAFT}${rootId}`;
-            testStore.dispatch(removeDraft(key, channelId, rootId));
+            testStore.dispatch(removeDraft(key));
 
             expect(store.getActions()).toEqual(
                 expect.arrayContaining(testStore.getActions()),

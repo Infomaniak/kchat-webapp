@@ -56,7 +56,7 @@ function ChannelDraft({
     }, [channelUrl]);
 
     const handleOnDelete = useCallback((id: string) => {
-        dispatch(removeDraft(id, channel.id));
+        dispatch(removeDraft(id));
     }, [channel.id]);
 
     const handleOnSend = useCallback(async (id: string) => {
@@ -73,7 +73,7 @@ function ChannelDraft({
         }
 
         dispatch(createPost(post, value.fileInfos));
-        dispatch(removeDraft(id, channel.id));
+        dispatch(removeDraft(id));
 
         history.push(channelUrl);
     }, [value, channelUrl, user.id, channel.id]);

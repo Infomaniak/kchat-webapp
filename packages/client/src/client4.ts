@@ -4502,17 +4502,10 @@ export default class Client4 {
         );
     };
 
-    deleteDraft = (channelId: Channel['id'], rootId = '') => {
-        let endpoint = `${this.getUserRoute('me')}/channels/${channelId}/drafts`;
-        if (rootId !== '') {
-            endpoint += `/${rootId}`;
-        }
-
-        return this.doFetch<null>(
-            endpoint,
-            {
-                method: 'delete',
-            },
+    deleteDraft = (draftId: Draft['id']) => {
+        return this.doFetch<StatusOK>(
+            `${this.getDraftsRoute()}/${draftId}`,
+            {method: 'delete'},
         );
     };
 

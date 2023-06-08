@@ -192,7 +192,7 @@ function setDraft(key: string, value: PostDraft, draftChannelId: string, save = 
             return dispatch(updateDraft(key, updatedValue, '', save));
         }
 
-        return dispatch(removeDraft(key, channelId));
+        return dispatch(removeDraft(key));
     };
 }
 

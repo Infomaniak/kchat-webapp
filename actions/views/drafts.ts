@@ -9,7 +9,6 @@ import {syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entit
 import {Client4} from 'mattermost-redux/client';
 
 import {setGlobalItem} from 'actions/storage';
-import {getConnectionId} from 'selectors/general';
 import type {GlobalState} from 'types/store';
 import {PostDraft} from 'types/store/draft';
 import {getGlobalItem} from 'selectors/storage';
@@ -68,15 +67,17 @@ export function getDrafts(teamId: string) {
     };
 }
 
-export function removeDraft(key: string, channelId: string, rootId = '') {
+export function removeDraft(key: string) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
+        const draftId = getGlobalItem(state, key, {}).id;
+        console.log(draftId);
 
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
-        if (syncedDraftsAreAllowedAndEnabled(state)) {
+        if (syncedDraftsAreAllowedAndEnabled(state) && draftId) {
             try {
-                await Client4.deleteDraft(channelId, rootId);
+                await Client4.deleteDraft(draftId);
             } catch (error) {
                 return {
                     data: false,

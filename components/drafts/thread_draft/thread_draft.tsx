@@ -70,7 +70,7 @@ function ThreadDraft({
     }, [channel.id, thread?.id]);
 
     const handleOnDelete = useCallback((id: string) => {
-        dispatch(removeDraft(id, channel.id, rootId));
+        dispatch(removeDraft(id));
     }, [channel.id, rootId]);
 
     const handleOnEdit = useCallback(() => {

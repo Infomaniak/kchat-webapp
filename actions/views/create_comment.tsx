@@ -171,7 +171,7 @@ export function makeOnSubmit(channelId: string, rootId: string, latestPostId: st
             return dispatch(upsertScheduleDraft(key, newDraft, rootId));
         }
 
-        dispatch(removeDraft(key, channelId, rootId));
+        dispatch(removeDraft(key));
 
         const isReaction = Utils.REACTION_PATTERN.exec(message);
 

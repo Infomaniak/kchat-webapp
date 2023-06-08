@@ -518,9 +518,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
         const isReaction = Utils.REACTION_PATTERN.exec(post.message);
         if (isSchedule) {
-            // Should we merge post in the updatedDraft ? If so, we must update the upsertDraft action
             const updatedDraft = {
-                ...this.draftsForChannel[channelId] ?? this.props.draft,
+                ...this.props.draft,
+                ...this.draftsForChannel[channelId],
                 timestamp: scheduleUTCTimestamp,
                 channelId,
                 remote: false,
