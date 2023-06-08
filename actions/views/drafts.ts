@@ -71,7 +71,6 @@ export function removeDraft(key: string) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
         const draftId = getGlobalItem(state, key, {}).id;
-        console.log(draftId);
 
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
