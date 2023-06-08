@@ -5885,5 +5885,6 @@
   "draft.info.scheduled_timestamp": "Senden am {timestamp}",
   "create_post.schedule_post.indicator": "Sie haben {count} {count, plural, one {Entwurf} other {Entwürfe}} für den Versand auf diesem {type} geplant. Der nächste wird am {timestamp} versendet. <GoToDrafts>Alle Entwürfe anzeigen</GoToDrafts>",
   "create_post.schedule_post.indicator.channel": "Kanal",
-  "create_post.schedule_post.indicator.thread": "Unterhaltung"
+  "create_post.schedule_post.indicator.thread": "Unterhaltung",
+  "drafts.actions.reschedule": "Entwurf umplanen"
 }

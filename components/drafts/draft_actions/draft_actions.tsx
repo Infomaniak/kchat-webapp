@@ -120,7 +120,12 @@ function DraftActions({
                 icon={ScheduleIcon}
                 id='schedule'
                 name='schedule'
-                tooltipText={(
+                tooltipText={scheduleTimestamp ? (
+                    <FormattedMessage
+                        id='drafts.actions.reschedule'
+                        defaultMessage='Reschedule draft'
+                    />
+                ) : (
                     <FormattedMessage
                         id='drafts.actions.schedule'
                         defaultMessage='Schedule draft'

@@ -5341,5 +5341,6 @@
   "draft.info.scheduled_timestamp": "Enviar el {timestamp}",
   "create_post.schedule_post.indicator": "Ha programado el envío de {count} {count, plural, one {borrador} other {borradores}} en este {type}. El siguiente se enviará el {timestamp}. <GoToDrafts>Ver todos los borradores</GoToDrafts>",
   "create_post.schedule_post.indicator.channel": "canal",
-  "create_post.schedule_post.indicator.thread": "hilo"
+  "create_post.schedule_post.indicator.thread": "hilo",
+  "drafts.actions.reschedule": "Reprogramar borrador"
 }

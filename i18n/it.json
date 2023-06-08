@@ -4059,5 +4059,6 @@
   "draft.info.scheduled_timestamp": "Inviare il {timestamp}",
   "create_post.schedule_post.indicator": "Hai programmato {count} {count, plural, one {bozza} other {bozze}} da inviare su questo {type}. La prossima sarà inviata su {timestamp}. <GoToDrafts>Vedi tutti i messaggi in bozza</GoToDrafts>",
   "create_post.schedule_post.indicator.channel": "canale",
-  "create_post.schedule_post.indicator.thread": "filo"
+  "create_post.schedule_post.indicator.thread": "filo",
+  "drafts.actions.reschedule": "Riprogrammare la bozza"
 }
