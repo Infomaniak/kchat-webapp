@@ -123,10 +123,11 @@ const SchedulePostModal = ({
             isConfirmDisabled={isConfirmDisabled}
             handleConfirm={handleConfirm}
             handleCancel={handleExit}
+            handleEnterKeyPress={handleConfirm}
             onExited={handleExit}
             footer={footer}
         >
-            <DateTimeInput // TODO: remove border
+            <DateTimeInput
                 time={scheduleTimestamp}
                 handleChange={setScheduleTimestamp}
                 timezone={timezone}

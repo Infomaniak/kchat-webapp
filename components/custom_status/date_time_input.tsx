@@ -3,7 +3,7 @@
 
 import React, {useEffect, useState, useCallback, CSSProperties} from 'react';
 import {useSelector} from 'react-redux';
-import {DayModifiers, DayPickerProps} from 'react-day-picker';
+import {DayPickerProps} from 'react-day-picker';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {components} from 'react-select';
 import Creatable from 'react-select/creatable';
@@ -124,6 +124,7 @@ type Props = {
 const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, onMenuChange, setIsDatePickerOpen}: Props) => {
     const locale = useSelector(getCurrentLocale);
     const [timeOptions, setTimeOptions] = useState<CreatableOption[]>([]);
+    const [selectedValue, setSelectedValue] = useState<ValueType<CreatableOption>>(null);
     const [isPopperOpen, setIsPopperOpen] = useState(false);
     const {formatMessage} = useIntl();
 
@@ -162,6 +163,10 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         const dayWithTimezone = timezone ? moment.tz(day, timezone) : moment(day);
         if (dayWithTimezone.isBefore(currentMoment)) {
             const roundedTime = getRoundedTime(currentMoment);
+            const newOptions = getTimeInIntervals(roundedTime);
+            if (newOptions.length) {
+                setSelectedValue(newOptions[0]);
+            }
             handleChange(roundedTime);
         } else {
             const newMoment = time.clone().dayOfYear(dayWithTimezone.dayOfYear()).year(dayWithTimezone.year());
@@ -215,6 +220,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
             newTime = setDateTime(time, value);
         }
         if (newTime.isValid()) {
+            setSelectedValue(newOption);
             handleChange(newTime);
         }
     };
@@ -274,6 +280,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
                         components={{Control: CreatableControl}}
                         classNamePrefix='react-select'
                         options={timeOptions}
+                        value={selectedValue}
                         onChange={handleTimeChange}
                         formatOptionLabel={formatOptionLabel}
                         isValidNewOption={isValidNewOption}
