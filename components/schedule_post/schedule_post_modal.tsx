@@ -34,7 +34,7 @@ const SchedulePostModal = ({
 }: Props) => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
-    const [scheduleTimestamp, setScheduleTimestamp] = useState<Moment>(getRoundedTime(timestamp));
+    const [scheduleTimestamp, setScheduleTimestamp] = useState<Moment>(isScheduledDraft ? timestamp : getRoundedTime(timestamp));
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
 
