@@ -1714,6 +1714,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     prefillMessage={this.prefillMessage}
                     textboxRef={this.textboxRef}
                     labels={priorityLabels}
+                    isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
                     additionalControls={[
                         this.props.isPostPriorityEnabled && (

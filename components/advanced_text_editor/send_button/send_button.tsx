@@ -52,11 +52,12 @@ const StyledButtonGroup = styled(ButtonGroup)`
 
 type SendButtonProps = {
     disabled: boolean;
+    isSchedulable?: boolean;
     handleSubmit: (e: React.FormEvent) => void;
     handleSchedulePost: (scheduleUTCTimestamp: number) => void;
 }
 
-const SendButton = ({disabled, handleSubmit, handleSchedulePost}: SendButtonProps) => {
+const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}: SendButtonProps) => {
     const theme = useSelector(getTheme);
     const draftsAreAllowed = useSelector(syncedDraftsAreAllowedAndEnabled);
     const {formatMessage} = useIntl();
@@ -93,7 +94,7 @@ const SendButton = ({disabled, handleSubmit, handleSchedulePost}: SendButtonProp
                         })}
                     />
                 </SendButtonContainer>
-                {draftsAreAllowed && (
+                {isSchedulable && draftsAreAllowed && (
                     <SchedulePostButton
                         disabled={disabled}
                         handleSchedulePost={handleSchedulePost}

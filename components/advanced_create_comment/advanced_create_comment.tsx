@@ -1253,6 +1253,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     getFileUploadTarget={this.getFileUploadTarget}
                     fileUploadRef={this.fileUploadRef}
                     isThreadView={this.props.isThreadView}
+                    isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
                 />
             </form>
