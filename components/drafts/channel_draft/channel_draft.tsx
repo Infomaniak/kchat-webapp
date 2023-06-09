@@ -152,6 +152,7 @@ function ChannelDraft({
                         uploadsInProgress={value.uploadsInProgress}
                         userId={user.id}
                         username={user.username}
+                        draft={value}
                     />
                 </>
             )}

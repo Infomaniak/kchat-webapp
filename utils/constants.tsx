@@ -1363,6 +1363,7 @@ export const Locations = {
     SEARCH: 'SEARCH' as const,
     NO_WHERE: 'NO_WHERE' as const,
     MODAL: 'MODAL' as const,
+    SCHEDULED_DRAFT: 'DRAFT',
 };
 
 export const PostListRowListIds = {

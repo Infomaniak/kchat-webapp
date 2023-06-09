@@ -360,6 +360,9 @@ const AdvanceTextEditor = ({
     case Locations.MODAL:
         textboxId = 'modal_textbox';
         break;
+    case Locations.SCHEDULED_DRAFT:
+        textboxId = 'scheduled_draft_editor_textbox';
+        break;
     }
 
     const showFormattingBar = !isFormattingBarHidden && !readOnlyChannel;
