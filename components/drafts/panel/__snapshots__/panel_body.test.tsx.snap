@@ -16,8 +16,11 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
   <PanelBody
     channelId="channel_id"
     displayName="display_name"
+    draft={Object {}}
     fileInfos={Array []}
+    isEditing={false}
     message="message"
+    setIsEditing={[Function]}
     status="status"
     uploadsInProgress={Array []}
     userId="user_id"
@@ -294,8 +297,11 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
   <PanelBody
     channelId="channel_id"
     displayName="display_name"
+    draft={Object {}}
     fileInfos={Array []}
+    isEditing={false}
     message="message"
+    setIsEditing={[Function]}
     status="status"
     uploadsInProgress={Array []}
     userId="user_id"
@@ -572,7 +578,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
   <PanelBody
     channelId="channel_id"
     displayName="display_name"
+    draft={Object {}}
     fileInfos={Array []}
+    isEditing={false}
     message="message"
     priority={
       Object {
@@ -580,6 +588,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
         "requested_ack": true,
       }
     }
+    setIsEditing={[Function]}
     status="status"
     uploadsInProgress={Array []}
     userId="user_id"
@@ -926,7 +935,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
   <PanelBody
     channelId="channel_id"
     displayName="display_name"
+    draft={Object {}}
     fileInfos={Array []}
+    isEditing={false}
     message="message"
     priority={
       Object {
@@ -934,6 +945,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
         "requested_ack": true,
       }
     }
+    setIsEditing={[Function]}
     status="status"
     uploadsInProgress={Array []}
     userId="user_id"
