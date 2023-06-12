@@ -42,6 +42,7 @@ import {IconContainer} from 'components/advanced_text_editor/formatting_bar/form
 import FileLimitStickyBanner from 'components/file_limit_sticky_banner';
 import {FilePreviewInfo} from 'components/file_preview/file_preview';
 import {TextboxElement} from 'components/textbox';
+import EditPostFooter from 'components/edit_post/edit_post_footer';
 
 import {PostDraft} from 'types/store/draft';
 import {ModalData} from 'types/actions';
@@ -80,10 +81,12 @@ type Props = {
     groupsWithAllowReference: Map<string, Group> | null;
     channelMemberCountsByGroup: ChannelMemberCountsByGroup;
     currentChannelMembersCount: number;
+    onCancel: () => void;
+    onEdit: () => void;
     actions: {
-        savePreferences: (userId: string, preferences: PreferenceType[]) => ActionResult;
+        savePreferences: (userId: string, preferences: PreferenceType[]) => Promise<ActionResult>;
         openModal: <P>(modalData: ModalData<P>) => void;
-        upsertScheduleDraft: (key: string, draft: PostDraft, rootId: string) => void;
+        upsertScheduleDraft: (key: string, draft: PostDraft, rootId: string) => Promise<ActionResult>;
     };
 };
 
@@ -144,14 +147,12 @@ class DraftEditor extends React.PureComponent<Props, State> {
         }
     };
 
-    toggleAdvanceTextEditor = () => {
-        this.props.actions.savePreferences(this.props.currentUserId, [{
-            category: Preferences.ADVANCED_TEXT_EDITOR,
-            user_id: this.props.currentUserId,
-            name: AdvancedTextEditorConst.POST,
-            value: String(!this.props.isFormattingBarHidden),
-        }]);
-    };
+    toggleAdvanceTextEditor = () => this.props.actions.savePreferences(this.props.currentUserId, [{
+        category: Preferences.ADVANCED_TEXT_EDITOR,
+        user_id: this.props.currentUserId,
+        name: AdvancedTextEditorConst.POST,
+        value: String(!this.props.isFormattingBarHidden),
+    }]);
 
     applyMarkdown = (params: ApplyMarkdownOptions) => {
         if (this.state.showPreview) {
@@ -436,10 +437,18 @@ class DraftEditor extends React.PureComponent<Props, State> {
         this.updateDraft();
     };
 
-    updateDraft = () => {
+    updateDraft = async () => {
         const {draft} = this.state;
         const key = draft.rootId ? StoragePrefixes.COMMENT_DRAFT + draft.rootId : StoragePrefixes.DRAFT + draft.channelId;
-        this.props.actions.upsertScheduleDraft(key, draft, draft.rootId);
+        const {error} = await this.props.actions.upsertScheduleDraft(key, draft, draft.rootId);
+        if (error) {
+            this.setState({serverError: {
+                ...error,
+                submittedMessage: draft.message,
+            }});
+            return;
+        }
+        this.props.onEdit();
     };
 
     postMsgKeyPress = (e: React.KeyboardEvent<TextboxElement>) => {
@@ -664,6 +673,11 @@ class DraftEditor extends React.PureComponent<Props, State> {
         this.focusTextbox();
     };
 
+    handleCancel = (e: React.MouseEvent) => {
+        e.preventDefault();
+        this.props.onCancel();
+    };
+
     getPriorityLabels = () => {
         const priority = this.state.draft.metadata?.priority;
         const hasPriorityLabels = this.props.isPostPriorityEnabled && priority && (priority.priority || priority.requested_ack);
@@ -843,6 +857,10 @@ class DraftEditor extends React.PureComponent<Props, State> {
                             </React.Fragment>
                         ),
                     ].filter(Boolean)}
+                />
+                <EditPostFooter
+                    onSave={this.updateDraft}
+                    onCancel={this.handleCancel}
                 />
             </form>
         );

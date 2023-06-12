@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useCallback, useMemo, useEffect} from 'react';
+import React, {memo, useCallback, useMemo, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
 import type {UserThread, UserThreadSynthetic} from '@mattermost/types/threads';
@@ -54,6 +54,7 @@ function ThreadDraft({
     scheduledWillNotBeSent,
 }: Props) {
     const dispatch = useDispatch();
+    const [isEditing, setIsEditing] = useState<boolean>(false);
 
     useEffect(() => {
         if (!thread?.id) {
@@ -74,9 +75,13 @@ function ThreadDraft({
     }, [channel.id, rootId]);
 
     const handleOnEdit = useCallback(() => {
+        if (isScheduled) {
+            setIsEditing(true);
+            return;
+        }
         // Temporary disable as it crashes after using schedule actions
         // dispatch(selectPost({id: rootId, channel_id: channel.id} as Post));
-    }, [channel]);
+    }, [channel, isScheduled]);
 
     const handleOnSend = useCallback(async (id: string) => {
         await dispatch(onSubmit(value));
@@ -159,6 +164,8 @@ function ThreadDraft({
                         userId={user.id}
                         username={user.username}
                         draft={value}
+                        isEditing={isEditing}
+                        setIsEditing={setIsEditing}
                     />
                 </>
             )}

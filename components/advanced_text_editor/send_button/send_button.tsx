@@ -73,7 +73,10 @@ const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}:
 
     return (
         <CompassDesignProvider theme={theme}>
-            <StyledButtonGroup ref={buttonGroupRef}>
+            <StyledButtonGroup
+                className='send-message-button'
+                ref={buttonGroupRef}
+            >
                 <SendButtonContainer
                     disableRipple={true}
                     data-testid='SendMessageButton'

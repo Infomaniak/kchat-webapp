@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
@@ -49,11 +49,16 @@ function ChannelDraft({
 }: Props) {
     const dispatch = useDispatch();
     const history = useHistory();
+    const [isEditing, setIsEditing] = useState<boolean>(false);
 
     const handleOnEdit = useCallback(() => {
+        if (isScheduled) {
+            setIsEditing(true);
+            return;
+        }
         // Temporary disable as it crashes after using schedule actions
         // history.push(channelUrl);
-    }, [channelUrl]);
+    }, [channelUrl, isScheduled]);
 
     const handleOnDelete = useCallback((id: string) => {
         dispatch(removeDraft(id));
@@ -153,6 +158,8 @@ function ChannelDraft({
                         userId={user.id}
                         username={user.username}
                         draft={value}
+                        isEditing={isEditing}
+                        setIsEditing={setIsEditing}
                     />
                 </>
             )}

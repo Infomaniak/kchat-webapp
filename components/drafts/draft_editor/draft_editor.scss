@@ -1,5 +1,15 @@
 #draft-editor {
     .AdvancedTextEditor {
         padding: 0;
+
+        .send-message-button {
+            display: none;
+        }
+    }
+    #postCreateFooter {
+        padding : 3px 0 0;
+        .msg-typing {
+            display: none;
+        }
     }
 }
