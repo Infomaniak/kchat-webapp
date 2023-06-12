@@ -70,6 +70,7 @@ import {IconContainer} from '../advanced_text_editor/formatting_bar/formatting_i
 import FileLimitStickyBanner from '../file_limit_sticky_banner';
 import {FilePreviewInfo} from '../file_preview/file_preview';
 import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
+
 const KeyCodes = Constants.KeyCodes;
 
 function isDraftEmpty(draft: PostDraft): boolean {
@@ -1032,7 +1033,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             draft.fileInfos = sortFileInfos(draft.fileInfos.concat(fileInfos), this.props.locale);
         }
 
-        this.handleDraftChange(draft, true);
+        this.handleDraftChange(draft, true, true);
     }
 
     handleUploadError = (err: string | ServerError, clientId?: string, channelId?: string) => {
@@ -1068,7 +1069,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     removePreview = (id: string) => {
         let modifiedDraft = {} as PostDraft;
         const draft = {...this.props.draft};
-        const channelId = this.props.currentChannel.id;
 
         // Clear previous errors
         this.setState({serverError: null});
@@ -1099,8 +1099,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             };
         }
 
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, modifiedDraft, channelId, false);
-        this.draftsForChannel[channelId] = modifiedDraft;
+        this.handleDraftChange(modifiedDraft, true, true);
 
         this.handleFileUploadChange();
 

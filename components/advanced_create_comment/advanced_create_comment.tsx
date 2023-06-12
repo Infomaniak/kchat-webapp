@@ -805,7 +805,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         const saveDraft = () => {
             if (typeof rootId == 'undefined') {
-                this.props.onUpdateCommentDraft(draft);
+                this.props.onUpdateCommentDraft(draft, save);
             } else {
                 this.props.updateCommentDraftWithRootId(rootId, draft, save);
             }
@@ -1130,9 +1130,8 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             uploadsInProgress,
         };
 
-        this.props.onUpdateCommentDraft(modifiedDraft);
+        this.handleDraftChange(modifiedDraft, this.props.rootId, true, true);
         this.setState({draft: modifiedDraft});
-        this.draftsForPost[this.props.rootId] = modifiedDraft;
 
         this.handleFileUploadChange();
 
