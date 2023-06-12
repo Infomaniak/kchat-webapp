@@ -79,8 +79,7 @@ function ThreadDraft({
             setIsEditing(true);
             return;
         }
-        // Temporary disable as it crashes after using schedule actions
-        // dispatch(selectPost({id: rootId, channel_id: channel.id} as Post));
+        dispatch(selectPost({id: rootId, channel_id: channel.id} as Post));
     }, [channel, isScheduled]);
 
     const handleOnSend = useCallback(async (id: string) => {

@@ -56,8 +56,7 @@ function ChannelDraft({
             setIsEditing(true);
             return;
         }
-        // Temporary disable as it crashes after using schedule actions
-        // history.push(channelUrl);
+        history.push(channelUrl);
     }, [channelUrl, isScheduled]);
 
     const handleOnDelete = useCallback((id: string) => {
