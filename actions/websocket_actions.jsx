@@ -1951,7 +1951,7 @@ function handleDeleteDraftEvent(msg) {
         const draft = msg.data.draft;
         const {key} = transformServerDraft(draft);
 
-        doDispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: [], remote: true}));
+        doDispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: [], remote: false}));
     };
 }
 
