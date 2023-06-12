@@ -796,7 +796,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.draftsForPost[this.props.rootId] = updatedDraft;
     }
 
-    handleDraftChange = (draft: PostDraft, rootId?: string, save = false, instant = false, callback?: (actionResult: ActionResult) => void) => {
+    handleDraftChange = (draft: PostDraft, rootId?: string, save = false, instant = false) => {
         this.isDraftEdited = true;
 
         if (this.saveDraftFrame) {
@@ -805,9 +805,9 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         const saveDraft = () => {
             if (typeof rootId == 'undefined') {
-                this.props.onUpdateCommentDraft(draft).then(callback);
+                this.props.onUpdateCommentDraft(draft);
             } else {
-                this.props.updateCommentDraftWithRootId(rootId, draft, save).then(callback);
+                this.props.updateCommentDraftWithRootId(rootId, draft, save);
             }
         };
 

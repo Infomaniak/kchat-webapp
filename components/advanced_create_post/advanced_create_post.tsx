@@ -895,7 +895,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.handleDraftChange(draft);
     }
 
-    handleDraftChange = (draft: PostDraft, instant = false, save = false, callback?: (actionResult: ActionResult) => void) => {
+    handleDraftChange = (draft: PostDraft, instant = false, save = false) => {
         const channelId = this.props.currentChannel.id;
 
         if (this.saveDraftFrame) {
@@ -903,10 +903,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         if (instant) {
-            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save).then(callback);
+            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
         } else {
             this.saveDraftFrame = window.setTimeout(() => {
-                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save).then(callback);
+                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
             }, Constants.SAVE_DRAFT_TIMEOUT);
         }
 
