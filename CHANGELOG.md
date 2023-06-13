@@ -1,3 +1,7 @@
+## 1.3.0-next.1 (2023-06-13)
+
+No changes.
+
 ## 1.2.6-next.2 (2023-06-06)
 
 ### Changed (2 changes)
