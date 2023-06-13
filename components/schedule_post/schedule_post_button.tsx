@@ -88,7 +88,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
             timestamp.add(1, 'day').hours(9).minutes(0).seconds(0);
             break;
         case 'monday':
-            timestamp.add(1, 'week').day('Monday').hours(9).minutes(0).seconds(0);
+            timestamp.add(1, 'week').isoWeekday(1).hours(9).minutes(0).seconds(0);
             break;
         case 'custom':
             dispatch(openModal({
