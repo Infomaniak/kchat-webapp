@@ -5142,5 +5142,6 @@
   "drafts.draft_title.channel": "Dans: {icon} <span>{channelName}</span>",
   "drafts.draft_title.direct_channel": "À: {icon} <span>{channelName}</span>",
   "drafts.sidebarLink": "Brouillons",
-  "drafts.filter.menu_button_tooltip": "Filtrer les brouillons"
+  "drafts.filter.menu_button_tooltip": "Filtrer les brouillons",
+  "drafts.invalid_scheduled": "{amount, plural, one {Un} other {Certains}} de vos brouillons planifiés ne {amount, plural, one {peut pas être envoyé} other {peuvent pas être envoyés}}."
 }

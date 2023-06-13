@@ -5892,5 +5892,6 @@
   "drafts.filter.menu.all": "Alle Entwürfe",
   "drafts.filter.menu.scheduled": "Geplant",
   "drafts.filter.menu.not_scheduled": "Nicht geplant",
-  "drafts.filter.menu_button_tooltip": "Entwürfe filtern"
+  "drafts.filter.menu_button_tooltip": "Entwürfe filtern",
+  "drafts.invalid_scheduled": "{amount, plural, one {Eine} other {Einige}} Ihrer geplanten Entwürfe {amount, plural, one {kann} other {können}} nicht gesendet werden."
 }

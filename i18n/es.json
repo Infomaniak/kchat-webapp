@@ -5362,5 +5362,6 @@
   "drafts.draft_title.channel": "En: {icon} <span>{channelName}</span>",
   "drafts.draft_title.direct_channel": "A: {icon} <span>{channelName}</span>",
   "drafts.sidebarLink": "Borradores",
-  "drafts.filter.menu_button_tooltip": "Filtrar borradores"
+  "drafts.filter.menu_button_tooltip": "Filtrar borradores",
+  "drafts.invalid_scheduled": "{amount, plural, one {Uno} other {Algunos}} de tus borradores programados no {amount, plural, one {se puede enviar} other {pueden enviarse}}."
 }

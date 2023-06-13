@@ -5893,5 +5893,6 @@
   "drafts.filter.menu.all": "All drafts",
   "drafts.filter.menu.scheduled": "Scheduled",
   "drafts.filter.menu.not_scheduled": "Not scheduled",
-  "drafts.filter.menu_button_tooltip": "Filter drafts"
+  "drafts.filter.menu_button_tooltip": "Filter drafts",
+  "drafts.invalid_scheduled": "{amount, plural, one {One} other {Some}} of your scheduled drafts cannot be sent."
 }

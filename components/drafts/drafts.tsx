@@ -28,6 +28,7 @@ type Props = {
     displayName: string;
     status: UserStatus['status'];
     localDraftsAreEnabled: boolean;
+    invalidScheduledAmount: number;
 }
 
 function Drafts({
@@ -36,6 +37,7 @@ function Drafts({
     status,
     user,
     localDraftsAreEnabled,
+    invalidScheduledAmount,
 }: Props) {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
@@ -64,6 +66,24 @@ function Drafts({
         return null;
     }
 
+    let invalidScheduledIndicator;
+    if (invalidScheduledAmount && filter !== DraftFilter.NOT_SCHEDULED) {
+        invalidScheduledIndicator = (
+            <div className='Drafts__invalid-indicator'>
+                <i className='icon-alert-outline  Drafts__invalid-indicator__alert-icon'/>
+                <b>
+                    {formatMessage({
+                        id: 'drafts.invalid_scheduled',
+                        defaultMessage: '{amount, plural, one {One} other {Some}} of your scheduled drafts cannot be sent.',
+                    }, {
+                        amount: invalidScheduledAmount,
+                    })}
+                </b>
+                <i className='icon icon-close Drafts__invalid-indicator__close-icon'/>
+            </div>
+        );
+    }
+
     return (
         <div
             id='app-content'
@@ -88,6 +108,7 @@ function Drafts({
                 )}
             />
             <div className='Drafts__main'>
+                {invalidScheduledIndicator}
                 {filteredDrafts.map((d) => (
                     <DraftRow
                         key={d.key}

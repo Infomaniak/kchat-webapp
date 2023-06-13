@@ -4080,5 +4080,6 @@
   "drafts.draft_title.channel": "In: {icon} <span>{channelName}</span>",
   "drafts.draft_title.direct_channel": "A: {icon} <span>{channelName}</span>",
   "drafts.sidebarLink": "Bozze",
-  "drafts.filter.menu_button_tooltip": "Filtro bozze"
+  "drafts.filter.menu_button_tooltip": "Filtro bozze",
+  "drafts.invalid_scheduled": "{amount, plural, one {Una} other {Alcune}} delle bozze programmate non {amount, plural, one {può essere inviata} other {possono essere inviate}}."
 }
