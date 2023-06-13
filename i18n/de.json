@@ -5891,5 +5891,6 @@
   "drafts.filter.menu.title": "Zeige",
   "drafts.filter.menu.all": "Alle Entwürfe",
   "drafts.filter.menu.scheduled": "Geplant",
-  "drafts.filter.menu.not_scheduled": "Nicht geplant"
+  "drafts.filter.menu.not_scheduled": "Nicht geplant",
+  "drafts.filter.menu_button_tooltip": "Entwürfe filtern"
 }

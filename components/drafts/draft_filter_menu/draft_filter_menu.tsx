@@ -10,6 +10,10 @@ import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {MuiMenuStyled} from 'components/menu/menu_styled';
 import {MenuItem} from 'components/menu/menu_item';
 import CompassDesignProvider from 'components/compass_design_provider';
+import OverlayTrigger from 'components/overlay_trigger';
+import Tooltip from 'components/tooltip';
+
+import Constants from 'utils/constants';
 
 import './draft_filter_menu.scss';
 
@@ -64,14 +68,31 @@ const DraftFilterMenu = ({filter, setFilter}: Props) => {
 
     return (
         <CompassDesignProvider theme={theme}>
-            <button
-                ref={menuButtonRef}
-                className='icon draft-filter-menu__button'
-                aria-label={formatMessage({id: 'drafts.filter.menu_button_aria', defaultMessage: 'Open draft filter menu'})}
-                onClick={() => setOpen(true)}
+            <OverlayTrigger
+                className='hidden-xs'
+                delayShow={Constants.OVERLAY_TIME_DELAY}
+                placement='top'
+                overlay={
+                    <Tooltip
+                        id='drafts_filter_menu_tooltip'
+                        className='hidden-xs'
+                    >
+                        {formatMessage({
+                            id: 'drafts.filter.menu_button_tooltip',
+                            defaultMessage: 'Filter drafts',
+                        })}
+                    </Tooltip>
+                }
             >
-                <i className='icon icon-filter-variant'/>
-            </button>
+                <button
+                    ref={menuButtonRef}
+                    className='icon draft-filter-menu__button'
+                    aria-label={formatMessage({id: 'drafts.filter.menu_button_aria', defaultMessage: 'Open draft filter menu'})}
+                    onClick={() => setOpen(true)}
+                >
+                    <i className='icon icon-filter-variant'/>
+                </button>
+            </OverlayTrigger>
             <MuiMenuStyled
                 className='draft-filter-menu'
                 open={open}

@@ -4065,5 +4065,20 @@
   "drafts.filter.menu.title": "Mostra",
   "drafts.filter.menu.all": "Tutte le bozze",
   "drafts.filter.menu.scheduled": "In programma",
-  "drafts.filter.menu.not_scheduled": "Non in programma"
+  "drafts.filter.menu.not_scheduled": "Non in programma",
+  "drafts.heading": "Bozze",
+  "drafts.subtitle": "Tutti i messaggi avviati vengono visualizzati qui",
+  "drafts.empty.title": "Nessuna bozza al momento",
+  "drafts.empty.subtitle": "Tutti i messaggi avviati vengono visualizzati qui",
+  "drafts.info.sync": "Aggiornato da un altro dispositivo",
+  "drafts.actions.delete": "Cancellare la bozza",
+  "drafts.actions.edit": "Modifica la bozza",
+  "drafts.actions.send": "Invia la bozza",
+  "drafts.draft_title.you": "(voi)",
+  "drafts.draft_title.channel_thread": "Filo in: {icon} <span>{channelName}</span>",
+  "drafts.draft_title.direct_thread": "Filetto a: {icon} <span>{channelName}</span>",
+  "drafts.draft_title.channel": "In: {icon} <span>{channelName}</span>",
+  "drafts.draft_title.direct_channel": "A: {icon} <span>{channelName}</span>",
+  "drafts.sidebarLink": "Bozze",
+  "drafts.filter.menu_button_tooltip": "Filtro bozze"
 }

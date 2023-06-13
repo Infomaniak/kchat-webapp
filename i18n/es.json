@@ -5347,5 +5347,20 @@
   "drafts.filter.menu.title": "Mostrar",
   "drafts.filter.menu.all": "Todos los borradores",
   "drafts.filter.menu.scheduled": "Previsto",
-  "drafts.filter.menu.not_scheduled": "No previsto"
+  "drafts.filter.menu.not_scheduled": "No previsto",
+  "drafts.heading": "Borradores",
+  "drafts.subtitle": "Los mensajes que hayas iniciado se mostrarán aquí",
+  "drafts.empty.title": "No hay borradores por el momento",
+  "drafts.empty.subtitle": "Los mensajes que hayas iniciado se mostrarán aquí",
+  "drafts.info.sync": "Actualizado desde otro dispositivo",
+  "drafts.actions.delete": "Borrar borrador",
+  "drafts.actions.edit": "Editar borrador",
+  "drafts.actions.send": "Enviar borrador",
+  "drafts.draft_title.you": "(usted)",
+  "drafts.draft_title.channel_thread": "Hilo en: {icon} <span>{channelName}</span>",
+  "drafts.draft_title.direct_thread": "Hilo a: {icon} <span>{channelName}</span>",
+  "drafts.draft_title.channel": "En: {icon} <span>{channelName}</span>",
+  "drafts.draft_title.direct_channel": "A: {icon} <span>{channelName}</span>",
+  "drafts.sidebarLink": "Borradores",
+  "drafts.filter.menu_button_tooltip": "Filtrar borradores"
 }

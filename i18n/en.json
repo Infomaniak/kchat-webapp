@@ -5892,5 +5892,6 @@
   "drafts.filter.menu.title": "Show",
   "drafts.filter.menu.all": "All drafts",
   "drafts.filter.menu.scheduled": "Scheduled",
-  "drafts.filter.menu.not_scheduled": "Not scheduled"
+  "drafts.filter.menu.not_scheduled": "Not scheduled",
+  "drafts.filter.menu_button_tooltip": "Filter drafts"
 }

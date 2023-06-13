@@ -5127,5 +5127,20 @@
   "drafts.filter.menu.title": "Afficher",
   "drafts.filter.menu.all": "Tous les brouillons",
   "drafts.filter.menu.scheduled": "Planifiés",
-  "drafts.filter.menu.not_scheduled": "Non planifiés"
+  "drafts.filter.menu.not_scheduled": "Non planifiés",
+  "drafts.heading": "Brouillons",
+  "drafts.subtitle": "Tous les messages que vous avez commencés s'afficheront ici",
+  "drafts.empty.title": "Pas de brouillon pour le moment",
+  "drafts.empty.subtitle": "Tous les messages que vous avez commencés s'afficheront ici",
+  "drafts.info.sync": "Mise à jour depuis un autre appareil",
+  "drafts.actions.delete": "Supprimer le brouillon",
+  "drafts.actions.edit": "Modifier le brouillon",
+  "drafts.actions.send": "Envoyer le brouillon",
+  "drafts.draft_title.you": "(vous)",
+  "drafts.draft_title.channel_thread": "Fil de discussion dans: {icon} <span>{channelName}</span>",
+  "drafts.draft_title.direct_thread": "Fil de discussion avec: {icon} <span>{channelName}</span>",
+  "drafts.draft_title.channel": "Dans: {icon} <span>{channelName}</span>",
+  "drafts.draft_title.direct_channel": "À: {icon} <span>{channelName}</span>",
+  "drafts.sidebarLink": "Brouillons",
+  "drafts.filter.menu_button_tooltip": "Filtrer les brouillons"
 }
