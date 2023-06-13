@@ -881,7 +881,7 @@ describe('components/advanced_create_post', () => {
         instance.handleFileUploadComplete(fileInfos, clientIds, currentChannelProp.id);
 
         jest.advanceTimersByTime(Constants.SAVE_DRAFT_TIMEOUT);
-        expect(setDraft).toHaveBeenCalledWith(StoragePrefixes.DRAFT + currentChannelProp.id, expectedDraft, currentChannelProp.id, false);
+        expect(setDraft).toHaveBeenCalledWith(StoragePrefixes.DRAFT + currentChannelProp.id, expectedDraft, currentChannelProp.id, true);
     });
 
     it('check for handleUploadError callback', () => {
@@ -961,7 +961,7 @@ describe('components/advanced_create_post', () => {
 
         jest.advanceTimersByTime(Constants.SAVE_DRAFT_TIMEOUT);
         expect(setDraft).toHaveBeenCalledTimes(1);
-        expect(setDraft).toHaveBeenCalledWith(StoragePrefixes.DRAFT + currentChannelProp.id, draftProp, currentChannelProp.id, false);
+        expect(setDraft).toHaveBeenCalledWith(StoragePrefixes.DRAFT + currentChannelProp.id, draftProp, currentChannelProp.id, true);
         expect(instance.handleFileUploadChange).toHaveBeenCalledTimes(1);
     });
 

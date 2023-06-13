@@ -99,7 +99,7 @@ function ChannelDraft({
             dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${value.channelId}_${value.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
         }
 
-        // Update channel draft remote
+        // Update server channel draft
         dispatch(updateDraft(StoragePrefixes.DRAFT + value.channelId, newDraft, '', true));
     };
 

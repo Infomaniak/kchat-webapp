@@ -106,7 +106,7 @@ function ThreadDraft({
             dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${rootId}_${value.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
         }
 
-        // Update channel draft remote
+        // Update remote thread draft
         dispatch(updateDraft(StoragePrefixes.COMMENT_DRAFT + rootId, newDraft, rootId, true));
     };
 
