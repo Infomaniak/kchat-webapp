@@ -1,19 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useRef, useState} from 'react';
-import {useSelector} from 'react-redux';
+import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
-
-import {MuiMenuStyled} from 'components/menu/menu_styled';
-import {MenuItem} from 'components/menu/menu_item';
-import CompassDesignProvider from 'components/compass_design_provider';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
-
-import Constants from 'utils/constants';
+import * as Menu from 'components/menu';
 
 import './draft_filter_menu.scss';
 
@@ -44,20 +35,12 @@ const menuItems: MenuItem[] = [
 ];
 
 const DraftFilterMenu = ({filter, setFilter}: Props) => {
-    const theme = useSelector(getTheme);
     const {formatMessage} = useIntl();
-    const [open, setOpen] = useState<boolean>(false);
-    const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-    const handleClose = () => setOpen(false);
-
-    const handleItemClick = (newFilter: DraftFilter) => {
-        setOpen(false);
-        setFilter(newFilter);
-    };
+    const handleItemClick = (newFilter: DraftFilter) => setFilter(newFilter);
 
     const renderedItems = menuItems.map((item) => (
-        <MenuItem
+        <Menu.Item
             key={'draft-filter-menu-' + item.key}
             className='draft-filter-menu__item'
             labels={<FormattedMessage {...item.label}/>}
@@ -67,47 +50,27 @@ const DraftFilterMenu = ({filter, setFilter}: Props) => {
     ));
 
     return (
-        <CompassDesignProvider theme={theme}>
-            <OverlayTrigger
-                className='hidden-xs'
-                delayShow={Constants.OVERLAY_TIME_DELAY}
-                placement='top'
-                overlay={
-                    <Tooltip
-                        id='drafts_filter_menu_tooltip'
-                        className='hidden-xs'
-                    >
-                        {formatMessage({
-                            id: 'drafts.filter.menu_button_tooltip',
-                            defaultMessage: 'Filter drafts',
-                        })}
-                    </Tooltip>
-                }
-            >
-                <button
-                    ref={menuButtonRef}
-                    className='icon draft-filter-menu__button'
-                    aria-label={formatMessage({id: 'drafts.filter.menu_button_aria', defaultMessage: 'Open draft filter menu'})}
-                    onClick={() => setOpen(true)}
-                >
-                    <i className='icon icon-filter-variant'/>
-                </button>
-            </OverlayTrigger>
-            <MuiMenuStyled
-                className='draft-filter-menu'
-                open={open}
-                anchorEl={menuButtonRef.current}
-                onClose={handleClose}
-            >
-                <h5 className='draft-filter-menu__title'>
-                    {formatMessage({
-                        id: 'drafts.filter.menu.title',
-                        defaultMessage: 'Show',
-                    })}
-                </h5>
-                {renderedItems}
-            </MuiMenuStyled>
-        </CompassDesignProvider>
+        <Menu.Container
+            menu={{id: 'draft_filter_menu'}}
+            menuButton={{
+                id: 'draft_filter_menu_button',
+                children: <i className='icon icon-filter-variant'/>,
+                'aria-label': formatMessage({id: 'drafts.filter.menu_button_aria', defaultMessage: 'Open draft filter menu'}),
+                class: 'icon draft-filter-menu__button',
+            }}
+            menuButtonTooltip={{
+                id: 'drafts_filter_menu_tooltip',
+                text: formatMessage({id: 'drafts.filter.menu_button_tooltip', defaultMessage: 'Filter drafts'}),
+            }}
+        >
+            <h5 className='draft-filter-menu__title'>
+                {formatMessage({
+                    id: 'drafts.filter.menu.title',
+                    defaultMessage: 'Show',
+                })}
+            </h5>
+            {renderedItems}
+        </Menu.Container>
     );
 };
 
