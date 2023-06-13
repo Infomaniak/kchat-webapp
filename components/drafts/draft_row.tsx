@@ -4,8 +4,9 @@
 import React, {memo} from 'react';
 import {useSelector} from 'react-redux';
 
-import {haveICurrentChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {Permissions} from 'mattermost-redux/constants';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import type {GlobalState} from '@mattermost/types/store';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 import type {Draft} from 'selectors/drafts';
@@ -21,7 +22,8 @@ type Props = {
 }
 
 function DraftRow({draft, user, status, displayName}: Props) {
-    const scheduledWillNotBeSent = useSelector((state: GlobalState) => !haveICurrentChannelPermission(state, Permissions.CREATE_POST));
+    const currentTeamId = useSelector(getCurrentTeamId);
+    const scheduledWillNotBeSent = useSelector((state: GlobalState) => !haveIChannelPermission(state, currentTeamId, draft.value.channelId, Permissions.CREATE_POST));
     const isScheduled = Boolean(draft.value.timestamp);
     switch (draft.type) {
     case 'channel':

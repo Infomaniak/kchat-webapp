@@ -19,7 +19,7 @@ type Props = {
 };
 
 function Action({name, icon, onClick, id, tooltipText}: Props) {
-    const Icon = typeof icon === 'string' ? undefined : icon;
+    const Icon = typeof icon === 'string' ? null : icon;
     return (
         <div className='DraftAction'>
             <OverlayTrigger

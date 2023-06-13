@@ -128,6 +128,10 @@ class DraftEditor extends React.PureComponent<Props, State> {
         this.postPriorityPickerRef = React.createRef<HTMLButtonElement>();
     }
 
+    componentDidMount() {
+        this.focusTextbox();
+    }
+
     handleSelect = (e: React.SyntheticEvent<Element, Event>) => Utils.adjustSelection(this.textboxRef.current?.getInputBox(), e as React.KeyboardEvent<HTMLInputElement>);
 
     handleMouseUpKeyUp = (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -195,7 +199,6 @@ class DraftEditor extends React.PureComponent<Props, State> {
             return;
         }
 
-        // Update draft
         if (ctrlEnterKeyCombo) {
             this.handleShowPreview(false);
             this.postMsgKeyPress(e);

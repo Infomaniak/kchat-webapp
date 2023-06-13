@@ -45,8 +45,8 @@ describe('components/AdvancedCreateComment', () => {
         latestPostId,
         locale: 'en',
         clearCommentDraftUploads: jest.fn(),
-        onUpdateCommentDraft: jest.fn(() => Promise.resolve()),
-        updateCommentDraftWithRootId: jest.fn(() => Promise.resolve()),
+        onUpdateCommentDraft: jest.fn(),
+        updateCommentDraftWithRootId: jest.fn(),
         onSubmit: jest.fn(),
         onResetHistoryIndex: jest.fn(),
         onMoveHistoryIndexBack: jest.fn(),
@@ -207,7 +207,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('should correctly update draft when handleEmojiClick is called', () => {
-        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
+        const onUpdateCommentDraft = jest.fn();
         const draft = emptyDraft;
         const enableAddButton = false;
         const props = {...baseProps, draft, onUpdateCommentDraft, enableAddButton};
@@ -281,7 +281,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('handleUploadError should update state with the correct error', () => {
-        const updateCommentDraftWithRootId = jest.fn(() => Promise.resolve());
+        const updateCommentDraftWithRootId = jest.fn();
         const draft = {
             message: 'Test message',
             uploadsInProgress: [1, 2, 3],
@@ -328,7 +328,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('handleUploadStart should update comment draft correctly', () => {
-        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
+        const onUpdateCommentDraft = jest.fn();
         const draft = {
             message: 'Test message',
             uploadsInProgress: [1, 2, 3],
@@ -355,7 +355,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('handleFileUploadComplete should update comment draft correctly', () => {
-        const updateCommentDraftWithRootId = jest.fn(() => Promise.resolve());
+        const updateCommentDraftWithRootId = jest.fn();
         const fileInfos = [{id: '1', name: 'aaa', create_at: 100}, {id: '2', name: 'bbb', create_at: 200}];
         const draft = {
             message: 'Test message',
@@ -388,7 +388,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('should open PostDeletedModal when createPostErrorId === api.post.create_post.root_id.app_error', () => {
-        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
+        const onUpdateCommentDraft = jest.fn();
         const draft = {
             message: 'Test message',
             uploadsInProgress: [1, 2, 3],

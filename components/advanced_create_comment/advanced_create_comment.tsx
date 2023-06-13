@@ -31,6 +31,7 @@ import {getTable, hasHtmlLink, formatMarkdownMessage, isGitHubCodeBlock, formatG
 import NotifyConfirmModal from 'components/notify_confirm_modal';
 import {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
 import PostDeletedModal from 'components/post_deleted_modal';
+import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 import {PostDraft} from 'types/store/draft';
 import {Group, GroupSource} from '@mattermost/types/groups';
 import {ChannelMemberCountsByGroup} from '@mattermost/types/channels';
@@ -48,7 +49,6 @@ import AdvancedTextEditor from '../advanced_text_editor/advanced_text_editor';
 import {TextboxClass, TextboxElement} from '../textbox';
 
 import FileLimitStickyBanner from '../file_limit_sticky_banner';
-import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 
 const KeyCodes = Constants.KeyCodes;
 
@@ -555,9 +555,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
     }
 
     handleSubmit = async (e?: React.FormEvent | React.MouseEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
-        if (e) {
-            e.preventDefault();
-        }
+        e?.preventDefault();
         this.setShowPreview(false);
         this.isDraftSubmitting = true;
 
