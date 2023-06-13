@@ -6,8 +6,6 @@ import classNames from 'classnames';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import {CloseIcon} from '@infomaniak/compass-icons/components';
-
 import {FocusTrap} from '../focus_trap';
 
 export type Props = {
@@ -175,21 +173,6 @@ export class GenericModal extends React.PureComponent<Props, State> {
 
         const isFocusTrapActive = this.props.enforceFocus === false ? this.state.isFocalTrapActive : false;
 
-        const closeButton = (
-            <button
-                className='close'
-                type='button'
-                aria-label='Close'
-                onClick={this.onHide}
-            >
-                <CloseIcon
-                    size={16}
-                    color={'rgba(var(--center-channel-color-rgb), 0.56)'}
-                />
-                <span className='sr-only'>{'Close'}</span>
-            </button>
-        );
-
         return (
             <Modal
                 id={this.props.id}
@@ -215,8 +198,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
                         tabIndex={this.props.tabIndex || 0}
                         className='GenericModal__wrapper-enter-key-press-catcher'
                     >
-                        <Modal.Header closeButton={false}>
-                            {closeButton}
+                        <Modal.Header closeButton={true}>
                             {this.props.compassDesign && headerText}
                         </Modal.Header>
                         <Modal.Body>

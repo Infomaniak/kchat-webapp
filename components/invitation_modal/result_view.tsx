@@ -43,7 +43,10 @@ export default function ResultView(props: Props) {
     const {formatMessage} = useIntl();
     return (
         <>
-            <Modal.Header className={props.headerClass}>
+            <Modal.Header
+                closeButton={true}
+                className={props.headerClass}
+            >
                 <h1 id='invitation_modal_title'>
                     <FormattedMessage
                         id='invite_modal.invited'

@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 import {debounce} from 'lodash';
 
@@ -10,8 +9,9 @@ import {UserProfile} from '@mattermost/types/users';
 import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {getHistory} from 'utils/browser_history';
-import Constants from 'utils/constants';
+import Constants, {ModalIdentifiers} from 'utils/constants';
 import MultiSelect from 'components/multiselect/multiselect';
+import GenericModal from 'components/generic_modal';
 
 import List from './list';
 import {USERS_PER_PAGE} from './list/list';
@@ -20,6 +20,8 @@ import {
     optionValue,
     OptionValue,
 } from './types';
+
+import './more_direct_channels.scss';
 
 export type Props = {
     currentUserId: string;
@@ -59,12 +61,12 @@ export type Props = {
         searchProfiles: (term: string, options?: any) => Promise<any>;
         searchGroupChannels: (term: string) => Promise<any>;
         setModalSearchTerm: (term: any) => GenericAction;
+        closeModal: (modalId: string) => void;
     };
 }
 
 type State = {
     values: OptionValue[];
-    show: boolean;
     search: boolean;
     saving: boolean;
     loadingUsers: boolean;
@@ -98,7 +100,6 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
         this.state = {
             values,
-            show: true,
             search: false,
             saving: false,
             loadingUsers: true,
@@ -149,13 +150,17 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         }
     }
 
+    componentDidMount() {
+        this.loadModalData();
+    }
+
     componentDidUpdate(prevProps: Props) {
         this.updateFromProps(prevProps);
     }
 
     handleHide = () => {
         this.props.actions.setModalSearchTerm('');
-        this.setState({show: false});
+        this.props.actions.closeModal(ModalIdentifiers.CREATE_DM_CHANNEL);
     }
 
     setUsersLoadingState = (loadingState: boolean) => {
@@ -165,10 +170,10 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
     }
 
     handleExit = () => {
+        this.props.actions.closeModal(ModalIdentifiers.CREATE_DM_CHANNEL);
         if (this.exitToChannel) {
             getHistory().push(this.exitToChannel);
         }
-
         this.props.onModalDismissed?.();
         this.props.onExited?.();
     }
@@ -282,46 +287,19 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         );
 
         return (
-            <Modal
-                dialogClassName='a11y__modal more-modal more-direct-channels'
-                show={this.state.show}
-                onHide={this.handleHide}
+            <GenericModal
+                id={ModalIdentifiers.CREATE_DM_CHANNEL}
+                className='more-modal more-direct-channels'
                 onExited={this.handleExit}
-                onEntered={this.loadModalData}
-                role='dialog'
-                aria-labelledby='moreDmModalLabel'
-                id='moreDmModal'
-                enforceFocus={false}
+                modalHeaderText={
+                    <FormattedMessage
+                        id='more_direct_channels.title'
+                        defaultMessage='Direct Messages'
+                    />
+                }
             >
-                <Modal.Header closeButton={true}>
-                    <Modal.Title
-                        componentClass='h1'
-                        id='moreDmModalLabel'
-                    >
-                        <FormattedMessage
-                            id='more_direct_channels.title'
-                            defaultMessage='Direct Messages'
-                        />
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body
-                    role='application'
-                >
-                    {body}
-                </Modal.Body>
-                <Modal.Footer className='modal-footer--invisible'>
-                    <button
-                        id='closeModalButton'
-                        type='button'
-                        className='btn btn-link'
-                    >
-                        <FormattedMessage
-                            id='general_button.close'
-                            defaultMessage='Close'
-                        />
-                    </button>
-                </Modal.Footer>
-            </Modal>
+                {body}
+            </GenericModal>
         );
     }
 }

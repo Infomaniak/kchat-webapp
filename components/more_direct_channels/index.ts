@@ -30,6 +30,7 @@ import {openDirectChannelToUserId, openGroupChannelToUserIds} from 'actions/chan
 import {loadStatusesForProfilesList, loadProfilesMissingStatus} from 'actions/status_actions';
 import {loadProfilesForGroupChannels} from 'actions/user_actions';
 import {setModalSearchTerm} from 'actions/views/search';
+import {closeModal} from 'actions/views/modals';
 
 import {GlobalState} from 'types/store';
 
@@ -113,6 +114,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             searchProfiles,
             searchGroupChannels,
             setModalSearchTerm,
+            closeModal,
         }, dispatch),
     };
 }
