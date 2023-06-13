@@ -67,7 +67,7 @@ const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleScheduleP
         }
         const timestamp = getCurrentMomentForTimezone(timezone).hours(9).minutes(0).seconds(0);
         if (name === 'monday') {
-            timestamp.add(1, 'week').isoWeekday(0);
+            timestamp.add(1, 'week').isoWeekday(1);
         }
         return (
             <FormattedMessage
