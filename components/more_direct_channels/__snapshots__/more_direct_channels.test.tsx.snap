@@ -3,7 +3,7 @@
 exports[`components/MoreDirectChannels should exclude deleted users if there is not direct channel between users 1`] = `
 <GenericModal
   autoCloseOnCancelButton={true}
-  autoCloseOnConfirmButton={true}
+  autoCloseOnConfirmButton={false}
   className="more-modal more-direct-channels"
   enforceFocus={true}
   id="create_dm_channel"
@@ -230,7 +230,7 @@ exports[`components/MoreDirectChannels should exclude deleted users if there is 
 exports[`components/MoreDirectChannels should match snapshot 1`] = `
 <GenericModal
   autoCloseOnCancelButton={true}
-  autoCloseOnConfirmButton={true}
+  autoCloseOnConfirmButton={false}
   className="more-modal more-direct-channels"
   enforceFocus={true}
   id="create_dm_channel"
