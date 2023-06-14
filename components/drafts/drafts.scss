@@ -30,10 +30,12 @@
             color: rgb(var(--semantic-color-danger));
         }
 
-        &__close-icon {
+        &__close-button {
+            all: unset;
             position: absolute;
             right: 16px;
             color: rgba(var(--center-channel-color-rgb), 0.56);
+            cursor: pointer;
         }
     }
 

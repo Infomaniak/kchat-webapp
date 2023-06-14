@@ -42,6 +42,7 @@ function Drafts({
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const [filter, setFilter] = useState<DraftFilter>(DraftFilter.ALL);
+    const [showInvalidScheduledIndicator, setShowInvalidScheduledIndicator] = useState<boolean>(invalidScheduledAmount > 0);
     const filteredDrafts = useMemo(() => {
         switch (filter) {
         case DraftFilter.SCHEDULED:
@@ -67,7 +68,7 @@ function Drafts({
     }
 
     let invalidScheduledIndicator;
-    if (invalidScheduledAmount && filter !== DraftFilter.NOT_SCHEDULED) {
+    if (showInvalidScheduledIndicator && filter !== DraftFilter.NOT_SCHEDULED) {
         invalidScheduledIndicator = (
             <div className='Drafts__invalid-indicator'>
                 <i className='icon-alert-outline  Drafts__invalid-indicator__alert-icon'/>
@@ -79,7 +80,12 @@ function Drafts({
                         amount: invalidScheduledAmount,
                     })}
                 </b>
-                <i className='icon icon-close Drafts__invalid-indicator__close-icon'/>
+                <button
+                    className='Drafts__invalid-indicator__close-button'
+                    onClick={() => setShowInvalidScheduledIndicator(false)}
+                >
+                    <i className='icon icon-close'/>
+                </button>
             </div>
         );
     }
