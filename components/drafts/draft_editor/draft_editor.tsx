@@ -372,6 +372,8 @@ class DraftEditor extends React.PureComponent<Props, State> {
     }
 
     handleSubmit = (e?: React.FormEvent) => {
+        e?.preventDefault();
+
         const {
             isConfirmNotificationsToChannnelEnabled,
             canUseChannelMentions,
@@ -389,8 +391,6 @@ class DraftEditor extends React.PureComponent<Props, State> {
         if (draft.uploadsInProgress.length > 0 || submitting || (message.trim().length === 0 && draft.fileInfos.length === 0)) {
             return;
         }
-
-        e?.preventDefault();
 
         this.setState({showPreview: false});
 
@@ -862,7 +862,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     ].filter(Boolean)}
                 />
                 <EditPostFooter
-                    onSave={this.updateDraft}
+                    onSave={this.handleSubmit}
                     onCancel={this.handleCancel}
                 />
             </form>
