@@ -17,7 +17,7 @@
 .modal-body {
     overflow: auto;
     max-height: calc(90vh - 80px);
-    padding: 25px 25px 0;
+    padding: 32px 40px 0;
 
     &.overflow--visible {
         overflow: visible;
@@ -50,17 +50,31 @@
         }
 
         .modal-header {
-            background: var(--sidebar-header-bg);
+            background: var(--ik-modal-header);
             border-radius: 12px 12px 0 0;
-            padding: 20px 32px 16px;
+            padding: 16px 40px 16px;
             align-items: center;
-            .close {
-                color: var(--sidebar-header-text-color);
+
+            .modal-title {
+                font-weight: 400;
             }
         }
         .modal-footer {
             border-radius: 0 0 12px 12px;
-            padding: 18px 32px;
+            padding: 18px 32px 32px 32px;
+            display: flex;
+            justify-content: space-between;
+            & > :only-child {
+                // align element to the right if it is the only child
+                margin-left: auto;
+            }
+            &::before, &::after {
+                display: none;
+            }
+            .btn-link {
+                // remove text underline on all modals
+                text-decoration: none;
+            }
         }
         .modal-body .filter-row .save-button {
             position: relative;
@@ -68,7 +82,6 @@
             align-items: center;
             justify-content: center;
             border: 0;
-            background: var(--button-bg);
             border-radius: 4px;
             color: var(--button-color);
             font-weight: 600;
@@ -91,9 +104,7 @@
                 align-items: center;
                 justify-content: center;
                 border: 0;
-                background: var(--button-bg);
                 border-radius: 4px;
-                color: var(--button-color);
                 font-weight: 600;
                 transition: all .15s ease-out;
                 height: 40px;
@@ -104,12 +115,15 @@
                 padding-left: 20px;
                 font-size: 14px;
                 line-height: 14px;
+                &:not(.btn-danger) {
+                    color: var(--button-color);
+                    background-color: var(--button-bg);
+                }
             }
             button.secondary:not(.close) {
                 margin-right: 8px;
-                background: var(--center-channel-bg);
-                background: rgba(var(--button-bg-rgb), 0.08);
-                color: var(--button-bg);
+                background: var(--ik-btn-secondary);
+                color: var(--ik-btn-secondary-color);
             }
         }
     }
@@ -195,6 +209,7 @@
 
     .modal-footer {
         background: var(--center-channel-bg);
+        border-top: none;
 
         &.modal-footer--invisible {
             overflow: hidden;
@@ -262,6 +277,7 @@
 
     .modal-dialog {
         max-width: 95%;
+        margin-top: calc(50vh - 240px);
         margin-right: auto;
         margin-bottom: 0;
         margin-left: auto;
@@ -311,13 +327,14 @@
 
         .modal-title {
             overflow: hidden;
-            max-width: calc(100% - 80px);
+            max-width: calc(100% - 40px);
             flex: 0.9;
-            color: var(--sidebar-header-text-color);
+            color: var(--center-channel-color);
             font-size: 20px;
             line-height: 27px;
             text-overflow: ellipsis;
             white-space: nowrap;
+            font-weight: 400;
 
             .name {
                 font-weight: 600;
@@ -345,26 +362,26 @@
         .close {
             position: absolute;
             z-index: 5;
+            width: 18px;
+            height: 18px;
+            top: 18px;
             right: 18px;
-            width: 30px;
-            height: 30px;
-            color: white;
-            font-size: 30px;
-            line-height: 30px;
-            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            color: rgba(var(--center-channel-color-rgb), 0.56);
+            font-size: 32px;
+            line-height: 18px;
+            font-weight: 400;
             text-shadow: none;
-            transition: all 0.1s ease-in;
-
+            opacity: 0.7;
             &:hover {
-                opacity: 1;
-
-                @include alpha-property(background, $black, 0.1);
+                opacity: 0.7;
             }
-
             .sr-only {
                 display: none;
             }
-
             span {
                 font-family: 'Open Sans', sans-serif;
                 line-height: 10px;
@@ -754,7 +771,7 @@
 
     .modal-body {
         padding: 10px 0 15px;
-        overflow-x: hidden;
+        overflow: hidden;
     }
 
     .filter-row {
@@ -1107,7 +1124,7 @@
 .filtered-user-list {
     display: flex;
     width: 100%;
-    height: calc(90vh - 120px);
+    height: 70vh;
     flex-direction: column;
 
     >div {
@@ -1261,33 +1278,8 @@
                 }
             }
 
-            .close {
-                right: 18px;
-                width: 4rem;
-                height: 4rem;
-                margin-top: 0;
-                color: rgba(var(--center-channel-color-rgb), 0.56);
-                font-size: 32px;
-                font-weight: normal;
-                line-height: 30px;
-
-                &:hover {
-                    background: rgba(var(--center-channel-color-rgb), 0.08);
-                    border-radius: 4px;
-                    color: rgba(var(--center-channel-color-rgb), 0.72);
-                    fill: rgba(var(--center-channel-color-rgb), 0.72);
-                }
-
-                &:active {
-                    background-color: rgba(var(--button-bg-rgb), 0.08);
-                    color: var(--button-bg);
-                }
-            }
-
             .modal-title {
                 color: inherit;
-                font-size: 22px;
-                line-height: 28px;
             }
         }
     }

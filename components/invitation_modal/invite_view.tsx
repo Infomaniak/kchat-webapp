@@ -139,7 +139,10 @@ export default function InviteView(props: Props) {
 
     return (
         <>
-            <Modal.Header className={props.headerClass}>
+            <Modal.Header
+                closeButton={true}
+                className={props.headerClass}
+            >
                 <h1 id='invitation_modal_title'>
                     <FormattedMessage
                         id='invite_modal.title'
@@ -152,13 +155,6 @@ export default function InviteView(props: Props) {
                         }}
                     />
                 </h1>
-                <button
-                    id='closeIcon'
-                    className='icon icon-close'
-                    aria-label='Close'
-                    title='Close'
-                    onClick={props.onClose}
-                />
             </Modal.Header>
             <Modal.Body>
                 <div className='InviteView__sectionTitle InviteView__sectionTitle--first'>

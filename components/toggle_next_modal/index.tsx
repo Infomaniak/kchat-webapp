@@ -52,7 +52,8 @@ const ToggleNextModal = () => {
             })}
         </div>
     ) : (
-        <div className='alert alert-danger'>
+        <div className='alert alert-with-icon alert-danger'>
+            <i className='icon-alert-outline'/>
             {formatMessage({
                 id: 'toggle_next_modal.message_next',
                 defaultMessage: 'NEXT is our test environment. You might encounter some bugs, but will also access the latest content and updates. If you are not interested by testing new features, we recommend staying on the STABLE version.',
@@ -65,6 +66,11 @@ const ToggleNextModal = () => {
         defaultMessage: 'Confirm',
     });
 
+    let confirmButtonClass;
+    if (!isNext) {
+        confirmButtonClass = 'btn-danger';
+    }
+
     return (
         <ConfirmModal
             show={show}
@@ -74,6 +80,7 @@ const ToggleNextModal = () => {
             title={title}
             message={message}
             confirmButtonText={confirmButtonText}
+            confirmButtonClass={confirmButtonClass}
         />
     );
 };

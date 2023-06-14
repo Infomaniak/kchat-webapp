@@ -248,7 +248,6 @@ export default class ChannelNotificationsModal extends React.PureComponent<Props
                         <div className='settings-content'>
                             <div className='user-settings'>
                                 <br/>
-                                <div className='divider-dark first'/>
                                 <NotificationSection
                                     section={NotificationSections.MARK_UNREAD}
                                     expand={activeSection === NotificationSections.MARK_UNREAD}

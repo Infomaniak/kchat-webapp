@@ -1,0 +1,19 @@
+.modal-dialog.more-direct-channels.more-modal.GenericModal {
+    margin-top: calc(45vh - 280px);
+    .multi-select__help {
+        padding: 10px 15px 15px 15px;
+    }
+    @media screen and (min-width: 1280px) {
+        margin-top: calc(45vh - 340px);
+    }
+    .modal-content {
+        padding: 0;
+    }
+    .GenericModal__body {
+        padding: 0;
+    }
+    .filter-row {
+        margin: 5px 0 0;
+        border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    }
+}

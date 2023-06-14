@@ -111,7 +111,7 @@ const getThemePreference = createSelector(
     },
 );
 
-export type ThemeKey = 'denim' | 'sapphire' | 'quartz' | 'indigo' | 'onyx' | 'infomaniak';
+export type ThemeKey = 'quartz' | 'indigo' | 'onyx' | 'ik';
 
 export type LegacyThemeType = 'Mattermost' | 'Organization' | 'Mattermost Dark' | 'Windows Dark';
 
@@ -160,6 +160,11 @@ export type Theme = {
     ikIllustrationGreyThirteen: string;
     ikIllustrationGreyFourteen: string;
     ikIllustrationGreyFifteen: string;
+    ikIllustrationGreySixteen: string;
+    ikIllustrationGreySeventeen: string;
+    ikModalHeader: string;
+    ikBtnSecondary: string;
+    ikBtnSecondaryColor: string;
 };
 
 const getDefaultTheme = createSelector('getDefaultTheme', getConfig, (config): Theme => {
