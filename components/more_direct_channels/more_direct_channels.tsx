@@ -158,11 +158,6 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
         this.updateFromProps(prevProps);
     }
 
-    handleHide = () => {
-        this.props.actions.setModalSearchTerm('');
-        this.props.actions.closeModal(ModalIdentifiers.CREATE_DM_CHANNEL);
-    }
-
     setUsersLoadingState = (loadingState: boolean) => {
         this.setState({
             loadingUsers: loadingState,
@@ -197,7 +192,8 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
 
             if (!error) {
                 this.exitToChannel = '/' + this.props.currentTeamName + '/channels/' + data.name;
-                this.handleHide();
+                this.props.actions.setModalSearchTerm('');
+                this.handleExit();
             }
         };
 
@@ -291,6 +287,7 @@ export default class MoreDirectChannels extends React.PureComponent<Props, State
                 id={ModalIdentifiers.CREATE_DM_CHANNEL}
                 className='more-modal more-direct-channels'
                 onExited={this.handleExit}
+                autoCloseOnConfirmButton={false}
                 modalHeaderText={
                     <FormattedMessage
                         id='more_direct_channels.title'
