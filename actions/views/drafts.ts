@@ -117,7 +117,7 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
     };
 }
 
-export function upsertScheduleDraft(key: string, value: PostDraft, rootId = '') {
+export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
         if (!syncedDraftsAreAllowedAndEnabled(state)) {

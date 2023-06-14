@@ -80,7 +80,7 @@ type Props = {
     locale: string;
     groupsWithAllowReference: Map<string, Group> | null;
     channelMemberCountsByGroup: ChannelMemberCountsByGroup;
-    currentChannelMembersCount: number;
+    channelMembersCount: number;
     onCancel: () => void;
     onEdit: () => void;
     actions: {
@@ -378,7 +378,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
             canUseCustomGroupMentions,
             groupsWithAllowReference,
             channelMemberCountsByGroup,
-            currentChannelMembersCount,
+            channelMembersCount,
         } = this.props;
         const {
             draft,
@@ -402,7 +402,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
         const specialMentions = specialMentionsInText(message);
         const hasSpecialMentions = Object.values(specialMentions).includes(true);
 
-        if (isConfirmNotificationsToChannnelEnabled && !hasSpecialMentions && (canUseCustomGroupMentions)) {
+        if (isConfirmNotificationsToChannnelEnabled && !hasSpecialMentions && canUseCustomGroupMentions) {
             // Groups mentioned in users text
             const mentionGroups = groupsMentionedInText(message, groupsWithAllowReference);
             if (mentionGroups.length > 0) {
@@ -422,8 +422,8 @@ class DraftEditor extends React.PureComponent<Props, State> {
             }
         }
 
-        if (notificationsToChannel && currentChannelMembersCount > Constants.NOTIFY_ALL_MEMBERS && hasSpecialMentions) {
-            memberNotifyCount = currentChannelMembersCount - 1;
+        if (notificationsToChannel && channelMembersCount > Constants.NOTIFY_ALL_MEMBERS && hasSpecialMentions) {
+            memberNotifyCount = channelMembersCount - 1;
 
             for (const k in specialMentions) {
                 if (specialMentions[k]) {
@@ -433,7 +433,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
         }
 
         if (memberNotifyCount > 0) {
-            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount);
+            this.showNotifyAllModal(mentions, 0, memberNotifyCount);
             return;
         }
 
