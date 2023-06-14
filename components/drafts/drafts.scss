@@ -57,10 +57,6 @@
     grid-template-columns: var(--list);
     grid-template-rows: 63px 1fr;
 
-    .no-results__wrapper > svg {
-        margin-bottom: 20px;
-    }
-
     @media screen and (max-width: 768px) {
         grid-template-rows: 0 1fr;
 
