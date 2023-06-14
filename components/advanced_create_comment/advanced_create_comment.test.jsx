@@ -409,7 +409,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('should open PostDeletedModal when message is submitted to deleted root', () => {
-        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
+        const onUpdateCommentDraft = jest.fn();
         const draft = {
             message: 'Test message',
             uploadsInProgress: [1, 2, 3],
@@ -526,7 +526,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     it('handleChange should throw away invalid command error if user resumes typing', async () => {
-        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
+        const onUpdateCommentDraft = jest.fn();
 
         const error = new Error('No command found');
         error.server_error_id = 'api.command.execute_command.not_found.app_error';
@@ -1077,7 +1077,7 @@ describe('components/AdvancedCreateComment', () => {
     });
 
     test('removePreview should remove file info and upload in progress with corresponding id', () => {
-        const onUpdateCommentDraft = jest.fn(() => Promise.resolve());
+        const onUpdateCommentDraft = jest.fn();
         const draft = {
             message: 'Test message',
             uploadsInProgress: [4, 5, 6],

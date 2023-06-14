@@ -817,7 +817,7 @@ describe('components/advanced_create_post', () => {
     });
 
     it('check for handleFileUploadStart callback', () => {
-        const setDraft = jest.fn(() => Promise.resolve());
+        const setDraft = jest.fn();
 
         const wrapper = shallow(
             advancedCreatePost({
