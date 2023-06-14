@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {ActionCreatorsMapObject, Dispatch, bindActionCreators} from 'redux';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
+import {getChannelTimezones} from 'mattermost-redux/actions/channels';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {Permissions, Preferences as PreferencesRedux} from 'mattermost-redux/constants';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
@@ -53,6 +54,7 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
         isEmojiPickerEnabled: config.EnableEmojiPicker === 'true',
         isConfirmNotificationsToChannnelEnabled: config.EnableConfirmNotificationsToChannel === 'true',
         isGifPickerEnabled: config.EnableGifPicker === 'true',
+        isTimezoneEnabled: config.ExperimentalTimezone === 'true',
         codeBlockOnCtrlEnter: getBool(state, PreferencesRedux.CATEGORY_ADVANCED_SETTINGS, 'code_block_ctrl_enter', true),
         ctrlSend: getBool(state, Preferences.CATEGORY_ADVANCED_SETTINGS, 'send_on_ctrl_enter'),
         isPostPriorityEnabled: isPostPriorityEnabled(state),
@@ -67,6 +69,7 @@ type Actions = {
     savePreferences: (userId: string, preferences: PreferenceType[]) => Promise<ActionResult>;
     openModal: <P>(modalData: ModalData<P>) => void;
     upsertScheduleDraft: (key: string, draft: PostDraft, rootId: string) => Promise<ActionResult>;
+    getChannelTimezones: (channelId: string) => Promise<ActionResult>;
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -74,6 +77,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
         savePreferences,
         openModal,
         upsertScheduleDraft,
+        getChannelTimezones,
     }, dispatch),
 });
 

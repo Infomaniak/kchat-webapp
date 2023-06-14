@@ -75,6 +75,7 @@ type Props = {
     isGifPickerEnabled: boolean;
     isPostPriorityEnabled: boolean;
     isConfirmNotificationsToChannnelEnabled: boolean;
+    isTimezoneEnabled: boolean;
     codeBlockOnCtrlEnter: boolean;
     ctrlSend: boolean;
     locale: string;
@@ -87,6 +88,7 @@ type Props = {
         savePreferences: (userId: string, preferences: PreferenceType[]) => Promise<ActionResult>;
         openModal: <P>(modalData: ModalData<P>) => void;
         upsertScheduleDraft: (key: string, draft: PostDraft, rootId: string) => Promise<ActionResult>;
+        getChannelTimezones: (channelId: string) => Promise<ActionResult>;
     };
 };
 
@@ -371,7 +373,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
         });
     }
 
-    handleSubmit = (e?: React.FormEvent) => {
+    handleSubmit = async (e?: React.FormEvent) => {
         e?.preventDefault();
 
         const {
@@ -381,6 +383,9 @@ class DraftEditor extends React.PureComponent<Props, State> {
             groupsWithAllowReference,
             channelMemberCountsByGroup,
             channelMembersCount,
+            channel,
+            isTimezoneEnabled,
+            actions,
         } = this.props;
         const {
             draft,
@@ -430,10 +435,15 @@ class DraftEditor extends React.PureComponent<Props, State> {
                     mentions.push('@' + k);
                 }
             }
+
+            if (isTimezoneEnabled) {
+                const {data} = await actions.getChannelTimezones(channel.id);
+                channelTimezoneCount = data ? data.length : 0;
+            }
         }
 
         if (memberNotifyCount > 0) {
-            this.showNotifyAllModal(mentions, 0, memberNotifyCount);
+            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount);
             return;
         }
 
