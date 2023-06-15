@@ -84,7 +84,9 @@ function ThreadDraft({
     }, [channel, isScheduled]);
 
     const handleOnSend = useCallback(async (id: string) => {
-        await dispatch(onSubmit(value));
+        const newDraft = {...value};
+        Reflect.deleteProperty(newDraft, 'timestamp');
+        await dispatch(onSubmit(newDraft));
 
         handleOnDelete(id);
         handleOnEdit();
