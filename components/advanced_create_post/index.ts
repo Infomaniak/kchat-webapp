@@ -174,6 +174,7 @@ type Actions = {
     getChannelMemberCountsByGroup: (channelId: string, includeTimezones: boolean) => void;
     savePreferences: (userId: string, preferences: PreferenceType[]) => ActionResult;
     searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined) => Promise<{ data: any }>;
+    upsertScheduleDraft: (key: string, value: PostDraft) => Promise<ActionResult>;
 }
 
 function setDraft(key: string, value: PostDraft, draftChannelId: string, save = false) {

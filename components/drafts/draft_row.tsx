@@ -23,8 +23,8 @@ type Props = {
 
 function DraftRow({draft, user, status, displayName}: Props) {
     const currentTeamId = useSelector(getCurrentTeamId);
-    const scheduledWillNotBeSent = useSelector((state: GlobalState) => !haveIChannelPermission(state, currentTeamId, draft.value.channelId, Permissions.CREATE_POST));
     const isScheduled = Boolean(draft.value.timestamp);
+    const scheduledWillNotBeSent = useSelector((state: GlobalState) => !haveIChannelPermission(state, currentTeamId, draft.value.channelId, Permissions.CREATE_POST)) && isScheduled;
     switch (draft.type) {
     case 'channel':
         return (

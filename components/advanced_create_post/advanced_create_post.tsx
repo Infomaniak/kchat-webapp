@@ -207,7 +207,7 @@ type Props = {
         runSlashCommandWillBePostedHooks: (originalMessage: string, originalArgs: CommandArgs) => ActionResult;
 
         // func called for setting drafts
-        setDraft: (name: string, value: PostDraft | null, draftChannelId: string, save?: boolean) => Promise<ActionResult>;
+        setDraft: (name: string, value: PostDraft | null, draftChannelId: string, save?: boolean) => void;
 
         upsertScheduleDraft: (key: string, value: PostDraft) => Promise<ActionResult>;
 
@@ -384,7 +384,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
     handleSchedulePost = (scheduleUTCTimestamp: number) => this.handleSubmit(undefined, true, scheduleUTCTimestamp);
 
-    saveDraftWithShow = async (props = this.props) => {
+    saveDraftWithShow = (props = this.props) => {
         if (this.saveDraftFrame && props.currentChannel) {
             const channelId = props.currentChannel.id;
             const draft = this.draftsForChannel[channelId];

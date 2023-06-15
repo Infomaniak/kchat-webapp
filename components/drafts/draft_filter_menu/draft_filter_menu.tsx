@@ -37,14 +37,12 @@ const menuItems: MenuItem[] = [
 const DraftFilterMenu = ({filter, setFilter}: Props) => {
     const {formatMessage} = useIntl();
 
-    const handleItemClick = (newFilter: DraftFilter) => setFilter(newFilter);
-
     const renderedItems = menuItems.map((item) => (
         <Menu.Item
             key={'draft-filter-menu-' + item.key}
             className='draft-filter-menu__item'
             labels={<FormattedMessage {...item.label}/>}
-            onClick={() => handleItemClick(item.filter)}
+            onClick={() => setFilter(item.filter)}
             trailingElements={filter === item.filter ? <i className='icon icon-check'/> : null}
         />
     ));

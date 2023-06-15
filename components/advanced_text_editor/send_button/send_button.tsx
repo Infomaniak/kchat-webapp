@@ -55,7 +55,7 @@ type SendButtonProps = {
     isSchedulable?: boolean;
     handleSubmit: (e: React.FormEvent) => void;
     handleSchedulePost: (scheduleUTCTimestamp: number) => void;
-}
+};
 
 const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}: SendButtonProps) => {
     const theme = useSelector(getTheme);
