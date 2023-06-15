@@ -4,6 +4,7 @@
 import React, {memo, useCallback, useMemo, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
+import {DispatchFunc} from 'mattermost-redux/types/actions';
 import type {UserThread, UserThreadSynthetic} from '@mattermost/types/threads';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
@@ -53,7 +54,7 @@ function ThreadDraft({
     isScheduled,
     scheduledWillNotBeSent,
 }: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<DispatchFunc>();
     const [isEditing, setIsEditing] = useState<boolean>(false);
 
     useEffect(() => {
@@ -102,15 +103,18 @@ function ThreadDraft({
         Reflect.deleteProperty(newDraft, 'timestamp');
 
         // Delete scheduled draft from store
-        if (value.id) {
-            dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${rootId}_${value.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
+        if (newDraft.id) {
+            dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${newDraft.rootId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
         }
 
         // Remove previously existing thread draft
-        await dispatch(removeDraft(StoragePrefixes.DRAFT + value.channelId));
+        await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId));
 
         // Update remote thread draft
-        dispatch(updateDraft(StoragePrefixes.COMMENT_DRAFT + rootId, newDraft, rootId, true));
+        const {error} = await dispatch(updateDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, newDraft, newDraft.rootId, true));
+        if (error && newDraft.id) {
+            dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${newDraft.rootId}_${newDraft.id}`, newDraft));
+        }
     };
 
     if (!thread) {

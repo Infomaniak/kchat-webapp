@@ -10,6 +10,7 @@ import {setGlobalItem} from 'actions/storage';
 import {removeDraft, upsertScheduleDraft, updateDraft} from 'actions/views/drafts';
 import {PostDraft} from 'types/store/draft';
 
+import {DispatchFunc} from 'mattermost-redux/types/actions';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 import {Post, PostMetadata} from '@mattermost/types/posts';
@@ -47,7 +48,7 @@ function ChannelDraft({
     isScheduled,
     scheduledWillNotBeSent,
 }: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<DispatchFunc>();
     const history = useHistory();
     const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -95,15 +96,18 @@ function ChannelDraft({
         Reflect.deleteProperty(newDraft, 'timestamp');
 
         // Delete scheduled draft from store
-        if (value.id) {
-            dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${value.channelId}_${value.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
+        if (newDraft.id) {
+            dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
         }
 
         // Remove previously existing channel draft
-        await dispatch(removeDraft(StoragePrefixes.DRAFT + value.channelId));
+        await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId));
 
         // Update server channel draft
-        dispatch(updateDraft(StoragePrefixes.DRAFT + value.channelId, newDraft, '', true));
+        const {error} = await dispatch(updateDraft(StoragePrefixes.DRAFT + newDraft.channelId, newDraft, '', true));
+        if (error && newDraft.id) {
+            dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, newDraft));
+        }
     };
 
     if (!channel) {

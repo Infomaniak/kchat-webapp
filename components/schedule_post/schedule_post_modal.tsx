@@ -14,6 +14,7 @@ import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_
 
 import {ModalIdentifiers} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import './schedule_post_modal.scss';
 
@@ -46,7 +47,9 @@ const SchedulePostModal = ({
     const handleExit = () => dispatch(closeModal(ModalIdentifiers.SCHEDULE_POST));
 
     const handleConfirm = (close?: boolean) => {
-        onConfirm(toUTCUnix(scheduleTimestamp.toDate()));
+        const currentMoment = getCurrentMomentForTimezone(timezone).add(1, 'minute');
+        const scheduleMoment = scheduleTimestamp.isBefore(currentMoment) ? currentMoment : scheduleTimestamp;
+        onConfirm(toUTCUnix(scheduleMoment.toDate()));
         if (close) {
             handleExit();
         }

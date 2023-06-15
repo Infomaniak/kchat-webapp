@@ -124,6 +124,7 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
             return {error: new Error('Drafts are not allowed on the current server')};
         }
         const userId = getCurrentUserId(state);
+        const activeDraft = getGlobalItem(state, key, null);
 
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
@@ -134,6 +135,9 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
                 id,
             }));
         } catch (error) {
+            if (activeDraft) {
+                dispatch(setGlobalItem(key, activeDraft));
+            }
             return {error};
         }
         return {data: true};
