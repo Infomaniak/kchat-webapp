@@ -95,6 +95,7 @@ import {fetchAppBindings, fetchRHSAppsBindings} from 'mattermost-redux/actions/a
 import {getConnectionId} from 'selectors/general';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
+import {getGlobalItem} from 'selectors/storage';
 
 import {incrementWsErrorCount, resetWsErrorCount} from 'actions/views/system';
 import {closeRightHandSide} from 'actions/views/rhs';
@@ -125,7 +126,6 @@ import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
-import { getGlobalItem } from 'selectors/storage';
 
 // import {isDesktopApp} from 'utils/user_agent';
 
