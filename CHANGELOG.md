@@ -1,3 +1,9 @@
+## 1.3.0-next.2 (2023-06-14)
+
+### Fixed (1 change)
+
+- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
+
 ## 1.3.0-next.1 (2023-06-13)
 
 No changes.
