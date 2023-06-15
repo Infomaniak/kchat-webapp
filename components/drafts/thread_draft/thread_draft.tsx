@@ -97,7 +97,7 @@ function ThreadDraft({
         dispatch(upsertScheduleDraft(`${StoragePrefixes.COMMENT_DRAFT}${rootId}`, newDraft, rootId));
     };
 
-    const handleOnScheduleDelete = () => {
+    const handleOnScheduleDelete = async () => {
         const newDraft = {...value};
         Reflect.deleteProperty(newDraft, 'timestamp');
 
@@ -105,6 +105,9 @@ function ThreadDraft({
         if (value.id) {
             dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${rootId}_${value.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
         }
+
+        // Remove previously existing thread draft
+        await dispatch(removeDraft(StoragePrefixes.DRAFT + value.channelId));
 
         // Update remote thread draft
         dispatch(updateDraft(StoragePrefixes.COMMENT_DRAFT + rootId, newDraft, rootId, true));

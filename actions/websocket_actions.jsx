@@ -125,6 +125,7 @@ import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
+import { getGlobalItem } from 'selectors/storage';
 
 // import {isDesktopApp} from 'utils/user_agent';
 
@@ -1947,9 +1948,16 @@ function handleUpsertDraftEvent(msg) {
 }
 
 function handleDeleteDraftEvent(msg) {
-    return async (doDispatch) => {
+    return async (doDispatch, doGetState) => {
         const draft = msg.data.draft;
         const {key} = transformServerDraft(draft);
+        const activeDraft = getGlobalItem(doGetState(), key, {});
+
+        if (activeDraft.id && draft.id !== activeDraft.id) {
+            // Old draft was removed to be replaced by an unscheduled draft
+            // We do not want to remove the replacement unscheduled draft
+            return;
+        }
 
         doDispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: [], remote: false}));
     };

@@ -90,7 +90,7 @@ function ChannelDraft({
         dispatch(upsertScheduleDraft(`${StoragePrefixes.DRAFT}${value.channelId}`, newDraft));
     };
 
-    const handleOnScheduleDelete = () => {
+    const handleOnScheduleDelete = async () => {
         const newDraft = {...value};
         Reflect.deleteProperty(newDraft, 'timestamp');
 
@@ -98,6 +98,9 @@ function ChannelDraft({
         if (value.id) {
             dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${value.channelId}_${value.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
         }
+
+        // Remove previously existing channel draft
+        await dispatch(removeDraft(StoragePrefixes.DRAFT + value.channelId));
 
         // Update server channel draft
         dispatch(updateDraft(StoragePrefixes.DRAFT + value.channelId, newDraft, '', true));
