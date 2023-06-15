@@ -154,7 +154,11 @@ class DraftEditor extends React.PureComponent<Props, State> {
 
     toggleEmojiPicker = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
         e?.stopPropagation();
-        this.setState({showEmojiPicker: !this.state.showEmojiPicker});
+        const showEmojiPicker = !this.state.showEmojiPicker;
+        if (!showEmojiPicker) {
+            this.focusTextbox();
+        }
+        this.setState({showEmojiPicker});
     };
 
     handlePostError = (postError: React.ReactNode) => {
@@ -368,7 +372,13 @@ class DraftEditor extends React.PureComponent<Props, State> {
         this.hideEmojiPicker();
     };
 
-    handleShowPreview = (showPreview: boolean) => this.setState({showPreview});
+    handleShowPreview = (showPreview: boolean) => {
+        this.setState({showPreview}, () => {
+            if (!showPreview) {
+                this.focusTextbox();
+            }
+        });
+    };
 
     showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number) => {
         this.props.actions.openModal({
