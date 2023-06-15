@@ -69,7 +69,7 @@ const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}:
         handleSubmit(e);
     };
 
-    const getButonGroupRef = () => buttonGroupRef.current;
+    const getButtonGroupRef = () => buttonGroupRef.current;
 
     return (
         <CompassDesignProvider theme={theme}>
@@ -101,7 +101,7 @@ const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}:
                     <SchedulePostButton
                         disabled={disabled}
                         handleSchedulePost={handleSchedulePost}
-                        getAnchorEl={getButonGroupRef}
+                        getAnchorEl={getButtonGroupRef}
                     />
                 )}
             </StyledButtonGroup>
