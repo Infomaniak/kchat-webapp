@@ -121,7 +121,7 @@ function PanelBody({
                             />
                         )}
                     </div>
-                    {(fileInfos.length > 0 || uploadsInProgress?.length > 0) && (
+                    {((fileInfos.length > 0 || uploadsInProgress?.length > 0) && !isEditing) && (
                         <FilePreview
                             fileInfos={fileInfos}
                             uploadsInProgress={uploadsInProgress}
