@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {ActionCreatorsMapObject, Dispatch, bindActionCreators} from 'redux';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
-import {getChannelTimezones} from 'mattermost-redux/actions/channels';
+import {getChannelStats, getChannelTimezones} from 'mattermost-redux/actions/channels';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {Permissions, Preferences as PreferencesRedux} from 'mattermost-redux/constants';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
@@ -70,6 +70,7 @@ type Actions = {
     openModal: <P>(modalData: ModalData<P>) => void;
     upsertScheduleDraft: (key: string, draft: PostDraft, rootId: string) => Promise<ActionResult>;
     getChannelTimezones: (channelId: string) => Promise<ActionResult>;
+    getChannelStats: (channelId: string) => Promise<ActionResult>;
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -78,6 +79,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
         openModal,
         upsertScheduleDraft,
         getChannelTimezones,
+        getChannelStats,
     }, dispatch),
 });
 

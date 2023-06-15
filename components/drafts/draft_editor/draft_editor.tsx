@@ -89,6 +89,7 @@ type Props = {
         openModal: <P>(modalData: ModalData<P>) => void;
         upsertScheduleDraft: (key: string, draft: PostDraft, rootId: string) => Promise<ActionResult>;
         getChannelTimezones: (channelId: string) => Promise<ActionResult>;
+        getChannelStats: (channelId: string) => Promise<ActionResult>;
     };
 };
 
@@ -131,7 +132,16 @@ class DraftEditor extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
+        const {
+            actions,
+            channel,
+            channelMembersCount,
+        } = this.props;
         this.focusTextbox();
+        if (channelMembersCount === 1) {
+            // Channel stats might not be fetched
+            actions.getChannelStats(channel.id);
+        }
     }
 
     handleSelect = (e: React.SyntheticEvent<Element, Event>) => Utils.adjustSelection(this.textboxRef.current?.getInputBox(), e as React.KeyboardEvent<HTMLInputElement>);
