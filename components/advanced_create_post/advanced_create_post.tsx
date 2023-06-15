@@ -917,10 +917,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
         const {error} = await this.props.actions.upsertScheduleDraft(StoragePrefixes.DRAFT + channelId, draft);
         if (error) {
-            this.setState({serverError: {
-                ...error,
-                submittedMessage: draft.message,
-            }});
+            error.submittedMessage = draft.message;
+            this.setState({serverError: error});
             this.isDraftSubmitting = false;
             this.draftsForChannel[channelId] = null;
             return;

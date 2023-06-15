@@ -168,7 +168,11 @@ export function makeOnSubmit(channelId: string, rootId: string, latestPostId: st
                 ...draft,
                 channelId,
             };
-            return dispatch(upsertScheduleDraft(key, newDraft, rootId));
+            const {data, error} = await dispatch(upsertScheduleDraft(key, newDraft, rootId));
+            if (error) {
+                throw error;
+            }
+            return {data};
         }
 
         dispatch(removeDraft(key));
