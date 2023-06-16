@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useCallback} from 'react';
+import React, {memo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
 import moment from 'moment-timezone';
@@ -46,7 +46,7 @@ function DraftActions({
 }: Props) {
     const dispatch = useDispatch();
 
-    const handleDelete = useCallback(() => {
+    const handleDelete = () => {
         dispatch(openModal({
             modalId: ModalIdentifiers.DELETE_DRAFT,
             dialogType: DeleteDraftModal,
@@ -55,9 +55,9 @@ function DraftActions({
                 onConfirm: () => onDelete(draftId),
             },
         }));
-    }, [displayName]);
+    };
 
-    const handleSend = useCallback(() => {
+    const handleSend = () => {
         dispatch(openModal({
             modalId: ModalIdentifiers.SEND_DRAFT,
             dialogType: SendDraftModal,
@@ -66,7 +66,7 @@ function DraftActions({
                 onConfirm: () => onSend(draftId),
             },
         }));
-    }, [displayName]);
+    };
 
     const handleSchedule = () => {
         dispatch(openModal({

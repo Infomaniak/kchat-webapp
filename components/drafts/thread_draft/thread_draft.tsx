@@ -68,29 +68,29 @@ function ThreadDraft({
             return makeOnSubmit(channel.id, thread.id, '');
         }
 
-        return () => Promise.resolve({data: true});
+        return () => () => Promise.resolve({data: true});
     }, [channel.id, thread?.id]);
 
-    const handleOnDelete = useCallback((id: string) => {
+    const handleOnDelete = (id: string) => {
         dispatch(removeDraft(id));
-    }, [channel.id, rootId]);
+    };
 
-    const handleOnEdit = useCallback((_e?: React.MouseEvent, redirectToThread?: boolean) => {
+    const handleOnEdit = (_e?: React.MouseEvent, redirectToThread?: boolean) => {
         if (!redirectToThread && isScheduled) {
             setIsEditing(true);
             return;
         }
         dispatch(selectPost({id: rootId, channel_id: channel.id} as Post));
-    }, [channel, isScheduled]);
+    };
 
-    const handleOnSend = useCallback(async (id: string) => {
+    const handleOnSend = async (id: string) => {
         const newDraft = {...value};
         Reflect.deleteProperty(newDraft, 'timestamp');
         await dispatch(onSubmit(newDraft));
 
         handleOnDelete(id);
         handleOnEdit(undefined, true);
-    }, [value, onSubmit]);
+    };
 
     const handleOnSchedule = (scheduleUTCTimestamp: number) => {
         const newDraft = {
