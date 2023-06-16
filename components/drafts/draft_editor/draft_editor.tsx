@@ -138,7 +138,7 @@ class DraftEditor extends React.PureComponent<Props, State> {
             channelMembersCount,
         } = this.props;
         this.focusTextbox();
-        if (channelMembersCount === 1) {
+        if (channelMembersCount === 1 && channel.type !== 'D') {
             // Channel stats might not be fetched
             actions.getChannelStats(channel.id);
         }

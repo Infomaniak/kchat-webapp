@@ -75,8 +75,8 @@ function ThreadDraft({
         dispatch(removeDraft(id));
     }, [channel.id, rootId]);
 
-    const handleOnEdit = useCallback(() => {
-        if (isScheduled) {
+    const handleOnEdit = useCallback((_e?: React.MouseEvent, redirectToThread?: boolean) => {
+        if (!redirectToThread && isScheduled) {
             setIsEditing(true);
             return;
         }
@@ -89,7 +89,7 @@ function ThreadDraft({
         await dispatch(onSubmit(newDraft));
 
         handleOnDelete(id);
-        handleOnEdit();
+        handleOnEdit(undefined, true);
     }, [value, onSubmit]);
 
     const handleOnSchedule = (scheduleUTCTimestamp: number) => {
