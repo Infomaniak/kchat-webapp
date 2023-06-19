@@ -21,6 +21,7 @@ import LocalStorageStore from 'stores/local_storage_store';
 
 import {Team} from '@mattermost/types/teams';
 import {ServerError} from '@mattermost/types/errors';
+import {isIkBaseUrl} from 'mattermost-redux/actions/users';
 
 export function initializeTeam(team: Team): ActionFunc<Team, ServerError> {
     return async (dispatch, getState) => {
@@ -29,6 +30,14 @@ export function initializeTeam(team: Team): ActionFunc<Team, ServerError> {
         const state = getState();
         const currentUser = getCurrentUser(state);
         LocalStorageStore.setPreviousTeamId(currentUser.id, team.id);
+
+        if (!isIkBaseUrl()) {
+            let domain = '.infomaniak.com';
+            if (window.location.hostname.indexOf('.preprod.dev.infomaniak.ch') !== -1) {
+                domain = '.preprod.dev.infomaniak.ch';
+            }
+            document.cookie = `LAST_KCHAT_${currentUser.id}=${team.id}; path=/; domain=${domain}; secure; samesite=lax; max-age=31536000`;
+        }
 
         const graphQLEnabled = isGraphQLEnabled(state);
         try {

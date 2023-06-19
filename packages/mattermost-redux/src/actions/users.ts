@@ -44,7 +44,7 @@ import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 import {useSelector} from 'react-redux';
 
-function isIkBaseUrl() {
+export function isIkBaseUrl() {
     const whitelist = [
         'https://do-not-replace-kchat.infomaniak.com'.replace('do-not-replace-', ''),
         'https://do-not-replace-kchat.preprod.dev.infomaniak.ch'.replace('do-not-replace-', ''),
@@ -99,19 +99,31 @@ export function loadMeREST(): ActionFunc {
 
             // allow through in tests to launch promise.all but not trigger redirect
             if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
+                await dispatch(getMe());
+
                 // don't redirect to the error page if it is a testing environment
                 if (!isDesktopApp() && isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
                     const orderedKSuite = suiteArr.sort((a, b) => b.update_at - a.update_at);
 
-                    const {url} = orderedKSuite[0];
-                    window.open(url, '_self');
+                    let lastSeenKSuiteUrl;
+                    const currentUserId = getCurrentUserId(getState());
+                    const lastKChatCookie = document.cookie.split('; ').find((cookie) => {
+                        const parsedLastKChatCookie = cookie.split('=');
+                        return parsedLastKChatCookie.length === 2 && parsedLastKChatCookie[0] === `LAST_KCHAT_${currentUserId}`;
+                    });
+                    if (lastKChatCookie) {
+                        const lastSeenKSuiteId = lastKChatCookie.split('=')[1];
+                        lastSeenKSuiteUrl = orderedKSuite.find((kSuite) => kSuite.id === lastSeenKSuiteId)?.url;
+                    }
+
+                    lastSeenKSuiteUrl ??= orderedKSuite[0].url;
+
+                    window.open(lastSeenKSuiteUrl, '_self');
                 }
 
                 await Promise.all([
                     dispatch(getClientConfig()),
                     dispatch(getLicenseConfig()),
-                    dispatch(getMe()),
                     dispatch(getMyPreferences()),
                     dispatch(getMyTeamMembers()),
                 ]);
