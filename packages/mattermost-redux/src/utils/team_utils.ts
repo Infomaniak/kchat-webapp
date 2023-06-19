@@ -40,3 +40,14 @@ export function filterTeamsStartingWithTerm(teams: Team[], term: string): Team[]
             displayName.startsWith(lowercasedTerm);
     });
 }
+
+export const getLastKSuiteSeenId = () => {
+    const lastKChatCookie = document.cookie.split('; ').find((cookie) => {
+        const parsedLastKChatCookie = cookie.split('=');
+        return parsedLastKChatCookie.length === 2 && parsedLastKChatCookie[0] === 'LAST_KSUITE';
+    });
+    if (lastKChatCookie) {
+        return lastKChatCookie.split('=')[1];
+    }
+    return null;
+};

@@ -4,7 +4,7 @@
 import {combineReducers} from 'redux';
 
 import {AdminTypes, ChannelTypes, TeamTypes, UserTypes, SchemeTypes, GroupTypes} from 'mattermost-redux/action_types';
-import {teamListToMap} from 'mattermost-redux/utils/team_utils';
+import {getLastKSuiteSeenId, teamListToMap} from 'mattermost-redux/utils/team_utils';
 import {Team, TeamMembership, TeamUnread} from '@mattermost/types/teams';
 import {UserProfile} from '@mattermost/types/users';
 import {RelationOneToOne, IDMappedObjects} from '@mattermost/types/utilities';
@@ -127,14 +127,25 @@ function myMembers(state: RelationOneToOne<Team, TeamMembership> = {}, action: G
     }
     case TeamTypes.RECEIVED_TEAMS_LIST: {
         const nextState = {...state};
-        const receivedTeams = teamListToMap(action.data);
+        const teams: Team[] = action.data;
+        const lastKSuiteSeenId = getLastKSuiteSeenId();
+        const sortedTeams = teams.sort((a, b) => {
+            if (a.id === lastKSuiteSeenId) {
+                return -1;
+            }
+            if (b.id === lastKSuiteSeenId) {
+                return 1;
+            }
+            return 0;
+        });
+        const receivedTeams = teamListToMap(sortedTeams);
         updateState(receivedTeams, nextState);
         if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
             window.postMessage(
                 {
                     type: 'update-teams',
                     message: {
-                        teams: action.data,
+                        teams: sortedTeams,
                     },
                 },
                 window.origin,
