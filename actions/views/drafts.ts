@@ -46,7 +46,24 @@ export function getDrafts(teamId: string) {
             return {data: false, error};
         }
 
-        const localDrafts = getLocalDrafts(state);
+        let localDrafts = getLocalDrafts(state);
+
+        localDrafts = localDrafts.map((localDraft) => {
+            if (!localDraft.value.id) {
+                return localDraft;
+            }
+            const {id, ...value} = localDraft.value;
+            const serverDraft = serverDrafts.find((serverDraft) => serverDraft.value.id === id);
+            if (!serverDraft) {
+                // remove obsolete draft id
+                return {
+                    ...localDraft,
+                    value,
+                };
+            }
+            return localDraft;
+        });
+
         const drafts = [...serverDrafts, ...localDrafts];
 
         // Reconcile drafts and only keep the latest version of a draft.
