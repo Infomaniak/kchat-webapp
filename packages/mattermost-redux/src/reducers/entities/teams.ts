@@ -24,7 +24,31 @@ function currentTeamId(state = '', action: GenericAction) {
 
 function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
     switch (action.type) {
-    case TeamTypes.RECEIVED_TEAMS_LIST:
+    case TeamTypes.RECEIVED_TEAMS_LIST: {
+        const teams: Team[] = action.data;
+        const lastKSuiteSeenId = getLastKSuiteSeenId();
+        const sortedTeams = teams.sort((a, b) => {
+            if (a.id === lastKSuiteSeenId) {
+                return -1;
+            }
+            if (b.id === lastKSuiteSeenId) {
+                return 1;
+            }
+            return b.update_at - a.update_at;
+        });
+        if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams: sortedTeams,
+                    },
+                },
+                window.origin,
+            );
+        }
+        return Object.assign({}, teamListToMap(sortedTeams));
+    }
     case SchemeTypes.RECEIVED_SCHEME_TEAMS:
     case AdminTypes.RECEIVED_DATA_RETENTION_CUSTOM_POLICY_TEAMS_SEARCH:
         return Object.assign({}, teamListToMap(action.data));
@@ -127,30 +151,8 @@ function myMembers(state: RelationOneToOne<Team, TeamMembership> = {}, action: G
     }
     case TeamTypes.RECEIVED_TEAMS_LIST: {
         const nextState = {...state};
-        const teams: Team[] = action.data;
-        const lastKSuiteSeenId = getLastKSuiteSeenId();
-        const sortedTeams = teams.sort((a, b) => {
-            if (a.id === lastKSuiteSeenId) {
-                return -1;
-            }
-            if (b.id === lastKSuiteSeenId) {
-                return 1;
-            }
-            return 0;
-        });
-        const receivedTeams = teamListToMap(sortedTeams);
+        const receivedTeams = teamListToMap(action.data);
         updateState(receivedTeams, nextState);
-        if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
-            window.postMessage(
-                {
-                    type: 'update-teams',
-                    message: {
-                        teams: sortedTeams,
-                    },
-                },
-                window.origin,
-            );
-        }
         return nextState;
     }
     case TeamTypes.RECEIVED_TEAMS: {
