@@ -36,7 +36,7 @@ export function initializeTeam(team: Team): ActionFunc<Team, ServerError> {
             if (window.location.hostname.indexOf('.preprod.dev.infomaniak.ch') !== -1) {
                 domain = '.preprod.dev.infomaniak.ch';
             }
-            document.cookie = `LAST_KCHAT_${currentUser.id}=${team.id}; path=/; domain=${domain}; secure; samesite=lax; max-age=31536000`;
+            document.cookie = `LAST_KSUITE=${team.id}; path=/; domain=${domain}; secure; samesite=lax; max-age=31536000`;
         }
 
         const graphQLEnabled = isGraphQLEnabled(state);
