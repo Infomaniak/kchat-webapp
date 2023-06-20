@@ -362,7 +362,8 @@ class DraftEditor extends React.PureComponent<Props, State> {
             const newMessage = (/\s+$/).test(message) ? message + gif : message + ' ' + gif;
             this.setState({draft: {
                 ...this.state.draft,
-                message: newMessage}});
+                message: newMessage,
+            }});
         } else {
             this.setState({draft: {
                 ...this.state.draft,

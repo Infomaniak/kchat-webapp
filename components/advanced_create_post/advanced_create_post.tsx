@@ -1482,19 +1482,18 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     handleGifClick = (gif: string) => {
-        if (this.state.message === '') {
-            this.setState({message: gif});
-        } else {
-            const newMessage = (/\s+$/).test(this.state.message) ? this.state.message + gif : this.state.message + ' ' + gif;
-            this.setState({message: newMessage});
-
-            const draft = {
-                ...this.props.draft,
-                newMessage,
-            };
-
-            this.handleDraftChange(draft);
+        let newMessage = gif;
+        if (this.state.message !== '') {
+            newMessage = (/\s+$/).test(this.state.message) ? this.state.message + gif : this.state.message + ' ' + gif;
         }
+        this.setState({message: newMessage});
+
+        const draft = {
+            ...this.props.draft,
+            message: newMessage,
+        };
+        this.handleDraftChange(draft, true, true);
+
         this.handleEmojiClose();
     }
 
