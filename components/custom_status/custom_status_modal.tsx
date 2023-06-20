@@ -197,7 +197,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
         case TODAY:
             return moment().endOf('day').toISOString();
         case THIS_WEEK:
-            return moment().endOf('week').toISOString();
+            return moment().endOf('isoWeek').toISOString();
         case DATE_AND_TIME:
         case CUSTOM_DATE_TIME:
             return customExpiryTime.toISOString();
@@ -353,10 +353,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
     const showDateAndTimeField = !showSuggestions && (duration === CUSTOM_DATE_TIME || duration === DATE_AND_TIME);
 
     const suggestion = (
-        <div
-            className='statusSuggestion'
-            style={{marginTop: isStatusSet ? 44 : 8}}
-        >
+        <div className='statusSuggestion'>
             <div className='statusSuggestion__content'>
                 {recentCustomStatuses.length > 0 && recentStatuses}
                 <div id='statusSuggestion__suggestions'>
@@ -443,7 +440,6 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                         placeholder={formatMessage({id: 'custom_status.set_status', defaultMessage: 'Set a status'})}
                     />
                 </div>
-                {showSuggestions && suggestion}
                 {isStatusSet && (
                     <ExpiryMenu
                         duration={duration}
@@ -451,6 +447,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                         handleDurationChange={setDuration}
                     />
                 )}
+                {showSuggestions && suggestion}
                 {showDateAndTimeField && (
                     <DateTimeInput
                         time={customExpiryTime}
