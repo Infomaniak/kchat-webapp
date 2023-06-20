@@ -32,10 +32,8 @@ export function initializeTeam(team: Team): ActionFunc<Team, ServerError> {
         LocalStorageStore.setPreviousTeamId(currentUser.id, team.id);
 
         if (!isIkBaseUrl()) {
-            let domain = '.infomaniak.com';
-            if (window.location.hostname.indexOf('.preprod.dev.infomaniak.ch') !== -1) {
-                domain = '.preprod.dev.infomaniak.ch';
-            }
+            const url = process.env.BASE_URL!; // eslint-disable-line no-process-env
+            const domain = url.substring(url.lastIndexOf('.', url.lastIndexOf('.') - 1) + 1);
             document.cookie = `LAST_KSUITE=${team.id}; path=/; domain=${domain}; secure; samesite=lax; max-age=31536000`;
         }
 
