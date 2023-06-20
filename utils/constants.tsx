@@ -498,6 +498,7 @@ export const ModalIdentifiers = {
     GET_THE_APP: 'get_the_app',
     TOGGLE_NEXT: 'toggle_next',
     SCHEDULE_POST: 'schedule_post',
+    OVERRIDE_DRAFT: 'override_draft',
 };
 
 export const UserStatuses = {

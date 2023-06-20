@@ -2,19 +2,25 @@
 // See LICENSE.txt for license information.
 
 import React, {memo, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
 import {createPost} from 'actions/post_actions';
 import {setGlobalItem} from 'actions/storage';
 import {removeDraft, upsertScheduleDraft, updateDraft} from 'actions/views/drafts';
+import {closeModal, openModal} from 'actions/views/modals';
+import {getGlobalItem} from 'selectors/storage';
 import {PostDraft} from 'types/store/draft';
+import {GlobalState} from 'types/store';
 
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 import {Post, PostMetadata} from '@mattermost/types/posts';
-import {StoragePrefixes} from 'utils/constants';
+
+import OverrideDraftModal from 'components/schedule_post/override_draft_modal';
+
+import {ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 
 import DraftTitle from '../draft_title';
 import DraftActions from '../draft_actions';
@@ -51,6 +57,8 @@ function ChannelDraft({
     const dispatch = useDispatch<DispatchFunc>();
     const history = useHistory();
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const channelDraft = useSelector((state: GlobalState) => getGlobalItem(state, StoragePrefixes.DRAFT + value.channelId, {}));
+
 
     const handleOnEdit = () => {
         if (isScheduled) {
@@ -92,6 +100,24 @@ function ChannelDraft({
     };
 
     const handleOnScheduleDelete = async () => {
+        const {message} = channelDraft;
+        if (message) {
+            dispatch(openModal({
+                modalId: ModalIdentifiers.OVERRIDE_DRAFT,
+                dialogType: OverrideDraftModal,
+                dialogProps: {
+                    message,
+                    onConfirm: deleteSchedule,
+                    onExited: () => dispatch(closeModal(ModalIdentifiers.OVERRIDE_DRAFT)),
+                },
+            }));
+            return;
+        }
+
+        deleteSchedule();
+    };
+
+    const deleteSchedule = async () => {
         const newDraft = {...value};
         Reflect.deleteProperty(newDraft, 'timestamp');
 

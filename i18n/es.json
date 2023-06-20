@@ -5365,5 +5365,7 @@
   "drafts.draft_title.direct_channel": "A: {icon} <span>{channelName}</span>",
   "drafts.sidebarLink": "Borradores",
   "drafts.filter.menu_button_tooltip": "Filtrar borradores",
-  "drafts.invalid_scheduled": "{amount, plural, one {Uno} other {Algunos}} de tus borradores programados no {amount, plural, one {se puede enviar} other {pueden enviarse}}."
+  "drafts.invalid_scheduled": "{amount, plural, one {Uno} other {Algunos}} de tus borradores programados no {amount, plural, one {se puede enviar} other {pueden enviarse}}.",
+  "drafts.override_draft.title": "Sustituir borrador",
+  "drafts.override_draft.message": "La anulación de este borrador sustituirá al siguiente borrador: {message}"
 }

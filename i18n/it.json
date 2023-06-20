@@ -4083,5 +4083,7 @@
   "drafts.draft_title.direct_channel": "A: {icon} <span>{channelName}</span>",
   "drafts.sidebarLink": "Bozze",
   "drafts.filter.menu_button_tooltip": "Filtro bozze",
-  "drafts.invalid_scheduled": "{amount, plural, one {Una} other {Alcune}} delle bozze programmate non {amount, plural, one {può essere inviata} other {possono essere inviate}}."
+  "drafts.invalid_scheduled": "{amount, plural, one {Una} other {Alcune}} delle bozze programmate non {amount, plural, one {può essere inviata} other {possono essere inviate}}.",
+  "drafts.override_draft.title": "Sostituire la bozza",
+  "drafts.override_draft.message": "La mancata programmazione di questa bozza sostituirà la bozza seguente: {message}"
 }

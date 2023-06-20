@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useCallback, useMemo, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, {memo, useMemo, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 import type {UserThread, UserThreadSynthetic} from '@mattermost/types/threads';
@@ -11,6 +11,7 @@ import type {UserProfile, UserStatus} from '@mattermost/types/users';
 import type {Post} from '@mattermost/types/posts';
 
 import type {PostDraft} from 'types/store/draft';
+import {GlobalState} from 'types/store';
 
 import {getPost} from 'mattermost-redux/actions/posts';
 
@@ -18,14 +19,17 @@ import {selectPost} from 'actions/views/rhs';
 import {removeDraft, updateDraft, upsertScheduleDraft} from 'actions/views/drafts';
 import {makeOnSubmit} from 'actions/views/create_comment';
 import {setGlobalItem} from 'actions/storage';
+import {closeModal, openModal} from 'actions/views/modals';
+import {getGlobalItem} from 'selectors/storage';
 
-import {StoragePrefixes} from 'utils/constants';
+import {ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 
 import DraftTitle from '../draft_title';
 import DraftActions from '../draft_actions';
 import Panel from '../panel/panel';
 import Header from '../panel/panel_header';
 import PanelBody from '../panel/panel_body';
+import OverrideDraftModal from 'components/schedule_post/override_draft_modal';
 
 type Props = {
     channel: Channel;
@@ -56,6 +60,7 @@ function ThreadDraft({
 }: Props) {
     const dispatch = useDispatch<DispatchFunc>();
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const threadDraft = useSelector((state: GlobalState) => getGlobalItem(state, StoragePrefixes.COMMENT_DRAFT + value.rootId, {}));
 
     useEffect(() => {
         if (!thread?.id) {
@@ -101,6 +106,24 @@ function ThreadDraft({
     };
 
     const handleOnScheduleDelete = async () => {
+        const {message} = threadDraft;
+        if (message) {
+            dispatch(openModal({
+                modalId: ModalIdentifiers.OVERRIDE_DRAFT,
+                dialogType: OverrideDraftModal,
+                dialogProps: {
+                    message,
+                    onConfirm: onDelete,
+                    onExited: () => dispatch(closeModal(ModalIdentifiers.OVERRIDE_DRAFT)),
+                },
+            }));
+            return;
+        }
+
+        onDelete();
+    };
+
+    const onDelete = async () => {
         const newDraft = {...value};
         Reflect.deleteProperty(newDraft, 'timestamp');
 
@@ -110,7 +133,7 @@ function ThreadDraft({
         }
 
         // Remove previously existing thread draft
-        await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId));
+        await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.rootId));
 
         // Update remote thread draft
         const {error} = await dispatch(updateDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, newDraft, newDraft.rootId, true));
