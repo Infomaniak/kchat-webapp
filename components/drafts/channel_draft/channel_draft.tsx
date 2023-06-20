@@ -59,7 +59,6 @@ function ChannelDraft({
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const channelDraft = useSelector((state: GlobalState) => getGlobalItem(state, StoragePrefixes.DRAFT + value.channelId, {}));
 
-
     const handleOnEdit = () => {
         if (isScheduled) {
             setIsEditing(true);
