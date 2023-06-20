@@ -471,9 +471,14 @@ class DraftEditor extends React.PureComponent<Props, State> {
     };
 
     updateDraft = async () => {
+        const {timestamp} = this.props.draft;
         const {draft} = this.state;
+        const newDraft = {
+            ...draft,
+            timestamp,
+        };
         const key = draft.rootId ? StoragePrefixes.COMMENT_DRAFT + draft.rootId : StoragePrefixes.DRAFT + draft.channelId;
-        const {error} = await this.props.actions.upsertScheduleDraft(key, draft, draft.rootId);
+        const {error} = await this.props.actions.upsertScheduleDraft(key, newDraft, draft.rootId);
         if (error) {
             this.setState({serverError: {
                 ...error,
