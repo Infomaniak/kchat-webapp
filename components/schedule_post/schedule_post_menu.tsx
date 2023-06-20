@@ -89,9 +89,9 @@ const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleScheduleP
                     time: (
                         <FormattedTime
                             value={timestamp.toDate()}
-                            timeStyle='short'
                             hour12={!isMilitaryTime}
-                            timeZone={timezone}
+                            hour='2-digit'
+                            minute='2-digit'
                         />
                     ),
                 }}
