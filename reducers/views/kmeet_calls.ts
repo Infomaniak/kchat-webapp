@@ -2,10 +2,26 @@
 // See LICENSE.txt for license information.
 import {combineReducers} from 'redux';
 
-import {ActionTypes} from 'utils/constants';
+import {PostTypes} from 'mattermost-redux/action_types';
 
-const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: {type: string; data: {channelID: string; url: string; id: string}}) => {
+import {ActionTypes} from 'utils/constants';
+const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {},
+    action: {type: string;
+        data: {type: string;props: {url: string; conference_id: string; created_at: number}; channelID: string; url: string; id: string};}) => {
     switch (action.type) {
+    case PostTypes.RECEIVED_NEW_POST:
+        if (action.data.type === 'custom_call') {
+            console.log(action.data);
+            return {
+                ...state,
+                [action.data.channelID]: {
+
+                    url: action.data.props.url,
+                    // url: 'https://kmeet.infomaniak.com' + action.data.props.conference_id,
+                    id: action.data.props.conference_id,
+                }};
+        }
+        return state;
     case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED:
         return {
             ...state,
