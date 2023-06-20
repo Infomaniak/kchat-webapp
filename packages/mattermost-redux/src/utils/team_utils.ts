@@ -42,12 +42,11 @@ export function filterTeamsStartingWithTerm(teams: Team[], term: string): Team[]
 }
 
 export const getLastKSuiteSeenId = () => {
-    const lastKChatCookie = document.cookie.split('; ').find((cookie) => {
-        const parsedLastKChatCookie = cookie.split('=');
-        return parsedLastKChatCookie.length === 2 && parsedLastKChatCookie[0] === 'LAST_KSUITE';
-    });
-    if (lastKChatCookie) {
-        return lastKChatCookie.split('=')[1];
+    for (const cookie of document.cookie.split('; ')) {
+        const [name, value] = cookie.split('=');
+        if (name && value && name === 'LAST_KSUITE') {
+            return value;
+        }
     }
     return null;
 };
