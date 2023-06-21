@@ -131,6 +131,12 @@
     }
 }
 
+.StatusModal__body {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
 .statusSuggestion__row,
 .status-dropdown-menu,
 .StatusModal__input {
@@ -266,8 +272,6 @@ span.emoticon[style]:hover {
 }
 
 .statusExpiry {
-    position: absolute;
-    top: 56px;
     display: inline-block;
     font-size: 14px;
 
