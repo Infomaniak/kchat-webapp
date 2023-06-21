@@ -630,9 +630,6 @@ export function handleEvent(msg) {
     case SocketEvents.THREAD_UPDATED:
         dispatch(handleThreadUpdated(msg));
         break;
-    case SocketEvents.CONFERENCE_ADDED:
-        dispatch(handleIncomingConferenceCall(msg));
-        break;
     case SocketEvents.CONFERENCE_DELETED:
         dispatch(handleConferenceDeleted(msg));
         break;
@@ -1864,48 +1861,7 @@ function handleConferenceDeleted(msg) {
     };
 }
 
-function handleIncomingConferenceCall(msg) {
-    return (doDispatch, doGetState) => {
-        // Pop calling modal for user to accept or deny call
-        // const data = await Client4
-        // const doGetProfilesInChannel = makeGetProfilesInChannel();
 
-        const state = doGetState();
-
-        // let users = [];
-
-        // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
-        const channel = getChannel(state, connectedChannelID(doGetState()));
-
-        // users = doGetProfilesInChannel(state, msg.data.channel_id, true);
-
-        // if (users.length <= 0) {
-        //     users.push(getUser(state, msg.data.user_id));
-        // }
-
-        doDispatch({
-            type: ActionTypes.VOICE_CHANNEL_ADDED,
-            data: {
-                id: msg.data.url.split('/').at(-1),
-                channelID: msg.data.channel_id,
-                participants: msg.data.participants,
-                userID: msg.data.user_id,
-                currentUserID: getCurrentUserId(getState()),
-                url: msg.data.url,
-            },
-        });
-
-        // if (!channel || channel.id !== msg.data.channel_id) {
-        //     doDispatch(openModal({
-        //         modalId: ModalIdentifiers.INCOMING_CALL,
-        //         dialogType: DialingModal,
-        //         dialogProps: {
-        //             calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
-        //         },
-        //     }));
-        // }
-    };
-}
 
 function handlePusherMemberRemoved(msg) {
     // console.log('pusher member removed', msg);
