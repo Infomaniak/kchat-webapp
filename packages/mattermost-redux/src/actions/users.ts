@@ -45,14 +45,6 @@ import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 import {useSelector} from 'react-redux';
 
-export function isIkBaseUrl() {
-    const whitelist = [
-        'https://do-not-replace-kchat.infomaniak.com'.replace('do-not-replace-', ''),
-        'https://do-not-replace-kchat.preprod.dev.infomaniak.ch'.replace('do-not-replace-', ''),
-    ];
-    return whitelist.includes(window.origin);
-}
-
 export function generateMfaSecret(userId: string): ActionFunc {
     return bindClientFunc({
         clientFunc: Client4.generateMfaSecret,
@@ -101,7 +93,7 @@ export function loadMeREST(): ActionFunc {
             // allow through in tests to launch promise.all but not trigger redirect
             if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
                 // don't redirect to the error page if it is a testing environment
-                if (!isDesktopApp() && isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
                     window.open(suiteArr[0].url, '_self');
                 }
 
