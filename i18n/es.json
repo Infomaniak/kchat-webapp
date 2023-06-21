@@ -5367,5 +5367,11 @@
   "drafts.filter.menu_button_tooltip": "Filtrar borradores",
   "drafts.invalid_scheduled": "{amount, plural, one {Uno} other {Algunos}} de tus borradores programados no {amount, plural, one {se puede enviar} other {pueden enviarse}}.",
   "drafts.override_draft.title": "Sustituir borrador",
-  "drafts.override_draft.message": "La anulación de este borrador sustituirá al siguiente borrador: {message}"
+  "drafts.override_draft.message": "La anulación de este borrador sustituirá al siguiente borrador: {message}",
+  "drafts.confirm.delete.button": "Sí, borrar",
+  "drafts.confirm.delete.text": "¿Estás seguro de que quieres eliminar este borrador de <strong>{displayName}</strong>?",
+  "drafts.confirm.delete.title": "Borrar borrador",
+  "drafts.confirm.send.button": "Sí, enviar ahora",
+  "drafts.confirm.send.text": "¿Estás seguro de que quieres enviar este mensaje a <strong>{displayName}</strong>?",
+  "drafts.confirm.send.title": "Invia il messaggio ora"
 }

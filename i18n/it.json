@@ -4085,5 +4085,11 @@
   "drafts.filter.menu_button_tooltip": "Filtro bozze",
   "drafts.invalid_scheduled": "{amount, plural, one {Una} other {Alcune}} delle bozze programmate non {amount, plural, one {può essere inviata} other {possono essere inviate}}.",
   "drafts.override_draft.title": "Sostituire la bozza",
-  "drafts.override_draft.message": "La mancata programmazione di questa bozza sostituirà la bozza seguente: {message}"
+  "drafts.override_draft.message": "La mancata programmazione di questa bozza sostituirà la bozza seguente: {message}",
+  "drafts.confirm.delete.button": "Sì, eliminare",
+  "drafts.confirm.delete.text": "Sei sicuro di voler cancellare questa bozza a <strong>{displayName}</strong>?",
+  "drafts.confirm.delete.title": "Cancellare la bozza",
+  "drafts.confirm.send.button": "Sì, inviare ora",
+  "drafts.confirm.send.text": "Sei sicuro di voler inviare questo messaggio a <strong>{displayName}</strong>?",
+  "drafts.confirm.send.title": "Enviar mensaje ahora"
 }

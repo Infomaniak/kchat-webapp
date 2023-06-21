@@ -5149,5 +5149,11 @@
   "drafts.filter.menu_button_tooltip": "Filtrer les brouillons",
   "drafts.invalid_scheduled": "{amount, plural, one {Un} other {Certains}} de vos brouillons planifiés ne {amount, plural, one {peut pas être envoyé} other {peuvent pas être envoyés}}.",
   "drafts.override_draft.title": "Remplacer un brouillon",
-  "drafts.override_draft.message": "Supprimer la planification remplacera le brouillon suivant: {message}"
+  "drafts.override_draft.message": "Supprimer la planification remplacera le brouillon suivant: {message}",
+  "drafts.confirm.delete.button": "Oui, supprimer",
+  "drafts.confirm.delete.text": "Êtes-vous sûr de vouloir supprimer ce brouillon de <strong>{displayName}</strong> ?",
+  "drafts.confirm.delete.title": "Supprimer le brouillon",
+  "drafts.confirm.send.button": "Oui, envoyer maintenant",
+  "drafts.confirm.send.text": "Êtes-vous sûr de vouloir envoyer ce message à <strong>{displayName}</strong> ?",
+  "drafts.confirm.send.title": "Envoyer un message"
 }
