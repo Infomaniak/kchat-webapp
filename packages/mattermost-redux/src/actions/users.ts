@@ -38,13 +38,14 @@ import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/pre
 
 import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
+import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 import {General} from 'mattermost-redux/constants';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 import {useSelector} from 'react-redux';
 
-function isIkBaseUrl() {
+export function isIkBaseUrl() {
     const whitelist = [
         'https://do-not-replace-kchat.infomaniak.com'.replace('do-not-replace-', ''),
         'https://do-not-replace-kchat.preprod.dev.infomaniak.ch'.replace('do-not-replace-', ''),
@@ -101,11 +102,7 @@ export function loadMeREST(): ActionFunc {
             if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
                 // don't redirect to the error page if it is a testing environment
                 if (!isDesktopApp() && isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
-                    const orderedKSuite = suiteArr.sort((a, b) => b.update_at - a.update_at);
-
-                    const {url} = orderedKSuite[0];
-                    window.open(url, '_self');
+                    window.open(suiteArr[0].url, '_self');
                 }
 
                 await Promise.all([
