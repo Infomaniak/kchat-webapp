@@ -6,23 +6,12 @@ import {combineReducers} from 'redux';
 import {PostTypes} from 'mattermost-redux/action_types';
 
 import {ActionTypes} from 'utils/constants';
-type KmeetActionType = {
-    type: string;
-    data: {
-        type: string;
-        props: {
-            url: string;
-            conference_id: string;
-            created_at: number;
-        };
-        channelID: string; url: string; id: string;
-        channel_id: string;
-    };
-}
-const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: KmeetActionType) => {
+import {GenericAction} from 'mattermost-redux/types/actions';
+
+const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: GenericAction) => {
     switch (action.type) {
     case PostTypes.RECEIVED_NEW_POST:
-        if (action.data.type === 'custom_call') {
+        if (action.data.type && action.data.type === 'custom_call') {
             return {
                 ...state,
                 [action.data.channel_id]: {
