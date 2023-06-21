@@ -46,25 +46,18 @@ export function getDrafts(teamId: string) {
             return {data: false, error};
         }
 
-        let localDrafts = getLocalDrafts(state);
+        const localDrafts = getLocalDrafts(state);
 
-        localDrafts = localDrafts.map((localDraft) => {
-            if (!localDraft.value.id) {
-                return localDraft;
+        const filteredLocalDrafts = localDrafts.filter((localDraft) => {
+            const serverDraft = serverDrafts.find((serverDraft) => serverDraft.value.id === localDraft.value.id);
+            if (localDraft.value.id && !serverDraft) {
+                dispatch(setGlobalItem(localDraft.key, {message: '', fileInfos: [], uploadsInProgress: [], remote: false}));
+                return false;
             }
-            const {id, ...value} = localDraft.value;
-            const serverDraft = serverDrafts.find((serverDraft) => serverDraft.value.id === id);
-            if (!serverDraft) {
-                // remove obsolete draft id
-                return {
-                    ...localDraft,
-                    value,
-                };
-            }
-            return localDraft;
+            return true;
         });
 
-        const drafts = [...serverDrafts, ...localDrafts];
+        const drafts = [...serverDrafts, ...filteredLocalDrafts];
 
         // Reconcile drafts and only keep the latest version of a draft.
         const draftsMap = new Map(drafts.map((draft) => [draft.key, draft]));
@@ -141,9 +134,6 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
             return {error: new Error('Drafts are not allowed on the current server')};
         }
         const userId = getCurrentUserId(state);
-        const activeDraft = getGlobalItem(state, key, null);
-
-        dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
         try {
             const {id} = await upsertDraft(value, userId, rootId);
@@ -152,9 +142,6 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
                 id,
             }));
         } catch (error) {
-            if (activeDraft) {
-                dispatch(setGlobalItem(key, activeDraft));
-            }
             return {error};
         }
         return {data: true};

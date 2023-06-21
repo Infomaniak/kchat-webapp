@@ -112,7 +112,7 @@ import {loadProfilesForSidebar} from 'actions/user_actions';
 import store from 'stores/redux_store.jsx';
 import WebSocketClient from 'client/web_websocket_client.jsx';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
-import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes} from 'utils/constants';
+import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, StoragePrefixes} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
@@ -1931,17 +1931,18 @@ function handlePostAcknowledgementRemoved(msg) {
 
 function handleUpsertDraftEvent(msg) {
     return async (doDispatch, doGetState) => {
-        //const state = doGetState();
-        //const connectionId = getConnectionId(state);
-
         const draft = msg.data.draft;
         const {key, value} = transformServerDraft(draft);
         value.show = true;
         value.remote = false;
 
-        // if (msg.broadcast.omit_connection_id !== connectionId) {
-        //     value.remote = true;
-        // }
+        if (value.timestamp) {
+            const channelDraftKey = value.rootId ? StoragePrefixes.COMMENT_DRAFT + value.rootId : StoragePrefixes.DRAFT + value.channelId;
+            const channelDraft = getGlobalItem(doGetState(), channelDraftKey, {});
+            if (channelDraft.id === value.id) {
+                dispatch(setGlobalItem(channelDraftKey, {message: '', fileInfos: [], uploadsInProgress: []}));
+            }
+        }
 
         doDispatch(setGlobalItem(key, value));
     };
