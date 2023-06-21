@@ -1894,7 +1894,7 @@ export default class Client4 {
     };
 
     viewMyChannel = (channelId: string, prevChannelId?: string, teamId?: string) => {
-        if (!this.isIkBaseUrl()) {
+        if (!this.isIkBaseUrl() && teamId) {
             const url = process.env.BASE_URL!; // eslint-disable-line no-process-env
             const domain = url.substring(url.lastIndexOf('.', url.lastIndexOf('.') - 1) + 1);
             document.cookie = `LAST_KSUITE=${teamId}; path=/; domain=${domain}; secure; samesite=lax; max-age=31536000`;
