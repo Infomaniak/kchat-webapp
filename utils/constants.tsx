@@ -497,6 +497,8 @@ export const ModalIdentifiers = {
     CANCEL_MULTIPLE_INVITES: 'cancel_multiple_invites',
     GET_THE_APP: 'get_the_app',
     TOGGLE_NEXT: 'toggle_next',
+    SCHEDULE_POST: 'schedule_post',
+    OVERRIDE_DRAFT: 'override_draft',
 };
 
 export const UserStatuses = {
@@ -1362,6 +1364,7 @@ export const Locations = {
     SEARCH: 'SEARCH' as const,
     NO_WHERE: 'NO_WHERE' as const,
     MODAL: 'MODAL' as const,
+    SCHEDULED_DRAFT: 'DRAFT',
 };
 
 export const PostListRowListIds = {

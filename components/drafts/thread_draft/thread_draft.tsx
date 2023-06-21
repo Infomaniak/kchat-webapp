@@ -1,27 +1,34 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useCallback, useMemo, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import React, {memo, useMemo, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
+import {DispatchFunc} from 'mattermost-redux/types/actions';
 import type {UserThread, UserThreadSynthetic} from '@mattermost/types/threads';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 import type {Post} from '@mattermost/types/posts';
 
 import type {PostDraft} from 'types/store/draft';
+import {GlobalState} from 'types/store';
 
 import {getPost} from 'mattermost-redux/actions/posts';
 
 import {selectPost} from 'actions/views/rhs';
-import {removeDraft} from 'actions/views/drafts';
+import {removeDraft, updateDraft, upsertScheduleDraft} from 'actions/views/drafts';
 import {makeOnSubmit} from 'actions/views/create_comment';
+import {closeModal, openModal} from 'actions/views/modals';
+import {getGlobalItem} from 'selectors/storage';
+
+import {ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 
 import DraftTitle from '../draft_title';
 import DraftActions from '../draft_actions';
 import Panel from '../panel/panel';
 import Header from '../panel/panel_header';
 import PanelBody from '../panel/panel_body';
+import OverrideDraftModal from 'components/schedule_post/override_draft_modal';
 
 type Props = {
     channel: Channel;
@@ -33,6 +40,8 @@ type Props = {
     type: 'channel' | 'thread';
     user: UserProfile;
     value: PostDraft;
+    isScheduled: boolean;
+    scheduledWillNotBeSent: boolean;
 }
 
 function ThreadDraft({
@@ -45,8 +54,12 @@ function ThreadDraft({
     type,
     user,
     value,
+    isScheduled,
+    scheduledWillNotBeSent,
 }: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<DispatchFunc>();
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const threadDraft = useSelector((state: GlobalState) => getGlobalItem(state, StoragePrefixes.COMMENT_DRAFT + value.rootId, {}));
 
     useEffect(() => {
         if (!thread?.id) {
@@ -59,30 +72,76 @@ function ThreadDraft({
             return makeOnSubmit(channel.id, thread.id, '');
         }
 
-        return () => Promise.resolve({data: true});
+        return () => () => Promise.resolve({data: true});
     }, [channel.id, thread?.id]);
 
-    const handleOnDelete = useCallback((id: string) => {
-        dispatch(removeDraft(id, channel.id, rootId));
-    }, [channel.id, rootId]);
+    const handleOnDelete = (id: string) => {
+        dispatch(removeDraft(id));
+    };
 
-    const handleOnEdit = useCallback(() => {
+    const handleOnEdit = (_e?: React.MouseEvent, redirectToThread?: boolean) => {
+        if (!redirectToThread && isScheduled) {
+            setIsEditing(true);
+            return;
+        }
         dispatch(selectPost({id: rootId, channel_id: channel.id} as Post));
-    }, [channel]);
+    };
 
-    const handleOnSend = useCallback(async (id: string) => {
-        await dispatch(onSubmit(value));
+    const handleOnSend = async (id: string) => {
+        const newDraft = {...value};
+        Reflect.deleteProperty(newDraft, 'timestamp');
+        await dispatch(onSubmit(newDraft));
 
         handleOnDelete(id);
-        handleOnEdit();
-    }, [value, onSubmit]);
+        handleOnEdit(undefined, true);
+    };
+
+    const handleOnSchedule = (scheduleUTCTimestamp: number) => {
+        const newDraft = {
+            ...value,
+            timestamp: scheduleUTCTimestamp,
+        };
+        dispatch(upsertScheduleDraft(`${StoragePrefixes.COMMENT_DRAFT}${rootId}`, newDraft, rootId));
+    };
+
+    const handleOnScheduleDelete = async () => {
+        const {message} = threadDraft;
+        if (message) {
+            dispatch(openModal({
+                modalId: ModalIdentifiers.OVERRIDE_DRAFT,
+                dialogType: OverrideDraftModal,
+                dialogProps: {
+                    message,
+                    onConfirm: onDelete,
+                    onExited: () => dispatch(closeModal(ModalIdentifiers.OVERRIDE_DRAFT)),
+                },
+            }));
+            return;
+        }
+
+        onDelete();
+    };
+
+    const onDelete = async () => {
+        const newDraft = {...value};
+        Reflect.deleteProperty(newDraft, 'timestamp');
+
+        // Remove previously existing thread draft
+        await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.rootId));
+
+        // Update thread draft
+        dispatch(updateDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, newDraft, newDraft.rootId, true));
+    };
 
     if (!thread) {
         return null;
     }
 
     return (
-        <Panel onClick={handleOnEdit}>
+        <Panel
+            onClick={handleOnEdit}
+            isInvalid={scheduledWillNotBeSent}
+        >
             {({hover}) => (
                 <>
                     <Header
@@ -94,9 +153,14 @@ function ThreadDraft({
                                 channelType={channel.type}
                                 userId={user.id}
                                 draftId={draftId}
+                                isScheduled={isScheduled}
+                                scheduleTimestamp={value.timestamp}
+                                isInvalid={scheduledWillNotBeSent}
                                 onDelete={handleOnDelete}
                                 onEdit={handleOnEdit}
                                 onSend={handleOnSend}
+                                onSchedule={handleOnSchedule}
+                                onScheduleDelete={handleOnScheduleDelete}
                             />
                         )}
                         title={(
@@ -108,6 +172,9 @@ function ThreadDraft({
                         )}
                         timestamp={value.updateAt}
                         remote={value.remote || false}
+                        isScheduled={isScheduled}
+                        scheduledTimestamp={value.timestamp}
+                        scheduledWillNotBeSent={scheduledWillNotBeSent}
                     />
                     <PanelBody
                         channelId={channel.id}
@@ -118,6 +185,9 @@ function ThreadDraft({
                         uploadsInProgress={value.uploadsInProgress}
                         userId={user.id}
                         username={user.username}
+                        draft={value}
+                        isEditing={isEditing}
+                        setIsEditing={setIsEditing}
                     />
                 </>
             )}

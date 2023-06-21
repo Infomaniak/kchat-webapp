@@ -111,6 +111,7 @@ describe('draft actions', () => {
             storage: {
                 [`${StoragePrefixes.COMMENT_DRAFT}${rootId}`]: {
                     value: {
+                        id: 'draft_id',
                         message: '',
                         fileInfos: [],
                         uploadsInProgress: [],
@@ -128,7 +129,7 @@ describe('draft actions', () => {
 
     let store: any;
     const key = StoragePrefixes.DRAFT + channelId;
-    const upsertDraftSpy = jest.spyOn(Client4, 'upsertDraft');
+    const createDraftSpy = jest.spyOn(Client4, 'createDraft');
     const deleteDraftSpy = jest.spyOn(Client4, 'deleteDraft');
 
     beforeEach(() => {
@@ -159,13 +160,13 @@ describe('draft actions', () => {
 
         it('calls upsertDraft correctly', async () => {
             await store.dispatch(updateDraft(key, draft, '', true));
-            expect(upsertDraftSpy).toHaveBeenCalled();
+            expect(createDraftSpy).toHaveBeenCalled();
         });
     });
 
     describe('removeDraft', () => {
         it('calls setGlobalItem action correctly', async () => {
-            await store.dispatch(removeDraft(key, channelId));
+            await store.dispatch(removeDraft(key));
 
             const testStore = mockStore(initialState);
 
@@ -178,8 +179,8 @@ describe('draft actions', () => {
             expect(store.getActions()).toEqual(testStore.getActions());
         });
 
-        it('calls upsertDraft correctly', async () => {
-            await store.dispatch(removeDraft(key, channelId));
+        it('calls deleteDraft correctly', async () => {
+            await store.dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + rootId));
             expect(deleteDraftSpy).toHaveBeenCalled();
         });
     });

@@ -13,6 +13,7 @@ import Markdown from 'components/markdown';
 import FilePreview from 'components/file_preview';
 import ProfilePicture from 'components/profile_picture';
 import PriorityLabel from 'components/post_priority/post_priority_label';
+import DraftEditor from 'components/drafts/draft_editor';
 import {imageURLForUser, handleFormattedTextClick} from 'utils/utils';
 
 import type {PostDraft} from 'types/store/draft';
@@ -32,6 +33,9 @@ type Props = {
     uploadsInProgress: PostDraft['uploadsInProgress'];
     userId: UserProfile['id'];
     username: UserProfile['username'];
+    draft: PostDraft;
+    isEditing: boolean;
+    setIsEditing: (isEditing: boolean) => void;
 }
 
 const OPTIONS = {
@@ -49,12 +53,17 @@ function PanelBody({
     uploadsInProgress,
     userId,
     username,
+    draft,
+    isEditing,
+    setIsEditing,
 }: Props) {
     const currentRelativeTeamUrl = useSelector(getCurrentRelativeTeamUrl);
 
     const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         handleFormattedTextClick(e, currentRelativeTeamUrl);
     }, [currentRelativeTeamUrl]);
+
+    const hideEditor = () => setIsEditing(false);
 
     return (
 
@@ -99,12 +108,20 @@ function PanelBody({
                         )}
                     </div>
                     <div className='post__body'>
-                        <Markdown
-                            options={OPTIONS}
-                            message={message}
-                        />
+                        {isEditing ? (
+                            <DraftEditor
+                                draft={draft}
+                                onCancel={hideEditor}
+                                onEdit={hideEditor}
+                            />
+                        ) : (
+                            <Markdown
+                                options={OPTIONS}
+                                message={message}
+                            />
+                        )}
                     </div>
-                    {(fileInfos.length > 0 || uploadsInProgress?.length > 0) && (
+                    {((fileInfos.length > 0 || uploadsInProgress?.length > 0) && !isEditing) && (
                         <FilePreview
                             fileInfos={fileInfos}
                             uploadsInProgress={uploadsInProgress}

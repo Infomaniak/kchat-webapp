@@ -4480,19 +4480,19 @@ export default class Client4 {
     keepAlive() {
         return this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
     }
-    upsertDraft = async (draft: Draft, connectionId: string) => {
-        const result = await this.doFetch<Draft>(
-            `${this.getDraftsRoute()}`,
-            {
-                method: 'post',
-                body: JSON.stringify(draft),
-                headers: {
-                    'Connection-Id': `${connectionId}`,
-                },
-            },
-        );
 
-        return result;
+    createDraft = (draft: Omit<Draft, 'id'>) => {
+        return this.doFetch<Draft>(
+            `${this.getDraftsRoute()}`,
+            {method: 'post', body: JSON.stringify(draft)},
+        );
+    };
+
+    updateDraft = (draft: Draft) => {
+        return this.doFetch<Draft>(
+            `${this.getDraftsRoute()}/${draft.id}`,
+            {method: 'put', body: JSON.stringify(draft)},
+        );
     };
 
     getUserDrafts = (teamId: Team['id']) => {
@@ -4502,20 +4502,10 @@ export default class Client4 {
         );
     };
 
-    deleteDraft = (channelId: Channel['id'], rootId = '', connectionId: string) => {
-        let endpoint = `${this.getUserRoute('me')}/channels/${channelId}/drafts`;
-        if (rootId !== '') {
-            endpoint += `/${rootId}`;
-        }
-
-        return this.doFetch<null>(
-            endpoint,
-            {
-                method: 'delete',
-                headers: {
-                    'Connection-Id': `${connectionId}`,
-                },
-            },
+    deleteDraft = (draftId: Draft['id']) => {
+        return this.doFetch<StatusOK>(
+            `${this.getDraftsRoute()}/${draftId}`,
+            {method: 'delete'},
         );
     };
 
