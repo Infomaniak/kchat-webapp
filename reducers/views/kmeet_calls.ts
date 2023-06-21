@@ -15,6 +15,7 @@ export type KmeetActionType = {
         type: string;
         props: {url: string; conference_id: string; created_at: number};
         channelID: string; url: string; id: string;
+        channel_id: string;
     };
 }
 const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: KmeetActionType) => {
