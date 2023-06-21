@@ -30,7 +30,6 @@ const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: KmeetAc
                     id: action.data.props.conference_id,
                 }};
         }
-
         return state;
     case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED:
         return {
