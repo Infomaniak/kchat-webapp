@@ -1931,6 +1931,8 @@ function handlePostAcknowledgementRemoved(msg) {
 
 function handleUpsertDraftEvent(msg) {
     return async (doDispatch, doGetState) => {
+        const state = doGetState();
+
         const draft = msg.data.draft;
         const {key, value} = transformServerDraft(draft);
         value.show = true;
@@ -1938,9 +1940,15 @@ function handleUpsertDraftEvent(msg) {
 
         if (value.timestamp) {
             const channelDraftKey = value.rootId ? StoragePrefixes.COMMENT_DRAFT + value.rootId : StoragePrefixes.DRAFT + value.channelId;
-            const channelDraft = getGlobalItem(doGetState(), channelDraftKey, {});
+            const channelDraft = getGlobalItem(state, channelDraftKey, {});
             if (channelDraft.id === value.id) {
                 dispatch(setGlobalItem(channelDraftKey, {message: '', fileInfos: [], uploadsInProgress: []}));
+            }
+        } else {
+            const scheduledDraftKey = value.rootId ? `${StoragePrefixes.COMMENT_DRAFT}${value.rootId}_${value.id}` : `${StoragePrefixes.DRAFT}${value.channelId}_${value.id}`;
+            const scheduledDraft = getGlobalItem(state, scheduledDraftKey, null);
+            if (scheduledDraft) {
+                dispatch(setGlobalItem(scheduledDraftKey, {message: '', fileInfos: [], uploadsInProgress: []}));
             }
         }
 
