@@ -1,3 +1,10 @@
+## 1.3.1-next.1 (2023-06-21)
+
+### Fixed (2 changes)
+
+- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
+- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
+
 ## 1.3.0-next.2 (2023-06-14)
 
 ### Fixed (1 change)
