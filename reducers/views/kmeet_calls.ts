@@ -1,15 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import {log} from 'console';
 
 import {combineReducers} from 'redux';
-
-import {act} from 'react-dom/test-utils';
 
 import {PostTypes} from 'mattermost-redux/action_types';
 
 import {ActionTypes} from 'utils/constants';
-export type KmeetActionType = {
+type KmeetActionType = {
     type: string;
     data: {
         type: string;
