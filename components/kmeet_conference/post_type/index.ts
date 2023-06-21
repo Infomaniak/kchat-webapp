@@ -4,9 +4,10 @@ import {connect} from 'react-redux';
 
 import {bindActionCreators, Dispatch} from 'redux';
 
-import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannel} from 'actions/calls';
 import {Post} from 'mattermost-redux/types/posts';
 import {GlobalState} from 'mattermost-redux/types/store';
+
+import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannel} from 'actions/calls';
 
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
