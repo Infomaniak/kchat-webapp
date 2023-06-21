@@ -1,11 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+import {log} from 'console';
+
 import {combineReducers} from 'redux';
+
+import {act} from 'react-dom/test-utils';
 
 import {PostTypes} from 'mattermost-redux/action_types';
 
 import {ActionTypes} from 'utils/constants';
-type ActionType = {
+export type KmeetActionType = {
     type: string;
     data: {
         type: string;
@@ -13,17 +17,18 @@ type ActionType = {
         channelID: string; url: string; id: string;
     };
 }
-const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: ActionType) => {
+const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: KmeetActionType) => {
     switch (action.type) {
     case PostTypes.RECEIVED_NEW_POST:
         if (action.data.type === 'custom_call') {
             return {
                 ...state,
-                [action.data.channelID]: {
+                [action.data.channel_id]: {
                     url: action.data.props.url,
                     id: action.data.props.conference_id,
                 }};
         }
+
         return state;
     case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED:
         return {
