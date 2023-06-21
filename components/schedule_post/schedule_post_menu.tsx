@@ -23,6 +23,7 @@ type Props = {
     getAnchorEl: () => HTMLDivElement | null;
     onClose: () => void;
     handleSchedulePostMenu: (optionName: SchedulePostMenuOption['name']) => void;
+    handleKeyDown: (e: React.KeyboardEvent) => void;
 };
 
 type IntlMessage = {
@@ -58,7 +59,7 @@ const menuProps: Partial<MenuProps> = {
     },
 };
 
-const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleSchedulePostMenu}: Props) => {
+const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleSchedulePostMenu, handleKeyDown}: Props) => {
     const isMilitaryTime = useSelector((state: GlobalState) => getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false));
 
     const getMenuItemLabel = ({name, title}: SchedulePostMenuOption) => {
@@ -103,6 +104,7 @@ const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleScheduleP
             key={'schedule-post-menu-' + option.name}
             labels={getMenuItemLabel(option)}
             onClick={() => handleSchedulePostMenu(option.name)}
+            tabIndex={1}
         />
     ));
     return (
@@ -110,9 +112,13 @@ const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleScheduleP
             open={open}
             onClose={onClose}
             anchorEl={getAnchorEl()}
+            onKeyDown={handleKeyDown}
             {...menuProps}
         >
-            <h5 className='schedule-post__menu-header'>
+            <h5
+                className='schedule-post__menu-header'
+                tabIndex={-1}
+            >
                 <FormattedMessage
                     id='create_post.schedule_post.menu.title'
                     defaultMessage='Schedule draft:'

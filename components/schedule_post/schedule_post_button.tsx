@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 import {Button, styled} from '@mui/material';
@@ -14,10 +14,12 @@ import SchedulePostMenu, {SchedulePostMenuOption} from 'components/schedule_post
 import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+import KeyboardShortcutSequence from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 import {toUTCUnix} from 'utils/datetime';
+import {isKeyPressed, cmdOrCtrlPressed} from 'utils/utils';
 
 const StyledSchedulePostButton = styled(Button)`
     display: flex;
@@ -52,6 +54,17 @@ const StyledSchedulePostButton = styled(Button)`
     }
 `;
 
+const keyboardShortcut = {
+    default: {
+        id: 'create_post.schedule_post.tooltip',
+        defaultMessage: 'Schedule a post:\tShift|Alt|S',
+    },
+    mac: {
+        id: 'create_post.schedule_post.tooltip.mac',
+        defaultMessage: 'Schedule a post:\tShift|⌥|S',
+    },
+};
+
 type Props = {
     disabled: boolean;
     getAnchorEl: () => HTMLDivElement | null;
@@ -66,12 +79,30 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
 
     const tooltip = (
         <Tooltip id='schedule-post-tooltip'>
-            {formatMessage({
-                id: 'create_post.schedule_post.tooltip',
-                defaultMessage: 'Schedule a post',
-            })}
+            <KeyboardShortcutSequence
+                shortcut={keyboardShortcut}
+                hoistDescription={true}
+                isInsideTooltip={true}
+            />
         </Tooltip>
     );
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
+    const handleKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
+        const shiftAltCombo = !cmdOrCtrlPressed(e) && e.shiftKey && e.altKey;
+        if (shiftAltCombo && isKeyPressed(e, Constants.KeyCodes.S)) {
+            e.preventDefault();
+            setOpen(true);
+        }
+        if (isKeyPressed(e, Constants.KeyCodes.ESCAPE) && open) {
+            e.preventDefault();
+            setOpen(false);
+        }
+    };
 
     const handleMenu = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -131,6 +162,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
                 getAnchorEl={getAnchorEl}
                 onClose={handleClose}
                 handleSchedulePostMenu={handleSchedulePostMenu}
+                handleKeyDown={handleKeyDown}
             />
         </>
     );
