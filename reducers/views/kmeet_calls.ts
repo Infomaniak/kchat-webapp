@@ -10,7 +10,11 @@ type KmeetActionType = {
     type: string;
     data: {
         type: string;
-        props: {url: string; conference_id: string; created_at: number};
+        props: {
+            url: string;
+            conference_id: string;
+            created_at: number;
+        };
         channelID: string; url: string; id: string;
         channel_id: string;
     };
