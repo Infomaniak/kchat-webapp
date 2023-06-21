@@ -4,6 +4,10 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
 <form
   onSubmit={[Function]}
 >
+  <Connect(ScheduledIndicator)
+    rootId=""
+    type={1}
+  />
   <AdvanceTextEditor
     applyMarkdown={[Function]}
     badConnection={false}
@@ -43,6 +47,7 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
     handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
+    handleSchedulePost={[Function]}
     handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
@@ -50,6 +55,7 @@ exports[`components/AdvancedCreateComment should match snapshot when cannot post
     handleUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
+    isSchedulable={true}
     location="RHS_COMMENT"
     maxPostSize={4000}
     message="Test message"
@@ -77,6 +83,10 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
 <form
   onSubmit={[Function]}
 >
+  <Connect(ScheduledIndicator)
+    rootId=""
+    type={1}
+  />
   <AdvanceTextEditor
     applyMarkdown={[Function]}
     badConnection={false}
@@ -110,6 +120,7 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
     handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
+    handleSchedulePost={[Function]}
     handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
@@ -117,6 +128,7 @@ exports[`components/AdvancedCreateComment should match snapshot, comment with me
     handleUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
+    isSchedulable={true}
     location="RHS_COMMENT"
     maxPostSize={4000}
     message="Test message"
@@ -145,6 +157,10 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
   onSubmit={[Function]}
 >
   <FileLimitStickyBanner />
+  <Connect(ScheduledIndicator)
+    rootId=""
+    type={1}
+  />
   <AdvanceTextEditor
     applyMarkdown={[Function]}
     badConnection={false}
@@ -184,6 +200,7 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
     handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
+    handleSchedulePost={[Function]}
     handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
@@ -191,6 +208,7 @@ exports[`components/AdvancedCreateComment should match snapshot, emoji picker di
     handleUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
+    isSchedulable={true}
     location="RHS_COMMENT"
     maxPostSize={4000}
     message="Test message"
@@ -218,6 +236,10 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
 <form
   onSubmit={[Function]}
 >
+  <Connect(ScheduledIndicator)
+    rootId=""
+    type={1}
+  />
   <AdvanceTextEditor
     applyMarkdown={[Function]}
     badConnection={false}
@@ -251,6 +273,7 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
     handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
+    handleSchedulePost={[Function]}
     handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
@@ -258,6 +281,7 @@ exports[`components/AdvancedCreateComment should match snapshot, empty comment 1
     handleUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
+    isSchedulable={true}
     location="RHS_COMMENT"
     maxPostSize={4000}
     message=""
@@ -286,6 +310,10 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
   onSubmit={[Function]}
 >
   <FileLimitStickyBanner />
+  <Connect(ScheduledIndicator)
+    rootId=""
+    type={1}
+  />
   <AdvanceTextEditor
     applyMarkdown={[Function]}
     badConnection={false}
@@ -325,6 +353,7 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
     handleKeyDown={[Function]}
     handleMouseUpKeyUp={[Function]}
     handlePostError={[Function]}
+    handleSchedulePost={[Function]}
     handleSelect={[Function]}
     handleSubmit={[Function]}
     handleUploadError={[Function]}
@@ -332,6 +361,7 @@ exports[`components/AdvancedCreateComment should match snapshot, non-empty messa
     handleUploadStart={[Function]}
     hideEmojiPicker={[Function]}
     isFormattingBarHidden={false}
+    isSchedulable={true}
     location="RHS_COMMENT"
     maxPostSize={4000}
     message="Test message"

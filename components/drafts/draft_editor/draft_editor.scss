@@ -1,0 +1,20 @@
+#draft-editor {
+    .AdvancedTextEditor {
+        padding: 0;
+
+        .send-message-button {
+            display: none;
+        }
+
+        #scheduled_draft_editor_textbox,
+        #scheduled_draft_editor_textbox_placeholder {
+            padding: 13px 16px;
+        }
+    }
+    #postCreateFooter {
+        padding : 3px 0 0;
+        .msg-typing {
+            display: none;
+        }
+    }
+}

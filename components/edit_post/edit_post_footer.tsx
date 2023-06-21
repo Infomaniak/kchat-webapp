@@ -12,8 +12,8 @@ import {isMac} from 'utils/utils';
 import {GlobalState} from 'types/store';
 
 type Props = {
-    onSave: () => void;
-    onCancel: () => void;
+    onSave: (e: React.MouseEvent) => void;
+    onCancel: (e: React.MouseEvent) => void;
 }
 
 const EditPostFooter = ({onSave, onCancel}: Props) => {

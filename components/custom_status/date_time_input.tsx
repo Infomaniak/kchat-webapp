@@ -3,7 +3,7 @@
 
 import React, {useEffect, useState, useCallback, CSSProperties} from 'react';
 import {useSelector} from 'react-redux';
-import {DayModifiers, DayPickerProps} from 'react-day-picker';
+import {DayPickerProps} from 'react-day-picker';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {components} from 'react-select';
 import Creatable from 'react-select/creatable';
@@ -103,14 +103,15 @@ const styles = {
         ...css,
         color: 'var(--center-channel-color)',
     }),
+    indicatorSeparator: (style: CSSProperties) => ({
+        ...style,
+        display: 'none',
+    }),
+    menu: (style: CSSProperties) => ({
+        ...style,
+        zIndex: 1000,
+    }),
 };
-
-const placeholder = (
-    <FormattedMessage
-        id='time_dropdown.choose_time'
-        defaultMessage='Choose a time'
-    />
-);
 
 type Props = {
     time: Moment;
@@ -123,6 +124,7 @@ type Props = {
 const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, onMenuChange, setIsDatePickerOpen}: Props) => {
     const locale = useSelector(getCurrentLocale);
     const [timeOptions, setTimeOptions] = useState<CreatableOption[]>([]);
+    const [selectedValue, setSelectedValue] = useState<ValueType<CreatableOption>>(null);
     const [isPopperOpen, setIsPopperOpen] = useState(false);
     const {formatMessage} = useIntl();
 
@@ -148,7 +150,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
     const setTimeAndOptions = () => {
         const currentTime = getCurrentMomentForTimezone(timezone);
         let startTime = moment(time).startOf('day');
-        if (time.date() === currentTime.date()) {
+        if (time.dayOfYear() === currentTime.dayOfYear() && time.year() === currentTime.year()) {
             startTime = getRoundedTime(currentTime);
         }
         setTimeOptions(getTimeInIntervals(startTime));
@@ -156,14 +158,19 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
 
     useEffect(setTimeAndOptions, [time]);
 
-    const handleDayChange = (day: Date, modifiers: DayModifiers) => {
-        if (modifiers.today) {
-            const currentTime = getCurrentMomentForTimezone(timezone);
-            const roundedTime = getRoundedTime(currentTime);
+    const handleDayChange = (day: Date) => {
+        const currentMoment = getCurrentMomentForTimezone(timezone);
+        const dayWithTimezone = timezone ? moment.tz(day, timezone) : moment(day);
+        if (dayWithTimezone.isBefore(currentMoment)) {
+            const roundedTime = getRoundedTime(currentMoment);
+            const newOptions = getTimeInIntervals(roundedTime);
+            if (newOptions.length) {
+                setSelectedValue(newOptions[0]);
+            }
             handleChange(roundedTime);
         } else {
-            const dayWithTimezone = timezone ? moment.tz(day, timezone) : moment(day);
-            handleChange(dayWithTimezone.startOf('day'));
+            const newMoment = time.clone().dayOfYear(dayWithTimezone.dayOfYear()).year(dayWithTimezone.year());
+            handleChange(newMoment);
         }
         handlePopperOpenState(false);
     };
@@ -176,7 +183,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
 
     const inputIcon = (
         <IconButton
-            onClick={() => handlePopperOpenState(true)}
+            onClick={() => handlePopperOpenState(!isPopperOpen)}
             icon={'calendar-outline'}
             className='dateTime__calendar-icon'
             size={'sm'}
@@ -213,6 +220,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
             newTime = setDateTime(time, value);
         }
         if (newTime.isValid()) {
+            setSelectedValue(newOption);
             handleChange(newTime);
         }
     };
@@ -237,16 +245,13 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
         defaultMessage: 'Invalid date',
     });
 
-    const defaultTimeValue = {
-        value: time.toDate(),
-        label: (
-            <Timestamp
-                useRelative={false}
-                useDate={false}
-                value={time.toDate()}
-            />
-        ),
-    };
+    const placeholder = (
+        <Timestamp
+            useRelative={false}
+            useDate={false}
+            value={time.toDate()}
+        />
+    );
 
     return (
         <div>
@@ -264,7 +269,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
                             readOnly={true}
                             className='dateTime__calendar-input'
                             label={localizeMessage('dnd_custom_time_picker_modal.date', 'Date')}
-                            onClick={() => handlePopperOpenState(true)}
+                            onClick={() => handlePopperOpenState(!isPopperOpen)}
                             tabIndex={-1}
                             inputPrefix={inputIcon}
                         />
@@ -275,7 +280,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
                         components={{Control: CreatableControl}}
                         classNamePrefix='react-select'
                         options={timeOptions}
-                        defaultValue={defaultTimeValue}
+                        value={selectedValue}
                         onChange={handleTimeChange}
                         formatOptionLabel={formatOptionLabel}
                         isValidNewOption={isValidNewOption}

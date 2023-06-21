@@ -50,6 +50,7 @@ import ResetStatusModal from 'components/reset_status_modal';
 import TextboxClass from 'components/textbox/textbox';
 import PostPriorityPickerOverlay from 'components/post_priority/post_priority_picker_overlay';
 import PriorityLabel from 'components/post_priority/post_priority_label';
+import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 
 import {PostDraft} from 'types/store/draft';
 
@@ -69,6 +70,7 @@ import {IconContainer} from '../advanced_text_editor/formatting_bar/formatting_i
 
 import FileLimitStickyBanner from '../file_limit_sticky_banner';
 import {FilePreviewInfo} from '../file_preview/file_preview';
+
 const KeyCodes = Constants.KeyCodes;
 
 function isDraftEmpty(draft: PostDraft): boolean {
@@ -206,6 +208,8 @@ type Props = {
 
         // func called for setting drafts
         setDraft: (name: string, value: PostDraft | null, draftChannelId: string, save?: boolean) => void;
+
+        upsertScheduleDraft: (key: string, value: PostDraft) => Promise<ActionResult>;
 
         // func called for editing posts
         setEditingPost: (postId?: string, refocusId?: string, title?: string, isRHS?: boolean) => void;
@@ -378,6 +382,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.saveDraftWithShow();
     }
 
+    handleSchedulePost = (scheduleUTCTimestamp: number) => this.handleSubmit(undefined, true, scheduleUTCTimestamp);
+
     saveDraftWithShow = (props = this.props) => {
         if (this.saveDraftFrame && props.currentChannel) {
             const channelId = props.currentChannel.id;
@@ -465,7 +471,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.handleEmojiClose();
     }
 
-    doSubmit = async (e?: React.FormEvent) => {
+    doSubmit = async (e?: React.FormEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
         const channelId = this.props.currentChannel.id;
         if (e) {
             e.preventDefault();
@@ -512,7 +518,17 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.focusTextbox(forceFocus);
 
         const isReaction = Utils.REACTION_PATTERN.exec(post.message);
-        if (post.message.indexOf('/') === 0 && !ignoreSlash) {
+        if (isSchedule) {
+            const updatedDraft = {
+                ...this.props.draft,
+                ...this.draftsForChannel[channelId],
+                timestamp: scheduleUTCTimestamp,
+                channelId,
+                remote: false,
+            };
+            this.scheduleDraft(updatedDraft);
+            return;
+        } else if (post.message.indexOf('/') === 0 && !ignoreSlash) {
             this.setState({message: '', postError: null});
             let args: CommandArgs = {
                 channel_id: channelId,
@@ -578,11 +594,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.draftsForChannel[channelId] = null;
     }
 
-    handleNotifyAllConfirmation = () => {
-        this.doSubmit();
-    }
+    handleNotifyAllConfirmation = (isSchedule = false, scheduleUTCTimestamp?: number) => this.doSubmit(undefined, isSchedule, scheduleUTCTimestamp);
 
-    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number) => {
+    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number, isSchedule = false, scheduleUTCTimestamp?: number) => {
         this.props.actions.openModal({
             modalId: ModalIdentifiers.NOTIFY_CONFIRM_MODAL,
             dialogType: NotifyConfirmModal,
@@ -590,7 +604,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 mentions,
                 channelTimezoneCount,
                 memberNotifyCount,
-                onConfirm: () => this.handleNotifyAllConfirmation(),
+                onConfirm: () => this.handleNotifyAllConfirmation(isSchedule, scheduleUTCTimestamp),
             },
         });
     }
@@ -609,7 +623,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         return command === 'online' || command === 'away' || command === 'dnd' || command === 'offline';
     };
 
-    handleSubmit = async (e: React.FormEvent) => {
+    handleSubmit = async (e?: React.FormEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
         const {
             currentChannel: updateChannel,
             userIsOutOfOffice,
@@ -670,7 +684,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         if (memberNotifyCount > 0) {
-            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount);
+            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp);
             this.isDraftSubmitting = false;
             return;
         }
@@ -720,7 +734,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             return;
         }
 
-        await this.doSubmit(e);
+        await this.doSubmit(e, isSchedule, scheduleUTCTimestamp);
     }
 
     sendMessage = async (originalPost: Post) => {
@@ -880,7 +894,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.handleDraftChange(draft);
     }
 
-    handleDraftChange = (draft: PostDraft, instant = false) => {
+    handleDraftChange = (draft: PostDraft, instant = false, save = false) => {
         const channelId = this.props.currentChannel.id;
 
         if (this.saveDraftFrame) {
@@ -888,15 +902,38 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         if (instant) {
-            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
+            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
         } else {
             this.saveDraftFrame = window.setTimeout(() => {
-                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
+                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
             }, Constants.SAVE_DRAFT_TIMEOUT);
         }
 
         this.draftsForChannel[channelId] = draft;
     }
+
+    scheduleDraft = async (draft: PostDraft) => {
+        const channelId = this.props.currentChannel.id;
+
+        const {error} = await this.props.actions.upsertScheduleDraft(StoragePrefixes.DRAFT + channelId, draft);
+        if (error) {
+            error.submittedMessage = draft.message;
+            this.setState({serverError: error});
+            this.isDraftSubmitting = false;
+            this.draftsForChannel[channelId] = null;
+            return;
+        }
+
+        this.setState({
+            message: '',
+            submitting: false,
+            postError: null,
+            showFormat: false,
+        });
+
+        this.isDraftSubmitting = false;
+        this.draftsForChannel[channelId] = null;
+    };
 
     pasteHandler = (e: ClipboardEvent) => {
         /**
@@ -992,7 +1029,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             draft.fileInfos = sortFileInfos(draft.fileInfos.concat(fileInfos), this.props.locale);
         }
 
-        this.handleDraftChange(draft, true);
+        this.handleDraftChange(draft, true, true);
     }
 
     handleUploadError = (err: string | ServerError, clientId?: string, channelId?: string) => {
@@ -1028,7 +1065,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     removePreview = (id: string) => {
         let modifiedDraft = {} as PostDraft;
         const draft = {...this.props.draft};
-        const channelId = this.props.currentChannel.id;
 
         // Clear previous errors
         this.setState({serverError: null});
@@ -1059,8 +1095,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             };
         }
 
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, modifiedDraft, channelId, false);
-        this.draftsForChannel[channelId] = modifiedDraft;
+        this.handleDraftChange(modifiedDraft, true, true);
 
         this.handleFileUploadChange();
 
@@ -1447,19 +1482,18 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     handleGifClick = (gif: string) => {
-        if (this.state.message === '') {
-            this.setState({message: gif});
-        } else {
-            const newMessage = (/\s+$/).test(this.state.message) ? this.state.message + gif : this.state.message + ' ' + gif;
-            this.setState({message: newMessage});
-
-            const draft = {
-                ...this.props.draft,
-                newMessage,
-            };
-
-            this.handleDraftChange(draft);
+        let newMessage = gif;
+        if (this.state.message !== '') {
+            newMessage = (/\s+$/).test(this.state.message) ? this.state.message + gif : this.state.message + ' ' + gif;
         }
+        this.setState({message: newMessage});
+
+        const draft = {
+            ...this.props.draft,
+            message: newMessage,
+        };
+        this.handleDraftChange(draft, true, true);
+
         this.handleEmojiClose();
     }
 
@@ -1620,6 +1654,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     (this.props.draft.fileInfos.length > 0 || this.props.draft.uploadsInProgress.length > 0) &&
                     <FileLimitStickyBanner/>
                 }
+                <ScheduledIndicator
+                    type={ScheduledIndicatorType.CHANNEL}
+                    channelId={this.props.currentChannel.id}
+                />
                 <AdvancedTextEditor
                     location={Locations.CENTER}
                     currentUserId={this.props.currentUserId}
@@ -1670,6 +1708,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     prefillMessage={this.prefillMessage}
                     textboxRef={this.textboxRef}
                     labels={priorityLabels}
+                    isSchedulable={true}
+                    handleSchedulePost={this.handleSchedulePost}
                     additionalControls={[
                         this.props.isPostPriorityEnabled && (
                             <React.Fragment key='PostPriorityPicker'>

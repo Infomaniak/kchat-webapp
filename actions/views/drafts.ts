@@ -9,7 +9,6 @@ import {syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entit
 import {Client4} from 'mattermost-redux/client';
 
 import {setGlobalItem} from 'actions/storage';
-import {getConnectionId} from 'selectors/general';
 import type {GlobalState} from 'types/store';
 import {PostDraft} from 'types/store/draft';
 import {getGlobalItem} from 'selectors/storage';
@@ -47,7 +46,24 @@ export function getDrafts(teamId: string) {
             return {data: false, error};
         }
 
-        const localDrafts = getLocalDrafts(state);
+        let localDrafts = getLocalDrafts(state);
+
+        localDrafts = localDrafts.map((localDraft) => {
+            if (!localDraft.value.id) {
+                return localDraft;
+            }
+            const {id, ...value} = localDraft.value;
+            const serverDraft = serverDrafts.find((serverDraft) => serverDraft.value.id === id);
+            if (!serverDraft) {
+                // remove obsolete draft id
+                return {
+                    ...localDraft,
+                    value,
+                };
+            }
+            return localDraft;
+        });
+
         const drafts = [...serverDrafts, ...localDrafts];
 
         // Reconcile drafts and only keep the latest version of a draft.
@@ -68,17 +84,16 @@ export function getDrafts(teamId: string) {
     };
 }
 
-export function removeDraft(key: string, channelId: string, rootId = '') {
+export function removeDraft(key: string) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
+        const draftId = getGlobalItem(state, key, {}).id;
 
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
-        if (syncedDraftsAreAllowedAndEnabled(state)) {
-            const connectionId = getConnectionId(getState() as GlobalState);
-
+        if (syncedDraftsAreAllowedAndEnabled(state) && draftId) {
             try {
-                await Client4.deleteDraft(channelId, rootId, connectionId);
+                await Client4.deleteDraft(draftId);
             } catch (error) {
                 return {
                     data: false,
@@ -105,24 +120,51 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
             };
         }
 
-        dispatch(setGlobalItem(key, updatedValue));
-
         if (syncedDraftsAreAllowedAndEnabled(state) && save && updatedValue) {
-            const connectionId = getConnectionId(state);
             const userId = getCurrentUserId(state);
             try {
-                await upsertDraft(updatedValue, userId, rootId, connectionId);
+                const {id} = await upsertDraft(updatedValue, userId, rootId);
+                updatedValue.id = id;
             } catch (error) {
                 return {data: false, error};
             }
+        }
+        dispatch(setGlobalItem(key, updatedValue));
+        return {data: true};
+    };
+}
+
+export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const state = getState() as GlobalState;
+        if (!syncedDraftsAreAllowedAndEnabled(state)) {
+            return {error: new Error('Drafts are not allowed on the current server')};
+        }
+        const userId = getCurrentUserId(state);
+        const activeDraft = getGlobalItem(state, key, null);
+
+        dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
+
+        try {
+            const {id} = await upsertDraft(value, userId, rootId);
+            dispatch(setGlobalItem(`${key}_${id}`, {
+                ...value,
+                id,
+            }));
+        } catch (error) {
+            if (activeDraft) {
+                dispatch(setGlobalItem(key, activeDraft));
+            }
+            return {error};
         }
         return {data: true};
     };
 }
 
-function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', connectionId: string) {
+function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '') {
     const fileIds = draft.fileInfos.map((file) => file.id);
     const newDraft = {
+        id: draft.id,
         create_at: draft.createAt || 0,
         update_at: draft.updateAt || 0,
         delete_at: 0,
@@ -132,10 +174,15 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', c
         message: draft.message,
         props: draft.props,
         file_ids: fileIds,
+        timestamp: draft.timestamp,
         priority: draft.metadata?.priority as PostPriorityMetadata,
     };
 
-    return Client4.upsertDraft(newDraft, connectionId);
+    if (newDraft.id) {
+        return Client4.updateDraft(newDraft as ServerDraft);
+    }
+
+    return Client4.createDraft(newDraft);
 }
 
 export function setDraftsTourTipPreference(initializationState: Record<string, boolean>): ActionFunc {
@@ -160,6 +207,10 @@ export function transformServerDraft(draft: ServerDraft): Draft {
         key = `${StoragePrefixes.COMMENT_DRAFT}${draft.root_id}`;
     }
 
+    if (draft.timestamp) {
+        key += `_${draft.id}`;
+    }
+
     let fileInfos: FileInfo[] = [];
     if (draft.metadata?.files) {
         fileInfos = draft.metadata.files;
@@ -174,7 +225,9 @@ export function transformServerDraft(draft: ServerDraft): Draft {
         key,
         timestamp: new Date(draft.update_at),
         value: {
+            id: draft.id,
             message: draft.message,
+            timestamp: draft.timestamp,
             fileInfos,
             props: draft.props,
             uploadsInProgress: [],

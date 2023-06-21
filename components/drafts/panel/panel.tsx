@@ -2,18 +2,21 @@
 // See LICENSE.txt for license information.
 
 import React, {memo, useState} from 'react';
+import classNames from 'classnames';
 
 import {makeIsEligibleForClick} from 'utils/utils';
+
 import './panel.scss';
 
 type Props = {
+    isInvalid: boolean;
     children: ({hover}: {hover: boolean}) => React.ReactNode;
     onClick: () => void;
 };
 
 const isEligibleForClick = makeIsEligibleForClick('.hljs, code');
 
-function Panel({children, onClick}: Props) {
+function Panel({isInvalid, children, onClick}: Props) {
     const [hover, setHover] = useState(false);
 
     const handleMouseEnter = () => {
@@ -32,7 +35,7 @@ function Panel({children, onClick}: Props) {
 
     return (
         <article
-            className='Panel'
+            className={classNames('Panel', {Pannel__dangerous: isInvalid})}
             onMouseEnter={handleMouseEnter}
             onClick={handleOnClick}
             onMouseLeave={handleMouseLeave}

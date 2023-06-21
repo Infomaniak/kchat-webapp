@@ -57,7 +57,7 @@ import {showPreviewOnCreatePost} from 'selectors/views/textbox';
 import {getCurrentLocale} from 'selectors/i18n';
 import {getEmojiMap, getShortcutReactToLastPostEmittedFrom} from 'selectors/emojis';
 import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
-import {removeDraft, updateDraft} from 'actions/views/drafts';
+import {removeDraft, updateDraft, upsertScheduleDraft} from 'actions/views/drafts';
 import {openModal} from 'actions/views/modals';
 import {AdvancedTextEditor, Constants, Preferences, StoragePrefixes, UserStatuses} from 'utils/constants';
 import {canUploadFiles} from 'utils/file_utils';
@@ -174,6 +174,7 @@ type Actions = {
     getChannelMemberCountsByGroup: (channelId: string, includeTimezones: boolean) => void;
     savePreferences: (userId: string, preferences: PreferenceType[]) => ActionResult;
     searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined) => Promise<{ data: any }>;
+    upsertScheduleDraft: (key: string, value: PostDraft) => Promise<ActionResult>;
 }
 
 function setDraft(key: string, value: PostDraft, draftChannelId: string, save = false) {
@@ -192,7 +193,7 @@ function setDraft(key: string, value: PostDraft, draftChannelId: string, save = 
             return dispatch(updateDraft(key, updatedValue, '', save));
         }
 
-        return dispatch(removeDraft(key, channelId));
+        return dispatch(removeDraft(key));
     };
 }
 
@@ -216,6 +217,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             addReaction,
             removeReaction,
             setDraft,
+            upsertScheduleDraft,
             clearDraftUploads,
             selectPostFromRightHandSideSearchByPostId,
             setEditingPost,

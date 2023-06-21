@@ -4,6 +4,11 @@
 import {PostMetadata, PostPriorityMetadata} from './posts';
 
 export type Draft = {
+
+    /**
+     * Every server draft has an id
+     */
+    id: string;
     create_at: number;
     update_at: number;
     delete_at: number;
@@ -15,4 +20,9 @@ export type Draft = {
     file_ids?: string[];
     metadata?: PostMetadata;
     priority?: PostPriorityMetadata;
+
+    /**
+     * Every scheduled draft as a unix timestamp
+     */
+    timestamp?: number;
 };
