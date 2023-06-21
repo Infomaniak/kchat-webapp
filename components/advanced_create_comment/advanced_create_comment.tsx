@@ -108,7 +108,7 @@ type Props = {
     updateCommentDraftWithRootId: (rootID: string, draft: PostDraft, save?: boolean) => void;
 
     // Called when submitting the comment
-    onSubmit: (draft: PostDraft, options: {ignoreSlash: boolean}) => void;
+    onSubmit: (draft: PostDraft, options: {ignoreSlash: boolean}) => Promise<ActionResult>;
 
     // Called when resetting comment message history index
     onResetHistoryIndex: () => void;

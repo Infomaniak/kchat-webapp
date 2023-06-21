@@ -135,6 +135,9 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
         }
         const userId = getCurrentUserId(state);
 
+        const activeDraft = getGlobalItem(state, key, null);
+        dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
+
         try {
             const {id} = await upsertDraft(value, userId, rootId);
             dispatch(setGlobalItem(`${key}_${id}`, {
@@ -142,6 +145,9 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
                 id,
             }));
         } catch (error) {
+            if (activeDraft) {
+                dispatch(setGlobalItem(key, activeDraft));
+            }
             return {error};
         }
         return {data: true};
