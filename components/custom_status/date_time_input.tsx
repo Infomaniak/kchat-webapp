@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect, useState, useCallback, CSSProperties} from 'react';
+import React, {useEffect, useState, CSSProperties} from 'react';
 import {useSelector} from 'react-redux';
 import {DayPickerProps} from 'react-day-picker';
 import {FormattedMessage, useIntl} from 'react-intl';
@@ -9,6 +9,7 @@ import {components} from 'react-select';
 import Creatable from 'react-select/creatable';
 import type {ActionMeta, ValueType, ControlProps, OptionsType} from 'react-select';
 import {DateTime} from 'luxon';
+import classNames from 'classnames';
 
 import moment, {Moment} from 'moment-timezone';
 
@@ -90,13 +91,14 @@ const styles = {
         ...css,
         minHeight: '40px',
         background: 'var(--center-channel-bg)',
-        border: '2px solid var(--button-bg)',
+        border: '1px solid rgba(var(--center-channel-color-rgb), 0.16)',
         boxShadow: 'none',
         '&:hover': {
-            border: '2px solid var(--button-bg)',
+            border: '1px solid rgba(var(--center-channel-color-rgb), 0.16)',
         },
-        '&:focus': {
-            border: '2px solid var(--button-bg)',
+        '&:focus-within': {
+            border: '1px solid var(--button-bg)',
+            boxShadow: 'rgba(0, 152, 255, 0.5) 0px 0px 1px 2px, rgb(0, 152, 255) 0px 0px 0px 1px',
         },
     }),
     singleValue: (css: CSSProperties) => ({
@@ -126,26 +128,31 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
     const [timeOptions, setTimeOptions] = useState<CreatableOption[]>([]);
     const [selectedValue, setSelectedValue] = useState<ValueType<CreatableOption>>(null);
     const [isPopperOpen, setIsPopperOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const {formatMessage} = useIntl();
 
-    const handlePopperOpenState = useCallback((isOpen: boolean) => {
+    const handlePopperOpenState = (isOpen: boolean) => {
         setIsPopperOpen(isOpen);
         setIsDatePickerOpen?.(isOpen);
-    }, []);
+    };
 
-    const handleKeyDown = useCallback((event: KeyboardEvent) => {
-        if (isKeyPressed(event, Constants.KeyCodes.ESCAPE) && isPopperOpen) {
-            handlePopperOpenState(false);
+    const handleMenuOpenState = (isOpen: boolean) => {
+        setIsMenuOpen(isOpen);
+        onMenuChange(isOpen);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent, open: boolean, setter: (open: boolean) => void) => {
+        if (!open && isKeyPressed(e, Constants.KeyCodes.ENTER)) {
+            e.preventDefault();
+            e.stopPropagation();
+            setter(true);
         }
-    }, [isPopperOpen, handlePopperOpenState]);
-
-    useEffect(() => {
-        document.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [handleKeyDown]);
+        if (open && isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
+            e.preventDefault();
+            e.stopPropagation();
+            setter(false);
+        }
+    };
 
     const setTimeAndOptions = () => {
         const currentTime = getCurrentMomentForTimezone(timezone);
@@ -188,6 +195,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
             className='dateTime__calendar-icon'
             size={'sm'}
             aria-haspopup='grid'
+            tabIndex={-1}
         />
     );
 
@@ -255,8 +263,12 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
 
     return (
         <div>
-            <div className='dateTime'>
-                <div className='dateTime__date'>
+            <div className='dateTime' >
+                <div
+                    className={classNames('dateTime__date', {'dateTime__date-open': isPopperOpen})}
+                    tabIndex={0}
+                    onKeyDown={(e) => handleKeyDown(e, isPopperOpen, handlePopperOpenState)}
+                >
                     <DatePicker
                         isPopperOpen={isPopperOpen}
                         handlePopperOpenState={handlePopperOpenState}
@@ -281,12 +293,14 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
                         classNamePrefix='react-select'
                         options={timeOptions}
                         value={selectedValue}
+                        menuIsOpen={isMenuOpen}
                         onChange={handleTimeChange}
                         formatOptionLabel={formatOptionLabel}
                         isValidNewOption={isValidNewOption}
-                        onMenuOpen={() => onMenuChange(true)}
-                        onMenuClose={() => onMenuChange(false)}
+                        onMenuOpen={() => handleMenuOpenState(true)}
+                        onMenuClose={() => handleMenuOpenState(false)}
                         noOptionsMessage={noOptionsMessage}
+                        onKeyDown={(e) => handleKeyDown(e, isMenuOpen, handleMenuOpenState)}
                         placeholder={placeholder}
                         styles={styles}
                     />

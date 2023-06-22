@@ -69,11 +69,11 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
             modalHeaderText={modalHeaderText}
             confirmButtonText={confirmButtonText}
             handleConfirm={handleConfirm}
-            handleEnterKeyPress={handleConfirm}
             id='PostReminderCustomTimePickerModal'
             className={'post-reminder-modal'}
             compassDesign={true}
-            enforceFocus={true}
+            enforceFocus={false}
+            autoCloseOnEnterKeyDown={false}
             keyboardEscape={false}
             isConfirmDisabled={isConfirmDisabled}
         >

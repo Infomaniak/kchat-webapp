@@ -7,6 +7,19 @@
         flex: 1;
         position: relative;
         margin-right: 20px;
+        border-radius: 4px;
+
+        border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+
+        &-open {
+            border: 1px solid var(--button-bg);
+            box-shadow: rgba(0, 152, 255, 0.5) 0px 0px 1px 2px, rgb(0, 152, 255) 0px 0px 0px 1px;
+        }
+
+        &:focus-within {
+            border: 1px solid var(--button-bg);
+            box-shadow: rgba(0, 152, 255, 0.5) 0px 0px 1px 2px, rgb(0, 152, 255) 0px 0px 0px 1px;
+        }
 
         &-icon {
             position: absolute;
@@ -66,6 +79,12 @@
         .react-select__placeholder {
             color: var(--center-channel-color);
         }
+
+        .react-select__input {
+            > input {
+                box-shadow: none;
+            }
+        }
     }
 
     &__description {
@@ -75,23 +94,26 @@
     }
 
     .dateTime__calendar-input {
-        border: 2px solid var(--button-bg);
         font-size: 14px;
+
 
         @media screen and (max-width: 768px) {
             width: auto;
         }
 
-        &:hover {
-            border: 2px solid var(--button-bg);
-            cursor: pointer;
-        }
+        border: none;
 
         &:focus-within {
+            border: none;
             box-shadow: none;
             .Input_legend {
                 color: rgba(var(--center-channel-color-rgb), 0.64);
             }
+        }
+
+        &:hover {
+            border: none;
+            cursor: pointer;
         }
 
         .Input_wrapper {

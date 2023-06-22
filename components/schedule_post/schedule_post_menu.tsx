@@ -104,7 +104,7 @@ const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleScheduleP
             key={'schedule-post-menu-' + option.name}
             labels={getMenuItemLabel(option)}
             onClick={() => handleSchedulePostMenu(option.name)}
-            tabIndex={1}
+            tabIndex={0}
         />
     ));
     return (

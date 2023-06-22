@@ -90,9 +90,13 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, []);
+    }, [disabled]);
 
     const handleKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
+        if (disabled) {
+            return;
+        }
+
         const shiftAltCombo = !cmdOrCtrlPressed(e) && e.shiftKey && e.altKey;
         if (shiftAltCombo && isKeyPressed(e, Constants.KeyCodes.S)) {
             e.preventDefault();
@@ -142,7 +146,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
                 overlay={tooltip}
                 delayShow={Constants.OVERLAY_TIME_DELAY}
                 placement='top'
-                trigger={'hover'}
+                trigger='hover'
             >
                 <StyledSchedulePostButton
                     disableRipple={true}

@@ -22,20 +22,10 @@
 
     .dateTime__calendar-input {
         width: 260px;
-        border: 2px solid var(--button-bg);
         font-size: 14px;
 
         @media screen and (max-width: 768px) {
             width: auto;
-        }
-
-        &:hover {
-            border: 2px solid var(--button-bg);
-            cursor: pointer;
-        }
-
-        &:focus-within {
-            box-shadow: 0;
         }
 
         .Input_wrapper {

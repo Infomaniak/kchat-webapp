@@ -124,9 +124,10 @@ const SchedulePostModal = ({
             modalHeaderText={modalHeaderText}
             confirmButtonText={confirmButtonText}
             isConfirmDisabled={isConfirmDisabled}
+            autoCloseOnEnterKeyDown={false}
+            enforceFocus={false}
             handleConfirm={handleConfirm}
             handleCancel={handleExit}
-            handleEnterKeyPress={handleConfirm}
             onExited={handleExit}
             footer={footer}
         >

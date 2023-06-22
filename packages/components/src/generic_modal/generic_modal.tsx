@@ -26,6 +26,7 @@ export type Props = {
     id: string;
     autoCloseOnCancelButton?: boolean;
     autoCloseOnConfirmButton?: boolean;
+    autoCloseOnEnterKeyDown?: boolean;
 
     /**
      * If false, bootrap's Modal will not enforce focus on the modal and will
@@ -57,6 +58,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
         id: 'genericModal',
         autoCloseOnCancelButton: true,
         autoCloseOnConfirmButton: true,
+        autoCloseOnEnterKeyDown: true,
         enforceFocus: true,
         keyboardEscape: true,
     };
@@ -96,7 +98,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
 
     private onEnterKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (event.key === 'Enter' && !this.props.isConfirmDisabled) {
-            if (this.props.autoCloseOnConfirmButton) {
+            if (this.props.autoCloseOnEnterKeyDown) {
                 this.onHide();
             }
             if (this.props.handleEnterKeyPress) {
