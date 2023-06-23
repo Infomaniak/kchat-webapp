@@ -116,26 +116,12 @@ export function createPost(post: Post, files: FileInfo[]) {
         }
 
         if (post.root_id) {
-            dispatch(storeCommentDraft(post.root_id, null));
+            dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + post.root_id));
         } else {
-            dispatch(storeDraft(post.channel_id, null));
+            dispatch(removeDraft(StoragePrefixes.DRAFT + post.channel_id));
         }
 
         return result;
-    };
-}
-
-function storeDraft(channelId: string, draft: null) {
-    return (dispatch: DispatchFunc) => {
-        dispatch(StorageActions.setGlobalItem('draft_' + channelId, draft));
-        return {data: true};
-    };
-}
-
-function storeCommentDraft(rootPostId: string, draft: null) {
-    return (dispatch: DispatchFunc) => {
-        dispatch(StorageActions.setGlobalItem('comment_draft_' + rootPostId, draft));
-        return {data: true};
     };
 }
 
