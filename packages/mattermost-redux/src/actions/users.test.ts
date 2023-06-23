@@ -11,6 +11,7 @@ import {RequestStatus} from '../constants';
 import TestHelper from '../../test/test_helper';
 import configureStore from '../../test/test_store';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 import {UserTypes} from 'mattermost-redux/action_types';
 import {ActionResult} from 'mattermost-redux/types/actions';
 import {UserProfile} from '@mattermost/types/users';
@@ -1454,6 +1455,50 @@ describe('Actions.Users', () => {
 
             const profiles = store.getState().entities.users.profiles;
             expect(profiles).toBe(originalState.entities.users.profiles);
+        });
+    });
+    describe('Should redirect to last kSuite seen on loadMeREST', () => {
+        test('on Webapp', async () => {
+            const open = jest.fn();
+            window.open = open;
+            window.origin = 'https://kchat.infomaniak.com';
+            const env = {...process.env};
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const teamUrl = 'https://test.test.com';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.basicTeam, url: teamUrl}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(open).toHaveBeenCalledWith(teamUrl, '_self');
+            process.env = env;
+        });
+        test('on Desktop', async () => {
+            const postMessage = jest.fn();
+            window.postMessage = postMessage;
+            window.origin = 'https://kchat.infomaniak.com';
+            const env = {...process.env};
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const teamUrl = 'https://test.test.com';
+            Object.defineProperty(window.navigator, 'userAgent', ((value) => ({
+                get: () => value,
+                set: (v) => {
+                    value = v; // eslint-disable-line no-param-reassign
+                },
+            }))(window.navigator.userAgent));
+            window.navigator.userAgent = 'Mattermost Electron';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.basicTeam, url: teamUrl}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(postMessage).toHaveBeenCalledWith({
+                type: 'switch-server',
+                data: TestHelper.basicTeam!.display_name,
+            });
+            process.env = env;
         });
     });
 });
