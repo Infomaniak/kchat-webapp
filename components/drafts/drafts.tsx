@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useEffect} from 'react';
+import React, {memo, useEffect, useMemo, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useIntl} from 'react-intl';
 
@@ -18,6 +18,7 @@ import type {UserProfile, UserStatus} from '@mattermost/types/users';
 
 import DraftRow from './draft_row';
 import DraftsIllustration from './drafts_illustration';
+import DraftFilterMenu, {DraftFilter} from './draft_filter_menu/draft_filter_menu';
 
 import './drafts.scss';
 
@@ -27,6 +28,7 @@ type Props = {
     displayName: string;
     status: UserStatus['status'];
     localDraftsAreEnabled: boolean;
+    invalidScheduledAmount: number;
 }
 
 function Drafts({
@@ -35,9 +37,22 @@ function Drafts({
     status,
     user,
     localDraftsAreEnabled,
+    invalidScheduledAmount,
 }: Props) {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
+    const [filter, setFilter] = useState<DraftFilter>(DraftFilter.ALL);
+    const [showInvalidScheduledIndicator, setShowInvalidScheduledIndicator] = useState<boolean>(invalidScheduledAmount > 0);
+    const filteredDrafts = useMemo(() => {
+        switch (filter) {
+        case DraftFilter.SCHEDULED:
+            return drafts.filter((draft) => draft.value.timestamp);
+        case DraftFilter.NOT_SCHEDULED:
+            return drafts.filter((draft) => !draft.value.timestamp);
+        default:
+            return drafts;
+        }
+    }, [drafts, filter]);
 
     useEffect(() => {
         dispatch(selectLhsItem(LhsItemType.Page, LhsPage.Drafts));
@@ -50,6 +65,29 @@ function Drafts({
 
     if (!localDraftsAreEnabled) {
         return null;
+    }
+
+    let invalidScheduledIndicator;
+    if (showInvalidScheduledIndicator && filter !== DraftFilter.NOT_SCHEDULED) {
+        invalidScheduledIndicator = (
+            <div className='Drafts__invalid-indicator'>
+                <i className='icon-alert-outline  Drafts__invalid-indicator__alert-icon'/>
+                <b>
+                    {formatMessage({
+                        id: 'drafts.invalid_scheduled',
+                        defaultMessage: '{amount, plural, one {One} other {Some}} of your scheduled drafts cannot be sent.',
+                    }, {
+                        amount: invalidScheduledAmount,
+                    })}
+                </b>
+                <button
+                    className='Drafts__invalid-indicator__close-button'
+                    onClick={() => setShowInvalidScheduledIndicator(false)}
+                >
+                    <i className='icon icon-close'/>
+                </button>
+            </div>
+        );
     }
 
     return (
@@ -68,9 +106,16 @@ function Drafts({
                     id: 'drafts.subtitle',
                     defaultMessage: 'Any messages you\'ve started will show here',
                 })}
+                right={(
+                    <DraftFilterMenu
+                        filter={filter}
+                        setFilter={setFilter}
+                    />
+                )}
             />
             <div className='Drafts__main'>
-                {drafts.map((d) => (
+                {invalidScheduledIndicator}
+                {filteredDrafts.map((d) => (
                     <DraftRow
                         key={d.key}
                         displayName={displayName}
@@ -79,7 +124,7 @@ function Drafts({
                         status={status}
                     />
                 ))}
-                {drafts.length === 0 && (
+                {filteredDrafts.length === 0 && (
                     <NoResultsIndicator
                         expanded={true}
                         iconGraphic={DraftsIllustration}

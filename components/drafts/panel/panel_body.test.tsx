@@ -27,6 +27,9 @@ describe('components/drafts/panel/panel_body', () => {
         uploadsInProgress: [] as PostDraft['uploadsInProgress'],
         userId: 'user_id' as UserProfile['id'],
         username: 'username' as UserProfile['username'],
+        draft: {} as PostDraft,
+        isEditing: false,
+        setIsEditing: jest.fn,
     };
 
     const initialState = {

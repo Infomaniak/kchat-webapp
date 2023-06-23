@@ -1,30 +1,35 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {FormEvent, memo} from 'react';
+import React, {memo, useRef} from 'react';
+import {useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
-import styled from 'styled-components';
+import {Button, ButtonGroup, styled} from '@mui/material';
 import {SendIcon} from '@infomaniak/compass-icons/components';
 
+import {getTheme, syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
+
+import CompassDesignProvider from 'components/compass_design_provider';
+
 import {t} from 'utils/i18n';
+import SchedulePostButton from 'components/schedule_post/schedule_post_button';
 
-type SendButtonProps = {
-    handleSubmit: (e: React.FormEvent) => void;
-    disabled: boolean;
-}
-
-const SendButtonContainer = styled.button`
+const SendButtonContainer = styled(Button)`
     display: flex;
     height: 32px;
     padding: 0 16px;
-    border: none;
     background: var(--button-bg);
-    border-radius: 4px;
     color: var(--button-color);
     cursor: pointer;
     place-content: center;
     place-items: center;
     transition: color 150ms;
+    border-color: var(--button-color-16);
+
+    :hover {
+        background-color: var(--button-bg);
+        border-color: var(--button-color-16);
+    }
 
     &--disabled,
     &[disabled] {
@@ -41,8 +46,22 @@ const SendButtonContainer = styled.button`
     }
 `;
 
-const SendButton = ({disabled, handleSubmit}: SendButtonProps) => {
+const StyledButtonGroup = styled(ButtonGroup)`
+    border-radius: 4px;
+`;
+
+type SendButtonProps = {
+    disabled: boolean;
+    isSchedulable?: boolean;
+    handleSubmit: (e: React.FormEvent) => void;
+    handleSchedulePost: (scheduleUTCTimestamp: number) => void;
+};
+
+const SendButton = ({disabled, isSchedulable, handleSubmit, handleSchedulePost}: SendButtonProps) => {
+    const theme = useSelector(getTheme);
+    const draftsAreAllowed = useSelector(syncedDraftsAreAllowedAndEnabled);
     const {formatMessage} = useIntl();
+    const buttonGroupRef = useRef<HTMLDivElement>(null);
 
     const sendMessage = (e: React.FormEvent) => {
         e.stopPropagation();
@@ -50,26 +69,43 @@ const SendButton = ({disabled, handleSubmit}: SendButtonProps) => {
         handleSubmit(e);
     };
 
+    const getButtonGroupRef = () => buttonGroupRef.current;
+
     return (
-        <SendButtonContainer
-            data-testid='SendMessageButton'
-            tabIndex={0}
-            aria-label={formatMessage({
-                id: 'create_post.send_message',
-                defaultMessage: 'Send a message',
-            })}
-            disabled={disabled}
-            onClick={sendMessage}
-        >
-            <SendIcon
-                size={18}
-                color='currentColor'
-                aria-label={formatMessage({
-                    id: t('create_post.icon'),
-                    defaultMessage: 'Create a post',
-                })}
-            />
-        </SendButtonContainer>
+        <CompassDesignProvider theme={theme}>
+            <StyledButtonGroup
+                className='send-message-button'
+                ref={buttonGroupRef}
+            >
+                <SendButtonContainer
+                    disableRipple={true}
+                    data-testid='SendMessageButton'
+                    tabIndex={0}
+                    aria-label={formatMessage({
+                        id: 'create_post.send_message',
+                        defaultMessage: 'Send a message',
+                    })}
+                    disabled={disabled}
+                    onClick={sendMessage}
+                >
+                    <SendIcon
+                        size={18}
+                        color='currentColor'
+                        aria-label={formatMessage({
+                            id: t('create_post.icon'),
+                            defaultMessage: 'Create a post',
+                        })}
+                    />
+                </SendButtonContainer>
+                {isSchedulable && draftsAreAllowed && (
+                    <SchedulePostButton
+                        disabled={disabled}
+                        handleSchedulePost={handleSchedulePost}
+                        getAnchorEl={getButtonGroupRef}
+                    />
+                )}
+            </StyledButtonGroup>
+        </CompassDesignProvider>
     );
 };
 

@@ -14,7 +14,6 @@ import * as GlobalActions from 'actions/global_actions';
 import Constants, {AdvancedTextEditor as AdvancedTextEditorConst, Locations, ModalIdentifiers, Preferences} from 'utils/constants';
 import {PreferenceType} from '@mattermost/types/preferences';
 import * as UserAgent from 'utils/user_agent';
-import {isMac} from 'utils/utils';
 import * as Utils from 'utils/utils';
 import {
     specialMentionsInText,
@@ -30,6 +29,7 @@ import {getTable, hasHtmlLink, formatMarkdownMessage, isGitHubCodeBlock, formatG
 import NotifyConfirmModal from 'components/notify_confirm_modal';
 import {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
 import PostDeletedModal from 'components/post_deleted_modal';
+import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 import {PostDraft} from 'types/store/draft';
 import {Group, GroupSource} from '@mattermost/types/groups';
 import {ChannelMemberCountsByGroup} from '@mattermost/types/channels';
@@ -108,7 +108,7 @@ type Props = {
     updateCommentDraftWithRootId: (rootID: string, draft: PostDraft, save?: boolean) => void;
 
     // Called when submitting the comment
-    onSubmit: (draft: PostDraft, options: {ignoreSlash: boolean}) => void;
+    onSubmit: (draft: PostDraft, options: {ignoreSlash: boolean}) => Promise<ActionResult>;
 
     // Called when resetting comment message history index
     onResetHistoryIndex: () => void;
@@ -236,6 +236,9 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         if (rootChanged || messageInHistoryChanged || props.draft.remote) {
             updatedState = {...updatedState, draft: {...props.draft, uploadsInProgress: rootChanged ? [] : props.draft.uploadsInProgress}};
         }
+        if (updatedState.draft && updatedState.draft.id !== props.draft.id) {
+            updatedState.draft.id = props.draft.id;
+        }
 
         return updatedState;
     }
@@ -349,6 +352,8 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.props.onUpdateCommentDraft(updatedDraft, true);
     }
 
+    handleSchedulePost = (scheduleUTCTimestamp: number) => this.handleSubmit(undefined, true, scheduleUTCTimestamp);
+
     saveDraftWithShow = () => {
         this.setState((prev) => {
             if (prev.draft) {
@@ -450,11 +455,11 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.setState({draft: updatedDraft});
     }
 
-    handleNotifyAllConfirmation = () => {
-        this.doSubmit();
+    handleNotifyAllConfirmation = (isSchedule = false, scheduleUTCTimestamp?: number) => {
+        this.doSubmit(undefined, isSchedule, scheduleUTCTimestamp);
     }
 
-    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number) => {
+    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number, isSchedule = false, scheduleUTCTimestamp?: number) => {
         this.props.openModal({
             modalId: ModalIdentifiers.NOTIFY_CONFIRM_MODAL,
             dialogType: NotifyConfirmModal,
@@ -462,7 +467,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                 mentions,
                 channelTimezoneCount,
                 memberNotifyCount,
-                onConfirm: () => this.handleNotifyAllConfirmation(),
+                onConfirm: () => this.handleNotifyAllConfirmation(isSchedule, scheduleUTCTimestamp),
             },
         });
     }
@@ -547,8 +552,8 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         this.setState({postError});
     }
 
-    handleSubmit = async (e: React.FormEvent | React.MouseEvent) => {
-        e.preventDefault();
+    handleSubmit = async (e?: React.FormEvent | React.MouseEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
+        e?.preventDefault();
         this.setShowPreview(false);
         this.isDraftSubmitting = true;
 
@@ -637,15 +642,15 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         }
 
         if (memberNotifyCount > 0) {
-            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount);
+            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp);
             this.isDraftSubmitting = false;
             return;
         }
 
-        await this.doSubmit(e);
+        await this.doSubmit(e, isSchedule, scheduleUTCTimestamp);
     }
 
-    doSubmit = async (e?: React.FormEvent) => {
+    doSubmit = async (e?: React.FormEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
         if (e) {
             e.preventDefault();
         }
@@ -681,6 +686,10 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         const fasterThanHumanWillClick = 150;
         const forceFocus = (Date.now() - this.lastBlurAt < fasterThanHumanWillClick);
         this.focusTextbox(forceFocus);
+
+        if (isSchedule) {
+            draft.timestamp = scheduleUTCTimestamp;
+        }
 
         const serverError = this.state.serverError;
         let ignoreSlash = false;
@@ -792,7 +801,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         const saveDraft = () => {
             if (typeof rootId == 'undefined') {
-                this.props.onUpdateCommentDraft(draft);
+                this.props.onUpdateCommentDraft(draft, save);
             } else {
                 this.props.updateCommentDraftWithRootId(rootId, draft, save);
             }
@@ -1117,9 +1126,8 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             uploadsInProgress,
         };
 
-        this.props.onUpdateCommentDraft(modifiedDraft);
+        this.handleDraftChange(modifiedDraft, undefined, true, true);
         this.setState({draft: modifiedDraft});
-        this.draftsForPost[this.props.rootId] = modifiedDraft;
 
         this.handleFileUploadChange();
 
@@ -1189,6 +1197,10 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     (this.props.draft.fileInfos.length > 0 || this.props.draft.uploadsInProgress.length > 0) &&
                     <FileLimitStickyBanner/>
                 }
+                <ScheduledIndicator
+                    type={ScheduledIndicatorType.THREAD}
+                    rootId={this.props.rootId}
+                />
                 <AdvancedTextEditor
                     location={Locations.RHS_COMMENT}
                     textboxRef={this.textboxRef}
@@ -1236,6 +1248,8 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     getFileUploadTarget={this.getFileUploadTarget}
                     fileUploadRef={this.fileUploadRef}
                     isThreadView={this.props.isThreadView}
+                    isSchedulable={true}
+                    handleSchedulePost={this.handleSchedulePost}
                 />
             </form>
         );

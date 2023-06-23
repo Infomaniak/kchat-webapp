@@ -386,10 +386,10 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                 />
             }
             isConfirmDisabled={disableSetStatus}
+            autoCloseOnEnterKeyDown={false}
             id='custom_status_modal'
             className={'StatusModal'}
             handleConfirm={handleSetStatus}
-            handleEnterKeyPress={handleSetStatus}
             handleCancel={handleClearStatus}
             confirmButtonClassName='btn btn-primary'
             ariaLabel={localizeMessage('custom_status.set_status', 'Set a status')}

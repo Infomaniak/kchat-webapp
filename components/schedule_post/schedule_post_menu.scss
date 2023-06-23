@@ -1,0 +1,17 @@
+.schedule-post {
+    &__menu-header {
+        display: flex;
+        align-items: center;
+        min-height: 32px;
+        min-width: 180px;
+        padding: 5px 10px;
+        margin: 0;
+        color: var(--center-channel-color);
+        font-weight: bold;
+        pointer-events: none;
+
+        @media screen and (max-width: 768px) {
+            padding: 5px 8px;
+        }
+    }
+}
