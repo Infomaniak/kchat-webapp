@@ -214,6 +214,7 @@ export default class ResetStatusModal extends React.PureComponent<Props, State> 
                 title={manualStatusTitle}
                 message={manualStatusMessage}
                 confirmButtonText={manualStatusButton}
+                modalClass='resetStatus'
                 onConfirm={this.onConfirm}
                 cancelButtonText={manualStatusCancel}
                 onCancel={this.onCancel}
