@@ -11,6 +11,7 @@ import AnnouncementBar from '../default_announcement_bar';
 
 interface Props {
     buildHash?: string;
+    isNewVersionCanaryOnly?: boolean;
 }
 
 interface State {
@@ -42,13 +43,14 @@ export default class VersionBar extends React.PureComponent <Props, State> {
 
     render() {
         const {buildHashOnAppLoad} = this.state;
-        const {buildHash} = this.props;
+        const {buildHash, isNewVersionCanaryOnly} = this.props;
+        const isCanary = document.cookie.indexOf('KCHAT_NEXT=always') !== -1;
 
         if (!buildHashOnAppLoad) {
             return null;
         }
 
-        if (buildHashOnAppLoad !== buildHash) {
+        if (buildHashOnAppLoad !== buildHash && (!isNewVersionCanaryOnly || isCanary)) {
             return (
                 <AnnouncementBar
                     type={AnnouncementBarTypes.ANNOUNCEMENT}
