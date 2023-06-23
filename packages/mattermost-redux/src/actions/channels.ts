@@ -770,7 +770,6 @@ export function viewChannel(channelId: string, prevChannelId = ''): ActionFunc {
         const viewTimePref = myPreferences[`${Preferences.CATEGORY_CHANNEL_APPROXIMATE_VIEW_TIME}--${channelId}`];
         const viewTime = viewTimePref ? parseInt(viewTimePref.value!, 10) : 0;
         const prevChanManuallyUnread = isManuallyUnread(state, prevChannelId);
-        const teamId = getCurrentTeamId(state);
 
         if (viewTime < new Date().getTime() - (3 * 60 * 60 * 1000)) {
             const preferences = [
@@ -780,7 +779,7 @@ export function viewChannel(channelId: string, prevChannelId = ''): ActionFunc {
         }
 
         try {
-            await Client4.viewMyChannel(channelId, prevChanManuallyUnread ? '' : prevChannelId, teamId);
+            await Client4.viewMyChannel(channelId, prevChanManuallyUnread ? '' : prevChannelId);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -1284,8 +1283,7 @@ export function markAllChannelsAsRead(prevChannelId?: string, updateLastViewedAt
 
 export function markChannelAsViewedOnServer(channelId: string, prevChannelId?: string): ActionFunc {
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const teamId = getCurrentTeamId(getState());
-        Client4.viewMyChannel(channelId, prevChannelId, teamId).then().catch((error) => {
+        Client4.viewMyChannel(channelId, prevChannelId).then().catch((error) => {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
             return {error};

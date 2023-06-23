@@ -3,6 +3,7 @@
 
 import {Team} from '@mattermost/types/teams';
 import {IDMappedObjects} from '@mattermost/types/utilities';
+import {Client4} from 'mattermost-redux/client';
 import {General} from '../constants';
 
 export function teamListToMap(teamList: Team[]): IDMappedObjects<Team> {
@@ -49,4 +50,12 @@ export const getLastKSuiteSeenId = () => {
         }
     }
     return null;
+};
+
+export const setLastKSuiteSeenCookie = (teamId: string) => {
+    if (!Client4.isIkBaseUrl()) {
+        const url = process.env.BASE_URL!; // eslint-disable-line no-process-env
+        const domain = url.substring(url.lastIndexOf('.', url.lastIndexOf('.') - 1) + 1);
+        document.cookie = `LAST_KSUITE=${teamId}; path=/; domain=${domain}; secure; samesite=lax; max-age=31536000`;
+    }
 };

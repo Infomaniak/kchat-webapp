@@ -4,7 +4,7 @@
 import {combineReducers} from 'redux';
 
 import {AdminTypes, ChannelTypes, TeamTypes, UserTypes, SchemeTypes, GroupTypes} from 'mattermost-redux/action_types';
-import {getLastKSuiteSeenId, teamListToMap} from 'mattermost-redux/utils/team_utils';
+import {teamListToMap} from 'mattermost-redux/utils/team_utils';
 import {Team, TeamMembership, TeamUnread} from '@mattermost/types/teams';
 import {UserProfile} from '@mattermost/types/users';
 import {RelationOneToOne, IDMappedObjects} from '@mattermost/types/utilities';
@@ -36,14 +36,6 @@ function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
                 },
                 window.origin,
             );
-            const lastKSuiteSeenId = getLastKSuiteSeenId();
-            const lastKSuiteSeen = teams.find((team) => team.id === lastKSuiteSeenId);
-            if (lastKSuiteSeen) {
-                window.postMessage({
-                    type: 'switch-server',
-                    data: lastKSuiteSeen.display_name,
-                });
-            }
         }
         return Object.assign({}, teamListToMap(teams));
     }
