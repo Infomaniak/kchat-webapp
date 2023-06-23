@@ -12,6 +12,7 @@ import {UserStatuses} from 'utils/constants';
 import {t} from 'utils/i18n';
 import {UserStatus} from '@mattermost/types/users';
 import {PreferenceType} from '@mattermost/types/preferences';
+import './reset_status_modal.scss';
 
 t('modal.manual_status.auto_responder.message_');
 t('modal.manual_status.auto_responder.message_away');
