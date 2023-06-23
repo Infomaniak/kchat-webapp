@@ -26,28 +26,26 @@ function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
     switch (action.type) {
     case TeamTypes.RECEIVED_TEAMS_LIST: {
         const teams: Team[] = action.data;
-        const lastKSuiteSeenId = getLastKSuiteSeenId();
-        const sortedTeams = teams.sort((a, b) => {
-            if (a.id === lastKSuiteSeenId) {
-                return -1;
-            }
-            if (b.id === lastKSuiteSeenId) {
-                return 1;
-            }
-            return b.update_at - a.update_at;
-        });
         if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
             window.postMessage(
                 {
                     type: 'update-teams',
                     message: {
-                        teams: sortedTeams,
+                        teams,
                     },
                 },
                 window.origin,
             );
+            const lastKSuiteSeenId = getLastKSuiteSeenId();
+            const lastKSuiteSeen = teams.find((team) => team.id === lastKSuiteSeenId);
+            if (lastKSuiteSeen) {
+                window.postMessage({
+                    type: 'switch-server',
+                    data: lastKSuiteSeen.display_name,
+                });
+            }
         }
-        return Object.assign({}, teamListToMap(sortedTeams));
+        return Object.assign({}, teamListToMap(teams));
     }
     case SchemeTypes.RECEIVED_SCHEME_TEAMS:
     case AdminTypes.RECEIVED_DATA_RETENTION_CUSTOM_POLICY_TEAMS_SEARCH:

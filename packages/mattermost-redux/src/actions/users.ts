@@ -94,7 +94,17 @@ export function loadMeREST(): ActionFunc {
             if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
                 // don't redirect to the error page if it is a testing environment
                 if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    window.open(suiteArr[0].url, '_self');
+                    const lastKSuiteSeenId = getLastKSuiteSeenId();
+                    const sortedSuites = suiteArr.sort((a, b) => {
+                        if (a.id === lastKSuiteSeenId) {
+                            return -1;
+                        }
+                        if (b.id === lastKSuiteSeenId) {
+                            return 1;
+                        }
+                        return b.update_at - a.update_at;
+                    });
+                    window.open(sortedSuites[0].url, '_self');
                 }
 
                 await Promise.all([
