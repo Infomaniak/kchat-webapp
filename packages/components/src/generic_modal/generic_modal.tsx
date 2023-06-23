@@ -26,6 +26,7 @@ export type Props = {
     id: string;
     autoCloseOnCancelButton?: boolean;
     autoCloseOnConfirmButton?: boolean;
+    autoCloseOnEnterKeyDown?: boolean;
 
     /**
      * If false, bootrap's Modal will not enforce focus on the modal and will
@@ -43,6 +44,7 @@ export type Props = {
     children: React.ReactNode;
     keyboardEscape?: boolean;
     onEnter?: (node: HTMLElement) => void;
+    footer?: JSX.Element;
 };
 
 type State = {
@@ -56,6 +58,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
         id: 'genericModal',
         autoCloseOnCancelButton: true,
         autoCloseOnConfirmButton: true,
+        autoCloseOnEnterKeyDown: true,
         enforceFocus: true,
         keyboardEscape: true,
     };
@@ -95,7 +98,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
 
     private onEnterKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (event.key === 'Enter' && !this.props.isConfirmDisabled) {
-            if (this.props.autoCloseOnConfirmButton) {
+            if (this.props.autoCloseOnConfirmButton && this.props.autoCloseOnEnterKeyDown) {
                 this.onHide();
             }
             if (this.props.handleEnterKeyPress) {
@@ -216,9 +219,11 @@ export class GenericModal extends React.PureComponent<Props, State> {
                                 {this.props.children}
                             </div>
                         </Modal.Body>
-                        {(cancelButton || confirmButton) && <Modal.Footer>
-                            {cancelButton}
-                            {confirmButton}
+                        {(cancelButton || confirmButton || this.props.footer) && <Modal.Footer>
+                            {this.props.footer ?? <>
+                                {cancelButton}
+                                {confirmButton}
+                            </>}
                         </Modal.Footer>}
                     </div>
                 </FocusTrap>

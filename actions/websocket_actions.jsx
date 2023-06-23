@@ -95,6 +95,7 @@ import {fetchAppBindings, fetchRHSAppsBindings} from 'mattermost-redux/actions/a
 import {getConnectionId} from 'selectors/general';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
+import {getGlobalItem} from 'selectors/storage';
 
 import {incrementWsErrorCount, resetWsErrorCount} from 'actions/views/system';
 import {closeRightHandSide} from 'actions/views/rhs';
@@ -111,7 +112,7 @@ import {loadProfilesForSidebar} from 'actions/user_actions';
 import store from 'stores/redux_store.jsx';
 import WebSocketClient from 'client/web_websocket_client.jsx';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
-import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes} from 'utils/constants';
+import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, StoragePrefixes} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
@@ -628,9 +629,6 @@ export function handleEvent(msg) {
         break;
     case SocketEvents.THREAD_UPDATED:
         dispatch(handleThreadUpdated(msg));
-        break;
-    case SocketEvents.CONFERENCE_ADDED:
-        dispatch(handleIncomingConferenceCall(msg));
         break;
     case SocketEvents.CONFERENCE_DELETED:
         dispatch(handleConferenceDeleted(msg));
@@ -1863,48 +1861,7 @@ function handleConferenceDeleted(msg) {
     };
 }
 
-function handleIncomingConferenceCall(msg) {
-    return (doDispatch, doGetState) => {
-        // Pop calling modal for user to accept or deny call
-        // const data = await Client4
-        // const doGetProfilesInChannel = makeGetProfilesInChannel();
 
-        const state = doGetState();
-
-        // let users = [];
-
-        // const inCall = getChannelMembersInChannels(state)?.[msg.data.channel_id];
-        const channel = getChannel(state, connectedChannelID(doGetState()));
-
-        // users = doGetProfilesInChannel(state, msg.data.channel_id, true);
-
-        // if (users.length <= 0) {
-        //     users.push(getUser(state, msg.data.user_id));
-        // }
-
-        doDispatch({
-            type: ActionTypes.VOICE_CHANNEL_ADDED,
-            data: {
-                id: msg.data.url.split('/').at(-1),
-                channelID: msg.data.channel_id,
-                participants: msg.data.participants,
-                userID: msg.data.user_id,
-                currentUserID: getCurrentUserId(getState()),
-                url: msg.data.url,
-            },
-        });
-
-        // if (!channel || channel.id !== msg.data.channel_id) {
-        //     doDispatch(openModal({
-        //         modalId: ModalIdentifiers.INCOMING_CALL,
-        //         dialogType: DialingModal,
-        //         dialogProps: {
-        //             calling: {users, channelID: msg.data.channel_id, userCalling: msg.data.user_id},
-        //         },
-        //     }));
-        // }
-    };
-}
 
 function handlePusherMemberRemoved(msg) {
     // console.log('pusher member removed', msg);
@@ -1930,28 +1887,44 @@ function handlePostAcknowledgementRemoved(msg) {
 
 function handleUpsertDraftEvent(msg) {
     return async (doDispatch, doGetState) => {
-        //const state = doGetState();
-        //const connectionId = getConnectionId(state);
+        const state = doGetState();
 
         const draft = msg.data.draft;
         const {key, value} = transformServerDraft(draft);
         value.show = true;
         value.remote = false;
 
-        // if (msg.broadcast.omit_connection_id !== connectionId) {
-        //     value.remote = true;
-        // }
+        if (value.timestamp) {
+            const channelDraftKey = value.rootId ? StoragePrefixes.COMMENT_DRAFT + value.rootId : StoragePrefixes.DRAFT + value.channelId;
+            const channelDraft = getGlobalItem(state, channelDraftKey, {});
+            if (channelDraft.id === value.id) {
+                dispatch(setGlobalItem(channelDraftKey, {message: '', fileInfos: [], uploadsInProgress: []}));
+            }
+        } else {
+            const scheduledDraftKey = value.rootId ? `${StoragePrefixes.COMMENT_DRAFT}${value.rootId}_${value.id}` : `${StoragePrefixes.DRAFT}${value.channelId}_${value.id}`;
+            const scheduledDraft = getGlobalItem(state, scheduledDraftKey, null);
+            if (scheduledDraft) {
+                dispatch(setGlobalItem(scheduledDraftKey, {message: '', fileInfos: [], uploadsInProgress: []}));
+            }
+        }
 
         doDispatch(setGlobalItem(key, value));
     };
 }
 
 function handleDeleteDraftEvent(msg) {
-    return async (doDispatch) => {
+    return async (doDispatch, doGetState) => {
         const draft = msg.data.draft;
         const {key} = transformServerDraft(draft);
+        const activeDraft = getGlobalItem(doGetState(), key, {});
 
-        doDispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: [], remote: true}));
+        if (activeDraft.id && draft.id !== activeDraft.id) {
+            // Old draft was removed to be replaced by an unscheduled draft
+            // We do not want to remove the replacement unscheduled draft
+            return;
+        }
+
+        doDispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: [], remote: false}));
     };
 }
 

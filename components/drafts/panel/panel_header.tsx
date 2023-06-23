@@ -38,6 +38,9 @@ type Props = {
     timestamp: number;
     remote: boolean;
     title: React.ReactNode;
+    isScheduled: boolean;
+    scheduledTimestamp?: number;
+    scheduledWillNotBeSent: boolean;
 }
 
 function PanelHeader({
@@ -46,6 +49,9 @@ function PanelHeader({
     timestamp,
     remote,
     title,
+    isScheduled,
+    scheduledTimestamp,
+    scheduledWillNotBeSent,
 }: Props) {
     const syncTooltip = (
         <Tooltip id='drafts-sync-tooltip'>
@@ -55,6 +61,55 @@ function PanelHeader({
             />
         </Tooltip>
     );
+
+    let tag = (
+        <FormattedMessage
+            id='drafts.info.tag.not_scheduled'
+            defaultMessage='Not scheduled'
+        />
+    );
+    if (isScheduled) {
+        const tagVariant = scheduledWillNotBeSent ? 'danger' : 'info';
+        const tagText = scheduledWillNotBeSent ? (
+            <FormattedMessage
+                id='drafts.info.tag.will_not_be_sent'
+                defaultMessage='Will not be sent'
+            />
+        ) : (
+            <FormattedMessage
+                id='drafts.info.tag.scheduled'
+                defaultMessage='Scheduled'
+            />
+        );
+        tag = (
+            <Tag
+                variant={tagVariant}
+                text={tagText}
+                uppercase={true}
+            />
+        );
+    }
+
+    let time;
+    if (timestamp) {
+        time = (
+            <Timestamp
+                value={new Date(timestamp)}
+                {...TIMESTAMP_PROPS}
+            />
+        );
+    }
+    if (isScheduled && scheduledTimestamp) {
+        time = (
+            <FormattedMessage
+                id='draft.info.scheduled_timestamp'
+                defaultMessage='Send on {timestamp}'
+                values={{
+                    timestamp: <Timestamp value={new Date(scheduledTimestamp * 1000)}/>,
+                }}
+            />
+        );
+    }
 
     return (
         <header className='PanelHeader'>
@@ -79,18 +134,9 @@ function PanelHeader({
                         </OverlayTrigger>
                     </div>}
                     <div className='PanelHeader__timestamp'>
-                        {Boolean(timestamp) && (
-                            <Timestamp
-                                value={new Date(timestamp)}
-                                {...TIMESTAMP_PROPS}
-                            />
-                        )}
+                        {time}
                     </div>
-                    <Tag
-                        variant={'danger'}
-                        uppercase={true}
-                        text={'draft'}
-                    />
+                    {tag}
                 </div>
             </div>
         </header>

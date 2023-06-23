@@ -25,7 +25,7 @@ import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
 import {removeDraft} from 'actions/views/drafts';
 import {isEmbedVisible, isInlineImageVisible} from 'selectors/posts';
 import {getSelectedPostId, getSelectedPostCardId, getRhsState} from 'selectors/rhs';
-import {getGlobalItem} from 'selectors/storage';
+import {makeGetDraftsByPrefix} from 'selectors/drafts';
 import {GlobalState} from 'types/store';
 import {
     ActionTypes,
@@ -300,6 +300,7 @@ export function markMostRecentPostInChannelAsUnread(channelId: string) {
 }
 
 export function deleteAndRemovePost(post: Post) {
+    const getThreadDrafts = makeGetDraftsByPrefix(StoragePrefixes.COMMENT_DRAFT);
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {error} = await dispatch(PostActions.deletePost(post));
         if (error) {
@@ -324,10 +325,14 @@ export function deleteAndRemovePost(post: Post) {
         }
 
         if (post.root_id === '') {
+            const state = getState() as GlobalState;
+            const threadDrafts = getThreadDrafts(state);
             const key = StoragePrefixes.COMMENT_DRAFT + post.id;
-            if (getGlobalItem(getState() as GlobalState, key, null)) {
-                dispatch(removeDraft(key, post.channel_id, post.id));
-            }
+            threadDrafts.forEach((threadDraft) => {
+                if (threadDraft.value.rootId === post.id) {
+                    dispatch(removeDraft(threadDraft.value.timestamp ? `${key}_${threadDraft.value.id}` : key));
+                }
+            });
         }
 
         dispatch(PostActions.removePost(post));

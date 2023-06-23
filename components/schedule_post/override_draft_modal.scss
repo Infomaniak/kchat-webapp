@@ -1,0 +1,10 @@
+.override-draft-modal {
+    .alert-danger {
+        justify-content: flex-start;
+        align-items: center;
+
+        p {
+            margin: 0;
+        }
+    }
+}

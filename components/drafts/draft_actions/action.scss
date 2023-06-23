@@ -22,6 +22,17 @@
         }
     }
 
+    &__icon {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+
+        // (X _ X)
+        // fix Safari invisible icon bug
+        align-items: initial;
+        justify-content: initial;
+    }
+
     .DraftAction__button--delete {
         &:hover,
         &:active,
