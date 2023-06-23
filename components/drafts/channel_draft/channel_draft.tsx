@@ -8,6 +8,7 @@ import {useHistory} from 'react-router-dom';
 import {createPost} from 'actions/post_actions';
 import {removeDraft, upsertScheduleDraft, updateDraft} from 'actions/views/drafts';
 import {closeModal, openModal} from 'actions/views/modals';
+import {setGlobalItem} from 'actions/storage';
 import {getGlobalItem} from 'selectors/storage';
 import {PostDraft} from 'types/store/draft';
 import {GlobalState} from 'types/store';
@@ -119,11 +120,16 @@ function ChannelDraft({
         const newDraft = {...value};
         Reflect.deleteProperty(newDraft, 'timestamp');
 
+        dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
+
         // Remove previously existing channel draft
         await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId));
 
         // Update channel draft
-        dispatch(updateDraft(StoragePrefixes.DRAFT + newDraft.channelId, newDraft, '', true));
+        const {error} = await dispatch(updateDraft(StoragePrefixes.DRAFT + newDraft.channelId, newDraft, '', true));
+        if (error) {
+            dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, value));
+        }
     };
 
     if (!channel) {

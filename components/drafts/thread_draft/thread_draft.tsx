@@ -19,6 +19,7 @@ import {selectPost} from 'actions/views/rhs';
 import {removeDraft, updateDraft, upsertScheduleDraft} from 'actions/views/drafts';
 import {makeOnSubmit} from 'actions/views/create_comment';
 import {closeModal, openModal} from 'actions/views/modals';
+import {setGlobalItem} from 'actions/storage';
 import {getGlobalItem} from 'selectors/storage';
 
 import {ModalIdentifiers, StoragePrefixes} from 'utils/constants';
@@ -126,11 +127,16 @@ function ThreadDraft({
         const newDraft = {...value};
         Reflect.deleteProperty(newDraft, 'timestamp');
 
+        dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${newDraft.rootId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
+
         // Remove previously existing thread draft
-        await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.rootId));
+        await dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId));
 
         // Update thread draft
-        dispatch(updateDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, newDraft, newDraft.rootId, true));
+        const {error} = await dispatch(updateDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, newDraft, newDraft.rootId, true));
+        if (error) {
+            dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${newDraft.rootId}_${newDraft.id}`, value));
+        }
     };
 
     if (!thread) {
