@@ -24,7 +24,7 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 interface Props {
     btnClass?: string;
     url: string;
-    displayName?: string;
+    displayName: string;
     content?: React.ReactNode;
     tip: string | JSX.Element;
     order?: number;
@@ -34,11 +34,11 @@ interface Props {
     mentions?: number;
     placement?: 'left' | 'right' | 'top' | 'bottom';
     teamIconUrl?: string | null;
-    switchTeam: (name: string) => void;
+    switchTeam: (name: string, teamId: string) => void;
     intl: IntlShape;
     isDraggable?: boolean;
     teamIndex?: number;
-    teamId?: string;
+    teamId: string;
     isInProduct?: boolean;
     hasUrgent?: boolean;
 }
@@ -47,7 +47,8 @@ class TeamButton extends React.PureComponent<Props> {
     handleSwitch = (e: React.MouseEvent) => {
         mark('TeamLink#click');
         e.preventDefault();
-        this.props.switchTeam(this.props.displayName);
+        const {switchTeam, displayName, teamId} = this.props;
+        switchTeam(displayName, teamId);
 
         setTimeout(() => {
             trackEvent('ui', 'ui_team_sidebar_switch_team');
