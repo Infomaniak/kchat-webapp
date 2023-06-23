@@ -10,6 +10,7 @@ import {logError} from 'mattermost-redux/actions/errors';
 import {isCustomGroupsEnabled, isGraphQLEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
 import {isSuccess} from 'types/actions';
 
@@ -29,6 +30,8 @@ export function initializeTeam(team: Team): ActionFunc<Team, ServerError> {
         const state = getState();
         const currentUser = getCurrentUser(state);
         LocalStorageStore.setPreviousTeamId(currentUser.id, team.id);
+
+        setLastKSuiteSeenCookie(team.id);
 
         const graphQLEnabled = isGraphQLEnabled(state);
         try {
