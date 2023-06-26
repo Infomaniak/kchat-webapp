@@ -185,7 +185,7 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
     const currentTime = getCurrentMomentForTimezone(timezone).toDate();
 
     const formatDate = (date: Date): string => {
-        return DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
+        return DateTime.fromJSDate(date).toFormat('dd-MM-yyyy');
     };
 
     const inputIcon = (
