@@ -1459,10 +1459,10 @@ describe('Actions.Users', () => {
     });
     describe('Should redirect to last kSuite seen on loadMeREST', () => {
         test('on Webapp', async () => {
-            const open = jest.fn();
-            window.open = open;
+            const originalEnv = {...process.env};
+            const originalOrigin = window.origin;
+            const open = jest.spyOn(window, 'open').mockImplementation(jest.fn());
             window.origin = 'https://kchat.infomaniak.com';
-            const env = {...process.env};
             process.env.NODE_ENV = 'production';
             process.env.BASE_URL = 'https://test.com';
             const teamUrl = 'https://test.test.com';
@@ -1472,23 +1472,20 @@ describe('Actions.Users', () => {
             setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
             await Actions.loadMeREST()(store.dispatch, store.getState);
             expect(open).toHaveBeenCalledWith(teamUrl, '_self');
-            process.env = env;
+            process.env = originalEnv;
+            window.origin = originalOrigin;
+            open.mockRestore();
         });
+
         test('on Desktop', async () => {
-            const postMessage = jest.fn();
-            window.postMessage = postMessage;
+            const originalEnv = {...process.env};
+            const originalOrigin = window.origin;
+            const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
+            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
             window.origin = 'https://kchat.infomaniak.com';
-            const env = {...process.env};
             process.env.NODE_ENV = 'production';
             process.env.BASE_URL = 'https://test.com';
             const teamUrl = 'https://test.test.com';
-            Object.defineProperty(window.navigator, 'userAgent', ((value) => ({
-                get: () => value,
-                set: (v) => {
-                    value = v; // eslint-disable-line no-param-reassign
-                },
-            }))(window.navigator.userAgent));
-            window.navigator.userAgent = 'Mattermost Electron';
             nock(Client4.getUserRoute('me')).
                 get('/servers').
                 reply(200, [{...TestHelper.basicTeam, url: teamUrl}]);
@@ -1498,7 +1495,11 @@ describe('Actions.Users', () => {
                 type: 'switch-server',
                 data: TestHelper.basicTeam!.display_name,
             });
-            process.env = env;
+            process.env = originalEnv;
+            window.origin = originalOrigin;
+            postMessage.mockRestore();
+            userAgentMock.mockRestore();
+            console.log(window.origin, window.postMessage, navigator.userAgent);
         });
     });
 });
