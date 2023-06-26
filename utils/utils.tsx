@@ -11,6 +11,7 @@ import cssVars from 'css-vars-ponyfill';
 import moment from 'moment';
 
 import type {Locale} from 'date-fns';
+import {enGB} from 'date-fns/locale';
 
 import {getName} from 'country-list';
 
@@ -1864,13 +1865,17 @@ export function getRoleFromTrackFlow() {
 }
 
 export function getDatePickerLocalesForDateFns(locale: string, loadedLocales: Record<string, Locale>) {
-    if (locale && locale !== 'en' && !loadedLocales[locale]) {
-        try {
-            /* eslint-disable global-require */
-            loadedLocales[locale] = require(`date-fns/locale/${locale}/index.js`);
-            /* eslint-disable global-require */
-        } catch (e) {
-            console.log(e); // eslint-disable-line no-console
+    if (locale && !loadedLocales[locale]) {
+        if (locale === 'en') {
+            loadedLocales[locale] = enGB;
+        } else {
+            try {
+                /* eslint-disable global-require */
+                loadedLocales[locale] = require(`date-fns/locale/${locale}/index.js`);
+                /* eslint-disable global-require */
+            } catch (e) {
+                console.log(e); // eslint-disable-line no-console
+            }
         }
     }
 
