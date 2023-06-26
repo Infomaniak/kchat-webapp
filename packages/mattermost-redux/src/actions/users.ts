@@ -104,7 +104,7 @@ export function loadMeREST(): ActionFunc {
                 });
                 const lastKSuiteSeen = sortedSuites[0];
 
-                if (isDesktopApp()
+                if (isDesktopApp() && Client4.isIkBaseUrl()
                 // && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development'
                 ) { //eslint-disable-line no-process-env
                     window.postMessage({

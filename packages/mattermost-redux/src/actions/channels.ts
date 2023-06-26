@@ -763,13 +763,12 @@ export function unarchiveChannel(channelId: string, openLimitModalIfNeeded: (err
 
 export function viewChannel(channelId: string, prevChannelId = ''): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        const state = getState();
-        const {currentUserId} = state.entities.users;
+        const {currentUserId} = getState().entities.users;
 
-        const {myPreferences} = state.entities.preferences;
+        const {myPreferences} = getState().entities.preferences;
         const viewTimePref = myPreferences[`${Preferences.CATEGORY_CHANNEL_APPROXIMATE_VIEW_TIME}--${channelId}`];
         const viewTime = viewTimePref ? parseInt(viewTimePref.value!, 10) : 0;
-        const prevChanManuallyUnread = isManuallyUnread(state, prevChannelId);
+        const prevChanManuallyUnread = isManuallyUnread(getState(), prevChannelId);
 
         if (viewTime < new Date().getTime() - (3 * 60 * 60 * 1000)) {
             const preferences = [
