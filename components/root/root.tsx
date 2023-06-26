@@ -425,9 +425,18 @@ export default class Root extends React.PureComponent<Props, State> {
         if (isMeLoaded) {
             const currentUser = getCurrentUser(store.getState());
             if (currentUser) {
-                const {email, id, username} = currentUser;
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                const {email, id, user_id, username, first_name, last_name} = currentUser;
                 console.log('[components/root] set user for sentry', {email, id, username}); // eslint-disable-line no-console
                 Sentry.setUser({ip_address: '{{auto}}', email, id, username});
+
+                // @ts-ignore
+                window.CONST_USER = {
+                    iGlobalUserCode: user_id,
+                    sFirstname: first_name,
+                    sLastname: last_name,
+                    sEmail: email,
+                };
             }
 
             if (this.props.location.pathname === '/') {
