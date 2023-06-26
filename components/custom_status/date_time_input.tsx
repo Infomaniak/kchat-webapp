@@ -214,7 +214,6 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
             before: currentTime,
         }],
         showOutsideDays: true,
-        ISOWeek: true,
     };
 
     const isValidNewOption = (inputValue: string, _values: ValueType<CreatableOption>, options: OptionsType<CreatableOption>) => {
