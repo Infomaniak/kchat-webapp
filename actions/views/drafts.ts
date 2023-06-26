@@ -113,6 +113,10 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
             };
         }
 
+        if (updatedValue && !updatedValue.message && !updatedValue.fileInfos.length && !updatedValue.uploadsInProgress.length) {
+            return dispatch(removeDraft(key));
+        }
+
         if (syncedDraftsAreAllowedAndEnabled(state) && save && updatedValue) {
             const userId = getCurrentUserId(state);
             try {
