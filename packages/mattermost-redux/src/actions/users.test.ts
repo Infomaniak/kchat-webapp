@@ -1485,9 +1485,10 @@ describe('Actions.Users', () => {
             window.origin = 'https://kchat.infomaniak.com';
             process.env.NODE_ENV = 'production';
             process.env.BASE_URL = 'https://test.com';
+            const teamUrl = 'https://test.test.com';
             nock(Client4.getUserRoute('me')).
                 get('/servers').
-                reply(200, [TestHelper.basicTeam]);
+                reply(200, [{...TestHelper.basicTeam, url: teamUrl}]);
             setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
             await Actions.loadMeREST()(store.dispatch, store.getState);
             expect(postMessage).toHaveBeenCalledWith({

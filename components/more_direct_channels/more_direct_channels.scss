@@ -16,4 +16,10 @@
         margin: 5px 0 0;
         border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
     }
+    .multi-select__help span:first-child {
+        padding-right: 8px;
+    }
+    .multi-select__help span:last-child{
+        text-align: right;
+    }
 }
