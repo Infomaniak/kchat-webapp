@@ -1896,6 +1896,10 @@ function handleUpsertDraftEvent(msg) {
         value.show = true;
         value.remote = false;
 
+        if (draft.delete_at) {
+            return;
+        }
+
         if (value.timestamp) {
             const channelDraftKey = value.rootId ? StoragePrefixes.COMMENT_DRAFT + value.rootId : StoragePrefixes.DRAFT + value.channelId;
             const channelDraft = getGlobalItem(state, channelDraftKey, {});
