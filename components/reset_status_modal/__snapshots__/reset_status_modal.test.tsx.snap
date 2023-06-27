@@ -37,7 +37,7 @@ exports[`components/ResetStatusModal should match snapshot 1`] = `
       }
     />
   }
-  modalClass=""
+  modalClass="resetStatus"
   onCancel={[Function]}
   onConfirm={[Function]}
   show={false}
@@ -93,7 +93,7 @@ exports[`components/ResetStatusModal should match snapshot, render modal for OOF
       }
     />
   }
-  modalClass=""
+  modalClass="resetStatus"
   onCancel={[Function]}
   onConfirm={[Function]}
   show={false}

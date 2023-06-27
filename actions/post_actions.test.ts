@@ -41,6 +41,10 @@ jest.mock('actions/storage', () => {
     };
 });
 
+jest.mock('actions/views/drafts', () => ({
+    removeDraft: (...args: any[]) => ({type: 'MOCK_REMOVE_DRAFT', args}),
+}));
+
 jest.mock('utils/user_agent', () => ({
     isIosClassic: jest.fn().mockReturnValueOnce(true).mockReturnValue(false),
     isDesktopApp: jest.fn().mockReturnValue(false),
@@ -348,8 +352,8 @@ describe('Actions.Posts', () => {
                 args: [newPost, files],
                 type: 'MOCK_CREATE_POST_IMMEDIATELY',
             }, {
-                args: ['draft_current_channel_id', null],
-                type: 'MOCK_SET_GLOBAL_ITEM',
+                args: ['draft_current_channel_id'],
+                type: 'MOCK_REMOVE_DRAFT',
             }];
 
             await testStore.dispatch(Actions.createPost(newPost, files));
@@ -361,8 +365,8 @@ describe('Actions.Posts', () => {
                     args: [newReply, files],
                     type: 'MOCK_CREATE_POST',
                 }, {
-                    args: ['comment_draft_new_post_id', null],
-                    type: 'MOCK_SET_GLOBAL_ITEM',
+                    args: ['comment_draft_new_post_id'],
+                    type: 'MOCK_REMOVE_DRAFT',
                 },
             ];
 
@@ -382,8 +386,8 @@ describe('Actions.Posts', () => {
                 args: [newPost, files],
                 type: 'MOCK_CREATE_POST',
             }, {
-                args: ['draft_current_channel_id', null],
-                type: 'MOCK_SET_GLOBAL_ITEM',
+                args: ['draft_current_channel_id'],
+                type: 'MOCK_REMOVE_DRAFT',
             }];
 
             await testStore.dispatch(Actions.createPost(newPost, files));
@@ -402,8 +406,8 @@ describe('Actions.Posts', () => {
                 args: [newPost, files],
                 type: 'MOCK_CREATE_POST',
             }, {
-                args: ['draft_current_channel_id', null],
-                type: 'MOCK_SET_GLOBAL_ITEM',
+                args: ['draft_current_channel_id'],
+                type: 'MOCK_REMOVE_DRAFT',
             }];
 
             await testStore.dispatch(Actions.createPost(newPost, files));
@@ -425,8 +429,8 @@ describe('Actions.Posts', () => {
                 args: [newPost, files],
                 type: 'MOCK_CREATE_POST',
             }, {
-                args: ['draft_current_channel_id', null],
-                type: 'MOCK_SET_GLOBAL_ITEM',
+                args: ['draft_current_channel_id'],
+                type: 'MOCK_REMOVE_DRAFT',
             }];
 
             await testStore.dispatch(Actions.createPost(newPost, files));

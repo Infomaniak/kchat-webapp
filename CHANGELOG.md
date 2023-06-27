@@ -1,3 +1,93 @@
+## 1.3.1-next.6 (2023-06-26)
+
+### Added (2 changes)
+
+- [set const_user window var for webcomponents](kchat/webapp@8f659de15d4b17542fe175576ddaa56d9ec6ff28) by @antonbuksa ([merge request](kchat/webapp!440))
+- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
+
+### Fixed (4 changes)
+
+- [date picker iso week](kchat/webapp@ed2afa4507cfef21c26c6ef58a563425b402ff17) by @leonard.jouve ([merge request](kchat/webapp!441))
+- [modify span padding and alignement](kchat/webapp@7353cd831cbca1e57c3c198f4796215d15076107) by @arthur.noguera ([merge request](kchat/webapp!436))
+- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
+- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
+
+### Changed (4 changes)
+
+- [Do not store empty drafts](kchat/webapp@cccab3b527a1421cd0d1becda0b86100b4d565ee) by @leonard.jouve ([merge request](kchat/webapp!441))
+- [European date format](kchat/webapp@ce37f6033a06c5207ed45e5d680ec8d61d012769) by @leonard.jouve ([merge request](kchat/webapp!441))
+- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
+- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
+
+## 1.3.1-next.5 (2023-06-26)
+
+### Added (2 changes)
+
+- [set const_user window var for webcomponents](kchat/webapp@8f659de15d4b17542fe175576ddaa56d9ec6ff28) by @antonbuksa ([merge request](kchat/webapp!440))
+- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
+
+### Fixed (3 changes)
+
+- [modify span padding and alignement](kchat/webapp@7353cd831cbca1e57c3c198f4796215d15076107) by @arthur.noguera ([merge request](kchat/webapp!436))
+- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
+- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
+
+### Changed (2 changes)
+
+- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
+- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
+
+## 1.3.1-next.4 (2023-06-23)
+
+### Added (1 change)
+
+- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
+
+### Fixed (3 changes)
+
+- [modify span padding and alignement](kchat/webapp@7353cd831cbca1e57c3c198f4796215d15076107) by @arthur.noguera ([merge request](kchat/webapp!436))
+- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
+- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
+
+### Changed (2 changes)
+
+- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
+- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
+
+## 1.3.1-next.3 (2023-06-23)
+
+### Added (1 change)
+
+- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
+
+### Fixed (2 changes)
+
+- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
+- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
+
+### Changed (2 changes)
+
+- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
+- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
+
+## 1.3.1-next.2 (2023-06-21)
+
+### Fixed (2 changes)
+
+- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
+- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
+
+### Changed (1 change)
+
+- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
+
+## 1.3.1-next.1 (2023-06-21)
+
+### Fixed (2 changes)
+
+- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
+- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
+
 ## 1.3.0-next.2 (2023-06-14)
 
 ### Fixed (1 change)
