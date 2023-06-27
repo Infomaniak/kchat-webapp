@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
 
@@ -36,15 +36,6 @@ const GetAppAnnoucementBar = () => {
     const shouldShow = lastSeenAt !== DO_NOT_DISTURB && (shouldDisplayDesktopBanner || shouldDisplayMobileModal || shouldDisplayMobileBanner);
     const [show, setShow] = useState(shouldShow);
 
-    useEffect(() => {
-        if (announcementBarCount > 1) {
-            setShow(false);
-        }
-        if (shouldShow && !show && !announcementBarCount) {
-            setShow(true);
-        }
-    }, [announcementBarCount]);
-
     const handleClose = (doNotDisturb = false) => {
         localStorage.setItem(GET_THE_APP_LAST_SEEN_AT, doNotDisturb ? DO_NOT_DISTURB : Date.now().toString());
         setShow(false);
@@ -67,7 +58,9 @@ const GetAppAnnoucementBar = () => {
         ),
     });
 
-    if (!show) {
+    const shouldDisplayBanner = show || (shouldShow && !announcementBarCount);
+
+    if (!shouldDisplayBanner || announcementBarCount > 1) {
         return null;
     }
 
