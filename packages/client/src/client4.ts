@@ -571,8 +571,12 @@ export default class Client4 {
             headers[HEADER_X_CSRF_TOKEN] = csrfToken;
         }
 
-        if (this.includeCookies) {
+        if (this.includeCookies && !options.forceCredentials) {
             newOptions.credentials = 'include';
+        }
+
+        if (options.forceCredentials) {
+            delete newOptions.forceCredentials;
         }
 
         if (this.userAgent) {
@@ -4374,6 +4378,8 @@ export default class Client4 {
             {
                 method: 'post',
                 body: formData,
+                credentials: 'omit',
+                forceCredentials: true,
             },
         );
     }
@@ -4396,6 +4402,8 @@ export default class Client4 {
             {
                 method: 'post',
                 body: formData,
+                credentials: 'omit',
+                forceCredentials: true,
             },
         );
     }
@@ -4415,6 +4423,8 @@ export default class Client4 {
             {
                 method: 'delete',
                 body: formData,
+                credentials: 'omit',
+                forceCredentials: true,
             },
         );
     }

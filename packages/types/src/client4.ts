@@ -19,6 +19,7 @@ export type Options = {
     method?: string;
     url?: string;
     credentials?: 'omit' | 'same-origin' | 'include';
+    forceCredentials?: boolean;
     body?: any;
 };
 
