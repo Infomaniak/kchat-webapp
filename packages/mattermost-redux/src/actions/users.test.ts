@@ -1498,7 +1498,6 @@ describe('Actions.Users', () => {
             window.origin = originalOrigin;
             postMessage.mockRestore();
             userAgentMock.mockRestore();
-            console.log(window.origin, window.postMessage, navigator.userAgent);
         });
     });
 });
