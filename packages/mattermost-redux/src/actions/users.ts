@@ -104,9 +104,7 @@ export function loadMeREST(): ActionFunc {
                 });
                 const lastKSuiteSeen = sortedSuites[0];
 
-                if (isDesktopApp()
-                // && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development'
-                ) { //eslint-disable-line no-process-env
+                if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
                     window.postMessage({
                         type: 'switch-server',
                         data: lastKSuiteSeen.display_name,
