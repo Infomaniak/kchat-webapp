@@ -38,19 +38,12 @@ import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/pre
 
 import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
+import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 import {General} from 'mattermost-redux/constants';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
 import {useSelector} from 'react-redux';
-
-function isIkBaseUrl() {
-    const whitelist = [
-        'https://do-not-replace-kchat.infomaniak.com'.replace('do-not-replace-', ''),
-        'https://do-not-replace-kchat.preprod.dev.infomaniak.ch'.replace('do-not-replace-', ''),
-    ];
-    return whitelist.includes(window.origin);
-}
 
 export function generateMfaSecret(userId: string): ActionFunc {
     return bindClientFunc({
@@ -99,13 +92,28 @@ export function loadMeREST(): ActionFunc {
 
             // allow through in tests to launch promise.all but not trigger redirect
             if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
-                // don't redirect to the error page if it is a testing environment
-                if (!isDesktopApp() && isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
-                    // update_at must be changed to another key returned on the fetch with the last time the kSuite has been seen
-                    const orderedKSuite = suiteArr.sort((a, b) => b.update_at - a.update_at);
+                const lastKSuiteSeenId = getLastKSuiteSeenId();
+                const sortedSuites = suiteArr.sort((a, b) => {
+                    if (a.id === lastKSuiteSeenId) {
+                        return -1;
+                    }
+                    if (b.id === lastKSuiteSeenId) {
+                        return 1;
+                    }
+                    return b.update_at - a.update_at;
+                });
+                const lastKSuiteSeen = sortedSuites[0];
 
-                    const {url} = orderedKSuite[0];
-                    window.open(url, '_self');
+                if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                    window.postMessage({
+                        type: 'switch-server',
+                        data: lastKSuiteSeen.display_name,
+                    }, window.origin);
+                }
+
+                // don't redirect to the error page if it is a testing environment
+                if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                    window.open(lastKSuiteSeen.url, '_self');
                 }
 
                 await Promise.all([

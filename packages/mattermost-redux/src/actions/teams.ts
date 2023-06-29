@@ -232,7 +232,7 @@ export function searchTeams(term: string, opts: TeamSearchOpts = {}): ActionFunc
 
         // The type of the response is determined by whether or not page/perPage were set
         let teams;
-        if (!opts.page || !opts.per_page) {
+        if (opts.page === undefined || opts.per_page === undefined) {
             teams = response as Team[];
         } else {
             teams = (response as TeamsWithCount).teams;

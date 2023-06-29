@@ -11,6 +11,7 @@ import {RequestStatus} from '../constants';
 import TestHelper from '../../test/test_helper';
 import configureStore from '../../test/test_store';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
+import {getLastKSuiteSeenId, setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 import {UserTypes} from 'mattermost-redux/action_types';
 import {ActionResult} from 'mattermost-redux/types/actions';
 import {UserProfile} from '@mattermost/types/users';
@@ -1454,6 +1455,117 @@ describe('Actions.Users', () => {
 
             const profiles = store.getState().entities.users.profiles;
             expect(profiles).toBe(originalState.entities.users.profiles);
+        });
+    });
+    describe('Should redirect to last kSuite seen on loadMeREST', () => {
+        test('on Webapp', async () => {
+            const originalEnv = {...process.env};
+            const originalOrigin = window.origin;
+            const open = jest.spyOn(window, 'open').mockImplementation(jest.fn());
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const teamUrl = 'https://test1.test.com';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.fakeTeamWithId(), url: 'https://test2.test.com'}, {...TestHelper.basicTeam, url: teamUrl}, {...TestHelper.fakeTeamWithId(), url: 'https://test3.test.com'}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            window.origin = 'https://kchat.infomaniak.com';
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(open).toHaveBeenCalledWith(teamUrl, '_self');
+            process.env = originalEnv;
+            window.origin = originalOrigin;
+            open.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
+        });
+
+        test('on Webapp if user is no more in lastActiveKSuite', async () => {
+            const originalEnv = {...process.env};
+            const originalOrigin = window.origin;
+            const open = jest.spyOn(window, 'open').mockImplementation(jest.fn());
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const teamUrl = 'https://test1.test.com';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.fakeTeamWithId(), url: 'https://test2.test.com', update_at: 0}, {...TestHelper.fakeTeamWithId(), url: teamUrl, update_at: 2}, {...TestHelper.fakeTeamWithId(), url: 'https://test3.test.com', update_at: 1}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            window.origin = 'https://kchat.infomaniak.com';
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(open).toHaveBeenCalledWith(teamUrl, '_self');
+            process.env = originalEnv;
+            window.origin = originalOrigin;
+            open.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
+        });
+
+        test('on Desktop', async () => {
+            const originalEnv = {...process.env};
+            const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
+            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [TestHelper.fakeTeamWithId(), TestHelper.basicTeam, TestHelper.fakeTeamWithId()]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(postMessage).toHaveBeenCalledWith({
+                type: 'switch-server',
+                data: TestHelper.basicTeam!.display_name,
+            }, window.origin);
+            process.env = originalEnv;
+            postMessage.mockRestore();
+            userAgentMock.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
+        });
+
+        test('on Desktop if user is no more in lastActiveKSuite', async () => {
+            const originalEnv = {...process.env};
+            const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
+            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const team = {
+                ...TestHelper.fakeTeamWithId(),
+                update_at: 2,
+            };
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.fakeTeamWithId(), update_at: 0}, team, {...TestHelper.fakeTeamWithId(), update_at: 1}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(postMessage).toHaveBeenCalledWith({
+                type: 'switch-server',
+                data: team.display_name,
+            }, window.origin);
+            process.env = originalEnv;
+            postMessage.mockRestore();
+            userAgentMock.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
         });
     });
 });
