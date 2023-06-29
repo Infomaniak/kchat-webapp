@@ -1469,10 +1469,36 @@ describe('Actions.Users', () => {
             });
             process.env.NODE_ENV = 'production';
             process.env.BASE_URL = 'https://test.com';
-            const teamUrl = 'https://test.test.com';
+            const teamUrl = 'https://test1.test.com';
             nock(Client4.getUserRoute('me')).
                 get('/servers').
                 reply(200, [{...TestHelper.fakeTeamWithId(), url: 'https://test2.test.com'}, {...TestHelper.basicTeam, url: teamUrl}, {...TestHelper.fakeTeamWithId(), url: 'https://test3.test.com'}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            window.origin = 'https://kchat.infomaniak.com';
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(open).toHaveBeenCalledWith(teamUrl, '_self');
+            process.env = originalEnv;
+            window.origin = originalOrigin;
+            open.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
+        });
+
+        test('on Webapp if user is no more in lastActiveKSuite', async () => {
+            const originalEnv = {...process.env};
+            const originalOrigin = window.origin;
+            const open = jest.spyOn(window, 'open').mockImplementation(jest.fn());
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const teamUrl = 'https://test1.test.com';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.fakeTeamWithId(), url: 'https://test2.test.com', update_at: 0}, {...TestHelper.fakeTeamWithId(), url: teamUrl, update_at: 2}, {...TestHelper.fakeTeamWithId(), url: 'https://test3.test.com', update_at: 1}]);
             setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
             window.origin = 'https://kchat.infomaniak.com';
             await Actions.loadMeREST()(store.dispatch, store.getState);
@@ -1503,6 +1529,37 @@ describe('Actions.Users', () => {
             expect(postMessage).toHaveBeenCalledWith({
                 type: 'switch-server',
                 data: TestHelper.basicTeam!.display_name,
+            }, window.origin);
+            process.env = originalEnv;
+            postMessage.mockRestore();
+            userAgentMock.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
+        });
+
+        test('on Desktop if user is no more in lastActiveKSuite', async () => {
+            const originalEnv = {...process.env};
+            const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
+            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const team = {
+                ...TestHelper.fakeTeamWithId(),
+                update_at: 2,
+            };
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.fakeTeamWithId(), update_at: 0}, team, {...TestHelper.fakeTeamWithId(), update_at: 1}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(postMessage).toHaveBeenCalledWith({
+                type: 'switch-server',
+                data: team.display_name,
             }, window.origin);
             process.env = originalEnv;
             postMessage.mockRestore();
