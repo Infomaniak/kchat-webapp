@@ -1479,10 +1479,8 @@ describe('Actions.Users', () => {
 
         test('on Desktop', async () => {
             const originalEnv = {...process.env};
-            const originalOrigin = window.origin;
             const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
             const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
-            window.origin = 'https://kchat.infomaniak.com';
             process.env.NODE_ENV = 'production';
             process.env.BASE_URL = 'https://test.com';
             nock(Client4.getUserRoute('me')).
@@ -1495,7 +1493,6 @@ describe('Actions.Users', () => {
                 data: TestHelper.basicTeam!.display_name,
             }, window.origin);
             process.env = originalEnv;
-            window.origin = originalOrigin;
             postMessage.mockRestore();
             userAgentMock.mockRestore();
         });
