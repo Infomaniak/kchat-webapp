@@ -71,7 +71,7 @@ import {
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
 import {setGlobalItem} from 'actions/storage';
-import {transformServerDraft} from 'actions/views/drafts';
+import {getDrafts, transformServerDraft} from 'actions/views/drafts';
 
 import {Client4} from 'mattermost-redux/client';
 import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
@@ -331,6 +331,8 @@ export async function reconnect() {
 
     dispatch(resetWsErrorCount());
     dispatch(clearErrors());
+
+    dispatch(getDrafts(currentTeamId));
 }
 
 function syncThreads(teamId, userId) {
@@ -1893,6 +1895,10 @@ function handleUpsertDraftEvent(msg) {
         const {key, value} = transformServerDraft(draft);
         value.show = true;
         value.remote = false;
+
+        if (draft.delete_at) {
+            return;
+        }
 
         if (value.timestamp) {
             const channelDraftKey = value.rootId ? StoragePrefixes.COMMENT_DRAFT + value.rootId : StoragePrefixes.DRAFT + value.channelId;
