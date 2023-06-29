@@ -1505,7 +1505,7 @@ describe('Actions.Users', () => {
             expect(postMessage).toHaveBeenCalledWith({
                 type: 'switch-server',
                 data: TestHelper.basicTeam!.display_name,
-            });
+            }, window.origin);
             process.env = originalEnv;
             window.origin = originalOrigin;
             postMessage.mockRestore();
