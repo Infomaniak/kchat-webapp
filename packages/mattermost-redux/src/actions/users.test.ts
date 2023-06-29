@@ -11,7 +11,7 @@ import {RequestStatus} from '../constants';
 import TestHelper from '../../test/test_helper';
 import configureStore from '../../test/test_store';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
-import {getLastKSuiteSeenId, setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 import {UserTypes} from 'mattermost-redux/action_types';
 import {ActionResult} from 'mattermost-redux/types/actions';
 import {UserProfile} from '@mattermost/types/users';
