@@ -18,7 +18,7 @@ import {
 import {getTeamsUnreadStatuses} from 'mattermost-redux/selectors/entities/channels';
 
 import {GenericAction, GetStateFunc} from 'mattermost-redux/types/actions';
-import {getTeamOrderCookie} from 'mattermost-redux/utils/team_utils';
+import {getTeamsOrderCookie} from 'mattermost-redux/utils/team_utils';
 
 import {GlobalState} from 'types/store';
 
@@ -46,7 +46,7 @@ function mapStateToProps(state: GlobalState) {
         experimentalPrimaryTeam,
         locale: getCurrentLocale(state),
         moreTeamsToJoin,
-        userTeamsOrderPreference: getTeamOrderCookie(),
+        userTeamsOrderPreference: getTeamsOrderCookie(),
         products,
         unreadTeamsSet,
         mentionsInTeamMap,
