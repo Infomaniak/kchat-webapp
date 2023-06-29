@@ -8,7 +8,7 @@ import {getCookie, setCookie} from 'mattermost-redux/utils/cookie_utils';
 import {General} from '../constants';
 
 const LAST_KSUITE_COOKIE = 'LAST_KSUITE';
-const TEAM_ORDER_COOKIE = 'TEAM_ORDER';
+const TEAMS_ORDER_COOKIE = 'TEAMS_ORDER';
 
 export function teamListToMap(teamList: Team[]): IDMappedObjects<Team> {
     const teams: Record<string, Team> = {};
@@ -54,6 +54,6 @@ export const setLastKSuiteSeenCookie = (teamId: string) => {
     }
 };
 
-export const getTeamOrderCookie = () => getCookie(TEAM_ORDER_COOKIE);
+export const getTeamsOrderCookie = () => getCookie(TEAMS_ORDER_COOKIE);
 
-export const setTeamOrderCookie = (teamOrder: string) => setCookie(TEAM_ORDER_COOKIE, teamOrder);
+export const setTeamsOrderCookie = (teamOrder: string) => setCookie(TEAMS_ORDER_COOKIE, teamOrder);

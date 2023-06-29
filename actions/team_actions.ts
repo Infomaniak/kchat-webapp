@@ -14,7 +14,7 @@ import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {selectTeam} from 'mattermost-redux/actions/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
-import {setTeamOrderCookie} from 'mattermost-redux/utils/team_utils';
+import {setTeamsOrderCookie} from 'mattermost-redux/utils/team_utils';
 
 import {getHistory} from 'utils/browser_history';
 import {Preferences} from 'utils/constants';
@@ -113,7 +113,7 @@ export function updateTeamsOrderForUser(teamIds: Array<Team['id']>) {
             category: Preferences.TEAMS_ORDER,
             value: teamOrder,
         }];
-        setTeamOrderCookie(teamOrder);
+        setTeamsOrderCookie(teamOrder);
         dispatch(savePreferences(currentUserId, teamOrderPreferences));
     };
 }
