@@ -4,7 +4,11 @@
 import {Team} from '@mattermost/types/teams';
 import {IDMappedObjects} from '@mattermost/types/utilities';
 import {Client4} from 'mattermost-redux/client';
+import {getCookie, setCookie} from 'mattermost-redux/utils/cookie_utils';
 import {General} from '../constants';
+
+const LAST_KSUITE_COOKIE = 'LAST_KSUITE';
+const TEAMS_ORDER_COOKIE = 'TEAMS_ORDER';
 
 export function teamListToMap(teamList: Team[]): IDMappedObjects<Team> {
     const teams: Record<string, Team> = {};
@@ -42,20 +46,14 @@ export function filterTeamsStartingWithTerm(teams: Team[], term: string): Team[]
     });
 }
 
-export const getLastKSuiteSeenId = () => {
-    for (const cookie of document.cookie.split('; ')) {
-        const [name, value] = cookie.split('=');
-        if (name && value && name === 'LAST_KSUITE') {
-            return value;
-        }
-    }
-    return null;
-};
+export const getLastKSuiteSeenId = () => getCookie(LAST_KSUITE_COOKIE);
 
 export const setLastKSuiteSeenCookie = (teamId: string) => {
     if (!Client4.isIkBaseUrl()) {
-        const url = process.env.BASE_URL!; // eslint-disable-line no-process-env
-        const domain = url.substring(url.lastIndexOf('.', url.lastIndexOf('.') - 1) + 1);
-        document.cookie = `LAST_KSUITE=${teamId}; path=/; domain=${domain}; secure; samesite=lax; max-age=31536000`;
+        setCookie(LAST_KSUITE_COOKIE, teamId);
     }
 };
+
+export const getTeamsOrderCookie = () => getCookie(TEAMS_ORDER_COOKIE);
+
+export const setTeamsOrderCookie = (teamOrder: string) => setCookie(TEAMS_ORDER_COOKIE, teamOrder);

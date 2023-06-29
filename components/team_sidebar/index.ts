@@ -15,10 +15,10 @@ import {
     getJoinableTeamIds,
     getMyKSuites,
 } from 'mattermost-redux/selectors/entities/teams';
-import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {getTeamsUnreadStatuses} from 'mattermost-redux/selectors/entities/channels';
 
 import {GenericAction, GetStateFunc} from 'mattermost-redux/types/actions';
+import {getTeamsOrderCookie} from 'mattermost-redux/utils/team_utils';
 
 import {GlobalState} from 'types/store';
 
@@ -26,8 +26,6 @@ import {getCurrentLocale} from 'selectors/i18n';
 import {getIsLhsOpen} from 'selectors/lhs';
 
 import {switchTeam, updateTeamsOrderForUser} from 'actions/team_actions';
-
-import {Preferences} from 'utils/constants';
 
 import TeamSidebar from './team_sidebar';
 
@@ -48,7 +46,7 @@ function mapStateToProps(state: GlobalState) {
         experimentalPrimaryTeam,
         locale: getCurrentLocale(state),
         moreTeamsToJoin,
-        userTeamsOrderPreference: get(state, Preferences.TEAMS_ORDER, '', ''),
+        userTeamsOrderPreference: getTeamsOrderCookie(),
         products,
         unreadTeamsSet,
         mentionsInTeamMap,
