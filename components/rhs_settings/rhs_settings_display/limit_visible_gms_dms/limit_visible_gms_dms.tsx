@@ -8,12 +8,11 @@ import {FormattedMessage} from 'react-intl';
 import {Preferences} from 'mattermost-redux/constants';
 import {PreferenceType} from '@mattermost/types/preferences';
 
-import {localizeMessage} from 'utils/utils';
 import RhsSettingsItem from '../../rhs_settings_item/rhs_settings_item';
 
 type Limit = {
     value: number;
-    label: string;
+    label: string | JSX.Element;
 };
 
 type Props = {
@@ -29,7 +28,15 @@ type State = {
 }
 
 const limits: Limit[] = [
-    {value: 10000, label: localizeMessage('user.settings.sidebar.limitVisibleGMsDMs.allDirectMessages', 'All Direct Messages')},
+    {
+        value: 10000,
+        label: (
+            <FormattedMessage
+                id='user.settings.sidebar.limitVisibleGMsDMs.allDirectMessages'
+                defaultMessage='All Direct Messages'
+            />
+        ),
+    },
     {value: 10, label: '10'},
     {value: 15, label: '15'},
     {value: 20, label: '20'},
