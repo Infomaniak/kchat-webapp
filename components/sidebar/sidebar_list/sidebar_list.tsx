@@ -157,6 +157,13 @@ export default class SidebarList extends React.PureComponent<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props) {
+        // TODO: Copying over so it doesn't get lost, but we don't have a design for the sidebar on mobile yet
+        // close the LHS on mobile when you change channels
+        // Sidebar does not close if we switch from threads to insights or drafts for example as the currentChannelId is an empty string
+        if (this.props.currentChannelId !== prevProps.currentChannelId) {
+            this.props.actions.close();
+        }
+
         if (!this.props.currentChannelId || !prevProps.currentChannelId) {
             return;
         }
@@ -170,12 +177,6 @@ export default class SidebarList extends React.PureComponent<Props, State> {
         if (this.props.currentChannelId !== prevProps.currentChannelId) {
             // This will be re-enabled when we can avoid animating the scroll on first load and team switch
             // this.scrollToChannel(this.props.currentChannelId);
-        }
-
-        // TODO: Copying over so it doesn't get lost, but we don't have a design for the sidebar on mobile yet
-        // close the LHS on mobile when you change channels
-        if (this.props.currentChannelId !== prevProps.currentChannelId) {
-            this.props.actions.close();
         }
 
         this.updateUnreadIndicators();
