@@ -198,6 +198,7 @@ export type ClientConfig = {
     ReduceOnBoardingTaskList: string;
     PostAcknowledgements: string;
     FeatureFlagTranslation: string;
+    IsNewVersionCanaryOnly?: boolean;
 };
 
 export type License = {
