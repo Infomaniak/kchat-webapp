@@ -156,11 +156,13 @@ def print_weekly_summary(weekly_summary)
     end
   end
 
-  output << "\n🚀 **Released in prod:**"
-  weekly_summary['prod_releases'].each do |mr|
-    trello_link = extract_trello_link(mr['description'])
-    trello_text = trello_link ? " - ([Trello](#{trello_link}))" : ""
-    output << "- [#{mr['title']}](#{mr['web_url']})#{trello_text} by @#{mr['user']}"
+  if weekly_summary['prod_releases'].any?
+    output << "\n🚀 **Released in prod:**"
+    weekly_summary['prod_releases'].each do |mr|
+      trello_link = extract_trello_link(mr['description'])
+      trello_text = trello_link ? " - ([Trello](#{trello_link}))" : ""
+      output << "- [#{mr['title']}](#{mr['web_url']})#{trello_text} by @#{mr['user']}"
+    end
   end
 
   output.join("\n")
