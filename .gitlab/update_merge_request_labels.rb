@@ -230,7 +230,7 @@ issues.each do |issue|
   # Check if issue has 'new-trello' label
   if issue['labels'].include?('new-trello')
     # Create a new Trello card in the 'FEEDBACKS' list with the issue description
-    card_response = create_trello_card(issue['title'], issue['description'], 'FEEDBACKS')
+    card_response = create_trello_card(issue['title'], issue['description'], 'FEEDBACKS Webapp + Desktop')
     if card_response
       card_id = card_response['id']
       # Get the shortlink of the new Trello card
@@ -242,7 +242,7 @@ issues.each do |issue|
       update_gitlab_issue(project_id, issue['iid'], updated_description)
 
       # Update labels to remove 'new-trello' and add 'trello::FEEDBACKS'
-      labels = issue['labels'].reject { |label| label == 'new-trello' } + ['trello::FEEDBACKS']
+      labels = issue['labels'].reject { |label| label == 'new-trello' } + ['trello::FEEDBACKS Webapp + Desktop']
       update_gitlab_issue_labels(project_id, issue['iid'], labels)
 
       puts "Created Trello card for issue id #{issue['iid']}. New description: #{updated_description}"
