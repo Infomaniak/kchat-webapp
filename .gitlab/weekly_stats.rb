@@ -138,32 +138,66 @@ end
 def print_weekly_summary(weekly_summary)
   output = []
 
-  output << "#### Weekly summary:\n🚧  **Working on:**"
-  weekly_summary['working_on'].each do |id, mr|
-    trello_link = extract_trello_link(mr['description'])
-    puts trello_link
-    trello_text = trello_link ? " - ([Trello](#{trello_link}))" : ""
-    output << "- [#{mr['title']}](#{mr['web_url']})#{trello_text} - 🕑 #{mr['time_spent']} logged by @#{mr['user']} this week"
-  end
+  # output << "#### Weekly:\n\n"
+  # output << "\n"
+  # output << "| Merge Req | Trello | Time Spent | User |"
+  # output << "|---|---|---|---|"
+  # weekly_summary['working_on'].each do |id, mr|
+  #   trello_link = extract_trello_link(mr['description'])
+  #   trello_text = trello_link ? "[Trello](#{trello_link})" : ""
+  #   output << "| [#{mr['title']}](#{mr['web_url']}) | #{trello_text} | #{mr['time_spent']} | @#{mr['user']} |"
+  # end
 
   if weekly_summary['issues'].any?
-    output << "\n❗️ **Blockers** (see issue discussion or trello)"
+    output << "\n ##### **Issues À Discuter**"
+    output << "\n"
+    output << "| &nbsp; | Link | Assignees |"
+    output << "|---|---|---|"
     weekly_summary['issues'].each do |id, issue|
       trello_link = extract_trello_link(issue['description'])
-      trello_text = trello_link ? " - ([Trello](#{trello_link}))" : ""
-      assignees = issue['assignees'].empty? ? "" : "(assigned to @#{issue['assignees'].join(", @")})"
-      output << "- [#{issue['title']}](#{issue['web_url']})#{trello_text} #{assignees}"
+      trello_text = trello_link ? "[Trello](#{trello_link})" : ""
+      assignees = issue['assignees'].empty? ? "unassigned" : "@#{issue['assignees'].join(", @")}"
+      output << "| [#{issue['title']}](#{issue['web_url']}) | #{trello_text} | #{assignees} |"
+    end
+  end
+
+  if weekly_summary['stagings'].any?
+    output << "\n ##### **Stagings:**"
+    output << "\n"
+    output << "| &nbsp; | Trello | Time Spent | User |"
+    output << "|---|---|---|---|"
+    weekly_summary['stagings'].each do |mr|
+      trello_link = extract_trello_link(mr['description'])
+      trello_text = trello_link ? "[Trello](#{trello_link})" : ""
+      output << "| [#{mr['title']}](#{mr['web_url']}) | #{trello_text} | #{mr['time_spent']} | @#{mr['user']} |"
     end
   end
 
   if weekly_summary['prod_releases'].any?
-    output << "\n🚀 **Released in prod:**"
+    output << "\n ##### **Prod release:**"
+    output << "\n"
+    output << "| &nbsp; | Link | User |"
+    output << "|---|---|---|"
     weekly_summary['prod_releases'].each do |mr|
       trello_link = extract_trello_link(mr['description'])
-      trello_text = trello_link ? " - ([Trello](#{trello_link}))" : ""
-      output << "- [#{mr['title']}](#{mr['web_url']})#{trello_text} by @#{mr['user']}"
+      trello_text = trello_link ? "[Trello](#{trello_link})" : ""
+      output << "| [#{mr['title']}](#{mr['web_url']}) | #{trello_text} | @#{mr['user']} |"
     end
   end
+
+  if weekly_summary['canary_releases'].any?
+    output << "\n ##### **Canary:**"
+    output << "\n"
+    output << "| &nbsp; | Link | User |"
+    output << "|---|---|---|"
+    weekly_summary['canary_releases'].each do |mr|
+      trello_link = extract_trello_link(mr['description'])
+      trello_text = trello_link ? "[Trello](#{trello_link})" : ""
+      output << "| [#{mr['title']}](#{mr['web_url']}) | #{trello_text} | @#{mr['user']} |"
+    end
+  end
+
+  output << "\n"
 
   output.join("\n")
 end
@@ -173,7 +207,9 @@ def main
   weekly_summary = {
     'working_on' => {},
     'issues' => {},
-    'prod_releases' => []
+    'stagings' => [],
+    'prod_releases' => [],
+    'canary_releases' => []
   }
 
   merge_requests.each do |mr|
@@ -195,21 +231,44 @@ def main
       }
     end
 
+    if mr['labels'].include?('stage::next')
+      weekly_summary['canary_releases'] << {
+        'title' => mr['title'],
+        'description' => mr['description'],
+        'web_url' => mr['web_url'],
+        'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/merge_requests/#{mr['iid']}",
+        'user' => mr['author']['username']
+      }
+    end
+
+    if mr['labels'].include?('staging')
+      next if total_time_spent == 0
+      human_readable_time_spent = seconds_to_human_readable(total_time_spent)
+      weekly_summary['stagings'] << {
+        'title' => mr['title'],
+        'description' => mr['description'],
+        'web_url' => mr['web_url'],
+        'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/merge_requests/#{mr['iid']}",
+        'time_spent' => human_readable_time_spent,
+        'user' => mr['author']['username']
+      }
+    end
+
     # Skip to the next merge request if no time was spent
-    next if total_time_spent == 0
-    human_readable_time_spent = seconds_to_human_readable(total_time_spent)
-    weekly_summary['working_on'][mr['iid']] = {
-      'title' => mr['title'],
-      'description' => mr['description'],
-      'web_url' => mr['web_url'],
-      'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/merge_requests/#{mr['iid']}",
-      'time_spent' => human_readable_time_spent,
-      'user' => mr['author']['username']
-    }
+    # next if total_time_spent == 0
+    # human_readable_time_spent = seconds_to_human_readable(total_time_spent)
+    # weekly_summary['working_on'][mr['iid']] = {
+    #   'title' => mr['title'],
+    #   'description' => mr['description'],
+    #   'web_url' => mr['web_url'],
+    #   'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/merge_requests/#{mr['iid']}",
+    #   'time_spent' => human_readable_time_spent,
+    #   'user' => mr['author']['username']
+    # }
   end
 
   issues = get_gitlab_issues
-  important_issues = issues.select { |issue| issue['labels'].include?("❗️") }
+  important_issues = issues.select { |issue| issue['labels'].include?("cp~") }
 
   if important_issues.any?
     important_issues.each do |issue|
