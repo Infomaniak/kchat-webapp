@@ -159,8 +159,7 @@ export default class SidebarList extends React.PureComponent<Props, State> {
     componentDidUpdate(prevProps: Props) {
         // TODO: Copying over so it doesn't get lost, but we don't have a design for the sidebar on mobile yet
         // close the LHS on mobile when you change channels
-        // Sidebar does not close if we switch from threads to insights or drafts for example as the currentChannelId is an empty string
-        if (this.props.currentChannelId !== prevProps.currentChannelId) {
+        if (this.props.currentChannelId !== prevProps.currentChannelId || this.props.currentStaticPageId !== prevProps.currentStaticPageId) {
             this.props.actions.close();
         }
 
