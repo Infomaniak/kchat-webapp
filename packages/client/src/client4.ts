@@ -156,14 +156,16 @@ function isDesktopApp(): boolean {
 }
 
 const IKConstants = {
+
     // @ts-ignore
     LOGIN_URL: process.env.LOGIN_ENDPOINT, // eslint-disable-line no-process-env
     // @ts-ignore
     LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
     CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
+
     // @ts-ignore
     MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
-}
+};
 
 const HEADER_AUTH = 'Authorization';
 const HEADER_BEARER = 'Bearer';
@@ -181,6 +183,8 @@ export const DEFAULT_LIMIT_BEFORE = 30;
 export const DEFAULT_LIMIT_AFTER = 30;
 
 const GRAPHQL_ENDPOINT = '/api/v5/graphql';
+
+type LogoutFunc = (url: string, shouldSignal?: boolean, userAction?: boolean) => void;
 
 export default class Client4 {
     logToConsole = false;
@@ -205,6 +209,7 @@ export default class Client4 {
     telemetryHandler?: TelemetryHandler;
 
     useBoardsProduct = false;
+    emitUserLoggedOutEvent: LogoutFunc | undefined = undefined;
 
     getUrl() {
         return this.url;
@@ -275,6 +280,10 @@ export default class Client4 {
 
     setUseBoardsProduct(useBoardsProduct: boolean) {
         this.useBoardsProduct = useBoardsProduct;
+    }
+
+    bindEmitUserLoggedOutEvent(func: LogoutFunc) {
+        this.emitUserLoggedOutEvent = func;
     }
 
     getServerVersion() {
@@ -4289,8 +4298,13 @@ export default class Client4 {
             });
         }
 
-        if ((response.status === 401 && data?.result === 'redirect') && !isDesktopApp()) {
-            window.location.href = data.uri;
+        if (response.status === 401 && data?.result === 'redirect') {
+            // eslint-disable-next-line no-negated-condition
+            if (!isDesktopApp()) {
+                window.location.href = data.uri;
+            } else {
+                this.emitUserLoggedOutEvent!('/login', true, true);
+            }
         }
 
         if (headers.has(HEADER_X_VERSION_ID)) {

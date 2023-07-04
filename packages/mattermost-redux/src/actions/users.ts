@@ -208,7 +208,7 @@ export function logout(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
 
-        // dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null}); // on s'en fou du success on est redirect sur login
+        dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null});
 
         return {data: true};
     };

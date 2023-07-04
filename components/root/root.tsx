@@ -296,6 +296,8 @@ export default class Root extends React.PureComponent<Props, State> {
             });
         }
 
+        Client4.bindEmitUserLoggedOutEvent(GlobalActions.emitUserLoggedOutEvent);
+
         Promise.all([
             this.props.actions.initializeProducts(),
             initializePlugins(),
