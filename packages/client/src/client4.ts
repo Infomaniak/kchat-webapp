@@ -4304,8 +4304,11 @@ export default class Client4 {
             });
         }
 
-        if ((response.status === 401 && data?.result === 'redirect') && !isDesktopApp()) {
-            window.location.href = data.uri;
+        if ((response.status === 401 && data?.result === 'redirect')) {
+            if (!isDesktopApp()) {
+                window.location.href = data.uri;
+                return {data: true}
+            }
             this.emitUserLoggedOutEvent!('/login', true, true);
         }
 

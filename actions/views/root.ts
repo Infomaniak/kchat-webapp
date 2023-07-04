@@ -69,10 +69,6 @@ export function unregisterPluginTranslationsSource(pluginId: string) {
     Reflect.deleteProperty(pluginTranslationSources, pluginId);
 }
 
-export function setAppLogoutCallback(func: (url: string, shouldSignal?: boolean, userAction?: boolean) => void) {
-    Client4.bindEmitUserLoggedOutEvent(func);
-}
-
 export function loadTranslations(locale: string, url: string) {
     return async (dispatch: DispatchFunc) => {
         const translations = {...en};
