@@ -4303,7 +4303,7 @@ export default class Client4 {
             if (!isDesktopApp()) {
                 window.location.href = data.uri;
             } else {
-                this.emitUserLoggedOutEvent!('/login', true, true);
+                this.emitUserLoggedOutEvent!('/', true, true);
             }
         }
 
