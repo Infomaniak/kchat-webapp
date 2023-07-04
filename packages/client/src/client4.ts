@@ -4306,14 +4306,12 @@ export default class Client4 {
             });
         }
 
-        if (response.status === 401) {
-            if (data?.result === 'redirect') {
-                // eslint-disable-next-line no-negated-condition
-                if (!isDesktopApp()) {
-                    window.location.href = data.uri;
-                } else {
-                    this.emitUserLoggedOutEvent!('/login', true, true);
-                }
+        if (response.status === 401 && data?.result === 'redirect') {
+            // eslint-disable-next-line no-negated-condition
+            if (!isDesktopApp()) {
+                window.location.href = data.uri;
+            } else {
+                this.emitUserLoggedOutEvent!('/login', true, true);
             }
         }
 
