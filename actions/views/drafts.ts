@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import PQueue from 'p-queue';
 import {batchActions} from 'redux-batched-actions';
 
 import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
@@ -29,6 +30,8 @@ type Draft = {
     value: PostDraft;
     timestamp: Date;
 }
+
+const updateDraftQueue = new PQueue({concurrency: 1});
 
 /**
  * Gets drafts stored on the server and reconciles them with any locally stored drafts.
@@ -98,15 +101,24 @@ export function removeDraft(key: string) {
     };
 }
 
-export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false) {
+// Assert previous call ended before dispatching the action again to ensure latest draftId is used and prevent multiple draft creation on the same channel
+export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false) => {
+    return (dispatch: DispatchFunc) => {
+        return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save)));
+    };
+};
+
+function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
+        const activeDraft = getGlobalItem(state, key, {});
         let updatedValue: PostDraft|null = null;
         if (value) {
             const timestamp = new Date().getTime();
             const data = getGlobalItem(state, key, {});
             updatedValue = {
                 ...value,
+                id: value.id || activeDraft.id,
                 createAt: data.createAt || timestamp,
                 updateAt: timestamp,
                 remote: false,

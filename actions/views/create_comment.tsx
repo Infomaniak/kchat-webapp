@@ -26,7 +26,7 @@ import * as PostActions from 'actions/post_actions';
 import {executeCommand} from 'actions/command';
 import {runMessageWillBePostedHooks, runSlashCommandWillBePostedHooks} from 'actions/hooks';
 import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
-import {updateDraft, removeDraft, upsertScheduleDraft} from 'actions/views/drafts';
+import {addToUpdateDraftQueue, removeDraft, upsertScheduleDraft} from 'actions/views/drafts';
 import EmojiMap from 'utils/emoji_map';
 import {getPostDraft} from 'selectors/rhs';
 
@@ -50,7 +50,7 @@ export function clearCommentDraftUploads() {
 // we're on will not save the draft quickly enough on page unload.
 export function updateCommentDraft(rootId: string, draft?: PostDraft, save = false) {
     const key = `${StoragePrefixes.COMMENT_DRAFT}${rootId}`;
-    return updateDraft(key, draft ?? null, rootId, save);
+    return addToUpdateDraftQueue(key, draft ?? null, rootId, save);
 }
 
 export function makeOnMoveHistoryIndex(rootId: string, direction: number) {
@@ -156,7 +156,7 @@ export function submitCommand(channelId: string, rootId: string, draft: PostDraf
 }
 
 export function makeOnSubmit(channelId: string, rootId: string, latestPostId: string) {
-    return (draft: PostDraft, options: {ignoreSlash?: boolean} = {}) => async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+    return (draft: PostDraft, options: {ignoreSlash?: boolean} = {}) => async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {message} = draft;
 
         dispatch(addMessageIntoHistory(message));
