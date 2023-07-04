@@ -290,7 +290,7 @@ export default class Client4 {
         this.useBoardsProduct = useBoardsProduct;
     }
 
-    bindEmitUserLoggedOutEvent(func: typeof this.emitUserLoggedOutEvent) {
+    bindEmitUserLoggedOutEvent(func: LogoutFunc) {
         this.emitUserLoggedOutEvent = func;
     }
 
