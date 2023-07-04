@@ -4306,9 +4306,9 @@ export default class Client4 {
             });
         }
 
-        if (response.status === 401 && data?.result === 'redirect') {
+        if (response.status === 401) {
             // eslint-disable-next-line no-negated-condition
-            if (!isDesktopApp()) {
+            if (!isDesktopApp() && data?.result === 'redirect') {
                 window.location.href = data.uri;
             } else {
                 this.emitUserLoggedOutEvent!('/login', true, true);
