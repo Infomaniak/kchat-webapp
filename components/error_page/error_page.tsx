@@ -82,9 +82,6 @@ export default class ErrorPage extends React.PureComponent<Props> {
         };
 
         const goToKsuite = () => {
-            if (isDesktopApp()) {
-                GlobalActions.emitUserLoggedOutEvent('ikLogout');
-            }
             if (window) {
                 window.open('https://infomaniak.com/ksuite', '_blank');
             }

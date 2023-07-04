@@ -182,6 +182,8 @@ export const DEFAULT_LIMIT_AFTER = 30;
 
 const GRAPHQL_ENDPOINT = '/api/v5/graphql';
 
+type LogoutFunc = (url: string, shouldSignal?: boolean, userAction?: boolean) => void;
+
 export default class Client4 {
     logToConsole = false;
     serverVersion = '';
@@ -205,6 +207,7 @@ export default class Client4 {
     telemetryHandler?: TelemetryHandler;
 
     useBoardsProduct = false;
+    emitUserLoggedOutEvent: LogoutFunc | undefined = undefined;
 
     isIkBaseUrl() {
         const whitelist = [
@@ -283,6 +286,10 @@ export default class Client4 {
 
     setUseBoardsProduct(useBoardsProduct: boolean) {
         this.useBoardsProduct = useBoardsProduct;
+    }
+
+    bindEmitUserLoggedOutEvent(func: typeof this.emitUserLoggedOutEvent) {
+        this.emitUserLoggedOutEvent = func;
     }
 
     getServerVersion() {
@@ -4299,6 +4306,7 @@ export default class Client4 {
 
         if ((response.status === 401 && data?.result === 'redirect') && !isDesktopApp()) {
             window.location.href = data.uri;
+            this.emitUserLoggedOutEvent!('/login', true, true);
         }
 
         if (headers.has(HEADER_X_VERSION_ID)) {
