@@ -4307,13 +4307,13 @@ export default class Client4 {
         }
 
         if (response.status === 401) {
-            // eslint-disable-next-line no-negated-condition
-            if (!isDesktopApp()) {
-                if (data?.result === 'redirect') {
+            if (data?.result === 'redirect') {
+                // eslint-disable-next-line no-negated-condition
+                if (!isDesktopApp()) {
                     window.location.href = data.uri;
+                } else {
+                    this.emitUserLoggedOutEvent!('/login', true, true);
                 }
-            } else {
-                this.emitUserLoggedOutEvent!('/login', true, true);
             }
         }
 
