@@ -13,7 +13,7 @@ import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
 import {Client4} from 'mattermost-redux/client';
 
-import {removeDraft, updateDraft} from './drafts';
+import {removeDraft, addToUpdateDraftQueue} from './drafts';
 
 jest.mock('mattermost-redux/client', () => {
     const original = jest.requireActual('mattermost-redux/client');
@@ -143,7 +143,7 @@ describe('draft actions', () => {
             jest.useFakeTimers('modern');
             jest.setSystemTime(42);
 
-            await store.dispatch(updateDraft(key, draft, '', false));
+            await store.dispatch(addToUpdateDraftQueue(key, draft, '', false));
 
             const testStore = mockStore(initialState);
 
@@ -159,7 +159,7 @@ describe('draft actions', () => {
         });
 
         it('calls upsertDraft correctly', async () => {
-            await store.dispatch(updateDraft(key, draft, '', true));
+            await store.dispatch(addToUpdateDraftQueue(key, draft, '', true));
             expect(createDraftSpy).toHaveBeenCalled();
         });
     });

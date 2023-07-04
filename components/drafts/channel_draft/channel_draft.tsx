@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
 import {createPost} from 'actions/post_actions';
-import {removeDraft, upsertScheduleDraft, updateDraft} from 'actions/views/drafts';
+import {removeDraft, upsertScheduleDraft, addToUpdateDraftQueue} from 'actions/views/drafts';
 import {closeModal, openModal} from 'actions/views/modals';
 import {setGlobalItem} from 'actions/storage';
 import {getGlobalItem} from 'selectors/storage';
@@ -126,7 +126,7 @@ function ChannelDraft({
         await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId));
 
         // Update channel draft
-        const {error} = await dispatch(updateDraft(StoragePrefixes.DRAFT + newDraft.channelId, newDraft, '', true));
+        const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.DRAFT + newDraft.channelId, newDraft, '', true));
         if (error) {
             dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, value));
         }
