@@ -84,8 +84,6 @@ import {close, initialize} from 'actions/websocket_actions';
 
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
-import {clearUserCookie} from 'actions/views/cookie';
-
 import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';

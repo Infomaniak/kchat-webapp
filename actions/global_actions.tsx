@@ -285,7 +285,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
 
-        // clearUserCookie();
+        clearUserCookie();
 
         if (redirectTo && redirectTo !== 'ikLogout') {
             getHistory().push(redirectTo);
