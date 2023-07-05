@@ -298,24 +298,6 @@ export default class Root extends React.PureComponent<Props, State> {
             });
         }
 
-        // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
-        Client4.bindEmitUserLoggedOutEvent(async (data) => {
-            // eslint-disable-next-line no-negated-condition
-            if (!isDesktopApp()) {
-                window.location.href = data.uri;
-            } else {
-                clearLocalStorageToken();
-
-                // In case of unexpected 401 token might already be deleted so calling
-                // delete through authManager.logout might fail.
-
-                // Delete the token if it still exists.
-                await window.authManager.logout();
-                window.authManager.resetToken();
-                clearUserCookie();
-            }
-        });
-
         Promise.all([
             this.props.actions.initializeProducts(),
             initializePlugins(),
@@ -467,7 +449,7 @@ export default class Root extends React.PureComponent<Props, State> {
         this.onConfigLoaded();
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         if (isDesktopApp()) {
             // Rely on initial client calls to 401 for the first redirect to login,
             // we dont need to do it manually.
@@ -597,7 +579,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     getChallengeAndRedirectToLogin(true);
                 }
 
-                // If old token with expire still present
+                // migration from 2.0
                 if (token && (tokenExpire || refreshToken)) {
                     // Prepare migrate to infinite token by clearing all instances of old token
                     clearLocalStorageToken();
@@ -617,11 +599,29 @@ export default class Root extends React.PureComponent<Props, State> {
                     }
                 }
             } else if (token && refreshToken) {
+                // 2.0 and older apps
                 // set an interval to run every minute to check if token needs refresh soon
                 // for older versions of app.
                 this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
             }
         }
+
+        // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
+        Client4.bindEmitUserLoggedOutEvent((data) => {
+            // eslint-disable-next-line no-negated-condition
+            if (!isDesktopApp()) {
+                window.location.href = data.uri;
+            } else {
+                const lsToken = localStorage.getItem('IKToken');
+
+                if (lsToken) {
+                    // Delete the token if it still exists.
+                    clearLocalStorageToken();
+                    clearUserCookie();
+                    window.authManager.logout();
+                }
+            }
+        });
 
         this.initiateMeRequests();
 
