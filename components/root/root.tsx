@@ -84,6 +84,8 @@ import {close, initialize} from 'actions/websocket_actions';
 
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
+import {clearUserCookie} from 'actions/views/cookie';
+
 import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
@@ -310,6 +312,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 // Delete the token if it still exists.
                 await window.authManager.logout();
                 window.authManager.resetToken();
+                clearUserCookie();
             }
         });
 
