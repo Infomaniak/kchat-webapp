@@ -607,7 +607,7 @@ export default class Root extends React.PureComponent<Props, State> {
         }
 
         // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
-        Client4.bindEmitUserLoggedOutEvent((data) => {
+        Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
                 window.location.href = data.uri;
@@ -618,7 +618,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     // Delete the token if it still exists.
                     clearLocalStorageToken();
                     clearUserCookie();
-                    window.authManager.logout();
+                    await window.authManager.logout();
                     window.authManager.resetToken();
                 }
             }
