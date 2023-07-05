@@ -12,6 +12,7 @@ import Header from 'components/widgets/header';
 
 import {selectLhsItem} from 'actions/views/lhs';
 import {suppressRHS, unsuppressRHS} from 'actions/views/rhs';
+import {loadProfilesForSidebar} from 'actions/user_actions';
 import {LhsItemType, LhsPage} from 'types/store/lhs';
 
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
@@ -57,6 +58,7 @@ function Drafts({
     useEffect(() => {
         dispatch(selectLhsItem(LhsItemType.Page, LhsPage.Drafts));
         dispatch(suppressRHS);
+        loadProfilesForSidebar();
 
         return () => {
             dispatch(unsuppressRHS);
