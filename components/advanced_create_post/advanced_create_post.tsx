@@ -395,10 +395,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     show: !isDraftEmpty(draft),
                     remote: false,
                 } as PostDraft;
+
+                this.saveDraft(props, true);
             }
         }
-
-        this.saveDraft(props, true);
     }
 
     saveDraft = (props = this.props, save = false) => {
