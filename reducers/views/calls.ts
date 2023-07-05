@@ -4,7 +4,10 @@ import {combineReducers} from 'redux';
 
 import {UserProfile} from 'mattermost-redux/types/users';
 
+import {act} from 'react-dom/test-utils';
+
 import {ActionTypes} from 'utils/constants';
+import {PostType} from '@mattermost/types/posts';
 
 export type UserState = {
     voice: boolean;
@@ -237,6 +240,7 @@ interface UsersStatusesAction {
 
 const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatusesAction) => {
     switch (action.type) {
+
     // case ActionTypes.VOICE_CHANNEL_UNINIT:
     //     return {};
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
@@ -425,6 +429,19 @@ const callStartAt = (state: {[channelID: string]: number} = {}, action: {type: s
     }
 };
 
+const kmeetRinging = (state: {isRinging: boolean; msg: PostType} = {isRinging: false, msg: {}}, action: { type: string; data: {msg: PostType; isRinging: boolean}}) => {
+    switch (action.type) {
+    case ActionTypes.CALL_RECEIVED: {
+        const {isRinging, msg} = action.data;
+        return {
+            isRinging, msg,
+        };
+    }
+    default:
+        return state;
+    }
+};
+
 const voiceChannelScreenSharingID = (state: {[channelID: string]: string} = {}, action: {type: string; data: {channelID: string; userID?: string}}) => {
     switch (action.type) {
     case ActionTypes.VOICE_CHANNEL_UNINIT:
@@ -496,4 +513,5 @@ export default combineReducers({
     expandedView,
     switchCallModal,
     screenSourceModal,
+    kmeetRinging,
 });

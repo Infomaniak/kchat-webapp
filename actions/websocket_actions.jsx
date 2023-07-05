@@ -127,6 +127,8 @@ import {
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
 
+import {receivedCallDisplay} from './calls';
+
 // import {isDesktopApp} from 'utils/user_agent';
 
 const dispatch = store.dispatch;
@@ -397,6 +399,9 @@ function handleClose(failCount) {
 export function handleEvent(msg) {
     switch (msg.event) {
     case SocketEvents.POSTED:
+        handleNewPostEventDebounced(msg);
+        break;
+
     case SocketEvents.EPHEMERAL_MESSAGE:
         handleNewPostEventDebounced(msg);
         break;
@@ -765,7 +770,15 @@ const handleNewPostEventDebounced = debouncePostEvent(100);
 export function handleNewPostEvent(msg) {
     return (myDispatch, myGetState) => {
         const post = msg.data.post;
-
+        const msgProps = post.props;
+        if (msgProps.url && !msgProps.endend_at) {
+            //dispatch here ringin
+            if (isDesktopApp()) {
+                console.log('desktop');
+            } else {
+                dispatch(receivedCallDisplay(post, true));
+            }
+        }
         if (window.logPostEvents) {
             // eslint-disable-next-line no-console
             console.log('handleNewPostEvent - new post received', post);
@@ -1862,8 +1875,6 @@ function handleConferenceDeleted(msg) {
         });
     };
 }
-
-
 
 function handlePusherMemberRemoved(msg) {
     // console.log('pusher member removed', msg);

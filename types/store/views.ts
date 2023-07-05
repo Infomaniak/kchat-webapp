@@ -9,6 +9,8 @@ import {RelationOneToOne} from '@mattermost/types/utilities';
 import {Team} from '@mattermost/types/teams';
 import {UserThread} from '@mattermost/types/threads';
 
+import {PostType} from '@mattermost/types/posts';
+
 import {I18nState} from './i18n';
 import {LhsViewState} from './lhs';
 import {RhsViewState} from './rhs';
@@ -80,6 +82,7 @@ export type ViewsState = {
         connectedCallID: string;
         connectedCallUrl: string;
         voiceConnectedChannels: any;
+        kmeetRinging: {isRinging: boolean; msg: PostType};
     };
 
     kmeetCalls: {

@@ -15,6 +15,7 @@ import {
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
 import {GlobalState} from 'types/store';
+import {PostType} from '@mattermost/types/posts';
 
 // import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 // import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
@@ -140,6 +141,18 @@ export function updateScreenSharingStatus(dialingID: string, muted = false) {
             data: {
                 userID: getCurrentUserId(getState()),
                 callID: connectedCallID(getState()),
+            },
+        });
+    };
+}
+
+export function receivedCallDisplay(kmeetCall: PostType, isRinging: boolean) {
+    return async (dispatch: DispatchFunc) => {
+        dispatch({
+            type: ActionTypes.CALL_RECEIVED,
+            data: {
+                msg: kmeetCall,
+                isRinging,
             },
         });
     };

@@ -364,6 +364,8 @@ export const ActionTypes = keyMirror({
     RECEIVED_PLUGIN_INSIGHT: null,
     SET_EDIT_CHANNEL_MEMBERS: null,
     NEEDS_LOGGED_IN_LIMIT_REACHED_CHECK: null,
+
+    CALL_RECEIVED: null,
 });
 
 export const PostRequestTypes = keyMirror({
