@@ -6,9 +6,11 @@
 
     &.modal-dialog.CallRingingModal {
         max-width: 270px;
+        height: 267px;
+        width: 267px;
         .modal-content {
             background: #fff;
-            padding: 15px;
+
         }
         .modal-footer {
             display: none;
@@ -16,7 +18,7 @@
         .content-body {
             display: flex;
             justify-content: center;
-            padding-top: 40px;
+          
         }
         .content-calling {
             text-align: center;
@@ -42,7 +44,7 @@
                 min-height: 44px;
                 color: white;
                 &.accept {
-                    background: var(--online-indicator);
+                    background: var(--sys-link-color);
                 }
                 &.decline {
                     background: var(--dnd-indicator);

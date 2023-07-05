@@ -15,7 +15,9 @@ import {
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
 import {GlobalState} from 'types/store';
-import {PostType} from '@mattermost/types/posts';
+import {Post} from '@mattermost/types/posts';
+
+import {openModal} from './views/modals';
 
 // import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 // import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
@@ -146,14 +148,21 @@ export function updateScreenSharingStatus(dialingID: string, muted = false) {
     };
 }
 
-export function receivedCallDisplay(kmeetCall: PostType, isRinging: boolean) {
+export function receivedCallDisplay(kmeetCall: Post, isRinging: boolean) {
     return async (dispatch: DispatchFunc) => {
-        dispatch({
-            type: ActionTypes.CALL_RECEIVED,
-            data: {
-                msg: kmeetCall,
-                isRinging,
-            },
-        });
+        try {
+            const data = await Client4.getProfilesInChannel(kmeetCall.channel_id);
+            dispatch({
+                type: ActionTypes.CALL_RECEIVED,
+                data: {
+                    msg: kmeetCall,
+                    isRinging,
+                    user: data,
+                },
+            });
+        } catch (error) {
+            return {error};
+        }
     };
 }
+

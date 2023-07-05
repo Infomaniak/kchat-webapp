@@ -6,7 +6,7 @@ import * as React from 'react';
 
 import {FormattedMessage} from 'react-intl';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {DefaultRootState, useDispatch, useSelector} from 'react-redux';
 
 import {UserProfile} from 'mattermost-redux/types/users';
 
@@ -14,9 +14,10 @@ import {startOrJoinCallInChannel} from 'actions/calls';
 import {closeModal} from 'actions/views/modals';
 import GenericModal from 'components/generic_modal';
 import Avatars from 'components/widgets/users/avatars';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId, getProfiles, getUser, getUsers} from 'mattermost-redux/selectors/entities/users';
 import {DispatchFunc} from 'mattermost-redux/types/actions';
-import ring from 'sounds/calls_incoming_ring.mp3';
+
+import 'components/kmeet_conference/sound/ring.mp3';
 
 // import {Client4} from 'mattermost-redux/client';
 
@@ -24,21 +25,26 @@ import store from 'stores/redux_store.jsx';
 import {GlobalState} from 'types/store';
 import {ModalIdentifiers} from 'utils/constants';
 import './ringing_dialog.scss';
-
+import {Post} from '@mattermost/types/posts';
+import {Client4} from 'mattermost-redux/client';
+import ring from 'sounds/calls_incoming_ring.mp3';
 type Props = {
     onClose?: () => void;
-    calling: {
+    calling?: {
         users: {[userID: string]: UserProfile};
         channelID: string;
         userCalling: string;
     };
+    post?: Post;
+    currentUserId: string;
 }
 
 function DialingModal(props: Props) {
-    const {users, channelID, userCalling} = props.calling;
+    // const {users, channelID, userCalling} = props.calling;
     const dispatch = useDispatch<DispatchFunc>();
-    const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
-    const state = store.getState();
+
+    const users: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.user);
+    console.log(props.post);
     const handleOnClose = () => {
         if (props.onClose) {
             props.onClose();
@@ -46,11 +52,11 @@ function DialingModal(props: Props) {
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
     };
     const onHandleAccept = (e: React.SyntheticEvent) => {
-        // const data = await Client4.acceptIncomingMeetCall(channelID);
+        Client4.acceptIncomingMeetCall(props.post!.channel_id);
 
         e.preventDefault();
         e.stopPropagation();
-        dispatch(startOrJoinCallInChannel(channelID));
+        dispatch(startOrJoinCallInChannel(props.post!.channel_id));
         handleOnClose();
     };
     const onHandleDecline = (e: React.SyntheticEvent<HTMLButtonElement | HTMLAnchorElement>) => {
@@ -58,15 +64,19 @@ function DialingModal(props: Props) {
         e.stopPropagation();
         handleOnClose();
 
-        // Client4.declineIncomingMeetCall(channelID);
+        Client4.declineIncomingMeetCall(props.post!.channel_id);
     };
 
-    if (connectedChannelID) {
-        return null;
-    }
+    // // if (connectedChannelID) {
+    // //     return null;
+    // // }
 
-    const usersIdsNotMe = Object.values(users).map((u) => u.id).filter((u) => u !== getCurrentUserId(state));
+    // const usersIdsNotMe = Object.values(users).map((u) => u.id).filter((u) => u !== getCurrentUserId(state));
 
+    // console.log(usersIdsNotMe);
+
+    const usersWithoutCurrent = users.filter((user: UserProfile) => user.id !== props.currentUserId);
+    console.log(usersWithoutCurrent, props.currentUserId);
     return (
         <GenericModal
             aria-labelledby='contained-modal-title-vcenter'
@@ -76,9 +86,9 @@ function DialingModal(props: Props) {
             <div className='content-body'>
                 {users && (
                     <Avatars
-                        userIds={usersIdsNotMe}
-                        size={usersIdsNotMe.length > 1 ? 'xl' : 'xxl'}
-                        totalUsers={usersIdsNotMe.length}
+                        userIds={usersWithoutCurrent.map((usr: UserProfile) => usr.id)}
+                        size='xxl'
+                        totalUsers={usersWithoutCurrent.length}
                     />
                 )}
             </div>
@@ -86,23 +96,23 @@ function DialingModal(props: Props) {
                 {users && (
                     <>
                         <div className='content-calling__user'>
-                            {Object.values(users).map((user) => (
-                                <>
-                                    {user.id !== getCurrentUserId(state) && user.id === userCalling && (
+                            {Object.values(usersWithoutCurrent).map((user) => (
+                                <div key={'calling-avatar' + user.id}>
+                                    {user.id !== props.currentUserId && (
                                         <>
                                             <span>
                                                 {user.nickname}
                                             </span>
-                                            {Object.values(users).length > 2 && (
+                                            {Object.values(usersWithoutCurrent).length > 2 && (
                                                 <span className='more'>
                                                     <>
-                                                        &nbsp;&nbsp;{'+'}{(Object.values(users).length - 2)}
+                                                    &nbsp;&nbsp;{'+'}{(Object.values(usersWithoutCurrent).length - 2)}
                                                     </>
                                                 </span>
                                             )}
                                         </>
                                     )}
-                                </>
+                                </div>
                             ))}
                         </div>
                         <div className='content-calling__info'>
@@ -116,6 +126,7 @@ function DialingModal(props: Props) {
                     </>
                 )}
             </div>
+            <div className='content-calling'/>
             <div className='content-actions'>
                 <IconButton
                     className='decline'
@@ -124,6 +135,7 @@ function DialingModal(props: Props) {
                     onClick={onHandleDecline}
                     inverted={true}
                     aria-label='Decline'
+                    label='Decline'
                 />
                 <IconButton
                     className='accept'
@@ -132,11 +144,12 @@ function DialingModal(props: Props) {
                     onClick={onHandleAccept}
                     inverted={true}
                     aria-label='Accept'
+                    label='Accept'
                 />
             </div>
             <audio
                 preload='auto'
-                src={ring}
+                src='/Users/archy/Dev/webapp/components/kmeet_conference/sound/ring.mp3'
                 loop={true}
                 autoPlay={true}
             />

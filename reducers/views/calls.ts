@@ -240,7 +240,6 @@ interface UsersStatusesAction {
 
 const voiceUsersStatuses = (state: UsersStatusesState = {}, action: UsersStatusesAction) => {
     switch (action.type) {
-
     // case ActionTypes.VOICE_CHANNEL_UNINIT:
     //     return {};
     case ActionTypes.VOICE_CHANNEL_USER_CONNECTED:
@@ -429,12 +428,12 @@ const callStartAt = (state: {[channelID: string]: number} = {}, action: {type: s
     }
 };
 
-const kmeetRinging = (state: {isRinging: boolean; msg: PostType} = {isRinging: false, msg: {}}, action: { type: string; data: {msg: PostType; isRinging: boolean}}) => {
+const kmeetRinging = (state: {isRinging: boolean; msg: PostType; user: UserProfile[]} = {isRinging: false, msg: {}, user: []}, action: { type: string; data: {msg: PostType; isRinging: boolean; user: UserProfile[]}}) => {
     switch (action.type) {
     case ActionTypes.CALL_RECEIVED: {
-        const {isRinging, msg} = action.data;
+        const {isRinging, msg, user} = action.data;
         return {
-            isRinging, msg,
+            isRinging, msg, user,
         };
     }
     default:

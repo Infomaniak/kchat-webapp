@@ -127,6 +127,8 @@ import {
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
 
+import DialingModal from 'components/kmeet_conference/ringing_dialog';
+
 import {receivedCallDisplay} from './calls';
 
 // import {isDesktopApp} from 'utils/user_agent';
@@ -771,11 +773,19 @@ export function handleNewPostEvent(msg) {
     return (myDispatch, myGetState) => {
         const post = msg.data.post;
         const msgProps = post.props;
+        const currentUserId = getCurrentUserId(myGetState());
         if (msgProps.url && !msgProps.endend_at) {
             //dispatch here ringin
             if (isDesktopApp()) {
                 console.log('desktop');
             } else {
+                dispatch(openModal(
+                    {
+                        modalId: ModalIdentifiers.INCOMING_CALL,
+                        dialogProps: {post, currentUserId},
+                        dialogType: DialingModal,
+                    },
+                ));
                 dispatch(receivedCallDisplay(post, true));
             }
         }
