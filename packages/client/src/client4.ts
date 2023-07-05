@@ -184,7 +184,7 @@ export const DEFAULT_LIMIT_AFTER = 30;
 
 const GRAPHQL_ENDPOINT = '/api/v5/graphql';
 
-type LogoutFunc = (url: string, shouldSignal?: boolean, userAction?: boolean) => void;
+type LogoutFunc = (redirectTo?: string, shouldSignal?: boolean, userAction?: boolean) => void;
 
 export default class Client4 {
     logToConsole = false;
@@ -4310,8 +4310,8 @@ export default class Client4 {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
                 window.location.href = data.uri;
-            } else {
-                this.emitUserLoggedOutEvent!('/login', true, true);
+            } else if (this.emitUserLoggedOutEvent) {
+                this.emitUserLoggedOutEvent('ikLogout');
             }
         }
 
