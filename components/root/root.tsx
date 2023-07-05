@@ -299,7 +299,7 @@ export default class Root extends React.PureComponent<Props, State> {
         }
 
         // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
-        Client4.bindEmitUserLoggedOutEvent((data) => {
+        Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
                 window.location.href = data.uri;
@@ -310,24 +310,8 @@ export default class Root extends React.PureComponent<Props, State> {
                 // delete through authManager.logout might fail.
 
                 // Delete the token if it still exists.
-                window.authManager.logout();
-
-                // Clean up desktop side if logout failed.
-                clearUserCookie();
+                await window.authManager.logout();
                 window.authManager.resetToken();
-
-                // Trigger hard redirect for reauth.
-                if (isDefaultAuthServer()) {
-                    getChallengeAndRedirectToLogin(true);
-                } else {
-                    window.postMessage(
-                        {
-                            type: 'reset-teams',
-                            message: {},
-                        },
-                        window.origin,
-                    );
-                }
             }
         });
 
