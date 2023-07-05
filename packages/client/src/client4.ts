@@ -148,13 +148,6 @@ import {TelemetryHandler} from './telemetry';
 // @ts-ignore
 import crypto from 'crypto';
 
-// Fix error import
-// eslint-disable-next-line no-warning-comments
-// TODO update isDesktopApp() with callback
-function isDesktopApp(): boolean {
-    return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
-}
-
 const IKConstants = {
 
     // @ts-ignore
@@ -184,7 +177,7 @@ export const DEFAULT_LIMIT_AFTER = 30;
 
 const GRAPHQL_ENDPOINT = '/api/v5/graphql';
 
-type LogoutFunc = (url: string, shouldSignal?: boolean, userAction?: boolean) => void;
+type LogoutFunc = (data?: any) => void;
 
 export default class Client4 {
     logToConsole = false;
@@ -4299,11 +4292,8 @@ export default class Client4 {
         }
 
         if (response.status === 401 && data?.result === 'redirect') {
-            // eslint-disable-next-line no-negated-condition
-            if (!isDesktopApp()) {
-                window.location.href = data.uri;
-            } else {
-                this.emitUserLoggedOutEvent!('/', true, true);
+            if (this.emitUserLoggedOutEvent) {
+                this.emitUserLoggedOutEvent(data);
             }
         }
 
