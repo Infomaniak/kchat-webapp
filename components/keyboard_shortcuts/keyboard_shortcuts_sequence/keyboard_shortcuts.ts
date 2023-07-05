@@ -544,4 +544,14 @@ export const KEYBOARD_SHORTCUTS = {
         },
     },
     calls: callsKBShortcuts,
+    schedulePost: {
+        default: {
+            id: 'create_post.schedule_post.tooltip',
+            defaultMessage: 'Schedule a post:\tShift|Alt|S',
+        },
+        mac: {
+            id: 'create_post.schedule_post.tooltip.mac',
+            defaultMessage: 'Schedule a post:\tShift|⌥|S',
+        },
+    },
 };

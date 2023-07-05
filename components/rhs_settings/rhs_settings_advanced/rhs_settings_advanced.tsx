@@ -329,6 +329,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserHighlightPrev}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserHighlightNext}/>
                                 <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.browserNewline}/>
+                                <KeyboardShortcutSequence shortcut={KEYBOARD_SHORTCUTS.schedulePost}/>
                             </div>
                         </div>
                     </div>

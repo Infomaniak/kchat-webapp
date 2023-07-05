@@ -14,7 +14,7 @@ import SchedulePostMenu, {SchedulePostMenuOption} from 'components/schedule_post
 import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import KeyboardShortcutSequence from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
@@ -54,17 +54,6 @@ const StyledSchedulePostButton = styled(Button)`
     }
 `;
 
-const keyboardShortcut = {
-    default: {
-        id: 'create_post.schedule_post.tooltip',
-        defaultMessage: 'Schedule a post:\tShift|Alt|S',
-    },
-    mac: {
-        id: 'create_post.schedule_post.tooltip.mac',
-        defaultMessage: 'Schedule a post:\tShift|⌥|S',
-    },
-};
-
 type Props = {
     disabled: boolean;
     getAnchorEl: () => HTMLDivElement | null;
@@ -80,7 +69,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
     const tooltip = (
         <Tooltip id='schedule-post-tooltip'>
             <KeyboardShortcutSequence
-                shortcut={keyboardShortcut}
+                shortcut={KEYBOARD_SHORTCUTS.schedulePost}
                 hoistDescription={true}
                 isInsideTooltip={true}
             />
