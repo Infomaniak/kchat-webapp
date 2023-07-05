@@ -84,6 +84,8 @@ import {close, initialize} from 'actions/websocket_actions';
 
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
+import {clearUserCookie} from 'actions/views/cookie';
+
 import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
@@ -296,7 +298,26 @@ export default class Root extends React.PureComponent<Props, State> {
             });
         }
 
-        Client4.bindEmitUserLoggedOutEvent(GlobalActions.emitUserLoggedOutEvent);
+        // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
+        // In case of unexpected 401 token might be deleted so calling delete through authManager.logout might fail.
+        // Discard token and start over instead.
+        Client4.bindEmitUserLoggedOutEvent(() => {
+            clearLocalStorageToken();
+            clearUserCookie();
+            window.authManager.resetToken();
+
+            if (isDefaultAuthServer()) {
+                getChallengeAndRedirectToLogin(true);
+            } else {
+                window.postMessage(
+                    {
+                        type: 'reset-teams',
+                        message: {},
+                    },
+                    window.origin,
+                );
+            }
+        });
 
         Promise.all([
             this.props.actions.initializeProducts(),
