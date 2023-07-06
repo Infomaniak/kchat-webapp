@@ -487,6 +487,8 @@ describe('components/AdvancedCreateComment', () => {
             wrapper.instance().focusTextbox = focusTextbox;
             wrapper.instance().handleBlur();
 
+            jest.runOnlyPendingTimers();
+
             // Note that setProps doesn't actually trigger componentDidUpdate
             wrapper.setProps(props);
             wrapper.instance().componentDidUpdate(props, props);

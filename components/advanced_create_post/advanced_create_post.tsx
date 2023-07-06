@@ -1412,6 +1412,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     handleBlur = () => {
+        if (this.saveDraftFrame) {
+            clearTimeout(this.saveDraftFrame);
+        }
         this.saveDraftFrame = window.setTimeout(() => {
             if (this.isDraftSubmitting) {
                 return;
