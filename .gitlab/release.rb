@@ -102,21 +102,21 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
 end
 
 # Update labels if the tag is a pre-release
-if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
-  puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
-  create_changelog(GIT_RELEASE_TAG)
-  changelog = get_changelog(GIT_RELEASE_TAG)
-  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+# if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+#   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
+#   create_changelog(GIT_RELEASE_TAG)
+#   changelog = get_changelog(GIT_RELEASE_TAG)
+#   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
-  mr_numbers.each do |mr_number|
-    mr = get_merge_request(mr_number)
-    labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::next"]
-    update_merge_request_labels(mr["iid"], labels)
-    puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
-  end
-  create_release(changelog)
-  puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
-end
+#   mr_numbers.each do |mr_number|
+#     mr = get_merge_request(mr_number)
+#     labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::next"]
+#     update_merge_request_labels(mr["iid"], labels)
+#     puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
+#   end
+#   create_release(changelog)
+#   puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
+# end
 
 ## Test if the tag is a preprod release
 # if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
@@ -131,8 +131,9 @@ end
 #   end
 # end
 
-# Notify only for prod or next tags
-if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG) || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+# Notify only for prod tags
+# || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   commit_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/commit/"
   mr_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/"
   formatted_changelog = changelog.gsub(/kchat\/webapp@/, commit_url).gsub(/kchat\/webapp!/, mr_url)
