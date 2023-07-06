@@ -131,7 +131,7 @@ end
 #   end
 # end
 
-# Notify only for prod or next tags
+# Notify only for prod tags
 # || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
 if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   commit_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/commit/"
