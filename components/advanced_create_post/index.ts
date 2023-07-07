@@ -182,7 +182,6 @@ function setDraft(key: string, value: PostDraft, draftChannelId: string, save = 
         const channelId = draftChannelId || getCurrentChannelId(getState());
         let updatedValue = null;
         if (value) {
-            updatedValue = {...value};
             updatedValue = {
                 ...value,
                 channelId,
