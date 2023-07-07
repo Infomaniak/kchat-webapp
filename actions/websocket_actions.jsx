@@ -1893,8 +1893,12 @@ function handleUpsertDraftEvent(msg) {
 
         const draft = msg.data.draft;
         const {key, value} = transformServerDraft(draft);
+        const currentDraft = getGlobalItem(state, key, {});
         value.show = true;
         value.remote = false;
+        if (currentDraft.uploadsInProgress.length) {
+            value.uploadsInProgress = currentDraft.uploadsInProgress;
+        }
 
         if (draft.delete_at) {
             return;
