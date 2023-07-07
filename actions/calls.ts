@@ -2,6 +2,8 @@
 // See LICENSE.txt for license information.
 import {Dispatch} from 'redux';
 
+import {ca} from 'date-fns/locale';
+
 import {ActionFunc, DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {ActionTypes} from 'utils/constants';
 import {
@@ -75,6 +77,14 @@ export function startOrJoinCallInChannel(channelID: string /**, dialingID?: stri
         const state = getState();
         const channels = voiceConnectedChannels(state);
 
+        const call: Post = {...state.views.calls.kmeetRinging.msg};
+
+        if (call.props && call.props.url) {
+            const kmeetUrl = new URL(call.props.url);
+            window.open(kmeetUrl.href, '_blank', 'noopener');
+        }
+        Client4.acceptIncomingMeetCall(call.props.id);
+
         // const getChannel = makeGetChannel();
         // const currentChannel = getChannel(state, {id: channelID});
         // const currentUser = getCurrentUser(getState());
@@ -82,13 +92,13 @@ export function startOrJoinCallInChannel(channelID: string /**, dialingID?: stri
 
         let data;
         if (!connectedChannelID(getState()) && !channels[channelID]) {
-            data = await Client4.startMeet(channelID);
+            data = await Client4.startMeet(call.channel_id);
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
             });
 
-            if (data && data.url) {
-                const kmeetUrl = new URL(data.url);
+            if (call.props && call.props.url) {
+                const kmeetUrl = new URL(call.props.url);
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
 
@@ -168,3 +178,12 @@ export function receivedCallDisplay(kmeetCall: Post, isRinging: boolean) {
     };
 }
 
+export const defineOnlineOffLineStatus = (onLine: boolean) => (dispatch: Dispatch<GenericAction>) => {
+    //Send to DB user Online
+    dispatch({
+        type: ActionTypes.CALL_USER_ONLINE,
+        data: {
+            onLine,
+        }},
+    );
+};

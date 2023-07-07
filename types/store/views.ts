@@ -9,7 +9,7 @@ import {RelationOneToOne} from '@mattermost/types/utilities';
 import {Team} from '@mattermost/types/teams';
 import {UserThread} from '@mattermost/types/threads';
 
-import {PostType} from '@mattermost/types/posts';
+import {Post, PostType} from '@mattermost/types/posts';
 
 import {I18nState} from './i18n';
 import {LhsViewState} from './lhs';
@@ -82,7 +82,7 @@ export type ViewsState = {
         connectedCallID: string;
         connectedCallUrl: string;
         voiceConnectedChannels: any;
-        kmeetRinging: {isRinging: boolean; msg: PostType; user: UserProfile[]; caller: UserProfile[]};
+        kmeetRinging: {isRinging: boolean; msg: Post; user: UserProfile[]; caller: UserProfile[]; online: boolean};
     };
 
     kmeetCalls: {

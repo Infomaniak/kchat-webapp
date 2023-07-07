@@ -6,7 +6,7 @@ import * as React from 'react';
 
 import {FormattedMessage} from 'react-intl';
 
-import {DefaultRootState, useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {UserProfile} from 'mattermost-redux/types/users';
 
@@ -14,20 +14,15 @@ import {startOrJoinCallInChannel} from 'actions/calls';
 import {closeModal} from 'actions/views/modals';
 import GenericModal from 'components/generic_modal';
 import Avatars from 'components/widgets/users/avatars';
-import {getCurrentUserId, getProfiles, getUser, getUsers} from 'mattermost-redux/selectors/entities/users';
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 
-import 'components/kmeet_conference/sound/ring.mp3';
-
 // import {Client4} from 'mattermost-redux/client';
-
-import store from 'stores/redux_store.jsx';
+import bing from 'sounds/bing.mp3';
 import {GlobalState} from 'types/store';
 import {ModalIdentifiers} from 'utils/constants';
 import './ringing_dialog.scss';
 import {Post} from '@mattermost/types/posts';
 import {Client4} from 'mattermost-redux/client';
-import ring from 'sounds/calls_incoming_ring.mp3';
 type Props = {
     onClose?: () => void;
     calling?: {
@@ -35,12 +30,11 @@ type Props = {
         channelID: string;
         userCalling: string;
     };
-    post?: Post;
+    post: Post;
     currentUserId: string;
 }
 
 function DialingModal(props: Props) {
-    // const {users, channelID, userCalling} = props.calling;
     const dispatch = useDispatch<DispatchFunc>();
     const users: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.user);
     const caller: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.caller);
@@ -52,18 +46,16 @@ function DialingModal(props: Props) {
     };
     const onHandleAccept = (e: React.SyntheticEvent) => {
         Client4.acceptIncomingMeetCall(props.post!.channel_id);
-
         e.preventDefault();
         e.stopPropagation();
-        dispatch(startOrJoinCallInChannel(props.post!.channel_id));
+        dispatch(startOrJoinCallInChannel(props.post.channel_id));
         handleOnClose();
     };
     const onHandleDecline = (e: React.SyntheticEvent<HTMLButtonElement | HTMLAnchorElement>) => {
         e.preventDefault();
         e.stopPropagation();
         handleOnClose();
-
-        Client4.declineIncomingMeetCall(props.post!.channel_id);
+        Client4.declineIncomingMeetCall(props.post.channel_id);
     };
 
     const usersWithoutCurrent = users.filter((user: UserProfile) => user.id !== props.currentUserId);
@@ -76,12 +68,17 @@ function DialingModal(props: Props) {
         return nicknames.toString();
     };
 
+    const audio = new Audio(bing);
+
+    audio.play();
+
     return (
         <GenericModal
             aria-labelledby='contained-modal-title-vcenter'
             className='CallRingingModal'
             onExited={handleOnClose}
         >
+
             <div className='content-body'>
                 {users && usersWithoutCurrent.length <= 2 && (
                     <Avatars
@@ -138,12 +135,7 @@ function DialingModal(props: Props) {
                     label='Accept'
                 />
             </div>
-            <audio
-                preload='auto'
-                src='/Users/archy/Dev/webapp/components/kmeet_conference/sound/ring.mp3'
-                loop={true}
-                autoPlay={true}
-            />
+
         </GenericModal>
     );
 }
