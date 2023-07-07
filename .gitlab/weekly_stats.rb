@@ -149,7 +149,7 @@ def print_weekly_summary(weekly_summary)
   # end
 
   if weekly_summary['issues'].any?
-    output << "\n ##### **Issues À Discuter**"
+    output << "\n #### **Issues À Discuter**"
     output << "\n"
     output << "| &nbsp; | Link | Assignees |"
     output << "|---|---|---|"
@@ -162,7 +162,7 @@ def print_weekly_summary(weekly_summary)
   end
 
   if weekly_summary['stagings'].any?
-    output << "\n ##### **Stagings:**"
+    output << "\n #### **Stagings:**"
     output << "\n"
     output << "| &nbsp; | Trello | User |"
     output << "|---|---|---|---|"
@@ -174,7 +174,7 @@ def print_weekly_summary(weekly_summary)
   end
 
   if weekly_summary['canary_releases'].any?
-    output << "\n ##### **Canary:**"
+    output << "\n #### **Canary:**"
     output << "\n"
     output << "| &nbsp; | Link | User |"
     output << "|---|---|---|"
@@ -186,7 +186,7 @@ def print_weekly_summary(weekly_summary)
   end
 
   if weekly_summary['prod_releases'].any?
-    output << "\n ##### **Prod release:**"
+    output << "\n #### **Prod releases this week:**"
     output << "\n"
     output << "| &nbsp; | Link | User |"
     output << "|---|---|---|"
