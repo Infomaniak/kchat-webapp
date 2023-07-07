@@ -149,15 +149,17 @@ export function updateScreenSharingStatus(dialingID: string, muted = false) {
 }
 
 export function receivedCallDisplay(kmeetCall: Post, isRinging: boolean) {
-    return async (dispatch: DispatchFunc) => {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         try {
             const data = await Client4.getProfilesInChannel(kmeetCall.channel_id);
+            const caller = await Client4.getProfilesByIds([kmeetCall.user_id]);
             dispatch({
                 type: ActionTypes.CALL_RECEIVED,
                 data: {
                     msg: kmeetCall,
                     isRinging,
                     user: data,
+                    caller,
                 },
             });
         } catch (error) {

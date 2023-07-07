@@ -42,9 +42,8 @@ type Props = {
 function DialingModal(props: Props) {
     // const {users, channelID, userCalling} = props.calling;
     const dispatch = useDispatch<DispatchFunc>();
-
     const users: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.user);
-    console.log(props.post);
+    const caller: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.caller);
     const handleOnClose = () => {
         if (props.onClose) {
             props.onClose();
@@ -67,16 +66,16 @@ function DialingModal(props: Props) {
         Client4.declineIncomingMeetCall(props.post!.channel_id);
     };
 
-    // // if (connectedChannelID) {
-    // //     return null;
-    // // }
-
-    // const usersIdsNotMe = Object.values(users).map((u) => u.id).filter((u) => u !== getCurrentUserId(state));
-
-    // console.log(usersIdsNotMe);
-
     const usersWithoutCurrent = users.filter((user: UserProfile) => user.id !== props.currentUserId);
-    console.log(usersWithoutCurrent, props.currentUserId);
+    const usersLenght = usersWithoutCurrent.length;
+    const getNickname = (len: number) => {
+        const nicknames: string[] = usersWithoutCurrent.map((usr: UserProfile) => (usr.nickname));
+        if (len > 2) {
+            nicknames.splice(2, nicknames.length - 2, '...');
+        }
+        return nicknames.toString();
+    };
+
     return (
         <GenericModal
             aria-labelledby='contained-modal-title-vcenter'
@@ -84,10 +83,17 @@ function DialingModal(props: Props) {
             onExited={handleOnClose}
         >
             <div className='content-body'>
-                {users && (
+                {users && usersWithoutCurrent.length <= 2 && (
                     <Avatars
                         userIds={usersWithoutCurrent.map((usr: UserProfile) => usr.id)}
-                        size='xxl'
+                        size='xl'
+                        totalUsers={usersWithoutCurrent.length}
+                    />
+                )}
+                {users && usersWithoutCurrent.length > 2 && caller && (
+                    <Avatars
+                        userIds={caller.map((usr) => usr.id)}
+                        size='xl'
                         totalUsers={usersWithoutCurrent.length}
                     />
                 )}
@@ -96,24 +102,9 @@ function DialingModal(props: Props) {
                 {users && (
                     <>
                         <div className='content-calling__user'>
-                            {Object.values(usersWithoutCurrent).map((user) => (
-                                <div key={'calling-avatar' + user.id}>
-                                    {user.id !== props.currentUserId && (
-                                        <>
-                                            <span>
-                                                {user.nickname}
-                                            </span>
-                                            {Object.values(usersWithoutCurrent).length > 2 && (
-                                                <span className='more'>
-                                                    <>
-                                                    &nbsp;&nbsp;{'+'}{(Object.values(usersWithoutCurrent).length - 2)}
-                                                    </>
-                                                </span>
-                                            )}
-                                        </>
-                                    )}
-                                </div>
-                            ))}
+                            <span>
+                                {getNickname(usersLenght)}
+                            </span>
                         </div>
                         <div className='content-calling__info'>
                             <>
