@@ -132,7 +132,7 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                   size="md"
                 >
                   <button
-                    className="RoundButton-dvlhqG gfRzmz style--none"
+                    className="RoundButton-jiiGed hRdoFj style--none"
                     size="md"
                   >
                     <span
@@ -413,7 +413,7 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                   size="md"
                 >
                   <button
-                    className="RoundButton-dvlhqG gfRzmz style--none"
+                    className="RoundButton-jiiGed hRdoFj style--none"
                     size="md"
                   >
                     <span
@@ -700,7 +700,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                   size="md"
                 >
                   <button
-                    className="RoundButton-dvlhqG gfRzmz style--none"
+                    className="RoundButton-jiiGed hRdoFj style--none"
                     size="md"
                   >
                     <span
@@ -1057,7 +1057,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                   size="md"
                 >
                   <button
-                    className="RoundButton-dvlhqG gfRzmz style--none"
+                    className="RoundButton-jiiGed hRdoFj style--none"
                     size="md"
                   >
                     <span

@@ -31,6 +31,7 @@ type Props = {
     size?: ComponentProps<typeof Avatar>['size'];
     fetchMissingUsers?: boolean;
     disableProfileOverlay?: boolean;
+    disablePopover?: boolean;
 };
 
 interface MMOverlayTrigger extends BaseOverlayTrigger {
@@ -60,11 +61,13 @@ function UserAvatar({
     userId,
     overlayProps,
     disableProfileOverlay,
+    disablePopover = false,
     ...props
 }: {
     userId: UserProfile['id'];
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
     disableProfileOverlay: boolean;
+    disablePopover?: boolean;
 } & ComponentProps<typeof Avatar>) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
@@ -76,7 +79,6 @@ function UserAvatar({
     const hideProfilePopover = () => {
         overlay.current?.hide();
     };
-
     return (
         <OverlayTrigger
             trigger='click'
@@ -85,12 +87,13 @@ function UserAvatar({
             rootClose={true}
             ref={overlay}
             overlay={
-                <ProfilePopover
-                    className='user-profile-popover'
-                    userId={userId}
-                    src={profilePictureURL}
-                    hide={hideProfilePopover}
-                />
+                // disablePopover ? <></> : <ProfilePopover
+                //     className='user-profile-popover'
+                //     userId={userId}
+                //     src={profilePictureURL}
+                //     hide={hideProfilePopover}
+                // />
+                <></>
             }
         >
             <SimpleTooltip
@@ -119,6 +122,7 @@ function Avatars({
     totalUsers,
     fetchMissingUsers = true,
     disableProfileOverlay = false,
+    disablePopover = false,
 }: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
@@ -152,6 +156,7 @@ function Avatars({
                     size={size}
                     overlayProps={overlayProps}
                     disableProfileOverlay={disableProfileOverlay}
+                    disablePopover={disablePopover}
                 />
             ))}
             {Boolean(nonDisplayCount) && (

@@ -5,7 +5,7 @@ import {Dispatch} from 'redux';
 import {ca} from 'date-fns/locale';
 
 import {ActionFunc, DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
-import {ActionTypes} from 'utils/constants';
+import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {
     connectedCallID,
     connectedCallUrl,
@@ -18,6 +18,8 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
 import {GlobalState} from 'types/store';
 import {Post} from '@mattermost/types/posts';
+
+import DialingModal from 'components/kmeet_conference/ringing_dialog';
 
 import {openModal} from './views/modals';
 
@@ -158,20 +160,30 @@ export function updateScreenSharingStatus(dialingID: string, muted = false) {
     };
 }
 
-export function receivedCallDisplay(kmeetCall: Post, isRinging: boolean) {
+export function receivedKmeetCall(kmeetCall: Post, isRinging: boolean, currentUserId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         try {
             const data = await Client4.getProfilesInChannel(kmeetCall.channel_id);
             const caller = await Client4.getProfilesByIds([kmeetCall.user_id]);
-            dispatch({
-                type: ActionTypes.CALL_RECEIVED,
-                data: {
-                    msg: kmeetCall,
-                    isRinging,
-                    user: data,
-                    caller,
-                },
-            });
+            if (kmeetCall.props.url && !kmeetCall.props.ended_at && kmeetCall.user_id !== currentUserId) {
+                dispatch(openModal(
+                    {
+                        modalId: ModalIdentifiers.INCOMING_CALL,
+                        dialogProps: {post: kmeetCall, currentUserId},
+                        dialogType: DialingModal,
+                    },
+                ));
+
+                dispatch({
+                    type: ActionTypes.CALL_RECEIVED,
+                    data: {
+                        msg: kmeetCall,
+                        isRinging,
+                        user: data,
+                        caller,
+                    },
+                });
+            }
         } catch (error) {
             return {error};
         }

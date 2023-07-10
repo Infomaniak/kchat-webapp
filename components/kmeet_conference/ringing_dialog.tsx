@@ -8,21 +8,25 @@ import {FormattedMessage} from 'react-intl';
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import {UserProfile} from 'mattermost-redux/types/users';
-
 import {startOrJoinCallInChannel} from 'actions/calls';
 import {closeModal} from 'actions/views/modals';
 import GenericModal from 'components/generic_modal';
-import Avatars from 'components/widgets/users/avatars';
+
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 
 // import {Client4} from 'mattermost-redux/client';
-import bing from 'sounds/bing.mp3';
+
 import {GlobalState} from 'types/store';
 import {ModalIdentifiers} from 'utils/constants';
 import './ringing_dialog.scss';
 import {Post} from '@mattermost/types/posts';
 import {Client4} from 'mattermost-redux/client';
+import bing from 'sounds/bing.mp3';
+import {UserProfile} from '@mattermost/types/users';
+
+import Avatars from 'components/widgets/users/avatars';
+
+import Ring from './ring/Ring';
 type Props = {
     onClose?: () => void;
     calling?: {
@@ -30,14 +34,15 @@ type Props = {
         channelID: string;
         userCalling: string;
     };
-    post: Post;
+    post?: Post;
     currentUserId: string;
 }
 
 function DialingModal(props: Props) {
     const dispatch = useDispatch<DispatchFunc>();
     const users: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.user);
-    const caller: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.caller);
+    const callers: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.caller);
+
     const handleOnClose = () => {
         if (props.onClose) {
             props.onClose();
@@ -45,17 +50,21 @@ function DialingModal(props: Props) {
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
     };
     const onHandleAccept = (e: React.SyntheticEvent) => {
-        Client4.acceptIncomingMeetCall(props.post!.channel_id);
-        e.preventDefault();
-        e.stopPropagation();
-        dispatch(startOrJoinCallInChannel(props.post.channel_id));
-        handleOnClose();
+        if (props.post) {
+            Client4.acceptIncomingMeetCall(props.post.channel_id);
+            e.preventDefault();
+            e.stopPropagation();
+            dispatch(startOrJoinCallInChannel(props.post.channel_id));
+            handleOnClose();
+        }
     };
     const onHandleDecline = (e: React.SyntheticEvent<HTMLButtonElement | HTMLAnchorElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        handleOnClose();
-        Client4.declineIncomingMeetCall(props.post.channel_id);
+        if (props.post) {
+            e.preventDefault();
+            e.stopPropagation();
+            handleOnClose();
+            Client4.declineIncomingMeetCall(props.post?.channel_id);
+        }
     };
 
     const usersWithoutCurrent = users.filter((user: UserProfile) => user.id !== props.currentUserId);
@@ -68,30 +77,32 @@ function DialingModal(props: Props) {
         return nicknames.toString();
     };
 
-    const audio = new Audio(bing);
-
-    audio.play();
-
-    return (
+    return (<>
         <GenericModal
             aria-labelledby='contained-modal-title-vcenter'
             className='CallRingingModal'
             onExited={handleOnClose}
         >
-
+            <Ring
+                sound={bing}
+            />
             <div className='content-body'>
-                {users && usersWithoutCurrent.length <= 2 && (
+                { usersWithoutCurrent.length && usersWithoutCurrent.length <= 2 && (
+
                     <Avatars
                         userIds={usersWithoutCurrent.map((usr: UserProfile) => usr.id)}
                         size='xl'
-                        totalUsers={usersWithoutCurrent.length}
+                        totalUsers={usersWithoutCurrent?.length}
+                        disableProfileOverlay={true}
                     />
                 )}
-                {users && usersWithoutCurrent.length > 2 && caller && (
+                {users && usersWithoutCurrent.length > 2 && callers && (
                     <Avatars
-                        userIds={caller.map((usr) => usr.id)}
+                        userIds={callers.map((usr) => usr.id)}
                         size='xl'
                         totalUsers={usersWithoutCurrent.length}
+                        disableProfileOverlay={true}
+                        disablePopover={true}
                     />
                 )}
             </div>
@@ -137,6 +148,7 @@ function DialingModal(props: Props) {
             </div>
 
         </GenericModal>
+    </>
     );
 }
 
