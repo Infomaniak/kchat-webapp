@@ -15,7 +15,7 @@ import {PostDraft} from 'types/store/draft';
 import {getGlobalItem} from 'selectors/storage';
 import {makeGetDrafts} from 'selectors/drafts';
 
-import {StoragePrefixes} from 'utils/constants';
+import {ActionTypes, StoragePrefixes} from 'utils/constants';
 
 import type {Draft as ServerDraft} from '@mattermost/types/drafts';
 import type {UserProfile} from '@mattermost/types/users';
@@ -121,9 +121,10 @@ function updateDraft(key: string, value: PostDraft|null, rootId = '', save = fal
                 id: value.id || activeDraft.id,
                 createAt: data.createAt || timestamp,
                 updateAt: timestamp,
-                remote: false,
             };
         }
+
+        dispatch(setGlobalDraft(key, updatedValue, false));
 
         if (updatedValue && !updatedValue.message && !updatedValue.fileInfos.length && !updatedValue.uploadsInProgress.length) {
             return dispatch(removeDraft(key));
@@ -131,14 +132,23 @@ function updateDraft(key: string, value: PostDraft|null, rootId = '', save = fal
 
         if (syncedDraftsAreAllowedAndEnabled(state) && save && updatedValue) {
             const userId = getCurrentUserId(state);
+
             try {
-                const {id} = await upsertDraft(updatedValue, userId, rootId);
-                updatedValue.id = id;
+                if (value?.message === '' || value?.message.replace(/\s/g, '').length || (value && value?.fileInfos.length > 0)) {
+                    if (value?.message.replace(/\s/g, '').length) {
+                        const {id} = await upsertDraft(updatedValue, userId, rootId);
+                        updatedValue.id = id;
+                    } else {
+                        //This case is when there is a file attached with no message
+                        await upsertDraft({...updatedValue, message: ''}, userId, rootId);
+                    }
+                }
             } catch (error) {
                 return {data: false, error};
             }
         }
-        dispatch(setGlobalItem(key, updatedValue));
+
+        // dispatch(setGlobalDraft(key, updatedValue, false));
         return {data: true};
     };
 }
@@ -206,6 +216,31 @@ export function setDraftsTourTipPreference(initializationState: Record<string, b
         };
         await dispatch(savePreferences(currentUserId, [preference]));
         return {data: true};
+    };
+}
+
+export function setGlobalDraft(key: string, value: PostDraft|null, isRemote: boolean) {
+    return (dispatch: DispatchFunc) => {
+        if (value?.message === '' || value?.message.replace(/\s/g, '').length || (value && value?.fileInfos.length > 0)) {
+            if (value?.message.replace(/\s/g, '').length) {
+                dispatch(setGlobalItem(key, value));
+            } else {
+                //This case is when there is a file attached with no message
+                dispatch(setGlobalItem(key, {...value, message: ''}));
+            }
+        }
+        dispatch(setGlobalDraftSource(key, isRemote));
+        return {data: true};
+    };
+}
+
+export function setGlobalDraftSource(key: string, isRemote: boolean) {
+    return {
+        type: ActionTypes.SET_DRAFT_SOURCE,
+        data: {
+            key,
+            isRemote,
+        },
     };
 }
 

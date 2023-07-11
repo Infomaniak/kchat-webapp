@@ -38,6 +38,7 @@ type Props = {
     type: 'channel' | 'thread';
     user: UserProfile;
     value: PostDraft;
+    isRemote: boolean;
     isScheduled: boolean;
     scheduledWillNotBeSent: boolean;
 }
@@ -51,6 +52,7 @@ function ChannelDraft({
     type,
     user,
     value,
+    isRemote,
     isScheduled,
     scheduledWillNotBeSent,
 }: Props) {
@@ -170,7 +172,7 @@ function ChannelDraft({
                             />
                         )}
                         timestamp={value.updateAt}
-                        remote={value.remote || false}
+                        remote={isRemote || false}
                         isScheduled={isScheduled}
                         scheduledTimestamp={value.timestamp}
                         scheduledWillNotBeSent={scheduledWillNotBeSent}

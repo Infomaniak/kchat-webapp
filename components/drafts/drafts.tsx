@@ -30,11 +30,13 @@ type Props = {
     status: UserStatus['status'];
     localDraftsAreEnabled: boolean;
     invalidScheduledAmount: number;
+    draftRemotes: Record<string, boolean>;
 }
 
 function Drafts({
     displayName,
     drafts,
+    draftRemotes,
     status,
     user,
     localDraftsAreEnabled,
@@ -122,6 +124,7 @@ function Drafts({
                         key={d.key}
                         displayName={displayName}
                         draft={d}
+                        isRemote={draftRemotes[d.key]}
                         user={user}
                         status={status}
                     />
