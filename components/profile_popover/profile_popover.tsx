@@ -94,11 +94,6 @@ interface ProfilePopoverProps extends Omit<React.ComponentProps<typeof Popover>,
      */
     returnFocus?: () => void;
 
-    /**
-     * Set to true if the popover was opened from the right-hand
-     * sidebar (comment thread, search results, etc.)
-     */
-    isRHS?: boolean;
     isBusy?: boolean;
     isMobileView: boolean;
 
@@ -211,7 +206,6 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
         return 'ProfilePopover';
     }
     static defaultProps = {
-        isRHS: false,
         hasMention: false,
         status: UserStatuses.OFFLINE,
         customStatus: null,
@@ -436,7 +430,7 @@ class ProfilePopover extends React.PureComponent<ProfilePopoverProps, ProfilePop
         }
 
         const keysToBeRemoved: Array<keyof ProfilePopoverProps> = ['user', 'userId', 'channelId', 'src', 'status', 'hideStatus', 'isBusy',
-            'hide', 'isRHS', 'hasMention', 'enableTimezone', 'currentUserId', 'currentTeamId', 'teamUrl', 'actions', 'isTeamAdmin',
+            'hide', 'hasMention', 'enableTimezone', 'currentUserId', 'currentTeamId', 'teamUrl', 'actions', 'isTeamAdmin',
             'isChannelAdmin', 'canManageAnyChannelMembersInCurrentTeam', 'intl'];
         const popoverProps: React.ComponentProps<typeof Popover> = Utils.deleteKeysFromObject({...this.props},
             keysToBeRemoved);

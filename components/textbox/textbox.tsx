@@ -51,11 +51,9 @@ export type Props = {
     suggestionListPosition?: React.ComponentProps<typeof SuggestionList>['position'];
     alignWithTextbox?: boolean;
     emojiEnabled?: boolean;
-    isRHS?: boolean;
     characterLimit: number;
     disabled?: boolean;
     badConnection?: boolean;
-    listenForMentionKeyClick?: boolean;
     currentUserId: string;
     currentTeamId: string;
     preview?: boolean;
@@ -83,8 +81,6 @@ export default class Textbox extends React.PureComponent<Props> {
 
     static defaultProps = {
         supportsCommands: true,
-        isRHS: false,
-        listenForMentionKeyClick: false,
         inputComponent: AutosizeTextarea,
         suggestionList: SuggestionList,
     };
@@ -281,7 +277,6 @@ export default class Textbox extends React.PureComponent<Props> {
                         onBlur={this.handleBlur}
                     >
                         <PostMarkdown
-                            isRHS={this.props.isRHS}
                             message={this.props.value}
                             mentionKeys={[]}
                             channelId={this.props.channelId}
@@ -322,10 +317,8 @@ export default class Textbox extends React.PureComponent<Props> {
                     channelId={this.props.channelId}
                     value={this.props.value}
                     renderDividers={ALL}
-                    isRHS={this.props.isRHS}
                     disabled={this.props.disabled}
                     contextId={this.props.channelId}
-                    listenForMentionKeyClick={this.props.listenForMentionKeyClick}
                     openWhenEmpty={this.props.openWhenEmpty}
                     alignWithTextbox={this.props.alignWithTextbox}
                 />

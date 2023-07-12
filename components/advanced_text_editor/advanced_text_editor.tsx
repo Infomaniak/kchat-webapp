@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {CSSProperties, useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import classNames from 'classnames';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {EmoticonHappyOutlineIcon} from '@infomaniak/compass-icons/components';
@@ -179,13 +179,7 @@ const AdvanceTextEditor = ({
 
     const handleHeightChange = useCallback((height: number, maxHeight: number) => {
         setRenderScrollbar(height > maxHeight);
-
-        window.requestAnimationFrame(() => {
-            if (textboxRef.current) {
-                setScrollbarWidth(Utils.scrollbarWidth(textboxRef.current.getInputBox()));
-            }
-        });
-    }, [textboxRef]);
+    }, []);
 
     const handleShowFormat = useCallback(() => {
         setShowPreview(!shouldShowPreview);
@@ -418,11 +412,6 @@ const AdvanceTextEditor = ({
                     scroll: renderScrollbar,
                     'formatting-bar': showFormattingBar,
                 })}
-                style={
-                    renderScrollbar && scrollbarWidth ? ({
-                        '--detected-scrollbar-width': `${scrollbarWidth}px`,
-                    } as CSSProperties) : undefined
-                }
             >
                 <div
                     id={'speak-'}
@@ -474,7 +463,6 @@ const AdvanceTextEditor = ({
                             characterLimit={maxPostSize}
                             preview={shouldShowPreview}
                             badConnection={badConnection}
-                            listenForMentionKeyClick={true}
                             useChannelMentions={useChannelMentions}
                             rootId={postId}
                             onWidthChange={handleWidthChange}
