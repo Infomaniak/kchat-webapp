@@ -87,13 +87,13 @@ function UserAvatar({
             rootClose={true}
             ref={overlay}
             overlay={
-                // disablePopover ? <></> : <ProfilePopover
-                //     className='user-profile-popover'
-                //     userId={userId}
-                //     src={profilePictureURL}
-                //     hide={hideProfilePopover}
-                // />
-                <></>
+                <ProfilePopover
+                    className='user-profile-popover'
+                    userId={userId}
+                    src={profilePictureURL}
+                    hide={hideProfilePopover}
+                />
+
             }
         >
             <SimpleTooltip

@@ -42,7 +42,6 @@ function DialingModal(props: Props) {
     const dispatch = useDispatch<DispatchFunc>();
     const users: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.user);
     const callers: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.caller);
-
     const handleOnClose = () => {
         if (props.onClose) {
             props.onClose();
@@ -51,7 +50,7 @@ function DialingModal(props: Props) {
     };
     const onHandleAccept = (e: React.SyntheticEvent) => {
         if (props.post) {
-            Client4.acceptIncomingMeetCall(props.post.channel_id);
+            Client4.acceptIncomingMeetCall(props.post.props.conference_id);
             e.preventDefault();
             e.stopPropagation();
             dispatch(startOrJoinCallInChannel(props.post.channel_id));
@@ -63,7 +62,7 @@ function DialingModal(props: Props) {
             e.preventDefault();
             e.stopPropagation();
             handleOnClose();
-            Client4.declineIncomingMeetCall(props.post?.channel_id);
+            Client4.declineIncomingMeetCall(props.post.props.conference_id);
         }
     };
 
@@ -76,7 +75,6 @@ function DialingModal(props: Props) {
         }
         return nicknames.toString();
     };
-
     return (<>
         <GenericModal
             aria-labelledby='contained-modal-title-vcenter'
@@ -117,8 +115,9 @@ function DialingModal(props: Props) {
                         <div className='content-calling__info'>
                             <>
                                 <FormattedMessage
-                                    id='calling_modal.alling'
+                                    id='calling_modal.calling'
                                     defaultMessage='calling'
+
                                 />
                             </>
                         </div>

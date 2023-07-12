@@ -54,7 +54,14 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           <OverlayTrigger
             defaultOverlayShown={false}
             disabled={false}
-            overlay={<React.Fragment />}
+            overlay={
+              <Memo(Connect(injectIntl(ProfilePopover)))
+                className="user-profile-popover"
+                hide={[Function]}
+                src="/api/v4/users/5/image?_=0"
+                userId="5"
+              />
+            }
             placement="right"
             rootClose={true}
             trigger="click"
@@ -63,6 +70,8 @@ exports[`components/threading/channel_threads/thread_footer should report total 
               defaultOverlayShown={false}
               overlay={
                 <OverlayWrapper
+                  className="user-profile-popover"
+                  hide={[Function]}
                   intl={
                     Object {
                       "defaultFormats": Object {},
@@ -99,6 +108,8 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       "wrapRichTextChunksInFragment": undefined,
                     }
                   }
+                  src="/api/v4/users/5/image?_=0"
+                  userId="5"
                 />
               }
               placement="right"
@@ -264,7 +275,14 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           <OverlayTrigger
             defaultOverlayShown={false}
             disabled={false}
-            overlay={<React.Fragment />}
+            overlay={
+              <Memo(Connect(injectIntl(ProfilePopover)))
+                className="user-profile-popover"
+                hide={[Function]}
+                src="/api/v4/users/4/image?_=0"
+                userId="4"
+              />
+            }
             placement="right"
             rootClose={true}
             trigger="click"
@@ -273,6 +291,8 @@ exports[`components/threading/channel_threads/thread_footer should report total 
               defaultOverlayShown={false}
               overlay={
                 <OverlayWrapper
+                  className="user-profile-popover"
+                  hide={[Function]}
                   intl={
                     Object {
                       "defaultFormats": Object {},
@@ -309,6 +329,8 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       "wrapRichTextChunksInFragment": undefined,
                     }
                   }
+                  src="/api/v4/users/4/image?_=0"
+                  userId="4"
                 />
               }
               placement="right"
@@ -474,7 +496,14 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           <OverlayTrigger
             defaultOverlayShown={false}
             disabled={false}
-            overlay={<React.Fragment />}
+            overlay={
+              <Memo(Connect(injectIntl(ProfilePopover)))
+                className="user-profile-popover"
+                hide={[Function]}
+                src="/api/v4/users/3/image?_=0"
+                userId="3"
+              />
+            }
             placement="right"
             rootClose={true}
             trigger="click"
@@ -483,6 +512,8 @@ exports[`components/threading/channel_threads/thread_footer should report total 
               defaultOverlayShown={false}
               overlay={
                 <OverlayWrapper
+                  className="user-profile-popover"
+                  hide={[Function]}
                   intl={
                     Object {
                       "defaultFormats": Object {},
@@ -519,6 +550,8 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       "wrapRichTextChunksInFragment": undefined,
                     }
                   }
+                  src="/api/v4/users/3/image?_=0"
+                  userId="3"
                 />
               }
               placement="right"
@@ -1152,7 +1185,14 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           <OverlayTrigger
             defaultOverlayShown={false}
             disabled={false}
-            overlay={<React.Fragment />}
+            overlay={
+              <Memo(Connect(injectIntl(ProfilePopover)))
+                className="user-profile-popover"
+                hide={[Function]}
+                src="/api/v4/users/5/image?_=0"
+                userId="5"
+              />
+            }
             placement="right"
             rootClose={true}
             trigger="click"
@@ -1161,6 +1201,8 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
               defaultOverlayShown={false}
               overlay={
                 <OverlayWrapper
+                  className="user-profile-popover"
+                  hide={[Function]}
                   intl={
                     Object {
                       "defaultFormats": Object {},
@@ -1197,6 +1239,8 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       "wrapRichTextChunksInFragment": undefined,
                     }
                   }
+                  src="/api/v4/users/5/image?_=0"
+                  userId="5"
                 />
               }
               placement="right"
@@ -1362,7 +1406,14 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           <OverlayTrigger
             defaultOverlayShown={false}
             disabled={false}
-            overlay={<React.Fragment />}
+            overlay={
+              <Memo(Connect(injectIntl(ProfilePopover)))
+                className="user-profile-popover"
+                hide={[Function]}
+                src="/api/v4/users/4/image?_=0"
+                userId="4"
+              />
+            }
             placement="right"
             rootClose={true}
             trigger="click"
@@ -1371,6 +1422,8 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
               defaultOverlayShown={false}
               overlay={
                 <OverlayWrapper
+                  className="user-profile-popover"
+                  hide={[Function]}
                   intl={
                     Object {
                       "defaultFormats": Object {},
@@ -1407,6 +1460,8 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       "wrapRichTextChunksInFragment": undefined,
                     }
                   }
+                  src="/api/v4/users/4/image?_=0"
+                  userId="4"
                 />
               }
               placement="right"
@@ -1572,7 +1627,14 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           <OverlayTrigger
             defaultOverlayShown={false}
             disabled={false}
-            overlay={<React.Fragment />}
+            overlay={
+              <Memo(Connect(injectIntl(ProfilePopover)))
+                className="user-profile-popover"
+                hide={[Function]}
+                src="/api/v4/users/3/image?_=0"
+                userId="3"
+              />
+            }
             placement="right"
             rootClose={true}
             trigger="click"
@@ -1581,6 +1643,8 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
               defaultOverlayShown={false}
               overlay={
                 <OverlayWrapper
+                  className="user-profile-popover"
+                  hide={[Function]}
                   intl={
                     Object {
                       "defaultFormats": Object {},
@@ -1617,6 +1681,8 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       "wrapRichTextChunksInFragment": undefined,
                     }
                   }
+                  src="/api/v4/users/3/image?_=0"
+                  userId="3"
                 />
               }
               placement="right"

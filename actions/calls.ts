@@ -21,6 +21,12 @@ import {Post} from '@mattermost/types/posts';
 
 import DialingModal from 'components/kmeet_conference/ringing_dialog';
 
+import {isDesktopApp} from 'utils/user_agent';
+
+import {KmeetTour} from 'components/tours/onboarding_tour';
+
+import {UserProfile} from '@mattermost/types/users';
+
 import {openModal} from './views/modals';
 
 // import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -79,13 +85,12 @@ export function startOrJoinCallInChannel(channelID: string /**, dialingID?: stri
         const state = getState();
         const channels = voiceConnectedChannels(state);
 
-        const call: Post = {...state.views.calls.kmeetRinging.msg};
+        const call: Post = state.views.calls.kmeetRinging.msg;
 
         if (call.props && call.props.url) {
             const kmeetUrl = new URL(call.props.url);
             window.open(kmeetUrl.href, '_blank', 'noopener');
         }
-        Client4.acceptIncomingMeetCall(call.props.id);
 
         // const getChannel = makeGetChannel();
         // const currentChannel = getChannel(state, {id: channelID});
@@ -94,26 +99,26 @@ export function startOrJoinCallInChannel(channelID: string /**, dialingID?: stri
 
         let data;
         if (!connectedChannelID(getState()) && !channels[channelID]) {
-            data = await Client4.startMeet(call.channel_id);
-            dispatch({
-                type: ActionTypes.VOICE_CHANNEL_ENABLE,
-            });
+            // data = await Client4.startMeet(call.channel_id);
+            // dispatch({
+            //     type: ActionTypes.VOICE_CHANNEL_ENABLE,
+            // });
 
-            if (call.props && call.props.url) {
-                const kmeetUrl = new URL(call.props.url);
-                window.open(kmeetUrl.href, '_blank', 'noopener');
-            }
+            // if (call.props && call.props.url) {
+            //     const kmeetUrl = new URL(call.props.url);
+            //     window.open(kmeetUrl.href, '_blank', 'noopener');
+            // }
 
-            await dispatch({
-                type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
-                data: {
-                    channelID,
-                    userID: getCurrentUserId(getState()),
-                    currentUserID: getCurrentUserId(getState()),
-                    url: data.url,
-                    id: data.id,
-                },
-            });
+            // await dispatch({
+            //     type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
+            //     data: {
+            //         channelID,
+            //         userID: getCurrentUserId(getState()),
+            //         currentUserID: getCurrentUserId(getState()),
+            //         url: data.url,
+            //         id: data.id,
+            //     },
+            // });
 
             // actions > old-calls #1
         } else if (connectedCallUrl(state) !== null) {
@@ -163,26 +168,43 @@ export function updateScreenSharingStatus(dialingID: string, muted = false) {
 export function receivedKmeetCall(kmeetCall: Post, isRinging: boolean, currentUserId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         try {
-            const data = await Client4.getProfilesInChannel(kmeetCall.channel_id);
-            const caller = await Client4.getProfilesByIds([kmeetCall.user_id]);
+            console.log(kmeetCall);
+            const data: UserProfile[] = await Client4.getProfilesInChannel(kmeetCall.channel_id);
+            const caller: UserProfile = await Client4.getProfilesByIds([kmeetCall.user_id]).then((res) => res[0]);
+            const channel = await Client4.getChannel(kmeetCall.channel_id);
             if (kmeetCall.props.url && !kmeetCall.props.ended_at && kmeetCall.user_id !== currentUserId) {
-                dispatch(openModal(
-                    {
-                        modalId: ModalIdentifiers.INCOMING_CALL,
-                        dialogProps: {post: kmeetCall, currentUserId},
-                        dialogType: DialingModal,
-                    },
-                ));
+                if (isDesktopApp()) {
+                    window.postMessage(
+                        {
+                            type: 'call-dialing',
+                            message: {
+                                calling: {
+                                    users: data.filter((usr: UserProfile) => usr.id !== caller.id),
+                                    channelID: kmeetCall.channel_id,
+                                    userCalling: caller.id,
+                                    channel},
+                            },
+                        },
+                        window.location.origin);
+                } else {
+                    dispatch(openModal(
+                        {
+                            modalId: ModalIdentifiers.INCOMING_CALL,
+                            dialogProps: {post: kmeetCall, currentUserId},
+                            dialogType: DialingModal,
+                        },
+                    ));
 
-                dispatch({
-                    type: ActionTypes.CALL_RECEIVED,
-                    data: {
-                        msg: kmeetCall,
-                        isRinging,
-                        user: data,
-                        caller,
-                    },
-                });
+                    dispatch({
+                        type: ActionTypes.CALL_RECEIVED,
+                        data: {
+                            msg: kmeetCall,
+                            isRinging,
+                            user: data,
+                            caller,
+                        },
+                    });
+                }
             }
         } catch (error) {
             return {error};

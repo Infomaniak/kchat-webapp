@@ -4256,7 +4256,7 @@ export default class Client4 {
 
     declineIncomingMeetCall(callID: string) {
         return this.doFetch(
-            `${this.getBaseRoute()}/conferences/${callID}/deny`,
+            `${this.getBaseRoute()}/conferences/${callID}/decline`,
             {method: 'post'},
         );
     }

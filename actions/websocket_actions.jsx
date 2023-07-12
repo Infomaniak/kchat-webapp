@@ -774,12 +774,7 @@ export function handleNewPostEvent(msg) {
         const msgProps = post.props;
         const currentUserId = getCurrentUserId(myGetState());
         if (msgProps) {
-            //dispatch here ringin
-            if (isDesktopApp()) {
-                console.log('desktop');
-            } else {
-                dispatch(receivedKmeetCall(post, true, currentUserId));
-            }
+            dispatch(receivedKmeetCall(post, true, currentUserId));
         }
         if (window.logPostEvents) {
             // eslint-disable-next-line no-console
