@@ -256,10 +256,7 @@ export default class Textbox extends React.PureComponent<Props> {
     }
 
     render() {
-        let preview = null;
-
         let textboxClassName = 'form-control custom-textarea';
-        let textWrapperClass = 'textarea-wrapper';
         if (this.props.emojiEnabled) {
             textboxClassName += ' custom-textarea--emoji-picker';
         }
@@ -270,25 +267,27 @@ export default class Textbox extends React.PureComponent<Props> {
             textboxClassName += ' textarea--has-labels';
         }
         if (this.props.preview) {
-            textboxClassName += ' custom-textarea--preview';
-            textWrapperClass += ' textarea-wrapper--preview';
-
-            preview = (
+            return (
                 <div
-                    tabIndex={this.props.tabIndex || 0}
-                    ref={this.preview}
-                    className={classNames('form-control custom-textarea textbox-preview-area', {'textarea--has-labels': this.props.hasLabels})}
-                    onKeyPress={this.props.onKeyPress}
-                    onKeyDown={this.handleKeyDown}
-                    onBlur={this.handleBlur}
+                    ref={this.wrapper}
+                    className='textarea-wrapper'
                 >
-                    <PostMarkdown
-                        isRHS={this.props.isRHS}
-                        message={this.props.value}
-                        mentionKeys={[]}
-                        channelId={this.props.channelId}
-                        imageProps={{hideUtilities: true}}
-                    />
+                    <div
+                        tabIndex={this.props.tabIndex || 0}
+                        ref={this.preview}
+                        className={classNames('form-control custom-textarea textbox-preview-area', {'textarea--has-labels': this.props.hasLabels})}
+                        onKeyPress={this.props.onKeyPress}
+                        onKeyDown={this.handleKeyDown}
+                        onBlur={this.handleBlur}
+                    >
+                        <PostMarkdown
+                            isRHS={this.props.isRHS}
+                            message={this.props.value}
+                            mentionKeys={[]}
+                            channelId={this.props.channelId}
+                            imageProps={{hideUtilities: true}}
+                        />
+                    </div>
                 </div>
             );
         }
@@ -296,7 +295,7 @@ export default class Textbox extends React.PureComponent<Props> {
         return (
             <div
                 ref={this.wrapper}
-                className={textWrapperClass}
+                className='textarea-wrapper'
             >
                 <SuggestionBox
                     id={this.props.id}
@@ -330,7 +329,6 @@ export default class Textbox extends React.PureComponent<Props> {
                     openWhenEmpty={this.props.openWhenEmpty}
                     alignWithTextbox={this.props.alignWithTextbox}
                 />
-                {preview}
             </div>
         );
     }

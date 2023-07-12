@@ -381,12 +381,7 @@ const AdvanceTextEditor = ({
             return;
         }
 
-        const inputPaddingLeft = parseInt(window.getComputedStyle(input, null).paddingLeft || '0', 10);
-        const inputPaddingRight = parseInt(window.getComputedStyle(input, null).paddingRight || '0', 10);
-        const inputPaddingX = inputPaddingLeft + inputPaddingRight;
-        const currentWidth = width + inputPaddingX;
-
-        if (currentWidth >= maxWidth) {
+        if (width >= maxWidth) {
             input.style.maxWidth = '100%';
             setShowFormattingSpacer(true);
         } else {
@@ -400,22 +395,6 @@ const AdvanceTextEditor = ({
             handleWidthChange(0);
         }
     }, [handleWidthChange, message]);
-
-    useEffect(() => {
-        if (!input) {
-            return;
-        }
-
-        let padding = 16;
-        if (showFormattingBar) {
-            padding += 32;
-        }
-        if (renderScrollbar) {
-            padding += 8;
-        }
-
-        input.style.paddingRight = `${padding}px`;
-    }, [showFormattingBar, renderScrollbar, input]);
 
     const formattingBar = (
         <AutoHeightSwitcher
@@ -440,6 +419,7 @@ const AdvanceTextEditor = ({
                 className={classNames('AdvancedTextEditor', {
                     'AdvancedTextEditor__attachment-disabled': !canUploadFiles,
                     scroll: renderScrollbar,
+                    'formatting-bar': showFormattingBar,
                 })}
                 style={
                     renderScrollbar && scrollbarWidth ? ({
