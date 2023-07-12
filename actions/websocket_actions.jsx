@@ -1893,7 +1893,7 @@ function handleUpsertDraftEvent(msg) {
         const {key, value} = transformServerDraft(draft);
         const currentDraft = getGlobalItem(state, key, {});
         value.show = true;
-        if (currentDraft.uploadsInProgress.length) {
+        if (currentDraft && currentDraft.uploadsInProgress && currentDraft.uploadsInProgress.length) {
             value.uploadsInProgress = currentDraft.uploadsInProgress;
         }
 
