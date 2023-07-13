@@ -129,8 +129,10 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
 
-# [stable + next] Notify only for prod tags
-if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG) || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+# [stable] Notify
+# canary changelog can be loopy when there is no prod release for a while, it can be seen in the develop MR anyway.
+# || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   commit_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/commit/"
   mr_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/"
   formatted_changelog = changelog.gsub(/kchat\/webapp@/, commit_url).gsub(/kchat\/webapp!/, mr_url)
