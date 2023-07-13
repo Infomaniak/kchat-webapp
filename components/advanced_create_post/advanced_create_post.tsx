@@ -609,6 +609,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 channelTimezoneCount,
                 memberNotifyCount,
                 onConfirm: () => this.handleNotifyAllConfirmation(isSchedule, scheduleUTCTimestamp),
+                onExited: () => {
+                    this.isDraftSubmitting = false;
+                },
             },
         });
     }
@@ -689,7 +692,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
         if (memberNotifyCount > 0) {
             this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp);
-            this.isDraftSubmitting = false;
             return;
         }
 
