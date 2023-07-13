@@ -1,9 +1,8 @@
 require 'json'
 require 'net/http'
 
-GITLAB_API_BASE = "https://gitlab.infomaniak.ch/api/v4"
-# todo: maybe use env
-GITLAB_PROJECT_ID = 3225
+GITLAB_API_BASE = ENV['CI_API_V4_URL']
+GITLAB_PROJECT_ID = ENV['CI_PROJECT_ID']
 GITLAB_ACCESS_TOKEN = ENV['GITLAB_API_TOKEN']
 GIT_RELEASE_TAG = ARGV[0]
 MILESTONE = ARGV[1]
