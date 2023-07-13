@@ -8,8 +8,8 @@ GITLAB_ACCESS_TOKEN = ENV['GITLAB_API_TOKEN']
 GIT_RELEASE_TAG = ARGV[0]
 MILESTONE = ARGV[1]
 NOTIFY_CHANNEL = ARGV[2]
-STABLE_BRANCH = 'master'
-NEXT_BRANCH = 'develop'
+STABLE_BRANCH = 'stable'
+NEXT_BRANCH = 'master'
 
 def get_http(uri)
   Net::HTTP.new(uri.host, uri.port).tap do |http|
