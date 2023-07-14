@@ -131,6 +131,7 @@ const initialState = {
         rhs: {
             rhsState: null,
             searchTerms: '',
+            settingsTabState: 'display',
         },
     },
 };
@@ -196,6 +197,7 @@ describe('executeCommand', () => {
                 {
                     type: ActionTypes.UPDATE_RHS_STATE,
                     state: RHSStates.SETTINGS,
+                    tab: 'display',
                 },
             ]);
             expect(result).toEqual({data: true});
