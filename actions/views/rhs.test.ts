@@ -119,6 +119,7 @@ describe('rhs view actions', () => {
             rhs: {
                 rhsState: null,
                 filesSearchExtFilter: [] as string[],
+                settingsTabState: 'display',
             },
             posts: {
                 editingPost: {
