@@ -122,8 +122,9 @@ function Drafts({
                         />
                         <SettingsButton
                             className='draft-filter-menu__button'
-                            icon={'sync'}
+                            icon={'server-variant'}
                             tab='drafts'
+                            tooltipPlacement='top'
                         />
                     </span>
                 )}

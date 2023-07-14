@@ -22,9 +22,11 @@ type Props = {
     tab?: string;
     className?: string;
     icon?: TIconGlyph;
+    tooltipPlacement?: string;
+    tooltipContent?: string;
 }
 
-const SettingsButton = ({tab = 'display', className, icon}: Props): JSX.Element | null => {
+const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, tooltipContent}: Props): JSX.Element | null => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
@@ -40,10 +42,12 @@ const SettingsButton = ({tab = 'display', className, icon}: Props): JSX.Element 
 
     const tooltip = (
         <Tooltip id='productSettings'>
-            <FormattedMessage
-                id='global_header.productSettings'
-                defaultMessage='Settings'
-            />
+            {tooltipContent || (
+                <FormattedMessage
+                    id='global_header.productSettings'
+                    defaultMessage='Settings'
+                />
+            )}
         </Tooltip>
     );
 
@@ -51,7 +55,7 @@ const SettingsButton = ({tab = 'display', className, icon}: Props): JSX.Element 
         <OverlayTrigger
             trigger={['hover', 'focus']}
             delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement='bottom'
+            placement={tooltipPlacement || 'bottom'}
             overlay={tooltip}
         >
             <IconButton
