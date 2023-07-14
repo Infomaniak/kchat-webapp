@@ -1,11 +1,25 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import {combineReducers} from 'redux';
 
-import {ActionTypes} from 'utils/constants';
+import {PostTypes} from 'mattermost-redux/action_types';
 
-const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: {type: string; data: {channelID: string; url: string; id: string}}) => {
+import {ActionTypes} from 'utils/constants';
+import {GenericAction} from 'mattermost-redux/types/actions';
+
+const connectedKmeetUrls = (state: ConnectedKmeetUrlsState = {}, action: GenericAction) => {
     switch (action.type) {
+    case PostTypes.RECEIVED_NEW_POST:
+        if (action.data.type && action.data.type === 'custom_call') {
+            return {
+                ...state,
+                [action.data.channel_id]: {
+                    url: action.data.props.url,
+                    id: action.data.props.conference_id,
+                }};
+        }
+        return state;
     case ActionTypes.VOICE_CHANNEL_USERS_CONNECTED:
         return {
             ...state,
