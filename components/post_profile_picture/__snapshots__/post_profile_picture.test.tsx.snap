@@ -9,7 +9,6 @@ exports[`components/PostProfilePicture should match snapshot, no status and post
   isBot={false}
   isBusy={true}
   isEmoji={false}
-  isRHS={false}
   popoverPlacement="right"
   profileSrc="/api/v4/users/defaultuser/image?_=0"
   size="md"
@@ -30,7 +29,6 @@ exports[`components/PostProfilePicture should match snapshot, status and post ic
   isBot={false}
   isBusy={true}
   isEmoji={false}
-  isRHS={false}
   popoverPlacement="right"
   profileSrc="/api/v4/users/defaultuser/image?_=0"
   size="md"

@@ -26,10 +26,6 @@ type Props = {
      */
     group: Group;
 
-    /**
-     * Props to be passed through from AtMention to ProfilePopover
-     */
-    isRHS?: boolean;
     channelId?: string;
     hasMention?: boolean;
 }
@@ -37,7 +33,6 @@ type Props = {
 const AtMentionGroup = (props: Props) => {
     const {
         group,
-        isRHS,
         channelId,
         hasMention,
     } = props;
@@ -136,7 +131,6 @@ const AtMentionGroup = (props: Props) => {
                         className='user-profile-popover'
                         userId={showUser.id}
                         src={Client4.getProfilePictureUrl(showUser.id, showUser.last_picture_update)}
-                        isRHS={isRHS}
                         channelId={channelId}
                         hasMention={hasMention}
                         hide={hideUserOverlay}

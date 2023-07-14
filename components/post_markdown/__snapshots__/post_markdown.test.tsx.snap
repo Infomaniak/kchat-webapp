@@ -12,7 +12,6 @@ exports[`components/PostMarkdown plugin hooks can build upon other hook message 
   editedAt={0}
   imageProps={Object {}}
   imagesMetadata={Object {}}
-  isRHS={false}
   mentionKeys={
     Array [
       Object {
@@ -51,7 +50,6 @@ exports[`components/PostMarkdown plugin hooks can overwrite other hooks messages
   editedAt={0}
   imageProps={Object {}}
   imagesMetadata={Object {}}
-  isRHS={false}
   mentionKeys={
     Array [
       Object {
@@ -83,7 +81,6 @@ exports[`components/PostMarkdown should correctly pass postId down 1`] = `
   editedAt={0}
   imageProps={Object {}}
   imagesMetadata={Object {}}
-  isRHS={false}
   mentionKeys={
     Array [
       Object {
@@ -177,7 +174,6 @@ exports[`components/PostMarkdown should render properly with a post 1`] = `
   editedAt={0}
   imageProps={Object {}}
   imagesMetadata={Object {}}
-  isRHS={false}
   mentionKeys={
     Array [
       Object {
@@ -209,7 +205,6 @@ exports[`components/PostMarkdown should render properly with an empty post 1`] =
   editedAt={0}
   imageProps={Object {}}
   imagesMetadata={Object {}}
-  isRHS={false}
   mentionKeys={
     Array [
       Object {
@@ -241,7 +236,6 @@ exports[`components/PostMarkdown should render properly without group highlight 
   editedAt={0}
   imageProps={Object {}}
   imagesMetadata={Object {}}
-  isRHS={false}
   mentionKeys={
     Array [
       Object {
@@ -273,7 +267,6 @@ exports[`components/PostMarkdown should render properly without highlight a post
   editedAt={0}
   imageProps={Object {}}
   imagesMetadata={Object {}}
-  isRHS={false}
   mentionKeys={
     Array [
       Object {
