@@ -11,6 +11,7 @@ import {RequestStatus} from '../constants';
 import TestHelper from '../../test/test_helper';
 import configureStore from '../../test/test_store';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 import {UserTypes} from 'mattermost-redux/action_types';
 import {ActionResult} from 'mattermost-redux/types/actions';
 import {UserProfile} from '@mattermost/types/users';
@@ -1454,6 +1455,51 @@ describe('Actions.Users', () => {
 
             const profiles = store.getState().entities.users.profiles;
             expect(profiles).toBe(originalState.entities.users.profiles);
+        });
+    });
+    describe('Should redirect to last kSuite seen on loadMeREST', () => {
+        test('on Webapp', async () => {
+            const originalEnv = {...process.env};
+            const originalOrigin = window.origin;
+            const open = jest.spyOn(window, 'open').mockImplementation(jest.fn());
+            window.origin = 'https://kchat.infomaniak.com';
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const teamUrl = 'https://test.test.com';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.basicTeam, url: teamUrl}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(open).toHaveBeenCalledWith(teamUrl, '_self');
+            process.env = originalEnv;
+            window.origin = originalOrigin;
+            open.mockRestore();
+        });
+
+        test('on Desktop', async () => {
+            const originalEnv = {...process.env};
+            const originalOrigin = window.origin;
+            const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
+            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
+            window.origin = 'https://kchat.infomaniak.com';
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const teamUrl = 'https://test.test.com';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.basicTeam, url: teamUrl}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(postMessage).toHaveBeenCalledWith({
+                type: 'switch-server',
+                data: TestHelper.basicTeam!.display_name,
+            });
+            process.env = originalEnv;
+            window.origin = originalOrigin;
+            postMessage.mockRestore();
+            userAgentMock.mockRestore();
+            console.log(window.origin, window.postMessage, navigator.userAgent);
         });
     });
 });

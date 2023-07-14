@@ -204,6 +204,14 @@ export default class Client4 {
     useBoardsProduct = false;
     emitUserLoggedOutEvent: LogoutFunc | undefined = undefined;
 
+    isIkBaseUrl() {
+        const whitelist = [
+            'https://do-not-replace-kchat.infomaniak.com'.replace('do-not-replace-', ''),
+            'https://do-not-replace-kchat.preprod.dev.infomaniak.ch'.replace('do-not-replace-', ''),
+        ];
+        return whitelist.includes(window.origin);
+    }
+
     getUrl() {
         return this.url;
     }

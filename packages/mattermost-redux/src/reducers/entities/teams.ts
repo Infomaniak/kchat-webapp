@@ -24,7 +24,21 @@ function currentTeamId(state = '', action: GenericAction) {
 
 function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
     switch (action.type) {
-    case TeamTypes.RECEIVED_TEAMS_LIST:
+    case TeamTypes.RECEIVED_TEAMS_LIST: {
+        const teams: Team[] = action.data;
+        if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams,
+                    },
+                },
+                window.origin,
+            );
+        }
+        return Object.assign({}, teamListToMap(teams));
+    }
     case SchemeTypes.RECEIVED_SCHEME_TEAMS:
     case AdminTypes.RECEIVED_DATA_RETENTION_CUSTOM_POLICY_TEAMS_SEARCH:
         return Object.assign({}, teamListToMap(action.data));
@@ -129,17 +143,6 @@ function myMembers(state: RelationOneToOne<Team, TeamMembership> = {}, action: G
         const nextState = {...state};
         const receivedTeams = teamListToMap(action.data);
         updateState(receivedTeams, nextState);
-        if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
-            window.postMessage(
-                {
-                    type: 'update-teams',
-                    message: {
-                        teams: action.data,
-                    },
-                },
-                window.origin,
-            );
-        }
         return nextState;
     }
     case TeamTypes.RECEIVED_TEAMS: {

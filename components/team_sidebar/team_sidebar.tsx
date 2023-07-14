@@ -11,6 +11,7 @@ import {RouteComponentProps} from 'react-router-dom';
 import {Team} from '@mattermost/types/teams';
 
 import Permissions from 'mattermost-redux/constants/permissions';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
 import {Constants} from 'utils/constants';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
@@ -194,7 +195,8 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         this.setState({teamsOrder: newTeamsOrder});
     }
 
-    switchTeamIK(teamName: string) {
+    switchTeamIK(teamName: string, teamId: string) {
+        setLastKSuiteSeenCookie(teamId);
         window.postMessage(
             {
                 type: 'switch-server',
