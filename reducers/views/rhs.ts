@@ -101,6 +101,18 @@ function selectedPostCardId(state = '', action: GenericAction) {
     }
 }
 
+function settingsTabState(state = 'display', action: GenericAction) {
+    switch (action.type) {
+    case ActionTypes.UPDATE_RHS_STATE:
+        if (action.tab) {
+            return action.tab;
+        }
+        return state;
+    default:
+        return state;
+    }
+}
+
 function selectedChannelId(state = '', action: GenericAction) {
     switch (action.type) {
     case ActionTypes.SELECT_POST:
@@ -373,6 +385,7 @@ export default combineReducers({
     selectedPostId,
     selectedPostFocussedAt,
     selectedPostCardId,
+    settingsTabState,
     selectedChannelId,
     highlightedPostId,
     previousRhsStates,

@@ -37,6 +37,7 @@ export type RhsViewState = {
     isSidebarExpanded: boolean;
     isMenuOpen: boolean;
     editChannelMembers: boolean;
+    settingsTabState: 'display' | 'notifications' | 'shortcuts' | 'drafts';
 };
 
 export type RhsState = typeof RHSStates[keyof typeof RHSStates] | null;
