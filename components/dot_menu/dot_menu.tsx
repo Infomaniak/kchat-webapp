@@ -10,6 +10,7 @@ import {
     BookmarkIcon,
     BookmarkOutlineIcon,
     ContentCopyIcon,
+    FlaskOutlineIcon,
     DotsHorizontalIcon,
     EmoticonPlusOutlineIcon,
     LinkVariantIcon,
@@ -244,6 +245,11 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
     copyText = (e: ChangeEvent) => {
         trackDotMenuEvent(e, TELEMETRY_LABELS.COPY_TEXT);
         Utils.copyToClipboard(this.props.post.message);
+    }
+
+    copyId = (e: ChangeEvent) => {
+        trackDotMenuEvent(e, TELEMETRY_LABELS.COPY_ID);
+        Utils.copyToClipboard(this.props.post.id);
     }
 
     handlePinMenuItemActivated = (e: ChangeEvent): void => {
@@ -715,6 +721,19 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         leadingElement={<ContentCopyIcon size={18}/>}
                         trailingElements={<ShortcutKey shortcutKey='C'/>}
                         onClick={this.copyText}
+                    />
+                }
+                {!isSystemMessage &&
+                    <Menu.Item
+                        id={`copy_id_${this.props.post.id}`}
+                        data-testid={`copy_id_${this.props.post.id}`}
+                        labels={
+                            <FormattedMessage
+                                id='post_info.copy_id'
+                                defaultMessage='Copy ID'
+                            />}
+                        leadingElement={<FlaskOutlineIcon size={18}/>}
+                        onClick={this.copyId}
                     />
                 }
                 {this.state.canDelete &&
