@@ -1,3 +1,13 @@
+## 1.3.5 (2023-07-14)
+
+### Added (1 change)
+
+- [Merge branch 'store-last-kchat-seen' into 'master' (cherrypick)](kchat/webapp@917f7708857d9f4d5b0082df9d93eebf9faf555c) by @antonbuksa
+
+### Fixed (1 change)
+
+- [Merge branch...](kchat/webapp@65e7fbb1552cea98aea3cde2f66f470d43ad658c) by @antonbuksa
+
 ## 1.2.6-next.1 (2023-06-06)
 
 ### Changed (1 change)
