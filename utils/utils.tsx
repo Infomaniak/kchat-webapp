@@ -1470,7 +1470,7 @@ function isChannelOrPermalink(link: string) {
             channelName: match[2],
         };
     }
-    match = (/\/([^/]+)\/pl\/(\w+)/).exec(link);
+    match = (/\/([^/]+)\/pl\/([0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})/).exec(link);
     if (match) {
         return {
             type: 'permalink',

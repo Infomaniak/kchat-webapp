@@ -8,14 +8,12 @@ import Markdown from 'components/markdown';
 
 import {MentionKey, TextFormattingOptions} from 'utils/text_formatting';
 
-import {Posts} from 'mattermost-redux/constants';
-
 import {Post} from '@mattermost/types/posts';
 import {Channel} from '@mattermost/types/channels';
 
 import {Team} from '@mattermost/types/teams';
 
-import {renderReminderSystemBotMessage, renderSystemMessage} from './system_message_helpers';
+import {renderSystemMessage} from './system_message_helpers';
 
 type Props = {
 
@@ -23,11 +21,6 @@ type Props = {
      * Any extra props that should be passed into the image component
      */
     imageProps?: Record<string, any>;
-
-    /*
-     * Whether or not this text is part of the RHS
-     */
-    isRHS?: boolean;
 
     /*
      * The post text to be rendered
@@ -70,7 +63,6 @@ type Props = {
 
 export default class PostMarkdown extends React.PureComponent<Props> {
     static defaultProps = {
-        isRHS: false,
         pluginHooks: [],
         options: {},
         showPostEditedIndicator: true,
@@ -127,7 +119,6 @@ export default class PostMarkdown extends React.PureComponent<Props> {
         return (
             <Markdown
                 imageProps={this.props.imageProps}
-                isRHS={this.props.isRHS}
                 message={message}
                 proxyImages={proxyImages}
                 mentionKeys={mentionKeys}

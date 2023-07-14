@@ -1,13 +1,14 @@
 require 'json'
 require 'net/http'
 
-GITLAB_API_BASE = "https://gitlab.infomaniak.ch/api/v4"
-# todo: maybe use env
-GITLAB_PROJECT_ID = 3225
+GITLAB_API_BASE = ENV['CI_API_V4_URL']
+GITLAB_PROJECT_ID = ENV['CI_PROJECT_ID']
 GITLAB_ACCESS_TOKEN = ENV['GITLAB_API_TOKEN']
 GIT_RELEASE_TAG = ARGV[0]
 MILESTONE = ARGV[1]
 NOTIFY_CHANNEL = ARGV[2]
+STABLE_BRANCH = 'stable'
+NEXT_BRANCH = 'next'
 
 def get_http(uri)
   Net::HTTP.new(uri.host, uri.port).tap do |http|
@@ -16,21 +17,21 @@ def get_http(uri)
   end
 end
 
-def create_changelog(tag)
+def create_changelog(tag, branch)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Post.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  request.set_form_data("version" => tag)
+  request.set_form_data("version" => tag, "branch" => branch)
 
   response = get_http(uri).request(request)
   response.body if response.code.to_i == 201
 end
 
-def get_changelog(tag)
+def get_changelog(tag, branch)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Get.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  request.set_form_data("version" => tag)
+  request.set_form_data("version" => tag, "branch" => branch)
 
   response = get_http(uri).request(request)
   JSON.parse(response.body)["notes"] if response.code.to_i == 200
@@ -81,13 +82,17 @@ end
 
 # main
 
-# Update labels if the tag is not a pre-release
+# [stable] Update labels and changelog
 if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   puts "Processing full release tag: #{GIT_RELEASE_TAG}"
-  create_changelog(GIT_RELEASE_TAG)
-  changelog = get_changelog(GIT_RELEASE_TAG)
+  branch = STABLE_BRANCH
+  # Creates the changelog entry on gitlab
+  create_changelog(GIT_RELEASE_TAG, branch)
+  # Get the relevant entries to update labels and create release
+  changelog = get_changelog(GIT_RELEASE_TAG, branch)
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
+  # --- Labels
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
     labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::prod"]
@@ -97,41 +102,34 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
       puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
     end
   end
+
+  # --- Release
   create_release(changelog)
   puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
 
-# Update labels if the tag is a pre-release
-# if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
-#   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
-#   create_changelog(GIT_RELEASE_TAG)
-#   changelog = get_changelog(GIT_RELEASE_TAG)
-#   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+# [next] Update labels and changelog
+if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+  branch = NEXT_BRANCH
+  puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
+  # Creates the changelog entry on gitlab
+  create_changelog(GIT_RELEASE_TAG, branch)
+  # Get the relevant entries to update labels and create release
+  changelog = get_changelog(GIT_RELEASE_TAG, branch)
+  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
-#   mr_numbers.each do |mr_number|
-#     mr = get_merge_request(mr_number)
-#     labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::next"]
-#     update_merge_request_labels(mr["iid"], labels)
-#     puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
-#   end
-#   create_release(changelog)
-#   puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
-# end
+  mr_numbers.each do |mr_number|
+    mr = get_merge_request(mr_number)
+    labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::next"]
+    update_merge_request_labels(mr["iid"], labels)
+    puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
+  end
+  create_release(changelog)
+  puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
+end
 
-## Test if the tag is a preprod release
-# if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
-#   puts "Processing prerelease tag: #{GIT_RELEASE_TAG}"
-#   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
-
-#   mr_numbers.each do |mr_number|
-#     mr = get_merge_request(mr_number)
-#     labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::preprod"]
-#     update_merge_request_labels(mr["iid"], labels)
-#     puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
-#   end
-# end
-
-# Notify only for prod tags
+# [stable] Notify
+# canary changelog can be loopy when there is no prod release for a while, it can be seen in the develop MR anyway.
 # || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
 if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   commit_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/commit/"
