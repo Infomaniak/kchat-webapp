@@ -6,11 +6,7 @@ import React from 'react';
 
 import {defineMessages, useIntl} from 'react-intl';
 
-
-
 import {Tab, Tabs} from 'react-bootstrap';
-
-import ReactDOM from 'react-dom';
 
 import {t} from '../../utils/i18n';
 
@@ -23,6 +19,8 @@ import NotificationsTab from 'components/rhs_settings/rhs_settings_notifications
 import AdvancedTab from 'components/rhs_settings/rhs_settings_advanced';
 
 import DisplayTab from 'components/rhs_settings/rhs_settings_display';
+
+import DraftTab from 'components/rhs_settings/rhs_settings_drafts';
 
 import './rhs_settings.scss';
 import RhsSettingsHeader from 'components/rhs_settings/rhs_settings_header/rhs_settings_header';
@@ -48,9 +46,13 @@ const holders = defineMessages({
         id: t('user.settings.modal.sidebar'),
         defaultMessage: 'Sidebar',
     },
-    advanced: {
+    shortcuts: {
         id: t('user.settings.advance.shortcuts'),
         defaultMessage: 'Shortcuts',
+    },
+    advanced: {
+        id: t('user.settings.modal.advanced'),
+        defaultMessage: 'Advanced',
     },
     checkEmail: {
         id: 'user.settings.general.checkEmail',
@@ -73,33 +75,36 @@ const holders = defineMessages({
 export interface Props {
     isMobile?: boolean;
     currentUser: UserProfile;
+    settingsTab: string;
 }
 
 export default function RhsSettings({
     isMobile,
     currentUser,
+    settingsTab,
 }: Props) {
     const intl = useIntl();
     const tabs = [];
     tabs.push({name: 'display', uiName: intl.formatMessage(holders.display), icon: 'icon fa fa-eye', iconTitle: Utils.localizeMessage('user.settings.display.icon', 'Display Settings Icon')});
     tabs.push({name: 'notifications', uiName: intl.formatMessage(holders.notifications), icon: 'icon fa fa-exclamation-circle', iconTitle: Utils.localizeMessage('user.settings.notifications.icon', 'Notification Settings Icon')});
-    tabs.push({name: 'advanced', uiName: intl.formatMessage(holders.advanced), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Advanced Settings Icon')});
-    const [activeTab, setActiveTab] = React.useState(tabs[0].name);
+    tabs.push({name: 'shortcuts', uiName: intl.formatMessage(holders.shortcuts), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Shortcut Settings Icon')});
+    tabs.push({name: 'drafts', uiName: intl.formatMessage(holders.advanced), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Advanced Settings Icon')});
+    const [activeTab, setActiveTab] = React.useState(settingsTab || tabs[0].name);
 
     const handleUpdateActiveTab = (e) => {
         setActiveTab(e);
     };
 
     // Called to hide the settings pane when on mobile
-    const handleCollapse = () => {
-        const el = ReactDOM.findDOMNode(this.modalBodyRef.current) as HTMLDivElement;
-        el.closest('.modal-dialog')!.classList.remove('display--content');
+    // const handleCollapse = () => {
+    //     const el = ReactDOM.findDOMNode(this.modalBodyRef.current) as HTMLDivElement;
+    //     el.closest('.modal-dialog')!.classList.remove('display--content');
 
-        this.setState({
-            active_tab: '',
-            active_section: '',
-        });
-    };
+    //     this.setState({
+    //         active_tab: '',
+    //         active_section: '',
+    //     });
+    // };
 
     const updateSection = (section?: string) => {
     };
@@ -143,9 +148,17 @@ export default function RhsSettings({
                             />
                         </div>
                     )}
-                    {activeTab === 'advanced' && (
+                    {activeTab === 'shortcuts' && (
                         <div>
                             <AdvancedTab
+                                updateSection={updateSection}
+                            />
+                        </div>
+                    )}
+                    {activeTab === 'drafts' && (
+                        <div>
+                            <DraftTab
+                                user={currentUser}
                                 updateSection={updateSection}
                             />
                         </div>

@@ -8,6 +8,8 @@ import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {useDispatch, useSelector} from 'react-redux';
 
+import {TIconGlyph} from '@infomaniak/compass-components/foundations/icon';
+
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
@@ -16,7 +18,13 @@ import {GlobalState} from 'types/store';
 import {getRhsState} from 'selectors/rhs';
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 
-const SettingsButton = (): JSX.Element | null => {
+type Props = {
+    tab?: string;
+    className?: string;
+    icon?: TIconGlyph;
+}
+
+const SettingsButton = ({tab = 'display', className, icon}: Props): JSX.Element | null => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
@@ -26,7 +34,7 @@ const SettingsButton = (): JSX.Element | null => {
         if (rhsState === RHSStates.SETTINGS) {
             dispatch(closeRightHandSide());
         } else {
-            dispatch(showSettings());
+            dispatch(showSettings(tab));
         }
     };
 
@@ -48,9 +56,9 @@ const SettingsButton = (): JSX.Element | null => {
         >
             <IconButton
                 id='right-controls-settings'
-                className={`grey ${rhsState === RHSStates.SETTINGS ? 'active' : ''}`}
+                className={`grey ${rhsState === RHSStates.SETTINGS ? 'active' : ''} ${className || ''}`}
                 size={'sm'}
-                icon={'cog'}
+                icon={icon || 'cog'}
                 toggled={rhsState === RHSStates.SETTINGS}
                 onClick={settingButtonClick}
                 inverted={true}
