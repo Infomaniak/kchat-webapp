@@ -501,6 +501,22 @@ exports[`components/dot_menu/DotMenu should match snapshot, on Center 1`] = `
       />
     }
   />
+  <MenuItem
+    data-testid="copy_id_post_id_1"
+    id="copy_id_post_id_1"
+    labels={
+      <Memo(MemoizedFormattedMessage)
+        defaultMessage="Copy ID"
+        id="post_info.copy_id"
+      />
+    }
+    leadingElement={
+      <FlaskOutlineIcon
+        size={18}
+      />
+    }
+    onClick={[Function]}
+  />
 </Menu>
 `;
 

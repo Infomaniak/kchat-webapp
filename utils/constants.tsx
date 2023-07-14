@@ -811,6 +811,7 @@ export const TELEMETRY_LABELS = {
     SAVE: 'save',
     COPY_LINK: 'copy_link',
     COPY_TEXT: 'copy_text',
+    COPY_ID: 'copy_id',
     DELETE: 'delete',
     EDIT: 'edit',
     FOLLOW: 'follow',
