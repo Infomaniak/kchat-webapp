@@ -42,6 +42,14 @@ resource_rules:
   # Merge Request Policies
   merge_requests:
     rules:
+      - name: "remove staging labels"
+        conditions:
+          state: merged
+          labels:
+            - staging
+        actions:
+          remove_labels:
+            - staging
       # Update trello::To merge MRs for trello tickets in merged MRs for schedule CI
       - name: "Update Trello for wip MRs"
         conditions:
