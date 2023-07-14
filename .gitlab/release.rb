@@ -129,7 +129,8 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
 end
 
 # [stable + next] Notify
-if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG) || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+# || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
+if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   commit_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/commit/"
   mr_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/"
   formatted_changelog = changelog.gsub(/kchat\/webapp@/, commit_url).gsub(/kchat\/webapp!/, mr_url)
