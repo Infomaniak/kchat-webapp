@@ -122,7 +122,7 @@ function Drafts({
                         />
                         <SettingsButton
                             className='draft-filter-menu__button'
-                            icon={'server-variant'}
+                            icon={'cog-outline'}
                             tab='drafts'
                             tooltipPlacement='top'
                         />
