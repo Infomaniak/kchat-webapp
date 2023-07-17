@@ -80,6 +80,7 @@ const actionsProp = {
     getChannelMemberCountsByGroup: jest.fn(),
     emitShortcutReactToLastPostFrom: jest.fn(),
     searchAssociatedGroupsForReference: jest.fn(),
+    setGlobalDraft: jest.fn(),
 };
 
 /* eslint-disable react/prop-types */
