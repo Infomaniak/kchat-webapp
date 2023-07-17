@@ -7,6 +7,12 @@
     &__header {
         border-bottom: var(--border);
         grid-area: header;
+        .controls {
+            display: flex;
+            .grey {
+                color: #666;
+            }
+        }
     }
 
     .channel-header__icon,

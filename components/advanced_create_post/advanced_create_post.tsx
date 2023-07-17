@@ -238,6 +238,8 @@ type Props = {
         savePreferences: (userId: string, preferences: PreferenceType[]) => ActionResult;
 
         searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined) => Promise<{ data: any }>;
+
+        setGlobalDraft: (key: string, draft: PostDraft, save: boolean) => Promise<{ data: any }>;
     };
 
     groupsWithAllowReference: Map<string, Group> | null;
@@ -609,6 +611,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 channelTimezoneCount,
                 memberNotifyCount,
                 onConfirm: () => this.handleNotifyAllConfirmation(isSchedule, scheduleUTCTimestamp),
+                onExited: () => {
+                    this.isDraftSubmitting = false;
+                },
             },
         });
     }
@@ -689,7 +694,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
         if (memberNotifyCount > 0) {
             this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp);
-            this.isDraftSubmitting = false;
             return;
         }
 
@@ -896,20 +900,21 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         };
 
         this.handleDraftChange(draft);
-    }
+    };
 
-    handleDraftChange = (draft: PostDraft, instant = false, save = false) => {
+    handleDraftChange = (draft: PostDraft, instant = false) => {
         const channelId = this.props.currentChannel.id;
+        this.props.actions.setGlobalDraft(StoragePrefixes.DRAFT + channelId, draft, false);
 
         if (this.saveDraftFrame) {
             clearTimeout(this.saveDraftFrame);
         }
 
         if (instant) {
-            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
+            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
         } else {
             this.saveDraftFrame = window.setTimeout(() => {
-                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
+                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
             }, Constants.SAVE_DRAFT_TIMEOUT);
         }
 
@@ -1070,6 +1075,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     removePreview = (id: string) => {
         let modifiedDraft = {} as PostDraft;
         const draft = {...this.props.draft};
+        const channelId = this.props.currentChannel.id;
 
         // Clear previous errors
         this.setState({serverError: null});
@@ -1100,7 +1106,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             };
         }
 
-        this.handleDraftChange(modifiedDraft, true, true);
+        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, modifiedDraft, channelId, false);
+        this.draftsForChannel[channelId] = modifiedDraft;
 
         this.handleFileUploadChange();
 
@@ -1417,18 +1424,12 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     handleBlur = () => {
-        if (this.saveDraftFrame) {
-            clearTimeout(this.saveDraftFrame);
-        }
-        this.saveDraftFrame = window.setTimeout(() => {
-            if (this.isDraftSubmitting) {
-                return;
-            }
+        if (!this.isDraftSubmitting) {
             this.saveDraftWithShow();
-        }, Constants.SAVE_DRAFT_TIMEOUT);
+        }
 
         this.lastBlurAt = Date.now();
-    }
+    };
 
     handleEmojiClose = () => {
         this.setState({showEmojiPicker: false});
@@ -1503,8 +1504,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             ...this.props.draft,
             message: newMessage,
         };
-        this.handleDraftChange(draft, true, true);
 
+        this.handleDraftChange(draft);
         this.handleEmojiClose();
     }
 

@@ -4,8 +4,6 @@
 /* eslint-disable max-lines */
 import React from 'react';
 
-import deepEqual from 'fast-deep-equal';
-
 import {FormattedMessage} from 'react-intl';
 
 import {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';

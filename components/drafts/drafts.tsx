@@ -16,6 +16,7 @@ import {loadProfilesForSidebar} from 'actions/user_actions';
 import {LhsItemType, LhsPage} from 'types/store/lhs';
 
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
+import SettingsButton from 'components/global_header/right_controls/settings_button';
 
 import DraftRow from './draft_row';
 import DraftsIllustration from './drafts_illustration';
@@ -111,10 +112,21 @@ function Drafts({
                     defaultMessage: 'Any messages you\'ve started will show here',
                 })}
                 right={(
-                    <DraftFilterMenu
-                        filter={filter}
-                        setFilter={setFilter}
-                    />
+                    <span
+                        aria-label='controls'
+                        className='controls'
+                    >
+                        <DraftFilterMenu
+                            filter={filter}
+                            setFilter={setFilter}
+                        />
+                        <SettingsButton
+                            className='draft-filter-menu__button'
+                            icon={'cog-outline'}
+                            tab='drafts'
+                            tooltipPlacement='top'
+                        />
+                    </span>
                 )}
             />
             <div className='Drafts__main'>
