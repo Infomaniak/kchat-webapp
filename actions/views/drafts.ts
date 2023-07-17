@@ -148,7 +148,6 @@ function updateDraft(key: string, value: PostDraft|null, rootId = '', save = fal
             }
         }
 
-        // dispatch(setGlobalDraft(key, updatedValue, false));
         return {data: true};
     };
 }
