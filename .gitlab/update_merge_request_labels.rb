@@ -148,27 +148,29 @@ end
 
 def sync_issue_metadata(merge_request, project_id, mr_iid)
   description = merge_request['description']
-  issue_iid = description[/Related to #(\d+)/, 1] || description[/Related to \[#(\d+)\]/, 1]
+  if description
+    issue_iid = description[/Related to #(\d+)/, 1] || description[/Related to \[#(\d+)\]/, 1]
 
-  if issue_iid
-    # Convert issue_iid to integer
-    issue_iid = issue_iid.to_i
-    mr_labels = get_mr_labels(project_id, mr_iid)
-    issue_labels = get_issue_labels(project_id, issue_iid)
+    if issue_iid
+      # Convert issue_iid to integer
+      issue_iid = issue_iid.to_i
+      mr_labels = get_mr_labels(project_id, mr_iid)
+      issue_labels = get_issue_labels(project_id, issue_iid)
 
-    trello_mr_labels = mr_labels.select { |label| label.start_with?('trello::') }
-    trello_issue_labels = issue_labels.select { |label| label.start_with?('trello::') }
+      trello_mr_labels = mr_labels.select { |label| label.start_with?('trello::') }
+      trello_issue_labels = issue_labels.select { |label| label.start_with?('trello::') }
 
-    missing_labels = trello_mr_labels - trello_issue_labels
-    if missing_labels.any?
-      puts "Adding labels #{missing_labels.join(', ')} to issue #{issue_iid} related to merge request #{mr_iid}"
-      add_issue_label(project_id, issue_iid, missing_labels)
-    end
+      missing_labels = trello_mr_labels - trello_issue_labels
+      if missing_labels.any?
+        puts "Adding labels #{missing_labels.join(', ')} to issue #{issue_iid} related to merge request #{mr_iid}"
+        add_issue_label(project_id, issue_iid, missing_labels)
+      end
 
-    extra_labels = trello_issue_labels - trello_mr_labels
-    if extra_labels.any?
-      puts "Removing labels #{extra_labels.join(', ')} from issue #{issue_iid} related to merge request #{mr_iid}"
-      remove_issue_label(project_id, issue_iid, extra_labels)
+      extra_labels = trello_issue_labels - trello_mr_labels
+      if extra_labels.any?
+        puts "Removing labels #{extra_labels.join(', ')} from issue #{issue_iid} related to merge request #{mr_iid}"
+        remove_issue_label(project_id, issue_iid, extra_labels)
+      end
     end
   end
 end
