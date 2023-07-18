@@ -270,56 +270,6 @@ update_labels:
       when: on_success
     - when: never
 
-open_mr_to_deploy_in_canary:
-  stage: .post
-  tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  image: registry.infomaniak.com:443/kchat/toolbox:1.2.9
-  script:
-    - |-
-      curl --location \
-        -sS \
-        --request POST \
-        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests?source_branch=master&target_branch=next&title=Deploy%20canary" \
-        --header "PRIVATE-TOKEN: ${GITLAB_API_TOKEN}" \
-        --header 'Content-Type: application/json'
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH == "master"
-      allow_failure: false
-      when: on_success
-    - when: never
-
-open_mr_to_deploy_in_production:
-  stage: .post
-  tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  image: registry.infomaniak.com:443/kchat/toolbox:1.2.9
-  script:
-    - |-
-      curl --location \
-        -sS \
-        --request POST \
-        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests?source_branch=master&target_branch=stable&title=Deploy%20production" \
-        --header "PRIVATE-TOKEN: ${GITLAB_API_TOKEN}" \
-        --header 'Content-Type: application/json'
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH == "master"
-      allow_failure: false
-      when: on_success
-    - when: never
-
 weekly_summary:
   image: ruby:latest
   script:
