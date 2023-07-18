@@ -79,7 +79,8 @@ def create_changelog(tag, branch)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Post.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  request.set_form_data("version" => tag, "branch" => branch, "from" => commit_sha)
+  # "branch" => branch,
+  request.set_form_data("version" => tag, "from" => commit_sha)
 
   response = get_http(uri).request(request)
   response.body if response.code.to_i == 201
