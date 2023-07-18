@@ -10,6 +10,12 @@ NOTIFY_CHANNEL = ARGV[2]
 STABLE_BRANCH = 'stable'
 NEXT_BRANCH = 'next'
 
+=begin
+# Creates and configures a new instance of the Net::HTTP class.
+#
+# @param uri [URI::Generic] The URI for which to create the HTTP instance.
+# @return [Net::HTTP] The new instance of the Net::HTTP class.
+=end
 def get_http(uri)
   Net::HTTP.new(uri.host, uri.port).tap do |http|
     http.use_ssl = true
@@ -17,16 +23,75 @@ def get_http(uri)
   end
 end
 
+=begin
+# Sends a GET request to fetch the commit SHA of a given tag.
+#
+# @param tag [String] The tag for which to fetch the commit SHA.
+# @return [String] The commit SHA corresponding to the given tag. Throws an error if it fails to fetch the tag.
+=end
+def get_commit_sha(tag)
+  uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/tags/#{tag}")
+  request = Net::HTTP::Get.new(uri.request_uri)
+  request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
+
+  response = get_http(uri).request(request)
+
+  if response.code.to_i == 200
+    JSON.parse(response.body)["commit"]["id"]
+  else
+    raise "Failed to fetch the commit SHA for tag #{tag}"
+  end
+end
+
+=begin
+# Sends a GET request to fetch all tags and finds the last tag before the given tag.
+#
+# @param current_tag [String] The current tag.
+# @return [String] The name of the last tag before the current tag. Throws an error if it fails to fetch the tags.
+=end
+def get_last_tag(current_tag)
+  uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/tags")
+  request = Net::HTTP::Get.new(uri.request_uri)
+  request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
+
+  response = get_http(uri).request(request)
+
+  if response.code.to_i == 200
+    tags = JSON.parse(response.body)
+    all_tags = tags.select { |tag| tag["name"] =~ /\A\d+\.\d+\.\d+(-next\.\d+)?\z/ && tag["name"] < current_tag }
+    all_tags.max_by { |tag| tag["name"] }["name"]
+  else
+    raise "Failed to fetch the tags"
+  end
+end
+
+=begin
+# Sends a POST request to create a changelog for a given tag on a specific branch.
+#
+# @param tag [String] The tag for which to create the changelog.
+# @param branch [String] The branch to commit the changelog changes to.
+# @return [String, nil] The body of the server's response. Returns nil if status code is not 201.
+=end
 def create_changelog(tag, branch)
+  last_tag = get_last_tag(tag)
+  puts "Last tag: #{last_tag}"
+  commit_sha = get_commit_sha(last_tag)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Post.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  request.set_form_data("version" => tag, "branch" => branch)
+  request.set_form_data("version" => tag, "branch" => branch, "from" => commit_sha)
 
   response = get_http(uri).request(request)
   response.body if response.code.to_i == 201
 end
 
+=begin
+# Sends a GET request to fetch the changelog for a given tag on a specific branch.
+#
+# @param tag [String] The tag for which to fetch the changelog.
+# @param branch [String] The branch where the changelog changes were committed.
+# @return [Array, nil] The changelog if the status code is 200, null otherwise.
+=end
 def get_changelog(tag, branch)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Get.new(uri.request_uri)
@@ -37,6 +102,12 @@ def get_changelog(tag, branch)
   JSON.parse(response.body)["notes"] if response.code.to_i == 200
 end
 
+=begin
+# Sends a POST request to create a release for a given tag.
+#
+# @param changelog [String] The changelog of the release.
+# @return [Boolean] True if the status code is 201, false otherwise.
+=end
 def create_release(changelog)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/releases")
   request = Net::HTTP::Post.new(uri.request_uri)
@@ -52,6 +123,12 @@ def create_release(changelog)
   response.code.to_i == 201
 end
 
+=begin
+# Sends a GET request to fetch the merge request with the given IID.
+#
+# @param mr_iid [Integer] The IID of the merge request to fetch.
+# @return [Hash] The fetched merge request. Throws an error if it fails to fetch the merge request or parse the response.
+=end
 def get_merge_request(mr_iid)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{mr_iid}")
   request = Net::HTTP::Get.new(uri.request_uri)
@@ -69,7 +146,13 @@ rescue JSON::ParserError
   raise "Invalid JSON response from GitLab API"
 end
 
-
+=begin
+# Sends a PUT request to update the labels of a merge request with the given IID.
+#
+# @param mr_iid [Integer] The IID of the merge request to update.
+# @param labels [Array] The labels to set on the merge request.
+# @return [Boolean] True if the status code is 200, false otherwise.
+=end
 def update_merge_request_labels(mr_iid, labels)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{mr_iid}")
   request = Net::HTTP::Put.new(uri.request_uri)
@@ -92,7 +175,7 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   changelog = get_changelog(GIT_RELEASE_TAG, branch)
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
-  # --- Labels
+  # Labels
   mr_numbers.each do |mr_number|
     mr = get_merge_request(mr_number)
     labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::prod"]
@@ -103,7 +186,7 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
     end
   end
 
-  # --- Release
+  # Release
   create_release(changelog)
   puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
@@ -125,12 +208,11 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
     puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
   end
   create_release(changelog)
-  puts "Creating release for tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
+  puts "Creating release for canary tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
 
 # [stable + next] Notify
-# || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
-if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
+if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG) || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   commit_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/commit/"
   mr_url = "https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/"
   formatted_changelog = changelog.gsub(/kchat\/webapp@/, commit_url).gsub(/kchat\/webapp!/, mr_url)
