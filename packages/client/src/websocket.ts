@@ -139,7 +139,7 @@ export default class WebSocketClient {
     ) {
         let currentUserId: any;
         let currentUserTeamId: any;
-        let currentPresenceChannelId: any;
+        let currentPresenceChannelId: string | undefined;
 
         // Store this for onmessage reconnect
         if (userId) {
@@ -264,7 +264,10 @@ export default class WebSocketClient {
             this.subscribeToUserChannel(userId || currentUserId);
             this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId);
 
-            this.bindPresenceChannel(presenceChannelId || currentPresenceChannelId);
+            const presenceChannel = presenceChannelId || currentPresenceChannelId;
+            if (presenceChannel) {
+                this.bindPresenceChannel(presenceChannel);
+            }
             this.bindChannelGlobally(this.teamChannel);
             this.bindChannelGlobally(this.userChannel);
 
