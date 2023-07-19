@@ -428,13 +428,20 @@ const callStartAt = (state: {[channelID: string]: number} = {}, action: {type: s
     }
 };
 
-const kmeetRinging = (state: {isRinging: boolean; msg: PostType; user: UserProfile[]; caller: UserProfile[]; online: boolean} = {isRinging: false, msg: {}, user: [], caller: [], online: false},
-    action: { type: string; data: {msg: PostType; isRinging: boolean; user: UserProfile[]; caller: UserProfile[]; online: boolean}}) => {
+const kmeet = (state: {isRinging: boolean; msg: PostType; user: UserProfile[]; caller: UserProfile; online: boolean} = {isRinging: false, msg: {}, user: [], caller: [], online: false},
+    action: { type: string; data: {msg: PostType; isRinging: boolean; user: UserProfile[]; caller: UserProfile; online: boolean}}) => {
     switch (action.type) {
     case ActionTypes.CALL_RECEIVED: {
         const {isRinging, msg, user, caller, online} = action.data;
         return {
             isRinging, msg, user, caller, online,
+        };
+    }
+    case ActionTypes.CALL_HANGOUT: {
+        const {isRinging} = action.data;
+        return {
+            ...state,
+            isRinging,
         };
     }
     case ActionTypes.CALL_USER_ONLINE: {
@@ -517,5 +524,5 @@ export default combineReducers({
     expandedView,
     switchCallModal,
     screenSourceModal,
-    kmeetRinging,
+    kmeet,
 });

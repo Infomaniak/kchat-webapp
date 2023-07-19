@@ -2689,6 +2689,7 @@
   "bots.token.confirm_text": "Voulez-vous vraiment supprimer ce jeton ?",
   "bots.token.delete": "Supprimer le jeton",
   "call_button.menuAriaLabel": "Sélection du type d'appel",
+  "calling_modal.calling": "vous appelle",
   "carousel.PreviousButton": "Précédent",
   "carousel.nextButton": "Suivant",
   "center_panel.archived.closeChannel": "Fermer le canal",

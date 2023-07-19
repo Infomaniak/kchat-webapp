@@ -82,7 +82,7 @@ export type ViewsState = {
         connectedCallID: string;
         connectedCallUrl: string;
         voiceConnectedChannels: any;
-        kmeetRinging: {isRinging: boolean; msg: Post; user: UserProfile[]; caller: UserProfile[]; online: boolean};
+        kmeet: {isRinging: boolean; msg: Post; user: UserProfile[]; caller: UserProfile; online: boolean};
     };
 
     kmeetCalls: {

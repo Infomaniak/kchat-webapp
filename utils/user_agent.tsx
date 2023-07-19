@@ -123,7 +123,7 @@ export function isEdge(): boolean {
 }
 
 export function isDesktopApp(): boolean {
-    return userAgent().indexOf('Mattermost') !== -1 && userAgent().indexOf('Electron') !== -1;
+    return userAgent().indexOf('kChat') !== -1 && userAgent().indexOf('Electron') !== -1;
 }
 
 export function isWindowsApp(): boolean {

@@ -366,6 +366,7 @@ export const ActionTypes = keyMirror({
     NEEDS_LOGGED_IN_LIMIT_REACHED_CHECK: null,
 
     CALL_RECEIVED: null,
+    CALL_HANGOUT: null,
     CALL_USER_ONLINE: null,
     CALL_USER_OFFLINE: null,
 });

@@ -2752,6 +2752,7 @@
   "bots.token.confirm_text": "¿Estás seguro(a) de querer borrar este token?",
   "bots.token.delete": "Eliminar Token",
   "call_button.menuAriaLabel": "Selector del tipo de llamada",
+  "calling_modal.calling": "te llama",
   "carousel.PreviousButton": "Anterior",
   "carousel.nextButton": "Siguiente",
   "center_panel.archived.closeChannel": "Cerrar Canal",

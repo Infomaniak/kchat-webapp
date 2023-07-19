@@ -6,8 +6,8 @@
 
     &.modal-dialog.CallRingingModal {
         max-width: 270px;
-        height: 267px;
-        width: 267px;
+        min-height: 267px;
+        min-width: 267px;
         .modal-content {
             background: #fff;
 
@@ -28,9 +28,13 @@
             &__user {
                 color: #333333;
                 font-weight: 600;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             &__info {
                 color: #666666;
+                padding-top: 8px;
             }
         }
         .content-actions {
@@ -43,6 +47,7 @@
             button {
                 flex: auto;
                 min-height: 44px;
+                min-width: 66px;
                 color: white;
                 &.accept {
                     background: var(--sys-link-color);

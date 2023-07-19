@@ -8,7 +8,7 @@ import {FormattedMessage} from 'react-intl';
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import {startOrJoinCallInChannel} from 'actions/calls';
+import {hangoutCall, ringing, startOrJoinCallInChannel} from 'actions/calls';
 import {closeModal} from 'actions/views/modals';
 import GenericModal from 'components/generic_modal';
 
@@ -21,12 +21,13 @@ import {ModalIdentifiers} from 'utils/constants';
 import './ringing_dialog.scss';
 import {Post} from '@mattermost/types/posts';
 import {Client4} from 'mattermost-redux/client';
-import bing from 'sounds/bing.mp3';
+import ring from 'sounds/ring.mp3';
 import {UserProfile} from '@mattermost/types/users';
 
 import Avatars from 'components/widgets/users/avatars';
 
 import Ring from './ring/Ring';
+
 type Props = {
     onClose?: () => void;
     calling?: {
@@ -40,14 +41,19 @@ type Props = {
 
 function DialingModal(props: Props) {
     const dispatch = useDispatch<DispatchFunc>();
-    const users: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.user);
-    const callers: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeetRinging.caller);
+    const users: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeet.user);
+    const caller: UserProfile = useSelector((state: GlobalState) => state.views.calls.kmeet.caller);
+    const isRinging: boolean = useSelector((state: GlobalState) => state.views.calls.kmeet.isRinging);
+    
     const handleOnClose = () => {
         if (props.onClose) {
             props.onClose();
         }
+        dispatch(hangoutCall());
+
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
     };
+
     const onHandleAccept = (e: React.SyntheticEvent) => {
         if (props.post) {
             Client4.acceptIncomingMeetCall(props.post.props.conference_id);
@@ -67,13 +73,22 @@ function DialingModal(props: Props) {
     };
 
     const usersWithoutCurrent = users.filter((user: UserProfile) => user.id !== props.currentUserId);
-    const usersLenght = usersWithoutCurrent.length;
-    const getNickname = (len: number) => {
-        const nicknames: string[] = usersWithoutCurrent.map((usr: UserProfile) => (usr.nickname));
-        if (len > 2) {
-            nicknames.splice(2, nicknames.length - 2, '...');
+    const getUsersForOvelay = () => {
+        if (usersWithoutCurrent.length >= 2) {
+            const overlayUsers: UserProfile[] = [caller];
+            const getOverLayUser: UserProfile = usersWithoutCurrent.filter((usr) => usr.id !== caller.id)[0];
+            overlayUsers.push(getOverLayUser);
+            return overlayUsers;
         }
-        return nicknames.toString();
+        return [caller];
+    };
+    const getUsersNicknames = (users: UserProfile[]): string => {
+        const nicknames = users.map((user) => user.nickname);
+
+        // if (usersWithoutCurrent.length > 2) {
+        //     return [...nicknames.slice(0, 2), '...'].join(', ');
+        // }
+        return nicknames.join(', ');
     };
     return (<>
         <GenericModal
@@ -81,43 +96,29 @@ function DialingModal(props: Props) {
             className='CallRingingModal'
             onExited={handleOnClose}
         >
-            <Ring
-                sound={bing}
-            />
+            {isRinging && <Ring sound={ring}/>}
             <div className='content-body'>
-                { usersWithoutCurrent.length && usersWithoutCurrent.length <= 2 && (
-
-                    <Avatars
-                        userIds={usersWithoutCurrent.map((usr: UserProfile) => usr.id)}
-                        size='xl'
-                        totalUsers={usersWithoutCurrent?.length}
-                        disableProfileOverlay={true}
-                    />
-                )}
-                {users && usersWithoutCurrent.length > 2 && callers && (
-                    <Avatars
-                        userIds={callers.map((usr) => usr.id)}
-                        size='xl'
-                        totalUsers={usersWithoutCurrent.length}
-                        disableProfileOverlay={true}
-                        disablePopover={true}
-                    />
-                )}
+                <Avatars
+                    userIds={getUsersForOvelay().map((usr) => usr.id)}
+                    size='xl'
+                    totalUsers={usersWithoutCurrent.length}
+                    disableProfileOverlay={true}
+                    disablePopover={true}
+                />
             </div>
             <div className='content-calling'>
                 {users && (
                     <>
                         <div className='content-calling__user'>
                             <span>
-                                {getNickname(usersLenght)}
+                                {getUsersNicknames(getUsersForOvelay())}
                             </span>
                         </div>
                         <div className='content-calling__info'>
                             <>
                                 <FormattedMessage
                                     id='calling_modal.calling'
-                                    defaultMessage='calling'
-
+                                    defaultMessage='iscalling'
                                 />
                             </>
                         </div>
