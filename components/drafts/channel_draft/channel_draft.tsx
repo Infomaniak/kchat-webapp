@@ -66,12 +66,7 @@ function ChannelDraft({
     };
 
     const handleOnEdit = () => {
-        // if (isScheduled) {
         setIsEditing(true);
-
-        // return;
-        // }
-        // history.push(channelUrl);
     };
 
     const handleOnDelete = (id: string) => {
