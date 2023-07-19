@@ -5901,5 +5901,6 @@
   "drafts.filter.menu_button_tooltip": "Filter drafts",
   "drafts.invalid_scheduled": "{amount, plural, one {One} other {Some}} of your scheduled drafts cannot be sent.",
   "drafts.override_draft.title": "Replace draft",
-  "drafts.override_draft.message": "Unscheduling this draft will replace the following draft: {message}"
+  "drafts.override_draft.message": "Unscheduling this draft will replace the following draft: {message}",
+  "drafts.actions.openInChannel": "Open in channel"
 }

@@ -5898,5 +5898,6 @@
   "drafts.filter.menu_button_tooltip": "Entwürfe filtern",
   "drafts.invalid_scheduled": "{amount, plural, one {Eine} other {Einige}} Ihrer geplanten Entwürfe {amount, plural, one {kann} other {können}} nicht gesendet werden.",
   "drafts.override_draft.title": "Ersetzen Sie den Entwurf",
-  "drafts.override_draft.message": "Wenn Sie diesen Entwurf absetzen, wird der folgende Entwurf ersetzt: {message}"
+  "drafts.override_draft.message": "Wenn Sie diesen Entwurf absetzen, wird der folgende Entwurf ersetzt: {message}",
+  "drafts.actions.openInChannel": "Im Kanal öffnen"
 }
