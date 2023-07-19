@@ -61,12 +61,12 @@ function ChannelDraft({
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const channelDraft = useSelector((state: GlobalState) => getGlobalItem(state, StoragePrefixes.DRAFT + value.channelId, {}));
 
-    const handleOnEdit = () => {
-        if (isScheduled) {
-            setIsEditing(true);
-            return;
-        }
+    const goToChannel = () => {
         history.push(channelUrl);
+    };
+
+    const handleOnEdit = () => {
+        setIsEditing(true);
     };
 
     const handleOnDelete = (id: string) => {
@@ -157,6 +157,7 @@ function ChannelDraft({
                                 isScheduled={isScheduled}
                                 scheduleTimestamp={value.timestamp}
                                 isInvalid={scheduledWillNotBeSent}
+                                goToChannel={goToChannel}
                                 onDelete={handleOnDelete}
                                 onEdit={handleOnEdit}
                                 onSend={handleOnSend}
@@ -169,6 +170,7 @@ function ChannelDraft({
                                 channel={channel}
                                 type={type}
                                 userId={user.id}
+                                goToChannel={goToChannel}
                             />
                         )}
                         timestamp={value.updateAt}

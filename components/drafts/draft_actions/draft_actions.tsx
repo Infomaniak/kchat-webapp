@@ -24,6 +24,7 @@ type Props = {
     timezone?: string;
     isScheduled: boolean;
     scheduleTimestamp?: number;
+    goToChannel: () => void;
     onDelete: (draftId: string) => void;
     onEdit: () => void;
     onSend: (draftId: string) => void;
@@ -38,6 +39,7 @@ function DraftActions({
     timezone,
     isScheduled,
     scheduleTimestamp,
+    goToChannel,
     onDelete,
     onEdit,
     onSend,
@@ -132,6 +134,18 @@ function DraftActions({
                     />
                 )}
                 onClick={handleSchedule}
+            />
+            <Action
+                icon='icon-reply-outline'
+                id='seeInChannel'
+                name='seeInChannel'
+                tooltipText={(
+                    <FormattedMessage
+                        id='drafts.actions.openInChannel'
+                        defaultMessage='Open in channel'
+                    />
+                )}
+                onClick={goToChannel}
             />
             <Action
                 icon='icon-send-outline'

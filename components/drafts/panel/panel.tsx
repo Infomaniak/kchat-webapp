@@ -36,7 +36,7 @@ function Panel({isInvalid, children, onClick}: Props) {
     return (
         <article
             className={classNames('Panel', {Pannel__dangerous: isInvalid})}
-            onMouseEnter={handleMouseEnter}
+            onMouseOver={handleMouseEnter}
             onClick={handleOnClick}
             onMouseLeave={handleMouseLeave}
             role='button'

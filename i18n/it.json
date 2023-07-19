@@ -4092,5 +4092,6 @@
   "drafts.confirm.delete.title": "Cancellare la bozza",
   "drafts.confirm.send.button": "Sì, inviare ora",
   "drafts.confirm.send.text": "Sei sicuro di voler inviare questo messaggio a <strong>{displayName}</strong>?",
-  "drafts.confirm.send.title": "Enviar mensaje ahora"
+  "drafts.confirm.send.title": "Enviar mensaje ahora",
+  "drafts.actions.openInChannel": "Aperto nel canale"
 }

@@ -31,7 +31,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
 
-        > span {
+        > span > span {
             display: inline-flex;
             min-width: 0;
             align-items: center;
