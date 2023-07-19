@@ -1513,7 +1513,7 @@ describe('Actions.Users', () => {
         test('on Desktop', async () => {
             const originalEnv = {...process.env};
             const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
-            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('kChat Electron');
+            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
             let cookies = '';
             const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
             const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
@@ -1537,35 +1537,35 @@ describe('Actions.Users', () => {
             setCookie.mockRestore();
         });
 
-        // test('on Desktop if user is no more in lastActiveKSuite', async () => {
-        //     const originalEnv = {...process.env};
-        //     const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
-        //     const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
-        //     let cookies = '';
-        //     const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
-        //     const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
-        //         cookies += cookie;
-        //     });
-        //     process.env.NODE_ENV = 'production';
-        //     process.env.BASE_URL = 'https://test.com';
-        //     const team = {
-        //         ...TestHelper.fakeTeamWithId(),
-        //         update_at: 2,
-        //     };
-        //     nock(Client4.getUserRoute('me')).
-        //         get('/servers').
-        //         reply(200, [{...TestHelper.fakeTeamWithId(), update_at: 0}, team, {...TestHelper.fakeTeamWithId(), update_at: 1}]);
-        //     setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
-        //     await Actions.loadMeREST()(store.dispatch, store.getState);
-        //     expect(postMessage).toHaveBeenCalledWith({
-        //         type: 'switch-server',
-        //         data: team.display_name,
-        //     }, window.origin);
-        //     process.env = originalEnv;
-        //     postMessage.mockRestore();
-        //     userAgentMock.mockRestore();
-        //     getCookie.mockRestore();
-        //     setCookie.mockRestore();
-        // });
+        test('on Desktop if user is no more in lastActiveKSuite', async () => {
+            const originalEnv = {...process.env};
+            const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
+            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const team = {
+                ...TestHelper.fakeTeamWithId(),
+                update_at: 2,
+            };
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.fakeTeamWithId(), update_at: 0}, team, {...TestHelper.fakeTeamWithId(), update_at: 1}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(postMessage).toHaveBeenCalledWith({
+                type: 'switch-server',
+                data: team.display_name,
+            }, window.origin);
+            process.env = originalEnv;
+            postMessage.mockRestore();
+            userAgentMock.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
+        });
     });
 });

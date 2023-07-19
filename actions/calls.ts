@@ -21,7 +21,7 @@ import {Post} from '@mattermost/types/posts';
 
 import DialingModal from 'components/kmeet_conference/ringing_dialog';
 
-import {isDesktopApp} from 'utils/user_agent';
+import {isDesktopApp, isLastDesktopApp} from 'utils/user_agent';
 
 import {KmeetTour} from 'components/tours/onboarding_tour';
 
@@ -185,7 +185,7 @@ export function receivedKmeetCall(kmeetCall: Post, isRinging: boolean, currentUs
                         caller,
                     },
                 });
-                if (isDesktopApp()) {
+                if (isLastDesktopApp()) {
                     window.postMessage(
                         {
                             type: 'call-dialing',
