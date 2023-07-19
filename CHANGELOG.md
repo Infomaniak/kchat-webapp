@@ -1,3 +1,9 @@
+## 1.3.5-next.4 (2023-07-19)
+
+### Fixed (1 change)
+
+- [fix release script duplicates when notifying](kchat/webapp@3ab5ddb1ceffe6ec64d53f7a946d4470e8383ec8) by @antonbuksa
+
 ## 1.3.5-next.3 (2023-07-19)
 
 ### Fixed (2 changes)
