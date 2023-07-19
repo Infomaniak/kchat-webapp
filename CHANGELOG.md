@@ -1,3 +1,18 @@
+## 1.3.5-next.3 (2023-07-19)
+
+### Fixed (2 changes)
+
+- [fix draft hover bug after action modal dismissed](kchat/webapp@5ca76754ba3a8e63706410e25cfc1c36489ee5c4) by @antonbuksa ([merge request](kchat/webapp!476))
+- [Do not bind presence channel if channel id is undefined](kchat/webapp@dc8548ee67288b187a87749ad343f9ba68e0dab5) by @leonard.jouve ([merge request](kchat/webapp!445))
+
+### Changed (1 change)
+
+- [make editing always use inline editor in draft page, add action to open in channel](kchat/webapp@916f268d4f3651188b299d73c37ff5367af759b7) by @antonbuksa ([merge request](kchat/webapp!476))
+
+### Chore (1 change)
+
+- [use from param for changelog calls to fix repeat entries](kchat/webapp@9ae8531a5d6021abf8bfee21f66719389aa05258) by @antonbuksa ([merge request](kchat/webapp!474))
+
 ## 1.3.5-next.1 (2023-07-14)
 
 ### Added (6 changes)
