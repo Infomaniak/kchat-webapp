@@ -73,6 +73,7 @@ end
 # @return [String, nil] The body of the server's response. Returns nil if status code is not 201.
 =end
 def create_changelog(tag, branch)
+  puts "Creating changelog for tag #{tag}"
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
   commit_sha = get_commit_sha(last_tag)
@@ -93,11 +94,15 @@ end
 # @param branch [String] The branch where the changelog changes were committed.
 # @return [Array, nil] The changelog if the status code is 200, null otherwise.
 =end
-def get_changelog(tag, branch)
+def get_changelog(tag)
+  puts "Fetching changelog for tag #{tag}"
+  last_tag = get_last_tag(tag)
+  puts "Last tag: #{last_tag}"
+  commit_sha = get_commit_sha(last_tag)
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Get.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  request.set_form_data("version" => tag, "branch" => branch)
+  request.set_form_data("version" => tag, "from" => commit_sha)
 
   response = get_http(uri).request(request)
   JSON.parse(response.body)["notes"] if response.code.to_i == 200
@@ -173,7 +178,7 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   # Creates the changelog entry on gitlab
   create_changelog(GIT_RELEASE_TAG, branch)
   # Get the relevant entries to update labels and create release
-  changelog = get_changelog(GIT_RELEASE_TAG, branch)
+  changelog = get_changelog(GIT_RELEASE_TAG)
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
   # Labels
@@ -199,7 +204,7 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   # Creates the changelog entry on gitlab
   create_changelog(GIT_RELEASE_TAG, branch)
   # Get the relevant entries to update labels and create release
-  changelog = get_changelog(GIT_RELEASE_TAG, branch)
+  changelog = get_changelog(GIT_RELEASE_TAG)
   mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
   mr_numbers.each do |mr_number|
