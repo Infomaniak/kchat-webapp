@@ -846,12 +846,14 @@ describe('components/advanced_create_post', () => {
 
     it('check for handleFileUploadComplete callback', () => {
         const setDraft = jest.fn();
+        const setGlobalDraft = jest.fn();
 
         const wrapper = shallow(
             advancedCreatePost({
                 actions: {
                     ...actionsProp,
                     setDraft,
+                    setGlobalDraft,
                 },
             }),
         );
@@ -884,7 +886,7 @@ describe('components/advanced_create_post', () => {
 
         instance.handleFileUploadComplete(fileInfos, clientIds, channelId);
 
-        expect(setDraft).toHaveBeenCalledWith(StoragePrefixes.DRAFT + channelId, expectedDraft, channelId, true);
+        expect(setGlobalDraft).toHaveBeenCalledWith(StoragePrefixes.DRAFT + channelId, expectedDraft, false);
     });
 
     it('check for handleUploadError callback', () => {
