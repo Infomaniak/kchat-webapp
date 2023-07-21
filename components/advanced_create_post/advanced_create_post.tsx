@@ -1038,7 +1038,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             draft.fileInfos = sortFileInfos(draft.fileInfos.concat(fileInfos), this.props.locale);
         }
 
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, true);
+        this.props.actions.setGlobalDraft(StoragePrefixes.DRAFT + channelId, draft, false);
+        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
         this.draftsForChannel[channelId] = draft;
     }
 
