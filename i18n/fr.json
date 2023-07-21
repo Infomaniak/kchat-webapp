@@ -5071,6 +5071,7 @@
   "post_info.post_reminder.sub_menu.one_hour": "1 heure",
   "post_info.post_reminder.sub_menu.two_hours": "2 heures",
   "post_info.post_reminder.sub_menu.tomorrow": "Demain",
+  "post_info.post_reminder.sub_menu.monday": "Lundi",
   "post_info.post_reminder.sub_menu.custom": "Personnalisé",
   "post_info.post_reminder.sub_menu.header": "Me rappeler dans :",
   "post_reminder.custom_time_picker_modal.text": "Définir un rappel",
