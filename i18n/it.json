@@ -4009,6 +4009,7 @@
   "post_info.post_reminder.sub_menu.one_hour": "1 ora",
   "post_info.post_reminder.sub_menu.two_hours": "2 ore",
   "post_info.post_reminder.sub_menu.tomorrow": "Domani",
+  "post_info.post_reminder.sub_menu.monday": "Lunedì",
   "post_info.post_reminder.sub_menu.custom": "Personalizzato",
   "post_info.post_reminder.sub_menu.header": "Impostare un promemoria per:",
   "post_reminder.custom_time_picker_modal.text": "Imposta promemoria",

@@ -31,6 +31,7 @@ const postReminderTimes = [
     {id: 'one_hour', label: t('post_info.post_reminder.sub_menu.one_hour'), labelDefault: '1 hour'},
     {id: 'two_hours', label: t('post_info.post_reminder.sub_menu.two_hours'), labelDefault: '2 hours'},
     {id: 'tomorrow', label: t('post_info.post_reminder.sub_menu.tomorrow'), labelDefault: 'Tomorrow'},
+    {id: 'monday', label: t('post_info.post_reminder.sub_menu.monday'), labelDefault: 'Monday'},
     {id: 'custom', label: t('post_info.post_reminder.sub_menu.custom'), labelDefault: 'Custom'},
 ];
 
@@ -57,6 +58,11 @@ export function PostReminderSubmenu(props: Props) {
         case 'tomorrow':
             // tomorrow 9:00
             endTime = currentDate.add(1, 'day').hours(9).minutes(0).seconds(0);
+            break;
+        case 'monday':
+            // monday 9:00
+            currentDate.add(1, 'weeks');
+            endTime = currentDate.day(1).hour(9).minute(0).second(0);
             break;
         }
 
@@ -97,6 +103,26 @@ export function PostReminderSubmenu(props: Props) {
                         {', '}
                         <FormattedTime
                             value={tomorrow}
+                            timeStyle='short'
+                            hour12={!props.isMilitaryTime}
+                            timeZone={props.timezone}
+                        />
+                    </span>
+                );
+            }
+            if (id === 'monday') {
+                const monday = getCurrentMomentForTimezone(props.timezone).day(1).hour(9).minute(0).second(0).toDate();
+
+                trailing = (
+                    <span className={`postReminder-${id}_timestamp`}>
+                        <FormattedDate
+                            value={monday}
+                            weekday='short'
+                            timeZone={props.timezone}
+                        />
+                        {', '}
+                        <FormattedTime
+                            value={monday}
                             timeStyle='short'
                             hour12={!props.isMilitaryTime}
                             timeZone={props.timezone}

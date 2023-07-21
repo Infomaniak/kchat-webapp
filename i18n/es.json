@@ -5291,6 +5291,7 @@
   "post_info.post_reminder.sub_menu.one_hour": "1 hora",
   "post_info.post_reminder.sub_menu.two_hours": "2 horas",
   "post_info.post_reminder.sub_menu.tomorrow": "Mañana",
+  "post_info.post_reminder.sub_menu.monday": "Lunes",
   "post_info.post_reminder.sub_menu.custom": "Personalizar",
   "post_info.post_reminder.sub_menu.header": "Establece un recordatorio para:",
   "post_reminder.custom_time_picker_modal.text": "Establecer recordatorio",
