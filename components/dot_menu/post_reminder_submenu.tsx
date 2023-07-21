@@ -61,6 +61,7 @@ export function PostReminderSubmenu(props: Props) {
             break;
         case 'monday':
             // monday 9:00
+            currentDate.add(1, 'weeks');
             endTime = currentDate.day(1).hour(9).minute(0).second(0);
             break;
         }
