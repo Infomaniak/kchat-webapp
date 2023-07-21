@@ -18,7 +18,7 @@ import {ActionResult} from 'mattermost-redux/types/actions';
 import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
 
 type Settings = {
-    syncDrafts: string;
+    sync_drafts: string;
 };
 
 export type Props = {
@@ -41,7 +41,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
         super(props);
 
         const settings: Settings = {
-            syncDrafts: this.props.syncDrafts,
+            sync_drafts: this.props.syncDrafts,
         };
         this.state = {
             settings,
@@ -80,7 +80,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                 ...data,
             },
         }), () => {
-            this.handleSubmit(['syncDrafts']);
+            this.handleSubmit(['sync_drafts']);
         });
     }
 
@@ -97,8 +97,8 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                 inputs={
                     <Toggle
                         id={name + 'childOption'}
-                        onToggle={() => this.setSettingsStateValue('syncDrafts', !this.state.settings.syncDrafts)}
-                        toggled={this.state.settings.syncDrafts === 'true'}
+                        onToggle={() => this.setSettingsStateValue('sync_drafts', this.state.settings.sync_drafts === 'true' ? 'false' : 'true')}
+                        toggled={this.state.settings.sync_drafts === 'true'}
                     />
                 }
                 updateSection={
