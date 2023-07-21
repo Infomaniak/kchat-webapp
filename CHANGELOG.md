@@ -1,3 +1,14 @@
+## 1.3.5-next.5 (2023-07-21)
+
+### Added (1 change)
+
+- [add monday as quick option for reminders](kchat/webapp@cf5038fae082061bb5932f07651ac36f08d83ac6) by @antonbuksa ([merge request](kchat/webapp!478))
+
+### Fixed (2 changes)
+
+- [sync setting was setting incorrect preference name](kchat/webapp@62a617ce85a01ec18c1c7e3de346a90f18685b68) by @antonbuksa ([merge request](kchat/webapp!479))
+- [fix draft losing chars when upload complete triggers](kchat/webapp@6bb08092d1ae63d1b5034ee21b197557f9e0eef5) by @antonbuksa ([merge request](kchat/webapp!477))
+
 ## 1.3.5-next.4 (2023-07-19)
 
 ### Fixed (1 change)
