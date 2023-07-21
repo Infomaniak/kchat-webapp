@@ -97,7 +97,7 @@ export default class AdvancedRhsSettingsDisplay extends React.PureComponent<Prop
                 inputs={
                     <Toggle
                         id={name + 'childOption'}
-                        onToggle={() => this.setSettingsStateValue('sync_drafts', !this.state.settings.sync_drafts)}
+                        onToggle={() => this.setSettingsStateValue('sync_drafts', this.state.settings.sync_drafts === 'true' ? 'false' : 'true')}
                         toggled={this.state.settings.sync_drafts === 'true'}
                     />
                 }
