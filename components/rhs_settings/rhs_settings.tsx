@@ -88,7 +88,9 @@ export default function RhsSettings({
     tabs.push({name: 'display', uiName: intl.formatMessage(holders.display), icon: 'icon fa fa-eye', iconTitle: Utils.localizeMessage('user.settings.display.icon', 'Display Settings Icon')});
     tabs.push({name: 'notifications', uiName: intl.formatMessage(holders.notifications), icon: 'icon fa fa-exclamation-circle', iconTitle: Utils.localizeMessage('user.settings.notifications.icon', 'Notification Settings Icon')});
     tabs.push({name: 'shortcuts', uiName: intl.formatMessage(holders.shortcuts), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Shortcut Settings Icon')});
-    tabs.push({name: 'drafts', uiName: intl.formatMessage(holders.advanced), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Advanced Settings Icon')});
+
+    // tabs.push({name: 'drafts', uiName: intl.formatMessage(holders.advanced), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Advanced Settings Icon')});
+
     const [activeTab, setActiveTab] = React.useState(settingsTab || tabs[0].name);
 
     const handleUpdateActiveTab = (e) => {

@@ -112,21 +112,26 @@ function Drafts({
                     defaultMessage: 'Any messages you\'ve started will show here',
                 })}
                 right={(
-                    <span
-                        aria-label='controls'
-                        className='controls'
-                    >
-                        <DraftFilterMenu
-                            filter={filter}
-                            setFilter={setFilter}
-                        />
-                        <SettingsButton
-                            className='draft-filter-menu__button'
-                            icon={'cog-outline'}
-                            tab='drafts'
-                            tooltipPlacement='top'
-                        />
-                    </span>
+
+                    // <span
+                    //     aria-label='controls'
+                    //     className='controls'
+                    // >
+                    //     <DraftFilterMenu
+                    //         filter={filter}
+                    //         setFilter={setFilter}
+                    //     />
+                    //     <SettingsButton
+                    //         className='draft-filter-menu__button'
+                    //         icon={'cog-outline'}
+                    //         tab='drafts'
+                    //         tooltipPlacement='top'
+                    //     />
+                    // </span>
+                    <DraftFilterMenu
+                        filter={filter}
+                        setFilter={setFilter}
+                    />
                 )}
             />
             <div className='Drafts__main'>
