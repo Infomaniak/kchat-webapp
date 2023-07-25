@@ -19,7 +19,7 @@ function isDesktopApp(): boolean {
 }
 
 export type MessageListener = (msg: WebSocketMessage) => void;
-export type FirstConnectListener = () => void;
+export type FirstConnectListener = (socketId?: string) => void;
 export type ReconnectListener = () => void;
 export type MissedMessageListener = () => void;
 export type ErrorListener = (event: Event) => void;
@@ -285,8 +285,9 @@ export default class WebSocketClient {
                 this.reconnectListeners.forEach((listener) => listener());
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
                 console.log('[websocket] calling first connect callbacks');
-                this.firstConnectCallback?.();
-                this.firstConnectListeners.forEach((listener) => listener());
+                console.log('[websocket] socketId', this.conn?.connection.socket_id);
+                this.firstConnectCallback?.(this.conn?.connection.socket_id);
+                this.firstConnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
             }
             this.connectFailCount = 0;
             this.errorCount = 0;

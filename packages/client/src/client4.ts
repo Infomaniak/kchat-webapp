@@ -255,6 +255,10 @@ export default class Client4 {
         this.defaultHeaders['Webapp-Version'] = version;
     }
 
+    setSocketId(socketId: string) {
+        this.defaultHeaders['X-Socket-Id'] = socketId;
+    }
+
     setEnableLogging(enable: boolean) {
         this.enableLogging = enable;
     }
