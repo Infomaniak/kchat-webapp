@@ -4053,6 +4053,7 @@
   "post_info.auto_responder": "RÉPONSE AUTOMATIQUE",
   "post_info.comment_icon.tooltip.reply": "Répondre",
   "post_info.copy": "Copier le texte",
+  "post_info.copy_id": "Copier l'ID",
   "post_info.del": "Supprimer",
   "post_info.dot_menu.tooltip.more_actions": "Plus",
   "post_info.edit": "Modifier",

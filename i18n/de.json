@@ -4466,6 +4466,7 @@
   "post_info.auto_responder": "AUTOMATISCHE ANTWORT",
   "post_info.comment_icon.tooltip.reply": "Antworten",
   "post_info.copy": "Text kopieren",
+  "post_info.copy_id": "ID kopieren",
   "post_info.del": "Löschen",
   "post_info.dot_menu.tooltip.more_actions": "Mehr",
   "post_info.edit": "Bearbeiten",
