@@ -3226,6 +3226,8 @@
   "post_delete.someone": "Qualcuno ha cancellato il messaggio che stai cercando di commentare.",
   "post_info.auto_responder": "RISPOSTE AUTOMATICHE",
   "post_info.comment_icon.tooltip.reply": "Rispondi",
+  "post_info.copy": "Copiare il testo",
+  "post_info.copy_id": "Copia il ID",
   "post_info.del": "Cancella",
   "post_info.dot_menu.tooltip.more_actions": "Altre Operazioni",
   "post_info.edit": "Modifica",
