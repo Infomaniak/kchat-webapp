@@ -1,3 +1,9 @@
+## 1.3.6-next.1 (2023-07-25)
+
+### Fixed (1 change)
+
+- [fix: missing copy id button translation](kchat/webapp@a5e818929216fae6c085c239096f4a64bf3b2bb9) by @leopold.jacquot ([merge request](kchat/webapp!483))
+
 ## 1.3.5-next.6 (2023-07-25)
 
 ### Added (1 change)
