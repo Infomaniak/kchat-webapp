@@ -5,6 +5,7 @@
 
 import {batchActions} from 'redux-batched-actions';
 
+import {Client4} from 'mattermost-redux/client';
 import {closeModal, openModal} from 'actions/views/modals';
 import {
     ChannelTypes,
@@ -369,7 +370,7 @@ export function unregisterAllPluginWebSocketEvents(pluginId) {
     Reflect.deleteProperty(pluginEventHandlers, pluginId);
 }
 
-function handleFirstConnect() {
+function handleFirstConnect(socketId?: string) {
     dispatch(batchActions([
         {
             type: GeneralTypes.WEBSOCKET_SUCCESS,
@@ -377,6 +378,11 @@ function handleFirstConnect() {
         },
         clearErrors(),
     ]));
+
+    console.log('websocket_actions: ', socketId);
+    if (socketId) {
+        Client4.setSocketId(socketId);
+    }
 }
 
 function handleClose(failCount) {
