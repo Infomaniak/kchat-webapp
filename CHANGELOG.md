@@ -1,3 +1,13 @@
+## 1.3.5-next.6 (2023-07-25)
+
+### Added (1 change)
+
+- [set x-socket-id header for rest client from ws first connect](kchat/webapp@8dbfeb31ca539ee729e8c66942247924a368655b) by @antonbuksa ([merge request](kchat/webapp!482))
+
+### Removed (1 change)
+
+- [disable advanced tab (drafts sync setting) in rhs settings](kchat/webapp@a7e3aa88d4aa739069716dcedbbe99c0038e6217) by @antonbuksa ([merge request](kchat/webapp!481))
+
 ## 1.3.5-next.5 (2023-07-21)
 
 ### Added (1 change)
