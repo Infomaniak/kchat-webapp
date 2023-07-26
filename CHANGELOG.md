@@ -1,3 +1,9 @@
+## 1.3.8-next.1 (2023-07-26)
+
+### Fixed (1 change)
+
+- [correctly handle localstorage null lastSeen for get app banner](kchat/webapp@46f6ead9fe07c36e5535eacb722bb3412e3254d5) by @antonbuksa ([merge request](kchat/webapp!488))
+
 ## 1.3.7-next.1 (2023-07-26)
 
 No changes.
