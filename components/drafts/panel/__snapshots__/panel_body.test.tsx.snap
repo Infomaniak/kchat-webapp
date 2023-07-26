@@ -202,7 +202,9 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
           <div
             className="post__header"
           >
-            <strong>
+            <strong
+              className="display_name"
+            >
               display_name
             </strong>
           </div>
@@ -479,7 +481,9 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
           <div
             className="post__header"
           >
-            <strong>
+            <strong
+              className="display_name"
+            >
               display_name
             </strong>
           </div>
@@ -762,7 +766,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
           <div
             className="post__header"
           >
-            <strong>
+            <strong
+              className="display_name"
+            >
               display_name
             </strong>
             <div
@@ -1115,7 +1121,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
           <div
             className="post__header"
           >
-            <strong>
+            <strong
+              className="display_name"
+            >
               display_name
             </strong>
             <div
