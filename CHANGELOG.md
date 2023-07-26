@@ -1,3 +1,9 @@
+## 1.3.9-next.1 (2023-07-26)
+
+### Fixed (1 change)
+
+- [fix socket id not updating on non fatal reconnect](kchat/webapp@dfe7724f000735223bfba733ca98b55a4b37b88d) by @antonbuksa ([merge request](kchat/webapp!489))
+
 ## 1.3.8-next.1 (2023-07-26)
 
 ### Fixed (1 change)
