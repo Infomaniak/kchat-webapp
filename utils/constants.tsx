@@ -366,9 +366,12 @@ export const ActionTypes = keyMirror({
     NEEDS_LOGGED_IN_LIMIT_REACHED_CHECK: null,
 
     CALL_RECEIVED: null,
-    CALL_HANGOUT: null,
+    CALL_HANGUP: null,
     CALL_USER_ONLINE: null,
     CALL_USER_OFFLINE: null,
+    CALL_USER_IN_CONF: null,
+    CALL_CALLING_USER: null,
+    CALL_CONF_CHANNEL: null,
 });
 
 export const PostRequestTypes = keyMirror({

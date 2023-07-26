@@ -4,10 +4,10 @@ import {combineReducers} from 'redux';
 
 import {UserProfile} from 'mattermost-redux/types/users';
 
-import {act} from 'react-dom/test-utils';
-
 import {ActionTypes} from 'utils/constants';
-import {PostType} from '@mattermost/types/posts';
+import {Post} from '@mattermost/types/posts';
+import {ServerChannel} from '@mattermost/types/channels';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 export type UserState = {
     voice: boolean;
@@ -428,31 +428,30 @@ const callStartAt = (state: {[channelID: string]: number} = {}, action: {type: s
     }
 };
 
-const kmeet = (state: {isRinging: boolean; msg: PostType; user: UserProfile[]; caller: UserProfile; online: boolean} = {isRinging: false, msg: {}, user: [], caller: [], online: false},
-    action: { type: string; data: {msg: PostType; isRinging: boolean; user: UserProfile[]; caller: UserProfile; online: boolean}}) => {
+const callParameters = (
+    state: {users: UserProfile[]; caller: UserProfile; channel: ServerChannel; msg: Post} = {users: [], caller: {}, channel: {}, msg: {}},
+    action: GenericAction) => {
     switch (action.type) {
-    case ActionTypes.CALL_RECEIVED: {
-        const {isRinging, msg, user, caller, online} = action.data;
+    case ActionTypes.CALL_USER_IN_CONF:
         return {
-            isRinging, msg, user, caller, online,
+            ...state, users: action.data,
         };
-    }
-    case ActionTypes.CALL_HANGOUT: {
-        const {isRinging} = action.data;
+    case ActionTypes.CALL_CALLING_USER:
         return {
-            ...state,
-            isRinging,
+            ...state, caller: action.data[0],
         };
-    }
-    case ActionTypes.CALL_USER_ONLINE: {
-        const {online} = action.data;
-        return {...state, online};
-    }
+    case ActionTypes.CALL_CONF_CHANNEL:
+        return {
+            ...state, channel: action.data,
+        };
+    case ActionTypes.CALL_RECEIVED:
+        return {
+            ...state, msg: action.data.msg,
+        };
     default:
         return state;
     }
 };
-
 const voiceChannelScreenSharingID = (state: {[channelID: string]: string} = {}, action: {type: string; data: {channelID: string; userID?: string}}) => {
     switch (action.type) {
     case ActionTypes.VOICE_CHANNEL_UNINIT:
@@ -524,5 +523,5 @@ export default combineReducers({
     expandedView,
     switchCallModal,
     screenSourceModal,
-    kmeet,
+    callParameters,
 });

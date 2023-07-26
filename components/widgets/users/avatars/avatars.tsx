@@ -93,7 +93,6 @@ function UserAvatar({
                     src={profilePictureURL}
                     hide={hideProfilePopover}
                 />
-
             }
         >
             <SimpleTooltip

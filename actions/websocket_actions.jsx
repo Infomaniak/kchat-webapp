@@ -67,7 +67,6 @@ import {clearErrors, logError} from 'mattermost-redux/actions/errors';
 import * as TeamActions from 'mattermost-redux/actions/teams';
 import {
     checkForModifiedUsers,
-    getProfilesByIds,
     getUser as loadUser,
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';

@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import { isServerVersionGreaterThanOrEqualTo } from "./server_version";
+import {isServerVersionGreaterThanOrEqualTo} from './server_version';
 
 /*
 Example User Agents
@@ -127,9 +127,13 @@ export function isEdge(): boolean {
 export function isDesktopApp(): boolean {
     return userAgent().indexOf('Mattermost') !== -1 && userAgent().indexOf('Electron') !== -1;
 }
-export function isLastDesktopApp(): boolean {
-    return isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0');
+export function isKmeetCallCompatibleDesktopApp(): boolean {
+    if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
+        return true;
+    }
+    return false;
 }
+
 export function isWindowsApp(): boolean {
     return isDesktopApp() && isWindows();
 }

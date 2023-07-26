@@ -8,75 +8,75 @@ import {FormattedMessage} from 'react-intl';
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import {hangoutCall, ringing, startOrJoinCallInChannel} from 'actions/calls';
+import {hangUpCall, startOrJoinCallInChannel} from 'actions/calls';
 import {closeModal} from 'actions/views/modals';
 import GenericModal from 'components/generic_modal';
 
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 
-// import {Client4} from 'mattermost-redux/client';
-
-import {GlobalState} from 'types/store';
 import {ModalIdentifiers} from 'utils/constants';
 import './ringing_dialog.scss';
 import {Post} from '@mattermost/types/posts';
-import {Client4} from 'mattermost-redux/client';
-import ring from 'sounds/ring.mp3';
+
 import {UserProfile} from '@mattermost/types/users';
 
 import Avatars from 'components/widgets/users/avatars';
 
-import Ring from './ring/Ring';
+import {ringing, stopRing} from 'utils/notification_sounds';
+import {callParameters} from 'selectors/calls';
 
 type Props = {
     onClose?: () => void;
-    calling?: {
-        users: {[userID: string]: UserProfile};
-        channelID: string;
-        userCalling: string;
-    };
-    post?: Post;
-    currentUserId: string;
 }
 
 function DialingModal(props: Props) {
     const dispatch = useDispatch<DispatchFunc>();
-    const users: UserProfile[] = useSelector((state: GlobalState) => state.views.calls.kmeet.user);
-    const caller: UserProfile = useSelector((state: GlobalState) => state.views.calls.kmeet.caller);
-    const isRinging: boolean = useSelector((state: GlobalState) => state.views.calls.kmeet.isRinging);
-    
+    const {users, caller} = useSelector(callParameters);
+    const btnRef = React.useRef<HTMLButtonElement>(null);
+    const actionRef = React.useRef<HTMLDivElement>(null);
+    React.useEffect(() => {
+        ringing('Ring');
+        btnRef.current?.focus();
+        return () => {
+            stopRing();
+        };
+    }, []);
+
+    //Draft: fix for Safari still some issue on firstload
+    const ringTone = () => {
+        ringing('Ring');
+        stopRing();
+        document.body.removeEventListener('click', ringTone);
+        document.body.removeEventListener('touchstart', ringTone);
+    };
+    document.body.addEventListener('click', ringTone);
+    document.body.addEventListener('touchstart', ringTone);
+
     const handleOnClose = () => {
         if (props.onClose) {
             props.onClose();
         }
-        dispatch(hangoutCall());
-
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
     };
 
     const onHandleAccept = (e: React.SyntheticEvent) => {
-        if (props.post) {
-            Client4.acceptIncomingMeetCall(props.post.props.conference_id);
-            e.preventDefault();
-            e.stopPropagation();
-            dispatch(startOrJoinCallInChannel(props.post.channel_id));
-            handleOnClose();
-        }
-    };
-    const onHandleDecline = (e: React.SyntheticEvent<HTMLButtonElement | HTMLAnchorElement>) => {
-        if (props.post) {
-            e.preventDefault();
-            e.stopPropagation();
-            handleOnClose();
-            Client4.declineIncomingMeetCall(props.post.props.conference_id);
-        }
+        e.preventDefault();
+        e.stopPropagation();
+        dispatch(startOrJoinCallInChannel());
+        handleOnClose();
     };
 
-    const usersWithoutCurrent = users.filter((user: UserProfile) => user.id !== props.currentUserId);
+    const onHandleDecline = (e: React.SyntheticEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dispatch(hangUpCall());
+        handleOnClose();
+    };
+
     const getUsersForOvelay = () => {
-        if (usersWithoutCurrent.length >= 2) {
+        if (users.length >= 2) {
             const overlayUsers: UserProfile[] = [caller];
-            const getOverLayUser: UserProfile = usersWithoutCurrent.filter((usr) => usr.id !== caller.id)[0];
+            const getOverLayUser: UserProfile = users.filter((usr) => usr.id !== caller.id)[0];
             overlayUsers.push(getOverLayUser);
             return overlayUsers;
         }
@@ -84,24 +84,20 @@ function DialingModal(props: Props) {
     };
     const getUsersNicknames = (users: UserProfile[]): string => {
         const nicknames = users.map((user) => user.nickname);
-
-        // if (usersWithoutCurrent.length > 2) {
-        //     return [...nicknames.slice(0, 2), '...'].join(', ');
-        // }
         return nicknames.join(', ');
     };
+
     return (<>
         <GenericModal
             aria-labelledby='contained-modal-title-vcenter'
             className='CallRingingModal'
             onExited={handleOnClose}
         >
-            {isRinging && <Ring sound={ring}/>}
             <div className='content-body'>
                 <Avatars
                     userIds={getUsersForOvelay().map((usr) => usr.id)}
-                    size='xl'
-                    totalUsers={usersWithoutCurrent.length}
+                    size='call'
+                    totalUsers={users.length}
                     disableProfileOverlay={true}
                     disablePopover={true}
                 />
@@ -126,7 +122,10 @@ function DialingModal(props: Props) {
                 )}
             </div>
             <div className='content-calling'/>
-            <div className='content-actions'>
+            <div
+                className='content-actions'
+                ref={actionRef}
+            >
                 <IconButton
                     className='decline'
                     size={'md'}
@@ -144,9 +143,9 @@ function DialingModal(props: Props) {
                     inverted={true}
                     aria-label='Accept'
                     label='Accept'
+                    ref={btnRef}
                 />
             </div>
-
         </GenericModal>
     </>
     );

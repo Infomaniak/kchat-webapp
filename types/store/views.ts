@@ -3,13 +3,13 @@
 
 import {UserProfile} from 'mattermost-redux/types/users';
 
-import {Channel} from '@mattermost/types/channels';
+import {Channel, ServerChannel} from '@mattermost/types/channels';
 import {MarketplaceApp, MarketplacePlugin} from '@mattermost/types/marketplace';
 import {RelationOneToOne} from '@mattermost/types/utilities';
 import {Team} from '@mattermost/types/teams';
 import {UserThread} from '@mattermost/types/threads';
 
-import {Post, PostType} from '@mattermost/types/posts';
+import {Post} from '@mattermost/types/posts';
 
 import {I18nState} from './i18n';
 import {LhsViewState} from './lhs';
@@ -82,7 +82,7 @@ export type ViewsState = {
         connectedCallID: string;
         connectedCallUrl: string;
         voiceConnectedChannels: any;
-        kmeet: {isRinging: boolean; msg: Post; user: UserProfile[]; caller: UserProfile; online: boolean};
+        callParameters: {users: UserProfile[]; caller: UserProfile; channel: ServerChannel; msg: Post};
     };
 
     kmeetCalls: {
