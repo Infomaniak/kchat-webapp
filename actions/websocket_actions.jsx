@@ -242,7 +242,7 @@ function restart() {
     dispatch(getClientConfig());
 }
 
-export async function reconnect() {
+export async function reconnect(socketId?: string) {
     // eslint-disable-next-line
     console.log('Reconnecting WebSocket');
     if (isDesktopApp()) {
@@ -272,6 +272,10 @@ export async function reconnect() {
         type: GeneralTypes.WEBSOCKET_SUCCESS,
         timestamp: Date.now(),
     });
+
+    if (socketId) {
+        Client4.setSocketId(socketId);
+    }
 
     const state = getState();
     const currentTeamId = getCurrentTeamId(state);
@@ -379,7 +383,6 @@ function handleFirstConnect(socketId?: string) {
         clearErrors(),
     ]));
 
-    console.log('websocket_actions: ', socketId);
     if (socketId) {
         Client4.setSocketId(socketId);
     }

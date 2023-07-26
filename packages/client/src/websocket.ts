@@ -20,7 +20,7 @@ function isDesktopApp(): boolean {
 
 export type MessageListener = (msg: WebSocketMessage) => void;
 export type FirstConnectListener = (socketId?: string) => void;
-export type ReconnectListener = () => void;
+export type ReconnectListener = (socketId?: string) => void;
 export type MissedMessageListener = () => void;
 export type ErrorListener = (event: Event) => void;
 export type CloseListener = (connectFailCount: number) => void;
@@ -281,8 +281,9 @@ export default class WebSocketClient {
             console.log('[websocket] re-established connection');
             if (this.connectFailCount > 0) {
                 console.log('[websocket] calling reconnect callbacks');
-                this.reconnectCallback?.();
-                this.reconnectListeners.forEach((listener) => listener());
+                console.log('[websocket] socketId', this.conn?.connection.socket_id);
+                this.reconnectCallback?.(this.conn?.connection.socket_id);
+                this.reconnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
                 console.log('[websocket] calling first connect callbacks');
                 console.log('[websocket] socketId', this.conn?.connection.socket_id);
