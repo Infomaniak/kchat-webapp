@@ -32,6 +32,7 @@ type Props = {
     fetchMissingUsers?: boolean;
     disableProfileOverlay?: boolean;
     disablePopover?: boolean;
+    disableButton?: boolean;
 };
 
 interface MMOverlayTrigger extends BaseOverlayTrigger {
@@ -62,12 +63,14 @@ function UserAvatar({
     overlayProps,
     disableProfileOverlay,
     disablePopover = false,
+    disableButton = false,
     ...props
 }: {
     userId: UserProfile['id'];
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
     disableProfileOverlay: boolean;
     disablePopover?: boolean;
+    disableButton?: boolean;
 } & ComponentProps<typeof Avatar>) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
@@ -100,16 +103,21 @@ function UserAvatar({
                 content={name}
                 {...overlayProps}
             >
-                <RoundButton
-                    className={'style--none'}
-                    onClick={(e) => e.stopPropagation()}
-                >
+                { disableButton ? <Avatar
+                    url={imageURLForUser(userId, user?.last_picture_update)}
+                    tabIndex={-1}
+                    {...props}/> : 
+                    <RoundButton
+                        className={'style--none'}
+                        onClick={(e) => e.stopPropagation()}
+                     >
                     <Avatar
                         url={imageURLForUser(userId, user?.last_picture_update)}
                         tabIndex={-1}
                         {...props}
                     />
                 </RoundButton>
+                }
             </SimpleTooltip>
         </OverlayTrigger>
     );

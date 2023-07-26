@@ -47,10 +47,14 @@ export function ringing(name: string) {
 
     currentRing = loopNotificationRing(name);
     currentRing.muted = false;
-    currentRing.play();
+    const promise = currentRing.play();
+
     // currentRing.addEventListener('pause', () => {
     //     stopRing();
     // });
+    if (promise !== undefined) {
+        promise.then(() => {}).catch((error) => console.error);
+    }
 }
 
 export function stopRing() {

@@ -35,8 +35,10 @@ function DialingModal(props: Props) {
     const btnRef = React.useRef<HTMLButtonElement>(null);
     const actionRef = React.useRef<HTMLDivElement>(null);
     React.useEffect(() => {
-        ringing('Ring');
+        actionRef.current?.focus();
         btnRef.current?.focus();
+        ringing('Ring');
+
         return () => {
             stopRing();
         };
@@ -93,58 +95,60 @@ function DialingModal(props: Props) {
             className='CallRingingModal'
             onExited={handleOnClose}
         >
-            <div className='content-body'>
-                <Avatars
-                    userIds={getUsersForOvelay().map((usr) => usr.id)}
-                    size='call'
-                    totalUsers={users.length}
-                    disableProfileOverlay={true}
-                    disablePopover={true}
-                />
-            </div>
-            <div className='content-calling'>
-                {users && (
-                    <>
-                        <div className='content-calling__user'>
-                            <span>
-                                {getUsersNicknames(getUsersForOvelay())}
-                            </span>
-                        </div>
-                        <div className='content-calling__info'>
-                            <>
-                                <FormattedMessage
-                                    id='calling_modal.calling'
-                                    defaultMessage='iscalling'
-                                />
-                            </>
-                        </div>
-                    </>
-                )}
-            </div>
-            <div className='content-calling'/>
-            <div
-                className='content-actions'
-                ref={actionRef}
-            >
-                <IconButton
-                    className='decline'
-                    size={'md'}
-                    icon={'close'}
-                    onClick={onHandleDecline}
-                    inverted={true}
-                    aria-label='Decline'
-                    label='Decline'
-                />
-                <IconButton
-                    className='accept'
-                    size={'md'}
-                    icon={'check'}
-                    onClick={onHandleAccept}
-                    inverted={true}
-                    aria-label='Accept'
-                    label='Accept'
-                    ref={btnRef}
-                />
+            <div ref={actionRef}>
+                <div className='content-body'>
+                    <Avatars
+                        userIds={getUsersForOvelay().map((usr) => usr.id)}
+                        size='call'
+                        totalUsers={users.length}
+                        disableProfileOverlay={true}
+                        disablePopover={true}
+                        disableButton={true}
+                    />
+                </div>
+                <div className='content-calling'>
+                    {users && (
+                        <>
+                            <div className='content-calling__user'>
+                                <span>
+                                    {getUsersNicknames(getUsersForOvelay())}
+                                </span>
+                            </div>
+                            <div className='content-calling__info'>
+                                <>
+                                    <FormattedMessage
+                                        id='calling_modal.calling'
+                                        defaultMessage='iscalling'
+                                    />
+                                </>
+                            </div>
+                        </>
+                    )}
+                </div>
+                <div className='content-calling'/>
+                <div
+                    className='content-actions'
+                >
+                    <IconButton
+                        className='decline'
+                        size={'md'}
+                        icon={'close'}
+                        onClick={onHandleDecline}
+                        inverted={true}
+                        aria-label='Decline'
+                        label='Decline'
+                    />
+                    <IconButton
+                        className='accept'
+                        size={'md'}
+                        icon={'check'}
+                        onClick={onHandleAccept}
+                        inverted={true}
+                        aria-label='Accept'
+                        label='Accept'
+                        ref={btnRef}
+                    />
+                </div>
             </div>
         </GenericModal>
     </>
