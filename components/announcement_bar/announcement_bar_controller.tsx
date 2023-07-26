@@ -119,7 +119,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
                     canViewSystemErrors={this.props.canViewSystemErrors}
                     warnMetricsStatus={this.props.warnMetricsStatus}
                 />
-                {/* <GetAppAnnoucementBar/> */}
+                <GetAppAnnoucementBar/>
             </>
         );
     }

@@ -11,7 +11,7 @@ import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
 import GetTheAppIcon from 'components/widgets/icons/get_the_app_icon';
 import GetTheAppModal from 'components/get_the_app_modal';
-// import GetAppAnnoucementBarMobile from 'components/announcement_bar/get_app_announcement_bar/get_app_annoucement_bar_mobile';
+import GetAppAnnoucementBarMobile from 'components/announcement_bar/get_app_announcement_bar/get_app_annoucement_bar_mobile';
 import useGetOperatingSystem from 'components/common/hooks/useGetOperatingSystem';
 import ExternalLink from 'components/external_link';
 
@@ -27,7 +27,7 @@ const GetAppAnnoucementBar = () => {
     const announcementBarCount = useSelector(getAnnouncementBarCount);
     const {formatMessage} = useIntl();
     const os = useGetOperatingSystem();
-    const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT);
+    const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT) || 1;
     const isMobile = getIsMobile();
     const isCooldownExceeded = Date.now() >= Number(lastSeenAt) + COOLDOWN;
     const shouldDisplayDesktopBanner = !isDesktopApp() && !isMobile && (!lastSeenAt || isCooldownExceeded);
@@ -76,11 +76,11 @@ const GetAppAnnoucementBar = () => {
         return null;
     }
 
-    // if (shouldDisplayMobileBanner) {
-    //     return (
-    //         <GetAppAnnoucementBarMobile onClose={handleClose}/>
-    //     );
-    // }
+    if (shouldDisplayMobileBanner) {
+        return (
+            <GetAppAnnoucementBarMobile onClose={handleClose}/>
+        );
+    }
 
     return (
         <AnnouncementBar
