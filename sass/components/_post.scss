@@ -1295,7 +1295,10 @@
         align-items: center;
         margin-bottom: 2px;
         white-space: nowrap;
-
+        .display_name {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
         .col__name {
             display: flex;
             min-width: 0;
