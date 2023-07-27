@@ -220,7 +220,10 @@ export function setDraftsTourTipPreference(initializationState: Record<string, b
 
 export function setGlobalDraft(key: string, value: PostDraft|null, isRemote: boolean) {
     return (dispatch: DispatchFunc) => {
-        if (value?.message === '' || value?.message.replace(/\s/g, '').length || (value && value?.fileInfos.length > 0)) {
+        if (value && !value.message) {
+            value.message = ''; // prevent message to be null and raise an exception
+        }
+        if (value?.message === '' || (value?.message?.replace(/\s/g, '').length) || (value && value?.fileInfos.length > 0)) {
             if (value?.message.replace(/\s/g, '').length) {
                 dispatch(setGlobalItem(key, value));
             } else {
