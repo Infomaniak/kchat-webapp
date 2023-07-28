@@ -4,6 +4,8 @@
 import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
+import {useSelector} from 'react-redux';
+
 import {UserProfile, UserStatus, GetFilteredUsersStatsOpts, UsersStats, UserCustomStatus} from '@mattermost/types/users';
 import {ServerError} from '@mattermost/types/errors';
 import {ClientConfig, ClientLicense} from '@mattermost/types/config';
@@ -43,7 +45,6 @@ import {General} from 'mattermost-redux/constants';
 
 import {getHistory} from 'utils/browser_history';
 import {isDesktopApp} from 'utils/user_agent';
-import {useSelector} from 'react-redux';
 
 export function generateMfaSecret(userId: string): ActionFunc {
     return bindClientFunc({
@@ -254,10 +255,19 @@ export function getFilteredUsersStats(options: GetFilteredUsersStatsOpts = {}, u
 export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SIZE, options: any = {}): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {currentUserId} = getState().entities.users;
-        let profiles: UserProfile[];
-
+        let profiles: UserProfile[] = [];
+        let currentFetch: UserProfile[];
+        let currentPage = page;
         try {
-            profiles = await Client4.getProfiles(page, perPage, options);
+            while (true) {
+                // eslint-disable-next-line no-await-in-loop
+                currentFetch = await Client4.getProfiles(currentPage, perPage, options);
+                profiles = profiles.concat(currentFetch);
+                if (currentFetch.length < perPage) {
+                    break;
+                }
+                currentPage += 1;
+            }
             removeUserFromList(currentUserId, profiles);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);

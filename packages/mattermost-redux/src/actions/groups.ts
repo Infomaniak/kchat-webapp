@@ -9,7 +9,7 @@ import {General} from 'mattermost-redux/constants';
 import {Client4} from 'mattermost-redux/client';
 
 import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
-import {GroupPatch, SyncableType, SyncablePatch, GroupCreateWithUserIds, CustomGroupPatch, GroupSearachParams, GroupSource} from '@mattermost/types/groups';
+import {GroupPatch, SyncableType, SyncablePatch, GroupCreateWithUserIds, CustomGroupPatch, GroupSearachParams, GroupSource, Group} from '@mattermost/types/groups';
 
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
@@ -157,19 +157,31 @@ export function getGroup(id: string, includeMemberCount = false): ActionFunc {
 }
 
 export function getGroups(filterAllowReference = false, page = 0, perPage = 10, includeMemberCount = false): ActionFunc {
-    return bindClientFunc({
-        clientFunc: async (param1, param2, param3, param4) => {
-            const result = await Client4.getGroups(param1, param2, param3, param4);
-            return result;
-        },
-        onSuccess: [GroupTypes.RECEIVED_GROUPS],
-        params: [
-            filterAllowReference,
-            page,
-            perPage,
-            includeMemberCount,
-        ],
-    });
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let groups: Group[] = [];
+        let currentFetch: Group[] = [];
+        let currentPage = page;
+
+        try {
+            while (true) {
+                // eslint-disable-next-line no-await-in-loop
+                currentFetch = await Client4.getGroups(filterAllowReference, currentPage, perPage, includeMemberCount);
+                groups = groups.concat(currentFetch);
+                if (currentFetch.length < perPage) {
+                    break;
+                }
+                currentPage += 1;
+            }
+        } catch (error) {
+            dispatch(logError(error));
+        }
+        dispatch({
+            type: GroupTypes.RECEIVED_GROUPS,
+            data: groups,
+        });
+
+        return {data: groups};
+    };
 }
 
 export function getGroupsNotAssociatedToTeam(teamID: string, q = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT, source = GroupSource.Ldap): ActionFunc {
