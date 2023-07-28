@@ -74,7 +74,7 @@ import {FilePreviewInfo} from '../file_preview/file_preview';
 const KeyCodes = Constants.KeyCodes;
 
 function isDraftEmpty(draft: PostDraft): boolean {
-    return !draft || (!draft.message && draft.fileInfos.length === 0);
+    return !draft || (!draft.message && draft.fileInfos?.length === 0);
 }
 
 // Temporary fix for IE-11, see MM-13423
