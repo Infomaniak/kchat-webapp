@@ -1,3 +1,14 @@
+## 1.3.11-next.2 (2023-07-28)
+
+### Fixed (2 changes)
+
+- [fix: null reference](kchat/webapp@ce5c5f03a5f3d47fcbdb15fb29368bab175753a7) by @benoit.nau ([merge request](kchat/webapp!500))
+- [fix: null reference](kchat/webapp@b37fdd6b24be8cbcaa46b085cf4f7d290860ac4d) by @benoit.nau ([merge request](kchat/webapp!499))
+
+### Changed (1 change)
+
+- [Change color font for Code type message](kchat/webapp@7c13666f9a9e1018514ab41324df9b6fa5f17e75) by @arthur.noguera ([merge request](kchat/webapp!406))
+
 ## 1.3.11-next.1 (2023-07-28)
 
 ### Added (1 change)
