@@ -4227,7 +4227,7 @@
   "navbar.toggle2": "Seitenleiste umschalten",
   "navbar.viewPinnedPosts": "Zeige angeheftete Nachrichten",
   "navbar_dropdown.about": "Über {appTitle}",
-  "navbar_dropdown.accountSettings": "Einstellungen",
+  "navbar_dropdown.accountSettings": "Profil",
   "navbar_dropdown.addGroupsToTeam": "Gruppen zu Team hinzufügen",
   "navbar_dropdown.console": "Systemkonsole",
   "navbar_dropdown.create": "Ein Team erstellen",
