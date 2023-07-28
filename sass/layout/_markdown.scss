@@ -438,7 +438,7 @@ pre {
 code {
     background-color: rgba(var(--center-channel-color-rgb), 0.1);
     // Reset styles from Bootstrap
-    color: darkorange;
+    color: var(--code-color)
 }
 
 .help {
