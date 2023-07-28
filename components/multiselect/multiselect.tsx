@@ -111,7 +111,9 @@ export default class MultiSelect<T extends Value> extends React.PureComponent<Pr
             if (this.props.focusOnLoad) {
                 requestAnimationFrame(() => {
                     // known from ternary definition of inputRef
-                    this.reactSelectRef.current!.focus();
+                    if (this.reactSelectRef?.current) {
+                        this.reactSelectRef.current.focus();
+                    }
                 });
             }
         }
