@@ -62,10 +62,10 @@ export class GenericModal extends React.PureComponent<Props, State> {
         enforceFocus: true,
         keyboardEscape: true,
     };
-
+    submitBtn: React.RefObject<HTMLButtonElement>;
     constructor(props: Props) {
         super(props);
-
+        this.submitBtn = React.createRef();
         this.state = {
             show: props.show!,
             isFocalTrapActive: false,
@@ -94,6 +94,10 @@ export class GenericModal extends React.PureComponent<Props, State> {
         if (this.props.handleConfirm) {
             this.props.handleConfirm();
         }
+    }
+
+    handleEntered = () => {
+        this.submitBtn?.current?.focus();
     }
 
     private onEnterKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -130,6 +134,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
 
             confirmButton = (
                 <button
+                    ref={this.submitBtn}
                     type='submit'
                     className={classNames('GenericModal__button', isConfirmOrDeleteClassName, this.props.confirmButtonClassName, {
                         disabled: this.props.isConfirmDisabled,
@@ -187,6 +192,7 @@ export class GenericModal extends React.PureComponent<Props, State> {
                 onShow={this.handleShow}
                 restoreFocus={true}
                 enforceFocus={this.props.enforceFocus}
+                onEntered={this.handleEntered}
                 onHide={this.onHide}
                 onExited={this.props.onExited}
                 backdrop={this.props.backdrop}
