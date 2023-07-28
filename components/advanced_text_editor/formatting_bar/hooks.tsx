@@ -19,7 +19,7 @@ export function useGetLatest<T>(val: T) {
 const useResponsiveFormattingBar = (ref: React.RefObject<HTMLDivElement>): WideMode => {
     const [wideMode, setWideMode] = useState<WideMode>('wide');
     const handleResize = debounce(() => {
-        if (ref.current?.clientWidth === undefined) {
+        if (!(ref.current && ref.current.clientWidth)) {
             return;
         }
 
