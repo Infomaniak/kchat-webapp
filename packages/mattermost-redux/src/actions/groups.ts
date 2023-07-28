@@ -172,14 +172,13 @@ export function getGroups(filterAllowReference = false, page = 0, perPage = 10, 
                 }
                 currentPage += 1;
             }
+            dispatch({
+                type: GroupTypes.RECEIVED_GROUPS,
+                data: groups,
+            });
         } catch (error) {
             dispatch(logError(error));
         }
-        dispatch({
-            type: GroupTypes.RECEIVED_GROUPS,
-            data: groups,
-        });
-
         return {data: groups};
     };
 }

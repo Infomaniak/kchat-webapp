@@ -4,8 +4,6 @@
 import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
-import {useSelector} from 'react-redux';
-
 import {UserProfile, UserStatus, GetFilteredUsersStatsOpts, UsersStats, UserCustomStatus} from '@mattermost/types/users';
 import {ServerError} from '@mattermost/types/errors';
 import {ClientConfig, ClientLicense} from '@mattermost/types/config';
