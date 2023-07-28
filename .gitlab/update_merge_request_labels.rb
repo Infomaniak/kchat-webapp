@@ -273,6 +273,10 @@ merge_requests.each do |merge_request|
   mr_details = JSON.parse(response.body)
 
   # Remove HTML comments
+  if description.nil?
+    description = ""
+  end
+
   description_without_comments = description.gsub(/<!--.*?-->/m, '')
   trello_links = description_without_comments.scan(/https:\/\/trello.com\/c\/[^\s]+/)
   trello_links.each do |link|
