@@ -1,3 +1,20 @@
+## 1.3.11-next.1 (2023-07-28)
+
+### Added (1 change)
+
+- [feat: Update generic modal](kchat/webapp@c152c7ed7c36be21d709fa1a2260ad967bef44ae) by @benoit.nau ([merge request](kchat/webapp!484))
+
+### Fixed (3 changes)
+
+- [fix: null reference](kchat/webapp@60e9a046fa2e9714ea8f537febb06412b13699c1) by @benoit.nau ([merge request](kchat/webapp!498))
+- [fix: null reference](kchat/webapp@afd6d3e96aa27fee61d4a5ff13e15fb23e7cf327) by @benoit.nau ([merge request](kchat/webapp!494))
+- [fix: null reference](kchat/webapp@dd02281d80fd8e0a033f9a592645e7ed92d441ba) by @benoit.nau ([merge request](kchat/webapp!492))
+
+### Changed (2 changes)
+
+- [feat: Update logo](kchat/webapp@3ef1e64591dac1767b7017c431ce6839b7cf7461) by @benoit.nau ([merge request](kchat/webapp!486))
+- [feat: Update favicon](kchat/webapp@056db4dd7af6dd9f0700006a1d50d6a943c53887) by @benoit.nau ([merge request](kchat/webapp!485))
+
 ## 1.3.9-next.1 (2023-07-26)
 
 ### Fixed (1 change)
