@@ -9,70 +9,48 @@ import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {hangUpCall, startOrJoinCallInChannel} from 'actions/calls';
-import {closeModal} from 'actions/views/modals';
 import GenericModal from 'components/generic_modal';
 
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 
-import {ModalIdentifiers} from 'utils/constants';
 import './ringing_dialog.scss';
-import {Post} from '@mattermost/types/posts';
 
 import {UserProfile} from '@mattermost/types/users';
 
 import Avatars from 'components/widgets/users/avatars';
 
-import {ringing, stopRing} from 'utils/notification_sounds';
 import {callParameters} from 'selectors/calls';
 
-type Props = {
-    onClose?: () => void;
-}
-
-function DialingModal(props: Props) {
+function DialingModal() {
     const dispatch = useDispatch<DispatchFunc>();
     const {users, caller} = useSelector(callParameters);
-    const btnRef = React.useRef<HTMLButtonElement>(null);
-    const actionRef = React.useRef<HTMLDivElement>(null);
-    React.useEffect(() => {
-        actionRef.current?.focus();
-        btnRef.current?.focus();
-        ringing('Ring');
+    const modalRef = React.useRef<HTMLDivElement>(null);
 
+    //manage to stop de tone when users click outside modal
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleClickOutsideModal = (event: any) => {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+            onHandleDecline(event);
+        }
+    };
+    document.addEventListener('click', handleClickOutsideModal);
+
+    React.useEffect(() => {
         return () => {
-            stopRing();
+            document.removeEventListener('click', handleClickOutsideModal);
         };
     }, []);
-
-    //Draft: fix for Safari still some issue on firstload
-    const ringTone = () => {
-        ringing('Ring');
-        stopRing();
-        document.body.removeEventListener('click', ringTone);
-        document.body.removeEventListener('touchstart', ringTone);
-    };
-    document.body.addEventListener('click', ringTone);
-    document.body.addEventListener('touchstart', ringTone);
-
-    const handleOnClose = () => {
-        if (props.onClose) {
-            props.onClose();
-        }
-        dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-    };
 
     const onHandleAccept = (e: React.SyntheticEvent) => {
         e.preventDefault();
         e.stopPropagation();
         dispatch(startOrJoinCallInChannel());
-        handleOnClose();
     };
 
     const onHandleDecline = (e: React.SyntheticEvent<HTMLButtonElement | HTMLAnchorElement>) => {
         e.preventDefault();
         e.stopPropagation();
         dispatch(hangUpCall());
-        handleOnClose();
     };
 
     const getUsersForOvelay = () => {
@@ -93,10 +71,11 @@ function DialingModal(props: Props) {
         <GenericModal
             aria-labelledby='contained-modal-title-vcenter'
             className='CallRingingModal'
-            onExited={handleOnClose}
         >
-            <div ref={actionRef}>
-                <div className='content-body'>
+            <div ref={modalRef}>
+                <div
+                    className='content-body'
+                >
                     <Avatars
                         userIds={getUsersForOvelay().map((usr) => usr.id)}
                         size='call'
@@ -146,7 +125,6 @@ function DialingModal(props: Props) {
                         inverted={true}
                         aria-label='Accept'
                         label='Accept'
-                        ref={btnRef}
                     />
                 </div>
             </div>

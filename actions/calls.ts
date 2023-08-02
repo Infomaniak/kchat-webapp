@@ -7,6 +7,7 @@ import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {
     callConferenceId,
     callParameters,
+    callUserStatus,
     connectedCallID,
 } from 'selectors/calls';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
@@ -23,7 +24,9 @@ import {imageURLForUser} from 'utils/utils';
 import {PostTypes} from 'mattermost-redux/constants/posts';
 import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 
-import {openModal} from './views/modals';
+import {ringing, stopRing} from 'utils/notification_sounds';
+
+import {closeModal, openModal} from './views/modals';
 
 export const showExpandedView = () => (dispatch: Dispatch<GenericAction>) => {
     dispatch({
@@ -70,10 +73,11 @@ export function leaveCallInChannel(channelID: string, dialingID: string) {
 export function startOrJoinCallInChannel(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
-        const {msg, ...rest} = callParameters(getState());
+        const {msg} = callParameters(getState());
         const conferenceId = callConferenceId(state);
         Client4.acceptIncomingMeetCall(conferenceId);
-
+        dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+        stopRing();
         if (msg) {
             const kmeetUrl = new URL(msg.props.url);
             window.open(kmeetUrl.href, '_blank', 'noopener');
@@ -119,6 +123,10 @@ export function updateScreenSharingStatus(dialingID: string, muted = false) {
 export function receivedKmeetCall(callMessage: Post, isRinging: boolean, currentUserId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         try {
+            const {status} = callUserStatus(getState());
+            if (status[currentUserId] === 'dnd') {
+                return;
+            }
             if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at && callMessage.user_id !== currentUserId) {
                 await dispatch(getCallingChannel(callMessage));
                 await dispatch(getUsersInCall(callMessage));
@@ -155,6 +163,7 @@ export function receivedKmeetCall(callMessage: Post, isRinging: boolean, current
                         },
                         window.location.origin);
                 } else {
+                    ringing('Ring');
                     dispatch(openModal(
                         {
                             modalId: ModalIdentifiers.INCOMING_CALL,
@@ -174,6 +183,8 @@ export function hangUpCall(): ActionFunc {
         const state = getState();
         const conferenceId = callConferenceId(state);
         Client4.declineIncomingMeetCall(conferenceId);
+        dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+        stopRing();
         dispatch({
             type: ActionTypes.CALL_HANGUP,
             data: {isRinging: false},
@@ -184,7 +195,7 @@ export function hangUpCall(): ActionFunc {
 export function getUsersInCall(callMessage: Post) {
     return bindClientFunc({
         clientFunc: Client4.getProfilesInChannel,
-        onSuccess: [ActionTypes.CALL_USER_IN_CONF],
+        onSuccess: [ActionTypes.CALL_USERS_IN_CONF],
         params: [
             callMessage.channel_id,
         ],

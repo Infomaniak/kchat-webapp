@@ -49,9 +49,9 @@ export function ringing(name: string) {
     currentRing.muted = false;
     const promise = currentRing.play();
 
-    // currentRing.addEventListener('pause', () => {
-    //     stopRing();
-    // });
+    currentRing.addEventListener('pause', () => {
+        stopRing();
+    });
     if (promise !== undefined) {
         promise.then(() => {}).catch((error) => console.error);
     }

@@ -15,12 +15,20 @@ export const channelInCall = (state: GlobalState) => state.views.calls.callParam
 export const callConferenceId = (state: GlobalState) => state.views.calls.callParameters.msg.props.conference_id;
 export const callMessage = (state: GlobalState) => state.views.calls.callParameters.msg;
 
+export const userStatus = (state: GlobalState) => state.entities.users.statuses;
+
 export const callParameters = (state: GlobalState) => {
     return {
         users: usersInCall(state).filter((usr) => usr.id !== getCurrentUserId(state)),
         caller: userCalling(state),
         channel: channelInCall(state),
         msg: callMessage(state),
+    };
+};
+
+export const callUserStatus = (state: GlobalState) => {
+    return {
+        status: userStatus(state),
     };
 };
 

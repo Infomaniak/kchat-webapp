@@ -432,7 +432,7 @@ const callParameters = (
     state: {users: UserProfile[]; caller: UserProfile; channel: ServerChannel; msg: Post} = {users: [], caller: {}, channel: {}, msg: {}},
     action: GenericAction) => {
     switch (action.type) {
-    case ActionTypes.CALL_USER_IN_CONF:
+    case ActionTypes.CALL_USERS_IN_CONF:
         return {
             ...state, users: action.data,
         };
