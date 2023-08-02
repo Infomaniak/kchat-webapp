@@ -248,6 +248,10 @@ h6.markdown__heading {
         overflow-x: auto;
         visibility: visible;
         white-space: pre;
+
+        code{
+            color: var(--code-block-color)
+        }
     }
 }
 
