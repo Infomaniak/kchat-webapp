@@ -526,9 +526,12 @@ export function applyTheme(theme: Theme) {
     }
 
     if (theme.codeColor) {
-        changeCss('Code', 'color' + theme.codeColor);
+        changeCss('code', 'color' + theme.codeColor);
     }
 
+    if (theme.codeBlockColor) {
+        changeCss('.hljs code', 'color' + theme.codeBlockColor);
+    }
     if (theme.buttonBg) {
         changeCss('.app__body .modal .settings-modal .profile-img__remove:hover, .app__body .DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover:before, .app__body .modal .settings-modal .team-img__remove:hover, .app__body .btn.btn-transparent:hover, .app__body .btn.btn-transparent:active, .app__body .post-image__details .post-image__download svg:hover, .app__body .file-view--single .file__download:hover, .app__body .new-messages__button div, .app__body .btn.btn-primary, .app__body .tutorial__circles .circle.active', 'background:' + theme.buttonBg);
         changeCss('.app__body .system-notice__logo svg', 'fill:' + theme.buttonBg);
@@ -621,6 +624,7 @@ export function applyTheme(theme: Theme) {
             'mention-highlight-bg': theme.mentionHighlightBg,
             'mention-highlight-link': theme.mentionHighlightLink,
             'code-color': theme.codeColor,
+            'code-block-color': theme.codeBlockColor,
 
             // Legacy variables with baked in opacity, do not use!
             'sidebar-text-08': changeOpacity(theme.sidebarText, 0.08),
