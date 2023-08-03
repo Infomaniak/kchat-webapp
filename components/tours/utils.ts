@@ -56,7 +56,7 @@ export const getLastStep = (Steps: Record<string, number>) => {
     }, Number.MIN_SAFE_INTEGER);
 };
 
-const faqBaseName = 'https://faq.infomaniak.com/';
+const FAQ_BASENAME = 'https://faq.infomaniak.com/';
 
 //add FAQ Id
 const faqId = new Map([
@@ -65,7 +65,7 @@ const faqId = new Map([
 
 export const getOnBoardingInfoUrl = (name: string): string => {
     if (faqId.has(name)) {
-        return faqBaseName + faqId.get(name);
+        return FAQ_BASENAME + faqId.get(name);
     }
-    return faqBaseName;
+    return FAQ_BASENAME;
 };
