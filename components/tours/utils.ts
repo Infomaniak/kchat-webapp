@@ -63,7 +63,7 @@ const faqId = new Map([
     ['channelTourTip', '2732'],
 ]);
 
-export const getOnBoardingInfo = (name: string): string => {
+export const getOnBoardingInfoUrl = (name: string): string => {
     if (faqId.has(name)) {
         return faqBaseName + faqId.get(name);
     }
