@@ -179,18 +179,19 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   create_changelog(GIT_RELEASE_TAG, branch)
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
-  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+
+  # mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
   # Labels
-  mr_numbers.each do |mr_number|
-    mr = get_merge_request(mr_number)
-    labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::prod"]
-    if mr["labels"].any? { |label| label.start_with?("trello::") }
-      labels = mr["labels"].reject { |label| label.start_with?("trello::") } + ["trello::All - Done", "trello-sync"]
-      update_merge_request_labels(mr["iid"], labels)
-      puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
-    end
-  end
+  # mr_numbers.each do |mr_number|
+  #   mr = get_merge_request(mr_number)
+  #   labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::prod"]
+  #   if mr["labels"].any? { |label| label.start_with?("trello::") }
+  #     labels = mr["labels"].reject { |label| label.start_with?("trello::") } + ["trello::All - Done", "trello-sync"]
+  #     update_merge_request_labels(mr["iid"], labels)
+  #     puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
+  #   end
+  # end
 
   # Release
   create_release(changelog)
@@ -205,14 +206,15 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   create_changelog(GIT_RELEASE_TAG, branch)
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
-  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
 
-  mr_numbers.each do |mr_number|
-    mr = get_merge_request(mr_number)
-    labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::next"]
-    update_merge_request_labels(mr["iid"], labels)
-    puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
-  end
+  # mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+
+  # mr_numbers.each do |mr_number|
+  #   mr = get_merge_request(mr_number)
+  #   labels = mr["labels"].reject { |label| label.start_with?("stage::") } + ["stage::next"]
+  #   update_merge_request_labels(mr["iid"], labels)
+  #   puts "Updated labels for merge request id #{mr['iid']}. New labels: #{labels.join(", ")}"
+  # end
   create_release(changelog)
   puts "Creating release for canary tag #{GIT_RELEASE_TAG} for milestone #{MILESTONE}"
 end
