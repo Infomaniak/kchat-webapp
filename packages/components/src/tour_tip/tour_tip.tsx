@@ -41,6 +41,7 @@ type Props = {
     className?: string;
     hideBackdrop?: boolean;
     tippyBlueStyle?: boolean;
+    link?: string;
 
     // if you don't want punchOut just assign null, keep null as hook may return null first than actual value
     overlayPunchOut: PunchOutCoordsHeightAndWidth | null;
@@ -79,6 +80,7 @@ export const TourTip = ({
     nextBtn,
     prevBtn,
     className,
+    link,
     offset = [-18, 4],
     placement = 'right-start',
     showOptOut = true,
@@ -142,6 +144,18 @@ export const TourTip = ({
             <div className='tour-tip__body'>
                 {screen}
             </div>
+            {link && (<div className='tour-tip__info'>
+                <a
+                    href={link}
+                    target='_blank'
+                    rel='noreferrer'
+                >
+                    <FormattedMessage
+                        id='tutorial_tip.link'
+                        defaultMessage='here'
+                    />
+                </a>
+            </div>)}
             {imageURL && (
                 <div className='tour-tip__image'>
                     <img

@@ -55,3 +55,17 @@ export const getLastStep = (Steps: Record<string, number>) => {
         return maxStep;
     }, Number.MIN_SAFE_INTEGER);
 };
+
+const faqBaseName = 'https://faq.infomaniak.com/';
+
+//add FAQ Id
+const faqId = new Map([
+    ['channelTourTip', '2732'],
+]);
+
+export const getOnBoardingInfo = (name: string): string => {
+    if (faqId.has(name)) {
+        return faqBaseName + faqId.get(name);
+    }
+    return faqBaseName;
+};

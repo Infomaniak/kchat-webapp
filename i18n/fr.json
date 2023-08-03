@@ -4545,6 +4545,7 @@
   "tutorial_tip.ok": "Suivant",
   "tutorial_tip.out": "Ne plus voir ces astuces.",
   "tutorial_tip.seen": "Déjà vu ? ",
+  "tutorial_tip.link": "En savoir plus.",
   "unarchive_channel.cancel": "Annuler",
   "unarchive_channel.confirm": "Confirmez le DESARCHIVAGE du canal",
   "unarchive_channel.del": "Désarchiver",
