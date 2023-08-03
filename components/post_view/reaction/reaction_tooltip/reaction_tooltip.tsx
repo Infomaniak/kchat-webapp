@@ -15,7 +15,7 @@ type Props = {
     reactions: ReactionType[];
     users: string[];
 };
-const MAX_DISPLAY_USER = 5;
+const MAX_DISPLAY_USER = 20;
 
 const ReactionTooltip: React.FC<Props> = (props: Props) => {
     const {
