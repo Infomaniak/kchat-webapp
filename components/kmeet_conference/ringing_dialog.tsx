@@ -20,6 +20,9 @@ import {UserProfile} from '@mattermost/types/users';
 import Avatars from 'components/widgets/users/avatars';
 
 import {callParameters} from 'selectors/calls';
+import {closeModal} from 'actions/views/modals';
+import {ModalIdentifiers} from 'utils/constants';
+import {stopRing} from 'utils/notification_sounds';
 
 function DialingModal() {
     const dispatch = useDispatch<DispatchFunc>();
@@ -36,6 +39,10 @@ function DialingModal() {
     document.addEventListener('click', handleClickOutsideModal);
 
     React.useEffect(() => {
+        window.addEventListener('offline', (e) => {
+            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+            stopRing();
+        });
         return () => {
             document.removeEventListener('click', handleClickOutsideModal);
         };
