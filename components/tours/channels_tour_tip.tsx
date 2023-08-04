@@ -26,6 +26,7 @@ export type ChannelsTourTipProps = {
     hideBackdrop?: boolean;
     tippyBlueStyle?: boolean;
     showOptOut?: boolean;
+    link?: string;
 }
 
 export const ChannelsTourTip = ({
@@ -36,6 +37,7 @@ export const ChannelsTourTip = ({
     singleTip,
     pulsatingDotTranslate,
     pulsatingDotPlacement,
+    link,
     offset = [-18, 4],
     placement = 'right-start',
     width = 320,
@@ -124,6 +126,7 @@ export const ChannelsTourTip = ({
             hideBackdrop={hideBackdrop}
             tippyBlueStyle={tippyBlueStyle}
             showOptOut={showOptOut}
+            link={link}
         />
     );
 };

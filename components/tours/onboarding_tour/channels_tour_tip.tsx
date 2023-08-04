@@ -4,6 +4,7 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import {getOnBoardingInfoUrl} from '../utils';
 import {useMeasurePunchouts} from '@mattermost/components';
 
 import {CategoryTypes} from 'packages/mattermost-redux/src/constants/channel_categories';
@@ -27,6 +28,7 @@ export const ChannelsTour = () => {
     );
 
     const overlayPunchOut = useMeasurePunchouts([`sidebar-droppable-category-${CategoryTypes.CHANNELS}`], []);
+    const link = getOnBoardingInfoUrl('channelTourTip');
 
     return (
         <span className='tip__positioned-horizontaly'>
@@ -37,6 +39,7 @@ export const ChannelsTour = () => {
                 pulsatingDotPlacement='right-start'
                 width={400}
                 overlayPunchOut={overlayPunchOut}
+                link={link}
             />
         </span>
     );
