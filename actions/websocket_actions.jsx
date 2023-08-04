@@ -127,7 +127,7 @@ import {
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
 
-import {receivedKmeetCall} from './calls';
+import {callNoLongerExist, receivedCall} from './calls';
 
 // import {isDesktopApp} from 'utils/user_agent';
 
@@ -773,7 +773,7 @@ export function handleNewPostEvent(msg) {
         const msgProps = post.props;
         const currentUserId = getCurrentUserId(myGetState());
         if (msgProps) {
-            dispatch(receivedKmeetCall(post, true, currentUserId));
+            dispatch(receivedCall(post, currentUserId));
         }
         if (window.logPostEvents) {
             // eslint-disable-next-line no-console
@@ -1862,6 +1862,7 @@ function handleConferenceUserDisconnected(msg) {
 function handleConferenceDeleted(msg) {
     return (doDispatch, getState) => {
         dispatch(getPostsSince(msg.data.channel_id, Date.now()));
+        dispatch(callNoLongerExist(msg));
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_DELETED,
             data: {

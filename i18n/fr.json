@@ -3681,7 +3681,7 @@
   "katex.error": "Impossible de compiler votre code LaTeX. Veuillez vérifier la syntaxe et réessayez.",
   "kmeet.calls.ended": "Terminée à {time}",
   "kmeet.calls.join": "Rejoindre la réunion",
-  "kmeet.calls.open": "Ouvrir",
+  "kmeet.calls.open": "Rejoindre",
   "kmeet.calls.start": "Démarrer une réunion",
   "kmeet.calls.started": "Réunion kMeet démarrée",
   "last_users_message.added_to_channel.type": "a été **ajouté au canal** par {actor}.",

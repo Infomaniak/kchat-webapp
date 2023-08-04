@@ -3999,7 +3999,7 @@
   "katex.error": "Konnte deinen Latex-Code nicht kompilieren. Bitte kontrolliere die Syntax und versuchenes erneut.",
   "kmeet.calls.ended": "Beendet um {time}",
   "kmeet.calls.join": "Dem Treffen beitreten",
-  "kmeet.calls.open": "Öffnen",
+  "kmeet.calls.open": "beitreten",
   "kmeet.calls.start": "Ein Treffen starten",
   "kmeet.calls.started": "kMeet-Treffen gestartet",
   "last_users_message.added_to_channel.type": "wurden durch {actor} **dem Kanal hinzugefügt**.",

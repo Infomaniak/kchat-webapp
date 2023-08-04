@@ -120,13 +120,11 @@ export function updateScreenSharingStatus(dialingID: string, muted = false) {
     };
 }
 
-export function receivedKmeetCall(callMessage: Post, isRinging: boolean, currentUserId: string) {
+export function receivedCall(callMessage: Post, currentUserId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         try {
             const {status} = callUserStatus(getState());
-            if (status[currentUserId] === 'dnd') {
-                return;
-            }
+
             if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at && callMessage.user_id !== currentUserId) {
                 await dispatch(getCallingChannel(callMessage));
                 await dispatch(getUsersInCall(callMessage));
@@ -163,7 +161,9 @@ export function receivedKmeetCall(callMessage: Post, isRinging: boolean, current
                         },
                         window.location.origin);
                 } else {
-                    ringing('Ring');
+                    if (status[currentUserId] !== 'dnd') {
+                        ringing('Ring');
+                    }
                     dispatch(openModal(
                         {
                             modalId: ModalIdentifiers.INCOMING_CALL,
@@ -177,7 +177,15 @@ export function receivedKmeetCall(callMessage: Post, isRinging: boolean, current
         }
     };
 }
-
+export function callNoLongerExist(endMsg): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const {msg} = callParameters(getState());
+        if (msg.props.url === endMsg.data.url) {
+            stopRing();
+            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+        }
+    };
+}
 export function hangUpCall(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();

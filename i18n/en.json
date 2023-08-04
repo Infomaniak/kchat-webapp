@@ -4002,7 +4002,7 @@
   "katex.error": "Couldn't compile your Latex code. Please review the syntax and try again.",
   "kmeet.calls.ended": "Finished at {time}",
   "kmeet.calls.join": "Join the meeting",
-  "kmeet.calls.open": "Open",
+  "kmeet.calls.open": "Join",
   "kmeet.calls.start": "Start a meeting",
   "kmeet.calls.started": "kMeet meeting started",
   "last_users_message.added_to_channel.type": "were **added to the channel** by {actor}.",

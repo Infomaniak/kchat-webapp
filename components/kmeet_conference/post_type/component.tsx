@@ -66,7 +66,7 @@ const PostType = ({post, connectedKmeetUrl}: Props) => {
                             <ButtonText>
                                 <FormattedMessage
                                     id='kmeet.calls.open'
-                                    defaultMessage='Ouvrir'
+                                    defaultMessage='Rejoindre'
                                 />
                             </ButtonText>
                         </JoinButton>
