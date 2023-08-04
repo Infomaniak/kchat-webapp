@@ -1,3 +1,18 @@
+## 1.3.14-next.1 (2023-08-04)
+
+### Fixed (2 changes)
+
+- [fix tooltip for reaction -> add Max display username per reaction](kchat/webapp@08bddd0951bd30ed3ff076140ea4e7acc1101333) by @arthur.noguera ([merge request](kchat/webapp!507))
+- [fix: null reference](kchat/webapp@7cca592e88e1bbd4de7476e177a6ef9d1b080fd7) by @benoit.nau ([merge request](kchat/webapp!506))
+
+### Changed (1 change)
+
+- [increase reaction tooltip size when max number of reactions reached](kchat/webapp@7938faba455a616cb1bdd35b6651cc4912598be2) by @antonbuksa ([merge request](kchat/webapp!507))
+
+### Removed (1 change)
+
+- [disable label update in release script](kchat/webapp@261ebde89c011573239748d75b4bfa121fe21775) by @antonbuksa
+
 ## 1.3.13-next.1 (2023-08-02)
 
 No changes.
