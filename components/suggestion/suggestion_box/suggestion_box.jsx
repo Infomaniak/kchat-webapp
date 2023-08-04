@@ -459,7 +459,10 @@ export default class SuggestionBox extends React.PureComponent {
             this.handleChange({target: this.inputRef.current});
             return false;
         }
-
+        if (!this.inputRef.current) {
+            // eslint-disable-next-line consistent-return
+            return;
+        }
         this.inputRef.current.focus();
 
         if (finish && this.props.onKeyPress) {
