@@ -70,7 +70,7 @@ export function leaveCallInChannel(channelID: string, dialingID: string) {
     };
 }
 
-export function startOrJoinCallInChannel(): ActionFunc {
+export function joinCallInChannel(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const {msg} = callParameters(getState());
@@ -126,9 +126,9 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
             const {status} = callUserStatus(getState());
 
             if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at && callMessage.user_id !== currentUserId) {
-                await dispatch(getCallingChannel(callMessage));
-                await dispatch(getUsersInCall(callMessage));
-                await dispatch(getCallingUser(callMessage));
+                dispatch(getCallingChannel(callMessage));
+                dispatch(getUsersInCall(callMessage));
+                dispatch(getCallingUser(callMessage));
                 dispatch({
                     type: ActionTypes.CALL_RECEIVED,
                     data: {

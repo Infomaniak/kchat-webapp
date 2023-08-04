@@ -8,7 +8,7 @@ import {FormattedMessage} from 'react-intl';
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import {hangUpCall, startOrJoinCallInChannel} from 'actions/calls';
+import {hangUpCall, joinCallInChannel} from 'actions/calls';
 import GenericModal from 'components/generic_modal';
 
 import {DispatchFunc} from 'mattermost-redux/types/actions';
@@ -26,7 +26,7 @@ import {stopRing} from 'utils/notification_sounds';
 
 function DialingModal() {
     const dispatch = useDispatch<DispatchFunc>();
-    const {users, caller} = useSelector(callParameters);
+    const {users, caller, channel} = useSelector(callParameters);
     const modalRef = React.useRef<HTMLDivElement>(null);
 
     //manage to stop de tone when users click outside modal
@@ -51,7 +51,7 @@ function DialingModal() {
     const onHandleAccept = (e: React.SyntheticEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        dispatch(startOrJoinCallInChannel());
+        dispatch(joinCallInChannel());
     };
 
     const onHandleDecline = (e: React.SyntheticEvent<HTMLButtonElement | HTMLAnchorElement>) => {
@@ -74,6 +74,50 @@ function DialingModal() {
         return nicknames.join(', ');
     };
 
+    const text = (type: 'DIRECT'|'TEAMS') => {
+        switch (type) {
+        case 'DIRECT':
+            return (<>
+                <div className='content-calling__user'>
+                    <span>
+                        {getUsersNicknames([caller])}
+                    </span>
+                </div>
+                <div className='content-calling__info'>
+                    <>
+                        <FormattedMessage
+                            id='calling_modal.calling.teams'
+                            defaultMessage='is calling in'
+                        />
+                    </>
+                </div>
+                <div className='content-calling__user'>
+                    <span>
+                        {channel.display_name}
+                    </span>
+                </div>
+            </>);
+            break;
+        case 'TEAMS':
+            return (
+                <>
+                    <div className='content-calling__user'>
+                        <span>
+                            {getUsersNicknames(getUsersForOvelay())}
+                        </span>
+                    </div>
+                    <div className='content-calling__info'>
+                        <>
+                            <FormattedMessage
+                                id='calling_modal.calling'
+                                defaultMessage='is calling'
+                            />
+                        </>
+                    </div>
+                </>
+            );
+        }
+    };
     return (<>
         <GenericModal
             aria-labelledby='contained-modal-title-vcenter'
@@ -93,23 +137,7 @@ function DialingModal() {
                     />
                 </div>
                 <div className='content-calling'>
-                    {users && (
-                        <>
-                            <div className='content-calling__user'>
-                                <span>
-                                    {getUsersNicknames(getUsersForOvelay())}
-                                </span>
-                            </div>
-                            <div className='content-calling__info'>
-                                <>
-                                    <FormattedMessage
-                                        id='calling_modal.calling'
-                                        defaultMessage='iscalling'
-                                    />
-                                </>
-                            </div>
-                        </>
-                    )}
+                    {users.length > 1 ? text('DIRECT') : text('TEAMS')}
                 </div>
                 <div className='content-calling'/>
                 <div

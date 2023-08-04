@@ -7,7 +7,7 @@ import {bindActionCreators, Dispatch} from 'redux';
 import {Post} from 'mattermost-redux/types/posts';
 import {GlobalState} from 'mattermost-redux/types/store';
 
-import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannel} from 'actions/calls';
+import {leaveCallInChannel, showSwitchCallModal, joinCallInChannel} from 'actions/calls';
 
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
@@ -29,7 +29,7 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-    onJoinCall: startOrJoinCallInChannel,
+    onJoinCall: joinCallInChannel,
     showSwitchCallModal,
     leaveCallInChannel,
 }, dispatch);

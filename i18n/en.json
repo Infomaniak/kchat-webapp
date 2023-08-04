@@ -2830,6 +2830,7 @@
   "bots.token.delete": "Delete Token",
   "call_button.menuAriaLabel": "Call type selector",
   "calling_modal.calling": "is Calling",
+  "calling_modal.calling.teams": "is Calling in",
   "carousel.nextButton": "Next",
   "carousel.PreviousButton": "Previous",
   "center_panel.archived.closeChannel": "Close Channel",

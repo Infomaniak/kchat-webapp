@@ -2753,6 +2753,7 @@
   "bots.token.delete": "Eliminar Token",
   "call_button.menuAriaLabel": "Selector del tipo de llamada",
   "calling_modal.calling": "te llama",
+  "calling_modal.calling.teams": "te llama en",
   "carousel.PreviousButton": "Anterior",
   "carousel.nextButton": "Siguiente",
   "center_panel.archived.closeChannel": "Cerrar Canal",
