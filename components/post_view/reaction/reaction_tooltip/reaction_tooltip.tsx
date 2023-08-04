@@ -140,11 +140,11 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
     }
 
     return (
-        <>
+        <div className={otherUsersCount > 0 ? 'reactions-xl' : ''}>
             {tooltip}
             <br/>
             {clickTooltip}
-        </>
+        </div>
     );
 };
 
