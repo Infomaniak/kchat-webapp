@@ -4,6 +4,8 @@
 import React, {memo, useMemo, useEffect, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {useHistory} from 'react-router-dom';
+
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 import type {UserThread, UserThreadSynthetic} from '@mattermost/types/threads';
 import type {Channel} from '@mattermost/types/channels';
@@ -33,6 +35,7 @@ import OverrideDraftModal from 'components/schedule_post/override_draft_modal';
 
 type Props = {
     channel: Channel;
+    channelUrl: string;
     displayName: string;
     draftId: string;
     rootId: UserThread['id'] | UserThreadSynthetic['id'];
@@ -48,6 +51,7 @@ type Props = {
 
 function ThreadDraft({
     channel,
+    channelUrl,
     displayName,
     draftId,
     rootId,
@@ -61,8 +65,13 @@ function ThreadDraft({
     scheduledWillNotBeSent,
 }: Props) {
     const dispatch = useDispatch<DispatchFunc>();
+    const history = useHistory();
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const threadDraft = useSelector((state: GlobalState) => getGlobalItem(state, StoragePrefixes.COMMENT_DRAFT + value.rootId, {}));
+
+    const goToChannel = () => {
+        history.push(channelUrl);
+    };
 
     useEffect(() => {
         if (!thread?.id) {
@@ -164,6 +173,7 @@ function ThreadDraft({
                                 isScheduled={isScheduled}
                                 scheduleTimestamp={value.timestamp}
                                 isInvalid={scheduledWillNotBeSent}
+                                goToChannel={goToChannel}
                                 onDelete={handleOnDelete}
                                 onEdit={handleOnEdit}
                                 onSend={handleOnSend}
