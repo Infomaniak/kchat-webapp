@@ -141,7 +141,7 @@ function ThreadDraft({
         dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${newDraft.rootId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
 
         // Remove previously existing thread draft
-        await dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId));
+        await dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, channel.id, rootId));
 
         // Update thread draft
         const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, newDraft, newDraft.rootId, true));

@@ -125,7 +125,7 @@ function ChannelDraft({
         dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
 
         // Remove previously existing channel draft
-        await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId));
+        await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId, channel.id));
 
         // Update channel draft
         const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.DRAFT + newDraft.channelId, newDraft, '', true));

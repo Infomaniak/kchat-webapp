@@ -596,8 +596,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         this.isDraftSubmitting = false;
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
-        this.draftsForChannel[channelId] = null;
+        this.removeDraft(channelId);
     }
 
     handleNotifyAllConfirmation = (isSchedule = false, scheduleUTCTimestamp?: number) => this.doSubmit(undefined, isSchedule, scheduleUTCTimestamp);
@@ -805,7 +804,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     sendReaction(isReaction: RegExpExecArray) {
-        const channelId = this.props.currentChannel.id;
         const action = isReaction[1];
         const emojiName = isReaction[2];
         const postId = this.props.latestReplyablePostId;
@@ -816,8 +814,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             this.props.actions.removeReaction(postId, emojiName);
         }
 
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
-        this.draftsForChannel[channelId] = null;
+        this.removeDraft();
     }
 
     focusTextbox = (keepFocus = false) => {
@@ -902,10 +899,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.handleDraftChange(draft);
     };
 
-    handleDraftChange = (draft: PostDraft, instant = false) => {
-        const channelId = this.props.currentChannel.id;
-        this.props.actions.setGlobalDraft(StoragePrefixes.DRAFT + channelId, draft, false);
-
+    handleDraftChange = (draft: PostDraft, channelId = this.props.currentChannel.id, instant = false) => {
         if (this.saveDraftFrame) {
             clearTimeout(this.saveDraftFrame);
         }
@@ -920,6 +914,11 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
         this.draftsForChannel[channelId] = draft;
     }
+
+    removeDraft = (channelId = this.props.currentChannel.id) => {
+        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
+        this.draftsForChannel[channelId] = null;
+    };
 
     scheduleDraft = async (draft: PostDraft) => {
         const channelId = this.props.currentChannel.id;
@@ -988,8 +987,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         };
 
         const channelId = this.props.currentChannel.id;
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
-        this.draftsForChannel[channelId] = draft;
+        this.handleDraftChange(draft, channelId, true);
     }
 
     handleFileUploadChange = () => {
@@ -1038,7 +1036,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             draft.fileInfos = sortFileInfos(draft.fileInfos.concat(fileInfos), this.props.locale);
         }
 
-        this.handleDraftChange(draft, true);
+        this.handleDraftChange(draft, channelId, true);
     }
 
     handleUploadError = (err: string | ServerError, clientId?: string, channelId?: string) => {
@@ -1063,8 +1061,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     ...draft,
                     uploadsInProgress,
                 };
-                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, modifiedDraft, channelId);
-                this.draftsForChannel[channelId] = modifiedDraft;
+                this.handleDraftChange(modifiedDraft, channelId, true);
             }
         }
 
@@ -1105,8 +1102,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             };
         }
 
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, modifiedDraft, channelId, false);
-        this.draftsForChannel[channelId] = modifiedDraft;
+        this.handleDraftChange(modifiedDraft, this.props.currentChannel.id, true);
 
         this.handleFileUploadChange();
 
@@ -1542,7 +1538,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             updatedDraft.metadata = {};
         }
 
-        this.handleDraftChange(updatedDraft, true);
+        this.handleDraftChange(updatedDraft, this.props.currentChannel.id, true);
         this.focusTextbox();
     };
 
