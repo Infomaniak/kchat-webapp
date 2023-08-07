@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useState} from 'react';
+import React, {memo, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
@@ -69,9 +69,9 @@ function ChannelDraft({
         setIsEditing(true);
     };
 
-    const handleOnDelete = (id: string) => {
-        dispatch(removeDraft(id));
-    };
+    const handleOnDelete = useCallback((id: string) => {
+        dispatch(removeDraft(id, channel.id));
+    }, [dispatch, channel.id]);
 
     const handleOnSend = async (id: string) => {
         const post = {} as Post;
@@ -87,7 +87,7 @@ function ChannelDraft({
         }
 
         dispatch(createPost(post, value.fileInfos));
-        dispatch(removeDraft(id));
+        dispatch(removeDraft(id, channel.id));
 
         history.push(channelUrl);
     };
