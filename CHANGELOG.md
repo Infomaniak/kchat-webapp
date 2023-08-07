@@ -1,3 +1,9 @@
+## 1.3.14-next.3 (2023-08-07)
+
+### Added (1 change)
+
+- [feat: logs](kchat/webapp@8ef7096967c5de9bca9ceb72d1b921c51724ebc9) by @benoit.nau ([merge request](kchat/webapp!510))
+
 ## 1.3.14-next.2 (2023-08-07)
 
 ### Changed (1 change)
