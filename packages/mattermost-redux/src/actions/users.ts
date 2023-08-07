@@ -215,7 +215,12 @@ export function logout(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
 
-        dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null});
+        // TODO: remove
+        // Causes a redirect in web which stops logout.
+        // Since app state rebuilds after redirecting to our external login as apposed
+        // to mattermost where login is in the app this is not needed.
+        //
+        // dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null});
 
         return {data: true};
     };
