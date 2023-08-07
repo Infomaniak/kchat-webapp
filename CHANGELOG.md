@@ -1,3 +1,9 @@
+## 1.3.14-next.2 (2023-08-07)
+
+### Changed (1 change)
+
+- [fix logout not working in web](kchat/webapp@88b911766da671da2550f4d54f7af6dd60f9a415) by @antonbuksa ([merge request](kchat/webapp!509))
+
 ## 1.3.14-next.1 (2023-08-04)
 
 ### Fixed (2 changes)
