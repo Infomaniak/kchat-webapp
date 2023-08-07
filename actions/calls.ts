@@ -26,6 +26,8 @@ import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 
 import {ringing, stopRing} from 'utils/notification_sounds';
 
+import {ChannelType} from '@mattermost/types/channels';
+
 import {closeModal, openModal} from './views/modals';
 
 export const showExpandedView = () => (dispatch: Dispatch<GenericAction>) => {
@@ -124,52 +126,70 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         try {
             const {status} = callUserStatus(getState());
-
-            if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at && callMessage.user_id !== currentUserId) {
-                dispatch(getCallingChannel(callMessage));
-                dispatch(getUsersInCall(callMessage));
-                dispatch(getCallingUser(callMessage));
+            if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at) {
+                await dispatch(getCallingChannel(callMessage));
+                const channelType: ChannelType = callParameters(getState()).channel.type;
+                if (channelType === 'O' || channelType === 'P') {
+                    return;
+                }
                 dispatch({
-                    type: ActionTypes.CALL_RECEIVED,
+                    type: ActionTypes.VOICE_CHANNEL_ADDED,
                     data: {
-                        msg: callMessage,
+                        channelID: callMessage.channel_id,
+                        userID: getCurrentUserId(getState()),
+                        currentUserID: getCurrentUserId(getState()),
+                        url: callMessage.props.url,
+                        id: callMessage.props.conference_id,
                     },
                 });
-                const {users, caller, channel} = callParameters(getState());
-                const currentUser = getCurrentUser(getState());
-                const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);
-                if (isKmeetCallCompatibleDesktopApp()) {
-                    window.postMessage(
-                        {
-                            type: 'call-dialing',
-                            message: {
-                                calling: {
-                                    users,
-                                    channelID: callMessage.channel_id,
-                                    userCalling: caller.id,
-                                    channel,
-                                    url: callMessage.props.url,
-                                    name: channel.display_name,
-                                    username: currentUser.nickname,
-                                    avatar,
-                                    id: callMessage.channel_id,
-                                    nicknames: users.map((usr) => usr.nickname).join(', '),
-                                    caller,
-                                    currentUser,
+                if (callMessage.user_id !== currentUserId) {
+                    dispatch(getUsersInCall(callMessage));
+                    dispatch(getCallingUser(callMessage));
+                    dispatch({
+                        type: ActionTypes.CALL_RECEIVED,
+                        data: {
+                            msg: callMessage,
+                        },
+                    });
+                    const {users, caller, channel} = callParameters(getState());
+                    const currentUser = getCurrentUser(getState());
+                    const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);
+                    if (isKmeetCallCompatibleDesktopApp()) {
+                        window.postMessage(
+                            {
+                                type: 'call-dialing',
+                                message: {
+                                    calling: {
+                                        users,
+                                        channelID: callMessage.channel_id,
+                                        userCalling: caller.id,
+                                        channel,
+                                        url: callMessage.props.url,
+                                        name: channel.display_name,
+                                        username: currentUser.nickname,
+                                        avatar,
+                                        id: callMessage.channel_id,
+                                        nicknames: users.map((usr) => usr.nickname).join(', '),
+                                        caller,
+                                        currentUser,
+                                    },
                                 },
                             },
-                        },
-                        window.location.origin);
-                } else {
-                    if (status[currentUserId] !== 'dnd') {
-                        ringing('Ring');
+                            window.location.origin);
+                    } else {
+                        if (status[currentUserId] !== 'dnd') {
+                            ringing('Ring');
+                        }
+                        dispatch(openModal(
+                            {
+                                modalId: ModalIdentifiers.INCOMING_CALL,
+                                dialogType: DialingModal,
+                                dialogProps: {
+                                    toneTimeOut: 30000,
+                                },
+                            },
+                        ));
                     }
-                    dispatch(openModal(
-                        {
-                            modalId: ModalIdentifiers.INCOMING_CALL,
-                            dialogType: DialingModal,
-                        },
-                    ));
                 }
             }
         } catch (error) {

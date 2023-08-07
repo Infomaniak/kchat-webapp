@@ -4,7 +4,7 @@ import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import * as React from 'react';
 
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -20,43 +20,45 @@ import {UserProfile} from '@mattermost/types/users';
 import Avatars from 'components/widgets/users/avatars';
 
 import {callParameters} from 'selectors/calls';
-import {closeModal} from 'actions/views/modals';
-import {ModalIdentifiers} from 'utils/constants';
-import {stopRing} from 'utils/notification_sounds';
 
-function DialingModal() {
+type PropsType={
+    toneTimeOut: number;
+}
+
+function DialingModal({toneTimeOut}: PropsType) {
     const dispatch = useDispatch<DispatchFunc>();
     const {users, caller, channel} = useSelector(callParameters);
     const modalRef = React.useRef<HTMLDivElement>(null);
+    const {formatMessage} = useIntl();
 
-    //manage to stop de tone when users click outside modal
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleClickOutsideModal = (event: any) => {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
-            onHandleDecline(event);
+            onHandleDecline();
         }
     };
     document.addEventListener('click', handleClickOutsideModal);
 
     React.useEffect(() => {
-        window.addEventListener('offline', (e) => {
-            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-            stopRing();
+        window.addEventListener('offline', () => {
+            onHandleDecline();
         });
         return () => {
             document.removeEventListener('click', handleClickOutsideModal);
         };
     }, []);
 
-    const onHandleAccept = (e: React.SyntheticEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
+    React.useEffect(() => {
+        const timeout = setTimeout(() => {
+            onHandleDecline();
+        }, toneTimeOut);
+        return () => clearTimeout(timeout);
+    }, []);
+
+    const onHandleAccept = () => {
         dispatch(joinCallInChannel());
     };
 
-    const onHandleDecline = (e: React.SyntheticEvent<HTMLButtonElement | HTMLAnchorElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
+    const onHandleDecline = () => {
         dispatch(hangUpCall());
     };
 
@@ -74,15 +76,11 @@ function DialingModal() {
         return nicknames.join(', ');
     };
 
-    const text = (type: 'DIRECT'|'TEAMS') => {
-        switch (type) {
-        case 'DIRECT':
+    const text = () => {
+        switch (channel.type) {
+        case 'O':
+        case 'P':
             return (<>
-                <div className='content-calling__user'>
-                    <span>
-                        {getUsersNicknames([caller])}
-                    </span>
-                </div>
                 <div className='content-calling__info'>
                     <>
                         <FormattedMessage
@@ -97,8 +95,8 @@ function DialingModal() {
                     </span>
                 </div>
             </>);
-            break;
-        case 'TEAMS':
+        case 'G':
+        case 'D':
             return (
                 <>
                     <div className='content-calling__user'>
@@ -118,6 +116,8 @@ function DialingModal() {
             );
         }
     };
+    const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
+    const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
     return (<>
         <GenericModal
             aria-labelledby='contained-modal-title-vcenter'
@@ -137,7 +137,7 @@ function DialingModal() {
                     />
                 </div>
                 <div className='content-calling'>
-                    {users.length > 1 ? text('DIRECT') : text('TEAMS')}
+                    {text()}
                 </div>
                 <div className='content-calling'/>
                 <div
@@ -150,7 +150,7 @@ function DialingModal() {
                         onClick={onHandleDecline}
                         inverted={true}
                         aria-label='Decline'
-                        label='Decline'
+                        label={textButtonDecline}
                     />
                     <IconButton
                         className='accept'
@@ -159,7 +159,7 @@ function DialingModal() {
                         onClick={onHandleAccept}
                         inverted={true}
                         aria-label='Accept'
-                        label='Accept'
+                        label={textButtonAccept}
                     />
                 </div>
             </div>

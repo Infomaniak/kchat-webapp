@@ -2691,6 +2691,8 @@
   "call_button.menuAriaLabel": "Sélection du type d'appel",
   "calling_modal.calling": "vous appelle",
   "calling_modal.calling.teams": "vous appelle dans",
+  "calling_modal.button.accept": "Accepter",
+  "calling_modal.button.decline": "Refuser",
   "carousel.PreviousButton": "Précédent",
   "carousel.nextButton": "Suivant",
   "center_panel.archived.closeChannel": "Fermer le canal",

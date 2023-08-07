@@ -2828,6 +2828,8 @@
   "bots.token.delete": "Token löschen",
   "call_button.menuAriaLabel": "Auswahl des Anruftyps",
   "calling_modal.calling": "ruft Sie an",
+  "calling_modal.button.accept": "Akzeptieren",
+  "calling_modal.button.decline": "Ablehnen",
   "carousel.PreviousButton": "Zurück",
   "carousel.nextButton": "Weiter",
   "center_panel.archived.closeChannel": "Kanal schließen",
