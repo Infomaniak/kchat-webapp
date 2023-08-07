@@ -80,16 +80,15 @@ export function getDrafts(teamId: string) {
     };
 }
 
-export function removeDraft(key: string) {
+export function removeDraft(key: string, channelId: string, rootId = '') {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
-        const draftId = getGlobalItem(state, key, {}).id;
 
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
-        if (syncedDraftsAreAllowedAndEnabled(state) && draftId) {
+        if (syncedDraftsAreAllowedAndEnabled(state)) {
             try {
-                await Client4.deleteDraft(draftId);
+                await Client4.deleteDraft(channelId, rootId);
             } catch (error) {
                 return {
                     data: false,
@@ -125,10 +124,6 @@ function updateDraft(key: string, value: PostDraft|null, rootId = '', save = fal
         }
 
         dispatch(setGlobalDraft(key, updatedValue, false));
-
-        if (updatedValue && !updatedValue.message && !updatedValue.fileInfos.length && !updatedValue.uploadsInProgress.length) {
-            return dispatch(removeDraft(key));
-        }
 
         if (syncedDraftsAreAllowedAndEnabled(state) && save && updatedValue) {
             const userId = getCurrentUserId(state);

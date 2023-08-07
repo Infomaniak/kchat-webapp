@@ -36,6 +36,8 @@ import {
 import {matchEmoticons} from 'utils/emoticons';
 import * as UserAgent from 'utils/user_agent';
 
+import {getGlobalItem} from 'selectors/storage';
+
 import {completePostReceive, NewPostMessageProps} from './new_post';
 
 export function handleNewPost(post: Post, msg?: {data?: NewPostMessageProps & GroupChannel}) {
@@ -116,12 +118,26 @@ export function createPost(post: Post, files: FileInfo[]) {
         }
 
         if (post.root_id) {
-            dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + post.root_id));
+            dispatch(storeCommentDraft(post.root_id, null));
         } else {
-            dispatch(removeDraft(StoragePrefixes.DRAFT + post.channel_id));
+            dispatch(storeDraft(post.channel_id, null));
         }
 
         return result;
+    };
+}
+
+function storeDraft(channelId: string, draft: null) {
+    return (dispatch: DispatchFunc) => {
+        dispatch(StorageActions.setGlobalItem('draft_' + channelId, draft));
+        return {data: true};
+    };
+}
+
+function storeCommentDraft(rootPostId: string, draft: null) {
+    return (dispatch: DispatchFunc) => {
+        dispatch(StorageActions.setGlobalItem('comment_draft_' + rootPostId, draft));
+        return {data: true};
     };
 }
 
@@ -286,7 +302,7 @@ export function markMostRecentPostInChannelAsUnread(channelId: string) {
 }
 
 export function deleteAndRemovePost(post: Post) {
-    const getThreadDrafts = makeGetDraftsByPrefix(StoragePrefixes.COMMENT_DRAFT);
+    // const getThreadDrafts = makeGetDraftsByPrefix(StoragePrefixes.COMMENT_DRAFT);
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {error} = await dispatch(PostActions.deletePost(post));
         if (error) {
@@ -311,14 +327,10 @@ export function deleteAndRemovePost(post: Post) {
         }
 
         if (post.root_id === '') {
-            const state = getState() as GlobalState;
-            const threadDrafts = getThreadDrafts(state);
             const key = StoragePrefixes.COMMENT_DRAFT + post.id;
-            threadDrafts.forEach((threadDraft) => {
-                if (threadDraft.value.rootId === post.id) {
-                    dispatch(removeDraft(threadDraft.value.timestamp ? `${key}_${threadDraft.value.id}` : key));
-                }
-            });
+            if (getGlobalItem(getState() as GlobalState, key, null)) {
+                dispatch(removeDraft(key, post.channel_id, post.id));
+            }
         }
 
         dispatch(PostActions.removePost(post));

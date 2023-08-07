@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useMemo, useEffect, useState} from 'react';
+import React, {memo, useMemo, useEffect, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {DispatchFunc} from 'mattermost-redux/types/actions';
@@ -78,9 +78,9 @@ function ThreadDraft({
         return () => () => Promise.resolve({data: true});
     }, [channel.id, thread?.id]);
 
-    const handleOnDelete = (id: string) => {
-        dispatch(removeDraft(id));
-    };
+    const handleOnDelete = useCallback((id: string) => {
+        dispatch(removeDraft(id, channel.id, rootId));
+    }, [channel.id, rootId]);
 
     const handleOnEdit = (_e?: React.MouseEvent, redirectToThread?: boolean) => {
         if (!redirectToThread && isScheduled) {
