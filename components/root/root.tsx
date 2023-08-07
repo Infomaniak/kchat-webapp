@@ -104,6 +104,12 @@ const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardi
 const MAX_GET_TOKEN_FAILS = 5;
 const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
 
+// Initialize logger to collect/centralize logs from all processes main/renderer
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
+    Object.assign(console, (window as any).logManager);
+}
+
 // const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 // const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
 // const ClaimController = makeAsyncComponent('ClaimController', LazyClaimController);
