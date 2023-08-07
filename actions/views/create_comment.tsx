@@ -175,7 +175,7 @@ export function makeOnSubmit(channelId: string, rootId: string, latestPostId: st
             return {data};
         }
 
-        dispatch(removeDraft(key));
+        dispatch(removeDraft(key, channelId, rootId));
 
         const isReaction = Utils.REACTION_PATTERN.exec(message);
 
