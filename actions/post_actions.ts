@@ -17,7 +17,7 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {canEditPost, comparePosts} from 'mattermost-redux/utils/post_utils';
 import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
-import {addRecentEmoji} from 'actions/emoji_actions';
+import {addRecentEmoji, addRecentEmojis} from 'actions/emoji_actions';
 import * as StorageActions from 'actions/storage';
 import {loadNewDMIfNeeded, loadNewGMIfNeeded} from 'actions/user_actions';
 import * as RhsActions from 'actions/views/rhs';
@@ -25,7 +25,6 @@ import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
 import {removeDraft} from 'actions/views/drafts';
 import {isEmbedVisible, isInlineImageVisible} from 'selectors/posts';
 import {getSelectedPostId, getSelectedPostCardId, getRhsState} from 'selectors/rhs';
-import {makeGetDraftsByPrefix} from 'selectors/drafts';
 import {GlobalState} from 'types/store';
 import {
     ActionTypes,
@@ -104,10 +103,8 @@ export function createPost(post: Post, files: FileInfo[]) {
         // parse message and emit emoji event
         const emojis = matchEmoticons(post.message);
         if (emojis) {
-            for (const emoji of emojis) {
-                const trimmed = emoji.substring(1, emoji.length - 1);
-                dispatch(addRecentEmoji(trimmed));
-            }
+            const trimmedEmojis = emojis.map((emoji) => emoji.substring(1, emoji.length - 1));
+            dispatch(addRecentEmojis(trimmedEmojis));
         }
 
         let result;
