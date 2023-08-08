@@ -128,7 +128,7 @@ export function sendDesktopNotification(post, msgProps) {
         let image = false;
 
         attachments.forEach((attachment) => {
-            if (notifyText.length === 0) {
+            if (notifyText?.length === 0) {
                 notifyText = attachment.fallback ||
                     attachment.pretext ||
                     attachment.text;
