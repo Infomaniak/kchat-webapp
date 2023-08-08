@@ -127,6 +127,8 @@ import {
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
 
+import {stopRing} from 'utils/notification_sounds';
+
 import {callNoLongerExist, receivedCall} from './calls';
 
 // import {isDesktopApp} from 'utils/user_agent';
@@ -1836,6 +1838,7 @@ function handleConferenceUserConnected(msg) {
             },
         });
         if (msg.data.user_id === getCurrentUserId(getState())) {
+            stopRing();
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         }
     };

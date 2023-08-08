@@ -28,6 +28,8 @@ import {ringing, stopRing} from 'utils/notification_sounds';
 
 import {ChannelType} from '@mattermost/types/channels';
 
+import OccupiedModal from 'components/kmeet_conference/occupiedSnackBar/occupiedModal';
+
 import {closeModal, openModal} from './views/modals';
 
 export const showExpandedView = () => (dispatch: Dispatch<GenericAction>) => {
@@ -142,7 +144,13 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                         id: callMessage.props.conference_id,
                     },
                 });
+
                 if (callMessage.user_id !== currentUserId) {
+                    //when event inCall=True=>
+                    // dispatch(openModal({modalId: ModalIdentifiers.OCCUPIED_CALL,
+                    //     dialogType: OccupiedModal,
+                    //     dialogProps: nameOfUserr,
+                    // }));
                     dispatch(getUsersInCall(callMessage));
                     dispatch(getCallingUser(callMessage));
                     dispatch({

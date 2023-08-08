@@ -2830,6 +2830,7 @@
   "calling_modal.calling": "ruft Sie an",
   "calling_modal.button.accept": "Akzeptieren",
   "calling_modal.button.decline": "Ablehnen",
+  "call_occupied_modal.info":" ist bereits in einem Anruf. Es wurde eine automatische Nachricht an ihn gesendet, damit er Sie zurückruft.",
   "carousel.PreviousButton": "Zurück",
   "carousel.nextButton": "Weiter",
   "center_panel.archived.closeChannel": "Kanal schließen",

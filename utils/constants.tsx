@@ -507,6 +507,7 @@ export const ModalIdentifiers = {
     TOGGLE_NEXT: 'toggle_next',
     SCHEDULE_POST: 'schedule_post',
     OVERRIDE_DRAFT: 'override_draft',
+    OCCUPIED_CALL: 'call_ringing_occupied_modal',
 };
 
 export const UserStatuses = {

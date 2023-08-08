@@ -2756,6 +2756,7 @@
   "calling_modal.calling.teams": "te llama en",
   "calling_modal.button.accept": "Aceptar",
   "calling_modal.button.decline": "Rechazar",
+  "call_occupied_modal.info":" está en una llamada. Se le ha enviado un mensaje automático para que le devuelva la llamada.",
   "carousel.PreviousButton": "Anterior",
   "carousel.nextButton": "Siguiente",
   "center_panel.archived.closeChannel": "Cerrar Canal",

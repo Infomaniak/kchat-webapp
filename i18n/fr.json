@@ -2693,6 +2693,7 @@
   "calling_modal.calling.teams": "vous appelle dans",
   "calling_modal.button.accept": "Accepter",
   "calling_modal.button.decline": "Refuser",
+  "call_occupied_modal.info":" est déja dans une appel. Un message automatique lui a été envoyé pour qu'il vous rappel.",
   "carousel.PreviousButton": "Précédent",
   "carousel.nextButton": "Suivant",
   "center_panel.archived.closeChannel": "Fermer le canal",
