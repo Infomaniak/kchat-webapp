@@ -691,6 +691,7 @@ export const SocketEvents = {
     CONFERENCE_DELETED: 'conference_deleted',
     CONFERENCE_USER_CONNECTED: 'conference_user_connected',
     CONFERENCE_USER_DISCONNECTED: 'conference_user_disconnected',
+    CONFERENCE_USER_DENIED: 'conference_user_denied',
     PUSHER_MEMBER_REMOVED: 'pusher:member_removed',
     PUSHER_PING: 'pusher:ping',
     PUSHER_PONG: 'pusher:pong',

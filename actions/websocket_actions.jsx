@@ -645,6 +645,9 @@ export function handleEvent(msg) {
     case SocketEvents.CONFERENCE_USER_CONNECTED:
         dispatch(handleConferenceUserConnected(msg));
         break;
+    case SocketEvents.CONFERENCE_USER_DENIED:
+        handleConferenceUserDenied();
+        break;
     case SocketEvents.CONFERENCE_USER_DISCONNECTED:
         dispatch(handleConferenceUserDisconnected(msg));
         break;
@@ -1821,6 +1824,10 @@ function handleThreadFollowChanged(msg) {
         }
         handleFollowChanged(doDispatch, msg.data.thread_id, msg.team_id, msg.data.state);
     };
+}
+
+function handleConferenceUserDenied() {
+    stopRing();
 }
 
 function handleConferenceUserConnected(msg) {
