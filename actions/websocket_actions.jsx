@@ -129,7 +129,7 @@ import {isDesktopApp} from 'utils/user_agent';
 
 import {stopRing} from 'utils/notification_sounds';
 
-import {callNoLongerExist, receivedCall} from './calls';
+import {callNoLongerExist, hangUpCall, receivedCall} from './calls';
 
 // import {isDesktopApp} from 'utils/user_agent';
 
@@ -646,7 +646,7 @@ export function handleEvent(msg) {
         dispatch(handleConferenceUserConnected(msg));
         break;
     case SocketEvents.CONFERENCE_USER_DENIED:
-        handleConferenceUserDenied();
+        dispatch(handleConferenceUserDenied(msg));
         break;
     case SocketEvents.CONFERENCE_USER_DISCONNECTED:
         dispatch(handleConferenceUserDisconnected(msg));
@@ -1828,6 +1828,7 @@ function handleThreadFollowChanged(msg) {
 
 function handleConferenceUserDenied() {
     stopRing();
+    dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
 }
 
 function handleConferenceUserConnected(msg) {
