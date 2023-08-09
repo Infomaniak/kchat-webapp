@@ -16,6 +16,7 @@ import Constants from 'utils/constants';
 
 import './meet_button.scss';
 import meetSvg from './static/kmeet.svg';
+import { PhoneInTalkIcon } from '@infomaniak/compass-icons/components';
 
 export type Props = {
     currentChannelID: string;
@@ -64,7 +65,7 @@ function MeetButton(props: Props) {
                     onClick={onClick}
                     ref={ref}
                 >
-                    <img
+                    {/* <img
                         src={meetSvg}
                         className='meet-btn__icon meet-btn__icon--16'
                     />
@@ -73,7 +74,8 @@ function MeetButton(props: Props) {
                             id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
                             defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
                         />
-                    </span>
+                    </span> */}
+                    <PhoneInTalkIcon/>
                 </button>
             </div>
         </OverlayTrigger>
