@@ -179,10 +179,8 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                                 },
                             },
                             window.location.origin);
-                    } else {
-                        if (status[currentUserId] !== 'dnd') {
-                            ringing('Ring');
-                        }
+                    } else if (status[currentUserId] !== 'dnd') {
+                        ringing('Ring');
                         dispatch(openModal(
                             {
                                 modalId: ModalIdentifiers.INCOMING_CALL,
