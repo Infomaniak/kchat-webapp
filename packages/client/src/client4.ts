@@ -4497,19 +4497,36 @@ export default class Client4 {
         return this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
     }
 
-    createDraft = (draft: Omit<Draft, 'id'>) => {
-        return this.doFetch<Draft>(
+    upsertDraft = async (draft: Draft) => {
+        const result = await this.doFetch<Draft>(
             `${this.getDraftsRoute()}`,
-            {method: 'post', body: JSON.stringify(draft)},
+            {
+                method: 'post',
+                body: JSON.stringify(draft),
+            },
         );
+
+        return result;
     };
 
-    updateDraft = (draft: Draft) => {
-        return this.doFetch<Draft>(
+    updateScheduledDraft = async (draft: Draft) => {
+        const result = await this.doFetch<Draft>(
             `${this.getDraftsRoute()}/${draft.id}`,
-            {method: 'put', body: JSON.stringify(draft)},
+            {
+                method: 'put',
+                body: JSON.stringify(draft),
+            },
         );
-    };
+
+        return result;
+    }
+
+    deleteScheduledDraft = (draftId: Draft['id']) => {
+        return this.doFetch<Draft>(
+            `${this.getDraftsRoute()}/${draftId}`,
+            {method: 'delete'},
+        );
+    }
 
     getUserDrafts = (teamId: Team['id']) => {
         return this.doFetch<Draft[]>(
