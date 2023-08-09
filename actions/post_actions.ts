@@ -299,7 +299,6 @@ export function markMostRecentPostInChannelAsUnread(channelId: string) {
 }
 
 export function deleteAndRemovePost(post: Post) {
-    // const getThreadDrafts = makeGetDraftsByPrefix(StoragePrefixes.COMMENT_DRAFT);
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {error} = await dispatch(PostActions.deletePost(post));
         if (error) {

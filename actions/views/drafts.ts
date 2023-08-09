@@ -83,12 +83,17 @@ export function getDrafts(teamId: string) {
 export function removeDraft(key: string, channelId: string, rootId = '') {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
+        const draft = getGlobalItem(state, key, {});
 
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
         if (syncedDraftsAreAllowedAndEnabled(state)) {
             try {
-                await Client4.deleteDraft(channelId, rootId);
+                if (draft.timestamp) {
+                    await Client4.deleteScheduledDraft(draft.id);
+                } else {
+                    await Client4.deleteDraft(channelId, rootId);
+                }
             } catch (error) {
                 return {
                     data: false,
@@ -107,7 +112,7 @@ export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId
     };
 };
 
-function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false) {
+export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
         const activeDraft = getGlobalItem(state, key, {});
@@ -191,11 +196,11 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '') {
         priority: draft.metadata?.priority as PostPriorityMetadata,
     };
 
-    if (newDraft.id) {
-        return Client4.updateDraft(newDraft as ServerDraft);
+    if (draft.timestamp && draft.id) {
+        return Client4.updateScheduledDraft(newDraft);
     }
 
-    return Client4.createDraft(newDraft);
+    return Client4.upsertDraft(newDraft);
 }
 
 export function setDraftsTourTipPreference(initializationState: Record<string, boolean>): ActionFunc {
