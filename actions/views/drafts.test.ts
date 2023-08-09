@@ -129,7 +129,7 @@ describe('draft actions', () => {
 
     let store: any;
     const key = StoragePrefixes.DRAFT + channelId;
-    const createDraftSpy = jest.spyOn(Client4, 'createDraft');
+    const createDraftSpy = jest.spyOn(Client4, 'upsertDraft');
     const deleteDraftSpy = jest.spyOn(Client4, 'deleteDraft');
 
     beforeEach(() => {
