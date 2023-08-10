@@ -106,13 +106,13 @@ export function removeDraft(key: string, channelId: string, rootId = '') {
 }
 
 // Assert previous call ended before dispatching the action again to ensure latest draftId is used and prevent multiple draft creation on the same channel
-export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false) => {
+export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) => {
     return (dispatch: DispatchFunc) => {
-        return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save)));
+        return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save, scheduleDelete)));
     };
 };
 
-export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false) {
+export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
         const activeDraft = getGlobalItem(state, key, {});
@@ -136,11 +136,11 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
             try {
                 if (value?.message === '' || value?.message.replace(/\s/g, '').length || (value && value?.fileInfos.length > 0)) {
                     if (value?.message.replace(/\s/g, '').length) {
-                        const {id} = await upsertDraft(updatedValue, userId, rootId);
+                        const {id} = await upsertDraft(updatedValue, userId, rootId, scheduleDelete);
                         updatedValue.id = id;
                     } else {
                         //This case is when there is a file attached with no message
-                        await upsertDraft({...updatedValue, message: ''}, userId, rootId);
+                        await upsertDraft({...updatedValue, message: ''}, userId, rootId, scheduleDelete);
                     }
                 }
             } catch (error) {
@@ -179,7 +179,7 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
     };
 }
 
-function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '') {
+function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', scheduleDelete = false) {
     const fileIds = draft.fileInfos.map((file) => file.id);
     const newDraft = {
         id: draft.id,
@@ -197,7 +197,9 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '') {
     };
 
     if (draft.timestamp && draft.id) {
-        Reflect.deleteProperty(newDraft, 'timestamp');
+        if (scheduleDelete) {
+            Reflect.deleteProperty(newDraft, 'timestamp');
+        }
         return Client4.updateScheduledDraft(newDraft);
     }
 
