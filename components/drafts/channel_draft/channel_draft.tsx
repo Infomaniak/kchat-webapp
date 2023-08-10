@@ -124,7 +124,6 @@ function ChannelDraft({
 
     const deleteSchedule = async () => {
         const newDraft = {...value};
-        Reflect.deleteProperty(newDraft, 'timestamp');
 
         dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
 
