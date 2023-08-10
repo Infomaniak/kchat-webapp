@@ -17,7 +17,7 @@ import {Post} from '@mattermost/types/posts';
 
 import DialingModal from 'components/kmeet_conference/ringing_dialog';
 
-import {isKmeetCallCompatibleDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isKmeetCallCompatibleDesktopApp} from 'utils/user_agent';
 
 import {imageURLForUser} from 'utils/utils';
 
@@ -170,7 +170,8 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
             if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at) {
                 await dispatch(getCallingChannel(callMessage));
                 const channelType: ChannelType = callParameters(getState()).channel.type;
-
+                await dispatch(getUsersInCall(callMessage));
+                await dispatch(getCallingUser(callMessage));
                 //replace ex conference_added
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_ADDED,
@@ -188,18 +189,16 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                 }
 
                 if (callMessage.user_id !== currentUserId) {
-                    dispatch(getUsersInCall(callMessage));
-                    dispatch(getCallingUser(callMessage));
                     dispatch({
                         type: ActionTypes.CALL_RECEIVED,
                         data: {
                             msg: callMessage,
                         },
                     });
-                    const {users, caller, channel} = callParameters(getState());
                     const currentUser = getCurrentUser(getState());
                     const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);
                     if (isKmeetCallCompatibleDesktopApp()) {
+                        const {users, caller, channel} = callParameters(getState());
                         window.postMessage(
                             {
                                 type: 'call-dialing',
@@ -211,12 +210,13 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                                         channel,
                                         url: callMessage.props.url,
                                         name: channel.display_name,
-                                        username: currentUser.nickname,
+                                        // username: currentUser.nickname,
                                         avatar,
                                         id: callMessage.channel_id,
                                         nicknames: users.map((usr) => usr.nickname).join(', '),
-                                        caller,
                                         currentUser,
+                                        conferenceId: callMessage.props.conference_id,
+                                        toneTimeOut: 30000,
                                     },
                                 },
                             },
@@ -290,5 +290,16 @@ export function getCallingChannel(callMessage: Post) {
         params: [
             callMessage.channel_id,
         ],
+    });
+}
+
+//get Events from desktop app
+if (isKmeetCallCompatibleDesktopApp()) {
+    (window as any).callManager.onCallJoined((_event, props) => {
+        return Client4.acceptIncomingMeetCall(props.conferenceId);
+    });
+
+    (window as any).callManager.onCallDeclined((_event, props) => {
+        return Client4.declineIncomingMeetCall(props.conferenceId);
     });
 }
