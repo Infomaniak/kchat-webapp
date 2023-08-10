@@ -197,6 +197,7 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '') {
     };
 
     if (draft.timestamp && draft.id) {
+        Reflect.deleteProperty(newDraft, 'timestamp');
         return Client4.updateScheduledDraft(newDraft);
     }
 
