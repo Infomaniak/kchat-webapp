@@ -170,6 +170,8 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
             if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at) {
                 await dispatch(getCallingChannel(callMessage));
                 const channelType: ChannelType = callParameters(getState()).channel.type;
+
+                //async nécéssary to correctly transmit data to the desktop app
                 await dispatch(getUsersInCall(callMessage));
                 await dispatch(getCallingUser(callMessage));
                 //replace ex conference_added
