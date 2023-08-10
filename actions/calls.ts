@@ -28,6 +28,8 @@ import {ringing, stopRing} from 'utils/notification_sounds';
 
 import {ChannelType} from '@mattermost/types/channels';
 
+import {connectedKmeetChannels, connectedKmeetCallUrl} from 'selectors/kmeet_calls';
+
 import {closeModal, openModal} from './views/modals';
 
 export const showExpandedView = () => (dispatch: Dispatch<GenericAction>) => {
@@ -72,6 +74,7 @@ export function leaveCallInChannel(channelID: string, dialingID: string) {
     };
 }
 
+//used only to answer last call brought by th diailing modal
 export function joinCallInChannel(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
@@ -87,6 +90,44 @@ export function joinCallInChannel(): ActionFunc {
     };
 }
 
+//used to manage ction from postType actions and meet button
+export function startOrJoinKmeetCallInChannel(channelID: string) {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const state = getState();
+        const channels = Object.keys(connectedKmeetChannels(state));
+
+        let data;
+        let kmeetUrl;
+        if (channels.indexOf(channelID) === -1) {
+            data = await Client4.startMeet(channelID);
+
+            dispatch({
+                type: ActionTypes.VOICE_CHANNEL_ENABLE,
+            });
+
+            dispatch({
+                type: ActionTypes.VOICE_CHANNEL_ADDED,
+                data: {
+                    channelID,
+                    userID: getCurrentUserId(getState()),
+                    currentUserID: getCurrentUserId(getState()),
+                    url: data.url,
+                    id: data.id,
+                },
+            });
+
+            if (data && data.url) {
+                kmeetUrl = new URL(data.url);
+            }
+        } else if (connectedKmeetCallUrl(state, channelID) !== null) {
+            kmeetUrl = new URL(connectedKmeetCallUrl(state, channelID));
+        }
+
+        if (kmeetUrl) {
+            window.open(kmeetUrl.href, '_blank', 'noopener');
+        }
+    };
+}
 export function updateAudioStatus(dialingID: string, muted = false) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         dispatch({
@@ -129,9 +170,8 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
             if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at) {
                 await dispatch(getCallingChannel(callMessage));
                 const channelType: ChannelType = callParameters(getState()).channel.type;
-                if (channelType === 'O' || channelType === 'P') {
-                    return;
-                }
+
+                //replace ex conference_added
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_ADDED,
                     data: {
@@ -142,9 +182,11 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                         id: callMessage.props.conference_id,
                     },
                 });
-                if (callMessage.props.in_call) {
+
+                if (channelType === 'O' || channelType === 'P' || status[currentUserId] === 'dnd' || callMessage.props.in_call) {
                     return;
                 }
+
                 if (callMessage.user_id !== currentUserId) {
                     dispatch(getUsersInCall(callMessage));
                     dispatch(getCallingUser(callMessage));
@@ -179,7 +221,7 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                                 },
                             },
                             window.location.origin);
-                    } else if (status[currentUserId] !== 'dnd') {
+                    } else {
                         ringing('Ring');
                         dispatch(openModal(
                             {

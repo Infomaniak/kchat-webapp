@@ -9,7 +9,7 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
 import {connectedKmeetCallUrl} from '../../selectors/kmeet_calls';
 
-import {startOrJoinKmeetCallInChannel} from '../../actions/views/kmeet_calls';
+import {startOrJoinKmeetCallInChannel} from 'actions/calls';
 
 import MeetButton from './meet_button';
 

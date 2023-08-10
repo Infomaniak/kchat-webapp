@@ -13,7 +13,7 @@ import {useDispatch} from 'react-redux';
 import {Client4} from 'mattermost-redux/client';
 
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
-import {startOrJoinKmeetCallInChannel} from 'actions/views/kmeet_calls';
+import {startOrJoinKmeetCallInChannel} from 'actions/calls';
 
 interface Props {
     post: Post;
