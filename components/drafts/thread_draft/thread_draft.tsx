@@ -18,7 +18,7 @@ import {GlobalState} from 'types/store';
 import {getPost} from 'mattermost-redux/actions/posts';
 
 import {selectPost} from 'actions/views/rhs';
-import {removeDraft, addToUpdateDraftQueue, upsertScheduleDraft} from 'actions/views/drafts';
+import {removeDraft, addToUpdateDraftQueue, upsertScheduleDraft, setGlobalDraftSource} from 'actions/views/drafts';
 import {makeOnSubmit} from 'actions/views/create_comment';
 import {closeModal, openModal} from 'actions/views/modals';
 import {setGlobalItem} from 'actions/storage';
@@ -139,12 +139,13 @@ function ThreadDraft({
         Reflect.deleteProperty(newDraft, 'timestamp');
 
         dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${newDraft.rootId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
+        dispatch(setGlobalDraftSource(`${StoragePrefixes.DRAFT}${newDraft.rootId}_${newDraft.id}`, false));
 
         // Remove previously existing thread draft
         await dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, channel.id, rootId));
 
         // Update thread draft
-        const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, newDraft, newDraft.rootId, true));
+        const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, value, newDraft.rootId, true, true));
         if (error) {
             dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${newDraft.rootId}_${newDraft.id}`, value));
         }
