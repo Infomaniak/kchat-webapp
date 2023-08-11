@@ -174,6 +174,7 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                 //async nécéssary to correctly transmit data to the desktop app
                 await dispatch(getUsersInCall(callMessage));
                 await dispatch(getCallingUser(callMessage));
+
                 //replace ex conference_added
                 dispatch({
                     type: ActionTypes.VOICE_CHANNEL_ADDED,
@@ -208,15 +209,11 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                                     calling: {
                                         users,
                                         channelID: callMessage.channel_id,
-                                        userCalling: caller.id,
-                                        channel,
                                         url: callMessage.props.url,
                                         name: channel.display_name,
-                                        // username: currentUser.nickname,
                                         avatar,
                                         id: callMessage.channel_id,
                                         nicknames: users.map((usr) => usr.nickname).join(', '),
-                                        currentUser,
                                         conferenceId: callMessage.props.conference_id,
                                         toneTimeOut: 30000,
                                     },
