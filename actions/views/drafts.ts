@@ -128,7 +128,10 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
             };
         }
 
-        dispatch(setGlobalDraft(key, updatedValue, false));
+        if (!scheduleDelete) {
+            // When unscheduling component will handle setting
+            dispatch(setGlobalDraft(key, updatedValue, false));
+        }
 
         if (syncedDraftsAreAllowedAndEnabled(state) && save && updatedValue) {
             const userId = getCurrentUserId(state);
