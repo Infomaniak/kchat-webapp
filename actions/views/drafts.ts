@@ -128,8 +128,11 @@ export function updateDraft(key: string, value: PostDraft|null, rootId = '', sav
             };
         }
 
-        if (!scheduleDelete) {
-            // When unscheduling component will handle setting
+        if (scheduleDelete) {
+            const newValue = {...updatedValue};
+            Reflect.deleteProperty(newValue, 'timestamp');
+            dispatch(setGlobalDraft(key, newValue as PostDraft, false));
+        } else {
             dispatch(setGlobalDraft(key, updatedValue, false));
         }
 
