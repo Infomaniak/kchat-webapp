@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
 import {createPost} from 'actions/post_actions';
-import {removeDraft, upsertScheduleDraft, addToUpdateDraftQueue} from 'actions/views/drafts';
+import {removeDraft, upsertScheduleDraft, addToUpdateDraftQueue, setGlobalDraftSource} from 'actions/views/drafts';
 import {closeModal, openModal} from 'actions/views/modals';
 import {setGlobalItem} from 'actions/storage';
 import {getGlobalItem} from 'selectors/storage';
@@ -127,6 +127,7 @@ function ChannelDraft({
         Reflect.deleteProperty(newDraft, 'timestamp');
 
         dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
+        dispatch(setGlobalDraftSource(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, false));
 
         // Remove previously existing channel draft
         await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId, channel.id));
