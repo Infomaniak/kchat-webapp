@@ -142,7 +142,7 @@ function ThreadDraft({
         dispatch(setGlobalDraftSource(`${StoragePrefixes.DRAFT}${newDraft.rootId}_${newDraft.id}`, false));
 
         // Remove previously existing thread draft
-        await dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, channel.id, rootId));
+        await dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, channel.id, newDraft.rootId));
 
         // Update thread draft
         const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, value, newDraft.rootId, true, true));
