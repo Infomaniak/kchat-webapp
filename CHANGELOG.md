@@ -1,3 +1,9 @@
+## 1.4.0-next.1 (2023-08-14)
+
+### Fixed (1 change)
+
+- [fix: null reference](kchat/webapp@e3d1a4ba194f5e86ed194b0ea41827a0d2369b23) by @benoit.nau ([merge request](kchat/webapp!513))
+
 ## 1.3.14-next.3 (2023-08-07)
 
 ### Added (1 change)
