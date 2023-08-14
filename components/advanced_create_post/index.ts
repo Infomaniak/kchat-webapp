@@ -191,7 +191,7 @@ function setDraft(key: string, value: PostDraft, draftChannelId: string, save = 
             return dispatch(addToUpdateDraftQueue(key, updatedValue, '', save));
         }
 
-        return dispatch(removeDraft(key));
+        return dispatch(removeDraft(key, channelId));
     };
 }
 

@@ -10,6 +10,9 @@ import {makeGetThreadOrSynthetic} from 'mattermost-redux/selectors/entities/thre
 import {PostDraft} from 'types/store/draft';
 import {GlobalState} from 'types/store';
 
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getChannelURL} from 'utils/utils';
+
 import ThreadDraft from './thread_draft';
 
 type OwnProps = {
@@ -23,6 +26,8 @@ function makeMapStatetoProps() {
     return (state: GlobalState, ownProps: OwnProps) => {
         const channel = getChannel(state, {id: ownProps.value.channelId});
         const post = getPost(state, ownProps.id);
+        const teamId = getCurrentTeamId(state);
+        const channelUrl = getChannelURL(state, channel, teamId);
 
         let thread;
         if (post) {
@@ -32,6 +37,7 @@ function makeMapStatetoProps() {
         return {
             channel,
             thread,
+            channelUrl,
         };
     };
 }

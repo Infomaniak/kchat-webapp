@@ -33,7 +33,7 @@ import {GlobalState} from 'types/store';
 
 import {isArchivedChannel} from 'utils/channel_utils';
 import {areConsecutivePostsBySameUser, shouldShowActionsMenu, shouldShowDotMenu} from 'utils/post_utils';
-import {Locations, Preferences, RHSStates} from 'utils/constants';
+import {Locations, Preferences, RHSStates, StoragePrefixes} from 'utils/constants';
 
 import {ExtendedPost, removePost} from 'mattermost-redux/actions/posts';
 import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
@@ -43,6 +43,9 @@ import {General} from 'mattermost-redux/constants';
 
 import {getDisplayNameByUser} from 'utils/utils';
 import {getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
+
+import {getGlobalItem} from 'selectors/storage';
+import {removeDraft} from 'actions/views/drafts';
 
 import PostComponent from './post_component';
 
@@ -94,6 +97,11 @@ function removePostAndCloseRHS(post: ExtendedPost) {
         if (isThreadOpen(state, post.id)) {
             dispatch(closeRightHandSide());
         }
+        const draftKey = `${StoragePrefixes.COMMENT_DRAFT}${post.id}`;
+        if (getGlobalItem(state, draftKey, null)) {
+            dispatch(removeDraft(draftKey, post.channel_id, post.id));
+        }
+
         return dispatch(removePost(post));
     };
 }
