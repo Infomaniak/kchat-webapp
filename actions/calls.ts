@@ -78,7 +78,7 @@ export function leaveCallInChannel(channelID: string, dialingID: string) {
 export function joinCallInChannel(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
-        const {msg} = callParameters(getState());
+        const {msg} = callParameters(state);
         const conferenceId = callConferenceId(state);
         Client4.acceptIncomingMeetCall(conferenceId);
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
@@ -90,7 +90,7 @@ export function joinCallInChannel(): ActionFunc {
     };
 }
 
-//used to manage ction from postType actions and meet button
+//used to manage action from postType actions and meet button
 export function startOrJoinKmeetCallInChannel(channelID: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
@@ -201,7 +201,7 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                     const currentUser = getCurrentUser(getState());
                     const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);
                     if (isKmeetCallCompatibleDesktopApp()) {
-                        const {users, caller, channel} = callParameters(getState());
+                        const {users, channel} = callParameters(getState());
                         window.postMessage(
                             {
                                 type: 'call-dialing',

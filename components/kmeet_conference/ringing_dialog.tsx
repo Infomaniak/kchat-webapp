@@ -42,16 +42,13 @@ function DialingModal({toneTimeOut}: PropsType) {
         window.addEventListener('offline', () => {
             onHandleDecline();
         });
-        return () => {
-            document.removeEventListener('click', handleClickOutsideModal);
-        };
-    }, []);
-
-    React.useEffect(() => {
         const timeout = setTimeout(() => {
             onHandleDecline();
         }, toneTimeOut);
-        return () => clearTimeout(timeout);
+        return () => {
+            document.removeEventListener('click', handleClickOutsideModal);
+            clearTimeout(timeout);
+        };
     }, []);
 
     const onHandleAccept = () => {
@@ -62,7 +59,7 @@ function DialingModal({toneTimeOut}: PropsType) {
         dispatch(hangUpCall());
     };
 
-    const getUsersForOvelay = () => {
+    const getUsersForOverlay = () => {
         if (users.length >= 2) {
             const overlayUsers: UserProfile[] = [caller];
             const getOverLayUser: UserProfile = users.filter((usr) => usr.id !== caller.id)[0];
@@ -101,7 +98,7 @@ function DialingModal({toneTimeOut}: PropsType) {
                 <>
                     <div className='content-calling__user'>
                         <span>
-                            {getUsersNicknames(getUsersForOvelay())}
+                            {getUsersNicknames(getUsersForOverlay())}
                         </span>
                     </div>
                     <div className='content-calling__info'>
@@ -128,7 +125,7 @@ function DialingModal({toneTimeOut}: PropsType) {
                     className='content-body'
                 >
                     <Avatars
-                        userIds={getUsersForOvelay().map((usr) => usr.id)}
+                        userIds={getUsersForOverlay().map((usr) => usr.id)}
                         size='call'
                         totalUsers={users.length}
                         disableProfileOverlay={true}

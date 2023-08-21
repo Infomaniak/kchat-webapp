@@ -65,16 +65,6 @@ function MeetButton(props: Props) {
                     onClick={onClick}
                     ref={ref}
                 >
-                    {/* <img
-                        src={meetSvg}
-                        className='meet-btn__icon meet-btn__icon--16'
-                    />
-                    <span className='meet-btn__text'>
-                        <FormattedMessage
-                            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
-                            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
-                        />
-                    </span> */}
                     <PhoneInTalkIcon/>
                 </button>
             </div>

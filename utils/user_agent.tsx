@@ -128,10 +128,7 @@ export function isDesktopApp(): boolean {
     return userAgent().indexOf('Mattermost') !== -1 && userAgent().indexOf('Electron') !== -1;
 }
 export function isKmeetCallCompatibleDesktopApp(): boolean {
-    if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
-        return true;
-    }
-    return false;
+    return isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0');
 }
 
 export function isWindowsApp(): boolean {

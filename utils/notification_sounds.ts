@@ -22,22 +22,6 @@ export const callsNotificationSounds = new Map([
     ['Ring', ring],
 ]);
 
-let canDing = true;
-export function ding(name: string) {
-    if (hasSoundOptions() && canDing) {
-        tryNotificationSound(name);
-        canDing = false;
-        setTimeout(() => {
-            canDing = true;
-        }, 3000);
-    }
-}
-
-export function tryNotificationSound(name: string) {
-    const audio = new Audio(notificationSounds.get(name) ?? notificationSounds.get('Bing'));
-    audio.play();
-}
-
 let currentRing: HTMLAudioElement | null = null;
 export function ringing(name: string) {
     if (!hasSoundOptions()) {
