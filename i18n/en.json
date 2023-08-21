@@ -4010,6 +4010,7 @@
   "kmeet.calls.start": "Call started",
   "kmeet.calls.started": "kMeet meeting started",
   "kmeet.calls.ended.title": "Call ended",
+  "kmeet.calls.declined": "Call rejected by {usernames}",
   "kmeet.calls.callback": "Callback",
   "kmeet.calls.called": "Call missed",
   "last_users_message.added_to_channel.type": "were **added to the channel** by {actor}.",

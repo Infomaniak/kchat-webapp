@@ -4006,6 +4006,7 @@
   "kmeet.calls.start": "Ein Treffen starten",
   "kmeet.calls.started": "Anruf beginnen",
   "kmeet.calls.ended.title": "Anruf beendet",
+  "kmeet.calls.declined": "anruf von {usernames} abgelehnt ",
   "kmeet.calls.callback": "Rückruf",
   "kmeet.calls.called": "Verpasster Anruf",
   "last_users_message.added_to_channel.type": "wurden durch {actor} **dem Kanal hinzugefügt**.",

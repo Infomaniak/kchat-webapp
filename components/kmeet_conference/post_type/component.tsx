@@ -38,11 +38,17 @@ const PostType = ({post, connectedKmeetUrl}: Props) => {
     // M: missed
     // S: started
     // E: ended
-    type Status = 'M'|'O'|'E'| undefined
-
+    // D: declined
+    type Status = 'M'|'O'|'E'|'D' | undefined
+    let declinedUsernames: string[] = [];
     const defineStatus = (): Status => {
         const spec = post.props;
         const ended = Boolean(spec.end_at);
+
+        if (spec.declined_usernames) {
+            declinedUsernames = spec.declined_usernames;
+            return 'D';
+        }
         if (spec.in_call === true) {
             return 'M';
         }
@@ -69,7 +75,7 @@ const PostType = ({post, connectedKmeetUrl}: Props) => {
             {moment(post.props.start_at).fromNow()}
         </Duration>
     );
-    const status = defineStatus();
+    const status: Status = defineStatus();
     return (
         <Main data-testid={'call-thread'}>
 
@@ -100,6 +106,18 @@ const PostType = ({post, connectedKmeetUrl}: Props) => {
                         <FormattedMessage
                             id='kmeet.calls.ended.title'
                             defaultMessage='Appel terminé'
+                        />
+                    </Message>
+                    <SubMessage>{subMessage}</SubMessage>
+                </MessageWrapper>}
+                {status === 'D' && <MessageWrapper>
+                    <Message>
+                        <FormattedMessage
+                            id='kmeet.calls.declined'
+                            defaultMessage='Appel refusé {usernames}'
+                            values={{
+                                usernames: declinedUsernames.toString(),
+                            }}
                         />
                     </Message>
                     <SubMessage>{subMessage}</SubMessage>

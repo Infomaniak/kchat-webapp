@@ -3685,6 +3685,7 @@
   "katex.error": "Impossible de compiler votre code LaTeX. Veuillez vérifier la syntaxe et réessayez.",
   "kmeet.calls.ended": "Terminée à {time}",
   "kmeet.calls.ended.title": "Appel terminé",
+  "kmeet.calls.declined": "Appel décliné par {usernames} ",
   "kmeet.calls.join": "Rejoindre la réunion",
   "kmeet.calls.open": "Rejoindre",
   "kmeet.calls.callback": "Rappeler",
