@@ -275,9 +275,6 @@ var config = {
             reselect: 'packages/reselect/src',
             marked: '@infomaniak/marked',
             '@mui/styled-engine': '@mui/styled-engine-sc',
-
-            // This alias restricts single version of styled components acros all packages
-            'styled-components': path.resolve(__dirname, '..', 'node_modules', 'styled-components'),
         },
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
         fallback: {
