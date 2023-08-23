@@ -5,9 +5,10 @@ import React, {useRef, useState, useEffect, useCallback, memo, useMemo} from 're
 import {FormattedMessage} from 'react-intl';
 import type {FixedSizeList} from 'react-window';
 import type InfiniteLoader from 'react-window-infinite-loader';
-import {throttle} from 'lodash';
+import throttle from 'lodash/throttle';
 
 import {Emoji, EmojiCategory} from '@mattermost/types/emojis';
+
 import {isSystemEmoji} from 'mattermost-redux/utils/emoji_utils';
 
 import {NoResultsVariant} from 'components/no_results_indicator/types';
@@ -34,7 +35,6 @@ import type {PropsFromRedux} from './index';
 
 interface Props extends PropsFromRedux {
     filter: string;
-    visible: boolean;
     onEmojiClick: (emoji: Emoji) => void;
     handleFilterChange: (filter: string) => void;
     handleEmojiPickerClose: () => void;
@@ -42,7 +42,6 @@ interface Props extends PropsFromRedux {
 
 const EmojiPicker = ({
     filter,
-    visible,
     onEmojiClick,
     handleFilterChange,
     handleEmojiPickerClose,
@@ -128,7 +127,7 @@ const EmojiPicker = ({
     // Hack for getting focus on search input when tab changes to emoji from gifs
     useEffect(() => {
         searchInputRef.current?.focus();
-    }, [visible]);
+    }, []);
 
     // clear out the active category on search input
     useEffect(() => {
