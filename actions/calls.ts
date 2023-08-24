@@ -173,75 +173,36 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
         try {
             if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at) {
                 const globalState = getState();
-                await dispatch(getCallingChannel(callMessage));
-                await dispatch(getUsersInCall(callMessage));
-                await dispatch(getCallingUser(callMessage));
-
-                //replace ex conference_added
-                dispatch({
-                    type: ActionTypes.VOICE_CHANNEL_ADDED,
-                    data: {
-                        channelID: callMessage.channel_id,
-                        userID: getCurrentUserId(globalState),
-                        currentUserID: getCurrentUserId(globalState),
-                        url: callMessage.props.url,
-                        id: callMessage.props.conference_id,
-                    },
-                });
+                // eslint-disable-next-line no-return-await
+                [getCallingChannel, getUsersInCall, getCallingUser].forEach(async (fn) => await dispatch(fn(callMessage)));
+                replacePreviousAddedConference(dispatch, callMessage, globalState);
                 const {status} = callUserStatus(globalState);
                 const channelType: ChannelType = callParameters(globalState).channel.type;
-                if (channelType === 'O' || channelType === 'P' || status[currentUserId] === 'dnd' || callMessage.props.in_call) {
+                if (channelType === 'O' || channelType === 'P' || status[currentUserId] === 'dnd' || callMessage.props.in_call || callMessage.user_id === currentUserId) {
                     return;
                 }
 
-                if (callMessage.user_id !== currentUserId) {
-                    dispatch({
-                        type: ActionTypes.CALL_RECEIVED,
-                        data: {
-                            msg: callMessage,
-                        },
-                    });
-                    const currentUser = getCurrentUser(globalState);
-                    const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);
-                    if (isKmeetCallCompatibleDesktopApp()) {
-                        const {users, channel} = callParameters(globalState);
-                        window.postMessage(
-                            {
-                                type: 'call-dialing',
-                                message: {
-                                    calling: {
-                                        users,
-                                        channelID: callMessage.channel_id,
-                                        url: callMessage.props.url,
-                                        name: channel.display_name,
-                                        avatar,
-                                        id: callMessage.channel_id,
-                                        nicknames: users.map((usr) => usr.nickname).join(', '),
-                                        conferenceId: callMessage.props.conference_id,
-                                        toneTimeOut: 30000,
-                                    },
-                                },
-                            },
-                            window.location.origin);
-                    } else {
-                        ringing('Ring');
-                        dispatch(openModal(
-                            {
-                                modalId: ModalIdentifiers.INCOMING_CALL,
-                                dialogType: DialingModal,
-                                dialogProps: {
-                                    toneTimeOut: 30000,
-                                },
-                            },
-                        ));
-                    }
+                dispatch({
+                    type: ActionTypes.CALL_RECEIVED,
+                    data: {
+                        msg: callMessage,
+                    },
+                });
+
+                if (isKmeetCallCompatibleDesktopApp()) {
+                    console.log('call received on desktop.');
+                    handleDesktopKmeetCall(globalState, currentUserId, callMessage);
+                } else {
+                    console.log('call received on browser.');
+                    launchRingAction(dispatch);
                 }
             }
         } catch (error) {
-            console.error('receivedCall error', error);
+            console.error('receivedCall error:', error);
         }
     };
 }
+
 export function callNoLongerExist(endMsg: any) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const {msg} = callParameters(getState());
@@ -300,5 +261,54 @@ if (isKmeetCallCompatibleDesktopApp()) {
 
     (window as any).callManager?.onCallDeclined((_: any, props: { conferenceId: string }) => {
         return Client4.declineIncomingMeetCall(props.conferenceId);
+    });
+}
+
+function launchRingAction(dispatch: DispatchFunc): void {
+    ringing('Ring');
+    dispatch(openModal(
+        {
+            modalId: ModalIdentifiers.INCOMING_CALL,
+            dialogType: DialingModal,
+            dialogProps: {
+                toneTimeOut: 30000,
+            },
+        },
+    ));
+}
+function handleDesktopKmeetCall(globalState: GlobalState, currentUserId: string, callMessage: Post): void {
+    const currentUser = getCurrentUser(globalState);
+    const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);
+    const {users, channel} = callParameters(globalState);
+    window.postMessage(
+        {
+            type: 'call-dialing',
+            message: {
+                calling: {
+                    users,
+                    channelID: callMessage.channel_id,
+                    url: callMessage.props.url,
+                    name: channel.display_name,
+                    avatar,
+                    id: callMessage.channel_id,
+                    nicknames: users.map((usr) => usr.nickname).join(', '),
+                    conferenceId: callMessage.props.conference_id,
+                    toneTimeOut: 30000,
+                },
+            },
+        },
+        window.location.origin);
+}
+
+function replacePreviousAddedConference(dispatch: DispatchFunc, callMessage: Post, globalState: GlobalState): void {
+    dispatch({
+        type: ActionTypes.VOICE_CHANNEL_ADDED,
+        data: {
+            channelID: callMessage.channel_id,
+            userID: getCurrentUserId(globalState),
+            currentUserID: getCurrentUserId(globalState),
+            url: callMessage.props.url,
+            id: callMessage.props.conference_id,
+        },
     });
 }
