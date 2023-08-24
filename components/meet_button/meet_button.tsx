@@ -5,6 +5,8 @@ import React, {useRef} from 'react';
 import {useSelector} from 'react-redux';
 import {FormattedMessage, injectIntl} from 'react-intl';
 
+import {PhoneInTalkIcon} from '@infomaniak/compass-icons/components';
+
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import OverlayTrigger from 'components/overlay_trigger';
@@ -16,7 +18,6 @@ import Constants from 'utils/constants';
 
 import './meet_button.scss';
 import meetSvg from './static/kmeet.svg';
-import { PhoneInTalkIcon } from '@infomaniak/compass-icons/components';
 
 export type Props = {
     currentChannelID: string;
@@ -65,7 +66,16 @@ function MeetButton(props: Props) {
                     onClick={onClick}
                     ref={ref}
                 >
-                    <PhoneInTalkIcon/>
+                    <img
+                        src={meetSvg}
+                        className='meet-btn__icon meet-btn__icon--16'
+                    />
+                    <span className='meet-btn__text'>
+                        <FormattedMessage
+                            id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
+                            defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
+                        />
+                    </span>
                 </button>
             </div>
         </OverlayTrigger>

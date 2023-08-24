@@ -1827,8 +1827,12 @@ function handleThreadFollowChanged(msg) {
 }
 
 function handleConferenceUserDenied() {
-    stopRing();
-    dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+    return async (doDispatch) => {
+        doDispatch({
+            type: ActionTypes.CALL_HANGUP,
+            data: {isRinging: false},
+        });
+    };
 }
 
 function handleConferenceUserConnected(msg) {
@@ -1845,10 +1849,6 @@ function handleConferenceUserConnected(msg) {
                 id: Object.keys(calls[msg.data.channel_id])[0],
             },
         });
-        if (msg.data.user_id === getCurrentUserId(getState())) {
-            stopRing();
-            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
-        }
     };
 }
 
@@ -1871,7 +1871,7 @@ function handleConferenceUserDisconnected(msg) {
 }
 
 function handleConferenceDeleted(msg) {
-    return (doDispatch, getState) => {
+    return (doDispatch) => {
         dispatch(getPostsSince(msg.data.channel_id, Date.now()));
         dispatch(callNoLongerExist(msg));
         doDispatch({

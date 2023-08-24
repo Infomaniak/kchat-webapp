@@ -1,8 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable no-console */
 import {Dispatch} from 'redux';
 
-import {ActionFunc, DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
 import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 import {
     callConferenceId,
@@ -17,7 +18,7 @@ import {Post} from '@mattermost/types/posts';
 
 import DialingModal from 'components/kmeet_conference/ringing_dialog';
 
-import {getDesktopVersion, isKmeetCallCompatibleDesktopApp} from 'utils/user_agent';
+import {isKmeetCallCompatibleDesktopApp} from 'utils/user_agent';
 
 import {imageURLForUser} from 'utils/utils';
 
@@ -60,7 +61,7 @@ export const hideSwitchCallModal = () => (dispatch: Dispatch<GenericAction>) => 
 };
 
 export function leaveCallInChannel(channelID: string, dialingID: string) {
-    return async (dispatch: DispatchFunc, getState) => {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         Client4.leaveMeet(dialingID);
         dispatch({
             type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
@@ -75,18 +76,21 @@ export function leaveCallInChannel(channelID: string, dialingID: string) {
 }
 
 //used only to answer last call brought by th diailing modal
-export function joinCallInChannel(): ActionFunc {
+export function joinCallInChannel() {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
-        const {msg} = callParameters(state);
         const conferenceId = callConferenceId(state);
-        Client4.acceptIncomingMeetCall(conferenceId);
-        dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+        await Client4.acceptIncomingMeetCall(conferenceId);
+        await dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+        const {msg} = callParameters(state);
         stopRing();
-        if (msg) {
-            const kmeetUrl = new URL(msg.props.url);
-            window.open(kmeetUrl.href, '_blank', 'noopener');
-        }
+        setTimeout(() => {
+            if (msg) {
+                const kmeetUrl = new URL(msg.props.url);
+                console.log('[joinCallInChannel]', msg.props.url);
+                window.open(kmeetUrl.href, '_blank', 'noopener');
+            }
+        });
     };
 }
 
@@ -124,6 +128,7 @@ export function startOrJoinKmeetCallInChannel(channelID: string) {
         }
 
         if (kmeetUrl) {
+            console.log('[startOrJoinKmeetCallInChannel] window.open', kmeetUrl.href);
             window.open(kmeetUrl.href, '_blank', 'noopener');
         }
     };
@@ -166,12 +171,9 @@ export function updateScreenSharingStatus(dialingID: string, muted = false) {
 export function receivedCall(callMessage: Post, currentUserId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         try {
-            const {status} = callUserStatus(getState());
             if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at) {
+                const globalState = getState();
                 await dispatch(getCallingChannel(callMessage));
-                const channelType: ChannelType = callParameters(getState()).channel.type;
-
-                //async nécéssary to correctly transmit data to the desktop app
                 await dispatch(getUsersInCall(callMessage));
                 await dispatch(getCallingUser(callMessage));
 
@@ -180,13 +182,14 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                     type: ActionTypes.VOICE_CHANNEL_ADDED,
                     data: {
                         channelID: callMessage.channel_id,
-                        userID: getCurrentUserId(getState()),
-                        currentUserID: getCurrentUserId(getState()),
+                        userID: getCurrentUserId(globalState),
+                        currentUserID: getCurrentUserId(globalState),
                         url: callMessage.props.url,
                         id: callMessage.props.conference_id,
                     },
                 });
-
+                const {status} = callUserStatus(globalState);
+                const channelType: ChannelType = callParameters(globalState).channel.type;
                 if (channelType === 'O' || channelType === 'P' || status[currentUserId] === 'dnd' || callMessage.props.in_call) {
                     return;
                 }
@@ -198,10 +201,10 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                             msg: callMessage,
                         },
                     });
-                    const currentUser = getCurrentUser(getState());
+                    const currentUser = getCurrentUser(globalState);
                     const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);
                     if (isKmeetCallCompatibleDesktopApp()) {
-                        const {users, channel} = callParameters(getState());
+                        const {users, channel} = callParameters(globalState);
                         window.postMessage(
                             {
                                 type: 'call-dialing',
@@ -235,30 +238,27 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                 }
             }
         } catch (error) {
-            return {error};
+            console.error('receivedCall error', error);
         }
     };
 }
-export function callNoLongerExist(endMsg): ActionFunc {
+export function callNoLongerExist(endMsg: any) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const {msg} = callParameters(getState());
-        if (msg.props.url === endMsg.data.url) {
+        if (msg.props?.url === endMsg.data.url) {
             stopRing();
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         }
     };
 }
-export function hangUpCall(): ActionFunc {
+export function hangUpCall() {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const conferenceId = callConferenceId(state);
-        Client4.declineIncomingMeetCall(conferenceId);
+        await Client4.declineIncomingMeetCall(conferenceId);
+        console.log('[hangUpCall]', conferenceId);
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         stopRing();
-        dispatch({
-            type: ActionTypes.CALL_HANGUP,
-            data: {isRinging: false},
-        });
     };
 }
 
@@ -294,11 +294,11 @@ export function getCallingChannel(callMessage: Post) {
 
 //get Events from desktop app
 if (isKmeetCallCompatibleDesktopApp()) {
-    (window as any).callManager.onCallJoined((_event, props) => {
+    (window as any).callManager?.onCallJoined((_: any, props: { conferenceId: string }) => {
         return Client4.acceptIncomingMeetCall(props.conferenceId);
     });
 
-    (window as any).callManager.onCallDeclined((_event, props) => {
+    (window as any).callManager?.onCallDeclined((_: any, props: { conferenceId: string }) => {
         return Client4.declineIncomingMeetCall(props.conferenceId);
     });
 }
