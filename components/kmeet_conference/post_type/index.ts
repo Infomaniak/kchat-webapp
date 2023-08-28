@@ -7,12 +7,10 @@ import {bindActionCreators, Dispatch} from 'redux';
 import {Post} from 'mattermost-redux/types/posts';
 import {GlobalState} from 'mattermost-redux/types/store';
 
-import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannelV2, startOrJoinCallInChannel} from 'actions/calls';
+import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannelV2} from 'actions/calls';
 
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
-
-import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import PostType from './component';
 
@@ -27,15 +25,11 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     return {
         ...ownProps,
         connectedKmeetUrl,
-        isCallDialingEnabled: callDialingEnabled(state),
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     startOrJoinCallInChannelV2,
-
-    // legacy simplified version, component determines which to call based on feature flag
-    startOrJoinCallInChannel,
     showSwitchCallModal,
     leaveCallInChannel,
 }, dispatch);

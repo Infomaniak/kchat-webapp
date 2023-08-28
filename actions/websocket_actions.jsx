@@ -1834,6 +1834,7 @@ function handleConferenceUserConnected(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
+        const keys = Object.keys(calls[msg.data.channel_id]);
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
             data: {
@@ -1841,7 +1842,7 @@ function handleConferenceUserConnected(msg) {
                 userID: msg.data.user_id,
                 currentUserID: getCurrentUserId(getState()),
                 url: msg.data.url,
-                id: Object.keys(calls[msg.data.channel_id])[0],
+                id: keys.length ? keys[0] : undefined,
             },
         });
     };
