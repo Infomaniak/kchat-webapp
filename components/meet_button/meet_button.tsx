@@ -21,18 +21,21 @@ export type Props = {
     currentChannelID: string;
     hasCall?: boolean;
     isCallDialingEnabled: boolean;
-    startCallInChannel: (channelID: unknown) => void;
-    startCallInChannelV2: (channelID: unknown) => void;
+    actions: {
+        startOrJoinCallInChannel: (channelID: unknown) => void;
+        startOrJoinCallInChannelV2: (channelID: unknown) => void;
+    };
 }
 
 function MeetButton(props: Props) {
     const isGuest = useSelector(isCurrentUserGuestUser);
     const kmeetTourStep = isGuest ? OnboardingTourStepsForGuestUsers.KMEET : OnboardingTourSteps.KMEET;
     const showKmeetTutorialStep = useShowOnboardingTutorialStep(kmeetTourStep);
-    const {isCallDialingEnabled, startCallInChannel, startCallInChannelV2} = props;
+    const {isCallDialingEnabled, actions} = props;
+    const {startOrJoinCallInChannel, startOrJoinCallInChannelV2} = actions;
     const ref = useRef<HTMLButtonElement>(null);
 
-    const fn = isCallDialingEnabled ? startCallInChannelV2 : startCallInChannel;
+    const fn = isCallDialingEnabled ? startOrJoinCallInChannelV2 : startOrJoinCallInChannel;
 
     const onClick = React.useCallback(() => {
         fn(props.currentChannelID);
