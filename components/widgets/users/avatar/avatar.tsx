@@ -32,6 +32,7 @@ export const getAvatarWidth = (size: TAvatarSizeToken) => {
 };
 
 type Props = {
+
     // url?: Promise<string> | string;
     url?: string;
     username?: string;

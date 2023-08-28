@@ -19,6 +19,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
     onMouseLeave={[Function]}
   >
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="1"
       overlayProps={
@@ -239,6 +240,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="6"
       overlayProps={
@@ -459,6 +461,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="7"
       overlayProps={
@@ -820,6 +823,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
     onMouseLeave={[Function]}
   >
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="1"
       overlayProps={
@@ -1040,6 +1044,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="2"
       overlayProps={
@@ -1260,6 +1265,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="3"
       overlayProps={
@@ -1619,6 +1625,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
     onMouseLeave={[Function]}
   >
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="1"
       overlayProps={
@@ -1839,6 +1846,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="2"
       overlayProps={
@@ -2059,6 +2067,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="3"
       overlayProps={

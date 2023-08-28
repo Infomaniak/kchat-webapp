@@ -365,6 +365,14 @@ export const ActionTypes = keyMirror({
     SET_EDIT_CHANNEL_MEMBERS: null,
     NEEDS_LOGGED_IN_LIMIT_REACHED_CHECK: null,
 
+    CALL_RECEIVED: null,
+    CALL_HANGUP: null,
+    CALL_USER_ONLINE: null,
+    CALL_USER_OFFLINE: null,
+    CALL_USERS_IN_CONF: null,
+    CALL_CALLING_USER: null,
+    CALL_CONF_CHANNEL: null,
+
     SET_DRAFT_SOURCE: null,
 });
 
@@ -501,6 +509,7 @@ export const ModalIdentifiers = {
     TOGGLE_NEXT: 'toggle_next',
     SCHEDULE_POST: 'schedule_post',
     OVERRIDE_DRAFT: 'override_draft',
+    OCCUPIED_CALL: 'call_ringing_occupied_modal',
 };
 
 export const UserStatuses = {
@@ -684,6 +693,7 @@ export const SocketEvents = {
     CONFERENCE_DELETED: 'conference_deleted',
     CONFERENCE_USER_CONNECTED: 'conference_user_connected',
     CONFERENCE_USER_DISCONNECTED: 'conference_user_disconnected',
+    CONFERENCE_USER_DENIED: 'conference_user_denied',
     PUSHER_MEMBER_REMOVED: 'pusher:member_removed',
     PUSHER_PING: 'pusher:ping',
     PUSHER_PONG: 'pusher:pong',

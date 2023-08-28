@@ -84,6 +84,7 @@ import {close, initialize} from 'actions/websocket_actions';
 
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
+import {setCallListeners} from 'actions/calls';
 import {clearUserCookie} from 'actions/views/cookie';
 
 import {applyLuxonDefaults} from './effects';
@@ -207,6 +208,8 @@ export default class Root extends React.PureComponent<Props, State> {
         if (!isDesktopApp()) {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
+
+        setCallListeners();
 
         setSystemEmojis(new Set(EmojiIndicesByAlias.keys()));
 

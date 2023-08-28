@@ -20,19 +20,23 @@ import meetSvg from './static/kmeet.svg';
 export type Props = {
     currentChannelID: string;
     hasCall?: boolean;
+    isCallDialingEnabled: boolean;
     startCallInChannel: (channelID: unknown) => void;
+    startCallInChannelV2: (channelID: unknown) => void;
 }
 
 function MeetButton(props: Props) {
     const isGuest = useSelector(isCurrentUserGuestUser);
     const kmeetTourStep = isGuest ? OnboardingTourStepsForGuestUsers.KMEET : OnboardingTourSteps.KMEET;
     const showKmeetTutorialStep = useShowOnboardingTutorialStep(kmeetTourStep);
-    const {startCallInChannel} = props;
-
+    const {isCallDialingEnabled, startCallInChannel, startCallInChannelV2} = props;
     const ref = useRef<HTMLButtonElement>(null);
+
+    const fn = isCallDialingEnabled ? startCallInChannelV2 : startCallInChannel;
+
     const onClick = React.useCallback(() => {
-        startCallInChannel(props.currentChannelID);
-    }, [props.currentChannelID]);
+        fn(props.currentChannelID);
+    }, [props.currentChannelID, isCallDialingEnabled]);
 
     const tooltip = (
         <Tooltip
