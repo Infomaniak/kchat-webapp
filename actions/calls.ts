@@ -77,7 +77,7 @@ export function leaveCallInChannel(channelID: string, dialingID: string) {
     };
 }
 
-//used only to answer last call brought by th diailing modal
+//used only to answer last call brought by the dialing modal
 export function joinCallInChannel() {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
