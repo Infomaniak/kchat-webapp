@@ -16,7 +16,11 @@ interface Props {
     startAt?: number;
     pictures: string[];
     profiles: UserProfile[];
-    onJoinCall: Function;
+    isCallDialingEnabled: boolean;
+    startOrJoinCallInChannelV2: (channelID: string) => void;
+
+    // Legacy simplified calls action. Feature flag determines which to call.
+    startOrJoinCallInChannel: (channelID: string) => void;
 }
 
 interface State {
@@ -50,13 +54,16 @@ export default class ChannelCallToast extends React.PureComponent<Props, State> 
     }
 
     onJoinCallClick = async () => {
+        const {isCallDialingEnabled, startOrJoinCallInChannelV2, startOrJoinCallInChannel} = this.props;
+        const fn = isCallDialingEnabled ? startOrJoinCallInChannelV2 : startOrJoinCallInChannel;
+
         if (this.props.connectedID) {
             return;
         }
 
         // window.postMessage({type: 'connectCall', channelID: this.props.currChannelID}, window.origin);
 
-        this.props.onJoinCall(this.props.currChannelID);
+        fn(this.props.currChannelID);
     }
 
     onDismissClick = () => {

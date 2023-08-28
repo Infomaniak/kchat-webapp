@@ -8,21 +8,20 @@ import {Post} from 'mattermost-redux/types/posts';
 
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import {useDispatch} from 'react-redux';
-
 import {Client4} from 'mattermost-redux/client';
 
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
-import {startOrJoinKmeetCallInChannel} from 'actions/calls';
 
 interface Props {
     post: Post;
     connectedKmeetUrl: string;
+    isCallDialingEnabled: boolean;
+    startOrJoinCallInChannel: (channelID: string) => void;
+    startOrJoinCallInChannelV2: (channelID: string) => void;
 }
 
-const PostType = ({post, connectedKmeetUrl}: Props) => {
+const PostType = ({post, connectedKmeetUrl, isCallDialingEnabled, startOrJoinCallInChannelV2, startOrJoinCallInChannel}: Props) => {
     const intl = useIntl();
-    const dispatch = useDispatch();
 
     const onJoinCallClick = () => {
         Client4.acceptIncomingMeetCall(post.props.conference_id);
@@ -30,8 +29,10 @@ const PostType = ({post, connectedKmeetUrl}: Props) => {
         window.open(kmeetUrl.href, '_blank', 'noopener');
     };
 
+    const dipatchFn = isCallDialingEnabled ? startOrJoinCallInChannelV2 : startOrJoinCallInChannel;
+
     const onStartOrJoinCall = () => {
-        dispatch(startOrJoinKmeetCallInChannel(post.channel_id));
+        dipatchFn(post.channel_id);
     };
     moment.locale(String(intl.locale));
 
@@ -163,14 +164,6 @@ const Main = styled.div`
     box-shadow: 0px 4px 6px rgba(var(--center-channel-color-rgb), 0.12);
     color: var(--center-channel-color);
     border-radius: 4px;
-`;
-
-const SubMain = styled.div<{ ended: boolean }>`
-    display: flex;
-    align-items: center;
-    width: 100%;
-    flex-wrap: ${(props) => (props.ended ? 'nowrap' : 'wrap')};
-    row-gap: 8px;
 `;
 
 const Left = styled.div`

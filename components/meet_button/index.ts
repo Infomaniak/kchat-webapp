@@ -9,7 +9,9 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
 import {connectedKmeetCallUrl} from '../../selectors/kmeet_calls';
 
-import {startOrJoinKmeetCallInChannel} from 'actions/calls';
+import {startOrJoinCallInChannel, startOrJoinCallInChannelV2} from 'actions/calls';
+
+import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import MeetButton from './meet_button';
 
@@ -20,11 +22,13 @@ function mapStateToProps(state: GlobalState) {
     return {
         currentChannelID,
         hasCall: connectedKmeetUrl != null,
+        isCallDialingEnabled: callDialingEnabled(state),
     };
 }
 
 const actions = {
-    startCallInChannel: startOrJoinKmeetCallInChannel,
+    startOrJoinCallInChannel,
+    startOrJoinCallInChannelV2,
 };
 
 export default connect(mapStateToProps, actions)(MeetButton);

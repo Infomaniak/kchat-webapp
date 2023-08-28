@@ -4007,7 +4007,7 @@
   "kmeet.calls.ended": "Finished at {time}",
   "kmeet.calls.join": "Join the meeting",
   "kmeet.calls.open": "Join",
-  "kmeet.calls.start": "Call started",
+  "kmeet.calls.start": "Start a meeting",
   "kmeet.calls.started": "kMeet meeting started",
   "kmeet.calls.ended.title": "Call ended",
   "kmeet.calls.declined": "Call rejected by {usernames}",

@@ -51,13 +51,13 @@ function DialingModal({toneTimeOut}: PropsType) {
         };
     }, []);
 
-    const onHandleAccept = () => {
+    const onHandleAccept = React.useCallback(() => {
         dispatch(joinCallInChannel());
-    };
+    }, [dispatch]);
 
-    const onHandleDecline = () => {
+    const onHandleDecline = React.useCallback(() => {
         dispatch(hangUpCall());
-    };
+    }, [dispatch]);
 
     const getUsersForOverlay = () => {
         if (users.length >= 2) {

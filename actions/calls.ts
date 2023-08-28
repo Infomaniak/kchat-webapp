@@ -10,6 +10,9 @@ import {
     callParameters,
     callUserStatus,
     connectedCallID,
+    connectedCallUrl,
+    connectedChannelID,
+    voiceConnectedChannels,
 } from 'selectors/calls';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
@@ -29,9 +32,9 @@ import {ringing, stopRing} from 'utils/notification_sounds';
 
 import {ChannelType} from '@mattermost/types/channels';
 
-import {connectedKmeetChannels, connectedKmeetCallUrl} from 'selectors/kmeet_calls';
-
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+
+import {connectedKmeetCallUrl, connectedKmeetChannels} from 'selectors/kmeet_calls';
 
 import {closeModal, openModal} from './views/modals';
 
@@ -96,8 +99,44 @@ export function joinCallInChannel() {
     };
 }
 
+// old simplified code for calls that just opens the link and fills store with the url.
+// only used if FeatureFlagIkCallDialing is set to false.
+export function startOrJoinCallInChannel(channelID: string) {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
+        const state = getState();
+        const channels = voiceConnectedChannels(state);
+
+        let data;
+        if (!connectedChannelID(getState()) && !channels[channelID]) {
+            data = await Client4.startMeet(channelID);
+            dispatch({
+                type: ActionTypes.VOICE_CHANNEL_ENABLE,
+            });
+
+            if (data && data.url) {
+                const kmeetUrl = new URL(data.url);
+                window.open(kmeetUrl.href, '_blank', 'noopener');
+            }
+
+            await dispatch({
+                type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
+                data: {
+                    channelID,
+                    userID: getCurrentUserId(getState()),
+                    currentUserID: getCurrentUserId(getState()),
+                    url: data.url,
+                    id: data.id,
+                },
+            });
+        } else if (connectedCallUrl(state) !== null) {
+            const kmeetUrl = new URL(connectedCallUrl(state));
+            window.open(kmeetUrl.href, '_blank', 'noopener');
+        }
+    };
+}
+
 //used to manage action from postType actions and meet button
-export function startOrJoinKmeetCallInChannel(channelID: string) {
+export function startOrJoinCallInChannelV2(channelID: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const state = getState();
         const channels = Object.keys(connectedKmeetChannels(state));
@@ -130,11 +169,12 @@ export function startOrJoinKmeetCallInChannel(channelID: string) {
         }
 
         if (kmeetUrl) {
-            console.log('[calls: startOrJoinKmeetCallInChannel] window.open', kmeetUrl.href);
+            console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
             window.open(kmeetUrl.href, '_blank', 'noopener');
         }
     };
 }
+
 export function updateAudioStatus(dialingID: string, muted = false) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         dispatch({
@@ -207,7 +247,17 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                 }
 
                 console.log('[calls] call received on browser.');
-                launchRingAction(dispatch);
+
+                ringing('Ring');
+                dispatch(openModal(
+                    {
+                        modalId: ModalIdentifiers.INCOMING_CALL,
+                        dialogType: DialingModal,
+                        dialogProps: {
+                            toneTimeOut: 30000,
+                        },
+                    },
+                ));
             }
         } catch (error) {
             console.error('[calls] receivedCall error:', error);
@@ -276,18 +326,6 @@ export function setCallListeners() {
     }
 }
 
-function launchRingAction(dispatch: DispatchFunc): void {
-    ringing('Ring');
-    dispatch(openModal(
-        {
-            modalId: ModalIdentifiers.INCOMING_CALL,
-            dialogType: DialingModal,
-            dialogProps: {
-                toneTimeOut: 30000,
-            },
-        },
-    ));
-}
 function handleDesktopKmeetCall(globalState: GlobalState, currentUserId: string, callMessage: Post): void {
     const currentUser = getCurrentUser(globalState);
     const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);

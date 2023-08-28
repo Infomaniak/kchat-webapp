@@ -35,7 +35,7 @@ import {
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 
-import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {
     getThread as fetchThread,
@@ -762,9 +762,8 @@ const handleNewPostEventDebounced = debouncePostEvent(100);
 export function handleNewPostEvent(msg) {
     return (myDispatch, myGetState) => {
         const post = msg.data.post;
-        const msgProps = post.props;
-        const currentUserId = getCurrentUserId(myGetState());
-        if (msgProps) {
+        if (post.type === 'custom_call' && callDialingEnabled(myGetState()) && post.props) {
+            const currentUserId = getCurrentUserId(myGetState());
             dispatch(receivedCall(post, currentUserId));
         }
         if (window.logPostEvents) {
@@ -1858,9 +1857,11 @@ function handleConferenceUserDisconnected(msg) {
 }
 
 function handleConferenceDeleted(msg) {
-    return (doDispatch) => {
+    return (doDispatch, doGetState) => {
         dispatch(getPostsSince(msg.data.channel_id, Date.now()));
-        dispatch(callNoLongerExist(msg));
+        if (callDialingEnabled(doGetState())) {
+            dispatch(callNoLongerExist(msg));
+        }
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_DELETED,
             data: {

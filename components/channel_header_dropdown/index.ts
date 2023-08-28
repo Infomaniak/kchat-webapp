@@ -33,7 +33,7 @@ import {getChannelHeaderMenuPluginComponents} from 'selectors/plugins';
 
 import {GlobalState} from 'types/store';
 
-import {startOrJoinKmeetCallInChannel} from 'actions/calls';
+import {startOrJoinCallInChannel} from 'actions/calls';
 
 import Desktop from './channel_header_dropdown';
 import Items from './channel_header_dropdown_items';
@@ -86,9 +86,8 @@ const mapStateToProps = (state: GlobalState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-
         actions: bindActionCreators({
-            startOrJoinKmeetCallInChannel,
+            startOrJoinCallInChannel,
         }, dispatch),
     };
 };
