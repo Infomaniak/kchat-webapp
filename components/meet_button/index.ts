@@ -11,9 +11,7 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 
 import {connectedKmeetCallUrl} from '../../selectors/kmeet_calls';
 
-import {startOrJoinCallInChannel, startOrJoinCallInChannelV2} from 'actions/calls';
-
-import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {startOrJoinCallInChannelV2} from 'actions/calls';
 
 import {Action} from 'mattermost-redux/types/actions';
 
@@ -26,13 +24,11 @@ function mapStateToProps(state: GlobalState) {
     return {
         currentChannelID,
         hasCall: connectedKmeetUrl != null,
-        isCallDialingEnabled: callDialingEnabled(state),
     };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     actions: bindActionCreators<ActionCreatorsMapObject<Action>, any>({
-        startOrJoinCallInChannel,
         startOrJoinCallInChannelV2,
     }, dispatch),
 });

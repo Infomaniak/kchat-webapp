@@ -25,7 +25,7 @@ describe('components/ChannelHeaderDropdown', () => {
         dmUserId: '',
         hasCall: false,
         actions: {
-            startOrJoinCallInChannel: jest.fn(() => ({type: ''})),
+            startOrJoinCallInChannelV2: jest.fn(() => ({type: ''})),
         },
     };
     test('should match snapshot with no plugin items', () => {

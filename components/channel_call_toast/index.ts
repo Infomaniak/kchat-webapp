@@ -16,9 +16,7 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels'
 
 import {Client4} from 'mattermost-redux/client';
 
-import {startOrJoinCallInChannelV2, startOrJoinCallInChannel} from 'actions/calls';
-
-import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {startOrJoinCallInChannelV2} from 'actions/calls';
 
 import ChannelCallToast from './component';
 
@@ -64,12 +62,10 @@ const mapStateToProps = (state: GlobalState) => {
         startAt: voiceChannelCallStartAt(state, currentID),
         pictures,
         profiles,
-        isCallDialingEnabled: callDialingEnabled(state),
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators<ActionCreatorsMapObject<Action>, any>({
-    startOrJoinCallInChannel,
     startOrJoinCallInChannelV2,
 }, dispatch);
 

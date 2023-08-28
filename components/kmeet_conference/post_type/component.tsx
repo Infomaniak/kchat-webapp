@@ -15,12 +15,10 @@ import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 interface Props {
     post: Post;
     connectedKmeetUrl: string;
-    isCallDialingEnabled: boolean;
-    startOrJoinCallInChannel: (channelID: string) => void;
     startOrJoinCallInChannelV2: (channelID: string) => void;
 }
 
-const PostType = ({post, connectedKmeetUrl, isCallDialingEnabled, startOrJoinCallInChannelV2, startOrJoinCallInChannel}: Props) => {
+const PostType = ({post, connectedKmeetUrl, startOrJoinCallInChannelV2}: Props) => {
     const intl = useIntl();
 
     const onJoinCallClick = () => {
@@ -29,10 +27,8 @@ const PostType = ({post, connectedKmeetUrl, isCallDialingEnabled, startOrJoinCal
         window.open(kmeetUrl.href, '_blank', 'noopener');
     };
 
-    const dipatchFn = isCallDialingEnabled ? startOrJoinCallInChannelV2 : startOrJoinCallInChannel;
-
     const onStartOrJoinCall = () => {
-        dipatchFn(post.channel_id);
+        startOrJoinCallInChannelV2(post.channel_id);
     };
     moment.locale(String(intl.locale));
 
