@@ -126,7 +126,7 @@ function DialingModal({toneTimeOut}: PropsType) {
                 >
                     <Avatars
                         userIds={getUsersForOverlay().map((usr) => usr.id)}
-                        size='call'
+                        size='xl'
                         totalUsers={users.length}
                         disableProfileOverlay={true}
                         disablePopover={true}

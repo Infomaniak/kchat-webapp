@@ -9,7 +9,7 @@ import './avatar.scss';
 import {Client4} from 'mattermost-redux/client';
 import BotDefaultIcon from 'images/bot_default_icon.png';
 
-export type TAvatarSizeToken = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'| 'call';
+export type TAvatarSizeToken = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 export const getAvatarWidth = (size: TAvatarSizeToken) => {
     switch (size) {
@@ -27,13 +27,12 @@ export const getAvatarWidth = (size: TAvatarSizeToken) => {
         return 50;
     case 'xxl':
         return 128;
-    case 'call':
-        return 50;
     }
     return 0;
 };
 
 type Props = {
+
     // url?: Promise<string> | string;
     url?: string;
     username?: string;
