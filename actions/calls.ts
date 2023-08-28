@@ -175,8 +175,9 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
         try {
             if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at) {
                 const globalState = getState();
-                // eslint-disable-next-line no-return-await
-                [getCallingChannel, getUsersInCall, getCallingUser].forEach(async (fn) => await dispatch(fn(callMessage)));
+                dispatch(getCallingChannel(callMessage));
+                dispatch(getUsersInCall(callMessage));
+                dispatch(getCallingUser(callMessage));
                 replacePreviousAddedConference(dispatch, callMessage, globalState);
                 const {status} = callUserStatus(globalState);
                 const channelType: ChannelType = callParameters(globalState).channel.type;
@@ -263,16 +264,16 @@ export function getCallingChannel(callMessage: Post) {
         ],
     });
 }
+export function setCallListeners() {
+    if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.3.0')) {
+        (window as any).callManager?.onCallJoined((_: any, props: { conferenceId: string }) => {
+            return Client4.acceptIncomingMeetCall(props.conferenceId);
+        });
 
-//get Events from desktop app
-if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.3.0')) {
-    (window as any).callManager?.onCallJoined((_: any, props: { conferenceId: string }) => {
-        return Client4.acceptIncomingMeetCall(props.conferenceId);
-    });
-
-    (window as any).callManager?.onCallDeclined((_: any, props: { conferenceId: string }) => {
-        return Client4.declineIncomingMeetCall(props.conferenceId);
-    });
+        (window as any).callManager?.onCallDeclined((_: any, props: { conferenceId: string }) => {
+            return Client4.declineIncomingMeetCall(props.conferenceId);
+        });
+    }
 }
 
 function launchRingAction(dispatch: DispatchFunc): void {
