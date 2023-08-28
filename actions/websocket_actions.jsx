@@ -5,7 +5,7 @@
 
 import {batchActions} from 'redux-batched-actions';
 
-import {closeModal, openModal} from 'actions/views/modals';
+import {openModal} from 'actions/views/modals';
 import {
     ChannelTypes,
     EmojiTypes,
@@ -73,7 +73,6 @@ import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
 import {setGlobalItem} from 'actions/storage';
 import {getDrafts, transformServerDraft} from 'actions/views/drafts';
 
-import {Client4} from 'mattermost-redux/client';
 import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import {getMyKSuites, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
@@ -87,12 +86,10 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {appsFeatureFlagEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {getStandardAnalytics} from 'mattermost-redux/actions/admin';
 
 import {fetchAppBindings, fetchRHSAppsBindings} from 'mattermost-redux/actions/apps';
 
-import {getConnectionId} from 'selectors/general';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
 import {getGlobalItem} from 'selectors/storage';
@@ -119,7 +116,7 @@ import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
 
 // import DialingModal from 'components/kmeet_conference/ringing_dialog';
-import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
+import {voiceConnectedChannels} from 'selectors/calls';
 
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {
@@ -127,9 +124,7 @@ import {
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
 
-import {stopRing} from 'utils/notification_sounds';
-
-import {callNoLongerExist, hangUpCall, receivedCall} from './calls';
+import {callNoLongerExist, receivedCall} from './calls';
 
 // import {isDesktopApp} from 'utils/user_agent';
 
