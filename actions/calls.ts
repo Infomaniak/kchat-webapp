@@ -81,13 +81,13 @@ export function joinCallInChannel() {
         const state = getState();
         const conferenceId = callConferenceId(state);
         await Client4.acceptIncomingMeetCall(conferenceId);
-        await dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+        dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         const {msg} = callParameters(state);
         stopRing();
         setTimeout(() => {
             if (msg) {
                 const kmeetUrl = new URL(msg.props.url);
-                console.log('[joinCallInChannel]', msg.props.url);
+                console.log('[calls: joinCallInChannel]', msg.props.url);
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
         });
@@ -128,7 +128,7 @@ export function startOrJoinKmeetCallInChannel(channelID: string) {
         }
 
         if (kmeetUrl) {
-            console.log('[startOrJoinKmeetCallInChannel] window.open', kmeetUrl.href);
+            console.log('[calls: startOrJoinKmeetCallInChannel] window.open', kmeetUrl.href);
             window.open(kmeetUrl.href, '_blank', 'noopener');
         }
     };
@@ -190,15 +190,15 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                 });
 
                 if (isKmeetCallCompatibleDesktopApp()) {
-                    console.log('call received on desktop.');
+                    console.log('[calls] call received on desktop.');
                     handleDesktopKmeetCall(globalState, currentUserId, callMessage);
                 } else {
-                    console.log('call received on browser.');
+                    console.log('[calls] call received on browser.');
                     launchRingAction(dispatch);
                 }
             }
         } catch (error) {
-            console.error('receivedCall error:', error);
+            console.error('[calls] receivedCall error:', error);
         }
     };
 }
@@ -217,7 +217,7 @@ export function hangUpCall() {
         const state = getState();
         const conferenceId = callConferenceId(state);
         await Client4.declineIncomingMeetCall(conferenceId);
-        console.log('[hangUpCall]', conferenceId);
+        console.log('[calls: hangUpCall]', conferenceId);
         dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         stopRing();
     };
