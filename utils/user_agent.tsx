@@ -127,9 +127,6 @@ export function isEdge(): boolean {
 export function isDesktopApp(): boolean {
     return userAgent().indexOf('Mattermost') !== -1 && userAgent().indexOf('Electron') !== -1;
 }
-export function isKmeetCallCompatibleDesktopApp(): boolean {
-    return isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0');
-}
 
 export function isWindowsApp(): boolean {
     return isDesktopApp() && isWindows();

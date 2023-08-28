@@ -18,7 +18,7 @@ import {Post} from '@mattermost/types/posts';
 
 import DialingModal from 'components/kmeet_conference/ringing_dialog';
 
-import {isKmeetCallCompatibleDesktopApp} from 'utils/user_agent';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 
 import {imageURLForUser} from 'utils/utils';
 
@@ -30,6 +30,8 @@ import {ringing, stopRing} from 'utils/notification_sounds';
 import {ChannelType} from '@mattermost/types/channels';
 
 import {connectedKmeetChannels, connectedKmeetCallUrl} from 'selectors/kmeet_calls';
+
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import {closeModal, openModal} from './views/modals';
 
@@ -189,13 +191,22 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                     },
                 });
 
-                if (isKmeetCallCompatibleDesktopApp()) {
-                    console.log('[calls] call received on desktop.');
-                    handleDesktopKmeetCall(globalState, currentUserId, callMessage);
-                } else {
-                    console.log('[calls] call received on browser.');
-                    launchRingAction(dispatch);
+                if (isDesktopApp()) {
+                    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.3.0')) {
+                        console.log('[calls] call received on desktop.');
+                        handleDesktopKmeetCall(globalState, currentUserId, callMessage);
+
+                        return;
+                    }
+                    console.warn(`[calls] dialing on desktop is supported from version 2.3 and up, current version is ${getDesktopVersion()}`);
+                    const kmeetUrl = new URL(callMessage.props.url);
+                    window.open(kmeetUrl.href, '_blank', 'noopener');
+
+                    return;
                 }
+
+                console.log('[calls] call received on browser.');
+                launchRingAction(dispatch);
             }
         } catch (error) {
             console.error('[calls] receivedCall error:', error);
@@ -254,7 +265,7 @@ export function getCallingChannel(callMessage: Post) {
 }
 
 //get Events from desktop app
-if (isKmeetCallCompatibleDesktopApp()) {
+if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.3.0')) {
     (window as any).callManager?.onCallJoined((_: any, props: { conferenceId: string }) => {
         return Client4.acceptIncomingMeetCall(props.conferenceId);
     });
