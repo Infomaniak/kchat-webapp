@@ -114,10 +114,7 @@ import {getSiteURL} from 'utils/url';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
-
-// import DialingModal from 'components/kmeet_conference/ringing_dialog';
 import {voiceConnectedChannels} from 'selectors/calls';
-
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
@@ -125,8 +122,6 @@ import {
 import {isDesktopApp} from 'utils/user_agent';
 
 import {callNoLongerExist, receivedCall} from './calls';
-
-// import {isDesktopApp} from 'utils/user_agent';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
