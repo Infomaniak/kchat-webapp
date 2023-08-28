@@ -208,7 +208,6 @@ export default class Reaction extends React.PureComponent<Props, State> {
         if (currentUserReacted && canRemoveReactions) {
             ariaLabelEmoji = `${Utils.localizeMessage('reaction.removeReact.ariaLabel', 'remove reaction')} ${emojiNameWithSpaces}`;
         }
-        const emojiUrl = this.props.emojiImageUrl;
 
         return (
             <OverlayTrigger

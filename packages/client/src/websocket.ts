@@ -19,8 +19,8 @@ function isDesktopApp(): boolean {
 }
 
 export type MessageListener = (msg: WebSocketMessage) => void;
-export type FirstConnectListener = () => void;
-export type ReconnectListener = () => void;
+export type FirstConnectListener = (socketId?: string) => void;
+export type ReconnectListener = (socketId?: string) => void;
 export type MissedMessageListener = () => void;
 export type ErrorListener = (event: Event) => void;
 export type CloseListener = (connectFailCount: number) => void;
@@ -139,7 +139,7 @@ export default class WebSocketClient {
     ) {
         let currentUserId: any;
         let currentUserTeamId: any;
-        let currentPresenceChannelId: any;
+        let currentPresenceChannelId: string | undefined;
 
         // Store this for onmessage reconnect
         if (userId) {
@@ -264,7 +264,10 @@ export default class WebSocketClient {
             this.subscribeToUserChannel(userId || currentUserId);
             this.subscribeToUserTeamScopedChannel(userTeamId || currentUserTeamId);
 
-            this.bindPresenceChannel(presenceChannelId || currentPresenceChannelId);
+            const presenceChannel = presenceChannelId || currentPresenceChannelId;
+            if (presenceChannel) {
+                this.bindPresenceChannel(presenceChannel);
+            }
             this.bindChannelGlobally(this.teamChannel);
             this.bindChannelGlobally(this.userChannel);
 
@@ -278,12 +281,14 @@ export default class WebSocketClient {
             console.log('[websocket] re-established connection');
             if (this.connectFailCount > 0) {
                 console.log('[websocket] calling reconnect callbacks');
-                this.reconnectCallback?.();
-                this.reconnectListeners.forEach((listener) => listener());
+                console.log('[websocket] socketId', this.conn?.connection.socket_id);
+                this.reconnectCallback?.(this.conn?.connection.socket_id);
+                this.reconnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
             } else if (this.firstConnectCallback || this.firstConnectListeners.size > 0) {
                 console.log('[websocket] calling first connect callbacks');
-                this.firstConnectCallback?.();
-                this.firstConnectListeners.forEach((listener) => listener());
+                console.log('[websocket] socketId', this.conn?.connection.socket_id);
+                this.firstConnectCallback?.(this.conn?.connection.socket_id);
+                this.firstConnectListeners.forEach((listener) => listener(this.conn?.connection.socket_id));
             }
             this.connectFailCount = 0;
             this.errorCount = 0;

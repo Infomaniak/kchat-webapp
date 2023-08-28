@@ -19,9 +19,10 @@ type Props = {
     status: UserStatus['status'];
     displayName: string;
     draft: Draft;
+    isRemote: boolean;
 }
 
-function DraftRow({draft, user, status, displayName}: Props) {
+function DraftRow({draft, user, status, displayName, isRemote}: Props) {
     const currentTeamId = useSelector(getCurrentTeamId);
     const isScheduled = Boolean(draft.value.timestamp);
     const scheduledWillNotBeSent = useSelector((state: GlobalState) => !haveIChannelPermission(state, currentTeamId, draft.value.channelId, Permissions.CREATE_POST)) && isScheduled;
@@ -34,6 +35,7 @@ function DraftRow({draft, user, status, displayName}: Props) {
                 user={user}
                 status={status}
                 displayName={displayName}
+                isRemote={isRemote}
                 isScheduled={isScheduled}
                 scheduledWillNotBeSent={scheduledWillNotBeSent}
             />
@@ -47,6 +49,7 @@ function DraftRow({draft, user, status, displayName}: Props) {
                 user={user}
                 status={status}
                 displayName={displayName}
+                isRemote={isRemote}
                 isScheduled={isScheduled}
                 scheduledWillNotBeSent={scheduledWillNotBeSent}
             />

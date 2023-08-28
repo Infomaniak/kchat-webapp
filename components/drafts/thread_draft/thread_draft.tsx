@@ -1,8 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useMemo, useEffect, useState} from 'react';
+import React, {memo, useMemo, useEffect, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+
+import {useHistory} from 'react-router-dom';
 
 import {DispatchFunc} from 'mattermost-redux/types/actions';
 import type {UserThread, UserThreadSynthetic} from '@mattermost/types/threads';
@@ -16,7 +18,7 @@ import {GlobalState} from 'types/store';
 import {getPost} from 'mattermost-redux/actions/posts';
 
 import {selectPost} from 'actions/views/rhs';
-import {removeDraft, addToUpdateDraftQueue, upsertScheduleDraft} from 'actions/views/drafts';
+import {removeDraft, addToUpdateDraftQueue, upsertScheduleDraft, setGlobalDraftSource} from 'actions/views/drafts';
 import {makeOnSubmit} from 'actions/views/create_comment';
 import {closeModal, openModal} from 'actions/views/modals';
 import {setGlobalItem} from 'actions/storage';
@@ -33,6 +35,7 @@ import OverrideDraftModal from 'components/schedule_post/override_draft_modal';
 
 type Props = {
     channel: Channel;
+    channelUrl: string;
     displayName: string;
     draftId: string;
     rootId: UserThread['id'] | UserThreadSynthetic['id'];
@@ -41,12 +44,14 @@ type Props = {
     type: 'channel' | 'thread';
     user: UserProfile;
     value: PostDraft;
+    isRemote: boolean;
     isScheduled: boolean;
     scheduledWillNotBeSent: boolean;
 }
 
 function ThreadDraft({
     channel,
+    channelUrl,
     displayName,
     draftId,
     rootId,
@@ -55,12 +60,18 @@ function ThreadDraft({
     type,
     user,
     value,
+    isRemote,
     isScheduled,
     scheduledWillNotBeSent,
 }: Props) {
     const dispatch = useDispatch<DispatchFunc>();
+    const history = useHistory();
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const threadDraft = useSelector((state: GlobalState) => getGlobalItem(state, StoragePrefixes.COMMENT_DRAFT + value.rootId, {}));
+
+    const goToChannel = () => {
+        history.push(channelUrl);
+    };
 
     useEffect(() => {
         if (!thread?.id) {
@@ -76,9 +87,9 @@ function ThreadDraft({
         return () => () => Promise.resolve({data: true});
     }, [channel.id, thread?.id]);
 
-    const handleOnDelete = (id: string) => {
-        dispatch(removeDraft(id));
-    };
+    const handleOnDelete = useCallback((id: string) => {
+        dispatch(removeDraft(id, channel.id, rootId));
+    }, [channel.id, rootId]);
 
     const handleOnEdit = (_e?: React.MouseEvent, redirectToThread?: boolean) => {
         if (!redirectToThread && isScheduled) {
@@ -128,12 +139,13 @@ function ThreadDraft({
         Reflect.deleteProperty(newDraft, 'timestamp');
 
         dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${newDraft.rootId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
+        dispatch(setGlobalDraftSource(`${StoragePrefixes.DRAFT}${newDraft.rootId}_${newDraft.id}`, false));
 
         // Remove previously existing thread draft
-        await dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId));
+        await dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, channel.id, newDraft.rootId));
 
         // Update thread draft
-        const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, newDraft, newDraft.rootId, true));
+        const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.COMMENT_DRAFT + newDraft.rootId, value, newDraft.rootId, true, true));
         if (error) {
             dispatch(setGlobalItem(`${StoragePrefixes.COMMENT_DRAFT}${newDraft.rootId}_${newDraft.id}`, value));
         }
@@ -162,6 +174,7 @@ function ThreadDraft({
                                 isScheduled={isScheduled}
                                 scheduleTimestamp={value.timestamp}
                                 isInvalid={scheduledWillNotBeSent}
+                                goToChannel={goToChannel}
                                 onDelete={handleOnDelete}
                                 onEdit={handleOnEdit}
                                 onSend={handleOnSend}
@@ -177,7 +190,7 @@ function ThreadDraft({
                             />
                         )}
                         timestamp={value.updateAt}
-                        remote={value.remote || false}
+                        remote={isRemote || false}
                         isScheduled={isScheduled}
                         scheduledTimestamp={value.timestamp}
                         scheduledWillNotBeSent={scheduledWillNotBeSent}

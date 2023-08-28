@@ -27,6 +27,7 @@ jest.mock('mattermost-redux/actions/posts', () => ({
 
 jest.mock('actions/emoji_actions', () => ({
     addRecentEmoji: (...args: any[]) => ({type: 'MOCK_ADD_RECENT_EMOJI', args}),
+    addRecentEmojis: (...args: any[]) => ({type: 'MOCK_ADD_RECENT_EMOJIS', args}),
 }));
 
 jest.mock('actions/notification_actions', () => ({
@@ -40,10 +41,6 @@ jest.mock('actions/storage', () => {
         setGlobalItem: (...args: any[]) => ({type: 'MOCK_SET_GLOBAL_ITEM', args}),
     };
 });
-
-jest.mock('actions/views/drafts', () => ({
-    removeDraft: (...args: any[]) => ({type: 'MOCK_REMOVE_DRAFT', args}),
-}));
 
 jest.mock('utils/user_agent', () => ({
     isIosClassic: jest.fn().mockReturnValueOnce(true).mockReturnValue(false),
@@ -352,8 +349,8 @@ describe('Actions.Posts', () => {
                 args: [newPost, files],
                 type: 'MOCK_CREATE_POST_IMMEDIATELY',
             }, {
-                args: ['draft_current_channel_id'],
-                type: 'MOCK_REMOVE_DRAFT',
+                args: ['draft_current_channel_id', null],
+                type: 'MOCK_SET_GLOBAL_ITEM',
             }];
 
             await testStore.dispatch(Actions.createPost(newPost, files));
@@ -365,8 +362,8 @@ describe('Actions.Posts', () => {
                     args: [newReply, files],
                     type: 'MOCK_CREATE_POST',
                 }, {
-                    args: ['comment_draft_new_post_id'],
-                    type: 'MOCK_REMOVE_DRAFT',
+                    args: ['comment_draft_new_post_id', null],
+                    type: 'MOCK_SET_GLOBAL_ITEM',
                 },
             ];
 
@@ -380,14 +377,14 @@ describe('Actions.Posts', () => {
             const files: FileInfo[] = [];
 
             const immediateExpectedState = [{
-                args: ['+1'],
-                type: 'MOCK_ADD_RECENT_EMOJI',
+                args: [['+1']],
+                type: 'MOCK_ADD_RECENT_EMOJIS',
             }, {
                 args: [newPost, files],
                 type: 'MOCK_CREATE_POST',
             }, {
-                args: ['draft_current_channel_id'],
-                type: 'MOCK_REMOVE_DRAFT',
+                args: ['draft_current_channel_id', null],
+                type: 'MOCK_SET_GLOBAL_ITEM',
             }];
 
             await testStore.dispatch(Actions.createPost(newPost, files));
@@ -400,14 +397,14 @@ describe('Actions.Posts', () => {
             const files: FileInfo[] = [];
 
             const immediateExpectedState = [{
-                args: ['cake'],
-                type: 'MOCK_ADD_RECENT_EMOJI',
+                args: [['cake']],
+                type: 'MOCK_ADD_RECENT_EMOJIS',
             }, {
                 args: [newPost, files],
                 type: 'MOCK_CREATE_POST',
             }, {
-                args: ['draft_current_channel_id'],
-                type: 'MOCK_REMOVE_DRAFT',
+                args: ['draft_current_channel_id', null],
+                type: 'MOCK_SET_GLOBAL_ITEM',
             }];
 
             await testStore.dispatch(Actions.createPost(newPost, files));
@@ -420,17 +417,14 @@ describe('Actions.Posts', () => {
             const files: FileInfo[] = [];
 
             const immediateExpectedState = [{
-                args: ['cake'],
-                type: 'MOCK_ADD_RECENT_EMOJI',
-            }, {
-                args: ['+1'],
-                type: 'MOCK_ADD_RECENT_EMOJI',
+                args: [['cake', '+1']],
+                type: 'MOCK_ADD_RECENT_EMOJIS',
             }, {
                 args: [newPost, files],
                 type: 'MOCK_CREATE_POST',
             }, {
-                args: ['draft_current_channel_id'],
-                type: 'MOCK_REMOVE_DRAFT',
+                args: ['draft_current_channel_id', null],
+                type: 'MOCK_SET_GLOBAL_ITEM',
             }];
 
             await testStore.dispatch(Actions.createPost(newPost, files));

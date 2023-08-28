@@ -1,12 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useState} from 'react';
+import React, {memo, useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
 import {createPost} from 'actions/post_actions';
-import {removeDraft, upsertScheduleDraft, addToUpdateDraftQueue} from 'actions/views/drafts';
+import {removeDraft, upsertScheduleDraft, addToUpdateDraftQueue, setGlobalDraftSource} from 'actions/views/drafts';
 import {closeModal, openModal} from 'actions/views/modals';
 import {setGlobalItem} from 'actions/storage';
 import {getGlobalItem} from 'selectors/storage';
@@ -38,6 +38,7 @@ type Props = {
     type: 'channel' | 'thread';
     user: UserProfile;
     value: PostDraft;
+    isRemote: boolean;
     isScheduled: boolean;
     scheduledWillNotBeSent: boolean;
 }
@@ -51,6 +52,7 @@ function ChannelDraft({
     type,
     user,
     value,
+    isRemote,
     isScheduled,
     scheduledWillNotBeSent,
 }: Props) {
@@ -58,6 +60,10 @@ function ChannelDraft({
     const history = useHistory();
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const channelDraft = useSelector((state: GlobalState) => getGlobalItem(state, StoragePrefixes.DRAFT + value.channelId, {}));
+
+    const goToChannel = () => {
+        history.push(channelUrl);
+    };
 
     const handleOnEdit = () => {
         if (isScheduled) {
@@ -67,9 +73,9 @@ function ChannelDraft({
         history.push(channelUrl);
     };
 
-    const handleOnDelete = (id: string) => {
-        dispatch(removeDraft(id));
-    };
+    const handleOnDelete = useCallback((id: string) => {
+        dispatch(removeDraft(id, channel.id));
+    }, [dispatch, channel.id]);
 
     const handleOnSend = async (id: string) => {
         const post = {} as Post;
@@ -85,7 +91,7 @@ function ChannelDraft({
         }
 
         dispatch(createPost(post, value.fileInfos));
-        dispatch(removeDraft(id));
+        dispatch(removeDraft(id, channel.id));
 
         history.push(channelUrl);
     };
@@ -121,12 +127,13 @@ function ChannelDraft({
         Reflect.deleteProperty(newDraft, 'timestamp');
 
         dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, {message: '', fileInfos: [], uploadsInProgress: []}));
+        dispatch(setGlobalDraftSource(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, false));
 
         // Remove previously existing channel draft
-        await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId));
+        await dispatch(removeDraft(StoragePrefixes.DRAFT + newDraft.channelId, channel.id));
 
         // Update channel draft
-        const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.DRAFT + newDraft.channelId, newDraft, '', true));
+        const {error} = await dispatch(addToUpdateDraftQueue(StoragePrefixes.DRAFT + newDraft.channelId, value, '', true, true));
         if (error) {
             dispatch(setGlobalItem(`${StoragePrefixes.DRAFT}${newDraft.channelId}_${newDraft.id}`, value));
         }
@@ -155,6 +162,7 @@ function ChannelDraft({
                                 isScheduled={isScheduled}
                                 scheduleTimestamp={value.timestamp}
                                 isInvalid={scheduledWillNotBeSent}
+                                goToChannel={goToChannel}
                                 onDelete={handleOnDelete}
                                 onEdit={handleOnEdit}
                                 onSend={handleOnSend}
@@ -167,10 +175,11 @@ function ChannelDraft({
                                 channel={channel}
                                 type={type}
                                 userId={user.id}
+                                goToChannel={goToChannel}
                             />
                         )}
                         timestamp={value.updateAt}
-                        remote={value.remote || false}
+                        remote={isRemote || false}
                         isScheduled={isScheduled}
                         scheduledTimestamp={value.timestamp}
                         scheduledWillNotBeSent={scheduledWillNotBeSent}

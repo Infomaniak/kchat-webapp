@@ -1,6 +1,10 @@
 @import 'sass/utils/mixins';
 @import 'sass/utils/functions';
 
+.tooltip:has(.reactions-xl) {
+    min-width: 300px;
+}
+
 .Reaction {
     @include button-style--none;
 

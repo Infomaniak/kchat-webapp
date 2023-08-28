@@ -15,7 +15,7 @@ import {PostDraft} from 'types/store/draft';
 import {getGlobalItem} from 'selectors/storage';
 import {makeGetDrafts} from 'selectors/drafts';
 
-import {StoragePrefixes} from 'utils/constants';
+import {ActionTypes, StoragePrefixes} from 'utils/constants';
 
 import type {Draft as ServerDraft} from '@mattermost/types/drafts';
 import type {UserProfile} from '@mattermost/types/users';
@@ -80,16 +80,20 @@ export function getDrafts(teamId: string) {
     };
 }
 
-export function removeDraft(key: string) {
+export function removeDraft(key: string, channelId: string, rootId = '') {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
-        const draftId = getGlobalItem(state, key, {}).id;
+        const draft = getGlobalItem(state, key, {});
 
         dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
 
-        if (syncedDraftsAreAllowedAndEnabled(state) && draftId) {
+        if (syncedDraftsAreAllowedAndEnabled(state)) {
             try {
-                await Client4.deleteDraft(draftId);
+                if (draft.timestamp) {
+                    await Client4.deleteScheduledDraft(draft.id);
+                } else {
+                    await Client4.deleteDraft(channelId, rootId);
+                }
             } catch (error) {
                 return {
                     data: false,
@@ -102,13 +106,13 @@ export function removeDraft(key: string) {
 }
 
 // Assert previous call ended before dispatching the action again to ensure latest draftId is used and prevent multiple draft creation on the same channel
-export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false) => {
+export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) => {
     return (dispatch: DispatchFunc) => {
-        return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save)));
+        return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save, scheduleDelete)));
     };
 };
 
-function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false) {
+export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
         const activeDraft = getGlobalItem(state, key, {});
@@ -121,24 +125,35 @@ function updateDraft(key: string, value: PostDraft|null, rootId = '', save = fal
                 id: value.id || activeDraft.id,
                 createAt: data.createAt || timestamp,
                 updateAt: timestamp,
-                remote: false,
             };
         }
 
-        if (updatedValue && !updatedValue.message && !updatedValue.fileInfos.length && !updatedValue.uploadsInProgress.length) {
-            return dispatch(removeDraft(key));
+        if (scheduleDelete) {
+            const newValue = {...updatedValue};
+            Reflect.deleteProperty(newValue, 'timestamp');
+            dispatch(setGlobalDraft(key, newValue as PostDraft, false));
+        } else {
+            dispatch(setGlobalDraft(key, updatedValue, false));
         }
 
         if (syncedDraftsAreAllowedAndEnabled(state) && save && updatedValue) {
             const userId = getCurrentUserId(state);
+
             try {
-                const {id} = await upsertDraft(updatedValue, userId, rootId);
-                updatedValue.id = id;
+                if (value?.message === '' || value?.message.replace(/\s/g, '').length || (value && value?.fileInfos.length > 0)) {
+                    if (value?.message.replace(/\s/g, '').length) {
+                        const {id} = await upsertDraft(updatedValue, userId, rootId, scheduleDelete);
+                        updatedValue.id = id;
+                    } else {
+                        //This case is when there is a file attached with no message
+                        await upsertDraft({...updatedValue, message: ''}, userId, rootId, scheduleDelete);
+                    }
+                }
             } catch (error) {
                 return {data: false, error};
             }
         }
-        dispatch(setGlobalItem(key, updatedValue));
+
         return {data: true};
     };
 }
@@ -170,7 +185,7 @@ export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''):
     };
 }
 
-function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '') {
+function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', scheduleDelete = false) {
     const fileIds = draft.fileInfos.map((file) => file.id);
     const newDraft = {
         id: draft.id,
@@ -187,11 +202,14 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '') {
         priority: draft.metadata?.priority as PostPriorityMetadata,
     };
 
-    if (newDraft.id) {
-        return Client4.updateDraft(newDraft as ServerDraft);
+    if (draft.timestamp && draft.id) {
+        if (scheduleDelete) {
+            Reflect.deleteProperty(newDraft, 'timestamp');
+        }
+        return Client4.updateScheduledDraft(newDraft);
     }
 
-    return Client4.createDraft(newDraft);
+    return Client4.upsertDraft(newDraft);
 }
 
 export function setDraftsTourTipPreference(initializationState: Record<string, boolean>): ActionFunc {
@@ -206,6 +224,34 @@ export function setDraftsTourTipPreference(initializationState: Record<string, b
         };
         await dispatch(savePreferences(currentUserId, [preference]));
         return {data: true};
+    };
+}
+
+export function setGlobalDraft(key: string, value: PostDraft|null, isRemote: boolean) {
+    return (dispatch: DispatchFunc) => {
+        if (value && !value.message) {
+            value.message = ''; // prevent message to be null and raise an exception
+        }
+        if (value?.message === '' || (value?.message?.replace(/\s/g, '').length) || (value && value?.fileInfos.length > 0)) {
+            if (value?.message.replace(/\s/g, '').length) {
+                dispatch(setGlobalItem(key, value));
+            } else {
+                //This case is when there is a file attached with no message
+                dispatch(setGlobalItem(key, {...value, message: ''}));
+            }
+        }
+        dispatch(setGlobalDraftSource(key, isRemote));
+        return {data: true};
+    };
+}
+
+export function setGlobalDraftSource(key: string, isRemote: boolean) {
+    return {
+        type: ActionTypes.SET_DRAFT_SOURCE,
+        data: {
+            key,
+            isRemote,
+        },
     };
 }
 

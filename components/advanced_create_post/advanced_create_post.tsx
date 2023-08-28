@@ -74,7 +74,7 @@ import {FilePreviewInfo} from '../file_preview/file_preview';
 const KeyCodes = Constants.KeyCodes;
 
 function isDraftEmpty(draft: PostDraft): boolean {
-    return !draft || (!draft.message && draft.fileInfos.length === 0);
+    return !draft || (!draft.message && draft.fileInfos?.length === 0);
 }
 
 // Temporary fix for IE-11, see MM-13423
@@ -125,6 +125,9 @@ type Props = {
 
     // Data used for populating message state from previous draft
     draft: PostDraft;
+
+    // Data used for knowing if the draft came from a WS event
+    isRemoteDraft: boolean;
 
     // Data used dispatching handleViewAction ex: edit post
     latestReplyablePostId?: string;
@@ -235,6 +238,8 @@ type Props = {
         savePreferences: (userId: string, preferences: PreferenceType[]) => ActionResult;
 
         searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined) => Promise<{ data: any }>;
+
+        setGlobalDraft: (key: string, draft: PostDraft, save: boolean) => Promise<{ data: any }>;
     };
 
     groupsWithAllowReference: Map<string, Group> | null;
@@ -283,7 +288,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         };
         if (
             props.currentChannel.id !== state.currentChannel.id ||
-            (props.draft.remote && props.draft.message !== state.message)
+            (props.isRemoteDraft && props.draft.message !== state.message)
         ) {
             updatedState = {
                 ...updatedState,
@@ -298,8 +303,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            message: this.props.draft.message,
-            caretPosition: this.props.draft.message.length,
+            message: props.draft.message,
+            caretPosition: props.draft.message.length,
             submitting: false,
             showEmojiPicker: false,
             uploadsProgressPercent: {},
@@ -395,10 +400,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     show: !isDraftEmpty(draft),
                     remote: false,
                 } as PostDraft;
+
+                this.saveDraft(props, true);
             }
         }
-
-        this.saveDraft(props, true);
     }
 
     saveDraft = (props = this.props, save = false) => {
@@ -522,6 +527,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             const updatedDraft = {
                 ...this.props.draft,
                 ...this.draftsForChannel[channelId],
+                id: this.draftsForChannel[channelId]?.id ?? this.props.draft.id,
                 timestamp: scheduleUTCTimestamp,
                 channelId,
                 remote: false,
@@ -590,8 +596,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         this.isDraftSubmitting = false;
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
-        this.draftsForChannel[channelId] = null;
+        this.removeDraft(channelId);
     }
 
     handleNotifyAllConfirmation = (isSchedule = false, scheduleUTCTimestamp?: number) => this.doSubmit(undefined, isSchedule, scheduleUTCTimestamp);
@@ -605,6 +610,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 channelTimezoneCount,
                 memberNotifyCount,
                 onConfirm: () => this.handleNotifyAllConfirmation(isSchedule, scheduleUTCTimestamp),
+                onExited: () => {
+                    this.isDraftSubmitting = false;
+                },
             },
         });
     }
@@ -685,7 +693,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
         if (memberNotifyCount > 0) {
             this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp);
-            this.isDraftSubmitting = false;
             return;
         }
 
@@ -797,7 +804,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     sendReaction(isReaction: RegExpExecArray) {
-        const channelId = this.props.currentChannel.id;
         const action = isReaction[1];
         const emojiName = isReaction[2];
         const postId = this.props.latestReplyablePostId;
@@ -808,8 +814,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             this.props.actions.removeReaction(postId, emojiName);
         }
 
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
-        this.draftsForChannel[channelId] = null;
+        this.removeDraft();
     }
 
     focusTextbox = (keepFocus = false) => {
@@ -892,25 +897,28 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         };
 
         this.handleDraftChange(draft);
-    }
+    };
 
-    handleDraftChange = (draft: PostDraft, instant = false, save = false) => {
-        const channelId = this.props.currentChannel.id;
-
+    handleDraftChange = (draft: PostDraft, channelId = this.props.currentChannel.id, instant = false) => {
         if (this.saveDraftFrame) {
             clearTimeout(this.saveDraftFrame);
         }
 
         if (instant) {
-            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
+            this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
         } else {
             this.saveDraftFrame = window.setTimeout(() => {
-                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId, save);
+                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
             }, Constants.SAVE_DRAFT_TIMEOUT);
         }
 
         this.draftsForChannel[channelId] = draft;
     }
+
+    removeDraft = (channelId = this.props.currentChannel.id) => {
+        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
+        this.draftsForChannel[channelId] = null;
+    };
 
     scheduleDraft = async (draft: PostDraft) => {
         const channelId = this.props.currentChannel.id;
@@ -979,8 +987,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         };
 
         const channelId = this.props.currentChannel.id;
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, draft, channelId);
-        this.draftsForChannel[channelId] = draft;
+        this.handleDraftChange(draft, channelId, true);
     }
 
     handleFileUploadChange = () => {
@@ -1029,7 +1036,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             draft.fileInfos = sortFileInfos(draft.fileInfos.concat(fileInfos), this.props.locale);
         }
 
-        this.handleDraftChange(draft, true, true);
+        this.handleDraftChange(draft, channelId, true);
     }
 
     handleUploadError = (err: string | ServerError, clientId?: string, channelId?: string) => {
@@ -1054,8 +1061,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     ...draft,
                     uploadsInProgress,
                 };
-                this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, modifiedDraft, channelId);
-                this.draftsForChannel[channelId] = modifiedDraft;
+                this.handleDraftChange(modifiedDraft, channelId, true);
             }
         }
 
@@ -1065,6 +1071,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     removePreview = (id: string) => {
         let modifiedDraft = {} as PostDraft;
         const draft = {...this.props.draft};
+        const channelId = this.props.currentChannel.id;
 
         // Clear previous errors
         this.setState({serverError: null});
@@ -1095,7 +1102,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             };
         }
 
-        this.handleDraftChange(modifiedDraft, true, true);
+        this.handleDraftChange(modifiedDraft, this.props.currentChannel.id, true);
 
         this.handleFileUploadChange();
 
@@ -1412,15 +1419,12 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     handleBlur = () => {
-        this.saveDraftFrame = window.setTimeout(() => {
-            if (this.isDraftSubmitting) {
-                return;
-            }
+        if (!this.isDraftSubmitting) {
             this.saveDraftWithShow();
-        }, Constants.SAVE_DRAFT_TIMEOUT);
+        }
 
         this.lastBlurAt = Date.now();
-    }
+    };
 
     handleEmojiClose = () => {
         this.setState({showEmojiPicker: false});
@@ -1495,8 +1499,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             ...this.props.draft,
             message: newMessage,
         };
-        this.handleDraftChange(draft, true, true);
 
+        this.handleDraftChange(draft);
         this.handleEmojiClose();
     }
 
@@ -1534,7 +1538,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             updatedDraft.metadata = {};
         }
 
-        this.handleDraftChange(updatedDraft, true);
+        this.handleDraftChange(updatedDraft, this.props.currentChannel.id, true);
         this.focusTextbox();
     };
 

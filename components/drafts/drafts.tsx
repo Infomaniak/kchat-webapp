@@ -12,9 +12,11 @@ import Header from 'components/widgets/header';
 
 import {selectLhsItem} from 'actions/views/lhs';
 import {suppressRHS, unsuppressRHS} from 'actions/views/rhs';
+import {loadProfilesForSidebar} from 'actions/user_actions';
 import {LhsItemType, LhsPage} from 'types/store/lhs';
 
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
+import SettingsButton from 'components/global_header/right_controls/settings_button';
 
 import DraftRow from './draft_row';
 import DraftsIllustration from './drafts_illustration';
@@ -29,11 +31,13 @@ type Props = {
     status: UserStatus['status'];
     localDraftsAreEnabled: boolean;
     invalidScheduledAmount: number;
+    draftRemotes: Record<string, boolean>;
 }
 
 function Drafts({
     displayName,
     drafts,
+    draftRemotes,
     status,
     user,
     localDraftsAreEnabled,
@@ -57,6 +61,7 @@ function Drafts({
     useEffect(() => {
         dispatch(selectLhsItem(LhsItemType.Page, LhsPage.Drafts));
         dispatch(suppressRHS);
+        loadProfilesForSidebar();
 
         return () => {
             dispatch(unsuppressRHS);
@@ -107,6 +112,22 @@ function Drafts({
                     defaultMessage: 'Any messages you\'ve started will show here',
                 })}
                 right={(
+
+                    // <span
+                    //     aria-label='controls'
+                    //     className='controls'
+                    // >
+                    //     <DraftFilterMenu
+                    //         filter={filter}
+                    //         setFilter={setFilter}
+                    //     />
+                    //     <SettingsButton
+                    //         className='draft-filter-menu__button'
+                    //         icon={'cog-outline'}
+                    //         tab='drafts'
+                    //         tooltipPlacement='top'
+                    //     />
+                    // </span>
                     <DraftFilterMenu
                         filter={filter}
                         setFilter={setFilter}
@@ -120,6 +141,7 @@ function Drafts({
                         key={d.key}
                         displayName={displayName}
                         draft={d}
+                        isRemote={draftRemotes[d.key]}
                         user={user}
                         status={status}
                     />

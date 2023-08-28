@@ -624,14 +624,13 @@ export function setEditChannelMembers(active: boolean) {
     };
 }
 
-export function showSettings() {
+export function showSettings(tab = 'display') {
     return (dispatch: DispatchFunc) => {
-        dispatch(
-            {
-                type: ActionTypes.UPDATE_RHS_STATE,
-                state: RHSStates.SETTINGS,
-            },
-        );
+        dispatch({
+            type: ActionTypes.UPDATE_RHS_STATE,
+            state: RHSStates.SETTINGS,
+            tab,
+        });
 
         return {data: true};
     };

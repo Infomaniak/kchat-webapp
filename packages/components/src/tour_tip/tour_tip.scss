@@ -361,6 +361,16 @@
         }
     }
 
+    &__info {
+        align-self: flex-start;
+        margin-top: 0.6rem;
+        font-size: 12px;
+
+        span {
+            opacity: 0.9;
+        }
+    }
+
     &__backdrop {
         position: absolute;
         z-index: 999;

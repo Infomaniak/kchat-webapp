@@ -372,6 +372,8 @@ export const ActionTypes = keyMirror({
     CALL_USERS_IN_CONF: null,
     CALL_CALLING_USER: null,
     CALL_CONF_CHANNEL: null,
+
+    SET_DRAFT_SOURCE: null,
 });
 
 export const PostRequestTypes = keyMirror({
@@ -819,6 +821,7 @@ export const TELEMETRY_LABELS = {
     SAVE: 'save',
     COPY_LINK: 'copy_link',
     COPY_TEXT: 'copy_text',
+    COPY_ID: 'copy_id',
     DELETE: 'delete',
     EDIT: 'edit',
     FOLLOW: 'follow',

@@ -5,6 +5,7 @@
 
 import {batchActions} from 'redux-batched-actions';
 
+import {Client4} from 'mattermost-redux/client';
 import {openModal} from 'actions/views/modals';
 import {
     ChannelTypes,
@@ -71,7 +72,7 @@ import {
 } from 'mattermost-redux/actions/users';
 import {removeNotVisibleUsers} from 'mattermost-redux/actions/websocket';
 import {setGlobalItem} from 'actions/storage';
-import {getDrafts, transformServerDraft} from 'actions/views/drafts';
+import {getDrafts, setGlobalDraft, transformServerDraft} from 'actions/views/drafts';
 
 import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import {getMyKSuites, getCurrentRelativeTeamUrl, getCurrentTeamId, getCurrentTeamUrl, getTeam} from 'mattermost-redux/selectors/entities/teams';
@@ -237,7 +238,7 @@ function restart() {
     dispatch(getClientConfig());
 }
 
-export async function reconnect() {
+export async function reconnect(socketId?: string) {
     // eslint-disable-next-line
     console.log('Reconnecting WebSocket');
     if (isDesktopApp()) {
@@ -267,6 +268,10 @@ export async function reconnect() {
         type: GeneralTypes.WEBSOCKET_SUCCESS,
         timestamp: Date.now(),
     });
+
+    if (socketId) {
+        Client4.setSocketId(socketId);
+    }
 
     const state = getState();
     const currentTeamId = getCurrentTeamId(state);
@@ -365,7 +370,7 @@ export function unregisterAllPluginWebSocketEvents(pluginId) {
     Reflect.deleteProperty(pluginEventHandlers, pluginId);
 }
 
-function handleFirstConnect() {
+function handleFirstConnect(socketId?: string) {
     dispatch(batchActions([
         {
             type: GeneralTypes.WEBSOCKET_SUCCESS,
@@ -373,6 +378,10 @@ function handleFirstConnect() {
         },
         clearErrors(),
     ]));
+
+    if (socketId) {
+        Client4.setSocketId(socketId);
+    }
 }
 
 function handleClose(failCount) {
@@ -1900,8 +1909,11 @@ function handleUpsertDraftEvent(msg) {
 
         const draft = msg.data.draft;
         const {key, value} = transformServerDraft(draft);
+        const currentDraft = getGlobalItem(state, key, {});
         value.show = true;
-        value.remote = false;
+        if (currentDraft && currentDraft.uploadsInProgress && currentDraft.uploadsInProgress.length) {
+            value.uploadsInProgress = currentDraft.uploadsInProgress;
+        }
 
         if (draft.delete_at) {
             return;
@@ -1921,7 +1933,7 @@ function handleUpsertDraftEvent(msg) {
             }
         }
 
-        doDispatch(setGlobalItem(key, value));
+        doDispatch(setGlobalDraft(key, value, true));
     };
 }
 
@@ -1937,7 +1949,11 @@ function handleDeleteDraftEvent(msg) {
             return;
         }
 
-        doDispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: [], remote: false}));
+        doDispatch(setGlobalItem(key, {
+            message: '',
+            fileInfos: [],
+            uploadsInProgress: [],
+        }));
     };
 }
 

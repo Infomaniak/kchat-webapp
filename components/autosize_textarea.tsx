@@ -20,8 +20,8 @@ export class AutosizeTextarea extends React.PureComponent<Props> {
     private height: number;
 
     private textarea?: HTMLTextAreaElement;
-    private referenceRef: React.RefObject<HTMLTextAreaElement>;
-    private measuringRef: React.RefObject<HTMLDivElement>;
+    private referenceRef: React.RefObject<HTMLDivElement>;
+    private referenceObserver: ResizeObserver;
 
     constructor(props: Props) {
         super(props);
@@ -29,30 +29,38 @@ export class AutosizeTextarea extends React.PureComponent<Props> {
         this.height = 0;
 
         this.referenceRef = React.createRef();
-        this.measuringRef = React.createRef();
+        this.referenceObserver = new ResizeObserver((entries) => {
+            this.recalculateHeight(entries[0]);
+            this.recalculateWidth(entries[0]);
+        });
     }
 
     componentDidMount() {
-        this.recalculateHeight();
-        this.recalculateWidth();
+        this.referenceObserver.observe(this.referenceRef.current!);
     }
 
-    componentDidUpdate() {
-        this.recalculateHeight();
-        this.recalculateWidth();
-        this.recalculatePadding();
+    componentWillUnmount(): void {
+        this.referenceObserver.disconnect();
     }
 
-    private recalculateHeight = () => {
-        if (!this.referenceRef.current || !this.textarea) {
+    private recalculateHeight = (entry: ResizeObserverEntry) => {
+        if (!this.textarea) {
             return;
         }
 
-        const height = (this.referenceRef.current).scrollHeight;
+        const height = entry.borderBoxSize[0].blockSize;
         const textarea = this.textarea;
 
         if (height > 0 && height !== this.height) {
             const style = getComputedStyle(textarea);
+
+            if (this.height === 0) {
+                // Disable the height transition when we first measure the textarea
+                textarea.style.transitionDuration = '0s';
+                requestAnimationFrame(() => {
+                    textarea.style.removeProperty('transition-duration');
+                });
+            }
 
             // Directly change the height to avoid circular rerenders
             textarea.style.height = `${height}px`;
@@ -63,26 +71,11 @@ export class AutosizeTextarea extends React.PureComponent<Props> {
         }
     }
 
-    private recalculatePadding = () => {
-        if (!this.referenceRef.current || !this.textarea) {
-            return;
-        }
-
-        const textarea = this.textarea;
-        const {paddingRight} = getComputedStyle(textarea);
-
-        if (paddingRight && paddingRight !== this.referenceRef.current.style.paddingRight) {
-            this.referenceRef.current.style.paddingRight = paddingRight;
-        }
-    }
-
-    private recalculateWidth = () => {
-        if (!this.measuringRef) {
-            return;
-        }
-
-        const width = this.measuringRef.current?.offsetWidth || -1;
-        if (width >= 0) {
+    private recalculateWidth = (entry: ResizeObserverEntry) => {
+        const width = entry.borderBoxSize[0].inlineSize;
+        if (width > 0) {
+            // Call this with requestAnimationFrame so that the ResizeObserver doesn't detect this as a potential
+            // infinite loop. It won't bea loop unless onWidthChange causes the width of the AutosizeTextarea to change
             window.requestAnimationFrame(() => {
                 this.props.onWidthChange?.(width);
             });
@@ -151,6 +144,18 @@ export class AutosizeTextarea extends React.PureComponent<Props> {
             );
         }
 
+        let referenceValue = value || defaultValue;
+        if (referenceValue?.endsWith('\n')) {
+            // In a div, the browser doesn't always count characters at the end of a line when measuring the dimensions
+            // of text. In the spec, they refer to those characters as "hanging". No matter what value we set for the
+            // `white-space` of a div, a single newline at the end of the div will always hang.
+            //
+            // The textarea doesn't have that behaviour, so we need to trick the reference div into measuring that
+            // newline, and it seems like the best way to do that is by adding a second newline because only the final
+            // one hangs.
+            referenceValue += '\n';
+        }
+
         return (
             <div>
                 {textareaPlaceholder}
@@ -170,23 +175,16 @@ export class AutosizeTextarea extends React.PureComponent<Props> {
                     defaultValue={defaultValue}
                 />
                 <div style={styles.container}>
-                    <textarea
+                    <div
                         ref={this.referenceRef}
                         id={id + '-reference'}
+                        className={otherProps.className}
                         style={styles.reference}
                         dir='auto'
                         disabled={true}
-                        rows={1}
-                        {...otherProps}
-                        value={value || defaultValue}
                         aria-hidden={true}
-                    />
-                    <div
-                        ref={this.measuringRef}
-                        id={id + '-measuring'}
-                        style={styles.measuring}
                     >
-                        {value || defaultValue}
+                        {referenceValue}
                     </div>
                 </div>
             </div>
@@ -196,9 +194,8 @@ export class AutosizeTextarea extends React.PureComponent<Props> {
 
 const styles: { [Key: string]: CSSProperties} = {
     container: {height: 0, overflow: 'hidden'},
-    reference: {height: 'auto', width: '100%'},
+    reference: {display: 'inline-block', height: 'auto', width: 'auto'},
     placeholder: {overflow: 'hidden', textOverflow: 'ellipsis', opacity: 0.5, pointerEvents: 'none', position: 'absolute', whiteSpace: 'nowrap', background: 'none', borderColor: 'transparent'},
-    measuring: {width: 'auto', display: 'inline-block'},
 };
 
 const forwarded = React.forwardRef<HTMLTextAreaElement>((props, ref) => (

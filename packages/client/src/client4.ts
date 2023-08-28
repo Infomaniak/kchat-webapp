@@ -148,13 +148,6 @@ import {TelemetryHandler} from './telemetry';
 // @ts-ignore
 import crypto from 'crypto';
 
-// Fix error import
-// eslint-disable-next-line no-warning-comments
-// TODO update isDesktopApp() with callback
-function isDesktopApp(): boolean {
-    return window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1;
-}
-
 const IKConstants = {
 
     // @ts-ignore
@@ -184,7 +177,7 @@ export const DEFAULT_LIMIT_AFTER = 30;
 
 const GRAPHQL_ENDPOINT = '/api/v5/graphql';
 
-type LogoutFunc = (url: string, shouldSignal?: boolean, userAction?: boolean) => void;
+type LogoutFunc = (data?: any) => void;
 
 export default class Client4 {
     logToConsole = false;
@@ -260,6 +253,10 @@ export default class Client4 {
 
     setWebappVersion(version: string) {
         this.defaultHeaders['Webapp-Version'] = version;
+    }
+
+    setSocketId(socketId: string) {
+        this.defaultHeaders['X-Socket-Id'] = socketId;
     }
 
     setEnableLogging(enable: boolean) {
@@ -4307,11 +4304,8 @@ export default class Client4 {
         }
 
         if (response.status === 401 && data?.result === 'redirect') {
-            // eslint-disable-next-line no-negated-condition
-            if (!isDesktopApp()) {
-                window.location.href = data.uri;
-            } else {
-                this.emitUserLoggedOutEvent!('/login', true, true);
+            if (this.emitUserLoggedOutEvent) {
+                this.emitUserLoggedOutEvent(data);
             }
         }
 
@@ -4503,19 +4497,36 @@ export default class Client4 {
         return this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
     }
 
-    createDraft = (draft: Omit<Draft, 'id'>) => {
-        return this.doFetch<Draft>(
+    upsertDraft = async (draft: Draft) => {
+        const result = await this.doFetch<Draft>(
             `${this.getDraftsRoute()}`,
-            {method: 'post', body: JSON.stringify(draft)},
+            {
+                method: 'post',
+                body: JSON.stringify(draft),
+            },
         );
+
+        return result;
     };
 
-    updateDraft = (draft: Draft) => {
-        return this.doFetch<Draft>(
+    updateScheduledDraft = async (draft: Draft) => {
+        const result = await this.doFetch<Draft>(
             `${this.getDraftsRoute()}/${draft.id}`,
-            {method: 'put', body: JSON.stringify(draft)},
+            {
+                method: 'put',
+                body: JSON.stringify(draft),
+            },
         );
-    };
+
+        return result;
+    }
+
+    deleteScheduledDraft = (draftId: Draft['id']) => {
+        return this.doFetch<Draft>(
+            `${this.getDraftsRoute()}/${draftId}`,
+            {method: 'delete'},
+        );
+    }
 
     getUserDrafts = (teamId: Team['id']) => {
         return this.doFetch<Draft[]>(
@@ -4524,9 +4535,14 @@ export default class Client4 {
         );
     };
 
-    deleteDraft = (draftId: Draft['id']) => {
-        return this.doFetch<StatusOK>(
-            `${this.getDraftsRoute()}/${draftId}`,
+    deleteDraft = (channelId: Channel['id'], rootId = '') => {
+        let endpoint = `${this.getUserRoute('me')}/channels/${channelId}/drafts`;
+        if (rootId !== '') {
+            endpoint += `/${rootId}`;
+        }
+
+        return this.doFetch<null>(
+            endpoint,
             {method: 'delete'},
         );
     };

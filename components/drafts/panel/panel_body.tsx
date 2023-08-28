@@ -84,7 +84,7 @@ function PanelBody({
             >
                 <div className='DraftPanelBody__right'>
                     <div className='post__header'>
-                        <strong>{displayName}</strong>
+                        <strong className='display_name'>{displayName}</strong>
                         {priority && (
                             <div className='DraftPanelBody__priority'>
                                 {priority.priority && (

@@ -99,13 +99,13 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
         };
     }
 
-    openProfileModal = (): void => {
-        this.props.actions.openModal({
-            modalId: ModalIdentifiers.USER_SETTINGS,
-            dialogType: UserSettingsModal,
-            dialogProps: {isContentProductSettings: false},
-        });
-    }
+    // openProfileModal = (): void => {
+    //     this.props.actions.openModal({
+    //         modalId: ModalIdentifiers.USER_SETTINGS,
+    //         dialogType: UserSettingsModal,
+    //         dialogProps: {isContentProductSettings: false},
+    //     });
+    // }
 
     setStatus = (status: string, dndEndTime?: number): void => {
         this.props.actions.setStatus({

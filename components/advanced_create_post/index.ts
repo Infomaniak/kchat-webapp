@@ -57,7 +57,7 @@ import {showPreviewOnCreatePost} from 'selectors/views/textbox';
 import {getCurrentLocale} from 'selectors/i18n';
 import {getEmojiMap, getShortcutReactToLastPostEmittedFrom} from 'selectors/emojis';
 import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
-import {addToUpdateDraftQueue, removeDraft, upsertScheduleDraft} from 'actions/views/drafts';
+import {addToUpdateDraftQueue, removeDraft, upsertScheduleDraft, setGlobalDraft} from 'actions/views/drafts';
 import {openModal} from 'actions/views/modals';
 import {AdvancedTextEditor, Constants, Preferences, StoragePrefixes, UserStatuses} from 'utils/constants';
 import {canUploadFiles} from 'utils/file_utils';
@@ -77,6 +77,7 @@ function makeMapStateToProps() {
         const currentChannel = getCurrentChannel(state) || {};
         const currentChannelTeammateUsername = getUser(state, currentChannel.teammate_id || '')?.username;
         const draft = getChannelDraft(state, currentChannel.id);
+        const isRemoteDraft = state.views.drafts.remotes[`${StoragePrefixes.DRAFT}${currentChannel.id}`] || false;
         const latestReplyablePostId = getLatestReplyablePostId(state);
         const currentChannelMembersCount = getCurrentChannelStats(state) ? getCurrentChannelStats(state).member_count : 1;
         const enableEmojiPicker = config.EnableEmojiPicker === 'true';
@@ -117,6 +118,7 @@ function makeMapStateToProps() {
             showSendTutorialTip,
             messageInHistoryItem: getMessageInHistoryItem(state),
             draft,
+            isRemoteDraft,
             latestReplyablePostId,
             locale: getCurrentLocale(state),
             currentUsersLatestPost: getCurrentUsersLatestPost(state, ''),
@@ -175,6 +177,7 @@ type Actions = {
     savePreferences: (userId: string, preferences: PreferenceType[]) => ActionResult;
     searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined) => Promise<{ data: any }>;
     upsertScheduleDraft: (key: string, value: PostDraft) => Promise<ActionResult>;
+    setGlobalDraft: (key: string, value: PostDraft, save: boolean) => Promise<ActionResult>;
 }
 
 function setDraft(key: string, value: PostDraft, draftChannelId: string, save = false) {
@@ -182,18 +185,13 @@ function setDraft(key: string, value: PostDraft, draftChannelId: string, save = 
         const channelId = draftChannelId || getCurrentChannelId(getState());
         let updatedValue = null;
         if (value) {
-            updatedValue = {...value};
-            updatedValue = {
-                ...value,
-                channelId,
-                remote: false,
-            };
+            updatedValue = {...value, channelId};
         }
         if (updatedValue) {
             return dispatch(addToUpdateDraftQueue(key, updatedValue, '', save));
         }
 
-        return dispatch(removeDraft(key));
+        return dispatch(removeDraft(key, channelId));
     };
 }
 
@@ -232,6 +230,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             getChannelMemberCountsByGroup,
             savePreferences,
             searchAssociatedGroupsForReference,
+            setGlobalDraft,
         }, dispatch),
     };
 }

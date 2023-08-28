@@ -290,6 +290,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         if (redirectTo && redirectTo !== 'ikLogout') {
             getHistory().push(redirectTo);
         } else if (userAction) {
+            // if ikLogout go to external ik logout
             const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
                 `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
                 `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;

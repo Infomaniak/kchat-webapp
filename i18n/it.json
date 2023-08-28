@@ -3226,6 +3226,8 @@
   "post_delete.someone": "Qualcuno ha cancellato il messaggio che stai cercando di commentare.",
   "post_info.auto_responder": "RISPOSTE AUTOMATICHE",
   "post_info.comment_icon.tooltip.reply": "Rispondi",
+  "post_info.copy": "Copiare il testo",
+  "post_info.copy_id": "Copia il ID",
   "post_info.del": "Cancella",
   "post_info.dot_menu.tooltip.more_actions": "Altre Operazioni",
   "post_info.edit": "Modifica",
@@ -4009,6 +4011,7 @@
   "post_info.post_reminder.sub_menu.one_hour": "1 ora",
   "post_info.post_reminder.sub_menu.two_hours": "2 ore",
   "post_info.post_reminder.sub_menu.tomorrow": "Domani",
+  "post_info.post_reminder.sub_menu.monday": "Lunedì",
   "post_info.post_reminder.sub_menu.custom": "Personalizzato",
   "post_info.post_reminder.sub_menu.header": "Impostare un promemoria per:",
   "post_reminder.custom_time_picker_modal.text": "Imposta promemoria",
@@ -4038,8 +4041,8 @@
   "create_post.schedule_post.tooltip.mac": "Pianifica un post:\tShift|⌥|S",
   "create_post.schedule_post.menu.options.date.title": "{date} alle {time}",
   "create_post.schedule_post.menu.options.tomorrow": "Domani",
-  "create_post.schedule_post.menu.title": "Pianifica una bozza:",
-  "create_post.schedule_post.modal.header": "Pianifica una bozza",
+  "create_post.schedule_post.menu.title": "Pianifica un post:",
+  "create_post.schedule_post.modal.header": "Pianifica un post",
   "create_post.schedule_post.modal.confirm": "Pianifica",
   "create_post.schedule_post.modal.repeat.checkbox": "Ripetere",
   "create_post.schedule_post.modal.repeat.every.amount_invalid": "Inserisci un numero valido",
@@ -4092,5 +4095,6 @@
   "drafts.confirm.delete.title": "Cancellare la bozza",
   "drafts.confirm.send.button": "Sì, inviare ora",
   "drafts.confirm.send.text": "Sei sicuro di voler inviare questo messaggio a <strong>{displayName}</strong>?",
-  "drafts.confirm.send.title": "Enviar mensaje ahora"
+  "drafts.confirm.send.title": "Enviar mensaje ahora",
+  "drafts.actions.openInChannel": "Aperto nel canale"
 }

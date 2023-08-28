@@ -27,7 +27,7 @@ const GetAppAnnoucementBar = () => {
     const announcementBarCount = useSelector(getAnnouncementBarCount);
     const {formatMessage} = useIntl();
     const os = useGetOperatingSystem();
-    const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT);
+    const lastSeenAt = localStorage.getItem(GET_THE_APP_LAST_SEEN_AT) || 1;
     const isMobile = getIsMobile();
     const isCooldownExceeded = Date.now() >= Number(lastSeenAt) + COOLDOWN;
     const shouldDisplayDesktopBanner = !isDesktopApp() && !isMobile && (!lastSeenAt || isCooldownExceeded);

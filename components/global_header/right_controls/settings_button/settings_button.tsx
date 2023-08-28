@@ -8,6 +8,8 @@ import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import {useDispatch, useSelector} from 'react-redux';
 
+import {TIconGlyph} from '@infomaniak/compass-components/foundations/icon';
+
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
@@ -16,7 +18,15 @@ import {GlobalState} from 'types/store';
 import {getRhsState} from 'selectors/rhs';
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 
-const SettingsButton = (): JSX.Element | null => {
+type Props = {
+    tab?: string;
+    className?: string;
+    icon?: TIconGlyph;
+    tooltipPlacement?: string;
+    tooltipContent?: string;
+}
+
+const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, tooltipContent}: Props): JSX.Element | null => {
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
     const rhsState = useSelector((state: GlobalState) => getRhsState(state));
@@ -26,16 +36,18 @@ const SettingsButton = (): JSX.Element | null => {
         if (rhsState === RHSStates.SETTINGS) {
             dispatch(closeRightHandSide());
         } else {
-            dispatch(showSettings());
+            dispatch(showSettings(tab));
         }
     };
 
     const tooltip = (
         <Tooltip id='productSettings'>
-            <FormattedMessage
-                id='global_header.productSettings'
-                defaultMessage='Settings'
-            />
+            {tooltipContent || (
+                <FormattedMessage
+                    id='global_header.productSettings'
+                    defaultMessage='Settings'
+                />
+            )}
         </Tooltip>
     );
 
@@ -43,14 +55,14 @@ const SettingsButton = (): JSX.Element | null => {
         <OverlayTrigger
             trigger={['hover', 'focus']}
             delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement='bottom'
+            placement={tooltipPlacement || 'bottom'}
             overlay={tooltip}
         >
             <IconButton
                 id='right-controls-settings'
-                className={`grey ${rhsState === RHSStates.SETTINGS ? 'active' : ''}`}
+                className={`grey ${rhsState === RHSStates.SETTINGS ? 'active' : ''} ${className || ''}`}
                 size={'sm'}
-                icon={'cog'}
+                icon={icon || 'cog'}
                 toggled={rhsState === RHSStates.SETTINGS}
                 onClick={settingButtonClick}
                 inverted={true}

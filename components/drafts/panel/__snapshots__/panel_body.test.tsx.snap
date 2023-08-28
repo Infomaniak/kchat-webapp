@@ -36,7 +36,6 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
           channelId="channel_id"
           hasMention={false}
           isEmoji={false}
-          isRHS={false}
           popoverPlacement="right"
           size="md"
           src="/api/v4/users/user_id/image?_=0"
@@ -53,7 +52,6 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                 className="user-profile-popover"
                 hasMention={false}
                 hide={[Function]}
-                isRHS={false}
                 src="/api/v4/users/user_id/image?_=0"
                 userId="user_id"
               />
@@ -110,7 +108,6 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                       "wrapRichTextChunksInFragment": undefined,
                     }
                   }
-                  isRHS={false}
                   src="/api/v4/users/user_id/image?_=0"
                   userId="user_id"
                 />
@@ -205,7 +202,9 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
           <div
             className="post__header"
           >
-            <strong>
+            <strong
+              className="display_name"
+            >
               display_name
             </strong>
           </div>
@@ -244,7 +243,6 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                 enableFormatting={true}
                 hasImageProxy={false}
                 imagesMetadata={Object {}}
-                isRHS={false}
                 managedResourcePaths={Array []}
                 mentionKeys={Array []}
                 message="message"
@@ -317,7 +315,6 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
           channelId="channel_id"
           hasMention={false}
           isEmoji={false}
-          isRHS={false}
           popoverPlacement="right"
           size="md"
           src="/api/v4/users/user_id/image?_=0"
@@ -334,7 +331,6 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                 className="user-profile-popover"
                 hasMention={false}
                 hide={[Function]}
-                isRHS={false}
                 src="/api/v4/users/user_id/image?_=0"
                 userId="user_id"
               />
@@ -391,7 +387,6 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                       "wrapRichTextChunksInFragment": undefined,
                     }
                   }
-                  isRHS={false}
                   src="/api/v4/users/user_id/image?_=0"
                   userId="user_id"
                 />
@@ -486,7 +481,9 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
           <div
             className="post__header"
           >
-            <strong>
+            <strong
+              className="display_name"
+            >
               display_name
             </strong>
           </div>
@@ -525,7 +522,6 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                 enableFormatting={true}
                 hasImageProxy={false}
                 imagesMetadata={Object {}}
-                isRHS={false}
                 managedResourcePaths={Array []}
                 mentionKeys={Array []}
                 message="message"
@@ -604,7 +600,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
           channelId="channel_id"
           hasMention={false}
           isEmoji={false}
-          isRHS={false}
           popoverPlacement="right"
           size="md"
           src="/api/v4/users/user_id/image?_=0"
@@ -621,7 +616,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                 className="user-profile-popover"
                 hasMention={false}
                 hide={[Function]}
-                isRHS={false}
                 src="/api/v4/users/user_id/image?_=0"
                 userId="user_id"
               />
@@ -678,7 +672,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                       "wrapRichTextChunksInFragment": undefined,
                     }
                   }
-                  isRHS={false}
                   src="/api/v4/users/user_id/image?_=0"
                   userId="user_id"
                 />
@@ -773,7 +766,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
           <div
             className="post__header"
           >
-            <strong>
+            <strong
+              className="display_name"
+            >
               display_name
             </strong>
             <div
@@ -882,7 +877,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                 enableFormatting={true}
                 hasImageProxy={false}
                 imagesMetadata={Object {}}
-                isRHS={false}
                 managedResourcePaths={Array []}
                 mentionKeys={Array []}
                 message="message"
@@ -961,7 +955,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
           channelId="channel_id"
           hasMention={false}
           isEmoji={false}
-          isRHS={false}
           popoverPlacement="right"
           size="md"
           src="/api/v4/users/user_id/image?_=0"
@@ -978,7 +971,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                 className="user-profile-popover"
                 hasMention={false}
                 hide={[Function]}
-                isRHS={false}
                 src="/api/v4/users/user_id/image?_=0"
                 userId="user_id"
               />
@@ -1035,7 +1027,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                       "wrapRichTextChunksInFragment": undefined,
                     }
                   }
-                  isRHS={false}
                   src="/api/v4/users/user_id/image?_=0"
                   userId="user_id"
                 />
@@ -1130,7 +1121,9 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
           <div
             className="post__header"
           >
-            <strong>
+            <strong
+              className="display_name"
+            >
               display_name
             </strong>
             <div
@@ -1201,7 +1194,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                 enableFormatting={true}
                 hasImageProxy={false}
                 imagesMetadata={Object {}}
-                isRHS={false}
                 managedResourcePaths={Array []}
                 mentionKeys={Array []}
                 message="message"

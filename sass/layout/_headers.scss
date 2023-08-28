@@ -554,12 +554,16 @@
         margin-bottom: 15px;
         font-size: 28px;
         font-weight: 600;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .channel-intro__content {
         padding: 10px 15px;
         background: $bg--gray;
         border-radius: 3px;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 }
 

@@ -3,14 +3,14 @@ require 'uri'
 require 'json'
 require 'date'
 
-GITLAB_API_TOKEN = ENV['GITLAB_API_KEY']
+GITLAB_API_TOKEN = ENV['GITLAB_API_TOKEN']
 GITLAB_PROJECT_ID = 3225
 GITLAB_API_URL = "https://gitlab.infomaniak.ch/api/v4"
 NOTIFY_CHANNEL = ARGV[0]
 
 def get_this_weeks_merge_requests
   uri = URI("#{GITLAB_API_URL}/projects/#{GITLAB_PROJECT_ID}/merge_requests?updated_after=#{(Time.now - 60 * 60 * 24 * 7).utc.strftime('%Y-%m-%dT%H:%M:%SZ')}")
-  puts uri
+  # puts uri
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
   request = Net::HTTP::Get.new(uri, { "PRIVATE-TOKEN" => GITLAB_API_TOKEN })
@@ -74,7 +74,7 @@ end
 
 def get_gitlab_issues
   uri = URI("#{GITLAB_API_URL}/projects/#{GITLAB_PROJECT_ID}/issues?updated_after=#{(Time.now - 60 * 60 * 24 * 7).utc.strftime('%Y-%m-%dT%H:%M:%SZ')}")
-  puts uri
+  # puts uri
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
   request = Net::HTTP::Get.new(uri, { "PRIVATE-TOKEN" => GITLAB_API_TOKEN })
@@ -149,7 +149,7 @@ def print_weekly_summary(weekly_summary)
   # end
 
   if weekly_summary['issues'].any?
-    output << "\n ##### **Issues À Discuter**"
+    output << "\n #### **Issues À Discuter**"
     output << "\n"
     output << "| &nbsp; | Link | Assignees |"
     output << "|---|---|---|"
@@ -162,23 +162,11 @@ def print_weekly_summary(weekly_summary)
   end
 
   if weekly_summary['stagings'].any?
-    output << "\n ##### **Stagings:**"
+    output << "\n #### **Stagings:**"
     output << "\n"
-    output << "| &nbsp; | Trello | Time Spent | User |"
+    output << "| &nbsp; | Trello | User |"
     output << "|---|---|---|---|"
     weekly_summary['stagings'].each do |mr|
-      trello_link = extract_trello_link(mr['description'])
-      trello_text = trello_link ? "[Trello](#{trello_link})" : ""
-      output << "| [#{mr['title']}](#{mr['web_url']}) | #{trello_text} | #{mr['time_spent']} | @#{mr['user']} |"
-    end
-  end
-
-  if weekly_summary['prod_releases'].any?
-    output << "\n ##### **Prod release:**"
-    output << "\n"
-    output << "| &nbsp; | Link | User |"
-    output << "|---|---|---|"
-    weekly_summary['prod_releases'].each do |mr|
       trello_link = extract_trello_link(mr['description'])
       trello_text = trello_link ? "[Trello](#{trello_link})" : ""
       output << "| [#{mr['title']}](#{mr['web_url']}) | #{trello_text} | @#{mr['user']} |"
@@ -186,11 +174,23 @@ def print_weekly_summary(weekly_summary)
   end
 
   if weekly_summary['canary_releases'].any?
-    output << "\n ##### **Canary:**"
+    output << "\n #### **Canary:**"
     output << "\n"
     output << "| &nbsp; | Link | User |"
     output << "|---|---|---|"
     weekly_summary['canary_releases'].each do |mr|
+      trello_link = extract_trello_link(mr['description'])
+      trello_text = trello_link ? "[Trello](#{trello_link})" : ""
+      output << "| [#{mr['title']}](#{mr['web_url']}) | #{trello_text} | @#{mr['user']} |"
+    end
+  end
+
+  if weekly_summary['prod_releases'].any?
+    output << "\n #### **Prod releases this week:**"
+    output << "\n"
+    output << "| &nbsp; | Link | User |"
+    output << "|---|---|---|"
+    weekly_summary['prod_releases'].each do |mr|
       trello_link = extract_trello_link(mr['description'])
       trello_text = trello_link ? "[Trello](#{trello_link})" : ""
       output << "| [#{mr['title']}](#{mr['web_url']}) | #{trello_text} | @#{mr['user']} |"
@@ -242,14 +242,14 @@ def main
     end
 
     if mr['labels'].include?('staging')
-      next if total_time_spent == 0
-      human_readable_time_spent = seconds_to_human_readable(total_time_spent)
+      # next if total_time_spent == 0
+      # human_readable_time_spent = seconds_to_human_readable(total_time_spent)
       weekly_summary['stagings'] << {
         'title' => mr['title'],
         'description' => mr['description'],
         'web_url' => mr['web_url'],
         'link' => "#{GITLAB_API_URL}/#{GITLAB_PROJECT_ID}/merge_requests/#{mr['iid']}",
-        'time_spent' => human_readable_time_spent,
+        # 'time_spent' => human_readable_time_spent,
         'user' => mr['author']['username']
       }
     end
@@ -286,7 +286,7 @@ def main
   end
 
   message = print_weekly_summary(weekly_summary)
-  puts message
+  # puts message
   notify_channel(message)
 end
 

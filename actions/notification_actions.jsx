@@ -128,7 +128,7 @@ export function sendDesktopNotification(post, msgProps) {
         let image = false;
 
         attachments.forEach((attachment) => {
-            if (notifyText.length === 0) {
+            if (notifyText?.length === 0) {
                 notifyText = attachment.fallback ||
                     attachment.pretext ||
                     attachment.text;
@@ -139,12 +139,12 @@ export function sendDesktopNotification(post, msgProps) {
         let strippedMarkdownNotifyText = stripMarkdown(notifyText);
 
         const notifyTextMaxLength = isWindowsApp() ? WINDOWS_NOTIFY_TEXT_MAX_LENGTH : NOTIFY_TEXT_MAX_LENGTH;
-        if (strippedMarkdownNotifyText.length > notifyTextMaxLength) {
+        if (strippedMarkdownNotifyText?.length > notifyTextMaxLength) {
             strippedMarkdownNotifyText = strippedMarkdownNotifyText.substring(0, notifyTextMaxLength - 1) + '...';
         }
 
         let body = `@${username}`;
-        if (strippedMarkdownNotifyText.length === 0) {
+        if (strippedMarkdownNotifyText?.length === 0) {
             if (msgProps.image) {
                 body += Utils.localizeMessage('channel_loader.uploadedImage', ' uploaded an image');
             } else if (msgProps.otherFile) {

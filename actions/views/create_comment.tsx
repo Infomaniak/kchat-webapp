@@ -156,7 +156,7 @@ export function submitCommand(channelId: string, rootId: string, draft: PostDraf
 }
 
 export function makeOnSubmit(channelId: string, rootId: string, latestPostId: string) {
-    return (draft: PostDraft, options: {ignoreSlash?: boolean} = {}) => async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+    return (draft: PostDraft, options: {ignoreSlash?: boolean} = {}) => async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const {message} = draft;
 
         dispatch(addMessageIntoHistory(message));
@@ -175,7 +175,7 @@ export function makeOnSubmit(channelId: string, rootId: string, latestPostId: st
             return {data};
         }
 
-        dispatch(removeDraft(key));
+        dispatch(removeDraft(key, channelId, rootId));
 
         const isReaction = Utils.REACTION_PATTERN.exec(message);
 

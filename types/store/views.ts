@@ -94,6 +94,12 @@ export type ViewsState = {
         };
     };
 
+    drafts: {
+        remotes: {
+            [storageKey: string]: boolean;
+        };
+    };
+
     rhs: RhsViewState;
 
     rhsSuppressed: boolean;

@@ -1,15 +1,156 @@
-## 1.3.2 (2023-07-04)
+## 1.4.0-next.1 (2023-08-14)
 
-### Added (5 changes)
+### Fixed (1 change)
 
+- [fix: null reference](kchat/webapp@e3d1a4ba194f5e86ed194b0ea41827a0d2369b23) by @benoit.nau ([merge request](kchat/webapp!513))
+
+## 1.3.14-next.3 (2023-08-07)
+
+### Added (1 change)
+
+- [feat: logs](kchat/webapp@8ef7096967c5de9bca9ceb72d1b921c51724ebc9) by @benoit.nau ([merge request](kchat/webapp!510))
+
+## 1.3.14-next.2 (2023-08-07)
+
+### Changed (1 change)
+
+- [fix logout not working in web](kchat/webapp@88b911766da671da2550f4d54f7af6dd60f9a415) by @antonbuksa ([merge request](kchat/webapp!509))
+
+## 1.3.14-next.1 (2023-08-04)
+
+### Fixed (2 changes)
+
+- [fix tooltip for reaction -> add Max display username per reaction](kchat/webapp@08bddd0951bd30ed3ff076140ea4e7acc1101333) by @arthur.noguera ([merge request](kchat/webapp!507))
+- [fix: null reference](kchat/webapp@7cca592e88e1bbd4de7476e177a6ef9d1b080fd7) by @benoit.nau ([merge request](kchat/webapp!506))
+
+### Changed (1 change)
+
+- [increase reaction tooltip size when max number of reactions reached](kchat/webapp@7938faba455a616cb1bdd35b6651cc4912598be2) by @antonbuksa ([merge request](kchat/webapp!507))
+
+### Removed (1 change)
+
+- [disable label update in release script](kchat/webapp@261ebde89c011573239748d75b4bfa121fe21775) by @antonbuksa
+
+## 1.3.13-next.1 (2023-08-02)
+
+No changes.
+
+## 1.3.12-next.1 (2023-07-28)
+
+No changes.
+
+## 1.3.11-next.2 (2023-07-28)
+
+### Fixed (2 changes)
+
+- [fix: null reference](kchat/webapp@ce5c5f03a5f3d47fcbdb15fb29368bab175753a7) by @benoit.nau ([merge request](kchat/webapp!500))
+- [fix: null reference](kchat/webapp@b37fdd6b24be8cbcaa46b085cf4f7d290860ac4d) by @benoit.nau ([merge request](kchat/webapp!499))
+
+### Changed (1 change)
+
+- [Change color font for Code type message](kchat/webapp@7c13666f9a9e1018514ab41324df9b6fa5f17e75) by @arthur.noguera ([merge request](kchat/webapp!406))
+
+## 1.3.11-next.1 (2023-07-28)
+
+### Added (1 change)
+
+- [feat: Update generic modal](kchat/webapp@c152c7ed7c36be21d709fa1a2260ad967bef44ae) by @benoit.nau ([merge request](kchat/webapp!484))
+
+### Fixed (3 changes)
+
+- [fix: null reference](kchat/webapp@60e9a046fa2e9714ea8f537febb06412b13699c1) by @benoit.nau ([merge request](kchat/webapp!498))
+- [fix: null reference](kchat/webapp@afd6d3e96aa27fee61d4a5ff13e15fb23e7cf327) by @benoit.nau ([merge request](kchat/webapp!494))
+- [fix: null reference](kchat/webapp@dd02281d80fd8e0a033f9a592645e7ed92d441ba) by @benoit.nau ([merge request](kchat/webapp!492))
+
+### Changed (2 changes)
+
+- [feat: Update logo](kchat/webapp@3ef1e64591dac1767b7017c431ce6839b7cf7461) by @benoit.nau ([merge request](kchat/webapp!486))
+- [feat: Update favicon](kchat/webapp@056db4dd7af6dd9f0700006a1d50d6a943c53887) by @benoit.nau ([merge request](kchat/webapp!485))
+
+## 1.3.9-next.1 (2023-07-26)
+
+### Fixed (1 change)
+
+- [fix socket id not updating on non fatal reconnect](kchat/webapp@dfe7724f000735223bfba733ca98b55a4b37b88d) by @antonbuksa ([merge request](kchat/webapp!489))
+
+## 1.3.8-next.1 (2023-07-26)
+
+### Fixed (1 change)
+
+- [correctly handle localstorage null lastSeen for get app banner](kchat/webapp@46f6ead9fe07c36e5535eacb722bb3412e3254d5) by @antonbuksa ([merge request](kchat/webapp!488))
+
+## 1.3.7-next.1 (2023-07-26)
+
+No changes.
+
+## 1.3.6-next.1 (2023-07-25)
+
+### Fixed (1 change)
+
+- [fix: missing copy id button translation](kchat/webapp@a5e818929216fae6c085c239096f4a64bf3b2bb9) by @leopold.jacquot ([merge request](kchat/webapp!483))
+
+## 1.3.5-next.6 (2023-07-25)
+
+### Added (1 change)
+
+- [set x-socket-id header for rest client from ws first connect](kchat/webapp@8dbfeb31ca539ee729e8c66942247924a368655b) by @antonbuksa ([merge request](kchat/webapp!482))
+
+### Removed (1 change)
+
+- [disable advanced tab (drafts sync setting) in rhs settings](kchat/webapp@a7e3aa88d4aa739069716dcedbbe99c0038e6217) by @antonbuksa ([merge request](kchat/webapp!481))
+
+## 1.3.5-next.5 (2023-07-21)
+
+### Added (1 change)
+
+- [add monday as quick option for reminders](kchat/webapp@cf5038fae082061bb5932f07651ac36f08d83ac6) by @antonbuksa ([merge request](kchat/webapp!478))
+
+### Fixed (2 changes)
+
+- [sync setting was setting incorrect preference name](kchat/webapp@62a617ce85a01ec18c1c7e3de346a90f18685b68) by @antonbuksa ([merge request](kchat/webapp!479))
+- [fix draft losing chars when upload complete triggers](kchat/webapp@6bb08092d1ae63d1b5034ee21b197557f9e0eef5) by @antonbuksa ([merge request](kchat/webapp!477))
+
+## 1.3.5-next.4 (2023-07-19)
+
+### Fixed (1 change)
+
+- [fix release script duplicates when notifying](kchat/webapp@3ab5ddb1ceffe6ec64d53f7a946d4470e8383ec8) by @antonbuksa
+
+## 1.3.5-next.3 (2023-07-19)
+
+### Fixed (2 changes)
+
+- [fix draft hover bug after action modal dismissed](kchat/webapp@5ca76754ba3a8e63706410e25cfc1c36489ee5c4) by @antonbuksa ([merge request](kchat/webapp!476))
+- [Do not bind presence channel if channel id is undefined](kchat/webapp@dc8548ee67288b187a87749ad343f9ba68e0dab5) by @leonard.jouve ([merge request](kchat/webapp!445))
+
+### Changed (1 change)
+
+- [make editing always use inline editor in draft page, add action to open in channel](kchat/webapp@916f268d4f3651188b299d73c37ff5367af759b7) by @antonbuksa ([merge request](kchat/webapp!476))
+
+### Chore (1 change)
+
+- [use from param for changelog calls to fix repeat entries](kchat/webapp@9ae8531a5d6021abf8bfee21f66719389aa05258) by @antonbuksa ([merge request](kchat/webapp!474))
+
+## 1.3.5-next.1 (2023-07-14)
+
+### Added (6 changes)
+
+- [add copy post id new entry in dot menu](kchat/webapp@4ee7d203949f1cab0ff7a111d34517d5307fd387) by @leopold.jacquot ([merge request](kchat/webapp!471))
 - [Share team order between kSuites with cookie](kchat/webapp@1759f4b8f0becf3f2a21ee4bb6cc8f34d1066c82) by @leonard.jouve ([merge request](kchat/webapp!446))
 - [Last kchat seen cookie](kchat/webapp@6b02328f9e7207f1974b0b0bf4fd5b0c340b5d50) by @leonard.jouve ([merge request](kchat/webapp!432))
 - [set const_user window var for webcomponents](kchat/webapp@8f659de15d4b17542fe175576ddaa56d9ec6ff28) by @antonbuksa ([merge request](kchat/webapp!440))
 - [Last kchat seen cookie](kchat/webapp@6214f637ec85d33cb777c2fac6d5c5b425ff0bb3) by @leonard.jouve ([merge request](kchat/webapp!432))
 - [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
 
-### Fixed (12 changes)
+### Fixed (19 changes)
 
+- [wrong regex for extracing post id from post permalink](kchat/webapp@94a3c892d82dfab79b07693e59c67b63dc76cab4) by @leopold.jacquot ([merge request](kchat/webapp!468))
+- [Fix: all uploads in progress removed when one upload ends](kchat/webapp@fdd9be956f851642b85ca9f9147334d60c7f2dfe) by @leonard.jouve ([merge request](kchat/webapp!463))
+- [Fix update draft with correct channel id on upload complete](kchat/webapp@c06783bc3f0101b62097c8ef8431756667ba313a) by @leonard.jouve ([merge request](kchat/webapp!462))
+- [Fix persistant old draft & tests](kchat/webapp@8a495479407af184af245117c662ce99af8dc3f2) by @leonard.jouve ([merge request](kchat/webapp!458))
+- [do not remove draft if draftForChannel is undefined](kchat/webapp@4ee1e18e4b801cf1356f3a10ba73eb2e0bf474d3) by @leonard.jouve ([merge request](kchat/webapp!457))
+- [Fetch sidebar profile when opening drafts page](kchat/webapp@46a08e53ac53678b0bde34656c29ccae231bf993) by @leonard.jouve ([merge request](kchat/webapp!457))
+- [Add schedule post shortcut to the rhs shortcut list](kchat/webapp@5f9f9f7ebab2c5bd9392173dd87571625a074130) by @leonard.jouve ([merge request](kchat/webapp!453))
 - [emit cache cleaning event in case of client 40x with redirect uri](kchat/webapp@ec8f38e7a4652bb9ff45e300207912f395836201) by @antonbuksa ([merge request](kchat/webapp!454))
 - [Add updateDraft queue to prevent multiple draft creation on the same channel](kchat/webapp@bd6eaa23906599779438f7abf4e27020d6ea8ece) by @leonard.jouve ([merge request](kchat/webapp!452))
 - [Fix draft stored after send button is 'clicked'](kchat/webapp@695179e4322351fde957c313c83e333a8e0bd3e8) by @leonard.jouve ([merge request](kchat/webapp!450))
@@ -23,410 +164,27 @@
 - [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
 - [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
 
-### Changed (5 changes)
+### Changed (8 changes)
 
+- [MM-53524/MM-53525 Clean up post textbox measurement](kchat/webapp@2e668cf67a5c7c1d340519995e752d56f61ef2f3) by @antonbuksa ([merge request](kchat/webapp!465))
+- [update drafts code from mattermost MM-48670 & MM-49228](kchat/webapp@e4cdb431e82c8c5cb8c350f542098009244f3383) by @antonbuksa ([merge request](kchat/webapp!464))
+- [custom logout handler for desktop client4](kchat/webapp@03ff1788ff2d7674bfb6b10df7de6fbfffbef19c) by @antonbuksa ([merge request](kchat/webapp!456))
 - [Do not store empty drafts](kchat/webapp@cccab3b527a1421cd0d1becda0b86100b4d565ee) by @leonard.jouve ([merge request](kchat/webapp!441))
 - [European date format](kchat/webapp@ce37f6033a06c5207ed45e5d680ec8d61d012769) by @leonard.jouve ([merge request](kchat/webapp!441))
 - [add version bar canary filter](kchat/webapp@74228ca04ce873a356d80de6c2ca78220907cc8a) by @leonard.jouve ([merge request](kchat/webapp!439))
 - [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
 - [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
 
-## 1.3.1-next.9 (2023-07-04)
+### Chore (2 changes)
 
-### Added (5 changes)
+- [tweak release script to better handle branches](kchat/webapp@dc00f1823dc1a1bbe068685d6f0f78842d31dab0) by @antonbuksa ([merge request](kchat/webapp!466))
+- [clean changelog](kchat/webapp@402009624ef974075d979432d8f1dc9d68bb7091) by @antonbuksa ([merge request](kchat/webapp!459))
 
-- [Share team order between kSuites with cookie](kchat/webapp@1759f4b8f0becf3f2a21ee4bb6cc8f34d1066c82) by @leonard.jouve ([merge request](kchat/webapp!446))
-- [Last kchat seen cookie](kchat/webapp@6b02328f9e7207f1974b0b0bf4fd5b0c340b5d50) by @leonard.jouve ([merge request](kchat/webapp!432))
-- [set const_user window var for webcomponents](kchat/webapp@8f659de15d4b17542fe175576ddaa56d9ec6ff28) by @antonbuksa ([merge request](kchat/webapp!440))
-- [Last kchat seen cookie](kchat/webapp@6214f637ec85d33cb777c2fac6d5c5b425ff0bb3) by @leonard.jouve ([merge request](kchat/webapp!432))
-- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
-
-### Fixed (12 changes)
-
-- [emit cache cleaning event in case of client 40x with redirect uri](kchat/webapp@ec8f38e7a4652bb9ff45e300207912f395836201) by @antonbuksa ([merge request](kchat/webapp!454))
-- [Add updateDraft queue to prevent multiple draft creation on the same channel](kchat/webapp@bd6eaa23906599779438f7abf4e27020d6ea8ece) by @leonard.jouve ([merge request](kchat/webapp!452))
-- [Fix draft stored after send button is 'clicked'](kchat/webapp@695179e4322351fde957c313c83e333a8e0bd3e8) by @leonard.jouve ([merge request](kchat/webapp!450))
-- [Fix limit dm translation](kchat/webapp@d403f993ecb80a6672666cf40887329e98fdf440) by @leonard.jouve ([merge request](kchat/webapp!448))
-- [Fix sidebar position on mobile responsive with only one kSuite](kchat/webapp@60f135d64388f9c89b36dce9ebfa0233b13f49fa) by @leonard.jouve ([merge request](kchat/webapp!447))
-- [Fix date picker | insight font](kchat/webapp@99a21769b7e63d55b5dce139dacb45b108348a8d) by @leonard.jouve ([merge request](kchat/webapp!443))
-- [Potential fix for persistant file after send](kchat/webapp@9529436121b77a9e14fcc5676d3bf65c3c461ee3) by @leonard.jouve ([merge request](kchat/webapp!443))
-- [Sync drafts on WS reconnect](kchat/webapp@e74b679ec5987ff426031efd9f8e0c2285d0c7e2) by @leonard.jouve ([merge request](kchat/webapp!443))
-- [date picker iso week](kchat/webapp@ed2afa4507cfef21c26c6ef58a563425b402ff17) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [modify span padding and alignement](kchat/webapp@7353cd831cbca1e57c3c198f4796215d15076107) by @arthur.noguera ([merge request](kchat/webapp!436))
-- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
-- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
-
-### Changed (5 changes)
-
-- [Do not store empty drafts](kchat/webapp@cccab3b527a1421cd0d1becda0b86100b4d565ee) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [European date format](kchat/webapp@ce37f6033a06c5207ed45e5d680ec8d61d012769) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [add version bar canary filter](kchat/webapp@74228ca04ce873a356d80de6c2ca78220907cc8a) by @leonard.jouve ([merge request](kchat/webapp!439))
-- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
-- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
-
-## 1.3.1-next.8 (2023-06-29)
-
-### Added (5 changes)
-
-- [Share team order between kSuites with cookie](kchat/webapp@1759f4b8f0becf3f2a21ee4bb6cc8f34d1066c82) by @leonard.jouve ([merge request](kchat/webapp!446))
-- [Last kchat seen cookie](kchat/webapp@6b02328f9e7207f1974b0b0bf4fd5b0c340b5d50) by @leonard.jouve ([merge request](kchat/webapp!432))
-- [set const_user window var for webcomponents](kchat/webapp@8f659de15d4b17542fe175576ddaa56d9ec6ff28) by @antonbuksa ([merge request](kchat/webapp!440))
-- [Last kchat seen cookie](kchat/webapp@6214f637ec85d33cb777c2fac6d5c5b425ff0bb3) by @leonard.jouve ([merge request](kchat/webapp!432))
-- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
-
-### Fixed (7 changes)
-
-- [Fix date picker | insight font](kchat/webapp@99a21769b7e63d55b5dce139dacb45b108348a8d) by @leonard.jouve ([merge request](kchat/webapp!443))
-- [Potential fix for persistant file after send](kchat/webapp@9529436121b77a9e14fcc5676d3bf65c3c461ee3) by @leonard.jouve ([merge request](kchat/webapp!443))
-- [Sync drafts on WS reconnect](kchat/webapp@e74b679ec5987ff426031efd9f8e0c2285d0c7e2) by @leonard.jouve ([merge request](kchat/webapp!443))
-- [date picker iso week](kchat/webapp@ed2afa4507cfef21c26c6ef58a563425b402ff17) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [modify span padding and alignement](kchat/webapp@7353cd831cbca1e57c3c198f4796215d15076107) by @arthur.noguera ([merge request](kchat/webapp!436))
-- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
-- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
-
-### Changed (4 changes)
-
-- [Do not store empty drafts](kchat/webapp@cccab3b527a1421cd0d1becda0b86100b4d565ee) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [European date format](kchat/webapp@ce37f6033a06c5207ed45e5d680ec8d61d012769) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
-- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
-
-## 1.3.1-next.7 (2023-06-29)
-
-### Added (4 changes)
-
-- [Last kchat seen cookie](kchat/webapp@6b02328f9e7207f1974b0b0bf4fd5b0c340b5d50) by @leonard.jouve ([merge request](kchat/webapp!432))
-- [set const_user window var for webcomponents](kchat/webapp@8f659de15d4b17542fe175576ddaa56d9ec6ff28) by @antonbuksa ([merge request](kchat/webapp!440))
-- [Last kchat seen cookie](kchat/webapp@6214f637ec85d33cb777c2fac6d5c5b425ff0bb3) by @leonard.jouve ([merge request](kchat/webapp!432))
-- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
-
-### Fixed (7 changes)
-
-- [Fix date picker | insight font](kchat/webapp@99a21769b7e63d55b5dce139dacb45b108348a8d) by @leonard.jouve ([merge request](kchat/webapp!443))
-- [Potential fix for persistant file after send](kchat/webapp@9529436121b77a9e14fcc5676d3bf65c3c461ee3) by @leonard.jouve ([merge request](kchat/webapp!443))
-- [Sync drafts on WS reconnect](kchat/webapp@e74b679ec5987ff426031efd9f8e0c2285d0c7e2) by @leonard.jouve ([merge request](kchat/webapp!443))
-- [date picker iso week](kchat/webapp@ed2afa4507cfef21c26c6ef58a563425b402ff17) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [modify span padding and alignement](kchat/webapp@7353cd831cbca1e57c3c198f4796215d15076107) by @arthur.noguera ([merge request](kchat/webapp!436))
-- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
-- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
-
-### Changed (4 changes)
-
-- [Do not store empty drafts](kchat/webapp@cccab3b527a1421cd0d1becda0b86100b4d565ee) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [European date format](kchat/webapp@ce37f6033a06c5207ed45e5d680ec8d61d012769) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
-- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
-
-## 1.3.1-next.6 (2023-06-26)
-
-### Added (2 changes)
-
-- [set const_user window var for webcomponents](kchat/webapp@8f659de15d4b17542fe175576ddaa56d9ec6ff28) by @antonbuksa ([merge request](kchat/webapp!440))
-- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
-
-### Fixed (4 changes)
-
-- [date picker iso week](kchat/webapp@ed2afa4507cfef21c26c6ef58a563425b402ff17) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [modify span padding and alignement](kchat/webapp@7353cd831cbca1e57c3c198f4796215d15076107) by @arthur.noguera ([merge request](kchat/webapp!436))
-- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
-- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
-
-### Changed (4 changes)
-
-- [Do not store empty drafts](kchat/webapp@cccab3b527a1421cd0d1becda0b86100b4d565ee) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [European date format](kchat/webapp@ce37f6033a06c5207ed45e5d680ec8d61d012769) by @leonard.jouve ([merge request](kchat/webapp!441))
-- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
-- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
-
-## 1.3.1-next.5 (2023-06-26)
-
-### Added (2 changes)
-
-- [set const_user window var for webcomponents](kchat/webapp@8f659de15d4b17542fe175576ddaa56d9ec6ff28) by @antonbuksa ([merge request](kchat/webapp!440))
-- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
-
-### Fixed (3 changes)
-
-- [modify span padding and alignement](kchat/webapp@7353cd831cbca1e57c3c198f4796215d15076107) by @arthur.noguera ([merge request](kchat/webapp!436))
-- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
-- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
-
-### Changed (2 changes)
-
-- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
-- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
-
-## 1.3.1-next.4 (2023-06-23)
+## 1.3.4 (2023-07-12)
 
 ### Added (1 change)
 
-- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
-
-### Fixed (3 changes)
-
-- [modify span padding and alignement](kchat/webapp@7353cd831cbca1e57c3c198f4796215d15076107) by @arthur.noguera ([merge request](kchat/webapp!436))
-- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
-- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
-
-### Changed (2 changes)
-
-- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
-- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
-
-## 1.3.1-next.3 (2023-06-23)
-
-### Added (1 change)
-
-- [Add scheduled posts 📅](kchat/webapp@cf0e3e023a92029015e44b5ec9e09274fb16f9b0) by @leonard.jouve ([merge request](kchat/webapp!404))
-
-### Fixed (2 changes)
-
-- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
-- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
-
-### Changed (2 changes)
-
-- [change checkbox position](kchat/webapp@d034d4e73c65a55fa426f3342a98a3c604b3055a) by @arthur.noguera ([merge request](kchat/webapp!435))
-- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
-
-## 1.3.1-next.2 (2023-06-21)
-
-### Fixed (2 changes)
-
-- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
-- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
-
-### Changed (1 change)
-
-- [Remove Websocket action conference created](kchat/webapp@3126dabb5a075dd5390888d90074d1e197d6a3fb) by @arthur.noguera ([merge request](kchat/webapp!433))
-
-## 1.3.1-next.1 (2023-06-21)
-
-### Fixed (2 changes)
-
-- [fix end of week status expiry time && style issues](kchat/webapp@24dbdbfd0b09fe4e0b87a82957424979b8d67d21) by @leonard.jouve ([merge request](kchat/webapp!434))
-- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
-
-## 1.3.0-next.2 (2023-06-14)
-
-### Fixed (1 change)
-
-- [fix more dm modal redirect](kchat/webapp@3be925262b6aabd5bc1d04c8d0bca8f3bb42f2c9) by @leonard.jouve ([merge request](kchat/webapp!427))
-
-## 1.3.0-next.1 (2023-06-13)
-
-No changes.
-
-## 1.2.6-next.2 (2023-06-06)
-
-### Changed (2 changes)
-
-- [make bot name clickable in ai bot notices](kchat/webapp@1e16433606052ef374a17d09dbc021b178a4a872) by @antonbuksa
-- [update ai notice info for gpt and add one for kchat bot](kchat/webapp@428f0cb446ead1a3a42799ab0bf18de70b4c9d74) by @antonbuksa ([merge request](kchat/webapp!426))
-
-## 1.2.6-next.1 (2023-06-06)
-
-### Changed (1 change)
-
-- [update ai notice info for gpt and add one for kchat bot](kchat/webapp@428f0cb446ead1a3a42799ab0bf18de70b4c9d74) by @antonbuksa ([merge request](kchat/webapp!426))
-
-## 1.2.5-next.4 (2023-05-31)
-
-### Added (2 changes)
-
-- [add trads for message ack popper](kchat/webapp@fd14dd898ab82d44a3b47b05ad8f2a9f1144890a) by @antonbuksa ([merge request](kchat/webapp!408))
-- [add trello mr label script](kchat/webapp@61110cfa257ac593da8d958244b7f1e0cb44cb7a) by @antonbuksa
-
-### Fixed (5 changes)
-
-- [fix regex for prod tags in release script](kchat/webapp@e0aa53236f1e9854f99afcee1c89b036c60c1680) by @antonbuksa ([merge request](kchat/webapp!421))
-- [fix tag check in release script](kchat/webapp@54695d9cd529dd8c36cf14161b0d4dfe21bcde06) by @antonbuksa ([merge request](kchat/webapp!421))
-- [fix release get_merge_request func](kchat/webapp@471c86e1b989b21ef306bbb08f405f7d23e235eb) by @antonbuksa ([merge request](kchat/webapp!421))
-- [fix date picker selected month MM-52881](kchat/webapp@070d7d280e3df4a422927773bdc94b85b65765e5) by @leonard.jouve ([merge request](kchat/webapp!422))
-- [improve image preview quality](kchat/webapp@b58ca7f1be735e1d1acaffae8713a3523222d10c) by @leonard.jouve ([merge request](kchat/webapp!332))
-
-### Changed (2 changes)
-
-- [update gpt bot daily msg limit in gpt banner notice](kchat/webapp@1092a480c8353a6c96a3de522e47775c86481b7f) by @antonbuksa ([merge request](kchat/webapp!423))
-- [ruby release script](kchat/webapp@527db9893fafe490cd778d115238e57aa7f1890d) by @antonbuksa ([merge request](kchat/webapp!421))
-
-### Removed (1 change)
-
-- [dont add any utm params in ExternalLink](kchat/webapp@45c49399230044c17661e87b6ded954400f00cb7) by @antonbuksa ([merge request](kchat/webapp!420))
-
-## 1.2.5-next.3 (2023-05-31)
-
-### Added (2 changes)
-
-- [add trads for message ack popper](kchat/webapp@fd14dd898ab82d44a3b47b05ad8f2a9f1144890a) by @antonbuksa ([merge request](kchat/webapp!408))
-- [add trello mr label script](kchat/webapp@61110cfa257ac593da8d958244b7f1e0cb44cb7a) by @antonbuksa
-
-### Fixed (5 changes)
-
-- [fix regex for prod tags in release script](kchat/webapp@e0aa53236f1e9854f99afcee1c89b036c60c1680) by @antonbuksa ([merge request](kchat/webapp!421))
-- [fix tag check in release script](kchat/webapp@54695d9cd529dd8c36cf14161b0d4dfe21bcde06) by @antonbuksa ([merge request](kchat/webapp!421))
-- [fix release get_merge_request func](kchat/webapp@471c86e1b989b21ef306bbb08f405f7d23e235eb) by @antonbuksa ([merge request](kchat/webapp!421))
-- [fix date picker selected month MM-52881](kchat/webapp@070d7d280e3df4a422927773bdc94b85b65765e5) by @leonard.jouve ([merge request](kchat/webapp!422))
-- [improve image preview quality](kchat/webapp@b58ca7f1be735e1d1acaffae8713a3523222d10c) by @leonard.jouve ([merge request](kchat/webapp!332))
-
-### Changed (1 change)
-
-- [ruby release script](kchat/webapp@527db9893fafe490cd778d115238e57aa7f1890d) by @antonbuksa ([merge request](kchat/webapp!421))
-
-### Removed (1 change)
-
-- [dont add any utm params in ExternalLink](kchat/webapp@45c49399230044c17661e87b6ded954400f00cb7) by @antonbuksa ([merge request](kchat/webapp!420))
-
-## 1.2.5-next.1 (2023-05-24)
-
-No changes.
-
-## 1.2.4-next.1 (2023-05-22)
-
-No changes.
-
-## 1.2.3-next.2 (2023-05-17)
-
-### Fixed (2 changes)
-
-- [ensure react and react-dom types use the correct version](kchat/webapp@33b871384358ede0eb3f31f1a1a85125f7fcdaab) by @antonbuksa ([merge request](kchat/webapp!413))
-- [fix date picker selected day](kchat/webapp@3945c9565a3211309b0041296b0bdcb43ba634b0) by @leonard.jouve ([merge request](kchat/webapp!409))
-
-### Changed (1 change)
-
-- [custom message for when gpt bot is disabled](kchat/webapp@d9224fab025f5c96a2334846c09c9ceaa6e11181) by @antonbuksa ([merge request](kchat/webapp!414))
-
-## 1.2.3-next.1 (2023-05-17)
-
-### Fixed (1 change)
-
-- [ensure react and react-dom types use the correct version](kchat/webapp@33b871384358ede0eb3f31f1a1a85125f7fcdaab) by @antonbuksa ([merge request](kchat/webapp!413))
-
-### Changed (1 change)
-
-- [custom message for when gpt bot is disabled](kchat/webapp@d9224fab025f5c96a2334846c09c9ceaa6e11181) by @antonbuksa ([merge request](kchat/webapp!414))
-
-## 1.2.2-next.1 (2023-05-12)
-
-### Fixed (2 changes)
-
-- [improve trad fr favorites insights](kchat/webapp@8b6ea17131c4074cc9c6959c2da0023722e9dbf6) by @antonbuksa ([merge request](kchat/webapp!405))
-- [fix mobile modal height with announcement bar](kchat/webapp@92e34128748aa769455c47ba6d4fb4ab5733878c) by @leonard.jouve ([merge request](kchat/webapp!387))
-
-### Changed (2 changes)
-
-- [improve mobile submenu](kchat/webapp@fb8375689bb82cd03c85ae2e7526348dc4452400) by @leonard.jouve ([merge request](kchat/webapp!398))
-- [move id into a copy btn in profile popover](kchat/webapp@4e13994081f753f385c5573d914378bc4ee3c15c) by @antonbuksa ([merge request](kchat/webapp!403))
-
-### Removed (2 changes)
-
-- [do not register post types for pricing modals](kchat/webapp@805ebf504004f6922108fe4d84cedfd2dc27bf1d) by @antonbuksa ([merge request](kchat/webapp!403))
-- [clean commands, remove marketplace and comment templates](kchat/webapp@0a9e795462caf9d77ba552edfa0ddc0189147041) by @antonbuksa ([merge request](kchat/webapp!403))
-
-### updated (1 change)
-
-- [Update to latest Mattermost webapp version](kchat/webapp@e6e63db6bbe4c2c17204ce553b2113fdf0b42df2) by @leonard.jouve ([merge request](kchat/webapp!403))
-
-## 1.2.1-next.1 (2023-05-11)
-
-No changes.
-
-## 1.2.0-next.7 (2023-05-11)
-
-### Fixed (2 changes)
-
-- [admin badge wording](kchat/webapp@1ffcddc2961a5ae846df3bc36197bd6d27aa9837) by @leonard.jouve ([merge request](kchat/webapp!391))
-- [fix channel not found error page wording](kchat/webapp@5b1a2de7154136001a0aa3c80985ba5775fe3b70) by @leonard.jouve ([merge request](kchat/webapp!389))
-
-### Changed (1 change)
-
-- [run release and changelog for canary](kchat/webapp@93fd072279d8e51d08b8cfb932f5532c68ec54bf) by @antonbuksa ([merge request](kchat/webapp!395))
-
-### Chore (3 changes)
-
-- [add summary policy](kchat/webapp@cb24dfb8bb73356a931ebbb1a2ec9f5d5f0d85fd) by @antonbuksa
-- [specify url prefix for sentry maps](kchat/webapp@9e436dd3eb20bfcad5f91e5579ad7056df996892) by @antonbuksa ([merge request](kchat/webapp!395))
-- [fix test report collection](kchat/webapp@fdd7b9d96a99a490a18e2e9f0ebfcc70804ec97a) by @antonbuksa ([merge request](kchat/webapp!395))
-
-## 1.2.0-next.6 (2023-05-09)
-
-### Fixed (2 changes)
-
-- [admin badge wording](kchat/webapp@1ffcddc2961a5ae846df3bc36197bd6d27aa9837) by @leonard.jouve ([merge request](kchat/webapp!391))
-- [fix channel not found error page wording](kchat/webapp@5b1a2de7154136001a0aa3c80985ba5775fe3b70) by @leonard.jouve ([merge request](kchat/webapp!389))
-
-### Changed (1 change)
-
-- [run release and changelog for canary](kchat/webapp@93fd072279d8e51d08b8cfb932f5532c68ec54bf) by @antonbuksa ([merge request](kchat/webapp!395))
-
-### Chore (3 changes)
-
-- [add summary policy](kchat/webapp@cb24dfb8bb73356a931ebbb1a2ec9f5d5f0d85fd) by @antonbuksa
-- [specify url prefix for sentry maps](kchat/webapp@9e436dd3eb20bfcad5f91e5579ad7056df996892) by @antonbuksa ([merge request](kchat/webapp!395))
-- [fix test report collection](kchat/webapp@fdd7b9d96a99a490a18e2e9f0ebfcc70804ec97a) by @antonbuksa ([merge request](kchat/webapp!395))
-
-## 1.2.0-next.5 (2023-05-08)
-
-### Fixed (2 changes)
-
-- [admin badge wording](kchat/webapp@1ffcddc2961a5ae846df3bc36197bd6d27aa9837) by @leonard.jouve ([merge request](kchat/webapp!391))
-- [fix channel not found error page wording](kchat/webapp@5b1a2de7154136001a0aa3c80985ba5775fe3b70) by @leonard.jouve ([merge request](kchat/webapp!389))
-
-### Changed (1 change)
-
-- [run release and changelog for canary](kchat/webapp@93fd072279d8e51d08b8cfb932f5532c68ec54bf) by @antonbuksa ([merge request](kchat/webapp!395))
-
-### Chore (3 changes)
-
-- [add summary policy](kchat/webapp@cb24dfb8bb73356a931ebbb1a2ec9f5d5f0d85fd) by @antonbuksa
-- [specify url prefix for sentry maps](kchat/webapp@9e436dd3eb20bfcad5f91e5579ad7056df996892) by @antonbuksa ([merge request](kchat/webapp!395))
-- [fix test report collection](kchat/webapp@fdd7b9d96a99a490a18e2e9f0ebfcc70804ec97a) by @antonbuksa ([merge request](kchat/webapp!395))
-
-## 1.2.0-next.4 (2023-05-04)
-
-### Fixed (2 changes)
-
-- [admin badge wording](kchat/webapp@1ffcddc2961a5ae846df3bc36197bd6d27aa9837) by @leonard.jouve ([merge request](kchat/webapp!391))
-- [fix channel not found error page wording](kchat/webapp@5b1a2de7154136001a0aa3c80985ba5775fe3b70) by @leonard.jouve ([merge request](kchat/webapp!389))
-
-### Changed (1 change)
-
-- [run release and changelog for canary](kchat/webapp@93fd072279d8e51d08b8cfb932f5532c68ec54bf) by @antonbuksa ([merge request](kchat/webapp!395))
-
-### Chore (2 changes)
-
-- [specify url prefix for sentry maps](kchat/webapp@9e436dd3eb20bfcad5f91e5579ad7056df996892) by @antonbuksa ([merge request](kchat/webapp!395))
-- [fix test report collection](kchat/webapp@fdd7b9d96a99a490a18e2e9f0ebfcc70804ec97a) by @antonbuksa ([merge request](kchat/webapp!395))
-
-## 1.2.0-next.3 (2023-05-03)
-
-### Fixed (1 change)
-
-- [admin badge wording](kchat/webapp@1ffcddc2961a5ae846df3bc36197bd6d27aa9837) by @leonard.jouve ([merge request](kchat/webapp!391))
-
-### Changed (1 change)
-
-- [run release and changelog for canary](kchat/webapp@93fd072279d8e51d08b8cfb932f5532c68ec54bf) by @antonbuksa ([merge request](kchat/webapp!395))
-
-### Chore (2 changes)
-
-- [specify url prefix for sentry maps](kchat/webapp@9e436dd3eb20bfcad5f91e5579ad7056df996892) by @antonbuksa ([merge request](kchat/webapp!395))
-- [fix test report collection](kchat/webapp@fdd7b9d96a99a490a18e2e9f0ebfcc70804ec97a) by @antonbuksa ([merge request](kchat/webapp!395))
-
-## 1.2.0-next.2 (2023-05-03)
-
-### Fixed (1 change)
-
-- [admin badge wording](kchat/webapp@1ffcddc2961a5ae846df3bc36197bd6d27aa9837) by @leonard.jouve ([merge request](kchat/webapp!391))
-
-### Changed (1 change)
-
-- [run release and changelog for canary](kchat/webapp@93fd072279d8e51d08b8cfb932f5532c68ec54bf) by @antonbuksa ([merge request](kchat/webapp!395))
-
-### Chore (2 changes)
-
-- [specify url prefix for sentry maps](kchat/webapp@9e436dd3eb20bfcad5f91e5579ad7056df996892) by @antonbuksa ([merge request](kchat/webapp!395))
-- [fix test report collection](kchat/webapp@fdd7b9d96a99a490a18e2e9f0ebfcc70804ec97a) by @antonbuksa ([merge request](kchat/webapp!395))
+- [set const_user window var for webcomponents](https://gitlab.infomaniak.ch/kchat/webapp/-/commit/8f659de15d4b17542fe175576ddaa56d9ec6ff28) by @antonbuksa ([merge request](https://gitlab.infomaniak.ch/kchat/webapp/-/merge_requests/440))
 
 ## 1.1.4 (2023-04-27)
 

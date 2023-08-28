@@ -527,6 +527,13 @@ export function applyTheme(theme: Theme) {
         changeCss('.app__body .post .post-collapse__show-more-button:hover', `background-color:${theme.linkColor}`);
     }
 
+    if (theme.codeColor) {
+        changeCss('code', 'color' + theme.codeColor);
+    }
+
+    if (theme.codeBlockColor) {
+        changeCss('.hljs code', 'color' + theme.codeBlockColor);
+    }
     if (theme.buttonBg) {
         changeCss('.app__body .modal .settings-modal .profile-img__remove:hover, .app__body .DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover:before, .app__body .modal .settings-modal .team-img__remove:hover, .app__body .btn.btn-transparent:hover, .app__body .btn.btn-transparent:active, .app__body .post-image__details .post-image__download svg:hover, .app__body .file-view--single .file__download:hover, .app__body .new-messages__button div, .app__body .btn.btn-primary, .app__body .tutorial__circles .circle.active', 'background:' + theme.buttonBg);
         changeCss('.app__body .system-notice__logo svg', 'fill:' + theme.buttonBg);
@@ -618,6 +625,8 @@ export function applyTheme(theme: Theme) {
             'error-text': theme.errorTextColor,
             'mention-highlight-bg': theme.mentionHighlightBg,
             'mention-highlight-link': theme.mentionHighlightLink,
+            'code-color': theme.codeColor,
+            'code-block-color': theme.codeBlockColor,
 
             // Legacy variables with baked in opacity, do not use!
             'sidebar-text-08': changeOpacity(theme.sidebarText, 0.08),
@@ -1472,7 +1481,7 @@ function isChannelOrPermalink(link: string) {
             channelName: match[2],
         };
     }
-    match = (/\/([^/]+)\/pl\/(\w+)/).exec(link);
+    match = (/\/([^/]+)\/pl\/([0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})/).exec(link);
     if (match) {
         return {
             type: 'permalink',

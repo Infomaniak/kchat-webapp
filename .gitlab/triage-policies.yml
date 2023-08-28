@@ -42,6 +42,14 @@ resource_rules:
   # Merge Request Policies
   merge_requests:
     rules:
+      - name: "remove staging labels"
+        conditions:
+          state: merged
+          labels:
+            - staging
+        actions:
+          remove_labels:
+            - staging
       # Update trello::To merge MRs for trello tickets in merged MRs for schedule CI
       - name: "Update Trello for wip MRs"
         conditions:
@@ -51,10 +59,10 @@ resource_rules:
             condition: member_of
             source_id: 3225
           labels:
-            - trello::FEEDBACKS
+            - FEEDBACKS Webapp + Desktop
         actions:
           remove_labels:
-            - trello::FEEDBACKS
+            - FEEDBACKS Webapp + Desktop
           labels:
             - trello::En cours
             - trello-sync
@@ -82,14 +90,3 @@ resource_rules:
           labels:
             - trello::To prod
             - trello-sync
-      # Faster rebasing with labels
-      - name: "Rebase stale"
-        conditions:
-          state: opened
-          labels:
-            - bot-rebase
-        actions:
-          remove_labels:
-            - bot-rebase
-          comment: |
-            /rebase

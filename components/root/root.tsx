@@ -85,6 +85,7 @@ import {close, initialize} from 'actions/websocket_actions';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import {setCallListeners} from 'actions/calls';
+import {clearUserCookie} from 'actions/views/cookie';
 
 import {applyLuxonDefaults} from './effects';
 
@@ -103,6 +104,12 @@ const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardi
 
 const MAX_GET_TOKEN_FAILS = 5;
 const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
+
+// Initialize logger to collect/centralize logs from all processes main/renderer
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
+    Object.assign(console, (window as any).logManager);
+}
 
 // const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
 // const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
@@ -300,8 +307,6 @@ export default class Root extends React.PureComponent<Props, State> {
             });
         }
 
-        Client4.bindEmitUserLoggedOutEvent(GlobalActions.emitUserLoggedOutEvent);
-
         Promise.all([
             this.props.actions.initializeProducts(),
             initializePlugins(),
@@ -453,7 +458,7 @@ export default class Root extends React.PureComponent<Props, State> {
         this.onConfigLoaded();
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         if (isDesktopApp()) {
             // Rely on initial client calls to 401 for the first redirect to login,
             // we dont need to do it manually.
@@ -583,7 +588,7 @@ export default class Root extends React.PureComponent<Props, State> {
                     getChallengeAndRedirectToLogin(true);
                 }
 
-                // If old token with expire still present
+                // migration from 2.0
                 if (token && (tokenExpire || refreshToken)) {
                     // Prepare migrate to infinite token by clearing all instances of old token
                     clearLocalStorageToken();
@@ -603,11 +608,30 @@ export default class Root extends React.PureComponent<Props, State> {
                     }
                 }
             } else if (token && refreshToken) {
+                // 2.0 and older apps
                 // set an interval to run every minute to check if token needs refresh soon
                 // for older versions of app.
                 this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
             }
         }
+
+        // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
+        Client4.bindEmitUserLoggedOutEvent(async (data) => {
+            // eslint-disable-next-line no-negated-condition
+            if (!isDesktopApp()) {
+                window.location.href = data.uri;
+            } else {
+                const lsToken = localStorage.getItem('IKToken');
+
+                if (lsToken) {
+                    // Delete the token if it still exists.
+                    clearLocalStorageToken();
+                    clearUserCookie();
+                    await window.authManager.logout();
+                    window.authManager.resetToken();
+                }
+            }
+        });
 
         this.initiateMeRequests();
 
