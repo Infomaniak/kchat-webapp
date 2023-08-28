@@ -291,7 +291,6 @@ export const getProfiles: (state: GlobalState, filters?: Filters) => UserProfile
     },
 );
 
-
 export function filterProfiles(profiles: IDMappedObjects<UserProfile>, filters?: Filters, memberships?: RelationOneToOne<UserProfile, TeamMembership> | RelationOneToOne<UserProfile, ChannelMembership>): IDMappedObjects<UserProfile> {
     if (!filters) {
         return profiles;

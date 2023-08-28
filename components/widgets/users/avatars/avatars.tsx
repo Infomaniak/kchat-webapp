@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable react/jsx-closing-bracket-location */
 
 import React, {memo, ComponentProps, CSSProperties, useMemo, useEffect, useRef} from 'react';
 import {useIntl} from 'react-intl';
@@ -103,21 +104,20 @@ function UserAvatar({
                 content={name}
                 {...overlayProps}
             >
-                { disableButton ? <Avatar
+                {/* eslint-disable-next-line multiline-ternary */}
+                { disableButton ? (<Avatar
                     url={imageURLForUser(userId, user?.last_picture_update)}
                     tabIndex={-1}
-                    {...props}/> : 
-                    <RoundButton
+                    {...props}/>) :
+                    (<RoundButton
                         className={'style--none'}
-                        onClick={(e) => e.stopPropagation()}
-                     >
-                    <Avatar
-                        url={imageURLForUser(userId, user?.last_picture_update)}
-                        tabIndex={-1}
-                        {...props}
-                    />
-                </RoundButton>
-                }
+                        onClick={(e) => e.stopPropagation()}>
+                        <Avatar
+                            url={imageURLForUser(userId, user?.last_picture_update)}
+                            tabIndex={-1}
+                            {...props}
+                        />
+                    </RoundButton>)}
             </SimpleTooltip>
         </OverlayTrigger>
     );
