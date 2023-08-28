@@ -5,8 +5,6 @@ import React, {useRef} from 'react';
 import {useSelector} from 'react-redux';
 import {FormattedMessage, injectIntl} from 'react-intl';
 
-import {PhoneInTalkIcon} from '@infomaniak/compass-icons/components';
-
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import OverlayTrigger from 'components/overlay_trigger';
