@@ -1834,17 +1834,20 @@ function handleConferenceUserConnected(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
-        const keys = Object.keys(calls[msg.data.channel_id]);
-        doDispatch({
-            type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
-            data: {
-                channelID: msg.data.channel_id,
-                userID: msg.data.user_id,
-                currentUserID: getCurrentUserId(getState()),
-                url: msg.data.url,
-                id: keys.length ? keys[0] : undefined,
-            },
-        });
+        const keys = calls[msg.data.channel_id].length ? Object.keys(calls[msg.data.channel_id]) : [];
+
+        if (keys.length) {
+            doDispatch({
+                type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
+                data: {
+                    channelID: msg.data.channel_id,
+                    userID: msg.data.user_id,
+                    currentUserID: getCurrentUserId(getState()),
+                    url: msg.data.url,
+                    id: keys[0],
+                },
+            });
+        }
     };
 }
 
@@ -1852,17 +1855,20 @@ function handleConferenceUserDisconnected(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
+        const keys = calls[msg.data.channel_id].length ? Object.keys(calls[msg.data.channel_id]) : [];
 
-        doDispatch({
-            type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
-            data: {
-                channelID: msg.data.channel_id,
-                userID: msg.data.user_id,
-                currentUserID: getCurrentUserId(getState()),
-                url: msg.data.url,
-                callID: Object.keys(calls[msg.data.channel_id])[0],
-            },
-        });
+        if (keys.length) {
+            doDispatch({
+                type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
+                data: {
+                    channelID: msg.data.channel_id,
+                    userID: msg.data.user_id,
+                    currentUserID: getCurrentUserId(getState()),
+                    url: msg.data.url,
+                    callID: keys[0],
+                },
+            });
+        }
     };
 }
 
