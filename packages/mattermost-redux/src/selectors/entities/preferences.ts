@@ -329,5 +329,7 @@ export function onboardingTourTipsEnabled(state: GlobalState): boolean {
 // Infomaniak custom
 
 export function callDialingEnabled(state: GlobalState): boolean {
-    return getFeatureFlagValue(state, 'IkCallDialing') === 'true';
+    return true;
+
+    // return getFeatureFlagValue(state, 'IkCallDialing') === 'true';
 }
