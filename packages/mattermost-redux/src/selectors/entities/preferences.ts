@@ -325,3 +325,9 @@ export function autoShowLinkedBoardFFEnabled(state: GlobalState): boolean {
 export function onboardingTourTipsEnabled(state: GlobalState): boolean {
     return getFeatureFlagValue(state, 'OnboardingTourTips') === 'true';
 }
+
+// Infomaniak custom
+
+export function callDialingEnabled(state: GlobalState): boolean {
+    return getFeatureFlagValue(state, 'IkCallDialing') === 'true';
+}

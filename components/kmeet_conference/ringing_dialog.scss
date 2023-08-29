@@ -6,9 +6,10 @@
 
     &.modal-dialog.CallRingingModal {
         max-width: 270px;
+        min-height: 267px;
+        min-width: 267px;
         .modal-content {
             background: #fff;
-            padding: 15px;
         }
         .modal-footer {
             display: none;
@@ -16,18 +17,22 @@
         .content-body {
             display: flex;
             justify-content: center;
-            padding-top: 40px;
+            padding: 16px;
         }
         .content-calling {
             text-align: center;
-            padding: 15px;
+            padding: 8px;
 
             &__user {
                 color: #333333;
                 font-weight: 600;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             &__info {
                 color: #666666;
+                padding-top: 8px;
             }
         }
         .content-actions {
@@ -40,14 +45,19 @@
             button {
                 flex: auto;
                 min-height: 44px;
+                min-width: 66px;
                 color: white;
                 &.accept {
-                    background: var(--online-indicator);
+                    background: var(--sys-link-color);
                 }
                 &.decline {
                     background: var(--dnd-indicator);
                 }
             }
+        }
+        @media (max-width: 768px) {
+            margin-left: auto;
+            margin-right: auto;
         }
     }
 }

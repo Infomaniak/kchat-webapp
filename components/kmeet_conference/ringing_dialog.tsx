@@ -4,143 +4,164 @@ import IconButton from '@infomaniak/compass-components/components/icon-button';
 
 import * as React from 'react';
 
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import {UserProfile} from 'mattermost-redux/types/users';
-
-import {startOrJoinCallInChannel} from 'actions/calls';
-import {closeModal} from 'actions/views/modals';
+import {hangUpCall, joinCallInChannel} from 'actions/calls';
 import GenericModal from 'components/generic_modal';
-import Avatars from 'components/widgets/users/avatars';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+
 import {DispatchFunc} from 'mattermost-redux/types/actions';
-import ring from 'sounds/calls_incoming_ring.mp3';
 
-// import {Client4} from 'mattermost-redux/client';
-
-import store from 'stores/redux_store.jsx';
-import {GlobalState} from 'types/store';
-import {ModalIdentifiers} from 'utils/constants';
 import './ringing_dialog.scss';
 
-type Props = {
-    onClose?: () => void;
-    calling: {
-        users: {[userID: string]: UserProfile};
-        channelID: string;
-        userCalling: string;
-    };
+import {UserProfile} from '@mattermost/types/users';
+
+import Avatars from 'components/widgets/users/avatars';
+
+import {callParameters} from 'selectors/calls';
+
+type PropsType={
+    toneTimeOut: number;
 }
 
-function DialingModal(props: Props) {
-    const {users, channelID, userCalling} = props.calling;
+function DialingModal({toneTimeOut}: PropsType) {
     const dispatch = useDispatch<DispatchFunc>();
-    const connectedChannelID = useSelector((state: GlobalState) => state.views.calls.connectedChannelID);
-    const state = store.getState();
-    const handleOnClose = () => {
-        if (props.onClose) {
-            props.onClose();
+    const {users, caller, channel} = useSelector(callParameters);
+    const modalRef = React.useRef<HTMLDivElement>(null);
+    const {formatMessage} = useIntl();
+
+    const handleClickOutsideModal = (event: any) => {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+            onHandleDecline();
         }
-        dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
     };
-    const onHandleAccept = (e: React.SyntheticEvent) => {
-        // const data = await Client4.acceptIncomingMeetCall(channelID);
+    document.addEventListener('click', handleClickOutsideModal);
 
-        e.preventDefault();
-        e.stopPropagation();
-        dispatch(startOrJoinCallInChannel(channelID));
-        handleOnClose();
+    React.useEffect(() => {
+        window.addEventListener('offline', () => {
+            onHandleDecline();
+        });
+        const timeout = setTimeout(() => {
+            onHandleDecline();
+        }, toneTimeOut);
+        return () => {
+            document.removeEventListener('click', handleClickOutsideModal);
+            clearTimeout(timeout);
+        };
+    }, []);
+
+    const onHandleAccept = React.useCallback(() => {
+        dispatch(joinCallInChannel());
+    }, [dispatch]);
+
+    const onHandleDecline = React.useCallback(() => {
+        dispatch(hangUpCall());
+    }, [dispatch]);
+
+    const getUsersForOverlay = () => {
+        if (users.length >= 2) {
+            const overlayUsers: UserProfile[] = [caller];
+            const getOverLayUser: UserProfile = users.filter((usr) => usr.id !== caller.id)[0];
+            overlayUsers.push(getOverLayUser);
+            return overlayUsers;
+        }
+        return [caller];
     };
-    const onHandleDecline = (e: React.SyntheticEvent<HTMLButtonElement | HTMLAnchorElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        handleOnClose();
-
-        // Client4.declineIncomingMeetCall(channelID);
+    const getUsersNicknames = (users: UserProfile[]): string => {
+        const nicknames = users.map((user) => user.nickname);
+        return nicknames.join(', ');
     };
 
-    if (connectedChannelID) {
-        return null;
-    }
-
-    const usersIdsNotMe = Object.values(users).map((u) => u.id).filter((u) => u !== getCurrentUserId(state));
-
-    return (
+    const text = () => {
+        switch (channel.type) {
+        case 'O':
+        case 'P':
+            return (<>
+                <div className='content-calling__info'>
+                    <>
+                        <FormattedMessage
+                            id='calling_modal.calling.teams'
+                            defaultMessage='is calling in'
+                        />
+                    </>
+                </div>
+                <div className='content-calling__user'>
+                    <span>
+                        {channel.display_name}
+                    </span>
+                </div>
+            </>);
+        case 'G':
+        case 'D':
+            return (
+                <>
+                    <div className='content-calling__user'>
+                        <span>
+                            {getUsersNicknames(getUsersForOverlay())}
+                        </span>
+                    </div>
+                    <div className='content-calling__info'>
+                        <>
+                            <FormattedMessage
+                                id='calling_modal.calling'
+                                defaultMessage='is calling'
+                            />
+                        </>
+                    </div>
+                </>
+            );
+        }
+    };
+    const textButtonAccept = formatMessage({id: 'calling_modal.button.accept', defaultMessage: 'Accept'});
+    const textButtonDecline = formatMessage({id: 'calling_modal.button.decline', defaultMessage: 'Decline'});
+    return (<>
         <GenericModal
             aria-labelledby='contained-modal-title-vcenter'
             className='CallRingingModal'
-            onExited={handleOnClose}
         >
-            <div className='content-body'>
-                {users && (
+            <div ref={modalRef}>
+                <div
+                    className='content-body'
+                >
                     <Avatars
-                        userIds={usersIdsNotMe}
-                        size={usersIdsNotMe.length > 1 ? 'xl' : 'xxl'}
-                        totalUsers={usersIdsNotMe.length}
+                        userIds={getUsersForOverlay().map((usr) => usr.id)}
+                        size='xl'
+                        totalUsers={users.length}
+                        disableProfileOverlay={true}
+                        disablePopover={true}
+                        disableButton={true}
                     />
-                )}
+                </div>
+                <div className='content-calling'>
+                    {text()}
+                </div>
+                <div className='content-calling'/>
+                <div
+                    className='content-actions'
+                >
+                    <IconButton
+                        className='decline'
+                        size={'md'}
+                        icon={'close'}
+                        onClick={onHandleDecline}
+                        inverted={true}
+                        aria-label='Decline'
+                        label={textButtonDecline}
+                    />
+                    <IconButton
+                        className='accept'
+                        size={'md'}
+                        icon={'check'}
+                        onClick={onHandleAccept}
+                        inverted={true}
+                        aria-label='Accept'
+                        label={textButtonAccept}
+                    />
+                </div>
             </div>
-            <div className='content-calling'>
-                {users && (
-                    <>
-                        <div className='content-calling__user'>
-                            {Object.values(users).map((user) => (
-                                <>
-                                    {user.id !== getCurrentUserId(state) && user.id === userCalling && (
-                                        <>
-                                            <span>
-                                                {user.nickname}
-                                            </span>
-                                            {Object.values(users).length > 2 && (
-                                                <span className='more'>
-                                                    <>
-                                                        &nbsp;&nbsp;{'+'}{(Object.values(users).length - 2)}
-                                                    </>
-                                                </span>
-                                            )}
-                                        </>
-                                    )}
-                                </>
-                            ))}
-                        </div>
-                        <div className='content-calling__info'>
-                            <>
-                                <FormattedMessage
-                                    id='calling_modal.alling'
-                                    defaultMessage='calling'
-                                />
-                            </>
-                        </div>
-                    </>
-                )}
-            </div>
-            <div className='content-actions'>
-                <IconButton
-                    className='decline'
-                    size={'md'}
-                    icon={'close'}
-                    onClick={onHandleDecline}
-                    inverted={true}
-                    aria-label='Decline'
-                />
-                <IconButton
-                    className='accept'
-                    size={'md'}
-                    icon={'check'}
-                    onClick={onHandleAccept}
-                    inverted={true}
-                    aria-label='Accept'
-                />
-            </div>
-            <audio
-                preload='auto'
-                src={ring}
-                loop={true}
-                autoPlay={true}
-            />
         </GenericModal>
+    </>
     );
 }
 

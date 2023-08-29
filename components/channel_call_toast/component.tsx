@@ -16,7 +16,7 @@ interface Props {
     startAt?: number;
     pictures: string[];
     profiles: UserProfile[];
-    onJoinCall: Function;
+    startOrJoinCallInChannelV2: (channelID: string) => void;
 }
 
 interface State {
@@ -50,13 +50,15 @@ export default class ChannelCallToast extends React.PureComponent<Props, State> 
     }
 
     onJoinCallClick = async () => {
+        const {startOrJoinCallInChannelV2} = this.props;
+
         if (this.props.connectedID) {
             return;
         }
 
         // window.postMessage({type: 'connectCall', channelID: this.props.currChannelID}, window.origin);
 
-        this.props.onJoinCall(this.props.currChannelID);
+        startOrJoinCallInChannelV2(this.props.currChannelID);
     }
 
     onDismissClick = () => {

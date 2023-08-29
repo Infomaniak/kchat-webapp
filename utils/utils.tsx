@@ -58,6 +58,7 @@ import crackle from 'sounds/crackle.mp3';
 import down from 'sounds/down.mp3';
 import hello from 'sounds/hello.mp3';
 import ripple from 'sounds/ripple.mp3';
+import ring from 'sounds/ring.mp3';
 import upstairs from 'sounds/upstairs.mp3';
 import {t} from 'utils/i18n';
 import store from 'stores/redux_store.jsx';
@@ -229,6 +230,7 @@ export const notificationSounds = new Map([
     ['Hello', hello],
     ['Ripple', ripple],
     ['Upstairs', upstairs],
+    ['Ring', ring],
 ]);
 
 let canDing = true;
