@@ -1,3 +1,15 @@
+## 1.4.1-next.1 (2023-08-29)
+
+### Added (3 changes)
+
+- [add feature flag for call dialing feature](kchat/webapp@b8acb941cc4b1c539af1d201b0944da947f1065e) by @antonbuksa ([merge request](kchat/webapp!455))
+- [feat: refacto](kchat/webapp@2b0acbd0008427ed4fd81f73d5eadfa7e1186605) by @benoit.nau ([merge request](kchat/webapp!455))
+- [feat: refacto](kchat/webapp@814658ef91ad416662a1e64c8d6fe1b32fc7b1a4) by @benoit.nau ([merge request](kchat/webapp!455))
+
+### Other (1 change)
+
+- [code review](kchat/webapp@f0716db6afbf9b6c9a7da393a0aff42b5ca18446) by @arthur.noguera ([merge request](kchat/webapp!455))
+
 ## 1.4.0-next.1 (2023-08-14)
 
 ### Fixed (1 change)
