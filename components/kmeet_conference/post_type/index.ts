@@ -12,6 +12,8 @@ import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannelV2} fro
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 
+import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
+
 import PostType from './component';
 
 interface OwnProps {
@@ -25,6 +27,7 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     return {
         ...ownProps,
         connectedKmeetUrl,
+        isDialingEnabled: callDialingEnabled(state),
     };
 };
 

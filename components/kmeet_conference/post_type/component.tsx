@@ -15,10 +15,11 @@ import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 interface Props {
     post: Post;
     connectedKmeetUrl: string;
+    isDialingEnabled: boolean;
     startOrJoinCallInChannelV2: (channelID: string) => void;
 }
 
-const PostType = ({post, connectedKmeetUrl, startOrJoinCallInChannelV2}: Props) => {
+const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInChannelV2}: Props) => {
     const intl = useIntl();
 
     const onJoinCallClick = () => {
@@ -53,6 +54,46 @@ const PostType = ({post, connectedKmeetUrl, startOrJoinCallInChannelV2}: Props) 
             return 'E';
         }
         return 'O';
+    };
+
+    const renderButton = () => {
+        if (isDialingEnabled) {
+            if (connectedKmeetUrl && status === 'O') {
+                return (
+                    <JoinButton onClick={onJoinCallClick}>
+                        <ButtonText>
+                            <FormattedMessage
+                                id='kmeet.calls.open'
+                                defaultMessage='Rejoindre'
+                            />
+                        </ButtonText>
+                    </JoinButton>
+                );
+            }
+            if (status === 'M') {
+                return (
+                    <JoinButton onClick={onStartOrJoinCall}>
+                        <ButtonText>
+                            <FormattedMessage
+                                id='kmeet.calls.callback'
+                                defaultMessage='Rappeler'
+                            />
+                        </ButtonText>
+                    </JoinButton>
+                );
+            }
+        }
+
+        return connectedKmeetUrl ? (
+            <JoinButton onClick={onJoinCallClick}>
+                <ButtonText>
+                    <FormattedMessage
+                        id='kmeet.calls.open'
+                        defaultMessage='Rejoindre'
+                    />
+                </ButtonText>
+            </JoinButton>
+        ) : null;
     };
 
     const subMessage = post.props.end_at ? (
@@ -121,28 +162,7 @@ const PostType = ({post, connectedKmeetUrl, startOrJoinCallInChannelV2}: Props) 
                 </MessageWrapper>}
             </Left>
             <Right>
-                {
-                    connectedKmeetUrl && status === 'O' &&
-                    <JoinButton onClick={onJoinCallClick}>
-                        <ButtonText>
-                            <FormattedMessage
-                                id='kmeet.calls.open'
-                                defaultMessage='Rejoindre'
-                            />
-                        </ButtonText>
-                    </JoinButton>
-                }
-                {
-                    status === 'M' &&
-                    <JoinButton onClick={onStartOrJoinCall}>
-                        <ButtonText>
-                            <FormattedMessage
-                                id='kmeet.calls.callback'
-                                defaultMessage='Rappeler'
-                            />
-                        </ButtonText>
-                    </JoinButton>
-                }
+                {renderButton()}
             </Right>
 
         </Main>
