@@ -214,11 +214,11 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         try {
             if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at) {
+                await dispatch(getCallingChannel(callMessage));
+                await dispatch(getUsersInCall(callMessage));
+                await dispatch(getCallingUser(callMessage));
                 const globalState = getState();
-                dispatch(getCallingChannel(callMessage));
-                dispatch(getUsersInCall(callMessage));
-                dispatch(getCallingUser(callMessage));
-                replacePreviousAddedConference(dispatch, callMessage, globalState);
+                await replacePreviousAddedConference(dispatch, callMessage, globalState);
                 const {status} = callUserStatus(globalState);
                 const channelType: ChannelType = callParameters(globalState).channel.type;
                 if (channelType === 'O' || channelType === 'P' || status[currentUserId] === 'dnd' || callMessage.props.in_call || callMessage.user_id === currentUserId) {
@@ -350,8 +350,8 @@ function handleDesktopKmeetCall(globalState: GlobalState, currentUserId: string,
         window.location.origin);
 }
 
-function replacePreviousAddedConference(dispatch: DispatchFunc, callMessage: Post, globalState: GlobalState): void {
-    dispatch({
+function replacePreviousAddedConference(dispatch: DispatchFunc, callMessage: Post, globalState: GlobalState) {
+    return dispatch({
         type: ActionTypes.VOICE_CHANNEL_ADDED,
         data: {
             channelID: callMessage.channel_id,
