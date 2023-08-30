@@ -1,14 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+import {GiphyFetch} from '@giphy/js-fetch-api';
+import {GlobalState} from '@mattermost/types/store';
+
+import {ClientConfig, FeatureFlags, ClientLicense} from '@mattermost/types/config';
 
 import {createSelector} from 'reselect';
 
 import {General} from 'mattermost-redux/constants';
 
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
-
-import {GlobalState} from '@mattermost/types/store';
-import {ClientConfig, FeatureFlags, ClientLicense} from '@mattermost/types/config';
 
 export function getConfig(state: GlobalState): Partial<ClientConfig> {
     return state.entities.general.config;
@@ -111,6 +112,19 @@ export const isMarketplaceEnabled: (state: GlobalState) => boolean = createSelec
     getConfig,
     (config) => {
         return config.PluginsEnabled === 'true' && config.EnableMarketplace === 'true';
+    },
+);
+
+export const getGiphyFetchInstance: (state: GlobalState) => GiphyFetch | null = createSelector(
+    'getGiphyFetchInstance',
+    (state) => getConfig(state).GiphySdkKey,
+    (giphySdkKey) => {
+        if (giphySdkKey) {
+            const giphyFetch = new GiphyFetch(giphySdkKey);
+            return giphyFetch;
+        }
+
+        return null;
     },
 );
 
