@@ -55,8 +55,42 @@ const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInC
         }
         return 'O';
     };
+    const renderCallStatus = (status: Status = 'O') => {
+        if (!isDialingEnabled) {
+            return (
+                <MessageWrapper>
+                    <Message>
+                        <FormattedMessage
+                            id='kmeet.calls.started'
+                            defaultMessage='Réunion kMeet démarrée'
+                        />
+                    </Message>
+                    <SubMessage>{subMessage}</SubMessage>
+                </MessageWrapper>
 
-    const renderButton = () => {
+            );
+        }
+        const text = {
+            O: {id: 'kmeet.calls.started', defaultMessage: 'Appel démarré', values: {}},
+            M: {id: 'kmeet.calls.called', defaultMessage: 'Appel manqué', values: {}},
+            E: {id: 'kmeet.calls.ended.title', defaultMessage: 'Appel terminé', values: {}},
+            D: {id: 'kmeet.calls.declined', defaultMessage: 'Appel refusé {usernames}', values: {usernames: declinedUsernames.toString()}},
+        };
+        return (
+            <MessageWrapper>
+                <Message>
+                    <FormattedMessage
+                        id={text[status].id}
+                        defaultMessage={text[status].defaultMessage}
+                        values={text[status].values}
+                    />
+                </Message>
+                <SubMessage>{subMessage}</SubMessage>
+            </MessageWrapper>
+        );
+    };
+
+    const renderButton = (status: Status) => {
         if (isDialingEnabled) {
             if (connectedKmeetUrl && status === 'O') {
                 return (
@@ -89,7 +123,7 @@ const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInC
                 <ButtonText>
                     <FormattedMessage
                         id='kmeet.calls.open'
-                        defaultMessage='Rejoindre'
+                        defaultMessage='Ouvrir'
                     />
                 </ButtonText>
             </JoinButton>
@@ -121,48 +155,10 @@ const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInC
                 <CallIndicator ended={Boolean(post.props.end_at)}>
                     <KMeetIcon style={{width: '100%', height: '100%'}}/>
                 </CallIndicator>
-                {status === 'O' && <MessageWrapper>
-                    <Message>
-                        <FormattedMessage
-                            id='kmeet.calls.started'
-                            defaultMessage='Appel démarré'
-                        />
-                    </Message>
-                    <SubMessage>{subMessage}</SubMessage>
-                </MessageWrapper>}
-                {status === 'M' && <MessageWrapper>
-                    <Message>
-                        <FormattedMessage
-                            id='kmeet.calls.called'
-                            defaultMessage='Appel manqué'
-                        />
-                    </Message>
-                    <SubMessage>{subMessage}</SubMessage>
-                </MessageWrapper>}
-                {status === 'E' && <MessageWrapper>
-                    <Message>
-                        <FormattedMessage
-                            id='kmeet.calls.ended.title'
-                            defaultMessage='Appel terminé'
-                        />
-                    </Message>
-                    <SubMessage>{subMessage}</SubMessage>
-                </MessageWrapper>}
-                {status === 'D' && <MessageWrapper>
-                    <Message>
-                        <FormattedMessage
-                            id='kmeet.calls.declined'
-                            defaultMessage='Appel refusé {usernames}'
-                            values={{
-                                usernames: declinedUsernames.toString(),
-                            }}
-                        />
-                    </Message>
-                    <SubMessage>{subMessage}</SubMessage>
-                </MessageWrapper>}
+                {renderCallStatus(status)}
             </Left>
             <Right>
-                {renderButton()}
+                {renderButton(status)}
             </Right>
 
         </Main>
