@@ -1,3 +1,10 @@
+## 1.4.1-next.2 (2023-08-30)
+
+### Fixed (2 changes)
+
+- [feature flag call status text](kchat/webapp@25a3aa68b99cc6c1fefacb2d14131616d51df397) by @antonbuksa
+- [fix js error in calls websocket actions](kchat/webapp@938cc8080713dfb2cb46ae0637bb3f196d2e42b9) by @antonbuksa
+
 ## 1.4.1-next.1 (2023-08-29)
 
 ### Added (3 changes)
