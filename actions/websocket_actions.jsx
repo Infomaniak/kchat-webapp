@@ -1834,9 +1834,9 @@ function handleConferenceUserConnected(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
-        const keys = calls[msg.data.channel_id].length ? Object.keys(calls[msg.data.channel_id]) : [];
 
-        if (keys.length) {
+        if (msg.data.channel_id in calls && calls[msg.data.channel_id].length) {
+            const keys = Object.keys(calls[msg.data.channel_id]);
             doDispatch({
                 type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
                 data: {
@@ -1855,9 +1855,9 @@ function handleConferenceUserDisconnected(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
-        const keys = calls[msg.data.channel_id].length ? Object.keys(calls[msg.data.channel_id]) : [];
 
-        if (keys.length) {
+        if (msg.data.channel_id in calls && calls[msg.data.channel_id].length) {
+            const keys = Object.keys(calls[msg.data.channel_id]);
             doDispatch({
                 type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
                 data: {
