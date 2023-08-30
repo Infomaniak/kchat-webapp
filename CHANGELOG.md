@@ -1,3 +1,9 @@
+## 1.4.2-next.1 (2023-08-30)
+
+### Changed (1 change)
+
+- [[MM-53842] Replace Gfycat with GIPHY in emoji/gif picker](kchat/webapp@939a0bce058a677c68fb61cc65a0b436112d7b9a) by @antonbuksa ([merge request](kchat/webapp!521))
+
 ## 1.4.1-next.2 (2023-08-30)
 
 ### Fixed (2 changes)
