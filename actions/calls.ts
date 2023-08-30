@@ -233,13 +233,13 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
                 });
 
                 if (isDesktopApp()) {
-                    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.3.0')) {
+                    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
                         console.log('[calls] call received on desktop.');
                         handleDesktopKmeetCall(globalState, currentUserId, callMessage);
 
                         return;
                     }
-                    console.warn(`[calls] dialing on desktop is supported from version 2.3 and up, current version is ${getDesktopVersion()}`);
+                    console.warn(`[calls] dialing on desktop is supported from version 2.2 and up, current version is ${getDesktopVersion()}`);
                     const kmeetUrl = new URL(callMessage.props.url);
                     window.open(kmeetUrl.href, '_blank', 'noopener');
 
@@ -315,7 +315,7 @@ export function getCallingChannel(callMessage: Post) {
     });
 }
 export function setCallListeners() {
-    if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.3.0')) {
+    if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
         (window as any).callManager?.onCallJoined((_: any, props: { conferenceId: string }) => {
             return Client4.acceptIncomingMeetCall(props.conferenceId);
         });
