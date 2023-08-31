@@ -85,18 +85,23 @@ const LeaveChannelModal = ({actions, channel, callback, onExited}: Props) => {
         }
     }
 
-    const content = (
-        <div>
-            <div className='alert alert-with-icon alert-grey'>
-                <i className='icon-information-outline'/>
-                <FormattedMessage
-                    id='leave_private_channel_modal.information'
-                    defaultMessage='Only a channel administrator can invite you to join this channel again.'
-                />
+    let content;
+    if (channel.type === Constants.PRIVATE_CHANNEL) {
+        content = (
+            <div>
+                <div className='alert alert-with-icon alert-grey'>
+                    <i className='icon-information-outline'/>
+                    <FormattedMessage
+                        id='leave_private_channel_modal.information'
+                        defaultMessage='Only a channel administrator can invite you to join this channel again.'
+                    />
+                </div>
+                {message}
             </div>
-            {message}
-        </div>
-    );
+        );
+    } else {
+        content = (<React.Fragment/>);
+    }
 
     const buttonClass = 'btn btn-danger';
     const button = (
