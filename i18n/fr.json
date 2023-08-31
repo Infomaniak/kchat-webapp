@@ -3708,6 +3708,8 @@
   "leave_private_channel_modal.message": "Souhaitez-vous vraiment quitter le canal {channel} ?",
   "leave_private_channel_modal.information": "Seul un administrateur du canal peut vous inviter à rejoindre ce canal de nouveau.",
   "leave_private_channel_modal.title": "Quitter le canal privé {channel}",
+  "leave_public_channel_modal.message": "Êtes-vous sûr de vouloir quitter le canal {channel} ? Vous pouvez rejoindre ce canal à l'avenir si vous changez d'avis.",
+  "leave_public_channel_modal.title": "Quitter le canal {channel}",
   "leave_team_modal.desc": "**Vous allez être retiré de {num_of_public_channels} { num_of_public_channels,plural,one {canal public} other {canaux publics}} et {num_of_private_channels} { num_of_private_channels,plural,one {canal privé} other {canaux privés}} de cette équipe.** Si l'équipe est privée, vous ne serez pas en mesure de rejoindre l'équipe à nouveau sans une invitation d'un autre membre de l'équipe. Voulez-vous continuer ?",
   "leave_team_modal.no": "Non",
   "leave_team_modal.title": "Quitter l'équipe ?",
