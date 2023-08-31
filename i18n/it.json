@@ -2982,6 +2982,7 @@
   "leave_private_channel_modal.message": "Vuoi davvero lasciare il canale {channel}?",
   "leave_private_channel_modal.information": "Solo l'amministratore del canale può invitare l'utente a unirsi nuovamente a questo canale.",
   "leave_private_channel_modal.title": "Abbandona il canale privato {channel}",
+  "leave_public_channel_modal.message": "Sei sicuro di voler lasciare il canale {channel}? Puoi iscriverti nuovamente a questo canale in futuro se cambi idea.",
   "leave_team_modal.desc": "Sarai rimosso da tutti i canali pubblici e privati. Se la squadra è privata non potrai rientrarci. Sei sicuro?",
   "leave_team_modal.no": "No",
   "leave_team_modal.title": "Abbandonare la squadra?",
