@@ -1,3 +1,10 @@
+## 1.4.2-next.2 (2023-08-31)
+
+### Fixed (2 changes)
+
+- [fix wrong message on leave public channel modal](kchat/webapp@cbc0473d201efb8a3445b383ee71b68135089386) by @antonbuksa ([merge request](kchat/webapp!524))
+- [fix missing trad](kchat/webapp@067a5d973f5b1ce8bb27d062eda61d9aa682537f) by @antonbuksa ([merge request](kchat/webapp!524))
+
 ## 1.4.2-next.1 (2023-08-30)
 
 ### Changed (1 change)
