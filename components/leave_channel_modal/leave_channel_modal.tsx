@@ -100,7 +100,7 @@ const LeaveChannelModal = ({actions, channel, callback, onExited}: Props) => {
             </div>
         );
     } else {
-        content = (<React.Fragment/>);
+        content = (<div>{message}</div>);
     }
 
     const buttonClass = 'btn btn-danger';
