@@ -3825,6 +3825,7 @@
   "leave_private_channel_modal.information": "Sólo un administrador del canal puede invitarte a unirte de nuevo a este canal.",
   "leave_private_channel_modal.title": "Abandonar Canal Privado {channel}",
   "leave_public_channel_modal.message": "¿Estás seguro de que deseas abandonar el canal {channel}? Puedes volver a unirte a este canal en el futuro si cambias de opinión.",
+  "leave_public_channel_modal.title": "Abandonar canal {channel}",
   "leave_team_modal.desc": "Serás eliminado de {num_of_public_channels} {num_of_public_channels,plural,one {canal público} other {canales públicos}} y {num_of_private_channels} {num_of_private_channels,plural,one {canal privado} other {canales privados}} en este equipo. Si el equipo es privado no podrás unirte de nuevo al equipo. ¿Estás seguro?",
   "leave_team_modal.no": "No",
   "leave_team_modal.title": "¿Abandonar Equipo?",
