@@ -104,7 +104,7 @@ import {getHistory} from 'utils/browser_history';
 import {loadChannelsForCurrentUser} from 'actions/channel_actions';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
-import {handleNewPost} from 'actions/post_actions';
+import {handleNewPost, resetReloadPostsInChannel} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
 import {loadProfilesForSidebar} from 'actions/user_actions';
 import store from 'stores/redux_store.jsx';
@@ -290,6 +290,8 @@ export async function reconnect(socketId?: string) {
         // }
 
         dispatch(loadChannelsForCurrentUser());
+
+        dispatch(resetReloadPostsInChannel());
 
         if (mostRecentPost) {
             // eslint-disable-next-line no-console

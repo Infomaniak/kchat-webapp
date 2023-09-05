@@ -374,3 +374,9 @@ export function emitShortcutReactToLastPostFrom(emittedFrom: 'CENTER' | 'RHS_ROO
         payload: emittedFrom,
     };
 }
+
+export function resetReloadPostsInChannel() {
+    return async (dispatch: DispatchFunc) => {
+        dispatch(PostActions.resetReloadPostsInChannel());
+    };
+}
