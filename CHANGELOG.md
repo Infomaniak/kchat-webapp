@@ -1,3 +1,9 @@
+## 1.4.3-next.1 (2023-09-12)
+
+### Fixed (1 change)
+
+- [fix: reconnexion ws](kchat/webapp@ba2843ff6cba10702cf98fa4c6f59c266a81ff35) by @benoit.nau ([merge request](kchat/webapp!523))
+
 ## 1.4.2-next.2 (2023-08-31)
 
 ### Fixed (2 changes)
