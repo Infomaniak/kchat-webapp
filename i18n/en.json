@@ -5288,7 +5288,7 @@
   "user_profile.call.userBusy": "{user} is in another call",
   "user_profile.custom_status": "Status",
   "user_profile.custom_status.set_status": "Set a status",
-  "user_profile.send.dm": "Message",
+  "user_profile.send.dm": "Send message",
   "user_profile.send.dm.icon": "Send Message Icon",
   "user_profile.send.dm.yourself": "Send yourself a message",
   "user.settings.advance.confirmDeactivateAccountTitle": "Confirm Deactivation",
