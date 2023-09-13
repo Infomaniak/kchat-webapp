@@ -1,3 +1,10 @@
+## 1.4.3-next.2 (2023-09-13)
+
+### Fixed (2 changes)
+
+- [fix: ws](kchat/webapp@586192fc0d4dc1c89006930dc445cc7dd2e2b7dc) by @benoit.nau ([merge request](kchat/webapp!525))
+- [fix: date](kchat/webapp@bc5749917d9eae85b40a5a033143a1bb9bae323a) by @arthur.noguera ([merge request](kchat/webapp!516))
+
 ## 1.4.3-next.1 (2023-09-12)
 
 ### Fixed (1 change)
