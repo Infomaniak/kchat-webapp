@@ -213,7 +213,7 @@ export function initialize() {
 
     // handle immediate WS reconnection after loosing the network connection.
     window.removeEventListener('online', reconnect);
-    window.addEventListener('online', reconnect);
+    window.addEventListener('online', () => reconnect());
 }
 
 export function close() {
