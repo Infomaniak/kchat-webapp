@@ -36,6 +36,7 @@ import {
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 
+import {loadProfilesForDM, loadProfilesForGM, loadProfilesForSidebar} from 'actions/user_actions';
 import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {
@@ -104,9 +105,9 @@ import {getHistory} from 'utils/browser_history';
 import {loadChannelsForCurrentUser} from 'actions/channel_actions';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
-import {handleNewPost, resetReloadPostsInChannel} from 'actions/post_actions';
+import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
-import {loadProfilesForSidebar} from 'actions/user_actions';
+
 import store from 'stores/redux_store.jsx';
 import WebSocketClient from 'client/web_websocket_client.jsx';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
@@ -1368,6 +1369,11 @@ function handlePreferenceChangedEvent(msg) {
 
     if (addedNewDmUser(preference)) {
         loadProfilesForSidebar();
+        loadProfilesForDM();
+    }
+
+    if (addedNewGmUser(preference)) {
+        loadProfilesForGM();
     }
 }
 
@@ -1377,6 +1383,11 @@ function handlePreferencesChangedEvent(msg) {
 
     if (preferences.findIndex(addedNewDmUser) !== -1) {
         loadProfilesForSidebar();
+        loadProfilesForDM();
+    }
+
+    if (preferences.findIndex(addedNewGmUser) !== -1) {
+        loadProfilesForGM();
     }
 }
 
@@ -1387,6 +1398,10 @@ function handlePreferencesDeletedEvent(msg) {
 
 function addedNewDmUser(preference) {
     return preference.category === Constants.Preferences.CATEGORY_DIRECT_CHANNEL_SHOW && preference.value === 'true';
+}
+
+function addedNewGmUser(preference) {
+    return preference.category === Constants.Preferences.CATEGORY_GROUP_CHANNEL_SHOW && preference.value === 'true';
 }
 
 function handleStatusChangedEvent(msg) {
