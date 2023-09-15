@@ -1,3 +1,10 @@
+## 1.4.3-next.3 (2023-09-15)
+
+### Fixed (2 changes)
+
+- [fix: user typing](kchat/webapp@656cc06c62fe2d653dffa385a9209ca2e6176803) by @benoit.nau ([merge request](kchat/webapp!528))
+- [fix: traduction](kchat/webapp@3bf85de76a2275c16c4cc43ad0334b6c7bb8d6b6) by @benoit.nau ([merge request](kchat/webapp!526))
+
 ## 1.4.3-next.2 (2023-09-13)
 
 ### Fixed (2 changes)
