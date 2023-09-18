@@ -73,8 +73,8 @@ import {
     UsersWithGroupsAndCount,
     GroupsWithCount,
     GroupCreateWithUserIds,
-    GroupSearachParams,
     CustomGroupPatch,
+    GroupSearchParams,
 } from '@mattermost/types/groups';
 import {PostActionResponse} from '@mattermost/types/integration_actions';
 import {
@@ -3745,7 +3745,7 @@ export default class Client4 {
         );
     }
 
-    searchGroups = (params: GroupSearachParams) => {
+    searchGroups = (params: GroupSearchParams) => {
         return this.doFetch<Group[]>(
             `${this.getGroupsRoute()}${buildQueryString(params)}`,
             {method: 'get'},
