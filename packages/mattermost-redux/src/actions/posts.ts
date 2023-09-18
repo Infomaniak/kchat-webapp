@@ -29,6 +29,12 @@ import {GlobalState} from '@mattermost/types/store';
 import {ChannelUnread} from '@mattermost/types/channels';
 import {FetchPaginatedThreadOptions} from '@mattermost/types/client4';
 
+import {Group} from '@mattermost/types/groups';
+
+import {getAllGroupsByName} from 'mattermost-redux/selectors/entities/groups';
+
+import {searchGroups} from 'mattermost-redux/actions/groups';
+
 import {getProfilesByIds, getProfilesByUsernames, getStatusesByIds} from './users';
 import {
     deletePreferences,
@@ -150,7 +156,7 @@ export function getPost(postId: string) {
 
         try {
             post = await Client4.getPost(postId);
-            getProfilesAndStatusesForPosts([post], dispatch, getState);
+            getMentionsAndStatusesForPosts([post], dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch({type: PostTypes.GET_POSTS_FAILURE, error});
@@ -764,7 +770,7 @@ export function getPostThread(rootId: string, fetchThreads = true) {
         let posts;
         try {
             posts = await getPaginatedPostThread(rootId, {fetchThreads, collapsedThreads: collapsedThreadsEnabled});
-            getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
+            getMentionsAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch({type: PostTypes.GET_POST_THREAD_FAILURE, error});
@@ -805,7 +811,7 @@ export function getNewestPostThread(rootId: string) {
         let posts;
         try {
             posts = await getPaginatedPostThread(rootId, options);
-            getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
+            getMentionsAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch({type: PostTypes.GET_POST_THREAD_FAILURE, error});
@@ -831,7 +837,7 @@ export function getPosts(channelId: string, page = 0, perPage = Posts.POST_CHUNK
         const collapsedThreadsEnabled = isCollapsedThreadsEnabled(getState());
         try {
             posts = await Client4.getPosts(channelId, page, perPage, fetchThreads, collapsedThreadsEnabled, collapsedThreadsExtended);
-            getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
+            getMentionsAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -864,7 +870,7 @@ export function getPostsUnread(channelId: string, fetchThreads = true, collapsed
             // Todo: use mattermost version
             hasLimitDate = posts.has_limitation;
 
-            getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
+            getMentionsAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -897,7 +903,7 @@ export function getPostsSince(channelId: string, since: number, fetchThreads = t
         try {
             const collapsedThreadsEnabled = isCollapsedThreadsEnabled(getState());
             posts = await Client4.getPostsSince(channelId, since, fetchThreads, collapsedThreadsEnabled, collapsedThreadsExtended);
-            getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
+            getMentionsAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -922,7 +928,7 @@ export function getPostsBefore(channelId: string, postId: string, page = 0, perP
         try {
             const collapsedThreadsEnabled = isCollapsedThreadsEnabled(getState());
             posts = await Client4.getPostsBefore(channelId, postId, page, perPage, fetchThreads, collapsedThreadsEnabled, collapsedThreadsExtended);
-            getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
+            getMentionsAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -946,7 +952,7 @@ export function getPostsAfter(channelId: string, postId: string, page = 0, perPa
         try {
             const collapsedThreadsEnabled = isCollapsedThreadsEnabled(getState());
             posts = await Client4.getPostsAfter(channelId, postId, page, perPage, fetchThreads, collapsedThreadsEnabled, collapsedThreadsExtended);
-            getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
+            getMentionsAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -998,7 +1004,7 @@ export function getPostsAround(channelId: string, postId: string, perPage = Post
             first_inaccessible_post_time: Math.max(before.first_inaccessible_post_time, after.first_inaccessible_post_time, thread.first_inaccessible_post_time) || 0,
         };
 
-        getProfilesAndStatusesForPosts(posts.posts, dispatch, getState);
+        getMentionsAndStatusesForPosts(posts.posts, dispatch, getState);
 
         dispatch(batchActions([
             receivedPosts(posts),
@@ -1040,8 +1046,8 @@ export function getThreadsForPosts(posts: Post[], fetchThreads = true) {
     };
 }
 
-// Note that getProfilesAndStatusesForPosts can take either an array of posts or a map of ids to posts
-export function getProfilesAndStatusesForPosts(postsArrayOrMap: Post[]|PostList['posts'], dispatch: DispatchFunc, getState: GetStateFunc) {
+// Note that getMentionsAndStatusesForPosts can take either an array of posts or a map of ids to posts
+export async function getMentionsAndStatusesForPosts(postsArrayOrMap: Post[]|PostList['posts'], dispatch: DispatchFunc, getState: GetStateFunc) {
     if (!postsArrayOrMap) {
         // Some API methods return {error} for no results
         return Promise.resolve();
@@ -1114,10 +1120,28 @@ export function getProfilesAndStatusesForPosts(postsArrayOrMap: Post[]|PostList[
     }
 
     // Profiles of users mentioned in the posts
-    const usernamesToLoad = getNeededAtMentionedUsernames(state, postsArray);
+    const usernamesAndGroupsToLoad = getNeededAtMentionedUsernamesAndGroups(state, postsArray);
 
-    if (usernamesToLoad.size > 0) {
-        promises.push(getProfilesByUsernames(Array.from(usernamesToLoad))(dispatch, getState));
+    if (usernamesAndGroupsToLoad.size > 0) {
+        // We need to load the profiles synchronously to filter them
+        // out of the groups to check
+        const getProfilesPromise = getProfilesByUsernames(Array.from(usernamesAndGroupsToLoad))(dispatch, getState);
+        promises.push(getProfilesPromise);
+
+        const {data} = await getProfilesPromise as ActionResult<UserProfile[]>;
+        const loadedProfiles = new Set<string>((data || []).map((p) => p.username));
+        const groupsToCheck = Array.from(usernamesAndGroupsToLoad).filter((name) => !loadedProfiles.has(name));
+
+        groupsToCheck.forEach((name) => {
+            const groupParams = {
+                q: name,
+                filter_allow_reference: true,
+                page: 0,
+                per_page: 60,
+                include_member_count: true,
+            };
+            promises.push(searchGroups(groupParams)(dispatch, getState));
+        });
     }
 
     return Promise.all(promises);
@@ -1142,6 +1166,66 @@ export function getPostsByIds(ids: string[]) {
 
         return {data: {posts}};
     };
+}
+
+export function getNeededAtMentionedUsernamesAndGroups(state: GlobalState, posts: Post[]): Set<string> {
+    let usersByUsername: Record<string, UserProfile>; // Populate this lazily since it's relatively expensive
+    let groupsByName: Record<string, Group>;
+
+    const usernamesAndGroupsToLoad = new Set<string>();
+
+    function findNeededUsernamesAndGroups(text?: string) {
+        if (!text || !text.includes('@')) {
+            return;
+        }
+
+        if (!usersByUsername) {
+            usersByUsername = getUsersByUsername(state);
+        }
+
+        if (!groupsByName) {
+            groupsByName = getAllGroupsByName(state);
+        }
+
+        const pattern = /\B@(([a-z0-9_.-]*[a-z0-9_])[.-]*)/gi;
+
+        let match;
+        while ((match = pattern.exec(text)) !== null) {
+            // match[1] is the matched mention including trailing punctuation
+            // match[2] is the matched mention without trailing punctuation
+            if (General.SPECIAL_MENTIONS.indexOf(match[2]) !== -1) {
+                continue;
+            }
+
+            if (usersByUsername[match[1]] || usersByUsername[match[2]]) {
+                // We have the user, go to the next match
+                continue;
+            }
+
+            if (groupsByName[match[1]] || groupsByName[match[2]]) {
+                // We have the group, go to the next match
+                continue;
+            }
+
+            // If there's no trailing punctuation, this will only add 1 item to the set
+            usernamesAndGroupsToLoad.add(match[1]);
+            usernamesAndGroupsToLoad.add(match[2]);
+        }
+    }
+
+    for (const post of posts) {
+        // These correspond to the fields searched by getMentionsEnabledFields on the server
+        findNeededUsernamesAndGroups(post.message);
+
+        if (post.props?.attachments) {
+            for (const attachment of post.props.attachments) {
+                findNeededUsernamesAndGroups(attachment.pretext);
+                findNeededUsernamesAndGroups(attachment.text);
+            }
+        }
+    }
+
+    return usernamesAndGroupsToLoad;
 }
 
 export function getPostEditHistory(postId: string) {

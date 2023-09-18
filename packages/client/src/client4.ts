@@ -73,8 +73,8 @@ import {
     UsersWithGroupsAndCount,
     GroupsWithCount,
     GroupCreateWithUserIds,
-    GroupSearachParams,
     CustomGroupPatch,
+    GroupSearchParams,
 } from '@mattermost/types/groups';
 import {PostActionResponse} from '@mattermost/types/integration_actions';
 import {
@@ -3674,8 +3674,9 @@ export default class Client4 {
         );
     };
 
-    getGroups = (filterAllowReference = false, page = 0, perPage = 10, includeMemberCount = false, hasFilterMember = false) => {
+    getGroups = (q = '', filterAllowReference = false, page = 0, perPage = 10, includeMemberCount = false, hasFilterMember = false) => {
         const qs: any = {
+            q,
             filter_allow_reference: filterAllowReference,
             page,
             per_page: perPage,
@@ -3744,7 +3745,7 @@ export default class Client4 {
         );
     }
 
-    searchGroups = (params: GroupSearachParams) => {
+    searchGroups = (params: GroupSearchParams) => {
         return this.doFetch<Group[]>(
             `${this.getGroupsRoute()}${buildQueryString(params)}`,
             {method: 'get'},
