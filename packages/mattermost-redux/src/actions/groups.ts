@@ -156,7 +156,7 @@ export function getGroup(id: string, includeMemberCount = false): ActionFunc {
     });
 }
 
-export function getGroups(filterAllowReference = false, page = 0, perPage = 10, includeMemberCount = false): ActionFunc {
+export function getGroups(q = '', filterAllowReference = false, page = 0, perPage = 10, includeMemberCount = false): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let groups: Group[] = [];
         let currentFetch: Group[] = [];
@@ -165,7 +165,7 @@ export function getGroups(filterAllowReference = false, page = 0, perPage = 10, 
         try {
             while (true) {
                 // eslint-disable-next-line no-await-in-loop
-                currentFetch = await Client4.getGroups(filterAllowReference, currentPage, perPage, includeMemberCount);
+                currentFetch = await Client4.getGroups(q, filterAllowReference, currentPage, perPage, includeMemberCount);
                 groups = groups.concat(currentFetch);
                 if (currentFetch.length < perPage) {
                     break;
