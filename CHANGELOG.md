@@ -1,3 +1,10 @@
+## 1.4.3-next.4 (2023-09-18)
+
+### Changed (2 changes)
+
+- [restore mattermost getGroups func without pagination](kchat/webapp@278d240feacc62edffdb20b741275d3a18e24100) by @antonbuksa ([merge request](kchat/webapp!529))
+- [[MM-52964] Updates post text processing to fetch nonexisting custom groups](kchat/webapp@ae63ad104310066709e40b5fc66ba67d47c5af48) by @antonbuksa ([merge request](kchat/webapp!529))
+
 ## 1.4.3-next.3 (2023-09-15)
 
 ### Fixed (2 changes)
