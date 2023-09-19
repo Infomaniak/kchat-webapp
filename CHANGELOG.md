@@ -1,3 +1,9 @@
+## 1.4.3-next.5 (2023-09-19)
+
+### Changed (1 change)
+
+- [cherrypick older updates to groups code to fix params](kchat/webapp@7d2838d6692eba2de59638960bfd8eb7201918a4) by @antonbuksa ([merge request](kchat/webapp!531))
+
 ## 1.4.3-next.4 (2023-09-18)
 
 ### Changed (2 changes)
