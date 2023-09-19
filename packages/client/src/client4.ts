@@ -3,6 +3,8 @@
 
 /* eslint-disable max-lines */
 
+import crypto from 'crypto';
+
 import FormData from 'form-data';
 
 import {PreferenceType} from '@mattermost/types/preferences';
@@ -147,8 +149,8 @@ import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
+
 // @ts-ignore
-import crypto from 'crypto';
 
 const IKConstants = {
 

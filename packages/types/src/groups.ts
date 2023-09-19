@@ -179,4 +179,5 @@ export type GroupMembership = {
 export type GroupPermissions = {
     can_delete: boolean;
     can_manage_members: boolean;
+    can_restore: boolean;
 }

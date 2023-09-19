@@ -409,6 +409,28 @@ export function searchGroups(params: GroupSearachParams): ActionFunc {
     };
 }
 
+export function restoreGroup(groupId: string): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let data;
+        try {
+            data = await Client4.restoreGroup(groupId);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            return {error};
+        }
+
+        dispatch(
+            {
+                type: GroupTypes.RESTORED_GROUP,
+                id: groupId,
+                data,
+            },
+        );
+
+        return {data};
+    };
+}
+
 export function archiveGroup(groupId: string): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let data;
