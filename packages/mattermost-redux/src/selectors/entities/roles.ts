@@ -6,7 +6,7 @@ import type {Role} from '@mattermost/types/roles';
 import type {GlobalState} from '@mattermost/types/store';
 
 import {General, Permissions} from 'mattermost-redux/constants';
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
+import {createSelector} from 'reselect';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {
     getMySystemPermissions,
