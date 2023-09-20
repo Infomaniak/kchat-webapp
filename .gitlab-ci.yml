@@ -170,7 +170,7 @@ unit_test:
       - .yarn/install-state.gz
       - .jestcache
   before_script:
-    - yarn
+    - NPM_TOKEN=${NPM_TOKEN} yarn
   script:
     # typescript
     # - npm run check-types
