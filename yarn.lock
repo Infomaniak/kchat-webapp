@@ -3787,6 +3787,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@infomaniak/mattermost-client@workspace:packages/client":
+  version: 0.0.0-use.local
+  resolution: "@infomaniak/mattermost-client@workspace:packages/client"
+  dependencies:
+    form-data: 4.0.0
+    jest: "*"
+    nock: "*"
+    typescript: ^4.3
+  languageName: unknown
+  linkType: soft
+
+"@infomaniak/mattermost-types@workspace:packages/types":
+  version: 0.0.0-use.local
+  resolution: "@infomaniak/mattermost-types@workspace:packages/types"
+  dependencies:
+    typescript: ^4.3
+  languageName: unknown
+  linkType: soft
+
 "@istanbuljs/load-nyc-config@npm:^1.0.0":
   version: 1.1.0
   resolution: "@istanbuljs/load-nyc-config@npm:1.1.0"
@@ -4769,17 +4788,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mattermost/client@workspace:packages/client":
-  version: 0.0.0-use.local
-  resolution: "@mattermost/client@workspace:packages/client"
-  dependencies:
-    form-data: 4.0.0
-    jest: "*"
-    nock: "*"
-    typescript: ^4.3
-  languageName: unknown
-  linkType: soft
-
 "@mattermost/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@mattermost/components@workspace:packages/components"
@@ -4830,14 +4838,6 @@ __metadata:
     shallow-equals: ^1.0.0
     styled-components: ^5.3.5
     tippy.js: ^6.3.7
-  languageName: unknown
-  linkType: soft
-
-"@mattermost/types@workspace:packages/types":
-  version: 0.0.0-use.local
-  resolution: "@mattermost/types@workspace:packages/types"
-  dependencies:
-    typescript: ^4.3
   languageName: unknown
   linkType: soft
 
@@ -15542,9 +15542,9 @@ __metadata:
     "@infomaniak/compass-components": 0.11.0
     "@infomaniak/compass-icons": 0.10.0
     "@infomaniak/marked": ^0.2.0
-    "@mattermost/client": "workspace:packages/client"
+    "@infomaniak/mattermost-client": "workspace:packages/client"
+    "@infomaniak/mattermost-types": "workspace:packages/types"
     "@mattermost/components": "workspace:packages/components"
-    "@mattermost/types": "workspace:packages/types"
     "@mui/base": 5.0.0-alpha.116
     "@mui/material": 5.11.7
     "@mui/styled-engine-sc": 5.11.0

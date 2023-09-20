@@ -274,6 +274,8 @@ var config = {
             'mattermost-redux': 'packages/mattermost-redux/src',
             reselect: 'packages/reselect/src',
             marked: '@infomaniak/marked',
+            '@mattermost/client': '@infomaniak/mattermost-client',
+            '@mattermost/types': '@infomaniak/mattermost-types',
             '@mui/styled-engine': '@mui/styled-engine-sc',
 
             // This alias restricts single version of styled components acros all packages

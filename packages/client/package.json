@@ -1,11 +1,11 @@
 {
-  "name": "@mattermost/client",
-  "version": "7.9.0",
+  "name": "@infomaniak/mattermost-client",
+  "version": "7.9.0-ik.1",
   "description": "JavaScript/TypeScript client for Mattermost",
   "keywords": [
     "mattermost"
   ],
-  "homepage": "https://github.com/mattermost/mattermost-webapp/tree/master/packages/client#readme",
+  "homepage": "https://github.com/Infomaniak/kchat-webapp/tree/master/packages/client#readme",
   "license": "MIT",
   "files": [
     "lib"
@@ -13,7 +13,7 @@
   "main": "./lib/index.js",
   "repository": {
     "type": "git",
-    "url": "github:mattermost/mattermost-webapp",
+    "url": "github:infomaniak/kchat-webapp",
     "directory": "packages/client"
   },
   "dependencies": {
