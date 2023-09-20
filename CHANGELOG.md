@@ -1,3 +1,9 @@
+## 1.4.3-next.6 (2023-09-20)
+
+### Fixed (1 change)
+
+- [fix: avatars](kchat/webapp@2091f9a6e90a6d5e6c68ebc11a08e7f345193297) by @benoit.nau ([merge request](kchat/webapp!530))
+
 ## 1.4.3-next.5 (2023-09-19)
 
 ### Changed (1 change)
