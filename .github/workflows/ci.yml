@@ -17,7 +17,6 @@ jobs:
         registry-url: 'https://npm.pkg.github.com'
         scope: '@infomaniak'
     - run: yarn
-    - run: yarn config set npmRegistryServer https://npm.pkg.github.com
     - run: yarn workspace @infomaniak/mattermost-client build
     - run: yarn workspace @infomaniak/mattermost-types build
     - run: yarn workspace @infomaniak/mattermost-client npm publish
@@ -25,3 +24,4 @@ jobs:
       shell: bash
     env:
       NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
