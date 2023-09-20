@@ -36,6 +36,8 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import {connectedKmeetCallUrl, connectedKmeetChannels} from 'selectors/kmeet_calls';
 
+import {UserProfile} from '@mattermost/types/users';
+
 import {closeModal, openModal} from './views/modals';
 
 export const showExpandedView = () => (dispatch: Dispatch<GenericAction>) => {
@@ -326,16 +328,26 @@ export function setCallListeners() {
     }
 }
 
+type Users = UserProfile & {avatar: string}
+
+function setUsersAvatar(users: UserProfile[]): Users[] {
+    return users.map((user: UserProfile) => ({
+        ...user,
+        avatar: imageURLForUser(user.id, user.last_picture_update),
+    }));
+}
+
 function handleDesktopKmeetCall(globalState: GlobalState, currentUserId: string, callMessage: Post): void {
     const currentUser = getCurrentUser(globalState);
     const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);
     const {users, channel} = callParameters(globalState);
+    const usersWithAvatars = setUsersAvatar(users);
     window.postMessage(
         {
             type: 'call-dialing',
             message: {
                 calling: {
-                    users,
+                    users: usersWithAvatars,
                     channelID: callMessage.channel_id,
                     url: callMessage.props.url,
                     name: channel.display_name,
