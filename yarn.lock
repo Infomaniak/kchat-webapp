@@ -3722,11 +3722,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@infomaniak/compass-components@npm:0.11.0":
-  version: 0.11.0
-  resolution: "@infomaniak/compass-components@npm:0.11.0"
+"@infomaniak/compass-components@npm:0.12.0":
+  version: 0.12.0
+  resolution: "@infomaniak/compass-components@npm:0.12.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40infomaniak%2Fcompass-components%2F0.12.0%2Fe320e20de4b2f5998db6aaea6c9fd97bf3ddd3f6"
   dependencies:
-    "@infomaniak/compass-icons": 0.8.0
+    "@infomaniak/compass-icons": 0.10.0
     "@popperjs/core": ^2.9.2
     clsx: ^1.1.1
     color-blend: ^3.0.1
@@ -3740,7 +3740,7 @@ __metadata:
   peerDependencies:
     react: 16.13.1 || ^17.0.1
     react-dom: 16.13.1 || ^17.0.1
-  checksum: f3b70fcdbda25dec0cfaffc10cd4a32d61504cf6cb0e15ea33099497b8d3d5f8dc1cff7615e52feb2911fe20e87d3a7a1baba81c322fd69ffc506eaccff4e08e
+  checksum: 133025956744b96293b1cee52d72f996658372cb2369bf7776c435caada3899d7f5a57f76ab3c73788897fe93cb0bd53538fa086d32db41c4dabd97e5d4469f1
   languageName: node
   linkType: hard
 
@@ -3758,23 +3758,6 @@ __metadata:
     unzip: 0.1.11
     xmldom: 0.6.0
   checksum: ea8e48685b374fbda334149d695030eb574124c08e60f12267dedb4409c7a76731de76b0826ebeed5657b4dadfc8e2740f0e7d6aad2adfec47aa4c4d5a417d5f
-  languageName: node
-  linkType: hard
-
-"@infomaniak/compass-icons@npm:0.8.0":
-  version: 0.8.0
-  resolution: "@infomaniak/compass-icons@npm:0.8.0"
-  dependencies:
-    esm: 3.2.25
-    fontello-batch-cli: 4.0.0
-    fontello-cli: 0.6.2
-    lodash: 4.17.21
-    needle: 3.0.0
-    open: 8.4.0
-    svgpath: 2.5.0
-    unzip: 0.1.11
-    xmldom: 0.6.0
-  checksum: 3b57bf2b1cb653c62cab5090e248b65505e49c1f832e972c0cb97a9f0dc2c1cb671b6b7ac58cc2220ff715680c2b8ac87d9c89e8d3abdea057be4a4f80111854
   languageName: node
   linkType: hard
 
@@ -15539,7 +15522,7 @@ __metadata:
     "@giphy/react-components": 8.1.0
     "@guyplusplus/turndown-plugin-gfm": 1.0.7
     "@hot-loader/react-dom": 17.0.2
-    "@infomaniak/compass-components": 0.11.0
+    "@infomaniak/compass-components": 0.12.0
     "@infomaniak/compass-icons": 0.10.0
     "@infomaniak/marked": ^0.2.0
     "@infomaniak/mattermost-client": "workspace:packages/client"
