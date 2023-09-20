@@ -83,8 +83,8 @@ build_front:
     - export ENVIRONMENT=${DEPLOY_VARIABLE}
   script:
     - yarn
-    - yarn workspace @mattermost/types build
-    - yarn workspace @mattermost/client build
+    - yarn workspace @infomaniak/mattermost-types build
+    - yarn workspace @infomaniak/mattermost-client build
     - yarn workspace @mattermost/components build
     - yarn build:webapp
   cache:
