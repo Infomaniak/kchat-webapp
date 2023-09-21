@@ -114,7 +114,6 @@ publish_packages:
   environment:
     name: "$DEPLOY_VARIABLE"
   script:
-    - yarn config set npmRegistryServer https://verdaccio.dev.infomaniak.ch
     - yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch
     - yarn config set npmAuthToken "$VERDACCIO_TOKEN"
     - yarn
