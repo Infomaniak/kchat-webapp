@@ -114,15 +114,16 @@ publish_packages:
   environment:
     name: "$DEPLOY_VARIABLE"
   script:
+    - yarn
+    - yarn workspace @infomaniak/mattermost-types build
+    - yarn workspace @infomaniak/mattermost-client build
     - yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch
     - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken' "$VERDACCIO_TOKEN"
     - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAlwaysAuth' true
     - yarn config set npmScopes.infomaniak.npmRegistryServer https://verdaccio.dev.infomaniak.ch
+    - yarn config set npmScopes.infomaniak.npmPublishRegistry https://verdaccio.dev.infomaniak.ch
     - yarn config set npmScopes.infomaniak.npmAuthToken "$VERDACCIO_TOKEN"
     - yarn config set npmScopes.infomaniak.npmAlwaysAuth true
-    - yarn
-    - yarn workspace @infomaniak/mattermost-types build
-    - yarn workspace @infomaniak/mattermost-client build
     - yarn workspace @infomaniak/mattermost-types npm publish
     - yarn workspace @infomaniak/mattermost-client npm publish
   cache:
