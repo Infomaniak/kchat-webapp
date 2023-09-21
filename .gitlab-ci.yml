@@ -115,7 +115,7 @@ publish_packages:
     name: "$DEPLOY_VARIABLE"
   script:
     - yarn config set npmRegistryServer https://verdaccio.dev.infomaniak.ch
-    - yarn config set npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken "$VERDACCIO_TOKEN"
+    - yarn config set npmAuthToken "$VERDACCIO_TOKEN"
     - yarn
     - yarn workspace @infomaniak/mattermost-types build
     - yarn workspace @infomaniak/mattermost-client build
