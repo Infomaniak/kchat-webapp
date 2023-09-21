@@ -108,8 +108,6 @@ publish_packages:
   rules:
     - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-      when: on_success
     - when: never
   environment:
     name: "$DEPLOY_VARIABLE"
@@ -123,7 +121,6 @@ publish_packages:
     - yarn config set npmScopes.infomaniak.npmRegistryServer https://verdaccio.dev.infomaniak.ch
     - yarn config set npmScopes.infomaniak.npmPublishRegistry https://verdaccio.dev.infomaniak.ch
     - yarn config set npmScopes.infomaniak.npmAuthToken "$VERDACCIO_TOKEN"
-    - yarn config set npmScopes.infomaniak.npmAlwaysAuth true
     - yarn workspace @infomaniak/mattermost-types npm publish
     - yarn workspace @infomaniak/mattermost-client npm publish
   cache:

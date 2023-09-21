@@ -17,10 +17,12 @@ jobs:
         registry-url: 'https://npm.pkg.github.com'
         scope: '@infomaniak'
     - run: yarn
-    - run: yarn config set npmPublishRegistry https://npm.pkg.github.com
-    - run: yarn config set 'npmRegistries["//npm.pkg.github.com"].npmAuthToken' "$NPM_TOKEN"
     - run: yarn workspace @infomaniak/mattermost-client build
     - run: yarn workspace @infomaniak/mattermost-types build
+    - run: yarn config set npmPublishRegistry https://npm.pkg.github.com
+    - run: yarn config set 'npmRegistries["//npm.pkg.github.com"].npmAuthToken' "$NPM_TOKEN"
+    - run: yarn config set 'npmRegistries["//npm.pkg.github.com"].npmAlwaysAuth' true
+    - run: yarn config set npmScopes.infomaniak.npmPublishRegistry https://npm.pkg.github.com
     - run: yarn workspace @infomaniak/mattermost-client npm publish
     - run: yarn workspace @infomaniak/mattermost-types npm publish
       shell: bash
