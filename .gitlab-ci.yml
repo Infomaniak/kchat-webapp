@@ -119,8 +119,8 @@ publish_packages:
     - yarn
     - yarn workspace @infomaniak/mattermost-types build
     - yarn workspace @infomaniak/mattermost-client build
-    - yarn workspace @infomaniak/mattermost-types npm publish --tolerate-republish=true
-    - yarn workspace @infomaniak/mattermost-client npm publish --tolerate-republish=true
+    - yarn workspace @infomaniak/mattermost-types npm publish
+    - yarn workspace @infomaniak/mattermost-client npm publish
   cache:
     key:
       files:
