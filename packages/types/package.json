@@ -1,6 +1,6 @@
 {
   "name": "@infomaniak/mattermost-types",
-  "version": "7.9.0-ik.1",
+  "version": "7.9.0-nightly.1",
   "description": "Shared type definitions used by the Mattermost web app",
   "keywords": [
     "mattermost"
