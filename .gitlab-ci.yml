@@ -100,6 +100,35 @@ build_front:
     expire_in: 1 days
     when: always
 
+publish_packages:
+  stage: build
+  image: node:16.10.0
+  tags:
+    - kubernetes
+  rules:
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+      when: on_success
+    - when: never
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  script:
+    - yarn config set npmRegistryServer https://verdaccio.dev.infomaniak.ch
+    - yarn config set npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken "$VERDACCIO_TOKEN"
+    - yarn
+    - yarn workspace @infomaniak/mattermost-types build
+    - yarn workspace @infomaniak/mattermost-client build
+    - yarn workspace @infomaniak/mattermost-types npm publish --tolerate-republish=true
+    - yarn workspace @infomaniak/mattermost-client npm publish --tolerate-republish=true
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - .yarn/cache/
+      - .yarn/install-state.gz
+
 publish_front:
   stage: release
   tags:
