@@ -58,7 +58,7 @@ import LocalStorageStore from 'stores/local_storage_store';
 import 'plugins/export.js';
 
 const LazyErrorPage = React.lazy(() => import('components/error_page'));
-const LazyLogin = React.lazy(() => import('components/login/login'));
+const LazyLogin = Utils.lazyWithRetries(() => import('components/login/login'));
 const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
 const LazyHelpController = React.lazy(() => import('components/help/help_controller'));
 
