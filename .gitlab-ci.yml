@@ -106,10 +106,10 @@ publish_packages:
   tags:
     - kubernetes
   rules:
-    - if: $DEPLOY_VARIABLE == "prodsec"
-      when: on_success
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
       when: never
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
     - when: never
   environment:
     name: "$DEPLOY_VARIABLE"
