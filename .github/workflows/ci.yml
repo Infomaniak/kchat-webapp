@@ -16,15 +16,17 @@ jobs:
         node-version: '16'
         registry-url: 'https://npm.pkg.github.com'
         scope: '@infomaniak'
-    - run: yarn
-    - run: yarn workspace @infomaniak/mattermost-client build
-    - run: yarn workspace @infomaniak/mattermost-types build
-    - run: yarn config set npmPublishRegistry https://npm.pkg.github.com
-    - run: yarn config set 'npmRegistries["//npm.pkg.github.com"].npmAuthToken' "$NPM_TOKEN"
-    - run: yarn config set 'npmRegistries["//npm.pkg.github.com"].npmAlwaysAuth' true
-    - run: yarn config set npmScopes.infomaniak.npmPublishRegistry https://npm.pkg.github.com
-    - run: yarn workspace @infomaniak/mattermost-client npm publish
-    - run: yarn workspace @infomaniak/mattermost-types npm publish
+    - name: Build Packages
+      run: |
+        yarn
+        yarn workspace @infomaniak/mattermost-client build
+        yarn workspace @infomaniak/mattermost-types build
+        yarn config set npmPublishRegistry https://npm.pkg.github.com
+        yarn config set 'npmRegistries["//npm.pkg.github.com"].npmAuthToken' "$NPM_TOKEN"
+        yarn config set 'npmRegistries["//npm.pkg.github.com"].npmAlwaysAuth' true
+        yarn config set npmScopes.infomaniak.npmPublishRegistry https://npm.pkg.github.com
+        yarn workspace @infomaniak/mattermost-client npm publish
+        yarn workspace @infomaniak/mattermost-types npm publish
       shell: bash
     env:
       NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
