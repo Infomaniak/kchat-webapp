@@ -354,7 +354,7 @@ export function getProfilesByIds(userIds: string[], options?: any, includeCurren
     };
 }
 
-export function getProfilesByUsernames(usernames: string[]): ActionFunc {
+export function getProfilesByUsernames(usernames: string[]): ActionFunc<UserProfile[]> {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {currentUserId} = getState().entities.users;
         let profiles;

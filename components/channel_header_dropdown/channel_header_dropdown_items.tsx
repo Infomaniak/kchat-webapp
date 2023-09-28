@@ -57,7 +57,7 @@ export type Props = {
     dmUserId: string;
     hasCall: boolean;
     actions: {
-        startOrJoinKmeetCallInChannel: (channelId: string) => void;
+        startOrJoinCallInChannelV2: (channelId: string) => void;
     };
 }
 
@@ -230,7 +230,7 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                         <Menu.ItemAction
                             id='startCallInChannel'
                             key='startCallInChannel'
-                            onClick={() => actions.startOrJoinKmeetCallInChannel(channel.id)}
+                            onClick={() => actions.startOrJoinCallInChannelV2(channel.id)}
                             text={hasCall ? localizeMessage('kmeet.calls.join', 'Join call') : localizeMessage('kmeet.calls.start', 'Start call')}
                         />
                     )}

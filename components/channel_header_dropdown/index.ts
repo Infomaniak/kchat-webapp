@@ -23,8 +23,6 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 
-import {startOrJoinKmeetCallInChannel} from 'actions/views/kmeet_calls';
-
 import {getPenultimateViewedChannelName} from 'selectors/local_storage';
 import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 
@@ -34,6 +32,8 @@ import * as Utils from 'utils/utils';
 import {getChannelHeaderMenuPluginComponents} from 'selectors/plugins';
 
 import {GlobalState} from 'types/store';
+
+import {startOrJoinCallInChannelV2} from 'actions/calls';
 
 import Desktop from './channel_header_dropdown';
 import Items from './channel_header_dropdown_items';
@@ -86,9 +86,8 @@ const mapStateToProps = (state: GlobalState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-
         actions: bindActionCreators({
-            startOrJoinKmeetCallInChannel,
+            startOrJoinCallInChannelV2,
         }, dispatch),
     };
 };

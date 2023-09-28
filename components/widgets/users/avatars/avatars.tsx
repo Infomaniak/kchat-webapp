@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable react/jsx-closing-bracket-location */
 
 import React, {memo, ComponentProps, CSSProperties, useMemo, useEffect, useRef} from 'react';
 import {useIntl} from 'react-intl';
@@ -31,6 +32,8 @@ type Props = {
     size?: ComponentProps<typeof Avatar>['size'];
     fetchMissingUsers?: boolean;
     disableProfileOverlay?: boolean;
+    disablePopover?: boolean;
+    disableButton?: boolean;
 };
 
 interface MMOverlayTrigger extends BaseOverlayTrigger {
@@ -60,11 +63,15 @@ function UserAvatar({
     userId,
     overlayProps,
     disableProfileOverlay,
+    disablePopover = false,
+    disableButton = false,
     ...props
 }: {
     userId: UserProfile['id'];
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
     disableProfileOverlay: boolean;
+    disablePopover?: boolean;
+    disableButton?: boolean;
 } & ComponentProps<typeof Avatar>) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
@@ -98,16 +105,20 @@ function UserAvatar({
                 content={name}
                 {...overlayProps}
             >
-                <RoundButton
-                    className={'style--none'}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <Avatar
-                        url={imageURLForUser(userId, user?.last_picture_update)}
-                        tabIndex={-1}
-                        {...props}
-                    />
-                </RoundButton>
+                {/* eslint-disable-next-line multiline-ternary */}
+                { disableButton ? (<Avatar
+                    url={imageURLForUser(userId, user?.last_picture_update)}
+                    tabIndex={-1}
+                    {...props}/>) :
+                    (<RoundButton
+                        className={'style--none'}
+                        onClick={(e) => e.stopPropagation()}>
+                        <Avatar
+                            url={imageURLForUser(userId, user?.last_picture_update)}
+                            tabIndex={-1}
+                            {...props}
+                        />
+                    </RoundButton>)}
             </SimpleTooltip>
         </OverlayTrigger>
     );
@@ -119,6 +130,7 @@ function Avatars({
     totalUsers,
     fetchMissingUsers = true,
     disableProfileOverlay = false,
+    disablePopover = false,
 }: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
@@ -152,6 +164,7 @@ function Avatars({
                     size={size}
                     overlayProps={overlayProps}
                     disableProfileOverlay={disableProfileOverlay}
+                    disablePopover={disablePopover}
                 />
             ))}
             {Boolean(nonDisplayCount) && (

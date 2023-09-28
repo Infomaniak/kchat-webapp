@@ -6,7 +6,7 @@
 import {batchActions} from 'redux-batched-actions';
 
 import {Client4} from 'mattermost-redux/client';
-import {closeModal, openModal} from 'actions/views/modals';
+import {openModal} from 'actions/views/modals';
 import {
     ChannelTypes,
     EmojiTypes,
@@ -36,7 +36,7 @@ import {
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 
-import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getNewestThreadInTeam, getThread, getThreads} from 'mattermost-redux/selectors/entities/threads';
 import {
     getThread as fetchThread,
@@ -56,7 +56,7 @@ import {
     getPosts,
     getPostsSince,
     getPostThread,
-    getProfilesAndStatusesForPosts,
+    getMentionsAndStatusesForPosts,
     getThreadsForPosts,
     postDeleted,
     receivedNewPost,
@@ -87,7 +87,6 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {appsFeatureFlagEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {getStandardAnalytics} from 'mattermost-redux/actions/admin';
 
 import {fetchAppBindings, fetchRHSAppsBindings} from 'mattermost-redux/actions/apps';
@@ -105,7 +104,7 @@ import {getHistory} from 'utils/browser_history';
 import {loadChannelsForCurrentUser} from 'actions/channel_actions';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
-import {handleNewPost} from 'actions/post_actions';
+import {handleNewPost, resetReloadPostsInChannel} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
 import {loadProfilesForSidebar} from 'actions/user_actions';
 import store from 'stores/redux_store.jsx';
@@ -116,17 +115,14 @@ import {getSiteURL} from 'utils/url';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 import InteractiveDialog from 'components/interactive_dialog';
-
-// import DialingModal from 'components/kmeet_conference/ringing_dialog';
-import {connectedChannelID, voiceConnectedChannels} from 'selectors/calls';
-
+import {voiceConnectedChannels} from 'selectors/calls';
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import {
     getTeamsUsage,
 } from 'actions/cloud';
 import {isDesktopApp} from 'utils/user_agent';
 
-// import {isDesktopApp} from 'utils/user_agent';
+import {callNoLongerExist, receivedCall} from './calls';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -214,6 +210,10 @@ export function initialize() {
         token,
         currentChannelId,
     );
+
+    // handle immediate WS reconnection after loosing the network connection.
+    window.removeEventListener('online', reconnect);
+    window.addEventListener('online', () => reconnect());
 }
 
 export function close() {
@@ -290,6 +290,8 @@ export async function reconnect(socketId?: string) {
         // }
 
         dispatch(loadChannelsForCurrentUser());
+
+        dispatch(resetReloadPostsInChannel());
 
         if (mostRecentPost) {
             // eslint-disable-next-line no-console
@@ -645,6 +647,9 @@ export function handleEvent(msg) {
     case SocketEvents.CONFERENCE_USER_CONNECTED:
         dispatch(handleConferenceUserConnected(msg));
         break;
+    case SocketEvents.CONFERENCE_USER_DENIED:
+        dispatch(handleConferenceUserDenied(msg));
+        break;
     case SocketEvents.CONFERENCE_USER_DISCONNECTED:
         dispatch(handleConferenceUserDisconnected(msg));
         break;
@@ -772,14 +777,17 @@ const handleNewPostEventDebounced = debouncePostEvent(100);
 export function handleNewPostEvent(msg) {
     return (myDispatch, myGetState) => {
         const post = msg.data.post;
-
+        if (post.type === 'custom_call' && callDialingEnabled(myGetState()) && post.props) {
+            const currentUserId = getCurrentUserId(myGetState());
+            dispatch(receivedCall(post, currentUserId));
+        }
         if (window.logPostEvents) {
             // eslint-disable-next-line no-console
             console.log('handleNewPostEvent - new post received', post);
         }
         myDispatch(handleNewPost(post, msg));
 
-        getProfilesAndStatusesForPosts([post], myDispatch, myGetState);
+        getMentionsAndStatusesForPosts([post], myDispatch, myGetState);
 
         // Since status updates aren't real time, assume another user is online if they have posted and:
         // 1. The user hasn't set their status manually to something that isn't online
@@ -818,7 +826,7 @@ export function handleNewPostEvents(queue) {
         myDispatch(getThreadsForPosts(posts));
 
         // And any other data needed for them
-        getProfilesAndStatusesForPosts(posts, myDispatch, myGetState);
+        getMentionsAndStatusesForPosts(posts, myDispatch, myGetState);
     };
 }
 
@@ -834,7 +842,7 @@ export function handlePostEditEvent(msg) {
     const crtEnabled = isCollapsedThreadsEnabled(getState());
     dispatch(receivedPost(post, crtEnabled));
 
-    getProfilesAndStatusesForPosts([post], dispatch, getState);
+    getMentionsAndStatusesForPosts([post], dispatch, getState);
     const currentChannelId = getCurrentChannelId(getState());
 
     // Update channel state
@@ -1819,22 +1827,32 @@ function handleThreadFollowChanged(msg) {
     };
 }
 
+function handleConferenceUserDenied() {
+    return async (doDispatch) => {
+        doDispatch({
+            type: ActionTypes.CALL_HANGUP,
+            data: {isRinging: false},
+        });
+    };
+}
+
 function handleConferenceUserConnected(msg) {
     return (doDispatch, doGetState) => {
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
-        doDispatch({
-            type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
-            data: {
-                channelID: msg.data.channel_id,
-                userID: msg.data.user_id,
-                currentUserID: getCurrentUserId(getState()),
-                url: msg.data.url,
-                id: Object.keys(calls[msg.data.channel_id])[0],
-            },
-        });
-        if (msg.data.user_id === getCurrentUserId(getState())) {
-            dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
+
+        if (msg.data.channel_id in calls && calls[msg.data.channel_id].length) {
+            const keys = Object.keys(calls[msg.data.channel_id]);
+            doDispatch({
+                type: ActionTypes.VOICE_CHANNEL_USER_CONNECTED,
+                data: {
+                    channelID: msg.data.channel_id,
+                    userID: msg.data.user_id,
+                    currentUserID: getCurrentUserId(getState()),
+                    url: msg.data.url,
+                    id: keys[0],
+                },
+            });
         }
     };
 }
@@ -1844,22 +1862,28 @@ function handleConferenceUserDisconnected(msg) {
         const state = doGetState();
         const calls = voiceConnectedChannels(state);
 
-        doDispatch({
-            type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
-            data: {
-                channelID: msg.data.channel_id,
-                userID: msg.data.user_id,
-                currentUserID: getCurrentUserId(getState()),
-                url: msg.data.url,
-                callID: Object.keys(calls[msg.data.channel_id])[0],
-            },
-        });
+        if (msg.data.channel_id in calls && calls[msg.data.channel_id].length) {
+            const keys = Object.keys(calls[msg.data.channel_id]);
+            doDispatch({
+                type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
+                data: {
+                    channelID: msg.data.channel_id,
+                    userID: msg.data.user_id,
+                    currentUserID: getCurrentUserId(getState()),
+                    url: msg.data.url,
+                    callID: keys[0],
+                },
+            });
+        }
     };
 }
 
 function handleConferenceDeleted(msg) {
-    return (doDispatch, getState) => {
+    return (doDispatch, doGetState) => {
         dispatch(getPostsSince(msg.data.channel_id, Date.now()));
+        if (callDialingEnabled(doGetState())) {
+            dispatch(callNoLongerExist(msg));
+        }
         doDispatch({
             type: ActionTypes.VOICE_CHANNEL_DELETED,
             data: {
@@ -1869,8 +1893,6 @@ function handleConferenceDeleted(msg) {
         });
     };
 }
-
-
 
 function handlePusherMemberRemoved(msg) {
     // console.log('pusher member removed', msg);

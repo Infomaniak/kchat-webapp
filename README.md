@@ -28,8 +28,8 @@ We are using yarn berry with workspace tools for monorepo support building and b
 
 ```shell
 yarn
-yarn workspace @mattermost/types build
-yarn workspace @mattermost/client build
+yarn workspace @infomaniak/mattermost-types build
+yarn workspace @infomaniak/mattermost-client build
 yarn workspace @mattermost/components build
 ```
 

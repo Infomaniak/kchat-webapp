@@ -234,7 +234,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
             draft: state.draft || {...props.draft, caretPosition: props.draft.message.length, uploadsInProgress: []},
         };
 
-        const rootChanged = props.rootId !== state.rootId;
+        const rootChanged = props.rootId !== state.rootId || props.draft.rootId !== state.draft?.rootId;
         const messageInHistoryChanged = props.messageInHistory !== state.messageInHistory;
         if (rootChanged || messageInHistoryChanged || (props.isRemoteDraft && props.draft.message !== state.draft?.message)) {
             updatedState = {
@@ -811,7 +811,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
 
         const saveDraft = () => {
             if (typeof rootId == 'undefined') {
-                this.props.onUpdateCommentDraft(draft, save);
+                this.props.onUpdateCommentDraft(draft);
             } else {
                 this.props.updateCommentDraftWithRootId(rootId, draft, save);
             }

@@ -1,0 +1,49 @@
+.modal .GenericModal{
+
+    &__body {
+        padding: 0;
+    }
+
+    &.modal-dialog.call_ringing_occupied_modal{
+        position: absolute;
+        width: 30%;
+        left: 50%;
+        top: 65%;
+        transform: translate(-50%, -50%);
+        
+        .modal-header .close {
+            span {
+                color: var(--dark-modal-font-color);
+                margin-top: 64px;
+            }
+        }
+        .modal-content {
+            overflow: hidden;
+            background-color:var(--dark-modal-color);
+
+               
+        }
+        .content-body {
+            color: var(--dark-modal-font-color);
+            transition-property: 10%;
+            padding: 22px, 24px, 22px, 24px;
+            display: flex;
+            align-items: center;
+            height: 84px;
+            .text {
+                margin: 16px 32px 16px 0px;
+            }
+            svg {
+                margin: 16px;
+                color:var(--denim-button-bg)
+            }
+        }
+        .modal-footer {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}

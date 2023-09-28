@@ -17,7 +17,7 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {canEditPost, comparePosts} from 'mattermost-redux/utils/post_utils';
 import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
-import {addRecentEmoji} from 'actions/emoji_actions';
+import {addRecentEmoji, addRecentEmojis} from 'actions/emoji_actions';
 import * as StorageActions from 'actions/storage';
 import {loadNewDMIfNeeded, loadNewGMIfNeeded} from 'actions/user_actions';
 import * as RhsActions from 'actions/views/rhs';
@@ -25,7 +25,6 @@ import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
 import {removeDraft} from 'actions/views/drafts';
 import {isEmbedVisible, isInlineImageVisible} from 'selectors/posts';
 import {getSelectedPostId, getSelectedPostCardId, getRhsState} from 'selectors/rhs';
-import {makeGetDraftsByPrefix} from 'selectors/drafts';
 import {GlobalState} from 'types/store';
 import {
     ActionTypes,
@@ -35,6 +34,8 @@ import {
 } from 'utils/constants';
 import {matchEmoticons} from 'utils/emoticons';
 import * as UserAgent from 'utils/user_agent';
+
+import {getGlobalItem} from 'selectors/storage';
 
 import {completePostReceive, NewPostMessageProps} from './new_post';
 
@@ -102,10 +103,8 @@ export function createPost(post: Post, files: FileInfo[]) {
         // parse message and emit emoji event
         const emojis = matchEmoticons(post.message);
         if (emojis) {
-            for (const emoji of emojis) {
-                const trimmed = emoji.substring(1, emoji.length - 1);
-                dispatch(addRecentEmoji(trimmed));
-            }
+            const trimmedEmojis = emojis.map((emoji) => emoji.substring(1, emoji.length - 1));
+            dispatch(addRecentEmojis(trimmedEmojis));
         }
 
         let result;
@@ -116,12 +115,26 @@ export function createPost(post: Post, files: FileInfo[]) {
         }
 
         if (post.root_id) {
-            dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + post.root_id));
+            dispatch(storeCommentDraft(post.root_id, null));
         } else {
-            dispatch(removeDraft(StoragePrefixes.DRAFT + post.channel_id));
+            dispatch(storeDraft(post.channel_id, null));
         }
 
         return result;
+    };
+}
+
+function storeDraft(channelId: string, draft: null) {
+    return (dispatch: DispatchFunc) => {
+        dispatch(StorageActions.setGlobalItem('draft_' + channelId, draft));
+        return {data: true};
+    };
+}
+
+function storeCommentDraft(rootPostId: string, draft: null) {
+    return (dispatch: DispatchFunc) => {
+        dispatch(StorageActions.setGlobalItem('comment_draft_' + rootPostId, draft));
+        return {data: true};
     };
 }
 
@@ -286,7 +299,6 @@ export function markMostRecentPostInChannelAsUnread(channelId: string) {
 }
 
 export function deleteAndRemovePost(post: Post) {
-    const getThreadDrafts = makeGetDraftsByPrefix(StoragePrefixes.COMMENT_DRAFT);
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {error} = await dispatch(PostActions.deletePost(post));
         if (error) {
@@ -311,14 +323,10 @@ export function deleteAndRemovePost(post: Post) {
         }
 
         if (post.root_id === '') {
-            const state = getState() as GlobalState;
-            const threadDrafts = getThreadDrafts(state);
             const key = StoragePrefixes.COMMENT_DRAFT + post.id;
-            threadDrafts.forEach((threadDraft) => {
-                if (threadDraft.value.rootId === post.id) {
-                    dispatch(removeDraft(threadDraft.value.timestamp ? `${key}_${threadDraft.value.id}` : key));
-                }
-            });
+            if (getGlobalItem(getState() as GlobalState, key, null)) {
+                dispatch(removeDraft(key, post.channel_id, post.id));
+            }
         }
 
         dispatch(PostActions.removePost(post));
@@ -364,5 +372,11 @@ export function emitShortcutReactToLastPostFrom(emittedFrom: 'CENTER' | 'RHS_ROO
     return {
         type: ActionTypes.EMITTED_SHORTCUT_REACT_TO_LAST_POST,
         payload: emittedFrom,
+    };
+}
+
+export function resetReloadPostsInChannel() {
+    return async (dispatch: DispatchFunc) => {
+        dispatch(PostActions.resetReloadPostsInChannel());
     };
 }

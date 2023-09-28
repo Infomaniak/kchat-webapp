@@ -34,6 +34,7 @@ jest.mock('utils/utils', () => ({
     localizeMessage: () => {},
     applyTheme: jest.fn(),
     makeIsEligibleForClick: jest.fn(),
+    lazyWithRetries: jest.fn(),
 }));
 
 jest.mock('mattermost-redux/actions/general', () => ({

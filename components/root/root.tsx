@@ -58,7 +58,7 @@ import LocalStorageStore from 'stores/local_storage_store';
 import 'plugins/export.js';
 
 const LazyErrorPage = React.lazy(() => import('components/error_page'));
-const LazyLogin = React.lazy(() => import('components/login/login'));
+const LazyLogin = Utils.lazyWithRetries(() => import('components/login/login'));
 const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
 const LazyHelpController = React.lazy(() => import('components/help/help_controller'));
 
@@ -84,6 +84,7 @@ import {close, initialize} from 'actions/websocket_actions';
 
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
+import {setCallListeners} from 'actions/calls';
 import {clearUserCookie} from 'actions/views/cookie';
 
 import {applyLuxonDefaults} from './effects';
@@ -207,6 +208,8 @@ export default class Root extends React.PureComponent<Props, State> {
         if (!isDesktopApp()) {
             Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
         }
+
+        setCallListeners();
 
         setSystemEmojis(new Set(EmojiIndicesByAlias.keys()));
 

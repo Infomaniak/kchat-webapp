@@ -1,3 +1,5 @@
+// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
+// See LICENSE.txt for license information.
 
 import fs from 'fs';
 
@@ -590,7 +592,7 @@ describe('Actions.Posts', () => {
         });
     });
 
-    it('getNeededAtMentionedUsernames', async () => {
+    it('getNeededAtMentionedUsernamesAndGroups', async () => {
         const state = {
             entities: {
                 users: {
@@ -601,53 +603,61 @@ describe('Actions.Posts', () => {
                         },
                     },
                 },
+                groups: {
+                    groups: [
+                        {
+                            id: '1',
+                            name: 'zzz',
+                        },
+                    ],
+                },
             },
         } as unknown as GlobalState;
 
         expect(
-            Actions.getNeededAtMentionedUsernames(state, [
+            Actions.getNeededAtMentionedUsernamesAndGroups(state, [
                 TestHelper.getPostMock({message: 'aaa'}),
             ])).toEqual(
             new Set(),
         );
 
         expect(
-            Actions.getNeededAtMentionedUsernames(state, [
+            Actions.getNeededAtMentionedUsernamesAndGroups(state, [
                 TestHelper.getPostMock({message: '@aaa'}),
             ])).toEqual(
             new Set(),
         );
 
         expect(
-            Actions.getNeededAtMentionedUsernames(state, [
+            Actions.getNeededAtMentionedUsernamesAndGroups(state, [
                 TestHelper.getPostMock({message: '@aaa @bbb @ccc'}),
             ])).toEqual(
             new Set(['bbb', 'ccc']),
         );
 
         expect(
-            Actions.getNeededAtMentionedUsernames(state, [
+            Actions.getNeededAtMentionedUsernamesAndGroups(state, [
                 TestHelper.getPostMock({message: '@bbb. @ccc.ddd'}),
             ])).toEqual(
             new Set(['bbb.', 'bbb', 'ccc.ddd']),
         );
 
         expect(
-            Actions.getNeededAtMentionedUsernames(state, [
+            Actions.getNeededAtMentionedUsernamesAndGroups(state, [
                 TestHelper.getPostMock({message: '@bbb- @ccc-ddd'}),
             ])).toEqual(
             new Set(['bbb-', 'bbb', 'ccc-ddd']),
         );
 
         expect(
-            Actions.getNeededAtMentionedUsernames(state, [
+            Actions.getNeededAtMentionedUsernamesAndGroups(state, [
                 TestHelper.getPostMock({message: '@bbb_ @ccc_ddd'}),
             ])).toEqual(
             new Set(['bbb_', 'ccc_ddd']),
         );
 
         expect(
-            Actions.getNeededAtMentionedUsernames(state, [
+            Actions.getNeededAtMentionedUsernamesAndGroups(state, [
                 TestHelper.getPostMock({message: '(@bbb/@ccc) ddd@eee'}),
             ])).toEqual(
             new Set(['bbb', 'ccc']),
@@ -655,7 +665,7 @@ describe('Actions.Posts', () => {
 
         // should never try to request usernames matching special mentions
         expect(
-            Actions.getNeededAtMentionedUsernames(state, [
+            Actions.getNeededAtMentionedUsernamesAndGroups(state, [
                 TestHelper.getPostMock({message: '@all'}),
                 TestHelper.getPostMock({message: '@here'}),
                 TestHelper.getPostMock({message: '@channel'}),
@@ -1524,7 +1534,7 @@ describe('Actions.Posts', () => {
         expect(index === 2).toBeTruthy();
     });
 
-    describe('getProfilesAndStatusesForPosts', () => {
+    describe('getMentionsAndStatusesForPosts', () => {
         describe('different values for posts argument', () => {
             // Mock the state to prevent any followup requests since we aren't testing those
             const currentUserId = 'user';
@@ -1548,13 +1558,13 @@ describe('Actions.Posts', () => {
             })) as unknown as GetStateFunc;
 
             it('null', async () => {
-                await Actions.getProfilesAndStatusesForPosts(null as any, dispatch as any, getState);
+                await Actions.getMentionsAndStatusesForPosts(null as any, dispatch as any, getState);
             });
 
             it('array of posts', async () => {
                 const posts = [post];
 
-                await Actions.getProfilesAndStatusesForPosts(posts, dispatch as any, getState);
+                await Actions.getMentionsAndStatusesForPosts(posts, dispatch as any, getState);
             });
 
             it('object map of posts', async () => {
@@ -1562,7 +1572,7 @@ describe('Actions.Posts', () => {
                     [post.id]: post,
                 };
 
-                await Actions.getProfilesAndStatusesForPosts(posts, dispatch as any, getState);
+                await Actions.getMentionsAndStatusesForPosts(posts, dispatch as any, getState);
             });
         });
     });

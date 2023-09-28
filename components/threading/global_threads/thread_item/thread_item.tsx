@@ -105,6 +105,11 @@ function ThreadItem({
             }
             return id;
         }).reverse();
+
+        if (thread?.post.props?.from_webhook) {
+            return ids;
+        }
+
         return [post.user_id, ...ids];
     }, [thread?.participants]);
 

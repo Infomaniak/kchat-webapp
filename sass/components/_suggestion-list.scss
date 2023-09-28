@@ -204,13 +204,13 @@
         white-space: nowrap;
 
         .suggestion-list__main {
-            overflow: hidden;
             width: 100%;
             color: rgba(var(--center-channel-color-rgb), 1);
             text-overflow: ellipsis;
-            white-space: nowrap;
 
             .suggestion-list__desc {
+                overflow: hidden;
+                white-space: nowrap;
                 margin-left: 8px;
                 color: rgba(var(--center-channel-color-rgb), 0.56);
             }

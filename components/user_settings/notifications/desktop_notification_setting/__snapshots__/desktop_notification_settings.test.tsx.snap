@@ -608,6 +608,10 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
                     "label": "Upstairs",
                     "value": "Upstairs",
                   },
+                  Object {
+                    "label": "Ring",
+                    "value": "Ring",
+                  },
                 ]
               }
               value={

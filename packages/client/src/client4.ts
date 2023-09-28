@@ -3,6 +3,8 @@
 
 /* eslint-disable max-lines */
 
+import crypto from 'crypto';
+
 import FormData from 'form-data';
 
 import {PreferenceType} from '@mattermost/types/preferences';
@@ -73,8 +75,10 @@ import {
     UsersWithGroupsAndCount,
     GroupsWithCount,
     GroupCreateWithUserIds,
-    GroupSearachParams,
     CustomGroupPatch,
+    GroupSearchParams,
+    GetGroupsForUserParams,
+    GetGroupsParams,
 } from '@mattermost/types/groups';
 import {PostActionResponse} from '@mattermost/types/integration_actions';
 import {
@@ -145,8 +149,8 @@ import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
 
 import {TelemetryHandler} from './telemetry';
+
 // @ts-ignore
-import crypto from 'crypto';
 
 const IKConstants = {
 
@@ -3674,19 +3678,9 @@ export default class Client4 {
         );
     };
 
-    getGroups = (filterAllowReference = false, page = 0, perPage = 10, includeMemberCount = false, hasFilterMember = false) => {
-        const qs: any = {
-            filter_allow_reference: filterAllowReference,
-            page,
-            per_page: perPage,
-            include_member_count: includeMemberCount,
-        };
-
-        if (hasFilterMember) {
-            qs.filter_has_member = hasFilterMember;
-        }
+    getGroups = (opts: GetGroupsForUserParams | GetGroupsParams) => {
         return this.doFetch<Group[]>(
-            `${this.getGroupsRoute()}${buildQueryString(qs)}`,
+            `${this.getGroupsRoute()}${buildQueryString(opts)}`,
             {method: 'get'},
         );
     };
@@ -3744,10 +3738,17 @@ export default class Client4 {
         );
     }
 
-    searchGroups = (params: GroupSearachParams) => {
+    searchGroups = (params: GroupSearchParams) => {
         return this.doFetch<Group[]>(
             `${this.getGroupsRoute()}${buildQueryString(params)}`,
             {method: 'get'},
+        );
+    }
+
+    restoreGroup = (groupId: string) => {
+        return this.doFetch<Group>(
+            `${this.getGroupRoute(groupId)}/restore`,
+            {method: 'post'},
         );
     }
 
@@ -4253,7 +4254,7 @@ export default class Client4 {
 
     declineIncomingMeetCall(callID: string) {
         return this.doFetch(
-            `${this.getBaseRoute()}/conferences/${callID}/deny`,
+            `${this.getBaseRoute()}/conferences/${callID}/decline`,
             {method: 'post'},
         );
     }
@@ -4497,19 +4498,36 @@ export default class Client4 {
         return this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
     }
 
-    createDraft = (draft: Omit<Draft, 'id'>) => {
-        return this.doFetch<Draft>(
+    upsertDraft = async (draft: Draft) => {
+        const result = await this.doFetch<Draft>(
             `${this.getDraftsRoute()}`,
-            {method: 'post', body: JSON.stringify(draft)},
+            {
+                method: 'post',
+                body: JSON.stringify(draft),
+            },
         );
+
+        return result;
     };
 
-    updateDraft = (draft: Draft) => {
-        return this.doFetch<Draft>(
+    updateScheduledDraft = async (draft: Draft) => {
+        const result = await this.doFetch<Draft>(
             `${this.getDraftsRoute()}/${draft.id}`,
-            {method: 'put', body: JSON.stringify(draft)},
+            {
+                method: 'put',
+                body: JSON.stringify(draft),
+            },
         );
-    };
+
+        return result;
+    }
+
+    deleteScheduledDraft = (draftId: Draft['id']) => {
+        return this.doFetch<Draft>(
+            `${this.getDraftsRoute()}/${draftId}`,
+            {method: 'delete'},
+        );
+    }
 
     getUserDrafts = (teamId: Team['id']) => {
         return this.doFetch<Draft[]>(
@@ -4518,9 +4536,14 @@ export default class Client4 {
         );
     };
 
-    deleteDraft = (draftId: Draft['id']) => {
-        return this.doFetch<StatusOK>(
-            `${this.getDraftsRoute()}/${draftId}`,
+    deleteDraft = (channelId: Channel['id'], rootId = '') => {
+        let endpoint = `${this.getUserRoute('me')}/channels/${channelId}/drafts`;
+        if (rootId !== '') {
+            endpoint += `/${rootId}`;
+        }
+
+        return this.doFetch<null>(
+            endpoint,
             {method: 'delete'},
         );
     };

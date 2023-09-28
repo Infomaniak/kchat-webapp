@@ -129,7 +129,7 @@ describe('draft actions', () => {
 
     let store: any;
     const key = StoragePrefixes.DRAFT + channelId;
-    const createDraftSpy = jest.spyOn(Client4, 'createDraft');
+    const createDraftSpy = jest.spyOn(Client4, 'upsertDraft');
     const deleteDraftSpy = jest.spyOn(Client4, 'deleteDraft');
 
     beforeEach(() => {
@@ -168,7 +168,7 @@ describe('draft actions', () => {
 
     describe('removeDraft', () => {
         it('calls setGlobalItem action correctly', async () => {
-            await store.dispatch(removeDraft(key));
+            await store.dispatch(removeDraft(key, channelId));
 
             const testStore = mockStore(initialState);
 
@@ -182,7 +182,7 @@ describe('draft actions', () => {
         });
 
         it('calls deleteDraft correctly', async () => {
-            await store.dispatch(removeDraft(StoragePrefixes.COMMENT_DRAFT + rootId));
+            await store.dispatch(removeDraft(key, channelId));
             expect(deleteDraftSpy).toHaveBeenCalled();
         });
     });

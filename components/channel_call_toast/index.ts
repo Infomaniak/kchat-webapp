@@ -16,7 +16,7 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels'
 
 import {Client4} from 'mattermost-redux/client';
 
-import {startOrJoinCallInChannel} from 'actions/calls';
+import {startOrJoinCallInChannelV2} from 'actions/calls';
 
 import ChannelCallToast from './component';
 
@@ -47,7 +47,10 @@ const mapStateToProps = (state: GlobalState) => {
                 } else if (profiles && profiles[i]) {
                     try {
                         profiles.splice(i, 1);
-                    } catch {}
+                    } catch (e) {
+                        // eslint-disable-next-line no-console
+                        console.error(e);
+                    }
                 }
             }
         }
@@ -63,7 +66,7 @@ const mapStateToProps = (state: GlobalState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators<ActionCreatorsMapObject<Action>, any>({
-    onJoinCall: startOrJoinCallInChannel,
+    startOrJoinCallInChannelV2,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelCallToast);

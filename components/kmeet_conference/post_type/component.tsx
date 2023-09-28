@@ -8,21 +8,127 @@ import {Post} from 'mattermost-redux/types/posts';
 
 import {FormattedMessage, useIntl} from 'react-intl';
 
+import {Client4} from 'mattermost-redux/client';
+
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
 
 interface Props {
     post: Post;
     connectedKmeetUrl: string;
+    isDialingEnabled: boolean;
+    startOrJoinCallInChannelV2: (channelID: string) => void;
 }
 
-const PostType = ({post, connectedKmeetUrl}: Props) => {
+const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInChannelV2}: Props) => {
     const intl = useIntl();
+
     const onJoinCallClick = () => {
+        Client4.acceptIncomingMeetCall(post.props.conference_id);
         const kmeetUrl = new URL(connectedKmeetUrl);
         window.open(kmeetUrl.href, '_blank', 'noopener');
     };
 
+    const onStartOrJoinCall = () => {
+        startOrJoinCallInChannelV2(post.channel_id);
+    };
     moment.locale(String(intl.locale));
+
+    // M: missed
+    // S: started
+    // E: ended
+    // D: declined
+    type Status = 'M'|'O'|'E'|'D' | undefined
+    let declinedUsernames: string[] = [];
+    const defineStatus = (): Status => {
+        const spec = post.props;
+        const ended = Boolean(spec.end_at);
+
+        if (spec.declined_usernames) {
+            declinedUsernames = spec.declined_usernames;
+            return 'D';
+        }
+        if (spec.in_call === true) {
+            return 'M';
+        }
+        if (ended === true) {
+            return 'E';
+        }
+        return 'O';
+    };
+    const renderCallStatus = (status: Status = 'O') => {
+        if (!isDialingEnabled) {
+            return (
+                <MessageWrapper>
+                    <Message>
+                        <FormattedMessage
+                            id='kmeet.calls.started'
+                            defaultMessage='Réunion kMeet démarrée'
+                        />
+                    </Message>
+                    <SubMessage>{subMessage}</SubMessage>
+                </MessageWrapper>
+
+            );
+        }
+        const text = {
+            O: {id: 'kmeet.calls.started', defaultMessage: 'Appel démarré', values: {}},
+            M: {id: 'kmeet.calls.called', defaultMessage: 'Appel manqué', values: {}},
+            E: {id: 'kmeet.calls.ended.title', defaultMessage: 'Appel terminé', values: {}},
+            D: {id: 'kmeet.calls.declined', defaultMessage: 'Appel refusé {usernames}', values: {usernames: declinedUsernames.toString()}},
+        };
+        return (
+            <MessageWrapper>
+                <Message>
+                    <FormattedMessage
+                        id={text[status].id}
+                        defaultMessage={text[status].defaultMessage}
+                        values={text[status].values}
+                    />
+                </Message>
+                <SubMessage>{subMessage}</SubMessage>
+            </MessageWrapper>
+        );
+    };
+
+    const renderButton = (status: Status) => {
+        if (isDialingEnabled) {
+            if (connectedKmeetUrl && status === 'O') {
+                return (
+                    <JoinButton onClick={onJoinCallClick}>
+                        <ButtonText>
+                            <FormattedMessage
+                                id='kmeet.calls.open'
+                                defaultMessage='Rejoindre'
+                            />
+                        </ButtonText>
+                    </JoinButton>
+                );
+            }
+            if (status === 'M') {
+                return (
+                    <JoinButton onClick={onStartOrJoinCall}>
+                        <ButtonText>
+                            <FormattedMessage
+                                id='kmeet.calls.callback'
+                                defaultMessage='Rappeler'
+                            />
+                        </ButtonText>
+                    </JoinButton>
+                );
+            }
+        }
+
+        return connectedKmeetUrl ? (
+            <JoinButton onClick={onJoinCallClick}>
+                <ButtonText>
+                    <FormattedMessage
+                        id='kmeet.calls.open'
+                        defaultMessage='Ouvrir'
+                    />
+                </ButtonText>
+            </JoinButton>
+        ) : null;
+    };
 
     const subMessage = post.props.end_at ? (
         <>
@@ -41,38 +147,20 @@ const PostType = ({post, connectedKmeetUrl}: Props) => {
             {moment(post.props.start_at).fromNow()}
         </Duration>
     );
-
+    const status: Status = defineStatus();
     return (
         <Main data-testid={'call-thread'}>
-            <SubMain ended={Boolean(post.props.end_at)}>
-                <Left>
-                    <CallIndicator ended={Boolean(post.props.end_at)}>
-                        <KMeetIcon style={{width: '100%', height: '100%'}}/>
-                    </CallIndicator>
-                    <MessageWrapper>
-                        <Message>
-                            <FormattedMessage
-                                id='kmeet.calls.started'
-                                defaultMessage='Réunion kMeet démarrée'
-                            />
-                        </Message>
-                        <SubMessage>{subMessage}</SubMessage>
-                    </MessageWrapper>
-                </Left>
-                <Right>
-                    {
-                        connectedKmeetUrl &&
-                        <JoinButton onClick={onJoinCallClick}>
-                            <ButtonText>
-                                <FormattedMessage
-                                    id='kmeet.calls.open'
-                                    defaultMessage='Ouvrir'
-                                />
-                            </ButtonText>
-                        </JoinButton>
-                    }
-                </Right>
-            </SubMain>
+
+            <Left>
+                <CallIndicator ended={Boolean(post.props.end_at)}>
+                    <KMeetIcon style={{width: '100%', height: '100%'}}/>
+                </CallIndicator>
+                {renderCallStatus(status)}
+            </Left>
+            <Right>
+                {renderButton(status)}
+            </Right>
+
         </Main>
     );
 };
@@ -88,14 +176,6 @@ const Main = styled.div`
     box-shadow: 0px 4px 6px rgba(var(--center-channel-color-rgb), 0.12);
     color: var(--center-channel-color);
     border-radius: 4px;
-`;
-
-const SubMain = styled.div<{ ended: boolean }>`
-    display: flex;
-    align-items: center;
-    width: 100%;
-    flex-wrap: ${(props) => (props.ended ? 'nowrap' : 'wrap')};
-    row-gap: 8px;
 `;
 
 const Left = styled.div`

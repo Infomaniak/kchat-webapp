@@ -1,3 +1,86 @@
+## 1.4.3-next.6 (2023-09-20)
+
+### Fixed (1 change)
+
+- [fix: avatars](kchat/webapp@2091f9a6e90a6d5e6c68ebc11a08e7f345193297) by @benoit.nau ([merge request](kchat/webapp!530))
+
+## 1.4.3-next.5 (2023-09-19)
+
+### Changed (1 change)
+
+- [cherrypick older updates to groups code to fix params](kchat/webapp@7d2838d6692eba2de59638960bfd8eb7201918a4) by @antonbuksa ([merge request](kchat/webapp!531))
+
+## 1.4.3-next.4 (2023-09-18)
+
+### Changed (2 changes)
+
+- [restore mattermost getGroups func without pagination](kchat/webapp@278d240feacc62edffdb20b741275d3a18e24100) by @antonbuksa ([merge request](kchat/webapp!529))
+- [[MM-52964] Updates post text processing to fetch nonexisting custom groups](kchat/webapp@ae63ad104310066709e40b5fc66ba67d47c5af48) by @antonbuksa ([merge request](kchat/webapp!529))
+
+## 1.4.3-next.3 (2023-09-15)
+
+### Fixed (2 changes)
+
+- [fix: user typing](kchat/webapp@656cc06c62fe2d653dffa385a9209ca2e6176803) by @benoit.nau ([merge request](kchat/webapp!528))
+- [fix: traduction](kchat/webapp@3bf85de76a2275c16c4cc43ad0334b6c7bb8d6b6) by @benoit.nau ([merge request](kchat/webapp!526))
+
+## 1.4.3-next.2 (2023-09-13)
+
+### Fixed (2 changes)
+
+- [fix: ws](kchat/webapp@586192fc0d4dc1c89006930dc445cc7dd2e2b7dc) by @benoit.nau ([merge request](kchat/webapp!525))
+- [fix: date](kchat/webapp@bc5749917d9eae85b40a5a033143a1bb9bae323a) by @arthur.noguera ([merge request](kchat/webapp!516))
+
+## 1.4.3-next.1 (2023-09-12)
+
+### Fixed (1 change)
+
+- [fix: reconnexion ws](kchat/webapp@ba2843ff6cba10702cf98fa4c6f59c266a81ff35) by @benoit.nau ([merge request](kchat/webapp!523))
+
+## 1.4.2-next.2 (2023-08-31)
+
+### Fixed (2 changes)
+
+- [fix wrong message on leave public channel modal](kchat/webapp@cbc0473d201efb8a3445b383ee71b68135089386) by @antonbuksa ([merge request](kchat/webapp!524))
+- [fix missing trad](kchat/webapp@067a5d973f5b1ce8bb27d062eda61d9aa682537f) by @antonbuksa ([merge request](kchat/webapp!524))
+
+## 1.4.2-next.1 (2023-08-30)
+
+### Changed (1 change)
+
+- [[MM-53842] Replace Gfycat with GIPHY in emoji/gif picker](kchat/webapp@939a0bce058a677c68fb61cc65a0b436112d7b9a) by @antonbuksa ([merge request](kchat/webapp!521))
+
+## 1.4.1-next.2 (2023-08-30)
+
+### Fixed (2 changes)
+
+- [feature flag call status text](kchat/webapp@25a3aa68b99cc6c1fefacb2d14131616d51df397) by @antonbuksa
+- [fix js error in calls websocket actions](kchat/webapp@938cc8080713dfb2cb46ae0637bb3f196d2e42b9) by @antonbuksa
+
+## 1.4.1-next.1 (2023-08-29)
+
+### Added (3 changes)
+
+- [add feature flag for call dialing feature](kchat/webapp@b8acb941cc4b1c539af1d201b0944da947f1065e) by @antonbuksa ([merge request](kchat/webapp!455))
+- [feat: refacto](kchat/webapp@2b0acbd0008427ed4fd81f73d5eadfa7e1186605) by @benoit.nau ([merge request](kchat/webapp!455))
+- [feat: refacto](kchat/webapp@814658ef91ad416662a1e64c8d6fe1b32fc7b1a4) by @benoit.nau ([merge request](kchat/webapp!455))
+
+### Other (1 change)
+
+- [code review](kchat/webapp@f0716db6afbf9b6c9a7da393a0aff42b5ca18446) by @arthur.noguera ([merge request](kchat/webapp!455))
+
+## 1.4.0-next.1 (2023-08-14)
+
+### Fixed (1 change)
+
+- [fix: null reference](kchat/webapp@e3d1a4ba194f5e86ed194b0ea41827a0d2369b23) by @benoit.nau ([merge request](kchat/webapp!513))
+
+## 1.3.14-next.3 (2023-08-07)
+
+### Added (1 change)
+
+- [feat: logs](kchat/webapp@8ef7096967c5de9bca9ceb72d1b921c51724ebc9) by @benoit.nau ([merge request](kchat/webapp!510))
+
 ## 1.3.14-next.2 (2023-08-07)
 
 ### Changed (1 change)

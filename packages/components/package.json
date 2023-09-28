@@ -1,5 +1,6 @@
 {
   "name": "@mattermost/components",
+  "private": true,
   "module": "dist/index.esm.js",
   "types": "dist/index.esm.d.ts",
   "styles": "dist/index.esm.css",
