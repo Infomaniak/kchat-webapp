@@ -201,6 +201,7 @@
     "jest-junit": "^16.0.0",
     "jest-styled-components": "7.1.1",
     "jest-watch-typeahead": "0.6.4",
+    "lerna": "7.3.0",
     "mini-css-extract-plugin": "2.0.0",
     "mmjstool": "https://github.com/mattermost/mattermost-utilities.git",
     "nock": "13.2.8",
@@ -265,5 +266,6 @@
       "packages/components"
     ]
   },
-  "packageManager": "yarn@3.2.2"
+  "packageManager": "yarn@3.2.2",
+  "useWorkspaces": true
 }
