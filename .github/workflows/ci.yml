@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_packages:
+    name: Build Packages and Publish to GitHub NPM Registry
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@infomaniak'
+    - run: yarn
+    - run: yarn workspace @infomaniak/mattermost-client build
+    - run: yarn workspace @infomaniak/mattermost-types build
+    - run: yarn config set npmPublishRegistry https://npm.pkg.github.com
+    - run: yarn config set 'npmRegistries["//npm.pkg.github.com"].npmAuthToken' "$NPM_TOKEN"
+    - run: yarn config set 'npmRegistries["//npm.pkg.github.com"].npmAlwaysAuth' true
+    - run: yarn config set npmScopes.infomaniak.npmPublishRegistry https://npm.pkg.github.com
+    - run: yarn workspace @infomaniak/mattermost-client npm publish
+    - run: yarn workspace @infomaniak/mattermost-types npm publish
+      shell: bash
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

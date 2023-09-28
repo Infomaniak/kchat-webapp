@@ -1,11 +1,11 @@
 {
-  "name": "@mattermost/types",
-  "version": "7.9.0",
+  "name": "@infomaniak/mattermost-types",
+  "version": "7.9.0-nightly.1",
   "description": "Shared type definitions used by the Mattermost web app",
   "keywords": [
     "mattermost"
   ],
-  "homepage": "https://github.com/mattermost/mattermost-webapp/tree/master/packages/types#readme",
+  "homepage": "https://github.com/Infomaniak/kchat-webapp/tree/master/packages/types#readme",
   "license": "MIT",
   "files": [
     "lib"
@@ -16,7 +16,7 @@
   "types": "./lib/*.d.ts",
   "repository": {
     "type": "git",
-    "url": "github:mattermost/mattermost-webapp",
+    "url": "github:infomaniak/kchat-webapp",
     "directory": "packages/types"
   },
   "devDependencies": {
