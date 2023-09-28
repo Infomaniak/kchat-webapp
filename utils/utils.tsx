@@ -1944,3 +1944,25 @@ export function getBlankAddressWithCountry(country?: string): Address {
         state: '',
     };
 }
+
+export const lazyWithRetries: typeof React.lazy = (importer) => {
+    const retryImport = async () => {
+        try {
+            return await importer();
+        } catch (error) {
+            for (let i = 0; i < 5; i++) {
+                // eslint-disable-next-line no-await-in-loop
+                await new Promise((resolve) => setTimeout(resolve, 2000));
+                try {
+                    // eslint-disable-next-line no-await-in-loop
+                    return await importer();
+                } catch (e) {
+                    // eslint-disable-next-line no-console
+                    console.log('retrying import');
+                }
+            }
+            throw error;
+        }
+    };
+    return React.lazy(retryImport);
+};
