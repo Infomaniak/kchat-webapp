@@ -108,6 +108,8 @@ publish_packages:
   rules:
     - if: $DEPLOY_VARIABLE == "prodsec"
       when: on_success
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
     - when: never
   environment:
     name: "$DEPLOY_VARIABLE"
