@@ -10,7 +10,7 @@ interface Args {
 // Webpack global var
 declare const GIT_RELEASE: string;
 
-const isLocalhost = (host: string) => host.startsWith('localhost') || host.startsWith('local.') || host.startsWith('kchat.devd');
+const isLocalhost = (host: string) => host.startsWith('localhost') || host.startsWith('infomaniak.local.') || host.startsWith('kchat.local.') || host.startsWith('local.') || host.startsWith('kchat.devd');
 const isCanaryOrPreprod = GIT_RELEASE.includes('-next') || GIT_RELEASE.includes('-rc');
 
 const bool = <T>(x: T | false | undefined | null | '' | 0): x is T => Boolean(x);
