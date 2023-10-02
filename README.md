@@ -13,6 +13,8 @@ Infomaniak fork of the mattermost web client modified to work with our internal 
 
 ### Environment
 
+Add an `NPM_TOKEN` env var with a Github token (read:packages scope)
+
 Create a .env file with the following variables
 
 ```dotenv
