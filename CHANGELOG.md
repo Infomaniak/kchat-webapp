@@ -1,3 +1,14 @@
+## 1.4.5-next.1 (2023-10-03)
+
+### Fixed (2 changes)
+
+- [fix: null reference](kchat/webapp@a00c8c978f15d5efbd507c494493654ff630f6f5) by @benoit.nau ([merge request](kchat/webapp!518))
+- [fix: loading](kchat/webapp@df8e5d61f3c4becc1139507dbca4d2e64f6bdfa2) by @benoit.nau ([merge request](kchat/webapp!535))
+
+### Chore (1 change)
+
+- [add kchat dot local to localhost list for sentry](kchat/webapp@69713ba8b0e9279d8b4132d8ac3debd03689b4d6) by @antonbuksa ([merge request](kchat/webapp!511))
+
 ## 1.4.4 (2023-09-28)
 
 ### Fixed (1 change)
