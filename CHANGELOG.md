@@ -1,3 +1,10 @@
+## 1.4.5-next.2 (2023-10-03)
+
+### Fixed (2 changes)
+
+- [bump compass-icons 0.11.0](kchat/webapp@75d8f5a6db40a37f723f513174711e3ba2c0eafa) by @antonbuksa
+- [fix: shortcut](kchat/webapp@6b5e980b5335acdf84102ea804586ec78fdf57c5) by @benoit.nau ([merge request](kchat/webapp!537))
+
 ## 1.4.5-next.1 (2023-10-03)
 
 ### Fixed (2 changes)
