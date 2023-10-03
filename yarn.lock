@@ -2583,6 +2583,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@infomaniak/compass-icons@npm:0.11.0":
+  version: 0.11.0
+  resolution: "@infomaniak/compass-icons@npm:0.11.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40infomaniak%2Fcompass-icons%2F0.11.0%2F60bd2d0eadfb3505f03d431e2a53c813cbe47c90"
+  dependencies:
+    esm: 3.2.25
+    fontello-batch-cli: 4.0.0
+    fontello-cli: 0.6.2
+    lodash: 4.17.21
+    needle: 3.0.0
+    open: 8.4.0
+    svgpath: 2.5.0
+    unzip: 0.1.11
+    xmldom: 0.6.0
+  checksum: 3c58835d169afefdc00571467a94858b1ba4ae72078a549e881b33b057146f2f5290f327b958e2556371053197c025b1fbcb39682a8eb62e92f911434d3e32e3
+  languageName: node
+  linkType: hard
+
 "@infomaniak/marked@npm:^0.2.0":
   version: 0.2.0
   resolution: "@infomaniak/marked@npm:0.2.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40infomaniak%2Fmarked%2F0.2.0%2F7497d3a2d1b083a2467bc0a84aae2dbd026bad1b"
@@ -14474,7 +14491,7 @@ __metadata:
     "@guyplusplus/turndown-plugin-gfm": 1.0.7
     "@hot-loader/react-dom": 17.0.2
     "@infomaniak/compass-components": 0.12.0
-    "@infomaniak/compass-icons": 0.10.0
+    "@infomaniak/compass-icons": 0.11.0
     "@infomaniak/marked": ^0.2.0
     "@infomaniak/mattermost-client": "workspace:packages/client"
     "@infomaniak/mattermost-types": "workspace:packages/types"
