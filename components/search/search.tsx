@@ -251,7 +251,9 @@ const Search: React.FC<Props> = (props: Props): JSX.Element => {
         } else if (indexChangedViaKeyPress) {
             e.preventDefault();
             setKeepInputFocused(true);
-            handleAddSearchTerm(visibleSearchHintOptions[highlightedSearchHintIndex].searchTerm);
+            if (visibleSearchHintOptions[highlightedSearchHintIndex]?.searchTerm) {
+                handleAddSearchTerm(visibleSearchHintOptions[highlightedSearchHintIndex].searchTerm);
+            }
         }
 
         if (props.isMentionSearch) {
