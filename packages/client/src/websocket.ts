@@ -214,7 +214,7 @@ export default class WebSocketClient {
             }
         });
 
-        this.conn.connection.bind('error', (evt: { type: string; data: { code: number; message?: string } }) => {
+        this.conn.connection.bind('error', (evt: any) => {
             console.log('[websocket] unexpected error: ', evt);
             this.errorCount++;
             this.connectFailCount++;
@@ -232,11 +232,6 @@ export default class WebSocketClient {
 
             this.closeCallback?.(this.connectFailCount);
             this.closeListeners.forEach((listener) => listener(this.connectFailCount));
-
-            // if (evt.data.code === 1006) {
-            //     console.log('[websocket] not scheduling auto reconnect');
-            //     return;
-            // }
 
             // let retryTime = MIN_WEBSOCKET_RETRY_TIME;
 
