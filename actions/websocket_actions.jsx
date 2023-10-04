@@ -210,10 +210,6 @@ export function initialize() {
         token,
         currentChannelId,
     );
-
-    // handle immediate WS reconnection after loosing the network connection.
-    window.removeEventListener('online', () => initialize());
-    window.addEventListener('online', () => initialize());
 }
 
 export function close() {
