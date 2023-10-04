@@ -214,7 +214,7 @@ export default class WebSocketClient {
             }
         });
 
-        this.conn.connection.bind('error', (evt: any) => {
+        this.conn.connection.bind('error', (evt: { type: string; data: { code: number; message?: string}}) => {
             console.log('[websocket] unexpected error: ', evt);
             this.errorCount++;
             this.connectFailCount++;
@@ -231,6 +231,11 @@ export default class WebSocketClient {
             this.closeCallback?.(this.connectFailCount);
             this.closeListeners.forEach((listener) => listener(this.connectFailCount));
 
+            if (evt.data.code === 1006) {
+                console.log('[websocket] not scheduling auto reconnect');
+                return;
+            }
+
             let retryTime = MIN_WEBSOCKET_RETRY_TIME;
 
             // If we've failed a bunch of connections then start backing off
@@ -244,19 +249,19 @@ export default class WebSocketClient {
             // Applying jitter to avoid thundering herd problems.
             retryTime += Math.random() * JITTER_RANGE;
 
-            // setTimeout(
-            //     () => {
-            //         this.initialize(
-            //             connectionUrl,
-            //             this.currentUser as number,
-            //             this.currentTeamUser,
-            //             this.currentTeam,
-            //             authToken,
-            //             this.currentPresence,
-            //         );
-            //     },
-            //     retryTime,
-            // );
+            setTimeout(
+                () => {
+                    this.initialize(
+                        connectionUrl,
+                        this.currentUser as number,
+                        this.currentTeamUser,
+                        this.currentTeam,
+                        authToken,
+                        this.currentPresence,
+                    );
+                },
+                retryTime,
+            );
         });
 
         this.conn.connection.bind('connected', () => {
