@@ -1,3 +1,9 @@
+## 1.4.5-next.3 (2023-10-04)
+
+### Changed (1 change)
+
+- [do not schedule timeout reconnect after 1006 errors](kchat/webapp@05381e35c946a0fa2b23c757ac4bc2ae82f8e605) by @antonbuksa ([merge request](kchat/webapp!540))
+
 ## 1.4.5-next.2 (2023-10-03)
 
 ### Fixed (2 changes)
