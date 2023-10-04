@@ -244,19 +244,19 @@ export default class WebSocketClient {
             // Applying jitter to avoid thundering herd problems.
             retryTime += Math.random() * JITTER_RANGE;
 
-            setTimeout(
-                () => {
-                    this.initialize(
-                        connectionUrl,
-                        this.currentUser as number,
-                        this.currentTeamUser,
-                        this.currentTeam,
-                        authToken,
-                        this.currentPresence,
-                    );
-                },
-                retryTime,
-            );
+            // setTimeout(
+            //     () => {
+            //         this.initialize(
+            //             connectionUrl,
+            //             this.currentUser as number,
+            //             this.currentTeamUser,
+            //             this.currentTeam,
+            //             authToken,
+            //             this.currentPresence,
+            //         );
+            //     },
+            //     retryTime,
+            // );
         });
 
         this.conn.connection.bind('connected', () => {
