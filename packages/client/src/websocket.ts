@@ -214,7 +214,7 @@ export default class WebSocketClient {
             }
         });
 
-        this.conn.connection.bind('error', (evt: { type: string; data: { code: number; message?: string}}) => {
+        this.conn.connection.bind('error', (evt: { type: string; data: { code: number; message?: string } }) => {
             console.log('[websocket] unexpected error: ', evt);
             this.errorCount++;
             this.connectFailCount++;
