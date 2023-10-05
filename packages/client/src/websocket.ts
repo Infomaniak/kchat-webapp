@@ -175,6 +175,7 @@ export default class WebSocketClient {
             this.conn = new Pusher('kchat-key', {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,
+                cluster: 'mt1',
                 authEndpoint: '/broadcasting/auth',
                 auth: {
                     headers: {
@@ -185,18 +186,19 @@ export default class WebSocketClient {
                 disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
                 activityTimeout: 10000,
                 pongTimeout: 5000,
-                unavailableTimeout: 3000,
+                forceTLS: true,
             });
         } else {
             this.conn = new Pusher('kchat-key', {
                 wsHost: connectionUrl,
                 httpHost: connectionUrl,
+                cluster: 'mt1',
                 authEndpoint: '/broadcasting/auth',
                 enabledTransports: ['ws', 'wss'],
                 disabledTransports: ['xhr_streaming', 'xhr_polling', 'sockjs'],
                 activityTimeout: 10000,
                 pongTimeout: 5000,
-                unavailableTimeout: 3000,
+                forceTLS: true,
             });
         }
 
