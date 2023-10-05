@@ -57,15 +57,15 @@ import LocalStorageStore from 'stores/local_storage_store';
 
 import 'plugins/export.js';
 
-const LazyErrorPage = React.lazy(() => import('components/error_page'));
+const LazyErrorPage = Utils.lazyWithRetries(() => import('components/error_page'));
 const LazyLogin = Utils.lazyWithRetries(() => import('components/login/login'));
-const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
-const LazyHelpController = React.lazy(() => import('components/help/help_controller'));
+const LazyLoggedIn = Utils.lazyWithRetries(() => import('components/logged_in'));
+const LazyHelpController = Utils.lazyWithRetries(() => import('components/help/help_controller'));
 
-// const LazyLinkingLandingPage = React.lazy(() => import('components/linking_landing_page'));
-const LazyPreparingWorkspace = React.lazy(() => import('components/preparing_workspace'));
-const LazyTeamController = React.lazy(() => import('components/team_controller'));
-const LazyOnBoardingTaskList = React.lazy(() => import('components/onboarding_tasklist'));
+// const LazyLinkingLandingPage = Utils.lazyWithRetries(() => import('components/linking_landing_page'));
+const LazyPreparingWorkspace = Utils.lazyWithRetries(() => import('components/preparing_workspace'));
+const LazyTeamController = Utils.lazyWithRetries(() => import('components/team_controller'));
+const LazyOnBoardingTaskList = Utils.lazyWithRetries(() => import('components/onboarding_tasklist'));
 
 import store from 'stores/redux_store.jsx';
 import {getSiteURL} from 'utils/url';
