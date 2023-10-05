@@ -1,3 +1,9 @@
+## 1.4.5-next.4 (2023-10-05)
+
+### Chore (1 change)
+
+- [update pusher-js lib](kchat/webapp@1a31e2f154d07bff95ca8041c8c4d3cf2b7594a4) by @antonbuksa ([merge request](kchat/webapp!544))
+
 ## 1.4.5-next.3 (2023-10-04)
 
 ### Changed (1 change)
