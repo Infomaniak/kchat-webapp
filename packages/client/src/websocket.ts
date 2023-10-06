@@ -553,12 +553,17 @@ export default class WebSocketClient {
         } else if (!this.conn || this.conn.connection.state === 'disconnected') {
             console.log('[websocket] tried to send message but connection unavailable');
 
-            // Sentry.captureException(new Error('Websocket tried to send message but connection unavailable'));
+            this.conn?.disconnect();
+            this.conn = null;
 
-            // this.conn = null;
-
-            // //@ts-ignore
-            // this.initialize(this.connectionId, this.currentUser as number, this.currentTeam, undefined, localStorage.getItem('IKToken'), this.currentPresence);
+            this.initialize(
+                this.connectionUrl,
+                this.currentUser as number,
+                this.currentTeamUser,
+                this.currentTeam,
+                localStorage.getItem('IKToken') as string,
+                this.currentPresence,
+            );
         }
     }
 
@@ -577,11 +582,19 @@ export default class WebSocketClient {
             this.presenceChannel?.trigger(action, msg);
         } else if (!this.conn || this.conn.connection.state === 'disconnected' || !this.presenceChannel) {
             console.log('presence channel is missing');
-            console.log('connection: ', this.conn);
             console.log('connection state: ', this.conn?.connection.state);
-            console.log('presence channel: ', this.presenceChannel);
 
-            // this.bindPresenceChannel(data.channel_id);
+            this.conn?.disconnect();
+            this.conn = null;
+
+            this.initialize(
+                this.connectionUrl,
+                this.currentUser as number,
+                this.currentTeamUser,
+                this.currentTeam,
+                localStorage.getItem('IKToken') as string,
+                this.currentPresence,
+            );
         }
     }
 
