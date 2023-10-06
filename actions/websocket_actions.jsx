@@ -238,7 +238,7 @@ function restart() {
     dispatch(getClientConfig());
 }
 
-export async function reconnect(socketId?: string) {
+export async function reconnect(socketId) {
     // eslint-disable-next-line
     console.log('Reconnecting WebSocket');
     if (isDesktopApp()) {
@@ -372,7 +372,7 @@ export function unregisterAllPluginWebSocketEvents(pluginId) {
     Reflect.deleteProperty(pluginEventHandlers, pluginId);
 }
 
-function handleFirstConnect(socketId?: string) {
+function handleFirstConnect(socketId) {
     dispatch(batchActions([
         {
             type: GeneralTypes.WEBSOCKET_SUCCESS,
@@ -637,6 +637,9 @@ export function handleEvent(msg) {
     case SocketEvents.THREAD_UPDATED:
         dispatch(handleThreadUpdated(msg));
         break;
+    case SocketEvents.CONFERENCE_ADDED:
+        dispatch(handleReceiveCall(msg));
+        break;
     case SocketEvents.CONFERENCE_DELETED:
         dispatch(handleConferenceDeleted(msg));
         break;
@@ -770,13 +773,16 @@ function debouncePostEvent(wait) {
 
 const handleNewPostEventDebounced = debouncePostEvent(100);
 
+function handleReceiveCall({data}) {
+    return (doDispatch, doGetState) => {
+        const currentUserId = getCurrentUserId(doGetState());
+        doDispatch(receivedCall(data, currentUserId));
+    };
+}
+
 export function handleNewPostEvent(msg) {
     return (myDispatch, myGetState) => {
         const post = msg.data.post;
-        if (post.type === 'custom_call' && callDialingEnabled(myGetState()) && post.props) {
-            const currentUserId = getCurrentUserId(myGetState());
-            dispatch(receivedCall(post, currentUserId));
-        }
         if (window.logPostEvents) {
             // eslint-disable-next-line no-console
             console.log('handleNewPostEvent - new post received', post);
@@ -1890,6 +1896,7 @@ function handleConferenceDeleted(msg) {
     };
 }
 
+// eslint-disable-next-line no-unused-vars
 function handlePusherMemberRemoved(msg) {
     // console.log('pusher member removed', msg);
 }

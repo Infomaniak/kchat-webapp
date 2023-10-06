@@ -17,7 +17,7 @@ import {
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {Client4} from 'mattermost-redux/client';
 import {GlobalState} from 'types/store';
-import {Post} from '@mattermost/types/posts';
+import {Call} from '@mattermost/types/posts';
 
 import DialingModal from 'components/kmeet_conference/ringing_dialog';
 
@@ -25,7 +25,6 @@ import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 
 import {imageURLForUser} from 'utils/utils';
 
-import {PostTypes} from 'mattermost-redux/constants/posts';
 import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 
 import {ringing, stopRing} from 'utils/notification_sounds';
@@ -33,8 +32,6 @@ import {ringing, stopRing} from 'utils/notification_sounds';
 import {ChannelType} from '@mattermost/types/channels';
 
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-
-import {connectedKmeetCallUrl, connectedKmeetChannels} from 'selectors/kmeet_calls';
 
 import {UserProfile} from '@mattermost/types/users';
 
@@ -93,8 +90,8 @@ export function joinCallInChannel() {
         stopRing();
         setTimeout(() => {
             if (msg) {
-                const kmeetUrl = new URL(msg.props.url);
-                console.log('[calls: joinCallInChannel]', msg.props.url);
+                const kmeetUrl = new URL(msg.url);
+                console.log('[calls: joinCallInChannel]', msg.url);
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
         });
@@ -140,14 +137,9 @@ export function startOrJoinCallInChannel(channelID: string) {
 //used to manage action from postType actions and meet button
 export function startOrJoinCallInChannelV2(channelID: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
-        const state = getState();
-        const channels = Object.keys(connectedKmeetChannels(state));
-
-        let data;
-        let kmeetUrl;
-        if (channels.indexOf(channelID) === -1) {
-            data = await Client4.startMeet(channelID);
-
+        try {
+            let kmeetUrl;
+            const data = await Client4.startMeet(channelID);
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
             });
@@ -158,21 +150,21 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                     channelID,
                     userID: getCurrentUserId(getState()),
                     currentUserID: getCurrentUserId(getState()),
-                    url: data.url,
-                    id: data.id,
+                    url: data?.url,
+                    id: data?.id,
                 },
             });
 
             if (data && data.url) {
                 kmeetUrl = new URL(data.url);
             }
-        } else if (connectedKmeetCallUrl(state, channelID) !== null) {
-            kmeetUrl = new URL(connectedKmeetCallUrl(state, channelID));
-        }
 
-        if (kmeetUrl) {
-            console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
-            window.open(kmeetUrl.href, '_blank', 'noopener');
+            if (kmeetUrl) {
+                console.log('[calls: startOrJoinKmeetCallInChannelV2] window.open', kmeetUrl.href);
+                window.open(kmeetUrl.href, '_blank', 'noopener');
+            }
+        } catch {
+            console.log('[calls]: Call user back.');
         }
     };
 }
@@ -212,55 +204,53 @@ export function updateScreenSharingStatus(dialingID: string, muted = false) {
     };
 }
 
-export function receivedCall(callMessage: Post, currentUserId: string) {
+export function receivedCall(call: Call, currentUserId: string) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         try {
-            if (callMessage.type === PostTypes.CALL && !callMessage.props.ended_at) {
-                await dispatch(getCallingChannel(callMessage));
-                await dispatch(getUsersInCall(callMessage));
-                await dispatch(getCallingUser(callMessage));
-                const globalState = getState();
-                await replacePreviousAddedConference(dispatch, callMessage, globalState);
-                const {status} = callUserStatus(globalState);
-                const channelType: ChannelType = callParameters(globalState).channel.type;
-                if (channelType === 'O' || channelType === 'P' || status[currentUserId] === 'dnd' || callMessage.props.in_call || callMessage.user_id === currentUserId) {
-                    return;
-                }
-
-                dispatch({
-                    type: ActionTypes.CALL_RECEIVED,
-                    data: {
-                        msg: callMessage,
-                    },
-                });
-
-                if (isDesktopApp()) {
-                    if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
-                        console.log('[calls] call received on desktop.');
-                        handleDesktopKmeetCall(globalState, currentUserId, callMessage);
-
-                        return;
-                    }
-                    console.warn(`[calls] dialing on desktop is supported from version 2.2 and up, current version is ${getDesktopVersion()}`);
-                    const kmeetUrl = new URL(callMessage.props.url);
-                    window.open(kmeetUrl.href, '_blank', 'noopener');
-
-                    return;
-                }
-
-                console.log('[calls] call received on browser.');
-
-                ringing('Ring');
-                dispatch(openModal(
-                    {
-                        modalId: ModalIdentifiers.INCOMING_CALL,
-                        dialogType: DialingModal,
-                        dialogProps: {
-                            toneTimeOut: 30000,
-                        },
-                    },
-                ));
+            await dispatch(getCallingChannel(call.channel_id));
+            await dispatch(getUsersInCall(call.channel_id));
+            await dispatch(getCallingUser(call.user_id));
+            const globalState = getState();
+            await replacePreviousAddedConference(dispatch, call, globalState);
+            const {status} = callUserStatus(globalState);
+            const channelType: ChannelType = callParameters(globalState).channel.type;
+            if (channelType === 'O' || channelType === 'P' || status[currentUserId] === 'dnd' || call.user_id === currentUserId) {
+                return;
             }
+
+            dispatch({
+                type: ActionTypes.CALL_RECEIVED,
+                data: {
+                    msg: call,
+                },
+            });
+
+            if (isDesktopApp()) {
+                if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.2.0')) {
+                    console.log('[calls] call received on desktop.');
+                    handleDesktopKmeetCall(globalState, currentUserId, call);
+
+                    return;
+                }
+                console.warn(`[calls] dialing on desktop is supported from version 2.2 and up, current version is ${getDesktopVersion()}`);
+                const kmeetUrl = new URL(call.url);
+                window.open(kmeetUrl.href, '_blank', 'noopener');
+
+                return;
+            }
+
+            console.log('[calls] call received on browser.');
+
+            ringing('Ring');
+            dispatch(openModal(
+                {
+                    modalId: ModalIdentifiers.INCOMING_CALL,
+                    dialogType: DialingModal,
+                    dialogProps: {
+                        toneTimeOut: 30000,
+                    },
+                },
+            ));
         } catch (error) {
             console.error('[calls] receivedCall error:', error);
         }
@@ -270,7 +260,7 @@ export function receivedCall(callMessage: Post, currentUserId: string) {
 export function callNoLongerExist(endMsg: any) {
     return async (dispatch: DispatchFunc, getState: () => GlobalState) => {
         const {msg} = callParameters(getState());
-        if (msg.props?.url === endMsg.data.url) {
+        if (msg?.url === endMsg.data.url) {
             stopRing();
             dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
         }
@@ -287,32 +277,32 @@ export function hangUpCall() {
     };
 }
 
-export function getUsersInCall(callMessage: Post) {
+export function getUsersInCall(channelId: string) {
     return bindClientFunc({
         clientFunc: Client4.getProfilesInChannel,
         onSuccess: [ActionTypes.CALL_USERS_IN_CONF],
         params: [
-            callMessage.channel_id,
+            channelId,
         ],
     });
 }
 
-export function getCallingUser(callMessage: Post) {
+export function getCallingUser(userId: string) {
     return bindClientFunc({
         clientFunc: Client4.getProfilesByIds,
         onSuccess: [ActionTypes.CALL_CALLING_USER],
         params: [
-            callMessage.user_id,
+            userId,
         ],
     });
 }
 
-export function getCallingChannel(callMessage: Post) {
+export function getCallingChannel(channelId: string) {
     return bindClientFunc({
         clientFunc: Client4.getChannel,
         onSuccess: [ActionTypes.CALL_CONF_CHANNEL],
         params: [
-            callMessage.channel_id,
+            channelId,
         ],
     });
 }
@@ -337,7 +327,7 @@ function setUsersAvatar(users: UserProfile[]): Users[] {
     }));
 }
 
-function handleDesktopKmeetCall(globalState: GlobalState, currentUserId: string, callMessage: Post): void {
+function handleDesktopKmeetCall(globalState: GlobalState, currentUserId: string, call: Call): void {
     const currentUser = getCurrentUser(globalState);
     const avatar = imageURLForUser(currentUserId, currentUser?.last_picture_update);
     const {users, channel} = callParameters(globalState);
@@ -348,29 +338,29 @@ function handleDesktopKmeetCall(globalState: GlobalState, currentUserId: string,
             message: {
                 calling: {
                     users: usersWithAvatars,
-                    channelID: callMessage.channel_id,
-                    url: callMessage.props.url,
+                    channelID: call.channel_id,
+                    url: call.url,
                     name: channel.display_name,
                     avatar,
-                    id: callMessage.channel_id,
+                    id: call.channel_id,
                     nicknames: users.map((usr) => usr.nickname).join(', '),
-                    conferenceId: callMessage.props.conference_id,
                     toneTimeOut: 30000,
+                    conferenceId: call.id,
                 },
             },
         },
         window.location.origin);
 }
 
-function replacePreviousAddedConference(dispatch: DispatchFunc, callMessage: Post, globalState: GlobalState) {
+function replacePreviousAddedConference(dispatch: DispatchFunc, call: Call, globalState: GlobalState) {
     return dispatch({
         type: ActionTypes.VOICE_CHANNEL_ADDED,
         data: {
-            channelID: callMessage.channel_id,
+            channelID: call.channel_id,
             userID: getCurrentUserId(globalState),
             currentUserID: getCurrentUserId(globalState),
-            url: callMessage.props.url,
-            id: callMessage.props.conference_id,
+            url: call.url,
+            id: call.id,
         },
     });
 }
