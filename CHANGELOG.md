@@ -1,3 +1,9 @@
+## 1.4.5-next.7 (2023-10-09)
+
+### Changed (1 change)
+
+- [add 30 sec margin to ws last disconnect to account for timeouts](kchat/webapp@ba108eb9fcdb70305b1d2f857ae72a74c7893e54) by @antonbuksa ([merge request](kchat/webapp!549))
+
 ## 1.4.5-next.6 (2023-10-09)
 
 ### Fixed (1 change)
