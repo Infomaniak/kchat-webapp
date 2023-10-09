@@ -1,3 +1,9 @@
+## 1.4.5-next.6 (2023-10-09)
+
+### Fixed (1 change)
+
+- [fix team id in follow changed ws event cb](kchat/webapp@4b95e2d7de077d4e922719866b8c37ba2b2fd5a7) by @antonbuksa ([merge request](kchat/webapp!547))
+
 ## 1.4.5-next.5 (2023-10-06)
 
 No changes.
