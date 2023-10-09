@@ -1819,7 +1819,7 @@ function handleThreadFollowChanged(msg) {
         if (!thread && msg.data.state && msg.data.reply_count) {
             await doDispatch(fetchThread(getCurrentUserId(state), getCurrentTeamId(state), msg.data.thread_id, true));
         }
-        handleFollowChanged(doDispatch, msg.data.thread_id, msg.team_id, msg.data.state);
+        handleFollowChanged(doDispatch, msg.data.thread_id, msg.data.team_id, msg.data.state);
     };
 }
 
