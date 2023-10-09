@@ -390,10 +390,15 @@ function handleClose(failCount) {
     if (failCount > MAX_WEBSOCKET_FAILS) {
         dispatch(logError({type: 'critical', message: AnnouncementBarMessages.WEBSOCKET_PORT_ERROR}, true));
     }
+
+    // Subtract 30 sec to account for ws disconnection timeout
+    const nowTimestamp = Date.now();
+    const thirtySecondsAgoTimestamp = nowTimestamp - (30 * 1000);
+
     dispatch(batchActions([
         {
             type: GeneralTypes.WEBSOCKET_FAILURE,
-            timestamp: Date.now(),
+            timestamp: thirtySecondsAgoTimestamp,
         },
         incrementWsErrorCount(),
     ]));
