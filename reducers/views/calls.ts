@@ -5,7 +5,7 @@ import {combineReducers} from 'redux';
 import {UserProfile} from 'mattermost-redux/types/users';
 
 import {ActionTypes} from 'utils/constants';
-import {Post} from '@mattermost/types/posts';
+import {Call} from '@mattermost/types/posts';
 import {ServerChannel} from '@mattermost/types/channels';
 import {GenericAction} from 'mattermost-redux/types/actions';
 
@@ -429,7 +429,7 @@ const callStartAt = (state: {[channelID: string]: number} = {}, action: {type: s
 };
 
 const callParameters = (
-    state: {users: UserProfile[]; caller: UserProfile; channel: ServerChannel; msg: Post} = {users: [], caller: {}, channel: {}, msg: {}},
+    state: {users: UserProfile[]; caller: UserProfile; channel: ServerChannel; msg: Call} = {users: [], caller: {}, channel: {}, msg: {}},
     action: GenericAction) => {
     switch (action.type) {
     case ActionTypes.CALL_USERS_IN_CONF:

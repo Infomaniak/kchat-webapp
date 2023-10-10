@@ -12,7 +12,7 @@ export const voiceConnectedChannels = (state: GlobalState) => state.views.calls.
 export const usersInCall = (state: GlobalState) => state.views.calls.callParameters.users;
 export const userCalling = (state: GlobalState) => state.views.calls.callParameters.caller;
 export const channelInCall = (state: GlobalState) => state.views.calls.callParameters.channel;
-export const callConferenceId = (state: GlobalState) => state.views.calls.callParameters.msg.props.conference_id;
+export const callConferenceId = (state: GlobalState) => state.views.calls.callParameters.msg.id;
 export const callMessage = (state: GlobalState) => state.views.calls.callParameters.msg;
 
 export const userStatus = (state: GlobalState) => state.entities.users.statuses;

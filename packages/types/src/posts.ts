@@ -206,3 +206,13 @@ export type PostAnalytics = {
     requested_ack?: boolean;
     persistent_notifications?: boolean;
 }
+
+export type Call = {
+    url: string;
+    channel_id: string;
+    user_id: string;
+    team_id: string;
+    id: string;
+    participants: string [];
+}
+
