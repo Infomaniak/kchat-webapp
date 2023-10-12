@@ -188,6 +188,9 @@ export default class Root extends React.PureComponent<Props, State> {
     // so we do need this.
     private a11yController: A11yController;
 
+    // Whether the app is running in an iframe.
+    private embeddedInIFrame: boolean;
+
     constructor(props: Props) {
         super(props);
         this.mounted = false;
@@ -240,6 +243,8 @@ export default class Root extends React.PureComponent<Props, State> {
         this.updateWindowSize();
 
         store.subscribe(() => applyLuxonDefaults(store.getState()));
+
+        this.embeddedInIFrame = window.self !== window.top;
     }
 
     onConfigLoaded = () => {
@@ -800,7 +805,7 @@ export default class Root extends React.PureComponent<Props, State> {
                         <AnnouncementBarController/>
                         <SystemNotice/>
                         <GlobalHeader/>
-                        <TeamSidebar/>
+                        {!this.embeddedInIFrame && <TeamSidebar/>}
                         <Switch>
                             {this.props.products?.map((product) => (
                                 <Route
