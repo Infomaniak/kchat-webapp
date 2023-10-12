@@ -4,13 +4,12 @@ import React from 'react';
 import moment from 'moment-timezone';
 import styled from 'styled-components';
 
-import {Post} from 'mattermost-redux/types/posts';
-
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import {Client4} from 'mattermost-redux/client';
 
 import KMeetIcon from 'components/widgets/icons/kmeet_icon';
+import {Post} from '@mattermost/types/posts';
 
 interface Props {
     post: Post;
@@ -22,9 +21,11 @@ interface Props {
 const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInChannelV2}: Props) => {
     const intl = useIntl();
 
+    const meetingUrl = connectedKmeetUrl ?? post.props.url;
+
     const onJoinCallClick = () => {
         Client4.acceptIncomingMeetCall(post.props.conference_id);
-        const kmeetUrl = new URL(connectedKmeetUrl);
+        const kmeetUrl = new URL(meetingUrl);
         window.open(kmeetUrl.href, '_blank', 'noopener');
     };
 
@@ -92,7 +93,7 @@ const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInC
 
     const renderButton = (status: Status) => {
         if (isDialingEnabled) {
-            if (connectedKmeetUrl && status === 'O') {
+            if (meetingUrl && status === 'O') {
                 return (
                     <JoinButton onClick={onJoinCallClick}>
                         <ButtonText>
@@ -118,7 +119,7 @@ const PostType = ({post, connectedKmeetUrl, isDialingEnabled, startOrJoinCallInC
             }
         }
 
-        return connectedKmeetUrl ? (
+        return meetingUrl ? (
             <JoinButton onClick={onJoinCallClick}>
                 <ButtonText>
                     <FormattedMessage
