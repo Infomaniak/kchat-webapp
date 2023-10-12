@@ -1,3 +1,14 @@
+## 1.4.5-next.11 (2023-10-12)
+
+### Fixed (2 changes)
+
+- [fix: meet url](kchat/webapp@1fffeb80eb12c7ac22d49db7c5c91d3031475098) by @benoit.nau ([merge request](kchat/webapp!554))
+- [fix: loading](kchat/webapp@a76d15bc7fc692c8a58cf28b3e908f2d731ba437) by @benoit.nau ([merge request](kchat/webapp!543))
+
+### Changed (1 change)
+
+- [hide team sidebar if app is running in iframe](kchat/webapp@4218e5504e5b917750e226d4c1f75732049f63d3) by @antonbuksa ([merge request](kchat/webapp!555))
+
 ## 1.4.5-next.9 (2023-10-10)
 
 No changes.
