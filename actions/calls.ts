@@ -35,6 +35,8 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 
 import {UserProfile} from '@mattermost/types/users';
 
+import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
+
 import {closeModal, openModal} from './views/modals';
 
 export const showExpandedView = () => (dispatch: Dispatch<GenericAction>) => {
@@ -164,7 +166,11 @@ export function startOrJoinCallInChannelV2(channelID: string) {
                 window.open(kmeetUrl.href, '_blank', 'noopener');
             }
         } catch {
-            console.log('[calls]: Call user back.');
+            const url = connectedKmeetCallUrl(getState(), channelID);
+            if (url) {
+                window.open(url, '_blank', 'noopener');
+            }
+            console.log(`[calls]: Call user back. connected url: ${url}`);
         }
     };
 }
