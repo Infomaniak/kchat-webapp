@@ -287,8 +287,6 @@ export async function reconnect(socketId) {
 
         dispatch(loadChannelsForCurrentUser());
 
-        dispatch(resetReloadPostsInChannel());
-
         if (mostRecentPost) {
             // eslint-disable-next-line no-console
             console.log('[websocket_actions] dispatch syncPostsInChannel');
