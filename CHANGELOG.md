@@ -1,3 +1,10 @@
+## 1.4.5-next.12 (2023-10-17)
+
+### Fixed (2 changes)
+
+- [If the start meeting call returns a 409,](kchat/webapp@4d8e7a01b1776a18b70874e7af56aee26c336c07) by @benoit.nau ([merge request](kchat/webapp!559))
+- [fix: reconnect](kchat/webapp@28c44153d2e15fc299f1207dc9300f99932b26dd) by @benoit.nau ([merge request](kchat/webapp!558))
+
 ## 1.4.5-next.11 (2023-10-12)
 
 ### Fixed (2 changes)
