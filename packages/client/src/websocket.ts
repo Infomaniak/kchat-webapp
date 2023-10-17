@@ -207,7 +207,7 @@ export default class WebSocketClient {
         this.conn.connection.bind('state_change', (states: { current: string; previous: string }) => {
             console.log('[websocket] current state is: ', states.current);
 
-            if (states.current === 'unavailable' || states.current === 'failed') {
+            if (states.current === 'unavailable' || states.current === 'failed' || (states.previous === 'connected' && states.current === 'connecting')) {
                 this.connectFailCount++;
                 console.log('[websocket] connectFailCount updated: ', this.connectFailCount);
 
