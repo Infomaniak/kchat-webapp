@@ -1,3 +1,9 @@
+## 1.4.5-next.13 (2023-10-18)
+
+### Fixed (1 change)
+
+- [Wrap the error triggered by the autoplay permission for notification sound.](kchat/webapp@95d09680cd3b3c41d212744ba00a2cd10ecc87fc) by @benoit.nau ([merge request](kchat/webapp!561))
+
 ## 1.4.5-next.12 (2023-10-17)
 
 ### Fixed (2 changes)
