@@ -118,6 +118,8 @@ export const Preferences = {
     INTERVAL_IMMEDIATE: 30, // "immediate" is a 30 second interval
     INTERVAL_FIFTEEN_MINUTES: 15 * 60,
     INTERVAL_HOUR: 60 * 60,
+    INTERVAL_DAY: 60 * 60 * 24,
+    INTERVAL_WEEK: 60 * 60 * 24 * 7,
     INTERVAL_NEVER: 0,
     NAME_NAME_FORMAT: 'name_format',
     CATEGORY_SYSTEM_NOTICE: 'system_notice',
@@ -518,6 +520,16 @@ export const UserStatuses = {
     AWAY: 'away',
     ONLINE: 'online',
     DND: 'dnd',
+} as const;
+
+export const EmailNotificationStatuses = {
+    NEVER: 'never',
+    UNREAD: 'unread',
+    FREQUENCY: {
+        ONCE: 'once',
+        WITHOUT_WEEKEND: 'without',
+        WEEKLY: 'weekly',
+    },
 } as const;
 
 export const EventTypes = Object.assign(
@@ -1410,6 +1422,7 @@ export const Constants = {
     SocketEvents,
     ActionTypes,
     UserStatuses,
+    EmailNotificationStatuses,
     UserSearchOptions,
     TutorialSteps,
     AdminTutorialSteps,
