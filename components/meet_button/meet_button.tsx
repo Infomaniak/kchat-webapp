@@ -25,6 +25,8 @@ export type Props = {
     };
 }
 
+const TIME_TO_AVOID_SPAMMING_CALL_BTN = 3000;
+
 function MeetButton(props: Props) {
     const isGuest = useSelector(isCurrentUserGuestUser);
     const kmeetTourStep = isGuest ? OnboardingTourStepsForGuestUsers.KMEET : OnboardingTourSteps.KMEET;
@@ -32,10 +34,19 @@ function MeetButton(props: Props) {
     const {actions} = props;
     const {startOrJoinCallInChannelV2} = actions;
     const ref = useRef<HTMLButtonElement>(null);
+    let spamBtn = false;
 
-    const onClick = React.useCallback(() => {
+    const onClick = () => {
+        if (spamBtn) {
+            return;
+        }
+        spamBtn = true;
         startOrJoinCallInChannelV2(props.currentChannelID);
-    }, [props.currentChannelID, startOrJoinCallInChannelV2]);
+        const timerId = setTimeout(() => {
+            spamBtn = false;
+            clearTimeout(timerId);
+        }, TIME_TO_AVOID_SPAMMING_CALL_BTN);
+    };
 
     const tooltip = (
         <Tooltip

@@ -37,6 +37,8 @@ import {UserProfile} from '@mattermost/types/users';
 
 import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 
+import {isModalOpen} from 'selectors/views/modals';
+
 import {closeModal, openModal} from './views/modals';
 
 export const showExpandedView = () => (dispatch: Dispatch<GenericAction>) => {
@@ -246,7 +248,9 @@ export function receivedCall(call: Call, currentUserId: string) {
             }
 
             console.log('[calls] call received on browser.');
-
+            if (isModalOpen(getState(), ModalIdentifiers.INCOMING_CALL)) {
+                return;
+            }
             ringing('Ring');
             dispatch(openModal(
                 {
