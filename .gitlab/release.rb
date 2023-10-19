@@ -43,6 +43,31 @@ def get_commit_sha(tag)
   end
 end
 
+def get_all_tags
+  page = 1
+  all_tags = []
+
+  loop do
+    uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/tags?page=#{page}&per_page=100")
+    request = Net::HTTP::Get.new(uri.request_uri)
+    request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
+
+    response = get_http(uri).request(request)
+
+    if response.code.to_i == 200
+      tags = JSON.parse(response.body)
+      break if tags.empty?  # Exit the loop if no more tags are returned
+
+      all_tags.concat(tags)
+      page += 1  # Increment the page number for the next request
+    else
+      raise "Failed to fetch the tags (page #{page})"
+    end
+  end
+
+  all_tags
+end
+
 =begin
 # Sends a GET request to fetch all tags and finds the last tag before the given tag.
 #
@@ -50,18 +75,12 @@ end
 # @return [String] The name of the last tag before the current tag. Throws an error if it fails to fetch the tags.
 =end
 def get_last_tag(current_tag)
-  uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/tags")
-  request = Net::HTTP::Get.new(uri.request_uri)
-  request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
+  all_tags = get_all_tags.select { |tag| tag["name"] =~ /\A\d+\.\d+\.\d+(-next\.\d+)?\z/ && tag["name"] < current_tag }
 
-  response = get_http(uri).request(request)
-
-  if response.code.to_i == 200
-    tags = JSON.parse(response.body)
-    all_tags = tags.select { |tag| tag["name"] =~ /\A\d+\.\d+\.\d+(-next\.\d+)?\z/ && tag["name"] < current_tag }
-    all_tags.max_by { |tag| tag["name"] }["name"]
+  if all_tags.empty?
+    raise "No previous tags found that meet the criteria."
   else
-    raise "Failed to fetch the tags"
+    all_tags.max_by { |tag| tag["name"] }["name"]
   end
 end
 
