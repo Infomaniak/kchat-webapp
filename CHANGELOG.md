@@ -1,3 +1,9 @@
+## 1.4.5-next.14 (2023-10-19)
+
+### Fixed (1 change)
+
+- [Avoid user to spam another user by clicking multiple time on the Join meeting button.](kchat/webapp@feab5f2f4fe5991fc2c52db4cb963433648585e2) by @benoit.nau ([merge request](kchat/webapp!562))
+
 ## 1.4.5-next.13 (2023-10-18)
 
 ### Fixed (1 change)
