@@ -4,9 +4,9 @@
 import React, {ComponentProps} from 'react';
 import {shallow} from 'enzyme';
 
-import {TestHelper} from 'utils/test_helper';
-
 import {UserNotifyProps} from '@mattermost/types/users';
+
+import {TestHelper} from 'utils/test_helper';
 
 import RhsSettingsNotifications from './rhs_settings_notifications';
 
@@ -19,14 +19,13 @@ describe('components/rhs_settings/rhs_settings_display/RhsSettingsDisplay', () =
         user,
         updateSection: jest.fn(),
         activeSection: '',
-        closeModal: jest.fn(),
-        collapseModal: jest.fn(),
         actions: {
             updateMe: jest.fn(() => Promise.resolve({})),
+            savePreferences: jest.fn(() => Promise.resolve({})),
         },
-        isCollapsedThreadsEnabled: false,
         sendPushNotifications: false,
         enableAutoResponder: false,
+        emailInterval: 86400,
     };
 
     test('should have called handleSubmit', async () => {
