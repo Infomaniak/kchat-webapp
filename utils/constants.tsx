@@ -2329,4 +2329,6 @@ export const OverActiveUserLimits = {
     MAX: 0.1,
 } as const;
 
+export const NotificationsSettingsPath = 'notifications-settings';
+
 export default Constants;
