@@ -15,7 +15,7 @@ import {UserNotifyProps, UserProfile} from '@mattermost/types/users';
 
 import {ActionResult} from 'mattermost-redux/types/actions';
 
-import Constants, {NotificationLevels} from 'utils/constants';
+import Constants, {NotificationLevels, Preferences} from 'utils/constants';
 import {localizeMessage, moveCursorToEnd} from 'utils/utils';
 import {isDesktopApp} from 'utils/user_agent';
 
@@ -25,8 +25,9 @@ import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
 
 import Toggle from 'components/toggle';
 
-import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
+import {PreferenceType} from '@mattermost/types/preferences';
 
+import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
 import './rhs_settings_notifications.scss';
 
 export type Props = {
@@ -35,8 +36,10 @@ export type Props = {
     activeSection: string;
     sendPushNotifications: boolean;
     enableAutoResponder: boolean;
+    emailInterval: number;
     actions: {
         updateMe: (user: UserProfile) => Promise<ActionResult>;
+        savePreferences: (userId: string, preferences: PreferenceType[]) => void;
     };
 }
 
@@ -60,6 +63,7 @@ type State = {
     notifyCommentsLevel: UserNotifyProps['comments'];
     isSaving: boolean;
     serverError: string;
+    emailInterval: number;
 };
 
 function getNotificationsStateFromProps(props: Props, state?: State): State {
@@ -173,6 +177,7 @@ function getNotificationsStateFromProps(props: Props, state?: State): State {
         notifyCommentsLevel: comments,
         isSaving: false,
         serverError: '',
+        emailInterval: props.emailInterval,
     };
 }
 
@@ -270,6 +275,28 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         this.handleCancel();
     };
 
+    handleSaveEmailInterval = async (interval: string) => {
+        const emailIntervalPreference = {
+            user_id: this.props.user.id,
+            category: Preferences.CATEGORY_NOTIFICATIONS,
+            name: Preferences.EMAIL_INTERVAL,
+            value: interval.toString(),
+        };
+
+        //this.setStateValue('emailInterval', interval.toString());
+        this.props.actions.savePreferences(this.props.user.id, [emailIntervalPreference]);
+        this.setState((prevState) => ({...prevState, emailInterval: Number(interval)}));
+    }
+
+    setEmailDescriptionMessage() {
+        if (Number(this.props.emailInterval) === Preferences.INTERVAL_DAY) {
+            return localizeMessage('user.settings.notifications.email.subtitle.daily', 'The e-mail will be sent to your inbox between 06:00 and 08:00 a.m. each day.');
+        } else if (Number(this.props.emailInterval) === Preferences.INTERVAL_WEEK) {
+            return localizeMessage('user.settings.notifications.email.subtitle.weekly', 'The e-mail will be sent to your inbox between 06:00 and 08:00 every Monday morning.');
+        }
+        return '';
+    }
+
     setStateValue = (key: string, value: string | boolean): void => {
         const data: {[key: string]: string | boolean } = {};
         data[key] = value;
@@ -292,7 +319,7 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         ];
         return (
             <RhsSettingsItem
-                key='desktopNotifications'
+                key='pushNotifications'
                 title={
                     <FormattedMessage
                         id='channel_notifications.push'
@@ -331,7 +358,10 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                 value: Constants.UserStatuses.AWAY,
                 label: localizeMessage('user.settings.push_notification.away', 'Away or offline'),
             },
-            {value: Constants.UserStatuses.OFFLINE, label: localizeMessage('user.settings.push_notification.offline', 'Offline')},
+            {
+                value: Constants.UserStatuses.OFFLINE,
+                label: localizeMessage('user.settings.push_notification.offline', 'Offline'),
+            },
         ];
 
         return (
@@ -596,6 +626,109 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
         );
     }
 
+    createEmailNotificationSection = () => {
+        const options = [
+            {
+                value: true,
+                label: localizeMessage('user.settings.notifications.email.unreads', 'For unread mentions and direct messages'),
+            },
+            {
+                value: false,
+                label: localizeMessage('user.settings.notifications.never', 'Never'),
+            },
+        ];
+
+        const frequencyOptions = [
+            {
+                value: Preferences.INTERVAL_DAY,
+                label: localizeMessage('user.settings.notifications.email.frequency.daily', 'Once a day'),
+            },
+
+            // Add this delay when it will be available
+            /*{
+                value: Constants.EmailNotificationStatuses.FREQUENCY.WITHOUT_WEEKEND,
+                label: localizeMessage('user.settings.notifications.email.frequency.daily.monday.to.friday', 'Once a day (Monday to Friday)'),
+            },*/
+            {
+                value: Preferences.INTERVAL_WEEK,
+                label: localizeMessage('user.settings.notifications.email.frequency.weekly', 'Once a week'),
+            },
+        ];
+
+        // set the default value to "DAILY".
+        if (this.state.enableEmail && this.state.emailInterval === 0) {
+            this.handleSaveEmailInterval(Preferences.INTERVAL_DAY.toString());
+        }
+
+        return (
+            <>
+                <RhsSettingsItem
+                    key='emailNotifications'
+                    title={
+                        <FormattedMessage
+                            id='user.settings.notifications.email.send'
+                            defaultMessage='Send email notifications'
+                        />
+                    }
+                    inputs={
+                        <ReactSelect
+                            className='react-select settings-select advanced-select'
+                            classNamePrefix='react-select'
+                            id='threadsPushLevel'
+                            key='threadsPushLevel'
+                            options={options}
+                            clearable={false}
+                            value={options.filter((option) => option.value === (this.state.enableEmail === 'true'))}
+                            onChange={(e) => {
+                                this.setStateValue('enableEmail', e?.value?.toString());
+                                if (!e?.value) {
+                                    this.handleSaveEmailInterval('0');
+                                }
+                            }}
+                            isSearchable={false}
+                            menuPortalTarget={document.body}
+                            styles={reactToTheTopStyles}
+                        />
+                    }
+                    updateSection={
+                        this.props.updateSection
+                    }
+                />
+                {
+                    this.state.enableEmail === 'true' &&
+                    <RhsSettingsItem
+                        key='emailFrequencyNotifications'
+                        title={
+                            <FormattedMessage
+                                id='user.settings.notifications.email.frequency'
+                                defaultMessage='Mailing frequency'
+                            />
+                        }
+                        inputs={
+                            <ReactSelect
+                                className='react-select settings-select advanced-select'
+                                classNamePrefix='react-select'
+                                id='threadsPushLevel'
+                                key='threadsPushLevel'
+                                options={frequencyOptions}
+                                clearable={false}
+                                value={frequencyOptions.filter((opt: { value: number }) => opt.value === this.state.emailInterval)}
+                                onChange={(e) => this.handleSaveEmailInterval(e?.value)}
+                                isSearchable={false}
+                                menuPortalTarget={document.body}
+                                styles={reactToTheTopStyles}
+                            />
+                        }
+                        updateSection={
+                            this.props.updateSection
+                        }
+                        messageDesc={this.setEmailDescriptionMessage()}
+                    />
+                }
+            </>
+        );
+    }
+
     onMentionKeySelect = (e: React.MouseEvent, state: string, value: string | boolean) => {
         e.preventDefault();
         e.stopPropagation();
@@ -651,6 +784,14 @@ export default class RhsNotificationsTab extends React.PureComponent<Props, Stat
                         active={this.props.activeSection === 'desktop'}
                         selectedSound={this.state.desktopNotificationSound || 'default'}
                     />
+                    <h5>
+                        <FormattedMessage
+                            id='user.settings.notifications.email.title'
+                            defaultMessage='Unread e-mail notifications'
+                        />
+                    </h5>
+                    <div className='divider-dark mt-5 rhs-custom-bb'/>
+                    {this.createEmailNotificationSection()}
                 </div>
             </div>
 
@@ -663,5 +804,19 @@ const reactStyles = {
         ...provided,
         zIndex: 9999,
         cursor: 'pointer',
+    }),
+};
+
+const reactToTheTopStyles = {
+    menuPortal: (provided: React.CSSProperties) => ({
+        ...provided,
+        zIndex: 9999,
+        cursor: 'pointer',
+    }),
+    menu: (provided: any) => ({
+        ...provided,
+        position: 'absolute',
+        top: 'auto',
+        bottom: 0,
     }),
 };

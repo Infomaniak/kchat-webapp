@@ -230,7 +230,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
             }
 
             return (
-                <section className='row rhs-settings-section'>
+                <section className='row rhs-settings-section rhs-custom-bb'>
                     <div className='col-sm-12'>
                         <div className='setting-list' >
                             {notificationSelection}

@@ -230,7 +230,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
     updateSection={[Function]}
   />
   <section
-    className="row rhs-settings-section"
+    className="row rhs-settings-section rhs-custom-bb"
   >
     <div
       className="col-sm-12"
@@ -355,7 +355,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
     updateSection={[Function]}
   />
   <section
-    className="row rhs-settings-section"
+    className="row rhs-settings-section rhs-custom-bb"
   >
     <div
       className="col-sm-12"
@@ -530,7 +530,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
     updateSection={[Function]}
   />
   <section
-    className="row rhs-settings-section"
+    className="row rhs-settings-section rhs-custom-bb"
   >
     <div
       className="col-sm-12"

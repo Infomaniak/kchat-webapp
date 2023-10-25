@@ -424,7 +424,8 @@ export async function redirectUserToDefaultTeam() {
         const channel = await getTeamRedirectChannelIfIsAccesible(user, team);
         if (channel) {
             dispatch(selectChannel(channel.id));
-            getHistory().push(`/${team.name}/channels/${channel.name}`);
+            const hashParams = window.location.hash ? `/${window.location.hash}` : '';
+            getHistory().push(`/${team.name}/channels/${channel.name}${hashParams}`);
             return;
         }
     }
