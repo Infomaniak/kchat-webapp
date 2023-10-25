@@ -8,8 +8,10 @@ import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 
 import {getModule} from 'module_registry';
 
+import {NotificationsSettingsPath} from './constants';
+
 const b = createBrowserHistory({basename: window.basename});
-const isDesktop = isDesktopApp() // && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '5.0.0');
+const isDesktop = isDesktopApp(); // && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '5.0.0');
 
 type Data = {
     type?: string;
@@ -64,3 +66,6 @@ const browserHistory = {
 export function getHistory() {
     return getModule<History>('utils/browser_history') ?? browserHistory;
 }
+
+export const hasNotificationsSettingsPathInUrl = () => window.location.hash.indexOf(NotificationsSettingsPath) !== -1;
+

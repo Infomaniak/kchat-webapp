@@ -5,6 +5,8 @@ import React, {lazy, memo, useEffect, useRef, useState} from 'react';
 import {Route, Switch, useHistory, useParams} from 'react-router-dom';
 import iNoBounce from 'inobounce';
 
+import {useDispatch} from 'react-redux';
+
 import {ActionResult} from 'mattermost-redux/types/actions';
 
 import {reconnect} from 'actions/websocket_actions.jsx';
@@ -21,6 +23,10 @@ import LocalStorageStore from 'stores/local_storage_store';
 
 import {ServerError} from '@mattermost/types/errors';
 import {Team} from '@mattermost/types/teams';
+
+import {showSettings} from 'actions/views/rhs';
+
+import {getHistory, hasNotificationsSettingsPathInUrl} from 'utils/browser_history';
 
 import type {OwnProps, PropsFromRedux} from './index';
 
@@ -41,6 +47,7 @@ type Props = PropsFromRedux & OwnProps;
 
 function TeamController(props: Props) {
     const history = useHistory();
+    const dispatch = useDispatch();
     const {team: teamNameParam} = useParams<Props['match']['params']>();
 
     const [initialChannelsLoaded, setInitialChannelsLoaded] = useState(false);
@@ -67,6 +74,16 @@ function TeamController(props: Props) {
     }, [props.graphQLEnabled]);
 
     useEffect(() => {
+        let notificationsSettingsTimer: NodeJS.Timeout;
+
+        // open notifications settings panel if the url contains 'notifications-settings'
+        // eslint-disable-next-line @babel/no-unused-expressions
+        if (hasNotificationsSettingsPathInUrl()) {
+            notificationsSettingsTimer = setTimeout(() => {
+                dispatch(showSettings('notifications'));
+                history.push(window.location.pathname); //clear the hash params
+            });
+        }
         const wakeUpIntervalId = setInterval(() => {
             const currentTime = Date.now();
             if ((currentTime - lastTime.current) > WAKEUP_THRESHOLD) {
@@ -78,6 +95,8 @@ function TeamController(props: Props) {
 
         return () => {
             clearInterval(wakeUpIntervalId);
+            // eslint-disable-next-line @babel/no-unused-expressions
+            notificationsSettingsTimer && clearInterval(notificationsSettingsTimer);
         };
     }, []);
 
