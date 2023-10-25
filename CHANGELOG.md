@@ -1,3 +1,28 @@
+## 1.4.6-next.1 (2023-10-25)
+
+### Added (2 changes)
+
+- [New path 'notifications-settings' to reach the notifications settings section on load.](kchat/webapp@695473afb1bca5ed87f01b33d412ad463efb0633) by @benoit.nau ([merge request](kchat/webapp!564))
+- [Add email setting section for unreads messages mail.](kchat/webapp@1a567b96d4c4668453f0163b5d270390bbd86dec) by @benoit.nau ([merge request](kchat/webapp!564))
+
+### Fixed (7 changes)
+
+- [Avoid user to spam another user by clicking multiple time on the Join meeting button.](kchat/webapp@feab5f2f4fe5991fc2c52db4cb963433648585e2) by @benoit.nau ([merge request](kchat/webapp!562))
+- [Wrap the error triggered by the autoplay permission for notification sound.](kchat/webapp@95d09680cd3b3c41d212744ba00a2cd10ecc87fc) by @benoit.nau ([merge request](kchat/webapp!561))
+- [If the start meeting call returns a 409,](kchat/webapp@4d8e7a01b1776a18b70874e7af56aee26c336c07) by @benoit.nau ([merge request](kchat/webapp!559))
+- [fix: reconnect](kchat/webapp@28c44153d2e15fc299f1207dc9300f99932b26dd) by @benoit.nau ([merge request](kchat/webapp!558))
+- [fix: meet url](kchat/webapp@1fffeb80eb12c7ac22d49db7c5c91d3031475098) by @benoit.nau ([merge request](kchat/webapp!554))
+- [fix: loading](kchat/webapp@a76d15bc7fc692c8a58cf28b3e908f2d731ba437) by @benoit.nau ([merge request](kchat/webapp!543))
+- [fix: logs](kchat/webapp@0d7075df5c593e0e4f1cf38f26338c3f03f391fe) by @benoit.nau ([merge request](kchat/webapp!552))
+
+### Changed (1 change)
+
+- [hide team sidebar if app is running in iframe](kchat/webapp@4218e5504e5b917750e226d4c1f75732049f63d3) by @antonbuksa ([merge request](kchat/webapp!555))
+
+### Chore (1 change)
+
+- [tweak release script to handle pagination when checking last tag](kchat/webapp@1800bbc408da1785f7dd9152f3744f7190514120) by @antonbuksa
+
 ## 1.4.5-next.14 (2023-10-19)
 
 ### Fixed (1 change)
