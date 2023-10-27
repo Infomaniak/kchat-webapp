@@ -1,3 +1,9 @@
+## 1.4.7-next.1 (2023-10-27)
+
+### Fixed (1 change)
+
+- [Add question mark to prevent null reference exception.](kchat/webapp@ffca47c59fb0c68b69015a664fac773903d90975) by @benoit.nau ([merge request](kchat/webapp!566))
+
 ## 1.4.6-next.1 (2023-10-25)
 
 ### Added (2 changes)
