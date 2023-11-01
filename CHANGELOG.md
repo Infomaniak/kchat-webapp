@@ -1,3 +1,9 @@
+## 1.4.7-next.2 (2023-11-01)
+
+### Fixed (1 change)
+
+- [fix count on DM for group members.](kchat/webapp@3bf3b7bb08044db2986dd48893fb8c98b95fd6aa) by @benoit.nau ([merge request](kchat/webapp!527))
+
 ## 1.4.7-next.1 (2023-10-27)
 
 ### Fixed (1 change)
