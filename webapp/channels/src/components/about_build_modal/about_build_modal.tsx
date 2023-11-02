@@ -31,6 +31,11 @@ type Props = {
      * Global license object
      */
     license: ClientLicense;
+
+    /**
+     * Webapp build hash override. By default, webpack sets this (so it must be overridden in tests).
+     */
+    webappBuildHash?: string;
 };
 
 type State = {
@@ -48,7 +53,6 @@ export default class AboutBuildModal extends React.PureComponent<Props, State> {
 
     doHide = () => {
         this.setState({show: false});
-        this.props.onExited();
     };
 
     render() {
@@ -172,7 +176,7 @@ export default class AboutBuildModal extends React.PureComponent<Props, State> {
 
         // Only show build number if it's a number (so only builds from Jenkins)
         let buildnumber: JSX.Element | null = (
-            <div data-testid='aboutModalBuildNumber'>
+            <div>
                 <FormattedMessage
                     id='about.buildnumber'
                     defaultMessage='Build Number:'
@@ -227,7 +231,7 @@ export default class AboutBuildModal extends React.PureComponent<Props, State> {
                                 {subTitle}
                             </p>
                             <div className='form-group less'>
-                                <div data-testid='aboutModalVersion'>
+                                <div>
                                     <FormattedMessage
                                         id='about.version'
                                         defaultMessage='Mattermost Version:'
@@ -236,7 +240,7 @@ export default class AboutBuildModal extends React.PureComponent<Props, State> {
                                         {'\u00a0' + mmversion}
                                     </span>
                                 </div>
-                                <div data-testid='aboutModalDBVersionString'>
+                                <div>
                                     <FormattedMessage
                                         id='about.dbversion'
                                         defaultMessage='Database Schema Version:'
@@ -325,6 +329,17 @@ export default class AboutBuildModal extends React.PureComponent<Props, State> {
                             />
                             <Nbsp/>
                             {config.BuildHashEnterprise}
+                            <br/>
+                            <FormattedMessage
+                                id='about.hashwebapp'
+                                defaultMessage='Webapp Build Hash:'
+                            />
+                            <Nbsp/>
+                            {
+                                /* global COMMIT_HASH */ this.props.
+                                    webappBuildHash ||
+                                    (typeof COMMIT_HASH === 'undefined' ? '' : COMMIT_HASH)
+                            }
                         </p>
                         <p>
                             <FormattedMessage
