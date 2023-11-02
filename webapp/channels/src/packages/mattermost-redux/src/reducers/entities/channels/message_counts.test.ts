@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ServerChannel} from '@mattermost/types/channels';
+import {ServerChannel} from '@mattermost/types/channels';
 
 import {updateMessageCount} from './message_counts';
 

@@ -1,16 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {PreferencesType} from '@mattermost/types/preferences';
-import type {GlobalState} from '@mattermost/types/store';
+import {GlobalState} from '@mattermost/types/store';
+import {PreferencesType} from '@mattermost/types/preferences';
 
 import {General, Preferences} from 'mattermost-redux/constants';
+
 import * as Selectors from 'mattermost-redux/selectors/entities/preferences';
-import deepFreezeAndThrowOnMutation from 'mattermost-redux/utils/deep_freeze';
-import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
-import * as ThemeUtils from 'mattermost-redux/utils/theme_utils';
 
 import mergeObjects from '../../../test/merge_objects';
+
+import * as ThemeUtils from 'mattermost-redux/utils/theme_utils';
+
+import deepFreezeAndThrowOnMutation from 'mattermost-redux/utils/deep_freeze';
+import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
 describe('Selectors.Preferences', () => {
     const category1 = 'testcategory1';
@@ -185,7 +188,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            } as unknown as GlobalState)).toEqual(Preferences.THEMES.denim);
+            } as unknown as GlobalState)).toEqual(Preferences.THEMES.ik);
         });
 
         it('custom theme', () => {
@@ -435,13 +438,13 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            } as GlobalState).mentionHighlightLink).toEqual(Preferences.THEMES.denim.mentionHighlightLink);
+            } as GlobalState).mentionHighlightLink).toEqual(Preferences.THEMES.ik.mentionHighlightLink);
         });
 
         it('system theme with missing colours', () => {
             const currentTeamId = '1234';
             const theme = {
-                type: Preferences.THEMES.indigo.type,
+                type: Preferences.THEMES.ik.type,
                 sidebarBg: '#ff0000',
             };
 
@@ -463,13 +466,13 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            } as GlobalState).sidebarText).toEqual(Preferences.THEMES.indigo.sidebarText);
+            } as GlobalState).sidebarText).toEqual(Preferences.THEMES.ik.sidebarText);
         });
 
         it('non-default system theme', () => {
             const currentTeamId = '1234';
             const theme = {
-                type: Preferences.THEMES.onyx.type,
+                type: Preferences.THEMES.ik.type,
             };
 
             expect(Selectors.getTheme({
@@ -490,7 +493,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            } as GlobalState).codeTheme).toEqual(Preferences.THEMES.onyx.codeTheme);
+            } as GlobalState).codeTheme).toEqual(Preferences.THEMES.ik.codeTheme);
         });
 
         it('should return the server-configured theme by default', () => {
@@ -498,7 +501,7 @@ describe('Selectors.Preferences', () => {
                 entities: {
                     general: {
                         config: {
-                            DefaultTheme: 'indigo',
+                            DefaultTheme: 'ik',
                         },
                     },
                     teams: {
@@ -510,7 +513,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            } as unknown as GlobalState).codeTheme).toEqual(Preferences.THEMES.indigo.codeTheme);
+            } as unknown as GlobalState).codeTheme).toEqual(Preferences.THEMES.ik.codeTheme);
 
             // Opposite case
             expect(Selectors.getTheme({
@@ -529,7 +532,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            } as unknown as GlobalState).codeTheme).not.toEqual(Preferences.THEMES.indigo.codeTheme);
+            } as unknown as GlobalState).codeTheme).not.toEqual(Preferences.THEMES.ik.codeTheme);
         });
 
         it('returns the "default" theme if the server-configured value is not present', () => {
@@ -549,7 +552,7 @@ describe('Selectors.Preferences', () => {
                         },
                     },
                 },
-            } as unknown as GlobalState).codeTheme).toEqual(Preferences.THEMES.denim.codeTheme);
+            } as unknown as GlobalState).codeTheme).toEqual(Preferences.THEMES.ik.codeTheme);
         });
     });
 

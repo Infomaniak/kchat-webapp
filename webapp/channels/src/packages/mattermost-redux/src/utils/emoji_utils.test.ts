@@ -2,43 +2,78 @@
 // See LICENSE.txt for license information.
 
 import * as EmojiUtils from 'mattermost-redux/utils/emoji_utils';
-
 import TestHelper from '../../test/test_helper';
 
 describe('EmojiUtils', () => {
-    describe('parseEmojiNamesFromText', () => {
-        test('should return empty array for text without emojis', () => {
-            const actual = EmojiUtils.parseEmojiNamesFromText(
+    describe('parseNeededCustomEmojisFromText', () => {
+        it('no emojis', () => {
+            const actual = EmojiUtils.parseNeededCustomEmojisFromText(
                 'This has no emojis',
+                new Set(),
+                new Map(),
+                new Set(),
             );
-            const expected: string[] = [];
+            const expected = new Set([]);
 
             expect(actual).toEqual(expected);
         });
 
-        test('should return anything that looks like an emoji', () => {
-            const actual = EmojiUtils.parseEmojiNamesFromText(
+        it('some emojis', () => {
+            const actual = EmojiUtils.parseNeededCustomEmojisFromText(
                 ':this: :is_all: :emo-jis: :123:',
+                new Set(),
+                new Map(),
+                new Set(),
             );
-            const expected = ['this', 'is_all', 'emo-jis', '123'];
+            const expected = new Set(['this', 'is_all', 'emo-jis', '123']);
 
             expect(actual).toEqual(expected);
         });
 
-        test('should correctly handle text surrounding emojis', () => {
-            const actual = EmojiUtils.parseEmojiNamesFromText(
+        it('text surrounding emojis', () => {
+            const actual = EmojiUtils.parseNeededCustomEmojisFromText(
                 ':this:/:is_all: (:emo-jis:) surrounding:123:text:456:asdf',
+                new Set(),
+                new Map(),
+                new Set(),
             );
-            const expected = ['this', 'is_all', 'emo-jis', '123', '456'];
+            const expected = new Set(['this', 'is_all', 'emo-jis', '123', '456']);
 
             expect(actual).toEqual(expected);
         });
 
-        test('should not return duplicates', () => {
-            const actual = EmojiUtils.parseEmojiNamesFromText(
-                ':emoji: :emoji: :emoji: :emoji:',
+        it('system emojis', () => {
+            const actual = EmojiUtils.parseNeededCustomEmojisFromText(
+                ':this: :is_all: :emo-jis: :123:',
+                new Set(['this', '123']),
+                new Map(),
+                new Set(),
             );
-            const expected = ['emoji'];
+            const expected = new Set(['is_all', 'emo-jis']);
+
+            expect(actual).toEqual(expected);
+        });
+
+        it('custom emojis', () => {
+            const actual = EmojiUtils.parseNeededCustomEmojisFromText(
+                ':this: :is_all: :emo-jis: :123:',
+                new Set(),
+                new Map([['is_all', TestHelper.getCustomEmojiMock({name: 'is_all'})], ['emo-jis', TestHelper.getCustomEmojiMock({name: 'emo-jis'})]]),
+                new Set(),
+            );
+            const expected = new Set(['this', '123']);
+
+            expect(actual).toEqual(expected);
+        });
+
+        it('emojis that we\'ve already tried to load', () => {
+            const actual = EmojiUtils.parseNeededCustomEmojisFromText(
+                ':this: :is_all: :emo-jis: :123:',
+                new Set(),
+                new Map(),
+                new Set(['this', 'emo-jis']),
+            );
+            const expected = new Set(['is_all', '123']);
 
             expect(actual).toEqual(expected);
         });
@@ -100,10 +135,10 @@ describe('EmojiUtils', () => {
             expect(EmojiUtils.getEmojiImageUrl(TestHelper.getSystemEmojiMock({short_names: ['system_emoji_short_names']}))).toBe('/static/emoji/system_emoji_short_names.png');
         });
 
-        test('return correct url for mattermost emoji', () => {
-            expect(EmojiUtils.getEmojiImageUrl(TestHelper.getCustomEmojiMock({id: 'mattermost', category: 'custom'}))).toBe('/static/emoji/mattermost.png');
+        test('return correct url for kchat emoji', () => {
+            expect(EmojiUtils.getEmojiImageUrl(TestHelper.getCustomEmojiMock({id: 'kchat', category: 'custom'}))).toBe('/static/emoji/kchat.png');
 
-            expect(EmojiUtils.getEmojiImageUrl(TestHelper.getCustomEmojiMock({id: 'mattermost'}))).toBe('/static/emoji/mattermost.png');
+            expect(EmojiUtils.getEmojiImageUrl(TestHelper.getCustomEmojiMock({id: 'kchat'}))).toBe('/static/emoji/kchat.png');
         });
 
         test('return correct url for custom emojis', () => {

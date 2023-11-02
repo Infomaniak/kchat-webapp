@@ -2,10 +2,10 @@
 // See LICENSE.txt for license information.
 
 export const NotificationLevel = {
-    DEFAULT: 'default' as const,
-    ALL: 'all' as const,
-    MENTION: 'mention' as const,
-    NONE: 'none' as const,
+    DEFAULT: 'default',
+    ALL: 'all',
+    MENTION: 'mention',
+    NONE: 'none',
 };
 
 export const MarkUnread = {

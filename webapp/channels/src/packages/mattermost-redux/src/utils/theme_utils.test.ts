@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import * as ThemeUtils from 'mattermost-redux/utils/theme_utils';
-
 import {Preferences} from '../constants';
 
 describe('ThemeUtils', () => {
@@ -69,7 +68,7 @@ describe('ThemeUtils', () => {
     describe('setThemeDefaults', () => {
         it('blank theme', () => {
             const input = {};
-            const expected = {...Preferences.THEMES.denim};
+            const expected = {...Preferences.THEMES.ik};
             delete expected.type;
 
             expect(ThemeUtils.setThemeDefaults(input)).toEqual(expected);

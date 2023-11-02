@@ -129,23 +129,4 @@ describe('Actions.Bots', () => {
         const botsResult = state.entities.bots.accounts[bot.user_id];
         expect(bot.owner_id).toEqual(botsResult.owner_id);
     });
-
-    it('logout', async () => {
-        // Fill redux store with somthing
-        const bot = TestHelper.fakeBot();
-        nock(Client4.getBaseRoute()).
-            post('/bots').
-            reply(200, bot);
-        await store.dispatch(BotActions.createBot(bot));
-
-        // Should be cleared by logout
-        nock(Client4.getUsersRoute()).
-            post('/logout').
-            reply(200, {status: 'OK'});
-        await store.dispatch(UserActions.logout());
-
-        // Check is clear
-        const state = store.getState();
-        expect(0).toEqual(Object.keys(state.entities.bots.accounts).length);
-    });
 });

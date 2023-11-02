@@ -5,17 +5,16 @@ import fs from 'fs';
 
 import nock from 'nock';
 
-import type {UserProfile} from '@mattermost/types/users';
-
-import {UserTypes} from 'mattermost-redux/action_types';
 import * as Actions from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
-import type {ActionResult} from 'mattermost-redux/types/actions';
-import deepFreeze from 'mattermost-redux/utils/deep_freeze';
-
+import {RequestStatus} from '../constants';
 import TestHelper from '../../test/test_helper';
 import configureStore from '../../test/test_store';
-import {RequestStatus} from '../constants';
+import deepFreeze from 'mattermost-redux/utils/deep_freeze';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
+import {UserTypes} from 'mattermost-redux/action_types';
+import {ActionResult} from 'mattermost-redux/types/actions';
+import {UserProfile} from '@mattermost/types/users';
 
 const OK_RESPONSE = {status: 'OK'};
 
@@ -89,7 +88,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         nock(Client4.getBaseRoute()).
             post('/users/me/terms_of_service').
@@ -115,7 +114,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         nock(Client4.getBaseRoute()).
             post('/users/me/terms_of_service').
@@ -127,107 +126,6 @@ describe('Actions.Users', () => {
 
         expect(currentUserId).toBeTruthy();
         expect(myAcceptedTermsOfServiceId).not.toEqual('1');
-    });
-
-    it('logout', async () => {
-        nock(Client4.getBaseRoute()).
-            post('/users/logout').
-            reply(200, OK_RESPONSE);
-
-        await Actions.logout()(store.dispatch, store.getState);
-
-        const state = store.getState();
-        const logoutRequest = state.requests.users.logout;
-        const general = state.entities.general;
-        const users = state.entities.users;
-        const teams = state.entities.teams;
-        const channels = state.entities.channels;
-        const posts = state.entities.posts;
-        const preferences = state.entities.preferences;
-
-        if (logoutRequest.status === RequestStatus.FAILURE) {
-            throw new Error(JSON.stringify(logoutRequest.error));
-        }
-
-        // config not empty
-        expect(general.config).toEqual({});
-
-        // license not empty
-        expect(general.license).toEqual({});
-
-        // current user id not empty
-        expect(users.currentUserId).toEqual('');
-
-        // user sessions not empty
-        expect(users.mySessions).toEqual([]);
-
-        // user audits not empty
-        expect(users.myAudits).toEqual([]);
-
-        // user profiles not empty
-        expect(users.profiles).toEqual({});
-
-        // users profiles in team not empty
-        expect(users.profilesInTeam).toEqual({});
-
-        // users profiles in channel not empty
-        expect(users.profilesInChannel).toEqual({});
-
-        // users profiles NOT in channel not empty
-        expect(users.profilesNotInChannel).toEqual({});
-
-        // users statuses not empty
-        expect(users.statuses).toEqual({});
-
-        // current team id is not empty
-        expect(teams.currentTeamId).toEqual('');
-
-        // teams is not empty
-        expect(teams.teams).toEqual({});
-
-        // team members is not empty
-        expect(teams.myMembers).toEqual({});
-
-        // members in team is not empty
-        expect(teams.membersInTeam).toEqual({});
-
-        // team stats is not empty
-        expect(teams.stats).toEqual({});
-
-        // current channel id is not empty
-        expect(channels.currentChannelId).toEqual('');
-
-        // channels is not empty
-        expect(channels.channels).toEqual({});
-
-        // channelsInTeam is not empty
-        expect(channels.channelsInTeam).toEqual({});
-
-        // channel members is not empty
-        expect(channels.myMembers).toEqual({});
-
-        // channel stats is not empty
-        expect(channels.stats).toEqual({});
-
-        // selected post id is not empty
-        expect(posts.selectedPostId).toEqual('');
-
-        // current focused post id is not empty
-        expect(posts.currentFocusedPostId).toEqual('');
-
-        // posts is not empty
-        expect(posts.posts).toEqual({});
-
-        // posts by channel is not empty
-        expect(posts.postsInChannel).toEqual({});
-
-        // user preferences not empty
-        expect(preferences.myPreferences).toEqual({});
-
-        nock(Client4.getBaseRoute()).
-            post('/users/login').
-            reply(200, TestHelper.basicUser!);
-        await TestHelper.basicClient4!.login(TestHelper.basicUser!.email, 'password1');
     });
 
     it('getProfiles', async () => {
@@ -661,7 +559,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         nock(Client4.getBaseRoute()).
             post('/users/login').
@@ -717,7 +615,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         nock(Client4.getBaseRoute()).
             post('/users/login').
@@ -854,7 +752,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const state = store.getState();
         const currentUser = state.entities.users.profiles[state.entities.users.currentUserId];
@@ -905,7 +803,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const state = store.getState();
         const currentUserId = state.entities.users.currentUserId;
@@ -953,7 +851,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -974,7 +872,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -995,7 +893,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const beforeTime = new Date().getTime();
         const currentUserId = store.getState().entities.users.currentUserId;
@@ -1090,9 +988,9 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
-        const testImageData = fs.createReadStream('src/packages/mattermost-redux/test/assets/images/test.png');
+        const testImageData = fs.createReadStream('packages/mattermost-redux/test/assets/images/test.png');
 
         const beforeTime = new Date().getTime();
         const currentUserId = store.getState().entities.users.currentUserId;
@@ -1115,7 +1013,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1182,7 +1080,7 @@ describe('Actions.Users', () => {
             store.dispatch({
                 type: UserTypes.LOGIN_SUCCESS,
             });
-            await Actions.loadMe()(store.dispatch, store.getState);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
 
             const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1213,7 +1111,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1249,7 +1147,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1286,7 +1184,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1323,7 +1221,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1371,7 +1269,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1426,7 +1324,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1481,7 +1379,7 @@ describe('Actions.Users', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await Actions.loadMe()(store.dispatch, store.getState);
+        await Actions.loadMeREST()(store.dispatch, store.getState);
 
         const currentUserId = store.getState().entities.users.currentUserId;
 
@@ -1557,6 +1455,117 @@ describe('Actions.Users', () => {
 
             const profiles = store.getState().entities.users.profiles;
             expect(profiles).toBe(originalState.entities.users.profiles);
+        });
+    });
+    describe('Should redirect to last kSuite seen on loadMeREST', () => {
+        test('on Webapp', async () => {
+            const originalEnv = {...process.env};
+            const originalOrigin = window.origin;
+            const open = jest.spyOn(window, 'open').mockImplementation(jest.fn());
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const teamUrl = 'https://test1.test.com';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.fakeTeamWithId(), url: 'https://test2.test.com'}, {...TestHelper.basicTeam, url: teamUrl}, {...TestHelper.fakeTeamWithId(), url: 'https://test3.test.com'}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            window.origin = 'https://kchat.infomaniak.com';
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(open).toHaveBeenCalledWith(teamUrl, '_self');
+            process.env = originalEnv;
+            window.origin = originalOrigin;
+            open.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
+        });
+
+        test('on Webapp if user is no more in lastActiveKSuite', async () => {
+            const originalEnv = {...process.env};
+            const originalOrigin = window.origin;
+            const open = jest.spyOn(window, 'open').mockImplementation(jest.fn());
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const teamUrl = 'https://test1.test.com';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.fakeTeamWithId(), url: 'https://test2.test.com', update_at: 0}, {...TestHelper.fakeTeamWithId(), url: teamUrl, update_at: 2}, {...TestHelper.fakeTeamWithId(), url: 'https://test3.test.com', update_at: 1}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            window.origin = 'https://kchat.infomaniak.com';
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(open).toHaveBeenCalledWith(teamUrl, '_self');
+            process.env = originalEnv;
+            window.origin = originalOrigin;
+            open.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
+        });
+
+        test('on Desktop', async () => {
+            const originalEnv = {...process.env};
+            const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
+            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [TestHelper.fakeTeamWithId(), TestHelper.basicTeam, TestHelper.fakeTeamWithId()]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(postMessage).toHaveBeenCalledWith({
+                type: 'switch-server',
+                data: TestHelper.basicTeam!.display_name,
+            }, window.origin);
+            process.env = originalEnv;
+            postMessage.mockRestore();
+            userAgentMock.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
+        });
+
+        test('on Desktop if user is no more in lastActiveKSuite', async () => {
+            const originalEnv = {...process.env};
+            const postMessage = jest.spyOn(window, 'postMessage').mockImplementation(jest.fn());
+            const userAgentMock = jest.spyOn(global.navigator, 'userAgent', 'get').mockReturnValue('Mattermost Electron');
+            let cookies = '';
+            const getCookie = jest.spyOn(global.document, 'cookie', 'get').mockImplementation(() => cookies);
+            const setCookie = jest.spyOn(global.document, 'cookie', 'set').mockImplementation((cookie) => {
+                cookies += cookie;
+            });
+            process.env.NODE_ENV = 'production';
+            process.env.BASE_URL = 'https://test.com';
+            const team = {
+                ...TestHelper.fakeTeamWithId(),
+                update_at: 2,
+            };
+            nock(Client4.getUserRoute('me')).
+                get('/servers').
+                reply(200, [{...TestHelper.fakeTeamWithId(), update_at: 0}, team, {...TestHelper.fakeTeamWithId(), update_at: 1}]);
+            setLastKSuiteSeenCookie(TestHelper.basicTeam!.id);
+            await Actions.loadMeREST()(store.dispatch, store.getState);
+            expect(postMessage).toHaveBeenCalledWith({
+                type: 'switch-server',
+                data: team.display_name,
+            }, window.origin);
+            process.env = originalEnv;
+            postMessage.mockRestore();
+            userAgentMock.mockRestore();
+            getCookie.mockRestore();
+            setCookie.mockRestore();
         });
     });
 });

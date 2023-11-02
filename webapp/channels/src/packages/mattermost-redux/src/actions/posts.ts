@@ -1,40 +1,52 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {AnyAction} from 'redux';
+/* eslint-disable max-lines */
+
+import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
-import type {Channel, ChannelUnread} from '@mattermost/types/channels';
-import type {FetchPaginatedThreadOptions} from '@mattermost/types/client4';
-import type {Group} from '@mattermost/types/groups';
-import type {Post, PostList, PostAcknowledgement} from '@mattermost/types/posts';
-import type {Reaction} from '@mattermost/types/reactions';
-import type {GlobalState} from '@mattermost/types/store';
-import type {UserProfile} from '@mattermost/types/users';
+import {Client4, DEFAULT_LIMIT_AFTER, DEFAULT_LIMIT_BEFORE} from 'mattermost-redux/client';
 
 import {PostTypes, ChannelTypes, FileTypes, IntegrationTypes} from 'mattermost-redux/action_types';
-import {selectChannel} from 'mattermost-redux/actions/channels';
-import {systemEmojis, getCustomEmojiByName, getCustomEmojisByName} from 'mattermost-redux/actions/emojis';
+
+import {getCurrentChannelId, getMyChannelMember as getMyChannelMemberSelector} from 'mattermost-redux/selectors/entities/channels';
+import {getCustomEmojisByName as selectCustomEmojisByName} from 'mattermost-redux/selectors/entities/emojis';
+import * as Selectors from 'mattermost-redux/selectors/entities/posts';
+import {getCurrentUserId, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
+
+import {isCombinedUserActivityPost} from 'mattermost-redux/utils/post_list';
+
+import {ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+
+import {getUnreadScrollPositionPreference, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+
+import {General, Preferences, Posts} from '../constants';
+import {UserProfile} from '@mattermost/types/users';
+import {Reaction} from '@mattermost/types/reactions';
+import {Post, PostList, PostAcknowledgement} from '@mattermost/types/posts';
+import {GlobalState} from '@mattermost/types/store';
+import {ChannelUnread} from '@mattermost/types/channels';
+import {FetchPaginatedThreadOptions} from '@mattermost/types/client4';
+
+import {Group} from '@mattermost/types/groups';
+
+import {getAllGroupsByName} from 'mattermost-redux/selectors/entities/groups';
+
 import {searchGroups} from 'mattermost-redux/actions/groups';
-import {bindClientFunc, forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
+
+import {getProfilesByIds, getProfilesByUsernames, getStatusesByIds} from './users';
 import {
     deletePreferences,
     savePreferences,
-} from 'mattermost-redux/actions/preferences';
-import {decrementThreadCounts} from 'mattermost-redux/actions/threads';
-import {getProfilesByIds, getProfilesByUsernames, getStatusesByIds} from 'mattermost-redux/actions/users';
-import {Client4, DEFAULT_LIMIT_AFTER, DEFAULT_LIMIT_BEFORE} from 'mattermost-redux/client';
-import {General, Preferences, Posts} from 'mattermost-redux/constants';
-import {getCurrentChannelId, getMyChannelMember as getMyChannelMemberSelector} from 'mattermost-redux/selectors/entities/channels';
-import {getCustomEmojisByName as selectCustomEmojisByName} from 'mattermost-redux/selectors/entities/emojis';
-import {getAllGroupsByName} from 'mattermost-redux/selectors/entities/groups';
-import * as PostSelectors from 'mattermost-redux/selectors/entities/posts';
-import {getUnreadScrollPositionPreference, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentUserId, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
-import type {ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
-import {isCombinedUserActivityPost} from 'mattermost-redux/utils/post_list';
-
+} from './preferences';
+import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {logError} from './errors';
+import {systemEmojis, getCustomEmojiByName, getCustomEmojisByName} from './emojis';
+import {selectChannel} from './channels';
+import {decrementThreadCounts} from './threads';
+
+export let hasLimitDate: string | null;
 
 // receivedPost should be dispatched after a single post from the server. This typically happens when an existing post
 // is updated.
@@ -172,7 +184,7 @@ export function createPost(post: Post, files: any[] = []) {
         const pendingPostId = post.pending_post_id || `${currentUserId}:${timestamp}`;
         let actions: AnyAction[] = [];
 
-        if (PostSelectors.isPostIdSending(state, pendingPostId)) {
+        if (Selectors.isPostIdSending(state, pendingPostId)) {
             return {data: true};
         }
 
@@ -185,7 +197,7 @@ export function createPost(post: Post, files: any[] = []) {
         };
 
         if (post.root_id) {
-            newPost.reply_count = PostSelectors.getPostRepliesCount(state, post.root_id) + 1;
+            newPost.reply_count = Selectors.getPostRepliesCount(state, post.root_id) + 1;
         }
 
         // We are retrying a pending post that had files
@@ -305,7 +317,7 @@ export function createPostImmediately(post: Post, files: any[] = []) {
         };
 
         if (post.root_id) {
-            newPost.reply_count = PostSelectors.getPostRepliesCount(state, post.root_id) + 1;
+            newPost.reply_count = Selectors.getPostRepliesCount(state, post.root_id) + 1;
         }
 
         if (files.length) {
@@ -399,7 +411,7 @@ export function deletePost(post: ExtendedPost) {
         }
         if (delPost.type === Posts.POST_TYPES.COMBINED_USER_ACTIVITY && delPost.system_post_ids) {
             delPost.system_post_ids.forEach((systemPostId) => {
-                const systemPost = PostSelectors.getPost(state, systemPostId);
+                const systemPost = Selectors.getPost(state, systemPostId);
                 if (systemPost) {
                     dispatch(deletePost(systemPost));
                 }
@@ -464,7 +476,7 @@ function getUnreadPostData(unreadChan: ChannelUnread, state: GlobalState) {
 export function setUnreadPost(userId: string, postId: string) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let state = getState();
-        const post = PostSelectors.getPost(state, postId);
+        const post = Selectors.getPost(state, postId);
         let unreadChan;
 
         try {
@@ -521,7 +533,7 @@ export function pinPost(postId: string) {
         ];
 
         const state = getState();
-        const post = PostSelectors.getPost(state, postId);
+        const post = Selectors.getPost(state, postId);
         if (post) {
             actions.push(
                 receivedPost({
@@ -539,16 +551,6 @@ export function pinPost(postId: string) {
         dispatch(batchActions(actions));
 
         return {data: posts};
-    };
-}
-
-/**
- * Decrements the pinned post count for a channel by 1
- */
-export function decrementPinnedPostCount(channelId: Channel['id']) {
-    return {
-        type: ChannelTypes.DECREMENT_PINNED_POST_COUNT,
-        id: channelId,
     };
 }
 
@@ -573,7 +575,7 @@ export function unpinPost(postId: string) {
         ];
 
         const state = getState();
-        const post = PostSelectors.getPost(state, postId);
+        const post = Selectors.getPost(state, postId);
         if (post) {
             actions.push(
                 receivedPost({
@@ -581,7 +583,10 @@ export function unpinPost(postId: string) {
                     is_pinned: false,
                     update_at: Date.now(),
                 }, isCollapsedThreadsEnabled(state)),
-                decrementPinnedPostCount(post.channel_id),
+                {
+                    type: ChannelTypes.DECREMENT_PINNED_POST_COUNT,
+                    id: post.channel_id,
+                },
             );
         }
 
@@ -786,7 +791,7 @@ export function getPostThread(rootId: string, fetchThreads = true) {
 }
 
 export function getNewestPostThread(rootId: string) {
-    const getPostsForThread = PostSelectors.makeGetPostsForThread();
+    const getPostsForThread = Selectors.makeGetPostsForThread();
 
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         dispatch({type: PostTypes.GET_POST_THREAD_REQUEST});
@@ -862,6 +867,9 @@ export function getPostsUnread(channelId: string, fetchThreads = true, collapsed
                 recentPosts = await Client4.getPosts(channelId, 0, Posts.POST_CHUNK_SIZE / 2, fetchThreads, collapsedThreadsEnabled, collapsedThreadsExtended);
             }
 
+            // Todo: use mattermost version
+            hasLimitDate = posts.has_limitation;
+
             getMentionsAndStatusesForPosts(posts.posts, dispatch, getState);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
@@ -926,6 +934,8 @@ export function getPostsBefore(channelId: string, postId: string, page = 0, perP
             dispatch(logError(error));
             return {error};
         }
+
+        hasLimitDate = posts.has_limitation;
 
         dispatch(batchActions([
             receivedPosts(posts),
@@ -1021,7 +1031,7 @@ export function getThreadsForPosts(posts: Post[], fetchThreads = true) {
             if (!post.root_id) {
                 return;
             }
-            const rootPost = PostSelectors.getPost(state, post.root_id);
+            const rootPost = Selectors.getPost(state, post.root_id);
 
             if (!rootPost) {
                 rootsSet.add(post.root_id);
@@ -1158,14 +1168,6 @@ export function getPostsByIds(ids: string[]) {
     };
 }
 
-export function getPostEditHistory(postId: string) {
-    return bindClientFunc({
-        clientFunc: Client4.getPostEditHistory,
-        onSuccess: PostTypes.RECEIVED_POST_HISTORY,
-        params: [postId],
-    });
-}
-
 export function getNeededAtMentionedUsernamesAndGroups(state: GlobalState, posts: Post[]): Set<string> {
     let usersByUsername: Record<string, UserProfile>; // Populate this lazily since it's relatively expensive
     let groupsByName: Record<string, Group>;
@@ -1226,6 +1228,52 @@ export function getNeededAtMentionedUsernamesAndGroups(state: GlobalState, posts
     return usernamesAndGroupsToLoad;
 }
 
+export function getPostEditHistory(postId: string) {
+    return bindClientFunc({
+        clientFunc: Client4.getPostEditHistory,
+        onSuccess: PostTypes.RECEIVED_POST_HISTORY,
+        params: [postId],
+    });
+}
+
+export function getNeededAtMentionedUsernames(state: GlobalState, posts: Post[]): Set<string> {
+    let usersByUsername: Record<string, UserProfile>; // Populate this lazily since it's relatively expensive
+
+    const usernamesToLoad = new Set<string>();
+
+    posts.forEach((post) => {
+        if (!post.message.includes('@')) {
+            return;
+        }
+
+        if (!usersByUsername) {
+            usersByUsername = getUsersByUsername(state);
+        }
+
+        const pattern = /\B@(([a-z0-9_.-]*[a-z0-9_])[.-]*)/gi;
+
+        let match;
+        while ((match = pattern.exec(post.message)) !== null) {
+            // match[1] is the matched mention including trailing punctuation
+            // match[2] is the matched mention without trailing punctuation
+            if (General.SPECIAL_MENTIONS.indexOf(match[2]) !== -1) {
+                continue;
+            }
+
+            if (usersByUsername[match[1]] || usersByUsername[match[2]]) {
+                // We have the user, go to the next match
+                continue;
+            }
+
+            // If there's no trailing punctuation, this will only add 1 item to the set
+            usernamesToLoad.add(match[1]);
+            usernamesToLoad.add(match[2]);
+        }
+    });
+
+    return usernamesToLoad;
+}
+
 export type ExtendedPost = Post & { system_post_ids?: string[] };
 
 export function removePost(post: ExtendedPost) {
@@ -1233,7 +1281,7 @@ export function removePost(post: ExtendedPost) {
         if (post.type === Posts.POST_TYPES.COMBINED_USER_ACTIVITY && post.system_post_ids) {
             const state = getState();
             for (const systemPostId of post.system_post_ids) {
-                const systemPost = PostSelectors.getPost(state, systemPostId);
+                const systemPost = Selectors.getPost(state, systemPostId);
 
                 if (systemPost) {
                     dispatch(removePost(systemPost as any) as any);
@@ -1242,7 +1290,12 @@ export function removePost(post: ExtendedPost) {
         } else {
             dispatch(postRemoved(post));
             if (post.is_pinned) {
-                dispatch(decrementPinnedPostCount(post.channel_id));
+                dispatch(
+                    {
+                        type: ChannelTypes.DECREMENT_PINNED_POST_COUNT,
+                        id: post.channel_id,
+                    },
+                );
             }
         }
         return {data: true};
@@ -1292,6 +1345,29 @@ export function addPostReminder(userId: string, postId: string, timestamp: numbe
             return {error};
         }
         return {data: true};
+    };
+}
+
+export function getOpenGraphMetadata(url: string) {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let data;
+        try {
+            data = await Client4.getOpenGraphMetadata(url);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error};
+        }
+
+        if (data && (data.url || data.type || data.title || data.description)) {
+            dispatch({
+                type: PostTypes.RECEIVED_OPEN_GRAPH_METADATA,
+                data,
+                url,
+            });
+        }
+
+        return {data};
     };
 }
 
@@ -1432,4 +1508,13 @@ export function unacknowledgePost(postId: string) {
 
         return {data};
     };
+}
+
+export function translatePost(postId: string) {
+    return bindClientFunc({
+        clientFunc: Client4.translatePost,
+        params: [
+            postId,
+        ],
+    });
 }

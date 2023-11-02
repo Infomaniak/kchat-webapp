@@ -1,26 +1,48 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {AnyAction} from 'redux';
+import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
-import type {ServerError} from '@mattermost/types/errors';
-import type {UserProfile, UserStatus, GetFilteredUsersStatsOpts, UsersStats, UserCustomStatus} from '@mattermost/types/users';
+import {UserProfile, UserStatus, GetFilteredUsersStatsOpts, UsersStats, UserCustomStatus} from '@mattermost/types/users';
+import {ServerError} from '@mattermost/types/errors';
+import {ClientConfig, ClientLicense} from '@mattermost/types/config';
+import {Role} from '@mattermost/types/roles';
+import {PreferenceType} from '@mattermost/types/preferences';
+import {Team, TeamMembership} from '@mattermost/types/teams';
 
-import {UserTypes, AdminTypes} from 'mattermost-redux/action_types';
-import {logError} from 'mattermost-redux/actions/errors';
-import {setServerVersion, getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
-import {bindClientFunc, forceLogoutIfNecessary, debounce} from 'mattermost-redux/actions/helpers';
-import {getMyPreferences} from 'mattermost-redux/actions/preferences';
-import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
-import {getMyTeams, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
 import {Client4} from 'mattermost-redux/client';
-import {General} from 'mattermost-redux/constants';
+
+import {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import {UserTypes, AdminTypes, GeneralTypes, PreferenceTypes, TeamTypes, RoleTypes} from 'mattermost-redux/action_types';
+
+import {setServerVersion, getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
+import {getMyKSuites, getMyTeamMembers, getMyTeamUnreads} from 'mattermost-redux/actions/teams';
+import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
+import {bindClientFunc, forceLogoutIfNecessary, debounce} from 'mattermost-redux/actions/helpers';
+import {logError} from 'mattermost-redux/actions/errors';
+import {getMyPreferences} from 'mattermost-redux/actions/preferences';
+import {
+    currentUserInfoQuery,
+    CurrentUserInfoQueryResponseType,
+    transformToRecievedMeReducerPayload,
+    transformToRecievedTeamsListReducerPayload,
+    transformToReceivedUserAndTeamRolesReducerPayload,
+    transformToRecievedMyTeamMembersReducerPayload,
+} from 'mattermost-redux/actions/users_queries';
+
+import {getTeams} from 'mattermost-redux/selectors/entities/teams';
 import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
+import {getCurrentUser, getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentUserId, getUsers} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+
+import {removeUserFromList} from 'mattermost-redux/utils/user_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
+import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
+import {General} from 'mattermost-redux/constants';
+
+import {getHistory} from 'utils/browser_history';
+import {isDesktopApp} from 'utils/user_agent';
 
 export function generateMfaSecret(userId: string): ActionFunc {
     return bindClientFunc({
@@ -54,24 +76,61 @@ export function createUser(user: UserProfile, token: string, inviteId: string, r
     };
 }
 
-export function loadMe(): ActionFunc {
+export function loadMeREST(): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         // Sometimes the server version is set in one or the other
-        const serverVersion = getState().entities.general.serverVersion || Client4.getServerVersion();
+        // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
+        const serverVersion = Client4.getServerVersion();
         dispatch(setServerVersion(serverVersion));
 
         try {
-            await Promise.all([
-                dispatch(getClientConfig()),
-                dispatch(getLicenseConfig()),
-                dispatch(getMe()),
-                dispatch(getMyPreferences()),
-                dispatch(getMyTeams()),
-                dispatch(getMyTeamMembers()),
-            ]);
+            const kSuiteCall = await dispatch(getMyKSuites());
+            const kSuites = getTeams(getState());
 
-            const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
-            await dispatch(getMyTeamUnreads(isCollapsedThreads));
+            const suiteArr = Object.values(kSuites);
+
+            // allow through in tests to launch promise.all but not trigger redirect
+            if (suiteArr.length > 0 || process.env.NODE_ENV === 'test') { //eslint-disable-line no-process-env
+                const lastKSuiteSeenId = getLastKSuiteSeenId();
+                const sortedSuites = suiteArr.sort((a, b) => {
+                    if (a.id === lastKSuiteSeenId) {
+                        return -1;
+                    }
+                    if (b.id === lastKSuiteSeenId) {
+                        return 1;
+                    }
+                    return b.update_at - a.update_at;
+                });
+                const lastKSuiteSeen = sortedSuites[0];
+
+                if (isDesktopApp() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                    window.postMessage({
+                        type: 'switch-server',
+                        data: lastKSuiteSeen.display_name,
+                    }, window.origin);
+                }
+
+                // don't redirect to the error page if it is a testing environment
+                if (!isDesktopApp() && Client4.isIkBaseUrl() && process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') { //eslint-disable-line no-process-env
+                    window.open(lastKSuiteSeen.url, '_self');
+                }
+
+                await Promise.all([
+                    dispatch(getClientConfig()),
+                    dispatch(getLicenseConfig()),
+                    dispatch(getMe()),
+                    dispatch(getMyPreferences()),
+                    dispatch(getMyTeamMembers()),
+                ]);
+
+                const isCollapsedThreads = isCollapsedThreadsEnabled(getState());
+                await dispatch(getMyTeamUnreads(isCollapsedThreads));
+            } else if (!isDesktopApp()) {
+                // we should not use getHistory in mattermost-redux since it is an import from outside the package, but what else can we do
+                if (kSuiteCall && kSuiteCall.data) {
+                    getHistory().push('/error?type=no_ksuite');
+                }
+            }
         } catch (error) {
             dispatch(logError(error as ServerError));
             return {error: error as ServerError};
@@ -81,17 +140,87 @@ export function loadMe(): ActionFunc {
     };
 }
 
+export function loadMe(): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        // Sometimes the server version is set in one or the other
+        // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
+        const serverVersion = Client4.getServerVersion();
+        dispatch(setServerVersion(serverVersion));
+
+        let clientLicense: ClientLicense;
+        let clientConfig: ClientConfig;
+        let userProfile: UserProfile;
+        let roles: Role[];
+        let preferences: PreferenceType[];
+        let teams: Team[];
+        let teamMemberships: TeamMembership[];
+
+        try {
+            const {data, errors} = await Client4.fetchWithGraphQL<CurrentUserInfoQueryResponseType>(currentUserInfoQuery);
+
+            if (errors || !data) {
+                throw new Error('Error returned in fetching current user info with graphQL');
+            }
+
+            clientLicense = Object.assign({}, data.license);
+            clientConfig = Object.assign({}, data.config);
+            userProfile = transformToRecievedMeReducerPayload(data.user);
+            roles = transformToReceivedUserAndTeamRolesReducerPayload(data.user.roles, data.teamMembers);
+            preferences = [...data.user.preferences];
+            teams = transformToRecievedTeamsListReducerPayload(data.teamMembers);
+            teamMemberships = transformToRecievedMyTeamMembersReducerPayload(data.teamMembers, data.user.id);
+        } catch (error) {
+            dispatch(logError(error as ServerError));
+            return {error: error as ServerError};
+        }
+
+        dispatch(
+            batchActions([
+                {
+                    type: GeneralTypes.CLIENT_LICENSE_RECEIVED,
+                    data: clientLicense,
+                },
+                {
+                    type: GeneralTypes.CLIENT_CONFIG_RECEIVED,
+                    data: clientConfig,
+                },
+                {
+                    type: UserTypes.RECEIVED_ME,
+                    data: userProfile,
+                },
+                {
+                    type: RoleTypes.RECEIVED_ROLES,
+                    data: roles,
+                },
+                {
+                    type: PreferenceTypes.RECEIVED_ALL_PREFERENCES,
+                    data: preferences,
+                },
+                {
+                    type: TeamTypes.RECEIVED_TEAMS_LIST,
+                    data: teams,
+                },
+                {
+                    type: TeamTypes.RECEIVED_MY_TEAM_MEMBERS,
+                    data: teamMemberships,
+                },
+            ]),
+        );
+
+        return {data: true};
+    };
+}
+
 export function logout(): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         dispatch({type: UserTypes.LOGOUT_REQUEST, data: null});
 
-        try {
-            await Client4.logout();
-        } catch (error) {
-            // nothing to do here
-        }
-
-        dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null});
+        // TODO: remove
+        // Causes a redirect in web which stops logout.
+        // Since app state rebuilds after redirecting to our external login as apposed
+        // to mattermost where login is in the app this is not needed.
+        //
+        // dispatch({type: UserTypes.LOGOUT_SUCCESS, data: null});
 
         return {data: true};
     };
@@ -128,10 +257,21 @@ export function getFilteredUsersStats(options: GetFilteredUsersStatsOpts = {}, u
 
 export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SIZE, options: any = {}): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        let profiles: UserProfile[];
-
+        const {currentUserId} = getState().entities.users;
+        let profiles: UserProfile[] = [];
+        let currentFetch: UserProfile[];
+        let currentPage = page;
         try {
-            profiles = await Client4.getProfiles(page, perPage, options);
+            while (true) {
+                // eslint-disable-next-line no-await-in-loop
+                currentFetch = await Client4.getProfiles(currentPage, perPage, options);
+                profiles = profiles.concat(currentFetch);
+                if (currentFetch.length < perPage) {
+                    break;
+                }
+                currentPage += 1;
+            }
+            removeUserFromList(currentUserId, profiles);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -189,12 +329,16 @@ export function getMissingProfilesByUsernames(usernames: string[]): ActionFunc {
     };
 }
 
-export function getProfilesByIds(userIds: string[], options?: any): ActionFunc {
+export function getProfilesByIds(userIds: string[], options?: any, includeCurrentUser = false): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const {currentUserId} = getState().entities.users;
         let profiles: UserProfile[];
 
         try {
             profiles = await Client4.getProfilesByIds(userIds, options);
+            if (!includeCurrentUser) {
+                removeUserFromList(currentUserId, profiles);
+            }
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -212,10 +356,12 @@ export function getProfilesByIds(userIds: string[], options?: any): ActionFunc {
 
 export function getProfilesByUsernames(usernames: string[]): ActionFunc<UserProfile[]> {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const {currentUserId} = getState().entities.users;
         let profiles;
 
         try {
             profiles = await Client4.getProfilesByUsernames(usernames);
+            removeUserFromList(currentUserId, profiles);
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch(logError(error));
@@ -233,6 +379,7 @@ export function getProfilesByUsernames(usernames: string[]): ActionFunc<UserProf
 
 export function getProfilesInTeam(teamId: string, page: number, perPage: number = General.PROFILE_CHUNK_SIZE, sort = '', options: any = {}): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const {currentUserId} = getState().entities.users;
         let profiles;
 
         try {
@@ -251,7 +398,7 @@ export function getProfilesInTeam(teamId: string, page: number, perPage: number 
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST,
-                data: profiles,
+                data: removeUserFromList(currentUserId, [...profiles]),
             },
         ]));
 
@@ -321,6 +468,7 @@ export enum ProfilesInChannelSortBy {
 
 export function getProfilesInChannel(channelId: string, page: number, perPage: number = General.PROFILE_CHUNK_SIZE, sort = '', options: {active?: boolean} = {}): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const {currentUserId} = getState().entities.users;
         let profiles;
 
         try {
@@ -339,7 +487,7 @@ export function getProfilesInChannel(channelId: string, page: number, perPage: n
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST,
-                data: profiles,
+                data: removeUserFromList(currentUserId, [...profiles]),
             },
         ]));
 
@@ -349,6 +497,7 @@ export function getProfilesInChannel(channelId: string, page: number, perPage: n
 
 export function getProfilesInGroupChannels(channelsIds: string[]): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const {currentUserId} = getState().entities.users;
         let channelProfiles;
 
         try {
@@ -372,7 +521,7 @@ export function getProfilesInGroupChannels(channelsIds: string[]): ActionFunc {
                     },
                     {
                         type: UserTypes.RECEIVED_PROFILES_LIST,
-                        data: profiles,
+                        data: removeUserFromList(currentUserId, [...profiles]),
                     },
                 );
             }
@@ -386,6 +535,7 @@ export function getProfilesInGroupChannels(channelsIds: string[]): ActionFunc {
 
 export function getProfilesNotInChannel(teamId: string, channelId: string, groupConstrained: boolean, page: number, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const {currentUserId} = getState().entities.users;
         let profiles;
 
         try {
@@ -406,7 +556,7 @@ export function getProfilesNotInChannel(teamId: string, channelId: string, group
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST,
-                data: profiles,
+                data: removeUserFromList(currentUserId, [...profiles]),
             },
         ]));
 
@@ -421,8 +571,10 @@ export function getMe(): ActionFunc {
             onSuccess: UserTypes.RECEIVED_ME,
         });
         const me = await getMeFunc(dispatch, getState);
-
         if ('error' in me) {
+            if (me.error?.status_code && me.error?.status_code === 404 && (window && !window.location.pathname.includes('static/call'))) {
+                getHistory().push('/error?type=page_not_found');
+            }
             return me;
         }
         if ('data' in me) {
@@ -467,6 +619,7 @@ export function updateMyTermsOfServiceStatus(termsOfServiceId: string, accepted:
 
 export function getProfilesInGroup(groupId: string, page = 0, perPage: number = General.PROFILE_CHUNK_SIZE, sort = ''): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const {currentUserId} = getState().entities.users;
         let profiles;
 
         try {
@@ -485,7 +638,7 @@ export function getProfilesInGroup(groupId: string, page = 0, perPage: number = 
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST,
-                data: profiles,
+                data: removeUserFromList(currentUserId, [...profiles]),
             },
         ]));
 
@@ -495,6 +648,7 @@ export function getProfilesInGroup(groupId: string, page = 0, perPage: number = 
 
 export function getProfilesNotInGroup(groupId: string, page = 0, perPage: number = General.PROFILE_CHUNK_SIZE): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const {currentUserId} = getState().entities.users;
         let profiles;
 
         try {
@@ -513,7 +667,7 @@ export function getProfilesNotInGroup(groupId: string, page = 0, perPage: number
             },
             {
                 type: UserTypes.RECEIVED_PROFILES_LIST,
-                data: profiles,
+                data: removeUserFromList(currentUserId, [...profiles]),
             },
         ]));
 
@@ -745,6 +899,9 @@ export function autocompleteUsers(term: string, teamId = '', channelId = '', opt
 }): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         dispatch({type: UserTypes.AUTOCOMPLETE_USERS_REQUEST, data: null});
+
+        const {currentUserId} = getState().entities.users;
+
         let data;
         try {
             data = await Client4.autocompleteUsers(term, teamId, channelId, options);
@@ -759,6 +916,7 @@ export function autocompleteUsers(term: string, teamId = '', channelId = '', opt
         if (data.out_of_channel) {
             users = [...users, ...data.out_of_channel];
         }
+        removeUserFromList(currentUserId, users);
         const actions: AnyAction[] = [{
             type: UserTypes.RECEIVED_PROFILES_LIST,
             data: users,
@@ -801,6 +959,8 @@ export function autocompleteUsers(term: string, teamId = '', channelId = '', opt
 
 export function searchProfiles(term: string, options: any = {}): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const {currentUserId} = getState().entities.users;
+
         let profiles;
         try {
             profiles = await Client4.searchUsers(term, options);
@@ -810,7 +970,7 @@ export function searchProfiles(term: string, options: any = {}): ActionFunc {
             return {error};
         }
 
-        const actions: AnyAction[] = [{type: UserTypes.RECEIVED_PROFILES_LIST, data: profiles}];
+        const actions: AnyAction[] = [{type: UserTypes.RECEIVED_PROFILES_LIST, data: removeUserFromList(currentUserId, [...profiles])}];
 
         if (options.in_channel_id) {
             actions.push({
@@ -905,7 +1065,7 @@ export function stopPeriodicStatusUpdates(): ActionFunc {
     };
 }
 
-export function updateMe(user: Partial<UserProfile>): ActionFunc<Partial<UserProfile>, ServerError> {
+export function updateMe(user: UserProfile): ActionFunc {
     return async (dispatch: DispatchFunc) => {
         dispatch({type: UserTypes.UPDATE_ME_REQUEST, data: null});
 
@@ -1327,18 +1487,13 @@ export function clearUserAccessTokens(): ActionFunc {
     };
 }
 
-export function checkForModifiedUsers() {
+export function checkForModifiedUsers(includeCurrentUser = false) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
         const users = getUsers(state);
         const lastDisconnectAt = state.websocket.lastDisconnectAt;
-        const serverVersion = getServerVersion(state);
 
-        if (!isMinimumServerVersion(serverVersion, 5, 14)) {
-            return {data: true};
-        }
-
-        await dispatch(getProfilesByIds(Object.keys(users), {since: lastDisconnectAt}));
+        await dispatch(getProfilesByIds(Object.keys(users), {since: lastDisconnectAt}, includeCurrentUser));
         return {data: true};
     };
 }

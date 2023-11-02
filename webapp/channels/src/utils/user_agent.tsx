@@ -142,10 +142,6 @@ export function isMac(): boolean {
     return userAgent().indexOf('Macintosh') !== -1;
 }
 
-export function isLinux(): boolean {
-    return navigator.platform.toUpperCase().indexOf('LINUX') >= 0;
-}
-
 export function isWindows7(): boolean {
     const appVersion = navigator.appVersion;
 
@@ -154,6 +150,10 @@ export function isWindows7(): boolean {
     }
 
     return (/\bWindows NT 6\.1\b/).test(appVersion);
+}
+
+export function isLinux(): boolean {
+    return userAgent().indexOf('Linux') !== -1;
 }
 
 export function getDesktopVersion(): string {

@@ -3,20 +3,12 @@
 
 import emojiRegex from 'emoji-regex';
 
-import {getEmojiMap} from 'selectors/emojis';
-import store from 'stores/redux_store';
-
 import EmojiMap from 'utils/emoji_map';
+import {getEmojiMap} from 'selectors/emojis';
+import store from 'stores/redux_store.jsx';
+
+import {formatText, autolinkAtMentions, highlightSearchTerms, handleUnicodeEmoji, parseSearchTerms} from 'utils/text_formatting';
 import LinkOnlyRenderer from 'utils/markdown/link_only_renderer';
-import {
-    formatText,
-    autolinkAtMentions,
-    highlightSearchTerms,
-    handleUnicodeEmoji,
-    highlightCurrentMentions,
-    parseSearchTerms, autolinkChannelMentions,
-} from 'utils/text_formatting';
-import type {ChannelNamesMap} from 'utils/text_formatting';
 
 const emptyEmojiMap = new EmojiMap(new Map());
 
@@ -184,26 +176,6 @@ describe('highlightSearchTerms', () => {
     });
 });
 
-describe('autolink channel mentions', () => {
-    test('link a channel mention', () => {
-        const mention = '~test-channel';
-        const leadingText = 'pre blah blah ';
-        const trailingText = ' post blah blah';
-        const text = `${leadingText}${mention}${trailingText}`;
-        const tokens = new Map();
-        const channelNamesMap: ChannelNamesMap = {
-            'test-channel': {
-                team_name: 'ad-1',
-                display_name: 'Test Channel',
-            },
-        };
-
-        const output = autolinkChannelMentions(text, tokens, channelNamesMap);
-        expect(output).toBe(`${leadingText}$MM_CHANNELMENTION0$${trailingText}`);
-        expect(tokens.get('$MM_CHANNELMENTION0$').value).toBe('<a class="mention-link" href="/ad-1/channels/test-channel" data-channel-mention-team="ad-1" data-channel-mention="test-channel">~Test Channel</a>');
-    });
-});
-
 describe('handleUnicodeEmoji', () => {
     const emojiMap = getEmojiMap(store.getState());
     const UNICODE_EMOJI_REGEX = emojiRegex();
@@ -281,26 +253,6 @@ describe('linkOnlyMarkdown', () => {
         expect(output).toBe(
             'Do you like <a class="theme markdown__link" href="https://www.mattermost.com" target="_blank">' +
             'Mattermost</a>?');
-    });
-});
-
-describe('highlightCurrentMentions', () => {
-    const tokens = new Map();
-    const mentionKeys = [
-        {key: '메터모스트'}, // Korean word
-        {key: 'マッターモスト'}, // Japanese word
-        {key: 'маттермост'}, // Russian word
-        {key: 'Mattermost'}, // Latin word
-    ];
-
-    it('should find and match Korean, Japanese, latin and Russian words', () => {
-        const text = '메터모스트, notinkeys, マッターモスト, маттермост!, Mattermost, notinkeys';
-        const highlightedText = highlightCurrentMentions(text, tokens, mentionKeys);
-
-        const expectedOutput = '$MM_SELFMENTION0$, notinkeys, $MM_SELFMENTION1$, $MM_SELFMENTION2$!, $MM_SELFMENTION3$, notinkeys';
-
-        // note that the string output $MM_SELFMENTION{idx} will be used by doFormatText to add the highlight later in the format process
-        expect(highlightedText).toContain(expectedOutput);
     });
 });
 

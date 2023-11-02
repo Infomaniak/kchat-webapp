@@ -3,21 +3,24 @@
 
 import {batchActions} from 'redux-batched-actions';
 
-import type {FileSearchResults, FileSearchResultItem} from '@mattermost/types/files';
-import type {PostList} from '@mattermost/types/posts';
-import type {SearchParameter} from '@mattermost/types/search';
-
-import {SearchTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
+import {SearchTypes} from 'mattermost-redux/action_types';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {ActionResult, DispatchFunc, GetStateFunc, ActionFunc} from 'mattermost-redux/types/actions';
+
+import {ActionResult, DispatchFunc, GetStateFunc, ActionFunc} from 'mattermost-redux/types/actions';
+
+import {PostList} from '@mattermost/types/posts';
+
+import {FileSearchResults, FileSearchResultItem} from '@mattermost/types/files';
+
+import {SearchParameter} from '@mattermost/types/search';
 
 import {getChannelAndMyMember, getChannelMembers} from './channels';
-import {logError} from './errors';
-import {receivedFiles} from './files';
 import {forceLogoutIfNecessary} from './helpers';
+import {logError} from './errors';
 import {getMentionsAndStatusesForPosts, receivedPosts} from './posts';
+import {receivedFiles} from './files';
 
 const WEBAPP_SEARCH_PER_PAGE = 20;
 

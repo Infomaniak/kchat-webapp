@@ -8,7 +8,6 @@ import nock from 'nock';
 import {FileTypes} from 'mattermost-redux/action_types';
 import * as Actions from 'mattermost-redux/actions/files';
 import {Client4} from 'mattermost-redux/client';
-
 import TestHelper from '../../test/test_helper';
 import configureStore from '../../test/test_store';
 
@@ -29,7 +28,7 @@ describe('Actions.Files', () => {
     it('getFilesForPost', async () => {
         const {basicClient4, basicChannel} = TestHelper;
         const testFileName = 'test.png';
-        const testImageData = fs.createReadStream(`src/packages/mattermost-redux/test/assets/images/${testFileName}`);
+        const testImageData = fs.createReadStream(`packages/mattermost-redux/test/assets/images/${testFileName}`);
         const clientId = TestHelper.generateId();
 
         const imageFormData = new FormData();

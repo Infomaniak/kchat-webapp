@@ -3,7 +3,7 @@
 
 import shallowEqual from 'shallow-equals';
 
-import {createSelectorCreator, defaultMemoize} from 'mattermost-redux/selectors/create_selector';
+import * as reselect from 'reselect';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function memoizeResult<F extends Function>(func: F, measure: Function | undefined = undefined): F {
@@ -32,10 +32,10 @@ export function memoizeResult<F extends Function>(func: F, measure: Function | u
 
 // Use this selector when you want a shallow comparison of the arguments and you want to memoize the result
 // try and use this only when your selector returns an array of ids
-export const createIdsSelector = createSelectorCreator(memoizeResult);
+export const createIdsSelector = reselect.createSelectorCreator(memoizeResult);
 
 // Use this selector when you want a shallow comparison of the arguments and you don't need to memoize the result
-export const createShallowSelector = createSelectorCreator(defaultMemoize, shallowEqual as any);
+export const createShallowSelector = reselect.createSelectorCreator(reselect.defaultMemoize, shallowEqual as any);
 
 // isMinimumServerVersion will return true if currentVersion is equal to higher or than the
 // the provided minimum version. A non-equal major version will ignore minor and dot

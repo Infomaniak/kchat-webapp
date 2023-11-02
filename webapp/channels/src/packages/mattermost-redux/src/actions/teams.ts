@@ -1,27 +1,31 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {AnyAction} from 'redux';
+import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
-import type {ServerError} from '@mattermost/types/errors';
-import type {Team, TeamMembership, TeamMemberWithError, GetTeamMembersOpts, TeamsWithCount, TeamSearchOpts} from '@mattermost/types/teams';
-import type {UserProfile} from '@mattermost/types/users';
+import {ServerError} from '@mattermost/types/errors';
+import {UserProfile} from '@mattermost/types/users';
+import {Team, TeamMembership, TeamMemberWithError, GetTeamMembersOpts, TeamsWithCount, TeamSearchOpts} from '@mattermost/types/teams';
 
-import {ChannelTypes, TeamTypes, UserTypes} from 'mattermost-redux/action_types';
-import {selectChannel} from 'mattermost-redux/actions/channels';
-import {logError} from 'mattermost-redux/actions/errors';
-import {bindClientFunc, forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
-import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
-import {getProfilesByIds, getStatusesByIds} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
+
 import {General} from 'mattermost-redux/constants';
+import {ChannelTypes, TeamTypes, UserTypes} from 'mattermost-redux/action_types';
+import {GetStateFunc, DispatchFunc, ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+
+import EventEmitter from 'mattermost-redux/utils/event_emitter';
+
 import {isCompatibleWithJoinViewTeamPermissions} from 'mattermost-redux/selectors/entities/general';
-import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {GetStateFunc, DispatchFunc, ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
-import EventEmitter from 'mattermost-redux/utils/event_emitter';
+import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+
+import {getProfilesByIds, getStatusesByIds} from 'mattermost-redux/actions/users';
+import {logError} from 'mattermost-redux/actions/errors';
+import {selectChannel} from 'mattermost-redux/actions/channels';
+import {bindClientFunc, forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
+import {loadRolesIfNeeded} from 'mattermost-redux/actions/roles';
 
 async function getProfilesAndStatusesForMembers(userIds: string[], dispatch: DispatchFunc, getState: GetStateFunc) {
     const {
@@ -64,6 +68,15 @@ export function selectTeam(team: Team | Team['id']) {
 export function getMyTeams(): ActionFunc {
     return bindClientFunc({
         clientFunc: Client4.getMyTeams,
+        onRequest: TeamTypes.MY_TEAMS_REQUEST,
+        onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, TeamTypes.MY_TEAMS_SUCCESS],
+        onFailure: TeamTypes.MY_TEAMS_FAILURE,
+    });
+}
+
+export function getMyKSuites(): ActionFunc {
+    return bindClientFunc({
+        clientFunc: Client4.getMyKSuites,
         onRequest: TeamTypes.MY_TEAMS_REQUEST,
         onSuccess: [TeamTypes.RECEIVED_TEAMS_LIST, TeamTypes.MY_TEAMS_SUCCESS],
         onFailure: TeamTypes.MY_TEAMS_FAILURE,
@@ -125,6 +138,45 @@ export function getTeamByName(teamName: string): ActionFunc<Team, ServerError> {
     });
 }
 
+export function getKSuites(page = 0, perPage: number = General.TEAMS_CHUNK_SIZE, includeTotalCount = false, excludePolicyConstrained = false): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let data;
+
+        dispatch({type: TeamTypes.GET_TEAMS_REQUEST, data});
+
+        try {
+            data = await Client4.getKSuites(page, perPage, includeTotalCount, excludePolicyConstrained) as TeamsWithCount;
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch({type: TeamTypes.GET_TEAMS_FAILURE, data});
+            dispatch(logError(error));
+            return {error};
+        }
+
+        const actions: AnyAction[] = [
+            {
+                type: TeamTypes.RECEIVED_TEAMS_LIST,
+                data: includeTotalCount ? data.teams : data,
+            },
+            {
+                type: TeamTypes.GET_TEAMS_SUCCESS,
+                data,
+            },
+        ];
+
+        // if (includeTotalCount) {
+        //     actions.push({
+        //         type: TeamTypes.RECEIVED_TOTAL_TEAM_COUNT,
+        //         data: data.total_count,
+        //     });
+        // }
+
+        dispatch(batchActions(actions));
+
+        return {data};
+    };
+}
+
 export function getTeams(page = 0, perPage: number = General.TEAMS_CHUNK_SIZE, includeTotalCount = false, excludePolicyConstrained = false): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let data;
@@ -180,7 +232,7 @@ export function searchTeams(term: string, opts: TeamSearchOpts = {}): ActionFunc
 
         // The type of the response is determined by whether or not page/perPage were set
         let teams;
-        if (!opts.page || !opts.per_page) {
+        if (opts.page === undefined || opts.per_page === undefined) {
             teams = response as Team[];
         } else {
             teams = (response as TeamsWithCount).teams;
@@ -288,6 +340,18 @@ export function unarchiveTeam(teamId: string): ActionFunc {
             type: TeamTypes.RECEIVED_TEAM_UNARCHIVED,
             data: team,
         });
+
+        return {data: true};
+    };
+}
+
+export function archiveAllTeamsExcept(teamId: string) {
+    return async () => {
+        try {
+            await Client4.archiveAllTeamsExcept(teamId);
+        } catch (error) {
+            return {error};
+        }
 
         return {data: true};
     };
@@ -737,27 +801,22 @@ export function joinTeam(inviteId: string, teamId: string): ActionFunc {
 }
 
 export function setTeamIcon(teamId: string, imageData: File): ActionFunc {
-    return async (dispatch: DispatchFunc) => {
-        await Client4.setTeamIcon(teamId, imageData);
-        const team = await Client4.getTeam(teamId);
-        dispatch({
-            type: TeamTypes.PATCHED_TEAM,
-            data: team,
-        });
-        return {data: {status: 'OK'}};
-    };
+    return bindClientFunc({
+        clientFunc: Client4.setTeamIcon,
+        params: [
+            teamId,
+            imageData,
+        ],
+    });
 }
 
 export function removeTeamIcon(teamId: string): ActionFunc {
-    return async (dispatch: DispatchFunc) => {
-        await Client4.removeTeamIcon(teamId);
-        const team = await Client4.getTeam(teamId);
-        dispatch({
-            type: TeamTypes.PATCHED_TEAM,
-            data: team,
-        });
-        return {data: {status: 'OK'}};
-    };
+    return bindClientFunc({
+        clientFunc: Client4.removeTeamIcon,
+        params: [
+            teamId,
+        ],
+    });
 }
 
 export function updateTeamScheme(teamId: string, schemeId: string): ActionFunc {

@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Timezone} from 'timezones.json';
+import {Timezone} from 'timezones.json';
 
-import type {UserTimezone} from '@mattermost/types/users';
+import {UserTimezone} from '@mattermost/types/users';
 
-export function getUserCurrentTimezone(userTimezone?: UserTimezone): string {
+export function getUserCurrentTimezone(userTimezone?: UserTimezone): string | undefined | null {
     if (!userTimezone) {
-        return 'UTC';
+        return null;
     }
     const {
         useAutomaticTimezone,

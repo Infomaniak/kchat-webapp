@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {AdminTypes, UserTypes} from 'mattermost-redux/action_types';
-import PluginState from 'mattermost-redux/constants/plugins';
-import reducer, {convertAnalyticsRowsToStats} from 'mattermost-redux/reducers/entities/admin';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 import deepFreezeAndThrowOnMutation from 'mattermost-redux/utils/deep_freeze';
+import {AdminTypes, UserTypes} from 'mattermost-redux/action_types';
+import reducer, {convertAnalyticsRowsToStats} from 'mattermost-redux/reducers/entities/admin';
+import PluginState from 'mattermost-redux/constants/plugins';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 type ReducerState = ReturnType<typeof reducer>;
 

@@ -1,15 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {createBrowserHistory} from 'history';
-import type {History} from 'history';
+import {createBrowserHistory, History} from 'history';
 
-import {getModule} from 'module_registry';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 
+import {getModule} from 'module_registry';
+
+import {NotificationsSettingsPath} from './constants';
+
 const b = createBrowserHistory({basename: window.basename});
-const isDesktop = isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '5.0.0');
+const isDesktop = isDesktopApp(); // && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '5.0.0');
 
 type Data = {
     type?: string;
@@ -64,3 +66,6 @@ const browserHistory = {
 export function getHistory() {
     return getModule<History>('utils/browser_history') ?? browserHistory;
 }
+
+export const hasNotificationsSettingsPathInUrl = () => window.location.hash.indexOf(NotificationsSettingsPath) !== -1;
+

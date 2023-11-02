@@ -3,10 +3,10 @@
 
 import {combineReducers} from 'redux';
 
-import type {ChannelsRequestsStatuses, RequestStatusType} from '@mattermost/types/requests';
+import {ChannelsRequestsStatuses, RequestStatusType} from '@mattermost/types/requests';
 
 import {ChannelTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {handleRequest, initialRequestState} from './helpers';
 

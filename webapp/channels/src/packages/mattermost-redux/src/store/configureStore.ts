@@ -1,23 +1,23 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {composeWithDevTools} from '@redux-devtools/extension';
 import {
     applyMiddleware,
     legacy_createStore,
-} from 'redux';
-import type {
     Reducer,
-    Store} from 'redux';
+    Store,
+} from 'redux';
 import thunk from 'redux-thunk';
+import {composeWithDevToolsDevelopmentOnly} from '@redux-devtools/extension';
 
-import type {GlobalState} from '@mattermost/types/store';
+import {GlobalState} from '@mattermost/types/store';
+
+import serviceReducers from '../reducers';
+
+import reducerRegistry from './reducer_registry';
 
 import {createReducer} from './helpers';
 import initialState from './initial_state';
-import reducerRegistry from './reducer_registry';
-
-import serviceReducers from '../reducers';
 
 /**
  * Configures and constructs the redux store. Accepts the following parameters:
@@ -39,7 +39,7 @@ export default function configureStore<S extends GlobalState>({
         ...preloadedState,
     };
 
-    const composeEnhancers = composeWithDevTools({
+    const composeEnhancers = composeWithDevToolsDevelopmentOnly({
         shouldHotReload: false,
         trace: true,
         traceLimit: 25,

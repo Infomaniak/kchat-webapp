@@ -3,13 +3,12 @@
 
 import {combineReducers} from 'redux';
 
-import type {Post} from '@mattermost/types/posts';
-import type {PreferenceType} from '@mattermost/types/preferences';
-import type {Search} from '@mattermost/types/search';
-
 import {PostTypes, PreferenceTypes, SearchTypes, UserTypes} from 'mattermost-redux/action_types';
 import {Preferences} from 'mattermost-redux/constants';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {PreferenceType} from '@mattermost/types/preferences';
+import {GenericAction} from 'mattermost-redux/types/actions';
+import {Post} from '@mattermost/types/posts';
+import {Search} from '@mattermost/types/search';
 
 function results(state: string[] = [], action: GenericAction) {
     switch (action.type) {
@@ -304,23 +303,33 @@ function isSearchGettingMore(state = false, action: GenericAction) {
     }
 }
 
-function isLimitedResults(state = -1, action: GenericAction): number {
-    switch (action.type) {
-    case SearchTypes.SEARCH_POSTS_REQUEST: {
-        if (!action.isGettingMore) {
-            return -1;
-        }
+// mattermost version
+// function isLimitedResults(state = -1, action: GenericAction): number {
+//     switch (action.type) {
+//     case SearchTypes.SEARCH_POSTS_REQUEST: {
+//         if (!action.isGettingMore) {
+//             return -1;
+//         }
+//         return state;
+//     }
+//     case SearchTypes.RECEIVED_SEARCH_POSTS: {
+//         if (action.data?.first_inaccessible_post_time) {
+//             return action.data.first_inaccessible_post_time || 0;
+//         }
+//         return state;
+//     }
+//     default: {
+//         return state;
+//     }
+//     }
+function hasLimitation(state: string | null = null, action: GenericAction) {
+    const {data, type} = action;
+
+    switch (type) {
+    case SearchTypes.RECEIVED_SEARCH_POSTS:
+        return data?.has_limitation || null;
+    default:
         return state;
-    }
-    case SearchTypes.RECEIVED_SEARCH_POSTS: {
-        if (action.data?.first_inaccessible_post_time) {
-            return action.data.first_inaccessible_post_time || 0;
-        }
-        return state;
-    }
-    default: {
-        return state;
-    }
     }
 }
 
@@ -354,7 +363,9 @@ export default combineReducers({
     // Boolean true if we are getting more search results
     isSearchGettingMore,
 
+    // Date of limitation start, present if a limit is present
+    hasLimitation,
     // Boolean true if the search returns results inaccessible because
     // they are beyond a cloud workspace's message limits.
-    isLimitedResults,
+    // isLimitedResults,
 });

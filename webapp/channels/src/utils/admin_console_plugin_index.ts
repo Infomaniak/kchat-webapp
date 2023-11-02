@@ -1,12 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {PluginRedux, PluginSetting} from '@mattermost/types/plugins';
-
-import getEnablePluginSetting from 'components/admin_console/custom_plugin_settings/enable_plugin_setting';
-import type {AdminDefinitionSetting} from 'components/admin_console/types';
-
 import {stripMarkdown} from 'utils/markdown';
+
+import {PluginRedux, PluginSetting} from '@mattermost/types/plugins';
+
+import getEnablePluginSetting, {EnabledPluginSetting} from 'components/admin_console/custom_plugin_settings/enable_plugin_setting';
 
 function extractTextsFromPlugin(plugin: PluginRedux) {
     const texts = extractTextFromSetting(getEnablePluginSetting(plugin));
@@ -28,7 +27,7 @@ function extractTextsFromPlugin(plugin: PluginRedux) {
             const settings = Object.values(plugin.settings_schema.settings);
 
             for (const setting of settings) {
-                const settingsTexts = extractTextFromSetting(setting as Partial<AdminDefinitionSetting & PluginSetting>);
+                const settingsTexts = extractTextFromSetting(setting);
                 texts.push(...settingsTexts);
             }
         }
@@ -36,7 +35,7 @@ function extractTextsFromPlugin(plugin: PluginRedux) {
     return texts;
 }
 
-function extractTextFromSetting(setting: Partial<AdminDefinitionSetting & PluginSetting>) {
+function extractTextFromSetting(setting: Partial<EnabledPluginSetting & PluginSetting>) {
     const texts = [];
     if (setting.label) {
         texts.push(setting.label);

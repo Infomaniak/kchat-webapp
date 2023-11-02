@@ -4,9 +4,7 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
-import ActionsMenu from 'components/actions_menu/actions_menu';
-import type {Props} from 'components/actions_menu/actions_menu';
-
+import ActionsMenu, {Props} from 'components/actions_menu/actions_menu';
 import {TestHelper} from 'utils/test_helper';
 
 jest.mock('utils/utils', () => {
@@ -39,9 +37,13 @@ describe('components/actions_menu/ActionsMenu on mobile view', () => {
             },
             appBindings: [],
             pluginMenuItems: [],
+            handleOpenTip: jest.fn(),
+            handleNextTip: jest.fn(),
+            handleDismissTip: jest.fn(),
+            showPulsatingDot: false,
+            showTutorialTip: false,
             appsEnabled: false,
             isSysAdmin: true,
-            canOpenMarketplace: false,
         };
 
         const wrapper = shallow(

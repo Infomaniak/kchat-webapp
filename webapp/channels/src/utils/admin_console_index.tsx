@@ -2,11 +2,11 @@
 // See LICENSE.txt for license information.
 
 import FlexSearch from 'flexsearch/dist/flexsearch.es5';
-import type {IntlShape} from 'react-intl';
+import {IntlShape} from 'react-intl';
 
-import type {PluginRedux} from '@mattermost/types/plugins';
+import {PluginRedux} from '@mattermost/types/plugins';
 
-import type AdminDefinition from 'components/admin_console/admin_definition';
+import AdminDefinition from 'components/admin_console/admin_definition';
 
 import {getPluginEntries} from './admin_console_plugin_index';
 
@@ -93,10 +93,11 @@ export function adminDefinitionsToUrlsAndTexts(adminDefinition: typeof AdminDefi
         adminDefinition.integrations,
         adminDefinition.compliance,
         adminDefinition.experimental,
+        adminDefinition.products,
         adminDefinition.billing,
     ];
     for (const section of sections) {
-        for (const item of Object.values(section.subsections)) {
+        for (const item of Object.values(section)) {
             if (!item.isDiscovery) {
                 entries[item.url] = extractTextsFromSection(item, intl);
             }

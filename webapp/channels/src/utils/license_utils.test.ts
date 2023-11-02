@@ -1,8 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {LicenseSkus} from 'utils/constants';
 import {isLicenseExpired, isLicenseExpiring, isLicensePastGracePeriod, isEnterpriseOrE20License} from 'utils/license_utils';
+
+import {LicenseSkus} from 'utils/constants';
 
 describe('license_utils', () => {
     const millisPerDay = 24 * 60 * 60 * 1000;

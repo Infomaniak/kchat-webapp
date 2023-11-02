@@ -4,8 +4,8 @@
 import {ThreadTypes} from 'mattermost-redux/action_types';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
+import {ExtraData} from './types';
 import {handleFollowChanged} from './threadsInTeam';
-import type {ExtraData} from './types';
 
 describe('handleFollowChanged', () => {
     const state = deepFreeze({
@@ -48,6 +48,10 @@ describe('handleFollowChanged', () => {
                 id: 'id2_2',
                 last_reply_at: 200,
             },
+        },
+        threadsInTeam: {
+            team_id1: [],
+            team_id2: [],
         },
     } as unknown as ExtraData;
 

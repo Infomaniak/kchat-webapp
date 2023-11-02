@@ -31,6 +31,7 @@ export type ThreadsRequestStatuses = {
 
 export type TeamsRequestsStatuses = {
     getMyTeams: RequestStatusType;
+    getMyKSuites: RequestStatusType;
     getTeams: RequestStatusType;
     joinTeam: RequestStatusType;
 };

@@ -3,8 +3,7 @@
 
 import nock from 'nock';
 
-import type {Job} from '@mattermost/types/jobs';
-
+import {Job} from '@mattermost/types/jobs';
 import * as Actions from 'mattermost-redux/actions/jobs';
 import {Client4} from 'mattermost-redux/client';
 

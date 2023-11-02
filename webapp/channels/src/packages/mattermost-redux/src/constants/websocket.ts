@@ -11,7 +11,7 @@ const WebsocketEvents = {
     CHANNEL_DELETED: 'channel_deleted',
     CHANNEL_UNARCHIVED: 'channel_restored',
     CHANNEL_UPDATED: 'channel_updated',
-    MULTIPLE_CHANNELS_VIEWED: 'multiple_channels_viewed',
+    CHANNEL_VIEWED: 'channel_viewed',
     CHANNEL_MEMBER_UPDATED: 'channel_member_updated',
     CHANNEL_SCHEME_UPDATED: 'channel_scheme_updated',
     DIRECT_ADDED: 'direct_added',
@@ -54,5 +54,12 @@ const WebsocketEvents = {
     THREAD_READ_CHANGED: 'thread_read_changed',
     FIRST_ADMIN_VISIT_MARKETPLACE_STATUS_RECEIVED: 'first_admin_visit_marketplace_status_received',
     GROUP_MEMBER_DELETED: 'group_member_deleted',
+    CONFERENCE_ADDED: 'conference_added',
+    CONFERENCE_DELETED: 'conference_deleted',
+    CONFERENCE_USER_CONNECTED: 'conference_user_connected',
+    CONFERENCE_USER_DISCONNECTED: 'conference_user_disconnected',
+    PUSHER_MEMBER_REMOVED: 'pusher:member_removed',
+    PUSHER_PING: 'pusher:ping',
+    PUSHER_PONG: 'pusher:pong',
 };
 export default WebsocketEvents;

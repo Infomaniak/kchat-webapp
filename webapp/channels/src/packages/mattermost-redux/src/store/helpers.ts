@@ -1,8 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {combineReducers} from 'redux';
-import type {AnyAction, Reducer} from 'redux';
+import {AnyAction, combineReducers, Reducer} from 'redux';
 import {enableBatching} from 'redux-batched-actions';
 
 import deepFreezeAndThrowOnMutation from 'mattermost-redux/utils/deep_freeze';

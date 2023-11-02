@@ -31,6 +31,7 @@ export type UserThread = {
     post: {
         channel_id: Channel['id'];
         user_id: UserProfile['id'];
+        props: Post['props'];
     };
 };
 

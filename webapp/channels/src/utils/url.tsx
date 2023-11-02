@@ -2,14 +2,14 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
-import type {IntlShape} from 'react-intl';
+import {FormattedMessage, IntlShape} from 'react-intl';
 
 import {getModule} from 'module_registry';
-import Constants from 'utils/constants';
-import {t} from 'utils/i18n';
+
 import {latinise} from 'utils/latinise';
+import {t} from 'utils/i18n';
 import * as TextFormatting from 'utils/text_formatting';
+import Constants from 'utils/constants';
 
 type WindowObject = {
     location: {
@@ -123,7 +123,7 @@ function formattedError(id: string, message: string, intl?: IntlShape): React.Re
 export function validateChannelUrl(url: string, intl?: IntlShape): Array<React.ReactElement | string> {
     const errors: Array<React.ReactElement | string> = [];
 
-    const USER_ID_LENGTH = 26;
+    const USER_ID_LENGTH = 36;
     const directMessageRegex = new RegExp(`^.{${USER_ID_LENGTH}}__.{${USER_ID_LENGTH}}$`);
     const isDirectMessageFormat = directMessageRegex.test(url);
 

@@ -1,15 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Team} from '@mattermost/types/teams';
-import type {IDMappedObjects} from '@mattermost/types/utilities';
-
+import {Team} from '@mattermost/types/teams';
+import {IDMappedObjects} from '@mattermost/types/utilities';
+import {Client4} from 'mattermost-redux/client';
+import {getCookie, setCookie} from 'mattermost-redux/utils/cookie_utils';
 import {General} from '../constants';
+
+const LAST_KSUITE_COOKIE = 'LAST_KSUITE';
+const TEAMS_ORDER_COOKIE = 'TEAMS_ORDER';
 
 export function teamListToMap(teamList: Team[]): IDMappedObjects<Team> {
     const teams: Record<string, Team> = {};
-    for (let i = 0; i < teamList.length; i++) {
-        teams[teamList[i].id] = teamList[i];
+    if (teamList) {
+        for (let i = 0; i < teamList.length; i++) {
+            teams[teamList[i].id] = teamList[i];
+        }
     }
     return teams;
 }
@@ -39,3 +45,15 @@ export function filterTeamsStartingWithTerm(teams: Team[], term: string): Team[]
             displayName.startsWith(lowercasedTerm);
     });
 }
+
+export const getLastKSuiteSeenId = () => getCookie(LAST_KSUITE_COOKIE);
+
+export const setLastKSuiteSeenCookie = (teamId: string) => {
+    if (!Client4.isIkBaseUrl()) {
+        setCookie(LAST_KSUITE_COOKIE, teamId);
+    }
+};
+
+export const getTeamsOrderCookie = () => getCookie(TEAMS_ORDER_COOKIE);
+
+export const setTeamsOrderCookie = (teamOrder: string) => setCookie(TEAMS_ORDER_COOKIE, teamOrder);

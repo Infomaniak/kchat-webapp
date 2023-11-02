@@ -1,16 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {AnyAction} from 'redux';
+import {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
-import type {GroupPatch, SyncablePatch, GroupCreateWithUserIds, CustomGroupPatch, GroupSearchParams, GetGroupsParams, GetGroupsForUserParams} from '@mattermost/types/groups';
-import {SyncableType, GroupSource} from '@mattermost/types/groups';
-
 import {ChannelTypes, GroupTypes, UserTypes} from 'mattermost-redux/action_types';
-import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
-import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import {Client4} from 'mattermost-redux/client';
+
+import {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import {GroupPatch, SyncableType, SyncablePatch, GroupCreateWithUserIds, CustomGroupPatch, GroupSearachParams, GroupSource, GetGroupsParams, GetGroupsForUserParams} from '@mattermost/types/groups';
 
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
@@ -385,7 +384,7 @@ export function removeUsersFromGroup(groupId: string, userIds: string[]): Action
     };
 }
 
-export function searchGroups(params: GroupSearchParams): ActionFunc {
+export function searchGroups(params: GroupSearachParams): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let data;
         try {
@@ -410,28 +409,6 @@ export function searchGroups(params: GroupSearchParams): ActionFunc {
     };
 }
 
-export function archiveGroup(groupId: string): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
-        let data;
-        try {
-            data = await Client4.archiveGroup(groupId);
-        } catch (error) {
-            forceLogoutIfNecessary(error, dispatch, getState);
-            return {error};
-        }
-
-        dispatch(
-            {
-                type: GroupTypes.ARCHIVED_GROUP,
-                id: groupId,
-                data,
-            },
-        );
-
-        return {data};
-    };
-}
-
 export function restoreGroup(groupId: string): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let data;
@@ -445,6 +422,28 @@ export function restoreGroup(groupId: string): ActionFunc {
         dispatch(
             {
                 type: GroupTypes.RESTORED_GROUP,
+                id: groupId,
+                data,
+            },
+        );
+
+        return {data};
+    };
+}
+
+export function archiveGroup(groupId: string): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let data;
+        try {
+            data = await Client4.archiveGroup(groupId);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            return {error};
+        }
+
+        dispatch(
+            {
+                type: GroupTypes.ARCHIVED_GROUP,
                 id: groupId,
                 data,
             },

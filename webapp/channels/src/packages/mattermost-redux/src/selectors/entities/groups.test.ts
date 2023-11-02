@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {UserProfile} from '@mattermost/types/users';
+import {UserProfile} from '@mattermost/types/users';
 
-import * as Selectors from 'mattermost-redux/selectors/entities/groups';
 import deepFreezeAndThrowOnMutation from 'mattermost-redux/utils/deep_freeze';
-
+import * as Selectors from 'mattermost-redux/selectors/entities/groups';
 import TestHelper from '../../../test/test_helper';
 
 describe('Selectors.Groups', () => {
@@ -216,6 +215,7 @@ describe('Selectors.Groups', () => {
             group5,
         ];
         const getAllAssociatedGroupsForReference = Selectors.makeGetAllAssociatedGroupsForReference();
+
         expect(getAllAssociatedGroupsForReference(testState, false)).toEqual(expected);
     });
 

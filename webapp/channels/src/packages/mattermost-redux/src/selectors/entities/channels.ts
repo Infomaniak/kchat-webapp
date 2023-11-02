@@ -3,29 +3,10 @@
 
 import {max} from 'lodash';
 
-import type {
-    Channel,
-    ChannelMemberCountsByGroup,
-    ChannelMembership,
-    ChannelMessageCount,
-    ChannelModeration,
-    ChannelSearchOpts,
-    ChannelStats,
-} from '@mattermost/types/channels';
-import type {GlobalState} from '@mattermost/types/store';
-import type {Team} from '@mattermost/types/teams';
-import type {UserProfile, UsersState} from '@mattermost/types/users';
-import type {
-    IDMappedObjects,
-    RelationOneToMany,
-    RelationOneToManyUnique,
-    RelationOneToOne,
-} from '@mattermost/types/utilities';
-
 import {General, Permissions, Preferences} from 'mattermost-redux/constants';
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getDataRetentionCustomPolicy} from 'mattermost-redux/selectors/entities/admin';
+
 import {getCategoryInTeamByType} from 'mattermost-redux/selectors/entities/channel_categories';
 import {
     getCurrentChannelId,
@@ -51,6 +32,7 @@ import {
     getUserIdsInChannels,
     isCurrentUserSystemAdmin,
 } from 'mattermost-redux/selectors/entities/users';
+
 import {
     calculateUnreadCount,
     completeDirectChannelDisplayName,
@@ -65,10 +47,32 @@ import {
     newCompleteDirectChannelInfo,
     sortChannelsByDisplayName,
 } from 'mattermost-redux/utils/channel_utils';
+
 import {createIdsSelector} from 'mattermost-redux/utils/helpers';
 
-import {isPostPriorityEnabled} from './posts';
+import {createSelector} from 'reselect';
+
+import {
+    Channel,
+    ChannelMemberCountsByGroup,
+    ChannelMembership,
+    ChannelMessageCount,
+    ChannelModeration,
+    ChannelSearchOpts,
+    ChannelStats,
+} from '@mattermost/types/channels';
+import {GlobalState} from '@mattermost/types/store';
+import {Team} from '@mattermost/types/teams';
+import {UserProfile, UsersState} from '@mattermost/types/users';
+import {
+    IDMappedObjects,
+    RelationOneToMany,
+    RelationOneToManyUnique,
+    RelationOneToOne,
+} from '@mattermost/types/utilities';
+
 import {getThreadCounts, getThreadCountsIncludingDirect} from './threads';
+import {isPostPriorityEnabled} from './posts';
 
 export {getCurrentChannelId, getMyChannelMemberships, getMyCurrentChannelMembership};
 export function getAllChannels(state: GlobalState): IDMappedObjects<Channel> {
@@ -93,10 +97,6 @@ export const getAllDmChannels = createSelector(
 
 export function getAllChannelStats(state: GlobalState): RelationOneToOne<Channel, ChannelStats> {
     return state.entities.channels.stats;
-}
-
-export function getChannelsMemberCount(state: GlobalState): Record<string, number> {
-    return state.entities.channels.channelsMemberCount;
 }
 
 export function getChannelsInTeam(state: GlobalState): RelationOneToMany<Team, Channel> {
@@ -142,10 +142,6 @@ export const getDirectChannelsSet: (state: GlobalState) => Set<string> = createS
 
 export function getChannelMembersInChannels(state: GlobalState): RelationOneToOne<Channel, Record<string, ChannelMembership>> {
     return state.entities.channels.membersInChannel;
-}
-
-export function getChannelMember(state: GlobalState, channelId: string, userId: string): ChannelMembership | undefined {
-    return getChannelMembersInChannels(state)[channelId]?.[userId];
 }
 
 // makeGetChannel returns a selector that returns a channel from the store with the following filled in for DM/GM channels:
@@ -354,7 +350,7 @@ export function makeGetChannelUnreadCount(): (state: GlobalState, channelId: str
     );
 }
 
-export function getChannelByName(state: GlobalState, channelName: string): Channel | undefined {
+export function getChannelByName(state: GlobalState, channelName: string): Channel | undefined | null {
     return getChannelByNameHelper(getAllChannels(state), channelName);
 }
 
@@ -1207,6 +1203,13 @@ export const getDefaultChannelForTeams: (state: GlobalState) => RelationOneToOne
     },
 );
 
+export const getCurrentTeamDefaultChannelId: (state: GlobalState) => string = createSelector(
+    'getCurrentTeamDefaultChannelId',
+    getCurrentTeamId,
+    getDefaultChannelForTeams,
+    (currentTeamId: string, defaultChannelForTeams: RelationOneToOne<Team, Channel>) => defaultChannelForTeams[currentTeamId]?.id ?? '',
+);
+
 export const getMyFirstChannelForTeams: (state: GlobalState) => RelationOneToOne<Team, Channel> = createSelector(
     'getMyFirstChannelForTeams',
     getAllChannels,
@@ -1430,3 +1433,5 @@ export const getRecentProfilesFromDMs: (state: GlobalState) => UserProfile[] = c
         return [...sortedUserProfiles];
     },
 );
+
+export const getPendingGuestsInChannel = (state: GlobalState, channelId: string) => state.entities.channels.pendingGuests[channelId] ?? {};

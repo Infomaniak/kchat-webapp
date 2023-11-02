@@ -1,22 +1,44 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ServerError} from '@mattermost/types/errors';
+import {ServerError} from '@mattermost/types/errors';
 
-import {UserTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
-import type {ActionFunc, GenericAction, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import {UserTypes} from 'mattermost-redux/action_types';
+
+import {ActionFunc, GenericAction, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+
+import {getHistory} from 'utils/browser_history';
 
 import {logError} from './errors';
-
 type ActionType = string;
 const HTTP_UNAUTHORIZED = 401;
 export function forceLogoutIfNecessary(err: ServerError, dispatch: DispatchFunc, getState: GetStateFunc) {
     const {currentUserId} = getState().entities.users;
 
+    redirectToErrorPageIfNecessary(err);
+
     if ('status_code' in err && err.status_code === HTTP_UNAUTHORIZED && err.url && err.url.indexOf('/login') === -1 && currentUserId) {
         Client4.setToken('');
         dispatch({type: UserTypes.LOGOUT_SUCCESS, data: {}});
+    }
+}
+
+const statusCodes = {
+    HTTP_MAINTENANCE: 503,
+    HTTP_BLOCKED: 401,
+};
+
+function redirectToErrorPageIfNecessary(err: ServerError) {
+    switch (err.status_code) {
+    case statusCodes.HTTP_MAINTENANCE:
+        getHistory().replace('/error?type=maintenance');
+        break;
+    case statusCodes.HTTP_BLOCKED:
+        if (err.server_error_id === 'product_locked' || err.error?.code === 'product_locked') {
+            getHistory().replace('/error?type=blocked');
+        }
+        break;
     }
 }
 

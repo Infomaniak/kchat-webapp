@@ -18,13 +18,6 @@ type ApplyMarkdownReturnValue = {
 
 type ApplySpecificMarkdownOptions = ApplyMarkdownReturnValue & {
     delimiter?: string;
-    delimiterStart?: string;
-    delimiterEnd?: string;
-}
-
-export type ApplyLinkMarkdownOptions = ApplySpecificMarkdownOptions & {
-    url?: string;
-
 }
 
 export function applyMarkdown(options: ApplyMarkdownOptions): ApplyMarkdownReturnValue {
@@ -75,7 +68,8 @@ export function applyMarkdown(options: ApplyMarkdownOptions): ApplyMarkdownRetur
         delimiter = '~~';
         return applyMarkdownToSelection({selectionEnd, selectionStart, message, delimiter});
     case 'code':
-        return applyCodeMarkdown({selectionEnd, selectionStart, message});
+        delimiter = '```';
+        return applyMarkdownToSelection({selectionEnd, selectionStart, message, delimiter});
     }
 
     throw Error('Unsupported markdown mode: ' + markdownMode);
@@ -272,12 +266,8 @@ const applyMarkdownToSelection = ({
     selectionStart,
     message,
     delimiter,
-    delimiterStart,
-    delimiterEnd,
 }: ApplySpecificMarkdownOptions) => {
-    const openingDelimiter = delimiterStart ?? delimiter;
-    const closingDelimiter = delimiterEnd ?? delimiter;
-    if (!openingDelimiter || !closingDelimiter) {
+    if (!delimiter) {
         /**
          * in case no delimiter is set return the values without changing anything
          */
@@ -298,7 +288,7 @@ const applyMarkdownToSelection = ({
     let suffix = message.slice(selectionEnd);
 
     // Does the selection have current hotkey's markdown?
-    const hasCurrentMarkdown = prefix.endsWith(openingDelimiter) && suffix.startsWith(closingDelimiter);
+    const hasCurrentMarkdown = prefix.endsWith(delimiter) && suffix.startsWith(delimiter);
 
     let newValue: string;
     let newStart = selectionStart;
@@ -318,14 +308,14 @@ const applyMarkdownToSelection = ({
 
     if (hasCurrentMarkdown) {
         // selection already has the markdown, so we remove it here
-        newValue = prefix.slice(0, prefix.length - openingDelimiter.length) + selection + suffix.slice(closingDelimiter.length);
-        newStart -= openingDelimiter.length;
-        newEnd -= closingDelimiter.length;
+        newValue = prefix.slice(0, prefix.length - delimiter.length) + selection + suffix.slice(delimiter.length);
+        newStart -= delimiter.length;
+        newEnd -= delimiter.length;
     } else {
         // add markdown to the selection
-        newValue = prefix + openingDelimiter + selection + closingDelimiter + suffix;
-        newStart += openingDelimiter.length;
-        newEnd += closingDelimiter.length;
+        newValue = prefix + delimiter + selection + delimiter + suffix;
+        newStart += delimiter.length;
+        newEnd += delimiter.length;
     }
 
     return {
@@ -406,16 +396,14 @@ function applyBoldItalicMarkdown({selectionEnd, selectionStart, message, markdow
     };
 }
 
-export const DEFAULT_PLACEHOLDER_URL = 'url';
-
-export function applyLinkMarkdown({selectionEnd, selectionStart, message, url = DEFAULT_PLACEHOLDER_URL}: ApplyLinkMarkdownOptions) {
+function applyLinkMarkdown({selectionEnd, selectionStart, message}: ApplySpecificMarkdownOptions) {
     // <prefix> <selection> <suffix>
     const prefix = message.slice(0, selectionStart);
     const selection = message.slice(selectionStart, selectionEnd);
     const suffix = message.slice(selectionEnd);
 
     const delimiterStart = '[';
-    const delimiterEnd = `](${url})`;
+    const delimiterEnd = '](url)';
 
     // Does the selection have link markdown?
     const hasMarkdown = prefix.endsWith(delimiterStart) && suffix.startsWith(delimiterEnd);
@@ -443,7 +431,7 @@ export function applyLinkMarkdown({selectionEnd, selectionStart, message, url = 
         // there is something selected; put markdown around it and preserve selection
         newValue = prefix + delimiterStart + selection + delimiterEnd + suffix;
         newStart = selectionEnd + urlShift;
-        newEnd = newStart + url.length;
+        newEnd = newStart + urlShift;
     } else {
         // nothing is selected
         const spaceBefore = prefix.charAt(prefix.length - 1) === ' ';
@@ -497,13 +485,6 @@ export function applyLinkMarkdown({selectionEnd, selectionStart, message, url = 
     };
 }
 
-function applyCodeMarkdown({selectionEnd, selectionStart, message}: ApplySpecificMarkdownOptions) {
-    if (isSelectionMultiline(message, selectionStart, selectionEnd)) {
-        return applyMarkdownToSelection({selectionEnd, selectionStart, message, delimiterStart: '```\n', delimiterEnd: '\n```'});
-    }
-    return applyMarkdownToSelection({selectionEnd, selectionStart, message, delimiter: '`'});
-}
-
 function findWordEnd(text: string, start: number) {
     const wordEnd = text.indexOf(' ', start);
     return wordEnd === -1 ? text.length : wordEnd;
@@ -512,8 +493,4 @@ function findWordEnd(text: string, start: number) {
 function findWordStart(text: string, start: number) {
     const wordStart = text.lastIndexOf(' ', start - 1) + 1;
     return wordStart === -1 ? 0 : wordStart;
-}
-
-function isSelectionMultiline(message: string, selectionStart: number, selectionEnd: number) {
-    return message.slice(selectionStart, selectionEnd).includes('\n');
 }

@@ -13,6 +13,7 @@ export default keyMirror({
     RECEIVED_FILES_USAGE: null,
     RECEIVED_BOARDS_USAGE: null,
     RECEIVED_TEAMS_USAGE: null,
+    RECEIVED_USAGE: null,
     RECEIVED_LICENSE_SELF_SERVE_STATS: null,
 
     CLOUD_CUSTOMER_FAILED: null,

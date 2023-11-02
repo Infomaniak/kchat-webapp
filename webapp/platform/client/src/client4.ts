@@ -3,6 +3,8 @@
 
 /* eslint-disable max-lines */
 
+import crypto from 'crypto';
+
 import FormData from 'form-data';
 
 import {PreferenceType} from '@mattermost/types/preferences';
@@ -26,14 +28,12 @@ import {
     CreateSubscriptionRequest,
     Feedback,
     WorkspaceDeletionRequest,
-    NewsletterRequestBody,
 } from '@mattermost/types/cloud';
 import {
     SelfHostedSignupForm,
     SelfHostedSignupCustomerResponse,
     SelfHostedSignupSuccessResponse,
     SelfHostedSignupBootstrapResponse,
-    SelfHostedExpansionRequest,
 } from '@mattermost/types/hosted_customer';
 import {ChannelCategory, OrderedChannelCategories} from '@mattermost/types/channel_categories';
 
@@ -50,6 +50,7 @@ import {
     ChannelWithTeamData,
     ChannelSearchOpts,
     ServerChannel,
+    PendingGuests,
 } from '@mattermost/types/channels';
 import {Options, StatusOK, ClientResponse, LogLevel, FetchPaginatedThreadOptions} from '@mattermost/types/client4';
 import {Compliance} from '@mattermost/types/compliance';
@@ -74,10 +75,10 @@ import {
     UsersWithGroupsAndCount,
     GroupsWithCount,
     GroupCreateWithUserIds,
-    GroupSearchParams,
     CustomGroupPatch,
-    GetGroupsParams,
+    GroupSearchParams,
     GetGroupsForUserParams,
+    GetGroupsParams,
 } from '@mattermost/types/groups';
 import {PostActionResponse} from '@mattermost/types/integration_actions';
 import {
@@ -140,24 +141,47 @@ import {
 } from '@mattermost/types/data_retention';
 import {CompleteOnboardingRequest} from '@mattermost/types/setup';
 import {UserThreadList, UserThread, UserThreadWithPost} from '@mattermost/types/threads';
+import {LeastActiveChannelsResponse, TopChannelResponse, TopReactionResponse, TopThreadResponse, TopDMsResponse} from '@mattermost/types/insights';
+
+import {Category, ExecuteWorkTemplateRequest, ExecuteWorkTemplateResponse, WorkTemplate} from '@mattermost/types/work_templates';
 
 import {cleanUrlForLogging} from './errors';
 import {buildQueryString} from './helpers';
+
 import {TelemetryHandler} from './telemetry';
 
+// @ts-ignore
+
+const IKConstants = {
+
+    // @ts-ignore
+    LOGIN_URL: process.env.LOGIN_ENDPOINT, // eslint-disable-line no-process-env
+    // @ts-ignore
+    LOGOUT_URL: `${process.env.LOGIN_ENDPOINT}logout`, // eslint-disable-line no-process-env
+    CLIENT_ID: 'A7376A6D-9A79-4B06-A837-7D92DB93965B',
+
+    // @ts-ignore
+    MANAGER_URL: process.env.MANAGER_ENDPOINT, // eslint-disable-line no-process-env
+};
+
 const HEADER_AUTH = 'Authorization';
-const HEADER_BEARER = 'BEARER';
+const HEADER_BEARER = 'Bearer';
 const HEADER_CONTENT_TYPE = 'Content-Type';
 const HEADER_REQUESTED_WITH = 'X-Requested-With';
 const HEADER_USER_AGENT = 'User-Agent';
 export const HEADER_X_CLUSTER_ID = 'X-Cluster-Id';
 const HEADER_X_CSRF_TOKEN = 'X-CSRF-Token';
+const HEADER_X_XSRF_TOKEN = 'X-XSRF-Token';
 export const HEADER_X_VERSION_ID = 'X-Version-Id';
-const LOGS_PER_PAGE_DEFAULT = 10000;
+
 const AUTOCOMPLETE_LIMIT_DEFAULT = 25;
 const PER_PAGE_DEFAULT = 60;
 export const DEFAULT_LIMIT_BEFORE = 30;
 export const DEFAULT_LIMIT_AFTER = 30;
+
+const GRAPHQL_ENDPOINT = '/api/v5/graphql';
+
+type LogoutFunc = (data?: any) => void;
 
 export default class Client4 {
     logToConsole = false;
@@ -181,6 +205,17 @@ export default class Client4 {
     userRoles = '';
     telemetryHandler?: TelemetryHandler;
 
+    useBoardsProduct = false;
+    emitUserLoggedOutEvent: LogoutFunc | undefined = undefined;
+
+    isIkBaseUrl() {
+        const whitelist = [
+            'https://do-not-replace-kchat.infomaniak.com'.replace('do-not-replace-', ''),
+            'https://do-not-replace-kchat.preprod.dev.infomaniak.ch'.replace('do-not-replace-', ''),
+        ];
+        return whitelist.includes(window.origin);
+    }
+
     getUrl() {
         return this.url;
     }
@@ -190,6 +225,10 @@ export default class Client4 {
             return baseUrl;
         }
         return this.getUrl() + baseUrl;
+    }
+
+    getGraphQLUrl() {
+        return `${this.url}${GRAPHQL_ENDPOINT}`;
     }
 
     setUrl(url: string) {
@@ -216,12 +255,12 @@ export default class Client4 {
         this.defaultHeaders['Accept-Language'] = locale;
     }
 
-    setHeader(header: string, value: string) {
-        this.defaultHeaders[header] = value;
+    setWebappVersion(version: string) {
+        this.defaultHeaders['Webapp-Version'] = version;
     }
 
-    removeHeader(header: string) {
-        delete this.defaultHeaders[header];
+    setSocketId(socketId: string) {
+        this.defaultHeaders['X-Socket-Id'] = socketId;
     }
 
     setEnableLogging(enable: boolean) {
@@ -246,6 +285,14 @@ export default class Client4 {
 
     setTelemetryHandler(telemetryHandler?: TelemetryHandler) {
         this.telemetryHandler = telemetryHandler;
+    }
+
+    setUseBoardsProduct(useBoardsProduct: boolean) {
+        this.useBoardsProduct = useBoardsProduct;
+    }
+
+    bindEmitUserLoggedOutEvent(func: LogoutFunc) {
+        this.emitUserLoggedOutEvent = func;
     }
 
     getServerVersion() {
@@ -274,6 +321,10 @@ export default class Client4 {
 
     getTeamsRoute() {
         return `${this.getBaseRoute()}/teams`;
+    }
+
+    getKSuiteRoute() {
+        return `${this.getBaseRoute()}/servers`;
     }
 
     getTeamRoute(teamId: string) {
@@ -334,6 +385,31 @@ export default class Client4 {
 
     getCommandsRoute() {
         return `${this.getBaseRoute()}/commands`;
+    }
+
+    getBaseWorkTemplate() {
+        return `${this.getBaseRoute()}/worktemplates`;
+    }
+
+    getWorkTemplateCategories = () => {
+        return this.doFetch<Category[]>(
+            `${this.getBaseWorkTemplate()}/categories`,
+            {method: 'get'},
+        );
+    }
+
+    getWorkTemplates = (categoryId: string) => {
+        return this.doFetch<WorkTemplate[]>(
+            `${this.getBaseWorkTemplate()}/categories/${categoryId}/templates`,
+            {method: 'get'},
+        );
+    }
+
+    executeWorkTemplate = (req: ExecuteWorkTemplateRequest) => {
+        return this.doFetch<ExecuteWorkTemplateResponse>(
+            `${this.getBaseWorkTemplate()}/execute`,
+            {method: 'post', body: JSON.stringify(req)},
+        );
     }
 
     getFilesRoute() {
@@ -420,6 +496,10 @@ export default class Client4 {
         return `${this.getBaseRoute()}/schemes`;
     }
 
+    getRedirectLocationRoute() {
+        return `${this.getBaseRoute()}/redirect_location`;
+    }
+
     getBotsRoute() {
         return `${this.getBaseRoute()}/bots`;
     }
@@ -472,6 +552,10 @@ export default class Client4 {
         return `${this.getBaseRoute()}/drafts`;
     }
 
+    getBoardsRoute() {
+        return `${this.url}/plugins/${this.useBoardsProduct ? 'boards' : 'focalboard'}/api/v2`;
+    }
+
     getCSRFFromCookie() {
         if (typeof document !== 'undefined' && typeof document.cookie !== 'undefined') {
             const cookies = document.cookie.split(';');
@@ -495,10 +579,13 @@ export default class Client4 {
 
         if (this.setAuthHeader && this.token) {
             headers[HEADER_AUTH] = `${HEADER_BEARER} ${this.token}`;
+            if (options.method && options.method.toLowerCase() !== 'delete') {
+                headers[HEADER_X_XSRF_TOKEN] = this.token;
+            }
         }
 
         const csrfToken = this.csrf || this.getCSRFFromCookie();
-        if (options.method && options.method.toLowerCase() !== 'get' && csrfToken) {
+        if (options.method && options.method.toLowerCase() !== 'get' && options.method.toLowerCase() !== 'delete' && csrfToken) {
             headers[HEADER_X_CSRF_TOKEN] = csrfToken;
         }
 
@@ -755,18 +842,6 @@ export default class Client4 {
         return profile;
     };
 
-    loginWithDesktopToken = async (token: string) => {
-        const body: any = {
-            token,
-            deviceId: '',
-        };
-
-        return await this.doFetch<UserProfile>(
-            `${this.getUsersRoute()}/login/desktop_token`,
-            {method: 'post', body: JSON.stringify(body)},
-        );
-    };
-
     loginById = (id: string, password: string, token = '') => {
         this.trackEvent('api', 'api_users_login');
         const body: any = {
@@ -779,6 +854,17 @@ export default class Client4 {
         return this.doFetch<UserProfile>(
             `${this.getUsersRoute()}/login`,
             {method: 'post', body: JSON.stringify(body)},
+        );
+    };
+
+    registerDevice = (device_id: string) => {
+        const body: any = {
+            device_id,
+        };
+
+        return this.doFetch<UserProfile>(
+            `${this.getUsersRoute()}/sessions/device`,
+            {method: 'put', body: JSON.stringify(body)},
         );
     };
 
@@ -925,6 +1011,23 @@ export default class Client4 {
 
         return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
     };
+    arrayBufferToBase64(buffer: ArrayBuffer) {
+        return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+    }
+
+    getProfilePictureFetched = async (userId: string, lastPictureUpdate: number, params: any) => {
+        const response = await fetch(`${this.getUserRoute(userId)}/image${buildQueryString(params)}`, this.getOptions({}));
+
+        // Convert the data to Base64 and build a data URL.
+        const binaryData = await response.arrayBuffer();
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(binaryData)));
+        const dataUrl = `data:image/png;base64,${base64}`;
+        return dataUrl;
+    }
+
+    getBasicProfilePictureUrl = (userId: string, lastPictureUpdate: number, params: any) => {
+        return `${this.getUserRoute(userId)}/image${buildQueryString(params)}`;
+    }
 
     getDefaultProfilePictureUrl = (userId: string) => {
         return `${this.getUserRoute(userId)}/image/default`;
@@ -1183,6 +1286,13 @@ export default class Client4 {
         );
     }
 
+    archiveAllTeamsExcept = (teamId: string) => {
+        return this.doFetch<StatusOK>(
+            `${this.getTeamRoute(teamId)}/except`,
+            {method: 'delete'},
+        );
+    }
+
     updateTeam = (team: Team) => {
         this.trackEvent('api', 'api_teams_update_name', {team_id: team.id});
 
@@ -1230,6 +1340,13 @@ export default class Client4 {
 
     getTeams = (page = 0, perPage = PER_PAGE_DEFAULT, includeTotalCount = false, excludePolicyConstrained = false) => {
         return this.doFetch<Team[] | TeamsWithCount>(
+            `${this.getKSuiteRoute()}${buildQueryString({page, per_page: perPage, include_total_count: includeTotalCount, exclude_policy_constrained: excludePolicyConstrained})}`,
+            {method: 'get'},
+        );
+    };
+
+    getKSuites = (page = 0, perPage = PER_PAGE_DEFAULT, includeTotalCount = false, excludePolicyConstrained = false) => {
+        return this.doFetch<Team[] | TeamsWithCount>(
             `${this.getTeamsRoute()}${buildQueryString({page, per_page: perPage, include_total_count: includeTotalCount, exclude_policy_constrained: excludePolicyConstrained})}`,
             {method: 'get'},
         );
@@ -1266,6 +1383,13 @@ export default class Client4 {
             {method: 'get'},
         );
     };
+
+    getMyKSuites = () => {
+        return this.doFetch<Team[]>(
+            `${this.getUserRoute('me')}/servers`,
+            {method: 'get'},
+        );
+    }
 
     getTeamsForUser = (userId: string) => {
         return this.doFetch<Team[]>(
@@ -1751,20 +1875,12 @@ export default class Client4 {
         );
     };
 
-    getChannelStats = (channelId: string, includeFileCount = false) => {
-        const param = !includeFileCount ? '?exclude_files_count=true' : '';
+    getChannelStats = (channelId: string) => {
         return this.doFetch<ChannelStats>(
-            `${this.getChannelRoute(channelId)}/stats${param}`,
+            `${this.getChannelRoute(channelId)}/stats`,
             {method: 'get'},
         );
     };
-
-    getChannelsMemberCount = (channelIds: string[]) => {
-        return this.doFetch<Record<string, number>>(
-            `${this.getChannelsRoute()}/stats/member_count`,
-            {method: 'post', body: JSON.stringify(channelIds)}
-        )
-    }
 
     getChannelModerations = (channelId: string) => {
         return this.doFetch<ChannelModeration[]>(
@@ -1787,18 +1903,11 @@ export default class Client4 {
         );
     };
 
-    viewMyChannel = (channelId: string) => {
-        const data = {channel_id: channelId, collapsed_threads_supported: true};
+    viewMyChannel = (channelId: string, prevChannelId?: string) => {
+        const data = {channel_id: channelId, prev_channel_id: prevChannelId, collapsed_threads_supported: true};
         return this.doFetch<ChannelViewResponse>(
             `${this.getChannelsRoute()}/members/me/view`,
             {method: 'post', body: JSON.stringify(data)},
-        );
-    };
-
-    readMultipleChannels = (channelIds: string[]) => {
-        return this.doFetch<ChannelViewResponse>(
-            `${this.getChannelsRoute()}/members/me/mark_read`,
-            {method: 'post', body: JSON.stringify(channelIds)},
         );
     };
 
@@ -2195,6 +2304,74 @@ export default class Client4 {
         );
     };
 
+    getTopReactionsForTeam = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopReactionResponse>(
+            `${this.getTeamRoute(teamId)}/top/reactions${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+
+    getMyTopReactions = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopReactionResponse>(
+            `${this.getUsersRoute()}/me/top/reactions${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getTopChannelsForTeam = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopChannelResponse>(
+            `${this.getTeamRoute(teamId)}/top/channels${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+
+    getMyTopChannels = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopChannelResponse>(
+            `${this.getUsersRoute()}/me/top/channels${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getTopThreadsForTeam = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopThreadResponse>(
+            `${this.getTeamRoute(teamId)}/top/threads${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+
+    getMyTopThreads = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopThreadResponse>(
+            `${this.getUsersRoute()}/me/top/threads${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getLeastActiveChannelsForTeam = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<LeastActiveChannelsResponse>(
+            `${this.getTeamRoute(teamId)}/top/inactive_channels${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+    getMyTopDMs = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopDMsResponse>(
+            `${this.getUsersRoute()}/me/top/dms${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+
+    getMyLeastActiveChannels = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<LeastActiveChannelsResponse>(
+            `${this.getUsersRoute()}/me/top/inactive_channels${buildQueryString({page, per_page: perPage, time_range: timeRange, team_id: teamId})}`,
+            {method: 'get'},
+        );
+    }
+    getNewTeamMembers = (teamId: string, page: number, perPage: number, timeRange: string) => {
+        return this.doFetch<TopDMsResponse>(
+            `${this.getTeamRoute(teamId)}/top/team_members${buildQueryString({page, per_page: perPage, time_range: timeRange})}`,
+            {method: 'get'},
+        );
+    }
+
     searchPostsWithParams = (teamId: string, params: any) => {
         this.trackEvent('api', 'api_posts_search', {team_id: teamId});
 
@@ -2224,6 +2401,13 @@ export default class Client4 {
 
     searchFiles = (teamId: string, terms: string, isOrSearch: boolean) => {
         return this.searchFilesWithParams(teamId, {terms, is_or_search: isOrSearch});
+    };
+
+    getOpenGraphMetadata = (url: string) => {
+        return this.doFetch<OpenGraphMetadata>(
+            `${this.getBaseRoute()}/opengraph`,
+            {method: 'post', body: JSON.stringify({url})},
+        );
     };
 
     doPostAction = (postId: string, actionId: string, selectedOption = '') => {
@@ -2343,15 +2527,12 @@ export default class Client4 {
 
     // General Routes
 
-    ping = (getServerStatus: boolean, deviceId?: string) => {
+    ping = () => {
         return this.doFetch<{
             status: string;
-            ActiveSearchBackend: string;
-            database_status: string;
-            filestore_status: string;
         }>(
-            `${this.getBaseRoute()}/system/ping${buildQueryString({get_server_status: getServerStatus, device_id: deviceId})}`,
-            {method: 'get', ignoreStatus: true},
+            `${this.getBaseRoute()}/system/ping?time=${Date.now()}`,
+            {method: 'get'},
         );
     };
 
@@ -2751,13 +2932,6 @@ export default class Client4 {
         );
     };
 
-    getCustomEmojisByNames = (names: string[]) => {
-        return this.doFetch<CustomEmoji[]>(
-            `${this.getEmojisRoute()}/names`,
-            {method: 'post', body: JSON.stringify(names)},
-        );
-    };
-
     getCustomEmojis = (page = 0, perPage = PER_PAGE_DEFAULT, sort = '') => {
         return this.doFetch<CustomEmoji[]>(
             `${this.getEmojisRoute()}${buildQueryString({page, per_page: perPage, sort})}`,
@@ -2935,13 +3109,6 @@ export default class Client4 {
         return this.doFetch<string[]>(
             `${this.getBaseRoute()}/logs/query`,
             {method: 'post', body: JSON.stringify(logFilter)},
-        );
-    };
-
-    getPlainLogs = (page = 0, perPage = LOGS_PER_PAGE_DEFAULT) => {
-        return this.doFetch<string[]>(
-            `${this.getBaseRoute()}/logs${buildQueryString({page, logs_per_page: perPage})}`,
-            {method: 'get'},
         );
     };
 
@@ -3578,6 +3745,13 @@ export default class Client4 {
         );
     }
 
+    restoreGroup = (groupId: string) => {
+        return this.doFetch<Group>(
+            `${this.getGroupRoute(groupId)}/restore`,
+            {method: 'post'},
+        );
+    }
+
     executeAppCall = async (call: AppCallRequest, trackAsSubmit: boolean) => {
         const callCopy: AppCallRequest = {
             ...call,
@@ -3674,19 +3848,23 @@ export default class Client4 {
         );
     }
 
-    restoreGroup = (groupId: string) => {
-        return this.doFetch<Group>(
-            `${this.getGroupRoute(groupId)}/restore`,
-            {method: 'post'},
-        );
-    }
-
     createGroupTeamsAndChannels = (userID: string) => {
         return this.doFetch<Group>(
             `${this.getBaseRoute()}/ldap/users/${userID}/group_sync_memberships`,
             {method: 'post'},
         );
     }
+
+    // Redirect Location
+    getRedirectLocation = (urlParam: string) => {
+        if (!urlParam.length) {
+            return Promise.resolve();
+        }
+        const url = `${this.getRedirectLocationRoute()}${buildQueryString({url: urlParam})}`;
+        return this.doFetch<{
+            location: string;
+        }>(url, {method: 'get'});
+    };
 
     // Bot Routes
 
@@ -3804,21 +3982,6 @@ export default class Client4 {
         );
     };
 
-
-    confirmSelfHostedExpansion = (setupIntentId: string, expandRequest: SelfHostedExpansionRequest) => {
-        return this.doFetch<SelfHostedSignupSuccessResponse>(
-            `${this.getHostedCustomerRoute()}/confirm-expand`,
-            {method: 'post', body: JSON.stringify({stripe_setup_intent_id: setupIntentId, expand_request: expandRequest})},
-        );
-    }
-
-    subscribeToNewsletter = (newletterRequestBody: NewsletterRequestBody) => {
-        return this.doFetch<StatusOK>(
-            `${this.getHostedCustomerRoute()}/subscribe-newsletter`,
-            {method: 'post', body: JSON.stringify(newletterRequestBody)},
-        );
-    };
-
     createPaymentMethod = async () => {
         return this.doFetch(
             `${this.getCloudRoute()}/payment`,
@@ -3866,7 +4029,7 @@ export default class Client4 {
         );
     }
 
-    subscribeCloudProduct = (productId: string, shippingAddress?: Address, seats = 0, downgradeFeedback?: Feedback, customerPatch?: CloudCustomerPatch) => {
+    subscribeCloudProduct = (productId: string, shippingAddress?: Address, seats = 0, downgradeFeedback?: Feedback) => {
         const body = {
             product_id: productId,
             seats,
@@ -3874,10 +4037,6 @@ export default class Client4 {
         } as any;
         if (shippingAddress) {
             body.shipping_address = shippingAddress;
-        }
-
-        if (customerPatch) {
-            body.customer = customerPatch;
         }
         return this.doFetch<Subscription>(
             `${this.getCloudRoute()}/subscription`,
@@ -3945,6 +4104,13 @@ export default class Client4 {
     getCloudLimits = () => {
         return this.doFetch<Limits>(
             `${this.getCloudRoute()}/limits`,
+            {method: 'get'},
+        );
+    }
+
+    getUsage = () => {
+        return this.doFetch(
+            this.getUsageRoute(),
             {method: 'get'},
         );
     }
@@ -4045,6 +4211,70 @@ export default class Client4 {
         );
     }
 
+    getMeets = () => {
+        return this.doFetch<Array<{
+            channel_id: string;
+            create_at: number;
+            id: string;
+            url: string;
+            user_id: string;
+        }>>(
+            `${this.getBaseRoute()}/conferences`,
+            {method: 'get'},
+        );
+    }
+
+    startMeet = (channelID: string) => {
+        return this.doFetch<{
+            channel_id: string;
+            created_at: string;
+            id: string;
+            team_user: Object;
+            team_user_id: string;
+            updated_at: string;
+            url: string;
+        }>(
+            `${this.getBaseRoute()}/conferences`,
+            {method: 'post', body: JSON.stringify({channel_id: channelID})},
+        );
+    }
+    leaveMeet = (callID: string) => {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${callID}/leave`,
+            {method: 'post'},
+        );
+    }
+
+    acceptIncomingMeetCall(callID: string) {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${callID}/answer`,
+            {method: 'post'},
+        );
+    }
+
+    declineIncomingMeetCall(callID: string) {
+        return this.doFetch(
+            `${this.getBaseRoute()}/conferences/${callID}/decline`,
+            {method: 'post'},
+        );
+    }
+
+    translatePost = (postId: string) => {
+        return this.doFetch(
+            `${this.getPostRoute(postId)}/translate`,
+            {method: 'POST'},
+        );
+    }
+
+    /**
+     * @param query string query of graphQL, pass the json stringified version of the query
+     * eg.  const query = JSON.stringify({query: `{license, config}`, operationName: 'queryForLicenseAndConfig'});
+     *      client4.fetchWithGraphQL(query);
+     */
+    fetchWithGraphQL = async <DataResponse>(query: string) => {
+        return this.doFetch<DataResponse>(this.getGraphQLUrl(), {method: 'post', body: query});
+    }
+
     getCallsChannelState = (channelId: string) => {
         return this.doFetch<{enabled: boolean; id: string}>(
             `${this.url}/plugins/${'com.mattermost.calls'}/${channelId}`,
@@ -4071,11 +4301,18 @@ export default class Client4 {
             throw new ClientError(this.getUrl(), {
                 message: 'Received invalid response from the server.',
                 url,
-            }, err);
+            });
         }
 
-        if (headers.has(HEADER_X_VERSION_ID) && !headers.get('Cache-Control')) {
+        if (response.status === 401 && data?.result === 'redirect') {
+            if (this.emitUserLoggedOutEvent) {
+                this.emitUserLoggedOutEvent(data);
+            }
+        }
+
+        if (headers.has(HEADER_X_VERSION_ID)) {
             const serverVersion = headers.get(HEADER_X_VERSION_ID);
+
             if (serverVersion && this.serverVersion !== serverVersion) {
                 this.serverVersion = serverVersion;
             }
@@ -4088,7 +4325,7 @@ export default class Client4 {
             }
         }
 
-        if (response.ok || options.ignoreStatus) {
+        if (response.ok) {
             return {
                 response,
                 headers,
@@ -4105,7 +4342,8 @@ export default class Client4 {
         throw new ClientError(this.getUrl(), {
             message: msg,
             server_error_id: data.id,
-            status_code: data.status_code,
+            status_code: data.status_code ? data.status_code : response.status,
+            error: data.error ? data.error : null,
             url,
         });
     };
@@ -4122,20 +4360,174 @@ export default class Client4 {
         }
     }
 
-    upsertDraft = async (draft: Draft, connectionId: string) => {
+    /****************************************************/
+    /*                                                  */
+    /*                IK CUSTOMS CALLS                  */
+    /*                                                  */
+    /****************************************************/
+
+    getIKLogin = (challenge: string) => {
+        return this.doFetch<any>(
+            `${this.getBaseRoute()}/desktop-login?challenge=${challenge}`,
+            {method: 'get'},
+        );
+    };
+
+    getIKLoginToken = (code: string, challenge: string, verifier: string, loginUrl: string, clientId: string) => {
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('grant_type', 'authorization_code');
+        formData.append('code', code);
+        formData.append('code_verifier', verifier);
+        formData.append('client_id', clientId);
+        formData.append('redirect_uri', window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`);
+
+        if (this.defaultHeaders['Webapp-Version']) {
+            delete this.defaultHeaders['Webapp-Version'];
+        }
+
+        return this.doFetch<any>(
+            `${loginUrl}token`,
+            {
+                method: 'post',
+                body: formData,
+            },
+        );
+    }
+
+    refreshIKLoginToken = (refresh: string, loginUrl: string, clientId: string) => {
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('grant_type', 'refresh_token');
+        formData.append('refresh_token', refresh);
+        formData.append('client_id', clientId);
+
+        if (this.defaultHeaders['Webapp-Version']) {
+            delete this.defaultHeaders['Webapp-Version'];
+        }
+
+        return this.doFetch<any>(
+
+            // `${this.getBaseRoute()}/token`,
+            `${loginUrl}token`,
+            {
+                method: 'post',
+                body: formData,
+            },
+        );
+    }
+
+    revokeIKLoginToken = (token: string, loginUrl: string) => {
+        // Body in formData because Laravel do not manage JSON
+        const formData = new FormData();
+        formData.append('token_type_hint', 'access_token');
+        formData.append('token', token);
+
+        if (this.defaultHeaders['Webapp-Version']) {
+            delete this.defaultHeaders['Webapp-Version'];
+        }
+
+        return this.doFetch<any>(
+            `${loginUrl}token`,
+            {
+                method: 'delete',
+                body: formData,
+            },
+        );
+    }
+
+    /****************************************************/
+    /*                                                  */
+    /*                IK CUSTOMS UTILS                  */
+    /*                                                  */
+    /****************************************************/
+
+    /**
+     * get code_verifier for challenge
+     * @returns string
+     */
+    getCodeVerifier() {
+        const ramdonByte = crypto.randomBytes(33);
+        const hash =
+            crypto.createHash('sha256').update(ramdonByte).digest();
+        return hash.toString('base64').
+            replace(/\+/g, '-').
+            replace(/\//g, '_').
+            replace(/[=]/g, '');
+    }
+
+    /**
+     * Generate code_challenge for oauth
+     * @param codeVerifier string
+     * @returns string
+     */
+    async generateCodeChallenge(codeVerifier: string) {
+        const hash =
+            crypto.createHash('sha256').update(codeVerifier).digest();
+        return hash.toString('base64').
+            replace(/\+/g, '-').
+            replace(/\//g, '_').
+            replace(/[=]/g, '');
+    }
+
+    /**
+     * get code_challenge and redirect to IK Login
+     */
+    getChallengeAndRedirectToLogin() {
+        const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
+
+        const codeVerifier = this.getCodeVerifier();
+        let codeChallenge = '';
+
+        this.generateCodeChallenge(codeVerifier).then((challenge) => {
+            codeChallenge = challenge;
+
+            // TODO: store in redux instead of localstorage
+            localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
+
+            // TODO: add env for login url and/or current server
+            window.location.assign(`${IKConstants.LOGIN_URL}authorize?access_type=offline&code_challenge=${codeChallenge}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
+        }).catch(() => {
+            // eslint-disable-next-line no-console
+            console.log('[client > getChallengeAndRedirectToLogin] Error redirect');
+        });
+    }
+
+    // Only for Webview
+    keepAlive() {
+        return this.doFetch(`${this.getBaseRoute()}/keepalive`, {method: 'get'});
+    }
+
+    upsertDraft = async (draft: Draft) => {
         const result = await this.doFetch<Draft>(
             `${this.getDraftsRoute()}`,
             {
                 method: 'post',
                 body: JSON.stringify(draft),
-                headers: {
-                    'Connection-Id': `${connectionId}`,
-                },
             },
         );
 
         return result;
     };
+
+    updateScheduledDraft = async (draft: Draft) => {
+        const result = await this.doFetch<Draft>(
+            `${this.getDraftsRoute()}/${draft.id}`,
+            {
+                method: 'put',
+                body: JSON.stringify(draft),
+            },
+        );
+
+        return result;
+    }
+
+    deleteScheduledDraft = (draftId: Draft['id']) => {
+        return this.doFetch<Draft>(
+            `${this.getDraftsRoute()}/${draftId}`,
+            {method: 'delete'},
+        );
+    }
 
     getUserDrafts = (teamId: Team['id']) => {
         return this.doFetch<Draft[]>(
@@ -4144,7 +4536,7 @@ export default class Client4 {
         );
     };
 
-    deleteDraft = (channelId: Channel['id'], rootId = '', connectionId: string) => {
+    deleteDraft = (channelId: Channel['id'], rootId = '') => {
         let endpoint = `${this.getUserRoute('me')}/channels/${channelId}/drafts`;
         if (rootId !== '') {
             endpoint += `/${rootId}`;
@@ -4152,12 +4544,7 @@ export default class Client4 {
 
         return this.doFetch<null>(
             endpoint,
-            {
-                method: 'delete',
-                headers: {
-                    'Connection-Id': `${connectionId}`,
-                },
-            },
+            {method: 'delete'},
         );
     };
 
@@ -4176,7 +4563,7 @@ export default class Client4 {
     }
 
     cwsAvailabilityCheck = () => {
-        return this.doFetchWithResponse(
+        return this.doFetch<StatusOK>(
             `${this.getCloudRoute()}/check-cws-connection`,
             {method: 'get'},
         );
@@ -4189,25 +4576,19 @@ export default class Client4 {
         );
     }
 
-    getGroupMessageMembersCommonTeams = (channelId: string) => {
-        return this.doFetchWithResponse<Team[]>(
-            `${this.getChannelRoute(channelId)}/common_teams`,
-            {method: 'get'},
-        )
-    }
+    getChannelPendingGuests = (channelId: string) => {
+        return this.doFetch<PendingGuests>(
+            `${this.getChannelMembersRoute(channelId)}/pending_guest`,
+            {method: 'GET'},
+        );
+    };
 
-    convertGroupMessageToPrivateChannel = (channelId: string, teamId: string, displayName: string, name: string) => {
-        const body = {
-            channel_id: channelId,
-            team_id: teamId,
-            display_name: displayName,
-            name: name,
-        }
-        return this.doFetchWithResponse<Channel>(
-            `${this.getChannelRoute(channelId)}/convert_to_channel?team_id=${teamId}`,
-            {method: 'post', body: JSON.stringify(body)},
-        )
-    }
+    cancelPendingGuestInvite = (invitationKey: string) => {
+        return this.doFetch(
+            `${this.getTeamsRoute()}/invites/email`,
+            {method: 'DELETE', body: JSON.stringify({invitation_key: invitationKey})},
+        );
+    };
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {
@@ -4233,14 +4614,16 @@ export class ClientError extends Error implements ServerError {
     url?: string;
     server_error_id?: string;
     status_code?: number;
+    error?: {code: string};
 
-    constructor(baseUrl: string, data: ServerError, cause?: any) {
-        super(data.message + ': ' + cleanUrlForLogging(baseUrl, data.url || ''), {cause});
+    constructor(baseUrl: string, data: ServerError) {
+        super(data.message + ': ' + cleanUrlForLogging(baseUrl, data.url || ''));
 
         this.message = data.message;
         this.url = data.url;
         this.server_error_id = data.server_error_id;
         this.status_code = data.status_code;
+        this.error = data.error;
 
         // Ensure message is treated as a property of this class when object spreading. Without this,
         // copying the object by using `{...error}` would not include the message.

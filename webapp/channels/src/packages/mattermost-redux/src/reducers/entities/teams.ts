@@ -3,13 +3,12 @@
 
 import {combineReducers} from 'redux';
 
-import type {Team, TeamMembership, TeamUnread} from '@mattermost/types/teams';
-import type {UserProfile} from '@mattermost/types/users';
-import type {RelationOneToOne, IDMappedObjects} from '@mattermost/types/utilities';
-
 import {AdminTypes, ChannelTypes, TeamTypes, UserTypes, SchemeTypes, GroupTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 import {teamListToMap} from 'mattermost-redux/utils/team_utils';
+import {Team, TeamMembership, TeamUnread} from '@mattermost/types/teams';
+import {UserProfile} from '@mattermost/types/users';
+import {RelationOneToOne, IDMappedObjects} from '@mattermost/types/utilities';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 function currentTeamId(state = '', action: GenericAction) {
     switch (action.type) {
@@ -25,10 +24,24 @@ function currentTeamId(state = '', action: GenericAction) {
 
 function teams(state: IDMappedObjects<Team> = {}, action: GenericAction) {
     switch (action.type) {
-    case TeamTypes.RECEIVED_TEAMS_LIST:
+    case TeamTypes.RECEIVED_TEAMS_LIST: {
+        const teams: Team[] = action.data;
+        if (window.navigator.userAgent.indexOf('Mattermost') !== -1 && window.navigator.userAgent.indexOf('Electron') !== -1) {
+            window.postMessage(
+                {
+                    type: 'update-teams',
+                    message: {
+                        teams,
+                    },
+                },
+                window.origin,
+            );
+        }
+        return Object.assign({}, teamListToMap(teams));
+    }
     case SchemeTypes.RECEIVED_SCHEME_TEAMS:
     case AdminTypes.RECEIVED_DATA_RETENTION_CUSTOM_POLICY_TEAMS_SEARCH:
-        return Object.assign({}, state, teamListToMap(action.data));
+        return Object.assign({}, teamListToMap(action.data));
     case AdminTypes.RECEIVED_DATA_RETENTION_CUSTOM_POLICY_TEAMS:
     case UserTypes.LOGIN: // Used by the mobile app
         return Object.assign({}, state, teamListToMap(action.data.teams));

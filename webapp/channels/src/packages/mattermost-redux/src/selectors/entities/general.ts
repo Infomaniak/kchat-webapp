@@ -1,13 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-
 import {GiphyFetch} from '@giphy/js-fetch-api';
+import {GlobalState} from '@mattermost/types/store';
 
-import type {ClientConfig, FeatureFlags, ClientLicense} from '@mattermost/types/config';
-import type {GlobalState} from '@mattermost/types/store';
+import {ClientConfig, FeatureFlags, ClientLicense} from '@mattermost/types/config';
+
+import {createSelector} from 'reselect';
 
 import {General} from 'mattermost-redux/constants';
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
+
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 
 export function getConfig(state: GlobalState): Partial<ClientConfig> {
@@ -126,3 +127,5 @@ export const getGiphyFetchInstance: (state: GlobalState) => GiphyFetch | null = 
         return null;
     },
 );
+
+export const getWorkTemplatesLinkedProducts = (state: GlobalState) => state.entities.worktemplates.linkedProducts;

@@ -5,17 +5,15 @@ import fs from 'fs';
 
 import nock from 'nock';
 
-import type {Team} from '@mattermost/types/teams';
-
-import {GeneralTypes, UserTypes} from 'mattermost-redux/action_types';
+import {ActionResult} from 'mattermost-redux/types/actions';
 import * as Actions from 'mattermost-redux/actions/teams';
-import {loadMe} from 'mattermost-redux/actions/users';
+import {loadMeREST} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
-import {General, RequestStatus} from 'mattermost-redux/constants';
-import type {ActionResult} from 'mattermost-redux/types/actions';
-
+import {GeneralTypes, UserTypes} from 'mattermost-redux/action_types';
 import TestHelper from '../../test/test_helper';
 import configureStore from '../../test/test_store';
+import {General, RequestStatus} from 'mattermost-redux/constants';
+import {Team} from '@mattermost/types/teams';
 
 const OK_RESPONSE = {status: 'OK'};
 
@@ -55,7 +53,7 @@ describe('Actions.Teams', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await loadMe()(store.dispatch, store.getState);
+        await loadMeREST()(store.dispatch, store.getState);
 
         nock(Client4.getBaseRoute()).
             get('/users/me/teams').
@@ -100,7 +98,7 @@ describe('Actions.Teams', () => {
         team = await Client4.createTeam(team);
 
         nock(Client4.getBaseRoute()).
-            get('/teams').
+            get('/servers').
             query(true).
             reply(200, [team]);
         await Actions.getTeams()(store.dispatch, store.getState);
@@ -124,7 +122,7 @@ describe('Actions.Teams', () => {
         team = await Client4.createTeam(team);
 
         nock(Client4.getBaseRoute()).
-            get('/teams').
+            get('/servers').
             query(true).
             reply(200, {teams: [team], total_count: 43});
         await Actions.getTeams(0, 1, true)(store.dispatch, store.getState);
@@ -737,77 +735,38 @@ describe('Actions.Teams', () => {
     });
 
     it('setTeamIcon', async () => {
-        const team = {id: 'teamId', invite_id: ''};
-        store = configureStore({
-            entities: {
-                teams: {
-                    teams: {
-                        [team!.id]: {...team},
-                    },
-                },
-            },
-        });
-
         TestHelper.mockLogin();
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await loadMe()(store.dispatch, store.getState);
+        await loadMeREST()(store.dispatch, store.getState);
 
-        let state = store.getState();
-        expect(state.entities.teams.teams[team!.id].invite_id).toEqual('');
-
-        const imageData = fs.createReadStream('src/packages/mattermost-redux/test/assets/images/test.png');
+        const team = TestHelper.basicTeam;
+        const imageData = fs.createReadStream('packages/mattermost-redux/test/assets/images/test.png');
 
         nock(Client4.getTeamRoute(team!.id)).
             post('/image').
             reply(200, OK_RESPONSE);
 
-        nock(Client4.getTeamRoute(team!.id)).
-            get('').
-            reply(200, {...team, invite_id: 'inviteId'});
-
         const {data} = await Actions.setTeamIcon(team!.id, imageData as any)(store.dispatch, store.getState) as ActionResult;
         expect(data).toEqual(OK_RESPONSE);
-
-        state = store.getState();
-        expect(state.entities.teams.teams[team!.id].invite_id).toEqual('inviteId');
     });
 
     it('removeTeamIcon', async () => {
-        const team = {id: 'teamId', invite_id: ''};
-        store = configureStore({
-            entities: {
-                teams: {
-                    teams: {
-                        [team!.id]: {...team},
-                    },
-                },
-            },
-        });
-
         TestHelper.mockLogin();
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await loadMe()(store.dispatch, store.getState);
+        await loadMeREST()(store.dispatch, store.getState);
 
-        let state = store.getState();
-        expect(state.entities.teams.teams[team!.id].invite_id).toEqual('');
+        const team = TestHelper.basicTeam;
 
         nock(Client4.getTeamRoute(team!.id)).
             delete('/image').
             reply(200, OK_RESPONSE);
 
-        nock(Client4.getTeamRoute(team!.id)).
-            get('').
-            reply(200, {...team, invite_id: 'inviteId'});
-
         const {data} = await Actions.removeTeamIcon(team!.id)(store.dispatch, store.getState) as ActionResult;
         expect(data).toEqual(OK_RESPONSE);
-
-        state = store.getState();
-        expect(state.entities.teams.teams[team!.id].invite_id).toEqual('inviteId');
     });
 
     it('updateTeamScheme', async () => {
@@ -815,7 +774,7 @@ describe('Actions.Teams', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await loadMe()(store.dispatch, store.getState);
+        await loadMeREST()(store.dispatch, store.getState);
 
         const schemeId = 'xxxxxxxxxxxxxxxxxxxxxxxxxx';
         const {id} = TestHelper.basicTeam!;

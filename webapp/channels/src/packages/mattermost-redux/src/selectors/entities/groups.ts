@@ -1,15 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Group} from '@mattermost/types/groups';
-import {GroupSource} from '@mattermost/types/groups';
-import type {GlobalState} from '@mattermost/types/store';
+import {createSelector} from 'reselect';
 
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
+import {Group, GroupSource} from '@mattermost/types/groups';
+
+import {filterGroupsMatchingTerm, sortGroups} from 'mattermost-redux/utils/group_utils';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getTeam} from 'mattermost-redux/selectors/entities/teams';
-import type {UserMentionKey} from 'mattermost-redux/selectors/entities/users';
-import {filterGroupsMatchingTerm, sortGroups} from 'mattermost-redux/utils/group_utils';
+import {UserMentionKey} from 'mattermost-redux/selectors/entities/users';
+import {GlobalState} from '@mattermost/types/store';
 
 import {getCurrentUserLocale} from './i18n';
 

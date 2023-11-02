@@ -1,9 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {FormatNumberOptions} from 'react-intl';
+import {FormatNumberOptions} from 'react-intl';
 
-import type {CloudUsage, Limits} from '@mattermost/types/cloud';
+import {CloudUsage, Limits} from '@mattermost/types/cloud';
+import {ServerError} from '@mattermost/types/errors';
 
 import {FileSizes} from './file_utils';
 
@@ -52,6 +53,12 @@ export function anyUsageDeltaExceededLimit(deltas: CloudUsage) {
 export function hasSomeLimits(limits: Limits): boolean {
     return Object.keys(limits).length > 0;
 }
+
+export const isLimited = (limits: Limits) => {
+    return Object.values(limits).some((limit) => typeof limit === 'number' && limit > 0);
+};
+
+export const isLimitExceeded = (error: ServerError): boolean => error.status_code === 409 && (error.server_error_id === 'quota-exceeded' || error.id === 'quota-exceeded');
 
 export const limitThresholds = Object.freeze({
     ok: 0,

@@ -29,6 +29,8 @@ export type PostType = 'system_add_remove' |
 'system_combined_user_activity' |
 'system_fake_parent_deleted' |
 'system_generic' |
+'system_post_reminder' |
+'system_change_chan_privacy' |
 'reminder' |
 '';
 
@@ -148,6 +150,7 @@ export type PostsState = {
     postEditHistory: Post[];
     currentFocusedPostId: string;
     messagesHistory: MessageHistory;
+    expandedURLs: Record<string, string>;
     limitedViews: {
         channels: Record<Channel['id'], number>;
         threads: Record<Post['root_id'], number>;
@@ -203,9 +206,13 @@ export type PostAnalytics = {
     requested_ack?: boolean;
     persistent_notifications?: boolean;
 }
-export type ActivityEntry = {
-    postType: Post['type'];
-    actorId: string[];
-    userIds: string[];
-    usernames: string[];
+
+export type Call = {
+    url: string;
+    channel_id: string;
+    user_id: string;
+    team_id: string;
+    id: string;
+    participants: string [];
 }
+
