@@ -1,15 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {fireEvent, screen, render, waitForElementToBeRemoved, waitFor} from '@testing-library/react';
 import {shallow} from 'enzyme';
 import React from 'react';
 
 import AccessHistoryModal from 'components/access_history_modal/access_history_modal';
 import AuditTable from 'components/audit_table';
 import LoadingScreen from 'components/loading_screen';
-
-import {withIntl} from 'tests/helpers/intl-test-helper';
 
 describe('components/AccessHistoryModal', () => {
     const baseProps = {
@@ -41,23 +38,26 @@ describe('components/AccessHistoryModal', () => {
         expect(wrapper.find(AuditTable).exists()).toBe(true);
     });
 
-    test('should have called actions.getUserAudits only when first rendered', () => {
+    test('should have called actions.getUserAudits when onShow is called', () => {
         const actions = {
             getUserAudits: jest.fn(),
         };
         const props = {...baseProps, actions};
-        const view = render(withIntl(<AccessHistoryModal {...props}/>));
+        const wrapper = shallow<AccessHistoryModal>(
+            <AccessHistoryModal {...props}/>,
+        );
 
-        expect(actions.getUserAudits).toHaveBeenCalledTimes(1);
-        const newProps = {...props, currentUserId: 'foo'};
-        view.rerender(withIntl(<AccessHistoryModal {...newProps}/>));
-        expect(actions.getUserAudits).toHaveBeenCalledTimes(1);
+        wrapper.instance().onShow();
+        expect(actions.getUserAudits).toHaveBeenCalledTimes(2);
     });
 
-    test('should hide', async () => {
-        render(withIntl(<AccessHistoryModal {...baseProps}/>));
-        await waitFor(() => screen.getByText('Access History'));
-        fireEvent.click(screen.getByLabelText('Close'));
-        await waitForElementToBeRemoved(() => screen.getByText('Access History'));
+    test('should match state when onHide is called', () => {
+        const wrapper = shallow<AccessHistoryModal>(
+            <AccessHistoryModal {...baseProps}/>,
+        );
+
+        wrapper.setState({show: true});
+        wrapper.instance().onHide();
+        expect(wrapper.state('show')).toEqual(false);
     });
 });
