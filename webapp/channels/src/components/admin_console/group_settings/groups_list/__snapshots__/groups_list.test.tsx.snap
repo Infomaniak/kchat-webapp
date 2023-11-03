@@ -34,11 +34,11 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       className="group-list-link-unlink"
     >
       <button
-        className="btn btn-primary"
+        className="btn btn-inactive disabled"
         type="button"
       >
         <i
-          className="icon icon-link-variant"
+          className="icon fa fa-link"
         />
         <MemoizedFormattedMessage
           defaultMessage="Link Selected Groups"
@@ -171,11 +171,11 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       className="group-list-link-unlink"
     >
       <button
-        className="btn btn-primary"
+        className="btn btn-inactive disabled"
         type="button"
       >
         <i
-          className="icon icon-link-variant"
+          className="icon fa fa-link"
         />
         <MemoizedFormattedMessage
           defaultMessage="Link Selected Groups"
@@ -305,20 +305,24 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       />
     </div>
     <button
-      className="btn btn-tertiary prev disabled"
+      className="btn btn-link prev disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next disabled"
+      className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -430,20 +434,24 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       />
     </div>
     <button
-      className="btn btn-tertiary prev disabled"
+      className="btn btn-link prev disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next disabled"
+      className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -555,20 +563,24 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       />
     </div>
     <button
-      className="btn btn-tertiary prev disabled"
+      className="btn btn-link prev disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next disabled"
+      className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -608,11 +620,11 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       className="group-list-link-unlink"
     >
       <button
-        className="btn btn-primary"
+        className="btn btn-inactive disabled"
         type="button"
       >
         <i
-          className="icon icon-link-variant"
+          className="icon fa fa-link"
         />
         <MemoizedFormattedMessage
           defaultMessage="Link Selected Groups"
@@ -715,20 +727,24 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       />
     </div>
     <button
-      className="btn btn-tertiary prev disabled"
+      className="btn btn-link prev disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next disabled"
+      className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -768,11 +784,11 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       className="group-list-link-unlink"
     >
       <button
-        className="btn btn-primary"
+        className="btn btn-inactive disabled"
         type="button"
       >
         <i
-          className="icon icon-link-variant"
+          className="icon fa fa-link"
         />
         <MemoizedFormattedMessage
           defaultMessage="Link Selected Groups"
@@ -966,20 +982,24 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       />
     </div>
     <button
-      className="btn btn-tertiary prev disabled"
+      className="btn btn-link prev disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next disabled"
+      className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -1019,11 +1039,11 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       className="group-list-link-unlink"
     >
       <button
-        className="btn btn-primary"
+        className="btn btn-inactive disabled"
         type="button"
       >
         <i
-          className="icon icon-link-variant"
+          className="icon fa fa-link"
         />
         <MemoizedFormattedMessage
           defaultMessage="Link Selected Groups"
@@ -1217,20 +1237,24 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       />
     </div>
     <button
-      className="btn btn-tertiary prev "
+      className="btn btn-link prev "
       disabled={false}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next disabled"
+      className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -1270,11 +1294,11 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       className="group-list-link-unlink"
     >
       <button
-        className="btn btn-primary"
+        className="btn btn-inactive disabled"
         type="button"
       >
         <i
-          className="icon icon-link-variant"
+          className="icon fa fa-link"
         />
         <MemoizedFormattedMessage
           defaultMessage="Link Selected Groups"
@@ -1377,20 +1401,24 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       />
     </div>
     <button
-      className="btn btn-tertiary prev "
+      className="btn btn-link prev "
       disabled={false}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next disabled"
+      className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -1430,11 +1458,11 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       className="group-list-link-unlink"
     >
       <button
-        className="btn btn-primary"
+        className="btn btn-inactive disabled"
         type="button"
       >
         <i
-          className="icon icon-link-variant"
+          className="icon fa fa-link"
         />
         <MemoizedFormattedMessage
           defaultMessage="Link Selected Groups"
@@ -1493,11 +1521,11 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       className="group-list-link-unlink"
     >
       <button
-        className="btn btn-primary"
+        className="btn btn-inactive disabled"
         type="button"
       >
         <i
-          className="icon icon-link-variant"
+          className="icon fa fa-link"
         />
         <MemoizedFormattedMessage
           defaultMessage="Link Selected Groups"
@@ -1564,20 +1592,24 @@ exports[`components/admin_console/group_settings/GroupsList.tsx should match sna
       />
     </div>
     <button
-      className="btn btn-tertiary prev disabled"
+      className="btn btn-link prev disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next disabled"
+      className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>

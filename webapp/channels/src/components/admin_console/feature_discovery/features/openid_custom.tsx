@@ -3,12 +3,12 @@
 
 import React from 'react';
 
-import {LicenseSkus} from 'utils/constants';
 import {t} from 'utils/i18n';
-
-import SamlSVG from './images/saml_svg';
+import {LicenseSkus} from 'utils/constants';
 
 import FeatureDiscovery from '../index';
+
+import SamlSVG from './images/saml_svg';
 
 const OpenIDCustomFeatureDiscovery: React.FC = () => {
     return (

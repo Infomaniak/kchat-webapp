@@ -2,13 +2,11 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import type {TermsOfService} from '@mattermost/types/terms_of_service';
-
+import {GenericAction, ActionFunc} from 'mattermost-redux/types/actions';
+import {TermsOfService} from '@mattermost/types/terms_of_service';
 import {getTermsOfService, createTermsOfService} from 'mattermost-redux/actions/users';
-import type {GenericAction, ActionFunc} from 'mattermost-redux/types/actions';
 
 import CustomTermsOfServiceSettings from './custom_terms_of_service_settings';
 

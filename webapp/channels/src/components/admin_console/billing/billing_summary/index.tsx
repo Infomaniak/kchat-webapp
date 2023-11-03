@@ -5,7 +5,6 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 
 import {getSubscriptionProduct, checkHadPriorTrial, getCloudSubscription} from 'mattermost-redux/selectors/entities/cloud';
-import {cloudReverseTrial} from 'mattermost-redux/selectors/entities/preferences';
 
 import {CloudProducts} from 'utils/constants';
 
@@ -14,6 +13,7 @@ import {
     InvoiceInfo,
     freeTrial,
 } from './billing_summary';
+
 import {tryEnterpriseCard, UpgradeToProfessionalCard} from './upsell_card';
 
 import './billing_summary.scss';
@@ -27,23 +27,20 @@ type BillingSummaryProps = {
 const BillingSummary = ({isFreeTrial, daysLeftOnTrial, onUpgradeMattermostCloud}: BillingSummaryProps) => {
     const subscription = useSelector(getCloudSubscription);
     const product = useSelector(getSubscriptionProduct);
-    const reverseTrial = useSelector(cloudReverseTrial);
 
     let body = noBillingHistory;
 
     const isPreTrial = subscription?.is_free_trial === 'false' && subscription?.trial_end_at === 0;
     const hasPriorTrial = useSelector(checkHadPriorTrial);
-    const isStarterPreTrial = product?.sku === CloudProducts.STARTER && isPreTrial;
-    const isStarterPostTrial = product?.sku === CloudProducts.STARTER && hasPriorTrial;
+    const showTryEnterprise = product?.sku === CloudProducts.STARTER && isPreTrial;
+    const showUpgradeProfessional = product?.sku === CloudProducts.STARTER && hasPriorTrial;
 
-    if (isStarterPreTrial && reverseTrial) {
-        body = <UpgradeToProfessionalCard/>;
-    } else if (isStarterPreTrial) {
+    if (showTryEnterprise) {
         body = tryEnterpriseCard;
-    } else if (isStarterPostTrial) {
+    } else if (showUpgradeProfessional) {
         body = <UpgradeToProfessionalCard/>;
     } else if (isFreeTrial) {
-        body = freeTrial(onUpgradeMattermostCloud, daysLeftOnTrial, reverseTrial);
+        body = freeTrial(onUpgradeMattermostCloud, daysLeftOnTrial);
     } else if (subscription?.last_invoice && !subscription?.upcoming_invoice) {
         const invoice = subscription.last_invoice;
         const fullCharges = invoice.line_items.filter((item) => item.type === 'full');

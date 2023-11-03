@@ -2,16 +2,15 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {shallow} from 'enzyme';
 
-import {renderWithIntl, screen} from 'tests/react_testing_utils';
-
-import ColorSetting from './color_setting';
+import ColorSetting from 'components/admin_console/color_setting';
 
 describe('components/ColorSetting', () => {
     test('should match snapshot, all', () => {
         function emptyFunction() {} //eslint-disable-line no-empty-function
 
-        const {container} = renderWithIntl(
+        const wrapper = shallow(
             <ColorSetting
                 id='id'
                 label='label'
@@ -21,16 +20,13 @@ describe('components/ColorSetting', () => {
                 disabled={false}
             />,
         );
-        expect(screen.getByText('helptext')).toBeInTheDocument();
-        expect(screen.getByTestId('color-inputColorValue')).not.toBeDisabled();
-
-        expect(container).toMatchSnapshot();
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should match snapshot, no help text', () => {
         function emptyFunction() {} //eslint-disable-line no-empty-function
 
-        const {container} = renderWithIntl(
+        const wrapper = shallow(
             <ColorSetting
                 id='id'
                 label='label'
@@ -39,15 +35,13 @@ describe('components/ColorSetting', () => {
                 disabled={false}
             />,
         );
-        expect(screen.queryByText('helptext')).not.toBeInTheDocument();
-
-        expect(container).toMatchSnapshot();
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should match snapshot, disabled', () => {
         function emptyFunction() {} //eslint-disable-line no-empty-function
 
-        const {container} = renderWithIntl(
+        const wrapper = shallow(
             <ColorSetting
                 id='id'
                 label='label'
@@ -56,16 +50,13 @@ describe('components/ColorSetting', () => {
                 disabled={true}
             />,
         );
-        expect(screen.getByTestId('color-inputColorValue')).toBeDisabled();
-        expect(screen.queryByText('helptext')).not.toBeInTheDocument();
-
-        expect(container).toMatchSnapshot();
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should match snapshot, clicked on color setting', () => {
         function emptyFunction() {} //eslint-disable-line no-empty-function
 
-        const {container} = renderWithIntl(
+        const wrapper = shallow(
             <ColorSetting
                 id='id'
                 label='label'
@@ -75,9 +66,7 @@ describe('components/ColorSetting', () => {
                 disabled={false}
             />,
         );
-        expect(screen.getByTestId('color-inputColorValue')).not.toBeDisabled();
-        expect(screen.queryByText('helptext')).toBeInTheDocument();
 
-        expect(container).toMatchSnapshot();
+        expect(wrapper).toMatchSnapshot();
     });
 });

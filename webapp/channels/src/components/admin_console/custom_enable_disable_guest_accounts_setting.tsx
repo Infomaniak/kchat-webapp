@@ -4,8 +4,9 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import ConfirmModal from 'components/confirm_modal';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import ConfirmModal from 'components/confirm_modal';
 
 import BooleanSetting from './boolean_setting';
 

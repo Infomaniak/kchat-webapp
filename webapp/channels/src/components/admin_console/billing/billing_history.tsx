@@ -6,28 +6,24 @@ import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {getInvoices} from 'mattermost-redux/actions/cloud';
+import {getSelfHostedInvoices as getSelfHostedInvoicesAction} from 'actions/hosted_customer';
 import {getCloudErrors, getCloudInvoices, isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 import {getSelfHostedErrors, getSelfHostedInvoices} from 'mattermost-redux/selectors/entities/hosted_customer';
-
-import {getSelfHostedInvoices as getSelfHostedInvoicesAction} from 'actions/hosted_customer';
 import {pageVisited, trackEvent} from 'actions/telemetry_actions';
 
 import CloudFetchError from 'components/cloud_fetch_error';
-import EmptyBillingHistorySvg from 'components/common/svg_images_components/empty_billing_history_svg';
-import ExternalLink from 'components/external_link';
-import AdminHeader from 'components/widgets/admin_console/admin_header';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
+import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
+import EmptyBillingHistorySvg from 'components/common/svg_images_components/empty_billing_history_svg';
 
-import {CloudLinks, HostedCustomerLinks} from 'utils/constants';
+import {CloudLinks} from 'utils/constants';
+import ExternalLink from 'components/external_link';
 
 import BillingHistoryTable from './billing_history_table';
 
 import './billing_history.scss';
 
-interface NoBillingHistorySectionProps {
-    selfHosted: boolean;
-}
-export const NoBillingHistorySection = (props: NoBillingHistorySectionProps) => (
+const noBillingHistorySection = (
     <div className='BillingHistory__noHistory'>
         <EmptyBillingHistorySvg
             width={300}
@@ -40,9 +36,8 @@ export const NoBillingHistorySection = (props: NoBillingHistorySectionProps) => 
             />
         </div>
         <ExternalLink
-            data-testid='billingHistoryLink'
             location='billing_history'
-            href={props.selfHosted ? HostedCustomerLinks.SELF_HOSTED_BILLING : CloudLinks.BILLING_DOCS}
+            href={CloudLinks.BILLING_DOCS}
             className='BillingHistory__noHistory-link'
             onClick={() => trackEvent('cloud_admin', 'click_billing_history', {screen: 'billing'})}
         >
@@ -68,15 +63,12 @@ const BillingHistory = () => {
     }, [isCloud]);
     const billingHistoryTable = invoices && <BillingHistoryTable invoices={invoices}/>;
     const areInvoicesEmpty = Object.keys(invoices || {}).length === 0;
-
     return (
         <div className='wrapper--fixed BillingHistory'>
-            <AdminHeader>
-                <FormattedMessage
-                    id='admin.billing.history.title'
-                    defaultMessage='Billing History'
-                />
-            </AdminHeader>
+            <FormattedAdminHeader
+                id='admin.billing.history.title'
+                defaultMessage='Billing History'
+            />
             <div className='admin-console__wrapper'>
                 <div className='admin-console__content'>
                     {invoicesError && <CloudFetchError/>}
@@ -89,10 +81,7 @@ const BillingHistory = () => {
                                         defaultMessage='Transactions'
                                     />
                                 </div>
-                                <div
-                                    data-testid='no-invoices'
-                                    className='BillingHistory__cardHeaderText-bottom'
-                                >
+                                <div className='BillingHistory__cardHeaderText-bottom'>
                                     <FormattedMessage
                                         id='admin.billing.history.allPaymentsShowHere'
                                         defaultMessage='All of your invoices will be shown here'
@@ -103,7 +92,9 @@ const BillingHistory = () => {
 
                         <div className='BillingHistory__cardBody'>
                             {invoices != null && (
-                                areInvoicesEmpty ? <NoBillingHistorySection selfHosted={!isCloud}/> : billingHistoryTable
+                                <>
+                                    {areInvoicesEmpty ? noBillingHistorySection : billingHistoryTable}
+                                </>
                             )}
                             {invoices == null && (
                                 <div className='BillingHistory__spinner'>

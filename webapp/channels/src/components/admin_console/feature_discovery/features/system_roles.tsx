@@ -3,12 +3,12 @@
 
 import React from 'react';
 
-import {LicenseSkus} from 'utils/constants';
 import {t} from 'utils/i18n';
-
-import SystemRolesSVG from './images/system_roles_svg';
+import {LicenseSkus} from 'utils/constants';
 
 import FeatureDiscovery from '../index';
+
+import SystemRolesSVG from './images/system_roles_svg';
 
 const SystemRolesFeatureDiscovery: React.FC = () => {
     return (

@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {shallow} from 'enzyme';
 import React from 'react';
+import {shallow} from 'enzyme';
 
-import MessageExportSettings from 'components/admin_console/message_export_settings';
+import MessageExportSettings from 'components/admin_console/message_export_settings.jsx';
 
 describe('components/MessageExportSettings', () => {
     test('should match snapshot, disabled, actiance', () => {

@@ -4,15 +4,15 @@
 import React from 'react';
 import {Overlay} from 'react-bootstrap';
 
-import type {AdminConfig, EnvironmentConfig} from '@mattermost/types/config';
-import type {DeepPartial} from '@mattermost/types/utilities';
-
-import FormError from 'components/form_error';
-import SaveButton from 'components/save_button';
-import Tooltip from 'components/tooltip';
-import AdminHeader from 'components/widgets/admin_console/admin_header';
+import {AdminConfig, EnvironmentConfig} from '@mattermost/types/config';
+import {DeepPartial} from '@mattermost/types/utilities';
 
 import {localizeMessage} from 'utils/utils';
+import SaveButton from 'components/save_button';
+import Tooltip from 'components/tooltip';
+import FormError from 'components/form_error';
+
+import AdminHeader from 'components/widgets/admin_console/admin_header';
 
 export type BaseProps = {
     config?: DeepPartial<AdminConfig>;
@@ -63,13 +63,13 @@ export default abstract class AdminSettings <Props extends BaseProps, State exte
 
     protected abstract renderSettings(): React.ReactElement;
 
-    protected handleSaved?: ((config: AdminConfig) => React.ReactElement | void);
+    protected handleSaved?: ((config: AdminConfig) => React.ReactElement);
 
     protected canSave?: () => boolean;
 
     private closeTooltip = () => {
         this.setState({errorTooltip: false});
-    };
+    }
 
     private openTooltip = (e: React.MouseEvent) => {
         const elm: HTMLElement|null = e.currentTarget.querySelector('.control-label');
@@ -77,9 +77,9 @@ export default abstract class AdminSettings <Props extends BaseProps, State exte
             const isElipsis = elm.offsetWidth < elm.scrollWidth;
             this.setState({errorTooltip: isElipsis});
         }
-    };
+    }
 
-    protected handleChange = (id: string, value: unknown) => {
+    protected handleChange = (id: string, value: boolean) => {
         this.setState((prevState) => ({
             ...prevState,
             saveNeeded: true,
@@ -95,7 +95,7 @@ export default abstract class AdminSettings <Props extends BaseProps, State exte
         e.preventDefault();
 
         this.doSubmit();
-    };
+    }
 
     protected doSubmit = async (callback?: () => void) => {
         this.setState({
@@ -160,8 +160,8 @@ export default abstract class AdminSettings <Props extends BaseProps, State exte
         return n;
     };
 
-    protected parseIntNonNegative = (str: string | number, defaultValue?: number) => {
-        const n = typeof str === 'string' ? parseInt(str, 10) : str;
+    private parseIntNonNegative = (str: string, defaultValue?: number) => {
+        const n = parseInt(str, 10);
 
         if (isNaN(n) || n < 0) {
             if (defaultValue) {
@@ -173,8 +173,8 @@ export default abstract class AdminSettings <Props extends BaseProps, State exte
         return n;
     };
 
-    protected parseIntZeroOrMin = (str: string | number, minimumValue = 1) => {
-        const n = typeof str === 'string' ? parseInt(str, 10) : str;
+    private parseIntZeroOrMin = (str: string, minimumValue = 1) => {
+        const n = parseInt(str, 10);
 
         if (isNaN(n) || n < 0) {
             return 0;
@@ -186,8 +186,8 @@ export default abstract class AdminSettings <Props extends BaseProps, State exte
         return n;
     };
 
-    protected parseIntNonZero = (str: string | number, defaultValue?: number, minimumValue = 1) => {
-        const n = typeof str === 'string' ? parseInt(str, 10) : str;
+    protected parseIntNonZero = (str: string, defaultValue?: number, minimumValue = 1) => {
+        const n = parseInt(str, 10);
 
         if (isNaN(n) || n < minimumValue) {
             if (defaultValue) {

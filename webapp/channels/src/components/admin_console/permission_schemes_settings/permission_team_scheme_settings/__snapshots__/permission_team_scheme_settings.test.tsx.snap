@@ -30,8 +30,8 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
 <div
   className="wrapper--fixed"
 >
-  <AdminHeader
-    withBackButton={true}
+  <div
+    className="admin-console__header with-back"
   >
     <div>
       <Connect(BlockableLink)
@@ -43,7 +43,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         id="admin.permissions.teamScheme"
       />
     </div>
-  </AdminHeader>
+  </div>
   <div
     className="admin-console__wrapper"
   >
@@ -92,11 +92,17 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
                 id="admin.permissions.teamScheme.schemeNameLabel"
               />
             </label>
-            <input
+            <LocalizedInput
               className="form-control"
               disabled={false}
               id="scheme-name"
               onChange={[Function]}
+              placeholder={
+                Object {
+                  "defaultMessage": "Scheme Name",
+                  "id": "admin.permissions.teamScheme.schemeNamePlaceholder",
+                }
+              }
               type="text"
               value="Test scheme"
             />
@@ -274,7 +280,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
     className="admin-console-save"
   >
     <SaveButton
-      btnClass=""
+      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"
@@ -354,8 +360,8 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
 <div
   className="wrapper--fixed"
 >
-  <AdminHeader
-    withBackButton={true}
+  <div
+    className="admin-console__header with-back"
   >
     <div>
       <Connect(BlockableLink)
@@ -367,7 +373,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         id="admin.permissions.teamScheme"
       />
     </div>
-  </AdminHeader>
+  </div>
   <div
     className="admin-console__wrapper"
   >
@@ -416,11 +422,17 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
                 id="admin.permissions.teamScheme.schemeNameLabel"
               />
             </label>
-            <input
+            <LocalizedInput
               className="form-control"
               disabled={false}
               id="scheme-name"
               onChange={[Function]}
+              placeholder={
+                Object {
+                  "defaultMessage": "Scheme Name",
+                  "id": "admin.permissions.teamScheme.schemeNamePlaceholder",
+                }
+              }
               type="text"
               value="Test scheme"
             />
@@ -621,7 +633,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
     className="admin-console-save"
   >
     <SaveButton
-      btnClass=""
+      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"
@@ -701,8 +713,8 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
 <div
   className="wrapper--fixed"
 >
-  <AdminHeader
-    withBackButton={true}
+  <div
+    className="admin-console__header with-back"
   >
     <div>
       <Connect(BlockableLink)
@@ -714,7 +726,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         id="admin.permissions.teamScheme"
       />
     </div>
-  </AdminHeader>
+  </div>
   <div
     className="admin-console__wrapper"
   >
@@ -763,11 +775,17 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
                 id="admin.permissions.teamScheme.schemeNameLabel"
               />
             </label>
-            <input
+            <LocalizedInput
               className="form-control"
               disabled={false}
               id="scheme-name"
               onChange={[Function]}
+              placeholder={
+                Object {
+                  "defaultMessage": "Scheme Name",
+                  "id": "admin.permissions.teamScheme.schemeNamePlaceholder",
+                }
+              }
               type="text"
               value="Test scheme"
             />
@@ -970,7 +988,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
     className="admin-console-save"
   >
     <SaveButton
-      btnClass=""
+      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"
@@ -1116,8 +1134,8 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
 <div
   className="wrapper--fixed"
 >
-  <AdminHeader
-    withBackButton={true}
+  <div
+    className="admin-console__header with-back"
   >
     <div>
       <Connect(BlockableLink)
@@ -1129,7 +1147,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
         id="admin.permissions.teamScheme"
       />
     </div>
-  </AdminHeader>
+  </div>
   <div
     className="admin-console__wrapper"
   >
@@ -1178,11 +1196,17 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
                 id="admin.permissions.teamScheme.schemeNameLabel"
               />
             </label>
-            <input
+            <LocalizedInput
               className="form-control"
               disabled={false}
               id="scheme-name"
               onChange={[Function]}
+              placeholder={
+                Object {
+                  "defaultMessage": "Scheme Name",
+                  "id": "admin.permissions.teamScheme.schemeNamePlaceholder",
+                }
+              }
               type="text"
               value=""
             />
@@ -1385,7 +1409,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_team_sc
     className="admin-console-save"
   >
     <SaveButton
-      btnClass=""
+      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"

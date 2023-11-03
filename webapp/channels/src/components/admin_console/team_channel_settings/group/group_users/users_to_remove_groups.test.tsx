@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {shallow} from 'enzyme';
 import React from 'react';
+import {shallow} from 'enzyme';
 
-import type {Group} from '@mattermost/types/groups';
-import type {UserProfile} from '@mattermost/types/users';
+import {UserProfile} from '@mattermost/types/users';
+import {Group} from '@mattermost/types/groups';
 
 import {TestHelper} from 'utils/test_helper';
 

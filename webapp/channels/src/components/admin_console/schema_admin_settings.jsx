@@ -1,37 +1,40 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import PropTypes from 'prop-types';
 import React from 'react';
-import {Overlay} from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import {FormattedMessage} from 'react-intl';
+import {Overlay} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 
-import BooleanSetting from 'components/admin_console/boolean_setting';
-import ColorSetting from 'components/admin_console/color_setting';
-import DropdownSetting from 'components/admin_console/dropdown_setting';
-import FileUploadSetting from 'components/admin_console/file_upload_setting';
-import GeneratedSetting from 'components/admin_console/generated_setting';
-import JobsTable from 'components/admin_console/jobs';
-import MultiSelectSetting from 'components/admin_console/multiselect_settings';
-import RadioSetting from 'components/admin_console/radio_setting';
-import RemoveFileSetting from 'components/admin_console/remove_file_setting';
-import RequestButton from 'components/admin_console/request_button/request_button';
-import SchemaText from 'components/admin_console/schema_text';
-import SettingsGroup from 'components/admin_console/settings_group';
-import TextSetting from 'components/admin_console/text_setting';
-import UserAutocompleteSetting from 'components/admin_console/user_autocomplete_setting';
-import FormError from 'components/form_error';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import SaveButton from 'components/save_button';
-import Tooltip from 'components/tooltip';
-import AdminHeader from 'components/widgets/admin_console/admin_header';
-import WarningIcon from 'components/widgets/icons/fa_warning_icon';
-
 import * as I18n from 'i18n/i18n.jsx';
+
 import Constants from 'utils/constants';
 import {rolesFromMapping, mappingValueFromRoles} from 'utils/policy_roles_adapter';
 import * as Utils from 'utils/utils';
+import RequestButton from 'components/admin_console/request_button/request_button';
+import BooleanSetting from 'components/admin_console/boolean_setting';
+import TextSetting from 'components/admin_console/text_setting';
+import DropdownSetting from 'components/admin_console/dropdown_setting.jsx';
+import MultiSelectSetting from 'components/admin_console/multiselect_settings.jsx';
+import RadioSetting from 'components/admin_console/radio_setting';
+import ColorSetting from 'components/admin_console/color_setting';
+import GeneratedSetting from 'components/admin_console/generated_setting';
+import UserAutocompleteSetting from 'components/admin_console/user_autocomplete_setting';
+import SettingsGroup from 'components/admin_console/settings_group.jsx';
+import JobsTable from 'components/admin_console/jobs';
+import FileUploadSetting from 'components/admin_console/file_upload_setting.jsx';
+import RemoveFileSetting from 'components/admin_console/remove_file_setting.jsx';
+import SchemaText from 'components/admin_console/schema_text';
+import SaveButton from 'components/save_button';
+import FormError from 'components/form_error';
+import Tooltip from 'components/tooltip';
+import WarningIcon from 'components/widgets/icons/fa_warning_icon';
+
+import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import AdminHeader from 'components/widgets/admin_console/admin_header';
+import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
 
 import Setting from './setting';
 
@@ -51,7 +54,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
         consoleAccess: PropTypes.object,
         cloud: PropTypes.object,
         isCurrentUserSystemAdmin: PropTypes.bool,
-    };
+    }
 
     constructor(props) {
         super(props);
@@ -158,7 +161,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
             });
             this.props.setNavigationBlocked(false);
         }
-    };
+    }
 
     getConfigFromState(config) {
         const schema = this.props.schema;
@@ -279,12 +282,10 @@ export default class SchemaAdminSettings extends React.PureComponent {
             );
         }
         return (
-            <AdminHeader>
-                <FormattedMessage
-                    id={this.props.schema.name || this.props.schema.id}
-                    defaultMessage={this.props.schema.name_default || this.props.schema.id}
-                />
-            </AdminHeader>
+            <FormattedAdminHeader
+                id={this.props.schema.name || this.props.schema.id}
+                defaultMessage={this.props.schema.name_default || this.props.schema.id}
+            />
         );
     };
 
@@ -316,7 +317,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
             );
         }
         return setting.label;
-    };
+    }
 
     renderHelpText = (setting) => {
         if (!this.props.schema) {
@@ -352,7 +353,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 textValues={helpTextValues}
             />
         );
-    };
+    }
 
     renderLabel = (setting) => {
         if (!this.props.schema) {
@@ -363,7 +364,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
             return setting.label;
         }
         return Utils.localizeMessage(setting.label, setting.label_default);
-    };
+    }
 
     isDisabled = (setting) => {
         const enterpriseReady = this.props.config.BuildEnterpriseReady === 'true';
@@ -371,14 +372,14 @@ export default class SchemaAdminSettings extends React.PureComponent {
             return setting.isDisabled(this.props.config, this.state, this.props.license, enterpriseReady, this.props.consoleAccess, this.props.cloud, this.props.isCurrentUserSystemAdmin);
         }
         return Boolean(setting.isDisabled);
-    };
+    }
 
     isHidden = (setting) => {
         if (typeof setting.isHidden === 'function') {
             return setting.isHidden(this.props.config, this.state, this.props.license);
         }
         return Boolean(setting.isHidden);
-    };
+    }
 
     buildButtonSetting = (setting) => {
         const handleRequestAction = (success, error) => {
@@ -436,7 +437,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 }}
             />
         );
-    };
+    }
 
     buildTextSetting = (setting) => {
         let inputType = 'input';
@@ -446,7 +447,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
             inputType = 'textarea';
         }
 
-        let value = this.state[setting.key] ?? '';
+        let value = this.state[setting.key] || '';
         if (setting.dynamic_value) {
             value = setting.dynamic_value(value, this.props.config, this.state, this.props.license);
         }
@@ -478,7 +479,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 footer={footer}
             />
         );
-    };
+    }
 
     buildColorSetting = (setting) => {
         return (
@@ -493,7 +494,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 onChange={this.handleChange}
             />
         );
-    };
+    }
 
     buildBoolSetting = (setting) => {
         return (
@@ -508,7 +509,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 onChange={this.handleChange}
             />
         );
-    };
+    }
 
     buildPermissionSetting = (setting) => {
         return (
@@ -523,7 +524,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 onChange={this.handlePermissionChange}
             />
         );
-    };
+    }
 
     buildDropdownSetting = (setting) => {
         const enterpriseReady = this.props.config.BuildEnterpriseReady === 'true';
@@ -568,7 +569,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 onChange={this.handleChange}
             />
         );
-    };
+    }
 
     buildLanguageSetting = (setting) => {
         const locales = I18n.getAllLanguages();
@@ -612,7 +613,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 onChange={this.handleChange}
             />
         );
-    };
+    }
 
     buildRadioSetting = (setting) => {
         const options = setting.options || [];
@@ -631,7 +632,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 onChange={this.handleChange}
             />
         );
-    };
+    }
 
     buildBannerSetting = (setting) => {
         if (this.isDisabled(setting)) {
@@ -650,7 +651,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 </div>
             </div>
         );
-    };
+    }
 
     buildGeneratedSetting = (setting) => {
         return (
@@ -667,11 +668,11 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 onChange={this.handleGeneratedChange}
             />
         );
-    };
+    }
 
     handleGeneratedChange = (id, s) => {
-        this.handleChange(id, s.replace(/\+/g, '-').replace(/\//g, '_'));
-    };
+        this.handleChange(id, s.replace('+', '-').replace('/', '_'));
+    }
 
     handleChange = (id, value, confirm = false, doSubmit = false, warning = false) => {
         let saveNeeded = this.state.saveNeeded === 'permissions' ? 'both' : 'config';
@@ -701,7 +702,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
         }
 
         this.props.setNavigationBlocked(true);
-    };
+    }
 
     handlePermissionChange = (id, value) => {
         let saveNeeded = 'permissions';
@@ -714,7 +715,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
         });
 
         this.props.setNavigationBlocked(true);
-    };
+    }
 
     buildUsernameSetting = (setting) => {
         return (
@@ -729,7 +730,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 onChange={this.handleChange}
             />
         );
-    };
+    }
 
     buildJobsTableSetting = (setting) => {
         return (
@@ -752,7 +753,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 }
             />
         );
-    };
+    }
 
     buildFileUploadSetting = (setting) => {
         const setData = (id, data) => {
@@ -830,7 +831,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 setByEnv={this.isSetByEnv(setting.key)}
             />
         );
-    };
+    }
 
     buildCustomSetting = (setting) => {
         const CustomComponent = setting.component;
@@ -868,21 +869,21 @@ export default class SchemaAdminSettings extends React.PureComponent {
             );
         }
         return componentInstance;
-    };
+    }
 
     unRegisterSaveAction = (saveAction) => {
         const indexOfSaveAction = this.saveActions.indexOf(saveAction);
         this.saveActions.splice(indexOfSaveAction, 1);
-    };
+    }
 
     registerSaveAction = (saveAction) => {
         this.saveActions.push(saveAction);
-    };
+    }
 
     setSaveNeeded = () => {
         this.setState({saveNeeded: 'config'});
         this.props.setNavigationBlocked(true);
-    };
+    }
 
     renderSettings = () => {
         const schema = this.props.schema;
@@ -994,17 +995,17 @@ export default class SchemaAdminSettings extends React.PureComponent {
         }
 
         return null;
-    };
+    }
 
     closeTooltip = () => {
         this.setState({errorTooltip: false});
-    };
+    }
 
     openTooltip = (e) => {
         const elm = e.currentTarget.querySelector('.control-label');
         const isElipsis = elm.offsetWidth < elm.scrollWidth;
         this.setState({errorTooltip: isElipsis});
-    };
+    }
 
     doSubmit = async (getStateFromConfig) => {
         // clone config so that we aren't modifying data in the stores
@@ -1105,7 +1106,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
             );
         }
         return null;
-    };
+    }
 
     canSave = () => {
         if (!this.props.schema || !this.props.schema.settings) {
@@ -1125,15 +1126,6 @@ export default class SchemaAdminSettings extends React.PureComponent {
             }
 
             if (setting.validate) {
-                if (setting.isHidden?.(this.props.config)) {
-                    // MM-50952
-                    // If the setting is hidden, then it is not being set in state so there is
-                    // nothing to validate, and validation would fail anyways and prevent saving
-                    // In practice, this only happens in custom cloud setup environments like RFQA
-                    // where it sets things in the config file directly instead of in the environment
-                    // (like cloud Mattermost does)
-                    continue;
-                }
                 const result = setting.validate(this.state[setting.key]);
                 if (!result.isValid()) {
                     return false;
@@ -1142,7 +1134,7 @@ export default class SchemaAdminSettings extends React.PureComponent {
         }
 
         return true;
-    };
+    }
 
     render = () => {
         const schema = this.props.schema;
@@ -1237,5 +1229,5 @@ export default class SchemaAdminSettings extends React.PureComponent {
                 </div>
             </div>
         );
-    };
+    }
 }

@@ -2,14 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import type {StatusOK} from '@mattermost/types/client4';
-import type {ServerError} from '@mattermost/types/errors';
-import type {GetFilteredUsersStatsOpts, UsersStats} from '@mattermost/types/users';
-
-import {logError} from 'mattermost-redux/actions/errors';
 import {getTeams, getTeamStats} from 'mattermost-redux/actions/teams';
 import {
     getUser,
@@ -19,17 +13,22 @@ import {
     revokeSessionsForAllUsers,
     getFilteredUsersStats,
 } from 'mattermost-redux/actions/users';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {logError} from 'mattermost-redux/actions/errors';
 import {getTeamsList} from 'mattermost-redux/selectors/entities/teams';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getFilteredUsersStats as selectFilteredUserStats, getUsers} from 'mattermost-redux/selectors/entities/users';
-import type {Action, ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+
+import {Action, ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {GetFilteredUsersStatsOpts, UsersStats} from '@mattermost/types/users';
+import {ServerError} from '@mattermost/types/errors';
+import {StatusOK} from '@mattermost/types/client4';
+
+import {GlobalState} from 'types/store';
 
 import {loadProfilesAndTeamMembers, loadProfilesWithoutTeam} from 'actions/user_actions';
+
 import {setSystemUsersSearch} from 'actions/views/search';
-
 import {SearchUserTeamFilter} from 'utils/constants';
-
-import type {GlobalState} from 'types/store';
 
 import SystemUsers from './system_users';
 

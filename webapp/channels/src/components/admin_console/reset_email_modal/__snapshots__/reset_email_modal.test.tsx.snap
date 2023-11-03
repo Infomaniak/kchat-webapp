@@ -89,7 +89,7 @@ exports[`components/admin_console/reset_email_modal/reset_email_modal.tsx should
       componentClass="div"
     >
       <button
-        className="btn btn-tertiary"
+        className="btn btn-link"
         onClick={[Function]}
         type="button"
       >
@@ -222,7 +222,7 @@ exports[`components/admin_console/reset_email_modal/reset_email_modal.tsx should
       componentClass="div"
     >
       <button
-        className="btn btn-tertiary"
+        className="btn btn-link"
         onClick={[Function]}
         type="button"
       >

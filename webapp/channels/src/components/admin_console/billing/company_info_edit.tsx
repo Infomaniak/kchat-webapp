@@ -9,18 +9,16 @@ import {useHistory} from 'react-router-dom';
 
 import {getCloudCustomer, updateCloudCustomer, updateCloudCustomerAddress} from 'mattermost-redux/actions/cloud';
 
-import {setNavigationBlocked} from 'actions/admin_actions.jsx';
-
 import BlockableLink from 'components/admin_console/blockable_link';
-import CountrySelector from 'components/payment_form/country_selector';
+import DropdownInput from 'components/dropdown_input';
 import StateSelector from 'components/payment_form/state_selector';
-import SaveButton from 'components/save_button';
-import AdminHeader from 'components/widgets/admin_console/admin_header';
 import Input from 'components/widgets/inputs/input/input';
-
+import SaveButton from 'components/save_button';
+import {GlobalState} from 'types/store';
+import {COUNTRIES} from 'utils/countries';
 import * as Utils from 'utils/utils';
 
-import type {GlobalState} from 'types/store';
+import {setNavigationBlocked} from 'actions/admin_actions.jsx';
 
 import './company_info_edit.scss';
 
@@ -137,12 +135,16 @@ const CompanyInfoEdit: React.FC<Props> = () => {
 
     const companyAddressInput = (
         <>
-            <CountrySelector
+            <DropdownInput
                 onChange={(option) => {
                     setCountry(option.value);
                     setContentChanged(true);
                 }}
-                value={country || undefined}
+                value={country ? {value: country, label: country} : undefined}
+                options={COUNTRIES.map((c) => ({value: c.name, label: c.name}))}
+                legend={Utils.localizeMessage('admin.billing.company_info.country', 'Country')}
+                placeholder={Utils.localizeMessage('admin.billing.company_info.country', 'Country')}
+                name={'country_dropdown'}
             />
             <div className='form-row'>
                 <Input
@@ -200,7 +202,7 @@ const CompanyInfoEdit: React.FC<Props> = () => {
 
     return (
         <div className='wrapper--fixed CompanyInfoEdit'>
-            <AdminHeader withBackButton={true}>
+            <div className='admin-console__header with-back'>
                 <div>
                     <BlockableLink
                         to='/admin_console/billing/company_info'
@@ -211,7 +213,7 @@ const CompanyInfoEdit: React.FC<Props> = () => {
                         defaultMessage='Edit Company Information'
                     />
                 </div>
-            </AdminHeader>
+            </div>
             <div className='admin-console__wrapper'>
                 <div className='admin-console__content'>
                     <div className='CompanyInfoEdit__card'>

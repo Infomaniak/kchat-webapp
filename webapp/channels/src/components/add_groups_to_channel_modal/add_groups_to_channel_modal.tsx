@@ -5,19 +5,18 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import type {ServerError} from '@mattermost/types/errors';
-import type {Group, SyncablePatch} from '@mattermost/types/groups';
-import {SyncableType} from '@mattermost/types/groups';
+import {Group, SyncablePatch, SyncableType} from '@mattermost/types/groups';
 
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import {ActionFunc} from 'mattermost-redux/types/actions';
 
-import MultiSelect from 'components/multiselect/multiselect';
-import type {Value} from 'components/multiselect/multiselect';
-import AddIcon from 'components/widgets/icons/fa_add_icon';
+import {ServerError} from '@mattermost/types/errors';
 
-import groupsAvatar from 'images/groups-avatar.png';
 import Constants from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
+
+import MultiSelect, {Value} from 'components/multiselect/multiselect';
+import groupsAvatar from 'images/groups-avatar.png';
+import AddIcon from 'components/widgets/icons/fa_add_icon';
 
 const GROUPS_PER_PAGE = 50;
 const MAX_SELECTABLE_VALUES = 10;
@@ -111,7 +110,7 @@ export default class AddGroupsToChannelModal extends React.PureComponent<Props, 
     handleHide = () => {
         this.props.actions.setModalSearchTerm('');
         this.setState({show: false});
-    };
+    }
 
     handleResponse = (err?: ServerError) => {
         let addError = null;
@@ -123,7 +122,7 @@ export default class AddGroupsToChannelModal extends React.PureComponent<Props, 
             saving: false,
             addError,
         });
-    };
+    }
 
     handleSubmit = async () => {
         const groupIDs = this.state.values.map((v) => v.id);
@@ -148,7 +147,7 @@ export default class AddGroupsToChannelModal extends React.PureComponent<Props, 
                 this.handleHide();
             }
         }));
-    };
+    }
 
     addValue = (value: GroupValue) => {
         const values = Object.assign([], this.state.values);
@@ -158,13 +157,13 @@ export default class AddGroupsToChannelModal extends React.PureComponent<Props, 
         }
 
         this.setState({values});
-    };
+    }
 
     setGroupsLoadingState = (loadingState: boolean) => {
         this.setState({
             loadingGroups: loadingState,
         });
-    };
+    }
 
     handlePageChange = (page: number, prevPage: number) => {
         if (page > prevPage) {
@@ -173,15 +172,15 @@ export default class AddGroupsToChannelModal extends React.PureComponent<Props, 
                 this.setGroupsLoadingState(false);
             });
         }
-    };
+    }
 
     handleDelete = (values: GroupValue[]) => {
         this.setState({values});
-    };
+    }
 
     search = (term: string) => {
         this.props.actions.setModalSearchTerm(term);
-    };
+    }
 
     renderOption = (option: GroupValue, isSelected: boolean, onAdd: (value: GroupValue) => void, onMouseMove?: (value: GroupValue) => void) => {
         const rowSelected = isSelected ? 'more-modal__row--selected' : '';
@@ -223,7 +222,7 @@ export default class AddGroupsToChannelModal extends React.PureComponent<Props, 
                 </div>
             </div>
         );
-    };
+    }
 
     renderValue(props: { data: Partial<Value> }) {
         return props.data.display_name;

@@ -243,20 +243,24 @@ exports[`admin_console/system_user_detail/team_list/AbstractList should match sn
       />
     </div>
     <button
-      className="btn btn-tertiary prev "
+      className="btn btn-link prev "
       disabled={false}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next "
+      className="btn btn-link next "
       disabled={false}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -468,20 +472,24 @@ exports[`admin_console/system_user_detail/team_list/AbstractList should match sn
       />
     </div>
     <button
-      className="btn btn-tertiary prev disabled"
+      className="btn btn-link prev disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next "
+      className="btn btn-link next "
       disabled={false}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -581,20 +589,24 @@ exports[`admin_console/system_user_detail/team_list/AbstractList should match sn
       />
     </div>
     <button
-      className="btn btn-tertiary prev disabled"
+      className="btn btn-link prev disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
-      className="btn btn-tertiary next disabled"
+      className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
       type="button"
     >
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>

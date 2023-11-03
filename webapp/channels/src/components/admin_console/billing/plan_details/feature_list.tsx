@@ -4,10 +4,9 @@
 import React from 'react';
 import {useIntl} from 'react-intl';
 
-import useGetLimits from 'components/common/hooks/useGetLimits';
-
-import {CloudProducts} from 'utils/constants';
 import {fallbackStarterLimits, asGBString, hasSomeLimits} from 'utils/limits';
+import useGetLimits from 'components/common/hooks/useGetLimits';
+import {CloudProducts} from 'utils/constants';
 
 import './feature_list.scss';
 

@@ -2,12 +2,12 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+
 import {FormattedMessage} from 'react-intl';
 
-import BlockableLink from 'components/admin_console/blockable_link';
 import SaveButton from 'components/save_button';
-
 import {localizeMessage} from 'utils/utils';
+import BlockableLink from 'components/admin_console/blockable_link';
 
 type Props = {
     saving: boolean;
@@ -29,7 +29,7 @@ const SaveChangesPanel = ({saveNeeded, onClick, saving, serverError, cancelLink,
             />
             <BlockableLink
                 id='cancelButtonSettings'
-                className='btn btn-quaternary'
+                className='cancel-button'
                 to={cancelLink}
             >
                 <FormattedMessage

@@ -52,7 +52,6 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
                   "mfa_active": false,
                   "nickname": "",
                   "notify_props": Object {
-                    "calls_desktop_sound": "true",
                     "channel": "false",
                     "comments": "never",
                     "desktop": "default",
@@ -99,7 +98,6 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
                   "mfa_active": false,
                   "nickname": "",
                   "notify_props": Object {
-                    "calls_desktop_sound": "true",
                     "channel": "false",
                     "comments": "never",
                     "desktop": "default",
@@ -146,7 +144,6 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
                   "mfa_active": false,
                   "nickname": "",
                   "notify_props": Object {
-                    "calls_desktop_sound": "true",
                     "channel": "false",
                     "comments": "never",
                     "desktop": "default",
@@ -193,7 +190,6 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
                   "mfa_active": false,
                   "nickname": "",
                   "notify_props": Object {
-                    "calls_desktop_sound": "true",
                     "channel": "false",
                     "comments": "never",
                     "desktop": "default",
@@ -240,7 +236,6 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
                   "mfa_active": false,
                   "nickname": "",
                   "notify_props": Object {
-                    "calls_desktop_sound": "true",
                     "channel": "false",
                     "comments": "never",
                     "desktop": "default",
@@ -287,7 +282,6 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
                   "mfa_active": false,
                   "nickname": "",
                   "notify_props": Object {
-                    "calls_desktop_sound": "true",
                     "channel": "false",
                     "comments": "never",
                     "desktop": "default",
@@ -334,7 +328,6 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
                   "mfa_active": false,
                   "nickname": "",
                   "notify_props": Object {
-                    "calls_desktop_sound": "true",
                     "channel": "false",
                     "comments": "never",
                     "desktop": "default",
@@ -381,7 +374,6 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
                   "mfa_active": false,
                   "nickname": "",
                   "notify_props": Object {
-                    "calls_desktop_sound": "true",
                     "channel": "false",
                     "comments": "never",
                     "desktop": "default",
@@ -428,7 +420,6 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
                   "mfa_active": false,
                   "nickname": "",
                   "notify_props": Object {
-                    "calls_desktop_sound": "true",
                     "channel": "false",
                     "comments": "never",
                     "desktop": "default",
@@ -475,7 +466,6 @@ exports[`admin_console/team_channel_settings/group/GroupList should match snapsh
                   "mfa_active": false,
                   "nickname": "",
                   "notify_props": Object {
-                    "calls_desktop_sound": "true",
                     "channel": "false",
                     "comments": "never",
                     "desktop": "default",

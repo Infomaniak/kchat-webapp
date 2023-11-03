@@ -3,9 +3,8 @@
 
 import React from 'react';
 
-import type {FilterOption, FilterValues} from './filter';
+import {FilterOption, FilterValues} from './filter';
 import FilterCheckbox from './filter_checkbox';
-
 import './filter.scss';
 
 type Props = {
@@ -24,7 +23,7 @@ class FilterList extends React.PureComponent<Props> {
             },
         };
         await this.props.updateValues(values, this.props.optionKey);
-    };
+    }
 
     render() {
         const {option} = this.props;

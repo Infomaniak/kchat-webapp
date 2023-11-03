@@ -1,8 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
-import type {RefObject} from 'react';
+import React, {RefObject} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';

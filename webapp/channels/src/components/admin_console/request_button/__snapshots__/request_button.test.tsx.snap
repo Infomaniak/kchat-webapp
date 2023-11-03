@@ -9,20 +9,20 @@ exports[`components/admin_console/request_button/request_button.jsx should match
   >
     <div>
       <button
-        className="btn btn-tertiary"
+        className="btn btn-default"
         disabled={false}
         onClick={[Function]}
         type="button"
       >
-        <Memo(LoadingWrapper)
+        <LoadingWrapper
           loading={false}
           text="Loading..."
         >
           <MemoizedFormattedMessage
             defaultMessage="Button Text"
-            id="test2"
+            id="test"
           />
-        </Memo(LoadingWrapper)>
+        </LoadingWrapper>
       </button>
     </div>
     <div
@@ -30,7 +30,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
     >
       <MemoizedFormattedMessage
         defaultMessage="Help Text"
-        id="test1"
+        id="test"
       />
     </div>
   </div>
@@ -42,7 +42,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
   buttonText={
     <Memo(MemoizedFormattedMessage)
       defaultMessage="Button Text"
-      id="test2"
+      id="test"
     />
   }
   disabled={false}
@@ -55,7 +55,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
   helpText={
     <Memo(MemoizedFormattedMessage)
       defaultMessage="Help Text"
-      id="test1"
+      id="test"
     />
   }
   includeDetailedError={true}
@@ -92,68 +92,38 @@ exports[`components/admin_console/request_button/request_button.jsx should match
     >
       <div>
         <button
-          className="btn btn-tertiary"
+          className="btn btn-default"
           disabled={false}
           onClick={[Function]}
           type="button"
         >
-          <Memo(LoadingWrapper)
+          <LoadingWrapper
             loading={false}
             text="Loading..."
           >
             <FormattedMessage
               defaultMessage="Button Text"
-              id="test2"
+              id="test"
             >
               <span>
                 Button Text
               </span>
             </FormattedMessage>
-          </Memo(LoadingWrapper)>
+          </LoadingWrapper>
         </button>
         <div>
           <div
             className="alert alert-warning"
           >
-            <injectIntl(WarningIcon)>
-              <WarningIcon
-                intl={
+            <WarningIcon
+              additionalClassName={null}
+            >
+              <LocalizedIcon
+                className="fa fa-warning"
+                title={
                   Object {
-                    "$t": [Function],
-                    "defaultFormats": Object {},
-                    "defaultLocale": "en",
-                    "defaultRichTextElements": undefined,
-                    "fallbackOnEmptyString": true,
-                    "formatDate": [Function],
-                    "formatDateTimeRange": [Function],
-                    "formatDateToParts": [Function],
-                    "formatDisplayName": [Function],
-                    "formatList": [Function],
-                    "formatListToParts": [Function],
-                    "formatMessage": [Function],
-                    "formatNumber": [Function],
-                    "formatNumberToParts": [Function],
-                    "formatPlural": [Function],
-                    "formatRelativeTime": [Function],
-                    "formatTime": [Function],
-                    "formatTimeToParts": [Function],
-                    "formats": Object {},
-                    "formatters": Object {
-                      "getDateTimeFormat": [Function],
-                      "getDisplayNames": [Function],
-                      "getListFormat": [Function],
-                      "getMessageFormat": [Function],
-                      "getNumberFormat": [Function],
-                      "getPluralRules": [Function],
-                      "getRelativeTimeFormat": [Function],
-                    },
-                    "locale": "en",
-                    "messages": Object {},
-                    "onError": [Function],
-                    "onWarn": [Function],
-                    "textComponent": "span",
-                    "timeZone": "Etc/UTC",
-                    "wrapRichTextChunksInFragment": undefined,
+                    "defaultMessage": "Warning Icon",
+                    "id": "generic_icons.warning",
                   }
                 }
               >
@@ -161,8 +131,8 @@ exports[`components/admin_console/request_button/request_button.jsx should match
                   className="fa fa-warning"
                   title="Warning Icon"
                 />
-              </WarningIcon>
-            </injectIntl(WarningIcon)>
+              </LocalizedIcon>
+            </WarningIcon>
             <FormattedMessage
               defaultMessage="Error Message: {error}"
               id="error.message"
@@ -184,7 +154,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
       >
         <FormattedMessage
           defaultMessage="Help Text"
-          id="test1"
+          id="test"
         >
           <span>
             Help Text
@@ -201,7 +171,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
   buttonText={
     <Memo(MemoizedFormattedMessage)
       defaultMessage="Button Text"
-      id="test2"
+      id="test"
     />
   }
   disabled={false}
@@ -214,7 +184,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
   helpText={
     <Memo(MemoizedFormattedMessage)
       defaultMessage="Help Text"
-      id="test1"
+      id="test"
     />
   }
   includeDetailedError={false}
@@ -259,68 +229,38 @@ exports[`components/admin_console/request_button/request_button.jsx should match
     >
       <div>
         <button
-          className="btn btn-tertiary"
+          className="btn btn-default"
           disabled={false}
           onClick={[Function]}
           type="button"
         >
-          <Memo(LoadingWrapper)
+          <LoadingWrapper
             loading={false}
             text="Loading..."
           >
             <FormattedMessage
               defaultMessage="Button Text"
-              id="test2"
+              id="test"
             >
               <span>
                 Button Text
               </span>
             </FormattedMessage>
-          </Memo(LoadingWrapper)>
+          </LoadingWrapper>
         </button>
         <div>
           <div
             className="alert alert-warning"
           >
-            <injectIntl(WarningIcon)>
-              <WarningIcon
-                intl={
+            <WarningIcon
+              additionalClassName={null}
+            >
+              <LocalizedIcon
+                className="fa fa-warning"
+                title={
                   Object {
-                    "$t": [Function],
-                    "defaultFormats": Object {},
-                    "defaultLocale": "en",
-                    "defaultRichTextElements": undefined,
-                    "fallbackOnEmptyString": true,
-                    "formatDate": [Function],
-                    "formatDateTimeRange": [Function],
-                    "formatDateToParts": [Function],
-                    "formatDisplayName": [Function],
-                    "formatList": [Function],
-                    "formatListToParts": [Function],
-                    "formatMessage": [Function],
-                    "formatNumber": [Function],
-                    "formatNumberToParts": [Function],
-                    "formatPlural": [Function],
-                    "formatRelativeTime": [Function],
-                    "formatTime": [Function],
-                    "formatTimeToParts": [Function],
-                    "formats": Object {},
-                    "formatters": Object {
-                      "getDateTimeFormat": [Function],
-                      "getDisplayNames": [Function],
-                      "getListFormat": [Function],
-                      "getMessageFormat": [Function],
-                      "getNumberFormat": [Function],
-                      "getPluralRules": [Function],
-                      "getRelativeTimeFormat": [Function],
-                    },
-                    "locale": "en",
-                    "messages": Object {},
-                    "onError": [Function],
-                    "onWarn": [Function],
-                    "textComponent": "span",
-                    "timeZone": "Etc/UTC",
-                    "wrapRichTextChunksInFragment": undefined,
+                    "defaultMessage": "Warning Icon",
+                    "id": "generic_icons.warning",
                   }
                 }
               >
@@ -328,8 +268,8 @@ exports[`components/admin_console/request_button/request_button.jsx should match
                   className="fa fa-warning"
                   title="Warning Icon"
                 />
-              </WarningIcon>
-            </injectIntl(WarningIcon)>
+              </LocalizedIcon>
+            </WarningIcon>
             <FormattedMessage
               defaultMessage="Error Message: {error}"
               id="error.message"
@@ -351,7 +291,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
       >
         <FormattedMessage
           defaultMessage="Help Text"
-          id="test1"
+          id="test"
         >
           <span>
             Help Text
@@ -368,7 +308,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
   buttonText={
     <Memo(MemoizedFormattedMessage)
       defaultMessage="Button Text"
-      id="test2"
+      id="test"
     />
   }
   disabled={false}
@@ -381,7 +321,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
   helpText={
     <Memo(MemoizedFormattedMessage)
       defaultMessage="Help Text"
-      id="test1"
+      id="test"
     />
   }
   includeDetailedError={false}
@@ -418,34 +358,44 @@ exports[`components/admin_console/request_button/request_button.jsx should match
     >
       <div>
         <button
-          className="btn btn-tertiary"
+          className="btn btn-default"
           disabled={false}
           onClick={[Function]}
           type="button"
         >
-          <Memo(LoadingWrapper)
+          <LoadingWrapper
             loading={false}
             text="Loading..."
           >
             <FormattedMessage
               defaultMessage="Button Text"
-              id="test2"
+              id="test"
             >
               <span>
                 Button Text
               </span>
             </FormattedMessage>
-          </Memo(LoadingWrapper)>
+          </LoadingWrapper>
         </button>
         <div>
           <div
             className="alert alert-success"
           >
             <SuccessIcon>
-              <i
+              <LocalizedIcon
                 className="fa fa-check"
-                title="Success Icon"
-              />
+                title={
+                  Object {
+                    "defaultMessage": "Success Icon",
+                    "id": "generic_icons.success",
+                  }
+                }
+              >
+                <i
+                  className="fa fa-check"
+                  title="Success Icon"
+                />
+              </LocalizedIcon>
             </SuccessIcon>
             <FormattedMessage
               defaultMessage="Success Message"
@@ -463,7 +413,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
       >
         <FormattedMessage
           defaultMessage="Help Text"
-          id="test1"
+          id="test"
         >
           <span>
             Help Text
@@ -480,7 +430,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
   buttonText={
     <Memo(MemoizedFormattedMessage)
       defaultMessage="Button Text"
-      id="test2"
+      id="test"
     />
   }
   disabled={false}
@@ -493,7 +443,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
   helpText={
     <Memo(MemoizedFormattedMessage)
       defaultMessage="Help Text"
-      id="test1"
+      id="test"
     />
   }
   includeDetailedError={false}
@@ -538,24 +488,24 @@ exports[`components/admin_console/request_button/request_button.jsx should match
     >
       <div>
         <button
-          className="btn btn-tertiary"
+          className="btn btn-default"
           disabled={false}
           onClick={[Function]}
           type="button"
         >
-          <Memo(LoadingWrapper)
+          <LoadingWrapper
             loading={false}
             text="Loading..."
           >
             <FormattedMessage
               defaultMessage="Button Text"
-              id="test2"
+              id="test"
             >
               <span>
                 Button Text
               </span>
             </FormattedMessage>
-          </Memo(LoadingWrapper)>
+          </LoadingWrapper>
         </button>
       </div>
       <div
@@ -563,7 +513,7 @@ exports[`components/admin_console/request_button/request_button.jsx should match
       >
         <FormattedMessage
           defaultMessage="Help Text"
-          id="test1"
+          id="test"
         >
           <span>
             Help Text

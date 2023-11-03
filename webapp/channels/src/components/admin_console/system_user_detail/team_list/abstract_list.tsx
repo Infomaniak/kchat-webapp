@@ -4,12 +4,12 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import type {Team} from '@mattermost/types/teams';
+import {Team} from '@mattermost/types/teams';
 
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
 
-import type {TeamWithMembership} from './types';
+import {TeamWithMembership} from './types';
 
 import './abstract_list.scss';
 
@@ -63,14 +63,14 @@ export default class AbstractList extends React.PureComponent<Props, State> {
         const page = this.state.page < 1 ? 0 : this.state.page - 1;
         this.setState({page, loading: true});
         this.performSearch();
-    };
+    }
 
     private nextPage = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         e.preventDefault();
         const page = this.state.page + 1;
         this.setState({page, loading: true});
         this.performSearch();
-    };
+    }
 
     private performSearch = (): void => {
         const userId = this.props.userId;
@@ -83,7 +83,7 @@ export default class AbstractList extends React.PureComponent<Props, State> {
             }
             this.setState({loading: false});
         });
-    };
+    }
 
     private getPaging(): Paging {
         const startCount = (this.state.page * PAGE_SIZE) + 1;
@@ -110,7 +110,7 @@ export default class AbstractList extends React.PureComponent<Props, State> {
             );
         }
         return null;
-    };
+    }
 
     private renderRows = (): JSX.Element | JSX.Element[] => {
         if (this.state.loading) {
@@ -134,7 +134,7 @@ export default class AbstractList extends React.PureComponent<Props, State> {
         const pageEnd = this.state.page < 1 ? PAGE_SIZE : (this.state.page + 1) * PAGE_SIZE; // ie 10, 20, 30, etc.
         const pageData = this.props.data.slice(pageStart, pageEnd).map(this.props.renderRow); // ie 0-10, 10-20, etc.
         return pageData;
-    };
+    }
 
     public render = (): JSX.Element => {
         const {startCount, endCount, total} = this.getPaging();
@@ -161,7 +161,7 @@ export default class AbstractList extends React.PureComponent<Props, State> {
                         </div>
                         <button
                             type='button'
-                            className={'btn btn-tertiary prev ' + (firstPage ? 'disabled' : '')}
+                            className={'btn btn-link prev ' + (firstPage ? 'disabled' : '')}
                             onClick={firstPage ? () => null : this.previousPage}
                             disabled={firstPage}
                         >
@@ -169,7 +169,7 @@ export default class AbstractList extends React.PureComponent<Props, State> {
                         </button>
                         <button
                             type='button'
-                            className={'btn btn-tertiary next ' + (lastPage ? 'disabled' : '')}
+                            className={'btn btn-link next ' + (lastPage ? 'disabled' : '')}
                             onClick={lastPage ? () => null : this.nextPage}
                             disabled={lastPage}
                         >
@@ -179,6 +179,6 @@ export default class AbstractList extends React.PureComponent<Props, State> {
                 }
             </div>
         );
-    };
+    }
 }
 

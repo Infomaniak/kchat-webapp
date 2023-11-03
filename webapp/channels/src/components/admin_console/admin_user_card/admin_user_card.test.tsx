@@ -2,11 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {shallow} from 'enzyme';
 
-import {renderWithIntl, screen} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
 
-import AdminUserCard from './admin_user_card';
+import AdminUserCard from 'components/admin_console/admin_user_card/admin_user_card';
 
 describe('components/admin_console/admin_user_card/admin_user_card', () => {
     const user = TestHelper.getUserMock({
@@ -22,12 +22,8 @@ describe('components/admin_console/admin_user_card/admin_user_card', () => {
 
     test('should match default snapshot', () => {
         const props = defaultProps;
-        const {container} = renderWithIntl(<AdminUserCard {...props}/>);
-        screen.getByText(props.user.first_name, {exact: false});
-        screen.getByText(props.user.last_name, {exact: false});
-        screen.getByText(props.user.nickname, {exact: false});
-
-        expect(container).toMatchSnapshot();
+        const wrapper = shallow(<AdminUserCard {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should match snapshot if no nickname is defined', () => {
@@ -38,12 +34,8 @@ describe('components/admin_console/admin_user_card/admin_user_card', () => {
                 nickname: null,
             },
         };
-        const {container} = renderWithIntl(<AdminUserCard {...props}/>);
-        screen.getByText(props.user.first_name, {exact: false});
-        screen.getByText(props.user.last_name, {exact: false});
-        expect(screen.queryByText(defaultProps.user.nickname)).not.toBeInTheDocument();
-
-        expect(container).toMatchSnapshot();
+        const wrapper = shallow(<AdminUserCard {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should match snapshot if no first/last name is defined', () => {
@@ -55,12 +47,8 @@ describe('components/admin_console/admin_user_card/admin_user_card', () => {
                 last_name: null,
             },
         };
-        const {container} = renderWithIntl(<AdminUserCard {...props}/>);
-        expect(screen.queryByText(defaultProps.user.first_name)).not.toBeInTheDocument();
-        expect(screen.queryByText(defaultProps.user.last_name)).not.toBeInTheDocument();
-        screen.getByText(props.user.nickname, {exact: false});
-
-        expect(container).toMatchSnapshot();
+        const wrapper = shallow(<AdminUserCard {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should match snapshot if no first/last name or nickname is defined', () => {
@@ -73,12 +61,7 @@ describe('components/admin_console/admin_user_card/admin_user_card', () => {
                 nickname: null,
             },
         };
-        const {container} = renderWithIntl(<AdminUserCard {...props}/>);
-        expect(screen.queryByText(defaultProps.user.first_name)).not.toBeInTheDocument();
-        expect(screen.queryByText(defaultProps.user.last_name)).not.toBeInTheDocument();
-        expect(screen.queryByText(defaultProps.user.nickname)).not.toBeInTheDocument();
-        screen.getByText(props.user.id, {exact: false});
-
-        expect(container).toMatchSnapshot();
+        const wrapper = shallow(<AdminUserCard {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 });

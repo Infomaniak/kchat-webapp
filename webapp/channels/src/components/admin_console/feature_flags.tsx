@@ -4,9 +4,9 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import type {AdminConfig} from '@mattermost/types/config';
+import {AdminConfig} from '@mattermost/types/config';
 
-import AdminHeader from 'components/widgets/admin_console/admin_header';
+import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
 
 type Props = {
     config: AdminConfig;
@@ -27,12 +27,10 @@ const FeatureFlags: React.FC<Props> = (props: Props) => {
 
     return (
         <div className='wrapper--admin'>
-            <AdminHeader>
-                <FormattedMessage
-                    id='admin.feature_flags.title'
-                    defaultMessage='Features Flags'
-                />
-            </AdminHeader>
+            <FormattedAdminHeader
+                id='admin.feature_flags.title'
+                defaultMessage='Feature Flags'
+            />
             <div className='admin-console__wrapper'>
                 <div className='admin-logs-content admin-console__content'>
                     <div className={'banner info'}>

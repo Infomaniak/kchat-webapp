@@ -6,12 +6,11 @@ exports[`components/admin_console/permission_schemes_settings/permission_schemes
 <div
   className="wrapper--fixed"
 >
-  <AdminHeader>
-    <MemoizedFormattedMessage
-      defaultMessage="Permission Schemes"
-      id="admin.permissions.permissionSchemes"
-    />
-  </AdminHeader>
+  <FormattedAdminHeader
+    defaultMessage="Permission Schemes"
+    id="admin.permissions.permissionSchemes"
+    values={Object {}}
+  />
   <div
     className="admin-console__wrapper"
   >
@@ -110,12 +109,11 @@ exports[`components/admin_console/permission_schemes_settings/permission_schemes
 <div
   className="wrapper--fixed"
 >
-  <AdminHeader>
-    <MemoizedFormattedMessage
-      defaultMessage="Permission Schemes"
-      id="admin.permissions.permissionSchemes"
-    />
-  </AdminHeader>
+  <FormattedAdminHeader
+    defaultMessage="Permission Schemes"
+    id="admin.permissions.permissionSchemes"
+    values={Object {}}
+  />
   <div
     className="admin-console__wrapper"
   >
@@ -192,12 +190,11 @@ exports[`components/admin_console/permission_schemes_settings/permission_schemes
 <div
   className="wrapper--fixed"
 >
-  <AdminHeader>
-    <MemoizedFormattedMessage
-      defaultMessage="Permission Schemes"
-      id="admin.permissions.permissionSchemes"
-    />
-  </AdminHeader>
+  <FormattedAdminHeader
+    defaultMessage="Permission Schemes"
+    id="admin.permissions.permissionSchemes"
+    values={Object {}}
+  />
   <div
     className="admin-console__wrapper"
   >
@@ -322,12 +319,11 @@ exports[`components/admin_console/permission_schemes_settings/permission_schemes
 <div
   className="wrapper--fixed"
 >
-  <AdminHeader>
-    <MemoizedFormattedMessage
-      defaultMessage="Permission Schemes"
-      id="admin.permissions.permissionSchemes"
-    />
-  </AdminHeader>
+  <FormattedAdminHeader
+    defaultMessage="Permission Schemes"
+    id="admin.permissions.permissionSchemes"
+    values={Object {}}
+  />
   <div
     className="admin-console__wrapper"
   >
@@ -452,12 +448,11 @@ exports[`components/admin_console/permission_schemes_settings/permission_schemes
 <div
   className="wrapper--fixed"
 >
-  <AdminHeader>
-    <MemoizedFormattedMessage
-      defaultMessage="Permission Schemes"
-      id="admin.permissions.permissionSchemes"
-    />
-  </AdminHeader>
+  <FormattedAdminHeader
+    defaultMessage="Permission Schemes"
+    id="admin.permissions.permissionSchemes"
+    values={Object {}}
+  />
   <div
     className="admin-console__wrapper"
   >

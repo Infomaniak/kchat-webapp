@@ -1,13 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Instance} from '@popperjs/core';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
+import {Instance} from '@popperjs/core';
+
 import {debounce} from 'lodash';
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 
-import type {MarkdownMode} from 'utils/markdown/apply_markdown';
+import {MarkdownMode} from 'utils/markdown/apply_markdown';
 
-type WideMode = 'wide' | 'normal' | 'narrow' | 'min';
+type WideMode = 'wide' | 'normal' | 'narrow';
 
 export function useGetLatest<T>(val: T) {
     const ref = React.useRef<T>(val);
@@ -17,24 +18,23 @@ export function useGetLatest<T>(val: T) {
 
 const useResponsiveFormattingBar = (ref: React.RefObject<HTMLDivElement>): WideMode => {
     const [wideMode, setWideMode] = useState<WideMode>('wide');
-    const handleResize = useCallback(debounce(() => {
+    const handleResize = debounce(() => {
         if (ref.current?.clientWidth === undefined) {
             return;
         }
+
         if (ref.current.clientWidth > 640) {
             setWideMode('wide');
         }
+
         if (ref.current.clientWidth >= 424 && ref.current.clientWidth <= 640) {
             setWideMode('normal');
         }
+
         if (ref.current.clientWidth < 424) {
             setWideMode('narrow');
         }
-
-        if (ref.current.clientWidth < 310) {
-            setWideMode('min');
-        }
-    }, 10), []);
+    }, 10);
 
     useLayoutEffect(() => {
         if (!ref.current) {
@@ -58,7 +58,6 @@ const MAP_WIDE_MODE_TO_CONTROLS_QUANTITY: {[key in WideMode]: number} = {
     wide: 9,
     normal: 5,
     narrow: 3,
-    min: 1,
 };
 
 export const useFormattingBarControls = (

@@ -4,11 +4,10 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import type {Team} from '@mattermost/types/teams';
-
 import TeamIcon from 'components/widgets/team_icon/team_icon';
 
 import {imageURLForTeam} from 'utils/utils';
+import {Team} from '@mattermost/types/teams';
 
 type Props = {
     team: Team;
@@ -23,7 +22,7 @@ export default class TeamInList extends React.PureComponent<Props> {
             return;
         }
         onRemoveTeam(team.id);
-    };
+    }
 
     render() {
         const {team, isDisabled} = this.props;

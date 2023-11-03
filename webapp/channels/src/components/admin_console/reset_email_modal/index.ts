@@ -2,16 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
+import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
 
-import type {UserProfile} from '@mattermost/types/users';
+import {UserProfile} from '@mattermost/types/users';
 
 import {patchUser} from 'mattermost-redux/actions/users';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+import {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
 
 import ResetEmailModal from './reset_email_modal';
 

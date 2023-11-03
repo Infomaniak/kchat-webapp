@@ -2,29 +2,40 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
-import {renderWithIntl, screen} from 'tests/react_testing_utils';
+import {shallow} from 'enzyme';
 
 import AdminTextSetting from './text_setting';
 
 describe('components/admin_console/TextSetting', () => {
     test('render component with required props', () => {
-        renderWithIntl(
+        const onChange = jest.fn();
+        const wrapper = shallow(
             <AdminTextSetting
-                id='some.id'
+                id='string.id'
                 label='some label'
                 value='some value'
-                onChange={jest.fn()}
+                onChange={onChange}
                 setByEnv={false}
                 labelClassName=''
                 inputClassName=''
                 maxLength={-1}
                 resizable={true}
+                type='input'
             />,
         );
-
-        screen.getByText('some label', {exact: false});
-        expect(screen.getByTestId('some.idinput')).toHaveProperty('id', 'some.id');
-        expect(screen.getByTestId('some.idinput')).toHaveValue('some value');
+        expect(wrapper).toMatchInlineSnapshot(`
+            <TextSetting
+              disabled={false}
+              id="string.id"
+              inputClassName="col-sm-8"
+              label="some label"
+              labelClassName="col-sm-4"
+              maxLength={-1}
+              onChange={[MockFunction]}
+              resizable={true}
+              type="input"
+              value="some value"
+            />
+        `);
     });
 });

@@ -6,12 +6,11 @@ import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
 import {trackEvent} from 'actions/telemetry_actions';
-
 import BlockableLink from 'components/admin_console/blockable_link';
-import CompanySvg from 'components/common/svg_images_components/company_svg';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+import CompanySvg from 'components/common/svg_images_components/company_svg';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
 
 import './company_info_display.scss';
 

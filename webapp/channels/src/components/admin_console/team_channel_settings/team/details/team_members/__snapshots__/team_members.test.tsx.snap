@@ -180,7 +180,6 @@ exports[`admin_console/team_channel_settings/team/TeamMembers should match snaps
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
-            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
@@ -218,7 +217,6 @@ exports[`admin_console/team_channel_settings/team/TeamMembers should match snaps
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
-            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
@@ -256,7 +254,6 @@ exports[`admin_console/team_channel_settings/team/TeamMembers should match snaps
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
-            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",

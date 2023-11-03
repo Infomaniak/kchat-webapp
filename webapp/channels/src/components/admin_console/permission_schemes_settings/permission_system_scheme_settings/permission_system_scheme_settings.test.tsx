@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {shallow} from 'enzyme';
 import React from 'react';
+import {shallow} from 'enzyme';
 
-import type {Role} from '@mattermost/types/roles';
+import {Role} from '@mattermost/types/roles';
 
 import PermissionSystemSchemeSettings from 'components/admin_console/permission_schemes_settings/permission_system_scheme_settings/permission_system_scheme_settings';
 
@@ -233,7 +233,7 @@ describe('components/admin_console/permission_schemes_settings/permission_system
             <PermissionSystemSchemeSettings {...defaultProps}/>,
         );
         expect(wrapper.state().showResetDefaultModal).toBe(false);
-        wrapper.find('.btn-quaternary').first().simulate('click');
+        wrapper.find('.reset-defaults-btn').first().simulate('click');
         expect(wrapper.state().showResetDefaultModal).toBe(true);
     });
 

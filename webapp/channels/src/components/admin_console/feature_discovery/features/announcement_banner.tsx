@@ -3,12 +3,12 @@
 
 import React from 'react';
 
-import {LicenseSkus} from 'utils/constants';
 import {t} from 'utils/i18n';
-
-import AnnouncementBannerSVG from './images/announcement_banner_svg';
+import {LicenseSkus} from 'utils/constants';
 
 import FeatureDiscovery from '../index';
+
+import AnnouncementBannerSVG from './images/announcement_banner_svg';
 
 const AnnouncementBannerFeatureDiscovery: React.FC = () => {
     return (

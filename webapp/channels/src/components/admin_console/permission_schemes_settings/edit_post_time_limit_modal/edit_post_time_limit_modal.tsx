@@ -2,18 +2,16 @@
 // See LICENSE.txt for license information.
 
 import React, {useState} from 'react';
-import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import {Modal} from 'react-bootstrap';
 
-import type {AdminConfig} from '@mattermost/types/config';
-
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import {AdminConfig} from '@mattermost/types/config';
+import {ActionFunc} from 'mattermost-redux/types/actions';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
 import {Constants} from 'utils/constants';
-import {t} from 'utils/i18n';
 import {localizeMessage} from 'utils/utils';
+import {t} from 'utils/i18n';
 
 const INT32_MAX = 2147483647;
 
@@ -159,7 +157,7 @@ export default function EditPostTimeLimitModal(props: Props) {
                 </div>
                 <button
                     type='button'
-                    className='btn btn-tertiary'
+                    className='btn btn-cancel'
                     onClick={props.onClose}
                 >
                     <FormattedMessage
@@ -170,7 +168,7 @@ export default function EditPostTimeLimitModal(props: Props) {
                 <button
                     id='linkModalCloseButton'
                     type='button'
-                    className='btn btn-tertiary'
+                    className='btn btn-default'
                     onClick={save}
                     disabled={saving}
                 >

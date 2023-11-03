@@ -5,21 +5,23 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import type {Role} from '@mattermost/types/roles';
-import type {UserProfile} from '@mattermost/types/users';
-
-import {Client4} from 'mattermost-redux/client';
-import {filterProfiles} from 'mattermost-redux/selectors/entities/users';
-import {filterProfilesStartingWithTerm, profileListToMap, isGuest} from 'mattermost-redux/utils/user_utils';
-
-import MultiSelect from 'components/multiselect/multiselect';
-import type {Value} from 'components/multiselect/multiselect';
-import ProfilePicture from 'components/profile_picture';
-import AddIcon from 'components/widgets/icons/fa_add_icon';
-import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
 
+import BotTag from 'components/widgets/tag/bot_tag';
+
+import {UserProfile} from '@mattermost/types/users';
+import {Role} from '@mattermost/types/roles';
+
+import {filterProfilesStartingWithTerm, profileListToMap, isGuest} from 'mattermost-redux/utils/user_utils';
+import {filterProfiles} from 'mattermost-redux/selectors/entities/users';
+
+import {Client4} from 'mattermost-redux/client';
+
 import {displayEntireNameForUser, localizeMessage} from 'utils/utils';
+import ProfilePicture from 'components/profile_picture';
+
+import MultiSelect, {Value} from 'components/multiselect/multiselect';
+import AddIcon from 'components/widgets/icons/fa_add_icon';
 
 const USERS_PER_PAGE = 50;
 const MAX_SELECTABLE_VALUES = 20;
@@ -74,38 +76,34 @@ export default class AddUsersToRoleModal extends React.PureComponent<Props, Stat
     componentDidMount = async () => {
         await this.props.actions.getProfiles(0, USERS_PER_PAGE * 2);
         this.setUsersLoadingState(false);
-    };
+    }
 
     setUsersLoadingState = (loading: boolean) => {
         this.setState({loading});
-    };
+    }
 
     search = async (term: string) => {
         this.setUsersLoadingState(true);
-        const searchResults: UserProfile[] = [];
+        let searchResults: UserProfile[] = [];
         const search = term !== '';
         if (search) {
             const {data} = await this.props.actions.searchProfiles(term, {replace: true});
-            data.forEach((user) => {
-                if (!user.is_bot) {
-                    searchResults.push(user);
-                }
-            });
+            searchResults = data;
         } else {
             await this.props.actions.getProfiles(0, USERS_PER_PAGE * 2);
         }
         this.setState({loading: false, searchResults, term});
-    };
+    }
 
     handleHide = () => {
         this.setState({show: false});
-    };
+    }
 
     handleExit = () => {
         if (this.props.onExited) {
             this.props.onExited();
         }
-    };
+    }
 
     renderOption = (option: UserProfileValue, isSelected: boolean, onAdd: (user: UserProfileValue) => void, onMouseMove: (user: UserProfileValue) => void) => {
         let rowSelected = '';
@@ -139,15 +137,15 @@ export default class AddUsersToRoleModal extends React.PureComponent<Props, Stat
                 </div>
             </div>
         );
-    };
+    }
 
     renderValue = (value: { data: UserProfileValue }): string => {
         return value.data?.username || '';
-    };
+    }
 
     renderAriaLabel = (option: UserProfileValue): string => {
         return option?.username || '';
-    };
+    }
 
     handleAdd = (value: UserProfileValue) => {
         const values: UserProfileValue[] = [...this.state.values];
@@ -155,11 +153,11 @@ export default class AddUsersToRoleModal extends React.PureComponent<Props, Stat
             values.push(value);
         }
         this.setState({values});
-    };
+    }
 
     handleDelete = (values: UserProfileValue[]) => {
         this.setState({values});
-    };
+    }
 
     handlePageChange = (page: number, prevPage: number) => {
         if (page > prevPage) {
@@ -173,7 +171,7 @@ export default class AddUsersToRoleModal extends React.PureComponent<Props, Stat
     handleSubmit = () => {
         this.props.onAddCallback(this.state.values);
         this.handleHide();
-    };
+    }
 
     render = (): JSX.Element => {
         const numRemainingText = (
@@ -267,5 +265,5 @@ export default class AddUsersToRoleModal extends React.PureComponent<Props, Stat
                 </Modal.Body>
             </Modal>
         );
-    };
+    }
 }

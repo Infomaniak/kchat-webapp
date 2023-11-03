@@ -1,27 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
+
 import {FormattedMessage} from 'react-intl';
 
-import type {Job, JobType} from '@mattermost/types/jobs';
-
-import type {ActionResult} from 'mattermost-redux/types/actions';
+import {Job, JobType} from '@mattermost/types/jobs';
+import {ActionResult} from 'mattermost-redux/types/actions';
 
 import {JobTypes} from 'utils/constants';
 
-import JobCancelButton from './job_cancel_button';
 import JobDownloadLink from './job_download_link';
-import JobFinishAt from './job_finish_at';
-import JobRunLength from './job_run_length';
 import JobStatus from './job_status';
+import JobRunLength from './job_run_length';
+import JobCancelButton from './job_cancel_button';
+import JobFinishAt from './job_finish_at';
 
 import './table.scss';
 
 export type Props = {
     jobs: Job[];
-    getExtraInfoText?: (job: Job) => React.ReactNode;
+    getExtraInfoText?: (job: Job) => string;
     disabled: boolean;
     createJobHelpText: React.ReactElement;
     jobType: JobType;
@@ -60,7 +60,7 @@ class JobTable extends React.PureComponent<Props> {
         }
 
         return <span/>;
-    };
+    }
 
     reload = () => {
         this.props.actions.getJobsByType(this.props.jobType);
@@ -119,7 +119,7 @@ class JobTable extends React.PureComponent<Props> {
                         <div>
                             <button
                                 type='button'
-                                className='btn btn-tertiary'
+                                className='btn btn-default'
                                 onClick={this.handleCreateJob}
                                 disabled={this.props.disabled}
                             >

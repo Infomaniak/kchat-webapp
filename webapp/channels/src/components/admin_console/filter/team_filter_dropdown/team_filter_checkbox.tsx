@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback} from 'react';
+import React from 'react';
 
 type Props = {
     id: string;
@@ -11,32 +11,36 @@ type Props = {
     updateOption: (checked: boolean, name: string) => void;
 };
 
-const TeamFilterCheckbox = ({
-    id,
-    name,
-    checked,
-    label,
-    updateOption,
-}: Props) => {
-    const toggleOption = useCallback(() => {
+class TeamFilterCheckbox extends React.PureComponent<Props> {
+    toggleOption = () => {
+        const {checked, id, updateOption} = this.props;
         updateOption(!checked, id);
-    }, [checked, id, updateOption]);
+    }
 
-    return (
-        <div className='TeamFilterDropdown_checkbox'>
-            <label>
-                <input
-                    type='checkbox'
-                    id={id}
-                    name={name}
-                    checked={checked}
-                    onChange={toggleOption}
-                />
+    render() {
+        const {
+            checked,
+            id,
+            label,
+            name,
+        } = this.props;
 
-                {label}
-            </label>
-        </div>
-    );
-};
+        return (
+            <div className='TeamFilterDropdown_checkbox'>
+                <label>
+                    <input
+                        type='checkbox'
+                        id={id}
+                        name={name}
+                        checked={checked}
+                        onChange={this.toggleOption}
+                    />
 
-export default React.memo(TeamFilterCheckbox);
+                    {label}
+                </label>
+            </div>
+        );
+    }
+}
+
+export default TeamFilterCheckbox;

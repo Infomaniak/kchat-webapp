@@ -6,16 +6,16 @@ import {FormattedMessage} from 'react-intl';
 
 import {Client4} from 'mattermost-redux/client';
 
-import ExternalLink from 'components/external_link';
+import * as Utils from 'utils/utils';
+
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
 
-import DocLinks from 'utils/constants';
-import * as Utils from 'utils/utils';
+import ExternalLink from 'components/external_link';
 
 import AdminSettings from './admin_settings';
 import BooleanSetting from './boolean_setting';
-import ClusterTableContainer from './cluster_table_container';
-import SettingsGroup from './settings_group';
+import ClusterTableContainer from './cluster_table_container.jsx';
+import SettingsGroup from './settings_group.jsx';
 import TextSetting from './text_setting';
 
 export default class ClusterSettings extends AdminSettings {
@@ -29,7 +29,7 @@ export default class ClusterSettings extends AdminSettings {
         config.ClusterSettings.GossipPort = this.parseIntNonZero(this.state.GossipPort, 8074);
         config.ClusterSettings.StreamingPort = this.parseIntNonZero(this.state.StreamingPort, 8075);
         return config;
-    };
+    }
 
     getStateFromConfig(config) {
         const settings = config.ClusterSettings;
@@ -62,7 +62,7 @@ export default class ClusterSettings extends AdminSettings {
         });
 
         this.handleChange(id, value);
-    };
+    }
 
     renderSettings = () => {
         const licenseEnabled = this.props.license.IsLicensed === 'true' && this.props.license.Cluster === 'true';
@@ -87,7 +87,7 @@ export default class ClusterSettings extends AdminSettings {
                             link: (msg) => (
                                 <ExternalLink
                                     location='cluster_settings'
-                                    href={DocLinks.HIGH_AVAILABILITY_CLUSTER}
+                                    href='http://docs.mattermost.com/deployment/cluster.html'
                                 >
                                     {msg}
                                 </ExternalLink>
@@ -114,7 +114,7 @@ export default class ClusterSettings extends AdminSettings {
                             link: (msg) => (
                                 <ExternalLink
                                     location='cluster_settings'
-                                    href={DocLinks.HIGH_AVAILABILITY_CLUSTER}
+                                    href='http://docs.mattermost.com/deployment/cluster.html'
                                 >
                                     {msg}
                                 </ExternalLink>
@@ -157,7 +157,7 @@ export default class ClusterSettings extends AdminSettings {
                                 link: (msg) => (
                                     <ExternalLink
                                         location='cluster_settings'
-                                        href={DocLinks.HIGH_AVAILABILITY_CLUSTER}
+                                        href='http://docs.mattermost.com/deployment/cluster.html'
                                     >
                                         {msg}
                                     </ExternalLink>
@@ -309,7 +309,7 @@ export default class ClusterSettings extends AdminSettings {
                 />
             </SettingsGroup>
         );
-    };
+    }
 }
 
 const style = {

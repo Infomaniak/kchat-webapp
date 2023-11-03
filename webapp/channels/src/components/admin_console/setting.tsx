@@ -5,7 +5,7 @@ import React, {PureComponent} from 'react';
 
 import SetByEnv from './set_by_env';
 
-export type Props = {
+type Props = {
     inputId?: string;
     label: React.ReactNode;
     children: React.ReactNode;

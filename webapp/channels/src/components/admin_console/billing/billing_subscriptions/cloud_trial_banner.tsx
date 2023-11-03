@@ -1,26 +1,30 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import isEmpty from 'lodash/isEmpty';
-import moment from 'moment';
 import React, {useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import type {GlobalState} from '@mattermost/types/store';
+import {FormattedMessage, useIntl} from 'react-intl';
 
-import {savePreferences} from 'mattermost-redux/actions/preferences';
+import moment from 'moment';
+import isEmpty from 'lodash/isEmpty';
+
+import {GlobalState} from '@mattermost/types/store';
+
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
 import {get as getPreference} from 'mattermost-redux/selectors/entities/preferences';
 
-import AlertBanner from 'components/alert_banner';
+import {savePreferences} from 'mattermost-redux/actions/preferences';
+
+import {getBrowserTimezone} from 'utils/timezone';
+import {CloudBanners, Preferences} from 'utils/constants';
+
 import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
+import AlertBanner from 'components/alert_banner';
 import UpgradeLink from 'components/widgets/links/upgrade_link';
 
-import {CloudBanners, Preferences} from 'utils/constants';
-import {getBrowserTimezone} from 'utils/timezone';
-
 import './cloud_trial_banner.scss';
+import {SalesInquiryIssue} from 'selectors/cloud';
 
 export interface Props {
     trialEndDate: number;
@@ -30,7 +34,7 @@ const CloudTrialBanner = ({trialEndDate}: Props): JSX.Element | null => {
     const endDate = new Date(trialEndDate);
     const DISMISSED_DAYS = 10;
     const {formatMessage} = useIntl();
-    const [openSalesLink] = useOpenSalesLink();
+    const openSalesLink = useOpenSalesLink(SalesInquiryIssue.UpgradeEnterprise);
     const dispatch = useDispatch();
     const user = useSelector(getCurrentUser);
     const storedDismissedEndDate = useSelector((state: GlobalState) => getPreference(state, Preferences.CLOUD_TRIAL_BANNER, CloudBanners.UPGRADE_FROM_TRIAL));

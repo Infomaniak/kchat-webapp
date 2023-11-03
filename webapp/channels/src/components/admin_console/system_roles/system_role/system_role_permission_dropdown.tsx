@@ -2,16 +2,17 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
 
-import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
-import Menu from 'components/widgets/menu/menu';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+import {FormattedMessage} from 'react-intl';
 
 import * as Utils from 'utils/utils';
 
-import {noAccess, writeAccess, readAccess, mixedAccess} from './types';
-import type {PermissionAccess, PermissionToUpdate, SystemSection, WriteAccess, NoAccess, ReadAccess, MixedAccess} from './types';
+import Menu from 'components/widgets/menu/menu';
+import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
+
+import {noAccess, PermissionAccess, writeAccess, readAccess, PermissionToUpdate, SystemSection, mixedAccess, WriteAccess, NoAccess, ReadAccess, MixedAccess} from './types';
 
 import './system_role_permissions.scss';
 
@@ -36,7 +37,7 @@ export default class SystemRolePermissionDropdown extends React.PureComponent<Pr
             permissions.push({name: section.name, value});
         }
         this.props.updatePermissions(permissions);
-    };
+    }
 
     renderOption = (label: JSX.Element, description: JSX.Element) => {
         return (
@@ -49,7 +50,7 @@ export default class SystemRolePermissionDropdown extends React.PureComponent<Pr
                 </div>
             </div>
         );
-    };
+    }
 
     render() {
         const {isDisabled, section} = this.props;

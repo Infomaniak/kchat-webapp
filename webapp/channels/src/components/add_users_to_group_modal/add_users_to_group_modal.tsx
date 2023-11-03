@@ -2,21 +2,23 @@
 // See LICENSE.txt for license information.
 
 import React, {useState, useCallback, useMemo} from 'react';
+
 import {Modal} from 'react-bootstrap';
-import {FormattedMessage, useIntl} from 'react-intl';
 
-import type {Group} from '@mattermost/types/groups';
-import type {UserProfile} from '@mattermost/types/users';
+import {FormattedMessage} from 'react-intl';
 
-import type {ActionResult} from 'mattermost-redux/types/actions';
-
-import AddUserToGroupMultiSelect from 'components/add_user_to_group_multiselect';
+import {UserProfile} from '@mattermost/types/users';
 
 import {localizeMessage} from 'utils/utils';
-
-import type {ModalData} from 'types/actions';
+import {Group} from '@mattermost/types/groups';
 
 import 'components/user_groups_modal/user_groups_modal.scss';
+import {ModalData} from 'types/actions';
+import AddUserToGroupMultiSelect from 'components/add_user_to_group_multiselect';
+import {ActionResult} from 'mattermost-redux/types/actions';
+
+import LocalizedIcon from 'components/localized_icon';
+import {t} from 'utils/i18n';
 
 export type Props = {
     onExited: () => void;
@@ -34,7 +36,6 @@ const AddUsersToGroupModal = (props: Props) => {
     const [saving, setSaving] = useState(false);
     const [usersToAdd, setUsersToAdd] = useState<UserProfile[]>([]);
     const [showUnknownError, setShowUnknownError] = useState(false);
-    const {formatMessage} = useIntl();
 
     const doHide = useCallback(() => {
         setShow(false);
@@ -102,11 +103,14 @@ const AddUsersToGroupModal = (props: Props) => {
             <Modal.Header closeButton={true}>
                 <button
                     type='button'
-                    className='modal-header-back-button btn btn-icon'
-                    aria-label={formatMessage({id: 'user_groups_modal.goBackLabel', defaultMessage: 'Back'})}
+                    className='modal-header-back-button btn-icon'
+                    aria-label='Close'
                     onClick={goBack}
                 >
-                    <i className='icon icon-arrow-left'/>
+                    <LocalizedIcon
+                        className='icon icon-arrow-left'
+                        ariaLabel={{id: t('user_groups_modal.goBackLabel'), defaultMessage: 'Back'}}
+                    />
                 </button>
                 <Modal.Title
                     componentClass='h1'

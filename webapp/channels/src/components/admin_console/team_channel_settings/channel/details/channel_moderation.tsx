@@ -1,221 +1,192 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
-import {isNil} from 'lodash';
 import React from 'react';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import type {MessageDescriptor} from 'react-intl';
 
-import type {ChannelModeration as ChannelPermissions} from '@mattermost/types/channels';
+import {isNil} from 'lodash';
+import classNames from 'classnames';
 
+import {ChannelModeration as ChannelPermissions} from '@mattermost/types/channels';
 import {Permissions, Roles} from 'mattermost-redux/constants';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import {t} from 'utils/i18n';
+
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import CheckboxCheckedIcon from 'components/widgets/icons/checkbox_checked_icon';
 
-import type {ChannelModerationRoles} from './types';
+import {ChannelModerationRoles} from './types';
 
 const PERIOD_TO_SLASH_REGEX = /\./g;
 
-const MEMBERS_CAN_CREATE_POST_PERMISSION = 'create_post';
-const GUESTS_CAN_CREATE_POST_PERMISSION = 'guest_create_post';
-const MEMBERS_CAN_POST_REACTIONS_PERMISSION = 'reactions';
-const GUESTS_CAN_POST_REACTIONS_PERMISSION = 'guest_reactions';
-const MEMBERS_CAN_MANAGE_CHANNEL_MEMBERS_PERMISSION = 'manage_{public_or_private}_channel_members';
-const GUESTS_CAN_MANAGE_CHANNEL_MEMBERS_PERMISSION = 'guest_manage_{public_or_private}_channel_members';
-const MEMBERS_CAN_USE_CHANNEL_MENTIONS_PERMISSION = 'use_channel_mentions';
-const GUESTS_CAN_USE_CHANNEL_MENTIONS_PERMISSION = 'guest_use_channel_mentions';
-
-function getChannelModerationPermissionNames(permission: string) {
-    if (permission === Permissions.CHANNEL_MODERATED_PERMISSIONS.CREATE_POST) {
-        return {
-            disabledGuests: GUESTS_CAN_CREATE_POST_PERMISSION,
-            disabledMembers: MEMBERS_CAN_CREATE_POST_PERMISSION,
-            disabledBoth: MEMBERS_CAN_CREATE_POST_PERMISSION,
-        };
-    }
-
-    if (permission === Permissions.CHANNEL_MODERATED_PERMISSIONS.CREATE_REACTIONS) {
-        return {
-            disabledGuests: GUESTS_CAN_POST_REACTIONS_PERMISSION,
-            disabledMembers: MEMBERS_CAN_POST_REACTIONS_PERMISSION,
-            disabledBoth: MEMBERS_CAN_POST_REACTIONS_PERMISSION,
-        };
-    }
-
-    if (permission === Permissions.CHANNEL_MODERATED_PERMISSIONS.MANAGE_MEMBERS) {
-        return {
-            disabledGuests: GUESTS_CAN_MANAGE_CHANNEL_MEMBERS_PERMISSION,
-            disabledMembers: MEMBERS_CAN_MANAGE_CHANNEL_MEMBERS_PERMISSION,
-            disabledBoth: MEMBERS_CAN_MANAGE_CHANNEL_MEMBERS_PERMISSION,
-        };
-    }
-
-    if (permission === Permissions.CHANNEL_MODERATED_PERMISSIONS.USE_CHANNEL_MENTIONS) {
-        return {
-            disabledGuests: GUESTS_CAN_USE_CHANNEL_MENTIONS_PERMISSION,
-            disabledMembers: MEMBERS_CAN_USE_CHANNEL_MENTIONS_PERMISSION,
-            disabledBoth: MEMBERS_CAN_USE_CHANNEL_MENTIONS_PERMISSION,
-        };
-    }
-
-    return null;
-}
-
-function getChannelModerationRowsMessages(permission: string): Record<string, MessageDescriptor> | null {
-    const createPostRowMessages = defineMessages({
+const formattedMessages: any = defineMessages({
+    [Permissions.CHANNEL_MODERATED_PERMISSIONS.CREATE_POST]: {
         title: {
-            id: 'admin.channel_settings.channel_moderation.createPosts',
+            id: t('admin.channel_settings.channel_moderation.createPosts'),
             defaultMessage: 'Create Posts',
         },
         description: {
-            id: 'admin.channel_settings.channel_moderation.createPostsDesc',
+            id: t('admin.channel_settings.channel_moderation.createPostsDesc'),
             defaultMessage: 'The ability for members and guests to create posts in the channel.',
         },
         descriptionMembers: {
-            id: 'admin.channel_settings.channel_moderation.createPostsDescMembers',
+            id: t('admin.channel_settings.channel_moderation.createPostsDescMembers'),
             defaultMessage: 'The ability for members to create posts in the channel.',
         },
         disabledGuests: {
-            id: 'admin.channel_settings.channel_moderation.createPosts.disabledGuest',
+            id: t('admin.channel_settings.channel_moderation.createPosts.disabledGuest'),
             defaultMessage: 'Create posts for guests are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'guest_create_post',
         },
         disabledMembers: {
-            id: 'admin.channel_settings.channel_moderation.createPosts.disabledMember',
+            id: t('admin.channel_settings.channel_moderation.createPosts.disabledMember'),
             defaultMessage: 'Create posts for members are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'create_post',
         },
         disabledBoth: {
-            id: 'admin.channel_settings.channel_moderation.createPosts.disabledBoth',
+            id: t('admin.channel_settings.channel_moderation.createPosts.disabledBoth'),
             defaultMessage: 'Create posts for members and guests are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'create_post',
         },
-    });
+    },
 
-    const postReactionsRowMessages = defineMessages({
+    [Permissions.CHANNEL_MODERATED_PERMISSIONS.CREATE_REACTIONS]: {
         title: {
-            id: 'admin.channel_settings.channel_moderation.postReactions',
+            id: t('admin.channel_settings.channel_moderation.postReactions'),
             defaultMessage: 'Post Reactions',
         },
         description: {
-            id: 'admin.channel_settings.channel_moderation.postReactionsDesc',
+            id: t('admin.channel_settings.channel_moderation.postReactionsDesc'),
             defaultMessage: 'The ability for members and guests to post reactions.',
         },
         descriptionMembers: {
-            id: 'admin.channel_settings.channel_moderation.postReactionsDescMembers',
+            id: t('admin.channel_settings.channel_moderation.postReactionsDescMembers'),
             defaultMessage: 'The ability for members to post reactions.',
         },
         disabledGuests: {
-            id: 'admin.channel_settings.channel_moderation.postReactions.disabledGuest',
+            id: t('admin.channel_settings.channel_moderation.postReactions.disabledGuest'),
             defaultMessage: 'Post reactions for guests are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'guest_reactions',
         },
         disabledMembers: {
-            id: 'admin.channel_settings.channel_moderation.postReactions.disabledMember',
+            id: t('admin.channel_settings.channel_moderation.postReactions.disabledMember'),
             defaultMessage: 'Post reactions for members are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'reactions',
         },
         disabledBoth: {
-            id: 'admin.channel_settings.channel_moderation.postReactions.disabledBoth',
+            id: t('admin.channel_settings.channel_moderation.postReactions.disabledBoth'),
             defaultMessage: 'Post reactions for members and guests are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'reactions',
         },
-    });
+    },
 
-    const manageMembersRowMessages = defineMessages({
+    [Permissions.CHANNEL_MODERATED_PERMISSIONS.MANAGE_MEMBERS]: {
         title: {
-            id: 'admin.channel_settings.channel_moderation.manageMembers',
+            id: t('admin.channel_settings.channel_moderation.manageMembers'),
             defaultMessage: 'Manage Members',
         },
         description: {
-            id: 'admin.channel_settings.channel_moderation.manageMembersDesc',
+            id: t('admin.channel_settings.channel_moderation.manageMembersDesc'),
             defaultMessage: 'The ability for members to add and remove people.',
         },
         disabledGuests: {
-            id: 'admin.channel_settings.channel_moderation.manageMembers.disabledGuest',
+            id: t('admin.channel_settings.channel_moderation.manageMembers.disabledGuest'),
             defaultMessage: 'Manage members for guests are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'guest_manage_{public_or_private}_channel_members',
         },
         disabledMembers: {
-            id: 'admin.channel_settings.channel_moderation.manageMembers.disabledMember',
+            id: t('admin.channel_settings.channel_moderation.manageMembers.disabledMember'),
             defaultMessage: 'Manage members for members are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'manage_{public_or_private}_channel_members',
         },
         disabledBoth: {
-            id: 'admin.channel_settings.channel_moderation.manageMembers.disabledBoth',
+            id: t('admin.channel_settings.channel_moderation.manageMembers.disabledBoth'),
             defaultMessage: 'Manage members for members and guests are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'manage_{public_or_private}_channel_members',
         },
-    });
+    },
 
-    const channelMentionsRowMessages = defineMessages({
+    [Permissions.CHANNEL_MODERATED_PERMISSIONS.USE_CHANNEL_MENTIONS]: {
         title: {
-            id: 'admin.channel_settings.channel_moderation.channelMentions',
+            id: t('admin.channel_settings.channel_moderation.channelMentions'),
             defaultMessage: 'Channel Mentions',
         },
         description: {
-            id: 'admin.channel_settings.channel_moderation.channelMentionsDesc',
+            id: t('admin.channel_settings.channel_moderation.channelMentionsDesc'),
             defaultMessage: 'The ability for members and guests to use @all, @here and @channel.',
         },
         descriptionMembers: {
-            id: 'admin.channel_settings.channel_moderation.channelMentionsDescMembers',
+            id: t('admin.channel_settings.channel_moderation.channelMentionsDescMembers'),
             defaultMessage: 'The ability for members to use @all, @here and @channel.',
         },
         disabledGuests: {
-            id: 'admin.channel_settings.channel_moderation.channelMentions.disabledGuest',
+            id: t('admin.channel_settings.channel_moderation.channelMentions.disabledGuest'),
             defaultMessage: 'Channel mentions for guests are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'guest_use_channel_mentions',
         },
         disabledMembers: {
-            id: 'admin.channel_settings.channel_moderation.channelMentions.disabledMember',
+            id: t('admin.channel_settings.channel_moderation.channelMentions.disabledMember'),
             defaultMessage: 'Channel mentions for members are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'use_channel_mentions',
         },
         disabledBoth: {
-            id: 'admin.channel_settings.channel_moderation.channelMentions.disabledBoth',
+            id: t('admin.channel_settings.channel_moderation.channelMentions.disabledBoth'),
             defaultMessage: 'Channel mentions for members and guests are disabled in [{scheme_name}](../permissions/{scheme_link}).',
+            permissionName: 'use_channel_mentions',
         },
         disabledGuestsDueToCreatePosts: {
-            id: 'admin.channel_settings.channel_moderation.channelMentions.disabledGuestsDueToCreatePosts',
+            id: t('admin.channel_settings.channel_moderation.channelMentions.disabledGuestsDueToCreatePosts'),
             defaultMessage: 'Guests can not use channel mentions without the ability to create posts.',
         },
         disabledMembersDueToCreatePosts: {
-            id: 'admin.channel_settings.channel_moderation.channelMentions.disabledMemberDueToCreatePosts',
+            id: t('admin.channel_settings.channel_moderation.channelMentions.disabledMemberDueToCreatePosts'),
             defaultMessage: 'Members can not use channel mentions without the ability to create posts.',
         },
         disabledBothDueToCreatePosts: {
-            id: 'admin.channel_settings.channel_moderation.channelMentions.disabledBothDueToCreatePosts',
+            id: t('admin.channel_settings.channel_moderation.channelMentions.disabledBothDueToCreatePosts'),
             defaultMessage: 'Guests and members can not use channel mentions without the ability to create posts.',
         },
-    });
+    },
 
-    if (permission === Permissions.CHANNEL_MODERATED_PERMISSIONS.CREATE_POST) {
-        return createPostRowMessages;
-    }
-
-    if (permission === Permissions.CHANNEL_MODERATED_PERMISSIONS.CREATE_REACTIONS) {
-        return postReactionsRowMessages;
-    }
-
-    if (permission === Permissions.CHANNEL_MODERATED_PERMISSIONS.MANAGE_MEMBERS) {
-        return manageMembersRowMessages;
-    }
-
-    if (permission === Permissions.CHANNEL_MODERATED_PERMISSIONS.USE_CHANNEL_MENTIONS) {
-        return channelMentionsRowMessages;
-    }
-
-    return null;
-}
-
-const channelModerationHeaderMessages = defineMessages({
-    titleMessage: {
-        id: 'admin.channel_settings.channel_moderation.title',
+    title: {
+        id: t('admin.channel_settings.channel_moderation.title'),
         defaultMessage: 'Channel Moderation',
     },
-    subtitleMessageForMembersAndGuests: {
-        id: 'admin.channel_settings.channel_moderation.subtitle',
+    subtitle: {
+        id: t('admin.channel_settings.channel_moderation.subtitle'),
         defaultMessage: 'Manage the actions available to channel members and guests.',
     },
-    subtitleMessageForMembers: {
-        id: 'admin.channel_settings.channel_moderation.subtitleMembers',
+    subtitleMembers: {
+        id: t('admin.channel_settings.channel_moderation.subtitleMembers'),
         defaultMessage: 'Manage the actions available to channel members.',
+    },
+    permissions: {
+        id: t('admin.channel_settings.channel_moderation.permissions'),
+        defaultMessage: 'Permissions',
+    },
+    guests: {
+        id: t('admin.channel_settings.channel_moderation.guests'),
+        defaultMessage: 'Guests',
+    },
+    members: {
+        id: t('admin.channel_settings.channel_moderation.members'),
+        defaultMessage: 'Members',
     },
 });
 
-interface ChannelModerationTableRow {
+interface Props {
+    channelPermissions?: ChannelPermissions[];
+    onChannelPermissionsChanged: (name: string, channelRole: ChannelModerationRoles) => void;
+    teamSchemeID?: string;
+    teamSchemeDisplayName?: string;
+    guestAccountsEnabled: boolean;
+    isPublic: boolean;
+    readOnly?: boolean;
+}
+
+interface RowProps {
     name: string;
     guests?: boolean;
     members: boolean;
@@ -227,27 +198,26 @@ interface ChannelModerationTableRow {
     readOnly?: boolean;
 }
 
-export const ChannelModerationTableRow = (props: ChannelModerationTableRow) => {
-    const channelModerationPermissionMessages = getChannelModerationRowsMessages(props.name);
-    let descriptionId = channelModerationPermissionMessages?.description.id;
-    let descriptionDefaultMessage = channelModerationPermissionMessages?.description.defaultMessage;
-    if (!props.guestAccountsEnabled && channelModerationPermissionMessages?.descriptionMembers) {
-        descriptionId = channelModerationPermissionMessages.descriptionMembers?.id ?? '';
-        descriptionDefaultMessage = channelModerationPermissionMessages?.descriptionMembers?.defaultMessage ?? '';
+export const ChannelModerationTableRow: React.FunctionComponent<RowProps> = (props: RowProps): JSX.Element => {
+    let descriptionId = formattedMessages[props.name].description.id;
+    let descriptionDefaultMessage = formattedMessages[props.name].description.defaultMessage;
+    if (!props.guestAccountsEnabled && formattedMessages[props.name].descriptionMembers) {
+        descriptionId = formattedMessages[props.name].descriptionMembers.id;
+        descriptionDefaultMessage = formattedMessages[props.name].descriptionMembers.defaultMessage;
     }
     return (
         <tr>
             <td>
                 <label
-                    data-testid={channelModerationPermissionMessages?.title?.id?.replace(PERIOD_TO_SLASH_REGEX, '-')}
+                    data-testid={formattedMessages[props.name].title.id.replace(PERIOD_TO_SLASH_REGEX, '-')}
                 >
                     <FormattedMessage
-                        id={channelModerationPermissionMessages?.title?.id}
-                        defaultMessage={channelModerationPermissionMessages?.title?.defaultMessage}
+                        id={formattedMessages[props.name].title.id}
+                        defaultMessage={formattedMessages[props.name].title.defaultMessage}
                     />
                 </label>
                 <div
-                    data-testid={channelModerationPermissionMessages?.description?.id?.replace(PERIOD_TO_SLASH_REGEX, '-')}
+                    data-testid={formattedMessages[props.name].description.id.replace(PERIOD_TO_SLASH_REGEX, '-')}
                 >
                     <FormattedMessage
                         id={descriptionId}
@@ -300,20 +270,8 @@ export const ChannelModerationTableRow = (props: ChannelModerationTableRow) => {
     );
 };
 
-interface Props {
-    channelPermissions?: ChannelPermissions[];
-    onChannelPermissionsChanged: (name: string, channelRole: ChannelModerationRoles) => void;
-    teamSchemeID?: string;
-    teamSchemeDisplayName?: string;
-    guestAccountsEnabled: boolean;
-    isPublic: boolean;
-    readOnly?: boolean;
-}
-
 export default class ChannelModeration extends React.PureComponent<Props> {
     private errorMessagesToDisplay = (entry: ChannelPermissions): JSX.Element[] => {
-        const channelModerationPermissionMessages = getChannelModerationRowsMessages(entry.name);
-
         const errorMessages: JSX.Element[] = [];
         const isGuestsDisabled = !isNil(entry.roles.guests?.enabled) && !entry.roles.guests?.enabled && this.props.guestAccountsEnabled;
         const isMembersDisabled = !entry.roles.members.enabled;
@@ -323,39 +281,31 @@ export default class ChannelModeration extends React.PureComponent<Props> {
             if (!createPostsObject!.roles.guests!.value && this.props.guestAccountsEnabled && !createPostsObject!.roles.members!.value) {
                 errorMessages.push(
                     <div
-                        data-testid={channelModerationPermissionMessages?.disabledBothDueToCreatePosts?.id?.replace(PERIOD_TO_SLASH_REGEX, '-')}
-                        key={channelModerationPermissionMessages?.disabledBothDueToCreatePosts?.id}
+                        data-testid={formattedMessages[entry.name].disabledBothDueToCreatePosts.id.replace(PERIOD_TO_SLASH_REGEX, '-')}
+                        key={formattedMessages[entry.name].disabledBothDueToCreatePosts.id}
                     >
                         <FormattedMessage
-                            id={channelModerationPermissionMessages?.disabledBothDueToCreatePosts?.id}
-                            defaultMessage={channelModerationPermissionMessages?.disabledBothDueToCreatePosts?.defaultMessage}
+                            id={formattedMessages[entry.name].disabledBothDueToCreatePosts.id}
+                            defaultMessage={formattedMessages[entry.name].disabledBothDueToCreatePosts.defaultMessage}
                         />
                     </div>,
                 );
                 return errorMessages;
             } else if (!createPostsObject!.roles.guests!.value && this.props.guestAccountsEnabled) {
                 createPostsKey = 'disabledGuestsDueToCreatePosts';
-                errorMessages.push(
-                    <div
-                        data-testid={channelModerationPermissionMessages?.disabledGuestsDueToCreatePosts?.id?.replace(PERIOD_TO_SLASH_REGEX, '-')}
-                        key={channelModerationPermissionMessages?.disabledGuestsDueToCreatePosts?.id}
-                    >
-                        <FormattedMessage
-                            id={channelModerationPermissionMessages?.disabledGuestsDueToCreatePosts?.id}
-                            defaultMessage={channelModerationPermissionMessages?.disabledGuestsDueToCreatePosts?.defaultMessage}
-                        />
-                    </div>,
-                );
             } else if (!createPostsObject!.roles.members!.value) {
                 createPostsKey = 'disabledMembersDueToCreatePosts';
+            }
+
+            if (createPostsKey !== '') {
                 errorMessages.push(
                     <div
-                        data-testid={channelModerationPermissionMessages?.disabledMembersDueToCreatePosts?.id?.replace(PERIOD_TO_SLASH_REGEX, '-')}
-                        key={channelModerationPermissionMessages?.disabledMembersDueToCreatePosts?.id}
+                        data-testid={formattedMessages[entry.name][createPostsKey].id.replace(PERIOD_TO_SLASH_REGEX, '-')}
+                        key={formattedMessages[entry.name][createPostsKey].id}
                     >
                         <FormattedMessage
-                            id={channelModerationPermissionMessages?.disabledMembersDueToCreatePosts?.id}
-                            defaultMessage={channelModerationPermissionMessages?.disabledMembersDueToCreatePosts?.defaultMessage}
+                            id={formattedMessages[entry.name][createPostsKey].id}
+                            defaultMessage={formattedMessages[entry.name][createPostsKey].defaultMessage}
                         />
                     </div>,
                 );
@@ -363,67 +313,37 @@ export default class ChannelModeration extends React.PureComponent<Props> {
         }
 
         let disabledKey;
-        let disabledKeyId;
-        let disabledKeyMessage;
-        let schemeName = 'System Scheme';
-        let schemeLink = 'system_scheme';
-
-        if (this.props.teamSchemeID) {
-            schemeName = this.props?.teamSchemeDisplayName + ' Team Scheme';
-            schemeLink = `team_override_scheme/${this.props.teamSchemeID}`;
-        }
-
-        const permissionName = getChannelModerationPermissionNames(entry.name);
-
         if (isGuestsDisabled && isMembersDisabled && errorMessages.length <= 0) {
             disabledKey = 'disabledBoth';
-            if (permissionName?.disabledBoth) {
-                schemeLink += `?rowIdFromQuery=${permissionName.disabledBoth}`;
-                if (schemeLink.includes('{public_or_private}')) {
-                    const publicOrPrivate = this.props.isPublic ? 'public' : 'private';
-                    schemeLink = schemeLink.replace('{public_or_private}', publicOrPrivate);
-                }
-            }
-            disabledKeyId = channelModerationPermissionMessages?.disabledBoth?.id;
-            disabledKeyMessage = channelModerationPermissionMessages?.disabledBoth?.defaultMessage;
         } else if (isGuestsDisabled && createPostsKey !== 'disabledGuestsDueToCreatePosts') {
             disabledKey = 'disabledGuests';
-            if (permissionName?.disabledGuests) {
-                schemeLink += `?rowIdFromQuery=${permissionName.disabledGuests}`;
-                if (schemeLink.includes('{public_or_private}')) {
-                    const publicOrPrivate = this.props.isPublic ? 'public' : 'private';
-                    schemeLink = schemeLink.replace('{public_or_private}', publicOrPrivate);
-                }
-            }
-            disabledKeyId = channelModerationPermissionMessages?.disabledGuests?.id;
-            disabledKeyMessage = channelModerationPermissionMessages?.disabledGuests?.defaultMessage;
         } else if (isMembersDisabled && createPostsKey !== 'disabledMembersDueToCreatePosts') {
             disabledKey = 'disabledMembers';
-            if (permissionName?.disabledMembers) {
-                schemeLink += `?rowIdFromQuery=${permissionName.disabledMembers}`;
+        }
+        if (disabledKey) {
+            let schemeName = 'System Scheme';
+            let schemeLink = 'system_scheme';
+            if (this.props.teamSchemeID) {
+                schemeName = this.props.teamSchemeDisplayName + ' Team Scheme';
+                schemeLink = `team_override_scheme/${this.props.teamSchemeID}`;
+            }
+
+            if (formattedMessages[entry.name][disabledKey].permissionName) {
+                schemeLink += `?rowIdFromQuery=${formattedMessages[entry.name][disabledKey].permissionName}`;
                 if (schemeLink.includes('{public_or_private}')) {
                     const publicOrPrivate = this.props.isPublic ? 'public' : 'private';
                     schemeLink = schemeLink.replace('{public_or_private}', publicOrPrivate);
                 }
             }
-            disabledKeyId = channelModerationPermissionMessages?.disabledMembers?.id;
-            disabledKeyMessage = channelModerationPermissionMessages?.disabledMembers?.defaultMessage;
-        }
 
-        if (schemeLink.includes('{public_or_private}')) {
-            const publicOrPrivate = this.props.isPublic ? 'public' : 'private';
-            schemeLink = schemeLink.replace('{public_or_private}', publicOrPrivate);
-        }
-
-        if (disabledKey) {
             errorMessages.push(
                 <div
-                    data-testid={disabledKeyId?.replace(PERIOD_TO_SLASH_REGEX, '-')}
-                    key={disabledKeyId}
+                    data-testid={formattedMessages[entry.name][disabledKey].id.replace(PERIOD_TO_SLASH_REGEX, '-')}
+                    key={formattedMessages[entry.name][disabledKey].id}
                 >
                     <FormattedMarkdownMessage
-                        id={disabledKeyId}
-                        defaultMessage={disabledKeyMessage as string}
+                        id={formattedMessages[entry.name][disabledKey].id}
+                        defaultMessage={formattedMessages[entry.name][disabledKey].defaultMessage}
                         values={{
                             scheme_name: schemeName,
                             scheme_link: schemeLink,
@@ -433,21 +353,17 @@ export default class ChannelModeration extends React.PureComponent<Props> {
             );
         }
         return errorMessages;
-    };
+    }
 
     render = (): JSX.Element => {
         const {channelPermissions, guestAccountsEnabled, onChannelPermissionsChanged, readOnly} = this.props;
         return (
             <AdminPanel
                 id='channel_moderation'
-                titleId={channelModerationHeaderMessages.titleMessage.id}
-                titleDefault={channelModerationHeaderMessages.titleMessage.defaultMessage}
-                subtitleId={
-                    guestAccountsEnabled ? channelModerationHeaderMessages.subtitleMessageForMembersAndGuests.id : channelModerationHeaderMessages.subtitleMessageForMembers.id
-                }
-                subtitleDefault={
-                    guestAccountsEnabled ? channelModerationHeaderMessages.subtitleMessageForMembersAndGuests.defaultMessage : channelModerationHeaderMessages.subtitleMessageForMembers.defaultMessage
-                }
+                titleId={formattedMessages.title.id}
+                titleDefault={formattedMessages.title.defaultMessage}
+                subtitleId={guestAccountsEnabled ? formattedMessages.subtitle.id : formattedMessages.subtitleMembers.id}
+                subtitleDefault={guestAccountsEnabled ? formattedMessages.subtitle.defaultMessage : formattedMessages.subtitleMembers.defaultMessage}
             >
                 <div className='channel-moderation'>
                     <div className='channel-moderation--body'>
@@ -460,22 +376,22 @@ export default class ChannelModeration extends React.PureComponent<Props> {
                                 <tr>
                                     <th>
                                         <FormattedMessage
-                                            id='admin.channel_settings.channel_moderation.permissions'
-                                            defaultMessage='Permissions'
+                                            id={formattedMessages.permissions.id}
+                                            defaultMessage={formattedMessages.permissions.defaultMessage}
                                         />
                                     </th>
                                     {guestAccountsEnabled &&
                                         <th>
                                             <FormattedMessage
-                                                id='admin.channel_settings.channel_moderation.guests'
-                                                defaultMessage='Guests'
+                                                id={formattedMessages.guests.id}
+                                                defaultMessage={formattedMessages.guests.defaultMessage}
                                             />
                                         </th>
                                     }
                                     <th>
                                         <FormattedMessage
-                                            id='admin.channel_settings.channel_moderation.members'
-                                            defaultMessage='Members'
+                                            id={formattedMessages.members.id}
+                                            defaultMessage={formattedMessages.members.defaultMessage}
                                         />
                                     </th>
                                 </tr>
@@ -505,5 +421,5 @@ export default class ChannelModeration extends React.PureComponent<Props> {
                 </div>
             </AdminPanel>
         );
-    };
+    }
 }

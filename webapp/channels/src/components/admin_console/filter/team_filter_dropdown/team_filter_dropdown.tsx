@@ -4,19 +4,18 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import type {Team, TeamSearchOpts} from '@mattermost/types/teams';
+import {createSelector} from 'reselect';
 
+import {Team, TeamSearchOpts} from '@mattermost/types/teams';
 import {debounce} from 'mattermost-redux/actions/helpers';
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
 
-import InfiniteScroll from 'components/gif_picker/components/InfiniteScroll';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
-
+import InfiniteScroll from 'components/gif_picker/components/InfiniteScroll';
 import * as Utils from 'utils/utils';
 
-import TeamFilterCheckbox from './team_filter_checkbox';
+import {FilterOption, FilterValues} from '../filter';
 
-import type {FilterOption, FilterValues} from '../filter';
+import TeamFilterCheckbox from './team_filter_checkbox';
 
 import './team_filter_dropdown.scss';
 import '../filter.scss';
@@ -101,11 +100,11 @@ class TeamFilterDropdown extends React.PureComponent<Props, State> {
 
     componentWillUnmount = () => {
         document.removeEventListener('mousedown', this.handleClickOutside);
-    };
+    }
 
     hidePopover = () => {
         this.setState({show: false});
-    };
+    }
 
     togglePopover = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         if (this.state.show) {
@@ -126,18 +125,18 @@ class TeamFilterDropdown extends React.PureComponent<Props, State> {
                 this.listRef.current.scrollTop = 0;
             }
         });
-    };
+    }
 
     handleClickOutside = (event: MouseEvent) => {
         if (this.ref?.current?.contains(event.target as Node)) {
             return;
         }
         this.hidePopover();
-    };
+    }
 
     setScrollPosition = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
         this.scrollPosition = (event.target as HTMLDivElement).scrollTop;
-    };
+    }
 
     hasMore = (): boolean => {
         if (this.state.loading) {
@@ -146,7 +145,7 @@ class TeamFilterDropdown extends React.PureComponent<Props, State> {
             return this.state.searchTotal > this.state.searchResults.length;
         }
         return this.props.total > (this.state.page + 1) * TEAMS_PER_PAGE;
-    };
+    }
 
     loadMore = async () => {
         const {searchTerm, loading} = this.state;
@@ -166,7 +165,7 @@ class TeamFilterDropdown extends React.PureComponent<Props, State> {
         }
 
         this.setState({page, loading: false});
-    };
+    }
 
     searchTeams = async (term: string, page: number) => {
         let searchResults = [];
@@ -181,7 +180,7 @@ class TeamFilterDropdown extends React.PureComponent<Props, State> {
         }
         this.searchRetryInterval *= 2;
         this.searchRetryId = window.setTimeout(this.searchTeams.bind(null, term, page), this.searchRetryInterval);
-    };
+    }
 
     searchTeamsDebounced = debounce((page, term) => this.searchTeams(term, page), INITIAL_SEARCH_RETRY_TIMEOUT, false, () => {});
 
@@ -204,12 +203,12 @@ class TeamFilterDropdown extends React.PureComponent<Props, State> {
         }
 
         this.searchTeamsDebounced(0, searchTerm);
-    };
+    }
 
     resetTeams = () => {
         this.setState({savedSelectedTeams: [], show: false, searchResults: [], searchTotal: 0, page: 0, searchTerm: ''});
         this.props.updateValues({team_ids: {name: 'Teams', value: []}}, 'teams');
-    };
+    }
 
     toggleTeam = (checked: boolean, teamId: string) => {
         const prevSelectedTeamIds = this.props.option.values.team_ids.value as string[];
@@ -221,7 +220,7 @@ class TeamFilterDropdown extends React.PureComponent<Props, State> {
         }
 
         this.props.updateValues({team_ids: {name: 'Teams', value: selectedTeamIds}}, 'teams');
-    };
+    }
 
     generateButtonText = () => {
         const selectedTeamIds = this.props.option.values.team_ids.value as string[];
@@ -253,7 +252,7 @@ class TeamFilterDropdown extends React.PureComponent<Props, State> {
         });
 
         return {buttonText, buttonMore};
-    };
+    }
 
     render() {
         const selectedTeamIds = this.props.option.values.team_ids.value as string[];

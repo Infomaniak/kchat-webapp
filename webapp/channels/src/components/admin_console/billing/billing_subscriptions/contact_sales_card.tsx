@@ -6,24 +6,25 @@ import {FormattedMessage} from 'react-intl';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import type {TelemetryProps} from 'components/common/hooks/useOpenPricingModal';
-import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
-import CloudTrialSvg from 'components/common/svg_images_components/cloud_trial_svg';
+import {CloudLinks, CloudProducts} from 'utils/constants';
 import PrivateCloudSvg from 'components/common/svg_images_components/private_cloud_svg';
+import CloudTrialSvg from 'components/common/svg_images_components/cloud_trial_svg';
+import {TelemetryProps} from 'components/common/hooks/useOpenPricingModal';
 import ExternalLink from 'components/external_link';
 
-import {CloudLinks, CloudProducts} from 'utils/constants';
-
 type Props = {
+    contactSalesLink: any;
     isFreeTrial: boolean;
+    trialQuestionsLink: any;
     subscriptionPlan: string | undefined;
     onUpgradeMattermostCloud: (telemetryProps?: TelemetryProps | undefined) => void;
 }
 
 const ContactSalesCard = (props: Props) => {
-    const [openSalesLink, contactSalesLink] = useOpenSalesLink();
     const {
+        contactSalesLink,
         isFreeTrial,
+        trialQuestionsLink,
         subscriptionPlan,
         onUpgradeMattermostCloud,
     } = props;
@@ -60,13 +61,13 @@ const ContactSalesCard = (props: Props) => {
         title = (
             <FormattedMessage
                 id='admin.billing.subscription.privateCloudCard.cloudEnterprise.title'
-                defaultMessage='Looking to rollout Mattermost for your entire organization? '
+                defaultMessage='Looking for an annual discount? '
             />
         );
         description = (
             <FormattedMessage
                 id='admin.billing.subscription.privateCloudCard.cloudEnterprise.description'
-                defaultMessage='At Mattermost, we work with you and your organization to meet your needs throughout the product. If you’re considering a wider rollout, talk to us.'
+                defaultMessage='At Mattermost, we work with you and your team to meet your needs throughout the product. If you are looking for an annual discount, please reach out to our sales team.'
             />
         );
     } else {
@@ -104,13 +105,13 @@ const ContactSalesCard = (props: Props) => {
             title = (
                 <FormattedMessage
                     id='admin.billing.subscription.privateCloudCard.cloudEnterprise.title'
-                    defaultMessage='Looking to rollout Mattermost for your entire organization? '
+                    defaultMessage='Looking for an annual discount? '
                 />
             );
             description = (
                 <FormattedMessage
                     id='admin.billing.subscription.privateCloudCard.cloudEnterprise.description'
-                    defaultMessage='At Mattermost, we work with you and your organization to meet your needs throughout the product. If you’re considering a wider rollout, talk to us.'
+                    defaultMessage='At Mattermost, we work with you and your team to meet your needs throughout the product. If you are looking for an annual discount, please reach out to our sales team.'
                 />
             );
             break;
@@ -144,7 +145,7 @@ const ContactSalesCard = (props: Props) => {
                 {(isFreeTrial || subscriptionPlan === CloudProducts.ENTERPRISE || isCloudLegacyPlan) &&
                     <ExternalLink
                         location='contact_sales_card'
-                        href={contactSalesLink}
+                        href={isFreeTrial ? trialQuestionsLink : contactSalesLink}
                         className='PrivateCloudCard__actionButton'
                         onClick={() => trackEvent('cloud_admin', 'click_contact_sales')}
                     >
@@ -162,7 +163,7 @@ const ContactSalesCard = (props: Props) => {
                             if (subscriptionPlan === CloudProducts.STARTER) {
                                 onUpgradeMattermostCloud({trackingLocation: 'admin_console_subscription_card_upgrade_now_button'});
                             } else {
-                                openSalesLink();
+                                window.open(contactSalesLink, '_blank');
                             }
                         }}
                         className='PrivateCloudCard__actionButton'

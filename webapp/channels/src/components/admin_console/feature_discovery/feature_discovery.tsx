@@ -2,33 +2,32 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 
-import type {AnalyticsRow} from '@mattermost/types/admin';
-import type {CloudCustomer} from '@mattermost/types/cloud';
-import type {ClientLicense} from '@mattermost/types/config';
+import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
-import {trackEvent} from 'actions/telemetry_actions';
+import {AnalyticsRow} from '@mattermost/types/admin';
+import {ClientLicense} from '@mattermost/types/config';
 
 import {EmbargoedEntityTrialError} from 'components/admin_console/license_settings/trial_banner/trial_banner';
 import AlertBanner from 'components/alert_banner';
-import ContactUsButton from 'components/announcement_bar/contact_sales/contact_us';
-import PurchaseLink from 'components/announcement_bar/purchase_link/purchase_link';
-import CloudStartTrialButton from 'components/cloud_start_trial/cloud_start_trial_btn';
-import ExternalLink from 'components/external_link';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import StartTrialBtn from 'components/learn_more_trial_modal/start_trial_btn';
-import PurchaseModal from 'components/purchase_modal';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
+import StartTrialBtn from 'components/learn_more_trial_modal/start_trial_btn';
+import PurchaseLink from 'components/announcement_bar/purchase_link/purchase_link';
+import ContactUsButton from 'components/announcement_bar/contact_sales/contact_us';
+import PurchaseModal from 'components/purchase_modal';
+import CloudStartTrialButton from 'components/cloud_start_trial/cloud_start_trial_btn';
 
-import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
 import {ModalIdentifiers, TELEMETRY_CATEGORIES, AboutLinks, LicenseLinks, LicenseSkus} from 'utils/constants';
-import {goToMattermostContactSalesForm} from 'utils/contact_support_sales';
+import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
 import * as Utils from 'utils/utils';
 
-import type {ModalData} from 'types/actions';
+import {trackEvent} from 'actions/telemetry_actions';
+
+import {ModalData} from 'types/actions';
 
 import './feature_discovery.scss';
+import ExternalLink from 'components/external_link';
 
 type Props = {
     featureName: string;
@@ -57,8 +56,7 @@ type Props = {
     hadPrevCloudTrial: boolean;
     isSubscriptionLoaded: boolean;
     isPaidSubscription: boolean;
-    customer?: CloudCustomer;
-    cloudFreeDeprecated: boolean;
+    contactSalesLink: string;
 }
 
 type State = {
@@ -97,17 +95,7 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
                 callerCTA: 'feature_discovery_subscribe_button',
             },
         });
-    };
-
-    contactSalesFunc = () => {
-        const {customer, isCloud} = this.props;
-        const customerEmail = customer?.email || '';
-        const firstName = customer?.contact_first_name || '';
-        const lastName = customer?.contact_last_name || '';
-        const companyName = customer?.name || '';
-        const utmMedium = isCloud ? 'in-product-cloud' : 'in-product';
-        goToMattermostContactSalesForm(firstName, lastName, companyName, customerEmail, 'mattermost', utmMedium);
-    };
+    }
 
     renderPostTrialCta = () => {
         const {
@@ -122,7 +110,7 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
                         data-testid='featureDiscovery_primaryCallToAction'
                         onClick={() => {
                             trackEvent(TELEMETRY_CATEGORIES.SELF_HOSTED_ADMIN, 'click_enterprise_contact_sales_feature_discovery');
-                            this.contactSalesFunc();
+                            window.open(LicenseLinks.CONTACT_SALES, '_blank');
                         }}
                     >
                         <FormattedMessage
@@ -164,7 +152,7 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
 
             </div>
         );
-    };
+    }
 
     renderStartTrial = (learnMoreURL: string, gettingTrialError: React.ReactNode) => {
         const {
@@ -173,6 +161,7 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
             hadPrevCloudTrial,
             isPaidSubscription,
             minimumSKURequiredForFeature,
+            contactSalesLink,
         } = this.props;
 
         const canRequestCloudFreeTrial = isCloud && !isCloudTrial && !hadPrevCloudTrial && !isPaidSubscription;
@@ -195,28 +184,16 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
         // if all conditions are set for being able to request a cloud trial, then show the cta start cloud trial button
             if (canRequestCloudFreeTrial) {
                 ctaPrimaryButton = (
-                    <FeatureDiscoveryCloudStartTrialButton
+                    <CloudStartTrialButton
+                        message={Utils.localizeAndFormatMessage(
+                            'admin.ldap_feature_discovery.call_to_action.primary.cloudFree',
+                            'Try free for {trialLength} days',
+                            {trialLength: FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS},
+                        )}
                         telemetryId={`start_cloud_trial_from_${this.props.featureName}`}
                         extraClass='btn btn-primary'
                     />
                 );
-                if (this.props.cloudFreeDeprecated) {
-                    ctaPrimaryButton = (
-                        <button
-                            className='btn btn-primary'
-                            data-testid='featureDiscovery_primaryCallToAction'
-                            onClick={() => {
-                                trackEvent(TELEMETRY_CATEGORIES.SELF_HOSTED_ADMIN, 'click_enterprise_contact_sales_feature_discovery');
-                                this.contactSalesFunc();
-                            }}
-                        >
-                            <FormattedMessage
-                                id='admin.ldap_feature_discovery_cloud.call_to_action.primary_sales'
-                                defaultMessage='Contact sales'
-                            />
-                        </button>
-                    );
-                }
             } else if (hadPrevCloudTrial) {
                 // if it is cloud, but this account already had a free trial, then the cta button must be Upgrade now
                 ctaPrimaryButton = (
@@ -240,10 +217,11 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
                             onClick={() => {
                                 if (isCloud) {
                                     trackEvent(TELEMETRY_CATEGORIES.CLOUD_ADMIN, 'click_enterprise_contact_sales_feature_discovery');
+                                    window.open(contactSalesLink, '_blank');
                                 } else {
                                     trackEvent(TELEMETRY_CATEGORIES.SELF_HOSTED_ADMIN, 'click_enterprise_contact_sales_feature_discovery');
+                                    window.open(LicenseLinks.CONTACT_SALES, '_blank');
                                 }
-                                this.contactSalesFunc();
                             }}
                         >
                             <FormattedMessage
@@ -271,7 +249,7 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
                     />
                 </ExternalLink>
                 {gettingTrialError}
-                {((!this.props.isCloud || canRequestCloudFreeTrial) && !this.props.cloudFreeDeprecated) && <p className='trial-legal-terms'>
+                {(!this.props.isCloud || canRequestCloudFreeTrial) && <p className='trial-legal-terms'>
                     {canRequestCloudFreeTrial ? (
                         <FormattedMessage
                             id='admin.feature_discovery.trial-request.accept-terms.cloudFree'
@@ -300,6 +278,7 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
                             }}
                         />
                     ) : (
+                        // TODO: mattermost reference
                         <FormattedMessage
                             id='admin.feature_discovery.trial-request.accept-terms'
                             defaultMessage='By clicking <highlight>Start trial</highlight>, I agree to the <linkEvaluation>Mattermost Software and Services License Agreement</linkEvaluation>, <linkPrivacy>Privacy Policy</linkPrivacy> and receiving product emails.'
@@ -329,7 +308,7 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
                 </p>}
             </>
         );
-    };
+    }
 
     render() {
         const {
@@ -433,23 +412,4 @@ export default class FeatureDiscovery extends React.PureComponent<Props, State> 
             </div>
         );
     }
-}
-
-function FeatureDiscoveryCloudStartTrialButton(props: Omit<React.ComponentProps<typeof CloudStartTrialButton>, 'message'>) {
-    const message = useIntl().formatMessage(
-        {
-            id: 'admin.ldap_feature_discovery.call_to_action.primary.cloudFree',
-            defaultMessage: 'Try free for {trialLength} days',
-        },
-        {
-            trialLength: FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS,
-        },
-    );
-
-    return (
-        <CloudStartTrialButton
-            {...props}
-            message={message}
-        />
-    );
 }

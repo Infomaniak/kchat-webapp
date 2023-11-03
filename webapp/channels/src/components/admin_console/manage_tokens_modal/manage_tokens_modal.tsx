@@ -5,18 +5,15 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import type {UserAccessToken, UserProfile} from '@mattermost/types/users';
-
 import {Client4} from 'mattermost-redux/client';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import {UserAccessToken, UserProfile} from '@mattermost/types/users';
+import {ActionFunc} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
 import RevokeTokenButton from 'components/admin_console/revoke_token_button';
-import ExternalLink from 'components/external_link';
 import LoadingScreen from 'components/loading_screen';
 import Avatar from 'components/widgets/users/avatar';
-
-import {DeveloperLinks} from 'utils/constants';
+import ExternalLink from 'components/external_link';
 
 export type Props = {
 
@@ -72,7 +69,7 @@ export default class ManageTokensModal extends React.PureComponent<Props, State>
         this.setState({
             error,
         });
-    };
+    }
 
     private renderContents = (): JSX.Element => {
         const {user, userAccessTokens} = this.props;
@@ -170,7 +167,7 @@ export default class ManageTokensModal extends React.PureComponent<Props, State>
                             ),
                             linkPersonalAccessTokens: (msg: React.ReactNode) => (
                                 <ExternalLink
-                                    href={DeveloperLinks.PERSONAL_ACCESS_TOKENS}
+                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-personal-access-token/'
                                     location='manage_tokens_modal'
                                 >
                                     {msg}
@@ -184,7 +181,7 @@ export default class ManageTokensModal extends React.PureComponent<Props, State>
                 </div>
             </div>
         );
-    };
+    }
 
     public render = (): JSX.Element => {
         return (
@@ -212,5 +209,5 @@ export default class ManageTokensModal extends React.PureComponent<Props, State>
                 </Modal.Body>
             </Modal>
         );
-    };
+    }
 }

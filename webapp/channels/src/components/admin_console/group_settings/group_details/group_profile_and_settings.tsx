@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+
 import {FormattedMessage} from 'react-intl';
 
 import GroupProfile from 'components/admin_console/group_settings/group_details/group_profile';

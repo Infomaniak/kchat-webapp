@@ -4,12 +4,11 @@ exports[`admin_console/system_roles should match snapshot 1`] = `
 <div
   className="wrapper--fixed"
 >
-  <AdminHeader>
-    <MemoizedFormattedMessage
-      defaultMessage="System Roles"
-      id="admin.permissions.systemRoles"
-    />
-  </AdminHeader>
+  <FormattedAdminHeader
+    defaultMessage="System Roles"
+    id="admin.permissions.systemRoles"
+    values={Object {}}
+  />
   <div
     className="admin-console__wrapper"
   >

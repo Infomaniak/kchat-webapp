@@ -3,12 +3,12 @@
 
 import React from 'react';
 
-import {LicenseSkus} from 'utils/constants';
 import {t} from 'utils/i18n';
-
-import GuestAccessSVG from './images/guest_access_svg';
+import {LicenseSkus} from 'utils/constants';
 
 import FeatureDiscovery from '../index';
+
+import GuestAccessSVG from './images/guest_access_svg';
 
 const GuestAccessFeatureDiscovery: React.FC = () => {
     return (

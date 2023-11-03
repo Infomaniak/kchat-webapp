@@ -1,18 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
-import React from 'react';
-import type {MouseEvent} from 'react';
+import React, {MouseEvent} from 'react';
 import {FormattedMessage} from 'react-intl';
+import classNames from 'classnames';
 
-import type {Group} from '@mattermost/types/groups';
-import type {Team} from '@mattermost/types/teams';
+import {Group} from '@mattermost/types/groups';
+import {Team} from '@mattermost/types/teams';
 
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
-
-import type {TeamWithMembership} from '../system_user_detail/team_list/types';
+import {TeamWithMembership} from '../system_user_detail/team_list/types';
 
 export const PAGE_SIZE = 10;
 
@@ -64,21 +62,21 @@ export default class AbstractList extends React.PureComponent<Props, State> {
         const page = this.state.page < 1 ? 0 : this.state.page - 1;
         this.setState({page, loading: true});
         this.performSearch(page);
-    };
+    }
 
     nextPage = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
         e.preventDefault();
         const page = this.state.page + 1;
         this.setState({page, loading: true});
         this.performSearch(page);
-    };
+    }
 
     renderHeader = (): JSX.Element | null => {
         if (this.props.data.length > 0) {
             return this.props.header;
         }
         return null;
-    };
+    }
 
     renderRows = (): JSX.Element | JSX.Element[] => {
         if (this.state.loading) {
@@ -100,7 +98,7 @@ export default class AbstractList extends React.PureComponent<Props, State> {
         }
         const offset = this.state.page * PAGE_SIZE;
         return this.props.data.slice(offset, offset + PAGE_SIZE).map(this.props.renderRow);
-    };
+    }
 
     performSearch = (page: number): void => {
         this.setState({loading: true});
@@ -111,7 +109,7 @@ export default class AbstractList extends React.PureComponent<Props, State> {
             }
             this.setState({loading: false});
         });
-    };
+    }
 
     getPaging(): Paging {
         const startCount = (this.state.page * PAGE_SIZE) + 1;
@@ -159,7 +157,7 @@ export default class AbstractList extends React.PureComponent<Props, State> {
                     </div>
                     <button
                         type='button'
-                        className={'btn btn-tertiary prev ' + (firstPage ? 'disabled' : '')}
+                        className={'btn btn-link prev ' + (firstPage ? 'disabled' : '')}
                         onClick={firstPage ? undefined : this.previousPage}
                         disabled={firstPage}
                     >
@@ -167,7 +165,7 @@ export default class AbstractList extends React.PureComponent<Props, State> {
                     </button>
                     <button
                         type='button'
-                        className={'btn btn-tertiary next ' + (lastPage ? 'disabled' : '')}
+                        className={'btn btn-link next ' + (lastPage ? 'disabled' : '')}
                         onClick={lastPage ? undefined : this.nextPage}
                         disabled={lastPage}
                         data-testid='page-link-next'
@@ -177,5 +175,5 @@ export default class AbstractList extends React.PureComponent<Props, State> {
                 </div>}
             </div>
         );
-    };
+    }
 }

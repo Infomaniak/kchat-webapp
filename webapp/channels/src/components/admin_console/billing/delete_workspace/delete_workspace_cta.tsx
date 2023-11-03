@@ -3,16 +3,19 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+
 import {useDispatch, useSelector} from 'react-redux';
 
-import {getCloudSubscription, getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
-import {getLicense} from 'mattermost-redux/selectors/entities/general';
-
 import {trackEvent} from 'actions/telemetry_actions';
+import {CloudProducts, ModalIdentifiers} from 'utils/constants';
 import {openModal} from 'actions/views/modals';
 
-import {CloudProducts, ModalIdentifiers} from 'utils/constants';
+import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {isCloudLicense} from 'utils/license_utils';
+
+import {getCloudSubscription, getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
+
+import ExternalLink from 'components/external_link';
 
 import DeleteWorkspaceModal from './delete_workspace_modal';
 
@@ -77,15 +80,17 @@ export default function DeleteWorkspaceCTA() {
                         }}
                     />
                 </div>
-                <button
-                    className='btn cancelSubscriptionSection__contactUs'
+                <ExternalLink
+                    href=''
+                    location='delete_workspace_cta'
+                    className='cancelSubscriptionSection__contactUs'
                     onClick={handleOnClickDelete}
                 >
                     <FormattedMessage
                         id='admin.billing.subscription.deleteWorkspaceSection.delete'
                         defaultMessage='Delete Workspace'
                     />
-                </button>
+                </ExternalLink>
             </div>
         </div>
     );

@@ -1,18 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
 import React from 'react';
+
 import {FormattedMessage} from 'react-intl';
 
-import type {Channel} from '@mattermost/types/channels';
-import type {Team} from '@mattermost/types/teams';
+import classNames from 'classnames';
 
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import SharedChannelIndicator from 'components/shared_channel_indicator';
-import AdminPanel from 'components/widgets/admin_console/admin_panel';
+import {Channel} from '@mattermost/types/channels';
+import {Team} from '@mattermost/types/teams';
 
 import {t} from 'utils/i18n';
+
+import AdminPanel from 'components/widgets/admin_console/admin_panel';
+import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+import ArchiveIcon from 'components/widgets/icons/archive_icon';
+import UnarchiveIcon from 'components/widgets/icons/unarchive_icon';
+import SharedChannelIndicator from 'components/shared_channel_indicator';
 
 import './channel_profile.scss';
 interface ChannelProfileProps {
@@ -93,15 +97,17 @@ export const ChannelProfile: React.SFC<ChannelProfileProps> = (props: ChannelPro
                                 classNames(
                                     'btn',
                                     'btn-secondary',
-                                    {'btn-danger': !isArchived},
+                                    'ArchiveButton',
+                                    {ArchiveButton___archived: isArchived},
+                                    {ArchiveButton___unarchived: !isArchived},
                                     {disabled: isDisabled},
                                 )
                             }
                             onClick={props.onToggleArchive}
                         >
                             {isArchived ?
-                                <i className='icon icon-archive-arrow-up-outline'/> :
-                                <i className='icon icon-archive-outline'/>}
+                                <UnarchiveIcon className='channel-icon channel-icon__unarchive'/> :
+                                <ArchiveIcon className='channel-icon channel-icon__archive'/>}
                             <FormattedMessage
                                 id={archiveBtnID}
                                 defaultMessage={archiveBtnDefault}

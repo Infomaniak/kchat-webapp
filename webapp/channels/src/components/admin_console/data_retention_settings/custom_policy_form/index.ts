@@ -2,15 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
 
-import type {
-    DataRetentionCustomPolicy,
-    CreateDataRetentionCustomPolicy,
-    PatchDataRetentionCustomPolicy,
-} from '@mattermost/types/data_retention';
-import type {Team} from '@mattermost/types/teams';
+import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
 
 import {
     getDataRetentionCustomPolicy as fetchPolicy,
@@ -23,12 +16,19 @@ import {
     removeDataRetentionCustomPolicyChannels,
 } from 'mattermost-redux/actions/admin';
 import {getDataRetentionCustomPolicy} from 'mattermost-redux/selectors/entities/admin';
-import {getTeamsInPolicy} from 'mattermost-redux/selectors/entities/teams';
-import type {GenericAction, ActionFunc} from 'mattermost-redux/types/actions';
+import {GenericAction, ActionFunc} from 'mattermost-redux/types/actions';
+import {
+    DataRetentionCustomPolicy,
+    CreateDataRetentionCustomPolicy,
+    PatchDataRetentionCustomPolicy,
+} from '@mattermost/types/data_retention';
+import {Team} from '@mattermost/types/teams';
+
+import {GlobalState} from 'types/store';
 
 import {setNavigationBlocked} from 'actions/admin_actions.jsx';
 
-import type {GlobalState} from 'types/store';
+import {getTeamsInPolicy} from 'mattermost-redux/selectors/entities/teams';
 
 import CustomPolicyForm from './custom_policy_form';
 

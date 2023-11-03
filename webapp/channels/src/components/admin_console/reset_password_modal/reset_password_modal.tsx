@@ -5,9 +5,8 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import type {UserProfile} from '@mattermost/types/users';
-
-import type {ActionResult} from 'mattermost-redux/types/actions';
+import {UserProfile} from '@mattermost/types/users';
+import {ActionResult} from 'mattermost-redux/types/actions';
 
 import * as Utils from 'utils/utils';
 
@@ -99,7 +98,7 @@ export default class ResetPasswordModal extends React.PureComponent<Props, State
             return;
         }
         this.props.onModalSubmit(this.props.user);
-    };
+    }
 
     private doCancel = (): void => {
         this.setState({
@@ -107,7 +106,7 @@ export default class ResetPasswordModal extends React.PureComponent<Props, State
             serverErrorCurrentPass: null,
         });
         this.props.onModalDismissed();
-    };
+    }
 
     public render(): JSX.Element {
         const user = this.props.user;
@@ -224,7 +223,7 @@ export default class ResetPasswordModal extends React.PureComponent<Props, State
                     <Modal.Footer>
                         <button
                             type='button'
-                            className='btn btn-tertiary'
+                            className='btn btn-link'
                             onClick={this.doCancel}
                         >
                             <FormattedMessage

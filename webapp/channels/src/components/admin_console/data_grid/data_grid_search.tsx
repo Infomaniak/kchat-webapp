@@ -3,11 +3,11 @@
 
 import React from 'react';
 
-import Filter from 'components/admin_console/filter/filter';
-import type {FilterOptions} from 'components/admin_console/filter/filter';
 import FaSearchIcon from 'components/widgets/icons/fa_search_icon';
 
 import * as Utils from 'utils/utils';
+
+import Filter, {FilterOptions} from 'components/admin_console/filter/filter';
 
 import './data_grid.scss';
 
@@ -32,7 +32,7 @@ class DataGridSearch extends React.PureComponent<Props, State> {
     static defaultProps = {
         placeholder: '',
         term: '',
-    };
+    }
 
     public constructor(props: Props) {
         super(props);
@@ -46,7 +46,7 @@ class DataGridSearch extends React.PureComponent<Props, State> {
         const term = e.target.value;
         this.setState({term});
         this.props.onSearch(term);
-    };
+    }
 
     resetSearch = () => {
         this.props.onSearch('');

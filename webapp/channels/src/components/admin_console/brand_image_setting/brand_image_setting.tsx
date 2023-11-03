@@ -7,12 +7,10 @@ import {FormattedMessage} from 'react-intl';
 import {Client4} from 'mattermost-redux/client';
 
 import {uploadBrandImage, deleteBrandImage} from 'actions/admin_actions.jsx';
-
+import {Constants} from 'utils/constants';
 import FormError from 'components/form_error';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import {Constants} from 'utils/constants';
 
 const HTTP_STATUS_OK = 200;
 
@@ -98,7 +96,9 @@ export default class BrandImageSetting extends React.PureComponent<Props, State>
             const img = this.imageRef.current;
             reader.onload = (e) => {
                 const src =
-          e.target?.result instanceof ArrayBuffer ? e.target?.result.toString() : e.target?.result;
+          e.target?.result instanceof ArrayBuffer ?
+              e.target?.result.toString() :
+              e.target?.result;
 
                 if (src) {
                     img.setAttribute('src', src);
@@ -178,6 +178,11 @@ export default class BrandImageSetting extends React.PureComponent<Props, State>
     };
 
     render() {
+        let letbtnDefaultClass = 'btn';
+        if (!this.props.disabled) {
+            letbtnDefaultClass += ' btn-default';
+        }
+
         let img = null;
         if (this.state.brandImage) {
             img = (
@@ -258,7 +263,7 @@ export default class BrandImageSetting extends React.PureComponent<Props, State>
                     <div className='file__upload mt-5'>
                         <button
                             type='button'
-                            className='btn btn-tertiary'
+                            className={letbtnDefaultClass}
                             disabled={this.props.disabled}
                         >
                             <FormattedMessage

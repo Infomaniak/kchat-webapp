@@ -4,8 +4,8 @@ exports[`components/admin_console/data_retention_settings/custom_policy_form sho
 <div
   className="wrapper--fixed DataRetentionSettings"
 >
-  <AdminHeader
-    withBackButton={true}
+  <div
+    className="admin-console__header with-back"
   >
     <div>
       <Connect(BlockableLink)
@@ -17,7 +17,7 @@ exports[`components/admin_console/data_retention_settings/custom_policy_form sho
         id="admin.data_retention.customTitle"
       />
     </div>
-  </AdminHeader>
+  </div>
   <div
     className="admin-console__wrapper"
   >
@@ -229,7 +229,7 @@ exports[`components/admin_console/data_retention_settings/custom_policy_form sho
     className="admin-console-save"
   >
     <SaveButton
-      btnClass=""
+      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"
@@ -264,8 +264,8 @@ exports[`components/admin_console/data_retention_settings/custom_policy_form sho
 <div
   className="wrapper--fixed DataRetentionSettings"
 >
-  <AdminHeader
-    withBackButton={true}
+  <div
+    className="admin-console__header with-back"
   >
     <div>
       <Connect(BlockableLink)
@@ -277,7 +277,7 @@ exports[`components/admin_console/data_retention_settings/custom_policy_form sho
         id="admin.data_retention.customTitle"
       />
     </div>
-  </AdminHeader>
+  </div>
   <div
     className="admin-console__wrapper"
   >
@@ -486,7 +486,7 @@ exports[`components/admin_console/data_retention_settings/custom_policy_form sho
     className="admin-console-save"
   >
     <SaveButton
-      btnClass=""
+      btnClass="btn-primary"
       defaultMessage={
         <Memo(MemoizedFormattedMessage)
           defaultMessage="Save"

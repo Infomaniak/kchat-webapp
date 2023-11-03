@@ -124,7 +124,6 @@ exports[`admin_console/team_channel_settings/channel/ChannelMembers should match
           "msg_count": 0,
           "msg_count_root": 0,
           "notify_props": Object {
-            "channel_auto_follow_threads": "off",
             "desktop": "default",
             "email": "default",
             "ignore_channel_mentions": "default",
@@ -146,7 +145,6 @@ exports[`admin_console/team_channel_settings/channel/ChannelMembers should match
           "msg_count": 0,
           "msg_count_root": 0,
           "notify_props": Object {
-            "channel_auto_follow_threads": "off",
             "desktop": "default",
             "email": "default",
             "ignore_channel_mentions": "default",
@@ -168,7 +166,6 @@ exports[`admin_console/team_channel_settings/channel/ChannelMembers should match
           "msg_count": 0,
           "msg_count_root": 0,
           "notify_props": Object {
-            "channel_auto_follow_threads": "off",
             "desktop": "default",
             "email": "default",
             "ignore_channel_mentions": "default",
@@ -208,7 +205,6 @@ exports[`admin_console/team_channel_settings/channel/ChannelMembers should match
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
-            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
@@ -246,7 +242,6 @@ exports[`admin_console/team_channel_settings/channel/ChannelMembers should match
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
-            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
@@ -284,7 +279,6 @@ exports[`admin_console/team_channel_settings/channel/ChannelMembers should match
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
-            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",

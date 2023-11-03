@@ -2,19 +2,24 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+
+import {screen} from '@testing-library/react';
+
 import * as redux from 'react-redux';
 import {Provider} from 'react-redux';
 
-import type {Subscription, Product} from '@mattermost/types/cloud';
-import type {GlobalState} from '@mattermost/types/store';
-import type {UserProfile, UsersState} from '@mattermost/types/users';
+import {renderWithIntl} from 'tests/react_testing_utils';
+import mockStore from 'tests/test_store';
 
 import * as cloudActions from 'actions/cloud';
 
-import {renderWithIntl, screen} from 'tests/react_testing_utils';
-import mockStore from 'tests/test_store';
-import {Constants, CloudProducts} from 'utils/constants';
 import {FileSizes} from 'utils/file_utils';
+import {Constants, CloudProducts} from 'utils/constants';
+
+import {UserProfile, UsersState} from '@mattermost/types/users';
+import {GlobalState} from '@mattermost/types/store';
+
+import {Subscription, Product} from '@mattermost/types/cloud';
 
 import Limits from './limits';
 

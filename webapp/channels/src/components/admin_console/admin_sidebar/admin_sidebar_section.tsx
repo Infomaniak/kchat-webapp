@@ -1,14 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
+
+import {createSafeId} from 'utils/utils';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import BlockableLink from 'components/admin_console/blockable_link';
-
-import {createSafeId} from 'utils/utils';
 
 type Props = {
     name: string;

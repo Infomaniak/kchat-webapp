@@ -2,15 +2,16 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedDate, FormattedMessage, FormattedTime, type IntlShape, injectIntl} from 'react-intl';
-
-import type {Compliance} from '@mattermost/types/compliance';
-import type {UserProfile} from '@mattermost/types/users';
+import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
 import {Client4} from 'mattermost-redux/client';
+import {Compliance} from '@mattermost/types/compliance';
+import {UserProfile} from '@mattermost/types/users';
 
 import LoadingScreen from 'components/loading_screen';
 import ReloadIcon from 'components/widgets/icons/fa_reload_icon';
+import LocalizedInput from 'components/localized_input/localized_input';
+import {t} from 'utils/i18n';
 
 type Props = {
 
@@ -37,8 +38,6 @@ type Props = {
 
     readOnly?: boolean;
 
-    intl: IntlShape;
-
     actions: {
 
         /*
@@ -58,7 +57,7 @@ type State = {
     runningReport?: boolean;
 }
 
-class ComplianceReports extends React.PureComponent<Props, State> {
+export default class ComplianceReports extends React.PureComponent<Props, State> {
     private descInput: React.RefObject<HTMLInputElement>;
     private emailsInput: React.RefObject<HTMLInputElement>;
     private fromInput: React.RefObject<HTMLInputElement>;
@@ -95,7 +94,7 @@ class ComplianceReports extends React.PureComponent<Props, State> {
         this.props.actions.getComplianceReports().then(
             () => this.setState({loadingReports: false}),
         );
-    };
+    }
 
     runReport = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -132,7 +131,7 @@ class ComplianceReports extends React.PureComponent<Props, State> {
                 this.props.actions.getComplianceReports();
             },
         );
-    };
+    }
 
     getDateTime(millis: number) {
         const date = new Date(millis);
@@ -344,12 +343,12 @@ class ComplianceReports extends React.PureComponent<Props, State> {
                                 defaultMessage='Job Name:'
                             />
                         </label>
-                        <input
+                        <LocalizedInput
                             type='text'
                             className='form-control'
                             id='desc'
                             ref={this.descInput}
-                            placeholder={this.props.intl.formatMessage({id: 'admin.compliance_reports.desc_placeholder', defaultMessage: 'E.g. "Audit 445 for HR"'})}
+                            placeholder={{id: t('admin.compliance_reports.desc_placeholder'), defaultMessage: 'E.g. "Audit 445 for HR"'}}
                             disabled={this.props.readOnly}
                         />
                     </div>
@@ -360,12 +359,12 @@ class ComplianceReports extends React.PureComponent<Props, State> {
                                 defaultMessage='From:'
                             />
                         </label>
-                        <input
+                        <LocalizedInput
                             type='text'
                             className='form-control'
                             id='from'
                             ref={this.fromInput}
-                            placeholder={this.props.intl.formatMessage({id: 'admin.compliance_reports.from_placeholder', defaultMessage: 'E.g. "2016-03-11"'})}
+                            placeholder={{id: t('admin.compliance_reports.from_placeholder'), defaultMessage: 'E.g. "2016-03-11"'}}
                             disabled={this.props.readOnly}
                         />
                     </div>
@@ -376,12 +375,12 @@ class ComplianceReports extends React.PureComponent<Props, State> {
                                 defaultMessage='To:'
                             />
                         </label>
-                        <input
+                        <LocalizedInput
                             type='text'
                             className='form-control'
                             id='to'
                             ref={this.toInput}
-                            placeholder={this.props.intl.formatMessage({id: 'admin.compliance_reports.to_placeholder', defaultMessage: 'E.g. "2016-03-15"'})}
+                            placeholder={{id: t('admin.compliance_reports.to_placeholder'), defaultMessage: 'E.g. "2016-03-15"'}}
                             disabled={this.props.readOnly}
                         />
                     </div>
@@ -394,12 +393,12 @@ class ComplianceReports extends React.PureComponent<Props, State> {
                                 defaultMessage='Emails:'
                             />
                         </label>
-                        <input
+                        <LocalizedInput
                             type='text'
                             className='form-control'
                             id='emails'
                             ref={this.emailsInput}
-                            placeholder={this.props.intl.formatMessage({id: 'admin.compliance_reports.emails_placeholder', defaultMessage: 'E.g. "bill@example.com, bob@example.com"'})}
+                            placeholder={{id: t('admin.compliance_reports.emails_placeholder'), defaultMessage: 'E.g. "bill@example.com, bob@example.com"'}}
                             disabled={this.props.readOnly}
                         />
                     </div>
@@ -410,12 +409,12 @@ class ComplianceReports extends React.PureComponent<Props, State> {
                                 defaultMessage='Keywords:'
                             />
                         </label>
-                        <input
+                        <LocalizedInput
                             type='text'
                             className='form-control'
                             id='keywords'
                             ref={this.keywordsInput}
-                            placeholder={this.props.intl.formatMessage({id: 'admin.compliance_reports.keywords_placeholder', defaultMessage: 'E.g. "shorting stock"'})}
+                            placeholder={{id: t('admin.compliance_reports.keywords_placeholder'), defaultMessage: 'E.g. "shorting stock"'}}
                             disabled={this.props.readOnly}
                         />
                     </div>
@@ -438,7 +437,7 @@ class ComplianceReports extends React.PureComponent<Props, State> {
                 <div className='text-right'>
                     <button
                         type='submit'
-                        className='btn btn-tertiary'
+                        className='btn btn-link'
                         disabled={this.state.runningReport}
                         onClick={this.reload}
                     >
@@ -465,5 +464,3 @@ const style: Record<string, React.CSSProperties> = {
     date: {whiteSpace: 'nowrap'},
     serverError: {marginTop: '10px'},
 };
-
-export default injectIntl(ComplianceReports);

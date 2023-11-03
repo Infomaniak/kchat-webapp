@@ -1,43 +1,40 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {cloneDeep} from 'lodash';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import type {Channel, ChannelModeration as ChannelPermissions, ChannelModerationPatch} from '@mattermost/types/channels';
-import type {ServerError} from '@mattermost/types/errors';
-import {SyncableType} from '@mattermost/types/groups';
-import type {SyncablePatch, Group} from '@mattermost/types/groups';
-import type {Scheme} from '@mattermost/types/schemes';
-import type {Team} from '@mattermost/types/teams';
-import type {UserProfile} from '@mattermost/types/users';
+import {cloneDeep} from 'lodash';
 
 import {Permissions} from 'mattermost-redux/constants';
-import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+import {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+import {UserProfile} from '@mattermost/types/users';
+import {Scheme} from '@mattermost/types/schemes';
+import {SyncablePatch, Group, SyncableType} from '@mattermost/types/groups';
+import {Channel, ChannelModeration as ChannelPermissions, ChannelModerationPatch} from '@mattermost/types/channels';
+import {Team} from '@mattermost/types/teams';
 
+import {ServerError} from '@mattermost/types/errors';
+
+import ConfirmModal from 'components/confirm_modal';
+import BlockableLink from 'components/admin_console/blockable_link';
+import FormError from 'components/form_error';
+import Constants from 'utils/constants';
+import {getHistory} from 'utils/browser_history';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
-import BlockableLink from 'components/admin_console/blockable_link';
-import ConfirmModal from 'components/confirm_modal';
-import FormError from 'components/form_error';
-import AdminHeader from 'components/widgets/admin_console/admin_header';
+import {NeedGroupsError, UsersWillBeRemovedError} from '../../errors';
+import ConvertConfirmModal from '../../convert_confirm_modal';
+import RemoveConfirmModal from '../../remove_confirm_modal';
+import ConvertAndRemoveConfirmModal from '../../convert_and_remove_confirm_modal';
+import SaveChangesPanel from '../../save_changes_panel';
 
-import {getHistory} from 'utils/browser_history';
-import Constants from 'utils/constants';
-
+import {ChannelModes} from './channel_modes';
 import {ChannelGroups} from './channel_groups';
+import {ChannelProfile} from './channel_profile';
 import ChannelMembers from './channel_members';
 import ChannelModeration from './channel_moderation';
-import {ChannelModes} from './channel_modes';
-import {ChannelProfile} from './channel_profile';
-import type {ChannelModerationRoles} from './types';
 
-import ConvertAndRemoveConfirmModal from '../../convert_and_remove_confirm_modal';
-import ConvertConfirmModal from '../../convert_confirm_modal';
-import {NeedGroupsError, UsersWillBeRemovedError} from '../../errors';
-import RemoveConfirmModal from '../../remove_confirm_modal';
-import SaveChangesPanel from '../../save_changes_panel';
+import {ChannelModerationRoles} from './types';
 
 export interface ChannelDetailsProps {
     channelID: string;
@@ -275,7 +272,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
             return g;
         });
         this.processGroupsChange(groups);
-    };
+    }
 
     private channelPermissionsChanged = (name: string, channelRole: ChannelModerationRoles) => {
         const currentValueIndex = this.state.channelPermissions.findIndex((element) => element.name === name);
@@ -324,7 +321,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
         };
         this.setState({channelPermissions, saveNeeded: true});
         this.props.actions.setNavigationBlocked(true);
-    };
+    }
 
     private handleGroupChange = (groupIDs: string[]) => {
         const groups = [...this.state.groups, ...groupIDs.map((gid: string) => this.props.allGroups[gid])];
@@ -610,20 +607,20 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
         const {isLocalArchived} = this.state;
         const isServerArchived = this.props.channel.delete_at !== 0;
         return isLocalArchived && !isServerArchived;
-    };
+    }
 
     private channelToBeRestored = (): boolean => {
         const {isLocalArchived} = this.state;
         const isServerArchived = this.props.channel.delete_at !== 0;
         return !isLocalArchived && isServerArchived;
-    };
+    }
 
     private addRolesToUpdate = (userId: string, schemeUser: boolean, schemeAdmin: boolean) => {
         const {rolesToUpdate} = this.state;
         rolesToUpdate[userId] = {schemeUser, schemeAdmin};
         this.setState({rolesToUpdate: {...rolesToUpdate}, saveNeeded: true});
         this.props.actions.setNavigationBlocked(true);
-    };
+    }
 
     private addUserToRemove = (user: UserProfile) => {
         let {usersToRemoveCount} = this.state;
@@ -637,12 +634,11 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
         delete rolesToUpdate[user.id];
         this.setState({usersToRemove: {...usersToRemove}, usersToAdd: {...usersToAdd}, rolesToUpdate: {...rolesToUpdate}, usersToRemoveCount, saveNeeded: true});
         this.props.actions.setNavigationBlocked(true);
-    };
+    }
 
     private addUsersToAdd = (users: UserProfile[]) => {
         let {usersToRemoveCount} = this.state;
-        const usersToRemove = {...this.state.usersToRemove};
-        const usersToAdd = {...this.state.usersToAdd};
+        const {usersToAdd, usersToRemove} = this.state;
         users.forEach((user) => {
             if (usersToRemove[user.id]?.id === user.id) {
                 delete usersToRemove[user.id];
@@ -653,7 +649,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
         });
         this.setState({usersToAdd: {...usersToAdd}, usersToRemove: {...usersToRemove}, usersToRemoveCount, saveNeeded: true});
         this.props.actions.setNavigationBlocked(true);
-    };
+    }
 
     private onToggleArchive = () => {
         const {isLocalArchived, serverError, previousServerError} = this.state;
@@ -783,7 +779,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
         );
         return (
             <div className='wrapper--fixed'>
-                <AdminHeader withBackButton={true}>
+                <div className='admin-console__header with-back'>
                     <div>
                         <BlockableLink
                             to='/admin_console/user_management/channels'
@@ -794,7 +790,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
                             defaultMessage='Channel Configuration'
                         />
                     </div>
-                </AdminHeader>
+                </div>
                 <div className='admin-console__wrapper'>
                     <div className='admin-console__content'>
                         <ChannelProfile

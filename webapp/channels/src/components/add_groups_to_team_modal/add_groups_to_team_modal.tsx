@@ -1,22 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
-import type {RefObject} from 'react';
+import React, {RefObject} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import type {Group, GroupsWithCount, SyncablePatch} from '@mattermost/types/groups';
-import {SyncableType} from '@mattermost/types/groups';
+import {Group, GroupsWithCount, SyncablePatch, SyncableType} from '@mattermost/types/groups';
 
-import Nbsp from 'components/html_entities/nbsp';
-import MultiSelect from 'components/multiselect/multiselect';
-import type {Value} from 'components/multiselect/multiselect';
-import AddIcon from 'components/widgets/icons/fa_add_icon';
-
-import groupsAvatar from 'images/groups-avatar.png';
 import Constants from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
+
+import MultiSelect, {Value} from 'components/multiselect/multiselect';
+import groupsAvatar from 'images/groups-avatar.png';
+import AddIcon from 'components/widgets/icons/fa_add_icon';
+import Nbsp from 'components/html_entities/nbsp';
 
 const GROUPS_PER_PAGE = 50;
 const MAX_SELECTABLE_VALUES = 10;
@@ -108,12 +105,12 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
     public handleHide = () => {
         this.props.actions.setModalSearchTerm('');
         this.setState({show: false});
-    };
+    }
 
     // public for tests
     public handleExit = (): void => {
         this.props.onExited();
-    };
+    }
 
     // public for tests
     public handleResponse = (err?: Error): void => {
@@ -126,7 +123,7 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
             saving: false,
             addError,
         });
-    };
+    }
 
     // public for tests
     public handleSubmit = async () => {
@@ -151,7 +148,7 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
                 this.handleHide();
             }
         }));
-    };
+    }
 
     // public for tests
     public addValue = (value: GroupValue): void => {
@@ -162,13 +159,13 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
         }
 
         this.setState({values});
-    };
+    }
 
     private setGroupsLoadingState = (loadingState: boolean) => {
         this.setState({
             loadingGroups: loadingState,
         });
-    };
+    }
 
     // public for tests
     public handlePageChange = (page: number, prevPage: number): void => {
@@ -178,7 +175,7 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
                 this.setGroupsLoadingState(false);
             });
         }
-    };
+    }
 
     // public for tests
     public handleDelete = (values: GroupValue[]): void => this.setState({values});
@@ -227,7 +224,7 @@ export default class AddGroupsToTeamModal extends React.PureComponent<Props, Sta
                 </div>
             </div>
         );
-    };
+    }
 
     // public for tests
     public renderValue = (props: { data: Value }): string | undefined => props.data.display_name;

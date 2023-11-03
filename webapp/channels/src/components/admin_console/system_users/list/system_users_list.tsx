@@ -4,22 +4,21 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import type {Team} from '@mattermost/types/teams';
-import type {UserProfile} from '@mattermost/types/users';
-
+import {UserProfile} from '@mattermost/types/users';
 import {getUserAccessTokensForUser} from 'mattermost-redux/actions/users';
 
-import ManageRolesModal from 'components/admin_console/manage_roles_modal';
-import ManageTeamsModal from 'components/admin_console/manage_teams_modal';
-import ManageTokensModal from 'components/admin_console/manage_tokens_modal';
-import ResetEmailModal from 'components/admin_console/reset_email_modal';
-import ResetPasswordModal from 'components/admin_console/reset_password_modal';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import SearchableUserList from 'components/searchable_user_list/searchable_user_list';
-import UserListRowWithError from 'components/user_list_row_with_error';
+import {Team} from '@mattermost/types/teams';
 
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
+import ManageRolesModal from 'components/admin_console/manage_roles_modal';
+import ManageTeamsModal from 'components/admin_console/manage_teams_modal';
+import ManageTokensModal from 'components/admin_console/manage_tokens_modal';
+import ResetPasswordModal from 'components/admin_console/reset_password_modal';
+import ResetEmailModal from 'components/admin_console/reset_email_modal';
+import SearchableUserList from 'components/searchable_user_list/searchable_user_list';
+import UserListRowWithError from 'components/user_list_row_with_error';
+import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 import SystemUsersDropdown from '../system_users_dropdown';
 
@@ -104,11 +103,11 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
         this.setState({page: this.state.page + 1});
 
         this.props.nextPage(this.state.page + 1);
-    };
+    }
 
     previousPage = () => {
         this.setState({page: this.state.page - 1});
-    };
+    }
 
     search = (term: string) => {
         this.props.search(term);
@@ -116,63 +115,63 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
         if (term !== '') {
             this.setState({page: 0});
         }
-    };
+    }
 
     doManageTeams = (user: UserProfile) => {
         this.setState({
             showManageTeamsModal: true,
             user,
         });
-    };
+    }
 
     doManageRoles = (user: UserProfile) => {
         this.setState({
             showManageRolesModal: true,
             user,
         });
-    };
+    }
 
     doManageTokens = (user: UserProfile) => {
         this.setState({
             showManageTokensModal: true,
             user,
         });
-    };
+    }
 
     doManageTeamsDismiss = () => {
         this.setState({
             showManageTeamsModal: false,
             user: undefined,
         });
-    };
+    }
 
     doManageRolesDismiss = () => {
         this.setState({
             showManageRolesModal: false,
             user: undefined,
         });
-    };
+    }
 
     doManageTokensDismiss = () => {
         this.setState({
             showManageTokensModal: false,
             user: undefined,
         });
-    };
+    }
 
     doPasswordReset = (user: UserProfile) => {
         this.setState({
             showPasswordModal: true,
             user,
         });
-    };
+    }
 
     doPasswordResetDismiss = () => {
         this.setState({
             showPasswordModal: false,
             user: undefined,
         });
-    };
+    }
 
     doPasswordResetSubmit = (user?: UserProfile) => {
         if (user) {
@@ -183,21 +182,21 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
             showPasswordModal: false,
             user: undefined,
         });
-    };
+    }
 
     doEmailReset = (user: UserProfile) => {
         this.setState({
             showEmailModal: true,
             user,
         });
-    };
+    }
 
     doEmailResetDismiss = () => {
         this.setState({
             showEmailModal: false,
             user: undefined,
         });
-    };
+    }
 
     doEmailResetSubmit = (user?: UserProfile) => {
         if (user) {
@@ -208,7 +207,7 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
             showEmailModal: false,
             user: undefined,
         });
-    };
+    }
 
     getInfoForUser(user: UserProfile) {
         const info = [];

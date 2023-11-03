@@ -4,11 +4,9 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import ChannelsList from 'components/admin_console/team_channel_settings/channel/list';
-import AdminHeader from 'components/widgets/admin_console/admin_header';
-import AdminPanel from 'components/widgets/admin_console/admin_panel';
-
 import {t} from 'utils/i18n';
+import ChannelsList from 'components/admin_console/team_channel_settings/channel/list';
+import AdminPanel from 'components/widgets/admin_console/admin_panel';
 
 interface Props {
     siteName?: string;
@@ -33,13 +31,13 @@ export class ChannelsSettings extends React.PureComponent<Props> {
     render = () => {
         return (
             <div className='wrapper--fixed'>
-                <AdminHeader>
+                <div className='admin-console__header'>
                     <FormattedMessage
                         id='admin.channel_settings.groupsPageTitle'
                         defaultMessage='{siteName} Channels'
                         values={{siteName: this.props.siteName}}
                     />
-                </AdminHeader>
+                </div>
 
                 <div className='admin-console__wrapper'>
                     <div className='admin-console__content'>

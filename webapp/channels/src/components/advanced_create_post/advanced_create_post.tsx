@@ -4,36 +4,16 @@
 /* eslint-disable max-lines */
 
 import React from 'react';
+import {FormattedMessage} from 'react-intl';
+import classNames from 'classnames';
 
-import type {Channel, ChannelMemberCountsByGroup} from '@mattermost/types/channels';
-import type {Emoji} from '@mattermost/types/emojis';
-import type {ServerError} from '@mattermost/types/errors';
-import type {FileInfo} from '@mattermost/types/files';
-import {GroupSource} from '@mattermost/types/groups';
-import type {Group} from '@mattermost/types/groups';
-import type {CommandArgs} from '@mattermost/types/integrations';
-import {PostPriority} from '@mattermost/types/posts';
-import type {Post, PostMetadata, PostPriorityMetadata} from '@mattermost/types/posts';
-import type {PreferenceType} from '@mattermost/types/preferences';
+import {AlertCircleOutlineIcon, CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 
 import {Posts} from 'mattermost-redux/constants';
-import type {ActionResult} from 'mattermost-redux/types/actions';
 import {sortFileInfos} from 'mattermost-redux/utils/file_utils';
+import {ActionResult} from 'mattermost-redux/types/actions';
 
 import * as GlobalActions from 'actions/global_actions';
-
-import AdvancedTextEditor from 'components/advanced_text_editor/advanced_text_editor';
-import EditChannelHeaderModal from 'components/edit_channel_header_modal';
-import EditChannelPurposeModal from 'components/edit_channel_purpose_modal';
-import FileLimitStickyBanner from 'components/file_limit_sticky_banner';
-import type {FilePreviewInfo} from 'components/file_preview/file_preview';
-import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
-import NotifyConfirmModal from 'components/notify_confirm_modal';
-import PersistNotificationConfirmModal from 'components/persist_notification_confirm_modal';
-import PostPriorityPickerOverlay from 'components/post_priority/post_priority_picker_overlay';
-import ResetStatusModal from 'components/reset_status_modal';
-import type TextboxClass from 'components/textbox/textbox';
-
 import Constants, {
     StoragePrefixes,
     ModalIdentifiers,
@@ -42,10 +22,6 @@ import Constants, {
     Preferences,
     AdvancedTextEditor as AdvancedTextEditorConst,
 } from 'utils/constants';
-import type EmojiMap from 'utils/emoji_map';
-import * as Keyboard from 'utils/keyboard';
-import {applyMarkdown} from 'utils/markdown/apply_markdown';
-import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 import {
     containsAtChannel,
     specialMentionsInText,
@@ -55,26 +31,64 @@ import {
     splitMessageBasedOnCaretPosition,
     groupsMentionedInText,
     mentionsMinusSpecialMentionsInText,
-    hasRequestedPersistentNotifications,
 } from 'utils/post_utils';
+import {getTable, hasHtmlLink, formatMarkdownMessage, formatGithubCodePaste, isGitHubCodeBlock} from 'utils/paste';
 import * as UserAgent from 'utils/user_agent';
+import {isMac} from 'utils/utils';
 import * as Utils from 'utils/utils';
+import EmojiMap from 'utils/emoji_map';
+import {applyMarkdown, ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 
-import type {ModalData} from 'types/actions';
-import type {PostDraft} from 'types/store/draft';
-import type {PluginComponent} from 'types/store/plugins';
+import Tooltip from 'components/tooltip';
+import OverlayTrigger from 'components/overlay_trigger';
+import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import NotifyConfirmModal from 'components/notify_confirm_modal';
+import EditChannelHeaderModal from 'components/edit_channel_header_modal';
+import EditChannelPurposeModal from 'components/edit_channel_purpose_modal';
+import {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
+import ResetStatusModal from 'components/reset_status_modal';
+import TextboxClass from 'components/textbox/textbox';
+import PostPriorityPickerOverlay from 'components/post_priority/post_priority_picker_overlay';
+import PriorityLabel from 'components/post_priority/post_priority_label';
+import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 
-import PriorityLabels from './priority_labels';
+import {PostDraft} from 'types/store/draft';
+
+import {ModalData} from 'types/actions';
+
+import {Channel, ChannelMemberCountsByGroup} from '@mattermost/types/channels';
+import {Post, PostMetadata, PostPriorityMetadata} from '@mattermost/types/posts';
+import {PreferenceType} from '@mattermost/types/preferences';
+import {ServerError} from '@mattermost/types/errors';
+import {CommandArgs} from '@mattermost/types/integrations';
+import {Group, GroupSource} from '@mattermost/types/groups';
+import {FileInfo} from '@mattermost/types/files';
+import {Emoji} from '@mattermost/types/emojis';
+
+import AdvancedTextEditor from '../advanced_text_editor/advanced_text_editor';
+import {IconContainer} from '../advanced_text_editor/formatting_bar/formatting_icon';
+
+import FileLimitStickyBanner from '../file_limit_sticky_banner';
+import {FilePreviewInfo} from '../file_preview/file_preview';
 
 const KeyCodes = Constants.KeyCodes;
 
 function isDraftEmpty(draft: PostDraft): boolean {
-    return !draft || (!draft.message && draft.fileInfos.length === 0);
+    return !draft || (!draft.message && draft.fileInfos?.length === 0);
+}
+
+// Temporary fix for IE-11, see MM-13423
+function trimRight(str: string) {
+    if (String.prototype.trimRight as any) {
+        return str.trimRight();
+    }
+
+    return str.replace(/\s*$/, '');
 }
 
 type TextboxElement = HTMLInputElement | HTMLTextAreaElement;
 
-export type Props = {
+type Props = {
 
     // ref passed from channelView for EmojiPickerOverlay
     getChannelView?: () => void;
@@ -148,6 +162,9 @@ export type Props = {
     //If RHS open
     rhsOpen: boolean;
 
+    //To check if the timezones are enable on the server.
+    isTimezoneEnabled: boolean;
+
     canPost: boolean;
 
     //To determine if the current user can send special channel mentions
@@ -195,6 +212,8 @@ export type Props = {
         // func called for setting drafts
         setDraft: (name: string, value: PostDraft | null, draftChannelId: string, save?: boolean) => void;
 
+        upsertScheduleDraft: (key: string, value: PostDraft) => Promise<ActionResult>;
+
         // func called for editing posts
         setEditingPost: (postId?: string, refocusId?: string, title?: string, isRHS?: boolean) => void;
 
@@ -213,19 +232,20 @@ export type Props = {
         //Function to set or unset emoji picker for last message
         emitShortcutReactToLastPostFrom: (emittedFrom: string) => void;
 
-        getChannelMemberCountsByGroup: (channelId: string) => void;
+        getChannelMemberCountsByGroup: (channelId: string, includeTimezones: boolean) => void;
 
         //Function used to advance the tutorial forward
         savePreferences: (userId: string, preferences: PreferenceType[]) => ActionResult;
 
         searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined) => Promise<{ data: any }>;
+
+        setGlobalDraft: (key: string, draft: PostDraft, save: boolean) => Promise<{ data: any }>;
     };
 
     groupsWithAllowReference: Map<string, Group> | null;
     channelMemberCountsByGroup: ChannelMemberCountsByGroup;
     useLDAPGroupMentions: boolean;
     useCustomGroupMentions: boolean;
-    postEditorActions: PluginComponent[];
 }
 
 type State = {
@@ -256,12 +276,11 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     private lastOrientation?: string;
     private saveDraftFrame?: number | null;
     private isDraftSubmitting = false;
-    private isNonFormattedPaste = false;
-    private timeoutId: number | null = null;
 
     private topDiv: React.RefObject<HTMLFormElement>;
     private textboxRef: React.RefObject<TextboxClass>;
     private fileUploadRef: React.RefObject<FileUploadClass>;
+    private postPriorityPickerRef: React.RefObject<HTMLButtonElement>;
 
     static getDerivedStateFromProps(props: Props, state: State): Partial<State> {
         let updatedState: Partial<State> = {
@@ -302,6 +321,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.topDiv = React.createRef<HTMLFormElement>();
         this.textboxRef = React.createRef<TextboxClass>();
         this.fileUploadRef = React.createRef<FileUploadClass>();
+        this.postPriorityPickerRef = React.createRef<HTMLButtonElement>();
     }
 
     componentDidMount() {
@@ -310,6 +330,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         actions.setShowPreview(false);
         actions.clearDraftUploads();
         this.focusTextbox();
+        document.addEventListener('paste', this.pasteHandler);
         document.addEventListener('keydown', this.documentKeyHandler);
         window.addEventListener('beforeunload', this.unloadHandler);
         this.setOrientationListeners();
@@ -341,17 +362,15 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     componentWillUnmount() {
+        document.removeEventListener('paste', this.pasteHandler);
         document.removeEventListener('keydown', this.documentKeyHandler);
         window.removeEventListener('beforeunload', this.unloadHandler);
         this.removeOrientationListeners();
         this.saveDraftWithShow();
-        if (this.timeoutId !== null) {
-            clearTimeout(this.timeoutId);
-        }
     }
 
     getChannelMemberCountsByGroup = () => {
-        const {useLDAPGroupMentions, useCustomGroupMentions, currentChannel, actions, draft} = this.props;
+        const {useLDAPGroupMentions, useCustomGroupMentions, currentChannel, isTimezoneEnabled, actions, draft} = this.props;
 
         if ((useLDAPGroupMentions || useCustomGroupMentions) && currentChannel.id) {
             const mentions = mentionsMinusSpecialMentionsInText(draft.message);
@@ -359,14 +378,16 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             if (mentions.length === 1) {
                 actions.searchAssociatedGroupsForReference(mentions[0], this.props.currentTeamId, currentChannel.id);
             } else if (mentions.length > 1) {
-                actions.getChannelMemberCountsByGroup(currentChannel.id);
+                actions.getChannelMemberCountsByGroup(currentChannel.id, isTimezoneEnabled);
             }
         }
-    };
+    }
 
     unloadHandler = () => {
         this.saveDraftWithShow();
-    };
+    }
+
+    handleSchedulePost = (scheduleUTCTimestamp: number) => this.handleSubmit(undefined, true, scheduleUTCTimestamp);
 
     saveDraftWithShow = (props = this.props) => {
         if (this.saveDraftFrame && props.currentChannel) {
@@ -377,12 +398,13 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 this.draftsForChannel[channelId] = {
                     ...draft,
                     show: !isDraftEmpty(draft),
+                    remote: false,
                 } as PostDraft;
+
+                this.saveDraft(props, true);
             }
         }
-
-        this.saveDraft(props, true);
-    };
+    }
 
     saveDraft = (props = this.props, save = false) => {
         if (this.saveDraftFrame && props.currentChannel) {
@@ -391,11 +413,11 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             clearTimeout(this.saveDraftFrame);
             this.saveDraftFrame = null;
         }
-    };
+    }
 
     setShowPreview = (newPreviewValue: boolean) => {
         this.props.actions.setShowPreview(newPreviewValue);
-    };
+    }
 
     setOrientationListeners = () => {
         if (window.screen.orientation && 'onchange' in window.screen.orientation) {
@@ -437,24 +459,24 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         this.lastOrientation = orientation;
-    };
+    }
 
     handlePostError = (postError: React.ReactNode) => {
         if (this.state.postError !== postError) {
             this.setState({postError});
         }
-    };
+    }
 
     toggleEmojiPicker = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
         e?.stopPropagation();
         this.setState({showEmojiPicker: !this.state.showEmojiPicker});
-    };
+    }
 
     hideEmojiPicker = () => {
         this.handleEmojiClose();
-    };
+    }
 
-    doSubmit = async (e?: React.FormEvent) => {
+    doSubmit = async (e?: React.FormEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
         const channelId = this.props.currentChannel.id;
         if (e) {
             e.preventDefault();
@@ -501,7 +523,18 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.focusTextbox(forceFocus);
 
         const isReaction = Utils.REACTION_PATTERN.exec(post.message);
-        if (post.message.indexOf('/') === 0 && !ignoreSlash) {
+        if (isSchedule) {
+            const updatedDraft = {
+                ...this.props.draft,
+                ...this.draftsForChannel[channelId],
+                id: this.draftsForChannel[channelId]?.id ?? this.props.draft.id,
+                timestamp: scheduleUTCTimestamp,
+                channelId,
+                remote: false,
+            };
+            this.scheduleDraft(updatedDraft);
+            return;
+        } else if (post.message.indexOf('/') === 0 && !ignoreSlash) {
             this.setState({message: '', postError: null});
             let args: CommandArgs = {
                 channel_id: channelId,
@@ -563,15 +596,12 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         this.isDraftSubmitting = false;
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
-        this.draftsForChannel[channelId] = null;
-    };
+        this.removeDraft(channelId);
+    }
 
-    handleNotifyAllConfirmation = () => {
-        this.doSubmit();
-    };
+    handleNotifyAllConfirmation = (isSchedule = false, scheduleUTCTimestamp?: number) => this.doSubmit(undefined, isSchedule, scheduleUTCTimestamp);
 
-    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number) => {
+    showNotifyAllModal = (mentions: string[], channelTimezoneCount: number, memberNotifyCount: number, isSchedule = false, scheduleUTCTimestamp?: number) => {
         this.props.actions.openModal({
             modalId: ModalIdentifiers.NOTIFY_CONFIRM_MODAL,
             dialogType: NotifyConfirmModal,
@@ -579,27 +609,13 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 mentions,
                 channelTimezoneCount,
                 memberNotifyCount,
-                onConfirm: () => this.handleNotifyAllConfirmation(),
+                onConfirm: () => this.handleNotifyAllConfirmation(isSchedule, scheduleUTCTimestamp),
                 onExited: () => {
                     this.isDraftSubmitting = false;
                 },
             },
         });
-    };
-
-    showPersistNotificationModal = (message: string, specialMentions: {[key: string]: boolean}, channelType: Channel['type']) => {
-        this.props.actions.openModal({
-            modalId: ModalIdentifiers.PERSIST_NOTIFICATION_CONFIRM_MODAL,
-            dialogType: PersistNotificationConfirmModal,
-            dialogProps: {
-                currentChannelTeammateUsername: this.props.currentChannelTeammateUsername,
-                specialMentions,
-                channelType,
-                message,
-                onConfirm: this.handleNotifyAllConfirmation,
-            },
-        });
-    };
+    }
 
     getStatusFromSlashCommand = () => {
         const {message} = this.state;
@@ -615,7 +631,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         return command === 'online' || command === 'away' || command === 'dnd' || command === 'offline';
     };
 
-    handleSubmit = async (e: React.FormEvent) => {
+    handleSubmit = async (e?: React.FormEvent, isSchedule = false, scheduleUTCTimestamp?: number) => {
         const {
             currentChannel: updateChannel,
             userIsOutOfOffice,
@@ -669,22 +685,14 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 }
             }
 
-            const {data} = await this.props.actions.getChannelTimezones(this.props.currentChannel.id);
-            channelTimezoneCount = data ? data.length : 0;
+            if (this.props.isTimezoneEnabled) {
+                const {data} = await this.props.actions.getChannelTimezones(this.props.currentChannel.id);
+                channelTimezoneCount = data ? data.length : 0;
+            }
         }
 
-        const isDirectOrGroup =
-            updateChannel.type === Constants.DM_CHANNEL || updateChannel.type === Constants.GM_CHANNEL;
-
-        if (
-            this.props.isPostPriorityEnabled &&
-            hasRequestedPersistentNotifications(this.props.draft?.metadata?.priority)
-        ) {
-            this.showPersistNotificationModal(this.state.message, specialMentions, updateChannel.type);
-            this.isDraftSubmitting = false;
-            return;
-        } else if (memberNotifyCount > 0) {
-            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount);
+        if (memberNotifyCount > 0) {
+            this.showNotifyAllModal(mentions, channelTimezoneCount, memberNotifyCount, isSchedule, scheduleUTCTimestamp);
             return;
         }
 
@@ -703,7 +711,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             return;
         }
 
-        if (this.state.message.trimEnd() === '/header') {
+        if (trimRight(this.state.message) === '/header') {
             const editChannelHeaderModalData = {
                 modalId: ModalIdentifiers.EDIT_CHANNEL_HEADER,
                 dialogType: EditChannelHeaderModal,
@@ -717,7 +725,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             return;
         }
 
-        if (!isDirectOrGroup && this.state.message.trimEnd() === '/purpose') {
+        const isDirectOrGroup =
+            updateChannel.type === Constants.DM_CHANNEL || updateChannel.type === Constants.GM_CHANNEL;
+        if (!isDirectOrGroup && trimRight(this.state.message) === '/purpose') {
             const editChannelPurposeModalData = {
                 modalId: ModalIdentifiers.EDIT_CHANNEL_PURPOSE,
                 dialogType: EditChannelPurposeModal,
@@ -731,8 +741,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             return;
         }
 
-        await this.doSubmit(e);
-    };
+        await this.doSubmit(e, isSchedule, scheduleUTCTimestamp);
+    }
 
     sendMessage = async (originalPost: Post) => {
         const {
@@ -791,10 +801,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.isDraftSubmitting = false;
 
         return {data: true};
-    };
+    }
 
     sendReaction(isReaction: RegExpExecArray) {
-        const channelId = this.props.currentChannel.id;
         const action = isReaction[1];
         const emojiName = isReaction[2];
         const postId = this.props.latestReplyablePostId;
@@ -805,8 +814,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             this.props.actions.removeReaction(postId, emojiName);
         }
 
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
-        this.draftsForChannel[channelId] = null;
+        this.removeDraft();
     }
 
     focusTextbox = (keepFocus = false) => {
@@ -818,7 +826,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         if (this.textboxRef.current && (keepFocus || !UserAgent.isMobile())) {
             this.textboxRef.current.focus();
         }
-    };
+    }
 
     postMsgKeyPress = (e: React.KeyboardEvent<TextboxElement>) => {
         const {ctrlSend, codeBlockOnCtrlEnter} = this.props;
@@ -844,7 +852,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             return;
         }
 
-        if (allowSending && this.isValidPersistentNotifications()) {
+        if (allowSending) {
             if (e.persist) {
                 e.persist();
             }
@@ -863,12 +871,12 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         this.emitTypingEvent();
-    };
+    }
 
     emitTypingEvent = () => {
         const channelId = this.props.currentChannel.id;
         GlobalActions.emitLocalUserTypingEvent(channelId, '');
-    };
+    }
 
     handleChange = (e: React.ChangeEvent<TextboxElement>) => {
         const message = e.target.value;
@@ -891,9 +899,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         this.handleDraftChange(draft);
     };
 
-    handleDraftChange = (draft: PostDraft, instant = false) => {
-        const channelId = this.props.currentChannel.id;
-
+    handleDraftChange = (draft: PostDraft, channelId = this.props.currentChannel.id, instant = false) => {
         if (this.saveDraftFrame) {
             clearTimeout(this.saveDraftFrame);
         }
@@ -907,11 +913,86 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         }
 
         this.draftsForChannel[channelId] = draft;
+    }
+
+    removeDraft = (channelId = this.props.currentChannel.id) => {
+        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, null, channelId);
+        this.draftsForChannel[channelId] = null;
     };
+
+    scheduleDraft = async (draft: PostDraft) => {
+        const channelId = this.props.currentChannel.id;
+
+        const {error} = await this.props.actions.upsertScheduleDraft(StoragePrefixes.DRAFT + channelId, draft);
+        if (error) {
+            error.submittedMessage = draft.message;
+            this.setState({serverError: error});
+            this.isDraftSubmitting = false;
+            this.draftsForChannel[channelId] = null;
+            return;
+        }
+
+        this.setState({
+            message: '',
+            submitting: false,
+            postError: null,
+            showFormat: false,
+        });
+
+        this.isDraftSubmitting = false;
+        this.draftsForChannel[channelId] = null;
+    };
+
+    pasteHandler = (e: ClipboardEvent) => {
+        /**
+         * casting HTMLInputElement on the EventTarget was necessary here
+         * since the ClipboardEvent type is not generic
+         */
+        if (!e.clipboardData || !e.clipboardData.items || ((e.target as TextboxElement)?.id !== 'post_textbox')) {
+            return;
+        }
+
+        const {clipboardData} = e;
+
+        const hasLinks = hasHtmlLink(clipboardData);
+        let table = getTable(clipboardData);
+        if (!table && !hasLinks) {
+            return;
+        }
+        table = table as HTMLTableElement;
+
+        e.preventDefault();
+
+        const message = this.state.message;
+        if (table && isGitHubCodeBlock(table.className)) {
+            const selectionStart = (e.target as any).selectionStart;
+            const selectionEnd = (e.target as any).selectionEnd;
+            const {formattedMessage, formattedCodeBlock} = formatGithubCodePaste({selectionStart, selectionEnd, message, clipboardData});
+            const newCaretPosition = this.state.caretPosition + formattedCodeBlock.length;
+            this.setMessageAndCaretPostion(formattedMessage, newCaretPosition);
+            return;
+        }
+
+        const originalSize = message.length;
+        const formattedMessage = formatMarkdownMessage(clipboardData, message.trim(), this.state.caretPosition);
+        const newCaretPosition = formattedMessage.length - (originalSize - this.state.caretPosition);
+        this.setMessageAndCaretPostion(formattedMessage, newCaretPosition);
+        this.handlePostPasteDraft(formattedMessage);
+    }
+
+    handlePostPasteDraft = (message: string) => {
+        const draft = {
+            ...this.props.draft,
+            message,
+        };
+
+        const channelId = this.props.currentChannel.id;
+        this.handleDraftChange(draft, channelId, true);
+    }
 
     handleFileUploadChange = () => {
         this.focusTextbox();
-    };
+    }
 
     handleUploadStart = (clientIds: string[], channelId: string) => {
         const uploadsInProgress = [...this.props.draft.uploadsInProgress, ...clientIds];
@@ -927,7 +1008,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         // this is a bit redundant with the code that sets focus when the file input is clicked,
         // but this also resets the focus after a drag and drop
         this.focusTextbox();
-    };
+    }
 
     handleUploadProgress = (filePreviewInfo: FilePreviewInfo) => {
         const uploadsProgressPercent = {
@@ -935,7 +1016,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             [filePreviewInfo.clientId]: filePreviewInfo,
         };
         this.setState({uploadsProgressPercent});
-    };
+    }
 
     handleFileUploadComplete = (fileInfos: FileInfo[], clientIds: string[], channelId: string) => {
         const draft = {...this.draftsForChannel[channelId]!};
@@ -955,35 +1036,36 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             draft.fileInfos = sortFileInfos(draft.fileInfos.concat(fileInfos), this.props.locale);
         }
 
-        this.handleDraftChange(draft, true);
-    };
+        this.handleDraftChange(draft, channelId, true);
+    }
 
-    handleUploadError = (uploadError: string | ServerError | null, clientId?: string, channelId?: string) => {
-        if (clientId && channelId) {
-            const draft = {...this.draftsForChannel[channelId]!};
+    handleUploadError = (err: string | ServerError, clientId?: string, channelId?: string) => {
+        let serverError = null;
+        if (typeof err === 'string' && err.length > 0) {
+            serverError = new Error(err);
+        }
 
-            if (draft.uploadsInProgress) {
-                const index = draft.uploadsInProgress.indexOf(clientId);
+        if (!channelId || !clientId) {
+            this.setState({serverError});
+            return;
+        }
 
-                if (index !== -1) {
-                    const uploadsInProgress = draft.uploadsInProgress.filter((item, itemIndex) => index !== itemIndex);
-                    const modifiedDraft = {
-                        ...draft,
-                        uploadsInProgress,
-                    };
-                    this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, modifiedDraft, channelId);
-                    this.draftsForChannel[channelId] = modifiedDraft;
-                }
+        const draft = {...this.draftsForChannel[channelId]!};
+
+        if (draft.uploadsInProgress) {
+            const index = draft.uploadsInProgress.indexOf(clientId);
+
+            if (index !== -1) {
+                const uploadsInProgress = draft.uploadsInProgress.filter((item, itemIndex) => index !== itemIndex);
+                const modifiedDraft = {
+                    ...draft,
+                    uploadsInProgress,
+                };
+                this.handleDraftChange(modifiedDraft, channelId, true);
             }
         }
 
-        if (typeof uploadError === 'string') {
-            if (uploadError.length !== 0) {
-                this.setState({serverError: new Error(uploadError)});
-            }
-        } else {
-            this.setState({serverError: uploadError});
-        }
+        this.setState({serverError});
     };
 
     removePreview = (id: string) => {
@@ -1020,8 +1102,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             };
         }
 
-        this.props.actions.setDraft(StoragePrefixes.DRAFT + channelId, modifiedDraft, channelId, false);
-        this.draftsForChannel[channelId] = modifiedDraft;
+        this.handleDraftChange(modifiedDraft, this.props.currentChannel.id, true);
 
         this.handleFileUploadChange();
 
@@ -1053,35 +1134,209 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         if (shouldFocusMainTextbox(e, document.activeElement)) {
             this.focusTextbox();
         }
-    };
+    }
 
     documentKeyHandler = (e: KeyboardEvent) => {
         const ctrlOrMetaKeyPressed = e.ctrlKey || e.metaKey;
-        const lastMessageReactionKeyCombo = ctrlOrMetaKeyPressed && e.shiftKey && Keyboard.isKeyPressed(e, KeyCodes.BACK_SLASH);
+        const lastMessageReactionKeyCombo = ctrlOrMetaKeyPressed && e.shiftKey && Utils.isKeyPressed(e, KeyCodes.BACK_SLASH);
         if (lastMessageReactionKeyCombo) {
             this.reactToLastMessage(e);
             return;
         }
 
         this.focusTextboxIfNecessary(e);
-    };
+    }
 
     getFileUploadTarget = () => {
         return this.textboxRef.current?.getInputBox();
-    };
+    }
 
     fillMessageFromHistory() {
         const lastMessage = this.props.messageInHistoryItem;
-        this.setState({
-            message: lastMessage || '',
-        });
+        if (lastMessage) {
+            this.setState({
+                message: lastMessage,
+            });
+        }
     }
 
     handleMouseUpKeyUp = (e: React.MouseEvent | React.KeyboardEvent) => {
         this.setState({
             caretPosition: (e.target as HTMLInputElement).selectionStart || 0,
         });
-    };
+    }
+
+    handleSelect = (e: React.SyntheticEvent<Element, Event>) => {
+        Utils.adjustSelection(this.textboxRef.current?.getInputBox(), e as React.KeyboardEvent<HTMLInputElement>);
+    }
+
+    handleKeyDown = (e: React.KeyboardEvent<TextboxElement>) => {
+        const messageIsEmpty = this.state.message.length === 0;
+        const draftMessageIsEmpty = this.props.draft.message.length === 0;
+
+        const ctrlOrMetaKeyPressed = e.ctrlKey || e.metaKey;
+        const ctrlEnterKeyCombo = (this.props.ctrlSend || this.props.codeBlockOnCtrlEnter) &&
+            Utils.isKeyPressed(e, KeyCodes.ENTER) &&
+            ctrlOrMetaKeyPressed;
+
+        const ctrlKeyCombo = Utils.cmdOrCtrlPressed(e) && !e.altKey && !e.shiftKey;
+        const ctrlAltCombo = Utils.cmdOrCtrlPressed(e, true) && e.altKey;
+        const shiftAltCombo = !Utils.cmdOrCtrlPressed(e) && e.shiftKey && e.altKey;
+
+        // listen for line break key combo and insert new line character
+        if (Utils.isUnhandledLineBreakKeyCombo(e)) {
+            this.setState({message: Utils.insertLineBreakFromKeyEvent(e)});
+            return;
+        }
+
+        if (ctrlEnterKeyCombo) {
+            this.setShowPreview(false);
+            this.postMsgKeyPress(e);
+            return;
+        }
+
+        const {message} = this.state;
+
+        if (Utils.isKeyPressed(e, KeyCodes.ESCAPE)) {
+            this.textboxRef.current?.blur();
+        }
+
+        if (
+            !e.ctrlKey &&
+            !e.metaKey &&
+            !e.altKey &&
+            !e.shiftKey &&
+            Utils.isKeyPressed(e, KeyCodes.UP) &&
+            message === ''
+        ) {
+            e.preventDefault();
+            if (this.textboxRef.current) {
+                this.textboxRef.current.blur();
+            }
+
+            this.editLastPost(e);
+        }
+
+        const {
+            selectionStart,
+            selectionEnd,
+            value,
+        } = e.target as TextboxElement;
+
+        if (ctrlKeyCombo) {
+            if (draftMessageIsEmpty && Utils.isKeyPressed(e, KeyCodes.UP)) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.loadPrevMessage(e);
+            } else if (draftMessageIsEmpty && Utils.isKeyPressed(e, KeyCodes.DOWN)) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.loadNextMessage(e);
+            } else if (Utils.isKeyPressed(e, KeyCodes.B)) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.applyMarkdown({
+                    markdownMode: 'bold',
+                    selectionStart,
+                    selectionEnd,
+                    message: value,
+                });
+            } else if (Utils.isKeyPressed(e, KeyCodes.I)) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.applyMarkdown({
+                    markdownMode: 'italic',
+                    selectionStart,
+                    selectionEnd,
+                    message: value,
+                });
+            }
+        } else if (ctrlAltCombo) {
+            if (Utils.isKeyPressed(e, KeyCodes.K)) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.applyMarkdown({
+                    markdownMode: 'link',
+                    selectionStart,
+                    selectionEnd,
+                    message: value,
+                });
+            } else if (Utils.isKeyPressed(e, KeyCodes.C)) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.applyMarkdown({
+                    markdownMode: 'code',
+                    selectionStart,
+                    selectionEnd,
+                    message: value,
+                });
+            } else if (Utils.isKeyPressed(e, KeyCodes.E)) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.toggleEmojiPicker();
+            } else if (Utils.isKeyPressed(e, KeyCodes.T)) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.toggleAdvanceTextEditor();
+            } else if (Utils.isKeyPressed(e, KeyCodes.P) && message.length) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.setShowPreview(!this.props.shouldShowPreview);
+            }
+        } else if (shiftAltCombo) {
+            if (Utils.isKeyPressed(e, KeyCodes.X)) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.applyMarkdown({
+                    markdownMode: 'strike',
+                    selectionStart,
+                    selectionEnd,
+                    message: value,
+                });
+            } else if (Utils.isKeyPressed(e, KeyCodes.SEVEN)) {
+                e.preventDefault();
+                this.applyMarkdown({
+                    markdownMode: 'ol',
+                    selectionStart,
+                    selectionEnd,
+                    message: value,
+                });
+            } else if (Utils.isKeyPressed(e, KeyCodes.EIGHT)) {
+                e.preventDefault();
+                this.applyMarkdown({
+                    markdownMode: 'ul',
+                    selectionStart,
+                    selectionEnd,
+                    message: value,
+                });
+            } else if (Utils.isKeyPressed(e, KeyCodes.NINE)) {
+                e.preventDefault();
+                this.applyMarkdown({
+                    markdownMode: 'quote',
+                    selectionStart,
+                    selectionEnd,
+                    message: value,
+                });
+            }
+        }
+        const upKeyOnly = !ctrlOrMetaKeyPressed && !e.altKey && !e.shiftKey && Utils.isKeyPressed(e, KeyCodes.UP);
+        const shiftUpKeyCombo = !ctrlOrMetaKeyPressed && !e.altKey && e.shiftKey && Utils.isKeyPressed(e, KeyCodes.UP);
+        const ctrlShiftCombo = Utils.cmdOrCtrlPressed(e, true) && e.shiftKey;
+
+        if (upKeyOnly && messageIsEmpty) {
+            this.editLastPost(e);
+        } else if (shiftUpKeyCombo && messageIsEmpty) {
+            this.replyToLastPost(e);
+        } else if (ctrlShiftCombo && Utils.isKeyPressed(e, KeyCodes.E)) {
+            e.stopPropagation();
+            e.preventDefault();
+            this.toggleEmojiPicker();
+        } else if (((isMac() && ctrlShiftCombo) || (!isMac() && ctrlAltCombo)) && Utils.isKeyPressed(e, KeyCodes.P) && this.state.message.length) {
+            this.setShowPreview(!this.props.shouldShowPreview);
+        } else if (ctrlAltCombo && Utils.isKeyPressed(e, KeyCodes.T)) {
+            this.toggleAdvanceTextEditor();
+        }
+    }
 
     editLastPost = (e: React.KeyboardEvent) => {
         e.preventDefault();
@@ -1101,7 +1356,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             this.textboxRef.current.blur();
         }
         this.props.actions.setEditingPost(lastPost.id, 'post_textbox', type);
-    };
+    }
 
     replyToLastPost = (e: React.KeyboardEvent) => {
         e.preventDefault();
@@ -1113,17 +1368,17 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         if (latestReplyablePostId) {
             this.props.actions.selectPostFromRightHandSideSearchByPostId(latestReplyablePostId);
         }
-    };
+    }
 
     loadPrevMessage = (e: React.KeyboardEvent) => {
         e.preventDefault();
         this.props.actions.moveHistoryIndexBack(Posts.MESSAGE_TYPES.POST).then(() => this.fillMessageFromHistory());
-    };
+    }
 
     loadNextMessage = (e: React.KeyboardEvent) => {
         e.preventDefault();
         this.props.actions.moveHistoryIndexForward(Posts.MESSAGE_TYPES.POST).then(() => this.fillMessageFromHistory());
-    };
+    }
 
     applyMarkdown = (params: ApplyMarkdownOptions) => {
         if (this.props.shouldShowPreview) {
@@ -1145,7 +1400,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
             this.handleDraftChange(draft);
         });
-    };
+    }
 
     reactToLastMessage = (e: KeyboardEvent) => {
         e.preventDefault();
@@ -1161,7 +1416,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         if (!rhsExpanded && noModalsAreOpen && noPopupsDropdownsAreOpen) {
             emitShortcutReactToLastPostFrom(Locations.CENTER);
         }
-    };
+    }
 
     handleBlur = () => {
         if (!this.isDraftSubmitting) {
@@ -1173,9 +1428,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
     handleEmojiClose = () => {
         this.setState({showEmojiPicker: false});
-    };
+    }
 
-    setMessageAndCaretPosition = (newMessage: string, newCaretPosition: number) => {
+    setMessageAndCaretPostion = (newMessage: string, newCaretPosition: number) => {
         const textbox = this.textboxRef.current?.getInputBox();
 
         this.setState({
@@ -1191,10 +1446,10 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
             this.handleDraftChange(draft);
         });
-    };
+    }
 
     prefillMessage = (message: string, shouldFocus?: boolean) => {
-        this.setMessageAndCaretPosition(message, message.length);
+        this.setMessageAndCaretPostion(message, message.length);
 
         if (shouldFocus) {
             const inputBox = this.textboxRef.current?.getInputBox();
@@ -1204,7 +1459,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             }
             this.focusTextbox(true);
         }
-    };
+    }
 
     handleEmojiClick = (emoji: Emoji) => {
         const emojiAlias = ('short_names' in emoji && emoji.short_names && emoji.short_names[0]) || emoji.name;
@@ -1216,7 +1471,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
         if (this.state.message === '') {
             const newMessage = ':' + emojiAlias + ': ';
-            this.setMessageAndCaretPosition(newMessage, newMessage.length);
+            this.setMessageAndCaretPostion(newMessage, newMessage.length);
         } else {
             const {message} = this.state;
             const {firstPiece, lastPiece} = splitMessageBasedOnCaretPosition(this.state.caretPosition, message);
@@ -1227,28 +1482,27 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
 
             const newCaretPosition =
                 firstPiece === '' ? `:${emojiAlias}: `.length : `${firstPiece} :${emojiAlias}: `.length;
-            this.setMessageAndCaretPosition(newMessage, newCaretPosition);
+            this.setMessageAndCaretPostion(newMessage, newCaretPosition);
         }
 
         this.handleEmojiClose();
-    };
+    }
 
     handleGifClick = (gif: string) => {
-        if (this.state.message === '') {
-            this.setState({message: gif});
-        } else {
-            const newMessage = (/\s+$/).test(this.state.message) ? this.state.message + gif : this.state.message + ' ' + gif;
-            this.setState({message: newMessage});
-
-            const draft = {
-                ...this.props.draft,
-                message: newMessage,
-            };
-
-            this.handleDraftChange(draft);
+        let newMessage = gif;
+        if (this.state.message !== '') {
+            newMessage = (/\s+$/).test(this.state.message) ? this.state.message + gif : this.state.message + ' ' + gif;
         }
+        this.setState({message: newMessage});
+
+        const draft = {
+            ...this.props.draft,
+            message: newMessage,
+        };
+
+        this.handleDraftChange(draft);
         this.handleEmojiClose();
-    };
+    }
 
     toggleAdvanceTextEditor = () => {
         this.setState({
@@ -1261,11 +1515,11 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             name: AdvancedTextEditorConst.POST,
             value: String(!this.state.isFormattingBarHidden),
         }]);
-    };
+    }
 
     handleRemovePriority = () => {
         this.handlePostPriorityApply();
-    };
+    }
 
     handlePostPriorityApply = (settings?: PostPriorityMetadata) => {
         const updatedDraft = {
@@ -1284,13 +1538,24 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             updatedDraft.metadata = {};
         }
 
-        this.handleDraftChange(updatedDraft, true);
+        this.handleDraftChange(updatedDraft, this.props.currentChannel.id, true);
         this.focusTextbox();
     };
 
     handlePostPriorityHide = () => {
-        this.focusTextbox(true);
+        this.setState({
+            showPostPriorityPicker: false,
+        });
+        this.focusTextbox();
     };
+
+    togglePostPriorityPicker = () => {
+        this.setState((prev) => ({
+            showPostPriorityPicker: !prev.showPostPriorityPicker,
+        }));
+    };
+
+    getPostPriorityPickerRef = () => this.postPriorityPickerRef.current;
 
     hasPrioritySet = () => {
         return (
@@ -1300,83 +1565,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                 this.props.draft.metadata.priority.requested_ack
             )
         );
-    };
-
-    isValidPersistentNotifications = (): boolean => {
-        if (!this.hasPrioritySet()) {
-            return true;
-        }
-
-        const {currentChannel} = this.props;
-        const {priority, persistent_notifications: persistentNotifications} = this.props.draft.metadata!.priority!;
-        if (priority !== PostPriority.URGENT || !persistentNotifications) {
-            return true;
-        }
-
-        if (currentChannel.type === Constants.DM_CHANNEL) {
-            return true;
-        }
-
-        if (this.hasSpecialMentions()) {
-            return false;
-        }
-
-        const mentions = mentionsMinusSpecialMentionsInText(this.state.message);
-
-        return mentions.length > 0;
-    };
-
-    getSpecialMentions = (): {[key: string]: boolean} => {
-        return specialMentionsInText(this.state.message);
-    };
-
-    hasSpecialMentions = (): boolean => {
-        return Object.values(this.getSpecialMentions()).includes(true);
-    };
-
-    onMessageChange = (message: string, callback?: (() => void) | undefined) => {
-        this.handleDraftChange({
-            ...this.props.draft,
-            message,
-        });
-        this.setState({message}, callback);
-    };
+    }
 
     render() {
-        const {draft, canPost} = this.props;
-
-        const pluginItems = this.props.postEditorActions?.
-            map((item) => {
-                if (!item.component) {
-                    return null;
-                }
-
-                const Component = item.component as any;
-                return (
-                    <Component
-                        key={item.id}
-                        draft={draft}
-                        getSelectedText={() => {
-                            const input = this.textboxRef.current?.getInputBox();
-
-                            return {
-                                start: input.selectionStart,
-                                end: input.selectionEnd,
-                            };
-                        }}
-                        updateText={(message: string) => {
-                            this.setState({
-                                message,
-                            });
-                            this.handleDraftChange({
-                                ...this.props.draft,
-                                message,
-                            });
-                        }}
-                    />
-                );
-            });
-
         let centerClass = '';
         if (!this.props.fullWidthTextBox) {
             centerClass = 'center';
@@ -1386,17 +1577,94 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
             return null;
         }
 
+        const priorityLabels = (
+            this.hasPrioritySet() ? (
+                <div className='AdvancedTextEditor__priority'>
+                    {this.props.draft.metadata!.priority!.priority && (
+                        <PriorityLabel
+                            size='xs'
+                            priority={this.props.draft.metadata!.priority!.priority}
+                        />
+                    )}
+                    {this.props.draft.metadata!.priority!.requested_ack && (
+                        <div className='AdvancedTextEditor__priority-ack'>
+                            <OverlayTrigger
+                                placement='top'
+                                delayShow={Constants.OVERLAY_TIME_DELAY}
+                                trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
+                                overlay={(
+                                    <Tooltip
+                                        id='post-priority-picker-ack-tooltip'
+                                        className='AdvancedTextEditor__priority-ack-tooltip'
+                                    >
+                                        <FormattedMessage
+                                            id={'post_priority.request_acknowledgement.tooltip'}
+                                            defaultMessage={'Acknowledgement will be requested'}
+                                        />
+                                    </Tooltip>
+                                )}
+                            >
+                                <CheckCircleOutlineIcon size={14}/>
+                            </OverlayTrigger>
+                            {!(this.props.draft.metadata!.priority!.priority) && (
+                                <FormattedMessage
+                                    id={'post_priority.request_acknowledgement'}
+                                    defaultMessage={'Request acknowledgement'}
+                                />
+                            )}
+                        </div>
+                    )}
+                    {!this.props.shouldShowPreview && (
+                        <OverlayTrigger
+                            placement='top'
+                            delayShow={Constants.OVERLAY_TIME_DELAY}
+                            trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
+                            overlay={(
+                                <Tooltip id='post-priority-picker-tooltip'>
+                                    <FormattedMessage
+                                        id={'post_priority.remove'}
+                                        defaultMessage={'Remove {priority}'}
+                                        values={{priority: this.props.draft.metadata!.priority!.priority}}
+                                    />
+                                </Tooltip>
+                            )}
+                        >
+                            <button
+                                type='button'
+                                className='close'
+                                onClick={this.handleRemovePriority}
+                            >
+                                <span aria-hidden='true'>{'×'}</span>
+                                <span className='sr-only'>
+                                    <FormattedMessage
+                                        id={'post_priority.remove'}
+                                        defaultMessage={'Remove {priority}'}
+                                        values={{priority: this.props.draft.metadata!.priority!.priority}}
+                                    />
+                                </span>
+                            </button>
+                        </OverlayTrigger>
+                    )}
+                </div>
+            ) : undefined
+        );
+
         return (
             <form
                 id='create_post'
                 ref={this.topDiv}
-                data-testid='create-post'
                 className={centerClass}
                 onSubmit={this.handleSubmit}
             >
-                {canPost && (draft.fileInfos.length > 0 || draft.uploadsInProgress.length > 0) && (
+                {
+                    this.props.canPost &&
+                    (this.props.draft.fileInfos.length > 0 || this.props.draft.uploadsInProgress.length > 0) &&
                     <FileLimitStickyBanner/>
-                )}
+                }
+                <ScheduledIndicator
+                    type={ScheduledIndicatorType.CHANNEL}
+                    channelId={this.props.currentChannel.id}
+                />
                 <AdvancedTextEditor
                     location={Locations.CENTER}
                     currentUserId={this.props.currentUserId}
@@ -1410,14 +1678,14 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     errorClass={this.state.errorClass}
                     serverError={this.state.serverError}
                     isFormattingBarHidden={this.state.isFormattingBarHidden}
-                    draft={draft}
+                    draft={this.props.draft}
                     showSendTutorialTip={this.props.showSendTutorialTip}
                     handleSubmit={this.handleSubmit}
                     removePreview={this.removePreview}
                     setShowPreview={this.setShowPreview}
                     shouldShowPreview={this.props.shouldShowPreview}
                     maxPostSize={this.props.maxPostSize}
-                    canPost={canPost}
+                    canPost={this.props.canPost}
                     applyMarkdown={this.applyMarkdown}
                     useChannelMentions={this.props.useChannelMentions}
                     badConnection={this.props.badConnection}
@@ -1428,6 +1696,8 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     handlePostError={this.handlePostError}
                     emitTypingEvent={this.emitTypingEvent}
                     handleMouseUpKeyUp={this.handleMouseUpKeyUp}
+                    handleSelect={this.handleSelect}
+                    handleKeyDown={this.handleKeyDown}
                     postMsgKeyPress={this.postMsgKeyPress}
                     handleChange={this.handleChange}
                     toggleEmojiPicker={this.toggleEmojiPicker}
@@ -1444,38 +1714,50 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     fileUploadRef={this.fileUploadRef}
                     prefillMessage={this.prefillMessage}
                     textboxRef={this.textboxRef}
-                    disableSend={!this.isValidPersistentNotifications()}
-                    labels={this.hasPrioritySet() ? (
-                        <PriorityLabels
-                            canRemove={!this.props.shouldShowPreview}
-                            hasError={!this.isValidPersistentNotifications()}
-                            specialMentions={this.getSpecialMentions()}
-                            onRemove={this.handleRemovePriority}
-                            persistentNotifications={draft!.metadata!.priority?.persistent_notifications}
-                            priority={draft!.metadata!.priority?.priority}
-                            requestedAck={draft!.metadata!.priority?.requested_ack}
-                        />
-                    ) : undefined}
+                    labels={priorityLabels}
+                    isSchedulable={true}
+                    handleSchedulePost={this.handleSchedulePost}
                     additionalControls={[
                         this.props.isPostPriorityEnabled && (
-                            <PostPriorityPickerOverlay
-                                key='post-priority-picker-key'
-                                settings={draft?.metadata?.priority}
-                                onApply={this.handlePostPriorityApply}
-                                onClose={this.handlePostPriorityHide}
-                                disabled={this.props.shouldShowPreview}
-                            />
+                            <React.Fragment key='PostPriorityPicker'>
+                                <PostPriorityPickerOverlay
+                                    settings={this.props.draft?.metadata?.priority}
+                                    show={this.state.showPostPriorityPicker}
+                                    target={this.getPostPriorityPickerRef}
+                                    onApply={this.handlePostPriorityApply}
+                                    onHide={this.handlePostPriorityHide}
+                                    defaultHorizontalPosition='left'
+                                />
+                                <OverlayTrigger
+                                    placement='top'
+                                    delayShow={Constants.OVERLAY_TIME_DELAY}
+                                    trigger={Constants.OVERLAY_DEFAULT_TRIGGER}
+                                    overlay={(
+                                        <Tooltip id='post-priority-picker-tooltip'>
+                                            <KeyboardShortcutSequence
+                                                shortcut={KEYBOARD_SHORTCUTS.msgPostPriority}
+                                                hoistDescription={true}
+                                                isInsideTooltip={true}
+                                            />
+                                        </Tooltip>
+                                    )}
+                                >
+                                    <IconContainer
+                                        ref={this.postPriorityPickerRef}
+                                        className={classNames({control: true, active: this.state.showPostPriorityPicker})}
+                                        disabled={this.props.shouldShowPreview}
+                                        type='button'
+                                        onClick={this.togglePostPriorityPicker}
+                                    >
+                                        <AlertCircleOutlineIcon
+                                            size={18}
+                                            color='currentColor'
+                                        />
+                                    </IconContainer>
+                                </OverlayTrigger>
+                            </React.Fragment>
                         ),
-                        ...(pluginItems || []),
                     ].filter(Boolean)}
-                    codeBlockOnCtrlEnter={this.props.codeBlockOnCtrlEnter}
-                    ctrlSend={this.props.ctrlSend}
-                    loadNextMessage={this.loadNextMessage}
-                    loadPrevMessage={this.loadPrevMessage}
-                    onEditLatestPost={this.editLastPost}
-                    onMessageChange={this.onMessageChange}
-                    replyToLastPost={this.replyToLastPost}
-                    caretPosition={this.state.caretPosition}
                 />
             </form>
         );

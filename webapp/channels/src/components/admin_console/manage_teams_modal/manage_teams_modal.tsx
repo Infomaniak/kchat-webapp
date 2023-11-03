@@ -5,21 +5,20 @@ import React, {useEffect} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import type {Team, TeamMembership} from '@mattermost/types/teams';
-import type {UserProfile} from '@mattermost/types/users';
-
-import {Client4} from 'mattermost-redux/client';
-import type {ActionResult} from 'mattermost-redux/types/actions';
-import {isAdmin} from 'mattermost-redux/utils/user_utils';
+import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
+import * as Utils from 'utils/utils';
 
 import LoadingScreen from 'components/loading_screen';
 import Avatar from 'components/widgets/users/avatar';
 
-import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
-import * as Utils from 'utils/utils';
+import {Client4} from 'mattermost-redux/client';
+import {isAdmin} from 'mattermost-redux/utils/user_utils';
+import {UserProfile} from '@mattermost/types/users';
+import {ActionResult} from 'mattermost-redux/types/actions';
+import {Team, TeamMembership} from '@mattermost/types/teams';
 
-import ManageTeamsDropdown from './manage_teams_dropdown';
 import RemoveFromTeamButton from './remove_from_team_button';
+import ManageTeamsDropdown from './manage_teams_dropdown';
 
 export type Props = {
     locale: string;

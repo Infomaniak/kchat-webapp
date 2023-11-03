@@ -2,16 +2,14 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
-
-import type {AdminConfig} from '@mattermost/types/config';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
 import {updateConfig} from 'mattermost-redux/actions/admin';
 import {getConfig} from 'mattermost-redux/selectors/entities/admin';
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {AdminConfig} from '@mattermost/types/config';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
 
 import EditPostTimeLimitModal from './edit_post_time_limit_modal';
 

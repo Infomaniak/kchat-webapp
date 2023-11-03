@@ -1,35 +1,23 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import React, {RefObject, useEffect, useState} from 'react';
 import classNames from 'classnames';
-import React, {useEffect, useState} from 'react';
-import type {RefObject} from 'react';
 import {FormattedDate, FormattedMessage, FormattedNumber, FormattedTime, useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
 
-import type {ClientLicense} from '@mattermost/types/config';
-
-import {Client4} from 'mattermost-redux/client';
-import {getConfig} from 'mattermost-redux/selectors/entities/admin';
-
-import {trackEvent} from 'actions/telemetry_actions';
-import {getExpandSeatsLink} from 'selectors/cloud';
-
-import useCanSelfHostedExpand from 'components/common/hooks/useCanSelfHostedExpand';
-import useControlSelfHostedExpansionModal from 'components/common/hooks/useControlSelfHostedExpansionModal';
-import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import Tag from 'components/widgets/tag/tag';
 
-import {FileTypes, TELEMETRY_CATEGORIES} from 'utils/constants';
-import {useQuery} from 'utils/http_utils';
-import {calculateOverageUserActivated} from 'utils/overage_team';
-import {getSkuDisplayName} from 'utils/subscription';
+import {ClientLicense} from '@mattermost/types/config';
+
+import {Client4} from 'mattermost-redux/client';
+
 import {getRemainingDaysFromFutureTimestamp, toTitleCase} from 'utils/utils';
+import {FileTypes} from 'utils/constants';
+import {getSkuDisplayName} from 'utils/subscription';
+import {calculateOverageUserActivated} from 'utils/overage_team';
 
 import './enterprise_edition.scss';
-
-const DAYS_UNTIL_EXPIRY_WARNING_DISPLAY_THRESHOLD = 30;
-const DAYS_UNTIL_EXPIRY_DANGER_DISPLAY_THRESHOLD = 5;
+import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 
 export interface EnterpriseEditionProps {
     openEELicenseModal: () => void;
@@ -59,23 +47,10 @@ const EnterpriseEditionLeftPanel = ({
     const {formatMessage} = useIntl();
     const [unsanitizedLicense, setUnsanitizedLicense] = useState(license);
     const openPricingModal = useOpenPricingModal();
-    const canExpand = useCanSelfHostedExpand();
-    const selfHostedExpansionModal = useControlSelfHostedExpansionModal({trackingLocation: 'license_settings_add_seats'});
-    const expandableLink = useSelector(getExpandSeatsLink);
-    const isSelfHostedPurchaseEnabled = useSelector(getConfig)?.ServiceSettings?.SelfHostedPurchase;
-
-    const query = useQuery();
-    const actionQueryParam = query.get('action');
-
-    useEffect(() => {
-        if (actionQueryParam === 'show_expansion_modal' && canExpand && isSelfHostedPurchaseEnabled) {
-            selfHostedExpansionModal.open();
-            query.set('action', '');
-        }
-    }, []);
 
     useEffect(() => {
         async function fetchUnSanitizedLicense() {
+            // This solves this the issue reported here: https://mattermost.atlassian.net/browse/MM-42906
             try {
                 const unsanitizedL = await Client4.getClientLicenseOld();
                 setUnsanitizedLicense(unsanitizedL);
@@ -101,15 +76,6 @@ const EnterpriseEditionLeftPanel = ({
             })}
         </button>
     );
-
-    const handleClickAddSeats = () => {
-        trackEvent(TELEMETRY_CATEGORIES.SELF_HOSTED_EXPANSION, 'add_seats_clicked');
-        if (!isSelfHostedPurchaseEnabled || !canExpand) {
-            window.open(expandableLink(unsanitizedLicense.Id), '_blank');
-        } else {
-            selfHostedExpansionModal.open();
-        }
-    };
 
     return (
         <div
@@ -151,16 +117,10 @@ const EnterpriseEditionLeftPanel = ({
             <div className='licenseInformation'>
                 <div className='license-details-top'>
                     <span className='title'>{'License details'}</span>
-                    {canExpand &&
-                        <button
-                            className='add-seats-button btn btn-primary'
-                            onClick={handleClickAddSeats}
-                        >
-                            <FormattedMessage
-                                id={'admin.license.enterpriseEdition.add.seats'}
-                                defaultMessage='+ Add seats'
-                            />
-                        </button>
+                    {(expirationDays <= 30) &&
+                        <span className='expiration-days'>
+                            {`Expires in ${expirationDays} day${expirationDays > 1 ? 's' : ''}`}
+                        </span>
                     }
                 </div>
                 {
@@ -174,7 +134,6 @@ const EnterpriseEditionLeftPanel = ({
                         fileInputRef,
                         handleChange,
                         statsActiveUsers,
-                        expirationDays,
                     )
                 }
             </div>
@@ -201,9 +160,9 @@ const EnterpriseEditionLeftPanel = ({
     );
 };
 
-type LegendValues = 'START DATE:' | 'EXPIRES:' | 'LICENSED SEATS:' | 'ACTIVE USERS:' | 'EDITION:' | 'LICENSE ISSUED:' | 'NAME:' | 'COMPANY / ORG:'
+type LegendValues = 'START DATE:' | 'EXPIRES:' | 'USERS:' | 'ACTIVE USERS:' | 'EDITION:' | 'LICENSE ISSUED:' | 'NAME:' | 'COMPANY / ORG:'
 
-const renderLicenseValues = (activeUsers: number, seatsPurchased: number, expirationDays: number) => ({legend, value}: {legend: LegendValues; value: string | JSX.Element | null}, index: number): React.ReactNode => {
+const renderLicenseValues = (activeUsers: number, seatsPurchased: number) => ({legend, value}: {legend: LegendValues; value: string | JSX.Element | null}, index: number): React.ReactNode => {
     if (legend === 'ACTIVE USERS:') {
         const {isBetween5PercerntAnd10PercentPurchasedSeats, isOver10PercerntPurchasedSeats} = calculateOverageUserActivated({activeUsers, seatsPurchased});
         return (
@@ -225,26 +184,6 @@ const renderLicenseValues = (activeUsers: number, seatsPurchased: number, expira
                         'value--over-seats-purchased': isOver10PercerntPurchasedSeats,
                     })}
                 >{value}</span>
-            </div>
-        );
-    } else if (legend === 'EXPIRES:') {
-        return (
-            <div
-                className='item-element'
-                key={value + index.toString()}
-            >
-                <span className='legend'>{legend}</span>
-                <span className='value'>{value}</span>
-                {(expirationDays <= DAYS_UNTIL_EXPIRY_WARNING_DISPLAY_THRESHOLD) &&
-                <span
-                    className={classNames('expiration-days', {
-                        'expiration-days-warning': expirationDays <= DAYS_UNTIL_EXPIRY_WARNING_DISPLAY_THRESHOLD,
-                        'expiration-days-danger': expirationDays <= DAYS_UNTIL_EXPIRY_DANGER_DISPLAY_THRESHOLD,
-                    })}
-                >
-                    {`Expires in ${expirationDays} day${expirationDays > 1 ? 's' : ''}`}
-                </span>
-                }
             </div>
         );
     }
@@ -270,7 +209,6 @@ const renderLicenseContent = (
     fileInputRef: RefObject<HTMLInputElement>,
     handleChange: () => void,
     statsActiveUsers: number,
-    expirationDays: number,
 ) => {
     // Note: DO NOT LOCALISE THESE STRINGS. Legally we can not since the license is in English.
 
@@ -298,7 +236,7 @@ const renderLicenseContent = (
     }> = [
         {legend: 'START DATE:', value: startsAt},
         {legend: 'EXPIRES:', value: expiresAt},
-        {legend: 'LICENSED SEATS:', value: users},
+        {legend: 'USERS:', value: users},
         {legend: 'ACTIVE USERS:', value: activeUsers},
         {legend: 'EDITION:', value: sku},
         {legend: 'LICENSE ISSUED:', value: issued},
@@ -308,7 +246,7 @@ const renderLicenseContent = (
 
     return (
         <div className='licenseElements'>
-            {licenseValues.map(renderLicenseValues(statsActiveUsers, parseInt(license.Users, 10), expirationDays))}
+            {licenseValues.map(renderLicenseValues(statsActiveUsers, parseInt(license.Users, 10)))}
             <hr/>
             {renderAddNewLicenseButton(fileInputRef, handleChange)}
             {renderRemoveButton(handleRemove, isDisabled, removing)}

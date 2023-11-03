@@ -4,14 +4,12 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import type {GroupStats} from '@mattermost/types/groups';
-import type {UserProfile} from '@mattermost/types/users';
-
-import DataGrid from 'components/admin_console/data_grid/data_grid';
-import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
-import UserGridName from 'components/admin_console/user_grid/user_grid_name';
+import {UserProfile} from '@mattermost/types/users';
+import {GroupStats} from '@mattermost/types/groups';
 
 import Constants from 'utils/constants';
+import UserGridName from 'components/admin_console/user_grid/user_grid_name';
+import DataGrid, {Row, Column} from 'components/admin_console/data_grid/data_grid';
 
 const USERS_PER_PAGE = 10;
 
@@ -98,7 +96,7 @@ export default class MemberListGroup extends React.PureComponent<Props, State> {
 
     loadComplete = () => {
         this.setState({loading: false});
-    };
+    }
 
     private nextPage = async () => {
         const {actions, groupID} = this.props;
@@ -106,11 +104,11 @@ export default class MemberListGroup extends React.PureComponent<Props, State> {
         this.setState({loading: true, page});
         await actions.getProfilesInGroup(groupID, page, USERS_PER_PAGE * 2);
         this.setState({loading: false});
-    };
+    }
 
     private previousPage = () => {
         this.setState({page: this.state.page - 1});
-    };
+    }
 
     private getRows = (): Row[] => {
         const {users} = this.props;
@@ -131,7 +129,7 @@ export default class MemberListGroup extends React.PureComponent<Props, State> {
                 },
             };
         });
-    };
+    }
 
     private getColumns = (): Column[] => {
         return [
@@ -145,7 +143,7 @@ export default class MemberListGroup extends React.PureComponent<Props, State> {
                 field: 'name',
             },
         ];
-    };
+    }
 
     private getPaginationProps = () => {
         let {total} = this.props;
@@ -160,7 +158,7 @@ export default class MemberListGroup extends React.PureComponent<Props, State> {
             endCount = total;
         }
         return {startCount, endCount, total};
-    };
+    }
 
     public render = (): JSX.Element => {
         const rows: Row[] = this.getRows();
@@ -192,5 +190,5 @@ export default class MemberListGroup extends React.PureComponent<Props, State> {
                 />
             </div>
         );
-    };
+    }
 }
