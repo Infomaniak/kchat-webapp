@@ -1,22 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import Pluggable from 'plugins/pluggable';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import type {TextFormattingOptions} from 'utils/text_formatting';
+import * as Utils from 'utils/utils';
 
 import type {Post} from '@mattermost/types/posts';
 
 import {Posts} from 'mattermost-redux/constants';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
-import {isPostEphemeral} from 'mattermost-redux/utils/post_utils';
 
 import PostMarkdown from 'components/post_markdown';
 import ShowMore from 'components/post_view/show_more';
 import type {AttachmentTextOverflowType} from 'components/post_view/show_more/show_more';
-
-import Pluggable from 'plugins/pluggable';
-import type {TextFormattingOptions} from 'utils/text_formatting';
-import * as Utils from 'utils/utils';
 
 type Props = {
     post: Post; /* The post to render the message for */
@@ -130,7 +128,7 @@ export default class PostMessageView extends React.PureComponent<Props, State> {
         }
 
         let message = post.message;
-        const isEphemeral = isPostEphemeral(post);
+        const isEphemeral = Utils.isPostEphemeral(post);
         if (compactDisplay && isEphemeral) {
             const visibleMessage = Utils.localizeMessage('post_info.message.visible.compact', ' (Only visible to you)');
             message = message.concat(visibleMessage);
@@ -146,6 +144,7 @@ export default class PostMessageView extends React.PureComponent<Props, State> {
                 maxHeight={maxHeight}
             >
                 <div
+                    aria-readonly='true'
                     tabIndex={0}
                     id={id}
                     className='post-message__text'

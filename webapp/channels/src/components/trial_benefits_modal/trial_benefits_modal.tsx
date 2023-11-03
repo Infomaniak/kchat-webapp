@@ -6,8 +6,7 @@ import React, {useCallback, useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {matchPath, useLocation} from 'react-router-dom';
-
-import {GenericModal} from '@mattermost/components';
+import {ConsolePages, ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 
@@ -22,13 +21,12 @@ import GuestAccessSvg from 'components/common/svg_images_components/guest_access
 import HandsSvg from 'components/common/svg_images_components/hands_svg';
 import MonitorImacLikeSVG from 'components/common/svg_images_components/monitor_imaclike_svg';
 import PersonWithChecklistSvg from 'components/common/svg_images_components/person_with_checklist';
-
-import {ConsolePages, DocLinks, ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
+import GenericModal from 'components/generic_modal';
 
 import type {GlobalState} from 'types/store';
 
-import TrialBenefitsModalStep from './trial_benefits_modal_step';
 import type {TrialBenefitsModalStepProps} from './trial_benefits_modal_step';
+import TrialBenefitsModalStep from './trial_benefits_modal_step';
 
 import './trial_benefits_modal.scss';
 
@@ -84,7 +82,7 @@ const TrialBenefitsModal = ({
                     height={180}
                 />
             ),
-            pageURL: DocLinks.SETUP_SAML,
+            pageURL: 'https://docs.mattermost.com/onboard/sso-saml.html',
             buttonLabel,
         },
         {
@@ -98,7 +96,7 @@ const TrialBenefitsModal = ({
                     height={180}
                 />
             ),
-            pageURL: DocLinks.SETUP_LDAP,
+            pageURL: 'https://docs.mattermost.com/onboard/ad-ldap.html',
             buttonLabel,
         },
         {

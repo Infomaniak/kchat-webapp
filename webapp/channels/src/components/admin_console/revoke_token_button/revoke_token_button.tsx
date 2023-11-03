@@ -4,7 +4,7 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 interface RevokeTokenButtonProps {
@@ -25,7 +25,7 @@ export default class RevokeTokenButton extends React.PureComponent<RevokeTokenBu
         if ('error' in response) {
             this.props.onError(response.error.message);
         }
-    }
+    };
 
     render() {
         return (

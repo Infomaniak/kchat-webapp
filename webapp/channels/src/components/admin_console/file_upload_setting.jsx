@@ -4,7 +4,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
 import * as Utils from 'utils/utils';
 
 import Setting from './setting';
@@ -39,7 +38,7 @@ export default class FileUploadSetting extends Setting {
         if (files && files.length > 0) {
             this.setState({fileSelected: true, fileName: files[0].name});
         }
-    }
+    };
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -51,7 +50,7 @@ export default class FileUploadSetting extends Setting {
                 Utils.clearFileInput(this.fileInputRef.current);
             }
         });
-    }
+    };
 
     render() {
         let serverError;

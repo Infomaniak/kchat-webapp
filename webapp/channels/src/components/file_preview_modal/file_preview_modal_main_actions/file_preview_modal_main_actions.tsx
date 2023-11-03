@@ -4,6 +4,8 @@
 import React, {memo, useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
+import Constants, {FileTypes} from 'utils/constants';
+import {copyToClipboard, getFileType} from 'utils/utils';
 
 import type {FileInfo} from '@mattermost/types/files';
 
@@ -15,13 +17,10 @@ import ExternalLink from 'components/external_link';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
-import Constants, {FileTypes} from 'utils/constants';
-import {copyToClipboard, getFileType} from 'utils/utils';
-
 import type {GlobalState} from 'types/store';
 
-import {isFileInfo} from '../types';
 import type {LinkInfo} from '../types';
+import {isFileInfo} from '../types';
 
 import './file_preview_modal_main_actions.scss';
 

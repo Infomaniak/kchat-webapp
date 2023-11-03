@@ -3,12 +3,9 @@
 
 /* eslint-disable max-lines */
 
-import keyMirror from 'key-mirror';
-
-import Permissions from 'mattermost-redux/constants/permissions';
-
-import * as PostListUtils from 'mattermost-redux/utils/post_list';
-
+import solarizedDarkCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/base16/solarized-dark.css';
+import githubCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/github.css';
+import monokaiCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/monokai.css';
 import audioIcon from 'images/icons/audio.svg';
 import codeIcon from 'images/icons/code.svg';
 import excelIcon from 'images/icons/excel.svg';
@@ -24,18 +21,17 @@ import monokaiIcon from 'images/themes/code_themes/monokai.png';
 import solarizedDarkIcon from 'images/themes/code_themes/solarized-dark.png';
 import solarizedLightIcon from 'images/themes/code_themes/solarized-light.png';
 import logoWebhook from 'images/webhook_icon.jpg';
-
+import keyMirror from 'key-mirror';
 import {t} from 'utils/i18n';
 
 import {CustomStatusDuration} from '@mattermost/types/users';
 
-import githubCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/github.css';
+import Permissions from 'mattermost-redux/constants/permissions';
+import * as PostListUtils from 'mattermost-redux/utils/post_list';
 
 // eslint-disable-line import/order
-import monokaiCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/monokai.css';
 
 // eslint-disable-line import/order
-import solarizedDarkCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/base16/solarized-dark.css';
 
 // eslint-disable-line import/order
 import solarizedLightCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/base16/solarized-light.css'; // eslint-disable-line import/order

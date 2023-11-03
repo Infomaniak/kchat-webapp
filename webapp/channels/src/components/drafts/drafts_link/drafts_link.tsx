@@ -1,41 +1,54 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useEffect} from 'react';
-import {FormattedMessage} from 'react-intl';
+import React, {memo, useCallback, useEffect} from 'react';
+import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 import {NavLink, useRouteMatch} from 'react-router-dom';
+import {RHSStates} from 'utils/constants';
 
-import {syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {localDraftsAreEnabled, syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {getDrafts} from 'actions/views/drafts';
+import {closeRightHandSide} from 'actions/views/rhs';
 import {makeGetDraftsCount} from 'selectors/drafts';
+import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
 
-import DraftsTourTip from 'components/drafts/drafts_link/drafts_tour_tip/drafts_tour_tip';
 import ChannelMentionBadge from 'components/sidebar/sidebar_channel/channel_mention_badge';
 
 import './drafts_link.scss';
+
+import DraftsTourTip from './drafts_tour_tip/drafts_tour_tip';
 
 const getDraftsCount = makeGetDraftsCount();
 
 function DraftsLink() {
     const dispatch = useDispatch();
-
+    const localDraftsEnabled = useSelector(localDraftsAreEnabled);
     const syncedDraftsAllowedAndEnabled = useSelector(syncedDraftsAreAllowedAndEnabled);
+    const {formatMessage} = useIntl();
+    const {url} = useRouteMatch();
+    const match = useRouteMatch('/:team/drafts');
     const count = useSelector(getDraftsCount);
     const teamId = useSelector(getCurrentTeamId);
-
-    const {url} = useRouteMatch();
-    const isDraftUrlMatch = useRouteMatch('/:team/drafts');
+    const rhsOpen = useSelector(getIsRhsOpen);
+    const rhsState = useSelector(getRhsState);
 
     useEffect(() => {
         if (syncedDraftsAllowedAndEnabled) {
             dispatch(getDrafts(teamId));
         }
-    }, [teamId, syncedDraftsAllowedAndEnabled]);
+    }, [teamId, dispatch, syncedDraftsAllowedAndEnabled]);
 
-    if (!count && !isDraftUrlMatch) {
+    const openDrafts = useCallback((e) => {
+        e.stopPropagation();
+        if (rhsOpen && rhsState === RHSStates.EDIT_HISTORY) {
+            dispatch(closeRightHandSide());
+        }
+    }, [rhsOpen, rhsState]);
+
+    if (!localDraftsEnabled || (!count && !match)) {
         return null;
     }
 
@@ -44,9 +57,10 @@ function DraftsLink() {
             <li
                 className='SidebarChannel'
                 tabIndex={-1}
-                id='sidebar-drafts-button'
+                id={'sidebar-drafts-button'}
             >
                 <NavLink
+                    onClick={openDrafts}
                     to={`${url}/drafts`}
                     id='sidebarItem_drafts'
                     activeClassName='active'
@@ -60,10 +74,7 @@ function DraftsLink() {
                     />
                     <div className='SidebarChannelLinkLabel_wrapper'>
                         <span className='SidebarChannelLinkLabel sidebar-item__name'>
-                            <FormattedMessage
-                                id='drafts.sidebarLink'
-                                defaultMessage='Drafts'
-                            />
+                            {formatMessage({id: 'drafts.sidebarLink', defaultMessage: 'Drafts'})}
                         </span>
                     </div>
                     {count > 0 && (

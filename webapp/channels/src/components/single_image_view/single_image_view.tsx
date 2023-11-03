@@ -3,6 +3,10 @@
 
 import classNames from 'classnames';
 import React from 'react';
+import {FileTypes, ModalIdentifiers} from 'utils/constants';
+import {
+    getFileType,
+} from 'utils/utils';
 
 import type {FileInfo} from '@mattermost/types/files';
 
@@ -10,11 +14,6 @@ import {getFilePreviewUrl, getFileUrl} from 'mattermost-redux/utils/file_utils';
 
 import FilePreviewModal from 'components/file_preview_modal';
 import SizeAwareImage from 'components/size_aware_image';
-
-import {FileTypes, ModalIdentifiers} from 'utils/constants';
-import {
-    getFileType,
-} from 'utils/utils';
 
 import type {PropsFromRedux} from './index';
 
@@ -61,7 +60,10 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
     }
 
     static getDerivedStateFromProps(props: Props, state: State) {
-        if ((props.fileInfo?.width !== state.dimensions.width) || props.fileInfo.height !== state.dimensions.height) {
+        if (
+            props.fileInfo?.width && props.fileInfo?.height &&
+            ((props.fileInfo?.width !== state.dimensions.width) || props.fileInfo.height !== state.dimensions.height)
+        ) {
             return {
                 dimensions: {
                     width: props.fileInfo?.width,
@@ -76,9 +78,9 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
         this.mounted = false;
     }
 
-    imageLoaded = () => {
+    imageLoaded = (dimensions: State['dimensions']) => {
         if (this.mounted) {
-            this.setState({loaded: true});
+            this.setState({loaded: true, dimensions});
         }
     };
 
@@ -227,7 +229,7 @@ export default class SingleImageView extends React.PureComponent<Props, State> {
                             className={classNames('image-loaded', fadeInClass, svgClass)}
                             style={styleIfSvgWithDimensions}
                         >
-                            <div className={classNames(permalinkClass)}>
+                            <div className={classNames(permalinkClass, 'clamp')}>
                                 <SizeAwareImage
                                     onClick={this.handleImageClick}
                                     className={classNames(minPreviewClass, permalinkClass)}

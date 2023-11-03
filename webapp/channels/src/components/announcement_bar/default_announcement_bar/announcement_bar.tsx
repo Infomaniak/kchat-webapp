@@ -3,6 +3,8 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {Constants, AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
+import {isStringContainingUrl} from 'utils/url';
 
 import type {WarnMetricStatus} from '@mattermost/types/config';
 
@@ -14,11 +16,7 @@ import ToggleModalButton from 'components/toggle_modal_button';
 import Tooltip from 'components/tooltip';
 import WarnMetricAckModal from 'components/warn_metric_ack_modal';
 
-import {Constants, AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
-import {isStringContainingUrl} from 'utils/url';
-
 type Props = {
-    id?: string;
     showCloseButton: boolean;
     color: string;
     textColor: string;
@@ -39,6 +37,7 @@ type Props = {
         decrementAnnouncementBarCount: () => void;
     };
     showCTA?: boolean;
+    isStringContainingUrl?: boolean;
 }
 
 type State = {
@@ -57,7 +56,7 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
 
         this.state = {
             showTooltip: false,
-            isStringContainingUrl: false,
+            isStringContainingUrl: this.props.isStringContainingUrl || false,
         };
     }
 
@@ -133,6 +132,10 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
             barClass = 'announcement-bar announcement-bar-advisor-ack';
         } else if (this.props.type === AnnouncementBarTypes.GENERAL) {
             barClass = 'announcement-bar announcement-bar-general';
+        } else if (this.props.type === AnnouncementBarTypes.INFOMANIAK) {
+            barClass = 'announcement-bar announcement-bar-infomaniak';
+        } else if (this.props.type === AnnouncementBarTypes.INFOMANIAK_MOBILE) {
+            barClass = 'announcement-bar announcement-bar-infomaniak-mobile';
         }
 
         let closeButton;
@@ -172,7 +175,6 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
                 style={barStyle}
                 // eslint-disable-next-line react/no-unknown-property
                 css={{gridArea: 'announcement'}}
-                data-testid={this.props.id}
             >
                 <OverlayTrigger
                     delayShow={Constants.OVERLAY_TIME_DELAY}

@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import Reaction from 'components/post_view/reaction';
-
-import {TestHelper} from 'utils/test_helper';
 
 import ReactionList from './reaction_list';
 

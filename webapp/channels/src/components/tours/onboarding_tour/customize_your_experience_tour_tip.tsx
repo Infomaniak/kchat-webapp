@@ -1,17 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import CustomImg from 'images/Customize-Your-Experience.gif';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {useMeasurePunchouts} from '@mattermost/components';
 
-import CustomImg from 'images/Customize-Your-Experience.gif';
-
 import OnboardingTourTip from './onboarding_tour_tip';
 
-const translate = {x: -56, y: 4};
-const offset: [number, number] = [17, 0];
+const translate = {x: 20, y: -6};
+const offset: [number, number] = [18, 4];
 
 export const CustomizeYourExperienceTour = () => {
     const title = (
@@ -37,7 +36,7 @@ export const CustomizeYourExperienceTour = () => {
             screen={screen}
             imageURL={CustomImg}
             placement='bottom-start'
-            pulsatingDotPlacement='right-end'
+            pulsatingDotPlacement='bottom'
             pulsatingDotTranslate={translate}
             offset={offset}
             width={352}

@@ -2,14 +2,15 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
 import type {MessageDescriptor} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {COUNTRIES} from 'utils/countries';
 
 import type {Address} from '@mattermost/types/cloud';
 
+import DropdownInput from 'components/dropdown_input';
 import Input from 'components/widgets/inputs/input/input';
 
-import CountrySelector from './country_selector';
 import StateSelector from './state_selector';
 
 import './payment_form.scss';
@@ -61,12 +62,25 @@ const AddressForm = (props: AddressFormProps) => {
                     {...props.title}
                 />
             </div>
-            <div className='third-dropdown-sibling-wrapper'>
-                <CountrySelector
-                    onChange={handleCountryChange}
-                    value={props.address.country}
-                />
-            </div>
+            <DropdownInput
+                onChange={handleCountryChange}
+                value={
+                    props.address.country ? {value: props.address.country, label: props.address.country} : undefined
+                }
+                options={COUNTRIES.map((country) => ({
+                    value: country.name,
+                    label: country.name,
+                }))}
+                legend={formatMessage({
+                    id: 'payment_form.country',
+                    defaultMessage: 'Country',
+                })}
+                placeholder={formatMessage({
+                    id: 'payment_form.country',
+                    defaultMessage: 'Country',
+                })}
+                name={'billing_dropdown'}
+            />
             <div className='form-row'>
                 <Input
                     name='address'
@@ -109,7 +123,7 @@ const AddressForm = (props: AddressFormProps) => {
                 />
             </div>
             <div className='form-row'>
-                <div className='form-row-third-1 selector fourth-dropdown-sibling-wrapper'>
+                <div className='form-row-third-1 selector'>
                     <StateSelector
                         country={props.address.country}
                         state={props.address.state}

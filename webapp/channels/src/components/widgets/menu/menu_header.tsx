@@ -6,22 +6,22 @@ import React from 'react';
 import './menu_header.scss';
 
 type Props = {
+    divider?: React.ReactNode;
     children?: React.ReactNode;
     onClick?: () => void;
 }
 
-/**
- * @deprecated Use the "webapp/channels/src/components/menu" instead.
- */
-const MenuHeader = ({children, onClick}: Props) => {
-    return (
-        <li
-            className='MenuHeader'
-            onClick={onClick}
-        >
-            {children}
-        </li>
-    );
-};
+export default class MenuHeader extends React.PureComponent<Props> {
+    public render() {
+        const {children, onClick} = this.props;
 
-export default React.memo(MenuHeader);
+        return (
+            <li
+                className='MenuHeader'
+                onClick={onClick}
+            >
+                {children}
+            </li>
+        );
+    }
+}

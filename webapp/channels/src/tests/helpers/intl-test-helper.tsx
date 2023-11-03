@@ -8,6 +8,7 @@ import {
     shallow,
     mount,
 } from 'enzyme';
+import defaultMessages from 'i18n/en.json';
 import React from 'react';
 import type {
     ExoticComponent,
@@ -21,8 +22,6 @@ import {
 import type {
     injectIntl,
     IntlShape} from 'react-intl';
-
-import defaultMessages from 'i18n/en.json';
 
 export const defaultIntl = createIntl({
     locale: 'en',

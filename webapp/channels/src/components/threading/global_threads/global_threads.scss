@@ -35,7 +35,7 @@
     > .no-results__holder {
         grid-area: list/list/pane/pane;
 
-        @media screen and (max-width: 1020px) {
+        @media screen and (max-width: 1073px) {
             grid-area: main;
         }
     }
@@ -68,7 +68,7 @@
     grid-template-rows: 63px 1fr;
 
     // single column
-    @media screen and (max-width: 1020px) {
+    @media screen and (max-width: 1073px) {
         grid-template-areas:
             'header header'
             'main main';
@@ -125,5 +125,42 @@
 
     @media screen and (min-width: 1680px) {
         --list: minmax(min-content, 500px);
+    }
+
+    @media screen and (max-width: 1473px) {
+        &.rhs-opened {
+            grid-template-areas:
+                'header header'
+                'main main';
+
+            &:not(.thread-selected) {
+                .ThreadList {
+                    grid-area: main;
+                }
+
+                .ThreadPane,
+                .ThreadList + .no-results__holder {
+                    display: none;
+                }
+            }
+
+            &.thread-selected {
+                .ThreadList {
+                    display: none;
+                }
+
+                .ThreadPane {
+                    grid-area: main;
+
+                    .Header {
+                        padding-left: 5px;
+                    }
+
+                    .back {
+                        display: unset;
+                    }
+                }
+            }
+        }
     }
 }

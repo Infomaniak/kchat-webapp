@@ -1,24 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
 import React from 'react';
-import {injectIntl, type IntlShape} from 'react-intl';
+import {t} from 'utils/i18n';
+
+import LocalizedIcon from 'components/localized_icon';
 
 type Props = {
-    additionalClassName?: string;
-    intl: IntlShape;
+    additionalClassName: string | null;
 }
 
-class WarningIcon extends React.PureComponent<Props> {
+export default class WarningIcon extends React.PureComponent<Props> {
+    public static defaultProps: Props = {
+        additionalClassName: null,
+    };
+
     public render(): JSX.Element {
+        const className = 'fa fa-warning' + (this.props.additionalClassName ? ' ' + this.props.additionalClassName : '');
         return (
-            <i
-                className={classNames('fa fa-warning', this.props.additionalClassName)}
-                title={this.props.intl.formatMessage({id: 'generic_icons.warning', defaultMessage: 'Warning Icon'})}
+            <LocalizedIcon
+                className={className}
+                title={{id: t('generic_icons.warning'), defaultMessage: 'Warning Icon'}}
             />
         );
     }
 }
-
-export default injectIntl(WarningIcon);

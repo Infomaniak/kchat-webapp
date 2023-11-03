@@ -1,27 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {ReactNode, MouseEvent} from 'react';
-import {injectIntl, type WrappedComponentProps} from 'react-intl';
+import React from 'react';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 
+import LocalizedIcon from 'components/localized_icon';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import TeamInfoIcon from 'components/widgets/icons/team_info_icon';
 
-import * as Utils from 'utils/utils';
-
-interface Props extends WrappedComponentProps {
+type Props = {
     team: Team;
     onTeamClick: (team: Team) => void;
     loading: boolean;
     canJoinPublicTeams: boolean;
     canJoinPrivateTeams: boolean;
-}
+};
 
-export class SelectTeamItem extends React.PureComponent<Props> {
+export default class SelectTeamItem extends React.PureComponent<Props> {
     handleTeamClick = (e: MouseEvent): void => {
         e.preventDefault();
         this.props.onTeamClick(this.props.team);
@@ -57,16 +57,18 @@ export class SelectTeamItem extends React.PureComponent<Props> {
         let icon;
         if (loading) {
             icon = (
-                <span
+                <LocalizedIcon
                     className='fa fa-refresh fa-spin right signup-team__icon'
-                    title={this.props.intl.formatMessage({id: 'generic_icons.loading', defaultMessage: 'Loading Icon'})}
+                    component='span'
+                    title={{id: t('generic_icons.loading'), defaultMessage: 'Loading Icon'}}
                 />
             );
         } else {
             icon = (
-                <span
+                <LocalizedIcon
                     className='fa fa-angle-right right signup-team__icon'
-                    title={this.props.intl.formatMessage({id: 'select_team.join.icon', defaultMessage: 'Join Team Icon'})}
+                    component='span'
+                    title={{id: t('select_team.join.icon'), defaultMessage: 'Join Team Icon'}}
                 />
             );
         }
@@ -84,9 +86,9 @@ export class SelectTeamItem extends React.PureComponent<Props> {
                 >
                     <span className='signup-team-dir__name'>{team.display_name}</span>
                     {!team.allow_open_invite &&
-                        <i
+                        <LocalizedIcon
                             className='fa fa-lock light'
-                            title={this.props.intl.formatMessage({id: 'select_team.private.icon', defaultMessage: 'Private team'})}
+                            title={{id: t('select_team.private.icon'), defaultMessage: 'Private team'}}
                         />}
                     {canJoin && icon}
                 </a>
@@ -94,5 +96,3 @@ export class SelectTeamItem extends React.PureComponent<Props> {
         );
     }
 }
-
-export default injectIntl(SelectTeamItem);

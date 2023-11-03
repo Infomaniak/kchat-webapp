@@ -1,14 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useRef} from 'react';
+import Pluggable from 'plugins/pluggable';
 import type {ComponentType} from 'react';
-import {Route, Switch} from 'react-router-dom';
+import React, {useRef} from 'react';
 import type {match} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import {createGlobalStyle} from 'styled-components';
 
-import type {Team} from '@mattermost/types/teams';
-import type {UserProfile} from '@mattermost/types/users';
+import type {Team} from '@mattermost/types/teams.js';
+import type {UserProfile} from '@mattermost/types/users.js';
 
 import Emoji from 'components/emoji';
 import AddEmoji from 'components/emoji/add_emoji';
@@ -26,8 +27,6 @@ import EditOutgoingWebhook from 'components/integrations/edit_outgoing_webhook';
 import InstalledIncomingWebhooks from 'components/integrations/installed_incoming_webhooks';
 import InstalledOauthApps from 'components/integrations/installed_oauth_apps';
 import InstalledOutgoingWebhooks from 'components/integrations/installed_outgoing_webhooks';
-
-import Pluggable from 'plugins/pluggable';
 
 import BackstageNavbar from './components/backstage_navbar';
 import BackstageSidebar from './components/backstage_sidebar';

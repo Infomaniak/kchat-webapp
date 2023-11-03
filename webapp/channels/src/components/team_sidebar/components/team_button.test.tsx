@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {BrowserRouter as Router} from 'react-router-dom';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import TeamButton from './team_button';

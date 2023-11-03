@@ -1,20 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import desktopImg from 'images/deep-linking/deeplinking-desktop-img.png';
+import mobileImg from 'images/deep-linking/deeplinking-mobile-img.png';
+import MattermostLogoSvg from 'images/logo.svg';
 import React, {PureComponent} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {LandingPreferenceTypes} from 'utils/constants';
+import * as UserAgent from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import BrowserStore from 'stores/browser_store';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import CheckboxCheckedIcon from 'components/widgets/icons/checkbox_checked_icon';
-
-import desktopImg from 'images/deep-linking/deeplinking-desktop-img.png';
-import mobileImg from 'images/deep-linking/deeplinking-mobile-img.png';
-import MattermostLogoSvg from 'images/logo.svg';
-import {LandingPreferenceTypes} from 'utils/constants';
-import * as UserAgent from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 type Props = {
     defaultTheme: any;
@@ -46,7 +45,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
             rememberChecked: false,
             redirectPage: false,
             location,
-            nativeLocation: location.replace(/^(https|http)/, 'mattermost'),
+            nativeLocation: location.replace(/^(https|http)/, 'kchat'),
             brandImageError: false,
             navigating: false,
         };
@@ -78,20 +77,6 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
     checkLandingPreferenceBrowser = () => {
         const landingPreference = BrowserStore.getLandingPreference(this.props.siteUrl);
         return landingPreference && landingPreference === LandingPreferenceTypes.BROWSER;
-    };
-
-    isEmbedded = () => {
-        // this cookie is set by any plugin that facilitates iframe embedding (e.g. mattermost-plugin-msteams-sync).
-        const cookieName = 'MMEMBED';
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.startsWith(cookieName + '=')) {
-                const value = cookie.substring(cookieName.length + 1);
-                return decodeURIComponent(value) === '1';
-            }
-        }
-        return false;
     };
 
     checkLandingPreferenceApp = () => {
@@ -161,14 +146,14 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
     renderGoNativeAppMessage = () => {
         return (
             <a
-                href={UserAgent.isMobile() ? '#' : this.state.nativeLocation}
+                href={Utils.isMobile() ? '#' : this.state.nativeLocation}
                 onMouseDown={() => {
                     this.setPreference(LandingPreferenceTypes.MATTERMOSTAPP, true);
                 }}
                 onClick={() => {
                     this.setPreference(LandingPreferenceTypes.MATTERMOSTAPP, true);
                     this.setState({redirectPage: true, navigating: true});
-                    if (UserAgent.isMobile()) {
+                    if (Utils.isMobile()) {
                         if (UserAgent.isAndroidWeb()) {
                             const timeout = setTimeout(() => {
                                 window.location.replace(this.getDownloadLink()!);
@@ -192,6 +177,12 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
             return this.props.iosAppLink;
         } else if (UserAgent.isAndroidWeb()) {
             return this.props.androidAppLink;
+        } else if (UserAgent.isMac()) {
+            return 'https://download.storage5.infomaniak.com/kchat/kchat-desktop-1.1.1-mac-x64.dmg';
+        } else if (UserAgent.isWindows()) {
+            return 'https://download.storage5.infomaniak.com/kchat/kchat-desktop-setup-1.1.1-win.exe';
+        } else if (UserAgent.isLinux()) {
+            return 'https://download.storage5.infomaniak.com/kchat/kchat-desktop-1.1.1-linux-x86_64.AppImage';
         }
 
         return this.props.desktopAppLink;
@@ -330,7 +321,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
                 id='get_app.ifNothingPrompts'
                 defaultMessage='You can view {siteName} in the desktop app or continue in your web browser.'
                 values={{
-                    siteName: this.props.enableCustomBrand ? '' : ' Mattermost',
+                    siteName: this.props.enableCustomBrand ? '' : ' kChat',
                 }}
             />
         );
@@ -340,7 +331,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
                     id='get_app.ifNothingPromptsMobile'
                     defaultMessage='You can view {siteName} in the mobile app or continue in your web browser.'
                     values={{
-                        siteName: this.props.enableCustomBrand ? '' : ' Mattermost',
+                        siteName: this.props.enableCustomBrand ? '' : ' kChat',
                     }}
                 />
             );
@@ -374,23 +365,27 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
             <div className='get-app__dialog-body'>
                 {this.renderDialogHeader()}
                 <div className='get-app__buttons'>
-                    {this.renderGoNativeAppMessage()}
-                    <a
-                        href={this.state.location}
-                        onMouseDown={() => {
-                            this.setPreference(LandingPreferenceTypes.BROWSER, true);
-                        }}
-                        onClick={() => {
-                            this.setPreference(LandingPreferenceTypes.BROWSER, true);
-                            this.setState({navigating: true});
-                        }}
-                        className='btn btn-tertiary btn-lg'
-                    >
-                        <FormattedMessage
-                            id='get_app.continueToBrowser'
-                            defaultMessage='View in Browser'
-                        />
-                    </a>
+                    <div className='get-app__status'>
+                        {this.renderGoNativeAppMessage()}
+                    </div>
+                    <div className='get-app__status'>
+                        <a
+                            href={this.state.location}
+                            onMouseDown={() => {
+                                this.setPreference(LandingPreferenceTypes.BROWSER, true);
+                            }}
+                            onClick={() => {
+                                this.setPreference(LandingPreferenceTypes.BROWSER, true);
+                                this.setState({navigating: true});
+                            }}
+                            className='btn btn-default btn-lg get-app__continue'
+                        >
+                            <FormattedMessage
+                                id='get_app.continueToBrowser'
+                                defaultMessage='View in Browser'
+                            />
+                        </a>
+                    </div>
                 </div>
                 <div className='get-app__preference'>
                     <button
@@ -446,7 +441,7 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
     render() {
         const isMobile = UserAgent.isMobile();
 
-        if (this.checkLandingPreferenceBrowser() || this.isEmbedded()) {
+        if (this.checkLandingPreferenceBrowser()) {
             this.openInBrowser();
             return null;
         }
@@ -455,12 +450,13 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
             <div className='get-app'>
                 {this.renderHeader()}
                 <div className='get-app__dialog'>
+
+                    {this.renderDialogBody()}
                     <div
                         className={`get-app__graphic ${isMobile ? 'mobile' : ''}`}
                     >
                         {this.renderGraphic()}
                     </div>
-                    {this.renderDialogBody()}
                 </div>
             </div>
         );

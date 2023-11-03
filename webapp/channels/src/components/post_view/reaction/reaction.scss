@@ -1,6 +1,10 @@
 @import 'sass/utils/mixins';
 @import 'sass/utils/functions';
 
+.tooltip:has(.reactions-xl) {
+    min-width: 300px;
+}
+
 .Reaction {
     @include button-style--none;
 
@@ -12,7 +16,7 @@
     border: 1px solid transparent;
     margin: 0 4px 4px 0;
     background: rgba(var(--center-channel-color-rgb), 0.08);
-    border-radius: 4px;
+    border-radius: 38px;
     color: rgba(var(--center-channel-color-rgb), 0.64);
     cursor: pointer;
     fill: rgba(var(--center-channel-color-rgb), 0.56);

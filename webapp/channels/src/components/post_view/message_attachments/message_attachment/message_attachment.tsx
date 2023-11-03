@@ -2,8 +2,13 @@
 // See LICENSE.txt for license information.
 
 import truncate from 'lodash/truncate';
-import React from 'react';
 import type {CSSProperties} from 'react';
+import React from 'react';
+import {Constants, ModalIdentifiers} from 'utils/constants';
+import LinkOnlyRenderer from 'utils/markdown/link_only_renderer';
+import type {TextFormattingOptions} from 'utils/text_formatting';
+import {isUrlSafe} from 'utils/url';
+import * as Utils from 'utils/utils';
 
 import type {PostAction, PostActionOption} from '@mattermost/types/integration_actions';
 import type {
@@ -18,19 +23,13 @@ import {trackEvent} from 'actions/telemetry_actions';
 
 import ExternalImage from 'components/external_image';
 import ExternalLink from 'components/external_link';
-import FilePreviewModal from 'components/file_preview_modal';
 import Markdown from 'components/markdown';
 import ShowMore from 'components/post_view/show_more';
 import SizeAwareImage from 'components/size_aware_image';
 
-import {Constants, ModalIdentifiers} from 'utils/constants';
-import LinkOnlyRenderer from 'utils/markdown/link_only_renderer';
-import type {TextFormattingOptions} from 'utils/text_formatting';
-import {isUrlSafe} from 'utils/url';
-import * as Utils from 'utils/utils';
-
 import type {ModalData} from 'types/actions';
 
+import FilePreviewModal from '../../../file_preview_modal';
 import ActionButton from '../action_button';
 import ActionMenu from '../action_menu';
 

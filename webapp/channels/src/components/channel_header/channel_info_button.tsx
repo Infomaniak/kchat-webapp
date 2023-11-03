@@ -4,13 +4,12 @@
 import React, {useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
+import {RHSStates} from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import {closeRightHandSide, showChannelInfo} from 'actions/views/rhs';
 import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
-
-import {RHSStates} from 'utils/constants';
 
 import type {RhsState} from 'types/store/rhs';
 

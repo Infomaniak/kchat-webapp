@@ -1,25 +1,28 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ServerError} from '@mattermost/types/errors';
-import type {GetGroupsForUserParams, GetGroupsParams} from '@mattermost/types/groups';
-import type {Team} from '@mattermost/types/teams';
-
-import {fetchChannelsAndMembers} from 'mattermost-redux/actions/channels';
-import {logError} from 'mattermost-redux/actions/errors';
-import {getGroups, getAllGroupsAssociatedToChannelsInTeam, getAllGroupsAssociatedToTeam, getGroupsByUserIdPaginated} from 'mattermost-redux/actions/groups';
-import {forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
+import {ActionFunc} from 'mattermost-redux/types/actions';
 import {getTeamByName, selectTeam} from 'mattermost-redux/actions/teams';
-import {getLicense} from 'mattermost-redux/selectors/entities/general';
-import {isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
+import {fetchMyChannelsAndMembersREST} from 'mattermost-redux/actions/channels';
+import {getGroups, getAllGroupsAssociatedToChannelsInTeam, getAllGroupsAssociatedToTeam, getGroupsByUserIdPaginated} from 'mattermost-redux/actions/groups';
+import {logError} from 'mattermost-redux/actions/errors';
+import {isCustomGroupsEnabled, isGraphQLEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import {getLicense} from 'mattermost-redux/selectors/entities/general';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
+
+import {isSuccess} from 'types/actions';
 
 import {loadStatusesForChannelAndSidebar} from 'actions/status_actions';
 import {addUserToTeam} from 'actions/team_actions';
+import {fetchChannelsAndMembers} from 'actions/channel_actions';
+
 import LocalStorageStore from 'stores/local_storage_store';
 
-import {isSuccess} from 'types/actions';
+import {Team} from '@mattermost/types/teams';
+import {ServerError} from '@mattermost/types/errors';
+import {GetGroupsForUserParams, GetGroupsParams} from '@mattermost/types/groups';
 
 export function initializeTeam(team: Team): ActionFunc<Team, ServerError> {
     return async (dispatch, getState) => {
@@ -29,8 +32,15 @@ export function initializeTeam(team: Team): ActionFunc<Team, ServerError> {
         const currentUser = getCurrentUser(state);
         LocalStorageStore.setPreviousTeamId(currentUser.id, team.id);
 
+        setLastKSuiteSeenCookie(team.id);
+
+        const graphQLEnabled = isGraphQLEnabled(state);
         try {
-            await dispatch(fetchChannelsAndMembers(team.id));
+            if (graphQLEnabled) {
+                await dispatch(fetchChannelsAndMembers(team.id));
+            } else {
+                await dispatch(fetchMyChannelsAndMembersREST(team.id));
+            }
         } catch (error) {
             forceLogoutIfNecessary(error as ServerError, dispatch, getState);
             dispatch(logError(error as ServerError));

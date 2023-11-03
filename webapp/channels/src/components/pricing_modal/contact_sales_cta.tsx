@@ -5,14 +5,14 @@ import React from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
+import {LicenseLinks, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 
 import {trackEvent} from 'actions/telemetry_actions';
+import {SalesInquiryIssue} from 'selectors/cloud';
 
 import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
-
-import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 const StyledA = styled.a`
 color: var(--denim-button-bg);
@@ -27,7 +27,11 @@ text-align: center;
 
 function ContactSalesCTA() {
     const {formatMessage} = useIntl();
-    const [openSalesLink] = useOpenSalesLink();
+    const openSalesLink = useOpenSalesLink(SalesInquiryIssue.UpgradeEnterprise);
+
+    const openSelfHostedLink = () => {
+        window.open(LicenseLinks.CONTACT_SALES, '_blank');
+    };
 
     const isCloud = useSelector(isCurrentLicenseCloud);
 
@@ -38,10 +42,11 @@ function ContactSalesCTA() {
                 e.preventDefault();
                 if (isCloud) {
                     trackEvent(TELEMETRY_CATEGORIES.CLOUD_PRICING, 'click_enterprise_contact_sales');
+                    openSalesLink();
                 } else {
                     trackEvent('self_hosted_pricing', 'click_enterprise_contact_sales');
+                    openSelfHostedLink();
                 }
-                openSalesLink();
             }}
         >
             {formatMessage({id: 'pricing_modal.btn.contactSalesForQuote', defaultMessage: 'Contact Sales'})}

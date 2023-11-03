@@ -3,20 +3,20 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {AdminConfig} from '@mattermost/types/config';
-import {DeepPartial} from '@mattermost/types/utilities';
-
-import * as Utils from 'utils/utils';
-import Card from 'components/card/card';
-import BlockableLink from 'components/admin_console/blockable_link';
 import {getHistory} from 'utils/browser_history';
-import DropdownInputHybrid from 'components/widgets/inputs/dropdown_input_hybrid';
+import * as Utils from 'utils/utils';
+
+import type {AdminConfig} from '@mattermost/types/config';
+import type {ServerError} from '@mattermost/types/errors';
+import type {DeepPartial} from '@mattermost/types/utilities';
+
+import BlockableLink from 'components/admin_console/blockable_link';
 import {keepForeverOption, yearsOption, daysOption, FOREVER, YEARS, DAYS} from 'components/admin_console/data_retention_settings/dropdown_options/dropdown_options';
+import Card from 'components/card/card';
+import SaveButton from 'components/save_button';
+import DropdownInputHybrid from 'components/widgets/inputs/dropdown_input_hybrid';
 
 import './global_policy_form.scss';
-import SaveButton from 'components/save_button';
-import {ServerError} from '@mattermost/types/errors';
 
 type ValueType = {
     label: string | JSX.Element;
@@ -60,7 +60,7 @@ export default class GlobalPolicyForm extends React.PureComponent<Props, State> 
         };
     }
 
-    includeBoards = this.props.config.PluginSettings?.PluginStates?.focalboard?.Enable && this.props.config.FeatureFlags?.BoardsDataRetention
+    includeBoards = this.props.config.PluginSettings?.PluginStates?.focalboard?.Enable && this.props.config.FeatureFlags?.BoardsDataRetention;
 
     getDefaultInputValue = (isEnabled: boolean | undefined, days: number | undefined): string => {
         if (!isEnabled || days === undefined) {
@@ -70,7 +70,7 @@ export default class GlobalPolicyForm extends React.PureComponent<Props, State> 
             return (days / 365).toString();
         }
         return days.toString();
-    }
+    };
     getDefaultDropdownValue = (isEnabled: boolean | undefined, days: number | undefined) => {
         if (!isEnabled || days === undefined) {
             return keepForeverOption();
@@ -79,7 +79,7 @@ export default class GlobalPolicyForm extends React.PureComponent<Props, State> 
             return yearsOption();
         }
         return daysOption();
-    }
+    };
 
     handleSubmit = async () => {
         const {messageRetentionDropdownValue, messageRetentionInputValue, fileRetentionDropdownValue, fileRetentionInputValue, boardsRetentionDropdownValue, boardsRetentionInputValue} = this.state;
@@ -128,7 +128,7 @@ export default class GlobalPolicyForm extends React.PureComponent<Props, State> 
             return false;
         }
         return true;
-    }
+    };
 
     setRetentionDays = (dropdownValue: string, value: string): number => {
         if (dropdownValue === YEARS) {
@@ -140,7 +140,7 @@ export default class GlobalPolicyForm extends React.PureComponent<Props, State> 
         }
 
         return 0;
-    }
+    };
 
     render = () => {
         return (
@@ -290,5 +290,5 @@ export default class GlobalPolicyForm extends React.PureComponent<Props, State> 
                 </div>
             </div>
         );
-    }
+    };
 }

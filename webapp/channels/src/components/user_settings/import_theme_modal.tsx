@@ -3,8 +3,8 @@
 
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-import {FormattedMessage, injectIntl} from 'react-intl';
 import type {WrappedComponentProps} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {setThemeDefaults} from 'mattermost-redux/utils/theme_utils';
@@ -207,7 +207,7 @@ class ImportThemeModal extends React.PureComponent<Props, State> {
                             <button
                                 id='cancelButton'
                                 type='button'
-                                className='btn btn-tertiary'
+                                className='btn btn-link'
                                 onClick={this.handleOnHide}
                             >
                                 <FormattedMessage

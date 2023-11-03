@@ -5,8 +5,9 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import {Session} from '@mattermost/types/sessions';
-import {ActionFunc} from 'mattermost-redux/types/actions';
+import type {Session} from '@mattermost/types/sessions';
+
+import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import ActivityLog from 'components/activity_log_modal/components/activity_log';
 
@@ -53,7 +54,7 @@ type State = {
 export default class ActivityLogModal extends React.PureComponent<Props, State> {
     static propTypes = {
 
-    }
+    };
 
     constructor(props: Props) {
         super(props);
@@ -73,15 +74,15 @@ export default class ActivityLogModal extends React.PureComponent<Props, State> 
         this.props.actions.revokeSession(this.props.currentUserId, altId).then(() => {
             this.props.actions.getSessions(this.props.currentUserId);
         });
-    }
+    };
 
     onShow = () => {
         this.props.actions.getSessions(this.props.currentUserId);
-    }
+    };
 
     onHide = () => {
         this.setState({show: false});
-    }
+    };
 
     componentDidMount() {
         this.onShow();

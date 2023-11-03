@@ -3,14 +3,12 @@
 
 import {connect} from 'react-redux';
 
-import type {Channel} from '@mattermost/types/channels';
-
-import {makeGetGmChannelMemberCount} from 'mattermost-redux/selectors/entities/channels';
 import {getUser} from 'mattermost-redux/selectors/entities/users';
+import {makeGetGmChannelMemberCount} from 'mattermost-redux/selectors/entities/channels';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
-
 import {Constants} from 'utils/constants';
 
+import type {Channel} from '@mattermost/types/channels';
 import type {GlobalState} from 'types/store';
 
 import DraftTitle from './draft_title';

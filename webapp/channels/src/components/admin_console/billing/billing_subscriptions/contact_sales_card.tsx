@@ -3,13 +3,13 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {CloudLinks, CloudProducts} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import {CloudLinks, CloudProducts} from 'utils/constants';
-import PrivateCloudSvg from 'components/common/svg_images_components/private_cloud_svg';
+import type {TelemetryProps} from 'components/common/hooks/useOpenPricingModal';
 import CloudTrialSvg from 'components/common/svg_images_components/cloud_trial_svg';
-import {TelemetryProps} from 'components/common/hooks/useOpenPricingModal';
+import PrivateCloudSvg from 'components/common/svg_images_components/private_cloud_svg';
 import ExternalLink from 'components/external_link';
 
 type Props = {

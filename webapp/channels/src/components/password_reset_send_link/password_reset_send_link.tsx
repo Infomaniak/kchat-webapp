@@ -2,19 +2,20 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage, injectIntl, type IntlShape} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import {t} from 'utils/i18n';
 
 import type {ServerError} from '@mattermost/types/errors';
 
 import {isEmail} from 'mattermost-redux/utils/helpers';
 
 import BackButton from 'components/common/back_button';
+import LocalizedInput from 'components/localized_input/localized_input';
 
 interface Props {
     actions: {
         sendPasswordResetEmail: (email: string) => Promise<{data: any; error: ServerError}>;
     };
-    intl: IntlShape;
 }
 
 interface State {
@@ -22,7 +23,7 @@ interface State {
     updateText: React.ReactNode;
 }
 
-export class PasswordResetSendLink extends React.PureComponent<Props, State> {
+export default class PasswordResetSendLink extends React.PureComponent<Props, State> {
     state = {
         error: null,
         updateText: null,
@@ -121,15 +122,15 @@ export class PasswordResetSendLink extends React.PureComponent<Props, State> {
                                 />
                             </p>
                             <div className={formClass}>
-                                <input
+                                <LocalizedInput
                                     id='passwordResetEmailInput'
                                     type='email'
                                     className='form-control'
                                     name='email'
-                                    placeholder={this.props.intl.formatMessage({
-                                        id: 'password_send.email',
+                                    placeholder={{
+                                        id: t('password_send.email'),
                                         defaultMessage: 'Email',
-                                    })}
+                                    }}
                                     ref={this.emailInput}
                                     spellCheck='false'
                                     autoFocus={true}
@@ -153,5 +154,3 @@ export class PasswordResetSendLink extends React.PureComponent<Props, State> {
         );
     }
 }
-
-export default injectIntl(PasswordResetSendLink);

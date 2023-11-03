@@ -4,19 +4,18 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
+import {TrialPeriodDays} from 'utils/constants';
+import {getRemainingDaysFromFutureTimestamp} from 'utils/utils';
 
 import {getSubscriptionProduct, getCloudSubscription} from 'mattermost-redux/selectors/entities/cloud';
 
 import useGetTotalUsersNoBots from 'components/common/hooks/useGetTotalUsersNoBots';
 
-import {getRemainingDaysFromFutureTimestamp} from 'utils/utils';
-import {TrialPeriodDays} from 'utils/constants';
-
+import FeatureList from './feature_list';
 import {
     PlanDetailsTopElements,
     currentPlanText,
 } from './plan_details';
-import FeatureList from './feature_list';
 import PlanPricing from './plan_pricing';
 
 import './plan_details.scss';

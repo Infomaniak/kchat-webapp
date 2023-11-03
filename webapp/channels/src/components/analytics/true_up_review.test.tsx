@@ -1,16 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {screen} from '@testing-library/react';
 import React from 'react';
+import {renderWithIntlAndStore} from 'tests/react_testing_utils';
+import {LicenseSkus} from 'utils/constants';
+import {TestHelper as TH} from 'utils/test_helper';
 
 import type {GlobalState} from '@mattermost/types/store';
 import type {DeepPartial} from '@mattermost/types/utilities';
 
 import * as useCWSAvailabilityCheckAll from 'components/common/hooks/useCWSAvailabilityCheck';
-
-import {renderWithIntlAndStore, screen} from 'tests/react_testing_utils';
-import {LicenseSkus} from 'utils/constants';
-import {TestHelper as TH} from 'utils/test_helper';
 
 import TrueUpReview from './true_up_review';
 

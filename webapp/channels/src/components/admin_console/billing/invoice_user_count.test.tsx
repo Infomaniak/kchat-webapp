@@ -3,11 +3,12 @@
 
 import React from 'react';
 
-import {mountWithIntl} from '../../../tests/helpers/intl-test-helper';
-
-import {Invoice, InvoiceLineItemType} from '@mattermost/types/cloud';
+import type {Invoice} from '@mattermost/types/cloud';
+import {InvoiceLineItemType} from '@mattermost/types/cloud';
 
 import InvoiceUserCount from './invoice_user_count';
+
+import {mountWithIntl} from '../../../tests/helpers/intl-test-helper';
 
 function makeInvoice(...lines: Array<[number, typeof InvoiceLineItemType[keyof typeof InvoiceLineItemType]]>): Invoice {
     return {

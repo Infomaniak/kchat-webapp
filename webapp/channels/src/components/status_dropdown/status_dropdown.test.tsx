@@ -2,12 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
-import {CustomStatusDuration} from '@mattermost/types/users';
-import type {UserProfile} from '@mattermost/types/users';
-
 import {fakeDate} from 'tests/helpers/date';
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+
+import type {UserProfile} from '@mattermost/types/users';
+import {CustomStatusDuration} from '@mattermost/types/users';
 
 import StatusDropdown from './status_dropdown';
 
@@ -44,12 +43,16 @@ describe('components/StatusDropdown', () => {
             manualTimezone: '',
         },
         status: 'away',
+        isTimezoneEnabled: true,
         isMilitaryTime: false,
         isCustomStatusEnabled: false,
         isCustomStatusExpired: false,
         isStatusDropdownOpen: false,
         showCustomStatusPulsatingDot: false,
         showCompleteYourProfileTour: false,
+        showProfileTutorialStep: false,
+        showStatusTutorialStep: false,
+        showNextSwitch: false,
     };
 
     test('should match snapshot in default state', () => {

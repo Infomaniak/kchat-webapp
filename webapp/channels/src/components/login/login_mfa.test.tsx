@@ -1,13 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import React from 'react';
 
 import LoginMfa from 'components/login/login_mfa';
 import SaveButton from 'components/save_button';
-
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 describe('components/login/LoginMfa', () => {
     const baseProps = {
@@ -26,7 +24,7 @@ describe('components/login/LoginMfa', () => {
     });
 
     test('should handle token entered', () => {
-        const wrapper = mountWithIntl(
+        const wrapper = mount(
             <LoginMfa {...baseProps}/>,
         );
 
@@ -46,7 +44,7 @@ describe('components/login/LoginMfa', () => {
     });
 
     test('should handle submit', () => {
-        const wrapper = mountWithIntl(
+        const wrapper = mount(
             <LoginMfa {...baseProps}/>,
         );
 

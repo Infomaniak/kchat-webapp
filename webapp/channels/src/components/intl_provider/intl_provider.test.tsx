@@ -2,12 +2,11 @@
 // See LICENSE.txt for license information.
 
 import {mount, shallow} from 'enzyme';
+import {getLanguageInfo} from 'i18n/i18n';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import IntlProvider from 'components/intl_provider/intl_provider';
-
-import {getLanguageInfo} from 'i18n/i18n';
 
 describe('components/IntlProvider', () => {
     const baseProps = {

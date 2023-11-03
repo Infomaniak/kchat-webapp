@@ -47,7 +47,7 @@ const OnBoardingVideoModal = ({onExited}: Props) => {
             />
             <Modal.Body>
                 <iframe
-                    src='//fast.wistia.net/embed/iframe/y4jbcyd7ej'
+                    src='//fast.wistia.net/embed/iframe/3t4dpc0k6b'
                     // eslint-disable-next-line react/no-unknown-property
                     allowTransparency={true}
                     frameBorder='0'

@@ -2,6 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import Constants from 'utils/constants';
+import * as UserAgent from 'utils/user_agent';
 
 import type {Channel, ChannelStats, ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -9,9 +11,6 @@ import type {UserProfile} from '@mattermost/types/users';
 import ChannelMembersDropdown from 'components/channel_members_dropdown';
 import LoadingScreen from 'components/loading_screen';
 import SearchableUserList from 'components/searchable_user_list/searchable_user_list_container';
-
-import Constants from 'utils/constants';
-import * as UserAgent from 'utils/user_agent';
 
 const USERS_PER_PAGE = 50;
 

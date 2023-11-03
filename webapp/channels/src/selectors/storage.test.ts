@@ -1,11 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import * as Selectors from 'selectors/storage';
-
 import {getPrefix} from 'utils/storage_utils';
-
-import type {GlobalState} from 'types/store';
+import * as Selectors from 'selectors/storage';
+import {GlobalState} from 'types/store';
 
 describe('Selectors.Storage', () => {
     const testState = {

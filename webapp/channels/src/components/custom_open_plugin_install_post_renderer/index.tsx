@@ -6,6 +6,7 @@ import React, {useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
+import {ModalIdentifiers} from 'utils/constants';
 
 import type {MarketplacePlugin} from '@mattermost/types/marketplace';
 import type {Post} from '@mattermost/types/posts';
@@ -17,10 +18,8 @@ import {fetchListing, installPlugin} from 'actions/marketplace';
 import {getError, getInstalledListing, getInstalling, getPlugins} from 'selectors/views/marketplace';
 
 import Markdown from 'components/markdown';
-import MarketplaceModal from 'components/plugin_marketplace/marketplace_modal';
+import MarketplaceModal from 'components/plugin_marketplace';
 import ToggleModalButton from 'components/toggle_modal_button';
-
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -302,7 +301,6 @@ export default function OpenPluginInstallPost(props: {post: Post}) {
                                 className='color--link'
                                 modalId={ModalIdentifiers.PLUGIN_MARKETPLACE}
                                 dialogType={MarketplaceModal}
-                                dialogProps={{openedFrom: 'open_plugin_install_post'}}
                             >
                                 {text}
                             </ToggleModalButton>

@@ -2,8 +2,10 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useEffect, useRef, useState} from 'react';
+
+// See LICENSE.txt for license information.
 import type {RefObject} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import type {AccordionItemType} from './accordion';
 

@@ -2,13 +2,15 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React from 'react';
 import type {RefObject} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {components} from 'react-select';
 import type {ValueType, ActionMeta, InputActionMeta} from 'react-select';
+import {components} from 'react-select';
 import type {Async} from 'react-select/async';
 import AsyncSelect from 'react-select/async';
+import {Constants} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {Channel} from '@mattermost/types/channels';
 
@@ -17,9 +19,6 @@ import CloseCircleSolidIcon from 'components/widgets/icons/close_circle_solid_ic
 import PublicChannelIcon from 'components/widgets/icons/globe_icon';
 import PrivateChannelIcon from 'components/widgets/icons/lock_icon';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
-
-import {Constants} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import './channels_input.scss';
 
@@ -132,9 +131,9 @@ export default class ChannelsInput extends React.PureComponent<Props, State> {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onChange = (value: Channel[], _meta: ActionMeta<Channel>) => {
+    onChange = (value: Channel[] | null, _meta: ActionMeta<Channel>) => {
         if (this.props.onChange) {
-            this.props.onChange(value);
+            this.props.onChange(value || []);
         }
     };
 

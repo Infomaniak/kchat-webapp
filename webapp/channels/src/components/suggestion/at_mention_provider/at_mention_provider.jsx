@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {Constants} from 'utils/constants';
+
 import {makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 import {makeAddLastViewAtToProfiles} from 'mattermost-redux/selectors/entities/utils';
 import {getSuggestionsSplitBy, getSuggestionsSplitByMultiple} from 'mattermost-redux/utils/user_utils';
 
 import store from 'stores/redux_store';
-
-import {Constants} from 'utils/constants';
 
 import AtMentionSuggestion from './at_mention_suggestion';
 
@@ -72,8 +72,10 @@ export default class AtMentionProvider extends Provider {
             profileSuggestions.push(...usernameSuggestions);
         }
         [profile.first_name, profile.last_name, profile.nickname].forEach((property) => {
-            const suggestions = getSuggestionsSplitBy(property.toLowerCase(), ' ');
-            profileSuggestions.push(...suggestions);
+            if (property) {
+                const suggestions = getSuggestionsSplitBy(property.toLowerCase(), ' ');
+                profileSuggestions.push(...suggestions);
+            }
         });
         profileSuggestions.push(profile.first_name.toLowerCase() + ' ' + profile.last_name.toLowerCase());
 

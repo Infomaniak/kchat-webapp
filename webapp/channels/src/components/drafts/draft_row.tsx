@@ -2,8 +2,14 @@
 // See LICENSE.txt for license information.
 
 import React, {memo} from 'react';
+import {useSelector} from 'react-redux';
 
+import type {GlobalState} from '@mattermost/types/store';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
+
+import {Permissions} from 'mattermost-redux/constants';
+import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import type {Draft} from 'selectors/drafts';
 
@@ -15,10 +21,13 @@ type Props = {
     status: UserStatus['status'];
     displayName: string;
     draft: Draft;
-    isRemote?: boolean;
+    isRemote: boolean;
 }
 
 function DraftRow({draft, user, status, displayName, isRemote}: Props) {
+    const currentTeamId = useSelector(getCurrentTeamId);
+    const isScheduled = Boolean(draft.value.timestamp);
+    const scheduledWillNotBeSent = useSelector((state: GlobalState) => !haveIChannelPermission(state, currentTeamId, draft.value.channelId, Permissions.CREATE_POST)) && isScheduled;
     switch (draft.type) {
     case 'channel':
         return (
@@ -29,6 +38,8 @@ function DraftRow({draft, user, status, displayName, isRemote}: Props) {
                 status={status}
                 displayName={displayName}
                 isRemote={isRemote}
+                isScheduled={isScheduled}
+                scheduledWillNotBeSent={scheduledWillNotBeSent}
             />
         );
     case 'thread':
@@ -41,6 +52,8 @@ function DraftRow({draft, user, status, displayName, isRemote}: Props) {
                 status={status}
                 displayName={displayName}
                 isRemote={isRemote}
+                isScheduled={isScheduled}
+                scheduledWillNotBeSent={scheduledWillNotBeSent}
             />
         );
     default:

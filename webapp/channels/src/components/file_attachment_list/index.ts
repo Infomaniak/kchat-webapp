@@ -1,22 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {connect} from 'react-redux';
-import type {ConnectedProps} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch} from 'redux';
-
-import type {Post} from '@mattermost/types/posts';
+import {connect, ConnectedProps} from 'react-redux';
+import {bindActionCreators, Dispatch} from 'redux';
 
 import {makeGetFilesForPost} from 'mattermost-redux/selectors/entities/files';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {Post} from '@mattermost/types/posts';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
-import {openModal} from 'actions/views/modals';
+import {GlobalState} from 'types/store';
+
 import {getCurrentLocale} from 'selectors/i18n';
 import {isEmbedVisible} from 'selectors/posts';
 
-import type {GlobalState} from 'types/store';
+import {openModal} from 'actions/views/modals';
 
 import FileAttachmentList from './file_attachment_list';
 

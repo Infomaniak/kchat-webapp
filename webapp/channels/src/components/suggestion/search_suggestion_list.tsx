@@ -3,10 +3,9 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
 
 import Popover from 'components/widgets/popover';
-
-import Constants from 'utils/constants';
 
 import type {UserProfile} from './command_provider/app_command_parser/app_command_parser_dependencies';
 import SuggestionList from './suggestion_list';
@@ -18,13 +17,12 @@ interface Item extends UserProfile {
 }
 
 interface Props {
-    ariaLiveRef?: React.RefObject<HTMLDivElement>;
-    inputRef?: React.RefObject<HTMLInputElement>;
+    ariaLiveRef?: React.Ref<HTMLDivElement>;
     open: boolean;
     position?: 'top' | 'bottom';
     renderDividers?: string[];
     renderNoResults?: boolean;
-    onCompleteWord: (term: string, matchedPretext: string, e?: React.KeyboardEventHandler<HTMLDivElement>) => boolean;
+    onCompleteWord: (term: string, matchedPretext: string, e?: React.MouseEvent<HTMLDivElement>) => boolean;
     preventClose?: () => void;
     onItemHover: (term: string) => void;
     pretext: string;
@@ -54,6 +52,7 @@ export default class SearchSuggestionList extends SuggestionList {
     constructor(props: Props) {
         super(props);
 
+        this.itemRefs = new Map();
         this.popoverRef = React.createRef();
         this.itemsContainerRef = React.createRef();
         this.suggestionReadOut = React.createRef();
@@ -84,7 +83,7 @@ export default class SearchSuggestionList extends SuggestionList {
     }
 
     getContent = () => {
-        return this.itemsContainerRef?.current?.parentNode as HTMLDivElement | null;
+        return this.itemsContainerRef.current?.parentNode;
     };
 
     renderChannelDivider(type: string) {

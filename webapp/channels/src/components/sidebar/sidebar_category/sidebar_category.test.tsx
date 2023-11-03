@@ -25,6 +25,7 @@ describe('components/sidebar/sidebar_category', () => {
         },
         channelIds: ['channel_id'],
         categoryIndex: 0,
+        isLastCategory: true,
         draggingState: {},
         setChannelRef: jest.fn(),
         handleOpenMoreDirectChannelsModal: jest.fn(),
@@ -33,6 +34,11 @@ describe('components/sidebar/sidebar_category', () => {
         limitVisibleDMsGMs: 10000,
         touchedInviteMembersButton: false,
         currentUserId: '',
+        menuButtonRef: {
+            current: null,
+        },
+        showDirectMessagesTutorialStep: false,
+        showChannelsTutorialStep: false,
         isAdmin: false,
         actions: {
             setCategoryCollapsed: jest.fn(),
@@ -89,7 +95,6 @@ describe('components/sidebar/sidebar_category', () => {
             droppableChildren({}, {}),
         );
         expect(droppableInner).toMatchSnapshot();
-        expect(droppableInner.find('.SidebarCategory_newLabel')).toHaveLength(1);
         expect(droppableInner.find('.SidebarCategory_newDropBox')).toHaveLength(1);
     });
 

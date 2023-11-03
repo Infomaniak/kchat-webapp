@@ -6,8 +6,8 @@ import React from 'react';
 
 import {General} from 'mattermost-redux/constants';
 
-import ListItem from './list_item';
 import type {Props} from './list_item';
+import ListItem from './list_item';
 
 import type {OptionValue} from '../types';
 

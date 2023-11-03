@@ -1,21 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {screen} from '@testing-library/react';
-
+import React from 'react';
 import {Provider} from 'react-redux';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {renderWithIntl} from 'tests/react_testing_utils';
+import mockStore from 'tests/test_store';
 import {OverActiveUserLimits} from 'utils/constants';
 
-import {General} from 'mattermost-redux/constants';
-import {DeepPartial} from '@mattermost/types/utilities';
-import {GlobalState} from '@mattermost/types/store';
-import mockStore from 'tests/test_store';
+import type {GlobalState} from '@mattermost/types/store';
+import type {DeepPartial} from '@mattermost/types/utilities';
 
-import EnterpriseEditionLeftPanel, {EnterpriseEditionProps} from './enterprise_edition_left_panel';
+import {General} from 'mattermost-redux/constants';
+
+import type {EnterpriseEditionProps} from './enterprise_edition_left_panel';
+import EnterpriseEditionLeftPanel from './enterprise_edition_left_panel';
 
 describe('components/admin_console/license_settings/enterprise_edition/enterprise_edition_left_panel', () => {
     const license = {

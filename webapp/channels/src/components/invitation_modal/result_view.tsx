@@ -4,14 +4,13 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {t} from 'utils/i18n';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import {t} from 'utils/i18n';
-
 import {InviteType} from './invite_as';
-import ResultTable from './result_table';
 import type {InviteResult} from './result_table';
+import ResultTable from './result_table';
 
 import './result_view.scss';
 
@@ -45,7 +44,10 @@ export default function ResultView(props: Props) {
     const {formatMessage} = useIntl();
     return (
         <>
-            <Modal.Header className={props.headerClass}>
+            <Modal.Header
+                closeButton={true}
+                className={props.headerClass}
+            >
                 <h1 id='invitation_modal_title'>
                     <FormattedMessage
                         id='invite_modal.invited'
@@ -77,7 +79,7 @@ export default function ResultView(props: Props) {
             <Modal.Footer className={props.footerClass}>
                 <button
                     onClick={props.inviteMore}
-                    className='btn btn-tertiary ResultView__inviteMore'
+                    className='btn btn-cancel ResultView__inviteMore'
                     data-testid='invite-more'
                 >
                     <FormattedMessage

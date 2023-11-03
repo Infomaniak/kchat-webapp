@@ -3,12 +3,12 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
 import {t} from 'utils/i18n';
+
+import ExternalLink from 'components/external_link';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 
 import LineSwitch from '../../line_switch';
-import ExternalLink from 'components/external_link';
 
 type Props = {
     syncChecked: boolean;

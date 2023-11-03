@@ -4,7 +4,6 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import * as reactRedux from 'react-redux';
-
 import mockStore from 'tests/test_store';
 import {TopLevelProducts} from 'utils/constants';
 import * as productUtils from 'utils/products';

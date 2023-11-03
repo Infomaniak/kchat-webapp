@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import logoImage from 'images/logo.png';
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 
@@ -11,8 +12,6 @@ import EmailToOAuth from 'components/claim/components/email_to_oauth';
 import LDAPToEmail from 'components/claim/components/ldap_to_email';
 import OAuthToEmail from 'components/claim/components/oauth_to_email';
 import BackButton from 'components/common/back_button';
-
-import logoImage from 'images/logo.png';
 
 export interface PasswordConfig {
     minimumLength: number;

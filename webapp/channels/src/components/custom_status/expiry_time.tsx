@@ -4,11 +4,10 @@
 import moment from 'moment-timezone';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import Timestamp, {RelativeRanges} from 'components/timestamp';
 import type {Props as TimestampProps} from 'components/timestamp/timestamp';
-
-import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 const CUSTOM_STATUS_EXPIRY_RANGES = [
     RelativeRanges.TODAY_TITLE_CASE,

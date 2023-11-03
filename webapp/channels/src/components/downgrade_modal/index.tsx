@@ -3,19 +3,19 @@
 
 import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
+import {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import {closeModal} from 'actions/views/modals';
 
 import BackgroundSvg from 'components/common/svg_images_components/background_svg';
 import CreditCardSvg from 'components/common/svg_images_components/credit_card_svg';
-import IconMessage from 'components/purchase_modal/icon_message';
 import RootPortal from 'components/root_portal';
 import FullScreenModal from 'components/widgets/modals/full_screen_modal';
 
 import 'components/payment_form/payment_form.scss';
 
-import {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
+import IconMessage from '../purchase_modal/icon_message';
 
 import './index.scss';
 

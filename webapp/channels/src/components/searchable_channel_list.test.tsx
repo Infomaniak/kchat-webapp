@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {type MockIntl} from 'tests/helpers/intl-test-helper';
 
 import {SearchableChannelList} from 'components/searchable_channel_list';
-
-import {type MockIntl} from 'tests/helpers/intl-test-helper';
 
 import {Filter} from './browse_channels/browse_channels';
 

@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import type EmojiMap from 'utils/emoji_map';
 import * as Markdown from 'utils/markdown';
 import {getSiteURL} from 'utils/url';

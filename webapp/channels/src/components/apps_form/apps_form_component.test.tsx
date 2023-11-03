@@ -5,16 +5,15 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {Provider} from 'react-redux';
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import mockStore from 'tests/test_store';
 
 import {AppCallResponseTypes} from 'mattermost-redux/constants/apps';
 
 import Markdown from 'components/markdown';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import mockStore from 'tests/test_store';
-
-import {AppsForm} from './apps_form_component';
 import type {Props} from './apps_form_component';
+import {AppsForm} from './apps_form_component';
 
 describe('AppsFormComponent', () => {
     const baseProps: Props = {

@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import DotMenu from 'components/dot_menu/dot_menu';
-
-import {TestHelper} from 'utils/test_helper';
 
 jest.mock('utils/utils', () => {
     return {
@@ -60,6 +59,7 @@ describe('components/dot_menu/DotMenu returning empty ("")', () => {
             threadId: 'post_id_1',
             userId: 'user_id_1',
             isMilitaryTime: false,
+            showForwardPostNewLabel: false,
         };
 
         const wrapper = shallow(

@@ -2,19 +2,18 @@
 // See LICENSE.txt for license information.
 
 import {memo} from 'react';
-import {connect} from 'react-redux';
 import {compose} from 'redux';
+import {connect} from 'react-redux';
 
-import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getPost, isPostPriorityEnabled, makeGetPostsForThread} from 'mattermost-redux/selectors/entities/posts';
-import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
-import {getThread} from 'mattermost-redux/selectors/entities/threads';
+import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 import {makeGetDisplayName} from 'mattermost-redux/selectors/entities/users';
+import {getThread} from 'mattermost-redux/selectors/entities/threads';
+import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
 
-import ThreadItem from './thread_item';
-import type {OwnProps} from './thread_item';
+import ThreadItem, {OwnProps} from './thread_item';
 
 function makeMapStateToProps() {
     const getPostsForThread = makeGetPostsForThread();

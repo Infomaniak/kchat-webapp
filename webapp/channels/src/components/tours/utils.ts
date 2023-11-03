@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type React from 'react';
+import React from 'react';
 
 import {FINISHED} from './constant';
 
@@ -54,4 +54,18 @@ export const getLastStep = (Steps: Record<string, number>) => {
         }
         return maxStep;
     }, Number.MIN_SAFE_INTEGER);
+};
+
+const FAQ_BASENAME = 'https://faq.infomaniak.com/';
+
+//add FAQ Id
+const faqId = new Map([
+    ['channelTourTip', '2732'],
+]);
+
+export const getOnBoardingInfoUrl = (name: string): string => {
+    if (faqId.has(name)) {
+        return FAQ_BASENAME + faqId.get(name);
+    }
+    return FAQ_BASENAME;
 };

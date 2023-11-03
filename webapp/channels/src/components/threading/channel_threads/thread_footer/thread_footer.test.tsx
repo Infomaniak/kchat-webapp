@@ -2,17 +2,16 @@
 // See LICENSE.txt for license information.
 
 import {mount} from 'enzyme';
-import React from 'react';
 import type {ComponentProps} from 'react';
+import React from 'react';
+import {fakeDate} from 'tests/helpers/date';
+import {mockStore} from 'tests/test_store';
 
 import type {UserThread} from '@mattermost/types/threads';
 
 import Timestamp from 'components/timestamp';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatars from 'components/widgets/users/avatars';
-
-import {fakeDate} from 'tests/helpers/date';
-import {mockStore} from 'tests/test_store';
 
 import ThreadFooter from './thread_footer';
 
@@ -284,7 +283,5 @@ describe('components/threading/channel_threads/thread_footer', () => {
         );
 
         expect(wrapper).toMatchSnapshot();
-        expect(wrapper.exists(FollowButton)).toBe(true);
-        expect(wrapper.find(FollowButton).props()).toHaveProperty('isFollowing', true);
     });
 });

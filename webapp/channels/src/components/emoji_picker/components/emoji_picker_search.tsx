@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {
+    ChangeEvent,
+    KeyboardEvent} from 'react';
 import React, {
     forwardRef,
     memo,
 } from 'react';
-import type {
-    ChangeEvent,
-    KeyboardEvent} from 'react';
 import {useIntl} from 'react-intl';
 
 import {EMOJI_PER_ROW} from 'components/emoji_picker/constants';

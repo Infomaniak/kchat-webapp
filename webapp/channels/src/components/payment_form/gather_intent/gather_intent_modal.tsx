@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import warningIcon from 'images/icons/warning-icon.svg';
 import React, {useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
-
-import warningIcon from 'images/icons/warning-icon.svg';
 
 import './gather_intent.scss';
 import type {FormDataState} from './useGatherIntent';

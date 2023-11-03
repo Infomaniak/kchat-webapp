@@ -10,10 +10,13 @@ exports[`components/post_view/PostReaction should match snapshot 1`] = `
   }
   teamId="current_team_id"
 >
-  <Connect(EmojiPickerOverlay)
+  <EmojiPickerOverlay
+    enableGifPicker={false}
     onEmojiClick={[Function]}
     onHide={[MockFunction]}
     show={false}
+    spaceRequiredAbove={476}
+    spaceRequiredBelow={497}
     target={[MockFunction]}
     topOffset={-7}
   />
@@ -47,7 +50,7 @@ exports[`components/post_view/PostReaction should match snapshot 1`] = `
       id="CENTER_reaction_post_id_1"
       onClick={[MockFunction]}
     >
-      <Memo(EmojiIcon)
+      <EmojiIcon
         className="icon icon--small"
       />
     </button>

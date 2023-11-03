@@ -3,10 +3,10 @@
 
 import {useMemo} from 'react';
 
-import type {CloudUsage} from '@mattermost/types/cloud';
+import {CloudUsage} from '@mattermost/types/cloud';
 
-import useGetLimits from './useGetLimits';
 import useGetUsage from './useGetUsage';
+import useGetLimits from './useGetLimits';
 
 // Returns an object of type CloudUsage with the values being the delta between the limit, and the actual usage of this installation.
 // A value < 0 means that they are NOT over the limit. A value > 0 means they've exceeded that limit
@@ -23,6 +23,13 @@ export default function useGetUsageDeltas(): CloudUsage {
     const usageDelta = useMemo(() => {
         return (
             {
+                storage: usage.storage - withBackupValue(limits.storage, limitsLoaded),
+                public_channels: usage.public_channels - withBackupValue(limits.public_channels, limitsLoaded),
+                private_channels: usage.private_channels - withBackupValue(limits.private_channels, limitsLoaded),
+                guests: usage.guests - withBackupValue(limits.guests, limitsLoaded),
+                pending_guests: -usage.pending_guests,
+                members: usage.members - withBackupValue(limits.members, limitsLoaded),
+                usageLoaded: usage.usageLoaded,
                 files: {
                     totalStorage: usage.files.totalStorage - withBackupValue(limits.files?.total_storage, limitsLoaded),
                     totalStorageLoaded: usage.files.totalStorageLoaded,

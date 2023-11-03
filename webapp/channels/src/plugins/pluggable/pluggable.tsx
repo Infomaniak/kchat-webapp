@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import webSocketClient from 'client/web_websocket_client';
 import React from 'react';
 
 import type {WebSocketClient} from '@mattermost/client';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
-
-import webSocketClient from 'client/web_websocket_client';
 
 import type {GlobalState} from 'types/store';
 import type {ProductComponent} from 'types/store/plugins';

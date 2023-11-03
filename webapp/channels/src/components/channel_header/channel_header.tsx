@@ -2,11 +2,20 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
+import ChannelHeaderPlug from 'plugins/channel_header_plug';
 import React from 'react';
 import type {MouseEvent, ReactNode, RefObject} from 'react';
 import {Overlay} from 'react-bootstrap';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
+import {
+    Constants,
+    ModalIdentifiers,
+    NotificationLevels,
+    RHSStates,
+} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {handleFormattedTextClick, localizeMessage, isEmptyObject, toTitleCase} from 'utils/utils';
 
 import type {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
 import type {UserCustomStatus, UserProfile} from '@mattermost/types/users';
@@ -19,7 +28,9 @@ import {ChannelHeaderDropdown} from 'components/channel_header_dropdown';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import CustomStatusText from 'components/custom_status/custom_status_text';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
+import LocalizedIcon from 'components/localized_icon';
 import Markdown from 'components/markdown';
+import MeetButton from 'components/meet_button';
 import OverlayTrigger from 'components/overlay_trigger';
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
 import ChannelPermissionGate from 'components/permissions_gates/channel_permission_gate';
@@ -27,21 +38,12 @@ import SharedChannelIndicator from 'components/shared_channel_indicator';
 import StatusIcon from 'components/status_icon';
 import Timestamp from 'components/timestamp';
 import Tooltip from 'components/tooltip';
+import {ChannelHeaderTour, KmeetTour} from 'components/tours/onboarding_tour';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Popover from 'components/widgets/popover';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
-
-import CallButton from 'plugins/call_button';
-import ChannelHeaderPlug from 'plugins/channel_header_plug';
-import {
-    Constants,
-    ModalIdentifiers,
-    NotificationLevels,
-    RHSStates,
-} from 'utils/constants';
-import {handleFormattedTextClick, localizeMessage, isEmptyObject, toTitleCase} from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 import type {RhsState} from 'types/store/rhs';
@@ -93,7 +95,7 @@ export type Props = {
     isLastActiveEnabled: boolean;
     timestampUnits?: string[];
     lastActivityTimestamp?: number;
-    hideGuestTags: boolean;
+    showChannelHeaderTutorialStep: boolean;
 };
 
 type State = {
@@ -101,6 +103,7 @@ type State = {
     showChannelHeaderPopover: boolean;
     leftOffset: number;
     topOffset: number;
+    popoverOverlayWidth: number;
 };
 
 class ChannelHeader extends React.PureComponent<Props, State> {
@@ -119,6 +122,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
         this.headerOverlayRef = React.createRef();
 
         this.state = {
+            popoverOverlayWidth: 0,
             showChannelHeaderPopover: false,
             leftOffset: 0,
             topOffset: 0,
@@ -242,6 +246,12 @@ class ChannelHeader extends React.PureComponent<Props, State> {
         }
     };
 
+    setPopoverOverlayWidth = () => {
+        const headerDescriptionRect = this.headerDescriptionRef.current?.getBoundingClientRect();
+        const ellipsisWidthAdjustment = 10;
+        this.setState({popoverOverlayWidth: (headerDescriptionRect?.width ?? 0) + ellipsisWidthAdjustment});
+    };
+
     handleFormattedTextClick = (e: MouseEvent<HTMLSpanElement>) => handleFormattedTextClick(e, this.props.currentRelativeTeamUrl);
 
     renderCustomStatus = () => {
@@ -283,13 +293,13 @@ class ChannelHeader extends React.PureComponent<Props, State> {
             rhsState,
             hasGuests,
             teammateNameDisplaySetting,
-            hideGuestTags,
+            showChannelHeaderTutorialStep,
         } = this.props;
         const {formatMessage} = this.props.intl;
         const ariaLabelChannelHeader = localizeMessage('accessibility.sections.channelHeader', 'channel header region');
-
+        let showMeetBtn = true;
         let hasGuestsText: ReactNode = '';
-        if (hasGuests && !hideGuestTags) {
+        if (hasGuests) {
             hasGuestsText = (
                 <span className='has-guest-header'>
                     <span tabIndex={0}>
@@ -344,6 +354,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         }}
                     />
                 );
+                showMeetBtn = false;
             } else {
                 channelTitle = displayUsername(dmUser, teammateNameDisplaySetting) + ' ';
             }
@@ -391,7 +402,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                 );
             });
 
-            if (hasGuests && !hideGuestTags) {
+            if (hasGuests) {
                 hasGuestsText = (
                     <span className='has-guest-header'>
                         <FormattedMessage
@@ -526,7 +537,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     id='header-popover'
                     popoverStyle='info'
                     popoverSize='lg'
-                    style={{transform: `translate(${this.state.leftOffset}px, ${this.state.topOffset}px)`}}
+                    style={{maxWidth: `${this.state.popoverOverlayWidth}px`, transform: `translate(${this.state.leftOffset}px, ${this.state.topOffset}px)`}}
                     placement='bottom'
                     className={classNames('channel-header__popover', {'chanel-header__popover--lhs_offset': this.props.hasMoreThanOneTeam})}
                 >
@@ -548,6 +559,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     className='channel-header__description'
                     dir='auto'
                 >
+                    {showChannelHeaderTutorialStep && <ChannelHeaderTour/>}
                     {dmHeaderIconStatus}
                     {dmHeaderTextStatus}
                     {memberListButton}
@@ -594,6 +606,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                             rootClose={true}
                             target={this.headerDescriptionRef.current as React.ReactInstance}
                             ref={this.headerOverlayRef}
+                            onEnter={this.setPopoverOverlayWidth}
                             onHide={() => this.setState({showChannelHeaderPopover: false})}
                         >
                             {popoverContent}
@@ -621,9 +634,9 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                                     id='channel_header.addChannelHeader'
                                     defaultMessage='Add a channel header'
                                 />
-                                <i
+                                <LocalizedIcon
                                     className='icon icon-pencil-outline edit-icon'
-                                    aria-label={this.props.intl.formatMessage({id: 'channel_header.editLink', defaultMessage: 'Edit'})}
+                                    ariaLabel={{id: t('channel_header.editLink'), defaultMessage: 'Edit'}}
                                 />
                             </button>
                         );
@@ -643,9 +656,9 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                                     id='channel_header.addChannelHeader'
                                     defaultMessage='Add a channel header'
                                 />
-                                <i
+                                <LocalizedIcon
                                     className='icon icon-pencil-outline edit-icon'
-                                    aria-label={this.props.intl.formatMessage({id: 'channel_header.editLink', defaultMessage: 'Edit'})}
+                                    ariaLabel={{id: t('channel_header.editLink'), defaultMessage: 'Edit'}}
                                 />
                             </button>
                         </ChannelPermissionGate>
@@ -657,6 +670,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     id='channelHeaderDescription'
                     className='channel-header__description light'
                 >
+                    {showChannelHeaderTutorialStep && <ChannelHeaderTour/>}
                     {dmHeaderIconStatus}
                     {dmHeaderTextStatus}
                     {memberListButton}
@@ -783,6 +797,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                             <span
                                 id='channelHeaderDropdownIcon'
                                 className='icon icon-chevron-down header-dropdown-chevron-icon'
+                                aria-label={formatMessage({id: 'generic_icons.dropdown', defaultMessage: 'Dropdown Icon'}).toLowerCase()}
                             />
                         </button>
                     </div>
@@ -812,6 +827,8 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                     {toggleFavorite}
                 </div>
             );
+
+            showMeetBtn = false;
         }
 
         return (
@@ -845,7 +862,7 @@ class ChannelHeader extends React.PureComponent<Props, State> {
                         channel={channel}
                         channelMember={channelMember}
                     />
-                    <CallButton/>
+                    {showMeetBtn && <MeetButton/>}
                     <ChannelInfoButton channel={channel}/>
                 </div>
             </div>

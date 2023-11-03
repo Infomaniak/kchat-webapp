@@ -3,8 +3,8 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
 import {t} from 'utils/i18n';
+
 import ConfirmModal from 'components/confirm_modal';
 
 type Props = {

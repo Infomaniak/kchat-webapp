@@ -1,26 +1,24 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classNames from 'classnames';
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
+import Constants, {InsightsScopes} from 'utils/constants';
 
-import classNames from 'classnames';
+import type {LeastActiveChannel, TimeFrame} from '@mattermost/types/insights';
+
+import {getLeastActiveChannelsForTeam, getMyLeastActiveChannels} from 'mattermost-redux/actions/insights';
+import {getCurrentRelativeTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import {getLeastActiveChannelsForTeam, getMyLeastActiveChannels} from 'mattermost-redux/actions/insights';
-
-import {LeastActiveChannel, TimeFrame} from '@mattermost/types/insights';
-
-import {getCurrentRelativeTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-
-import Constants, {InsightsScopes} from 'utils/constants';
-
-import Avatars from 'components/widgets/users/avatars';
-import DataGrid, {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import DataGrid from 'components/admin_console/data_grid/data_grid';
 import Timestamp from 'components/timestamp';
+import Avatars from 'components/widgets/users/avatars';
 
 import ChannelActionsMenu from '../channel_actions_menu/channel_actions_menu';
 
@@ -154,23 +152,21 @@ const LeastActiveChannelsTable = (props: Props) => {
                         lastActivity: (
                             <span className='timestamp'>
                                 {
-                                    channel.last_activity_at === 0 ?
-                                        <FormattedMessage
-                                            id='insights.leastActiveChannels.lastActivityNone'
-                                            defaultMessage='No activity'
-                                        /> :
-                                        <Timestamp
-                                            value={channel.last_activity_at}
-                                            units={[
-                                                'now',
-                                                'minute',
-                                                'hour',
-                                                'day',
-                                                'week',
-                                                'month',
-                                            ]}
-                                            useTime={false}
-                                        />
+                                    channel.last_activity_at === 0 ? <FormattedMessage
+                                        id='insights.leastActiveChannels.lastActivityNone'
+                                        defaultMessage='No activity'
+                                    /> : <Timestamp
+                                                                         value={channel.last_activity_at}
+                                                                         units={[
+                                            'now',
+                                            'minute',
+                                            'hour',
+                                            'day',
+                                            'week',
+                                            'month',
+                                        ]}
+                                                                         useTime={false}
+                                                                          />
                                 }
                             </span>
                         ),

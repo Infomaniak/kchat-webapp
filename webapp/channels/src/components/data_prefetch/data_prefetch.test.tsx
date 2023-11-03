@@ -3,12 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import type {ChannelType} from '@mattermost/types/channels';
 
 import {loadProfilesForSidebar} from 'actions/user_actions';
-
-import {TestHelper} from 'utils/test_helper';
 
 import DataPrefetch from './data_prefetch';
 
@@ -68,8 +67,6 @@ describe('/components/data_prefetch', () => {
             last_post_at: 1235,
             last_root_post_at: 1235,
         })],
-        disableWebappPrefetchAllowed: false,
-        dataPrefetchEnabled: true,
     };
 
     beforeEach(() => {

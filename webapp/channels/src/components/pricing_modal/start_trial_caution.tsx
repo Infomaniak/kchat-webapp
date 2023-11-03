@@ -4,10 +4,9 @@
 import React from 'react';
 import {useIntl} from 'react-intl';
 import styled from 'styled-components';
+import {AboutLinks, LicenseLinks} from 'utils/constants';
 
 import ExternalLink from 'components/external_link';
-
-import {AboutLinks, LicenseLinks} from 'utils/constants';
 
 const ContainerSpan = styled.span`
 font-style: normal;

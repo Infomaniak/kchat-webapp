@@ -2,16 +2,17 @@
 // See LICENSE.txt for license information.
 
 import React, {useState} from 'react';
-import {FormattedMessage} from 'react-intl';
 import {Modal} from 'react-bootstrap';
+import {FormattedMessage} from 'react-intl';
+import {Constants} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
 
-import {AdminConfig} from '@mattermost/types/config';
-import {ActionFunc} from 'mattermost-redux/types/actions';
+import type {AdminConfig} from '@mattermost/types/config';
+
+import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import {Constants} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
-import {t} from 'utils/i18n';
 
 const INT32_MAX = 2147483647;
 

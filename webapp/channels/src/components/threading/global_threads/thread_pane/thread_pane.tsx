@@ -1,12 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useCallback} from 'react';
+import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
 import type {ReactNode} from 'react';
+import React, {memo, useCallback} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
+import {t} from 'utils/i18n';
 
-import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
 import type {UserThread} from '@mattermost/types/threads';
 
 import {setThreadFollow} from 'mattermost-redux/actions/threads';
@@ -16,15 +17,12 @@ import {getPost, makeGetPostsForThread} from 'mattermost-redux/selectors/entitie
 import Header from 'components/widgets/header';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 
-import {t} from 'utils/i18n';
-
 import type {GlobalState} from 'types/store';
 
 import Button from '../../common/button';
 import FollowButton from '../../common/follow_button';
 import {useThreadRouting} from '../../hooks';
 import ThreadMenu from '../thread_menu';
-
 import './thread_pane.scss';
 
 const getChannel = makeGetChannel();

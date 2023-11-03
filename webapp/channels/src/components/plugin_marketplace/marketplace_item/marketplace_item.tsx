@@ -3,6 +3,7 @@
 
 import classNames from 'classnames';
 import React from 'react';
+import {Constants} from 'utils/constants';
 
 import type {MarketplaceLabel} from '@mattermost/types/marketplace';
 
@@ -11,8 +12,6 @@ import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import PluginIcon from 'components/widgets/icons/plugin_icon';
 import Tag from 'components/widgets/tag/tag';
-
-import {Constants} from 'utils/constants';
 
 // Label renders a tag showing a name and a description in a tooltip.
 // If a URL is provided, clicking on the tag will open the URL in a new tab.
@@ -75,33 +74,7 @@ export type MarketplaceItemProps = {
     versionLabel: JSX.Element| null;
 };
 
-type MarketplaceItemState = {
-    showTooltip: boolean;
-};
-
-export default class MarketplaceItem extends React.PureComponent <MarketplaceItemProps, MarketplaceItemState> {
-    descriptionRef: React.RefObject<HTMLParagraphElement>;
-
-    constructor(props: MarketplaceItemProps) {
-        super(props);
-
-        this.descriptionRef = React.createRef();
-
-        this.state = {
-            showTooltip: false,
-        };
-    }
-
-    componentDidMount(): void {
-        this.enableToolTipIfNeeded();
-    }
-
-    enableToolTipIfNeeded = (): void => {
-        const element = this.descriptionRef.current;
-        const showTooltip = element && element.offsetWidth < element.scrollWidth;
-        this.setState({showTooltip: Boolean(showTooltip)});
-    };
-
+export default class MarketplaceItem extends React.PureComponent <MarketplaceItemProps> {
     render(): JSX.Element {
         const {labels = null} = this.props;
         let icon;
@@ -131,36 +104,11 @@ export default class MarketplaceItem extends React.PureComponent <MarketplaceIte
             </>
         );
 
-        const descriptionText = this.props.error || this.props.description;
-        let description = (
-            <p
-                className={classNames('more-modal__description', {error_text: this.props.error})}
-                ref={this.descriptionRef}
-            >
-                {descriptionText}
+        const description = (
+            <p className={classNames('more-modal__description', {error_text: this.props.error})}>
+                {this.props.error || this.props.description}
             </p>
         );
-
-        if (this.state.showTooltip) {
-            const displayNameToolTip = (
-                <Tooltip
-                    id='marketplace-item-description__tooltip'
-                    className='more-modal__description-tooltip'
-                >
-                    {descriptionText}
-                </Tooltip>
-            );
-
-            description = (
-                <OverlayTrigger
-                    delayShow={Constants.OVERLAY_TIME_DELAY}
-                    placement='top'
-                    overlay={displayNameToolTip}
-                >
-                    {description}
-                </OverlayTrigger>
-            );
-        }
 
         let pluginDetails;
         if (this.props.homepageUrl) {

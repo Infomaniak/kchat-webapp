@@ -4,10 +4,15 @@
 /* eslint-disable max-lines */
 
 import deepEqual from 'fast-deep-equal';
+import * as I18n from 'i18n/i18n.jsx';
 import type {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {Timezone} from 'timezones.json';
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
+import {getBrowserTimezone} from 'utils/timezone';
+import {a11yFocus} from 'utils/utils';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile, UserTimezone} from '@mattermost/types/users';
@@ -20,12 +25,6 @@ import SettingItem from 'components/setting_item';
 import SettingItemMax from 'components/setting_item_max';
 import ThemeSetting from 'components/user_settings/display/user_settings_theme';
 import BackIcon from 'components/widgets/icons/fa_back_icon';
-
-import * as I18n from 'i18n/i18n.jsx';
-import Constants from 'utils/constants';
-import {t} from 'utils/i18n';
-import {getBrowserTimezone} from 'utils/timezone';
-import {a11yFocus} from 'utils/utils';
 
 import ManageLanguages from './manage_languages';
 import ManageTimezones from './manage_timezones';
@@ -106,6 +105,7 @@ type Props = {
     enableThemeSelection: boolean;
     configTeammateNameDisplay: string;
     currentUserTimezone: string;
+    enableTimezone: boolean;
     shouldAutoUpdateTimezone: boolean | string;
     lockTeammateNameDisplay: boolean;
     militaryTime: string;
@@ -180,9 +180,9 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
     }
 
     componentDidMount() {
-        const {actions, shouldAutoUpdateTimezone} = this.props;
+        const {actions, enableTimezone, shouldAutoUpdateTimezone} = this.props;
 
-        if (shouldAutoUpdateTimezone) {
+        if (enableTimezone && shouldAutoUpdateTimezone) {
             actions.autoUpdateTimezone(getBrowserTimezone());
         }
     }
@@ -844,7 +844,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
         });
 
         let timezoneSelection;
-        if (!this.props.shouldAutoUpdateTimezone) {
+        if (this.props.enableTimezone && !this.props.shouldAutoUpdateTimezone) {
             const userTimezone = this.props.userTimezone;
             const active = this.props.activeSection === 'timezone';
             let max = null;
@@ -1135,7 +1135,8 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     </h3>
                     <div className='divider-dark first'/>
                     {themeSection}
-                    {collapsedReplyThreads}
+                    {lastActiveSection}
+                    {/* {collapsedReplyThreads}
                     {clockSection}
                     {teammateNameDisplaySection}
                     {availabilityStatusOnPostsSection}
@@ -1144,10 +1145,10 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     {linkPreviewSection}
                     {collapseSection}
                     {messageDisplaySection}
-                    {clickToReply}
+                    {/* {clickToReply} */}
                     {channelDisplayModeSection}
                     {oneClickReactionsOnPostsSection}
-                    {languagesSection}
+                    {/* {languagesSection} */}
                 </div>
             </div>
         );

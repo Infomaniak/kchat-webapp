@@ -1,19 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {ChangeEvent, MouseEvent, ReactNode} from 'react';
-import {FormattedMessage, FormattedDate, injectIntl, type WrappedComponentProps} from 'react-intl';
+import React from 'react';
+import {FormattedMessage, FormattedDate} from 'react-intl';
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
+import {imageURLForTeam, isMobile, localizeMessage, moveCursorToEnd} from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 
+import LocalizedInput from 'components/localized_input/localized_input';
 import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
 import SettingPicture from 'components/setting_picture';
 import BackIcon from 'components/widgets/icons/fa_back_icon';
-
-import Constants from 'utils/constants';
-import {imageURLForTeam, localizeMessage, moveCursorToEnd} from 'utils/utils';
 
 import OpenInvite from './open_invite';
 
@@ -21,7 +22,7 @@ import type {PropsFromRedux, OwnProps} from '.';
 
 const ACCEPTED_TEAM_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/bmp'];
 
-type Props = PropsFromRedux & OwnProps & WrappedComponentProps;
+type Props = PropsFromRedux & OwnProps;
 
 type State = {
     name?: Team['display_name'];
@@ -37,7 +38,7 @@ type State = {
     shouldFetchTeam?: boolean;
 }
 
-export class GeneralTab extends React.PureComponent<Props, State> {
+export default class GeneralTab extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = this.setupInitialState(props);
@@ -106,10 +107,9 @@ export class GeneralTab extends React.PureComponent<Props, State> {
     handleAllowedDomainsSubmit = async () => {
         const state = {serverError: '', clientError: ''};
 
-        const data = {
-            id: this.props.team?.id,
-            allowed_domains: this.state.allowed_domains,
-        };
+        const data = {...this.props.team};
+        data.allowed_domains = this.state.allowed_domains;
+
         const {error} = await this.props.actions.patchTeam(data);
 
         if (error) {
@@ -152,10 +152,9 @@ export class GeneralTab extends React.PureComponent<Props, State> {
             return;
         }
 
-        const data = {
-            id: this.props.team?.id,
-            display_name: this.state.name,
-        };
+        const data = {...this.props.team};
+        data.display_name = this.state.name;
+
         const {error} = await this.props.actions.patchTeam(data);
 
         if (error) {
@@ -200,10 +199,9 @@ export class GeneralTab extends React.PureComponent<Props, State> {
             return;
         }
 
-        const data = {
-            id: this.props.team?.id,
-            description: this.state.description,
-        };
+        const data = {...this.props.team};
+        data.description = this.state.description;
+
         const {error} = await this.props.actions.patchTeam(data);
 
         if (error) {
@@ -392,7 +390,7 @@ export class GeneralTab extends React.PureComponent<Props, State> {
         if (this.props.activeSection === 'name') {
             const inputs = [];
 
-            const teamNameLabel = this.props.isMobileView ? '' : (
+            const teamNameLabel = isMobile() ? '' : (
                 <FormattedMessage
                     id='general_tab.teamName'
                     defaultMessage='Team Name'
@@ -451,7 +449,7 @@ export class GeneralTab extends React.PureComponent<Props, State> {
         if (this.props.activeSection === 'description') {
             const inputs = [];
 
-            const teamDescriptionLabel = this.props.isMobileView ? '' : (
+            const teamDescriptionLabel = isMobile() ? '' : (
                 <FormattedMessage
                     id='general_tab.teamDescription'
                     defaultMessage='Team Description'
@@ -559,7 +557,7 @@ export class GeneralTab extends React.PureComponent<Props, State> {
                     />
                 );
             } else {
-                minMessage = this.props.isMobileView ? localizeMessage('general_tab.teamIconEditHintMobile', 'Click to upload an image') : localizeMessage('general_tab.teamIconEditHint', 'Click \'Edit\' to upload an image.');
+                minMessage = isMobile() ? localizeMessage('general_tab.teamIconEditHintMobile', 'Click to upload an image') : localizeMessage('general_tab.teamIconEditHint', 'Click \'Edit\' to upload an image.');
             }
 
             teamIconSection = (
@@ -583,7 +581,7 @@ export class GeneralTab extends React.PureComponent<Props, State> {
                     className='form-group'
                 >
                     <div className='col-sm-12'>
-                        <input
+                        <LocalizedInput
                             id='allowedDomains'
                             autoFocus={true}
                             className='form-control'
@@ -591,7 +589,7 @@ export class GeneralTab extends React.PureComponent<Props, State> {
                             onChange={this.updateAllowedDomains}
                             value={this.state.allowed_domains}
                             onFocus={moveCursorToEnd}
-                            placeholder={this.props.intl.formatMessage({id: 'general_tab.AllowedDomainsExample', defaultMessage: 'corp.mattermost.com, mattermost.com'})}
+                            placeholder={{id: t('general_tab.AllowedDomainsExample'), defaultMessage: 'corp.mattermost.com, mattermost.com'}}
                             aria-label={localizeMessage('general_tab.allowedDomains.ariaLabel', 'Allowed Domains')}
                         />
                     </div>
@@ -693,5 +691,3 @@ export class GeneralTab extends React.PureComponent<Props, State> {
         );
     }
 }
-
-export default injectIntl(GeneralTab);

@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import type {Placement} from 'popper.js';
-import React from 'react';
 import type {RefObject} from 'react';
+import React from 'react';
 import {usePopper} from 'react-popper';
 import {CSSTransition} from 'react-transition-group';
 import styled from 'styled-components';

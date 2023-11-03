@@ -42,8 +42,18 @@ exports[`components/delete_channel_modal should match snapshot for delete_channe
       id="deleteChannelModalLabel"
     >
       <MemoizedFormattedMessage
-        defaultMessage="Confirm ARCHIVE Channel"
+        defaultMessage="Archive the {visibility} <strong>{channel}</strong> channel"
         id="delete_channel.confirm"
+        values={
+          Object {
+            "channel": "testing",
+            "strong": [Function],
+            "visibility": <Memo(MemoizedFormattedMessage)
+              defaultMessage="public"
+              id="delete_channel.public"
+            />,
+          }
+        }
       />
     </ModalTitle>
   </ModalHeader>
@@ -52,10 +62,13 @@ exports[`components/delete_channel_modal should match snapshot for delete_channe
     componentClass="div"
   >
     <div
-      className="alert alert-danger"
+      className="alert alert-with-icon alert-grey"
     >
+      <i
+        className="icon-information-outline"
+      />
       <FormattedMarkdownMessage
-        defaultMessage="This will archive the channel from the team and remove it from the user interface. Archived channels can be unarchived if needed again. \\\\n \\\\nAre you sure you wish to archive the {display_name} channel?"
+        defaultMessage="This will archive the channel from the team and remove it from the user interface. Archived channels can be unarchived if needed again."
         id="delete_channel.question"
         values={
           Object {
@@ -64,13 +77,27 @@ exports[`components/delete_channel_modal should match snapshot for delete_channe
         }
       />
     </div>
+    <p
+      className="subtitle"
+    >
+      <MemoizedFormattedMessage
+        defaultMessage="Souhaitez-vous vraiment archiver le canal <strong>{channel}</strong> ?"
+        id="delete_channel.confirm"
+        values={
+          Object {
+            "channel": "testing",
+            "strong": [Function],
+          }
+        }
+      />
+    </p>
   </ModalBody>
   <ModalFooter
     bsClass="modal-footer"
     componentClass="div"
   >
     <button
-      className="btn btn-tertiary"
+      className="btn btn-link secondary"
       onClick={[Function]}
       type="button"
     >

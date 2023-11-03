@@ -3,18 +3,17 @@
 
 /* eslint-disable max-lines */
 
+import {AccountMultipleOutlineIcon, ChartBarIcon, CogOutlineIcon, CreditCardOutlineIcon, FlaskOutlineIcon, FormatListBulletedIcon, InformationOutlineIcon, PowerPlugOutlineIcon, ServerVariantIcon, ShieldOutlineIcon, SitemapIcon, ProductsIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {AccountMultipleOutlineIcon, ChartBarIcon, CogOutlineIcon, CreditCardOutlineIcon, FlaskOutlineIcon, FormatListBulletedIcon, InformationOutlineIcon, PowerPlugOutlineIcon, ServerVariantIcon, ShieldOutlineIcon, SitemapIcon, ProductsIcon} from '@infomaniak/compass-icons/components';
+import {isCloudFreePlan} from 'utils/cloud_utils';
+import {Constants, CloudProducts, LicenseSkus} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {isCloudLicense} from 'utils/license_utils';
+import {getSiteURL} from 'utils/url';
 
 import {RESOURCE_KEYS} from 'mattermost-redux/constants/permissions_sysconsole';
 
-import {Constants, CloudProducts, LicenseSkus} from 'utils/constants';
-import {isCloudFreePlan} from 'utils/cloud_utils';
-import {isCloudLicense} from 'utils/license_utils';
-import {getSiteURL} from 'utils/url';
-import {t} from 'utils/i18n';
 import {
     ldapTest, invalidateAllCaches, reloadConfig, testS3Connection,
     removeIdpSamlCertificate, uploadIdpSamlCertificate,
@@ -24,38 +23,43 @@ import {
     removePublicLdapCertificate, uploadPublicLdapCertificate,
     invalidateAllEmailInvites, testSmtp, testSiteURL, getSamlMetadataFromIdp, setSamlIdpCertificateFromMetadata,
 } from 'actions/admin_actions';
-import SystemAnalytics from 'components/analytics/system_analytics';
-import TeamAnalytics from 'components/analytics/team_analytics';
-import PluginManagement from 'components/admin_console/plugin_management';
-import CustomPluginSettings from 'components/admin_console/custom_plugin_settings';
-import RestrictedIndicator from 'components/widgets/menu/menu_items/restricted_indicator';
-
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
+import CustomPluginSettings from 'components/admin_console/custom_plugin_settings';
+import PluginManagement from 'components/admin_console/plugin_management';
+import SystemAnalytics from 'components/analytics/system_analytics';
+import TeamAnalytics from 'components/analytics/team_analytics';
 import ExternalLink from 'components/external_link';
+import RestrictedIndicator from 'components/widgets/menu/menu_items/restricted_indicator';
 
-import OpenIdConvert from './openid_convert';
+import * as DefinitionConstants from './admin_definition_constants';
 import Audits from './audits';
-import CustomURLSchemesSetting from './custom_url_schemes_setting.jsx';
+import BillingHistory from './billing/billing_history';
+import BillingSubscriptions from './billing/billing_subscriptions/index.tsx';
+import CompanyInfo from './billing/company_info';
+import PaymentInfo from './billing/payment_info';
+import BleveSettings from './bleve_settings.jsx';
+import BrandImageSetting from './brand_image_setting/brand_image_setting';
 import CustomEnableDisableGuestAccountsSetting from './custom_enable_disable_guest_accounts_setting';
+import CustomURLSchemesSetting from './custom_url_schemes_setting.jsx';
+import OpenIdConvert from './openid_convert';
 import LicenseSettings from './license_settings';
+import PasswordSettings from './password_settings.jsx';
 import PermissionSchemesSettings from './permission_schemes_settings';
 import PermissionSystemSchemeSettings from './permission_schemes_settings/permission_system_scheme_settings';
 import PermissionTeamSchemeSettings from './permission_schemes_settings/permission_team_scheme_settings';
-import ValidationResult from './validation';
+import ServerLogs from './server_logs';
 import SystemRoles from './system_roles';
+import ValidationResult from './validation';
 import SystemRole from './system_roles/system_role';
 import SystemUsers from './system_users';
 import SystemUserDetail from './system_user_detail';
-import ServerLogs from './server_logs';
-import BrandImageSetting from './brand_image_setting/brand_image_setting';
 import GroupSettings from './group_settings/group_settings';
 import GroupDetails from './group_settings/group_details';
 import TeamSettings from './team_channel_settings/team';
 import TeamDetails from './team_channel_settings/team/details';
 import ChannelSettings from './team_channel_settings/channel';
 import ChannelDetails from './team_channel_settings/channel/details';
-import PasswordSettings from './password_settings.jsx';
 import PushNotificationsSettings from './push_settings.jsx';
 import DataRetentionSettings from './data_retention_settings';
 import GlobalDataRetentionForm from './data_retention_settings/global_policy_form';
@@ -63,15 +67,10 @@ import CustomDataRetentionForm from './data_retention_settings/custom_policy_for
 import MessageExportSettings from './message_export_settings.jsx';
 import DatabaseSettings from './database_settings.jsx';
 import ElasticSearchSettings from './elasticsearch_settings.jsx';
-import BleveSettings from './bleve_settings.jsx';
 import FeatureFlags from './feature_flags.tsx';
 import ClusterSettings from './cluster_settings.jsx';
 import CustomTermsOfServiceSettings from './custom_terms_of_service_settings';
 import SessionLengthSettings from './session_length_settings';
-import BillingSubscriptions from './billing/billing_subscriptions/index.tsx';
-import BillingHistory from './billing/billing_history';
-import CompanyInfo from './billing/company_info';
-import PaymentInfo from './billing/payment_info';
 import CompanyInfoEdit from './billing/company_info_edit';
 import PaymentInfoEdit from './billing/payment_info_edit';
 import WorkspaceOptimizationDashboard from './workspace-optimization/dashboard';
@@ -88,8 +87,6 @@ import {
     SystemRolesFeatureDiscovery,
     GroupsFeatureDiscovery,
 } from './feature_discovery/features';
-
-import * as DefinitionConstants from './admin_definition_constants';
 
 const FILE_STORAGE_DRIVER_LOCAL = 'local';
 const FILE_STORAGE_DRIVER_S3 = 'amazons3';

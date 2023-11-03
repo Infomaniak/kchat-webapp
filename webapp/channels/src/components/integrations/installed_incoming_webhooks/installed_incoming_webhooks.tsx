@@ -3,6 +3,8 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {IncomingWebhook} from '@mattermost/types/integrations';
@@ -12,13 +14,12 @@ import type {IDMappedObjects} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
+
 import BackstageList from 'components/backstage/components/backstage_list';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import InstalledIncomingWebhook, {matchesFilter} from 'components/integrations/installed_incoming_webhook';
-
-import {Constants, DeveloperLinks} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 type Props = {
     team: Team;
@@ -131,29 +132,15 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
                 helpText={
                     <FormattedMessage
                         id='installed_incoming_webhooks.help'
-                        defaultMessage='Use incoming webhooks to connect external tools to Mattermost. {buildYourOwn} or visit the {appDirectory} to find self-hosted, third-party apps and integrations.'
+                        defaultMessage='Use incoming webhooks to connect external tools to kChat. {learnMore}'
                         values={{
-                            buildYourOwn: (
-                                <ExternalLink
-                                    location='installed_incoming_webhooks'
-                                    href={DeveloperLinks.SETUP_INCOMING_WEBHOOKS}
-                                >
+                            learnMore: (
+                                <a onClick={redirectToDeveloperDocumentation}>
                                     <FormattedMessage
-                                        id='installed_incoming_webhooks.help.buildYourOwn'
-                                        defaultMessage='Build Your Own'
+                                        id='developer_documentation.learn_more'
+                                        defaultMessage='Learn more'
                                     />
-                                </ExternalLink>
-                            ),
-                            appDirectory: (
-                                <ExternalLink
-                                    href='https://mattermost.com/marketplace'
-                                    location='installed_incoming_webhooks'
-                                >
-                                    <FormattedMessage
-                                        id='installed_incoming_webhooks.help.appDirectory'
-                                        defaultMessage='App Directory'
-                                    />
-                                </ExternalLink>
+                                </a>
                             ),
                         }}
                     />

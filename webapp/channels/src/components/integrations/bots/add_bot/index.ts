@@ -2,23 +2,22 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {RouteComponentProps} from 'react-router-dom';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import {createBot, patchBot} from 'mattermost-redux/actions/bots';
+import {RouteComponentProps} from 'react-router-dom';
+
 import {updateUserRoles, uploadProfileImage, setDefaultProfileImage, createUserAccessToken} from 'mattermost-redux/actions/users';
-import {Permissions} from 'mattermost-redux/constants';
+import {createBot, patchBot} from 'mattermost-redux/actions/bots';
 import {getBotAccounts} from 'mattermost-redux/selectors/entities/bots';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getUser} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import {haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
+import {Permissions} from 'mattermost-redux/constants';
+import {ActionFunc} from 'mattermost-redux/types/actions';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
 
-import AddBot from './add_bot';
-import type {Props} from './add_bot';
+import AddBot, {Props} from './add_bot';
 
 type OwnProps = {
 
@@ -36,7 +35,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     const user = bot ? getUser(state, bot.user_id) : undefined;
     const roles = user ? user.roles : undefined;
     return {
-        maxFileSize: parseInt(config.MaxFileSize!, 10),
+        maxFileSize: parseInt(config.MaxBotProfileImageSize!, 10),
         bot,
         roles,
         editingUserHasManageSystem: haveISystemPermission(state, {permission: Permissions.MANAGE_SYSTEM}),

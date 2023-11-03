@@ -4,24 +4,26 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-
-import {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
-import {ChannelWithTeamData, ChannelSearchOpts} from '@mattermost/types/channels';
-import {debounce} from 'mattermost-redux/actions/helpers';
-
 import {getHistory} from 'utils/browser_history';
+import {isArchivedChannel} from 'utils/channel_utils';
+import {Constants} from 'utils/constants';
+
+import type {ChannelWithTeamData, ChannelSearchOpts} from '@mattermost/types/channels';
+
+import {debounce} from 'mattermost-redux/actions/helpers';
+import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
-import {Constants} from 'utils/constants';
-import {isArchivedChannel} from 'utils/channel_utils';
-import DataGrid, {Row, Column} from 'components/admin_console/data_grid/data_grid';
-import {FilterOptions} from 'components/admin_console/filter/filter';
+import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import DataGrid from 'components/admin_console/data_grid/data_grid';
+import type {FilterOptions} from 'components/admin_console/filter/filter';
 import TeamFilterDropdown from 'components/admin_console/filter/team_filter_dropdown';
 import {PAGE_SIZE} from 'components/admin_console/team_channel_settings/abstract_list';
+import SharedChannelIndicator from 'components/shared_channel_indicator';
+import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import GlobeIcon from 'components/widgets/icons/globe_icon';
 import LockIcon from 'components/widgets/icons/lock_icon';
-import ArchiveIcon from 'components/widgets/icons/archive_icon';
-import SharedChannelIndicator from 'components/shared_channel_indicator';
 
 import './channel_list.scss';
 interface ChannelListProps {
@@ -69,7 +71,7 @@ export default class ChannelList extends React.PureComponent<ChannelListProps, C
 
     isSearching = (term: string, filters: ChannelSearchOpts) => {
         return term.length > 0 || Object.keys(filters).length > 0;
-    }
+    };
 
     getPaginationProps = () => {
         const {page, term, filters} = this.state;
@@ -78,7 +80,7 @@ export default class ChannelList extends React.PureComponent<ChannelListProps, C
         let endCount = (page + 1) * PAGE_SIZE;
         endCount = endCount > total ? total : endCount;
         return {startCount, endCount, total};
-    }
+    };
 
     loadPage = async (page = 0, term = '', filters = {}) => {
         this.setState({loading: true, term, filters});
@@ -93,7 +95,7 @@ export default class ChannelList extends React.PureComponent<ChannelListProps, C
 
         await this.props.actions.getData(page, PAGE_SIZE, '', false, true);
         this.setState({page, loading: false});
-    }
+    };
 
     searchChannels = async (page = 0, term = '', filters = {}) => {
         let channels = [];
@@ -106,21 +108,21 @@ export default class ChannelList extends React.PureComponent<ChannelListProps, C
             searchErrored = false;
         }
         this.setState({page, loading: false, channels, total, searchErrored});
-    }
+    };
 
     searchChannelsDebounced = debounce((page, term, filters = {}) => this.searchChannels(page, term, filters), 300, false, () => {});
 
     nextPage = () => {
         this.loadPage(this.state.page + 1, this.state.term, this.state.filters);
-    }
+    };
 
     previousPage = () => {
         this.setState({page: this.state.page - 1});
-    }
+    };
 
     onSearch = async (term = '') => {
         this.loadPage(0, term, this.state.filters);
-    }
+    };
 
     getColumns = (): Column[] => {
         const name: JSX.Element = (
@@ -167,7 +169,7 @@ export default class ChannelList extends React.PureComponent<ChannelListProps, C
                 fixed: true,
             },
         ];
-    }
+    };
 
     getRows = (): Row[] => {
         const {data} = this.props;
@@ -245,7 +247,7 @@ export default class ChannelList extends React.PureComponent<ChannelListProps, C
                 onClick: () => getHistory().push(`/admin_console/user_management/channels/${channel.id}`),
             };
         });
-    }
+    };
 
     onFilter = (filterOptions: FilterOptions) => {
         const filters: ChannelSearchOpts = {};
@@ -285,7 +287,7 @@ export default class ChannelList extends React.PureComponent<ChannelListProps, C
             }
         }
         this.loadPage(0, this.state.term, filters);
-    }
+    };
 
     render = (): JSX.Element => {
         const {term, searchErrored} = this.state;
@@ -414,5 +416,5 @@ export default class ChannelList extends React.PureComponent<ChannelListProps, C
                 />
             </div>
         );
-    }
+    };
 }

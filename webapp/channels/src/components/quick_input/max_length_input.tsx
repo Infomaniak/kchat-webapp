@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {Fragment, forwardRef} from 'react';
 import type {FC, InputHTMLAttributes} from 'react';
+import React, {Fragment, forwardRef} from 'react';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     className: string;

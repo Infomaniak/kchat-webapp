@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import MuiMenu from '@mui/material/Menu';
 import type {MenuProps as MuiMenuProps} from '@mui/material/Menu';
+import MuiMenu from '@mui/material/Menu';
 import {styled} from '@mui/material/styles';
 
 interface Props extends MuiMenuProps {
@@ -27,6 +27,9 @@ export const MuiMenuStyled = styled(MuiMenu, {
             maxWidth: '496px',
             maxHeight: '80vh',
             width,
+        },
+        '& .MuiList-root': {
+            padding: '3px 0',
         },
     }),
 );

@@ -1,14 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {SendIcon} from '@infomaniak/compass-icons/components';
 import React, {useEffect, useState, useRef} from 'react';
 import {useIntl} from 'react-intl';
 import {useHistory} from 'react-router-dom';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import {VariableSizeList} from 'react-window';
 import type {ListChildComponentProps} from 'react-window';
+import {VariableSizeList} from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 import styled, {css} from 'styled-components';
+import * as Utils from 'utils/utils';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {Group} from '@mattermost/types/groups';
@@ -20,9 +22,7 @@ import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
 
-import * as Utils from 'utils/utils';
-
-import {Load} from '../constants';
+import {Load} from '../user_group_popover';
 
 const USERS_PER_PAGE = 100;
 
@@ -189,15 +189,13 @@ const GroupMemberList = (props: Props) => {
                             content={formatMessage({id: 'group_member_list.sendMessageTooltip', defaultMessage: 'Send message'})}
                         >
                             <DMButton
-                                className='btn btn-icon btn-xs'
+                                className='btn-icon'
                                 aria-label={formatMessage(
                                     {id: 'group_member_list.sendMessageButton', defaultMessage: 'Send message to {user}'},
                                     {user: name})}
                                 onClick={() => showDirectChannel(user)}
                             >
-                                <i
-                                    className='icon icon-send'
-                                />
+                                <SendIcon/>
                             </DMButton>
                         </SimpleTooltip>
                     </DMContainer>

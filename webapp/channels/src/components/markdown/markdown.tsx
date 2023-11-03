@@ -2,16 +2,15 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import type EmojiMap from 'utils/emoji_map';
+import messageHtmlToComponent from 'utils/message_html_to_component';
+import type {ChannelNamesMap, TextFormattingOptions, MentionKey} from 'utils/text_formatting';
+import {formatText} from 'utils/text_formatting';
 
 import type {PostImage, PostType} from '@mattermost/types/posts';
 import type {Team} from '@mattermost/types/teams';
 
-import PostEditedIndicator from 'components/post_view/post_edited_indicator';
-
-import type EmojiMap from 'utils/emoji_map';
-import messageHtmlToComponent from 'utils/message_html_to_component';
-import {formatText} from 'utils/text_formatting';
-import type {ChannelNamesMap, TextFormattingOptions, MentionKey} from 'utils/text_formatting';
+import PostEditedIndicator from '../post_view/post_edited_indicator';
 
 type Props = {
 

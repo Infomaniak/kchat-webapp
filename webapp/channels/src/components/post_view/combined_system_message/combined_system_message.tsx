@@ -2,8 +2,9 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {injectIntl} from 'react-intl';
 import type {IntlShape, MessageDescriptor} from 'react-intl';
+import {injectIntl} from 'react-intl';
+import {t} from 'utils/i18n';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -12,12 +13,10 @@ import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import Markdown from 'components/markdown';
 
-import {t} from 'utils/i18n';
-
 import LastUsers from './last_users';
 
 const {
-    JOIN_CHANNEL, ADD_TO_CHANNEL, REMOVE_FROM_CHANNEL, LEAVE_CHANNEL, JOIN_LEAVE_CHANNEL,
+    JOIN_CHANNEL, ADD_TO_CHANNEL, REMOVE_FROM_CHANNEL, LEAVE_CHANNEL,
     JOIN_TEAM, ADD_TO_TEAM, REMOVE_FROM_TEAM, LEAVE_TEAM,
 } = Posts.POST_TYPES;
 
@@ -92,24 +91,6 @@ const postTypeMessage = {
         many_expanded: {
             id: t('combined_system_message.left_channel.many_expanded'),
             defaultMessage: '{users} and {lastUser} **left the channel**.',
-        },
-    },
-    [JOIN_LEAVE_CHANNEL]: {
-        one: {
-            id: t('combined_system_message.join_left_channel.one'),
-            defaultMessage: '{firstUser} **joined and left the channel**.',
-        },
-        one_you: {
-            id: t('combined_system_message.join_left_channel.one_you'),
-            defaultMessage: 'You **joined and left the channel**.',
-        },
-        two: {
-            id: t('combined_system_message.join_left_channel.two'),
-            defaultMessage: '{firstUser} and {secondUser} **joined and left the channel**.',
-        },
-        many_expanded: {
-            id: t('combined_system_message.join_left_channel.many_expanded'),
-            defaultMessage: '{users} and {lastUser} **joined and left the channel**.',
         },
     },
     [JOIN_TEAM]: {
@@ -257,32 +238,30 @@ export class CombinedSystemMessage extends React.PureComponent<Props> {
         return usernames;
     };
 
-    getUsernamesByIds = (userIds: string | string[] = []): string[] => {
-        const userIdsArray = Array.isArray(userIds) ? userIds : [userIds];
+    getUsernamesByIds = (userIds: string[] = []): string[] => {
         const {currentUserId, currentUsername} = this.props;
         const allUsernames = this.getAllUsernames();
 
         const {formatMessage} = this.props.intl;
         const someone = formatMessage({id: t('channel_loader.someone'), defaultMessage: 'Someone'});
 
-        const usernames = userIdsArray.
+        const usernames = userIds.
             filter((userId) => {
                 return userId !== currentUserId && userId !== currentUsername;
             }).
             map((userId) => {
                 return allUsernames[userId] ? `@${allUsernames[userId]}` : someone;
-            }).
-            filter((username) => {
+            }).filter((username) => {
                 return username && username !== '';
             });
 
-        if (userIdsArray.includes(currentUserId)) {
+        if (userIds.includes(currentUserId)) {
             usernames.unshift(allUsernames[currentUserId]);
-        } else if (userIdsArray.includes(currentUsername)) {
+        } else if (userIds.includes(currentUsername)) {
             usernames.unshift(allUsernames[currentUsername]);
         }
 
-        return Array.from(new Set(usernames));
+        return usernames;
     };
 
     renderFormattedMessage(postType: string, userIds: string[], actorId?: string): JSX.Element {
@@ -341,9 +320,9 @@ export class CombinedSystemMessage extends React.PureComponent<Props> {
         );
     }
 
-    renderMessage(index: number, postType: string, userIds: string[], actorId?: string): JSX.Element {
+    renderMessage(postType: string, userIds: string[], actorId?: string): JSX.Element {
         return (
-            <React.Fragment key={index}>
+            <React.Fragment key={postType + actorId}>
                 {this.renderFormattedMessage(postType, userIds, actorId)}
                 <br/>
             </React.Fragment>
@@ -357,8 +336,8 @@ export class CombinedSystemMessage extends React.PureComponent<Props> {
         } = this.props;
 
         const content = [];
-        for (let i = 0; i < messageData.length; i++) {
-            const message = messageData[i];
+        const removedUserIds = [];
+        for (const message of messageData) {
             const {
                 postType,
                 actorId,
@@ -377,7 +356,17 @@ export class CombinedSystemMessage extends React.PureComponent<Props> {
                 }
             }
 
-            content.push(this.renderMessage(i, postType, userIds, actorId));
+            if (postType === REMOVE_FROM_CHANNEL) {
+                removedUserIds.push(...userIds);
+                continue;
+            }
+
+            content.push(this.renderMessage(postType, userIds, actorId));
+        }
+
+        if (removedUserIds.length > 0) {
+            const uniqueRemovedUserIds = removedUserIds.filter((id, index, arr) => arr.indexOf(id) === index);
+            content.push(this.renderMessage(REMOVE_FROM_CHANNEL, uniqueRemovedUserIds, currentUserId));
         }
 
         return (

@@ -2,12 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import {LicenseSkus} from 'utils/constants';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-
-import EnterpriseEditionRightPanel, {EnterpriseEditionProps} from './enterprise_edition_right_panel';
+import type {EnterpriseEditionProps} from './enterprise_edition_right_panel';
+import EnterpriseEditionRightPanel from './enterprise_edition_right_panel';
 
 describe('components/admin_console/license_settings/enterprise_edition/enterprise_edition_right_panel', () => {
     const license = {

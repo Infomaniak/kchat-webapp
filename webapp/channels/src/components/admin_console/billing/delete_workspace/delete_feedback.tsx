@@ -2,10 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import type {WrappedComponentProps} from 'react-intl';
+import {injectIntl} from 'react-intl';
 
-import {injectIntl, WrappedComponentProps} from 'react-intl';
+import type {Feedback} from '@mattermost/types/cloud';
 
-import {Feedback} from '@mattermost/types/cloud';
 import FeedbackModal from 'components/feedback_modal/feedback';
 
 type Props = {

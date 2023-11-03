@@ -2,25 +2,25 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {connect} from 'react-redux';
-import type {ConnectedProps} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch} from 'redux';
+import {connect, ConnectedProps} from 'react-redux';
 
-import {addPostReminder} from 'mattermost-redux/actions/posts';
+import {bindActionCreators, Dispatch} from 'redux';
+
 import {Preferences} from 'mattermost-redux/constants';
+import {addPostReminder} from 'mattermost-redux/actions/posts';
+
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
+import {GlobalState} from 'types/store';
 import {makeAsyncComponent} from 'components/async_load';
 
-import type {GlobalState} from 'types/store';
+import {getCurrentUserTimezone} from 'selectors/general';
 
 const PostReminderCustomTimePicker = makeAsyncComponent('PostReminderCustomTimePicker', React.lazy(() => import('./post_reminder_custom_time_picker_modal')));
 
 function mapStateToProps(state: GlobalState) {
-    const timezone = getCurrentTimezone(state);
+    const timezone = getCurrentUserTimezone(state);
     const userId = getCurrentUserId(state);
     const isMilitaryTime = getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.USE_MILITARY_TIME, false);
 

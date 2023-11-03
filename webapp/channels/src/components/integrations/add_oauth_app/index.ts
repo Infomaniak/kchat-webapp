@@ -2,14 +2,12 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
 import {addOAuthApp} from 'mattermost-redux/actions/integrations';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import {ActionFunc} from 'mattermost-redux/types/actions';
 
-import AddOAuthApp from './add_oauth_app';
-import type {Props} from './add_oauth_app';
+import AddOAuthApp, {Props} from './add_oauth_app';
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {

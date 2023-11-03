@@ -3,9 +3,8 @@
 
 import {ErrorPageTypes} from 'utils/constants';
 
-import {UserProfile} from '@mattermost/types/users';
-
-import {ClientLicense} from '@mattermost/types/config';
+import type {ClientLicense} from '@mattermost/types/config';
+import type {UserProfile} from '@mattermost/types/users';
 
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 

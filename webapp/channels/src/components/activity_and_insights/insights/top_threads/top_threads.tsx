@@ -3,21 +3,20 @@
 
 import React, {memo, useEffect, useState, useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
-import {TopThread} from '@mattermost/types/insights';
-import {GlobalState} from '@mattermost/types/store';
+import {InsightsScopes} from 'utils/constants';
 
 import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
+import type {TopThread} from '@mattermost/types/insights';
+import type {GlobalState} from '@mattermost/types/store';
 
 import {getMyTopThreads, getTopThreadsForTeam} from 'mattermost-redux/actions/insights';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
-import {InsightsScopes} from 'utils/constants';
-
-import widgetHoc, {WidgetHocProps} from '../widget_hoc/widget_hoc';
-import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
-
 import TopThreadsItem from './top_threads_item/top_threads_item';
+
+import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
+import type {WidgetHocProps} from '../widget_hoc/widget_hoc';
+import widgetHoc from '../widget_hoc/widget_hoc';
 
 import './../../activity_and_insights.scss';
 import './top_threads.scss';

@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {JSXElementConstructor} from 'react';
+import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
@@ -11,7 +11,6 @@ import type {TypePurchases} from '@mattermost/types/cloud';
 import type {GatherIntentModalProps} from './gather_intent_modal';
 import {GatherIntentSubmittedModal} from './gather_intent_submitted_modal';
 import {useGatherIntent} from './useGatherIntent';
-
 import './gather_intent.scss';
 
 interface GatherIntentProps {

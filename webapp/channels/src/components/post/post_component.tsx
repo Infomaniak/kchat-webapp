@@ -2,13 +2,16 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import type {MouseEvent} from 'react';
+import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {getHistory} from 'utils/browser_history';
+import Constants, {A11yCustomEventTypes, AppEvents, Locations} from 'utils/constants';
+import * as PostUtils from 'utils/post_utils';
+import {getDateForUnixTicks, makeIsEligibleForClick} from 'utils/utils';
 
 import type {Emoji} from '@mattermost/types/emojis';
 import type {Post} from '@mattermost/types/posts';
-import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Posts} from 'mattermost-redux/constants/index';
@@ -41,22 +44,14 @@ import Tooltip from 'components/tooltip';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import InfoSmallIcon from 'components/widgets/icons/info_small_icon';
 
-import {getHistory} from 'utils/browser_history';
-import Constants, {A11yCustomEventTypes, AppEvents, Locations} from 'utils/constants';
-import type {A11yFocusEventDetail} from 'utils/constants';
-import {isKeyPressed} from 'utils/keyboard';
-import * as PostUtils from 'utils/post_utils';
-import {getDateForUnixTicks, makeIsEligibleForClick} from 'utils/utils';
-
-import type {PostPluginComponent, PluginComponent} from 'types/store/plugins';
+import type {PostPluginComponent} from 'types/store/plugins';
 
 import PostOptions from './post_options';
 import PostUserProfile from './user_profile';
 
 export type Props = {
     post: Post;
-    currentTeam: Team;
-    team?: Team;
+    teamId: string;
     currentUserId: string;
     compactDisplay?: boolean;
     colorizeUsernames?: boolean;
@@ -82,7 +77,7 @@ export type Props = {
     channelType?: string;
     a11yIndex?: number;
     isBot: boolean;
-    hasReplies: boolean;
+    hasReplies?: boolean;
     isFirstReply?: boolean;
     previousPostIsComment?: boolean;
     matches?: string[];
@@ -117,18 +112,17 @@ export type Props = {
     isPostAcknowledgementsEnabled: boolean;
     isPostPriorityEnabled: boolean;
     isCardOpen?: boolean;
-    canDelete?: boolean;
-    pluginActions: PluginComponent[];
+    shouldShowDotMenu: boolean;
+    tourTipsEnabled: boolean;
 };
 
 const PostComponent = (props: Props): JSX.Element => {
-    const {post, shouldHighlight, togglePostMenu} = props;
+    const {post, togglePostMenu} = props;
 
     const isSearchResultItem = (props.matches && props.matches.length > 0) || props.isMentionSearch || (props.term && props.term.length > 0);
     const isRHS = props.location === Locations.RHS_ROOT || props.location === Locations.RHS_COMMENT || props.location === Locations.SEARCH;
     const postRef = useRef<HTMLDivElement>(null);
     const postHeaderRef = useRef<HTMLDivElement>(null);
-    const teamId = props.team?.id || props.currentTeam.id;
 
     const [hover, setHover] = useState(false);
     const [a11yActive, setA11y] = useState(false);
@@ -136,42 +130,22 @@ const PostComponent = (props: Props): JSX.Element => {
     const [fileDropdownOpened, setFileDropdownOpened] = useState(false);
     const [fadeOutHighlight, setFadeOutHighlight] = useState(false);
     const [alt, setAlt] = useState(false);
-    const [hasReceivedA11yFocus, setHasReceivedA11yFocus] = useState(false);
 
     const isSystemMessage = PostUtils.isSystemMessage(post);
     const fromAutoResponder = PostUtils.fromAutoResponder(post);
 
     useEffect(() => {
-        if (shouldHighlight) {
+        if (props.shouldHighlight) {
             const timer = setTimeout(() => setFadeOutHighlight(true), Constants.PERMALINK_FADEOUT);
             return () => {
                 clearTimeout(timer);
             };
         }
         return undefined;
-    }, [shouldHighlight]);
+    }, [props.shouldHighlight]);
 
     const handleA11yActivateEvent = () => setA11y(true);
     const handleA11yDeactivateEvent = () => setA11y(false);
-    const handleAlt = (e: KeyboardEvent) => setAlt(e.altKey);
-
-    const handleA11yKeyboardFocus = useCallback((e: KeyboardEvent) => {
-        if (!hasReceivedA11yFocus && shouldHighlight && isKeyPressed(e, Constants.KeyCodes.TAB) && e.shiftKey) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            setHasReceivedA11yFocus(true);
-
-            document.dispatchEvent(new CustomEvent<A11yFocusEventDetail>(
-                A11yCustomEventTypes.FOCUS, {
-                    detail: {
-                        target: postRef.current,
-                        keyboardOnly: true,
-                    },
-                },
-            ));
-        }
-    }, [hasReceivedA11yFocus, shouldHighlight]);
 
     useEffect(() => {
         if (a11yActive) {
@@ -180,8 +154,13 @@ const PostComponent = (props: Props): JSX.Element => {
     }, [a11yActive]);
 
     useEffect(() => {
+        const handleAlt = (e: KeyboardEvent) => {
+            setAlt(e.altKey);
+        };
         let removeEventListener: (type: string, listener: EventListener) => void;
 
+        document.addEventListener('keydown', handleAlt);
+        document.addEventListener('keyup', handleAlt);
         if (postRef.current) {
             postRef.current.addEventListener(A11yCustomEventTypes.ACTIVATE, handleA11yActivateEvent);
             postRef.current.addEventListener(A11yCustomEventTypes.DEACTIVATE, handleA11yDeactivateEvent);
@@ -189,32 +168,14 @@ const PostComponent = (props: Props): JSX.Element => {
         }
 
         return () => {
+            document.removeEventListener('keydown', handleAlt);
+            document.removeEventListener('keyup', handleAlt);
             if (removeEventListener) {
                 removeEventListener(A11yCustomEventTypes.ACTIVATE, handleA11yActivateEvent);
                 removeEventListener(A11yCustomEventTypes.DEACTIVATE, handleA11yDeactivateEvent);
             }
         };
     }, []);
-
-    useEffect(() => {
-        if (hover) {
-            document.addEventListener('keydown', handleAlt);
-            document.addEventListener('keyup', handleAlt);
-        }
-
-        return () => {
-            document.removeEventListener('keydown', handleAlt);
-            document.removeEventListener('keyup', handleAlt);
-        };
-    }, [hover]);
-
-    useEffect(() => {
-        document.addEventListener('keyup', handleA11yKeyboardFocus);
-
-        return () => {
-            document.removeEventListener('keyup', handleA11yKeyboardFocus);
-        };
-    }, [handleA11yKeyboardFocus]);
 
     const hasSameRoot = (props: Props) => {
         if (props.isFirstReply) {
@@ -285,7 +246,7 @@ const PostComponent = (props: Props): JSX.Element => {
         const hovered =
             hover || fileDropdownOpened || dropdownOpened || a11yActive || props.isPostBeingEdited;
         return classNames('a11y__section post', {
-            'post--highlight': shouldHighlight && !fadeOutHighlight,
+            'post--highlight': props.shouldHighlight && !fadeOutHighlight,
             'same--root': hasSameRoot(props),
             'other--root': !hasSameRoot(props) && !isSystemMessage,
             'post--bot': PostUtils.isFromBot(post),
@@ -293,16 +254,16 @@ const PostComponent = (props: Props): JSX.Element => {
             'current--user': props.currentUserId === post.user_id && !isSystemMessage,
             'post--system': isSystemMessage || isMeMessage,
             'post--root': props.hasReplies && !(post.root_id && post.root_id.length > 0),
-            'post--comment': (post.root_id && post.root_id.length > 0 && !props.isCollapsedThreadsEnabled) || (props.location === Locations.RHS_COMMENT),
+            'post--comment': post.root_id && post.root_id.length > 0 && !props.isCollapsedThreadsEnabled,
             'post--compact': props.compactDisplay,
             'post--hovered': hovered,
-            'same--user': props.isConsecutivePost && (!props.compactDisplay || props.location === Locations.RHS_COMMENT),
+            'same--user': props.isConsecutivePost && !props.compactDisplay,
             'cursor--pointer': alt && !props.channelIsArchived,
             'post--hide-controls': post.failed || post.state === Posts.POST_DELETED,
             'post--comment same--root': fromAutoResponder,
             'post--pinned-or-flagged': (post.is_pinned || props.isFlagged) && props.location === Locations.CENTER,
             'mention-comment': props.isCommentMention,
-            'post--thread': props.location === Locations.RHS_COMMENT || props.location === Locations.RHS_ROOT,
+            'post--thread': props.location === Locations.RHS_COMMENT || Locations.RHS_ROOT,
         });
     };
 
@@ -388,15 +349,7 @@ const PostComponent = (props: Props): JSX.Element => {
             return;
         }
         props.actions.selectPostFromRightHandSideSearch(post);
-    }, [post, props.actions, props.actions.selectPostFromRightHandSideSearch]);
-
-    const handleThreadClick = useCallback((e: React.MouseEvent) => {
-        if (props.currentTeam.id === teamId) {
-            handleCommentClick(e);
-        } else {
-            handleJumpClick(e);
-        }
-    }, [handleCommentClick, handleJumpClick, props.currentTeam.id, teamId]);
+    }, [post, props.actions]);
 
     const postClass = classNames('post__body', {'post--edited': PostUtils.isEdited(post), 'search-item-snippet': isSearchResultItem});
 
@@ -425,8 +378,7 @@ const PostComponent = (props: Props): JSX.Element => {
 
     let profilePic;
     const hideProfilePicture = hasSameRoot(props) && (!post.root_id && !props.hasReplies) && !PostUtils.isFromBot(post);
-    const hideProfileCase = !(props.location === Locations.RHS_COMMENT && props.compactDisplay && props.isConsecutivePost);
-    if (!hideProfilePicture && hideProfileCase) {
+    if (!hideProfilePicture) {
         profilePic = (
             <PostProfilePicture
                 compactDisplay={props.compactDisplay}
@@ -476,12 +428,12 @@ const PostComponent = (props: Props): JSX.Element => {
     const threadFooter = props.location !== Locations.RHS_ROOT && props.isCollapsedThreadsEnabled && !post.root_id && (props.hasReplies || post.is_following) ? (
         <ThreadFooter
             threadId={post.id}
-            replyClick={handleThreadClick}
+            replyClick={handleCommentClick}
         />
     ) : null;
     const currentPostDay = getDateForUnixTicks(post.create_at);
     const channelDisplayName = getChannelName();
-    const showReactions = props.location !== Locations.SEARCH || props.isPinnedPosts || props.isFlaggedPosts;
+    const showReactions = props.location !== Locations.SEARCH && !props.isPinnedPosts && !props.isFlaggedPosts;
 
     const getTestId = () => {
         let idPrefix: string;
@@ -509,20 +461,17 @@ const PostComponent = (props: Props): JSX.Element => {
         priority = <span className='d-flex mr-2 ml-1'><PriorityLabel priority={post.metadata.priority.priority}/></span>;
     }
 
-    let postAriaLabelDivTestId = '';
-    if (props.location === Locations.CENTER) {
-        postAriaLabelDivTestId = 'postView';
-    } else if (props.location === Locations.RHS_ROOT || props.location === Locations.RHS_COMMENT) {
-        postAriaLabelDivTestId = 'rhsPostView';
-    }
-
     return (
-        <>
-            {(isSearchResultItem || (props.location !== Locations.CENTER && (props.isPinnedPosts || props.isFlaggedPosts))) && <DateSeparator date={currentPostDay}/>}
+        <div
+            className={props.location === 'SEARCH' ? 'search-item__container' : undefined}
+            data-testid={props.location === 'SEARCH' ? 'search-item-container' : undefined}
+        >
+            {(isSearchResultItem || props.isPinnedPosts || props.isFlagged) && <DateSeparator date={currentPostDay}/>}
             <PostAriaLabelDiv
                 ref={postRef}
+                role='listitem'
                 id={getTestId()}
-                data-testid={postAriaLabelDivTestId}
+                data-testid={props.location === 'CENTER' ? 'postView' : ''}
                 tabIndex={0}
                 post={post}
                 className={getClassName()}
@@ -535,11 +484,9 @@ const PostComponent = (props: Props): JSX.Element => {
                         className='search-channel__name__container'
                         aria-hidden='true'
                     >
-                        {(Boolean(isSearchResultItem) || props.isFlaggedPosts) &&
                         <span className='search-channel__name'>
                             {channelDisplayName}
                         </span>
-                        }
                         {props.channelIsArchived &&
                         <span className='search-channel__archived'>
                             <ArchiveIcon className='icon icon__archive channel-header-archived-icon svg-text-color'/>
@@ -549,7 +496,7 @@ const PostComponent = (props: Props): JSX.Element => {
                             />
                         </span>
                         }
-                        {(Boolean(isSearchResultItem) || props.isFlaggedPosts) && Boolean(props.teamDisplayName) &&
+                        {Boolean(props.teamDisplayName) &&
                         <span className='search-team__name'>
                             {props.teamDisplayName}
                         </span>
@@ -581,10 +528,9 @@ const PostComponent = (props: Props): JSX.Element => {
                                 isSystemMessage={isSystemMessage}
                             />
                             <div className='col d-flex align-items-center'>
-                                {((!hideProfilePicture && props.location === Locations.CENTER) || hover || props.location !== Locations.CENTER) &&
+                                {
                                     <PostTime
                                         isPermalink={!(Posts.POST_DELETED === post.state || isPostPendingOrFailed(post))}
-                                        teamName={props.team?.name}
                                         eventTime={post.create_at}
                                         postId={post.id}
                                         location={props.location}
@@ -624,11 +570,12 @@ const PostComponent = (props: Props): JSX.Element => {
                             {!props.isPostBeingEdited &&
                             <PostOptions
                                 {...props}
-                                teamId={teamId}
+                                setActionsMenuInitialisationState={props.actions.setActionsMenuInitialisationState}
                                 handleDropdownOpened={handleDropdownOpened}
                                 handleCommentClick={handleCommentClick}
                                 hover={hover || a11yActive}
                                 removePost={props.actions.removePost}
+                                isSearchResultsItem={Boolean(isSearchResultItem)}
                                 handleJumpClick={handleJumpClick}
                                 isPostHeaderVisible={getPostHeaderVisible()}
                             />
@@ -669,7 +616,7 @@ const PostComponent = (props: Props): JSX.Element => {
                     </div>
                 </div>
             </PostAriaLabelDiv>
-        </>
+        </div>
     );
 };
 

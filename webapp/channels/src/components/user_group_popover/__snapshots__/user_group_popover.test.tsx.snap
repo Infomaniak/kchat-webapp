@@ -194,28 +194,28 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                             </Title>
                             <CloseButton
                               aria-label="Close"
-                              className="btn btn-sm btn-compact btn-icon"
+                              className="btn-icon"
                               onClick={[Function]}
                             >
                               <button
                                 aria-label="Close"
-                                className="CloseButton-lhxEdi gyMeQZ btn btn-sm btn-compact btn-icon"
+                                className="CloseButton-lhxEdi fcDqCh btn-icon"
                                 onClick={[Function]}
                               >
-                                <LocalizedIcon
-                                  ariaLabel={
-                                    Object {
-                                      "defaultMessage": "Close",
-                                      "id": "user_group_popover.close",
-                                    }
-                                  }
-                                  className="icon icon-close"
-                                >
-                                  <i
-                                    aria-label="Close"
-                                    className="icon icon-close"
-                                  />
-                                </LocalizedIcon>
+                                <CloseIcon>
+                                  <svg
+                                    fill="currentColor"
+                                    height={24}
+                                    version="1.1"
+                                    viewBox="0 0 24 24"
+                                    width={24}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                                    />
+                                  </svg>
+                                </CloseIcon>
                               </button>
                             </CloseButton>
                           </div>
@@ -234,7 +234,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                               <span
                                 className="NoShrink-kvXWXm Dot-etDJYJ wzpro jiooBj"
                               >
-                                •
+                                 • 
                               </span>
                             </Dot>
                             <FormattedMessage
@@ -300,10 +300,10 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                         <MagnifyIcon>
                           <svg
                             fill="currentColor"
-                            height="1em"
+                            height={24}
                             version="1.1"
                             viewBox="0 0 24 24"
-                            width="1em"
+                            width={24}
                             xmlns="http://www.w3.org/2000/svg"
                           >
                             <path
@@ -404,7 +404,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -445,7 +444,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -486,7 +484,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -527,7 +524,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -568,7 +564,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -609,7 +604,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -650,7 +644,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -691,7 +684,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -732,7 +724,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -773,7 +764,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -814,7 +804,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -855,7 +844,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -896,7 +884,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -937,7 +924,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -978,7 +964,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                 "mfa_active": false,
                                 "nickname": "",
                                 "notify_props": Object {
-                                  "calls_desktop_sound": "true",
                                   "channel": "false",
                                   "comments": "never",
                                   "desktop": "default",
@@ -1192,11 +1177,9 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                           id="name-id0"
                                                           intl={
                                                             Object {
-                                                              "$t": [Function],
                                                               "defaultFormats": Object {},
                                                               "defaultLocale": "en",
                                                               "defaultRichTextElements": undefined,
-                                                              "fallbackOnEmptyString": true,
                                                               "formatDate": [Function],
                                                               "formatDateTimeRange": [Function],
                                                               "formatDateToParts": [Function],
@@ -1223,7 +1206,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                               "locale": "en",
                                                               "messages": Object {},
                                                               "onError": [Function],
-                                                              "onWarn": [Function],
                                                               "textComponent": "span",
                                                               "timeZone": "Etc/UTC",
                                                               "wrapRichTextChunksInFragment": undefined,
@@ -1244,7 +1226,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                     >
                                                       <DMButton
                                                         aria-label="Send message to username0"
-                                                        className="btn btn-icon btn-xs"
+                                                        className="btn-icon"
                                                         onBlur={[Function]}
                                                         onClick={[Function]}
                                                         onFocus={[Function]}
@@ -1253,16 +1235,27 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                       >
                                                         <button
                                                           aria-label="Send message to username0"
-                                                          className="DMButton-hIFgRF ecgFEo btn btn-icon btn-xs"
+                                                          className="DMButton-hIFgRF ecgFEo btn-icon"
                                                           onBlur={[Function]}
                                                           onClick={[Function]}
                                                           onFocus={[Function]}
                                                           onMouseOut={[Function]}
                                                           onMouseOver={[Function]}
                                                         >
-                                                          <i
-                                                            className="icon icon-send"
-                                                          />
+                                                          <SendIcon>
+                                                            <svg
+                                                              fill="currentColor"
+                                                              height={24}
+                                                              version="1.1"
+                                                              viewBox="0 0 24 24"
+                                                              width={24}
+                                                              xmlns="http://www.w3.org/2000/svg"
+                                                            >
+                                                              <path
+                                                                d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+                                                              />
+                                                            </svg>
+                                                          </SendIcon>
                                                         </button>
                                                       </DMButton>
                                                     </OverlayTrigger>
@@ -1400,11 +1393,9 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                           id="name-id1"
                                                           intl={
                                                             Object {
-                                                              "$t": [Function],
                                                               "defaultFormats": Object {},
                                                               "defaultLocale": "en",
                                                               "defaultRichTextElements": undefined,
-                                                              "fallbackOnEmptyString": true,
                                                               "formatDate": [Function],
                                                               "formatDateTimeRange": [Function],
                                                               "formatDateToParts": [Function],
@@ -1431,7 +1422,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                               "locale": "en",
                                                               "messages": Object {},
                                                               "onError": [Function],
-                                                              "onWarn": [Function],
                                                               "textComponent": "span",
                                                               "timeZone": "Etc/UTC",
                                                               "wrapRichTextChunksInFragment": undefined,
@@ -1452,7 +1442,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                     >
                                                       <DMButton
                                                         aria-label="Send message to username1"
-                                                        className="btn btn-icon btn-xs"
+                                                        className="btn-icon"
                                                         onBlur={[Function]}
                                                         onClick={[Function]}
                                                         onFocus={[Function]}
@@ -1461,16 +1451,27 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                       >
                                                         <button
                                                           aria-label="Send message to username1"
-                                                          className="DMButton-hIFgRF ecgFEo btn btn-icon btn-xs"
+                                                          className="DMButton-hIFgRF ecgFEo btn-icon"
                                                           onBlur={[Function]}
                                                           onClick={[Function]}
                                                           onFocus={[Function]}
                                                           onMouseOut={[Function]}
                                                           onMouseOver={[Function]}
                                                         >
-                                                          <i
-                                                            className="icon icon-send"
-                                                          />
+                                                          <SendIcon>
+                                                            <svg
+                                                              fill="currentColor"
+                                                              height={24}
+                                                              version="1.1"
+                                                              viewBox="0 0 24 24"
+                                                              width={24}
+                                                              xmlns="http://www.w3.org/2000/svg"
+                                                            >
+                                                              <path
+                                                                d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+                                                              />
+                                                            </svg>
+                                                          </SendIcon>
                                                         </button>
                                                       </DMButton>
                                                     </OverlayTrigger>
@@ -1608,11 +1609,9 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                           id="name-id10"
                                                           intl={
                                                             Object {
-                                                              "$t": [Function],
                                                               "defaultFormats": Object {},
                                                               "defaultLocale": "en",
                                                               "defaultRichTextElements": undefined,
-                                                              "fallbackOnEmptyString": true,
                                                               "formatDate": [Function],
                                                               "formatDateTimeRange": [Function],
                                                               "formatDateToParts": [Function],
@@ -1639,7 +1638,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                               "locale": "en",
                                                               "messages": Object {},
                                                               "onError": [Function],
-                                                              "onWarn": [Function],
                                                               "textComponent": "span",
                                                               "timeZone": "Etc/UTC",
                                                               "wrapRichTextChunksInFragment": undefined,
@@ -1660,7 +1658,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                     >
                                                       <DMButton
                                                         aria-label="Send message to username10"
-                                                        className="btn btn-icon btn-xs"
+                                                        className="btn-icon"
                                                         onBlur={[Function]}
                                                         onClick={[Function]}
                                                         onFocus={[Function]}
@@ -1669,16 +1667,27 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                       >
                                                         <button
                                                           aria-label="Send message to username10"
-                                                          className="DMButton-hIFgRF ecgFEo btn btn-icon btn-xs"
+                                                          className="DMButton-hIFgRF ecgFEo btn-icon"
                                                           onBlur={[Function]}
                                                           onClick={[Function]}
                                                           onFocus={[Function]}
                                                           onMouseOut={[Function]}
                                                           onMouseOver={[Function]}
                                                         >
-                                                          <i
-                                                            className="icon icon-send"
-                                                          />
+                                                          <SendIcon>
+                                                            <svg
+                                                              fill="currentColor"
+                                                              height={24}
+                                                              version="1.1"
+                                                              viewBox="0 0 24 24"
+                                                              width={24}
+                                                              xmlns="http://www.w3.org/2000/svg"
+                                                            >
+                                                              <path
+                                                                d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+                                                              />
+                                                            </svg>
+                                                          </SendIcon>
                                                         </button>
                                                       </DMButton>
                                                     </OverlayTrigger>
@@ -1816,11 +1825,9 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                           id="name-id11"
                                                           intl={
                                                             Object {
-                                                              "$t": [Function],
                                                               "defaultFormats": Object {},
                                                               "defaultLocale": "en",
                                                               "defaultRichTextElements": undefined,
-                                                              "fallbackOnEmptyString": true,
                                                               "formatDate": [Function],
                                                               "formatDateTimeRange": [Function],
                                                               "formatDateToParts": [Function],
@@ -1847,7 +1854,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                               "locale": "en",
                                                               "messages": Object {},
                                                               "onError": [Function],
-                                                              "onWarn": [Function],
                                                               "textComponent": "span",
                                                               "timeZone": "Etc/UTC",
                                                               "wrapRichTextChunksInFragment": undefined,
@@ -1868,7 +1874,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                     >
                                                       <DMButton
                                                         aria-label="Send message to username11"
-                                                        className="btn btn-icon btn-xs"
+                                                        className="btn-icon"
                                                         onBlur={[Function]}
                                                         onClick={[Function]}
                                                         onFocus={[Function]}
@@ -1877,16 +1883,27 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                       >
                                                         <button
                                                           aria-label="Send message to username11"
-                                                          className="DMButton-hIFgRF ecgFEo btn btn-icon btn-xs"
+                                                          className="DMButton-hIFgRF ecgFEo btn-icon"
                                                           onBlur={[Function]}
                                                           onClick={[Function]}
                                                           onFocus={[Function]}
                                                           onMouseOut={[Function]}
                                                           onMouseOver={[Function]}
                                                         >
-                                                          <i
-                                                            className="icon icon-send"
-                                                          />
+                                                          <SendIcon>
+                                                            <svg
+                                                              fill="currentColor"
+                                                              height={24}
+                                                              version="1.1"
+                                                              viewBox="0 0 24 24"
+                                                              width={24}
+                                                              xmlns="http://www.w3.org/2000/svg"
+                                                            >
+                                                              <path
+                                                                d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+                                                              />
+                                                            </svg>
+                                                          </SendIcon>
                                                         </button>
                                                       </DMButton>
                                                     </OverlayTrigger>
@@ -2024,11 +2041,9 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                           id="name-id12"
                                                           intl={
                                                             Object {
-                                                              "$t": [Function],
                                                               "defaultFormats": Object {},
                                                               "defaultLocale": "en",
                                                               "defaultRichTextElements": undefined,
-                                                              "fallbackOnEmptyString": true,
                                                               "formatDate": [Function],
                                                               "formatDateTimeRange": [Function],
                                                               "formatDateToParts": [Function],
@@ -2055,7 +2070,6 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                               "locale": "en",
                                                               "messages": Object {},
                                                               "onError": [Function],
-                                                              "onWarn": [Function],
                                                               "textComponent": "span",
                                                               "timeZone": "Etc/UTC",
                                                               "wrapRichTextChunksInFragment": undefined,
@@ -2076,7 +2090,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                     >
                                                       <DMButton
                                                         aria-label="Send message to username12"
-                                                        className="btn btn-icon btn-xs"
+                                                        className="btn-icon"
                                                         onBlur={[Function]}
                                                         onClick={[Function]}
                                                         onFocus={[Function]}
@@ -2085,16 +2099,27 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                                       >
                                                         <button
                                                           aria-label="Send message to username12"
-                                                          className="DMButton-hIFgRF ecgFEo btn btn-icon btn-xs"
+                                                          className="DMButton-hIFgRF ecgFEo btn-icon"
                                                           onBlur={[Function]}
                                                           onClick={[Function]}
                                                           onFocus={[Function]}
                                                           onMouseOut={[Function]}
                                                           onMouseOver={[Function]}
                                                         >
-                                                          <i
-                                                            className="icon icon-send"
-                                                          />
+                                                          <SendIcon>
+                                                            <svg
+                                                              fill="currentColor"
+                                                              height={24}
+                                                              version="1.1"
+                                                              viewBox="0 0 24 24"
+                                                              width={24}
+                                                              xmlns="http://www.w3.org/2000/svg"
+                                                            >
+                                                              <path
+                                                                d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+                                                              />
+                                                            </svg>
+                                                          </SendIcon>
                                                         </button>
                                                       </DMButton>
                                                     </OverlayTrigger>

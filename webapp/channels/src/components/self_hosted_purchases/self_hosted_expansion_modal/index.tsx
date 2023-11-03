@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import React, {useEffect, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
+import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
+import {inferNames} from 'utils/hosted_customer';
 
 import type {SelfHostedSignupCustomerResponse} from '@mattermost/types/hosted_customer';
 import {SelfHostedSignupProgress} from '@mattermost/types/hosted_customer';
@@ -39,9 +41,6 @@ import SuccessPage from 'components/self_hosted_purchases/self_hosted_expansion_
 import Terms from 'components/self_hosted_purchases/self_hosted_purchase_modal/terms';
 import Input from 'components/widgets/inputs/input/input';
 import FullScreenModal from 'components/widgets/modals/full_screen_modal';
-
-import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
-import {inferNames} from 'utils/hosted_customer';
 
 import SelfHostedExpansionCard from './expansion_card';
 import Submitting from './submitting';

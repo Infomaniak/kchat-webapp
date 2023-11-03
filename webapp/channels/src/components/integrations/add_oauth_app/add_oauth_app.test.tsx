@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import AddOAuthApp from 'components/integrations/add_oauth_app/add_oauth_app';
-
-import {TestHelper} from 'utils/test_helper';
 
 describe('components/integrations/AddOAuthApp', () => {
     const emptyFunction = jest.fn();

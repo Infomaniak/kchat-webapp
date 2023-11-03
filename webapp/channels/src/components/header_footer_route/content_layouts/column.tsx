@@ -1,15 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {type ReactNode} from 'react';
-
+import React from 'react';
 import Constants from 'utils/constants';
 
 import './column.scss';
 
 type ColumnProps = {
-    title: ReactNode;
-    message: ReactNode;
+    title: string;
+    message: string;
     SVGElement?: React.ReactNode;
     extraContent?: React.ReactNode;
     onEnterKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;

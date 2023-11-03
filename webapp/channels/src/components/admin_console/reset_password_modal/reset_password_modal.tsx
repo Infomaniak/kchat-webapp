@@ -4,11 +4,11 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-
-import {UserProfile} from '@mattermost/types/users';
-import {ActionResult} from 'mattermost-redux/types/actions';
-
 import * as Utils from 'utils/utils';
+
+import type {UserProfile} from '@mattermost/types/users';
+
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 interface PasswordConfig {
     minimumLength: number;
@@ -98,7 +98,7 @@ export default class ResetPasswordModal extends React.PureComponent<Props, State
             return;
         }
         this.props.onModalSubmit(this.props.user);
-    }
+    };
 
     private doCancel = (): void => {
         this.setState({
@@ -106,7 +106,7 @@ export default class ResetPasswordModal extends React.PureComponent<Props, State
             serverErrorCurrentPass: null,
         });
         this.props.onModalDismissed();
-    }
+    };
 
     public render(): JSX.Element {
         const user = this.props.user;

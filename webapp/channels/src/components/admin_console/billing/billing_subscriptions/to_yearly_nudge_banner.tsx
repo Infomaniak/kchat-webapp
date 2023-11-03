@@ -2,24 +2,24 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {useIntl, FormattedMessage} from 'react-intl';
-
-import AlertBanner from 'components/alert_banner';
-import useOpenCloudPurchaseModal from 'components/common/hooks/useOpenCloudPurchaseModal';
-import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
-import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
-
-import {SalesInquiryIssue} from 'selectors/cloud';
-import {getSubscriptionProduct as selectSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
-import {getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-import {savePreferences} from 'mattermost-redux/actions/preferences';
-import {get as getPreference} from 'mattermost-redux/selectors/entities/preferences';
-
+import {useDispatch, useSelector} from 'react-redux';
 import {AnnouncementBarTypes, CloudBanners, CloudProducts, Preferences, RecurringIntervals} from 'utils/constants';
 import {t} from 'utils/i18n';
 
-import {GlobalState} from '@mattermost/types/store';
+import type {GlobalState} from '@mattermost/types/store';
+
+import {savePreferences} from 'mattermost-redux/actions/preferences';
+import {getSubscriptionProduct as selectSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
+import {get as getPreference} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+
+import {SalesInquiryIssue} from 'selectors/cloud';
+
+import AlertBanner from 'components/alert_banner';
+import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
+import useOpenCloudPurchaseModal from 'components/common/hooks/useOpenCloudPurchaseModal';
+import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 
 import './to_yearly_nudge_banner.scss';
 

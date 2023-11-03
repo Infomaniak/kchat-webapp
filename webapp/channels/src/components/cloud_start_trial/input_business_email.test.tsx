@@ -3,7 +3,6 @@
 
 import {mount, shallow} from 'enzyme';
 import React from 'react';
-
 import {ItemStatus} from 'utils/constants';
 
 import InputBusinessEmail from './input_business_email';

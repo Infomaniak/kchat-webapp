@@ -3,20 +3,19 @@
 
 import {render} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import WebSocketClient from 'client/web_websocket_client';
 import {createBrowserHistory} from 'history';
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 import React from 'react';
 import {IntlProvider} from 'react-intl';
 import {Provider} from 'react-redux';
 import {Router} from 'react-router-dom';
+import mockStore from 'tests/test_store';
+import {WebSocketContext} from 'utils/use_websocket';
 
 import type {DeepPartial} from '@mattermost/types/utilities';
 
 import configureStore from 'store';
-
-import WebSocketClient from 'client/web_websocket_client';
-import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import mockStore from 'tests/test_store';
-import {WebSocketContext} from 'utils/use_websocket';
 
 import type {GlobalState} from 'types/store';
 export * from '@testing-library/react';

@@ -1,12 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {shallow} from 'enzyme';
-
-import {Group} from '@mattermost/types/groups';
-
+import React from 'react';
 import {TestHelper} from 'utils/test_helper';
+
+import type {Group} from '@mattermost/types/groups';
 
 import GroupList from './group_list';
 

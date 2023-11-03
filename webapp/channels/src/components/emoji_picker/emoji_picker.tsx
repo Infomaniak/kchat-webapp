@@ -26,8 +26,8 @@ import {
     EMOJI_PER_ROW,
     CUSTOM_EMOJI_SEARCH_THROTTLE_TIME_MS,
 } from 'components/emoji_picker/constants';
-import {NavigationDirection} from 'components/emoji_picker/types';
 import type {CategoryOrEmojiRow, Categories, EmojiCursor, EmojiPosition, EmojiRow} from 'components/emoji_picker/types';
+import {NavigationDirection} from 'components/emoji_picker/types';
 import {createCategoryAndEmojiRows, getCursorProperties, getUpdatedCategoriesAndAllEmojis} from 'components/emoji_picker/utils';
 import NoResultsIndicator from 'components/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
@@ -125,6 +125,7 @@ const EmojiPicker = ({
         throttledSearchCustomEmoji.current(filter, customEmojisEnabled);
     }, [filter, shouldRunCreateCategoryAndEmojiRows.current, customEmojisEnabled]);
 
+    // Hack for getting focus on search input when tab changes to emoji from gifs
     useEffect(() => {
         searchInputRef.current?.focus();
     }, []);

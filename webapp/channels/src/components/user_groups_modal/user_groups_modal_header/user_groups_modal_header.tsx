@@ -4,10 +4,9 @@
 import React, {useCallback} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import {ModalIdentifiers} from 'utils/constants';
 
 import CreateUserGroupsModal from 'components/create_user_groups_modal';
-
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {ModalData} from 'types/actions';
 
@@ -46,7 +45,7 @@ const UserGroupsModalHeader = (props: Props) => {
             {
                 props.canCreateCustomGroups &&
                 <button
-                    className='user-groups-create btn btn-secondary btn-sm'
+                    className='user-groups-create btn btn-md btn-primary'
                     onClick={goToCreateModal}
                 >
                     <FormattedMessage

@@ -3,15 +3,15 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {Team} from '@mattermost/types/teams';
-
 import * as Utils from 'utils/utils';
+
+import type {Team} from '@mattermost/types/teams';
+
 import TeamIcon from 'components/widgets/team_icon/team_icon';
 
 import './team_row.scss';
 import TeamListDropdown from './team_list_dropdown';
-import {TeamWithMembership} from './types';
+import type {TeamWithMembership} from './types';
 
 type Props = {
     team: TeamWithMembership;
@@ -46,7 +46,7 @@ export default class TeamRow extends React.PureComponent<Props> {
                 defaultMessage={'Invite only'}
             />
         );
-    }
+    };
     private renderTeamRole = (team: TeamWithMembership) => {
         if (team.scheme_guest) {
             return (
@@ -73,7 +73,7 @@ export default class TeamRow extends React.PureComponent<Props> {
             );
         }
         return null;
-    }
+    };
     public render = (): JSX.Element => {
         const {team} = this.props;
         const teamIconUrl = Utils.imageURLForTeam(team);

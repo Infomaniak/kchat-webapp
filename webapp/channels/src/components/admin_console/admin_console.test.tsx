@@ -1,18 +1,18 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {shallow} from 'enzyme';
-
-import {Team} from '@mattermost/types/teams';
-import {SelfHostedSignupProgress} from '@mattermost/types/cloud';
-import {AdminConfig, ExperimentalSettings} from '@mattermost/types/config';
-
-import {Theme} from 'mattermost-redux/selectors/entities/preferences';
-
-import AdminDefinition from 'components/admin_console/admin_definition';
+import React from 'react';
 import {TestHelper} from 'utils/test_helper';
 import * as Utils from 'utils/utils';
+
+import {SelfHostedSignupProgress} from '@mattermost/types/cloud';
+import type {AdminConfig, ExperimentalSettings} from '@mattermost/types/config';
+import type {Team} from '@mattermost/types/teams';
+
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+
+import AdminDefinition from 'components/admin_console/admin_definition';
 
 import AdminConsole from './admin_console';
 import type {Props} from './admin_console';

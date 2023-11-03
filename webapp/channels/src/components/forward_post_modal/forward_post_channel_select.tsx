@@ -1,19 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect, useRef} from 'react';
-import {useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
-import {components} from 'react-select';
-import type {IndicatorProps, OptionProps, SingleValueProps, ValueType} from 'react-select';
-import AsyncSelect from 'react-select/async';
-
 import {
     ArchiveOutlineIcon, ChevronDownIcon,
     GlobeIcon,
     LockOutlineIcon,
     MessageTextOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
+import React, {useEffect, useRef} from 'react';
+import {useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
+import type {IndicatorProps, OptionProps, SingleValueProps, ValueType} from 'react-select';
+import {components} from 'react-select';
+import AsyncSelect from 'react-select/async';
+import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
+
 import type {Channel} from '@mattermost/types/channels';
 
 import {getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
@@ -28,9 +30,6 @@ import type {ProviderResult} from 'components/suggestion/provider';
 import SwitchChannelProvider from 'components/suggestion/switch_channel_provider';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
-
-import Constants from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -245,7 +244,7 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight}: Props<Ch
     const getDefaultResults = () => {
         let options: GroupedOption[] = [];
 
-        const handleDefaultResults = (res: ProviderResult<any>) => {
+        const handleDefaultResults = (res: ProviderResult) => {
             options = [
                 {
                     label: formatMessage({id: 'suggestion.mention.recent.channels', defaultMessage: 'Recent'}),
@@ -274,7 +273,7 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight}: Props<Ch
              *
              * @see {@link components/suggestion/switch_channel_provider.jsx}
              */
-            const handleResults = async (res: ProviderResult<any>) => {
+            const handleResults = async (res: ProviderResult) => {
                 callCount++;
                 await res.items.filter((item) => item?.channel && isValidChannelType(item.channel) && !item.deactivated).forEach((item) => {
                     const {channel} = item;

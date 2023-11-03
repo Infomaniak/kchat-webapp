@@ -1,36 +1,26 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ChevronLeftIcon} from '@infomaniak/compass-icons/components';
 import MuiMenuList from '@mui/material/MenuList';
 import type {PopoverOrigin} from '@mui/material/Popover';
-import React, {
-    useState,
-    useEffect,
-    useMemo,
-    useCallback,
-} from 'react';
-import type {
-    ReactNode,
-    MouseEvent,
-    KeyboardEvent} from 'react';
+import type {ReactNode, MouseEvent, KeyboardEvent} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
-import {GenericModal} from '@mattermost/components';
+import Constants, {A11yClassNames} from 'utils/constants';
+import {isKeyPressed} from 'utils/utils';
 
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
-import {openModal, closeModal} from 'actions/views/modals';
+import {openModal, closeModal, toggleModalVisibility} from 'actions/views/modals';
 import {getIsMobileView} from 'selectors/views/browser';
 import {isAnyModalOpen} from 'selectors/views/modals';
 
 import CompassDesignProvider from 'components/compass_design_provider';
+import GenericModal from 'components/generic_modal';
 
-import Constants, {A11yClassNames} from 'utils/constants';
-import {isKeyPressed} from 'utils/keyboard';
-
-import {SubMenuContext, useMenuContextValue} from './menu_context';
-import {MenuItem} from './menu_item';
 import type {Props as MenuItemProps} from './menu_item';
+import {MenuItem as ParentMenuItem} from './menu_item';
 import {MuiMenuStyled} from './menu_styled';
 
 import './sub_menu.scss';
@@ -47,64 +37,52 @@ interface Props {
     menuAriaLabel?: string;
     forceOpenOnLeft?: boolean; // Most of the times this is not needed, since submenu position is calculated and placed
 
+    /**
+     * Id of the parent menu
+     *
+     * If defined, hides the parent menu while the submenu is opened on responsive menu modal
+    */
+    parentMenuId?: string;
+
     children: ReactNode;
 }
 
-export function SubMenu(props: Props) {
-    const {
-        id,
-        leadingElement,
-        labels,
-        trailingElements,
-        isDestructive,
-        menuId,
-        menuAriaLabel,
-        forceOpenOnLeft,
-        children,
-        ...rest
-    } = props;
-
+export function SubMenu({id, leadingElement, labels, trailingElements, isDestructive, menuId, menuAriaLabel, forceOpenOnLeft, parentMenuId, children, ...rest}: Props) {
     const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
     const isSubMenuOpen = Boolean(anchorElement);
 
     const isMobileView = useSelector(getIsMobileView);
+
     const anyModalOpen = useSelector(isAnyModalOpen);
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (anyModalOpen && !isMobileView) {
-            setAnchorElement(null);
+    function handleSubMenuOpen(event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) {
+        event.preventDefault();
+
+        if (isMobileView) {
+            dispatch(openModal<SubMenuModalProps>({
+                modalId: menuId,
+                dialogType: SubMenuModal,
+                dialogProps: {
+                    menuId,
+                    menuAriaLabel,
+                    parentMenuId,
+                    children,
+                },
+            }));
+        } else {
+            setAnchorElement(event.currentTarget);
         }
-    }, [anyModalOpen, isMobileView]);
-
-    const originOfAnchorAndTransform = useMemo(() => {
-        return getOriginOfAnchorAndTransform(forceOpenOnLeft, anchorElement);
-    }, [anchorElement, forceOpenOnLeft]);
-
-    // Handler function injected in the menu items to close the submenu
-    const closeSubMenu = useCallback(() => {
-        setAnchorElement(null);
-    }, []);
-
-    const providerValue = useMenuContextValue(closeSubMenu, Boolean(anchorElement));
-
-    const hasSubmenuItems = Boolean(children);
-    if (!hasSubmenuItems) {
-        return null;
     }
 
-    function handleMouseEnter(event: MouseEvent<HTMLLIElement>) {
-        event.preventDefault();
-        setAnchorElement(event.currentTarget);
-    }
-
-    function handleMouseLeave(event: MouseEvent<HTMLLIElement>) {
+    function handleSubMenuClose(event: MouseEvent<HTMLLIElement>) {
         event.preventDefault();
         setAnchorElement(null);
     }
 
-    function handleKeyDown(event: KeyboardEvent<HTMLLIElement>) {
+    // This handleKeyDown is on the menu item which opens the submenu
+    function handleSubMenuParentItemKeyDown(event: KeyboardEvent<HTMLLIElement>) {
         if (
             isKeyPressed(event, Constants.KeyCodes.ENTER) ||
             isKeyPressed(event, Constants.KeyCodes.SPACE) ||
@@ -125,17 +103,17 @@ export function SubMenu(props: Props) {
         }
     }
 
-    // This is used in MobileView to open the submenu in a modal
-    function handleOnClick() {
-        dispatch(openModal<SubMenuModalProps>({
-            modalId: menuId,
-            dialogType: SubMenuModal,
-            dialogProps: {
-                menuId,
-                menuAriaLabel,
-                children,
-            },
-        }));
+    useEffect(() => {
+        if (anyModalOpen && !isMobileView) {
+            setAnchorElement(null);
+        }
+    }, [anyModalOpen, isMobileView]);
+
+    const originOfAnchorAndTransform = useMemo(() => getOriginOfAnchorAndTransform(forceOpenOnLeft, anchorElement), [anchorElement]);
+
+    const hasSubmenuItems = Boolean(children);
+    if (!hasSubmenuItems) {
+        return null;
     }
 
     const passedInTriggerButtonProps = {
@@ -148,20 +126,20 @@ export function SubMenu(props: Props) {
         labels,
         trailingElements,
         isDestructive,
-        onClick: isMobileView ? handleOnClick : undefined, // OnClicks on parent menuItem of subMenu is only needed in mobile view
+        onClick: handleSubMenuOpen,
     };
 
     if (isMobileView) {
-        return (<MenuItem {...passedInTriggerButtonProps}/>);
+        return (<ParentMenuItem {...passedInTriggerButtonProps}/>);
     }
 
     return (
-        <MenuItem
+        <ParentMenuItem
             {...rest} // pass through other props which might be coming in from the material-ui
             {...passedInTriggerButtonProps}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onKeyDown={handleKeyDown}
+            onMouseEnter={handleSubMenuOpen}
+            onMouseLeave={handleSubMenuClose}
+            onKeyDown={handleSubMenuParentItemKeyDown}
         >
             <MuiMenuStyled
                 anchorEl={anchorElement}
@@ -169,11 +147,8 @@ export function SubMenu(props: Props) {
                 asSubMenu={true}
                 anchorOrigin={originOfAnchorAndTransform.anchorOrigin}
                 transformOrigin={originOfAnchorAndTransform.transformOrigin}
-                sx={{pointerEvents: 'none'}}
+                sx={{pointerEvents: 'none'}} // disables the menu background wrapper for accessing submenu
             >
-                {/* This component is needed here to re enable pointer events for the submenu items which we had to disable above as */}
-                {/* pointer turns to default as soon as it leaves the parent menu */}
-                {/* Notice we dont use the below component in menu.tsx  */}
                 <MuiMenuList
                     id={menuId}
                     component='ul'
@@ -186,18 +161,17 @@ export function SubMenu(props: Props) {
                         paddingBottom: 0,
                     }}
                 >
-                    <SubMenuContext.Provider value={providerValue}>
-                        {children}
-                    </SubMenuContext.Provider>
+                    {children}
                 </MuiMenuList>
             </MuiMenuStyled>
-        </MenuItem>
+        </ParentMenuItem>
     );
 }
 
 interface SubMenuModalProps {
     menuId: Props['menuId'];
     menuAriaLabel?: Props['menuAriaLabel'];
+    parentMenuId?: Props['parentMenuId'];
     children: Props['children'];
 }
 
@@ -210,6 +184,33 @@ function SubMenuModal(props: SubMenuModalProps) {
         dispatch(closeModal(props.menuId));
     }
 
+    const handleModalEnter = () => {
+        if (props.parentMenuId) {
+            dispatch(toggleModalVisibility(props.parentMenuId, false));
+        }
+    };
+
+    const handleArrowBack = () => {
+        if (props.parentMenuId) {
+            dispatch(toggleModalVisibility(props.parentMenuId, true));
+        }
+    };
+
+    let arrowBack;
+    if (props.parentMenuId) {
+        arrowBack = (
+            <button
+                className='menuModal__arrow-back'
+                onClick={handleArrowBack}
+            >
+                <ChevronLeftIcon
+                    size={20}
+                    color='var(--center-channel-color)'
+                />
+            </button>
+        );
+    }
+
     return (
         <CompassDesignProvider theme={theme}>
             <GenericModal
@@ -218,11 +219,13 @@ function SubMenuModal(props: SubMenuModalProps) {
                 onExited={handleModalClose}
                 backdrop={true}
                 className='menuModal'
+                onEnter={handleModalEnter}
             >
                 <MuiMenuList
                     aria-hidden={true}
                     onClick={handleModalClose}
                 >
+                    {arrowBack}
                     {props.children}
                 </MuiMenuList>
             </GenericModal>

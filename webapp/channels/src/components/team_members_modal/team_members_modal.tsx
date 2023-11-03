@@ -4,6 +4,7 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import {ModalIdentifiers} from 'utils/constants';
 
 import type {Team} from '@mattermost/types/teams';
 
@@ -12,8 +13,6 @@ import Permissions from 'mattermost-redux/constants/permissions';
 import InvitationModal from 'components/invitation_modal';
 import MemberListTeam from 'components/member_list_team';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
-
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {ModalData} from 'types/actions';
 
@@ -96,7 +95,7 @@ export default class TeamMembersModal extends React.PureComponent<Props, State> 
                         <button
                             id='invitePeople'
                             type='button'
-                            className='btn btn-primary btn-sm invite-people-btn'
+                            className='btn btn-primary invite-people-btn'
                             onClick={this.handleInvitePeople}
                         >
                             <FormattedMessage

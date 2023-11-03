@@ -1,16 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {screen} from '@testing-library/react';
 import React from 'react';
+import {renderWithIntlAndStore} from 'tests/react_testing_utils';
+import {TestHelper as TH} from 'utils/test_helper';
 
 import type {DeepPartial} from '@mattermost/types/utilities';
 
 import {Client4} from 'mattermost-redux/client';
-
-import {STORAGE_KEY_PURCHASE_IN_PROGRESS} from 'components/self_hosted_purchases/constants';
-
-import {renderWithIntlAndStore, screen} from 'tests/react_testing_utils';
-import {TestHelper as TH} from 'utils/test_helper';
 
 import type {GlobalState} from 'types/store';
 
@@ -59,27 +57,13 @@ describe('PurchaseInProgressModal', () => {
     it('when purchaser and user emails are different, user is instructed to wait', () => {
         const stateOverride: DeepPartial<GlobalState> = JSON.parse(JSON.stringify(initialState));
         stateOverride.entities!.users!.currentUserId = 'otherUserId';
-        renderWithIntlAndStore(
-            <div id='root-portal'>
-                <PurchaseInProgressModal
-                    purchaserEmail={'admin@example.com'}
-                    storageKey={STORAGE_KEY_PURCHASE_IN_PROGRESS}
-                />
-            </div>, stateOverride,
-        );
+        renderWithIntlAndStore(<div id='root-portal'><PurchaseInProgressModal purchaserEmail={'admin@example.com'}/></div>, stateOverride);
 
         screen.getByText('@UserAdmin is currently attempting to purchase a paid license.');
     });
 
     it('when purchaser and user emails are same, allows user to reset purchase flow', () => {
-        renderWithIntlAndStore(
-            <div id='root-portal'>
-                <PurchaseInProgressModal
-                    purchaserEmail={'admin@example.com'}
-                    storageKey={STORAGE_KEY_PURCHASE_IN_PROGRESS}
-                />
-            </div>, initialState,
-        );
+        renderWithIntlAndStore(<div id='root-portal'><PurchaseInProgressModal purchaserEmail={'admin@example.com'}/></div>, initialState);
 
         expect(Client4.bootstrapSelfHostedSignup).not.toHaveBeenCalled();
         screen.getByText('Reset purchase flow').click();

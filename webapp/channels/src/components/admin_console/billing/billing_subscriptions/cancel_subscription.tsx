@@ -5,6 +5,7 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {trackEvent} from 'actions/telemetry_actions';
+
 import ExternalLink from 'components/external_link';
 
 type Props = {

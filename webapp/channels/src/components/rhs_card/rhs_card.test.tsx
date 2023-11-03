@@ -2,9 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import React from 'react';
 import type {ComponentProps} from 'react';
-
+import React from 'react';
 import {TestHelper} from 'utils/test_helper';
 
 import type {PostPluginComponent} from 'types/store/plugins';

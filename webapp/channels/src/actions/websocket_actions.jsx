@@ -3,7 +3,12 @@
 
 /* eslint-disable max-lines */
 
+import WebSocketClient from 'client/web_websocket_client';
+import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 import {batchActions} from 'redux-batched-actions';
+import {getHistory} from 'utils/browser_history';
+import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, PageLoadContext} from 'utils/constants';
+import {getSiteURL} from 'utils/url';
 
 import {
     ChannelTypes,
@@ -114,12 +119,6 @@ import store from 'stores/redux_store';
 
 import InteractiveDialog from 'components/interactive_dialog';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
-
-import WebSocketClient from 'client/web_websocket_client';
-import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
-import {getHistory} from 'utils/browser_history';
-import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, PageLoadContext} from 'utils/constants';
-import {getSiteURL} from 'utils/url';
 
 import {temporarilySetPageLoadContext} from './telemetry_actions';
 

@@ -3,9 +3,12 @@
 
 /* eslint-disable max-lines */
 
-import React from 'react';
 import type {ReactNode} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import Constants, {AdvancedSections, Preferences} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {a11yFocus, isMac, localizeMessage} from 'utils/utils';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile} from '@mattermost/types/users';
@@ -19,11 +22,6 @@ import SettingItem from 'components/setting_item';
 import SettingItemMax from 'components/setting_item_max';
 import BackIcon from 'components/widgets/icons/fa_back_icon';
 
-import Constants, {AdvancedSections, Preferences} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {isMac} from 'utils/user_agent';
-import {a11yFocus, localizeMessage} from 'utils/utils';
-
 import JoinLeaveSection from './join_leave_section';
 import PerformanceDebuggingSection from './performance_debugging_section';
 
@@ -36,7 +34,6 @@ type Settings = {
     formatting: Props['formatting'];
     join_leave: Props['joinLeave'];
     sync_drafts: Props['syncDrafts'];
-    data_prefetch: Props['dataPrefetchEnabled'];
 };
 
 export type Props = {
@@ -55,8 +52,6 @@ export type Props = {
     enablePreviewFeatures: boolean;
     enableUserDeactivation: boolean;
     syncedDraftsAreAllowed: boolean;
-    disableWebappPrefetchAllowed: boolean;
-    dataPrefetchEnabled: string;
     actions: {
         savePreferences: (userId: string, preferences: PreferenceType[]) => Promise<ActionResult>;
         updateUserActive: (userId: string, active: boolean) => Promise<ActionResult>;
@@ -90,7 +85,6 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
             formatting: this.props.formatting,
             join_leave: this.props.joinLeave,
             sync_drafts: this.props.syncDrafts,
-            data_prefetch: this.props.dataPrefetchEnabled,
             [Preferences.UNREAD_SCROLL_POSITION]: this.props.unreadScrollPosition,
         };
 
@@ -149,7 +143,7 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
             }
         });
 
-        this.setState({settings, enabledFeatures});
+        this.setState((prevState) => ({...prevState, ...settings}));
     };
 
     saveEnabledFeatures = (): void => {
@@ -182,38 +176,6 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
         await actions.savePreferences(userId, preferences);
 
         this.handleUpdateSection('');
-    };
-
-    handleDeactivateAccountSubmit = async (): Promise<void> => {
-        const userId = this.props.currentUser.id;
-
-        this.setState({isSaving: true});
-
-        this.props.actions.updateUserActive(userId, false).
-            then(({error}) => {
-                if (error) {
-                    this.setState({serverError: error.message});
-                }
-            });
-
-        const {data, error} = await this.props.actions.revokeAllSessionsForUser(userId);
-        if (data) {
-            emitUserLoggedOutEvent();
-        } else if (error) {
-            this.setState({serverError: error.message});
-        }
-    };
-
-    handleShowDeactivateAccountModal = (): void => {
-        this.setState({
-            showDeactivateAccountModal: true,
-        });
-    };
-
-    handleHideDeactivateAccountModal = (): void => {
-        this.setState({
-            showDeactivateAccountModal: false,
-        });
     };
 
     handleUpdateSection = (section?: string): void => {
@@ -320,38 +282,36 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
         );
     }
 
-    renderFormattingSection = () => {
-        const active = this.props.activeSection === 'formatting';
-        let max = null;
-        if (active) {
-            max = (
+    renderUnreadScrollPositionSection = () => {
+        if (this.props.activeSection === Preferences.UNREAD_SCROLL_POSITION) {
+            return (
                 <SettingItemMax
                     title={
                         <FormattedMessage
-                            id='user.settings.advance.formattingTitle'
-                            defaultMessage='Enable Post Formatting'
+                            id='user.settings.advance.unreadScrollPositionTitle'
+                            defaultMessage='Scroll position when viewing an unread channel'
                         />
                     }
                     inputs={[
-                        <fieldset key='formattingSetting'>
+                        <fieldset key='unreadScrollPositionSetting'>
                             <legend className='form-legend hidden-label'>
                                 <FormattedMessage
-                                    id='user.settings.advance.formattingTitle'
-                                    defaultMessage='Enable Post Formatting'
+                                    id='user.settings.advance.unreadScrollPositionTitle'
+                                    defaultMessage='Scroll position when viewing an unread channel'
                                 />
                             </legend>
                             <div className='radio'>
                                 <label>
                                     <input
-                                        id='postFormattingOn'
+                                        id='unreadPositionStartFromLeftOff'
                                         type='radio'
-                                        name='formatting'
-                                        checked={this.state.settings.formatting !== 'false'}
-                                        onChange={this.updateSetting.bind(this, 'formatting', 'true')}
+                                        name='unreadScrollPosition'
+                                        checked={this.state.settings.unread_scroll_position === Preferences.UNREAD_SCROLL_POSITION_START_FROM_LEFT}
+                                        onChange={this.updateSetting.bind(this, Preferences.UNREAD_SCROLL_POSITION, Preferences.UNREAD_SCROLL_POSITION_START_FROM_LEFT)}
                                     />
                                     <FormattedMessage
-                                        id='user.settings.advance.on'
-                                        defaultMessage='On'
+                                        id='user.settings.advance.startFromLeftOff'
+                                        defaultMessage='Start me where I left off'
                                     />
                                 </label>
                                 <br/>
@@ -359,23 +319,23 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
                             <div className='radio'>
                                 <label>
                                     <input
-                                        id='postFormattingOff'
+                                        id='unreadPositionStartFromNewest'
                                         type='radio'
-                                        name='formatting'
-                                        checked={this.state.settings.formatting === 'false'}
-                                        onChange={this.updateSetting.bind(this, 'formatting', 'false')}
+                                        name='unreadScrollPosition'
+                                        checked={this.state.settings.unread_scroll_position === Preferences.UNREAD_SCROLL_POSITION_START_FROM_NEWEST}
+                                        onChange={this.updateSetting.bind(this, Preferences.UNREAD_SCROLL_POSITION, Preferences.UNREAD_SCROLL_POSITION_START_FROM_NEWEST)}
                                     />
                                     <FormattedMessage
-                                        id='user.settings.advance.off'
-                                        defaultMessage='Off'
+                                        id='user.settings.advance.startFromNewest'
+                                        defaultMessage='Start me at the newest message'
                                     />
                                 </label>
                                 <br/>
                             </div>
                             <div className='mt-5'>
                                 <FormattedMessage
-                                    id='user.settings.advance.formattingDesc'
-                                    defaultMessage='If enabled, posts will be formatted to create links, show emoji, style the text, and add line breaks. By default, this setting is enabled.'
+                                    id='user.settings.advance.unreadScrollPositionDesc'
+                                    defaultMessage='Choose your scroll position when you view an unread channel. Channels will always be marked as read when viewed.'
                                 />
                             </div>
                         </fieldset>,
@@ -394,12 +354,12 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
                 areAllSectionsInactive={this.props.activeSection === ''}
                 title={
                     <FormattedMessage
-                        id='user.settings.advance.formattingTitle'
-                        defaultMessage='Enable Post Formatting'
+                        id='user.settings.advance.unreadScrollPositionTitle'
+                        defaultMessage='Scroll position when viewing an unread channel'
                     />
                 }
-                describe={this.renderOnOffLabel(this.state.settings.formatting)}
-                section={'formatting'}
+                describe={this.renderUnreadScrollPositionLabel(this.state.settings[Preferences.UNREAD_SCROLL_POSITION])}
+                section={Preferences.UNREAD_SCROLL_POSITION}
                 updateSection={this.handleUpdateSection}
                 max={max}
             />
@@ -573,93 +533,6 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
                 }
                 describe={this.renderOnOffLabel(this.state.settings.sync_drafts)}
                 section={AdvancedSections.SYNC_DRAFTS}
-                updateSection={this.handleUpdateSection}
-                max={max}
-            />
-        );
-    };
-
-    renderDataPrefetchSection = () => {
-        const active = this.props.activeSection === AdvancedSections.DATA_PREFETCH;
-        let max = null;
-        if (active) {
-            max = (
-                <SettingItemMax
-                    title={
-                        <FormattedMessage
-                            id='user.settings.advance.dataPrefetch.Title'
-                            defaultMessage='Allow Mattermost to prefetch channel posts'
-                        />
-                    }
-                    inputs={[
-                        <fieldset key='syncDraftsSetting'>
-                            <legend className='form-legend hidden-label'>
-                                <FormattedMessage
-                                    id='user.settings.advance.dataPrefetch.Title'
-                                    defaultMessage='Allow Mattermost to prefetch channel posts'
-                                />
-                            </legend>
-                            <div className='radio'>
-                                <label>
-                                    <input
-                                        id='dataPrefetchOn'
-                                        type='radio'
-                                        name='dataPrefetch'
-                                        checked={this.state.settings.data_prefetch !== 'false'}
-                                        onChange={this.updateSetting.bind(this, 'data_prefetch', 'true')}
-                                    />
-                                    <FormattedMessage
-                                        id='user.settings.advance.on'
-                                        defaultMessage='On'
-                                    />
-                                </label>
-                                <br/>
-                            </div>
-                            <div className='radio'>
-                                <label>
-                                    <input
-                                        id='dataPrefetchOff'
-                                        type='radio'
-                                        name='dataPrefetch'
-                                        checked={this.state.settings.data_prefetch === 'false'}
-                                        onChange={this.updateSetting.bind(this, 'data_prefetch', 'false')}
-                                    />
-                                    <FormattedMessage
-                                        id='user.settings.advance.off'
-                                        defaultMessage='Off'
-                                    />
-                                </label>
-                                <br/>
-                            </div>
-                            <div className='mt-5'>
-                                <FormattedMessage
-                                    id='user.settings.advance.dataPrefetch.Desc'
-                                    defaultMessage='When disabled, messages and user information will be fetched on each channel load instead of being pre-fetched on startup. Disabling prefetch is recommended for users with a high unread channel count in order to improve application performance.'
-                                />
-                            </div>
-                        </fieldset>,
-                    ]}
-                    setting={AdvancedSections.DATA_PREFETCH}
-                    submit={this.handleSubmit.bind(this, ['data_prefetch'])}
-                    saving={this.state.isSaving}
-                    serverError={this.state.serverError}
-                    updateSection={this.handleUpdateSection}
-                />
-            );
-        }
-
-        return (
-            <SettingItem
-                active={active}
-                areAllSectionsInactive={this.props.activeSection === ''}
-                title={
-                    <FormattedMessage
-                        id='user.settings.advance.dataPrefetch.Title'
-                        defaultMessage='Allow Mattermost to prefetch channel posts'
-                    />
-                }
-                describe={this.renderOnOffLabel(this.state.settings.data_prefetch)}
-                section={AdvancedSections.DATA_PREFETCH}
                 updateSection={this.handleUpdateSection}
                 max={max}
             />
@@ -867,109 +740,11 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
     render() {
         const ctrlSendSection = this.renderCtrlSendSection();
 
-        const formattingSection = this.renderFormattingSection();
-        let formattingSectionDivider = null;
-        if (formattingSection) {
-            formattingSectionDivider = <div className='divider-light'/>;
-        }
-
-        let previewFeaturesSection;
-        let previewFeaturesSectionDivider;
-        if (this.state.previewFeaturesEnabled && this.state.preReleaseFeaturesKeys.length > 0) {
-            previewFeaturesSectionDivider = (
-                <div className='divider-light'/>
-            );
-            previewFeaturesSection = this.renderPreviewFeaturesSection();
-        }
-
-        let deactivateAccountSection: ReactNode = '';
-        let makeConfirmationModal: ReactNode = '';
-        const currentUser = this.props.currentUser;
-
-        if (currentUser.auth_service === '' && this.props.enableUserDeactivation) {
-            const active = this.props.activeSection === 'deactivateAccount';
-            let max = null;
-            if (active) {
-                max = (
-                    <SettingItemMax
-                        title={
-                            <FormattedMessage
-                                id='user.settings.advance.deactivateAccountTitle'
-                                defaultMessage='Deactivate Account'
-                            />
-                        }
-                        inputs={[
-                            <div key='formattingSetting'>
-                                <div>
-                                    <br/>
-                                    <FormattedMessage
-                                        id='user.settings.advance.deactivateDesc'
-                                        defaultMessage='Deactivating your account removes your ability to log in to this server and disables all email and mobile notifications. To reactivate your account, contact your System Administrator.'
-                                    />
-                                </div>
-                            </div>,
-                        ]}
-                        saveButtonText={'Deactivate'}
-                        setting={'deactivateAccount'}
-                        submit={this.handleShowDeactivateAccountModal}
-                        saving={this.state.isSaving}
-                        serverError={this.state.serverError}
-                        updateSection={this.handleUpdateSection}
-                    />
-                );
-            }
-            deactivateAccountSection = (
-                <SettingItem
-                    active={active}
-                    areAllSectionsInactive={this.props.activeSection === ''}
-                    title={
-                        <FormattedMessage
-                            id='user.settings.advance.deactivateAccountTitle'
-                            defaultMessage='Deactivate Account'
-                        />
-                    }
-                    describe={
-                        <FormattedMessage
-                            id='user.settings.advance.deactivateDescShort'
-                            defaultMessage="Click 'Edit' to deactivate your account"
-                        />
-                    }
-                    section={'deactivateAccount'}
-                    updateSection={this.handleUpdateSection}
-                    max={max}
-                />
-            );
-
-            const confirmButtonClass = 'btn btn-danger';
-            const deactivateMemberButton = (
-                <FormattedMessage
-                    id='user.settings.advance.deactivate_member_modal.deactivateButton'
-                    defaultMessage='Yes, deactivate my account'
-                />
-            );
-
-            makeConfirmationModal = (
-                <ConfirmModal
-                    show={this.state.showDeactivateAccountModal}
-                    title={
-                        <FormattedMessage
-                            id='user.settings.advance.confirmDeactivateAccountTitle'
-                            defaultMessage='Confirm Deactivation'
-                        />
-                    }
-                    message={
-                        <FormattedMessage
-                            id='user.settings.advance.confirmDeactivateDesc'
-                            defaultMessage='Are you sure you want to deactivate your account? This can only be reversed by your System Administrator.'
-                        />
-                    }
-                    confirmButtonClass={confirmButtonClass}
-                    confirmButtonText={deactivateMemberButton}
-                    onConfirm={this.handleDeactivateAccountSubmit}
-                    onCancel={this.handleHideDeactivateAccountModal}
-                />
-            );
-        }
+        // const formattingSection = this.renderFormattingSection();
+        // let formattingSectionDivider = null;
+        // if (formattingSection) {
+        //     formattingSectionDivider = <div className='divider-light'/>;
+        // }
 
         const unreadScrollPositionSection = this.renderUnreadScrollPositionSection();
         let unreadScrollPositionSectionDivider = null;
@@ -983,15 +758,6 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
             syncDraftsSection = this.renderSyncDraftsSection();
             if (syncDraftsSection) {
                 syncDraftsSectionDivider = <div className='divider-light'/>;
-            }
-        }
-
-        let dataPrefetchSection = null;
-        let dataPrefetchSectionDivider = null;
-        if (this.props.disableWebappPrefetchAllowed) {
-            dataPrefetchSection = this.renderDataPrefetchSection();
-            if (syncDraftsSection) {
-                dataPrefetchSectionDivider = <div className='divider-light'/>;
             }
         }
 
@@ -1031,32 +797,30 @@ export default class AdvancedSettingsDisplay extends React.PureComponent<Props, 
                     </h3>
                     <div className='divider-dark first'/>
                     {ctrlSendSection}
-                    {formattingSectionDivider}
-                    {formattingSection}
+                    {/* {formattingSectionDivider}
+                    {formattingSection} */}
                     <div className='divider-light'/>
-                    <JoinLeaveSection
+                    {/* <JoinLeaveSection
                         active={this.props.activeSection === AdvancedSections.JOIN_LEAVE}
                         areAllSectionsInactive={this.props.activeSection === ''}
                         onUpdateSection={this.handleUpdateSection}
                         renderOnOffLabel={this.renderOnOffLabel}
-                    />
-                    {previewFeaturesSectionDivider}
-                    {previewFeaturesSection}
-                    {formattingSectionDivider}
+                    /> */}
+                    {/* {previewFeaturesSectionDivider} */}
+                    {/* {previewFeaturesSection} */}
+                    {/* {formattingSectionDivider} */}
                     <PerformanceDebuggingSection
                         active={this.props.activeSection === AdvancedSections.PERFORMANCE_DEBUGGING}
                         onUpdateSection={this.handleUpdateSection}
                         areAllSectionsInactive={this.props.activeSection === ''}
                     />
-                    {deactivateAccountSection}
+                    {/* {deactivateAccountSection} */}
                     {unreadScrollPositionSectionDivider}
                     {unreadScrollPositionSection}
                     {syncDraftsSectionDivider}
                     {syncDraftsSection}
-                    {dataPrefetchSectionDivider}
-                    {dataPrefetchSection}
                     <div className='divider-dark'/>
-                    {makeConfirmationModal}
+                    {/* {makeConfirmationModal} */}
                 </div>
             </div>
         );

@@ -4,7 +4,7 @@ exports[`ProductNoticesModal Match snapshot for single notice 1`] = `
 <GenericModal
   autoCloseOnCancelButton={false}
   autoCloseOnConfirmButton={true}
-  bodyPadding={true}
+  autoCloseOnEnterKeyDown={true}
   cancelButtonText={null}
   className="productNotices"
   confirmButtonText={
@@ -45,10 +45,12 @@ exports[`ProductNoticesModal Match snapshot for user notice 1`] = `
 <GenericModal
   autoCloseOnCancelButton={false}
   autoCloseOnConfirmButton={true}
-  bodyPadding={true}
+  autoCloseOnEnterKeyDown={true}
   cancelButtonText={
     <React.Fragment>
-      <Memo(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
       <Memo(MemoizedFormattedMessage)
         defaultMessage="Previous"
         id="generic.previous"
@@ -122,7 +124,7 @@ exports[`ProductNoticesModal Should match snapshot for system admin notice 1`] =
 <GenericModal
   autoCloseOnCancelButton={false}
   autoCloseOnConfirmButton={false}
-  bodyPadding={true}
+  autoCloseOnEnterKeyDown={true}
   cancelButtonText={null}
   className="productNotices"
   confirmButtonText={
@@ -131,7 +133,9 @@ exports[`ProductNoticesModal Should match snapshot for system admin notice 1`] =
         defaultMessage="Next"
         id="generic.next"
       />
-      <Memo(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </React.Fragment>
   }
   enforceFocus={true}

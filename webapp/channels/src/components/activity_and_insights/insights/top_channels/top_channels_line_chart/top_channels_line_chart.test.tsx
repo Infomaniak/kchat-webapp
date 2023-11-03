@@ -2,15 +2,13 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import {Provider} from 'react-redux';
-
 import {BrowserRouter} from 'react-router-dom';
-
-import {TimeFrames, TopChannel} from '@mattermost/types/insights';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
+
+import type {TopChannel} from '@mattermost/types/insights';
+import {TimeFrames} from '@mattermost/types/insights';
 
 import TopChannelsLineChart from './top_channels_line_chart';
 

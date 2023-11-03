@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
 import * as Utils from 'utils/utils';
 
 import Setting from './setting';
@@ -40,7 +39,7 @@ export default class BooleanSetting extends React.PureComponent<Props> {
 
     private handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.props.onChange(this.props.id, e.target.value === 'true');
-    }
+    };
 
     public render() {
         let helpText;

@@ -3,52 +3,50 @@
 
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {isCustomerCardExpired} from 'utils/cloud_utils';
+import {
+    CloudProducts,
+    RecurringIntervals,
+    TrialPeriodDays,
+} from 'utils/constants';
+import {useQuery} from 'utils/http_utils';
+import {hasSomeLimits} from 'utils/limits';
+import {getRemainingDaysFromFutureTimestamp} from 'utils/utils';
+
+import type {GlobalState} from '@mattermost/types/store';
 
 import {getCloudSubscription, getCloudProducts, getCloudCustomer} from 'mattermost-redux/actions/cloud';
-import {DispatchFunc} from 'mattermost-redux/types/actions';
-
-import {pageVisited} from 'actions/telemetry_actions';
-
-import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
-import CloudTrialBanner from 'components/admin_console/billing/billing_subscriptions/cloud_trial_banner';
-import CloudFetchError from 'components/cloud_fetch_error';
-
-import {getCloudContactUsLink, InquiryType, SalesInquiryIssue} from 'selectors/cloud';
 import {
     getSubscriptionProduct,
     getCloudSubscription as selectCloudSubscription,
     getCloudCustomer as selectCloudCustomer,
     getCloudErrors,
 } from 'mattermost-redux/selectors/entities/cloud';
-import {
-    CloudProducts,
-    RecurringIntervals,
-    TrialPeriodDays,
-} from 'utils/constants';
-import {isCustomerCardExpired} from 'utils/cloud_utils';
-import {hasSomeLimits} from 'utils/limits';
-import {getRemainingDaysFromFutureTimestamp} from 'utils/utils';
-import {useQuery} from 'utils/http_utils';
+import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
-import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
-import useOpenCloudPurchaseModal from 'components/common/hooks/useOpenCloudPurchaseModal';
-import useGetLimits from 'components/common/hooks/useGetLimits';
+import {pageVisited} from 'actions/telemetry_actions';
+import {getCloudContactUsLink, InquiryType, SalesInquiryIssue} from 'selectors/cloud';
+
 import DeleteWorkspaceCTA from 'components/admin_console/billing//delete_workspace/delete_workspace_cta';
-
-import PlanDetails from '../plan_details';
-import BillingSummary from '../billing_summary';
-import {GlobalState} from '@mattermost/types/store';
-
-import ContactSalesCard from './contact_sales_card';
-import Limits from './limits';
+import CloudTrialBanner from 'components/admin_console/billing/billing_subscriptions/cloud_trial_banner';
+import CloudFetchError from 'components/cloud_fetch_error';
+import useGetLimits from 'components/common/hooks/useGetLimits';
+import useOpenCloudPurchaseModal from 'components/common/hooks/useOpenCloudPurchaseModal';
+import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
+import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
 
 import {
     creditCardExpiredBanner,
     paymentFailedBanner,
 } from './billing_subscriptions';
-import LimitReachedBanner from './limit_reached_banner';
 import CancelSubscription from './cancel_subscription';
+import ContactSalesCard from './contact_sales_card';
+import LimitReachedBanner from './limit_reached_banner';
+import Limits from './limits';
 import {ToYearlyNudgeBanner} from './to_yearly_nudge_banner';
+
+import BillingSummary from '../billing_summary';
+import PlanDetails from '../plan_details';
 
 import './billing_subscriptions.scss';
 
@@ -166,11 +164,9 @@ const BillingSubscriptions = () => {
                                 onUpgradeMattermostCloud={openPricingModal}
                             />
                         )}
-                        {isAnnualProfessionalOrEnterprise && !isFreeTrial ?
-                            <CancelSubscription
-                                cancelAccountLink={cancelAccountLink}
-                            /> :
-                            <DeleteWorkspaceCTA/>
+                        {isAnnualProfessionalOrEnterprise && !isFreeTrial ? <CancelSubscription
+                            cancelAccountLink={cancelAccountLink}
+                        /> : <DeleteWorkspaceCTA/>
                         }
                     </>}
                 </div>

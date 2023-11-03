@@ -3,24 +3,23 @@
 
 import React, {memo, useEffect, useState, useCallback, useMemo} from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-
-import {GlobalState} from '@mattermost/types/store';
-import {TopReaction} from '@mattermost/types/insights';
+import {InsightsScopes} from 'utils/constants';
 
 import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
+import type {TopReaction} from '@mattermost/types/insights';
+import type {GlobalState} from '@mattermost/types/store';
 
 import {getTopReactionsForTeam, getMyTopReactions} from 'mattermost-redux/actions/insights';
 import {getTopReactionsForCurrentTeam, getMyTopReactionsForCurrentTeam} from 'mattermost-redux/selectors/entities/insights';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
-import {InsightsScopes} from 'utils/constants';
-
-import widgetHoc, {WidgetHocProps} from '../widget_hoc/widget_hoc';
-
-import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
 
 import TopReactionsBarChart from './top_reactions_bar_chart/top_reactions_bar_chart';
+
+import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
+import type {WidgetHocProps} from '../widget_hoc/widget_hoc';
+import widgetHoc from '../widget_hoc/widget_hoc';
 
 import './../../activity_and_insights.scss';
 

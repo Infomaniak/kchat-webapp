@@ -63,7 +63,9 @@ exports[`components/integrations/InstalledIncomingWebhook should match snapshot 
           }
         />
         <span>
-          <Memo(CopyText)
+          <CopyText
+            defaultMessage="Copy"
+            idMessage="integrations.copy"
             value="http://localhost:8065/hooks/9w96t4nhbfdiij64wfqors4i1r"
           />
         </span>

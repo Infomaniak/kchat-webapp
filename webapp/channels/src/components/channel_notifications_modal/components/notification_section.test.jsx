@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {NotificationLevels, NotificationSections} from 'utils/constants';
 
 import NotificationSection from 'components/channel_notifications_modal/components/notification_section.jsx';
-
-import {NotificationLevels, NotificationSections} from 'utils/constants';
 
 describe('components/channel_notifications_modal/NotificationSection', () => {
     const baseProps = {
@@ -17,11 +16,9 @@ describe('components/channel_notifications_modal/NotificationSection', () => {
         globalNotificationLevel: NotificationLevels.DEFAULT,
         onChange: () => {}, //eslint-disable-line no-empty-function
         onChangeThreads: () => {}, //eslint-disable-line no-empty-function
-        onReset: () => {},
         onSubmit: () => {}, //eslint-disable-line no-empty-function
         onUpdateSection: () => {}, //eslint-disable-line no-empty-function
         serverError: '',
-        isGM: false,
     };
 
     test('should match snapshot, DESKTOP on collapsed view', () => {

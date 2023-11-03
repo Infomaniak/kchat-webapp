@@ -1,20 +1,24 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import StatusIcon from '@infomaniak/compass-components/components/status-icon';
+import Text from '@infomaniak/compass-components/components/text';
+import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
+import type {TUserStatus} from '@infomaniak/compass-components/shared';
 import classNames from 'classnames';
-import React from 'react';
 import type {ReactNode} from 'react';
-import {injectIntl, FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
+import React from 'react';
 import type {IntlShape} from 'react-intl';
+import {injectIntl, FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
+import {Constants, ModalIdentifiers, UserStatuses} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {getCurrentDateTimeForTimezone, getCurrentMomentForTimezone} from 'utils/timezone';
+import {localizeMessage} from 'utils/utils';
 
-import StatusIcon from '@mattermost/compass-components/components/status-icon'; // eslint-disable-line no-restricted-imports
-import Text from '@mattermost/compass-components/components/text'; // eslint-disable-line no-restricted-imports
-import type {TUserStatus} from '@mattermost/compass-components/shared'; // eslint-disable-line no-restricted-imports
-import {AccountOutlineIcon, CheckIcon, ExitToAppIcon} from '@mattermost/compass-icons/components';
 import {PulsatingDot} from '@mattermost/components';
 import type {PreferenceType} from '@mattermost/types/preferences';
-import {CustomStatusDuration} from '@mattermost/types/users';
 import type {UserCustomStatus, UserProfile, UserStatus} from '@mattermost/types/users';
+import {CustomStatusDuration} from '@mattermost/types/users';
 
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
@@ -29,21 +33,17 @@ import {OnboardingTaskCategory, OnboardingTasksName, TaskNameMapToSteps, Complet
 import OverlayTrigger from 'components/overlay_trigger';
 import ResetStatusModal from 'components/reset_status_modal';
 import Tooltip from 'components/tooltip';
-import UserSettingsModal from 'components/user_settings/modal';
+import {ProfileTour, StatusTour} from 'components/tours/onboarding_tour';
 import EmojiIcon from 'components/widgets/icons/emoji_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import Avatar from 'components/widgets/users/avatar/avatar';
 import type {TAvatarSizeToken} from 'components/widgets/users/avatar/avatar';
-
-import {Constants, ModalIdentifiers, UserStatuses} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {getCurrentDateTimeForTimezone, getCurrentMomentForTimezone} from 'utils/timezone';
-import {localizeMessage} from 'utils/utils';
+import Avatar from 'components/widgets/users/avatar/avatar';
 
 import type {ModalData} from 'types/actions';
 
 import './status_dropdown.scss';
+import ToggleNextModal from 'components/toggle_next_modal';
 
 type Props = {
     intl: IntlShape;
@@ -67,6 +67,9 @@ type Props = {
     showCompleteYourProfileTour: boolean;
     showCustomStatusPulsatingDot: boolean;
     timezone?: string;
+    showProfileTutorialStep: boolean;
+    showStatusTutorialStep: boolean;
+    showNextSwitch: boolean;
 }
 
 type State = {
@@ -98,13 +101,13 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
         };
     }
 
-    openProfileModal = (): void => {
-        this.props.actions.openModal({
-            modalId: ModalIdentifiers.USER_SETTINGS,
-            dialogType: UserSettingsModal,
-            dialogProps: {isContentProductSettings: false},
-        });
-    };
+    // openProfileModal = (): void => {
+    //     this.props.actions.openModal({
+    //         modalId: ModalIdentifiers.USER_SETTINGS,
+    //         dialogType: UserSettingsModal,
+    //         dialogProps: {isContentProductSettings: false},
+    //     });
+    // }
 
     setStatus = (status: string, dndEndTime?: number): void => {
         this.props.actions.setStatus({
@@ -200,7 +203,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
     };
 
     handleEmitUserLoggedOutEvent = (): void => {
-        GlobalActions.emitUserLoggedOutEvent();
+        GlobalActions.emitUserLoggedOutEvent('ikLogout');
     };
 
     onToggle = (open: boolean): void => {
@@ -330,6 +333,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                             className='custom_status__text'
                         />
                         <Text
+                            className='custom_status__textContent'
                             margin='none'
                             color='disabled'
                         >
@@ -345,9 +349,9 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
     };
 
     render = (): JSX.Element => {
-        const {intl} = this.props;
+        const {intl, showNextSwitch} = this.props;
         const needsConfirm = this.isUserOutOfOffice() && this.props.autoResetPref === '';
-        const {status, customStatus, isCustomStatusExpired, currentUser} = this.props;
+        const {status, customStatus, isCustomStatusExpired, currentUser, showProfileTutorialStep, showStatusTutorialStep} = this.props;
         const isStatusSet = customStatus && (customStatus.text.length > 0 || customStatus.emoji.length > 0) && !isCustomStatusExpired;
 
         const setOnline = needsConfirm ? () => this.showStatusChangeConfirmation('online') : this.setOnline;
@@ -356,10 +360,16 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
         const setOffline = needsConfirm ? () => this.showStatusChangeConfirmation('offline') : this.setOffline;
         const setCustomTimedDnd = needsConfirm ? () => this.showStatusChangeConfirmation('dnd') : this.setCustomTimedDnd;
 
+        const redirectToManagerProfile = (e: Event): void => {
+            e.preventDefault();
+            window.open('https://manager.infomaniak.com/v3/ng/profile/user/dashboard', '_blank');
+        };
+
         const selectedIndicator = (
-            <CheckIcon
+            <Icon
+                glyph={'check'}
                 size={16}
-                color={'var(--semantic-color-success)'}
+                color={'success'}
             />
         );
 
@@ -446,12 +456,14 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
             });
         }
 
+        const isNext = document.cookie.indexOf('KCHAT_NEXT=always') !== -1;
+
         return (
             <MenuWrapper
                 onToggle={this.onToggle}
                 open={this.props.isStatusDropdownOpen}
                 className={classNames('status-dropdown-menu status-dropdown-menu-global-header', {
-                    active: this.props.isStatusDropdownOpen || isStatusSet,
+                    active: this.props.isStatusDropdownOpen,
                 })}
             >
                 <button
@@ -482,7 +494,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                     listId={'status-drop-down-menu-list'}
                 >
                     {currentUser && (
-                        <Menu.Header onClick={this.openProfileModal}>
+                        <Menu.Header >
                             {this.renderProfilePicture('lg')}
                             <div className={'username-wrapper'}>
                                 <Text
@@ -522,6 +534,7 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                             )}
                             rightDecorator={status === 'online' && selectedIndicator}
                             id={'status-menu-online'}
+                            sibling={showStatusTutorialStep && <StatusTour/>}
                         />
                         <Menu.ItemAction
                             onClick={setAway}
@@ -567,14 +580,18 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                         />
                     </Menu.Group>
                     <Menu.Group>
-                        <Menu.ItemToggleModalRedux
+                        <Menu.ItemAction
                             id='accountSettings'
                             ariaLabel='Profile'
-                            modalId={ModalIdentifiers.USER_SETTINGS}
-                            dialogType={UserSettingsModal}
-                            dialogProps={{isContentProductSettings: false}}
-                            text={localizeMessage('navbar_dropdown.profileSettings', 'Profile')}
-                            icon={<AccountOutlineIcon size={16}/>}
+                            onClick={redirectToManagerProfile}
+                            text={localizeMessage('navbar_dropdown.accountSettings', 'Profile')}
+                            icon={(
+                                <Icon
+                                    size={16}
+                                    glyph={'account-outline'}
+                                />
+                            )}
+                            sibling={showProfileTutorialStep && <ProfileTour/>}
                         >
                             {this.props.showCompleteYourProfileTour && (
                                 <div
@@ -584,14 +601,44 @@ export class StatusDropdown extends React.PureComponent<Props, State> {
                                     <CompleteYourProfileTour/>
                                 </div>
                             )}
-                        </Menu.ItemToggleModalRedux>
+                        </Menu.ItemAction>
+                        {showNextSwitch &&
+                            <Menu.ItemToggleModalRedux
+                                className='status-dropdown-menu__next-switch'
+                                modalId={ModalIdentifiers.TOGGLE_NEXT}
+                                dialogType={ToggleNextModal}
+                                icon={(
+                                    <Icon
+                                        size={16}
+                                        glyph={'laptop'}
+                                        className='status-dropdown-menu__next-icon'
+                                    />
+                                )}
+                                text={(
+                                    <div>
+                                        <FormattedMessage
+                                            id='toggle_next_modal.title'
+                                            defaultMessage='Switch to {version} version'
+                                            values={{
+                                                version: isNext ? 'STABLE' : 'NEXT',
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            />
+                        }
                     </Menu.Group>
                     <Menu.Group>
                         <Menu.ItemAction
                             id='logout'
                             onClick={this.handleEmitUserLoggedOutEvent}
                             text={localizeMessage('navbar_dropdown.logout', 'Log Out')}
-                            icon={<ExitToAppIcon size={16}/>}
+                            icon={(
+                                <Icon
+                                    size={16}
+                                    glyph={'exit-to-app'}
+                                />
+                            )}
                         />
                     </Menu.Group>
                 </Menu>

@@ -2,16 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
+import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
 
-import {removeUsersFromGroup} from 'mattermost-redux/actions/groups';
-import {Permissions} from 'mattermost-redux/constants';
+import {ActionFunc, ActionResult, GenericAction} from 'mattermost-redux/types/actions';
+import {GlobalState} from 'types/store';
+
 import {getGroup as getGroupById} from 'mattermost-redux/selectors/entities/groups';
+import {removeUsersFromGroup} from 'mattermost-redux/actions/groups';
 import {haveIGroupPermission} from 'mattermost-redux/selectors/entities/roles';
-import type {ActionFunc, ActionResult, GenericAction} from 'mattermost-redux/types/actions';
-
-import type {GlobalState} from 'types/store';
+import {Permissions} from 'mattermost-redux/constants';
 
 import ViewUserGroupListItem from './view_user_group_list_item';
 

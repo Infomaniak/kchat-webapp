@@ -1,27 +1,29 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {createRef, RefObject} from 'react';
+import type {RefObject} from 'react';
+import React, {createRef} from 'react';
 import {FormattedMessage} from 'react-intl';
 import ReactSelect from 'react-select';
-
-import {AdminConfig} from '@mattermost/types/config';
-import {DataRetentionCustomPolicies, DataRetentionCustomPolicy} from '@mattermost/types/data_retention';
-import {DeepPartial} from '@mattermost/types/utilities';
-
+import {getHistory} from 'utils/browser_history';
 import {JobTypes} from 'utils/constants';
 import * as Utils from 'utils/utils';
-import DataGrid, {Row, Column} from 'components/admin_console/data_grid/data_grid';
+
+import type {AdminConfig} from '@mattermost/types/config';
+import type {DataRetentionCustomPolicies, DataRetentionCustomPolicy} from '@mattermost/types/data_retention';
+import type {JobTypeBase, JobType} from '@mattermost/types/jobs';
+import type {DeepPartial} from '@mattermost/types/utilities';
+
+import type {ActionResult} from 'mattermost-redux/types/actions';
+
+import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import DataGrid from 'components/admin_console/data_grid/data_grid';
+import JobsTable from 'components/admin_console/jobs';
 import Card from 'components/card/card';
 import TitleAndButtonCardHeader from 'components/card/title_and_button_card_header/title_and_button_card_header';
-
-import JobsTable from 'components/admin_console/jobs';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Menu from 'components/widgets/menu/menu';
-import {getHistory} from 'utils/browser_history';
-import {JobTypeBase, JobType} from '@mattermost/types/jobs';
+import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
-import {ActionResult} from 'mattermost-redux/types/actions';
 import './data_retention_settings.scss';
 
 type OptionType = {
@@ -65,9 +67,9 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
     deleteCustomPolicy = async (id: string) => {
         await this.props.actions.deleteDataRetentionCustomPolicy(id);
         this.loadPage(0);
-    }
+    };
 
-    includeBoards = this.props.config.PluginSettings?.PluginStates?.focalboard?.Enable && this.props.config.FeatureFlags?.BoardsDataRetention
+    includeBoards = this.props.config.PluginSettings?.PluginStates?.focalboard?.Enable && this.props.config.FeatureFlags?.BoardsDataRetention;
     getGlobalPolicyColumns = (): Column[] => {
         const columns: Column[] = [
             {
@@ -119,7 +121,7 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
             },
         );
         return columns;
-    }
+    };
     getCustomPolicyColumns = (): Column[] => {
         const columns: Column[] = [
             {
@@ -156,7 +158,7 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
             },
         ];
         return columns;
-    }
+    };
     getMessageRetentionSetting = (enabled: boolean | undefined, days: number | undefined): JSX.Element => {
         if (!enabled) {
             return (
@@ -187,7 +189,7 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
                 }}
             />
         );
-    }
+    };
     getGlobalPolicyRows = (): Row[] => {
         const {DataRetentionSettings} = this.props.config;
         return [{
@@ -240,7 +242,7 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
                 getHistory().push('/admin_console/compliance/data_retention_settings/global_policy');
             },
         }];
-    }
+    };
     getChannelAndTeamCounts = (policy: DataRetentionCustomPolicy): JSX.Element => {
         if (policy.channel_count === 0 && policy.team_count === 0) {
             return (
@@ -260,7 +262,7 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
                 }}
             />
         );
-    }
+    };
     getCustomPolicyRows = (startCount: number, endCount: number): Row[] => {
         let policies = Object.values(this.props.customPolicies);
         policies = policies.slice(startCount - 1, endCount);
@@ -333,18 +335,18 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
         this.setState({customPoliciesLoading: true});
         await this.props.actions.getDataRetentionCustomPolicies(page);
         this.setState({page, customPoliciesLoading: false});
-    }
+    };
     componentDidMount = async () => {
         await this.loadPage(this.state.page);
-    }
+    };
 
     private nextPage = () => {
         this.loadPage(this.state.page + 1);
-    }
+    };
 
     private previousPage = () => {
         this.loadPage(this.state.page - 1);
-    }
+    };
 
     public getPaginationProps = (): {startCount: number; endCount: number; total: number} => {
         const {page} = this.state;
@@ -354,17 +356,17 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
         endCount = endCount > total ? total : endCount;
 
         return {startCount, endCount, total};
-    }
+    };
 
     showEditJobTime = (value: boolean) => {
         this.setState({showEditJobTime: value});
-    }
+    };
 
     componentDidUpdate = (prevProps: Props, prevState: State) => {
         if (prevState.showEditJobTime !== this.state.showEditJobTime && this.state.showEditJobTime) {
             this.inputRef.current?.focus();
         }
-    }
+    };
 
     handleCreateJob = async (e?: React.SyntheticEvent) => {
         e?.preventDefault();
@@ -382,7 +384,7 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
 
         await this.props.actions.updateConfig(newConfig);
         this.inputRef.current?.blur();
-    }
+    };
 
     getJobStartTime = (): JSX.Element | null => {
         const {DataRetentionSettings} = this.props.config;
@@ -417,7 +419,7 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
                 }}
             />
         );
-    }
+    };
     getJobTimeOptions = () => {
         const options: OptionType[] = [];
         return () => {
@@ -445,7 +447,7 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
 
             return options;
         };
-    }
+    };
     getJobTimes = this.getJobTimeOptions();
 
     render = () => {
@@ -597,46 +599,44 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
                                                 id='admin.data_retention.createJob.instructions'
                                                 defaultMessage='Daily time to check policies and run delete job:'
                                             />
-                                            {this.state.showEditJobTime ?
-                                                <ReactSelect
-                                                    id={'JobSelectTime'}
-                                                    className={'JobSelectTime'}
-                                                    components={{
-                                                        DropdownIndicator: () => null,
-                                                        IndicatorSeparator: () => null,
-                                                    }}
-                                                    onChange={(e) => {
-                                                        this.changeJobTimeConfig((e as OptionType).value);
-                                                    }}
-                                                    styles={{
-                                                        control: (base) => ({
-                                                            ...base,
-                                                            height: 32,
-                                                            minHeight: 32,
-                                                        }),
-                                                        menu: (base) => ({
-                                                            ...base,
-                                                            width: 210,
-                                                        }),
-                                                    }}
-                                                    onBlur={() => {
-                                                        this.showEditJobTime(false);
-                                                    }}
-                                                    value={{label: this.getJobStartTime(), value: DataRetentionSettings?.DeletionJobStartTime} as OptionType}
-                                                    hideSelectedOptions={true}
-                                                    isSearchable={true}
-                                                    options={this.getJobTimes()}
-                                                    ref={this.inputRef}
-                                                    onFocus={() => {
-                                                        this.showEditJobTime(true);
-                                                    }}
-                                                    menuIsOpen={this.state.showEditJobTime}
-                                                /> :
-                                                <span
-                                                    className='JobSelectedtime'
-                                                >
-                                                    <b>{this.getJobStartTime()}</b>
-                                                </span>
+                                            {this.state.showEditJobTime ? <ReactSelect
+                                                id={'JobSelectTime'}
+                                                className={'JobSelectTime'}
+                                                components={{
+                                                    DropdownIndicator: () => null,
+                                                    IndicatorSeparator: () => null,
+                                                }}
+                                                onChange={(e) => {
+                                                    this.changeJobTimeConfig((e as OptionType).value);
+                                                }}
+                                                styles={{
+                                                    control: (base) => ({
+                                                        ...base,
+                                                        height: 32,
+                                                        minHeight: 32,
+                                                    }),
+                                                    menu: (base) => ({
+                                                        ...base,
+                                                        width: 210,
+                                                    }),
+                                                }}
+                                                onBlur={() => {
+                                                    this.showEditJobTime(false);
+                                                }}
+                                                value={{label: this.getJobStartTime(), value: DataRetentionSettings?.DeletionJobStartTime} as OptionType}
+                                                hideSelectedOptions={true}
+                                                isSearchable={true}
+                                                options={this.getJobTimes()}
+                                                ref={this.inputRef}
+                                                onFocus={() => {
+                                                    this.showEditJobTime(true);
+                                                }}
+                                                menuIsOpen={this.state.showEditJobTime}
+                                            /> : <span
+                                                                              className='JobSelectedtime'
+                                                                               >
+                                                                              <b>{this.getJobStartTime()}</b>
+                                                                          </span>
                                             }
                                             <a
                                                 className='EditJobTime'
@@ -653,5 +653,5 @@ export default class DataRetentionSettings extends React.PureComponent<Props, St
                 </div>
             </div>
         );
-    }
+    };
 }

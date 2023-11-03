@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React from 'react';
 import type {ReactNode, CSSProperties} from 'react';
+import React from 'react';
 import {useIntl} from 'react-intl';
 
 type Props = {

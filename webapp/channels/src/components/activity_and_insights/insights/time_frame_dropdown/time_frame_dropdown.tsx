@@ -1,17 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useCallback} from 'react';
-
-import ReactSelect, {ValueType} from 'react-select';
-
 import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
-
-import {trackEvent} from 'actions/telemetry_actions';
+import React, {memo, useCallback} from 'react';
+import type {ValueType} from 'react-select';
+import ReactSelect from 'react-select';
+import {localizeMessage} from 'utils/utils';
 
 import {TimeFrames} from '@mattermost/types/insights';
 
-import {localizeMessage} from 'utils/utils';
+import {trackEvent} from 'actions/telemetry_actions';
 
 import './time_frame_dropdown.scss';
 

@@ -6,6 +6,8 @@ import {FormattedMessage} from 'react-intl';
 import type {ListChildComponentProps} from 'react-window';
 import {VariableSizeList} from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
+import {ModalIdentifiers} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import type {Group, GroupPermissions} from '@mattermost/types/groups';
 
@@ -17,9 +19,6 @@ import {NoResultsVariant} from 'components/no_results_indicator/types';
 import ViewUserGroupModal from 'components/view_user_group_modal';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-
-import {ModalIdentifiers} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 
@@ -164,7 +163,7 @@ const UserGroupsList = (props: Props) => {
                             stopPropagationOnToggle={true}
                             id={`customWrapper-${group.id}`}
                         >
-                            <button className='btn btn-icon btn-xs'>
+                            <button className='action-wrapper'>
                                 <i className='icon icon-dots-vertical'/>
                             </button>
                             <Menu

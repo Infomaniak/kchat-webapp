@@ -3,7 +3,7 @@
 
 import {WindowSizes} from 'utils/constants';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
 
 export function getIsDesktopView(state: GlobalState): boolean {
     const windowSize = state.views.browser.windowSize;

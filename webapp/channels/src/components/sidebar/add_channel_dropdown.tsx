@@ -3,14 +3,16 @@
 
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {ModalIdentifiers} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import {CreateAndJoinChannelsTour, InvitePeopleTour} from 'components/tours/onboarding_tour';
+import {CreateChannelsTour, InvitePeopleTour, JoinChannelsTour} from 'components/tours/onboarding_tour';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+import WorkTemplateModal from 'components/work_templates';
 
 type Props = {
     canCreateChannel: boolean;
@@ -23,11 +25,13 @@ type Props = {
     showCreateCategoryModal: () => void;
     handleOpenDirectMessagesModal: (e: Event) => void;
     unreadFilterEnabled: boolean;
+    showJoinChannelTutorialTip: boolean;
     showCreateTutorialTip: boolean;
     showInviteTutorialTip: boolean;
     isAddChannelOpen: boolean;
     openAddChannelOpen: (open: boolean) => void;
     canCreateCustomGroups: boolean;
+    showWorkTemplateButton: boolean;
 };
 
 const AddChannelDropdown = ({
@@ -40,11 +44,13 @@ const AddChannelDropdown = ({
     showCreateCategoryModal,
     handleOpenDirectMessagesModal,
     unreadFilterEnabled,
+    showJoinChannelTutorialTip,
     showCreateTutorialTip,
     showInviteTutorialTip,
     isAddChannelOpen,
     openAddChannelOpen,
     canCreateCustomGroups,
+    showWorkTemplateButton,
 }: Props) => {
     const intl = useIntl();
 
@@ -55,12 +61,27 @@ const AddChannelDropdown = ({
                     id='invitePeople'
                     onClick={invitePeopleModal}
                     icon={<i className='icon-account-plus-outline'/>}
-                    text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.invitePeople', defaultMessage: 'Invite people'})}
+                    text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.invitePeople', defaultMessage: 'Invite People'})}
                     extraText={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.invitePeopleExtraText', defaultMessage: 'Add people to the team'})}
                 />
                 {showInviteTutorialTip && <InvitePeopleTour/>}
             </Menu.Group>
         );
+
+        let workTemplate;
+        if (showWorkTemplateButton) {
+            workTemplate = (
+                <Menu.ItemToggleModalRedux
+                    id='work-template'
+                    modalId={ModalIdentifiers.WORK_TEMPLATE}
+                    dialogType={WorkTemplateModal}
+                    text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.work_template', defaultMessage: 'Create from a template'})}
+                    extraText={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.work_template_extra', defaultMessage: 'Set up a channel with linked boards, and playbooks'})}
+                    icon={<i className='icon-layers-outline'/>}
+                    className='work-template'
+                />
+            );
+        }
 
         let joinPublicChannel;
         if (canJoinPublicChannel) {
@@ -69,7 +90,8 @@ const AddChannelDropdown = ({
                     id='showMoreChannels'
                     onClick={showMoreChannelsModal}
                     icon={<i className='icon-globe'/>}
-                    text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.browseChannels', defaultMessage: 'Browse channels'})}
+                    text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.browseChannels', defaultMessage: 'Browse Channels'})}
+                    sibling={showJoinChannelTutorialTip && <JoinChannelsTour/>}
                 />
             );
         }
@@ -81,7 +103,8 @@ const AddChannelDropdown = ({
                     id='showNewChannel'
                     onClick={showNewChannelModal}
                     icon={<i className='icon-plus'/>}
-                    text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.createNewChannel', defaultMessage: 'Create new channel'})}
+                    text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.createNewChannel', defaultMessage: 'Create New Channel'})}
+                    sibling={showCreateTutorialTip && <CreateChannelsTour/>}
                 />
             );
         }
@@ -94,7 +117,7 @@ const AddChannelDropdown = ({
                         id='createCategory'
                         onClick={showCreateCategoryModal}
                         icon={<i className='icon-folder-plus-outline'/>}
-                        text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.createCategory', defaultMessage: 'Create new category'})}
+                        text={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.createCategory', defaultMessage: 'Create New Category'})}
                     />
                 </Menu.Group>);
         }
@@ -123,14 +146,14 @@ const AddChannelDropdown = ({
         return (
             <>
                 <Menu.Group>
-                    {createChannel}
+                    {workTemplate}
                     {joinPublicChannel}
+                    {createChannel}
                     {createDirectMessage}
-                    {showCreateTutorialTip && <CreateAndJoinChannelsTour/>}
                     {createUserGroup}
                 </Menu.Group>
                 {createCategory}
-                {invitePeople}
+                {/* {invitePeople} */}
             </>
         );
     };
@@ -169,12 +192,14 @@ const AddChannelDropdown = ({
                 placement='top'
                 overlay={tooltip}
             >
-                <button
-                    className={'AddChannelDropdown_dropdownButton'}
-                    aria-label={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channel Dropdown'})}
-                >
-                    <i className='icon-plus'/>
-                </button>
+                <>
+                    <button
+                        className={'AddChannelDropdown_dropdownButton'}
+                        aria-label={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channel Dropdown'})}
+                    >
+                        <i className='icon-plus'/>
+                    </button>
+                </>
             </OverlayTrigger>
             <Menu
                 id='AddChannelDropdown'

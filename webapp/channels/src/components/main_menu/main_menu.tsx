@@ -2,77 +2,66 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
+import {injectIntl} from 'react-intl';
+import {Constants, ModalIdentifiers} from 'utils/constants';
+import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Permissions} from 'mattermost-redux/constants';
 
 import * as GlobalActions from 'actions/global_actions';
-import {trackEvent} from 'actions/telemetry_actions';
 
-import AboutBuildModal from 'components/about_build_modal';
+// import * as UserAgent from 'utils/user_agent';
+// import InvitationModal from 'components/invitation_modal';
+
 import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
-import InvitationModal from 'components/invitation_modal';
-import LeaveTeamModal from 'components/leave_team_modal';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import TeamGroupsManageModal from 'components/team_groups_manage_modal';
-import TeamMembersModal from 'components/team_members_modal';
-import TeamSettingsModal from 'components/team_settings_modal';
-import UserSettingsModal from 'components/user_settings/modal';
-import LeaveTeamIcon from 'components/widgets/icons/leave_team_icon';
 import Menu from 'components/widgets/menu/menu';
-import RestrictedIndicator from 'components/widgets/menu/menu_items/restricted_indicator';
 
-import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
-import {Constants, LicenseSkus, ModalIdentifiers, MattermostFeatures} from 'utils/constants';
-import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
-import {makeUrlSafe} from 'utils/url';
-import * as UserAgent from 'utils/user_agent';
+// import {trackEvent} from 'actions/telemetry_actions';
 
 import type {ModalData} from 'types/actions';
 import type {PluginComponent} from 'types/store/plugins';
+
+import {IKConstants} from '../../utils/constants-ik';
 
 export type Props = {
     mobile: boolean;
     id?: string;
     teamId?: string;
     teamName?: string;
-    siteName?: string;
     currentUser?: UserProfile;
-    appDownloadLink?: string;
+
+    // appDownloadLink?: string;
     enableCommands: boolean;
     enableIncomingWebhooks: boolean;
     enableOAuthServiceProvider: boolean;
     enableOutgoingWebhooks: boolean;
     canManageSystemBots: boolean;
     canManageIntegrations: boolean;
-    experimentalPrimaryTeam?: string;
-    helpLink?: string;
-    reportAProblemLink?: string;
-    moreTeamsToJoin: boolean;
+
+    // experimentalPrimaryTeam?: string;
+    // helpLink?: string;
+    // reportAProblemLink?: string;
     pluginMenuItems?: PluginComponent[];
     isMentionSearch?: boolean;
+    isRhsSettings?: boolean;
     teamIsGroupConstrained: boolean;
     isLicensedForLDAPGroups?: boolean;
     intl: IntlShape;
-    teamUrl: string;
-    isFirstAdmin: boolean;
-    isCloud: boolean;
-    isStarterFree: boolean;
-    isFreeTrial: boolean;
-    usageDeltaTeams: number;
-    location: {
-        pathname: string;
-    };
-    guestAccessEnabled: boolean;
-    canInviteTeamMember: boolean;
+
+    // guestAccessEnabled: boolean;
+    // canInviteTeamMember: boolean;
+    ikGroupId: number;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
         showMentions: () => void;
         showFlaggedPosts: () => void;
+        showSettings: () => void;
         closeRightHandSide: () => void;
         closeRhsMenu: () => void;
     };
@@ -96,12 +85,21 @@ export class MainMenu extends React.PureComponent<Props> {
     handleKeyDown = (e: KeyboardEvent): void => {
         if (cmdOrCtrlPressed(e) && e.shiftKey && isKeyPressed(e, Constants.KeyCodes.A)) {
             e.preventDefault();
-            this.props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}});
+            if (this.props.isRhsSettings) {
+                this.props.actions.closeRightHandSide();
+            } else {
+                this.props.actions.showSettings();
+            }
         }
     };
 
     handleEmitUserLoggedOutEvent = (): void => {
         GlobalActions.emitUserLoggedOutEvent();
+    };
+
+    handleEmitUserGoToDashboard = (e: Event): void => {
+        e.preventDefault();
+        GlobalActions.redirectToManagerDashboard(this.props.ikGroupId);
     };
 
     getFlagged = (e: Event): void => {
@@ -121,18 +119,25 @@ export class MainMenu extends React.PureComponent<Props> {
         }
     };
 
+    redirectToManagerProfile = (e: Event): void => {
+        e.preventDefault();
+        window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
+    };
+
     render() {
         const {
-            appDownloadLink,
+
+            // appDownloadLink,
             currentUser,
             teamIsGroupConstrained,
             isLicensedForLDAPGroups,
             teamId = '',
-            guestAccessEnabled,
-            canInviteTeamMember,
+
+            // guestAccessEnabled,
+            // canInviteTeamMember,
         } = this.props;
 
-        const safeAppDownloadLink = makeUrlSafe(appDownloadLink || '');
+        // const safeAppDownloadLink = makeUrlSafe(appDownloadLink || '');
 
         if (!currentUser) {
             return null;
@@ -154,55 +159,35 @@ export class MainMenu extends React.PureComponent<Props> {
 
         const someIntegrationEnabled = this.props.enableIncomingWebhooks || this.props.enableOutgoingWebhooks || this.props.enableCommands || this.props.enableOAuthServiceProvider || this.props.canManageSystemBots;
         const showIntegrations = !this.props.mobile && someIntegrationEnabled && this.props.canManageIntegrations;
-        const teamsLimitReached = this.props.isStarterFree && !this.props.isFreeTrial && this.props.usageDeltaTeams >= 0;
-        const createTeamRestricted = this.props.isCloud && (this.props.isFreeTrial || teamsLimitReached);
 
         const {formatMessage} = this.props.intl;
 
-        let invitePeopleModal = null;
-        if (guestAccessEnabled || canInviteTeamMember) {
-            invitePeopleModal = (
-                <Menu.ItemToggleModalRedux
-                    id='invitePeople'
-                    modalId={ModalIdentifiers.INVITATION}
-                    dialogType={InvitationModal}
-                    text={formatMessage({
-                        id: 'navbar_dropdown.invitePeople',
-                        defaultMessage: 'Invite People',
-                    })}
-                    extraText={formatMessage({
-                        id: 'navbar_dropdown.invitePeopleExtraText',
-                        defaultMessage: 'Add people to the team',
-                    })}
-                    icon={this.props.mobile && <i className='fa fa-user-plus'/>}
-                    onClick={() => trackEvent('ui', 'click_sidebar_team_dropdown_invite_people')}
-                />
-            );
-        }
+        // let invitePeopleModal = null;
+        // if (guestAccessEnabled || canInviteTeamMember) {
+        //     invitePeopleModal = (
+        //         <Menu.ItemToggleModalRedux
+        //             id='invitePeople'
+        //             modalId={ModalIdentifiers.INVITATION}
+        //             dialogType={InvitationModal}
+        //             text={formatMessage({
+        //                 id: 'navbar_dropdown.invitePeople',
+        //                 defaultMessage: 'Invite People',
+        //             })}
+        //             extraText={formatMessage({
+        //                 id: 'navbar_dropdown.invitePeopleExtraText',
+        //                 defaultMessage: 'Add people to the team',
+        //             })}
+        //             icon={this.props.mobile && <i className='fa fa-user-plus'/>}
+        //            onClick={() => trackEvent('ui', 'click_sidebar_team_dropdown_invite_people')}
+        //         />
+        //     );
+        // }
 
         return this.props.mobile ? (
             <Menu
                 id={this.props.id}
                 ariaLabel={formatMessage({id: 'navbar_dropdown.menuAriaLabel', defaultMessage: 'main menu'})}
             >
-                <Menu.Group>
-                    <SystemPermissionGate
-                        permissions={[Permissions.SYSCONSOLE_WRITE_BILLING]}
-                    >
-                        <Menu.CloudTrial
-                            id='menuCloudTrial'
-                        />
-                    </SystemPermissionGate>
-                </Menu.Group>
-                <Menu.Group>
-                    <SystemPermissionGate
-                        permissions={[Permissions.SYSCONSOLE_WRITE_ABOUT_EDITION_AND_LICENSE]}
-                    >
-                        <Menu.StartTrial
-                            id='startTrial'
-                        />
-                    </SystemPermissionGate>
-                </Menu.Group>
                 <Menu.Group>
                     <Menu.ItemAction
                         id='recentMentions'
@@ -218,20 +203,11 @@ export class MainMenu extends React.PureComponent<Props> {
                     />
                 </Menu.Group>
                 <Menu.Group>
-                    <Menu.ItemToggleModalRedux
-                        id='profileSettings'
-                        modalId={ModalIdentifiers.USER_SETTINGS}
-                        dialogType={UserSettingsModal}
-                        dialogProps={{isContentProductSettings: false}}
-                        text={formatMessage({id: 'navbar_dropdown.profileSettings', defaultMessage: 'Profile'})}
-                        icon={<i className='fa fa-user'/>}
-                    />
-                    <Menu.ItemToggleModalRedux
+                    <Menu.ItemAction
                         id='accountSettings'
-                        modalId={ModalIdentifiers.USER_SETTINGS}
-                        dialogType={UserSettingsModal}
-                        dialogProps={{isContentProductSettings: true}}
-                        text={formatMessage({id: 'navbar_dropdown.accountSettings', defaultMessage: 'Settings'})}
+                        ariaLabel='Profile'
+                        onClick={this.redirectToManagerProfile}
+                        text={formatMessage({id: 'navbar_dropdown.accountSettings', defaultMessage: 'Profile'})}
                         icon={<i className='fa fa-cog'/>}
                     />
                 </Menu.Group>
@@ -249,15 +225,15 @@ export class MainMenu extends React.PureComponent<Props> {
                             icon={<i className='fa fa-user-plus'/>}
                         />
                     </TeamPermissionGate>
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.ADD_USER_TO_TEAM, Permissions.INVITE_GUEST]}
                     >
                         {invitePeopleModal}
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                 </Menu.Group>
                 <Menu.Group>
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
@@ -268,8 +244,8 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.teamSettings', defaultMessage: 'Team Settings'})}
                             icon={<i className='fa fa-globe'/>}
                         />
-                    </TeamPermissionGate>
-                    <TeamPermissionGate
+                    </TeamPermissionGate> */}
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
@@ -284,8 +260,8 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.manageGroups', defaultMessage: 'Manage Groups'})}
                             icon={<i className='fa fa-user-plus'/>}
                         />
-                    </TeamPermissionGate>
-                    <TeamPermissionGate
+                    </TeamPermissionGate> */}
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
                     >
@@ -296,8 +272,8 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.manageMembers', defaultMessage: 'Manage Members'})}
                             icon={<i className='fa fa-users'/>}
                         />
-                    </TeamPermissionGate>
-                    <TeamPermissionGate
+                    </TeamPermissionGate> */}
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
                         invert={true}
@@ -309,33 +285,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.viewMembers', defaultMessage: 'View Members'})}
                             icon={<i className='fa fa-users'/>}
                         />
-                    </TeamPermissionGate>
-                </Menu.Group>
-                <Menu.Group>
-                    <SystemPermissionGate permissions={[Permissions.CREATE_TEAM]}>
-                        <Menu.ItemLink
-                            id='createTeam'
-                            show={!teamsLimitReached}
-                            to='/create_team'
-                            text={formatMessage({id: 'navbar_dropdown.create', defaultMessage: 'Create a Team'})}
-                            icon={<i className='fa fa-plus-square'/>}
-                        />
-                    </SystemPermissionGate>
-                    <Menu.ItemLink
-                        id='joinTeam'
-                        show={!this.props.experimentalPrimaryTeam && this.props.moreTeamsToJoin}
-                        to='/select_team'
-                        text={formatMessage({id: 'navbar_dropdown.join', defaultMessage: 'Join Another Team'})}
-                        icon={<i className='fa fa-plus-square'/>}
-                    />
-                    <Menu.ItemToggleModalRedux
-                        id='leaveTeam'
-                        show={!teamIsGroupConstrained && this.props.experimentalPrimaryTeam !== this.props.teamName}
-                        modalId={ModalIdentifiers.LEAVE_TEAM}
-                        dialogType={LeaveTeamModal}
-                        text={formatMessage({id: 'navbar_dropdown.leave', defaultMessage: 'Leave Team'})}
-                        icon={<LeaveTeamIcon/>}
-                    />
+                    </TeamPermissionGate> */}
                 </Menu.Group>
                 <Menu.Group>
                     {pluginItems}
@@ -343,12 +293,12 @@ export class MainMenu extends React.PureComponent<Props> {
                 <Menu.Group>
                     <Menu.ItemLink
                         id='integrations'
-                        show={showIntegrations}
+                        show={true}
                         to={'/' + this.props.teamName + '/integrations'}
                         text={formatMessage({id: 'navbar_dropdown.integrations', defaultMessage: 'Integrations'})}
                     />
                 </Menu.Group>
-                <Menu.Group>
+                {/* <Menu.Group>
                     <Menu.ItemExternalLink
                         id='helpLink'
                         show={Boolean(this.props.helpLink)}
@@ -363,6 +313,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         text={formatMessage({id: 'navbar_dropdown.report', defaultMessage: 'Report a Problem'})}
                         icon={<i className='fa fa-phone'/>}
                     />
+                    // TODO: plug this
                     <Menu.ItemExternalLink
                         id='nativeAppLink'
                         show={this.props.appDownloadLink && !UserAgent.isMobileApp()}
@@ -377,7 +328,7 @@ export class MainMenu extends React.PureComponent<Props> {
                         text={formatMessage({id: 'navbar_dropdown.about', defaultMessage: 'About {appTitle}'}, {appTitle: this.props.siteName || 'Mattermost'})}
                         icon={<i className='fa fa-info'/>}
                     />
-                </Menu.Group>
+                </Menu.Group> */}
                 <Menu.Group>
                     <Menu.ItemAction
                         id='logout'
@@ -393,6 +344,17 @@ export class MainMenu extends React.PureComponent<Props> {
                 ariaLabel={formatMessage({id: 'sidebar.team_menu.menuAriaLabel', defaultMessage: 'team menu'})}
             >
                 <Menu.Group>
+                    <SystemPermissionGate
+                        permissions={[Permissions.SYSTEM_ADMIN]}
+                    >
+                        <Menu.ItemAction
+                            id='dashboardManager'
+                            onClick={this.handleEmitUserGoToDashboard}
+                            text={formatMessage({id: 'navbar_dropdown.dashboard', defaultMessage: 'Tableau de bord'})}
+                        />
+                    </SystemPermissionGate>
+                </Menu.Group>
+                <Menu.Group>
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
@@ -405,13 +367,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.addGroupsToTeam', defaultMessage: 'Add Groups to Team'})}
                         />
                     </TeamPermissionGate>
-                    <TeamPermissionGate
-                        teamId={teamId}
-                        permissions={[Permissions.ADD_USER_TO_TEAM, Permissions.INVITE_GUEST]}
-                    >
-                        {invitePeopleModal}
-                    </TeamPermissionGate>
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
@@ -421,7 +377,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             dialogType={TeamSettingsModal}
                             text={formatMessage({id: 'navbar_dropdown.teamSettings', defaultMessage: 'Team Settings'})}
                         />
-                    </TeamPermissionGate>
+                    </TeamPermissionGate> */}
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
@@ -435,7 +391,7 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.manageGroups', defaultMessage: 'Manage Groups'})}
                         />
                     </TeamPermissionGate>
-                    <TeamPermissionGate
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
                     >
@@ -445,8 +401,8 @@ export class MainMenu extends React.PureComponent<Props> {
                             dialogType={TeamMembersModal}
                             text={formatMessage({id: 'navbar_dropdown.manageMembers', defaultMessage: 'Manage Members'})}
                         />
-                    </TeamPermissionGate>
-                    <TeamPermissionGate
+                    </TeamPermissionGate> */}
+                    {/* <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.REMOVE_USER_FROM_TEAM, Permissions.MANAGE_TEAM_ROLES]}
                         invert={true}
@@ -457,74 +413,26 @@ export class MainMenu extends React.PureComponent<Props> {
                             dialogType={TeamMembersModal}
                             text={formatMessage({id: 'navbar_dropdown.viewMembers', defaultMessage: 'View Members'})}
                         />
-                    </TeamPermissionGate>
-                    <Menu.ItemLink
-                        id='joinTeam'
-                        show={!this.props.experimentalPrimaryTeam && this.props.moreTeamsToJoin}
-                        to='/select_team'
-                        text={formatMessage({id: 'navbar_dropdown.join', defaultMessage: 'Join Another Team'})}
-                    />
-                    <Menu.ItemToggleModalRedux
+                    </TeamPermissionGate> */}
+                    {/* <Menu.ItemToggleModalRedux
                         id='leaveTeam'
                         className='destructive'
                         show={!teamIsGroupConstrained && this.props.experimentalPrimaryTeam !== this.props.teamName}
                         modalId={ModalIdentifiers.LEAVE_TEAM}
                         dialogType={LeaveTeamModal}
                         text={formatMessage({id: 'navbar_dropdown.leave', defaultMessage: 'Leave Team'})}
-                    />
-                </Menu.Group>
-                <Menu.Group>
-                    <SystemPermissionGate permissions={[Permissions.CREATE_TEAM]}>
-                        <Menu.ItemLink
-                            id='createTeam'
-                            to='/create_team'
-                            className={createTeamRestricted ? 'MenuItem__with-icon-tooltip' : ''}
-                            disabled={teamsLimitReached}
-                            text={formatMessage({id: 'navbar_dropdown.create', defaultMessage: 'Create a Team'})}
-                            sibling={createTeamRestricted && (
-                                <RestrictedIndicator
-                                    feature={MattermostFeatures.CREATE_MULTIPLE_TEAMS}
-                                    minimumPlanRequiredForFeature={LicenseSkus.Professional}
-                                    blocked={!this.props.isFreeTrial}
-                                    tooltipMessage={formatMessage({
-                                        id: 'navbar_dropdown.create.tooltip.cloudFreeTrial',
-                                        defaultMessage: 'During your trial you are able to create multiple teams. These teams will be archived after your trial.',
-                                    })}
-                                    titleAdminPreTrial={formatMessage({
-                                        id: 'navbar_dropdown.create.modal.titleAdminPreTrial',
-                                        defaultMessage: 'Try unlimited teams with a free trial',
-                                    })}
-                                    messageAdminPreTrial={formatMessage({
-                                        id: 'navbar_dropdown.create.modal.messageAdminPreTrial',
-                                        defaultMessage: 'Create unlimited teams with one of our paid plans. Get the full experience of Enterprise when you start a free, {trialLength} day trial.',
-                                    },
-                                    {
-                                        trialLength: FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS,
-                                    },
-                                    )}
-                                    titleAdminPostTrial={formatMessage({
-                                        id: 'navbar_dropdown.create.modal.titleAdminPostTrial',
-                                        defaultMessage: 'Upgrade to create unlimited teams',
-                                    })}
-                                    messageAdminPostTrial={formatMessage({
-                                        id: 'navbar_dropdown.create.modal.messageAdminPostTrial',
-                                        defaultMessage: 'Multiple teams allow for context-specific spaces that are more attuned to your and your teams’ needs. Upgrade to the Professional plan to create unlimited teams.',
-                                    })}
-                                    titleEndUser={formatMessage({
-                                        id: 'navbar_dropdown.create.modal.titleEndUser',
-                                        defaultMessage: 'Multiple teams available in paid plans',
-                                    })}
-                                    messageEndUser={formatMessage({
-                                        id: 'navbar_dropdown.create.modal.messageEndUser',
-                                        defaultMessage: 'Multiple teams allow for context-specific spaces that are more attuned to your teams’ needs.',
-                                    })}
-                                />
-                            )}
-                        />
-                    </SystemPermissionGate>
+                    /> */}
                 </Menu.Group>
                 <Menu.Group>
                     {pluginItems}
+                </Menu.Group>
+                <Menu.Group>
+                    <Menu.ItemLink
+                        id='integrations'
+                        show={showIntegrations}
+                        to={'/' + this.props.teamName + '/integrations'}
+                        text={formatMessage({id: 'navbar_dropdown.integrations', defaultMessage: 'Integrations'})}
+                    />
                 </Menu.Group>
             </Menu>
         );

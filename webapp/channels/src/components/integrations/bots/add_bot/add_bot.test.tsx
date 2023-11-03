@@ -3,7 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {FormattedMessage} from 'react-intl';
 
+// import TestHelper from 'mattermost-redux/test/test_helper';
 import {TestHelper} from 'utils/test_helper';
 
 import AddBot from './add_bot';
@@ -47,7 +49,11 @@ describe('components/integrations/bots/AddBot', () => {
                 value={''}
             />,
         )).toEqual(true);
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.containsMatchingElement(
+            <FormattedMessage
+                id='admin.manage_roles.additionalRoles'
+            />,
+        )).toEqual(true);
     });
 
     it('edit bot', () => {

@@ -1,17 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {ComponentProps} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import OverlayTrigger from 'components/overlay_trigger';
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
+import OverlayTrigger from 'components/overlay_trigger';
 import ProfilePopover from 'components/profile_popover';
 import StatusIcon from 'components/status_icon';
 import StatusIconNew from 'components/status_icon_new';
-import Avatar, {getAvatarWidth} from 'components/widgets/users/avatar';
 import type {TAvatarSizeToken} from 'components/widgets/users/avatar';
+import Avatar, {getAvatarWidth} from 'components/widgets/users/avatar';
 
 import './profile_picture.scss';
 
@@ -24,7 +24,11 @@ type Props = {
     isBusy?: boolean;
     isEmoji?: boolean;
     profileSrc?: string;
+
+    // profileSrc?: Promise<string> | string;
     size?: ComponentProps<typeof Avatar>['size'];
+
+    // src: Promise<string> | string;
     src: string;
     status?: string;
     userId?: string;

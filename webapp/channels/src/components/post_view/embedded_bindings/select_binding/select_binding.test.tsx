@@ -3,11 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import type {AppBinding, AppCallResponse} from '@mattermost/types/apps';
 import type {Post} from '@mattermost/types/posts';
-
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import SelectBinding, {RawSelectBinding} from './select_binding';
 

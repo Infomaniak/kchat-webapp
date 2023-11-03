@@ -4,20 +4,19 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
+import {isMobile} from 'utils/user_agent';
+import {insertLineBreakFromKeyEvent, isKeyPressed, isUnhandledLineBreakKeyCombo, localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import Textbox, {TextboxLinks} from 'components/textbox';
 import type {TextboxElement} from 'components/textbox';
+import Textbox from 'components/textbox';
 import type TextboxClass from 'components/textbox/textbox';
-
-import Constants from 'utils/constants';
-import {isKeyPressed} from 'utils/keyboard';
-import {isMobile} from 'utils/user_agent';
-import {insertLineBreakFromKeyEvent, isUnhandledLineBreakKeyCombo, localizeMessage} from 'utils/utils';
+import TextboxLinks from 'components/textbox/textbox_links';
 
 const KeyCodes = Constants.KeyCodes;
 
@@ -68,7 +67,7 @@ type State = {
     header?: string;
     saving: boolean;
     show: boolean;
-    serverError?: ServerError | null;
+    serverError?: ServerError;
     postError?: React.ReactNode;
 }
 
@@ -97,21 +96,9 @@ export default class EditChannelHeaderModal extends React.PureComponent<Props, S
     };
 
     private handleChange = (e: React.ChangeEvent<TextboxElement>): void => {
-        const isInvalidLength = e.target.value.length > headerMaxLength;
-        if (isInvalidLength) {
-            this.setState({
-                header: e.target.value,
-                serverError: {
-                    server_error_id: 'model.channel.is_valid.header.app_error',
-                    message: 'Invalid header length',
-                },
-            });
-        } else {
-            this.setState({
-                header: e.target.value,
-                serverError: null,
-            });
-        }
+        this.setState({
+            header: e.target.value,
+        });
     };
 
     public handleSave = async (): Promise<void> => {
@@ -157,7 +144,7 @@ export default class EditChannelHeaderModal extends React.PureComponent<Props, S
 
         // listen for line break key combo and insert new line character
         if (isUnhandledLineBreakKeyCombo(e)) {
-            this.setState({header: insertLineBreakFromKeyEvent(e.nativeEvent)});
+            this.setState({header: insertLineBreakFromKeyEvent(e as React.KeyboardEvent<HTMLTextAreaElement>)});
         } else if (ctrlSend && isKeyPressed(e, KeyCodes.ENTER) && e.ctrlKey === true) {
             this.handleKeyPress(e);
         }
@@ -271,7 +258,7 @@ export default class EditChannelHeaderModal extends React.PureComponent<Props, S
                                 channelId={this.props.channel.id!}
                                 id='edit_textbox'
                                 ref={this.editChannelHeaderTextboxRef}
-                                characterLimit={headerMaxLength}
+                                characterLimit={1024}
                                 preview={this.props.shouldShowPreview}
                                 useChannelMentions={false}
                             />
@@ -282,7 +269,7 @@ export default class EditChannelHeaderModal extends React.PureComponent<Props, S
                                 showPreview={this.props.shouldShowPreview}
                                 updatePreview={this.setShowPreview}
                                 hasText={this.state.header ? this.state.header.length > 0 : false}
-                                hasExceededCharacterLimit={this.state.header ? this.state.header.length > headerMaxLength : false}
+                                hasExceededCharacterLimit={this.state.header ? this.state.header.length > 1024 : false}
                                 previewMessageLink={localizeMessage('edit_channel_header.previewHeader', 'Edit Header')}
                             />
                         </div>
@@ -293,7 +280,7 @@ export default class EditChannelHeaderModal extends React.PureComponent<Props, S
                 <Modal.Footer>
                     <button
                         type='button'
-                        className='btn btn-tertiary cancel-button'
+                        className='btn cancel-button secondary'
                         onClick={this.hideModal}
                     >
                         <FormattedMessage

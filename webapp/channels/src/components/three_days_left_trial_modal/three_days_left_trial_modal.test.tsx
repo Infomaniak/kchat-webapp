@@ -2,16 +2,14 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
+import TestHelper from 'packages/mattermost-redux/test/test_helper';
 import React from 'react';
 import {Provider} from 'react-redux';
-
-import {GenericModal} from '@mattermost/components';
-
-import ThreeDaysLeftTrialModal from 'components/three_days_left_trial_modal/three_days_left_trial_modal';
-
-import TestHelper from 'packages/mattermost-redux/test/test_helper';
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
+
+import GenericModal from 'components/generic_modal';
+import ThreeDaysLeftTrialModal from 'components/three_days_left_trial_modal/three_days_left_trial_modal';
 
 describe('components/three_days_left_trial_modal/three_days_left_trial_modal', () => {
     // required state to mount using the provider

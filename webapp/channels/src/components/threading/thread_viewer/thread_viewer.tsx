@@ -2,13 +2,14 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React from 'react';
 import type {HTMLAttributes} from 'react';
+import React from 'react';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import type {UserThread} from '@mattermost/types/threads';
 
+import type {ExtendedPost} from 'mattermost-redux/actions/posts';
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import deferComponentRender from 'components/deferComponentRender';
@@ -21,7 +22,7 @@ import ThreadViewerVirtualized from '../virtualized_thread_viewer';
 
 import './thread_viewer.scss';
 
-const DeferredThreadViewerVirt = deferComponentRender(ThreadViewerVirtualized);
+const DeferredThreadViewerVirt = deferComponentRender(ThreadViewerVirtualized); // where this is called is causing issues
 
 type Attrs = Pick<HTMLAttributes<HTMLDivElement>, 'className' | 'id'>;
 
@@ -31,6 +32,7 @@ export type Props = Attrs & {
     userThread?: UserThread | null;
     channel: Channel | null;
     selected: Post | FakePost;
+    previousRhsState?: string;
     currentUserId: string;
     currentTeamId: string;
     socketConnectionStatus: boolean;
@@ -39,6 +41,7 @@ export type Props = Attrs & {
         getNewestPostThread: (rootId: string) => Promise<any>|ActionFunc;
         getPostThread: (rootId: string, fetchThreads: boolean) => Promise<any>|ActionFunc;
         getThread: (userId: string, teamId: string, threadId: string, extended: boolean) => Promise<any>|ActionFunc;
+        removePost: (post: ExtendedPost) => void;
         selectPostCard: (post: Post) => void;
         updateThreadLastOpened: (threadId: string, lastViewedAt: number) => unknown;
         updateThreadRead: (userId: string, teamId: string, threadId: string, timestamp: number) => unknown;
@@ -48,7 +51,6 @@ export type Props = Attrs & {
     highlightedPostId?: Post['id'];
     selectedPostFocusedAt?: number;
     isThreadView?: boolean;
-    inputPlaceholder?: string;
 };
 
 type State = {
@@ -213,7 +215,6 @@ export default class ThreadViewer extends React.PureComponent<Props, State> {
                             <FileUploadOverlay overlayType='right'/>
                             {this.props.selected && (
                                 <DeferredThreadViewerVirt
-                                    inputPlaceholder={this.props.inputPlaceholder}
                                     key={this.props.selected.id}
                                     channel={this.props.channel}
                                     onCardClick={this.handleCardClick}

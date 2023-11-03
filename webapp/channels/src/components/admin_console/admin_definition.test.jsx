@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {Constants} from 'utils/constants';
 import * as yup from 'yup';
 
 import adminDefinition from 'components/admin_console/admin_definition.jsx';
-import {Constants} from 'utils/constants';
 
 const baseShape = {
     label: yup.string().required(),

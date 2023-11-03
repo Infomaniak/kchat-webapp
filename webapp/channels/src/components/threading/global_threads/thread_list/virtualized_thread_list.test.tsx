@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import React from 'react';
 import type {ComponentProps} from 'react';
+import React from 'react';
 
 import VirtualizedThreadList from './virtualized_thread_list';
 

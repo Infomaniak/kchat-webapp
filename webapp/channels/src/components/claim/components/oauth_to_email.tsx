@@ -3,15 +3,17 @@
 
 import classNames from 'classnames';
 import React, {useRef, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
+import type {getPasswordConfig} from 'utils/utils';
+import {isValidPassword, localizeMessage, toTitleCase} from 'utils/utils';
 
 import type {AuthChangeResponse} from '@mattermost/types/users';
 
 import {oauthToEmail} from 'actions/admin_actions.jsx';
 
-import Constants from 'utils/constants';
-import {isValidPassword, localizeMessage, toTitleCase} from 'utils/utils';
-import type {getPasswordConfig} from 'utils/utils';
+import LocalizedInput from 'components/localized_input/localized_input';
 
 import ErrorLabel from './error_label';
 
@@ -23,7 +25,6 @@ type Props = {
 }
 
 const OAuthToEmail = (props: Props) => {
-    const intl = useIntl();
     const passwordInput = useRef<HTMLInputElement>(null);
     const passwordConfirmInput = useRef<HTMLInputElement>(null);
 
@@ -70,6 +71,8 @@ const OAuthToEmail = (props: Props) => {
     };
 
     const uiType = `${(props.currentType === Constants.SAML_SERVICE ? Constants.SAML_SERVICE.toUpperCase() : toTitleCase(props.currentType || ''))} SSO`;
+    const placeholderPasswordMessage = {id: t('claim.oauth_to_email.newPwd'), defaultMessage: 'New Password'};
+    const placeholderConfirmMessage = {id: t('claim.oauth_to_email.confirm'), defaultMessage: 'Confirm Password'};
 
     return (
         <>
@@ -95,28 +98,22 @@ const OAuthToEmail = (props: Props) => {
                     />
                 </p>
                 <div className={classNames('form-group', {'has-error': error})}>
-                    <input
+                    <LocalizedInput
                         type='password'
                         className='form-control'
                         name='password'
                         ref={passwordInput}
-                        placeholder={intl.formatMessage({
-                            id: 'claim.oauth_to_email.newPwd',
-                            defaultMessage: 'New Password',
-                        })}
+                        placeholder={placeholderPasswordMessage}
                         spellCheck='false'
                     />
                 </div>
                 <div className={classNames('form-group', {'has-error': error})}>
-                    <input
+                    <LocalizedInput
                         type='password'
                         className='form-control'
                         name='passwordconfirm'
                         ref={passwordConfirmInput}
-                        placeholder={intl.formatMessage({
-                            id: 'claim.oauth_to_email.confirm',
-                            defaultMessage: 'Confirm Password',
-                        })}
+                        placeholder={placeholderConfirmMessage}
                         spellCheck='false'
                     />
                 </div>

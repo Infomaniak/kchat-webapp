@@ -1,22 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import React, {memo, useState, useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {FormattedMessage} from 'react-intl';
 
+import React, {memo, useState, useCallback} from 'react';
 import {Modal} from 'react-bootstrap';
+import {FormattedMessage} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
+import {localizeMessage} from 'utils/utils';
+
+import type {TopThread} from '@mattermost/types/insights';
 
 import {joinChannel} from 'mattermost-redux/actions/channels';
-
-import {TopThread} from '@mattermost/types/insights';
-
-import {ActionResult} from 'mattermost-redux/types/actions';
-
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {selectPost} from 'actions/views/rhs';
-
-import {localizeMessage} from 'utils/utils';
 
 import SaveButton from 'components/save_button';
 

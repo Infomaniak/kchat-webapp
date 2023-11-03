@@ -1,21 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {screen, fireEvent} from '@testing-library/react';
 import React from 'react';
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import {renderWithIntlAndStore} from 'tests/react_testing_utils';
+import {Locations} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import type {PostType} from '@mattermost/types/posts';
 import type {DeepPartial} from '@mattermost/types/utilities';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-import {fireEvent, renderWithIntlAndStore, screen} from 'tests/react_testing_utils';
-import {Locations} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
-
 import type {GlobalState} from 'types/store';
 
-import DotMenu from './dot_menu';
 import type {DotMenuClass} from './dot_menu';
-
+import DotMenu from './dot_menu';
+import * as dotUtils from './utils';
 jest.mock('./utils');
 
 describe('components/dot_menu/DotMenu', () => {
@@ -134,6 +134,7 @@ describe('components/dot_menu/DotMenu', () => {
             setThreadFollow: jest.fn(),
             addPostReminder: jest.fn(),
             setGlobalItem: jest.fn(),
+            translatePost: jest.fn(),
         },
         canEdit: false,
         canDelete: false,
@@ -146,6 +147,9 @@ describe('components/dot_menu/DotMenu', () => {
         threadReplyCount: 0,
         userId: 'user_id_1',
         isMilitaryTime: false,
+        showForwardPostNewLabel: false,
+        isMilitaryTime: false,
+        postTranslationEnabled: true,
     };
 
     test('should match snapshot, on Center', () => {
@@ -171,6 +175,32 @@ describe('components/dot_menu/DotMenu', () => {
             ...baseProps,
             canEdit: true,
             canDelete: true,
+        };
+        const wrapper = renderWithIntlAndStore(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should match snapshot, show "New" badge on forward post', () => {
+        const props = {
+            ...baseProps,
+            showForwardPostNewLabel: true,
+        };
+        const wrapper = renderWithIntlAndStore(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should match snapshot, hide "New" badge on forward post', () => {
+        const props = {
+            ...baseProps,
+            showForwardPostNewLabel: false,
         };
         const wrapper = renderWithIntlAndStore(
             <DotMenu {...props}/>,
@@ -286,6 +316,40 @@ describe('components/dot_menu/DotMenu', () => {
             const menuItem = screen.getByTestId(`follow_post_thread_${baseProps.post.id}`);
             expect(menuItem).toBeVisible();
             expect(menuItem).toHaveTextContent(text);
+        });
+
+        test.each([
+            [false, {isFollowingThread: true}],
+            [true, {isFollowingThread: false}],
+        ])('should call setThreadFollow with following as %s', async (following, caseProps) => {
+            const spySetThreadFollow = jest.fn();
+            const spy = jest.spyOn(dotUtils, 'trackDotMenuEvent');
+
+            const props = {
+                ...baseProps,
+                ...caseProps,
+                location: Locations.RHS_ROOT,
+                actions: {
+                    ...baseProps.actions,
+                    setThreadFollow: spySetThreadFollow,
+                },
+            };
+            renderWithIntlAndStore(
+                <DotMenu {...props}/>,
+                initialState,
+            );
+            const button = screen.getByTestId(`PostDotMenu-Button-${baseProps.post.id}`);
+            fireEvent.click(button);
+            const menuItem = screen.getByTestId(`follow_post_thread_${baseProps.post.id}`);
+            expect(menuItem).toBeVisible();
+            fireEvent.mouseDown(menuItem);
+            expect(spy).toHaveBeenCalled();
+            expect(spySetThreadFollow).toHaveBeenCalledWith(
+                'user_id_1',
+                'team_id_1',
+                'post_id_1',
+                following,
+            );
         });
     });
 });

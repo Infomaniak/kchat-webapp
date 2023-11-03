@@ -2,27 +2,28 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
+
 import timezones from 'timezones.json';
 
-import {CollapsedThreads} from '@mattermost/types/config';
-import type {PreferenceType} from '@mattermost/types/preferences';
-import type {UserProfile} from '@mattermost/types/users';
+import {GenericAction, ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
 
+import {updateMe} from 'mattermost-redux/actions/users';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {autoUpdateTimezone} from 'mattermost-redux/actions/timezone';
-import {updateMe} from 'mattermost-redux/actions/users';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
-import {get, isCollapsedThreadsAllowed, getCollapsedThreadsPreference} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTimezoneFull, getCurrentTimezoneLabel} from 'mattermost-redux/selectors/entities/timezone';
 import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
-import type {GenericAction, ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+import {get, isCollapsedThreadsAllowed, getCollapsedThreadsPreference} from 'mattermost-redux/selectors/entities/preferences';
+import {getTimezoneLabel, makeGetUserTimezone} from 'mattermost-redux/selectors/entities/timezone';
 import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
 
-import {Preferences} from 'utils/constants';
+import {CollapsedThreads} from '@mattermost/types/config';
+import {PreferenceType} from '@mattermost/types/preferences';
+import {UserProfile} from '@mattermost/types/users';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
+import {Preferences} from 'utils/constants';
 
 import UserSettingsDisplay from './user_settings_display';
 
@@ -33,17 +34,20 @@ type Actions = {
 }
 
 export function makeMapStateToProps() {
+    const getUserTimezone = makeGetUserTimezone();
+
     return (state: GlobalState) => {
         const config = getConfig(state);
         const currentUserId = getCurrentUserId(state);
-        const userTimezone = getCurrentTimezoneFull(state);
+        const userTimezone = getUserTimezone(state, currentUserId);
         const automaticTimezoneNotSet = userTimezone && userTimezone.useAutomaticTimezone && !userTimezone.automaticTimezone;
         const shouldAutoUpdateTimezone = !userTimezone || automaticTimezoneNotSet;
-        const timezoneLabel = getCurrentTimezoneLabel(state);
+        const timezoneLabel = getTimezoneLabel(state, currentUserId);
         const allowCustomThemes = config.AllowCustomThemes === 'true';
         const enableLinkPreviews = config.EnableLinkPreviews === 'true';
         const defaultClientLocale = config.DefaultClientLocale as string;
         const enableThemeSelection = config.EnableThemeSelection === 'true';
+        const enableTimezone = config.ExperimentalTimezone === 'true';
         const lockTeammateNameDisplay = getLicense(state).LockTeammateNameDisplay === 'true' && config.LockTeammateNameDisplay === 'true';
         const configTeammateNameDisplay = config.TeammateNameDisplay as string;
         const emojiPickerEnabled = config.EnableEmojiPicker === 'true';
@@ -61,6 +65,7 @@ export function makeMapStateToProps() {
             enableLinkPreviews,
             defaultClientLocale,
             enableThemeSelection,
+            enableTimezone,
             timezones,
             timezoneLabel,
             userTimezone,

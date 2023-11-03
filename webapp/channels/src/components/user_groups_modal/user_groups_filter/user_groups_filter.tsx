@@ -70,7 +70,7 @@ const UserGroupsFilter = (props: Props) => {
                             rightDecorator={selectedFilter === 'my' && <i className='icon icon-check'/>}
                         />
                     </Menu.Group>
-                    <Menu.Group>
+                    {/* <Menu.Group>
                         <Menu.ItemAction
                             id='groupsDropdownArchived'
                             buttonClass='groups-filter-btn'
@@ -78,7 +78,7 @@ const UserGroupsFilter = (props: Props) => {
                             text={intl.formatMessage({id: 'user_groups_modal.archivedGroups', defaultMessage: 'Archived Groups'})}
                             rightDecorator={selectedFilter === 'archived' && <i className='icon icon-check'/>}
                         />
-                    </Menu.Group>
+                    </Menu.Group> */}
                 </Menu>
             </MenuWrapper>
         </div>

@@ -3,11 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import SingleImageView from 'components/single_image_view/single_image_view';
 import SizeAwareImage from 'components/size_aware_image';
-
-import {TestHelper} from 'utils/test_helper';
 
 describe('components/SingleImageView', () => {
     const baseProps = {
@@ -85,7 +84,7 @@ describe('components/SingleImageView', () => {
             <SingleImageView {...baseProps}/>,
         );
         expect(wrapper.state('loaded')).toEqual(false);
-        wrapper.find(SizeAwareImage).prop('onImageLoaded')();
+        wrapper.find(SizeAwareImage).prop('onImageLoaded')({width: 0, height: 0});
         expect(wrapper.state('loaded')).toEqual(true);
         expect(wrapper).toMatchSnapshot();
     });

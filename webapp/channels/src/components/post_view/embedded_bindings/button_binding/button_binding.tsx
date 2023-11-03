@@ -2,8 +2,9 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
+import {injectIntl} from 'react-intl';
+import {createCallContext} from 'utils/apps';
 
 import type {AppBinding} from '@mattermost/types/apps';
 import type {Channel} from '@mattermost/types/channels';
@@ -14,8 +15,6 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import Markdown from 'components/markdown';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
-
-import {createCallContext} from 'utils/apps';
 
 import type {PostEphemeralCallResponseForPost, HandleBindingClick, OpenAppsModal} from 'types/apps';
 

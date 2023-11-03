@@ -3,13 +3,12 @@
 
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
+import Constants from 'utils/constants';
 
 import {isCustomStatusEnabled} from 'selectors/views/custom_status';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

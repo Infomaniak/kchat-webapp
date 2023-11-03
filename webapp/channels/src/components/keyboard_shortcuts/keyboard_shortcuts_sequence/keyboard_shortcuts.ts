@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {MessageDescriptor} from 'react-intl';
+import {MessageDescriptor} from 'react-intl';
 
 import {t} from 'utils/i18n';
 
@@ -451,6 +451,16 @@ export const KEYBOARD_SHORTCUTS = {
             defaultMessage: 'Link:\t⌘|⌥|K',
         },
     },
+    msgMarkAllAsRead: {
+        default: {
+            id: t('shortcuts.msgs.mark_all_as_read'),
+            defaultMessage: 'Mark all messages as read:\tAlt|Esc',
+        },
+        mac: {
+            id: t('shortcuts.msgs.mark_all_as_read.mac'),
+            defaultMessage: 'Mark all messages as read:\t⌥|Esc',
+        },
+    },
     filesUpload: {
         default: {
             id: t('shortcuts.files.upload'),
@@ -534,4 +544,14 @@ export const KEYBOARD_SHORTCUTS = {
         },
     },
     calls: callsKBShortcuts,
+    schedulePost: {
+        default: {
+            id: 'create_post.schedule_post.tooltip',
+            defaultMessage: 'Schedule a post:\tShift|Alt|S',
+        },
+        mac: {
+            id: 'create_post.schedule_post.tooltip.mac',
+            defaultMessage: 'Schedule a post:\tShift|⌥|S',
+        },
+    },
 };

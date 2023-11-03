@@ -3,6 +3,8 @@
 
 jest.mock('mattermost-redux/actions/users');
 
+import configureStore from 'tests/test_store';
+
 import * as UserActions from 'mattermost-redux/actions/users';
 
 import {
@@ -10,8 +12,6 @@ import {
     deactivateMfa,
     generateMfaSecret,
 } from 'actions/views/mfa';
-
-import configureStore from 'tests/test_store';
 
 describe('actions/views/mfa', () => {
     describe('activateMfa', () => {

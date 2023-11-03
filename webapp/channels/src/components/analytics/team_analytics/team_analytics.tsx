@@ -3,6 +3,8 @@
 
 import React from 'react';
 import {FormattedDate, FormattedMessage} from 'react-intl';
+import {StatTypes} from 'utils/constants';
+import {getMonthLong} from 'utils/i18n';
 
 import type {AnalyticsRow} from '@mattermost/types/admin';
 import type {ClientLicense} from '@mattermost/types/config';
@@ -23,10 +25,6 @@ import TrueUpReview from 'components/analytics/true_up_review';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LoadingScreen from 'components/loading_screen';
-import AdminHeader from 'components/widgets/admin_console/admin_header';
-
-import {StatTypes} from 'utils/constants';
-import {getMonthLong} from 'utils/i18n';
 
 import {formatPostsPerDayData, formatUsersWithPostsPerDayData, synchronizeChartLabels} from '../format';
 
@@ -287,7 +285,7 @@ export default class TeamAnalytics extends React.PureComponent<Props, State> {
 
         return (
             <div className='wrapper--fixed team_statistics'>
-                <AdminHeader>
+                <div className='admin-console__header team-statistics__header-row'>
                     <div className='team-statistics__header'>
                         <FormattedMarkdownMessage
                             id='analytics.team.title'
@@ -307,11 +305,11 @@ export default class TeamAnalytics extends React.PureComponent<Props, State> {
                             {teams}
                         </select>
                     </div>
-                </AdminHeader>
+                </div>
 
                 <div className='admin-console__wrapper'>
                     <div className='admin-console__content'>
-                        <TrueUpReview/>
+                        {/* <TrueUpReview/> */}
                         {banner}
                         <div className='grid-statistics'>
                             <ActivatedUserCard

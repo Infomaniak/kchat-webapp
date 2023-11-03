@@ -9,45 +9,60 @@ import type {ServerError} from '@mattermost/types/errors';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import Provider from './provider';
-import type {ResultsCallback} from './provider';
-import {SuggestionContainer} from './suggestion';
-import type {SuggestionProps} from './suggestion';
+import Suggestion from './suggestion.jsx';
+
+export type Results = {
+    matchedPretext: string;
+    terms: string[];
+    items: Channel[];
+    component: React.ElementType;
+}
+
+type ResultsCallback = (results: Results) => void;
 
 type ChannelSearchFunc = (term: string, success: (channels: Channel[]) => void, error?: (err: ServerError) => void) => (ActionResult | Promise<ActionResult | ActionResult[]>);
 
-const GenericChannelSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<Channel>>((props, ref) => {
-    const {item} = props;
+class ChannelSuggestion extends Suggestion {
+    render() {
+        const isSelection = this.props.isSelection;
+        const item = this.props.item;
 
-    const channelName = item.display_name;
-    const purpose = item.purpose;
+        const channelName = item.display_name;
+        const purpose = item.purpose;
 
-    const icon = (
-        <span className='suggestion-list__icon suggestion-list__icon--large'>
-            <i className='icon icon--standard icon--no-spacing icon-globe'/>
-        </span>
-    );
+        const icon = (
+            <span className='suggestion-list__icon suggestion-list__icon--large'>
+                <i className='icon icon--standard icon--no-spacing icon-globe'/>
+            </span>
+        );
+        let className = 'suggestion-list__item';
+        if (isSelection) {
+            className += ' suggestion--selected';
+        }
 
-    const description = '(~' + item.name + ')';
+        const description = '(~' + item.name + ')';
 
-    return (
-        <SuggestionContainer
-            ref={ref}
-            {...props}
-        >
-            {icon}
-            <div className='suggestion-list__ellipsis'>
-                <span className='suggestion-list__main'>
-                    {channelName}
-                </span>
-                {description}
-                {purpose}
+        return (
+            <div
+                className={className}
+                onClick={this.handleClick}
+                onMouseMove={this.handleMouseMove}
+                {...Suggestion.baseProps}
+            >
+                {icon}
+                <div className='suggestion-list__ellipsis'>
+                    <span className='suggestion-list__main'>
+                        {channelName}
+                    </span>
+                    {description}
+                    {purpose}
+                </div>
             </div>
-        </SuggestionContainer>
-    );
-});
-GenericChannelSuggestion.displayName = 'GenericChannelSuggestion';
+        );
+    }
+}
 
-export default class GenericChannelProvider extends Provider {
+export default class ChannelProvider extends Provider {
     autocompleteChannels: ChannelSearchFunc;
     constructor(channelSearchFunc: ChannelSearchFunc) {
         super();
@@ -55,22 +70,24 @@ export default class GenericChannelProvider extends Provider {
         this.autocompleteChannels = channelSearchFunc;
     }
 
-    handlePretextChanged(pretext: string, resultsCallback: ResultsCallback<Channel>) {
+    handlePretextChanged(pretext: string, resultsCallback: ResultsCallback) {
         const normalizedPretext = pretext.toLowerCase();
         this.startNewRequest(normalizedPretext);
 
         this.autocompleteChannels(
             normalizedPretext,
-            (channels: Channel[]) => {
+            (data: Channel[]) => {
                 if (this.shouldCancelDispatch(normalizedPretext)) {
                     return;
                 }
+
+                const channels: Channel[] = Object.assign([], data);
 
                 resultsCallback({
                     matchedPretext: normalizedPretext,
                     terms: channels.map((channel: Channel) => channel.display_name),
                     items: channels,
-                    component: GenericChannelSuggestion,
+                    component: ChannelSuggestion,
                 });
             },
         );

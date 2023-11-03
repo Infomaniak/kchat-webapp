@@ -1,9 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo} from 'react';
-import {MessageDescriptor, useIntl} from 'react-intl';
-import styled from 'styled-components';
 import {
     FormatBoldIcon,
     FormatItalicIcon,
@@ -15,18 +12,22 @@ import {
     FormatListBulletedIcon,
     FormatListNumberedIcon,
 } from '@infomaniak/compass-icons/components';
-import IconProps from '@infomaniak/compass-icons/components/props';
+import type IconProps from '@infomaniak/compass-icons/components/props';
+import React, {memo} from 'react';
+import type {MessageDescriptor} from 'react-intl';
+import {useIntl} from 'react-intl';
+import styled from 'styled-components';
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
+import type {MarkdownMode} from 'utils/markdown/apply_markdown';
 
+import type {
+    KeyboardShortcutDescriptor} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import KeyboardShortcutSequence, {
-    KeyboardShortcutDescriptor,
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import {MarkdownMode} from 'utils/markdown/apply_markdown';
-import Constants from 'utils/constants';
-import {t} from 'utils/i18n';
 
 export const IconContainer = styled.button`
     display: flex;

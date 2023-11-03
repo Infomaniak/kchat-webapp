@@ -2,19 +2,16 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
-
-import type {GlobalState} from '@mattermost/types/store';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
 import {switchLdapToEmail} from 'mattermost-redux/actions/users';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {GlobalState} from '@mattermost/types/store';
+import {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
 
 import {getPasswordConfig} from 'utils/utils';
 
-import ClaimController from './claim_controller';
-import type {Props} from './claim_controller';
+import ClaimController, {Props} from './claim_controller';
 
 function mapStateToProps(state: GlobalState) {
     const config = getConfig(state);

@@ -1,118 +1,125 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
+
+import {Client4} from 'mattermost-redux/client';
+import {rudderAnalytics, RudderTelemetryHandler} from 'mattermost-redux/client/rudder';
+
+import type {ProductComponent, PluginComponent} from 'types/store/plugins';
+
+import SystemNotice from 'components/system_notice';
+
+// import OpenPricingModalPost from 'components/custom_open_pricing_modal_post_renderer';
+// import OpenPluginInstallPost from 'components/custom_open_plugin_install_post_renderer';
+
+
+// import BrowserStore from 'stores/browser_store';
+
+import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
+import {EmojiIndicesByAlias} from 'utils/emoji';
+import * as Utils from 'utils/utils';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+import webSocketClient from 'client/web_websocket_client.jsx';
 import deepEqual from 'fast-deep-equal';
+import throttle from 'lodash/throttle';
+import {initializePlugins} from 'plugins';
+import Pluggable from 'plugins/pluggable';
 import React from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
-import {ServiceEnvironment} from '@mattermost/types/config';
-import type {UserProfile} from '@mattermost/types/users';
+import LocalStorageStore from 'stores/local_storage_store';
 
+import 'plugins/export.js';
+
+const LazyErrorPage = Utils.lazyWithRetries(() => import('components/error_page'));
+const LazyLogin = Utils.lazyWithRetries(() => import('components/login/login'));
+const LazyLoggedIn = Utils.lazyWithRetries(() => import('components/logged_in'));
+const LazyHelpController = Utils.lazyWithRetries(() => import('components/help/help_controller'));
+
+// const LazyLinkingLandingPage = Utils.lazyWithRetries(() => import('components/linking_landing_page'));
+const LazyPreparingWorkspace = Utils.lazyWithRetries(() => import('components/preparing_workspace'));
+const LazyTeamController = Utils.lazyWithRetries(() => import('components/team_controller'));
+const LazyOnBoardingTaskList = Utils.lazyWithRetries(() => import('components/onboarding_tasklist'));
+
+import A11yController from 'utils/a11y_controller';
+
+import {IKConstants} from 'utils/constants-ik';
+
+import {close, initialize} from 'actions/websocket_actions';
+
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getSiteURL} from 'utils/url';
+import {UserProfile} from '@mattermost/types/users';
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
-import {Client4} from 'mattermost-redux/client';
-import {rudderAnalytics, RudderTelemetryHandler} from 'mattermost-redux/client/rudder';
 import {General} from 'mattermost-redux/constants';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
-import {getActiveTeamsList} from 'mattermost-redux/selectors/entities/teams';
+import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, isCurrentUserSystemAdmin, checkIsFirstAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {ActionResult} from 'mattermost-redux/types/actions';
+import {ActionResult} from 'mattermost-redux/types/actions';
 
+import {setCallListeners} from 'actions/calls';
 import {loadRecentlyUsedCustomEmojis} from 'actions/emoji_actions';
 import * as GlobalActions from 'actions/global_actions';
-import {measurePageLoadTelemetry, temporarilySetPageLoadContext, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
-import BrowserStore from 'stores/browser_store';
-import store from 'stores/redux_store';
+import {measurePageLoadTelemetry, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
+import {clearUserCookie} from 'actions/views/cookie';
+import store from 'stores/redux_store.jsx';
 
 import AccessProblem from 'components/access_problem';
 import AnnouncementBarController from 'components/announcement_bar';
 import AppBar from 'components/app_bar/app_bar';
 import {makeAsyncComponent} from 'components/async_load';
-import CloudEffects from 'components/cloud_effects';
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
-import OpenPluginInstallPost from 'components/custom_open_plugin_install_post_renderer';
-import OpenPricingModalPost from 'components/custom_open_pricing_modal_post_renderer';
 import GlobalHeader from 'components/global_header/global_header';
 import {HFRoute} from 'components/header_footer_route/header_footer_route';
-import {HFTRoute, LoggedInHFTRoute} from 'components/header_footer_template_route';
-import MobileViewWatcher from 'components/mobile_view_watcher';
+import {HFTRoute} from 'components/header_footer_template_route';
 import ModalController from 'components/modal_controller';
 import LaunchingWorkspace, {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'components/preparing_workspace/launching_workspace';
 import {Animations} from 'components/preparing_workspace/steps';
 import SidebarRight from 'components/sidebar_right';
 import SidebarRightMenu from 'components/sidebar_right_menu';
-import SystemNotice from 'components/system_notice';
 import TeamSidebar from 'components/team_sidebar';
-import WindowSizeObserver from 'components/window_size_observer/WindowSizeObserver';
-
-import webSocketClient from 'client/web_websocket_client';
-import {initializePlugins} from 'plugins';
-import Pluggable from 'plugins/pluggable';
-import A11yController from 'utils/a11y_controller';
-import {PageLoadContext, StoragePrefixes} from 'utils/constants';
-import {EmojiIndicesByAlias} from 'utils/emoji';
-import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
-import {getSiteURL} from 'utils/url';
-import * as UserAgent from 'utils/user_agent';
-import * as Utils from 'utils/utils';
-
-import type {ProductComponent, PluginComponent} from 'types/store/plugins';
+import WelcomePostRenderer from 'components/welcome_post_renderer';
 
 import {applyLuxonDefaults} from './effects';
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
 
-import 'plugins/export.js';
+import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
-const LazyErrorPage = React.lazy(() => import('components/error_page'));
-const LazyLogin = React.lazy(() => import('components/login/login'));
-const LazyAdminConsole = React.lazy(() => import('components/admin_console'));
-const LazyLoggedIn = React.lazy(() => import('components/logged_in'));
-const LazyPasswordResetSendLink = React.lazy(() => import('components/password_reset_send_link'));
-const LazyPasswordResetForm = React.lazy(() => import('components/password_reset_form'));
-const LazySignup = React.lazy(() => import('components/signup/signup'));
-const LazyTermsOfService = React.lazy(() => import('components/terms_of_service'));
-const LazyShouldVerifyEmail = React.lazy(() => import('components/should_verify_email/should_verify_email'));
-const LazyDoVerifyEmail = React.lazy(() => import('components/do_verify_email/do_verify_email'));
-const LazyClaimController = React.lazy(() => import('components/claim'));
-const LazyLinkingLandingPage = React.lazy(() => import('components/linking_landing_page'));
-const LazySelectTeam = React.lazy(() => import('components/select_team'));
-const LazyAuthorize = React.lazy(() => import('components/authorize'));
-const LazyCreateTeam = React.lazy(() => import('components/create_team'));
-const LazyMfa = React.lazy(() => import('components/mfa/mfa_controller'));
-const LazyPreparingWorkspace = React.lazy(() => import('components/preparing_workspace'));
-const LazyTeamController = React.lazy(() => import('components/team_controller'));
-const LazyDelinquencyModalController = React.lazy(() => import('components/delinquency_modal'));
-const LazyOnBoardingTaskList = React.lazy(() => import('components/onboarding_tasklist'));
-
-const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
-const TermsOfService = makeAsyncComponent('TermsOfService', LazyTermsOfService);
 const Login = makeAsyncComponent('LoginController', LazyLogin);
-const AdminConsole = makeAsyncComponent('AdminConsole', LazyAdminConsole);
 const LoggedIn = makeAsyncComponent('LoggedIn', LazyLoggedIn);
-const PasswordResetSendLink = makeAsyncComponent('PasswordResedSendLink', LazyPasswordResetSendLink);
-const PasswordResetForm = makeAsyncComponent('PasswordResetForm', LazyPasswordResetForm);
-const Signup = makeAsyncComponent('SignupController', LazySignup);
-const ShouldVerifyEmail = makeAsyncComponent('ShouldVerifyEmail', LazyShouldVerifyEmail);
-const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
-const ClaimController = makeAsyncComponent('ClaimController', LazyClaimController);
-const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', LazyLinkingLandingPage);
-const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
-const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
-const Mfa = makeAsyncComponent('Mfa', LazyMfa);
+const HelpController = makeAsyncComponent('HelpController', LazyHelpController);
+
+// const LinkingLandingPage = makeAsyncComponent('LinkingLandingPage', LazyLinkingLandingPage);
 const PreparingWorkspace = makeAsyncComponent('PreparingWorkspace', LazyPreparingWorkspace);
 const TeamController = makeAsyncComponent('TeamController', LazyTeamController);
-const DelinquencyModalController = makeAsyncComponent('DelinquencyModalController', LazyDelinquencyModalController);
 const OnBoardingTaskList = makeAsyncComponent('OnboardingTaskList', LazyOnBoardingTaskList);
+
+const MAX_GET_TOKEN_FAILS = 5;
+const MIN_GET_TOKEN_RETRY_TIME = 2000; // 2 sec
+
+// const SelectTeam = makeAsyncComponent('SelectTeam', LazySelectTeam);
+// const DoVerifyEmail = makeAsyncComponent('DoVerifyEmail', LazyDoVerifyEmail);
+// const ClaimController = makeAsyncComponent('ClaimController', LazyClaimController);
+// const PasswordResetForm = makeAsyncComponent('PasswordResetForm', LazyPasswordResetForm);
+// const ShouldVerifyEmail = makeAsyncComponent('ShouldVerifyEmail', LazyShouldVerifyEmail);
+// const PasswordResetSendLink = makeAsyncComponent('PasswordResedSendLink', LazyPasswordResetSendLink);
+// const Signup = makeAsyncComponent('SignupController', LazySignup);
+// const TermsOfService = makeAsyncComponent('TermsOfService', LazyTermsOfService);
+// const CreateTeam = makeAsyncComponent('CreateTeam', LazyCreateTeam);
+// const AdminConsole = makeAsyncComponent('AdminConsole', LazyAdminConsole);
+// const Authorize = makeAsyncComponent('Authorize', LazyAuthorize);
+// const DelinquencyModalController = makeAsyncComponent('DelinquencyModalController', LazyDelinquencyModalController);
 
 type LoggedInRouteProps<T> = {
     component: React.ComponentType<T>;
-    path: string | string[];
+    path: string;
     theme?: Theme; // the routes that send the theme are the ones that will actually need to show the onboarding tasklist
 };
 function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
@@ -135,6 +142,7 @@ function LoggedInRoute<T>(props: LoggedInRouteProps<T>) {
 const noop = () => {};
 
 export type Actions = {
+    emitBrowserWindowResized: (size?: string) => void;
     getFirstAdminSetupComplete: () => Promise<ActionResult>;
     getProfiles: (page?: number, pageSize?: number, options?: Record<string, any>) => Promise<ActionResult>;
     migrateRecentEmojis: () => void;
@@ -165,21 +173,39 @@ interface State {
 }
 
 export default class Root extends React.PureComponent<Props, State> {
+    private desktopMediaQuery: MediaQueryList;
+    private smallDesktopMediaQuery: MediaQueryList;
+    private tabletMediaQuery: MediaQueryList;
+    private mobileMediaQuery: MediaQueryList;
     private mounted: boolean;
+    private retryGetToken: number;
+    private IKLoginCode: string | undefined;
+    private loginCodeInterval: NodeJS.Timer | undefined;
+    private tokenCheckInterval: NodeJS.Timer | undefined;
 
     // The constructor adds a bunch of event listeners,
     // so we do need this.
     private a11yController: A11yController;
 
+    // Whether the app is running in an iframe.
+    private embeddedInIFrame: boolean;
+
     constructor(props: Props) {
         super(props);
         this.mounted = false;
+        this.retryGetToken = 0;
+        this.IKLoginCode = undefined;
+        this.loginCodeInterval = undefined;
+        this.tokenCheckInterval = undefined;
 
         // Redux
         setUrl(getSiteURL());
 
-        // Disable auth header to enable CSRF check
-        Client4.setAuthHeader = false;
+        if (!isDesktopApp()) {
+            Client4.setAuthHeader = false; // Disable auth header to enable CSRF check
+        }
+
+        setCallListeners();
 
         setSystemEmojis(new Set(EmojiIndicesByAlias.keys()));
 
@@ -207,27 +233,31 @@ export default class Root extends React.PureComponent<Props, State> {
 
         this.a11yController = new A11yController();
 
+        // set initial window size state
+        this.desktopMediaQuery = window.matchMedia(`(min-width: ${Constants.DESKTOP_SCREEN_WIDTH + 1}px)`);
+        this.smallDesktopMediaQuery = window.matchMedia(`(min-width: ${Constants.TABLET_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.DESKTOP_SCREEN_WIDTH}px)`);
+        this.tabletMediaQuery = window.matchMedia(`(min-width: ${Constants.MOBILE_SCREEN_WIDTH + 1}px) and (max-width: ${Constants.TABLET_SCREEN_WIDTH}px)`);
+        this.mobileMediaQuery = window.matchMedia(`(max-width: ${Constants.MOBILE_SCREEN_WIDTH}px)`);
+
+        this.updateWindowSize();
+
         store.subscribe(() => applyLuxonDefaults(store.getState()));
+
+        this.embeddedInIFrame = window.self !== window.top;
     }
 
     onConfigLoaded = () => {
-        const config = getConfig(store.getState());
         const telemetryId = this.props.telemetryId;
 
-        const rudderUrl = 'https://pdat.matterlytics.com';
-        let rudderKey = '';
-        switch (config.ServiceEnvironment) {
-        case ServiceEnvironment.PRODUCTION:
-            rudderKey = '1aoejPqhgONMI720CsBSRWzzRQ9';
-            break;
-        case ServiceEnvironment.TEST:
-            rudderKey = '1aoeoCDeh7OCHcbW2kseWlwUFyq';
-            break;
-        case ServiceEnvironment.DEV:
-            break;
+        let rudderKey: string | null | undefined = Constants.TELEMETRY_RUDDER_KEY;
+        let rudderUrl: string | null | undefined = Constants.TELEMETRY_RUDDER_DATAPLANE_URL;
+
+        if (rudderKey.startsWith('placeholder') && rudderUrl.startsWith('placeholder')) {
+            rudderKey = process.env.RUDDER_KEY; //eslint-disable-line no-process-env
+            rudderUrl = process.env.RUDDER_DATAPLANE_URL; //eslint-disable-line no-process-env
         }
 
-        if (rudderKey !== '' && this.props.telemetryEnabled) {
+        if (rudderKey != null && rudderKey !== '' && this.props.telemetryEnabled) {
             const rudderCfg: {setCookieDomain?: string} = {};
             const siteURL = getConfig(store.getState()).SiteURL;
             if (siteURL !== '') {
@@ -275,10 +305,6 @@ export default class Root extends React.PureComponent<Props, State> {
             });
         }
 
-        if (this.props.location.pathname === '/' && this.props.noAccounts) {
-            this.props.history.push('/signup_user_complete');
-        }
-
         Promise.all([
             this.props.actions.initializeProducts(),
             initializePlugins(),
@@ -293,40 +319,40 @@ export default class Root extends React.PureComponent<Props, State> {
         this.props.actions.migrateRecentEmojis();
         loadRecentlyUsedCustomEmojis()(store.dispatch, store.getState);
 
-        const iosDownloadLink = getConfig(store.getState()).IosAppDownloadLink;
-        const androidDownloadLink = getConfig(store.getState()).AndroidAppDownloadLink;
-        const desktopAppDownloadLink = getConfig(store.getState()).AppDownloadLink;
+        // const iosDownloadLink = getConfig(store.getState()).IosAppDownloadLink;
+        // const androidDownloadLink = getConfig(store.getState()).AndroidAppDownloadLink;
+        // const desktopAppDownloadLink = getConfig(store.getState()).AppDownloadLink;
 
-        const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
+        // const toResetPasswordScreen = this.props.location.pathname === '/reset_password_complete';
 
         // redirect to the mobile landing page if the user hasn't seen it before
-        let landing;
-        if (UserAgent.isAndroidWeb()) {
-            landing = androidDownloadLink;
-        } else if (UserAgent.isIosWeb()) {
-            landing = iosDownloadLink;
-        } else {
-            landing = desktopAppDownloadLink;
-        }
+        // let landing;
+        // if (UserAgent.isAndroidWeb()) {
+        //     landing = androidDownloadLink;
+        // } else if (UserAgent.isIosWeb()) {
+        //     landing = iosDownloadLink;
+        // } else {
+        //     landing = desktopAppDownloadLink;
+        // }
 
-        if (landing && !this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
-            this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
-            BrowserStore.setLandingPageSeen(true);
-        }
+        // if (landing && !this.props.isCloud && !BrowserStore.hasSeenLandingPage() && !toResetPasswordScreen && !this.props.location.pathname.includes('/landing') && !window.location.hostname?.endsWith('.test.mattermost.com') && !UserAgent.isDesktopApp() && !UserAgent.isChromebook()) {
+        //     this.props.history.push('/landing#' + this.props.location.pathname + this.props.location.search);
+        //     BrowserStore.setLandingPageSeen(true);
+        // }
 
         Utils.applyTheme(this.props.theme);
     };
 
     componentDidUpdate(prevProps: Props) {
         if (!deepEqual(prevProps.theme, this.props.theme)) {
-            Utils.applyTheme(this.props.theme);
-        }
-        if (this.props.location.pathname === '/') {
-            if (this.props.noAccounts) {
-                prevProps.history.push('/signup_user_complete');
-            } else if (this.props.showTermsOfService) {
-                prevProps.history.push('/terms_of_service');
+            // add body class for webcomponents theming
+            if (document.body.className.match(/kchat-.+-theme/)) {
+                document.body.className = document.body.className.replace(/kchat-.+-theme/, `kchat-${this.props.theme.ikType}-theme`);
+            } else {
+                document.body.className += ` kchat-${this.props.theme.ikType}-theme`;
             }
+
+            Utils.applyTheme(this.props.theme);
         }
         if (
             this.props.shouldShowAppBar !== prevProps.shouldShowAppBar ||
@@ -345,11 +371,8 @@ export default class Root extends React.PureComponent<Props, State> {
             return;
         }
 
-        const teams = getActiveTeamsList(storeState);
-
-        const onboardingFlowEnabled = getIsOnboardingFlowEnabled(storeState);
-
-        if (teams.length > 0 || !onboardingFlowEnabled) {
+        const useCaseOnboarding = getUseCaseOnboarding(storeState);
+        if (!useCaseOnboarding) {
             GlobalActions.redirectUserToDefaultTeam();
             return;
         }
@@ -408,31 +431,259 @@ export default class Root extends React.PureComponent<Props, State> {
     initiateMeRequests = async () => {
         const {data: isMeLoaded} = await this.props.actions.loadConfigAndMe();
 
-        if (isMeLoaded && this.props.location.pathname === '/') {
-            this.redirectToOnboardingOrDefaultTeam();
+        if (isMeLoaded) {
+            const currentUser = getCurrentUser(store.getState());
+            if (currentUser) {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                const {email, id, user_id, username, first_name, last_name} = currentUser;
+                console.log('[components/root] set user for sentry', {email, id, username}); // eslint-disable-line no-console
+                Sentry.setUser({ip_address: '{{auto}}', email, id, username});
+
+                // @ts-ignore
+                window.CONST_USER = {
+                    iGlobalUserCode: user_id,
+                    sFirstname: first_name,
+                    sLastname: last_name,
+                    sEmail: email,
+                };
+            }
+
+            if (this.props.location.pathname === '/') {
+                this.redirectToOnboardingOrDefaultTeam();
+            }
         }
 
         this.onConfigLoaded();
     };
 
     componentDidMount() {
-        temporarilySetPageLoadContext(PageLoadContext.PAGE_LOAD);
+        if (isDesktopApp()) {
+            // Rely on initial client calls to 401 for the first redirect to login,
+            // we dont need to do it manually.
+            // Login will send us back here with a code after we give it the challange.
+            // Use code to refresh token.
+            const loginCode = (new URLSearchParams(this.props.location.search)).get('code');
 
+            if (loginCode) {
+                console.log('[components/root] login with code'); // eslint-disable-line no-console
+                this.storeLoginCode(loginCode);
+                this.tryGetNewToken();
+            } else {
+                this.runMounted();
+            }
+        } else {
+            // Allow through initial requests for web.
+            this.runMounted();
+        }
+    }
+
+    storeLoginCode = (code: string) => {
+        console.log('[components/root] store login code'); // eslint-disable-line no-console
+        this.IKLoginCode = code;
+    };
+
+    tryGetNewToken = async () => {
+        const challenge = JSON.parse(localStorage.getItem('challenge') as string);
+        const loginCode = this.IKLoginCode;
+        console.log('[component/root] try get token count', this.retryGetToken); // eslint-disable-line no-console
+        try { // Get new token
+            const response: {
+                expires_in?: number;
+                access_token: string;
+                refresh_token: string;
+            } = await Client4.getIKLoginToken(
+                loginCode as string,
+                challenge?.challenge,
+                challenge?.verifier,
+                IKConstants.LOGIN_URL!,
+                IKConstants.CLIENT_ID,
+            );
+
+            // Store in localstorage
+            storeTokenResponse(response);
+
+            // Remove challenge, loginCode and set logged in.
+            localStorage.removeItem('challenge');
+            localStorage.setItem('tokenExpired', '0');
+            LocalStorageStore.setWasLoggedIn(true);
+            this.IKLoginCode = undefined;
+
+            let newToken;
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+                newToken = {
+                    token: response.access_token,
+                };
+            } else {
+                newToken = {
+                    token: response.access_token,
+                    refreshToken: response.refresh_token,
+                    expiresAt: (Date.now() / 1000) + response.expires_in, // ignore as its never undefined in 2.0
+                };
+            }
+
+            // Store in desktop storage.
+            window.postMessage(
+                {
+                    type: 'token-refreshed',
+                    message: newToken,
+                },
+                window.origin,
+            );
+
+            this.retryGetToken = 0;
+            clearInterval(this.loginCodeInterval as NodeJS.Timer);
+
+            // Allow through initial requests anyway to receive new errors.
+            this.runMounted();
+        } catch (error) {
+            console.log('[components/root] post token fail ', error); // eslint-disable-line no-console
+
+            if (this.retryGetToken < MAX_GET_TOKEN_FAILS) {
+                console.log('[components/root] will retry token post with fail count: ', this.retryGetToken); // eslint-disable-line no-console
+                this.retryGetToken += 1;
+                const retryTime = MIN_GET_TOKEN_RETRY_TIME * this.retryGetToken;
+                clearInterval(this.loginCodeInterval as NodeJS.Timer);
+                this.loginCodeInterval = setInterval(() => this.tryGetNewToken(), retryTime);
+            } else {
+                console.log('[components/root] max retry count reached, continuing with mount to reach login'); // eslint-disable-line no-console
+                clearInterval(this.loginCodeInterval as NodeJS.Timer);
+                this.IKLoginCode = undefined;
+
+                Sentry.captureException(new Error('Get token max error count. Redirect to login'));
+                this.runMounted();
+            }
+        }
+    };
+
+    // Does not run in 2.1 and up
+    doTokenCheck = () => {
+        // If expiring soon but not expired, refresh before we start hitting errors.
+        if (checkIKTokenExpiresSoon() && !checkIKTokenIsExpired()) {
+            console.log('[components/root] desktop token expiring soon'); // eslint-disable-line no-console
+            refreshIKToken(/*redirectToReam*/false)?.then(() => {
+                console.log('[components/root] desktop token refreshed'); // eslint-disable-line no-console
+                close();
+                initialize();
+            }).catch((e: unknown) => {
+                console.warn('[components/root] desktop token refresh error: ', e); // eslint-disable-line no-console
+            });
+        }
+    };
+
+    runMounted = () => {
         this.mounted = true;
+
+        const token = localStorage.getItem('IKToken');
+        const tokenExpire = localStorage.getItem('IKTokenExpire');
+        const refreshToken = localStorage.getItem('IKRefreshToken');
+
+        // Validate infinite token or setup token keepalive for older tokens
+        if (isDesktopApp()) {
+            if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+                // TODO: find a way to clean this if into an else below, since its counterintuitive
+                // The reset teams will retrigger this func
+                if (isDefaultAuthServer() && !token) {
+                    getChallengeAndRedirectToLogin(true);
+                }
+
+                // migration from 2.0
+                if (token && (tokenExpire || refreshToken)) {
+                    // Prepare migrate to infinite token by clearing all instances of old token
+                    clearLocalStorageToken();
+                    window.authManager.resetToken();
+
+                    // Need to reset teams before redirecting to login after token is cleared
+                    if (isDefaultAuthServer()) {
+                        getChallengeAndRedirectToLogin(true);
+                    } else {
+                        window.postMessage(
+                            {
+                                type: 'reset-teams',
+                                message: {},
+                            },
+                            window.origin,
+                        );
+                    }
+                }
+            } else if (token && refreshToken) {
+                // 2.0 and older apps
+                // set an interval to run every minute to check if token needs refresh soon
+                // for older versions of app.
+                this.tokenCheckInterval = setInterval(this.doTokenCheck, /*one minute*/1000 * 60);
+            }
+        }
+
+        // Binds a handler for unexpected session loss on desktop, web will follow api redirect.
+        Client4.bindEmitUserLoggedOutEvent(async (data) => {
+            // eslint-disable-next-line no-negated-condition
+            if (!isDesktopApp()) {
+                window.location.href = data.uri;
+            } else {
+                const lsToken = localStorage.getItem('IKToken');
+
+                if (lsToken) {
+                    // Delete the token if it still exists.
+                    clearLocalStorageToken();
+                    clearUserCookie();
+                    await window.authManager.logout();
+                    window.authManager.resetToken();
+                }
+            }
+        });
 
         this.initiateMeRequests();
 
         // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
-        this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
-        this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
+        // this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
+        // this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
+        this.props.actions.registerCustomPostRenderer('system_welcome_post', WelcomePostRenderer, 'welcome_post_renderer');
+
+        if (this.desktopMediaQuery.addEventListener) {
+            this.desktopMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
+            this.smallDesktopMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
+            this.tabletMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
+            this.mobileMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
+        } else if (this.desktopMediaQuery.addListener) {
+            this.desktopMediaQuery.addListener(this.handleMediaQueryChangeEvent);
+            this.smallDesktopMediaQuery.addListener(this.handleMediaQueryChangeEvent);
+            this.tabletMediaQuery.addListener(this.handleMediaQueryChangeEvent);
+            this.mobileMediaQuery.addListener(this.handleMediaQueryChangeEvent);
+        } else {
+            window.addEventListener('resize', this.handleWindowResizeEvent);
+        }
 
         measurePageLoadTelemetry();
         trackSelectorMetrics();
-    }
+    };
 
     componentWillUnmount() {
         this.mounted = false;
+        this.retryGetToken = 0;
+        this.IKLoginCode = undefined;
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
+        if (this.tokenCheckInterval) {
+            console.log('[components/root] destroy token interval check'); // eslint-disable-line no-console
+            clearInterval(this.tokenCheckInterval);
+        }
+
+        if (this.loginCodeInterval) {
+            console.log('[components/root] destroy login with code interval'); // eslint-disable-line no-console
+            clearInterval(this.loginCodeInterval);
+        }
+
+        if (this.desktopMediaQuery.removeEventListener) {
+            this.desktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
+            this.smallDesktopMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
+            this.tabletMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
+            this.mobileMediaQuery.removeEventListener('change', this.handleMediaQueryChangeEvent);
+        } else if (this.desktopMediaQuery.removeListener) {
+            this.desktopMediaQuery.removeListener(this.handleMediaQueryChangeEvent);
+            this.smallDesktopMediaQuery.removeListener(this.handleMediaQueryChangeEvent);
+            this.tabletMediaQuery.removeListener(this.handleMediaQueryChangeEvent);
+            this.mobileMediaQuery.removeListener(this.handleMediaQueryChangeEvent);
+        } else {
+            window.removeEventListener('resize', this.handleWindowResizeEvent);
+        }
     }
 
     handleLogoutLoginSignal = (e: StorageEvent) => {
@@ -460,6 +711,16 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     };
 
+    handleWindowResizeEvent = throttle(() => {
+        this.props.actions.emitBrowserWindowResized();
+    }, 100);
+
+    handleMediaQueryChangeEvent = (e: MediaQueryListEvent) => {
+        if (e.matches) {
+            this.updateWindowSize();
+        }
+    };
+
     setRootMeta = () => {
         const root = document.getElementById('root')!;
 
@@ -472,6 +733,23 @@ export default class Root extends React.PureComponent<Props, State> {
         }
     };
 
+    updateWindowSize = () => {
+        switch (true) {
+        case this.desktopMediaQuery.matches:
+            this.props.actions.emitBrowserWindowResized(WindowSizes.DESKTOP_VIEW);
+            break;
+        case this.smallDesktopMediaQuery.matches:
+            this.props.actions.emitBrowserWindowResized(WindowSizes.SMALL_DESKTOP_VIEW);
+            break;
+        case this.tabletMediaQuery.matches:
+            this.props.actions.emitBrowserWindowResized(WindowSizes.TABLET_VIEW);
+            break;
+        case this.mobileMediaQuery.matches:
+            this.props.actions.emitBrowserWindowResized(WindowSizes.MOBILE_VIEW);
+            break;
+        }
+    };
+
     render() {
         if (!this.state.configLoaded) {
             return <div/>;
@@ -479,13 +757,12 @@ export default class Root extends React.PureComponent<Props, State> {
 
         return (
             <RootProvider>
-                <MobileViewWatcher/>
                 <Switch>
                     <Route
                         path={'/error'}
                         component={ErrorPage}
                     />
-                    <HFRoute
+                    <Route
                         path={'/login'}
                         component={Login}
                     />
@@ -494,65 +771,13 @@ export default class Root extends React.PureComponent<Props, State> {
                         component={AccessProblem}
                     />
                     <HFTRoute
-                        path={'/reset_password'}
-                        component={PasswordResetSendLink}
+                        path={'/help'}
+                        component={HelpController}
                     />
-                    <HFTRoute
-                        path={'/reset_password_complete'}
-                        component={PasswordResetForm}
-                    />
-                    <HFRoute
-                        path={'/signup_user_complete'}
-                        component={Signup}
-                    />
-                    <HFRoute
-                        path={'/should_verify_email'}
-                        component={ShouldVerifyEmail}
-                    />
-                    <HFRoute
-                        path={'/do_verify_email'}
-                        component={DoVerifyEmail}
-                    />
-                    <HFTRoute
-                        path={'/claim'}
-                        component={ClaimController}
-                    />
-                    <LoggedInRoute
-                        path={'/terms_of_service'}
-                        component={TermsOfService}
-                    />
-                    <Route
+                    {/* <Route
                         path={'/landing'}
                         component={LinkingLandingPage}
-                    />
-                    <Route
-                        path={'/admin_console'}
-                    >
-                        <Switch>
-                            <LoggedInRoute
-                                theme={this.props.theme}
-                                path={'/admin_console'}
-                                component={AdminConsole}
-                            />
-                            <RootRedirect/>
-                        </Switch>
-                    </Route>
-                    <LoggedInHFTRoute
-                        path={'/select_team'}
-                        component={SelectTeam}
-                    />
-                    <LoggedInHFTRoute
-                        path={'/oauth/authorize'}
-                        component={Authorize}
-                    />
-                    <LoggedInHFTRoute
-                        path={'/create_team'}
-                        component={CreateTeam}
-                    />
-                    <LoggedInRoute
-                        path={'/mfa'}
-                        component={Mfa}
-                    />
+                    /> */}
                     <LoggedInRoute
                         path={'/preparing-workspace'}
                         component={PreparingWorkspace}
@@ -575,32 +800,12 @@ export default class Root extends React.PureComponent<Props, State> {
                                 transitionDirection={Animations.Reasons.EnterFromBefore}
                             />
                         )}
-                        <WindowSizeObserver/>
                         <ModalController/>
                         <AnnouncementBarController/>
                         <SystemNotice/>
                         <GlobalHeader/>
-                        <CloudEffects/>
-                        <TeamSidebar/>
-                        <DelinquencyModalController/>
+                        {!this.embeddedInIFrame && <TeamSidebar/>}
                         <Switch>
-                            {this.props.products?.filter((product) => Boolean(product.publicComponent)).map((product) => (
-                                <Route
-                                    key={`${product.id}-public`}
-                                    path={`${product.baseURL}/public`}
-                                    render={(props) => {
-                                        return (
-                                            <Pluggable
-                                                pluggableName={'Product'}
-                                                subComponentName={'publicComponent'}
-                                                pluggableId={product.id}
-                                                css={{gridArea: 'center'}}
-                                                {...props}
-                                            />
-                                        );
-                                    }}
-                                />
-                            ))}
                             {this.props.products?.map((product) => (
                                 <Route
                                     key={product.id}
@@ -645,7 +850,7 @@ export default class Root extends React.PureComponent<Props, State> {
                             ))}
                             <LoggedInRoute
                                 theme={this.props.theme}
-                                path={`/:team(${TEAM_NAME_PATH_PATTERN})`}
+                                path={'/:team'}
                                 component={TeamController}
                             />
                             <RootRedirect/>

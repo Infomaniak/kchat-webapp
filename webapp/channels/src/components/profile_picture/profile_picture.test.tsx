@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import React from 'react';
 import type {ComponentProps} from 'react';
+import React from 'react';
 
 import ProfilePicture from 'components/profile_picture';
 

@@ -3,11 +3,12 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {exportFormats} from 'utils/constants';
+
+import type {Job} from '@mattermost/types/jobs';
 
 import {Client4} from 'mattermost-redux/client';
-import {Job} from '@mattermost/types/jobs';
 
-import {exportFormats} from 'utils/constants';
 import ExternalLink from 'components/external_link';
 
 const JobDownloadLink = React.memo(({job}: {job: Job}): JSX.Element => {

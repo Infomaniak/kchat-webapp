@@ -2,21 +2,18 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
 import {uploadFile} from 'actions/file_actions';
 import {getCurrentLocale} from 'selectors/i18n';
-
 import {canUploadFiles} from 'utils/file_utils';
 
-import type {GlobalState} from 'types/store';
-import type {FilesWillUploadHook} from 'types/store/plugins';
+import {FilesWillUploadHook} from 'types/store/plugins';
+import {GlobalState} from 'types/store';
 
-import FileUpload from './file_upload';
-import type {Props} from './file_upload';
+import FileUpload, {Props} from './file_upload';
 
 function mapStateToProps(state: GlobalState) {
     const config = getConfig(state);

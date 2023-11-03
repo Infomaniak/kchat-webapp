@@ -1,17 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import logoImage from 'images/logo.png';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Route, Switch} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 
 import {emitUserLoggedOutEvent} from 'actions/global_actions';
 
 import BackButton from 'components/common/back_button';
 import LogoutIcon from 'components/widgets/icons/fa_logout_icon';
-
-import logoImage from 'images/logo.png';
 
 import Confirm from '../confirm';
 import Setup from '../setup';

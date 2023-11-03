@@ -5,6 +5,8 @@ import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {Dispatch} from 'redux';
+import {Locations} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 import type {Emoji} from '@mattermost/types/emojis';
 
@@ -15,9 +17,6 @@ import OverlayTrigger from 'components/overlay_trigger';
 import ChannelPermissionGate from 'components/permissions_gates/channel_permission_gate';
 import Tooltip from 'components/tooltip';
 import EmojiIcon from 'components/widgets/icons/emoji_icon';
-
-import {Locations} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 const TOP_OFFSET = -7;
 

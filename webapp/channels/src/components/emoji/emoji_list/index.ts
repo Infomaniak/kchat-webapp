@@ -2,16 +2,14 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import type {CustomEmoji} from '@mattermost/types/emojis';
-import type {ServerError} from '@mattermost/types/errors';
-import type {GlobalState} from '@mattermost/types/store';
-
-import {getCustomEmojis, searchCustomEmojis} from 'mattermost-redux/actions/emojis';
 import {getCustomEmojiIdsSortedByName} from 'mattermost-redux/selectors/entities/emojis';
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {getCustomEmojis, searchCustomEmojis} from 'mattermost-redux/actions/emojis';
+import {GlobalState} from '@mattermost/types/store';
+import {CustomEmoji} from '@mattermost/types/emojis';
+import {ServerError} from '@mattermost/types/errors';
 
 import EmojiList from './emoji_list';
 

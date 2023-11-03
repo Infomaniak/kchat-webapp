@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {shallow} from 'enzyme';
-
-import {UserProfile} from '@mattermost/types/users';
-import {Team} from '@mattermost/types/teams';
-
+import React from 'react';
 import {TestHelper} from 'utils/test_helper';
+
+import type {Team} from '@mattermost/types/teams';
+import type {UserProfile} from '@mattermost/types/users';
 
 import AddUsersToTeamModal from './add_users_to_team_modal';
 

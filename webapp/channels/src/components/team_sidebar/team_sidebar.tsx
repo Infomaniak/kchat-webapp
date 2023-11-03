@@ -2,26 +2,27 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
+import Pluggable from 'plugins/pluggable';
 import React from 'react';
-import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import type {DroppableProvided, DropResult} from 'react-beautiful-dnd';
+import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Scrollbars from 'react-custom-scrollbars';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
+import {Constants} from 'utils/constants';
+import {getCurrentProduct} from 'utils/products';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 
 import Permissions from 'mattermost-redux/constants/permissions';
+import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
 
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import TeamButton from 'components/team_sidebar/components/team_button';
-
-import Pluggable from 'plugins/pluggable';
-import {Constants} from 'utils/constants';
-import * as Keyboard from 'utils/keyboard';
-import {getCurrentProduct} from 'utils/products';
-import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
-import * as Utils from 'utils/utils';
 
 import type {PropsFromRedux} from './index';
 
@@ -72,9 +73,9 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
     }
 
     switchToPrevOrNextTeam = (e: KeyboardEvent, currentTeamId: string, teams: Team[]) => {
-        if (Keyboard.isKeyPressed(e, Constants.KeyCodes.UP) || Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
+        if (Utils.isKeyPressed(e, Constants.KeyCodes.UP) || Utils.isKeyPressed(e, Constants.KeyCodes.DOWN)) {
             e.preventDefault();
-            const delta = Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN) ? 1 : -1;
+            const delta = Utils.isKeyPressed(e, Constants.KeyCodes.DOWN) ? 1 : -1;
             const pos = teams.findIndex((team: Team) => team.id === currentTeamId);
             const newPos = pos + delta;
 
@@ -108,7 +109,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         ];
 
         for (const idx in digits) {
-            if (Keyboard.isKeyPressed(e, digits[idx]) && parseInt(idx, 10) < teams.length) {
+            if (Utils.isKeyPressed(e, digits[idx]) && parseInt(idx, 10) < teams.length) {
                 e.preventDefault();
 
                 // prevents reloading the current team, while still capturing the keyboard shortcut
@@ -146,16 +147,16 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         }
     };
 
-    componentDidMount() {
-        this.props.actions.getTeams(0, 200);
-        document.addEventListener('keydown', this.handleKeyDown);
-        document.addEventListener('keyup', this.handleKeyUp);
-    }
+    // componentDidMount() {
+    //     this.props.actions.getTeams(0, 200);
+    //     document.addEventListener('keydown', this.handleKeyDown);
+    //     document.addEventListener('keyup', this.handleKeyUp);
+    // }
 
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.handleKeyDown);
-        document.removeEventListener('keyup', this.handleKeyUp);
-    }
+    // componentWillUnmount() {
+    //     document.removeEventListener('keydown', this.handleKeyDown);
+    //     document.removeEventListener('keyup', this.handleKeyUp);
+    // }
 
     onDragEnd = (result: DropResult) => {
         const {
@@ -193,7 +194,21 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
         this.setState({teamsOrder: newTeamsOrder});
     };
 
+    switchTeamIK(teamName: string, teamId: string) {
+        setLastKSuiteSeenCookie(teamId);
+        window.postMessage(
+            {
+                type: 'switch-server',
+                data: teamName,
+            },
+            window.origin,
+        );
+    }
+
     render() {
+        // if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
+        //     return null;
+        // }
         const root: Element | null = document.querySelector('#root');
         if (this.props.myTeams.length <= 1) {
             root!.classList.remove('multi-teams');
@@ -213,7 +228,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
             return (
                 <TeamButton
                     key={'switch_team_' + team.name}
-                    url={`/${team.name}`}
+                    url={team.url}
                     tip={team.display_name}
                     active={team.id === this.props.currentTeamId}
                     displayName={team.display_name}
@@ -223,7 +238,7 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
                     mentions={this.props.mentionsInTeamMap.has(team.id) ? this.props.mentionsInTeamMap.get(team.id) : 0}
                     hasUrgent={this.props.teamHasUrgentMap.has(team.id) ? this.props.teamHasUrgentMap.get(team.id) : false}
                     teamIconUrl={Utils.imageURLForTeam(team)}
-                    switchTeam={(url: string) => this.props.actions.switchTeam(url, currentProduct ? team : undefined)}
+                    switchTeam={this.switchTeamIK}
                     isDraggable={true}
                     teamId={team.id}
                     teamIndex={index}
@@ -234,51 +249,51 @@ export default class TeamSidebar extends React.PureComponent<Props, State> {
 
         const joinableTeams = [];
 
-        const plusIcon = (
-            <i
-                className='icon icon-plus'
-                role={'img'}
-                aria-label={Utils.localizeMessage('sidebar.team_menu.button.plusIcon', 'Plus Icon')}
-            />
-        );
+        // const plusIcon = (
+        //     <i
+        //         className='icon icon-plus'
+        //         role={'img'}
+        //         aria-label={Utils.localizeMessage('sidebar.team_menu.button.plusIcon', 'Plus Icon')}
+        //     />
+        // );
 
-        if (this.props.moreTeamsToJoin && !this.props.experimentalPrimaryTeam) {
-            joinableTeams.push(
-                <TeamButton
-                    btnClass='team-btn__add'
-                    key='more_teams'
-                    url='/select_team'
-                    tip={
-                        <FormattedMessage
-                            id='team_sidebar.join'
-                            defaultMessage='Other teams you can join'
-                        />
-                    }
-                    content={plusIcon}
-                    switchTeam={this.props.actions.switchTeam}
-                />,
-            );
-        } else {
-            joinableTeams.push(
-                <SystemPermissionGate
-                    permissions={[Permissions.CREATE_TEAM]}
-                    key='more_teams'
-                >
-                    <TeamButton
-                        btnClass='team-btn__add'
-                        url='/create_team'
-                        tip={
-                            <FormattedMessage
-                                id='navbar_dropdown.create'
-                                defaultMessage='Create a Team'
-                            />
-                        }
-                        content={plusIcon}
-                        switchTeam={this.props.actions.switchTeam}
-                    />
-                </SystemPermissionGate>,
-            );
-        }
+        // if (this.props.moreTeamsToJoin && !this.props.experimentalPrimaryTeam) {
+        //     joinableTeams.push(
+        //         <TeamButton
+        //             btnClass='team-btn__add'
+        //             key='more_teams'
+        //             url='/select_team'
+        //             tip={
+        //                 <FormattedMessage
+        //                     id='team_sidebar.join'
+        //                     defaultMessage='Other teams you can join'
+        //                 />
+        //             }
+        //             content={plusIcon}
+        //             switchTeam={this.props.actions.switchTeam}
+        //         />,
+        //     );
+        // } else {
+        // joinableTeams.push(
+        //     <SystemPermissionGate
+        //         permissions={[Permissions.CREATE_TEAM]}
+        //         key='more_teams'
+        //     >
+        //         <TeamButton
+        //             btnClass='team-btn__add'
+        //             url='/create_team'
+        //             tip={
+        //                 <FormattedMessage
+        //                     id='navbar_dropdown.create'
+        //                     defaultMessage='Create a Team'
+        //                 />
+        //             }
+        //             content={plusIcon}
+        //             switchTeam={this.props.actions.switchTeam}
+        //         />
+        //     </SystemPermissionGate>,
+        // );
+        // }
 
         // Disable team sidebar pluggables in products until proper support can be provided.
         const isNonChannelsProduct = !currentProduct;

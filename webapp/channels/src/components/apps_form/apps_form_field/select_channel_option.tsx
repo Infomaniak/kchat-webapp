@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {components} from 'react-select';
 import type {OptionProps} from 'react-select';
+import {components} from 'react-select';
 
 import type {AppSelectOption} from '@mattermost/types/apps';
 

@@ -4,13 +4,7 @@
 import classNames from 'classnames';
 import React, {useState, useEffect} from 'react';
 import {useIntl} from 'react-intl';
-
-import {CloseCircleIcon} from '@mattermost/compass-icons/components';
-
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
-
-import Constants, {ItemStatus} from 'utils/constants';
+import {ItemStatus} from 'utils/constants';
 
 import './input.scss';
 
@@ -36,9 +30,6 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     useLegend?: boolean;
     customMessage?: CustomMessageInputType;
     inputSize?: SIZE;
-    clearable?: boolean;
-    clearableTooltipText?: string;
-    onClear?: () => void;
 }
 
 const Input = React.forwardRef((
@@ -63,12 +54,9 @@ const Input = React.forwardRef((
         maxLength,
         inputSize = SIZE.MEDIUM,
         disabled,
-        clearable,
-        clearableTooltipText,
         onFocus,
         onBlur,
         onChange,
-        onClear,
         ...otherProps
     }: InputProps,
     ref?: React.Ref<HTMLInputElement>,
@@ -119,12 +107,6 @@ const Input = React.forwardRef((
         }
     };
 
-    const handleOnClear = () => {
-        if (onClear) {
-            onClear();
-        }
-    };
-
     const validateInput = () => {
         if (!required || (value !== null && value !== '')) {
             return;
@@ -136,26 +118,6 @@ const Input = React.forwardRef((
     const showLegend = Boolean(focused || value);
     const error = customInputLabel?.type === 'error';
     const limitExceeded = limit && value && !Array.isArray(value) ? value.toString().length - limit : 0;
-
-    const clearButton = value && clearable ? (
-        <div
-            className='Input__clear'
-            onMouseDown={handleOnClear}
-            onTouchEnd={handleOnClear}
-        >
-            <OverlayTrigger
-                delayShow={Constants.OVERLAY_TIME_DELAY}
-                placement='bottom'
-                overlay={(
-                    <Tooltip id={'InputClearTooltip'}>
-                        {clearableTooltipText || formatMessage({id: 'widget.input.clear', defaultMessage: 'Clear'})}
-                    </Tooltip>
-                )}
-            >
-                <CloseCircleIcon size={18}/>
-            </OverlayTrigger>
-        </div>
-    ) : null;
 
     return (
         <div className={classNames('Input_container', containerClassName, {disabled})}>
@@ -179,7 +141,6 @@ const Input = React.forwardRef((
                         className={classNames('Input form-control', inputSize, inputClassName, {Input__focus: showLegend})}
                         value={value}
                         placeholder={focused ? (label && placeholder) || label : label || placeholder}
-                        aria-label={label || placeholder}
                         name={name}
                         disabled={disabled}
                         {...otherProps}
@@ -194,7 +155,6 @@ const Input = React.forwardRef((
                         </span>
                     )}
                     {inputSuffix}
-                    {clearButton}
                 </div>
                 {addon}
             </fieldset>

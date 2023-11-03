@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import {useCallback, useEffect, useLayoutEffect, useRef} from 'react';
-
 import Constants, {WindowSizes} from 'utils/constants';
 
 import type {PropsFromRedux} from './index';

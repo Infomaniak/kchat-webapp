@@ -167,7 +167,7 @@ export default class InstalledOutgoingWebhook extends React.PureComponent<Props>
                     >
                         <FormattedMessage
                             id='installed_integrations.regenToken'
-                            defaultMessage='Regenerate Token'
+                            defaultMessage='Regen Token'
                         />
                     </button>
                     {' - '}

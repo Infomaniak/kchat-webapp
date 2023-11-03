@@ -11,11 +11,11 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render 1`] = `
     }
     button={
       <button
-        className="app-install always-show-enabled"
+        className="btn btn-primary"
         disabled={false}
         onClick={[Function]}
       >
-        <Memo(LoadingWrapper)
+        <LoadingWrapper
           loading={false}
           text="Installing..."
         >
@@ -23,7 +23,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render 1`] = `
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </Memo(LoadingWrapper)>
+        </LoadingWrapper>
       </button>
     }
     description="test plugin"
@@ -50,7 +50,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render installed a
     }
     button={
       <button
-        className="app-installed"
+        className="btn btn-outline"
         disabled={true}
       >
         <Memo(MemoizedFormattedMessage)
@@ -83,11 +83,11 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with empty 
     }
     button={
       <button
-        className="app-install always-show-enabled"
+        className="btn btn-primary"
         disabled={false}
         onClick={[Function]}
       >
-        <Memo(LoadingWrapper)
+        <LoadingWrapper
           loading={false}
           text="Installing..."
         >
@@ -95,7 +95,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with empty 
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </Memo(LoadingWrapper)>
+        </LoadingWrapper>
       </button>
     }
     description="test plugin"
@@ -123,11 +123,11 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with icon 1
     }
     button={
       <button
-        className="app-install always-show-enabled"
+        className="btn btn-primary"
         disabled={false}
         onClick={[Function]}
       >
-        <Memo(LoadingWrapper)
+        <LoadingWrapper
           loading={false}
           text="Installing..."
         >
@@ -135,7 +135,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with icon 1
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </Memo(LoadingWrapper)>
+        </LoadingWrapper>
       </button>
     }
     description="test plugin"
@@ -164,11 +164,11 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with no hom
     }
     button={
       <button
-        className="app-install always-show-enabled"
+        className="btn btn-primary"
         disabled={false}
         onClick={[Function]}
       >
-        <Memo(LoadingWrapper)
+        <LoadingWrapper
           loading={false}
           text="Installing..."
         >
@@ -176,7 +176,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with no hom
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </Memo(LoadingWrapper)>
+        </LoadingWrapper>
       </button>
     }
     description="test plugin"
@@ -202,11 +202,11 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with no plu
     }
     button={
       <button
-        className="app-install always-show-enabled"
+        className="btn btn-primary"
         disabled={false}
         onClick={[Function]}
       >
-        <Memo(LoadingWrapper)
+        <LoadingWrapper
           loading={false}
           text="Installing..."
         >
@@ -214,7 +214,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with no plu
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </Memo(LoadingWrapper)>
+        </LoadingWrapper>
       </button>
     }
     homepageUrl="http://example.com"
@@ -240,11 +240,11 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with one la
     }
     button={
       <button
-        className="app-install always-show-enabled"
+        className="btn btn-primary"
         disabled={false}
         onClick={[Function]}
       >
-        <Memo(LoadingWrapper)
+        <LoadingWrapper
           loading={false}
           text="Installing..."
         >
@@ -252,7 +252,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with one la
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </Memo(LoadingWrapper)>
+        </LoadingWrapper>
       </button>
     }
     description="test plugin"
@@ -288,11 +288,11 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with server
     }
     button={
       <button
-        className="app-install always-show-enabled"
+        className="btn btn-primary"
         disabled={false}
         onClick={[Function]}
       >
-        <Memo(LoadingWrapper)
+        <LoadingWrapper
           loading={false}
           text="Installing..."
         >
@@ -300,7 +300,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with server
             defaultMessage="Try Again"
             id="marketplace_modal.list.try_again"
           />
-        </Memo(LoadingWrapper)>
+        </LoadingWrapper>
       </button>
     }
     description="test plugin"
@@ -328,11 +328,11 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with two la
     }
     button={
       <button
-        className="app-install always-show-enabled"
+        className="btn btn-primary"
         disabled={false}
         onClick={[Function]}
       >
-        <Memo(LoadingWrapper)
+        <LoadingWrapper
           loading={false}
           text="Installing..."
         >
@@ -340,7 +340,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem should render with two la
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </Memo(LoadingWrapper)>
+        </LoadingWrapper>
       </button>
     }
     description="test plugin"
@@ -381,11 +381,11 @@ exports[`components/MarketplaceItemApp MarketplaceItem when installing 1`] = `
     }
     button={
       <button
-        className="app-install always-show-enabled"
+        className="btn btn-primary"
         disabled={false}
         onClick={[Function]}
       >
-        <Memo(LoadingWrapper)
+        <LoadingWrapper
           loading={false}
           text="Installing..."
         >
@@ -393,7 +393,7 @@ exports[`components/MarketplaceItemApp MarketplaceItem when installing 1`] = `
             defaultMessage="Install"
             id="marketplace_modal.list.install"
           />
-        </Memo(LoadingWrapper)>
+        </LoadingWrapper>
       </button>
     }
     description="test plugin"

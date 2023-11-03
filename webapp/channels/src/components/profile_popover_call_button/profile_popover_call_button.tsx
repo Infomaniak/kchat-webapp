@@ -3,13 +3,12 @@
 
 import React, {useState, useEffect, useRef} from 'react';
 import {useDispatch} from 'react-redux';
+import {Constants} from 'utils/constants';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 
 import {createDirectChannel} from 'mattermost-redux/actions/channels';
 import type {ActionResult} from 'mattermost-redux/types/actions';
-
-import {Constants} from 'utils/constants';
 
 import type {PluginComponent} from 'types/store/plugins';
 

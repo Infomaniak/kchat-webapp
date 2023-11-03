@@ -2,10 +2,9 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import {FormattedMessage} from 'react-intl';
 
-import {UserProfile} from '@mattermost/types/users';
+import type {UserProfile} from '@mattermost/types/users';
 
 type Props = {
     user: UserProfile;
@@ -20,7 +19,7 @@ export default class UserGridRemove extends React.PureComponent<Props> {
             return;
         }
         this.props.removeUser(this.props.user);
-    }
+    };
 
     public render = (): JSX.Element => {
         const {isDisabled} = this.props;
@@ -39,5 +38,5 @@ export default class UserGridRemove extends React.PureComponent<Props> {
                 </a>
             </div>
         );
-    }
+    };
 }

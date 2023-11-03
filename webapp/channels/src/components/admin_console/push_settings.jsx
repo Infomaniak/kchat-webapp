@@ -3,11 +3,10 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import ExternalLink from 'components/external_link';
-
 import Constants from 'utils/constants';
 import * as Utils from 'utils/utils';
+
+import ExternalLink from 'components/external_link';
 
 import AdminSettings from './admin_settings';
 import DropdownSetting from './dropdown_setting.jsx';
@@ -22,13 +21,13 @@ const PUSH_NOTIFICATIONS_CUSTOM = 'custom';
 export default class PushSettings extends AdminSettings {
     canSave = () => {
         return this.state.pushNotificationServerType !== PUSH_NOTIFICATIONS_MHPNS || this.state.agree;
-    }
+    };
 
     handleAgreeChange = (e) => {
         this.setState({
             agree: e.target.checked,
         });
-    }
+    };
 
     handleDropdownChange = (id, value) => {
         if (id === 'pushNotificationServerType') {
@@ -54,7 +53,7 @@ export default class PushSettings extends AdminSettings {
         }
 
         this.handleChange(id, value);
-    }
+    };
 
     getConfigFromState = (config) => {
         config.EmailSettings.SendPushNotifications = this.state.pushNotificationServerType !== PUSH_NOTIFICATIONS_OFF;
@@ -62,7 +61,7 @@ export default class PushSettings extends AdminSettings {
         config.TeamSettings.MaxNotificationsPerChannel = this.state.maxNotificationsPerChannel;
 
         return config;
-    }
+    };
 
     getStateFromConfig(config) {
         let pushNotificationServerType = PUSH_NOTIFICATIONS_CUSTOM;
@@ -318,5 +317,5 @@ export default class PushSettings extends AdminSettings {
                 />
             </SettingsGroup>
         );
-    }
+    };
 }

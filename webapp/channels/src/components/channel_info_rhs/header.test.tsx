@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {fireEvent, screen} from '@testing-library/react';
 import React from 'react';
+import {renderWithIntl} from 'tests/react_testing_utils';
 
 import type {Channel} from '@mattermost/types/channels';
-
-import {fireEvent, renderWithIntl, screen} from 'tests/react_testing_utils';
 
 import Header from './header';
 
@@ -34,7 +34,7 @@ describe('channel_info_rhs/header', () => {
             />,
         );
 
-        fireEvent.click(screen.getByLabelText('Close Sidebar Icon'));
+        fireEvent.click(screen.getByLabelText('Close'));
 
         expect(onClose).toHaveBeenCalled();
     });

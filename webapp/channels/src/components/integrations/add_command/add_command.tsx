@@ -2,16 +2,19 @@
 // See LICENSE.txt for license information.
 
 import React, {useState} from 'react';
-import {useIntl} from 'react-intl';
-import type {MessageDescriptor} from 'react-intl';
 import {useHistory} from 'react-router-dom';
+import {t} from 'utils/i18n';
 
-import type {Command} from '@mattermost/types/integrations';
-import type {Team} from '@mattermost/types/teams';
+import type {Command} from '@mattermost/types/integrations.js';
+import type {Team} from '@mattermost/types/teams.js';
 
 import type {ActionResult} from 'mattermost-redux/types/actions.js';
 
-import AbstractCommand from '../abstract_command';
+import AbstractCommand from '../abstract_command.jsx';
+
+const HEADER = {id: t('integrations.add'), defaultMessage: 'Add'};
+const FOOTER = {id: t('add_command.save'), defaultMessage: 'Save'};
+const LOADING = {id: t('add_command.saving'), defaultMessage: 'Saving...'};
 
 export type Props = {
 
@@ -31,10 +34,7 @@ export type Props = {
 
 const AddCommand = ({team, actions}: Props) => {
     const history = useHistory();
-    const {formatMessage} = useIntl();
-    const headerMessage = formatMessage({id: ('integrations.add'), defaultMessage: 'Add'}) as MessageDescriptor;
-    const footerMessage = formatMessage({id: ('add_command.save'), defaultMessage: 'Save'}) as MessageDescriptor;
-    const loadingMessage = formatMessage({id: ('add_command.saving'), defaultMessage: 'Saving...'}) as MessageDescriptor;
+
     const [serverError, setServerError] = useState('');
 
     const addCommand = async (command: Command) => {
@@ -54,9 +54,10 @@ const AddCommand = ({team, actions}: Props) => {
     return (
         <AbstractCommand
             team={team}
-            header={headerMessage}
-            footer={footerMessage}
-            loading={loadingMessage}
+            header={HEADER}
+            footer={FOOTER}
+            loading={LOADING}
+            renderExtra={''}
             action={addCommand}
             serverError={serverError}
         />

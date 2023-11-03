@@ -4,23 +4,22 @@
 import {capitalize as caps, isArray} from 'lodash';
 import type {Moment} from 'moment-timezone';
 import moment from 'moment-timezone';
-import React, {PureComponent} from 'react';
 import type {ReactNode} from 'react';
-import {
-    injectIntl,
-    FormattedMessage,
-} from 'react-intl';
+import React, {PureComponent} from 'react';
 import type {
     IntlShape,
     FormatDateOptions,
     FormatRelativeTimeOptions} from 'react-intl';
+import {
+    injectIntl,
+    FormattedMessage,
+} from 'react-intl';
 import {isValidElementType} from 'react-is';
+import {isSameYear, isWithin, isEqual, getDiff} from 'utils/datetime';
+import type {Resolvable} from 'utils/resolvable';
+import {resolve} from 'utils/resolvable';
 
 import type {RequireOnlyOne} from '@mattermost/types/utilities';
-
-import {isSameYear, isWithin, isEqual, getDiff} from 'utils/datetime';
-import {resolve} from 'utils/resolvable';
-import type {Resolvable} from 'utils/resolvable';
 
 import {STANDARD_UNITS} from './relative_ranges';
 import SemanticTime from './semantic_time';

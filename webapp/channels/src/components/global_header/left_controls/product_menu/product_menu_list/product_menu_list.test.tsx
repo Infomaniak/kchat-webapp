@@ -3,13 +3,12 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {TestHelper} from 'utils/test_helper';
-
-import ProductMenuList from './product_menu_list';
 import type {Props as ProductMenuListProps} from './product_menu_list';
+import ProductMenuList from './product_menu_list';
 
 describe('components/global/product_switcher_menu', () => {
     // Neccessary for components enhanced by HOCs due to issue with enzyme.

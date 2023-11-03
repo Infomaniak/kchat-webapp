@@ -3,18 +3,18 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {Constants} from 'utils/constants';
 
-import {AdminConfig, ClientLicense} from '@mattermost/types/config';
-import {TermsOfService} from '@mattermost/types/terms_of_service';
+import type {AdminConfig, ClientLicense} from '@mattermost/types/config';
+import type {TermsOfService} from '@mattermost/types/terms_of_service';
 
-import AdminSettings, {BaseProps, BaseState} from 'components/admin_console/admin_settings';
-import SettingsGroup from 'components/admin_console/settings_group.jsx';
+import type {BaseProps, BaseState} from 'components/admin_console/admin_settings';
+import AdminSettings from 'components/admin_console/admin_settings';
 import BooleanSetting from 'components/admin_console/boolean_setting';
+import SettingsGroup from 'components/admin_console/settings_group.jsx';
 import TextSetting from 'components/admin_console/text_setting';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LoadingScreen from 'components/loading_screen';
-
-import {Constants} from 'utils/constants';
 
 type Props = BaseProps & {
     actions: {
@@ -73,7 +73,7 @@ export default class CustomTermsOfServiceSettings extends AdminSettings<Props, S
             config.SupportSettings.CustomTermsOfServiceReAcceptancePeriod = this.parseIntNonZero(String(this.state.reAcceptancePeriod), Constants.DEFAULT_TERMS_OF_SERVICE_RE_ACCEPTANCE_PERIOD);
         }
         return config;
-    }
+    };
 
     componentDidMount() {
         this.getTermsOfService();
@@ -244,5 +244,5 @@ export default class CustomTermsOfServiceSettings extends AdminSettings<Props, S
                 />
             </SettingsGroup>
         );
-    }
+    };
 }

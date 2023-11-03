@@ -1,10 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ArchiveOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {memo, forwardRef, useMemo} from 'react';
 import {useSelector} from 'react-redux';
+import Constants from 'utils/constants';
 
-import {ArchiveOutlineIcon} from '@mattermost/compass-icons/components';
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -16,26 +17,24 @@ import AdvancedCreateComment from 'components/advanced_create_comment';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import BasicSeparator from 'components/widgets/separator/basic-separator';
 
-import Constants from 'utils/constants';
-
 import type {GlobalState} from 'types/store';
 
 type Props = {
     focusOnMount: boolean;
+    onHeightChange: (height: number, maxHeight: number) => void;
     teammate?: UserProfile;
     threadId: string;
     latestPostId: Post['id'];
     isThreadView?: boolean;
-    placeholder?: string;
 };
 
 const CreateComment = forwardRef<HTMLDivElement, Props>(({
     focusOnMount,
+    onHeightChange,
     teammate,
     threadId,
     latestPostId,
     isThreadView,
-    placeholder,
 }: Props, ref) => {
     const getChannel = useMemo(makeGetChannel, []);
     const rootPost = useSelector((state: GlobalState) => getPost(state, threadId));
@@ -94,13 +93,12 @@ const CreateComment = forwardRef<HTMLDivElement, Props>(({
         <div
             className='post-create__container'
             ref={ref}
-            data-testid='comment-create'
         >
             <AdvancedCreateComment
-                placeholder={placeholder}
                 focusOnMount={focusOnMount}
                 channelId={channel.id}
                 latestPostId={latestPostId}
+                onHeightChange={onHeightChange}
                 rootDeleted={rootDeleted}
                 rootId={threadId}
                 isThreadView={isThreadView}

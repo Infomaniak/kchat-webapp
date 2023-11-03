@@ -6,6 +6,12 @@ import classNames from 'classnames';
 import React, {useEffect, useRef, useReducer, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
+import {
+    ModalIdentifiers,
+    StatTypes,
+    TELEMETRY_CATEGORIES,
+} from 'utils/constants';
+import {inferNames} from 'utils/hosted_customer';
 
 import type {
     SelfHostedSignupCustomerResponse} from '@mattermost/types/hosted_customer';
@@ -42,13 +48,6 @@ import {errorInvalidNumber} from 'components/seats_calculator';
 import type {Seats} from 'components/seats_calculator';
 import Input from 'components/widgets/inputs/input/input';
 import FullScreenModal from 'components/widgets/modals/full_screen_modal';
-
-import {
-    ModalIdentifiers,
-    StatTypes,
-    TELEMETRY_CATEGORIES,
-} from 'utils/constants';
-import {inferNames} from 'utils/hosted_customer';
 
 import type {GlobalState} from 'types/store';
 

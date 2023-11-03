@@ -2,10 +2,13 @@
 // See LICENSE.txt for license information.
 
 import React, {memo} from 'react';
+import {FileTypes} from 'utils/constants';
 
 import type {FileInfo} from '@mattermost/types/files';
 import type {Post} from '@mattermost/types/posts';
 
+import type {ZoomValue} from '../file_preview_modal_image_controls/file_preview_modal_image_controls';
+import FilePreviewModalImageControls from '../file_preview_modal_image_controls/file_preview_modal_image_controls';
 import FilePreviewModalInfo from '../file_preview_modal_info/file_preview_modal_info';
 import FilePreviewModalMainActions from '../file_preview_modal_main_actions/file_preview_modal_main_actions';
 import FilePreviewModalMainNav from '../file_preview_modal_main_nav/file_preview_modal_main_nav';
@@ -26,13 +29,16 @@ interface Props {
     canDownloadFiles: boolean;
     canCopyContent: boolean;
     isExternalFile: boolean;
+    fileType: string;
+    toolbarZoom: ZoomValue;
+    setToolbarZoom: (toolbarZoom: ZoomValue) => void;
     handlePrev: () => void;
     handleNext: () => void;
     handleModalClose: () => void;
     content: string;
 }
 
-const FilePreviewModalHeader: React.FC<Props> = ({post, totalFiles, fileIndex, ...actionProps}: Props) => {
+const FilePreviewModalHeader: React.FC<Props> = ({post, totalFiles, fileIndex, toolbarZoom, setToolbarZoom, fileType, ...actionProps}: Props) => {
     let mainActions = (<div/>);
     if (totalFiles > 1) {
         mainActions = (
@@ -44,6 +50,15 @@ const FilePreviewModalHeader: React.FC<Props> = ({post, totalFiles, fileIndex, .
             />
         );
     }
+    let imageControls;
+    if (fileType === FileTypes.IMAGE || fileType === FileTypes.SVG) {
+        imageControls = (
+            <FilePreviewModalImageControls
+                toolbarZoom={toolbarZoom}
+                setToolbarZoom={setToolbarZoom}
+            />
+        );
+    }
     const actions = (
         <FilePreviewModalMainActions
             {...actionProps}
@@ -51,18 +66,21 @@ const FilePreviewModalHeader: React.FC<Props> = ({post, totalFiles, fileIndex, .
             usedInside='Header'
         />);
     return (
-        <div className='file-preview-modal-header'>
-            {actionProps.isMobileView && actions}
-            {!actionProps.isMobileView &&
-            <FilePreviewModalInfo
-                showFileName={true}
-                post={post}
-                filename={actionProps.filename}
-            />
-            }
-            {mainActions}
-            {!actionProps.isMobileView && actions}
-        </div>
+        <>
+            <div className='file-preview-modal-header'>
+                {actionProps.isMobileView && actions}
+                {!actionProps.isMobileView &&
+                <FilePreviewModalInfo
+                    showFileName={true}
+                    post={post}
+                    filename={actionProps.filename}
+                />
+                }
+                {mainActions}
+                {!actionProps.isMobileView && actions}
+            </div>
+            {imageControls}
+        </>
     );
 };
 

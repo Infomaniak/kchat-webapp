@@ -1,15 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {shallow} from 'enzyme';
+import React from 'react';
 
-import {Team, TeamMembership} from '@mattermost/types/teams';
-import {UserProfile} from '@mattermost/types/users';
-
-import {TestHelper} from '../../../../../../utils/test_helper';
+import type {Team, TeamMembership} from '@mattermost/types/teams';
+import type {UserProfile} from '@mattermost/types/users';
 
 import TeamMembers from './team_members';
+
+import {TestHelper} from '../../../../../../utils/test_helper';
 
 describe('admin_console/team_channel_settings/team/TeamMembers', () => {
     const user1: UserProfile = Object.assign(TestHelper.getUserMock({id: 'user-1'}));

@@ -3,8 +3,7 @@
 
 import React from 'react';
 import {CSSTransition} from 'react-transition-group';
-
-import {isMobile} from './is_mobile_view_hack';
+import {isMobile} from 'utils/utils';
 
 const ANIMATION_DURATION = 80;
 
@@ -13,9 +12,6 @@ type Props = {
     show: boolean;
 }
 
-/**
- * @deprecated Use the "webapp/channels/src/components/menu" instead.
- */
 export default function MenuWrapperAnimation(props: Props) {
     if (isMobile()) {
         if (props.show) {

@@ -2,15 +2,14 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import React from 'react';
 import type {ComponentProps} from 'react';
-
+import React from 'react';
 import {NotificationLevels} from 'utils/constants';
 
 import DesktopNotificationSettings from './desktop_notification_settings';
 
-jest.mock('utils/notification_sounds', () => {
-    const original = jest.requireActual('utils/notification_sounds');
+jest.mock('utils/utils', () => {
+    const original = jest.requireActual('utils/utils');
     return {
         ...original,
         hasSoundOptions: jest.fn(() => true),
@@ -32,9 +31,6 @@ describe('components/user_settings/notifications/DesktopNotificationSettings', (
         selectedSound: 'Bing',
         isCollapsedThreadsEnabled: false,
         threads: NotificationLevels.ALL,
-        callsSelectedSound: 'Dynamic',
-        callsSound: 'false',
-        isCallsRingingEnabled: false,
     };
 
     test('should match snapshot, on max setting', () => {
@@ -47,24 +43,6 @@ describe('components/user_settings/notifications/DesktopNotificationSettings', (
 
     test('should match snapshot, on max setting with sound enabled', () => {
         const props = {...baseProps, sound: 'true'};
-        const wrapper = shallow(
-            <DesktopNotificationSettings {...props}/>,
-        );
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should match snapshot, on max setting with Calls enabled', () => {
-        const props = {...baseProps, isCallsRingingEnabled: true};
-        const wrapper = shallow(
-            <DesktopNotificationSettings {...props}/>,
-        );
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should match snapshot, on max setting with Calls enabled, calls sound true', () => {
-        const props = {...baseProps, isCallsRingingEnabled: true, callsSound: 'true'};
         const wrapper = shallow(
             <DesktopNotificationSettings {...props}/>,
         );

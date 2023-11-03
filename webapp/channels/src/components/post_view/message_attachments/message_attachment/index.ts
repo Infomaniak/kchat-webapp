@@ -2,18 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
-
-import type {GlobalState} from '@mattermost/types/store';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
 import {doPostActionWithCookie} from 'mattermost-redux/actions/posts';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
-import type {ActionFunc, ActionResult, GenericAction} from 'mattermost-redux/types/actions';
+import {GlobalState} from '@mattermost/types/store';
+import {ActionFunc, ActionResult, GenericAction} from 'mattermost-redux/types/actions';
 
 import {openModal} from 'actions/views/modals';
-
-import type {ModalData} from 'types/actions';
+import {ModalData} from 'types/actions';
 
 import MessageAttachment from './message_attachment';
 

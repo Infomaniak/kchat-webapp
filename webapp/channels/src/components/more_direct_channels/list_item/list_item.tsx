@@ -9,10 +9,11 @@ import AddIcon from 'components/widgets/icons/fa_add_icon';
 
 import UserDetails from './user_details';
 
-import {isGroupChannel} from '../types';
 import type {
     GroupChannel,
-    OptionValue,
+    OptionValue} from '../types';
+import {
+    isGroupChannel,
 } from '../types';
 
 const TIME_SPEC: React.ComponentProps<typeof Timestamp> = {
@@ -92,7 +93,7 @@ function GMDetails(props: {option: GroupChannel}) {
 
     return (
         <>
-            <div className='more-modal__gm-icon'>
+            <div className='more-modal__gm-icon bg-text-200'>
                 {option.profiles.length}
             </div>
             <div className='more-modal__details'>

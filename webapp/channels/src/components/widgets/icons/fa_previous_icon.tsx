@@ -1,23 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
 import React from 'react';
-import {useIntl} from 'react-intl';
+import {t} from 'utils/i18n';
+
+import LocalizedIcon from 'components/localized_icon';
 
 type Props = {
-    additionalClassName?: string;
+    additionalClassName: string | null;
 }
 
-const PreviousIcon = ({additionalClassName}: Props) => {
-    const {formatMessage} = useIntl();
+export default class PreviousIcon extends React.PureComponent<Props> {
+    public static defaultProps: Props = {
+        additionalClassName: null,
+    };
 
-    return (
-        <i
-            className={classNames('icon icon-chevron-left', additionalClassName)}
-            title={formatMessage({id: 'generic_icons.previous', defaultMessage: 'Previous Icon'})}
-        />
-    );
-};
-
-export default React.memo(PreviousIcon);
+    public render(): JSX.Element {
+        const className = 'fa fa-1x fa-angle-left' + (this.props.additionalClassName ? ' ' + this.props.additionalClassName : '');
+        return (
+            <LocalizedIcon
+                className={className}
+                title={{id: t('generic_icons.previous'), defaultMessage: 'Previous Icon'}}
+            />
+        );
+    }
+}

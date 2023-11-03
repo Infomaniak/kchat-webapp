@@ -2,19 +2,21 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Link, RouteComponentProps} from 'react-router-dom';
 import {FormattedMessage} from 'react-intl';
+import type {RouteComponentProps} from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
+
+import type {Scheme} from '@mattermost/types/schemes';
+import type {Team} from '@mattermost/types/teams';
+
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import ConfirmModal from 'components/confirm_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
-
-import * as Utils from 'utils/utils';
-import Constants from 'utils/constants';
-import {Scheme} from '@mattermost/types/schemes';
-import {ActionResult} from 'mattermost-redux/types/actions';
-import {Team} from '@mattermost/types/teams';
 
 const MAX_TEAMS_PER_SCHEME_SUMMARY = 8;
 
@@ -96,17 +98,17 @@ export default class PermissionsSchemeSummary extends React.PureComponent<Props 
                 onCancel={this.handleDeleteCanceled}
             />
         );
-    }
+    };
 
     stopPropagation = (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
         e.stopPropagation();
-    }
+    };
 
     handleDeleteCanceled = (): void => {
         this.setState({
             showConfirmModal: false,
         });
-    }
+    };
 
     handleDeleteConfirmed = async (): Promise<void> => {
         this.setState({deleting: true, serverError: undefined});
@@ -116,7 +118,7 @@ export default class PermissionsSchemeSummary extends React.PureComponent<Props 
         } else {
             this.setState({deleting: false, showConfirmModal: false});
         }
-    }
+    };
 
     delete = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>): void => {
         e.stopPropagation();
@@ -124,11 +126,11 @@ export default class PermissionsSchemeSummary extends React.PureComponent<Props 
             return;
         }
         this.setState({showConfirmModal: true, serverError: undefined});
-    }
+    };
 
     goToEdit = (): void => {
         this.props.history.push('/admin_console/user_management/permissions/team_override_scheme/' + this.props.scheme.id);
-    }
+    };
 
     render = () => {
         const {scheme, isDisabled} = this.props;

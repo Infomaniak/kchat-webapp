@@ -1,45 +1,45 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import classNames from 'classnames';
-import {FormattedMessage, useIntl} from 'react-intl';
 import {EmoticonHappyOutlineIcon} from '@infomaniak/compass-icons/components';
+import classNames from 'classnames';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
+import Constants, {Locations} from 'utils/constants';
+import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
+import * as Utils from 'utils/utils';
 
-import {PostDraft} from 'types/store/draft';
+import type {Channel} from '@mattermost/types/channels';
+import type {Emoji} from '@mattermost/types/emojis';
+import type {ServerError} from '@mattermost/types/errors';
+import type {FileInfo} from '@mattermost/types/files';
 
 import EmojiPickerOverlay from 'components/emoji_picker/emoji_picker_overlay';
 import FilePreview from 'components/file_preview';
+import type {FilePreviewInfo} from 'components/file_preview/file_preview';
 import FileUpload from 'components/file_upload';
-import MsgTyping from 'components/msg_typing';
-import Textbox, {TextboxElement} from 'components/textbox';
-import TextboxClass from 'components/textbox/textbox';
-import MessageSubmitError from 'components/message_submit_error';
-import {FilePreviewInfo} from 'components/file_preview/file_preview';
-import {SendMessageTour} from 'components/tours/onboarding_tour';
-import {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
-import OverlayTrigger from 'components/overlay_trigger';
+import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import MessageSubmitError from 'components/message_submit_error';
+import MsgTyping from 'components/msg_typing';
+import OverlayTrigger from 'components/overlay_trigger';
+import type {TextboxElement} from 'components/textbox';
+import Textbox from 'components/textbox';
+import type TextboxClass from 'components/textbox/textbox';
+import {SendMessageTour} from 'components/tours/onboarding_tour';
 
-import * as Utils from 'utils/utils';
-import {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
-import Constants, {Locations} from 'utils/constants';
+import type {PostDraft} from 'types/store/draft';
 
-import {Channel} from '@mattermost/types/channels';
-import {ServerError} from '@mattermost/types/errors';
-import {FileInfo} from '@mattermost/types/files';
-import {Emoji} from '@mattermost/types/emojis';
+import FormattingBar from './formatting_bar';
+import {FormattingBarSpacer, Separator} from './formatting_bar/formatting_bar';
+import {IconContainer} from './formatting_bar/formatting_icon';
+import SendButton from './send_button';
+import ShowFormat from './show_formatting';
+import TexteditorActions from './texteditor_actions';
+
 import AutoHeightSwitcher from '../common/auto_height_switcher';
 import RhsSuggestionList from '../suggestion/rhs_suggestion_list';
 import Tooltip from '../tooltip';
-
-import {FormattingBarSpacer, Separator} from './formatting_bar/formatting_bar';
-
-import TexteditorActions from './texteditor_actions';
-import FormattingBar from './formatting_bar';
-import ShowFormat from './show_formatting';
-import SendButton from './send_button';
-import {IconContainer} from './formatting_bar/formatting_icon';
 
 import './advanced_text_editor.scss';
 import ToggleFormattingBar from './toggle_formatting_bar/toggle_formatting_bar';

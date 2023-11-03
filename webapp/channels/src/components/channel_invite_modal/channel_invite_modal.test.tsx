@@ -16,15 +16,6 @@ import type {Value} from 'components/multiselect/multiselect';
 
 type UserProfileValue = Value & UserProfile;
 
-jest.mock('utils/utils', () => {
-    const original = jest.requireActual('utils/utils');
-    return {
-        ...original,
-        localizeMessage: jest.fn(),
-        sortUsersAndGroups: jest.fn(),
-    };
-});
-
 describe('components/channel_invite_modal', () => {
     const users = [{
         id: 'user-1',
@@ -64,11 +55,8 @@ describe('components/channel_invite_modal', () => {
         profilesInCurrentChannel: [],
         profilesNotInCurrentTeam: [],
         profilesFromRecentDMs: [],
-        membersInTeam: {},
-        groups: [],
         userStatuses: {},
         teammateNameDisplaySetting: General.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME,
-        isGroupsEnabled: true,
         actions: {
             addUsersToChannel: jest.fn().mockImplementation(() => {
                 const error = {
@@ -79,13 +67,11 @@ describe('components/channel_invite_modal', () => {
             }),
             getProfilesNotInChannel: jest.fn().mockImplementation(() => Promise.resolve()),
             getProfilesInChannel: jest.fn().mockImplementation(() => Promise.resolve()),
-            searchAssociatedGroupsForReference: jest.fn().mockImplementation(() => Promise.resolve()),
             getTeamStats: jest.fn(),
             getUserStatuses: jest.fn().mockImplementation(() => Promise.resolve()),
             loadStatusesForProfilesList: jest.fn(),
             searchProfiles: jest.fn(),
             closeModal: jest.fn(),
-            getTeamMembersByIds: jest.fn(),
         },
         onExited: jest.fn(),
     };
@@ -190,7 +176,7 @@ describe('components/channel_invite_modal', () => {
             />,
         );
 
-        wrapper.setState({selectedUsers: users, show: true});
+        wrapper.setState({values: users, show: true});
         wrapper.instance().handleSubmit();
         expect(wrapper.state('saving')).toEqual(true);
         expect(wrapper.instance().props.actions.addUsersToChannel).toHaveBeenCalledTimes(1);
@@ -219,7 +205,7 @@ describe('components/channel_invite_modal', () => {
             />,
         );
 
-        wrapper.setState({selectedUsers: users, show: true});
+        wrapper.setState({values: users, show: true});
         wrapper.instance().handleSubmit();
         expect(wrapper.state('saving')).toEqual(true);
         expect(wrapper.instance().props.actions.addUsersToChannel).toHaveBeenCalledTimes(1);
@@ -245,7 +231,7 @@ describe('components/channel_invite_modal', () => {
             />,
         );
 
-        wrapper.setState({selectedUsers: users, show: true});
+        wrapper.setState({values: users, show: true});
         wrapper.instance().handleSubmit();
         expect(onAddCallback).toHaveBeenCalled();
         expect(wrapper.instance().props.actions.addUsersToChannel).toHaveBeenCalledTimes(0);

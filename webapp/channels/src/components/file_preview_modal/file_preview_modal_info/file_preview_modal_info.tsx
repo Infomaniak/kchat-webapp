@@ -4,6 +4,7 @@
 import React, {memo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
+import {imageURLForUser} from 'utils/utils';
 
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
@@ -15,8 +16,6 @@ import {
 } from 'mattermost-redux/selectors/entities/users';
 
 import Avatar from 'components/widgets/users/avatar/avatar';
-
-import {imageURLForUser} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

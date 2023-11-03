@@ -2,16 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {mount} from 'enzyme';
-import React from 'react';
-import * as reactIntl from 'react-intl';
-
 import enMessages from 'i18n/en.json';
 import esMessages from 'i18n/es.json';
+import React from 'react';
+import * as reactIntl from 'react-intl';
 import {mockStore} from 'tests/test_store';
 import {TestHelper} from 'utils/test_helper';
 
-import PostAriaLabelDiv from './post_aria_label_div';
 import type {Props} from './post_aria_label_div';
+import PostAriaLabelDiv from './post_aria_label_div';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),

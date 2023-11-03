@@ -4,13 +4,14 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {DispatchFunc} from 'mattermost-redux/types/actions';
 import {getCloudCustomer} from 'mattermost-redux/actions/cloud';
 import {getCloudErrors} from 'mattermost-redux/selectors/entities/cloud';
+import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {pageVisited} from 'actions/telemetry_actions';
-import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
+
 import CloudFetchError from 'components/cloud_fetch_error';
+import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
 
 import CompanyInfoDisplay from './company_info_display';
 

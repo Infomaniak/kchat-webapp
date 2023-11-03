@@ -4,7 +4,7 @@ exports[`components/drafts/draft_actions/send_draft_modal should have called onC
 <GenericModal
   autoCloseOnCancelButton={true}
   autoCloseOnConfirmButton={true}
-  bodyPadding={true}
+  autoCloseOnEnterKeyDown={true}
   compassDesign={true}
   confirmButtonText="Yes, send now"
   enforceFocus={true}
@@ -45,7 +45,7 @@ exports[`components/drafts/draft_actions/send_draft_modal should have called onE
 <GenericModal
   autoCloseOnCancelButton={true}
   autoCloseOnConfirmButton={true}
-  bodyPadding={true}
+  autoCloseOnEnterKeyDown={true}
   compassDesign={true}
   confirmButtonText="Yes, send now"
   enforceFocus={true}

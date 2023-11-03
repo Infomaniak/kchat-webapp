@@ -1,34 +1,51 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import IconButton from '@infomaniak/compass-components/components/icon-button';
+import type {TIconGlyph} from '@infomaniak/compass-components/foundations/icon';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
+import Constants, {RHSStates} from 'utils/constants';
 
-import IconButton from '@mattermost/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
+import {closeRightHandSide, showSettings} from 'actions/views/rhs';
+import {getRhsState} from 'selectors/rhs';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import UserSettingsModal from 'components/user_settings/modal';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
-
-import type {ModalData} from 'types/actions';
+import type {GlobalState} from 'types/store';
 
 type Props = {
-    actions: {
-        openModal: <P>(modalData: ModalData<P>) => void;
-    };
-};
+    tab?: string;
+    className?: string;
+    icon?: TIconGlyph;
+    tooltipPlacement?: string;
+    tooltipContent?: string;
+}
 
-const SettingsButton = (props: Props): JSX.Element | null => {
+const SettingsButton = ({tab = 'display', className, icon, tooltipPlacement, tooltipContent}: Props): JSX.Element | null => {
+    const dispatch = useDispatch();
     const {formatMessage} = useIntl();
+    const rhsState = useSelector((state: GlobalState) => getRhsState(state));
+
+    const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        if (rhsState === RHSStates.SETTINGS) {
+            dispatch(closeRightHandSide());
+        } else {
+            dispatch(showSettings(tab));
+        }
+    };
 
     const tooltip = (
         <Tooltip id='productSettings'>
-            <FormattedMessage
-                id='global_header.productSettings'
-                defaultMessage='Settings'
-            />
+            {tooltipContent || (
+                <FormattedMessage
+                    id='global_header.productSettings'
+                    defaultMessage='Settings'
+                />
+            )}
         </Tooltip>
     );
 
@@ -36,20 +53,22 @@ const SettingsButton = (props: Props): JSX.Element | null => {
         <OverlayTrigger
             trigger={['hover', 'focus']}
             delayShow={Constants.OVERLAY_TIME_DELAY}
-            placement='bottom'
+            placement={tooltipPlacement || 'bottom'}
             overlay={tooltip}
         >
             <IconButton
+                id='right-controls-settings'
+                className={`grey ${rhsState === RHSStates.SETTINGS ? 'active' : ''} ${className || ''}`}
                 size={'sm'}
-                icon={'settings-outline'}
-                onClick={(): void => {
-                    props.actions.openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}});
-                }}
+                icon={icon || 'cog'}
+                toggled={rhsState === RHSStates.SETTINGS}
+                onClick={settingButtonClick}
                 inverted={true}
                 compact={true}
                 aria-haspopup='dialog'
                 aria-label={formatMessage({id: 'global_header.productSettings', defaultMessage: 'Settings'})}
             />
+
         </OverlayTrigger>
     );
 };

@@ -1,21 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {ComponentType, useCallback, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import type {ComponentType} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useIntl} from 'react-intl';
+import {useDispatch} from 'react-redux';
+import {InsightsScopes, InsightsCardTitles, ModalIdentifiers} from 'utils/constants';
 
-import {openModal} from 'actions/views/modals';
+import type {CardSize, InsightsWidgetTypes, TimeFrame} from '@mattermost/types/insights';
+
+import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions';
-
-import {CardSize, InsightsWidgetTypes, TimeFrame} from '@mattermost/types/insights';
+import {openModal} from 'actions/views/modals';
 
 import InsightsCard from '../card/card';
 import InsightsModal from '../insights_modal/insights_modal';
-
-import {InsightsScopes, InsightsCardTitles, ModalIdentifiers} from 'utils/constants';
-import {DispatchFunc} from 'mattermost-redux/types/actions';
 
 export interface WidgetHocProps {
     size: CardSize;

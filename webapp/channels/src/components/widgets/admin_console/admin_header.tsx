@@ -1,28 +1,18 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
 import React from 'react';
-import type {ReactNode} from 'react';
 
 type Props = {
-    withBackButton?: boolean;
-    children: ReactNode;
+    children: JSX.Element[] | JSX.Element | string;
 };
 
-const AdminHeader = (props: Props) => {
-    return (
-        <div
-            className={
-                classNames(
-                    'admin-console__header',
-                    {'with-back': props.withBackButton},
-                )
-            }
-        >
-            {props.children}
-        </div>
-    );
-};
-
-export default AdminHeader;
+export default class AdminHeader extends React.PureComponent<Props> {
+    public render() {
+        return (
+            <div className={'admin-console__header'}>
+                {this.props.children}
+            </div>
+        );
+    }
+}

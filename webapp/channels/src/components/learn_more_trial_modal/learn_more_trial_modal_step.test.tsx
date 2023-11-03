@@ -4,10 +4,9 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
+import mockStore from 'tests/test_store';
 
 import LearnMoreTrialModalStep from 'components/learn_more_trial_modal/learn_more_trial_modal_step';
-
-import mockStore from 'tests/test_store';
 
 describe('components/learn_more_trial_modal/learn_more_trial_modal_step', () => {
     const props = {

@@ -37,9 +37,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <Memo(MenuHeader)
-      onClick={[Function]}
-    >
+    <MenuHeader>
       <div
         className="username-wrapper"
       >
@@ -57,7 +55,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
           @undefined
         </Text>
       </div>
-    </Memo(MenuHeader)>
+    </MenuHeader>
     <MenuGroup>
       <MenuItemAction
         ariaLabel="out of office"
@@ -80,6 +78,7 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -93,8 +92,9 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <CheckIcon
-            color="var(--semantic-color-success)"
+          <Icon
+            color="success"
+            glyph="check"
             size={16}
           />
         }
@@ -191,36 +191,26 @@ exports[`components/StatusDropdown should match snapshot in default state 1`] = 
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "type": [Function],
-          }
-        }
         icon={
-          <AccountOutlineIcon
+          <Icon
+            glyph="account-outline"
             size={16}
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <ExitToAppIcon
+          <Icon
+            glyph="exit-to-app"
             size={16}
           />
         }
@@ -271,9 +261,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <Memo(MenuHeader)
-      onClick={[Function]}
-    >
+    <MenuHeader>
       <div
         className="username-wrapper"
       >
@@ -291,7 +279,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
           @undefined
         </Text>
       </div>
-    </Memo(MenuHeader)>
+    </MenuHeader>
     <MenuGroup>
       <MenuItemAction
         ariaLabel="out of office"
@@ -335,6 +323,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           />
@@ -395,6 +384,7 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -408,8 +398,9 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <CheckIcon
-            color="var(--semantic-color-success)"
+          <Icon
+            color="success"
+            glyph="check"
             size={16}
           />
         }
@@ -506,36 +497,26 @@ exports[`components/StatusDropdown should match snapshot with custom status and 
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "type": [Function],
-          }
-        }
         icon={
-          <AccountOutlineIcon
+          <Icon
+            glyph="account-outline"
             size={16}
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <ExitToAppIcon
+          <Icon
+            glyph="exit-to-app"
             size={16}
           />
         }
@@ -586,9 +567,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <Memo(MenuHeader)
-      onClick={[Function]}
-    >
+    <MenuHeader>
       <div
         className="username-wrapper"
       >
@@ -606,7 +585,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
           @undefined
         </Text>
       </div>
-    </Memo(MenuHeader)>
+    </MenuHeader>
     <MenuGroup>
       <MenuItemAction
         ariaLabel="out of office"
@@ -631,7 +610,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
           <span
             className="custom_status__icon"
           >
-            <Memo(EmojiIcon)
+            <EmojiIcon
               className="custom-status-emoji"
             />
           </span>
@@ -641,6 +620,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -662,6 +642,7 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -675,8 +656,9 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <CheckIcon
-            color="var(--semantic-color-success)"
+          <Icon
+            color="success"
+            glyph="check"
             size={16}
           />
         }
@@ -773,36 +755,26 @@ exports[`components/StatusDropdown should match snapshot with custom status enab
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "type": [Function],
-          }
-        }
         icon={
-          <AccountOutlineIcon
+          <Icon
+            glyph="account-outline"
             size={16}
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <ExitToAppIcon
+          <Icon
+            glyph="exit-to-app"
             size={16}
           />
         }
@@ -853,9 +825,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <Memo(MenuHeader)
-      onClick={[Function]}
-    >
+    <MenuHeader>
       <div
         className="username-wrapper"
       >
@@ -873,7 +843,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
           @undefined
         </Text>
       </div>
-    </Memo(MenuHeader)>
+    </MenuHeader>
     <MenuGroup>
       <MenuItemAction
         ariaLabel="out of office"
@@ -898,7 +868,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
           <span
             className="custom_status__icon"
           >
-            <Memo(EmojiIcon)
+            <EmojiIcon
               className="custom-status-emoji"
             />
           </span>
@@ -908,6 +878,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -929,6 +900,7 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -942,8 +914,9 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <CheckIcon
-            color="var(--semantic-color-success)"
+          <Icon
+            color="success"
+            glyph="check"
             size={16}
           />
         }
@@ -1040,36 +1013,26 @@ exports[`components/StatusDropdown should match snapshot with custom status expi
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "type": [Function],
-          }
-        }
         icon={
-          <AccountOutlineIcon
+          <Icon
+            glyph="account-outline"
             size={16}
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <ExitToAppIcon
+          <Icon
+            glyph="exit-to-app"
             size={16}
           />
         }
@@ -1120,9 +1083,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <Memo(MenuHeader)
-      onClick={[Function]}
-    >
+    <MenuHeader>
       <div
         className="username-wrapper"
       >
@@ -1140,7 +1101,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
           @undefined
         </Text>
       </div>
-    </Memo(MenuHeader)>
+    </MenuHeader>
     <MenuGroup>
       <MenuItemAction
         ariaLabel="out of office"
@@ -1165,7 +1126,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
           <span
             className="custom_status__icon"
           >
-            <Memo(EmojiIcon)
+            <EmojiIcon
               className="custom-status-emoji"
             />
           </span>
@@ -1175,6 +1136,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -1197,6 +1159,7 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -1210,8 +1173,9 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <CheckIcon
-            color="var(--semantic-color-success)"
+          <Icon
+            color="success"
+            glyph="check"
             size={16}
           />
         }
@@ -1308,36 +1272,26 @@ exports[`components/StatusDropdown should match snapshot with custom status puls
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "type": [Function],
-          }
-        }
         icon={
-          <AccountOutlineIcon
+          <Icon
+            glyph="account-outline"
             size={16}
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <ExitToAppIcon
+          <Icon
+            glyph="exit-to-app"
             size={16}
           />
         }
@@ -1392,9 +1346,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <Memo(MenuHeader)
-      onClick={[Function]}
-    >
+    <MenuHeader>
       <Memo(Avatar)
         size="lg"
         url="http://localhost:8065/api/v4/users/jsx5jmdiyjyuzp9rzwfaf5pwjo/image?_=1590519110944"
@@ -1416,7 +1368,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
           @undefined
         </Text>
       </div>
-    </Memo(MenuHeader)>
+    </MenuHeader>
     <MenuGroup>
       <MenuItemAction
         ariaLabel="out of office"
@@ -1439,6 +1391,7 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -1452,8 +1405,9 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <CheckIcon
-            color="var(--semantic-color-success)"
+          <Icon
+            color="success"
+            glyph="check"
             size={16}
           />
         }
@@ -1550,36 +1504,26 @@ exports[`components/StatusDropdown should match snapshot with profile picture UR
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "type": [Function],
-          }
-        }
         icon={
-          <AccountOutlineIcon
+          <Icon
+            glyph="account-outline"
             size={16}
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <ExitToAppIcon
+          <Icon
+            glyph="exit-to-app"
             size={16}
           />
         }
@@ -1630,9 +1574,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <Memo(MenuHeader)
-      onClick={[Function]}
-    >
+    <MenuHeader>
       <div
         className="username-wrapper"
       >
@@ -1650,7 +1592,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
           @undefined
         </Text>
       </div>
-    </Memo(MenuHeader)>
+    </MenuHeader>
     <MenuGroup>
       <MenuItemAction
         ariaLabel="out of office"
@@ -1673,6 +1615,7 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -1686,8 +1629,9 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <CheckIcon
-            color="var(--semantic-color-success)"
+          <Icon
+            color="success"
+            glyph="check"
             size={16}
           />
         }
@@ -1784,36 +1728,26 @@ exports[`components/StatusDropdown should match snapshot with status dropdown op
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "type": [Function],
-          }
-        }
         icon={
-          <AccountOutlineIcon
+          <Icon
+            glyph="account-outline"
             size={16}
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <ExitToAppIcon
+          <Icon
+            glyph="exit-to-app"
             size={16}
           />
         }
@@ -1864,9 +1798,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <Memo(MenuHeader)
-      onClick={[Function]}
-    >
+    <MenuHeader>
       <div
         className="username-wrapper"
       >
@@ -1884,7 +1816,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
           @undefined
         </Text>
       </div>
-    </Memo(MenuHeader)>
+    </MenuHeader>
     <MenuGroup>
       <MenuItemAction
         ariaLabel="out of office"
@@ -1909,7 +1841,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
           <span
             className="custom_status__icon"
           >
-            <Memo(EmojiIcon)
+            <EmojiIcon
               className="custom-status-emoji"
             />
           </span>
@@ -1919,6 +1851,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           >
@@ -1940,6 +1873,7 @@ exports[`components/StatusDropdown should not show clear status button when cust
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -1953,8 +1887,9 @@ exports[`components/StatusDropdown should not show clear status button when cust
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <CheckIcon
-            color="var(--semantic-color-success)"
+          <Icon
+            color="success"
+            glyph="check"
             size={16}
           />
         }
@@ -2051,36 +1986,26 @@ exports[`components/StatusDropdown should not show clear status button when cust
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "type": [Function],
-          }
-        }
         icon={
-          <AccountOutlineIcon
+          <Icon
+            glyph="account-outline"
             size={16}
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <ExitToAppIcon
+          <Icon
+            glyph="exit-to-app"
             size={16}
           />
         }
@@ -2131,9 +2056,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
     id="statusDropdownMenu"
     listId="status-drop-down-menu-list"
   >
-    <Memo(MenuHeader)
-      onClick={[Function]}
-    >
+    <MenuHeader>
       <div
         className="username-wrapper"
       >
@@ -2151,7 +2074,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
           @undefined
         </Text>
       </div>
-    </Memo(MenuHeader)>
+    </MenuHeader>
     <MenuGroup>
       <MenuItemAction
         ariaLabel="out of office"
@@ -2195,6 +2118,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
             tooltipDirection="bottom"
           />
           <Text
+            className="custom_status__textContent"
             color="disabled"
             margin="none"
           />
@@ -2255,6 +2179,7 @@ exports[`components/StatusDropdown should show clear status button when custom s
         onClick={[Function]}
         rightDecorator={false}
         show={true}
+        sibling={false}
         text="Online"
       />
       <MenuItemAction
@@ -2268,8 +2193,9 @@ exports[`components/StatusDropdown should show clear status button when custom s
         id="status-menu-away"
         onClick={[Function]}
         rightDecorator={
-          <CheckIcon
-            color="var(--semantic-color-success)"
+          <Icon
+            color="success"
+            glyph="check"
             size={16}
           />
         }
@@ -2366,36 +2292,26 @@ exports[`components/StatusDropdown should show clear status button when custom s
       />
     </MenuGroup>
     <MenuGroup>
-      <MenuItemToggleModalRedux
+      <MenuItemAction
         ariaLabel="Profile"
-        dialogProps={
-          Object {
-            "isContentProductSettings": false,
-          }
-        }
-        dialogType={
-          Object {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "type": [Function],
-          }
-        }
         icon={
-          <AccountOutlineIcon
+          <Icon
+            glyph="account-outline"
             size={16}
           />
         }
         id="accountSettings"
-        modalId="user_settings"
+        onClick={[Function]}
         show={true}
+        sibling={false}
         text="Profile"
       />
     </MenuGroup>
     <MenuGroup>
       <MenuItemAction
         icon={
-          <ExitToAppIcon
+          <Icon
+            glyph="exit-to-app"
             size={16}
           />
         }

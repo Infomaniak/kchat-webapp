@@ -71,11 +71,11 @@ import ring from 'sounds/ring.mp3';
 import ripple from 'sounds/ripple.mp3';
 import upstairs from 'sounds/upstairs.mp3';
 import {getHistory} from 'utils/browser_history';
-import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes} from 'utils/constants';
 import type {A11yFocusEventDetail} from 'utils/constants';
+import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes} from 'utils/constants';
 import {t} from 'utils/i18n';
-import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 import * as UserAgent from 'utils/user_agent';
+import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 
 import {joinPrivateChannelPrompt} from './channel_utils';
 import {isServerVersionGreaterThanOrEqualTo} from './server_version';

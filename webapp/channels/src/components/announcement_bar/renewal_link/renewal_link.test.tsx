@@ -4,45 +4,11 @@
 import type {ReactWrapper} from 'enzyme';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
-import {Provider} from 'react-redux';
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import {Client4} from 'mattermost-redux/client';
 
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import mockStore from 'tests/test_store';
-
 import RenewalLink from './renewal_link';
-
-const initialState = {
-    views: {
-        announcementBar: {
-            announcementBarState: {
-                announcementBarCount: 1,
-            },
-        },
-    },
-    entities: {
-        general: {
-            config: {
-                CWSURL: '',
-            },
-            license: {
-                IsLicensed: 'true',
-                Cloud: 'true',
-            },
-        },
-        users: {
-            currentUserId: 'current_user_id',
-            profiles: {
-                current_user_id: {roles: 'system_user'},
-            },
-        },
-        preferences: {
-            myPreferences: {},
-        },
-        cloud: {},
-    },
-};
 
 const actImmediate = (wrapper: ReactWrapper) =>
     act(
@@ -74,8 +40,7 @@ describe('components/RenewalLink', () => {
             });
         });
         getRenewalLinkSpy.mockImplementation(() => promise);
-        const store = mockStore(initialState);
-        const wrapper = mountWithIntl(<Provider store={store}><RenewalLink {...props}/></Provider>);
+        const wrapper = mountWithIntl(<RenewalLink {...props}/>);
 
         // wait for the promise to resolve and component to update
         await actImmediate(wrapper);
@@ -89,8 +54,7 @@ describe('components/RenewalLink', () => {
             reject(new Error('License cannot be renewed from portal'));
         });
         getRenewalLinkSpy.mockImplementation(() => promise);
-        const store = mockStore(initialState);
-        const wrapper = mountWithIntl(<Provider store={store}><RenewalLink {...props}/></Provider>);
+        const wrapper = mountWithIntl(<RenewalLink {...props}/>);
 
         // wait for the promise to resolve and component to update
         await actImmediate(wrapper);

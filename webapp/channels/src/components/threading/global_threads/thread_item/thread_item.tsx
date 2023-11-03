@@ -1,13 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
-import React, {memo, useCallback, useEffect, useMemo} from 'react';
 import type {MouseEvent} from 'react';
+import React, {memo, useCallback, useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
+import {CrtTutorialSteps, Preferences} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
-import {DotsVerticalIcon} from '@mattermost/compass-icons/components';
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import {PostPriority} from '@mattermost/types/posts';
@@ -31,9 +33,6 @@ import CRTListTutorialTip from 'components/tours/crt_tour/crt_list_tutorial_tip'
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Tag from 'components/widgets/tag/tag';
 import Avatars from 'components/widgets/users/avatars';
-
-import {CrtTutorialSteps, Preferences} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -65,7 +64,7 @@ type Props = {
 const markdownPreviewOptions = {
     singleline: true,
     mentionHighlight: false,
-    atMentions: false,
+    atMentions: true,
 };
 
 function ThreadItem({
@@ -105,11 +104,16 @@ function ThreadItem({
 
     const participantIds = useMemo(() => {
         const ids = (thread?.participants || []).flatMap(({id}) => {
-            if (id === post.user_id) {
+            if (id === post.user_id && !thread?.post.props?.from_webhook) {
                 return [];
             }
             return id;
         }).reverse();
+
+        if (thread?.post.props?.from_webhook) {
+            return ids;
+        }
+
         return [post.user_id, ...ids];
     }, [thread?.participants]);
 
@@ -163,6 +167,9 @@ function ThreadItem({
         reply_count: totalReplies,
         is_following: isFollowing,
     } = thread;
+
+    // Makes the space a little bit bigger for quote blocks
+    const spacingClassName = post.message.startsWith('>') ? 'preview quote' : 'preview normalText';
 
     // if we have the whole thread, get the posts in it, sorted from newest to oldest.
     // First post is latest reply. Use that timestamp
@@ -245,7 +252,7 @@ function ThreadItem({
             </div>
             <div
                 aria-readonly='true'
-                className='preview'
+                className={spacingClassName}
                 dir='auto'
                 tabIndex={0}
                 onClick={handleFormattedTextClick}

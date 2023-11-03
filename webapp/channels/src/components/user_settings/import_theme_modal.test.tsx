@@ -2,10 +2,9 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {mountWithIntl, shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import {setThemeDefaults} from 'mattermost-redux/utils/theme_utils';
-
-import {mountWithIntl, shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import ImportThemeModal from './import_theme_modal';
 

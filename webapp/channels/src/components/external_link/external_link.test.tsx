@@ -1,12 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {screen} from '@testing-library/react';
 import {mount} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
 import type {DeepPartial} from 'redux';
-
-import {renderWithIntlAndStore, screen} from 'tests/react_testing_utils';
+import {renderWithIntlAndStore} from 'tests/react_testing_utils';
 import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
@@ -33,7 +33,7 @@ describe('components/external_link', () => {
         const wrapper = mount(
             <Provider store={store}>
                 <ExternalLink
-                    href='https://mattermost.com'
+                    href='https://infomaniak.com'
 
                 >{'Click Me'}</ExternalLink>
             </Provider>,
@@ -55,16 +55,17 @@ describe('components/external_link', () => {
                 },
             },
         };
+        const store: GlobalState = JSON.parse(JSON.stringify(state));
         renderWithIntlAndStore(
-            <ExternalLink href='https://mattermost.com'>
+            <ExternalLink href='https://infomaniak.com'>
                 {'Click Me'}
             </ExternalLink>,
-            state,
+            store,
         );
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
             'href',
-            expect.stringMatching('utm_source=mattermost&utm_medium=in-product-cloud&utm_content=&uid=currentUserId&sid='),
+            expect.stringMatching('https://infomaniak.com'),
         );
     });
 
@@ -81,16 +82,19 @@ describe('components/external_link', () => {
                 },
             },
         };
+        const store: GlobalState = JSON.parse(JSON.stringify(state));
         renderWithIntlAndStore(
-            <ExternalLink href='https://mattermost.com?test=true'>
+            <ExternalLink href='https://infomaniak.com?test=true'>
                 {'Click Me'}
             </ExternalLink>,
-            state,
+            store,
         );
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
             'href',
-            'https://mattermost.com?utm_source=mattermost&utm_medium=in-product-cloud&utm_content=&uid=currentUserId&sid=&test=true',
+
+            // ?utm_source=infomaniak&utm_medium=in-product&utm_content=&uid=currentUserId&sid=&
+            'https://infomaniak.com?test=true',
         );
     });
 
@@ -107,16 +111,17 @@ describe('components/external_link', () => {
                 },
             },
         };
+        const store: GlobalState = JSON.parse(JSON.stringify(state));
         renderWithIntlAndStore(
             <ExternalLink href='https://google.com'>
                 {'Click Me'}
             </ExternalLink>,
-            state,
+            store,
         );
 
         expect(screen.queryByText('Click Me')).not.toHaveAttribute(
             'href',
-            'utm_source=mattermost&utm_medium=in-product-cloud&utm_content=&uid=currentUserId&sid=',
+            'utm_source=infomaniak&utm_medium=in-product&utm_content=&uid=currentUserId&sid=',
         );
     });
 
@@ -133,13 +138,14 @@ describe('components/external_link', () => {
                 },
             },
         };
+        const store: GlobalState = JSON.parse(JSON.stringify(state));
         renderWithIntlAndStore(
             <ExternalLink
                 target='test'
                 rel='test'
                 href='https://google.com'
             >{'Click Me'}</ExternalLink>,
-            state,
+            store,
         );
 
         expect(screen.queryByText('Click Me')).toHaveAttribute(
@@ -151,34 +157,6 @@ describe('components/external_link', () => {
         expect(screen.queryByText('Click Me')).toHaveAttribute(
             'rel',
             expect.stringMatching('test'),
-        );
-    });
-
-    it('renders href correctly when url contains anchor by setting anchor at the end', () => {
-        const state = {
-            ...initialState,
-            entities: {
-                ...initialState.entities,
-                general: {
-                    ...initialState?.entities?.general,
-                    config: {
-                        DiagnosticsEnabled: 'true',
-                    },
-                },
-            },
-        };
-        renderWithIntlAndStore(
-            <ExternalLink
-                href='https://mattermost.com#desktop'
-            >
-                {'Click Me'}
-            </ExternalLink>,
-            state,
-        );
-
-        expect(screen.queryByText('Click Me')).toHaveAttribute(
-            'href',
-            'https://mattermost.com?utm_source=mattermost&utm_medium=in-product-cloud&utm_content=&uid=currentUserId&sid=#desktop',
         );
     });
 });

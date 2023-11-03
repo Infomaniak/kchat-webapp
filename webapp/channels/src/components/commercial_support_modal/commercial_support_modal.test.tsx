@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import CommercialSupportModal from 'components/commercial_support_modal/commercial_support_modal';
-
-import {TestHelper} from 'utils/test_helper';
 
 describe('components/CommercialSupportModal', () => {
     test('should match snapshot', () => {

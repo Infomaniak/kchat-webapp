@@ -1,11 +1,25 @@
 .image_preview {
-    &__image {
-        max-height: calc(100vh - 168px);
-        border-radius: 8px;
-        cursor: default;
+    max-width: none;
+    max-height: none;
+    border-radius: 8px;
 
-        @media screen and (max-width: 768px) {
-            border-radius: 0;
-        }
+    &_loading {
+        display: none;
+    }
+
+    &__fullscreen {
+        border-radius: 0px;
+    }
+
+    &__normal {
+        cursor: default;
+    }
+
+    &__hover {
+        cursor: grab;
+    }
+
+    &__dragging {
+        cursor: grabbing;
     }
 }

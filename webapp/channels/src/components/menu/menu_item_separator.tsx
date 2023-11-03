@@ -10,13 +10,18 @@ import React from 'react';
  * <Menu.Container>
  *   <Menu.Item>
  *   <Menu.Separator />
- * </Menu.Container>
  */
 export function MenuItemSeparator() {
     return (
         <Divider
             component='li'
             aria-orientation='vertical'
+            sx={() => ({
+                '&.MuiDivider-root': {
+                    marginTop: '3px',
+                    marginBottom: '3px',
+                },
+            })}
         />
     );
 }

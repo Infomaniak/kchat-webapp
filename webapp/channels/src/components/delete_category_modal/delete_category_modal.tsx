@@ -3,14 +3,12 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {localizeMessage} from 'utils/utils';
 
-import {GenericModal} from '@mattermost/components';
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
+import GenericModal from 'components/generic_modal';
 
 import '../category_modal.scss';
 
@@ -39,10 +37,6 @@ export default class DeleteCategoryModal extends React.PureComponent<Props, Stat
         this.props.actions.deleteCategory(this.props.category.id);
     };
 
-    handleCancel = () => {
-        this.props.onExited();
-    };
-
     render() {
         return (
             <GenericModal
@@ -54,7 +48,6 @@ export default class DeleteCategoryModal extends React.PureComponent<Props, Stat
                         defaultMessage='Delete this category?'
                     />
                 )}
-                handleCancel={this.handleCancel}
                 handleConfirm={this.handleConfirm}
                 confirmButtonText={(
                     <FormattedMessage
@@ -63,6 +56,8 @@ export default class DeleteCategoryModal extends React.PureComponent<Props, Stat
                     />
                 )}
                 confirmButtonClassName={'delete'}
+                enforceFocus={false}
+                compassDesign={true}
             >
                 <span className='delete-category__helpText'>
                     <FormattedMarkdownMessage
@@ -77,11 +72,3 @@ export default class DeleteCategoryModal extends React.PureComponent<Props, Stat
         );
     }
 }
-
-// TODO MM-52680 These strings are properly defined in @mattermost/components, but the i18n tooling currently can't
-// find them there, so we've had to redefine them here
-t('generic_modal.cancel');
-t('generic_modal.confirm');
-t('footer_pagination.count');
-t('footer_pagination.prev');
-t('footer_pagination.next');

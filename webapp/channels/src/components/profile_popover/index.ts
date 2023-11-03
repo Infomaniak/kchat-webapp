@@ -2,41 +2,41 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import type {ServerError} from '@mattermost/types/errors';
-
-import {
-    canManageAnyChannelMembersInCurrentTeam,
-    getCurrentChannelId,
-    getChannelByName,
-    getChannelMember,
-} from 'mattermost-redux/selectors/entities/channels';
-import {getCallsConfig, getProfilesInCalls} from 'mattermost-redux/selectors/entities/common';
-import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import {displayLastActiveLabel, getCurrentUserId, getLastActiveTimestampUnits, getLastActivityForUserId, getStatusForUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 import {
     getCurrentTeam,
     getCurrentRelativeTeamUrl,
     getTeamMember,
 } from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
-import {displayLastActiveLabel, getCurrentUserId, getLastActiveTimestampUnits, getLastActivityForUserId, getStatusForUserId, getUser} from 'mattermost-redux/selectors/entities/users';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {
+    getChannelMembersInChannels,
+    canManageAnyChannelMembersInCurrentTeam,
+    getCurrentChannelId,
+    getChannelByName,
+} from 'mattermost-redux/selectors/entities/channels';
+import {getCallsConfig, getCalls} from 'mattermost-redux/selectors/entities/common';
+import {Action} from 'mattermost-redux/types/actions';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 
 import {openDirectChannelToUserId} from 'actions/channel_actions';
-import {closeModal, openModal} from 'actions/views/modals';
 import {getMembershipForEntities} from 'actions/views/profile_popover';
-import {isCallsEnabled} from 'selectors/calls';
+import {closeModal, openModal} from 'actions/views/modals';
+
+import {areTimezonesEnabledAndSupported, getCurrentUserTimezone} from 'selectors/general';
 import {getRhsState, getSelectedPost} from 'selectors/rhs';
 import {getIsMobileView} from 'selectors/views/browser';
-import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 'selectors/views/custom_status';
 import {isAnyModalOpen} from 'selectors/views/modals';
+import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 'selectors/views/custom_status';
 
+import {ModalData} from 'types/actions';
+import {GlobalState} from 'types/store';
+
+import {ServerError} from '@mattermost/types/errors';
+
+import {suitePluginIds} from 'utils/constants';
 import {getDirectChannelName} from 'utils/utils';
-
-import type {ModalData} from 'types/actions';
-import type {GlobalState} from 'types/store';
 
 import ProfilePopover from './profile_popover';
 
@@ -50,16 +50,21 @@ function getDefaultChannelId(state: GlobalState) {
     return selectedPost.exists ? selectedPost.channel_id : getCurrentChannelId(state);
 }
 
-export function checkUserInCall(state: GlobalState, userId: string) {
-    for (const profilesMap of Object.values(getProfilesInCalls(state))) {
-        for (const profile of Object.values(profilesMap || {})) {
-            if (profile?.id === userId) {
-                return true;
+function checkUserInCall(state: GlobalState, userId: string) {
+    let isUserInCall = false;
+
+    const calls = getCalls(state);
+    Object.keys(calls).forEach((channelId) => {
+        const usersInCall = calls[channelId];
+
+        for (const user of usersInCall) {
+            if (user.id === userId) {
+                isUserInCall = true;
+                break;
             }
         }
-    }
-
-    return false;
+    });
+    return isUserInCall;
 }
 
 function makeMapStateToProps() {
@@ -70,7 +75,7 @@ function makeMapStateToProps() {
         const teamMember = getTeamMember(state, team.id, userId);
 
         const isTeamAdmin = Boolean(teamMember && teamMember.scheme_admin);
-        const channelMember = getChannelMember(state, channelId, userId);
+        const channelMember = getChannelMembersInChannels(state)?.[channelId]?.[userId];
 
         let isChannelAdmin = false;
         if (getRhsState(state) !== 'search' && channelMember != null && channelMember.scheme_admin) {
@@ -86,13 +91,14 @@ function makeMapStateToProps() {
         const enableLastActiveTime = displayLastActiveLabel(state, userId);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const callsEnabled = isCallsEnabled(state);
+        const isCallsEnabled = Boolean(state.plugins.plugins[suitePluginIds.calls]) && Boolean(state['plugins-' + suitePluginIds.calls]);
         const currentUserId = getCurrentUserId(state);
-        const callsConfig = callsEnabled ? getCallsConfig(state) : undefined;
+        const callsConfig = isCallsEnabled ? getCallsConfig(state) : undefined;
 
         return {
             currentTeamId: team.id,
             currentUserId,
+            enableTimezone: areTimezonesEnabledAndSupported(state),
             isTeamAdmin,
             isChannelAdmin,
             isInCurrentTeam: Boolean(teamMember) && teamMember?.delete_at === 0,
@@ -105,14 +111,14 @@ function makeMapStateToProps() {
             isCustomStatusEnabled: isCustomStatusEnabled(state),
             isCustomStatusExpired: isCustomStatusExpired(state, customStatus),
             channelId,
-            currentUserTimezone: getCurrentTimezone(state),
+            currentUserTimezone: getCurrentUserTimezone(state),
             lastActivityTimestamp,
             enableLastActiveTime,
             timestampUnits,
             isMobileView: getIsMobileView(state),
-            isCallsEnabled: callsEnabled,
-            isUserInCall: callsEnabled ? checkUserInCall(state, userId) : undefined,
-            isCurrentUserInCall: callsEnabled ? checkUserInCall(state, currentUserId) : undefined,
+            isCallsEnabled,
+            isUserInCall: isCallsEnabled ? checkUserInCall(state, userId) : undefined,
+            isCurrentUserInCall: isCallsEnabled ? checkUserInCall(state, currentUserId) : undefined,
             isCallsDefaultEnabledOnAllChannels: callsConfig?.DefaultEnabled,
             isCallsCanBeDisabledOnSpecificChannels: callsConfig?.AllowEnableCalls,
             dMChannel: getChannelByName(state, getDirectChannelName(currentUserId, userId)),
@@ -129,9 +135,9 @@ type Actions = {
     getMembershipForEntities: (teamId: string, userId: string, channelId?: string) => Promise<void>;
 }
 
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators<ActionCreatorsMapObject, Actions>({
+        actions: bindActionCreators<ActionCreatorsMapObject<Action>, Actions>({
             closeModal,
             openDirectChannelToUserId,
             openModal,

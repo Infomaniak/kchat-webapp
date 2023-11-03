@@ -1,16 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect} from 'react';
+import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
+import React from 'react';
 import {useIntl, FormattedMessage, FormattedNumber} from 'react-intl';
-
-import {InformationOutlineIcon} from '@mattermost/compass-icons/components';
+import {Constants, ItemStatus} from 'utils/constants';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import Input from 'components/widgets/inputs/input/input';
-
-import {Constants, ItemStatus} from 'utils/constants';
 
 import './seats_calculator.scss';
 
@@ -41,12 +39,6 @@ export const errorInvalidNumber = (
         defaultMessage='Enter a valid number of seats'
     />
 );
-export const errorMinSeats = (
-    <FormattedMessage
-        id='cloud_upgrade.error_min_seats'
-        defaultMessage='Minimum of 10 seats required'
-    />
-);
 
 function validateSeats(seats: string, annualPricePerSeat: number, minSeats: number, cloud: boolean): Seats {
     if (seats === '') {
@@ -61,13 +53,6 @@ function validateSeats(seats: string, annualPricePerSeat: number, minSeats: numb
         return {
             quantity: seats,
             error: errorInvalidNumber,
-        };
-    }
-
-    if (seatsNumber < 10) {
-        return {
-            quantity: seats,
-            error: errorMinSeats,
         };
     }
 
@@ -101,7 +86,7 @@ function validateSeats(seats: string, annualPricePerSeat: number, minSeats: numb
             {errorPrefix}
             <FormattedMessage
                 id='self_hosted_signup.error_max_seats'
-                defaultMessage=' license purchase only supports purchases up to {num} seats'
+                defaultMessage=' license purchase only supports purchases up to {num} users'
                 values={{
                     num: <FormattedNumber value={maxSeats}/>,
                 }}
@@ -147,10 +132,6 @@ export default function SeatsCalculator(props: Props) {
         props.onChange(validateSeats(value, annualPricePerSeat, props.existingUsers, props.isCloud));
     };
 
-    useEffect(() => {
-        props.onChange(validateSeats(props.seats.quantity, annualPricePerSeat, props.existingUsers, props.isCloud));
-    }, []);
-
     const maxSeats = calculateMaxUsers(annualPricePerSeat);
     const total = '$' + intl.formatNumber((parseFloat(props.seats.quantity) || 0) * annualPricePerSeat, {maximumFractionDigits: 2});
     const userCountTooltip = (
@@ -184,7 +165,7 @@ export default function SeatsCalculator(props: Props) {
                             type='text'
                             value={props.seats.quantity}
                             onChange={onChange}
-                            placeholder={intl.formatMessage({id: 'self_hosted_signup.seats', defaultMessage: 'Seats'})}
+                            placeholder={intl.formatMessage({id: 'self_hosted_signup.seats', defaultMessage: 'User seats'})}
                             wrapperClassName='user_seats'
                             inputClassName='user_seats'
                             maxLength={maxSeats.toString().length + 1}
@@ -214,7 +195,7 @@ export default function SeatsCalculator(props: Props) {
                     <div className='SeatsCalculator__seats-label'>
                         <FormattedMessage
                             id='self_hosted_signup.line_item_subtotal'
-                            defaultMessage='{num} seats × 12 mo.'
+                            defaultMessage='{num} users × 12 mo.'
                             values={{
                                 num: props.seats.quantity || '0',
                             }}

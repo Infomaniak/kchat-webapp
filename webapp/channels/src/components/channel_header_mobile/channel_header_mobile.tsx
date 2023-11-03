@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
+import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
@@ -9,8 +10,7 @@ import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {MobileChannelHeaderDropdown} from 'components/channel_header_dropdown';
-
-import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
+import FlagNext from 'components/flag_next';
 
 import ChannelInfoButton from './channel_info_button';
 import CollapseLhsButton from './collapse_lhs_button';
@@ -122,6 +122,7 @@ export default class ChannelHeaderMobile extends React.PureComponent<Props> {
                             />
                         )}
                         <CollapseRhsButton/>
+                        <FlagNext/>
                     </div>
                 </div>
             </nav>

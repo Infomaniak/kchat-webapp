@@ -12,7 +12,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, comma
     >
       <MemoizedFormattedMessage
         defaultMessage="Slash Commands"
-        id="slash_commands.header"
+        id="installed_commands.header"
       />
     </Link>
     <MemoizedFormattedMessage
@@ -55,7 +55,9 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, comma
           }
         }
       />
-      <Memo(CopyText)
+      <CopyText
+        defaultMessage="Copy"
+        idMessage="integrations.copy"
         value="jb6oyqh95irpbx8fo9zmndkp1r"
       />
     </p>
@@ -88,7 +90,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, incom
     >
       <MemoizedFormattedMessage
         defaultMessage="Incoming Webhooks"
-        id="incoming_webhooks.header"
+        id="installed_incoming_webhooks.header"
       />
     </Link>
     <MemoizedFormattedMessage
@@ -131,7 +133,9 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, incom
           }
         }
       />
-      <Memo(CopyText)
+      <CopyText
+        defaultMessage="Copy"
+        idMessage="integrations.copy"
         value="http://localhost:8065/hooks/r5tpgt4iepf45jt768jz84djic"
       />
     </p>
@@ -164,7 +168,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, oauth
     >
       <MemoizedFormattedMessage
         defaultMessage="OAuth 2.0 Applications"
-        id="installed_oauth2_apps.header"
+        id="installed_oauth_apps.header"
       />
     </Link>
     <MemoizedFormattedMessage
@@ -209,7 +213,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, oauth
           }
         }
       />
-      <Memo(CopyText)
+      <CopyText
         defaultMessage="Copy Client Id"
         idMessage="integrations.copy_client_id"
         value="r5tpgt4iepf45jt768jz84djic"
@@ -224,7 +228,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, oauth
           }
         }
       />
-      <Memo(CopyText)
+      <CopyText
         defaultMessage="Copy Client Secret"
         idMessage="integrations.copy_client_secret"
         value="<==secret==>"
@@ -282,7 +286,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, outgo
     >
       <MemoizedFormattedMessage
         defaultMessage="Outgoing Webhooks"
-        id="add_outgoing_webhook.header"
+        id="installed_outgoing_webhooks.header"
       />
     </Link>
     <MemoizedFormattedMessage
@@ -325,7 +329,9 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, outgo
           }
         }
       />
-      <Memo(CopyText)
+      <CopyText
+        defaultMessage="Copy"
+        idMessage="integrations.copy"
         value="jb6oyqh95irpbx8fo9zmndkp1r"
       />
     </p>

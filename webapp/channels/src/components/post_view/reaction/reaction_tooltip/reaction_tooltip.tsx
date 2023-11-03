@@ -1,10 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import * as React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import type {Reaction as ReactionType} from '@mattermost/types/reactions';
+
+import RenderEmoji from 'components/emoji/render_emoji';
 
 type Props = {
     canAddReactions: boolean;
@@ -14,6 +16,7 @@ type Props = {
     reactions: ReactionType[];
     users: string[];
 };
+const MAX_DISPLAY_USER = 20;
 
 const ReactionTooltip: React.FC<Props> = (props: Props) => {
     const {
@@ -25,17 +28,18 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
         users,
     } = props;
 
-    const otherUsersCount = reactions.length - users.length;
+    const reduceUsers = users.slice(0, MAX_DISPLAY_USER);
+    const otherUsersCount = reactions.length - reduceUsers.length;
 
     let names: React.ReactNode;
     if (otherUsersCount > 0) {
-        if (users.length > 0) {
+        if (reduceUsers.length > 0) {
             names = (
                 <FormattedMessage
                     id='reaction.usersAndOthersReacted'
                     defaultMessage='{users} and {otherUsers, number} other {otherUsers, plural, one {user} other {users}}'
                     values={{
-                        users: users.join(', '),
+                        users: reduceUsers.join(', '),
                         otherUsers: otherUsersCount,
                     }}
                 />
@@ -57,8 +61,8 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
                 id='reaction.usersReacted'
                 defaultMessage='{users} and {lastUser}'
                 values={{
-                    users: users.slice(0, -1).join(', '),
-                    lastUser: users[users.length - 1],
+                    users: reduceUsers.slice(0, -1).join(', '),
+                    lastUser: reduceUsers[reduceUsers.length - 1],
                 }}
             />
         );
@@ -67,7 +71,7 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
     }
 
     let reactionVerb: React.ReactNode;
-    if (users.length + otherUsersCount > 1) {
+    if (users.length > 1) {
         if (currentUserReacted) {
             reactionVerb = (
                 <FormattedMessage
@@ -100,15 +104,23 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
     }
 
     const tooltip = (
-        <FormattedMessage
-            id='reaction.reacted'
-            defaultMessage='{users} {reactionVerb} with {emoji}'
-            values={{
-                users: <b>{names}</b>,
-                reactionVerb,
-                emoji: <b>{':' + emojiName + ':'}</b>,
-            }}
-        />
+        <>
+            <RenderEmoji
+                emojiName={emojiName}
+                size={50}
+                emojiStyle={{backgroundColor: 'white', borderRadius: '3px', backgroundSize: '45px'}}
+            />
+            <br/>
+            <FormattedMessage
+                id='reaction.reacted'
+                defaultMessage='{users} {reactionVerb} with {emoji}'
+                values={{
+                    users: <b>{names}</b>,
+                    reactionVerb,
+                    emoji: <b>{':' + emojiName + ':'}</b>,
+                }}
+            />
+        </>
     );
 
     let clickTooltip: React.ReactNode;
@@ -129,11 +141,11 @@ const ReactionTooltip: React.FC<Props> = (props: Props) => {
     }
 
     return (
-        <>
+        <div className={otherUsersCount > 0 ? 'reactions-xl' : ''}>
             {tooltip}
             <br/>
             {clickTooltip}
-        </>
+        </div>
     );
 };
 

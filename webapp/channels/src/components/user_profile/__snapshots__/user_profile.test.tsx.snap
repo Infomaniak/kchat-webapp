@@ -143,7 +143,7 @@ exports[`components/UserProfile should match snapshot, with colorization 1`] = `
       className="user-popover style--none"
       style={
         Object {
-          "color": "#bbd279",
+          "color": "#000000",
         }
       }
     >

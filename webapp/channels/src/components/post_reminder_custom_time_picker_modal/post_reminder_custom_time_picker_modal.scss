@@ -16,22 +16,16 @@
         &-footer {
             padding: 0;
             padding-right: 16px;
-            margin-top: 22px;
+            margin-top: 0px;
         }
     }
 
     .dateTime__calendar-input {
         width: 260px;
-        border: 2px solid var(--button-bg);
         font-size: 14px;
 
-        &:hover {
-            border: 2px solid var(--button-bg);
-            cursor: pointer;
-        }
-
-        &:focus-within {
-            box-shadow: 0;
+        @media screen and (max-width: 768px) {
+            width: auto;
         }
 
         .Input_wrapper {

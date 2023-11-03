@@ -1,17 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import IconButton from '@infomaniak/compass-components/components/icon-button';
+import {CheckIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {memo, useCallback, useState} from 'react';
 import {defineMessages, useIntl} from 'react-intl';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {imageURLForUser} from 'utils/utils';
 
-import IconButton from '@mattermost/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
-import {CheckIcon} from '@mattermost/compass-icons/components';
 import type {Post} from '@mattermost/types/posts';
 
-import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
-
-import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
 import InfoToast from 'components/info_toast/info_toast';
 import OverlayTrigger from 'components/overlay_trigger';
 import PostAriaLabelDiv from 'components/post_view/post_aria_label_div';
@@ -21,12 +21,9 @@ import Tooltip from 'components/tooltip';
 import UserProfileComponent from 'components/user_profile';
 import Avatar from 'components/widgets/users/avatar';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {imageURLForUser} from 'utils/utils';
-
 import RestorePostModal from '../restore_post_modal';
 
-import type {PropsFromRedux} from './index';
+import type {PropsFromRedux} from '.';
 
 const DATE_RANGES = [
     RelativeRanges.TODAY_TITLE_CASE,
@@ -35,15 +32,15 @@ const DATE_RANGES = [
 
 const itemMessages = defineMessages({
     helpText: {
-        id: 'post_info.edit.restore',
+        id: t('post_info.edit.restore'),
         defaultMessage: 'Restore this version',
     },
     currentVersionText: {
-        id: 'post_info.edit.current_version',
+        id: t('post_info.edit.current_version'),
         defaultMessage: 'Current Version',
     },
     ariaLabelMessage: {
-        id: 'post_info.edit.aria_label',
+        id: t('post_info.edit.aria_label'),
         defaultMessage: 'Select to restore an old message.',
     },
 });
@@ -51,10 +48,9 @@ const itemMessages = defineMessages({
 export type Props = PropsFromRedux & {
     post: Post;
     isCurrent?: boolean;
-    theme: Theme;
 }
 
-const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, theme, actions}: Props) => {
+const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: Props) => {
     const {formatMessage} = useIntl();
     const [open, setOpen] = useState(isCurrent);
 
@@ -203,42 +199,40 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, theme, act
     const timeStampValue = post.edit_at === 0 ? post.create_at : post.edit_at;
 
     return (
-        <CompassThemeProvider theme={theme}>
-            <div
-                className={postContainerClass}
-                onClick={togglePost}
+        <div
+            className={postContainerClass}
+            onClick={togglePost}
+        >
+            <PostAriaLabelDiv
+                className={'a11y__section post'}
+                id={'searchResult_' + post.id}
+                post={post}
             >
-                <PostAriaLabelDiv
-                    className={'a11y__section post'}
-                    id={'searchResult_' + post.id}
-                    post={post}
+                <div
+                    className='edit-post-history__title__container'
+                    aria-hidden='true'
                 >
-                    <div
-                        className='edit-post-history__title__container'
-                        aria-hidden='true'
-                    >
-                        <div className='edit-post-history__date__badge__container'>
-                            <IconButton
-                                size={'sm'}
-                                icon={open ? 'chevron-down' : 'chevron-right'}
-                                compact={true}
-                                aria-label='Toggle to see an old message.'
-                                className='edit-post-history__icon__button'
+                    <div className='edit-post-history__date__badge__container'>
+                        <IconButton
+                            size={'sm'}
+                            icon={open ? 'chevron-down' : 'chevron-right'}
+                            compact={true}
+                            aria-label='Toggle to see an old message.'
+                            className='edit-post-history__icon__button'
+                        />
+                        <span className='edit-post-history__date'>
+                            <Timestamp
+                                value={timeStampValue}
+                                ranges={DATE_RANGES}
                             />
-                            <span className='edit-post-history__date'>
-                                <Timestamp
-                                    value={timeStampValue}
-                                    ranges={DATE_RANGES}
-                                />
-                            </span>
-                            {currentVersionIndicator}
-                        </div>
-                        {restoreButton}
+                        </span>
+                        {currentVersionIndicator}
                     </div>
-                    {open && messageContainer}
-                </PostAriaLabelDiv>
-            </div>
-        </CompassThemeProvider>
+                    {restoreButton}
+                </div>
+                {open && messageContainer}
+            </PostAriaLabelDiv>
+        </div>
     );
 };
 

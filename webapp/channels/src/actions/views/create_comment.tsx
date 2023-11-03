@@ -1,6 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {Constants, StoragePrefixes} from 'utils/constants';
+import EmojiMap from 'utils/emoji_map';
+import * as Utils from 'utils/utils';
+
 import type {Post} from '@mattermost/types/posts';
 
 import {
@@ -28,10 +32,6 @@ import * as PostActions from 'actions/post_actions';
 import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
 import {updateDraft, removeDraft} from 'actions/views/drafts';
 import {getPostDraft} from 'selectors/rhs';
-
-import {Constants, StoragePrefixes} from 'utils/constants';
-import EmojiMap from 'utils/emoji_map';
-import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 import type {PostDraft} from 'types/store/draft';

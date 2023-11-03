@@ -5,10 +5,8 @@ import {useDispatch} from 'react-redux';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
-
-import DowngradeModal from 'components/downgrade_modal';
-
 import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
+import DowngradeModal from 'components/downgrade_modal';
 
 interface OpenDowngradeModalOptions{
     trackingLocation?: string;

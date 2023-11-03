@@ -2,8 +2,24 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import {FormattedMessage} from 'react-intl';
+import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
+
+import type {ChannelWithTeamData} from '@mattermost/types/channels';
+import type {
+    Group,
+    GroupChannel,
+    GroupPatch,
+    GroupTeam,
+    SyncablePatch} from '@mattermost/types/groups';
+import {
+    SyncableType,
+} from '@mattermost/types/groups';
+import type {Team} from '@mattermost/types/teams';
+import type {UserProfile} from '@mattermost/types/users';
+
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import BlockableLink from 'components/admin_console/blockable_link';
 import {GroupProfileAndSettings} from 'components/admin_console/group_settings/group_details/group_profile_and_settings';
@@ -16,21 +32,6 @@ import TeamSelectorModal from 'components/team_selector_modal';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import {ActionResult} from 'mattermost-redux/types/actions';
-import {ChannelWithTeamData} from '@mattermost/types/channels';
-import {
-    Group,
-    GroupChannel,
-    GroupPatch,
-    GroupTeam,
-    SyncablePatch,
-    SyncableType,
-} from '@mattermost/types/groups';
-import {Team} from '@mattermost/types/teams';
-import {UserProfile} from '@mattermost/types/users';
-
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
 
 export type Props = {
     groupID: string;
@@ -508,12 +509,8 @@ export default class GroupDetails extends React.PureComponent<Props, State> {
                 allowReference,
                 groupMentionName: lcGroupMentionName,
                 serverError,
-                hasAllowReferenceChanged: result.error ?
-                    hasAllowReferenceChanged :
-                    false,
-                hasGroupMentionNameChanged: result.error ?
-                    hasGroupMentionNameChanged :
-                    false,
+                hasAllowReferenceChanged: result.error ? hasAllowReferenceChanged : false,
+                hasGroupMentionNameChanged: result.error ? hasGroupMentionNameChanged : false,
             });
         }
 

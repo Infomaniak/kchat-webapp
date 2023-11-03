@@ -1,4 +1,10 @@
 .new-channel-modal {
+    .new-channel-modal-name-input {
+        height: 34px !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+    }
+
     .new-channel-modal-type-selector {
         margin-top: 24px;
     }
@@ -80,4 +86,8 @@
     .description {
         font-weight: 500;
     }
+}
+
+.new-channel-modal__url {
+    margin-top: 4px;
 }

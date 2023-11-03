@@ -19,7 +19,7 @@ type Props = {
 
 export default class SaveButton extends React.PureComponent<Props> {
     public static defaultProps: Partial<Props> = {
-        btnClass: '',
+        btnClass: 'btn-primary',
         defaultMessage: (
             <FormattedMessage
                 id='save_button.save'
@@ -47,11 +47,7 @@ export default class SaveButton extends React.PureComponent<Props> {
             ...props
         } = this.props;
 
-        let className = 'btn';
-        if (!btnClass) {
-            className += ' btn-primary';
-        }
-
+        let className = 'save-button btn';
         if (!disabled || saving) {
             className += ' ' + btnClass;
         }

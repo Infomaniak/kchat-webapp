@@ -3,7 +3,6 @@
 
 import {mount} from 'enzyme';
 import React from 'react';
-
 import EmojiMap from 'utils/emoji_map';
 
 import DialogIntroductionText from './dialog_introduction_text';

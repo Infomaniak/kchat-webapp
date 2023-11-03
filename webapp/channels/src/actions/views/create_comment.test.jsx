@@ -1,6 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import mockStore from 'tests/test_store';
+import {StoragePrefixes} from 'utils/constants';
+
 import {
     removeReaction,
     addMessageIntoHistory,
@@ -23,9 +26,6 @@ import {
     makeOnEditLatestPost,
 } from 'actions/views/create_comment';
 import {removeDraft, setGlobalDraftSource} from 'actions/views/drafts';
-
-import mockStore from 'tests/test_store';
-import {StoragePrefixes} from 'utils/constants';
 
 /* eslint-disable global-require */
 

@@ -1,30 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-
-import {FormattedMessage, useIntl} from 'react-intl';
-
-import moment from 'moment';
 import isEmpty from 'lodash/isEmpty';
+import moment from 'moment';
+import React, {useState} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
+import {CloudBanners, Preferences} from 'utils/constants';
+import {getBrowserTimezone} from 'utils/timezone';
 
-import {GlobalState} from '@mattermost/types/store';
+import type {GlobalState} from '@mattermost/types/store';
 
+import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
 import {get as getPreference} from 'mattermost-redux/selectors/entities/preferences';
 
-import {savePreferences} from 'mattermost-redux/actions/preferences';
+import {SalesInquiryIssue} from 'selectors/cloud';
 
-import {getBrowserTimezone} from 'utils/timezone';
-import {CloudBanners, Preferences} from 'utils/constants';
-
-import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import AlertBanner from 'components/alert_banner';
+import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import UpgradeLink from 'components/widgets/links/upgrade_link';
 
 import './cloud_trial_banner.scss';
-import {SalesInquiryIssue} from 'selectors/cloud';
 
 export interface Props {
     trialEndDate: number;

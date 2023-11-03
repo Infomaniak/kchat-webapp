@@ -2,14 +2,13 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import type {Action, GenericAction} from 'mattermost-redux/types/actions.js';
+import {GlobalState} from 'types/store/index.js';
+
+import {Action, GenericAction} from 'mattermost-redux/types/actions.js';
 
 import {closeModal} from 'actions/views/modals';
-
-import type {GlobalState} from 'types/store/index.js';
 
 import ModalController from './modal_controller';
 

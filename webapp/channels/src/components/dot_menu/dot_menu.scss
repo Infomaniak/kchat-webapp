@@ -6,15 +6,29 @@
     }
 
     &__post-reminder-menu-header {
-        padding: 6px 20px;
+        padding: 6px 10px;
         margin: 0;
         color: var(--center-channel-color);
         font-weight: bold;
         pointer-events: none;
+
+        @media screen and (max-width: 768px) {
+            padding: 6px 8px;
+        }
     }
 
     &__item-trailing-icon {
         display: flex;
         margin-right: -4px;
+    }
+
+    .post_info__reminder-icon {
+        color: rgba(var(--center-channel-color-rgb), 0.56);
+    }
+
+    .remind_menu__right_decorator {
+        position: absolute;
+        right: 10px;
+        font-size: 12px;
     }
 }

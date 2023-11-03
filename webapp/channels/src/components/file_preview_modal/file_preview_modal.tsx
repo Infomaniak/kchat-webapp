@@ -4,6 +4,8 @@
 import classNames from 'classnames';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
+import Constants, {FileTypes, ZoomSettings} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import type {FileInfo} from '@mattermost/types/files';
 import type {Post} from '@mattermost/types/posts';
@@ -16,20 +18,16 @@ import CodePreview from 'components/code_preview';
 import FileInfoPreview from 'components/file_info_preview';
 import LoadingImagePreview from 'components/loading_image_preview';
 
-import Constants, {FileTypes, ZoomSettings} from 'utils/constants';
-import * as Keyboard from 'utils/keyboard';
-import * as Utils from 'utils/utils';
-
 import type {FilePreviewComponent} from 'types/store/plugins';
 
+import type {ZoomValue} from './file_preview_modal_image_controls/file_preview_modal_image_controls';
+import ImagePreview from './image_preview';
+import './file_preview_modal.scss';
 import FilePreviewModalFooter from './file_preview_modal_footer/file_preview_modal_footer';
 import FilePreviewModalHeader from './file_preview_modal_header/file_preview_modal_header';
-import ImagePreview from './image_preview';
 import PopoverBar from './popover_bar';
-import {isFileInfo} from './types';
 import type {LinkInfo} from './types';
-
-import './file_preview_modal.scss';
+import {isFileInfo} from './types';
 
 const PDFPreview = React.lazy(() => import('components/pdf_preview'));
 
@@ -66,6 +64,7 @@ export type Props = {
 }
 
 type State = {
+    toolbarZoom: ZoomValue;
     show: boolean;
     imageIndex: number;
     imageHeight: number | string;
@@ -89,6 +88,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
         super(props);
 
         this.state = {
+            toolbarZoom: 'A',
             show: true,
             imageIndex: this.props.startIndex,
             imageHeight: '100%',
@@ -101,6 +101,8 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
             content: '',
         };
     }
+
+    setToolbarZoom = (newToolbarZoom: ZoomValue) => this.setState({toolbarZoom: newToolbarZoom});
 
     handleNext = () => {
         let id = this.state.imageIndex + 1;
@@ -119,9 +121,9 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
     };
 
     handleKeyPress = (e: KeyboardEvent) => {
-        if (Keyboard.isKeyPressed(e, KeyCodes.RIGHT)) {
+        if (Utils.isKeyPressed(e, KeyCodes.RIGHT)) {
             this.handleNext();
-        } else if (Keyboard.isKeyPressed(e, KeyCodes.LEFT)) {
+        } else if (Utils.isKeyPressed(e, KeyCodes.LEFT)) {
             this.handlePrev();
         }
     };
@@ -307,8 +309,9 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                 if (fileType === FileTypes.IMAGE || fileType === FileTypes.SVG) {
                     content = (
                         <ImagePreview
-                            fileInfo={fileInfo as FileInfo}
-                            canDownloadFiles={this.props.canDownloadFiles}
+                            fileInfo={fileInfo as FileInfo & LinkInfo}
+                            toolbarZoom={this.state.toolbarZoom}
+                            setToolbarZoom={this.setToolbarZoom}
                         />
                     );
                 } else if (fileType === FileTypes.VIDEO || fileType === FileTypes.AUDIO) {
@@ -425,6 +428,9 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                                     post={this.props.post!}
                                     showPublicLink={showPublicLink}
                                     fileIndex={this.state.imageIndex}
+                                    toolbarZoom={this.state.toolbarZoom}
+                                    setToolbarZoom={this.setToolbarZoom}
+                                    fileType={fileType}
                                     totalFiles={this.props.fileInfos?.length}
                                     filename={fileName}
                                     fileURL={fileDownloadUrl}
@@ -445,6 +451,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                                     'file-preview-modal__content',
                                     {
                                         'file-preview-modal__content-scrollable': (!isFileInfo(fileInfo) || !fileInfo.archived) && this.state.loaded[this.state.imageIndex] && (fileType === FileTypes.PDF),
+                                        'file-preview-modal__content-image': (fileType === FileTypes.IMAGE || fileType === FileTypes.SVG),
                                     },
                                 )}
                                 onClick={this.handleBgClose}

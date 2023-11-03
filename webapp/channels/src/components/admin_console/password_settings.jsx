@@ -3,10 +3,9 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
 import Constants from 'utils/constants';
-import * as Utils from 'utils/utils';
 import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import AdminSettings from './admin_settings';
 import Setting from './setting';
@@ -78,7 +77,7 @@ export default class PasswordSettings extends AdminSettings {
         config.ServiceSettings.MaximumLoginAttempts = this.parseIntNonZero(this.state.maximumLoginAttempts, Constants.MAXIMUM_LOGIN_ATTEMPTS_DEFAULT);
 
         return config;
-    }
+    };
 
     getStateFromConfig(config) {
         return {
@@ -123,17 +122,17 @@ export default class PasswordSettings extends AdminSettings {
                 }}
             />
         );
-    }
+    };
 
     handlePasswordLengthChange = (id, value) => {
         this.handleChange(id, value);
-    }
+    };
 
     handleCheckboxChange = (id) => {
         return ({target: {checked}}) => {
             this.handleChange(id, checked);
         };
-    }
+    };
 
     renderTitle() {
         return (
@@ -283,5 +282,5 @@ export default class PasswordSettings extends AdminSettings {
                 }
             </SettingsGroup>
         );
-    }
+    };
 }

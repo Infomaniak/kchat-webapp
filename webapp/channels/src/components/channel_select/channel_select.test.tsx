@@ -3,13 +3,12 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import Constants from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import type {ChannelType} from '@mattermost/types/channels';
 
 import ChannelSelect from 'components/channel_select/channel_select';
-
-import Constants from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
 
 describe('components/ChannelSelect', () => {
     const defaultProps = {

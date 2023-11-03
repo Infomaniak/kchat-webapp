@@ -17,7 +17,7 @@ type Props = {
     /**
      * Invert the permission (used for else)
      */
-    invert?: boolean;
+    invert: boolean;
 
     /**
      * Content protected by the permissions gate
@@ -25,15 +25,18 @@ type Props = {
     children: React.ReactNode;
 };
 
-const SystemPermissionGate = ({
-    invert = false,
-    hasPermission,
-    children,
-}: Props) => {
-    if (hasPermission !== invert) {
-        return <>{children}</>;
-    }
-    return null;
-};
+export default class SystemPermissionGate extends React.PureComponent<Props> {
+    public static defaultProps = {
+        invert: false,
+    };
 
-export default SystemPermissionGate;
+    render() {
+        if (this.props.hasPermission && !this.props.invert) {
+            return this.props.children;
+        }
+        if (!this.props.hasPermission && this.props.invert) {
+            return this.props.children;
+        }
+        return null;
+    }
+}

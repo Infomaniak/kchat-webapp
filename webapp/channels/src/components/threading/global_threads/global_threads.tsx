@@ -4,10 +4,10 @@
 import classNames from 'classnames';
 import {isEmpty} from 'lodash';
 import React, {memo, useCallback, useEffect, useState} from 'react';
-import type {ReactNode} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 import {Link, useRouteMatch} from 'react-router-dom';
+import {Constants, PreviousViewedTypes} from 'utils/constants';
 
 import {getThreadCounts, getThreads} from 'mattermost-redux/actions/threads';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
@@ -23,6 +23,7 @@ import {loadProfilesForSidebar} from 'actions/user_actions';
 import {selectLhsItem} from 'actions/views/lhs';
 import {suppressRHS, unsuppressRHS} from 'actions/views/rhs';
 import {setSelectedThreadId} from 'actions/views/threads';
+import {getIsRhsOpen} from 'selectors/rhs';
 import {getSelectedThreadIdInCurrentTeam} from 'selectors/views/threads';
 import {useGlobalState} from 'stores/hooks';
 import LocalStorageStore from 'stores/local_storage_store';
@@ -31,19 +32,19 @@ import LoadingScreen from 'components/loading_screen';
 import NoResultsIndicator from 'components/no_results_indicator';
 import Header from 'components/widgets/header';
 
-import {Constants, PreviousViewedTypes} from 'utils/constants';
-
 import type {GlobalState} from 'types/store/index';
 import {LhsItemType, LhsPage} from 'types/store/lhs';
 
 import ThreadList, {ThreadFilter, FILTER_STORAGE_KEY} from './thread_list';
 import ThreadPane from './thread_pane';
 
-import ChatIllustration from '../common/chat_illustration';
+import NoThreadIllustration from '../common/no_thread_illustration';
 import {useThreadRouting} from '../hooks';
 import ThreadViewer from '../thread_viewer';
 
 import './global_threads.scss';
+
+const NO_THREAD_ILLUSTRATION = (<NoThreadIllustration/>);
 
 const GlobalThreads = () => {
     const {formatMessage} = useIntl();
@@ -60,6 +61,7 @@ const GlobalThreads = () => {
     const threadIds = useSelector((state: GlobalState) => getThreadOrderInCurrentTeam(state, selectedThread?.id), shallowEqual);
     const unreadThreadIds = useSelector((state: GlobalState) => getUnreadThreadOrderInCurrentTeam(state, selectedThread?.id), shallowEqual);
     const numUnread = counts?.total_unread_threads || 0;
+    const isRHSOpened = useSelector(getIsRhsOpen);
 
     useEffect(() => {
         dispatch(suppressRHS);
@@ -151,7 +153,10 @@ const GlobalThreads = () => {
     return (
         <div
             id='app-content'
-            className={classNames('GlobalThreads app__content', {'thread-selected': Boolean(selectedThread)})}
+            className={classNames('GlobalThreads app__content', {
+                'thread-selected': Boolean(selectedThread),
+                'rhs-opened': isRHSOpened,
+            })}
         >
             <Header
                 level={2}
@@ -173,7 +178,7 @@ const GlobalThreads = () => {
                     ) : (
                         <NoResultsIndicator
                             expanded={true}
-                            iconGraphic={ChatIllustration}
+                            iconGraphic={NO_THREAD_ILLUSTRATION}
                             title={formatMessage({
                                 id: 'globalThreads.noThreads.title',
                                 defaultMessage: 'No followed threads yet',
@@ -208,25 +213,10 @@ const GlobalThreads = () => {
                     ) : (
                         <NoResultsIndicator
                             expanded={true}
-                            iconGraphic={ChatIllustration}
+                            iconGraphic={NO_THREAD_ILLUSTRATION}
                             title={formatMessage({
                                 id: 'globalThreads.threadPane.unselectedTitle',
-                                defaultMessage: '{numUnread, plural, =0 {Looks like you’re all caught up} other {Catch up on your threads}}',
-                            }, {numUnread})}
-                            subtitle={formatMessage<ReactNode>({
-                                id: 'globalThreads.threadPane.unreadMessageLink',
-                                defaultMessage: 'You have {numUnread, plural, =0 {no unread threads} =1 {<link>{numUnread} thread</link>} other {<link>{numUnread} threads</link>}} {numUnread, plural, =0 {} other {with unread messages}}',
-                            }, {
-                                numUnread,
-                                link: (chunks) => (
-                                    <Link
-                                        key='single'
-                                        to={`${url}/${unreadThreadIds[0]}`}
-                                        onClick={handleSelectUnread}
-                                    >
-                                        {chunks}
-                                    </Link>
-                                ),
+                                defaultMessage: 'Select a Thread',
                             })}
                         />
                     )}

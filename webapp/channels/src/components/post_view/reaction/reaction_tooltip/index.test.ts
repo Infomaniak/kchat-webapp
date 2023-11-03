@@ -1,9 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Reaction} from '@mattermost/types/reactions';
-import type {GlobalState} from '@mattermost/types/store';
-
+import {GlobalState} from '@mattermost/types/store';
+import {Reaction} from '@mattermost/types/reactions';
 import {TestHelper} from 'utils/test_helper';
 
 import {makeGetNamesOfUsers} from './index';

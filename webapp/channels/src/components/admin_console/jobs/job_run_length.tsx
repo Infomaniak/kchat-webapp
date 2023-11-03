@@ -3,10 +3,9 @@
 
 import React from 'react';
 import {useIntl} from 'react-intl';
-
-import {Job} from '@mattermost/types/jobs';
-
 import {JobStatuses} from 'utils/constants';
+
+import type {Job} from '@mattermost/types/jobs';
 
 const JobRunLength = React.memo(({job}: {job: Job}): JSX.Element => {
     const intl = useIntl();

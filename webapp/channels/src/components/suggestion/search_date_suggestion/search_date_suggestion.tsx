@@ -4,23 +4,14 @@
 import type {Locale} from 'date-fns';
 import React from 'react';
 import {DayPicker} from 'react-day-picker';
-
 import Constants from 'utils/constants';
-import * as Keyboard from 'utils/keyboard';
 import * as Utils from 'utils/utils';
 
-import type {SuggestionProps} from '../suggestion';
+import Suggestion from '../suggestion.jsx';
 
 import 'react-day-picker/dist/style.css';
 
-type Props = SuggestionProps<never> & {
-    currentDate?: Date;
-    handleEscape: () => void;
-    locale: string;
-    preventClose: () => void;
-}
-
-export default class SearchDateSuggestion extends React.PureComponent<Props> {
+export default class SearchDateSuggestion extends Suggestion {
     private loadedLocales: Record<string, Locale> = {};
 
     state = {
@@ -33,9 +24,9 @@ export default class SearchDateSuggestion extends React.PureComponent<Props> {
     };
 
     handleKeyDown = (e: KeyboardEvent) => {
-        if (Keyboard.isKeyPressed(e, Constants.KeyCodes.DOWN) && document.activeElement?.id === 'searchBox') {
+        if (Utils.isKeyPressed(e, Constants.KeyCodes.DOWN) && document.activeElement?.id === 'searchBox') {
             this.setState({datePickerFocused: true});
-        } else if (Keyboard.isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
+        } else if (Utils.isKeyPressed(e, Constants.KeyCodes.ESCAPE)) {
             this.props.handleEscape();
         }
     };

@@ -1,14 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {CSSProperties} from 'react';
-import {FormattedMessage} from 'react-intl';
 import classNames from 'classnames';
+import type {CSSProperties} from 'react';
+import React from 'react';
+import {FormattedMessage} from 'react-intl';
 
+import type {FilterOptions} from 'components/admin_console/filter/filter';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
-import {FilterOptions} from 'components/admin_console/filter/filter';
 
 import DataGridHeader from './data_grid_header';
 import DataGridRow from './data_grid_row';
@@ -82,7 +83,7 @@ class DataGrid extends React.PureComponent<Props, State> {
     static defaultProps = {
         term: '',
         searchPlaceholder: '',
-    }
+    };
 
     public constructor(props: Props) {
         super(props);
@@ -134,7 +135,7 @@ class DataGrid extends React.PureComponent<Props, State> {
         });
 
         this.setState({visibleColumns});
-    }
+    };
 
     private renderRows(): JSX.Element {
         const {rows, rowsContainerStyles} = this.props;
@@ -219,19 +220,19 @@ class DataGrid extends React.PureComponent<Props, State> {
         if (!this.props.loading) {
             this.props.nextPage();
         }
-    }
+    };
 
     private previousPage = () => {
         if (!this.props.loading) {
             this.props.previousPage();
         }
-    }
+    };
 
     private search = (term: string) => {
         if (this.props.onSearch) {
             this.props.onSearch(term);
         }
-    }
+    };
 
     private renderFooter = (): JSX.Element | null => {
         const {startCount, endCount, total} = this.props;
@@ -286,7 +287,7 @@ class DataGrid extends React.PureComponent<Props, State> {
         }
 
         return footer;
-    }
+    };
 
     public render() {
         return (

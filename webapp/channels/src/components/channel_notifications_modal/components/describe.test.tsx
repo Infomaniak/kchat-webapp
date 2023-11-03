@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {NotificationLevels, NotificationSections} from 'utils/constants';
 
 import Describe from 'components/channel_notifications_modal/components/describe';
-
-import {NotificationLevels, NotificationSections} from 'utils/constants';
 
 describe('components/channel_notifications_modal/NotificationSection', () => {
     const baseProps = {

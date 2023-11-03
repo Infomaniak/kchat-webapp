@@ -1,22 +1,18 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {connect} from 'react-redux';
-import type {ConnectedProps} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
+import {connect, ConnectedProps} from 'react-redux';
 
-import type {Team} from '@mattermost/types/teams';
-
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getTeam, patchTeam, removeTeamIcon, setTeamIcon, regenerateTeamInviteId} from 'mattermost-redux/actions/teams';
 import {Permissions} from 'mattermost-redux/constants';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import type {ActionResult, GenericAction} from 'mattermost-redux/types/actions';
+import {ActionResult, GenericAction} from 'mattermost-redux/types/actions';
 
-import {getIsMobileView} from 'selectors/views/browser';
+import {GlobalState} from 'types/store/index';
 
-import type {GlobalState} from 'types/store/index';
+import {Team} from '@mattermost/types/teams';
 
 import TeamGeneralTab from './team_general_tab';
 
@@ -37,7 +33,6 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     return {
         maxFileSize,
         canInviteTeamMembers,
-        isMobileView: getIsMobileView(state),
     };
 }
 

@@ -4,6 +4,7 @@
 import React from 'react';
 import ReactSelect from 'react-select';
 import AsyncSelect from 'react-select/async';
+import {imageURLForUser} from 'utils/utils';
 
 import type {AppField, AppSelectOption} from '@mattermost/types/apps';
 import type {UserAutocomplete} from '@mattermost/types/autocomplete';
@@ -11,8 +12,6 @@ import type {Channel} from '@mattermost/types/channels';
 
 import {AppFieldTypes} from 'mattermost-redux/constants/apps';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
-
-import {imageURLForUser} from 'utils/utils';
 
 import {SelectChannelOption} from './select_channel_option';
 import {SelectUserOption} from './select_user_option';
@@ -90,7 +89,7 @@ export default class AppsFormSelectField extends React.PureComponent<Props, Stat
     loadDynamicUserOptions = async (userInput: string): Promise<AppSelectOption[]> => {
         const usersSearchResults: UserAutocomplete = await this.props.actions.autocompleteUsers(userInput.toLowerCase());
 
-        return usersSearchResults.users.filter((user) => !user.is_bot).map((user) => {
+        return usersSearchResults.users.map((user) => {
             const label = this.props.teammateNameDisplay ? displayUsername(user, this.props.teammateNameDisplay) : user.username;
 
             return {...user, label, value: user.id, icon_data: imageURLForUser(user.id)};

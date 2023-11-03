@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import {localizeMessage} from 'utils/utils';
 
 export type AttachmentTextOverflowType = 'ellipsis';

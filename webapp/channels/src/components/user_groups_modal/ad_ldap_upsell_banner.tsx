@@ -5,6 +5,8 @@ import moment from 'moment';
 import React, {memo, useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
+import {CloudProducts, LicenseLinks, LicenseSkus} from 'utils/constants';
+import {getBrowserTimezone} from 'utils/timezone';
 
 import type {GlobalState} from '@mattermost/types/store';
 
@@ -18,16 +20,13 @@ import CloudStartTrialButton from 'components/cloud_start_trial/cloud_start_tria
 import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import StartTrialBtn from 'components/learn_more_trial_modal/start_trial_btn';
 
-import {CloudProducts, LicenseSkus} from 'utils/constants';
-import {getBrowserTimezone} from 'utils/timezone';
-
 function ADLDAPUpsellBanner() {
     const [show, setShow] = useState(true);
     const [confirmed, setConfirmed] = useState(false);
 
     const dispatch = useDispatch();
     const {formatMessage} = useIntl();
-    const [openSalesLink] = useOpenSalesLink();
+    const openSalesLink = useOpenSalesLink();
 
     useEffect(() => {
         dispatch(getPrevTrialLicense());
@@ -53,6 +52,14 @@ function ADLDAPUpsellBanner() {
 
     const currentLicenseEndDate = new Date(parseInt(currentLicense?.ExpiresAt, 10));
 
+    const openLink = () => {
+        if (isCloud) {
+            openSalesLink();
+        } else {
+            window.open(LicenseLinks.CONTACT_SALES, '_blank');
+        }
+    };
+
     const confirmBanner = (
         <div className='ad_ldap_upsell_confirm'>
             <div className='upsell-confirm-backdrop'/>
@@ -62,7 +69,7 @@ function ADLDAPUpsellBanner() {
                 <div className='btns-container'>
                     <button
                         className='confrim-btn learn-more'
-                        onClick={openSalesLink}
+                        onClick={openLink}
                     >
                         {formatMessage({id: 'adldap_upsell_banner.confirm.learn_more', defaultMessage: 'Learn more'})}
                     </button>
@@ -92,7 +99,7 @@ function ADLDAPUpsellBanner() {
     let btn = (
         <StartTrialBtn
             btnClass='ad-ldap-banner-btn'
-            message={formatMessage({id: 'adldap_upsell_banner.trial_btn', defaultMessage: 'Start trial'})}
+            message={formatMessage({id: 'adldap_upsell_banner.trial_btn', defaultMessage: 'Try free for 30 days'})}
             telemetryId={'start_self-hosted_trial_from_adldap_upsell_banner'}
             renderAsButton={true}
             onClick={() => setConfirmed(true)}
@@ -102,7 +109,7 @@ function ADLDAPUpsellBanner() {
         btn = (
             <CloudStartTrialButton
                 extraClass='ad-ldap-banner-btn'
-                message={formatMessage({id: 'adldap_upsell_banner.trial_btn', defaultMessage: 'Start trial'})}
+                message={formatMessage({id: 'adldap_upsell_banner.trial_btn', defaultMessage: 'Try free for 30 days'})}
                 telemetryId={'start_cloud_trial_from_adldap_upsell_banner'}
                 onClick={() => setConfirmed(true)}
             />
@@ -113,7 +120,7 @@ function ADLDAPUpsellBanner() {
         btn = (
             <button
                 className='ad-ldap-banner-btn'
-                onClick={openSalesLink}
+                onClick={openLink}
             >
                 {formatMessage({id: 'adldap_upsell_banner.sales_btn', defaultMessage: 'Contact sales to use'})}
             </button>

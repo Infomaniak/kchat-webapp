@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import * as Utils from 'utils/utils';
 
 import type {Post} from '@mattermost/types/posts';
 import type {Reaction as ReactionType} from '@mattermost/types/reactions';
@@ -9,10 +10,7 @@ import type {Reaction as ReactionType} from '@mattermost/types/reactions';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
-import * as Utils from 'utils/utils';
-
 import ReactionTooltip from './reaction_tooltip';
-
 import './reaction.scss';
 
 type State = {
@@ -216,7 +214,10 @@ export default class Reaction extends React.PureComponent<Props, State> {
                 placement='top'
                 shouldUpdatePosition={true}
                 overlay={
-                    <Tooltip id={`${this.props.post.id}-${this.props.emojiName}-reaction`}>
+                    <Tooltip
+                        id={`${this.props.post.id}-${this.props.emojiName}-reaction`}
+                        style={{opacity: '1'}}
+                    >
                         <ReactionTooltip
                             canAddReactions={canAddReactions}
                             canRemoveReactions={canRemoveReactions}

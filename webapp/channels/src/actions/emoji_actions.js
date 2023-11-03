@@ -1,6 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import Constants, {ActionTypes, Preferences} from 'utils/constants';
+import {EmojiIndicesByAlias} from 'utils/emoji';
+
 import * as EmojiActions from 'mattermost-redux/actions/emojis';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCustomEmojisByName as selectCustomEmojisByName, getCustomEmojisEnabled} from 'mattermost-redux/selectors/entities/emojis';
@@ -9,9 +12,6 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {getEmojiMap, getRecentEmojisData, getRecentEmojisNames, isCustomEmojiEnabled} from 'selectors/emojis';
 import {isCustomStatusEnabled, makeGetCustomStatus} from 'selectors/views/custom_status';
 import LocalStorageStore from 'stores/local_storage_store';
-
-import Constants, {ActionTypes, Preferences} from 'utils/constants';
-import {EmojiIndicesByAlias} from 'utils/emoji';
 
 export function loadRecentlyUsedCustomEmojis() {
     return (dispatch, getState) => {

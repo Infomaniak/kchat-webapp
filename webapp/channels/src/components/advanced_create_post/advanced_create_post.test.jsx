@@ -1,19 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {shallow} from 'enzyme';
+import React from 'react';
+import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
+import {testComponentForMarkdownHotkeys} from 'tests/helpers/markdown_hotkey_helpers.js';
+import Constants, {StoragePrefixes, ModalIdentifiers} from 'utils/constants';
+import EmojiMap from 'utils/emoji_map';
+import * as Utils from 'utils/utils';
+
+import {Posts} from 'mattermost-redux/constants';
+
+import * as GlobalActions from 'actions/global_actions';
 
 import AdvancedCreatePost from 'components/advanced_create_post/advanced_create_post';
 
-import {Posts} from 'mattermost-redux/constants';
-import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
-import {testComponentForMarkdownHotkeys} from 'tests/helpers/markdown_hotkey_helpers.js';
-import * as GlobalActions from 'actions/global_actions';
-import EmojiMap from 'utils/emoji_map';
-
-import Constants, {StoragePrefixes, ModalIdentifiers} from 'utils/constants';
-import * as Utils from 'utils/utils';
 import AdvanceTextEditor from '../advanced_text_editor/advanced_text_editor';
 
 jest.mock('actions/global_actions', () => ({

@@ -4,10 +4,9 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
+import mockStore from 'tests/test_store';
 
 import * as StatusSelectors from 'selectors/views/custom_status';
-
-import mockStore from 'tests/test_store';
 
 import CustomStatusModal from './custom_status_modal';
 

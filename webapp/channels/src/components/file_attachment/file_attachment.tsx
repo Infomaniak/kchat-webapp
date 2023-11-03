@@ -1,11 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ArchiveOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {useRef, useState, useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {Constants, FileTypes, ModalIdentifiers} from 'utils/constants';
+import {trimFilename} from 'utils/file_utils';
+import {
+    fileSizeToString,
+    getFileType,
+    loadImage,
+    localizeMessage,
+} from 'utils/utils';
 
-import {ArchiveOutlineIcon} from '@mattermost/compass-icons/components';
 import type {FileInfo} from '@mattermost/types/files';
 
 import {getFileThumbnailUrl, getFileUrl} from 'mattermost-redux/utils/file_utils';
@@ -16,15 +24,6 @@ import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-
-import {Constants, FileTypes, ModalIdentifiers} from 'utils/constants';
-import {trimFilename} from 'utils/file_utils';
-import {
-    fileSizeToString,
-    getFileType,
-    loadImage,
-    localizeMessage,
-} from 'utils/utils';
 
 import ArchivedTooltip from './archived_tooltip';
 import FileThumbnail from './file_thumbnail';

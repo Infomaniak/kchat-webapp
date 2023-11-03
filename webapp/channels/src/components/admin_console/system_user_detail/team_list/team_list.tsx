@@ -2,17 +2,16 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
-import {ActionResult} from 'mattermost-redux/types/actions';
-
-import {Team, TeamMembership} from '@mattermost/types/teams';
-
-import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import {t} from 'utils/i18n';
+import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
+
+import type {Team, TeamMembership} from '@mattermost/types/teams';
+
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import AbstractList from './abstract_list';
 import TeamRow from './team_row';
-import {TeamWithMembership} from './types';
+import type {TeamWithMembership} from './types';
 
 const headerLabels = [
     {
@@ -71,7 +70,7 @@ export default class TeamList extends React.PureComponent<Props, State> {
         emptyListTextId: t('admin.team_settings.team_list.no_teams_found'),
         emptyListTextDefaultMessage: 'No teams found',
         refreshTeams: false,
-    }
+    };
 
     public constructor(props: Props) {
         super(props);
@@ -100,7 +99,7 @@ export default class TeamList extends React.PureComponent<Props, State> {
                 this.setState({teamsWithMemberships});
                 this.props.userDetailCallback(teamsWithMemberships);
             });
-    }
+    };
 
     // check this out
     private mergeTeamsWithMemberships = (data: [{data: Team[]}, {data: TeamMembership[]}]): TeamWithMembership[] => {
@@ -113,7 +112,7 @@ export default class TeamList extends React.PureComponent<Props, State> {
         });
         teamsWithMemberships = filterAndSortTeamsByDisplayName(teamsWithMemberships, this.props.locale);
         return teamsWithMemberships;
-    }
+    };
 
     private doRemoveUserFromTeam = async (teamId: string): Promise<void> => {
         const {error} = await this.props.actions.removeUserFromTeam(teamId, this.props.userId);
@@ -122,7 +121,7 @@ export default class TeamList extends React.PureComponent<Props, State> {
         } else {
             this.getTeamsAndMemberships();
         }
-    }
+    };
 
     private doMakeUserTeamAdmin = async (teamId: string) => {
         const {error} = await this.props.actions.updateTeamMemberSchemeRoles(teamId, this.props.userId, true, true);
@@ -131,7 +130,7 @@ export default class TeamList extends React.PureComponent<Props, State> {
         } else {
             this.getTeamsAndMemberships();
         }
-    }
+    };
 
     private doMakeUserTeamMember = async (teamId: string) => {
         const {error} = await this.props.actions.updateTeamMemberSchemeRoles(teamId, this.props.userId, true, false);
@@ -140,7 +139,7 @@ export default class TeamList extends React.PureComponent<Props, State> {
         } else {
             this.getTeamsAndMemberships();
         }
-    }
+    };
 
     public render(): JSX.Element {
         let serverError = null;
@@ -179,5 +178,5 @@ export default class TeamList extends React.PureComponent<Props, State> {
                 readOnly={this.props.readOnly}
             />
         );
-    }
+    };
 }

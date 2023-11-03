@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import hlJS from 'highlight.js/lib/core';
-
 import * as TextFormatting from 'utils/text_formatting';
 
 import Constants from './constants';

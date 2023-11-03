@@ -3,27 +3,26 @@
 
 import React, {memo, useEffect, useState, useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
-import {NewMember, TopDM} from '@mattermost/types/insights';
+import {InsightsScopes, ModalIdentifiers} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
+import type {NewMember, TopDM} from '@mattermost/types/insights';
 
 import {getMyTopDMs, getNewTeamMembers} from 'mattermost-redux/actions/insights';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
-import {openModal} from 'actions/views/modals';
 import {trackEvent} from 'actions/telemetry_actions';
+import {openModal} from 'actions/views/modals';
 
-import {InsightsScopes, ModalIdentifiers} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
-
-import widgetHoc, {WidgetHocProps} from '../widget_hoc/widget_hoc';
-import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
-import InsightsModal from '../insights_modal/insights_modal';
-
-import TopDMsItem from './top_dms_item/top_dms_item';
 import NewMembersItem from './new_members_item/new_members_item';
 import NewMembersTotal from './new_members_total/new_members_total';
+import TopDMsItem from './top_dms_item/top_dms_item';
+
+import InsightsModal from '../insights_modal/insights_modal';
+import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
+import type {WidgetHocProps} from '../widget_hoc/widget_hoc';
+import widgetHoc from '../widget_hoc/widget_hoc';
 
 import './../../activity_and_insights.scss';
 

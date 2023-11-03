@@ -3,11 +3,10 @@
 
 import {mount} from 'enzyme';
 import React from 'react';
-
-import ShowThreeDaysLeftTrialModal from 'components/announcement_bar/show_tree_days_left_trial_modal/show_three_days_left_trial_modal';
-
 import {CloudProducts} from 'utils/constants';
 import {FileSizes} from 'utils/file_utils';
+
+import ShowThreeDaysLeftTrialModal from 'components/announcement_bar/show_tree_days_left_trial_modal/show_three_days_left_trial_modal';
 
 let mockState: any;
 const mockDispatch = jest.fn();
@@ -98,6 +97,7 @@ describe('components/sidebar/show_three_days_left_trial_modal', () => {
                     },
                 },
                 usage: {
+                    usageLoaded: true,
                     files: {
                         totalStorage: 0,
                         totalStorageLoaded: true,

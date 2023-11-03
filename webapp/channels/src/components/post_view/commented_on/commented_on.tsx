@@ -1,27 +1,28 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo} from 'react';
+import React, {PureComponent} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {stripMarkdown} from 'utils/markdown';
+import * as Utils from 'utils/utils';
 
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile as UserProfileType} from '@mattermost/types/users';
 
 import CommentedOnFilesMessage from 'components/post_view/commented_on_files_message';
-import UserProfile from 'components/user_profile';
 
-import {stripMarkdown} from 'utils/markdown';
-import * as Utils from 'utils/utils';
+import UserProfile from '../../user_profile/user_profile';
 
 type Props = {
     enablePostUsernameOverride?: boolean;
     parentPostUser?: UserProfileType;
     onCommentClick?: React.EventHandler<React.MouseEvent>;
     post: Post;
-};
+}
 
-function CommentedOn({post, parentPostUser, onCommentClick}: Props) {
-    const makeCommentedOnMessage = () => {
+export default class CommentedOn extends PureComponent<Props> {
+    makeCommentedOnMessage = () => {
+        const {post} = this.props;
         let message: React.ReactNode = '';
         if (post.message) {
             message = Utils.replaceHtmlEntities(post.message);
@@ -29,7 +30,7 @@ function CommentedOn({post, parentPostUser, onCommentClick}: Props) {
             message = (
                 <CommentedOnFilesMessage parentPostId={post.id}/>
             );
-        } else if (post.props?.attachments?.length > 0) {
+        } else if (post.props && post.props.attachments && post.props.attachments.length > 0) {
             const attachment = post.props.attachments[0];
             const webhookMessage = attachment.pretext || attachment.title || attachment.text || attachment.fallback || '';
             message = Utils.replaceHtmlEntities(webhookMessage);
@@ -38,40 +39,42 @@ function CommentedOn({post, parentPostUser, onCommentClick}: Props) {
         return message;
     };
 
-    const message = makeCommentedOnMessage();
-    const parentPostUserId = parentPostUser?.id || '';
+    render() {
+        const message = this.makeCommentedOnMessage();
+        const parentPostUser = this.props.parentPostUser;
+        const parentPostUserId = (parentPostUser && parentPostUser.id) || '';
 
-    const parentUserProfile = (
-        <UserProfile
-            user={parentPostUser}
-            userId={parentPostUserId}
-            hasMention={true}
-            disablePopover={false}
-        />
-    );
+        const parentUserProfile = (
+            <UserProfile
+                user={parentPostUser}
+                userId={parentPostUserId}
+                displayName={parentPostUser?.username}
+                hasMention={true}
+                disablePopover={false}
+            />
+        );
 
-    return (
-        <div
-            data-testid='post-link'
-            className='post__link'
-        >
-            <span>
-                <FormattedMessage
-                    id='post_body.commentedOn'
-                    defaultMessage="Commented on {name}'s message: "
-                    values={{
-                        name: <a className='theme user_name'>{parentUserProfile}</a>,
-                    }}
-                />
-                <a
-                    className='theme'
-                    onClick={onCommentClick}
-                >
-                    {typeof message === 'string' ? stripMarkdown(message) : message}
-                </a>
-            </span>
-        </div>
-    );
+        return (
+            <div
+                data-testid='post-link'
+                className='post__link'
+            >
+                <span>
+                    <FormattedMessage
+                        id='post_body.commentedOn'
+                        defaultMessage="Commented on {name}'s message: "
+                        values={{
+                            name: <a className='theme user_name'>{parentUserProfile}</a>,
+                        }}
+                    />
+                    <a
+                        className='theme'
+                        onClick={this.props.onCommentClick}
+                    >
+                        {typeof message === 'string' ? stripMarkdown(message) : message}
+                    </a>
+                </span>
+            </div>
+        );
+    }
 }
-
-export default memo(CommentedOn);

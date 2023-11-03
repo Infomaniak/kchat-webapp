@@ -5,10 +5,9 @@ import {mount} from 'enzyme';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {Provider} from 'react-redux';
+import mockStore from 'tests/test_store';
 
 import {closeModal} from 'actions/views/modals';
-
-import mockStore from 'tests/test_store';
 
 import ModalController from '.';
 

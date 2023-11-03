@@ -2,26 +2,24 @@
 // See LICENSE.txt for license information.
 
 import React, {memo, useCallback} from 'react';
-import {useSelector} from 'react-redux';
 import {FormattedMessage} from 'react-intl';
+import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
+import Constants from 'utils/constants';
+import {imageURLForUser} from 'utils/utils';
+
+import type {TopDM} from '@mattermost/types/insights';
+import type {Team} from '@mattermost/types/teams';
+import type {UserProfile} from '@mattermost/types/users';
+
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-
-import {UserProfile} from '@mattermost/types/users';
-import {TopDM} from '@mattermost/types/insights';
-import {Team} from '@mattermost/types/teams';
-
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
-
 import OverlayTrigger from 'components/overlay_trigger';
-import Avatar from 'components/widgets/users/avatar';
 import Tooltip from 'components/tooltip';
-
-import {imageURLForUser} from 'utils/utils';
-import Constants from 'utils/constants';
+import Avatar from 'components/widgets/users/avatar';
 
 import './../../../activity_and_insights.scss';
 

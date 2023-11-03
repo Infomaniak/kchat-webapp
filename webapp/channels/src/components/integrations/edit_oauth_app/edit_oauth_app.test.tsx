@@ -3,13 +3,12 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {getHistory} from 'utils/browser_history';
 
 import type {OAuthApp} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
 
 import EditOAuthApp from 'components/integrations/edit_oauth_app/edit_oauth_app';
-
-import {getHistory} from 'utils/browser_history';
 
 describe('components/integrations/EditOAuthApp', () => {
     const oauthApp: OAuthApp = {

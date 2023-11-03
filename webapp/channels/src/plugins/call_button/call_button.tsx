@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import React, {useState, useEffect, useRef} from 'react';
 import type {CSSProperties} from 'react';
 import {useIntl} from 'react-intl';
+import {Constants} from 'utils/constants';
 
 import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
 import PhoneOutlineIcon from '@mattermost/compass-icons/components/phone-outline';
@@ -12,8 +13,6 @@ import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-
-import {Constants} from 'utils/constants';
 
 import type {PluginComponent} from 'types/store/plugins';
 

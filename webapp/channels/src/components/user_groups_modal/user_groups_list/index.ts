@@ -2,17 +2,16 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
+import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
+
+import {ActionFunc, ActionResult, GenericAction} from 'mattermost-redux/types/actions';
+
+import {GlobalState} from 'types/store';
 
 import {archiveGroup, restoreGroup} from 'mattermost-redux/actions/groups';
-import {getGroupListPermissions} from 'mattermost-redux/selectors/entities/roles';
-import type {ActionFunc, ActionResult, GenericAction} from 'mattermost-redux/types/actions';
-
+import {ModalData} from 'types/actions';
 import {openModal} from 'actions/views/modals';
-
-import type {ModalData} from 'types/actions';
-import type {GlobalState} from 'types/store';
+import {getGroupListPermissions} from 'mattermost-redux/selectors/entities/roles';
 
 import UserGroupsList from './user_groups_list';
 

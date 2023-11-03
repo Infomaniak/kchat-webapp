@@ -1,19 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ComponentProps} from 'react';
+import {ComponentProps} from 'react';
 import {connect} from 'react-redux';
-import {withRouter, matchPath} from 'react-router-dom';
-import type {RouteChildrenProps} from 'react-router-dom';
-import {bindActionCreators} from 'redux';
-import type {Dispatch} from 'redux';
-
-import type {GlobalState} from '@mattermost/types/store';
+import {bindActionCreators, Dispatch} from 'redux';
+import {withRouter, RouteChildrenProps, matchPath} from 'react-router-dom';
 
 import {getCurrentChannel, getUnreadStatus} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {GlobalState} from '@mattermost/types/store';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 import FaviconTitleHandler from './favicon_title_handler';
 
@@ -33,6 +30,7 @@ function mapStateToProps(state: GlobalState, {location: {pathname}}: Props): Com
         unreadStatus: getUnreadStatus(state),
         inGlobalThreads: matchPath(pathname, {path: '/:team/threads/:threadIdentifier?'}) != null,
         inDrafts: matchPath(pathname, {path: '/:team/drafts'}) != null,
+        inActivityAndInsights: matchPath(pathname, {path: '/:team/activity-and-insights'}) != null,
     };
 }
 

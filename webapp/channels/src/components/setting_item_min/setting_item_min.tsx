@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {ReactNode} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {a11yFocus} from 'utils/utils';
 
 import EditIcon from 'components/widgets/icons/fa_edit_icon';
-
-import {a11yFocus} from 'utils/utils';
 
 interface Props {
 
@@ -70,13 +69,8 @@ export default class SettingItemMin extends React.PureComponent<Props> {
                         aria-labelledby={this.props.section + 'Title ' + this.props.section + 'Edit'}
                         aria-expanded={false}
                     >
-                        {this.props.describe ? this.props.describe : (
-                            <FormattedMessage
-                                id='setting_item_min.edit'
-                                defaultMessage='Edit'
-                            />
-                        )}
-                        <i className='icon icon-chevron-down'/>
+                        <EditIcon/>
+                        {this.props.describe}
                     </button>
                 </div>
             );

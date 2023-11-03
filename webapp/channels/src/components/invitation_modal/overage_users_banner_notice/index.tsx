@@ -4,29 +4,26 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
+import {LicenseLinks, StatTypes, Preferences} from 'utils/constants';
+import {getIsGovSku} from 'utils/license_utils';
+import {calculateOverageUserActivated} from 'utils/overage_team';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
-import {getConfig} from 'mattermost-redux/selectors/entities/admin';
 import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
+
+import type {GlobalState} from 'types/store';
+
 import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import AlertBanner from 'components/alert_banner';
-import useCanSelfHostedExpand from 'components/common/hooks/useCanSelfHostedExpand';
 import {useExpandOverageUsersCheck} from 'components/common/hooks/useExpandOverageUsersCheck';
-import ExternalLink from 'components/external_link';
-
-import {LicenseLinks, StatTypes, Preferences, ConsolePages} from 'utils/constants';
-import {getIsGovSku} from 'utils/license_utils';
-import {calculateOverageUserActivated} from 'utils/overage_team';
-import {getSiteURL} from 'utils/url';
-
-import type {GlobalState} from 'types/store';
 
 import './overage_users_banner_notice.scss';
+import ExternalLink from 'components/external_link';
 
 type AdminHasDismissedArgs = {
     preferenceName: string;
@@ -49,10 +46,6 @@ const OverageUsersBannerNotice = () => {
     const currentUser = useSelector((state: GlobalState) => getCurrentUser(state));
     const overagePreferences = useSelector((state: GlobalState) => getPreferencesCategory(state, Preferences.OVERAGE_USERS_BANNER));
     const activeUsers = ((stats || {})[StatTypes.TOTAL_USERS]) as number || 0;
-    const isSelfHostedPurchaseEnabled = useSelector(getConfig)?.ServiceSettings?.SelfHostedPurchase;
-    const canSelfHostedExpand = useCanSelfHostedExpand() && isSelfHostedPurchaseEnabled;
-    const siteURL = getSiteURL();
-
     const {
         isBetween5PercerntAnd10PercentPurchasedSeats,
         isOver10PercerntPurchasedSeats,
@@ -78,7 +71,6 @@ const OverageUsersBannerNotice = () => {
         licenseId: license.Id,
         isWarningState: isBetween5PercerntAnd10PercentPurchasedSeats,
         banner: 'invite modal',
-        canSelfHostedExpand: canSelfHostedExpand || false,
     });
 
     if (!hasPermission || adminHasDismissed({overagePreferences, preferenceName})) {
@@ -95,27 +87,7 @@ const OverageUsersBannerNotice = () => {
     };
 
     let message;
-
-    if (canSelfHostedExpand) {
-        message = (
-            <FormattedMessage
-                id='licensingPage.overageUsersBanner.selfHostedNoticeDescription'
-                defaultMessage={'<a>Purchase additional seats</a> to remain compliant.'}
-                values={{
-                    a: (chunks: React.ReactNode) => {
-                        return (
-                            <ExternalLink
-                                className='overage_users_banner__button'
-                                href={`${siteURL}/${ConsolePages.LICENSE}?action=show_expansion_modal`}
-                            >
-                                {chunks}
-                            </ExternalLink>
-                        );
-                    },
-                }}
-            />
-        );
-    } else if (!isGovSku) {
+    if (!isGovSku) {
         message = (
             <FormattedMessage
                 id='licensingPage.overageUsersBanner.noticeDescription'

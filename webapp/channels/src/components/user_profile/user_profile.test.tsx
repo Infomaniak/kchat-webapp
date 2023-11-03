@@ -6,18 +6,14 @@ import React from 'react';
 
 import type {UserProfile as UserProfileType} from '@mattermost/types/users';
 
-import {Preferences} from 'mattermost-redux/constants';
-
 import UserProfile from './user_profile';
 
 describe('components/UserProfile', () => {
     const baseProps = {
         displayName: 'nickname',
         isBusy: false,
-        isMobileView: false,
         user: {username: 'username'} as UserProfileType,
         userId: 'user_id',
-        theme: Preferences.THEMES.onyx,
     };
 
     test('should match snapshot', () => {

@@ -1,40 +1,41 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {cloneDeep} from 'lodash';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {cloneDeep} from 'lodash';
+import {getHistory} from 'utils/browser_history';
+import Constants from 'utils/constants';
+
+import type {Channel, ChannelModeration as ChannelPermissions, ChannelModerationPatch} from '@mattermost/types/channels';
+import type {ServerError} from '@mattermost/types/errors';
+import type {SyncablePatch, Group} from '@mattermost/types/groups';
+import {SyncableType} from '@mattermost/types/groups';
+import type {Scheme} from '@mattermost/types/schemes';
+import type {Team} from '@mattermost/types/teams';
+import type {UserProfile} from '@mattermost/types/users';
 
 import {Permissions} from 'mattermost-redux/constants';
-import {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
-import {UserProfile} from '@mattermost/types/users';
-import {Scheme} from '@mattermost/types/schemes';
-import {SyncablePatch, Group, SyncableType} from '@mattermost/types/groups';
-import {Channel, ChannelModeration as ChannelPermissions, ChannelModerationPatch} from '@mattermost/types/channels';
-import {Team} from '@mattermost/types/teams';
+import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
 
-import {ServerError} from '@mattermost/types/errors';
-
-import ConfirmModal from 'components/confirm_modal';
-import BlockableLink from 'components/admin_console/blockable_link';
-import FormError from 'components/form_error';
-import Constants from 'utils/constants';
-import {getHistory} from 'utils/browser_history';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
-import {NeedGroupsError, UsersWillBeRemovedError} from '../../errors';
-import ConvertConfirmModal from '../../convert_confirm_modal';
-import RemoveConfirmModal from '../../remove_confirm_modal';
-import ConvertAndRemoveConfirmModal from '../../convert_and_remove_confirm_modal';
-import SaveChangesPanel from '../../save_changes_panel';
+import BlockableLink from 'components/admin_console/blockable_link';
+import ConfirmModal from 'components/confirm_modal';
+import FormError from 'components/form_error';
 
-import {ChannelModes} from './channel_modes';
 import {ChannelGroups} from './channel_groups';
-import {ChannelProfile} from './channel_profile';
 import ChannelMembers from './channel_members';
 import ChannelModeration from './channel_moderation';
+import {ChannelModes} from './channel_modes';
+import {ChannelProfile} from './channel_profile';
+import type {ChannelModerationRoles} from './types';
 
-import {ChannelModerationRoles} from './types';
+import ConvertAndRemoveConfirmModal from '../../convert_and_remove_confirm_modal';
+import ConvertConfirmModal from '../../convert_confirm_modal';
+import {NeedGroupsError, UsersWillBeRemovedError} from '../../errors';
+import RemoveConfirmModal from '../../remove_confirm_modal';
+import SaveChangesPanel from '../../save_changes_panel';
 
 export interface ChannelDetailsProps {
     channelID: string;
@@ -272,7 +273,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
             return g;
         });
         this.processGroupsChange(groups);
-    }
+    };
 
     private channelPermissionsChanged = (name: string, channelRole: ChannelModerationRoles) => {
         const currentValueIndex = this.state.channelPermissions.findIndex((element) => element.name === name);
@@ -321,7 +322,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
         };
         this.setState({channelPermissions, saveNeeded: true});
         this.props.actions.setNavigationBlocked(true);
-    }
+    };
 
     private handleGroupChange = (groupIDs: string[]) => {
         const groups = [...this.state.groups, ...groupIDs.map((gid: string) => this.props.allGroups[gid])];
@@ -607,20 +608,20 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
         const {isLocalArchived} = this.state;
         const isServerArchived = this.props.channel.delete_at !== 0;
         return isLocalArchived && !isServerArchived;
-    }
+    };
 
     private channelToBeRestored = (): boolean => {
         const {isLocalArchived} = this.state;
         const isServerArchived = this.props.channel.delete_at !== 0;
         return !isLocalArchived && isServerArchived;
-    }
+    };
 
     private addRolesToUpdate = (userId: string, schemeUser: boolean, schemeAdmin: boolean) => {
         const {rolesToUpdate} = this.state;
         rolesToUpdate[userId] = {schemeUser, schemeAdmin};
         this.setState({rolesToUpdate: {...rolesToUpdate}, saveNeeded: true});
         this.props.actions.setNavigationBlocked(true);
-    }
+    };
 
     private addUserToRemove = (user: UserProfile) => {
         let {usersToRemoveCount} = this.state;
@@ -634,7 +635,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
         delete rolesToUpdate[user.id];
         this.setState({usersToRemove: {...usersToRemove}, usersToAdd: {...usersToAdd}, rolesToUpdate: {...rolesToUpdate}, usersToRemoveCount, saveNeeded: true});
         this.props.actions.setNavigationBlocked(true);
-    }
+    };
 
     private addUsersToAdd = (users: UserProfile[]) => {
         let {usersToRemoveCount} = this.state;
@@ -649,7 +650,7 @@ export default class ChannelDetails extends React.PureComponent<ChannelDetailsPr
         });
         this.setState({usersToAdd: {...usersToAdd}, usersToRemove: {...usersToRemove}, usersToRemoveCount, saveNeeded: true});
         this.props.actions.setNavigationBlocked(true);
-    }
+    };
 
     private onToggleArchive = () => {
         const {isLocalArchived, serverError, previousServerError} = this.state;

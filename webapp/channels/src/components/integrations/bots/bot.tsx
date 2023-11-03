@@ -1,10 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {ChangeEvent, SyntheticEvent, ReactNode} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
+import * as Utils from 'utils/utils';
 
 import type {Bot as BotType} from '@mattermost/types/bots';
 import type {Team} from '@mattermost/types/teams';
@@ -16,8 +17,6 @@ import ConfirmModal from 'components/confirm_modal';
 import Markdown from 'components/markdown';
 import SaveButton from 'components/save_button';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
-
-import * as Utils from 'utils/utils';
 
 export function matchesFilter(bot: BotType, filter?: string, owner?: UserProfile): boolean {
     if (!filter) {
@@ -411,7 +410,7 @@ export default class Bot extends React.PureComponent<Props, State> {
                                         saving={false}
                                     />
                                     <button
-                                        className='btn btn-sm btn-tertiary'
+                                        className='btn btn-sm btn-link'
                                         onClick={this.closeCreateToken}
                                     >
                                         <FormattedMessage

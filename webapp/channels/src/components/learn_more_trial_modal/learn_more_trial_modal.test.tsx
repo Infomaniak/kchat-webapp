@@ -4,14 +4,12 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
-
-import {GenericModal} from '@mattermost/components';
-
-import Carousel from 'components/common/carousel/carousel';
-import LearnMoreTrialModal from 'components/learn_more_trial_modal/learn_more_trial_modal';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
+
+import Carousel from 'components/common/carousel/carousel';
+import GenericModal from 'components/generic_modal';
+import LearnMoreTrialModal from 'components/learn_more_trial_modal/learn_more_trial_modal';
 
 jest.mock('actions/telemetry_actions.jsx', () => {
     const original = jest.requireActual('actions/telemetry_actions.jsx');
@@ -32,12 +30,6 @@ describe('components/learn_more_trial_modal/learn_more_trial_modal', () => {
         entities: {
             users: {
                 currentUserId: 'current_user_id',
-                profiles: {
-                    current_user_id: {
-                        id: 'current_user_id',
-                        roles: '',
-                    },
-                },
             },
             admin: {
                 analytics: {

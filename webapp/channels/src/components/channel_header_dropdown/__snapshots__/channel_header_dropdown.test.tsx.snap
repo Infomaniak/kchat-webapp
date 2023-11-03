@@ -24,7 +24,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
     }
     show={true}
   />
-  <Memo(ChannelMoveToSubMenuOld)
+  <Memo(ChannelMoveToSubMenu)
     channel={
       Object {
         "create_at": 0,
@@ -130,7 +130,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
             "mfa_active": false,
             "nickname": "",
             "notify_props": Object {
-              "calls_desktop_sound": "true",
               "channel": "false",
               "comments": "never",
               "desktop": "default",
@@ -206,7 +205,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
-            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
@@ -459,43 +457,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
       show={false}
       text="Edit Conversation Header"
     />
-    <MenuItemToggleModalRedux
-      dialogProps={
-        Object {
-          "channel": Object {
-            "create_at": 0,
-            "creator_id": "id",
-            "delete_at": 0,
-            "display_name": "name",
-            "group_constrained": false,
-            "header": "header",
-            "id": "test-channel-id",
-            "last_post_at": 0,
-            "last_root_post_at": 0,
-            "name": "DN",
-            "purpose": "purpose",
-            "scheme_id": "id",
-            "team_id": "team_id",
-            "type": "O",
-            "update_at": 0,
-          },
-        }
-      }
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "type": [Function],
-        }
-      }
-      id="convertGMPrivateChannel"
-      modalId="convert_gm_to_channel"
-      show={false}
-      text="Convert to Private Channel"
-    />
-  </MenuGroup>
-  <MenuGroup>
     <Connect(ChannelPermissionGate)
       channelId="test-channel-id"
       permissions={
@@ -641,30 +602,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         text="Convert to Private Channel"
       />
     </Connect(ChannelPermissionGate)>
-    <Connect(LeaveChannel)
-      channel={
-        Object {
-          "create_at": 0,
-          "creator_id": "id",
-          "delete_at": 0,
-          "display_name": "name",
-          "group_constrained": false,
-          "header": "header",
-          "id": "test-channel-id",
-          "last_post_at": 0,
-          "last_root_post_at": 0,
-          "name": "DN",
-          "purpose": "purpose",
-          "scheme_id": "id",
-          "team_id": "team_id",
-          "type": "O",
-          "update_at": 0,
-        }
-      }
-      id="channelLeaveChannel"
-      isDefault={false}
-      isGuestUser={false}
-    />
     <Connect(ChannelPermissionGate)
       channelId="test-channel-id"
       permissions={
@@ -712,6 +649,30 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
         text="Archive Channel"
       />
     </Connect(ChannelPermissionGate)>
+    <Connect(LeaveChannel)
+      channel={
+        Object {
+          "create_at": 0,
+          "creator_id": "id",
+          "delete_at": 0,
+          "display_name": "name",
+          "group_constrained": false,
+          "header": "header",
+          "id": "test-channel-id",
+          "last_post_at": 0,
+          "last_root_post_at": 0,
+          "name": "DN",
+          "purpose": "purpose",
+          "scheme_id": "id",
+          "team_id": "team_id",
+          "type": "O",
+          "update_at": 0,
+        }
+      }
+      id="channelLeaveChannel"
+      isDefault={false}
+      isGuestUser={false}
+    />
     <Connect(CloseMessage)
       channel={
         Object {
@@ -750,7 +711,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
-            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
@@ -774,7 +734,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with no plugin i
       }
       id="channelCloseMessage"
     />
-    <Connect(Component)
+    <Connect(CloseChannel)
       isArchived={false}
     />
   </MenuGroup>
@@ -853,7 +813,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
     }
     show={true}
   />
-  <Memo(ChannelMoveToSubMenuOld)
+  <Memo(ChannelMoveToSubMenu)
     channel={
       Object {
         "create_at": 0,
@@ -959,7 +919,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
             "mfa_active": false,
             "nickname": "",
             "notify_props": Object {
-              "calls_desktop_sound": "true",
               "channel": "false",
               "comments": "never",
               "desktop": "default",
@@ -1035,7 +994,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
-            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
@@ -1288,43 +1246,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
       show={false}
       text="Edit Conversation Header"
     />
-    <MenuItemToggleModalRedux
-      dialogProps={
-        Object {
-          "channel": Object {
-            "create_at": 0,
-            "creator_id": "id",
-            "delete_at": 0,
-            "display_name": "name",
-            "group_constrained": false,
-            "header": "header",
-            "id": "test-channel-id",
-            "last_post_at": 0,
-            "last_root_post_at": 0,
-            "name": "DN",
-            "purpose": "purpose",
-            "scheme_id": "id",
-            "team_id": "team_id",
-            "type": "O",
-            "update_at": 0,
-          },
-        }
-      }
-      dialogType={
-        Object {
-          "$$typeof": Symbol(react.memo),
-          "WrappedComponent": [Function],
-          "compare": null,
-          "type": [Function],
-        }
-      }
-      id="convertGMPrivateChannel"
-      modalId="convert_gm_to_channel"
-      show={false}
-      text="Convert to Private Channel"
-    />
-  </MenuGroup>
-  <MenuGroup>
     <Connect(ChannelPermissionGate)
       channelId="test-channel-id"
       permissions={
@@ -1470,30 +1391,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         text="Convert to Private Channel"
       />
     </Connect(ChannelPermissionGate)>
-    <Connect(LeaveChannel)
-      channel={
-        Object {
-          "create_at": 0,
-          "creator_id": "id",
-          "delete_at": 0,
-          "display_name": "name",
-          "group_constrained": false,
-          "header": "header",
-          "id": "test-channel-id",
-          "last_post_at": 0,
-          "last_root_post_at": 0,
-          "name": "DN",
-          "purpose": "purpose",
-          "scheme_id": "id",
-          "team_id": "team_id",
-          "type": "O",
-          "update_at": 0,
-        }
-      }
-      id="channelLeaveChannel"
-      isDefault={false}
-      isGuestUser={false}
-    />
     <Connect(ChannelPermissionGate)
       channelId="test-channel-id"
       permissions={
@@ -1541,6 +1438,30 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
         text="Archive Channel"
       />
     </Connect(ChannelPermissionGate)>
+    <Connect(LeaveChannel)
+      channel={
+        Object {
+          "create_at": 0,
+          "creator_id": "id",
+          "delete_at": 0,
+          "display_name": "name",
+          "group_constrained": false,
+          "header": "header",
+          "id": "test-channel-id",
+          "last_post_at": 0,
+          "last_root_post_at": 0,
+          "name": "DN",
+          "purpose": "purpose",
+          "scheme_id": "id",
+          "team_id": "team_id",
+          "type": "O",
+          "update_at": 0,
+        }
+      }
+      id="channelLeaveChannel"
+      isDefault={false}
+      isGuestUser={false}
+    />
     <Connect(CloseMessage)
       channel={
         Object {
@@ -1579,7 +1500,6 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
           "mfa_active": false,
           "nickname": "",
           "notify_props": Object {
-            "calls_desktop_sound": "true",
             "channel": "false",
             "comments": "never",
             "desktop": "default",
@@ -1603,7 +1523,7 @@ exports[`components/ChannelHeaderDropdown should match snapshot with plugins 1`]
       }
       id="channelCloseMessage"
     />
-    <Connect(Component)
+    <Connect(CloseChannel)
       isArchived={false}
     />
   </MenuGroup>

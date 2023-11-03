@@ -2,11 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import React from 'react';
 import type {ComponentProps} from 'react';
-
-import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
-
+import React from 'react';
 import {ModalIdentifiers} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 
@@ -21,7 +18,6 @@ describe('components/post_edit_history/edited_post_item', () => {
             message: 'post message',
         }),
         isCurrent: false,
-        theme: {} as Theme,
         postCurrentVersion: TestHelper.getPostMock({
             id: 'post_current_version_id',
             message: 'post current version message',

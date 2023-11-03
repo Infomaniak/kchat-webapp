@@ -2,18 +2,18 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedDate, FormattedMessage, defineMessages} from 'react-intl';
+import {FormattedDate, FormattedMessage} from 'react-intl';
+import {Constants, ModalIdentifiers} from 'utils/constants';
+import {getMonthLong, t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
-import {BellRingOutlineIcon} from '@mattermost/compass-icons/components';
-import type {Channel, ChannelMembership} from '@mattermost/types/channels';
-import type {UserProfile as UserProfileType} from '@mattermost/types/users';
+import type {Channel} from '@mattermost/types/channels';
+import type {UserProfile as UserProfileRedux} from '@mattermost/types/users';
 
 import {Permissions} from 'mattermost-redux/constants';
-import {NotificationLevel} from 'mattermost-redux/constants/channels';
-import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 
 import AddGroupsToTeamModal from 'components/add_groups_to_team_modal';
-import ChannelNotificationsModal from 'components/channel_notifications_modal';
+import AtMention from 'components/at_mention';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LocalizedIcon from 'components/localized_icon';
@@ -24,10 +24,6 @@ import ToggleModalButton from 'components/toggle_modal_button';
 import UserProfile from 'components/user_profile';
 import EditIcon from 'components/widgets/icons/fa_edit_icon';
 
-import {Constants, ModalIdentifiers} from 'utils/constants';
-import {getMonthLong, t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
-
 import AddMembersButton from './add_members_button';
 import PluggableIntroButtons from './pluggable_intro_buttons';
 
@@ -36,16 +32,15 @@ type Props = {
     channel: Channel;
     fullWidth: boolean;
     locale: string;
-    channelProfiles: UserProfileType[];
+    channelProfiles: UserProfileRedux[];
     enableUserCreation?: boolean;
     isReadOnly?: boolean;
     teamIsGroupConstrained?: boolean;
     creatorName: string;
-    teammate?: UserProfileType;
+    teammate?: UserProfileRedux;
     teammateName?: string;
     stats: any;
     usersLimit: number;
-    channelMember?: ChannelMembership;
     actions: {
         getTotalUsersStats: () => any;
     };
@@ -61,7 +56,6 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
         const {
             currentUserId,
             channel,
-            channelMember,
             creatorName,
             fullWidth,
             locale,
@@ -83,7 +77,7 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
         if (channel.type === Constants.DM_CHANNEL) {
             return createDMIntroMessage(channel, centeredIntro, teammate, teammateName);
         } else if (channel.type === Constants.GM_CHANNEL) {
-            return createGMIntroMessage(channel, centeredIntro, channelProfiles, currentUserId, channelMember);
+            return createGMIntroMessage(channel, centeredIntro, channelProfiles, currentUserId);
         } else if (channel.name === Constants.DEFAULT_CHANNEL) {
             return createDefaultIntroMessage(channel, centeredIntro, stats, usersLimit, enableUserCreation, isReadOnly, teamIsGroupConstrained);
         } else if (channel.name === Constants.OFFTOPIC_CHANNEL) {
@@ -95,51 +89,10 @@ export default class ChannelIntroMessage extends React.PureComponent<Props> {
     }
 }
 
-const gmIntroMessages = defineMessages({
-    muted: {id: 'intro_messages.GM.muted', defaultMessage: 'This group message is currently <b>muted</b>, so you will not be notified.'},
-    [NotificationLevel.ALL]: {id: 'intro_messages.GM.all', defaultMessage: 'You\'ll be notified <b>for all activity</b> in this group message.'},
-    [NotificationLevel.DEFAULT]: {id: 'intro_messages.GM.all', defaultMessage: 'You\'ll be notified <b>for all activity</b> in this group message.'},
-    [NotificationLevel.MENTION]: {id: 'intro_messages.GM.mention', defaultMessage: 'You have selected to be notified <b>only when mentioned</b> in this group message.'},
-    [NotificationLevel.NONE]: {id: 'intro_messages.GM.none', defaultMessage: 'You have selected to <b>never</b> be notified in this group message.'},
-});
-
-const getGMIntroMessageSpecificPart = (userProfile: UserProfileType | undefined, membership: ChannelMembership | undefined) => {
-    const isMuted = isChannelMuted(membership);
-    if (isMuted) {
-        return (
-            <FormattedMessage
-                {...gmIntroMessages.muted}
-                values={{
-                    b: (chunks) => <b>{chunks}</b>,
-                }}
-            />
-        );
-    }
-    const channelNotifyProp = membership?.notify_props?.desktop || NotificationLevel.DEFAULT;
-    const userNotifyProp = userProfile?.notify_props?.desktop || NotificationLevel.MENTION;
-    let notifyLevelToUse = channelNotifyProp;
-    if (notifyLevelToUse === NotificationLevel.DEFAULT) {
-        notifyLevelToUse = userNotifyProp;
-    }
-    if (channelNotifyProp === NotificationLevel.DEFAULT && userNotifyProp === NotificationLevel.MENTION) {
-        notifyLevelToUse = NotificationLevel.ALL;
-    }
-
-    return (
-        <FormattedMessage
-            {...gmIntroMessages[notifyLevelToUse]}
-            values={{
-                b: (chunks) => <b>{chunks}</b>,
-            }}
-        />
-    );
-};
-
-function createGMIntroMessage(channel: Channel, centeredIntro: string, profiles: UserProfileType[], currentUserId: string, channelMembership?: ChannelMembership) {
+function createGMIntroMessage(channel: Channel, centeredIntro: string, profiles: UserProfileRedux[], currentUserId: string) {
     const channelIntroId = 'channelIntro';
 
     if (profiles.length > 0) {
-        const currentUserProfile = profiles.find((v) => v.id === currentUserId);
         const pictures = profiles.
             filter((profile) => profile.id !== currentUserId).
             map((profile) => (
@@ -161,21 +114,16 @@ function createGMIntroMessage(channel: Channel, centeredIntro: string, profiles:
                     {pictures}
                 </div>
                 <p className='channel-intro-text'>
-                    <FormattedMessage
-                        id='intro_messages.GM.common'
-                        defaultMessage={'This is the start of your group message history with {names}.{br}'}
+                    <FormattedMarkdownMessage
+                        id='intro_messages.GM'
+                        defaultMessage='This is the start of your group message history with {names}.\nMessages and files shared here are not shown to people outside this area.'
                         values={{
                             names: channel.display_name,
-                            br: <br/>,
                         }}
                     />
-                    {getGMIntroMessageSpecificPart(currentUserProfile, channelMembership)}
                 </p>
-                <div style={{display: 'flex'}}>
-                    {createNotificationPreferencesButton(channel, currentUserProfile)}
-                    <PluggableIntroButtons channel={channel}/>
-                    {createSetHeaderButton(channel)}
-                </div>
+                <PluggableIntroButtons channel={channel}/>
+                {createSetHeaderButton(channel)}
             </div>
         );
     }
@@ -195,7 +143,7 @@ function createGMIntroMessage(channel: Channel, centeredIntro: string, profiles:
     );
 }
 
-function createDMIntroMessage(channel: Channel, centeredIntro: string, teammate?: UserProfileType, teammateName?: string) {
+function createDMIntroMessage(channel: Channel, centeredIntro: string, teammate?: UserProfileRedux, teammateName?: string) {
     const channelIntroId = 'channelIntro';
     if (teammate) {
         const src = teammate ? Utils.imageURLForUser(teammate.id, teammate.last_picture_update) : '';
@@ -237,10 +185,52 @@ function createDMIntroMessage(channel: Channel, centeredIntro: string, teammate?
                         }}
                     />
                 </p>
-                <div style={{display: 'flex'}}>
-                    {pluggableButton}
-                    {setHeaderButton}
-                </div>
+                {pluggableButton}
+                {setHeaderButton}
+                {teammate?.username === 'chat.gpt' ? (
+                    <p className='channel-limitation-banner'>
+                        <span style={{alignSelf: 'baseline'}}>
+                            <i className='icon-information-outline'/>
+                        </span>
+                        <FormattedMessage
+                            id='intro_messages.botGPT'
+                            values={{
+                                limit: 100,
+                                day: 23,
+                                botName: 'kchat.bot',
+                                mention: (chunks: React.ReactNode) => (
+                                    <AtMention
+                                        key={'kchat.bot'}
+                                        mentionName={'kchat.bot'}
+                                        channelId={channel.id}
+                                    >{'@'}{chunks}</AtMention>
+                                ),
+                            }}
+                            defaultMessage='{limit} daily ChatGPT queries are included with kChat for free until {day} November to let you test the power of <mention>{botName}</mention>. With our AI, the data is processed exclusively in Switzerland on Infomaniak’s servers. Using ChatGPT, the data is sent and analysed on OpenAI servers in the United States. We advise you not to share sensitive information with ChatGPT and remind you that AI may generate inaccurate information about people, places or facts.'
+                        />
+                    </p>
+                ) : null}
+                {teammate?.username === 'kchat.bot' ? (
+                    <p className='channel-limitation-banner'>
+                        <span style={{alignSelf: 'baseline'}}>
+                            <i className='icon-information-outline'/>
+                        </span>
+                        <FormattedMessage
+                            id='intro_messages.botFalcon'
+                            values={{
+                                botName: 'kchat.bot',
+                                mention: (chunks: React.ReactNode) => (
+                                    <AtMention
+                                        key={'kchat.bot'}
+                                        mentionName={'kchat.bot'}
+                                        channelId={channel.id}
+                                    >{'@'}{chunks}</AtMention>
+                                ),
+                            }}
+                            defaultMessage='<mention>{botName}</mention> is a sovereign AI. The data is processed exclusively in Switzerland on Infomaniak’s servers. We remind you that the information generated by <mention>{botName}</mention> and AI may be inaccurate, incomplete or misleading.'
+                        />
+                    </p>
+                ) : null}
             </div>
         );
     }
@@ -605,29 +595,6 @@ function createSetHeaderButton(channel: Channel) {
             <FormattedMessage
                 id='intro_messages.setHeader'
                 defaultMessage='Set a Header'
-            />
-        </ToggleModalButton>
-    );
-}
-
-function createNotificationPreferencesButton(channel: Channel, currentUser?: UserProfileType) {
-    const isGM = channel.type === 'G';
-    if (!isGM || !currentUser) {
-        return null;
-    }
-
-    return (
-        <ToggleModalButton
-            modalId={ModalIdentifiers.CHANNEL_NOTIFICATIONS}
-            ariaLabel={Utils.localizeMessage('intro_messages.notificationPreferences', 'Notification Preferences')}
-            className={'intro-links color--link channelIntroButton'}
-            dialogType={ChannelNotificationsModal}
-            dialogProps={{channel, currentUser}}
-        >
-            <BellRingOutlineIcon size={16}/>
-            <FormattedMessage
-                id='intro_messages.notificationPreferences'
-                defaultMessage='Notification Preferences'
             />
         </ToggleModalButton>
     );

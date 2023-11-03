@@ -1,19 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {SyncIcon} from '@infomaniak/compass-icons/components';
 import cn from 'classnames';
-import React from 'react';
 import type {ComponentProps} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {SyncIcon} from '@mattermost/compass-icons/components';
+import Constants from 'utils/constants';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Timestamp from 'components/timestamp';
 import Tooltip from 'components/tooltip';
 import Tag from 'components/widgets/tag/tag';
-
-import Constants from 'utils/constants';
 
 import './panel_header.scss';
 
@@ -38,6 +36,9 @@ type Props = {
     timestamp: number;
     remote: boolean;
     title: React.ReactNode;
+    isScheduled: boolean;
+    scheduledTimestamp?: number;
+    scheduledWillNotBeSent: boolean;
 }
 
 function PanelHeader({
@@ -46,6 +47,9 @@ function PanelHeader({
     timestamp,
     remote,
     title,
+    isScheduled,
+    scheduledTimestamp,
+    scheduledWillNotBeSent,
 }: Props) {
     const syncTooltip = (
         <Tooltip id='drafts-sync-tooltip'>
@@ -55,6 +59,55 @@ function PanelHeader({
             />
         </Tooltip>
     );
+
+    let tag = (
+        <FormattedMessage
+            id='drafts.info.tag.not_scheduled'
+            defaultMessage='Not scheduled'
+        />
+    );
+    if (isScheduled) {
+        const tagVariant = scheduledWillNotBeSent ? 'danger' : 'info';
+        const tagText = scheduledWillNotBeSent ? (
+            <FormattedMessage
+                id='drafts.info.tag.will_not_be_sent'
+                defaultMessage='Will not be sent'
+            />
+        ) : (
+            <FormattedMessage
+                id='drafts.info.tag.scheduled'
+                defaultMessage='Scheduled'
+            />
+        );
+        tag = (
+            <Tag
+                variant={tagVariant}
+                text={tagText}
+                uppercase={true}
+            />
+        );
+    }
+
+    let time;
+    if (timestamp) {
+        time = (
+            <Timestamp
+                value={new Date(timestamp)}
+                {...TIMESTAMP_PROPS}
+            />
+        );
+    }
+    if (isScheduled && scheduledTimestamp) {
+        time = (
+            <FormattedMessage
+                id='draft.info.scheduled_timestamp'
+                defaultMessage='Send on {timestamp}'
+                values={{
+                    timestamp: <Timestamp value={new Date(scheduledTimestamp * 1000)}/>,
+                }}
+            />
+        );
+    }
 
     return (
         <header className='PanelHeader'>
@@ -79,18 +132,9 @@ function PanelHeader({
                         </OverlayTrigger>
                     </div>}
                     <div className='PanelHeader__timestamp'>
-                        {Boolean(timestamp) && (
-                            <Timestamp
-                                value={new Date(timestamp)}
-                                {...TIMESTAMP_PROPS}
-                            />
-                        )}
+                        {time}
                     </div>
-                    <Tag
-                        variant={'danger'}
-                        uppercase={true}
-                        text={'draft'}
-                    />
+                    {tag}
                 </div>
             </div>
         </header>

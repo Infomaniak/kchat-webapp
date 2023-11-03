@@ -2,13 +2,11 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
-
-import type {UserProfile} from '@mattermost/types/users';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
 import {updateMe} from 'mattermost-redux/actions/users';
-import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+import {UserProfile} from '@mattermost/types/users';
+import {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
 
 import ManageLanguages from './manage_languages';
 

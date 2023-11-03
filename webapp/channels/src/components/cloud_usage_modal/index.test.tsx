@@ -1,20 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {screen} from '@testing-library/react';
 import React from 'react';
 import * as redux from 'react-redux';
 import {Provider} from 'react-redux';
-
-import type {Subscription} from '@mattermost/types/cloud';
-import type {GlobalState} from '@mattermost/types/store';
-
-import {renderWithIntl, screen} from 'tests/react_testing_utils';
+import {renderWithIntl} from 'tests/react_testing_utils';
 import mockStore from 'tests/test_store';
 import {Constants} from 'utils/constants';
 import {FileSizes} from 'utils/file_utils';
 
-import CloudUsageModal from './index';
+import type {Subscription} from '@mattermost/types/cloud';
+import type {GlobalState} from '@mattermost/types/store';
+
 import type {Props} from './index';
+import CloudUsageModal from './index';
 
 const freeLimits = {
     messages: {

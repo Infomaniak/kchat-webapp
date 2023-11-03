@@ -1,27 +1,26 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedDate, FormattedMessage, FormattedNumber} from 'react-intl';
-
 import {useDispatch} from 'react-redux';
-import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
-
 import {BillingSchemes, CloudLinks, TrialPeriodDays, ModalIdentifiers} from 'utils/constants';
 
-import BlockableLink from 'components/admin_console/blockable_link';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
-import UpgradeSvg from 'components/common/svg_images_components/upgrade_svg';
-import EmptyBillingHistorySvg from 'components/common/svg_images_components/empty_billing_history_svg';
-
-import {trackEvent} from 'actions/telemetry_actions';
+import type {Invoice, InvoiceLineItem, Product} from '@mattermost/types/cloud';
 
 import {Client4} from 'mattermost-redux/client';
-import {Invoice, InvoiceLineItem, Product} from '@mattermost/types/cloud';
+
+import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
+
+import BlockableLink from 'components/admin_console/blockable_link';
 import CloudInvoicePreview from 'components/cloud_invoice_preview';
+import EmptyBillingHistorySvg from 'components/common/svg_images_components/empty_billing_history_svg';
+import UpgradeSvg from 'components/common/svg_images_components/upgrade_svg';
 import ExternalLink from 'components/external_link';
+import OverlayTrigger from 'components/overlay_trigger';
+import Tooltip from 'components/tooltip';
 
 export const noBillingHistory = (
     <div className='BillingSummary__noBillingHistory'>

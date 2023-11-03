@@ -3,11 +3,10 @@
 
 import React, {useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import type {WebSocketMessage} from '@mattermost/client';
-
 import {SocketEvents} from 'utils/constants';
 import {useWebSocket} from 'utils/use_websocket';
+
+import type {WebSocketMessage} from '@mattermost/client';
 
 type Props = {
     channelId: string;
@@ -22,15 +21,15 @@ export default function MsgTyping(props: Props) {
     useWebSocket({
         handler: useCallback((msg: WebSocketMessage) => {
             if (msg.event === SocketEvents.TYPING) {
-                const channelId = msg.broadcast.channel_id;
-                const rootId = msg.data.parent_id;
-                const userId = msg.data.user_id;
+                const channelId = msg.data.data.channel_id;
+                const rootId = msg.data.data.parent_id;
+                const userId = msg.data.data.user_id;
 
                 if (props.channelId === channelId && props.postId === rootId) {
                     userStartedTyping(userId, channelId, rootId, Date.now());
                 }
             } else if (msg.event === SocketEvents.POSTED) {
-                const post = JSON.parse(msg.data.post);
+                const post = msg.data.post;
 
                 const channelId = post.channel_id;
                 const rootId = post.root_id;

@@ -3,7 +3,6 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import PasswordResetForm from './password_reset_form';

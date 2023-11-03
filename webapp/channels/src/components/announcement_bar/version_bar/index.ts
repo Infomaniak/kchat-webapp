@@ -3,13 +3,15 @@
 
 import {connect} from 'react-redux';
 
-import type {GlobalState} from '@mattermost/types/store';
+import {GlobalState} from '@mattermost/types/store';
 
 import VersionBar from './version_bar';
 
 function mapStateToProps(state: GlobalState) {
+    const {BuildHash, IsNewVersionCanaryOnly} = state.entities.general.config;
     return {
-        buildHash: state.entities.general.config.BuildHash,
+        buildHash: BuildHash,
+        isNewVersionCanaryOnly: IsNewVersionCanaryOnly,
     };
 }
 

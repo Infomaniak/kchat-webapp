@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import FullScreenModal from './full_screen_modal';

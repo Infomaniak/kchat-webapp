@@ -2,20 +2,17 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 
-import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
+import {GenericAction} from 'mattermost-redux/types/actions';
+import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {GenericAction} from 'mattermost-redux/types/actions';
-
-import {closeModal, openModal} from 'actions/views/modals';
 
 import {ModalIdentifiers, Preferences} from 'utils/constants';
-
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
+import {closeModal, openModal} from 'actions/views/modals';
 
 import DeliquencyModalController from './delinquency_modal_controller';
 

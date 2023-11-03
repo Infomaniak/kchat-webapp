@@ -1,8 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {CSSProperties} from 'react';
+import React from 'react';
+import LinkOnlyRenderer from 'utils/markdown/link_only_renderer';
+import type {TextFormattingOptions} from 'utils/text_formatting';
+import * as Utils from 'utils/utils';
 
 import type {AppBinding} from '@mattermost/types/apps';
 import type {Post} from '@mattermost/types/posts';
@@ -12,10 +15,6 @@ import {cleanBinding} from 'mattermost-redux/utils/apps';
 
 import Markdown from 'components/markdown';
 import ShowMore from 'components/post_view/show_more';
-
-import LinkOnlyRenderer from 'utils/markdown/link_only_renderer';
-import type {TextFormattingOptions} from 'utils/text_formatting';
-import * as Utils from 'utils/utils';
 
 import ButtonBinding from '../button_binding';
 import SelectBinding from '../select_binding';

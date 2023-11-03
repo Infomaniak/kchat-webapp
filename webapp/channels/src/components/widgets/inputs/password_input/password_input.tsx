@@ -2,14 +2,13 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useState} from 'react';
 import type {ChangeEventHandler, FocusEventHandler} from 'react';
+import React, {useState} from 'react';
 import {useIntl} from 'react-intl';
-
 import {ItemStatus} from 'utils/constants';
 
-import Input from '../input/input';
 import type {CustomMessageInputType, SIZE} from '../input/input';
+import Input from '../input/input';
 
 import './password_input.scss';
 
@@ -53,8 +52,6 @@ const PasswordInput = React.forwardRef((
     const customMessageInfo: CustomMessageInputType | null = info ? {type: ItemStatus.INFO, value: info} : null;
     const customMessage = error ? customMessageError : customMessageInfo;
 
-    const placeHolder = createMode ? formatMessage({id: 'widget.passwordInput.createPassword', defaultMessage: 'Choose a Password'}) : formatMessage({id: 'widget.passwordInput.password', defaultMessage: 'Password'});
-
     return (
         <Input
             className={classNames('password-input', className)}
@@ -66,7 +63,6 @@ const PasswordInput = React.forwardRef((
                 <button
                     id='password_toggle'
                     type='button'
-                    aria-label={formatMessage({id: 'widget.passwordInput.passwordToggle', defaultMessage: 'Show or hide password'})}
                     className='password-input-toggle'
                     onClick={toggleShowPassword}
                     disabled={disabled}
@@ -78,7 +74,11 @@ const PasswordInput = React.forwardRef((
             onChange={onChange}
             onBlur={onBlur}
             onFocus={onFocus}
-            placeholder={placeHolder}
+            placeholder={createMode ? (
+                formatMessage({id: 'widget.passwordInput.createPassword', defaultMessage: 'Choose a Password'})
+            ) : (
+                formatMessage({id: 'widget.passwordInput.password', defaultMessage: 'Password'})
+            )}
             hasError={hasError}
             customMessage={error || info ? customMessage : undefined}
             disabled={disabled}

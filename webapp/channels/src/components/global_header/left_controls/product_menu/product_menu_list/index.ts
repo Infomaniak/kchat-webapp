@@ -2,37 +2,31 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
-import {Permissions} from 'mattermost-redux/constants';
+import {Action} from 'mattermost-redux/types/actions';
 import {getCloudSubscription, getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
+import {
+    getInt,
+    isCustomGroupsEnabled,
+} from 'mattermost-redux/selectors/entities/preferences';
 import {
     getConfig,
     getFirstAdminVisitMarketplaceStatus,
     getLicense,
     isMarketplaceEnabled,
 } from 'mattermost-redux/selectors/entities/general';
-import {
-    getInt,
-    isCustomGroupsEnabled,
-} from 'mattermost-redux/selectors/entities/preferences';
-import {haveICurrentTeamPermission, haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-import type {Action} from 'mattermost-redux/types/actions';
-
-import {openModal} from 'actions/views/modals';
-import {getIsMobileView} from 'selectors/views/browser';
-
+import {haveICurrentTeamPermission, haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
+import {Permissions} from 'mattermost-redux/constants';
+import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
+import {GlobalState} from 'types/store';
 import {OnboardingTaskCategory, OnboardingTasksName, TaskNameMapToSteps} from 'components/onboarding_tasks';
-
+import {openModal} from 'actions/views/modals';
+import {ModalData} from 'types/actions';
 import {CloudProducts} from 'utils/constants';
 import {isCloudLicense} from 'utils/license_utils';
-
-import type {ModalData} from 'types/actions';
-import type {GlobalState} from 'types/store';
 
 import ProductMenuList from './product_menu_list';
 
@@ -59,7 +53,6 @@ function mapStateToProps(state: GlobalState) {
     const step = getInt(state, OnboardingTaskCategory, OnboardingTasksName.VISIT_SYSTEM_CONSOLE, 0);
     const showVisitSystemConsoleTour = step === TaskNameMapToSteps[OnboardingTasksName.VISIT_SYSTEM_CONSOLE].STARTED;
     const enableCustomUserGroups = isCustomGroupsEnabled(state);
-    const isMobile = getIsMobileView(state);
 
     const subscription = getCloudSubscription(state);
     const license = getLicense(state);
@@ -77,7 +70,7 @@ function mapStateToProps(state: GlobalState) {
     const isFreeTrial = isCloudFreeTrial || isSelfHostedFreeTrial;
 
     return {
-        isMobile,
+        isMobile: state.views.channel.mobileView,
         appDownloadLink,
         enableCommands,
         canManageIntegrations,

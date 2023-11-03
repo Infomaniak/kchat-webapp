@@ -2,15 +2,16 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {Channel} from '@mattermost/types/channels';
 
+import LocalizedIcon from 'components/localized_icon';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import Constants from 'utils/constants';
 
 interface Props {
     channel: Channel;
@@ -33,7 +34,6 @@ const HeaderTitle = styled.span`
 `;
 
 const Header = ({channel, isArchived, isMobile, onClose}: Props) => {
-    const {formatMessage} = useIntl();
     const closeSidebarTooltip = (
         <Tooltip id='closeSidebarTooltip'>
             <FormattedMessage
@@ -84,12 +84,13 @@ const Header = ({channel, isArchived, isMobile, onClose}: Props) => {
                 <button
                     id='rhsCloseButton'
                     type='button'
-                    className='sidebar--right__close btn btn-icon btn-sm'
-                    aria-label={formatMessage({id: 'rhs_header.closeTooltip.icon', defaultMessage: 'Close Sidebar Icon'})}
+                    className='sidebar--right__close btn-icon'
+                    aria-label='Close'
                     onClick={onClose}
                 >
-                    <i
+                    <LocalizedIcon
                         className='icon icon-close'
+                        ariaLabel={{id: t('rhs_header.closeTooltip.icon'), defaultMessage: 'Close Sidebar Icon'}}
                     />
                 </button>
             </OverlayTrigger>

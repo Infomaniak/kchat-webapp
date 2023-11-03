@@ -5,8 +5,9 @@ import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
+import Constants from 'utils/constants';
 
-import type {Channel} from '@mattermost/types/channels';
+import type {Channel, PendingGuest as PendingGuestType} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
@@ -16,12 +17,12 @@ import ChannelMembersDropdown from 'components/channel_members_dropdown';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import OverlayTrigger from 'components/overlay_trigger';
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
+import PendingGuestsDropdown from 'components/pending_guests_dropdown';
 import ProfilePicture from 'components/profile_picture';
 import ProfilePopover from 'components/profile_popover';
 import Tooltip from 'components/tooltip';
+import PendingGuestIcon from 'components/widgets/icons/pending_guest_icon';
 import GuestTag from 'components/widgets/tag/guest_tag';
-
-import Constants from 'utils/constants';
 
 import type {ChannelMember} from './channel_members_rhs';
 
@@ -31,49 +32,43 @@ const Avatar = styled.div`
 `;
 
 const UserInfo = styled.div`
-    display: flex;
     flex: 1;
-    cursor: pointer;
     overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    cursor: pointer;
 `;
 
 const DisplayName = styled.span`
-    display: inline;
-    overflow: hidden;
-    margin-left: 8px;
-    color: var(--center-channel-color);
-    font-size: 14px;
+    display: inline-flex;
     gap: 8px;
+    margin-left: 8px;
+    font-size: 14px;
     line-height: 20px;
-    text-overflow: ellipsis;
+    color: var(--center-channel-color);
 `;
 
 const Username = styled.span`
-    margin-left: 4px;
-    color: rgba(var(--center-channel-color-rgb), 0.56);
+    margin-left: 8px;
     font-size: 12px;
     line-height: 18px;
+    color: rgba(var(--center-channel-color-rgb), 0.56);
 `;
 
 const SendMessage = styled.button`
     display: none;
+    border: 0;
+    background-color: transparent;
+    padding: 0;
     width: 24px;
     height: 24px;
-    padding: 0;
-    border: 0;
-    margin-left: 8px;
-    background-color: transparent;
     border-radius: 4px;
-
     &:hover {
         background-color: rgba(var(--center-channel-color-rgb), 0.12);
     }
-
     .icon {
-        color: rgba(var(--center-channel-color-rgb), 0.56);
         font-size: 14.4px;
+        color: rgba(var(--center-channel-color-rgb), 0.56);
     };
 `;
 
@@ -127,7 +122,6 @@ const Member = ({className, channel, member, index, totalUsers, editing, actions
     return (
         <div
             className={className}
-            style={{height: '48px'}}
             data-testid={`memberline-${member.user.id}`}
         >
 
@@ -170,14 +164,8 @@ const Member = ({className, channel, member, index, totalUsers, editing, actions
                             userID={member.user.id}
                             showTooltip={true}
                             emojiSize={16}
-                            spanStyle={{
-                                display: 'flex',
-                                flex: '0 0 auto',
-                                alignItems: 'center',
-                            }}
                             emojiStyle={{
                                 marginLeft: '8px',
-                                alignItems: 'center',
                             }}
                         />
                     </UserInfo>
@@ -248,26 +236,73 @@ export default styled(Member)`
     &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.08);
         color: rgba(var(--center-channel-color-rgb), 0.56);
-
         ${SendMessage} {
             display: block;
-            flex: 0 0 auto;
         }
     }
 
     .ProfileSpan {
         display: flex;
-        overflow: hidden;
-        width: 100%;
         flex-direction: row;
         align-items: center;
-        // This padding is to make sure the status icon doesnt get clipped off because of the overflow
-        padding: 4px 0;
         margin-right: auto;
     }
 
     .MenuWrapper {
-        font-size: 11px;
         font-weight: 600;
+        font-size: 11px;
     }
 `;
+
+const StyledPendingGuest = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 4px;
+
+    &:hover {
+        background: rgba(var(--center-channel-color-rgb), 0.08);
+        color: rgba(var(--center-channel-color-rgb), 0.56);
+    }
+
+    .MenuWrapper {
+        font-weight: 600;
+        font-size: 11px;
+    }
+`;
+
+const StyledPendingGuestIcon = styled(PendingGuestIcon)`
+    width: 24px;
+    height: 24px;
+`;
+
+type PendingGuestProp = {
+    channel: Channel;
+    pendingGuest: PendingGuestType;
+    editing: boolean;
+    index: number;
+    totalUsers: number;
+};
+
+export const PendingGuest = ({channel, pendingGuest, editing, index, totalUsers}: PendingGuestProp) => {
+    return (
+        <StyledPendingGuest>
+            <StyledPendingGuestIcon/>
+            <UserInfo>
+                <DisplayName>
+                    {pendingGuest.email}
+                    <GuestTag/>
+                </DisplayName>
+            </UserInfo>
+            <RoleChooser className={classNames({editing}, 'member-role-chooser')}>
+                <PendingGuestsDropdown
+                    channel={channel}
+                    pendingGuest={pendingGuest}
+                    index={index}
+                    totalUsers={totalUsers}
+                />
+            </RoleChooser>
+        </StyledPendingGuest>
+    );
+};

@@ -4,14 +4,18 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
+
+import type {ChannelType} from '@mattermost/types/channels';
+import type {ServerError} from '@mattermost/types/errors';
 
 import {General} from 'mattermost-redux/constants';
+import type {ActionFunc} from 'mattermost-redux/types/actions';
 
+import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
-import Constants from 'utils/constants';
 
 type Props = {
     channelDisplayName: string;
@@ -23,7 +27,7 @@ type Props = {
     onExited: () => void;
 
     actions: {
-        updateChannelPrivacy: (channelId: string, privacy: string) => void;
+        updateChannelPrivacy: (channelId: string, privacy: string, openChannelLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc) => void;
     };
 }
 
@@ -44,7 +48,7 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
             return;
         }
 
-        actions.updateChannelPrivacy(channelId, General.PRIVATE_CHANNEL);
+        actions.updateChannelPrivacy(channelId, General.PRIVATE_CHANNEL, openChannelLimitModalIfNeeded);
         trackEvent('actions', 'convert_to_private_channel', {channel_id: channelId});
         this.onHide();
     };
@@ -86,7 +90,7 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                     <p>
                         <FormattedMarkdownMessage
                             id='convert_channel.question1'
-                            defaultMessage='When you convert **{display_name}** to a private channel, history and membership are preserved. Publicly shared files remain accessible to anyone with the link. Membership in a private channel is by invitation only.'
+                            defaultMessage='When you convert **{display_name}** to a private channel, history and membership are preserved. Membership in a private channel is by invitation only.'
                             values={{
                                 display_name: channelDisplayName,
                             }}
@@ -111,7 +115,7 @@ export default class ConvertChannelModal extends React.PureComponent<Props, Stat
                 <Modal.Footer>
                     <button
                         type='button'
-                        className='btn btn-tertiary'
+                        className='btn btn-link secondary'
                         onClick={this.onHide}
                     >
                         <FormattedMessage

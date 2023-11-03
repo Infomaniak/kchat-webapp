@@ -1,7 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
 import React from 'react';
+import {Constants, ModalIdentifiers} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -15,7 +18,6 @@ import ChannelInviteModal from 'components/channel_invite_modal';
 import ChannelMoveToSubMenuOld from 'components/channel_move_to_sub_menu_old';
 import ChannelNotificationsModal from 'components/channel_notifications_modal';
 import ConvertChannelModal from 'components/convert_channel_modal';
-import ConvertGmToChannelModal from 'components/convert_gm_to_channel_modal';
 import DeleteChannelModal from 'components/delete_channel_modal';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
 import EditChannelPurposeModal from 'components/edit_channel_purpose_modal';
@@ -24,10 +26,6 @@ import ChannelPermissionGate from 'components/permissions_gates/channel_permissi
 import RenameChannelModal from 'components/rename_channel_modal';
 import UnarchiveChannelModal from 'components/unarchive_channel_modal';
 import Menu from 'components/widgets/menu/menu';
-
-import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
-import {Constants, ModalIdentifiers} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 import type {PluginComponent} from 'types/store/plugins';
 
@@ -52,6 +50,11 @@ export type Props = {
     penultimateViewedChannelName: string;
     pluginMenuItems: PluginComponent[];
     isLicensedForLDAPGroups: boolean;
+    dmUserId: string;
+    hasCall: boolean;
+    actions: {
+        startOrJoinCallInChannelV2: (channelId: string) => void;
+    };
 }
 
 export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
@@ -67,6 +70,9 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
             isMobile,
             penultimateViewedChannelName,
             isLicensedForLDAPGroups,
+            dmUserId,
+            hasCall,
+            actions,
         } = this.props;
 
         const isPrivate = channel.type === Constants.PRIVATE_CHANNEL;
@@ -75,6 +81,8 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
         const channelPropertiesPermission = isPrivate ? Permissions.MANAGE_PRIVATE_CHANNEL_PROPERTIES : Permissions.MANAGE_PUBLIC_CHANNEL_PROPERTIES;
         const channelDeletePermission = isPrivate ? Permissions.DELETE_PRIVATE_CHANNEL : Permissions.DELETE_PUBLIC_CHANNEL;
         const channelUnarchivePermission = Permissions.MANAGE_TEAM;
+        const isDM = channel.type === Constants.DM_CHANNEL;
+        const showCall = !isDM || user.id !== dmUserId;
 
         let divider;
         if (isMobile) {
@@ -214,6 +222,14 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                 </Menu.Group>
 
                 <Menu.Group divider={divider}>
+                    {isMobile && showCall && (
+                        <Menu.ItemAction
+                            id='startCallInChannel'
+                            key='startCallInChannel'
+                            onClick={() => actions.startOrJoinCallInChannelV2(channel.id)}
+                            text={hasCall ? localizeMessage('kmeet.calls.join', 'Join call') : localizeMessage('kmeet.calls.start', 'Start call')}
+                        />
+                    )}
                     <Menu.ItemToggleModalRedux
                         id='channelEditHeader'
                         show={(channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) && !isArchived && !isReadonly}
@@ -222,18 +238,6 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                         dialogProps={{channel}}
                         text={localizeMessage('channel_header.setConversationHeader', 'Edit Conversation Header')}
                     />
-
-                    <Menu.ItemToggleModalRedux
-                        id='convertGMPrivateChannel'
-                        show={channel.type === Constants.GM_CHANNEL && !isArchived && !isReadonly && !isGuest(user.roles)}
-                        modalId={ModalIdentifiers.CONVERT_GM_TO_CHANNEL}
-                        dialogType={ConvertGmToChannelModal}
-                        dialogProps={{channel}}
-                        text={localizeMessage('sidebar_left.sidebar_channel_menu_convert_to_channel', 'Convert to Private Channel')}
-                    />
-                </Menu.Group>
-
-                <Menu.Group divider={divider}>
                     <ChannelPermissionGate
                         channelId={channel.id}
                         teamId={channel.team_id}
@@ -281,12 +285,6 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                             text={localizeMessage('channel_header.convert', 'Convert to Private Channel')}
                         />
                     </ChannelPermissionGate>
-                    <MenuItemLeaveChannel
-                        id='channelLeaveChannel'
-                        channel={channel}
-                        isDefault={isDefault}
-                        isGuestUser={isGuest(user.roles)}
-                    />
                     <ChannelPermissionGate
                         channelId={channel.id}
                         teamId={channel.team_id}
@@ -310,6 +308,12 @@ export default class ChannelHeaderDropdown extends React.PureComponent<Props> {
                             channel={channel}
                             isDropdown={true}
                         />}
+                    <MenuItemLeaveChannel
+                        id='channelLeaveChannel'
+                        channel={channel}
+                        isDefault={isDefault}
+                        isGuestUser={isGuest(user.roles)}
+                    />
                     <MenuItemCloseMessage
                         id='channelCloseMessage'
                         channel={channel}

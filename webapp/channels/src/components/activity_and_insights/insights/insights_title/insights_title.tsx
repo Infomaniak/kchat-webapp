@@ -3,12 +3,11 @@
 
 import React, {memo, useCallback} from 'react';
 import {useIntl} from 'react-intl';
-
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import Menu from 'components/widgets/menu/menu';
-
-import * as Utils from 'utils/utils';
 import {InsightsScopes} from 'utils/constants';
+import * as Utils from 'utils/utils';
+
+import Menu from 'components/widgets/menu/menu';
+import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
 type Props = {
     filterType: string;

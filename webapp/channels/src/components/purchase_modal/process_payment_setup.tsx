@@ -3,12 +3,15 @@
 
 import type {Stripe} from '@stripe/stripe-js';
 import React from 'react';
-import {FormattedMessage, injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
-import {withRouter} from 'react-router-dom';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
+import {RecurringIntervals, TELEMETRY_CATEGORIES} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {getNextBillingDate} from 'utils/utils';
 
-import type {Address, CloudCustomerPatch, Feedback, Product} from '@mattermost/types/cloud';
+import type {Address, Feedback, Product} from '@mattermost/types/cloud';
 import type {Team} from '@mattermost/types/teams';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
@@ -19,10 +22,6 @@ import ComplianceScreenFailedSvg from 'components/common/svg_images_components/a
 import CreditCardSvg from 'components/common/svg_images_components/credit_card_svg';
 import PaymentFailedSvg from 'components/common/svg_images_components/payment_failed_svg';
 import PaymentSuccessStandardSvg from 'components/common/svg_images_components/payment_success_standard_svg';
-
-import {RecurringIntervals, TELEMETRY_CATEGORIES} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {getNextBillingDate} from 'utils/utils';
 
 import type {BillingDetails} from 'types/cloud/sku';
 
@@ -39,16 +38,16 @@ type Props = RouteComponentProps & {
     billingDetails: BillingDetails | null;
     shippingAddress: Address | null;
     stripe: Promise<Stripe | null>;
-    cwsMockMode: boolean;
+    isDevMode: boolean;
     contactSupportLink: string;
     currentTeam: Team;
     addPaymentMethod: (
         stripe: Stripe,
         billingDetails: BillingDetails,
-        cwsMockMode: boolean
+        isDevMode: boolean
     ) => Promise<boolean | null>;
     subscribeCloudSubscription:
-    | ((productId: string, shippingAddress: Address, seats?: number, downgradeFeedback?: Feedback, customerPatch?: CloudCustomerPatch) => Promise<ActionResult<Subscription, ComplianceError>>)
+    | ((productId: string, shippingAddress: Address, seats?: number, downgradeFeedback?: Feedback) => Promise<ActionResult<Subscription, ComplianceError>>)
     | null;
     onBack: () => void;
     onClose: () => void;
@@ -123,10 +122,10 @@ class ProcessPaymentSetup extends React.PureComponent<Props, State> {
             stripe,
             addPaymentMethod,
             billingDetails,
-            cwsMockMode,
+            isDevMode,
             subscribeCloudSubscription,
         } = this.props;
-        const success = await addPaymentMethod((await stripe)!, billingDetails!, cwsMockMode);
+        const success = await addPaymentMethod((await stripe)!, billingDetails!, isDevMode);
 
         if (typeof success !== 'boolean' || !success) {
             trackEvent('cloud_admin', 'complete_payment_failed', {
@@ -139,10 +138,7 @@ class ProcessPaymentSetup extends React.PureComponent<Props, State> {
         }
 
         if (subscribeCloudSubscription) {
-            const customerPatch = {
-                name: billingDetails?.company_name,
-            } as CloudCustomerPatch;
-            const result = await subscribeCloudSubscription(this.props.selectedProduct?.id as string, this.props.shippingAddress as Address, this.props.usersCount, undefined, customerPatch);
+            const result = await subscribeCloudSubscription(this.props.selectedProduct?.id as string, this.props.shippingAddress as Address, this.props.usersCount);
 
             // the action subscribeCloudSubscription returns a true boolean when successful and an error when it fails
             if (result.error) {
@@ -373,6 +369,9 @@ class ProcessPaymentSetup extends React.PureComponent<Props, State> {
                 <IconMessage
                     title={t(
                         'admin.billing.subscription.complianceScreenFailed.title',
+                    )}
+                    subtitle={t(
+                        'admin.billing.subscription.complianceScreenFailed.subtitle',
                     )}
                     icon={
                         <ComplianceScreenFailedSvg

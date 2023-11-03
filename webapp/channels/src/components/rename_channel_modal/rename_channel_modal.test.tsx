@@ -2,17 +2,16 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import {TestHelper} from 'utils/test_helper';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Team} from '@mattermost/types/teams';
 
 import {RequestStatus} from 'mattermost-redux/constants';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-import {TestHelper} from 'utils/test_helper';
-
-import RenameChannelModal from './rename_channel_modal';
 import type {RenameChannelModal as RenameChannelModalClass} from './rename_channel_modal';
+import RenameChannelModal from './rename_channel_modal';
 
 describe('components/RenameChannelModal', () => {
     const channel: Channel = TestHelper.getChannelMock({
@@ -66,7 +65,7 @@ describe('components/RenameChannelModal', () => {
             [{name: 'must start with a letter or number', value: '_channel'}, false],
             [{name: 'must end with a letter or number', value: 'channel_'}, false],
             [{name: 'can contain two underscores in a row', value: 'channel__two'}, true],
-            [{name: 'can not resemble direct message channel url', value: 'uzsfmtmniifsjgesce4u7yznyh__uzsfmtmniifsjgesce4u7yznyh'}, false],
+            [{name: 'can not resemble direct message channel url', value: 'pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz__pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz'}, false],
             [{name: 'valid channel url', value: 'a_valid_channel'}, true],
         ];
 

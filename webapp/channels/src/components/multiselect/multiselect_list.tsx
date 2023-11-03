@@ -4,11 +4,10 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {getOptionValue} from 'react-select/src/builtins';
+import Constants from 'utils/constants';
+import {cmdOrCtrlPressed} from 'utils/utils';
 
 import LoadingScreen from 'components/loading_screen';
-
-import Constants from 'utils/constants';
-import {cmdOrCtrlPressed} from 'utils/keyboard';
 
 import type {Value} from './multiselect';
 
@@ -170,7 +169,8 @@ export default class MultiSelectList<T extends Value> extends React.PureComponen
             renderOutput = (
                 <div aria-hidden={true}>
                     <LoadingScreen
-                        position='absolute'
+
+                        // position='absolute'
                         key='loading'
                     />
                 </div>

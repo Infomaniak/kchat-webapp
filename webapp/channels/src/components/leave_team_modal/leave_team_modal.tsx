@@ -4,6 +4,8 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
+import {isKeyPressed} from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -11,9 +13,6 @@ import type {ActionFunc} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
-import Constants from 'utils/constants';
-import {isKeyPressed} from 'utils/keyboard';
 
 type Props = {
     currentUser: UserProfile;
@@ -160,7 +159,7 @@ export default class LeaveTeamModal extends React.PureComponent<Props, State> {
                 role='dialog'
                 aria-labelledby='leaveTeamModalLabel'
             >
-                <Modal.Header closeButton={false}>
+                <Modal.Header closeButton={true}>
                     <Modal.Title
                         componentClass='h1'
                         id='leaveTeamModalLabel'
@@ -177,7 +176,7 @@ export default class LeaveTeamModal extends React.PureComponent<Props, State> {
                 <Modal.Footer>
                     <button
                         type='button'
-                        className='btn btn-tertiary'
+                        className='btn btn-link'
                         onClick={this.handleHide}
                         id='leaveTeamNo'
                     >

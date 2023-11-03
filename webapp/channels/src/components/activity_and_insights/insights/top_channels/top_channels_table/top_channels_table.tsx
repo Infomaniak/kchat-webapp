@@ -5,16 +5,17 @@ import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
+import Constants, {InsightsScopes} from 'utils/constants';
+
+import type {TimeFrame, TopChannel} from '@mattermost/types/insights';
+
+import {getMyTopChannels, getTopChannelsForTeam} from 'mattermost-redux/actions/insights';
+import {getCurrentRelativeTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import {TimeFrame, TopChannel} from '@mattermost/types/insights';
-
-import DataGrid, {Row, Column} from 'components/admin_console/data_grid/data_grid';
-
-import Constants, {InsightsScopes} from 'utils/constants';
-import {getCurrentRelativeTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {getMyTopChannels, getTopChannelsForTeam} from 'mattermost-redux/actions/insights';
+import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import DataGrid from 'components/admin_console/data_grid/data_grid';
 
 import './../../../activity_and_insights.scss';
 

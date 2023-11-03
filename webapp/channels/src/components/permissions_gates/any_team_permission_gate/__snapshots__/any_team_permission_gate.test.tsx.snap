@@ -13,25 +13,24 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
     }
   }
 >
-  <Connect(Component)
+  <Connect(AnyTeamPermissionGate)
     permissions={
       Array [
         "invalid_permission",
       ]
     }
   >
-    <Memo(AnyTeamPermissionGate)
+    <AnyTeamPermissionGate
       dispatch={[Function]}
       hasPermission={false}
+      invert={false}
       permissions={
         Array [
           "invalid_permission",
         ]
       }
-    >
-      <p />
-    </Memo(AnyTeamPermissionGate)>
-  </Connect(Component)>
+    />
+  </Connect(AnyTeamPermissionGate)>
 </Provider>
 `;
 
@@ -48,7 +47,7 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
     }
   }
 >
-  <Connect(Component)
+  <Connect(AnyTeamPermissionGate)
     permissions={
       Array [
         "test_team_permission",
@@ -56,9 +55,10 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
       ]
     }
   >
-    <Memo(AnyTeamPermissionGate)
+    <AnyTeamPermissionGate
       dispatch={[Function]}
       hasPermission={true}
+      invert={false}
       permissions={
         Array [
           "test_team_permission",
@@ -69,8 +69,8 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
       <p>
         Valid permission (shown)
       </p>
-    </Memo(AnyTeamPermissionGate)>
-  </Connect(Component)>
+    </AnyTeamPermissionGate>
+  </Connect(AnyTeamPermissionGate)>
 </Provider>
 `;
 
@@ -87,16 +87,17 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
     }
   }
 >
-  <Connect(Component)
+  <Connect(AnyTeamPermissionGate)
     permissions={
       Array [
         "test_team_permission",
       ]
     }
   >
-    <Memo(AnyTeamPermissionGate)
+    <AnyTeamPermissionGate
       dispatch={[Function]}
       hasPermission={true}
+      invert={false}
       permissions={
         Array [
           "test_team_permission",
@@ -106,8 +107,8 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
       <p>
         Valid permission (shown)
       </p>
-    </Memo(AnyTeamPermissionGate)>
-  </Connect(Component)>
+    </AnyTeamPermissionGate>
+  </Connect(AnyTeamPermissionGate)>
 </Provider>
 `;
 
@@ -124,7 +125,7 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
     }
   }
 >
-  <Connect(Component)
+  <Connect(AnyTeamPermissionGate)
     invert={true}
     permissions={
       Array [
@@ -132,7 +133,7 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
       ]
     }
   >
-    <Memo(AnyTeamPermissionGate)
+    <AnyTeamPermissionGate
       dispatch={[Function]}
       hasPermission={true}
       invert={true}
@@ -141,10 +142,8 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
           "test_team_permission",
         ]
       }
-    >
-      <p />
-    </Memo(AnyTeamPermissionGate)>
-  </Connect(Component)>
+    />
+  </Connect(AnyTeamPermissionGate)>
 </Provider>
 `;
 
@@ -161,16 +160,17 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
     }
   }
 >
-  <Connect(Component)
+  <Connect(AnyTeamPermissionGate)
     permissions={
       Array [
         "test_system_permission",
       ]
     }
   >
-    <Memo(AnyTeamPermissionGate)
+    <AnyTeamPermissionGate
       dispatch={[Function]}
       hasPermission={true}
+      invert={false}
       permissions={
         Array [
           "test_system_permission",
@@ -180,8 +180,8 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
       <p>
         Valid permission (shown)
       </p>
-    </Memo(AnyTeamPermissionGate)>
-  </Connect(Component)>
+    </AnyTeamPermissionGate>
+  </Connect(AnyTeamPermissionGate)>
 </Provider>
 `;
 
@@ -198,16 +198,17 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
     }
   }
 >
-  <Connect(Component)
+  <Connect(AnyTeamPermissionGate)
     permissions={
       Array [
         "other_permission",
       ]
     }
   >
-    <Memo(AnyTeamPermissionGate)
+    <AnyTeamPermissionGate
       dispatch={[Function]}
       hasPermission={true}
+      invert={false}
       permissions={
         Array [
           "other_permission",
@@ -217,8 +218,8 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
       <p>
         Valid permission (shown)
       </p>
-    </Memo(AnyTeamPermissionGate)>
-  </Connect(Component)>
+    </AnyTeamPermissionGate>
+  </Connect(AnyTeamPermissionGate)>
 </Provider>
 `;
 
@@ -235,7 +236,7 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
     }
   }
 >
-  <Connect(Component)
+  <Connect(AnyTeamPermissionGate)
     invert={true}
     permissions={
       Array [
@@ -243,7 +244,7 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
       ]
     }
   >
-    <Memo(AnyTeamPermissionGate)
+    <AnyTeamPermissionGate
       dispatch={[Function]}
       hasPermission={true}
       invert={true}
@@ -252,10 +253,8 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
           "other_permission",
         ]
       }
-    >
-      <p />
-    </Memo(AnyTeamPermissionGate)>
-  </Connect(Component)>
+    />
+  </Connect(AnyTeamPermissionGate)>
 </Provider>
 `;
 
@@ -272,7 +271,7 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
     }
   }
 >
-  <Connect(Component)
+  <Connect(AnyTeamPermissionGate)
     invert={true}
     permissions={
       Array [
@@ -280,7 +279,7 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
       ]
     }
   >
-    <Memo(AnyTeamPermissionGate)
+    <AnyTeamPermissionGate
       dispatch={[Function]}
       hasPermission={false}
       invert={true}
@@ -293,7 +292,7 @@ exports[`components/permissions_gates TeamPermissionGate should match snapshot w
       <p>
         Invalid permission but inverted (shown)
       </p>
-    </Memo(AnyTeamPermissionGate)>
-  </Connect(Component)>
+    </AnyTeamPermissionGate>
+  </Connect(AnyTeamPermissionGate)>
 </Provider>
 `;

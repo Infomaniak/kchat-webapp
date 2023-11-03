@@ -5,75 +5,76 @@ import React, {useCallback, useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import {defineMessages, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
+import {suitePluginIds} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
-import {isCallsEnabled} from 'selectors/calls';
-
+import type {
+    KeyboardShortcutDescriptor} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import type {
-    KeyboardShortcutDescriptor} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 
-import * as UserAgent from 'utils/user_agent';
+import type {GlobalState} from 'types/store';
 
 import './keyboard_shortcuts_modal.scss';
 
 const modalMessages = defineMessages({
     msgHeader: {
-        id: 'shortcuts.msgs.header',
+        id: t('shortcuts.msgs.header'),
         defaultMessage: 'Messages',
     },
     msgInputHeader: {
-        id: 'shortcuts.msgs.input.header',
+        id: t('shortcuts.msgs.input.header'),
         defaultMessage: 'Works inside an empty input field',
     },
     filesHeader: {
-        id: 'shortcuts.files.header',
+        id: t('shortcuts.files.header'),
         defaultMessage: 'Files',
     },
     browserHeader: {
-        id: 'shortcuts.browser.header',
+        id: t('shortcuts.browser.header'),
         defaultMessage: 'Built-in Browser Commands',
     },
     msgCompHeader: {
-        id: 'shortcuts.msgs.comp.header',
+        id: t('shortcuts.msgs.comp.header'),
         defaultMessage: 'Autocomplete',
     },
     browserInputHeader: {
-        id: 'shortcuts.browser.input.header',
+        id: t('shortcuts.browser.input.header'),
         defaultMessage: 'Works inside an input field',
     },
     msgMarkdownHeader: {
-        id: 'shortcuts.msgs.markdown.header',
+        id: t('shortcuts.msgs.markdown.header'),
         defaultMessage: 'Formatting',
     },
     info: {
-        id: 'shortcuts.info',
+        id: t('shortcuts.info'),
         defaultMessage:
             'Begin a message with / for a list of all the available slash commands.',
     },
     navHeader: {
-        id: 'shortcuts.nav.header',
+        id: t('shortcuts.nav.header'),
         defaultMessage: 'Navigation',
     },
     msgSearchHeader: {
-        id: 'shortcuts.msgs.search.header',
+        id: t('shortcuts.msgs.search.header'),
         defaultMessage: 'Searching',
     },
     callsHeader: {
-        id: 'shortcuts.calls.header',
+        id: t('shortcuts.calls.header'),
         defaultMessage: 'Calls',
     },
     callsGlobalHeader: {
-        id: 'shortcuts.calls.global.header',
+        id: t('shortcuts.calls.global.header'),
         defaultMessage: 'Global',
     },
     callsWidgetHeader: {
-        id: 'shortcuts.calls.widget.header',
+        id: t('shortcuts.calls.widget.header'),
         defaultMessage: 'Call widget',
     },
     callsExpandedHeader: {
-        id: 'shortcuts.calls.expanded.header',
+        id: t('shortcuts.calls.expanded.header'),
         defaultMessage: 'Expanded view (pop-out window)',
     },
 });
@@ -89,9 +90,11 @@ const KeyboardShortcutsModal = ({onExited}: Props): JSX.Element => {
 
     const handleHide = useCallback(() => setShow(false), []);
 
-    const isLinux = UserAgent.isLinux();
+    const isLinux = Utils.isLinux();
 
-    const callsEnabled = useSelector(isCallsEnabled);
+    const isCallsEnabled = useSelector((state: GlobalState) => {
+        return Boolean(state.plugins.plugins[suitePluginIds.calls]);
+    });
 
     const renderShortcutSequences = (shortcuts: {[key: string]: KeyboardShortcutDescriptor}) => {
         return Object.entries(shortcuts).map(([key, shortcut]) => {
@@ -201,7 +204,7 @@ const KeyboardShortcutsModal = ({onExited}: Props): JSX.Element => {
                         </div>
 
                     </div>
-                    { callsEnabled &&
+                    { isCallsEnabled &&
                     <div className='row'>
                         <div className='col-sm-4'>
                             <div className='section'>

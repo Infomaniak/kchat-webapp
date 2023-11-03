@@ -36,6 +36,8 @@ exports[`components/drafts/drafts should match snapshot 1`] = `
     displayName="display_name"
     draftRemotes={Object {}}
     drafts={Array []}
+    invalidScheduledAmount={0}
+    localDraftsAreEnabled={true}
     status={Object {}}
     user={Object {}}
   />
@@ -78,6 +80,8 @@ exports[`components/drafts/drafts should match snapshot for local drafts disable
     displayName="display_name"
     draftRemotes={Object {}}
     drafts={Array []}
+    invalidScheduledAmount={0}
+    localDraftsAreEnabled={false}
     status={Object {}}
     user={Object {}}
   />

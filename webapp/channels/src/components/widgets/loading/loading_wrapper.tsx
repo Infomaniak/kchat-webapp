@@ -6,17 +6,24 @@ import React from 'react';
 import LoadingSpinner from './loading_spinner';
 
 type Props = {
-    loading?: boolean;
-    text?: React.ReactNode;
-    children?: React.ReactNode;
+    loading: boolean;
+    text: React.ReactNode;
+    children: React.ReactNode;
 }
 
-const LoadingWrapper = ({loading = true, text = null, children = null}: Props) => {
-    return (
-        <>
-            {loading ? <LoadingSpinner text={text}/> : children}
-        </>
-    );
-};
+export default class LoadingWrapper extends React.PureComponent<Props> {
+    public static defaultProps: Props = {
+        loading: true,
+        text: null,
+        children: null,
+    };
 
-export default React.memo(LoadingWrapper);
+    public render() {
+        const {text, loading, children} = this.props;
+        if (!loading) {
+            return children;
+        }
+
+        return <LoadingSpinner text={text}/>;
+    }
+}

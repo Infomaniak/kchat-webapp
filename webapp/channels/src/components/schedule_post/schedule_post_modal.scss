@@ -1,0 +1,37 @@
+.schedule-post-modal {
+    .modal &.GenericModal {
+        @media screen and (max-width: 768px) {
+            &.modal-dialog {
+                margin: auto;
+            }
+        }
+
+        & .modal-body {
+            padding-bottom: 28px;
+            overflow: visible;
+
+            .GenericModal__header {
+                span {
+                    font-weight: 400;
+                    font-size: 12px;
+                    line-height: 16px;
+                }
+            }
+
+            .GenericModal__body {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+        }
+
+        & .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            &::before,
+            &::after {
+                display: none;
+            }
+        }
+    }
+}

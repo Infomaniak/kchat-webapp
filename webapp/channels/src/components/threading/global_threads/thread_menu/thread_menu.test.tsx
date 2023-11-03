@@ -3,29 +3,28 @@
 
 import {shallow} from 'enzyme';
 import {set} from 'lodash';
-import React from 'react';
 import type {ComponentProps} from 'react';
+import React from 'react';
+import {fakeDate} from 'tests/helpers/date';
+import {copyToClipboard} from 'utils/utils';
 
 import {setThreadFollow, updateThreadRead, markLastPostInThreadAsUnread} from 'mattermost-redux/actions/threads';
+jest.mock('mattermost-redux/actions/threads');
 
 import {
     flagPost as savePost,
     unflagPost as unsavePost,
 } from 'actions/post_actions';
 import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
+jest.mock('actions/views/threads');
 
 import Menu from 'components/widgets/menu/menu';
 
-import {fakeDate} from 'tests/helpers/date';
-import {copyToClipboard} from 'utils/utils';
-
-import type {GlobalState} from 'types/store';
-
 import ThreadMenu from '../thread_menu';
 
-jest.mock('mattermost-redux/actions/threads');
-jest.mock('actions/views/threads');
 jest.mock('actions/post_actions');
+
+import type {GlobalState} from 'types/store';
 jest.mock('utils/utils');
 
 const mockRouting = {

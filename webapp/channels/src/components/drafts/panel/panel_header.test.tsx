@@ -10,6 +10,8 @@ import PanelHeader from './panel_header';
 
 describe('components/drafts/panel/panel_header', () => {
     const baseProps = {
+        isScheduled: false,
+        scheduledWillNotBeSent: false,
         actions: <div>{'actions'}</div>,
         hover: false,
         timestamp: 12345,

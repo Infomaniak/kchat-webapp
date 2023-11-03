@@ -3,10 +3,9 @@
 
 import React from 'react';
 import {useIntl} from 'react-intl';
+import {toTitleCase} from 'utils/utils';
 
 import type {Audit} from '@mattermost/types/audits';
-
-import {toTitleCase} from 'utils/utils';
 
 import AuditRow from './audit_row/audit_row';
 import ChannelRow from './channel_row/channel_row';

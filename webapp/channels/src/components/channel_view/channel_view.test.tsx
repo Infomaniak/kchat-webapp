@@ -4,8 +4,8 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
-import ChannelView from './channel_view';
 import type {Props} from './channel_view';
+import ChannelView from './channel_view';
 
 describe('components/channel_view', () => {
     const baseProps: Props = {

@@ -4,7 +4,6 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
 

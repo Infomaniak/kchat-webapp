@@ -7,7 +7,8 @@ import {FormattedMessage} from 'react-intl';
 import Permissions from 'mattermost-redux/constants/permissions';
 
 import SystemRolePermissionDropdown from './system_role_permission_dropdown';
-import {PermissionsToUpdate, PermissionToUpdate, SystemSection, noAccess, PermissionAccess, writeAccess, readAccess, mixedAccess} from './types';
+import type {PermissionsToUpdate, PermissionToUpdate, SystemSection, PermissionAccess} from './types';
+import {noAccess, writeAccess, readAccess, mixedAccess} from './types';
 
 import './system_role_permissions.scss';
 
@@ -28,7 +29,7 @@ export default class SystemRolePermission extends React.PureComponent<Props> {
             return visibleSections[section.name];
         }
         return this.getAccessForSection(section, permissionsMap, permissionsToUpdate) === mixedAccess;
-    }
+    };
 
     renderSubsectionToggle = (section: SystemSection, isSectionVisible: boolean) => {
         if (!section.subsections || section.subsections.length === 0) {
@@ -59,7 +60,7 @@ export default class SystemRolePermission extends React.PureComponent<Props> {
                 </button>
             </div>
         );
-    }
+    };
 
     renderSubsections = (section: SystemSection, permissionsMap: Record<string, boolean>, permissionsToUpdate: PermissionsToUpdate, isSectionVisible: boolean) => {
         if (!section.subsections || section.subsections.length === 0) {
@@ -74,7 +75,7 @@ export default class SystemRolePermission extends React.PureComponent<Props> {
                 }
             </div>
         );
-    }
+    };
 
     renderSectionRow = (section: SystemSection, permissionsMap: Record<string, boolean>, permissionsToUpdate: PermissionsToUpdate, isSectionVisible: boolean) => {
         return (
@@ -111,7 +112,7 @@ export default class SystemRolePermission extends React.PureComponent<Props> {
                 </div>
             </div>
         );
-    }
+    };
 
     getAccessForSection = (section: SystemSection, permissions: Record<string, boolean>, permissionsToUpdate: Record<string, PermissionAccess>) => {
         // If we have subsections then use them to determine access to show.
@@ -145,7 +146,7 @@ export default class SystemRolePermission extends React.PureComponent<Props> {
             }
         }
         return this.getAccessForSectionByName(section.name, permissions, permissionsToUpdate);
-    }
+    };
 
     getAccessForSectionByName = (sectionName: string, permissions: Record<string, boolean>, permissionsToUpdate: Record<string, PermissionAccess>) => {
         // Assume sysadmin has write access for everything, this is a bit of a hack but it should be left in until `user_management_read|write_system_roles` is actually a permission
@@ -167,7 +168,7 @@ export default class SystemRolePermission extends React.PureComponent<Props> {
         }
 
         return access;
-    }
+    };
 
     render() {
         const {section, permissionsMap, permissionsToUpdate, visibleSections} = this.props;

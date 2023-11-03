@@ -2,6 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 
@@ -10,9 +12,6 @@ import {trackEvent} from 'actions/telemetry_actions';
 import LeaveChannelModal from 'components/leave_channel_modal';
 import SharedChannelIndicator from 'components/shared_channel_indicator';
 import SidebarChannelLink from 'components/sidebar/sidebar_channel/sidebar_channel_link';
-
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 import type {PropsFromRedux} from './index';
 

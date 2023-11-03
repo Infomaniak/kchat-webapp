@@ -2,30 +2,26 @@
 // See LICENSE.txt for license information.
 
 import React, {memo, useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {useIntl} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {getSiteURL} from 'utils/url';
+import {copyToClipboard} from 'utils/utils';
 
-import {trackEvent} from 'actions/telemetry_actions';
-
-import {openModal} from 'actions/views/modals';
-
-import {General} from 'mattermost-redux/constants';
+import type {LeastActiveChannel} from '@mattermost/types/insights';
+import type {GlobalState} from '@mattermost/types/store';
 
 import {leaveChannel} from 'mattermost-redux/actions/channels';
-
-import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
+import {General} from 'mattermost-redux/constants';
 import {getMyChannelMembership} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 
-import {LeastActiveChannel} from '@mattermost/types/insights';
-import {GlobalState} from '@mattermost/types/store';
+import {trackEvent} from 'actions/telemetry_actions';
+import {openModal} from 'actions/views/modals';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {copyToClipboard} from 'utils/utils';
-import {getSiteURL} from 'utils/url';
-
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import Menu from 'components/widgets/menu/menu';
 import LeaveChannelModal from 'components/leave_channel_modal';
+import Menu from 'components/widgets/menu/menu';
+import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
 import './channel_actions_menu.scss';
 

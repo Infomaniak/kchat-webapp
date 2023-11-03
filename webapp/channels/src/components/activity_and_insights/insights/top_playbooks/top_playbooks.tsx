@@ -1,25 +1,26 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useState, useCallback, useEffect, useMemo, ComponentProps} from 'react';
+import type {ComponentProps} from 'react';
+import React, {memo, useState, useCallback, useEffect, useMemo} from 'react';
+import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {FormattedMessage} from 'react-intl';
-
-import {TopPlaybook} from '@mattermost/types/insights';
 
 import {RectangleSkeletonLoader} from '@mattermost/components';
+import type {TopPlaybook} from '@mattermost/types/insights';
 
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import {GlobalState} from 'types/store';
-
 import Timestamp from 'components/timestamp';
 
-import widgetHoc, {WidgetHocProps} from '../widget_hoc/widget_hoc';
+import type {GlobalState} from 'types/store';
+
 import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
+import type {WidgetHocProps} from '../widget_hoc/widget_hoc';
+import widgetHoc from '../widget_hoc/widget_hoc';
 
 import './../../activity_and_insights.scss';
 

@@ -3,9 +3,9 @@
 
 import {connect} from 'react-redux';
 
-import type {GlobalState} from '@mattermost/types/store';
-
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+
+import {GlobalState} from '@mattermost/types/store';
 
 import TeamSettings from './team_settings';
 

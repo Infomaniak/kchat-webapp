@@ -4,12 +4,11 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
-
-import RadioGroup from 'components/common/radio_group';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
 import {CloudProducts} from 'utils/constants';
+
+import RadioGroup from 'components/common/radio_group';
 
 import InviteAs, {InviteType} from './invite_as';
 

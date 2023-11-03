@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import debounce from 'lodash/debounce';
-import React from 'react';
 import type {CSSProperties} from 'react';
+import React from 'react';
 
 import LoadingScreen from 'components/loading_screen';
 

@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-
 import * as Utils from 'utils/utils';
 
 import Menu from '../../menu';

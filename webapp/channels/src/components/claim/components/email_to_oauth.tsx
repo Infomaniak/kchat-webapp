@@ -3,16 +3,17 @@
 
 import classNames from 'classnames';
 import React, {useState, useRef} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import Constants, {ClaimErrors} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {localizeMessage, toTitleCase} from 'utils/utils';
 
 import type {AuthChangeResponse} from '@mattermost/types/users';
 
 import {emailToOAuth} from 'actions/admin_actions.jsx';
 
+import LocalizedInput from 'components/localized_input/localized_input';
 import LoginMfa from 'components/login/login_mfa';
-
-import Constants, {ClaimErrors} from 'utils/constants';
-import {toTitleCase} from 'utils/utils';
 
 import type {SubmitOptions} from './email_to_ldap';
 import ErrorLabel from './error_label';
@@ -24,8 +25,6 @@ type Props = {
 }
 
 const EmailToOAuth = (props: Props) => {
-    const {formatMessage} = useIntl();
-
     const [showMfa, setShowMfa] = useState(false);
     const [password, setPassword] = useState('');
     const [serverError, setServerError] = useState<string>('');
@@ -36,7 +35,7 @@ const EmailToOAuth = (props: Props) => {
 
         const password = passwordInput.current?.value;
         if (!password) {
-            setServerError(formatMessage({id: 'claim.email_to_oauth.pwdError', defaultMessage: 'Please enter your password.'}));
+            setServerError(localizeMessage('claim.email_to_oauth.pwdError', 'Please enter your password.'));
             return;
         }
 
@@ -71,13 +70,18 @@ const EmailToOAuth = (props: Props) => {
 
     const type = (props.newType === Constants.SAML_SERVICE ? Constants.SAML_SERVICE.toUpperCase() : toTitleCase(props.newType || ''));
     const uiType = `${type} SSO`;
+    const titleMessage = {
+        id: t('claim.email_to_oauth.title'),
+        defaultMessage: 'Switch Email/Password Account to {uiType}',
+    };
+    const placeholderPasswordMessage = {id: t('claim.email_to_oauth.pwd'), defaultMessage: 'Password'};
 
     if (showMfa) {
         return (
             <LoginMfa
                 loginId={props.email}
                 password={password}
-                title={formatMessage({id: 'claim.email_to_oauth.title', defaultMessage: 'Switch Email/Password Account to {uiType}'})}
+                title={titleMessage}
                 onSubmit={submit}
             />
         );
@@ -114,12 +118,12 @@ const EmailToOAuth = (props: Props) => {
                     />
                 </p>
                 <div className={classNames('form-group', {'has-error': serverError})}>
-                    <input
+                    <LocalizedInput
                         type='password'
                         className='form-control'
                         name='password'
                         ref={passwordInput}
-                        placeholder={formatMessage({id: 'claim.email_to_oauth.pwd', defaultMessage: 'Password'})}
+                        placeholder={placeholderPasswordMessage}
                         spellCheck='false'
                     />
                 </div>

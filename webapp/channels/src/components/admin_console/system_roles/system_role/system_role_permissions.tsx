@@ -2,18 +2,19 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
-import {memoizeResult} from 'mattermost-redux/utils/helpers';
-import {Role} from '@mattermost/types/roles';
-
+import Constants from 'utils/constants';
 import {t} from 'utils/i18n';
 
+import type {Role} from '@mattermost/types/roles';
+
+import {memoizeResult} from 'mattermost-redux/utils/helpers';
+
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
-import Constants from 'utils/constants';
-import FormattedMarkdownMessage from '../../../formatted_markdown_message';
 
 import SystemRolePermission from './system_role_permission';
-import {PermissionsToUpdate, PermissionToUpdate, SystemSection} from './types';
+import type {PermissionsToUpdate, PermissionToUpdate, SystemSection} from './types';
+
+import FormattedMarkdownMessage from '../../../formatted_markdown_message';
 
 import './system_role_permissions.scss';
 
@@ -181,11 +182,11 @@ export default class SystemRolePermissions extends React.PureComponent<Props, St
         if (sectionIndex > -1) {
             sectionsList.splice(sectionIndex, 1);
         }
-    }
+    };
 
     updatePermissions = (permissions: PermissionToUpdate[]) => {
         this.props.updatePermissions(permissions);
-    }
+    };
 
     setSectionVisible = (name: string, visible: boolean) => {
         const {visibleSections} = this.state;
@@ -195,7 +196,7 @@ export default class SystemRolePermissions extends React.PureComponent<Props, St
                 [name]: visible,
             },
         });
-    }
+    };
 
     getRows = (permissionsMap: Record<string, boolean>, permissionsToUpdate: PermissionsToUpdate, visibleSections: Record<string, boolean>) => {
         const {isLicensedForCloud} = this.props;
@@ -257,7 +258,7 @@ export default class SystemRolePermissions extends React.PureComponent<Props, St
                 />
             );
         });
-    }
+    };
 
     render() {
         const {role, permissionsToUpdate} = this.props;

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import React, {useState, useEffect} from 'react';
 import {Tooltip} from 'react-bootstrap';
 import {useSelector} from 'react-redux';
+import Constants, {suitePluginIds} from 'utils/constants';
 
 import {getCurrentChannel, getMyCurrentChannelMembership} from 'mattermost-redux/selectors/entities/channels';
 
@@ -12,8 +13,6 @@ import {getActiveRhsComponent} from 'selectors/rhs';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import PluginIcon from 'components/widgets/icons/plugin_icon';
-
-import Constants, {suitePluginIds} from 'utils/constants';
 
 import type {PluginComponent, AppBarComponent} from 'types/store/plugins';
 
@@ -64,14 +63,9 @@ const AppBarPluginComponent = (props: PluginComponentProps) => {
 
     const iconUrl = component.iconUrl;
     let content: React.ReactNode = (
-        <div
-            role='button'
-            tabIndex={0}
-            className='app-bar__icon-inner'
-        >
+        <div className='app-bar__icon-inner'>
             <img
                 src={iconUrl}
-                alt={component.pluginId}
                 onLoad={onImageLoadComplete}
                 onError={onImageLoadError}
             />
@@ -82,11 +76,7 @@ const AppBarPluginComponent = (props: PluginComponentProps) => {
 
     if (!iconUrl) {
         content = (
-            <div
-                role='button'
-                tabIndex={0}
-                className={classNames('app-bar__old-icon app-bar__icon-inner app-bar__icon-inner--centered', {'app-bar__old-icon--active': isButtonActive})}
-            >
+            <div className={classNames('app-bar__old-icon app-bar__icon-inner app-bar__icon-inner--centered', {'app-bar__old-icon--active': isButtonActive})}>
                 {component.icon}
             </div>
         );
@@ -98,7 +88,7 @@ const AppBarPluginComponent = (props: PluginComponentProps) => {
         );
     }
 
-    const boardsEnabled = component.pluginId === suitePluginIds.focalboard;
+    const boardsEnabled = component.pluginId === suitePluginIds.focalboard || component.pluginId === suitePluginIds.boards;
 
     return (
         <OverlayTrigger

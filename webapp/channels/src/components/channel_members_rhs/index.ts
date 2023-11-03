@@ -2,45 +2,42 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {AnyAction, Dispatch} from 'redux';
+import {AnyAction, bindActionCreators, Dispatch} from 'redux';
 
-import type {Channel, ChannelMembership} from '@mattermost/types/channels';
-import type {UserProfile} from '@mattermost/types/users';
-import type {RelationOneToOne} from '@mattermost/types/utilities';
+import {createSelector} from 'reselect';
 
-import {loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
-import {Permissions} from 'mattermost-redux/constants';
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {
     getCurrentChannel,
     getCurrentChannelStats,
     getMembersInCurrentChannel,
     getMyCurrentChannelMembership,
+    getPendingGuestsInChannel,
     isCurrentChannelArchived,
 } from 'mattermost-redux/selectors/entities/channels';
-import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import {GlobalState} from 'types/store';
+import {Constants, RHSStates} from 'utils/constants';
 import {getCurrentRelativeTeamUrl, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {
     getActiveProfilesInCurrentChannelWithoutSorting,
     getUserStatuses, searchActiveProfilesInCurrentChannel,
 } from 'mattermost-redux/selectors/entities/users';
+import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import {Permissions} from 'mattermost-redux/constants';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
-
 import {openDirectChannelToUserId} from 'actions/channel_actions';
-import {loadProfilesAndReloadChannelMembers, searchProfilesAndChannelMembers} from 'actions/user_actions';
 import {openModal} from 'actions/views/modals';
 import {closeRightHandSide, goBack, setEditChannelMembers} from 'actions/views/rhs';
-import {setChannelMembersRhsSearchTerm} from 'actions/views/search';
 import {getIsEditingMembers, getPreviousRhsState} from 'selectors/rhs';
+import {setChannelMembersRhsSearchTerm} from 'actions/views/search';
+import {loadProfilesAndReloadChannelMembers, loadProfilesAndReloadChannelMembersAll, searchProfilesAndChannelMembers} from 'actions/user_actions';
+import {Channel, ChannelMembership} from '@mattermost/types/channels';
+import {getChannelPendingGuests, loadMyChannelMemberAndRole} from 'mattermost-redux/actions/channels';
 
-import {Constants, RHSStates} from 'utils/constants';
+import {UserProfile} from '@mattermost/types/users';
+import {RelationOneToOne} from '@mattermost/types/utilities';
 
-import type {GlobalState} from 'types/store';
-
-import RHS from './channel_members_rhs';
-import type {Props, ChannelMember} from './channel_members_rhs';
+import RHS, {Props, ChannelMember} from './channel_members_rhs';
 
 const buildProfileList = (
     profilesInCurrentChannel: UserProfile[],
@@ -98,7 +95,7 @@ function mapStateToProps(state: GlobalState) {
     const channel = getCurrentChannel(state);
     const currentTeam = getCurrentTeam(state);
     const currentUser = getMyCurrentChannelMembership(state);
-    const {member_count: membersCount} = getCurrentChannelStats(state) || {member_count: 0};
+    const {member_count: membersCount, guest_count: guestsCount} = getCurrentChannelStats(state) || {member_count: 0, guest_count: 0};
 
     if (!channel) {
         return {
@@ -108,9 +105,11 @@ function mapStateToProps(state: GlobalState) {
             channelAdmins: [],
             searchTerms: '',
             membersCount,
+            guestsCount,
             canManageMembers: false,
             canGoBack: false,
             teamUrl: '',
+            pendingGuests: {},
         } as unknown as Props;
     }
 
@@ -143,16 +142,20 @@ function mapStateToProps(state: GlobalState) {
 
     const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
 
+    const pendingGuests = getPendingGuestsInChannel(state, channel.id);
+
     return {
         channel,
         currentUserIsChannelAdmin,
         membersCount,
+        guestsCount,
         searchTerms,
         teamUrl,
         canGoBack,
         canManageMembers,
         channelMembers,
         editing,
+        pendingGuests,
     } as Props;
 }
 
@@ -165,9 +168,11 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             goBack,
             setChannelMembersRhsSearchTerm,
             loadProfilesAndReloadChannelMembers,
+            loadProfilesAndReloadChannelMembersAll,
             loadMyChannelMemberAndRole,
             setEditChannelMembers,
             searchProfilesAndChannelMembers,
+            getChannelPendingGuests,
         }, dispatch),
     };
 }

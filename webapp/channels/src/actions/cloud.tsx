@@ -3,6 +3,7 @@
 
 import type {Stripe} from '@stripe/stripe-js';
 import {getCode} from 'country-list';
+import {getBlankAddressWithCountry} from 'utils/utils';
 
 import type {Address, CloudCustomerPatch, Feedback, WorkspaceDeletionRequest} from '@mattermost/types/cloud';
 
@@ -15,8 +16,6 @@ import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/type
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import {getConfirmCardSetup} from 'components/payment_form/stripe';
-
-import {getBlankAddressWithCountry} from 'utils/utils';
 
 import type {StripeSetupIntent, BillingDetails} from 'types/cloud/sku';
 

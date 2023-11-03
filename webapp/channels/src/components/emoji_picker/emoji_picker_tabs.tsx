@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
 import type {CSSProperties, RefObject} from 'react';
 import React, {PureComponent, createRef} from 'react';
 import {Tab, Tabs} from 'react-bootstrap';
@@ -13,6 +12,7 @@ import {makeAsyncComponent} from 'components/async_load';
 import EmojiPicker from 'components/emoji_picker';
 import EmojiPickerHeader from 'components/emoji_picker/components/emoji_picker_header';
 import EmojiIcon from 'components/widgets/icons/emoji_icon';
+import GfycatIcon from 'components/widgets/icons/gfycat_icon';
 import GifIcon from 'components/widgets/icons/giphy_icon';
 
 const GifPicker = makeAsyncComponent('GifPicker', React.lazy(() => import('components/gif_picker/gif_picker')));
@@ -36,7 +36,6 @@ type State = {
 
 export default class EmojiPickerTabs extends PureComponent<Props, State> {
     private rootPickerNodeRef: RefObject<HTMLDivElement>;
-
     static defaultProps = {
         rightOffset: 0,
         topOffset: 0,
@@ -91,15 +90,17 @@ export default class EmojiPickerTabs extends PureComponent<Props, State> {
             }
         }
 
+        let pickerClass = 'emoji-picker';
+        if (this.props.placement === 'bottom') {
+            pickerClass += ' bottom';
+        }
+
         if (this.props.enableGifPicker && typeof this.props.onGifClick != 'undefined') {
             return (
                 <div
-                    id='emojiGifPicker'
                     ref={this.rootPickerNodeRef}
                     style={pickerStyle}
-                    className={classNames('a11y__popup', 'emoji-picker', {
-                        bottom: this.props.placement === 'bottom',
-                    })}
+                    className={pickerClass}
                 >
                     <Tabs
                         id='emoji-picker-tabs'
@@ -166,9 +167,7 @@ export default class EmojiPickerTabs extends PureComponent<Props, State> {
             <div
                 id='emojiPicker'
                 style={pickerStyle}
-                className={classNames('a11y__popup', 'emoji-picker', 'emoji-picker--single', {
-                    bottom: this.props.placement === 'bottom',
-                })}
+                className={`a11y__popup ${pickerClass} emoji-picker--single`}
             >
                 <EmojiPickerHeader handleEmojiPickerClose={this.handleEmojiPickerClose}/>
                 <EmojiPicker

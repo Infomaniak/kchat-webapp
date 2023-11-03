@@ -1,8 +1,6 @@
-@import './mixins';
-
 .PaymentForm {
-    @include payment-form-padding;
-
+    padding-right: 96px;
+    padding-left: 96px;
     margin: 0 auto;
 
     .form-row {
@@ -14,6 +12,7 @@
 
     .form-row-third-1 {
         .DropdownInput {
+            z-index: 99999;
             margin-top: 0;
         }
 
@@ -38,6 +37,7 @@
 
     .DropdownInput {
         position: relative;
+        z-index: 999999;
         height: 36px;
         margin-bottom: 24px;
         font-weight: normal;
@@ -45,6 +45,10 @@
         .DropDown__control {
             min-height: 0;
             background-color: var(--center-channel-bg) !important;
+
+            .DropDown__value-container > div {
+                color: var(--center-channel-color) !important;
+            }
         }
 
         .DropDown__menu {

@@ -1,33 +1,32 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {History} from 'history';
+import {History} from 'history';
 
-import type {Channel} from '@mattermost/types/channels';
-import type {GlobalState} from '@mattermost/types/store';
-
-import {joinChannel, getChannelByNameAndTeamName, getChannelMember, markGroupChannelOpen, fetchChannelsAndMembers} from 'mattermost-redux/actions/channels';
-import {getUser, getUserByUsername, getUserByEmail} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
-import {getChannelByName, getOtherChannels, getChannel, getChannelsNameMapInTeam, getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
+
+import {joinChannel, getChannelByNameAndTeamName, getChannelMember, markGroupChannelOpen, fetchMyChannelsAndMembersREST} from 'mattermost-redux/actions/channels';
+import {getUser, getUserByUsername, getUserByEmail} from 'mattermost-redux/actions/users';
 import {getTeamByName} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, getCurrentUserId, getUserByUsername as selectUserByUsername, getUser as selectUser, getUserByEmail as selectUserByEmail} from 'mattermost-redux/selectors/entities/users';
-import type {GetStateFunc, DispatchFunc, ActionFunc} from 'mattermost-redux/types/actions';
-import * as UserUtils from 'mattermost-redux/utils/user_utils';
+import {getChannelByName, getOtherChannels, getChannel, getChannelsNameMapInTeam, getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
+import {GetStateFunc, DispatchFunc, ActionFunc} from 'mattermost-redux/types/actions';
+import {GlobalState} from '@mattermost/types/store';
+import {Channel} from '@mattermost/types/channels';
 
 import {openDirectChannelToUserId} from 'actions/channel_actions';
 import * as GlobalActions from 'actions/global_actions';
-
 import {joinPrivateChannelPrompt} from 'utils/channel_utils';
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
+import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
-import type {Match, MatchAndHistory} from './channel_identifier_router';
+import {Match, MatchAndHistory} from './channel_identifier_router';
 
-const LENGTH_OF_ID = 26;
+const LENGTH_OF_ID = 36;
 const LENGTH_OF_GROUP_ID = 40;
-const LENGTH_OF_USER_ID_PAIR = 54;
-const USER_ID_PAIR_REGEXP = new RegExp(`^[a-zA-Z0-9]{${LENGTH_OF_ID}}__[a-zA-Z0-9]{${LENGTH_OF_ID}}$`);
+const LENGTH_OF_USER_ID_PAIR = 74;
+const USER_ID_PAIR_REGEXP = new RegExp(`^[a-zA-Z0-9-]{${LENGTH_OF_ID}}__[a-zA-Z0-9-]{${LENGTH_OF_ID}}$`);
 
 export function onChannelByIdentifierEnter({match, history}: MatchAndHistory): ActionFunc {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
@@ -68,7 +67,7 @@ export function onChannelByIdentifierEnter({match, history}: MatchAndHistory): A
             dispatch(goToDirectChannelByUserId(match, history, identifier));
             break;
         case 'error':
-            await dispatch(fetchChannelsAndMembers(teamObj!.id));
+            await dispatch(fetchMyChannelsAndMembersREST(teamObj!.id));
             handleError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
             break;
         }
@@ -136,7 +135,7 @@ export function goToChannelByChannelId(match: Match, history: History): ActionFu
         if (!channel || !member) {
             const dispatchResult = await dispatch(joinChannel(getCurrentUserId(state), teamObj!.id, channelId, ''));
             if ('error' in dispatchResult) {
-                await dispatch(fetchChannelsAndMembers(teamObj!.id));
+                await dispatch(fetchMyChannelsAndMembersREST(teamObj!.id));
                 handleChannelJoinError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
                 return {data: undefined};
             }
@@ -202,7 +201,7 @@ export function goToChannelByChannelName(match: Match, history: History): Action
                 if (!channel) {
                     const getChannelDispatchResult = await dispatch(getChannelByNameAndTeamName(team, channelName, true));
                     if ('error' in getChannelDispatchResult || getChannelDispatchResult.data.delete_at === 0) {
-                        await dispatch(fetchChannelsAndMembers(teamObj!.id));
+                        await dispatch(fetchMyChannelsAndMembersREST(teamObj!.id));
                         handleChannelJoinError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
                         return {data: undefined};
                     }
@@ -235,7 +234,7 @@ function goToDirectChannelByUsername(match: Match, history: History): ActionFunc
         if (!user) {
             const dispatchResult = await dispatch(getUserByUsername(username));
             if ('error' in dispatchResult) {
-                await dispatch(fetchChannelsAndMembers(teamObj!.id));
+                await dispatch(fetchMyChannelsAndMembersREST(teamObj!.id));
                 handleError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
                 return {data: undefined};
             }
@@ -244,7 +243,7 @@ function goToDirectChannelByUsername(match: Match, history: History): ActionFunc
 
         const directChannelDispatchRes = await dispatch(openDirectChannelToUserId(user.id));
         if ('error' in directChannelDispatchRes) {
-            await dispatch(fetchChannelsAndMembers(teamObj!.id));
+            await dispatch(fetchMyChannelsAndMembersREST(teamObj!.id));
             handleError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
             return {data: undefined};
         }
@@ -264,7 +263,7 @@ export function goToDirectChannelByUserId(match: Match, history: History, userId
         if (!user) {
             const dispatchResult = await dispatch(getUser(userId));
             if ('error' in dispatchResult) {
-                await dispatch(fetchChannelsAndMembers(teamObj!.id));
+                await dispatch(fetchMyChannelsAndMembersREST(teamObj!.id));
                 handleError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
                 return {data: undefined};
             }
@@ -287,7 +286,7 @@ export function goToDirectChannelByUserIds(match: Match, history: History): Acti
         if (!user) {
             const dispatchResult = await dispatch(getUser(userId));
             if ('error' in dispatchResult) {
-                await dispatch(fetchChannelsAndMembers(teamObj!.id));
+                await dispatch(fetchMyChannelsAndMembersREST(teamObj!.id));
                 handleError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
                 return {data: undefined};
             }
@@ -310,7 +309,7 @@ export function goToDirectChannelByEmail(match: Match, history: History): Action
         if (!user) {
             const dispatchResult = await dispatch(getUserByEmail(email));
             if ('error' in dispatchResult) {
-                await dispatch(fetchChannelsAndMembers(teamObj!.id));
+                await dispatch(fetchMyChannelsAndMembersREST(teamObj!.id));
                 handleError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
                 return {data: undefined};
             }
@@ -335,7 +334,7 @@ function goToGroupChannelByGroupId(match: Match, history: History): ActionFunc {
         if (!channel) {
             const dispatchResult = await dispatch(joinChannel(getCurrentUserId(state), teamObj!.id, '', groupId));
             if ('error' in dispatchResult) {
-                await dispatch(fetchChannelsAndMembers(teamObj!.id));
+                await dispatch(fetchMyChannelsAndMembersREST(teamObj!.id));
                 handleError(match, history, getRedirectChannelNameForTeam(state, teamObj!.id));
                 return {data: undefined};
             }

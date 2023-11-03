@@ -2,9 +2,9 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect, useState} from 'react';
-import type {ReactNode} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
+import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
@@ -13,13 +13,9 @@ import {trackEvent} from 'actions/telemetry_actions';
 import {openModal, closeModal} from 'actions/views/modals';
 
 import useGetSubscription from 'components/common/hooks/useGetSubscription';
-import ExternalLink from 'components/external_link';
 import TrialBenefitsModal from 'components/trial_benefits_modal/trial_benefits_modal';
 
-import {ModalIdentifiers, TELEMETRY_CATEGORIES, LicenseLinks} from 'utils/constants';
-
 import RequestBusinessEmailModal from './request_business_email_modal';
-
 import './cloud_start_trial_btn.scss';
 
 export type CloudStartTrialBtnProps = {
@@ -131,7 +127,7 @@ const CloudStartTrialButton = ({
         }));
     };
 
-    const btnText = (status: TrialLoadStatus) => {
+    const btnText = (status: TrialLoadStatus): string => {
         switch (status) {
         case TrialLoadStatus.Started:
             return formatMessage({id: 'start_cloud_trial.modal.gettingTrial', defaultMessage: 'Getting Trial...'});
@@ -140,22 +136,7 @@ const CloudStartTrialButton = ({
         case TrialLoadStatus.Failed:
             return formatMessage({id: 'start_cloud_trial.modal.failed', defaultMessage: 'Failed'});
         case TrialLoadStatus.Embargoed:
-            return formatMessage<ReactNode>(
-                {
-                    id: 'admin.license.trial-request.embargoed',
-                    defaultMessage: 'We were unable to process the request due to limitations for embargoed countries. <link>Learn more in our documentation</link>, or reach out to legal@mattermost.com for questions around export limitations.',
-                },
-                {
-                    link: (text: string) => (
-                        <ExternalLink
-                            location='trial_banner'
-                            href={LicenseLinks.EMBARGOED_COUNTRIES}
-                        >
-                            {text}
-                        </ExternalLink>
-                    ),
-                },
-            );
+            return formatMessage({id: 'admin.license.trial-request.embargoed'});
         default:
             return message;
         }

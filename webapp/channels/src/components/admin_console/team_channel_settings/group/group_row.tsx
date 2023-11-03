@@ -2,18 +2,16 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import {FormattedMessage} from 'react-intl';
-
-import {Group} from '@mattermost/types/groups';
-
-import ToggleModalButton from 'components/toggle_modal_button';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import Menu from 'components/widgets/menu/menu';
-import GroupMembersModal from 'components/admin_console/team_channel_settings/group/group_members_modal';
-
 import {ModalIdentifiers} from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
+
+import type {Group} from '@mattermost/types/groups';
+
+import GroupMembersModal from 'components/admin_console/team_channel_settings/group/group_members_modal';
+import ToggleModalButton from 'components/toggle_modal_button';
+import Menu from 'components/widgets/menu/menu';
+import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
 interface GroupRowProps {
     group: Partial<Group>;
@@ -63,7 +61,7 @@ export default class GroupRow extends React.PureComponent<GroupRowProps> {
             return teamAdmin;
         }
         return member;
-    }
+    };
 
     displayRoleToBe = () => {
         const {group, type} = this.props;
@@ -73,7 +71,7 @@ export default class GroupRow extends React.PureComponent<GroupRowProps> {
             return localizeMessage('admin.team_channel_settings.group_row.teamAdmin', 'Team Admin');
         }
         return localizeMessage('admin.team_channel_settings.group_row.member', 'Member');
-    }
+    };
 
     render = () => {
         const {group} = this.props;

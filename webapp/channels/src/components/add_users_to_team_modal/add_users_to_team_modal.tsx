@@ -4,21 +4,20 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import {displayEntireNameForUser, localizeMessage} from 'utils/utils';
 
-import GuestTag from 'components/widgets/tag/guest_tag';
-import BotTag from 'components/widgets/tag/bot_tag';
-
-import {UserProfile} from '@mattermost/types/users';
-import {Team} from '@mattermost/types/teams';
+import type {Team} from '@mattermost/types/teams';
+import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
-
-import {displayEntireNameForUser, localizeMessage} from 'utils/utils';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
-import ProfilePicture from 'components/profile_picture';
 
-import MultiSelect, {Value} from 'components/multiselect/multiselect';
+import type {Value} from 'components/multiselect/multiselect';
+import MultiSelect from 'components/multiselect/multiselect';
+import ProfilePicture from 'components/profile_picture';
 import AddIcon from 'components/widgets/icons/fa_add_icon';
+import BotTag from 'components/widgets/tag/bot_tag';
+import GuestTag from 'components/widgets/tag/guest_tag';
 
 const USERS_PER_PAGE = 50;
 const MAX_SELECTABLE_VALUES = 20;
@@ -78,11 +77,11 @@ export default class AddUsersToTeamModal extends React.PureComponent<Props, Stat
     public componentDidMount = async () => {
         await this.props.actions.getProfilesNotInTeam(this.props.team.id, false, 0, USERS_PER_PAGE * 2);
         this.setUsersLoadingState(false);
-    }
+    };
 
     private setUsersLoadingState = (loading: boolean) => {
         this.setState({loading});
-    }
+    };
 
     public search = async (term: string) => {
         this.setUsersLoadingState(true);
@@ -95,17 +94,17 @@ export default class AddUsersToTeamModal extends React.PureComponent<Props, Stat
             await this.props.actions.getProfilesNotInTeam(this.props.team.id, false, 0, USERS_PER_PAGE * 2);
         }
         this.setState({loading: false, searchResults, search});
-    }
+    };
 
     public handleHide = () => {
         this.setState({show: false});
-    }
+    };
 
     private handleExit = () => {
         if (this.props.onExited) {
             this.props.onExited();
         }
-    }
+    };
 
     private renderOption = (option: UserProfileValue, isSelected: boolean, onAdd: (user: UserProfileValue) => void, onMouseMove: (user: UserProfileValue) => void) => {
         let rowSelected = '';
@@ -139,15 +138,15 @@ export default class AddUsersToTeamModal extends React.PureComponent<Props, Stat
                 </div>
             </div>
         );
-    }
+    };
 
     private renderValue = (value: { data: UserProfileValue }): string => {
         return value.data?.username || '';
-    }
+    };
 
     private renderAriaLabel = (option: UserProfileValue): string => {
         return option?.username || '';
-    }
+    };
 
     private handleAdd = (value: UserProfileValue) => {
         const values: UserProfileValue[] = [...this.state.values];
@@ -155,11 +154,11 @@ export default class AddUsersToTeamModal extends React.PureComponent<Props, Stat
             values.push(value);
         }
         this.setState({values});
-    }
+    };
 
     private handleDelete = (values: UserProfileValue[]) => {
         this.setState({values});
-    }
+    };
 
     private handlePageChange = (page: number, prevPage: number) => {
         if (page > prevPage) {
@@ -173,7 +172,7 @@ export default class AddUsersToTeamModal extends React.PureComponent<Props, Stat
     private handleSubmit = () => {
         this.props.onAddCallback(this.state.values);
         this.handleHide();
-    }
+    };
 
     public render = (): JSX.Element => {
         const numRemainingText = (
@@ -259,5 +258,5 @@ export default class AddUsersToTeamModal extends React.PureComponent<Props, Stat
                 </Modal.Body>
             </Modal>
         );
-    }
+    };
 }

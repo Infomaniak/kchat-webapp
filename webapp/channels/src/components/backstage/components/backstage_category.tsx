@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React from 'react';
 import type {ReactNode} from 'react';
+import React from 'react';
 import {Route, NavLink} from 'react-router-dom';
 
 type Props = {

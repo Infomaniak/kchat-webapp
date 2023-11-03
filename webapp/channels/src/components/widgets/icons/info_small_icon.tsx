@@ -9,6 +9,7 @@ export default function InfoSmallIcon(props: React.HTMLAttributes<HTMLSpanElemen
     return (
         <span {...props}>
             <svg
+                className='svg-text-color'
                 aria-label={formatMessage({id: 'generic_icons.info', defaultMessage: 'Info Icon'})}
                 width='24px'
                 height='24px'

@@ -4,6 +4,8 @@
 import React, {useCallback} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {Group} from '@mattermost/types/groups';
 
@@ -11,9 +13,6 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import AddUsersToGroupModal from 'components/add_users_to_group_modal';
 import LocalizedIcon from 'components/localized_icon';
-
-import {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import type {ModalData} from 'types/actions';
 
@@ -103,7 +102,7 @@ const ViewUserGroupModalHeader = ({
         if (permissionToJoinGroup) {
             return (
                 <button
-                    className='mr-2 btn btn-secondary btn-sm'
+                    className='user-groups-create btn btn-md btn-primary'
                     onClick={goToAddPeopleModal}
                 >
                     <FormattedMessage
@@ -163,7 +162,7 @@ const ViewUserGroupModalHeader = ({
         <Modal.Header closeButton={true}>
             <button
                 type='button'
-                className='modal-header-back-button btn btn-icon'
+                className='modal-header-back-button btn-icon'
                 aria-label='Close'
                 onClick={goBack}
             >

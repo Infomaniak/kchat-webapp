@@ -1,19 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classNames from 'classnames';
 import React, {memo, useState} from 'react';
-
 import {makeIsEligibleForClick} from 'utils/utils';
+
 import './panel.scss';
 
 type Props = {
+    isInvalid: boolean;
     children: ({hover}: {hover: boolean}) => React.ReactNode;
     onClick: () => void;
 };
 
 const isEligibleForClick = makeIsEligibleForClick('.hljs, code');
 
-function Panel({children, onClick}: Props) {
+function Panel({isInvalid, children, onClick}: Props) {
     const [hover, setHover] = useState(false);
 
     const handleMouseEnter = () => {
@@ -32,8 +34,8 @@ function Panel({children, onClick}: Props) {
 
     return (
         <article
-            className='Panel'
-            onMouseEnter={handleMouseEnter}
+            className={classNames('Panel', {Pannel__dangerous: isInvalid})}
+            onMouseOver={handleMouseEnter}
             onClick={handleOnClick}
             onMouseLeave={handleMouseLeave}
             role='button'

@@ -81,6 +81,7 @@ exports[`components/FilePreviewModal should fall back to default preview if plug
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -115,12 +116,14 @@ exports[`components/FilePreviewModal should fall back to default preview if plug
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
         <div
-          className="file-preview-modal__content"
+          className="file-preview-modal__content file-preview-modal__content-image"
           onClick={[Function]}
         >
           <LoadingImagePreview
@@ -216,6 +219,7 @@ exports[`components/FilePreviewModal should match snapshot 1`] = `
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -250,12 +254,14 @@ exports[`components/FilePreviewModal should match snapshot 1`] = `
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
         <div
-          className="file-preview-modal__content"
+          className="file-preview-modal__content file-preview-modal__content-image"
           onClick={[Function]}
         >
           <LoadingImagePreview
@@ -351,6 +357,7 @@ exports[`components/FilePreviewModal should match snapshot for external file 1`]
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_info_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -385,12 +392,14 @@ exports[`components/FilePreviewModal should match snapshot for external file 1`]
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
         <div
-          className="file-preview-modal__content"
+          className="file-preview-modal__content file-preview-modal__content-image"
           onClick={[Function]}
         >
           <LoadingImagePreview
@@ -486,6 +495,7 @@ exports[`components/FilePreviewModal should match snapshot when plugin overrides
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -520,12 +530,14 @@ exports[`components/FilePreviewModal should match snapshot when plugin overrides
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
         <div
-          className="file-preview-modal__content"
+          className="file-preview-modal__content file-preview-modal__content-image"
           onClick={[Function]}
         >
           <component
@@ -664,6 +676,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -698,16 +711,17 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
         <div
-          className="file-preview-modal__content"
+          className="file-preview-modal__content file-preview-modal__content-image"
           onClick={[Function]}
         >
           <ImagePreview
-            canDownloadFiles={true}
             fileInfo={
               Object {
                 "archived": false,
@@ -726,6 +740,8 @@ exports[`components/FilePreviewModal should match snapshot, loaded 1`] = `
                 "width": 350,
               }
             }
+            setToolbarZoom={[Function]}
+            toolbarZoom="A"
           />
         </div>
       </div>
@@ -815,6 +831,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -849,16 +866,17 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
         <div
-          className="file-preview-modal__content"
+          className="file-preview-modal__content file-preview-modal__content-image"
           onClick={[Function]}
         >
           <ImagePreview
-            canDownloadFiles={true}
             fileInfo={
               Object {
                 "archived": false,
@@ -877,6 +895,8 @@ exports[`components/FilePreviewModal should match snapshot, loaded and showing f
                 "width": 350,
               }
             }
+            setToolbarZoom={[Function]}
+            toolbarZoom="A"
           />
         </div>
       </div>
@@ -966,6 +986,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .js file
                 "width": 350,
               }
             }
+            fileType="code"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1000,7 +1021,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .js file
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -1119,6 +1142,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .m4a fil
                 "width": 350,
               }
             }
+            fileType="audio"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1153,7 +1177,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .m4a fil
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -1270,6 +1296,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .mov fil
                 "width": 350,
               }
             }
+            fileType="video"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1304,7 +1331,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with .mov fil
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
@@ -1421,6 +1450,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id_1?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1455,16 +1485,17 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={3}
           />
         </ModalTitle>
         <div
-          className="file-preview-modal__content"
+          className="file-preview-modal__content file-preview-modal__content-image"
           onClick={[Function]}
         >
           <ImagePreview
-            canDownloadFiles={true}
             fileInfo={
               Object {
                 "archived": false,
@@ -1483,6 +1514,8 @@ exports[`components/FilePreviewModal should match snapshot, loaded with footer 1
                 "width": 350,
               }
             }
+            setToolbarZoom={[Function]}
+            toolbarZoom="A"
           />
         </div>
       </div>
@@ -1572,6 +1605,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
                 "width": 350,
               }
             }
+            fileType="image"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1606,16 +1640,17 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>
         <div
-          className="file-preview-modal__content"
+          className="file-preview-modal__content file-preview-modal__content-image"
           onClick={[Function]}
         >
           <ImagePreview
-            canDownloadFiles={true}
             fileInfo={
               Object {
                 "archived": false,
@@ -1634,6 +1669,8 @@ exports[`components/FilePreviewModal should match snapshot, loaded with image 1`
                 "width": 350,
               }
             }
+            setToolbarZoom={[Function]}
+            toolbarZoom="A"
           />
         </div>
       </div>
@@ -1723,6 +1760,7 @@ exports[`components/FilePreviewModal should match snapshot, loaded with other fi
                 "width": 350,
               }
             }
+            fileType="other"
             fileURL="/api/v4/files/file_id?download=1"
             filename="name"
             handleModalClose={[Function]}
@@ -1757,7 +1795,9 @@ exports[`components/FilePreviewModal should match snapshot, loaded with other fi
                 "user_id": "user_id",
               }
             }
+            setToolbarZoom={[Function]}
             showPublicLink={true}
+            toolbarZoom="A"
             totalFiles={1}
           />
         </ModalTitle>

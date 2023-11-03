@@ -71,13 +71,16 @@ function ThreadFooter({
         trackEvent('crt', 'replied_using_footer');
         e.stopPropagation();
         dispatch(selectPost({id: threadId, channel_id: channelId} as Post));
-    }, [replyClick, threadId, channelId]);
+    }, [dispatch, replyClick, threadId, channelId]);
 
     const handleFollowing = useCallback((e) => {
         e.stopPropagation();
         dispatch(setThreadFollow(currentUserId, currentTeamId, threadId, !isFollowing));
     }, [isFollowing]);
 
+    if (thread.reply_count === 0) {
+        return (null);
+    }
     return (
         <div className='ThreadFooter'>
             {!isFollowing || threadIsSynthetic(thread) || !thread.unread_replies ? (
@@ -109,23 +112,21 @@ function ThreadFooter({
                 />
             ) : null}
 
-            {thread.reply_count > 0 && (
-                <Button
-                    onClick={handleReply}
-                    className='ReplyButton separated'
-                    prepend={
-                        <span className='icon'>
-                            <i className='icon-reply-outline'/>
-                        </span>
-                    }
-                >
-                    <FormattedMessage
-                        id='threading.numReplies'
-                        defaultMessage='{totalReplies, plural, =0 {Reply} =1 {# reply} other {# replies}}'
-                        values={{totalReplies}}
-                    />
-                </Button>
-            )}
+            <Button
+                onClick={handleReply}
+                className='ReplyButton separated'
+                prepend={
+                    <span className='icon'>
+                        <i className='icon-reply-outline'/>
+                    </span>
+                }
+            >
+                <FormattedMessage
+                    id='threading.numReplies'
+                    defaultMessage='{totalReplies, plural, =0 {Reply} =1 {# reply} other {# replies}}'
+                    values={{totalReplies}}
+                />
+            </Button>
 
             <FollowButton
                 isFollowing={isFollowing}

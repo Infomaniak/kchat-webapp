@@ -1,28 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 
-import type {GlobalState} from '@mattermost/types/store';
-
-import Permissions from 'mattermost-redux/constants/permissions';
-import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getAssociatedGroupsForReference} from 'mattermost-redux/selectors/entities/groups';
-import {makeGetProfilesForThread} from 'mattermost-redux/selectors/entities/posts';
-import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {Action} from 'mattermost-redux/types/actions';
+import {makeGetProfilesForThread} from 'mattermost-redux/selectors/entities/posts';
 
-import {autocompleteChannels} from 'actions/channel_actions';
+import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import Permissions from 'mattermost-redux/constants/permissions';
+
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+
+import {GlobalState} from '@mattermost/types/store';
+import {Action} from 'mattermost-redux/types/actions';
+
 import {autocompleteUsersInChannel} from 'actions/views/channel';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
+import {autocompleteChannels} from 'actions/channel_actions';
 
-import Textbox from './textbox';
-import type {Props as TextboxProps} from './textbox';
-import TextboxLinks from './textbox_links';
+import Textbox, {Props as TextboxProps} from './textbox';
 
 type Props = {
     channelId: string;
@@ -48,7 +47,6 @@ const makeMapStateToProps = () => {
             currentTeamId: teamId,
             autocompleteGroups,
             priorityProfiles: getProfilesForThread(state, ownProps.rootId ?? ''),
-            delayChannelAutocomplete: getConfig(state).DelayChannelAutocomplete === 'true',
         };
     };
 };
@@ -64,4 +62,3 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export {Textbox as TextboxClass};
 
 export default connect(makeMapStateToProps, mapDispatchToProps, null, {forwardRef: true})(Textbox);
-export {TextboxLinks};

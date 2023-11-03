@@ -3,6 +3,9 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
+import {getSiteURL} from 'utils/url';
+import * as Utils from 'utils/utils';
 
 import type {Bot as BotType} from '@mattermost/types/bots';
 import type {Team} from '@mattermost/types/teams';
@@ -11,13 +14,11 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
+
 import BackstageList from 'components/backstage/components/backstage_list';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
-import Constants from 'utils/constants';
-import {getSiteURL} from 'utils/url';
-import * as Utils from 'utils/utils';
 
 import Bot, {matchesFilter} from './bot';
 
@@ -248,26 +249,22 @@ export default class Bots extends React.PureComponent<Props, State> {
                     <React.Fragment>
                         <FormattedMessage
                             id='bots.manage.help1'
-                            defaultMessage='Use {botAccounts} to integrate with Mattermost through plugins or the API. Bot accounts are available to everyone on your server. '
+                            defaultMessage='Use {botAccounts} to integrate with Mattermost through plugins or the API. Bot accounts are available to everyone on your server. {learnMore}'
                             values={{
                                 botAccounts: (
-                                    <ExternalLink
-                                        href='https://mattermost.com/pl/default-bot-accounts'
-                                        location='bots'
-                                    >
-                                        <FormattedMessage
-                                            id='bots.manage.bot_accounts'
-                                            defaultMessage='Bot Accounts'
-                                        />
-                                    </ExternalLink>
+                                    <FormattedMessage
+                                        id='bots.manage.bot_accounts'
+                                        defaultMessage='Bot Accounts'
+                                    />
                                 ),
-                            }}
-                        />
-                        <FormattedMarkdownMessage
-                            id='bots.manage.help2'
-                            defaultMessage={'Enable bot account creation in the [System Console]({siteURL}/admin_console/integrations/bot_accounts).'}
-                            values={{
-                                siteURL: getSiteURL(),
+                                learnMore: (
+                                    <a onClick={redirectToDeveloperDocumentation}>
+                                        <FormattedMessage
+                                            id='developer_documentation.learn_more'
+                                            defaultMessage='Learn more'
+                                        />
+                                    </a>
+                                ),
                             }}
                         />
                     </React.Fragment>

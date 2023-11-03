@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import KeyboardShortcutsSequence from './keyboard_shortcuts_sequence';

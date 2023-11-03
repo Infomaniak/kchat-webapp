@@ -7,11 +7,12 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {TourTip, useMeasurePunchouts} from '@mattermost/components';
 
-import {setShowOnboardingCompleteProfileTour} from 'actions/views/onboarding_tasks';
 import {isShowOnboardingCompleteProfileTour} from 'selectors/views/onboarding_tasks';
 
 import {OnboardingTasksName, TaskNameMapToSteps} from './constants';
 import {useHandleOnBoardingTaskData} from './onboarding_tasks_manager';
+
+import {setShowOnboardingCompleteProfileTour} from '../../actions/views/onboarding_tasks';
 
 const translate = {x: 0, y: -2};
 

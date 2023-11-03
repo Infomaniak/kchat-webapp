@@ -79,7 +79,9 @@ exports[`components/integrations/InstalledCommand should call onDelete function 
             }
           }
         />
-        <Memo(CopyText)
+        <CopyText
+          defaultMessage="Copy"
+          idMessage="integrations.copy"
           value="testToken"
         />
       </span>
@@ -185,7 +187,9 @@ exports[`components/integrations/InstalledCommand should call onRegenToken funct
             }
           }
         />
-        <Memo(CopyText)
+        <CopyText
+          defaultMessage="Copy"
+          idMessage="integrations.copy"
           value="testToken"
         />
       </span>
@@ -261,7 +265,9 @@ exports[`components/integrations/InstalledCommand should match snapshot 1`] = `
             }
           }
         />
-        <Memo(CopyText)
+        <CopyText
+          defaultMessage="Copy"
+          idMessage="integrations.copy"
           value="testToken"
         />
       </span>
@@ -335,7 +341,9 @@ exports[`components/integrations/InstalledCommand should match snapshot, not aut
             }
           }
         />
-        <Memo(CopyText)
+        <CopyText
+          defaultMessage="Copy"
+          idMessage="integrations.copy"
           value="testToken"
         />
       </span>

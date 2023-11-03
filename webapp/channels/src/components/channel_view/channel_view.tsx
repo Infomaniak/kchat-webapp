@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import WebSocketClient from 'client/web_websocket_client';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
@@ -90,6 +91,12 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             if (this.props.channelIsArchived && !this.props.viewArchivedChannels) {
                 this.props.goToLastViewedChannel();
             }
+            if (prevProps.channelId) {
+                WebSocketClient.unbindPresenceChannel(prevProps.channelId);
+            }
+            if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
+                WebSocketClient.bindPresenceChannel(this.props.channelId);
+            }
         }
     }
 
@@ -105,8 +112,8 @@ export default class ChannelView extends React.PureComponent<Props, State> {
                         className='channel-archived__message'
                     >
                         <FormattedMarkdownMessage
-                            id='create_post.deactivated'
-                            defaultMessage='You are viewing an archived channel with a **deactivated user**. New messages cannot be posted.'
+                            id={this.props.isGptBot ? 'create_post.deactivated_gpt' : 'create_post.deactivated'}
+                            defaultMessage={this.props.isGptBot ? 'ChatGPT is disabled in your kChat. Contact an administrator to enable this feature.' : 'You are viewing an archived channel with a **deactivated user**. New messages cannot be posted.'}
                         />
                         <button
                             className='btn btn-primary channel-archived__close-btn'
@@ -149,9 +156,8 @@ export default class ChannelView extends React.PureComponent<Props, State> {
         } else {
             createPost = (
                 <div
-                    id='post-create'
-                    data-testid='post-create'
                     className='post-create__container AdvancedTextEditor__ctr'
+                    id='post-create'
                 >
                     <AdvancedCreatePost getChannelView={this.getChannelView}/>
                 </div>

@@ -4,11 +4,10 @@
 import {mount, shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
+import mockStore from 'tests/test_store';
 
 import LoadingImagePreview from 'components/loading_image_preview';
 import SizeAwareImage from 'components/size_aware_image';
-
-import mockStore from 'tests/test_store';
 
 describe('components/SizeAwareImage', () => {
     const baseProps = {

@@ -1,18 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {fireEvent, screen} from '@testing-library/react';
 import React from 'react';
-
-import {fireEvent, renderWithIntl, screen} from 'tests/react_testing_utils';
+import {renderWithIntl} from 'tests/react_testing_utils';
 import Constants from 'utils/constants';
 
-import ActionBar from './action_bar';
 import type {Props} from './action_bar';
+import ActionBar from './action_bar';
 
 describe('channel_members_rhs/action_bar', () => {
     const actionBarDefaultProps: Props = {
         channelType: Constants.OPEN_CHANNEL,
         membersCount: 12,
+        guestsCount: 0,
+        pendingGuestsCount: 0,
         canManageMembers: true,
         editing: false,
         actions: {

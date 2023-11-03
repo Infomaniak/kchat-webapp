@@ -3,19 +3,20 @@
 
 import React, {memo} from 'react';
 import {defineMessages, useIntl} from 'react-intl';
+import {t} from 'utils/i18n';
 
-import {GenericModal} from '@mattermost/components';
 import type {Post} from '@mattermost/types/posts';
 
+import GenericModal from 'components/generic_modal';
 import PostMessageView from 'components/post_view/post_message_view';
 
 const modalMessages = defineMessages({
     title: {
-        id: 'post_info.edit.restore',
+        id: t('post_info.edit.restore'),
         defaultMessage: 'Restore this version',
     },
     titleQuestion: {
-        id: 'post_info.edit.restore_question',
+        id: t('post_info.edit.restore_question'),
         defaultMessage: 'Restore this version?',
     },
 });

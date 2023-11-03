@@ -2,15 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
+
+import {ActionResult, GenericAction} from 'mattermost-redux/types/actions';
 
 import {getChannel} from 'mattermost-redux/actions/channels';
-import type {ActionResult, GenericAction} from 'mattermost-redux/types/actions';
+
+import {PostEphemeralCallResponseForPost, HandleBindingClick, OpenAppsModal} from 'types/apps';
 
 import {postEphemeralCallResponseForPost, handleBindingClick, openAppsModal} from 'actions/apps';
-
-import type {PostEphemeralCallResponseForPost, HandleBindingClick, OpenAppsModal} from 'types/apps';
 
 import SelectBinding from './select_binding';
 

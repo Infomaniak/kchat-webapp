@@ -2,16 +2,26 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
-import type {RouteComponentProps} from 'react-router-dom';
-import {bindActionCreators} from 'redux';
-import type {Dispatch} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
+
+import {withRouter, RouteComponentProps} from 'react-router-dom';
+
+import {memo} from 'react';
 
 import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
-import {setRhsExpanded, showChannelInfo, showPinnedPosts, showChannelFiles, openRHSSearch, closeRightHandSide, openAtPrevious, updateSearchTerms} from 'actions/views/rhs';
-import {selectCurrentProductId} from 'selectors/products';
+import {
+    setRhsExpanded,
+    showChannelInfo,
+    showPinnedPosts,
+    showChannelFiles,
+    openRHSSearch,
+    closeRightHandSide,
+    openAtPrevious,
+    updateSearchTerms,
+    showSettings,
+} from 'actions/views/rhs';
 import {
     getIsRhsExpanded,
     getIsRhsOpen,
@@ -21,10 +31,11 @@ import {
     getSelectedPostCardId,
     getPreviousRhsState,
 } from 'selectors/rhs';
-
 import {RHSStates} from 'utils/constants';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
+
+import {selectCurrentProductId} from 'selectors/products';
 
 import SidebarRight from './sidebar_right';
 
@@ -44,7 +55,7 @@ function mapStateToProps(state: GlobalState, props: RouteComponentProps) {
         channel,
         postRightVisible: Boolean(selectedPostId) && rhsState !== RHSStates.EDIT_HISTORY,
         postCardVisible: Boolean(selectedPostCardId),
-        searchVisible: Boolean(rhsState) && rhsState !== RHSStates.PLUGIN,
+        searchVisible: Boolean(rhsState) && rhsState !== RHSStates.PLUGIN && rhsState !== RHSStates.SETTINGS,
         previousRhsState: getPreviousRhsState(state),
         isPinnedPosts: rhsState === RHSStates.PIN,
         isChannelFiles: rhsState === RHSStates.CHANNEL_FILES,
@@ -52,6 +63,7 @@ function mapStateToProps(state: GlobalState, props: RouteComponentProps) {
         isChannelMembers: rhsState === RHSStates.CHANNEL_MEMBERS,
         isPluginView: rhsState === RHSStates.PLUGIN,
         isPostEditHistory: rhsState === RHSStates.EDIT_HISTORY,
+        isSettings: rhsState === RHSStates.SETTINGS,
         rhsChannel: getSelectedChannel(state),
         selectedPostId,
         selectedPostCardId,
@@ -72,8 +84,9 @@ function mapDispatchToProps(dispatch: Dispatch) {
             updateSearchTerms,
             showChannelFiles,
             showChannelInfo,
+            showSettings,
         }, dispatch),
     };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SidebarRight));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(memo(SidebarRight)));

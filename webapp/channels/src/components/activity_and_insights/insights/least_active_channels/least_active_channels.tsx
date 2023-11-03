@@ -3,20 +3,19 @@
 
 import React, {memo, useState, useCallback, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-
-import {LeastActiveChannel} from '@mattermost/types/insights';
+import {InsightsScopes} from 'utils/constants';
 
 import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
+import type {LeastActiveChannel} from '@mattermost/types/insights';
 
 import {getMyLeastActiveChannels, getLeastActiveChannelsForTeam} from 'mattermost-redux/actions/insights';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
-import {InsightsScopes} from 'utils/constants';
-
-import widgetHoc, {WidgetHocProps} from '../widget_hoc/widget_hoc';
-import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
-
 import LeastActiveChannelsItem from './least_active_channels_item/least_active_channels_item';
+
+import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
+import type {WidgetHocProps} from '../widget_hoc/widget_hoc';
+import widgetHoc from '../widget_hoc/widget_hoc';
 
 import './../../activity_and_insights.scss';
 

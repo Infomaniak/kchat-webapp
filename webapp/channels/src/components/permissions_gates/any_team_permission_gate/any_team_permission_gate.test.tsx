@@ -4,10 +4,9 @@
 import {mount} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
+import mockStore from 'tests/test_store';
 
 import AnyTeamPermissionGate from 'components/permissions_gates/any_team_permission_gate';
-
-import mockStore from 'tests/test_store';
 
 describe('components/permissions_gates', () => {
     const state = {

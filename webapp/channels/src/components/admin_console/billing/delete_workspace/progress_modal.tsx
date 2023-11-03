@@ -2,18 +2,18 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect, useRef, useState} from 'react';
-import {injectIntl, WrappedComponentProps} from 'react-intl';
+import type {WrappedComponentProps} from 'react-intl';
+import {injectIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
-
-import RootPortal from 'components/root_portal';
-import FullScreenModal from 'components/widgets/modals/full_screen_modal';
-import BackgroundSvg from 'components/common/svg_images_components/background_svg';
-
-import IconMessage from 'components/purchase_modal/icon_message';
+import {ModalIdentifiers} from 'utils/constants';
 
 import {closeModal} from 'actions/views/modals';
-import {ModalIdentifiers} from 'utils/constants';
+
+import BackgroundSvg from 'components/common/svg_images_components/background_svg';
 import CreditCardSvg from 'components/common/svg_images_components/credit_card_svg';
+import IconMessage from 'components/purchase_modal/icon_message';
+import RootPortal from 'components/root_portal';
+import FullScreenModal from 'components/widgets/modals/full_screen_modal';
 
 import './progress_modal.scss';
 const MIN_PROCESSING_MILLISECONDS = 5000;

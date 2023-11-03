@@ -1,10 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 import {shallow} from 'enzyme';
 import React from 'react';
-
-import IconButton from '@mattermost/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
 
 import type {GlobalState} from 'types/store';
 

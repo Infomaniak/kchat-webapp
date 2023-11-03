@@ -4,17 +4,16 @@
 import React, {memo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
+import {isMac} from 'utils/utils';
 
 import {Preferences} from 'mattermost-redux/constants';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 
-import {isMac} from 'utils/user_agent';
-
 import type {GlobalState} from 'types/store';
 
 type Props = {
-    onSave: () => void;
-    onCancel: () => void;
+    onSave: (e: React.MouseEvent) => void;
+    onCancel: (e: React.MouseEvent) => void;
 }
 
 const EditPostFooter = ({onSave, onCancel}: Props) => {

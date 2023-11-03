@@ -4,16 +4,15 @@
 /* eslint-disable max-lines */
 
 import emojiRegex from 'emoji-regex';
-import {Renderer} from 'marked';
-
-import {SystemEmoji} from '@mattermost/types/emojis';
-
+import type {Renderer} from 'marked';
 import {formatWithRenderer} from 'utils/markdown';
 
+import type {SystemEmoji} from '@mattermost/types/emojis';
+
+import Constants from './constants';
+import type EmojiMap from './emoji_map.js';
 import * as Emoticons from './emoticons';
 import * as Markdown from './markdown';
-import Constants from './constants';
-import EmojiMap from './emoji_map.js';
 
 const punctuationRegex = /[^\p{L}\d]/u;
 const AT_MENTION_PATTERN = /(?:\B|\b_+)@([a-z0-9.\-_]+)/gi;

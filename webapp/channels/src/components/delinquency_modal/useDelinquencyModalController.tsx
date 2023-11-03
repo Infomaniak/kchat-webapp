@@ -3,6 +3,7 @@
 
 import {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {StoragePrefixes, ModalIdentifiers} from 'utils/constants';
 
 import type {Subscription} from '@mattermost/types/cloud';
 import type {PreferenceType} from '@mattermost/types/preferences';
@@ -12,8 +13,6 @@ import {getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud'
 
 import {setItem} from 'actions/storage';
 import {makeGetItem} from 'selectors/storage';
-
-import {StoragePrefixes, ModalIdentifiers} from 'utils/constants';
 
 import type {ModalData} from 'types/actions';
 

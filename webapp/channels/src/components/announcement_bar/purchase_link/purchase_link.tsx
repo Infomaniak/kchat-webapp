@@ -3,6 +3,8 @@
 
 import React from 'react';
 import {useSelector} from 'react-redux';
+import {CloudLinks, SelfHostedProducts} from 'utils/constants';
+import {findSelfHostedProductBySku} from 'utils/hosted_customer';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/admin';
 
@@ -15,9 +17,6 @@ import {
 } from 'components/common/hooks/useControlModal';
 import useControlSelfHostedPurchaseModal from 'components/common/hooks/useControlSelfHostedPurchaseModal';
 import useGetSelfHostedProducts from 'components/common/hooks/useGetSelfHostedProducts';
-
-import {CloudLinks, SelfHostedProducts} from 'utils/constants';
-import {findSelfHostedProductBySku} from 'utils/hosted_customer';
 
 import './purchase_link.scss';
 

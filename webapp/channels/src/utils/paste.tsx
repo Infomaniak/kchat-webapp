@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import TurndownService from 'turndown';
-import {tables} from '@guyplusplus/turndown-plugin-gfm';
 
+import {tables} from '@guyplusplus/turndown-plugin-gfm';
+import TurndownService from 'turndown';
 import {splitMessageBasedOnCaretPosition, splitMessageBasedOnTextSelection} from 'utils/post_utils';
 
 type FormatCodeOptions = {
@@ -84,9 +84,7 @@ export function formatMarkdownMessage(clipboardData: DataTransfer, message?: str
 
 export function formatGithubCodePaste({message, clipboardData, selectionStart, selectionEnd}: FormatCodeOptions): {formattedMessage: string; formattedCodeBlock: string} {
     const textSelected = selectionStart !== selectionEnd;
-    const {firstPiece, lastPiece} = textSelected ?
-        splitMessageBasedOnTextSelection(selectionStart ?? message.length, selectionEnd ?? message.length, message) :
-        splitMessageBasedOnCaretPosition(selectionStart ?? message.length, message);
+    const {firstPiece, lastPiece} = textSelected ? splitMessageBasedOnTextSelection(selectionStart ?? message.length, selectionEnd ?? message.length, message) : splitMessageBasedOnCaretPosition(selectionStart ?? message.length, message);
 
     // Add new lines if content exists before or after the cursor.
     const requireStartLF = firstPiece === '' ? '' : '\n';

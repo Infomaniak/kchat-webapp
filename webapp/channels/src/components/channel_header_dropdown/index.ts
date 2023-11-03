@@ -2,8 +2,17 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
+import {bindActionCreators, Dispatch} from 'redux';
 
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
+import {createSelector} from 'reselect';
+
+import {
+    getUser,
+    getCurrentUser,
+    getUserStatuses,
+    getCurrentUserId,
+} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {
     getCurrentChannel,
     isCurrentChannelDefault,
@@ -12,21 +21,19 @@ import {
     isCurrentChannelArchived,
     getRedirectChannelNameForTeam,
 } from 'mattermost-redux/selectors/entities/channels';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {
-    getUser,
-    getCurrentUser,
-    getUserStatuses,
-    getCurrentUserId,
-} from 'mattermost-redux/selectors/entities/users';
+import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 
 import {getPenultimateViewedChannelName} from 'selectors/local_storage';
-import {getChannelHeaderMenuPluginComponents} from 'selectors/plugins';
+import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
-import type {GlobalState} from 'types/store';
+import {getChannelHeaderMenuPluginComponents} from 'selectors/plugins';
+
+import {GlobalState} from 'types/store';
+
+import {startOrJoinCallInChannelV2} from 'actions/calls';
 
 import Desktop from './channel_header_dropdown';
 import Items from './channel_header_dropdown_items';
@@ -58,18 +65,32 @@ const getTeammateStatus = createSelector(
     },
 );
 
-const mapStateToProps = (state: GlobalState) => ({
-    user: getCurrentUser(state),
-    channel: getCurrentChannel(state),
-    isDefault: isCurrentChannelDefault(state),
-    isFavorite: isCurrentChannelFavorite(state),
-    isMuted: isCurrentChannelMuted(state),
-    isReadonly: false,
-    isArchived: isCurrentChannelArchived(state),
-    penultimateViewedChannelName: getPenultimateViewedChannelName(state) || getRedirectChannelNameForTeam(state, getCurrentTeamId(state)),
-    pluginMenuItems: getChannelHeaderMenuPluginComponents(state),
-    isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
-});
+const mapStateToProps = (state: GlobalState) => {
+    const user = getCurrentUser(state);
+    const channel = getCurrentChannel(state);
+    return {
+        user,
+        channel,
+        dmUserId: getUserIdFromChannelName(user.id, channel.name),
+        isDefault: isCurrentChannelDefault(state),
+        isFavorite: isCurrentChannelFavorite(state),
+        isMuted: isCurrentChannelMuted(state),
+        isReadonly: false,
+        isArchived: isCurrentChannelArchived(state),
+        penultimateViewedChannelName: getPenultimateViewedChannelName(state) || getRedirectChannelNameForTeam(state, getCurrentTeamId(state)),
+        pluginMenuItems: getChannelHeaderMenuPluginComponents(state),
+        isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
+        hasCall: connectedKmeetCallUrl(state, channel.id) != null,
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        actions: bindActionCreators({
+            startOrJoinCallInChannelV2,
+        }, dispatch),
+    };
+};
 
 const mobileMapStateToProps = (state: GlobalState) => {
     const user = getCurrentUser(state);
@@ -95,5 +116,5 @@ const mobileMapStateToProps = (state: GlobalState) => {
 };
 
 export const ChannelHeaderDropdown = Desktop;
-export const ChannelHeaderDropdownItems = connect(mapStateToProps)(Items);
+export const ChannelHeaderDropdownItems = connect(mapStateToProps, mapDispatchToProps)(Items);
 export const MobileChannelHeaderDropdown = connect(mobileMapStateToProps)(Mobile);

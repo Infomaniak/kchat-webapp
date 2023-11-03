@@ -1,24 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {RefObject} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {Constants, ModalIdentifiers} from 'utils/constants';
+import {applyTheme} from 'utils/utils';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
-import ExternalLink from 'components/external_link';
 import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
 import type SettingItemMinComponent from 'components/setting_item_min/setting_item_min';
 import ImportThemeModal from 'components/user_settings/import_theme_modal';
 
-import {Constants, ModalIdentifiers} from 'utils/constants';
-import {applyTheme} from 'utils/utils';
-
 import type {ModalData} from 'types/actions';
 
-import CustomThemeChooser from './custom_theme_chooser/custom_theme_chooser';
+//import CustomThemeChooser from './custom_theme_chooser/custom_theme_chooser';
 import PremadeThemeChooser from './premade_theme_chooser';
 
 type Props = {
@@ -169,28 +167,15 @@ export default class ThemeSetting extends React.PureComponent<Props, State> {
 
         const displayCustom = this.state.type === 'custom';
 
-        let custom;
-        let premade;
-        if (displayCustom && this.props.allowCustomThemes) {
-            custom = (
-                <div key='customThemeChooser'>
-                    <CustomThemeChooser
-                        theme={this.state.theme}
-                        updateTheme={this.updateTheme}
-                    />
-                </div>
-            );
-        } else {
-            premade = (
-                <div key='premadeThemeChooser'>
-                    <br/>
-                    <PremadeThemeChooser
-                        theme={this.state.theme}
-                        updateTheme={this.updateTheme}
-                    />
-                </div>
-            );
-        }
+        const premade = (
+            <div key='premadeThemeChooser'>
+                <br/>
+                <PremadeThemeChooser
+                    theme={this.state.theme}
+                    updateTheme={this.updateTheme}
+                />
+            </div>
+        );
 
         let themeUI;
         if (this.props.selected) {
@@ -221,65 +206,6 @@ export default class ThemeSetting extends React.PureComponent<Props, State> {
             }
 
             inputs.push(premade);
-
-            if (this.props.allowCustomThemes) {
-                inputs.push(
-                    <div
-                        className='radio'
-                        key='customThemeColorLabel'
-                    >
-                        <label>
-                            <input
-                                id='customThemes'
-                                type='radio'
-                                name='theme'
-                                checked={displayCustom}
-                                onChange={this.updateType.bind(this, 'custom')}
-                            />
-                            <FormattedMessage
-                                id='user.settings.display.theme.customTheme'
-                                defaultMessage='Custom Theme'
-                            />
-                        </label>
-                    </div>,
-                );
-
-                inputs.push(custom);
-
-                inputs.push(
-                    <div key='otherThemes'>
-                        <br/>
-                        <ExternalLink
-                            id='otherThemes'
-                            href='http://docs.mattermost.com/help/settings/theme-colors.html#custom-theme-examples'
-                            location='user_settings_theme'
-                        >
-                            <FormattedMessage
-                                id='user.settings.display.theme.otherThemes'
-                                defaultMessage='See other themes'
-                            />
-                        </ExternalLink>
-                    </div>,
-                );
-
-                inputs.push(
-                    <div
-                        key='importSlackThemeButton'
-                        className='pt-2'
-                    >
-                        <button
-                            id='slackImportTheme'
-                            className='theme style--none color--link'
-                            onClick={this.handleImportModal}
-                        >
-                            <FormattedMessage
-                                id='user.settings.display.theme.import'
-                                defaultMessage='Import theme colors from Slack'
-                            />
-                        </button>
-                    </div>,
-                );
-            }
 
             let allTeamsCheckbox = null;
             if (this.state.showAllTeamsCheckbox) {

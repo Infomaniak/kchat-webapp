@@ -2,14 +2,14 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {memo} from 'react';
 import type {HTMLAttributes} from 'react';
+import React, {memo} from 'react';
+
+import './avatar.scss';
 
 import {Client4} from 'mattermost-redux/client';
 
 import BotDefaultIcon from 'images/bot_default_icon.png';
-
-import './avatar.scss';
 
 export type TAvatarSizeToken = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
@@ -34,6 +34,8 @@ export const getAvatarWidth = (size: TAvatarSizeToken) => {
 };
 
 type Props = {
+
+    // url?: Promise<string> | string;
     url?: string;
     username?: string;
     size?: TAvatarSizeToken;
@@ -52,7 +54,16 @@ const Avatar = ({
     text,
     ...attrs
 }: Props & Attrs) => {
+    // const [imgSrc, setImgSrc] = React.useState('');
     const classes = classNames(`Avatar Avatar-${size}`, attrs.className);
+
+    // React.useEffect(() => {
+    //     if(url instanceof Promise)
+    //     url?.then((val) => {
+    //         setImgSrc(val);
+    //     })
+    //     else setImgSrc(url || '')
+    // }, [url])
 
     if (text) {
         return (

@@ -1,15 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {debounce} from 'lodash';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {debounce} from 'lodash';
 
-import {ActionFunc} from 'mattermost-redux/types/actions';
+import type {LogFilter, LogLevels, LogObject, LogServerNames} from '@mattermost/types/admin';
+
+import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
-
-import {LogFilter, LogLevels, LogObject, LogServerNames} from '@mattermost/types/admin';
 
 import LogList from './log_list';
 
@@ -57,11 +57,11 @@ export default class Logs extends React.PureComponent<Props, State> {
             dateTo: this.state.dateTo,
         });
         this.setState({loadingLogs: false});
-    }
+    };
 
     onSearchChange = (search: string) => {
         this.setState({search}, () => this.performSearch());
-    }
+    };
 
     performSearch = debounce(() => {
         const {search} = this.state;
@@ -74,7 +74,7 @@ export default class Logs extends React.PureComponent<Props, State> {
 
     onFiltersChange = ({dateFrom, dateTo, logLevels, serverNames}: LogFilter) => {
         this.setState({dateFrom, dateTo, logLevels, serverNames}, () => this.reload());
-    }
+    };
 
     render() {
         return (

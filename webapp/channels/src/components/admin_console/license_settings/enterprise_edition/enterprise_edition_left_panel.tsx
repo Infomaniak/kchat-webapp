@@ -1,23 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {RefObject, useEffect, useState} from 'react';
 import classNames from 'classnames';
+import type {RefObject} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FormattedDate, FormattedMessage, FormattedNumber, FormattedTime, useIntl} from 'react-intl';
+import {FileTypes} from 'utils/constants';
+import {calculateOverageUserActivated} from 'utils/overage_team';
+import {getSkuDisplayName} from 'utils/subscription';
+import {getRemainingDaysFromFutureTimestamp, toTitleCase} from 'utils/utils';
 
-import Tag from 'components/widgets/tag/tag';
-
-import {ClientLicense} from '@mattermost/types/config';
+import type {ClientLicense} from '@mattermost/types/config';
 
 import {Client4} from 'mattermost-redux/client';
 
-import {getRemainingDaysFromFutureTimestamp, toTitleCase} from 'utils/utils';
-import {FileTypes} from 'utils/constants';
-import {getSkuDisplayName} from 'utils/subscription';
-import {calculateOverageUserActivated} from 'utils/overage_team';
-
 import './enterprise_edition.scss';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
+import Tag from 'components/widgets/tag/tag';
 
 export interface EnterpriseEditionProps {
     openEELicenseModal: () => void;

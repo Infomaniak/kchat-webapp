@@ -3,12 +3,11 @@
 
 import {mount} from 'enzyme';
 import React from 'react';
+import {mockStore} from 'tests/test_store';
 
 import * as ChannelSelectors from 'mattermost-redux/selectors/entities/channels';
 
-import {mockStore} from 'tests/test_store';
-
-import NotifyCounts from './';
+import NotifyCounts from '../notify_counts';
 
 describe('components/notify_counts', () => {
     const getUnreadStatusInCurrentTeam = jest.spyOn(ChannelSelectors, 'getUnreadStatusInCurrentTeam');
@@ -37,6 +36,6 @@ describe('components/notify_counts', () => {
         const {mountOptions} = mockStore();
         const wrapper = mount(<NotifyCounts/>, mountOptions);
 
-        expect(wrapper.html()).toBe('');
+        expect(wrapper.isEmptyRender()).toBe(true);
     });
 });

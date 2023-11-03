@@ -1,12 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {Preferences} from 'mattermost-redux/constants';
+import {GlobalState} from 'types/store';
 import {get} from 'mattermost-redux/selectors/entities/preferences';
-
+import {Preferences} from 'mattermost-redux/constants';
 import {getIsMobileView} from 'selectors/views/browser';
-
-import type {GlobalState} from 'types/store';
 
 export function showActionsDropdownPulsatingDot(state: GlobalState): boolean {
     if (getIsMobileView(state)) {

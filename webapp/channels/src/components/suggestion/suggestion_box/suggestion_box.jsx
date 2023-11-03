@@ -3,13 +3,11 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-
-import QuickInput from 'components/quick_input';
-
 import Constants, {A11yCustomEventTypes} from 'utils/constants';
-import * as Keyboard from 'utils/keyboard';
 import * as UserAgent from 'utils/user_agent';
 import * as Utils from 'utils/utils';
+
+import QuickInput from 'components/quick_input';
 
 const EXECUTE_CURRENT_COMMAND_ITEM_ID = Constants.Integrations.EXECUTE_CURRENT_COMMAND_ITEM_ID;
 const OPEN_COMMAND_IN_MODAL_ITEM_ID = Constants.Integrations.OPEN_COMMAND_IN_MODAL_ITEM_ID;
@@ -96,6 +94,7 @@ export default class SuggestionBox extends React.PureComponent {
         onKeyPress: PropTypes.func,
         onComposition: PropTypes.func,
 
+        onSelect: PropTypes.func,
         onSearchTypeSelected: PropTypes.func,
 
         /**
@@ -349,6 +348,9 @@ export default class SuggestionBox extends React.PureComponent {
 
     addTextAtCaret = (term, matchedPretext) => {
         const textbox = this.getTextbox();
+        if (!textbox) {
+            return;
+        }
         const caret = textbox.selectionEnd;
         const text = this.props.value;
         const pretext = textbox.value.substring(0, textbox.selectionEnd);
@@ -457,12 +459,15 @@ export default class SuggestionBox extends React.PureComponent {
             this.handleChange({target: this.inputRef.current});
             return false;
         }
-
+        if (!this.inputRef.current) {
+            // eslint-disable-next-line consistent-return
+            return;
+        }
         this.inputRef.current.focus();
 
         if (finish && this.props.onKeyPress) {
             let ke = e;
-            if (!e || Keyboard.isKeyPressed(e, Constants.KeyCodes.TAB)) {
+            if (!e || Utils.isKeyPressed(e, Constants.KeyCodes.TAB)) {
                 ke = new KeyboardEvent('keydown', {
                     bubbles: true, cancelable: true, keyCode: 13,
                 });
@@ -547,13 +552,13 @@ export default class SuggestionBox extends React.PureComponent {
     handleKeyDown = (e) => {
         if ((this.props.openWhenEmpty || this.props.value) && this.hasSuggestions()) {
             const ctrlOrMetaKeyPressed = e.ctrlKey || e.metaKey;
-            if (Keyboard.isKeyPressed(e, KeyCodes.UP)) {
+            if (Utils.isKeyPressed(e, KeyCodes.UP)) {
                 this.selectPrevious();
                 e.preventDefault();
-            } else if (Keyboard.isKeyPressed(e, KeyCodes.DOWN)) {
+            } else if (Utils.isKeyPressed(e, KeyCodes.DOWN)) {
                 this.selectNext();
                 e.preventDefault();
-            } else if ((Keyboard.isKeyPressed(e, KeyCodes.ENTER) && !ctrlOrMetaKeyPressed) || (this.props.completeOnTab && Keyboard.isKeyPressed(e, KeyCodes.TAB))) {
+            } else if ((Utils.isKeyPressed(e, KeyCodes.ENTER) && !ctrlOrMetaKeyPressed) || (this.props.completeOnTab && Utils.isKeyPressed(e, KeyCodes.TAB))) {
                 let matchedPretext = '';
                 for (let i = 0; i < this.state.terms.length; i++) {
                     if (this.state.terms[i] === this.state.selection) {
@@ -576,7 +581,7 @@ export default class SuggestionBox extends React.PureComponent {
                     this.props.onKeyDown(e);
                 }
                 e.preventDefault();
-            } else if (Keyboard.isKeyPressed(e, KeyCodes.ESCAPE)) {
+            } else if (Utils.isKeyPressed(e, KeyCodes.ESCAPE)) {
                 this.clear();
                 this.setState({presentationType: 'text'});
                 e.preventDefault();
@@ -585,6 +590,12 @@ export default class SuggestionBox extends React.PureComponent {
             }
         } else if (this.props.onKeyDown) {
             this.props.onKeyDown(e);
+        }
+    };
+
+    handleSelect = (e) => {
+        if (this.props.onSelect) {
+            this.props.onSelect(e);
         }
     };
 
@@ -796,6 +807,7 @@ export default class SuggestionBox extends React.PureComponent {
                     onCompositionUpdate={this.handleCompositionUpdate}
                     onCompositionEnd={this.handleCompositionEnd}
                     onKeyDown={this.handleKeyDown}
+                    onSelect={this.handleSelect}
                 />
                 {(this.props.openWhenEmpty || this.props.value.length >= this.props.requiredCharacters) && this.state.presentationType === 'text' && (
                     <SuggestionListComponent

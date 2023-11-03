@@ -6,12 +6,22 @@
 import {Elements} from '@stripe/react-stripe-js';
 import type {Stripe, StripeCardElementChangeEvent} from '@stripe/stripe-js';
 import {loadStripe} from '@stripe/stripe-js/pure'; // https://github.com/stripe/stripe-js#importing-loadstripe-without-side-effects
-import classnames from 'classnames';
 import {isEmpty} from 'lodash';
-import React from 'react';
 import type {ReactNode} from 'react';
-import {FormattedMessage, injectIntl} from 'react-intl';
+import React from 'react';
 import type {IntlShape} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {
+    Constants,
+    TELEMETRY_CATEGORIES,
+    CloudLinks,
+    CloudProducts,
+    BillingSchemes,
+    ModalIdentifiers,
+    RecurringIntervals,
+} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {localizeMessage, getNextBillingDate, getBlankAddressWithCountry} from 'utils/utils';
 
 import type {Address, CloudCustomer, Product, Invoice, Feedback} from '@mattermost/types/cloud';
 import {areShippingDetailsValid} from '@mattermost/types/cloud';
@@ -31,37 +41,25 @@ import UpgradeSvg from 'components/common/svg_images_components/upgrade_svg';
 import ExternalLink from 'components/external_link';
 import OverlayTrigger from 'components/overlay_trigger';
 import AddressForm from 'components/payment_form/address_form';
-import PaymentForm from 'components/payment_form/payment_form';
-import {STRIPE_CSS_SRC} from 'components/payment_form/stripe';
+import {STRIPE_CSS_SRC, STRIPE_PUBLIC_KEY} from 'components/payment_form/stripe';
 import PricingModal from 'components/pricing_modal';
 import RootPortal from 'components/root_portal';
-import SeatsCalculator, {errorInvalidNumber} from 'components/seats_calculator';
 import type {Seats} from 'components/seats_calculator';
+import SeatsCalculator, {errorInvalidNumber} from 'components/seats_calculator';
 import Consequences from 'components/seats_calculator/consequences';
 import SwitchToYearlyPlanConfirmModal from 'components/switch_to_yearly_plan_confirm_modal';
 import Tooltip from 'components/tooltip';
 import StarMarkSvg from 'components/widgets/icons/star_mark_icon';
 import FullScreenModal from 'components/widgets/modals/full_screen_modal';
 
-import {
-    Constants,
-    TELEMETRY_CATEGORIES,
-    CloudLinks,
-    CloudProducts,
-    BillingSchemes,
-    ModalIdentifiers,
-    RecurringIntervals,
-} from 'utils/constants';
-import {goToMattermostContactSalesForm} from 'utils/contact_support_sales';
-import {t} from 'utils/i18n';
-import {localizeMessage, getNextBillingDate, getBlankAddressWithCountry} from 'utils/utils';
-
 import type {ModalData} from 'types/actions';
-import type {BillingDetails} from 'types/cloud/sku';
-import {areBillingDetailsValid} from 'types/cloud/sku';
 
 import IconMessage from './icon_message';
 import ProcessPaymentSetup from './process_payment_setup';
+
+import type {BillingDetails} from '../../types/cloud/sku';
+import {areBillingDetailsValid} from '../../types/cloud/sku';
+import PaymentForm from '../payment_form/payment_form';
 
 import 'components/payment_form/payment_form.scss';
 
@@ -107,7 +105,7 @@ type CardProps = {
 type Props = {
     customer: CloudCustomer | undefined;
     show: boolean;
-    cwsMockMode: boolean;
+    isDevMode: boolean;
     products: Record<string, Product> | undefined;
     yearlyProducts: Record<string, Product>;
     contactSalesLink: string;
@@ -126,8 +124,6 @@ type Props = {
     // callerCTA is information about the cta that opened this modal. This helps us provide a telemetry path
     // showing information about how the modal was opened all the way to more CTAs within the modal itself
     callerCTA?: string;
-
-    stripePublicKey: string;
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
         closeModal: () => void;
@@ -135,7 +131,7 @@ type Props = {
         completeStripeAddPaymentMethod: (
             stripe: Stripe,
             billingDetails: BillingDetails,
-            cwsMockMode: boolean
+            isDevMode: boolean
         ) => Promise<boolean | null>;
         subscribeCloudSubscription: (
             productId: string,
@@ -463,7 +459,6 @@ class PurchaseModal extends React.PureComponent<Props, State> {
     };
 
     confirmSwitchToAnnual = () => {
-        const {customer} = this.props;
         this.props.actions.openModal({
             modalId: ModalIdentifiers.CONFIRM_SWITCH_TO_YEARLY,
             dialogType: SwitchToYearlyPlanConfirmModal,
@@ -477,11 +472,7 @@ class PurchaseModal extends React.PureComponent<Props, State> {
                         TELEMETRY_CATEGORIES.CLOUD_ADMIN,
                         'confirm_switch_to_annual_click_contact_sales',
                     );
-                    const customerEmail = customer?.email || '';
-                    const firstName = customer?.contact_first_name || '';
-                    const lastName = customer?.contact_last_name || '';
-                    const companyName = customer?.name || '';
-                    goToMattermostContactSalesForm(firstName, lastName, companyName, customerEmail, 'mattermost', 'in-product-cloud');
+                    window.open(this.props.contactSalesLink, '_blank');
                 },
             },
         });
@@ -728,7 +719,7 @@ class PurchaseModal extends React.PureComponent<Props, State> {
                         this.state.selectedProduct ? this.state.selectedProduct.name : '',
                     )}
                     price={yearlyProductMonthlyPrice}
-                    rate={formatMessage({id: 'pricing_modal.rate.seatPerMonth', defaultMessage: 'USD per seat/month {br}<b>(billed annually)</b>'}, {
+                    rate={formatMessage({id: 'pricing_modal.rate.userPerMonth', defaultMessage: 'USD per user/month {br}<b>(billed annually)</b>'}, {
                         br: <br/>,
                         b: (chunks: React.ReactNode | React.ReactNodeArray) => (
                             <span style={{fontSize: '14px'}}>
@@ -818,7 +809,7 @@ class PurchaseModal extends React.PureComponent<Props, State> {
         }
 
         return (
-            <div className={classnames('PurchaseModal__purchase-body', {processing: this.state.processing})}>
+            <div className={this.state.processing ? 'processing' : ''}>
                 <div className='LHS'>
                     <h2 className='title'>{title}</h2>
                     <UpgradeSvg
@@ -836,7 +827,6 @@ class PurchaseModal extends React.PureComponent<Props, State> {
                             onCardInputChange={this.handleCardInputChange}
                             initialBillingDetails={initialBillingDetails}
                             theme={this.props.theme}
-                            customer={this.props.customer}
                         />
                     ) : (
                         <div className='PaymentDetails'>
@@ -939,6 +929,9 @@ class PurchaseModal extends React.PureComponent<Props, State> {
                                 title={t(
                                     'admin.billing.subscription.complianceScreenFailed.title',
                                 )}
+                                subtitle={t(
+                                    'admin.billing.subscription.complianceScreenFailed.subtitle',
+                                )}
                                 icon={
                                     <ComplianceScreenFailedSvg
                                         width={321}
@@ -963,7 +956,7 @@ class PurchaseModal extends React.PureComponent<Props, State> {
             );
         }
         if (!stripePromise) {
-            stripePromise = loadStripe(this.props.stripePublicKey);
+            stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
         }
 
         return (
@@ -1005,7 +998,7 @@ class PurchaseModal extends React.PureComponent<Props, State> {
                                             this.props.actions.
                                                 subscribeCloudSubscription
                                         }
-                                        cwsMockMode={this.props.cwsMockMode}
+                                        isDevMode={this.props.isDevMode}
                                         onClose={() => {
                                             this.props.actions.getCloudSubscription();
                                             this.props.actions.closeModal();
@@ -1016,7 +1009,7 @@ class PurchaseModal extends React.PureComponent<Props, State> {
                                             });
                                         }}
                                         contactSupportLink={
-                                            this.props.contactSupportLink
+                                            this.props.contactSalesLink
                                         }
                                         currentTeam={this.props.currentTeam}
                                         onSuccess={() => {

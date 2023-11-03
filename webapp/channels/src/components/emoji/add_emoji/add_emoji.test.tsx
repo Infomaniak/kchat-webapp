@@ -3,16 +3,15 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import EmojiMap from 'utils/emoji_map';
+import {TestHelper} from 'utils/test_helper';
 
 import type {CustomEmoji} from '@mattermost/types/emojis';
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 
-import EmojiMap from 'utils/emoji_map';
-import {TestHelper} from 'utils/test_helper';
-
-import AddEmoji from './add_emoji';
 import type {AddEmojiProps} from './add_emoji';
+import AddEmoji from './add_emoji';
 
 const context = {router: {}};
 const image = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAB3R' +
@@ -202,7 +201,7 @@ describe('components/emoji/components/AddEmoji', () => {
         const file = new Blob([image], {type: 'image/png'});
         wrapper.setState({image: file as File, imageUrl: image});
 
-        const saveButton = wrapper.find({'data-testid': 'save-button'}).first();
+        const saveButton = wrapper.find('SpinnerButton').first();
         const nameInput = wrapper.find('#name');
         nameInput.simulate('change', {target: {name: 'name', value: emojiName}});
 

@@ -1,12 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import IconButton from '@infomaniak/compass-components/components/icon-button';
+import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
 import React, {useRef} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-
-import IconButton from '@mattermost/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
+import {ExploreOtherToolsTourSteps, suitePluginIds} from 'utils/constants';
+import {useCurrentProductId, useProducts, isChannels} from 'utils/products';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';
@@ -23,13 +25,9 @@ import {
     useHandleOnBoardingTaskData,
 } from 'components/onboarding_tasks';
 import {FINISHED, TutorialTourName} from 'components/tours';
-import {PlaybooksTourTip} from 'components/tours/onboarding_explore_tools_tour';
+import {BoardsTourTip, PlaybooksTourTip} from 'components/tours/onboarding_explore_tools_tour';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-
-import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
-import {ExploreOtherToolsTourSteps, suitePluginIds} from 'utils/constants';
-import {useCurrentProductId, useProducts, isChannels} from 'utils/products';
 
 import type {GlobalState} from 'types/store';
 
@@ -81,8 +79,11 @@ const ProductMenu = (): JSX.Element => {
     const triggerStep = useSelector((state: GlobalState) => getInt(state, OnboardingTaskCategory, OnboardingTasksName.EXPLORE_OTHER_TOOLS, FINISHED));
     const exploreToolsTourTriggered = triggerStep === GenericTaskSteps.STARTED;
 
-    const {playbooksPlugin} = useGetPluginsActivationState();
+    const {boardsProductEnabled, boardsPlugin, playbooksPlugin} = useGetPluginsActivationState();
 
+    const boardsEnabled = boardsPlugin || boardsProductEnabled;
+
+    const showBoardsTour = enableTutorial && tutorialStep === ExploreOtherToolsTourSteps.BOARDS_TOUR && exploreToolsTourTriggered && boardsEnabled;
     const showPlaybooksTour = enableTutorial && tutorialStep === ExploreOtherToolsTourSteps.PLAYBOOKS_TOUR && exploreToolsTourTriggered && playbooksPlugin;
 
     const handleClick = () => dispatch(setProductMenuSwitcherOpen(!switcherOpen));
@@ -106,9 +107,15 @@ const ProductMenu = (): JSX.Element => {
     const productItems = products?.map((product) => {
         let tourTip;
 
+        // focalboard
+        const boardsEnabled = product.pluginId === suitePluginIds.focalboard || product.pluginId === suitePluginIds.boards;
+        if (boardsEnabled && showBoardsTour) {
+            tourTip = (<BoardsTourTip singleTip={!playbooksPlugin}/>);
+        }
+
         // playbooks
         if (product.pluginId === suitePluginIds.playbooks && showPlaybooksTour) {
-            tourTip = (<PlaybooksTourTip singleTip={true}/>);
+            tourTip = (<PlaybooksTourTip singleTip={!boardsEnabled}/>);
         }
 
         return (

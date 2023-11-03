@@ -1,15 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classnames from 'classnames';
-import React, {useEffect, useRef, useState} from 'react';
 import type {ReactNode} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {Locations} from 'utils/constants';
+import {isSystemMessage, fromAutoResponder} from 'utils/post_utils';
 
 import type {Emoji} from '@mattermost/types/emojis';
 import type {Post} from '@mattermost/types/posts';
 
-import {Posts} from 'mattermost-redux/constants/index';
+import {Posts, Preferences} from 'mattermost-redux/constants/index';
 import {isPostEphemeral} from 'mattermost-redux/utils/post_utils';
 
 import ActionsMenu from 'components/actions_menu';
@@ -19,11 +20,6 @@ import PostFlagIcon from 'components/post_view/post_flag_icon';
 import PostReaction from 'components/post_view/post_reaction';
 import PostRecentReactions from 'components/post_view/post_recent_reactions';
 
-import {Locations, Constants} from 'utils/constants';
-import {isSystemMessage, fromAutoResponder} from 'utils/post_utils';
-
-import type {PluginComponent} from 'types/store/plugins';
-
 type Props = {
     post: Post;
     teamId: string;
@@ -32,11 +28,14 @@ type Props = {
     enableEmojiPicker?: boolean;
     isReadOnly?: boolean;
     channelIsArchived?: boolean;
+    setActionsMenuInitialisationState: (initializationState: Record<string, boolean>) => void;
     handleCommentClick?: (e: React.MouseEvent) => void;
     handleJumpClick?: (e: React.MouseEvent) => void;
     handleDropdownOpened?: (e: boolean) => void;
     collapsedThreadsEnabled?: boolean;
     shouldShowActionsMenu?: boolean;
+    showActionsMenuPulsatingDot?: boolean;
+    tourTipsEnabled: boolean;
     oneClickReactionsEnabled?: boolean;
     recentEmojis: Emoji[];
     isExpanded?: boolean;
@@ -44,6 +43,7 @@ type Props = {
     isMobileView: boolean;
     hasReplies?: boolean;
     isFirstReply?: boolean;
+    isSearchResultsItem?: boolean;
     canReply?: boolean;
     replyCount?: number;
     location: keyof typeof Locations;
@@ -51,8 +51,7 @@ type Props = {
     shortcutReactToLastPostEmittedFrom?: string;
     isPostHeaderVisible?: boolean | null;
     isPostBeingEdited?: boolean;
-    canDelete?: boolean;
-    pluginActions: PluginComponent[];
+    shouldShowDotMenu: boolean;
     actions: {
         emitShortcutReactToLastPostFrom: (emittedFrom: 'CENTER' | 'RHS_ROOT' | 'NO_WHERE') => void;
     };
@@ -64,11 +63,11 @@ const PostOptions = (props: Props): JSX.Element => {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [showDotMenu, setShowDotMenu] = useState(false);
     const [showActionsMenu, setShowActionsMenu] = useState(false);
+    const [showActionTip, setShowActionTip] = useState(false);
 
     useEffect(() => {
-        const locationToUse = props.location === 'RHS_COMMENT' ? Locations.RHS_ROOT : props.location;
         if (props.isLastPost &&
-            (props.shortcutReactToLastPostEmittedFrom === locationToUse) &&
+            (props.shortcutReactToLastPostEmittedFrom === props.location) &&
                 props.isPostHeaderVisible) {
             toggleEmojiPicker();
             props.actions.emitShortcutReactToLastPostFrom(Locations.NO_WHERE);
@@ -81,6 +80,8 @@ const PostOptions = (props: Props): JSX.Element => {
         isReadOnly,
         post,
         oneClickReactionsEnabled,
+        showActionsMenuPulsatingDot,
+        tourTipsEnabled,
         isMobileView,
     } = props;
 
@@ -88,9 +89,7 @@ const PostOptions = (props: Props): JSX.Element => {
     const systemMessage = isSystemMessage(post);
     const isFromAutoResponder = fromAutoResponder(post);
 
-    function removePost() {
-        props.removePost(props.post);
-    }
+    const removePost = () => props.removePost(props.post);
 
     const toggleEmojiPicker = () => {
         setShowEmojiPicker(!showEmojiPicker);
@@ -103,14 +102,34 @@ const PostOptions = (props: Props): JSX.Element => {
     };
 
     const handleActionsMenuOpened = (open: boolean) => {
+        if (tourTipsEnabled && showActionsMenuPulsatingDot) {
+            setShowActionTip(true);
+            return;
+        }
         setShowActionsMenu(open);
         props.handleDropdownOpened!(open);
+    };
+
+    const handleActionsMenuTipOpened = () => {
+        setShowActionTip(true);
+        props.handleDropdownOpened!(true);
+    };
+
+    const handleActionsMenuGotItClick = () => {
+        props.setActionsMenuInitialisationState?.(({[Preferences.ACTIONS_MENU_VIEWED]: true}));
+        setShowActionTip(false);
+        props.handleDropdownOpened!(false);
+    };
+
+    const handleTipDismissed = () => {
+        setShowActionTip(false);
+        props.handleDropdownOpened!(false);
     };
 
     const getDotMenuRef = () => dotMenuRef.current;
 
     const isPostDeleted = post && post.state === Posts.POST_DELETED;
-    const hoverLocal = props.hover || showEmojiPicker || showDotMenu || showActionsMenu;
+    const hoverLocal = props.hover || showEmojiPicker || showDotMenu || showActionsMenu || showActionTip;
     const showCommentIcon = isFromAutoResponder || (!systemMessage && (isMobileView ||
             hoverLocal || (!post.root_id && Boolean(props.hasReplies)) ||
             props.isFirstReply) && props.location === Locations.CENTER);
@@ -132,17 +151,13 @@ const PostOptions = (props: Props): JSX.Element => {
 
     let showRecentReactions: ReactNode;
     if (showRecentlyUsedReactions) {
-        const showMoreReactions = props.isExpanded ||
-            props.location === 'CENTER' ||
-            (document.getElementById('sidebar-right')?.getBoundingClientRect().width ?? 0) > Constants.SIDEBAR_MINIMUM_WIDTH;
-
         showRecentReactions = (
             <PostRecentReactions
                 channelId={post.channel_id}
                 postId={post.id}
                 teamId={props.teamId}
                 emojis={props.recentEmojis}
-                size={showMoreReactions ? 3 : 1}
+                size={props.isExpanded || props.location === 'CENTER' ? 3 : 1}
             />
         );
     }
@@ -182,26 +197,13 @@ const PostOptions = (props: Props): JSX.Element => {
             location={props.location}
             handleDropdownOpened={handleActionsMenuOpened}
             isMenuOpen={showActionsMenu}
+            showPulsatingDot={tourTipsEnabled && showActionsMenuPulsatingDot}
+            showTutorialTip={tourTipsEnabled && showActionTip}
+            handleOpenTip={handleActionsMenuTipOpened}
+            handleNextTip={handleActionsMenuGotItClick}
+            handleDismissTip={handleTipDismissed}
         />
     );
-
-    let pluginItems: ReactNode = null;
-    if ((!isEphemeral && !post.failed && !systemMessage) && hoverLocal) {
-        pluginItems = props.pluginActions?.
-            map((item) => {
-                if (item.component) {
-                    const Component = item.component as any;
-                    return (
-                        <Component
-                            post={props.post}
-                            key={item.id}
-                        />
-                    );
-                }
-                return null;
-            }) || [];
-    }
-
     const dotMenu = (
         <DotMenu
             post={props.post}
@@ -229,7 +231,7 @@ const PostOptions = (props: Props): JSX.Element => {
                 </button>
             </div>
         );
-    } else if (isPostDeleted || (systemMessage && !props.canDelete)) {
+    } else if (isPostDeleted || !props.shouldShowDotMenu) {
         options = null;
     } else if (props.location === Locations.SEARCH) {
         const hasCRTFooter = props.collapsedThreadsEnabled && !post.root_id && (post.reply_count > 0 || post.is_following);
@@ -264,13 +266,12 @@ const PostOptions = (props: Props): JSX.Element => {
             <div
                 ref={dotMenuRef}
                 data-testid={`post-menu-${props.post.id}`}
-                className={classnames('col post-menu', {'post-menu--position': !hoverLocal && showCommentIcon})}
+                className='col post-menu'
             >
                 {!collapsedThreadsEnabled && !showRecentlyUsedReactions && dotMenu}
                 {showRecentReactions}
                 {postReaction}
                 {flagIcon}
-                {pluginItems}
                 {actionsMenu}
                 {commentIcon}
                 {(collapsedThreadsEnabled || showRecentlyUsedReactions) && dotMenu}

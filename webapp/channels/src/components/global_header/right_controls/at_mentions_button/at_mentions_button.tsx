@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-
-import IconButton from '@mattermost/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
+import Constants, {RHSStates} from 'utils/constants';
 
 import {closeRightHandSide, showMentions} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
@@ -13,8 +13,6 @@ import {getRhsState} from 'selectors/rhs';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import Constants, {RHSStates} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -54,8 +52,10 @@ const AtMentionsButton = (): JSX.Element => {
             overlay={tooltip}
         >
             <IconButton
+                id='right-controls-at-mentions'
+                className={`grey ${rhsState === RHSStates.MENTION ? 'active' : ''}`}
                 size={'sm'}
-                icon={'at'}
+                icon={'mentions'}
                 toggled={rhsState === RHSStates.MENTION}
                 onClick={mentionButtonClick}
                 inverted={true}

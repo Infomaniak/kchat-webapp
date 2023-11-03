@@ -4,14 +4,16 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
 
-import type {Channel} from '@mattermost/types/channels';
+import type {Channel, ChannelType} from '@mattermost/types/channels';
+import type {ServerError} from '@mattermost/types/errors';
 
-import type {ActionResult} from 'mattermost-redux/types/actions';
+import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
+
+import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
-import Constants from 'utils/constants';
 
 type Props = {
     onExited: () => void;
@@ -24,7 +26,7 @@ type State = {
 }
 
 export type ChannelDetailsActions = {
-    unarchiveChannel: (channelId: string) => Promise<ActionResult>;
+    unarchiveChannel: (channelId: string, openLimitModalIfNeeded: (error: ServerError, type: ChannelType) => ActionFunc) => Promise<ActionResult>;
 };
 
 export default class UnarchiveChannelModal extends React.PureComponent<Props, State> {
@@ -38,7 +40,7 @@ export default class UnarchiveChannelModal extends React.PureComponent<Props, St
         if (this.props.channel.id.length !== Constants.CHANNEL_ID_LENGTH) {
             return;
         }
-        this.props.actions.unarchiveChannel(this.props.channel.id);
+        this.props.actions.unarchiveChannel(this.props.channel.id, openChannelLimitModalIfNeeded);
         this.onHide();
     };
 
@@ -82,7 +84,7 @@ export default class UnarchiveChannelModal extends React.PureComponent<Props, St
                 <Modal.Footer>
                     <button
                         type='button'
-                        className='btn btn-tertiary'
+                        className='btn btn-link'
                         onClick={this.onHide}
                     >
                         <FormattedMessage

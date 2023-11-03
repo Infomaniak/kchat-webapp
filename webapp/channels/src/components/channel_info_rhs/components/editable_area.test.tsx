@@ -1,9 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {fireEvent, screen} from '@testing-library/react';
 import React from 'react';
-
-import {fireEvent, renderWithIntl, screen} from 'tests/react_testing_utils';
+import {renderWithIntl} from 'tests/react_testing_utils';
 
 import EditableArea from './editable_area';
 

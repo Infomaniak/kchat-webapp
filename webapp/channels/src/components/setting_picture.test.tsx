@@ -2,15 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import React from 'react';
 import type {ReactNode} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import SettingPicture from 'components/setting_picture';
 
 const helpText: ReactNode = (
     <FormattedMessage
-        id={'setting_picture.help.profile.example'}
+        id={'setting_picture.help.profile'}
         defaultMessage='Upload a picture in BMP, JPG or PNG format. Maximum file size: {max}'
         values={{max: 52428800}}
     />

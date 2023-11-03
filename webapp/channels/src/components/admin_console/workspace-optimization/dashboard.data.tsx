@@ -1,10 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
-import {useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
-
 import {
     ChartLineIcon,
     ServerVariantIcon,
@@ -13,12 +9,15 @@ import {
     LockOutlineIcon,
     AccountMultipleOutlineIcon,
 } from '@infomaniak/compass-icons/components';
+import React from 'react';
+import {useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
+import {CloudLinks, ConsolePages, DocLinks, LicenseLinks} from 'utils/constants';
+
+import type {GlobalState} from '@mattermost/types/store';
 
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 
-import {GlobalState} from '@mattermost/types/store';
-
-import {CloudLinks, ConsolePages, DocLinks, LicenseLinks} from 'utils/constants';
 import {daysToLicenseExpire, isEnterpriseOrE20License, getIsStarterLicense} from '../../../utils/license_utils';
 
 export type DataModel = {

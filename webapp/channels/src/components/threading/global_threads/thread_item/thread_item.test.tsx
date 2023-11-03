@@ -4,28 +4,25 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import type {ComponentProps} from 'react';
+import {WindowSizes} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
+import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import type {UserThread} from '@mattermost/types/threads';
 
 import {markLastPostInThreadAsUnread, updateThreadRead} from 'mattermost-redux/actions/threads';
+jest.mock('mattermost-redux/actions/threads');
 
 import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
 
 import Tag from 'components/widgets/tag/tag';
-
-import {WindowSizes} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
-import * as Utils from 'utils/utils';
+jest.mock('actions/views/threads');
 
 import ThreadItem from './thread_item';
 
 import ThreadMenu from '../thread_menu';
-
-jest.mock('mattermost-redux/actions/threads');
-
-jest.mock('actions/views/threads');
 
 const mockRouting = {
     currentUserId: '7n4ach3i53bbmj84dfmu5b7c1c',

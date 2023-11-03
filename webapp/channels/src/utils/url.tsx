@@ -1,15 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
-import {FormattedMessage, IntlShape} from 'react-intl';
-
 import {getModule} from 'module_registry';
-
-import {latinise} from 'utils/latinise';
-import {t} from 'utils/i18n';
-import * as TextFormatting from 'utils/text_formatting';
+import React from 'react';
+import type {IntlShape} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
+import {latinise} from 'utils/latinise';
+import * as TextFormatting from 'utils/text_formatting';
 
 type WindowObject = {
     location: {

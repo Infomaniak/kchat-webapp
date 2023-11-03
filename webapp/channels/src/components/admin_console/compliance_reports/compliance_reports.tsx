@@ -3,15 +3,16 @@
 
 import React from 'react';
 import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
+import {t} from 'utils/i18n';
+
+import type {Compliance} from '@mattermost/types/compliance';
+import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
-import {Compliance} from '@mattermost/types/compliance';
-import {UserProfile} from '@mattermost/types/users';
 
 import LoadingScreen from 'components/loading_screen';
-import ReloadIcon from 'components/widgets/icons/fa_reload_icon';
 import LocalizedInput from 'components/localized_input/localized_input';
-import {t} from 'utils/i18n';
+import ReloadIcon from 'components/widgets/icons/fa_reload_icon';
 
 type Props = {
 
@@ -94,7 +95,7 @@ export default class ComplianceReports extends React.PureComponent<Props, State>
         this.props.actions.getComplianceReports().then(
             () => this.setState({loadingReports: false}),
         );
-    }
+    };
 
     runReport = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -131,7 +132,7 @@ export default class ComplianceReports extends React.PureComponent<Props, State>
                 this.props.actions.getComplianceReports();
             },
         );
-    }
+    };
 
     getDateTime(millis: number) {
         const date = new Date(millis);

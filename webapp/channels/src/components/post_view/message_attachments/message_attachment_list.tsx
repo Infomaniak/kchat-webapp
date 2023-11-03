@@ -2,11 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import type {TextFormattingOptions} from 'utils/text_formatting';
 
 import type {MessageAttachment as MessageAttachmentType} from '@mattermost/types/message_attachments';
 import type {PostImage} from '@mattermost/types/posts';
-
-import type {TextFormattingOptions} from 'utils/text_formatting';
 
 import MessageAttachment from './message_attachment';
 

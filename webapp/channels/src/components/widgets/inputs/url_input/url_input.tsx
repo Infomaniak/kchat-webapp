@@ -4,12 +4,11 @@
 import classNames from 'classnames';
 import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
+import Constants from 'utils/constants';
+import {getShortenedURL} from 'utils/url';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import Constants from 'utils/constants';
-import {getShortenedURL} from 'utils/url';
 
 import Input from '../input/input';
 
@@ -80,10 +79,7 @@ function UrlInput({
     };
 
     const urlInputLabel = (
-        <span
-            className='url-input-label'
-            data-testid='urlInputLabel'
-        >
+        <span className='url-input-label'>
             {formatMessage({id: 'url_input.label.url', defaultMessage: 'URL: '})}
             {isShortenedURL ? getShortenedURL(fullURL, shortenLength) : fullURL}
         </span>
@@ -109,7 +105,6 @@ function UrlInput({
                 )}
                 {(editing || hasError) && (
                     <Input
-                        data-testid='channelURLInput'
                         name='url-input'
                         type='text'
                         containerClassName='url-input-editable-container'

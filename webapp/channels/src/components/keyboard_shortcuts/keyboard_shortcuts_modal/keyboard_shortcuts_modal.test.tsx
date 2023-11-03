@@ -4,11 +4,10 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import * as redux from 'react-redux';
-
-import KeyboardShortcutsModal from 'components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal';
-
 import mockStore from 'tests/test_store';
 import {suitePluginIds} from 'utils/constants';
+
+import KeyboardShortcutsModal from 'components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal';
 
 describe('components/KeyboardShortcutsModal', () => {
     const initialState = {
@@ -37,7 +36,6 @@ describe('components/KeyboardShortcutsModal', () => {
                     ...initialState.plugins.plugins,
                     [suitePluginIds.calls]: {
                         id: suitePluginIds.calls,
-                        version: '0.15.0',
                     },
                 },
             },

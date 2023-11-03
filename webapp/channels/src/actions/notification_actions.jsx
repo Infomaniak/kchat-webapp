@@ -1,6 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {getHistory} from 'utils/browser_history';
+import Constants, {NotificationLevels, UserStatuses, IgnoreChannelMentions} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {stripMarkdown, formatWithRenderer} from 'utils/markdown';
+import MentionableRenderer from 'utils/markdown/mentionable_renderer';
+import * as NotificationSounds from 'utils/notification_sounds';
+import {showNotification} from 'utils/notifications';
+import {cjkrPattern, escapeRegex} from 'utils/text_formatting';
+import {isDesktopApp, isMobileApp, isWindowsApp} from 'utils/user_agent';
+
+import * as Utils from 'utils/utils';
 import {logError} from 'mattermost-redux/actions/errors';
 import {getProfilesByIds} from 'mattermost-redux/actions/users';
 import {getCurrentChannel, getMyChannelMember, makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -18,16 +29,6 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {getChannelURL, getPermalinkURL} from 'selectors/urls';
 import {isThreadOpen} from 'selectors/views/threads';
 
-import {getHistory} from 'utils/browser_history';
-import Constants, {NotificationLevels, UserStatuses, IgnoreChannelMentions} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {stripMarkdown, formatWithRenderer} from 'utils/markdown';
-import MentionableRenderer from 'utils/markdown/mentionable_renderer';
-import * as NotificationSounds from 'utils/notification_sounds';
-import {showNotification} from 'utils/notifications';
-import {cjkrPattern, escapeRegex} from 'utils/text_formatting';
-import {isDesktopApp, isMobileApp, isWindowsApp} from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import {runDesktopNotificationHooks} from './hooks';
 

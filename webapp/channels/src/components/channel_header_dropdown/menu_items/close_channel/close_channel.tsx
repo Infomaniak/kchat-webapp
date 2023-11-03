@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {useIntl} from 'react-intl';
+import {localizeMessage} from 'utils/utils';
 
 import Menu from 'components/widgets/menu/menu';
 
@@ -13,22 +13,18 @@ type Props = {
     };
 }
 
-const CloseChannel = ({
-    isArchived,
-    actions,
-}: Props): JSX.Element => {
-    const intl = useIntl();
+export default class CloseChannel extends React.PureComponent<Props> {
+    private handleClose = () => {
+        this.props.actions.goToLastViewedChannel();
+    };
 
-    return (
-        <Menu.ItemAction
-            show={isArchived}
-            onClick={actions.goToLastViewedChannel}
-            text={intl.formatMessage({
-                id: 'center_panel.archived.closeChannel',
-                defaultMessage: 'Close Channel',
-            })}
-        />
-    );
-};
-
-export default React.memo(CloseChannel);
+    render() {
+        return (
+            <Menu.ItemAction
+                show={this.props.isArchived}
+                onClick={this.handleClose}
+                text={localizeMessage('center_panel.archived.closeChannel', 'Close Channel')}
+            />
+        );
+    }
+}

@@ -1,10 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 
 import {
     favoriteChannel,
@@ -22,16 +21,16 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentRelativeTeamUrl, getCurrentTeamId, getMyTeams} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentRelativeTeamUrl, getCurrentTeamId, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 import {
     displayLastActiveLabel,
     getCurrentUser,
     getLastActiveTimestampUnits,
     getLastActivityForUserId,
     getUser,
+    isCurrentUserGuestUser,
     makeGetProfilesInChannel,
 } from 'mattermost-redux/selectors/entities/users';
-import type {Action} from 'mattermost-redux/types/actions';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 
 import {goToLastViewedChannel} from 'actions/views/channel';
@@ -42,18 +41,21 @@ import {
     closeRightHandSide,
     showChannelMembers,
 } from 'actions/views/rhs';
-import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
-import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
 import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 'selectors/views/custom_status';
+import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
 import {isModalOpen} from 'selectors/views/modals';
-
+import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
 import {ModalIdentifiers} from 'utils/constants';
 import {isFileAttachmentsEnabled} from 'utils/file_utils';
+import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours';
+import {OnboardingTasksName} from 'components/onboarding_tasks';
+import {getShowTutorialStep} from 'selectors/onboarding';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
 
-import ChannelHeader from './channel_header';
-import type {Props} from './channel_header';
+import {Action} from 'mattermost-redux/types/actions';
+
+import ChannelHeader, {Props} from './channel_header';
 
 const EMPTY_CHANNEL = {};
 const EMPTY_CHANNEL_STATS = {member_count: 0, guest_count: 0, pinnedpost_count: 0, files_count: 0};
@@ -66,9 +68,16 @@ function makeMapStateToProps() {
     return function mapStateToProps(state: GlobalState) {
         const channel = getCurrentChannel(state) || EMPTY_CHANNEL;
         const user = getCurrentUser(state);
-        const teams = getMyTeams(state);
+        const teams = getMyKSuites(state);
         const hasMoreThanOneTeam = teams.length > 1;
         const config = getConfig(state);
+
+        const isGuest = isCurrentUserGuestUser(state);
+        const showChannelHeaderTutorialStep = getShowTutorialStep(state, {
+            tourName: isGuest ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP,
+            taskName: OnboardingTasksName.CHANNELS_TOUR,
+            tourStep: isGuest ? OnboardingTourStepsForGuestUsers.CHANNEL_HEADER : OnboardingTourSteps.CHANNEL_HEADER,
+        });
 
         let dmUser;
         let gmMembers;
@@ -118,7 +127,7 @@ function makeMapStateToProps() {
             isFileAttachmentsEnabled: isFileAttachmentsEnabled(config),
             isLastActiveEnabled,
             timestampUnits,
-            hideGuestTags: config.HideGuestTags === 'true',
+            showChannelHeaderTutorialStep,
         };
     };
 }

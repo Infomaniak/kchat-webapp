@@ -2,31 +2,23 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
-import {bindActionCreators} from 'redux';
 import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
+import {RHSStates} from 'utils/constants';
 
 import {Permissions} from 'mattermost-redux/constants';
-import {getCloudSubscription as selectCloudSubscription, getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
-import {
-    getConfig,
-    getLicense,
-} from 'mattermost-redux/selectors/entities/general';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {haveICurrentTeamPermission, haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
 import {
     getJoinableTeamIds,
     getCurrentTeam,
-    getCurrentRelativeTeamUrl,
 } from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUser, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {openModal} from 'actions/views/modals';
-import {showMentions, showFlaggedPosts, closeRightHandSide, closeMenu as closeRhsMenu} from 'actions/views/rhs';
+import {showMentions, showFlaggedPosts, showSettings, closeRightHandSide, closeMenu as closeRhsMenu} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
-
-import {RHSStates, CloudProducts} from 'utils/constants';
-import {isCloudLicense} from 'utils/license_utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -39,7 +31,6 @@ function mapStateToProps(state: GlobalState) {
 
     const appDownloadLink = config.AppDownloadLink;
     const enableCommands = config.EnableCommands === 'true';
-    const siteName = config.SiteName;
     const enableIncomingWebhooks = config.EnableIncomingWebhooks === 'true';
     const enableOAuthServiceProvider = config.EnableOAuthServiceProvider === 'true';
     const enableOutgoingWebhooks = config.EnableOutgoingWebhooks === 'true';
@@ -56,13 +47,7 @@ function mapStateToProps(state: GlobalState) {
     const moreTeamsToJoin = joinableTeams && joinableTeams.length > 0;
     const rhsState = getRhsState(state);
 
-    const subscription = selectCloudSubscription(state);
-    const license = getLicense(state);
-    const subscriptionProduct = getSubscriptionProduct(state);
-
-    const isCloud = isCloudLicense(license);
-    const isStarterFree = isCloud && subscriptionProduct?.sku === CloudProducts.STARTER;
-    const isFreeTrial = isCloud && subscription?.is_free_trial === 'true';
+    const ikGroupId = state.entities.teams.teams[currentTeam.id].account_id;
 
     return {
         appDownloadLink,
@@ -77,20 +62,16 @@ function mapStateToProps(state: GlobalState) {
         reportAProblemLink,
         pluginMenuItems: state.plugins.components.MainMenu,
         moreTeamsToJoin,
-        siteName,
         teamId: currentTeam.id,
         teamName: currentTeam.name,
         currentUser,
         isMentionSearch: rhsState === RHSStates.MENTION,
+        isRhsSettings: rhsState === RHSStates.SETTINGS,
         teamIsGroupConstrained: Boolean(currentTeam.group_constrained),
         isLicensedForLDAPGroups: state.entities.general.license.LDAPGroups === 'true',
-        teamUrl: getCurrentRelativeTeamUrl(state),
         guestAccessEnabled: config.EnableGuestAccounts === 'true',
         canInviteTeamMember,
-        isFirstAdmin: isFirstAdmin(state),
-        isCloud,
-        isStarterFree,
-        isFreeTrial,
+        ikGroupId,
     };
 }
 
@@ -100,10 +81,11 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             openModal,
             showMentions,
             showFlaggedPosts,
+            showSettings,
             closeRightHandSide,
             closeRhsMenu,
         }, dispatch),
     };
 }
 
-export default withRouter<any, any>(connect(mapStateToProps, mapDispatchToProps)(MainMenu));
+export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);

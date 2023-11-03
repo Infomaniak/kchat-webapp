@@ -1,15 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {shallow} from 'enzyme';
-
+import React from 'react';
 import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
 import {testComponentForMarkdownHotkeys} from 'tests/helpers/markdown_hotkey_helpers.js';
-
 import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import AdvancedCreateComment from 'components/advanced_create_comment/advanced_create_comment';
+
 import AdvanceTextEditor from '../advanced_text_editor/advanced_text_editor';
 
 describe('components/AdvancedCreateComment', () => {

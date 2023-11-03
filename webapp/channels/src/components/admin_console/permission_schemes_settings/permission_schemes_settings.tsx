@@ -3,25 +3,20 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {RouteComponentProps} from 'react-router-dom';
-
+import type {RouteComponentProps} from 'react-router-dom';
+import {LicenseSkus} from 'utils/constants';
 import {t} from 'utils/i18n';
 import * as Utils from 'utils/utils';
 
-import LoadingScreen from 'components/loading_screen';
-import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
+import type {Scheme, SchemeScope, SchemesState} from '@mattermost/types/schemes';
 
-import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
-import AdminPanelWithLink from 'components/widgets/admin_console/admin_panel_with_link';
-
-import {ActionResult} from 'mattermost-redux/types/actions';
-
-import {Scheme, SchemeScope, SchemesState} from '@mattermost/types/schemes';
-
-import {LicenseSkus} from 'utils/constants';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import ExternalLink from 'components/external_link';
+import LoadingScreen from 'components/loading_screen';
+import AdminPanelWithLink from 'components/widgets/admin_console/admin_panel_with_link';
+import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
+import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
 
 import PermissionsSchemeSummary from './permissions_scheme_summary';
 
@@ -89,7 +84,7 @@ export default class PermissionSchemesSettings extends React.PureComponent<Props
             }
             Promise.all(promises).then(() => this.setState({loadingMore: false, page: this.state.page + 1}));
         });
-    }
+    };
 
     // |RunJobs && !EnableCluster|(*App).IsPhase2MigrationCompleted|View                                                   |
     // |-------------------------|---------------------------------|-------------------------------------------------------|
@@ -127,7 +122,7 @@ export default class PermissionSchemesSettings extends React.PureComponent<Props
             'Migration job on hold: Team Override Schemes are not available until the job server can execute the permissions migration. The job will be automatically started when the job server is enabled. Learn more in the {documentationLink}.',
             docLink,
         );
-    }
+    };
 
     teamOverrideUnavalableView = (id: string, defaultMsg: string, documentationLink: React.ReactNode) => {
         return (
@@ -211,7 +206,7 @@ export default class PermissionSchemesSettings extends React.PureComponent<Props
             );
         }
         return false;
-    }
+    };
 
     render = () => {
         if (this.state.loading) {

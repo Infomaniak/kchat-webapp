@@ -3,11 +3,11 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {JobStatuses, JobTypes} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import {elasticsearchPurgeIndexes, elasticsearchTest} from 'actions/admin_actions.jsx';
-import {JobStatuses, JobTypes} from 'utils/constants';
-import * as Utils from 'utils/utils';
-import {t} from 'utils/i18n';
 
 import ExternalLink from 'components/external_link';
 
@@ -33,7 +33,7 @@ export default class ElasticsearchSettings extends AdminSettings {
         config.ElasticsearchSettings.EnableAutocomplete = this.state.enableAutocomplete;
 
         return config;
-    }
+    };
 
     getStateFromConfig(config) {
         return {
@@ -83,17 +83,17 @@ export default class ElasticsearchSettings extends AdminSettings {
         }
 
         this.handleChange(id, value);
-    }
+    };
 
     handleSaved = () => {
         this.setState({
             canPurgeAndIndex: this.state.enableIndexing,
         });
-    }
+    };
 
     canSave = () => {
         return this.state.canSave;
-    }
+    };
 
     doTestConfig = (success, error) => {
         const config = JSON.parse(JSON.stringify(this.props.config));
@@ -116,7 +116,7 @@ export default class ElasticsearchSettings extends AdminSettings {
                 error(err);
             },
         );
-    }
+    };
 
     getExtraInfo(job) {
         if (job.status === JobStatuses.IN_PROGRESS) {
@@ -470,5 +470,5 @@ export default class ElasticsearchSettings extends AdminSettings {
                 />
             </SettingsGroup>
         );
-    }
+    };
 }

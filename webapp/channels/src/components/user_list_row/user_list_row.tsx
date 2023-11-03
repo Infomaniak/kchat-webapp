@@ -1,10 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {ReactNode} from 'react';
+import React from 'react';
 import type {ConnectedComponent} from 'react-redux';
 import styled from 'styled-components';
+import {createSafeId, displayFullAndNicknameForUser} from 'utils/utils';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {TeamMembership} from '@mattermost/types/teams';
@@ -17,8 +18,6 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import Nbsp from 'components/html_entities/nbsp';
 import ProfilePicture from 'components/profile_picture';
 import UserProfile from 'components/user_profile';
-
-import {createSafeId, displayFullAndNicknameForUser} from 'utils/utils';
 
 const CustomStatus = styled.span`
     margin: auto 0;
@@ -152,11 +151,6 @@ const UserListRow = ({user, status, extraInfo = [], actions = [], actionProps, a
                             userID={user.id}
                             emojiSize={16}
                             showTooltip={true}
-                            spanStyle={{
-                                display: 'flex',
-                                flex: '0 0 auto',
-                                alignItems: 'center',
-                            }}
                         />
                     </CustomStatus>
 

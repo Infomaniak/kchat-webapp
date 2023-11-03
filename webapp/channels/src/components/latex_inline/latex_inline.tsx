@@ -5,6 +5,8 @@ import type {KatexOptions} from 'katex';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import './latex_inline.scss';
+
 type Katex = typeof import('katex');
 
 type Props = {
@@ -54,10 +56,12 @@ export default class LatexInline extends React.PureComponent<Props, State> {
             const html = this.state.katex.renderToString(this.props.content, katexOptions);
 
             return (
-                <span
-                    className='post-body--code inline-tex'
-                    dangerouslySetInnerHTML={{__html: html}}
-                />
+                <div className='inline-tex-wrapper'>
+                    <span
+                        className='post-body--code inline-tex'
+                        dangerouslySetInnerHTML={{__html: html}}
+                    />
+                </div>
             );
         } catch (e) {
             return (

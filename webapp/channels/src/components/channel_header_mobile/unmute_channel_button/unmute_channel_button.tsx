@@ -2,10 +2,9 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {NotificationLevels} from 'utils/constants';
 
 import type {ChannelNotifyProps} from '@mattermost/types/channels';
-
-import {NotificationLevels} from 'utils/constants';
 
 type Actions = {
     updateChannelNotifyProps: (userId: string, channelId: string, props: ChannelNotifyProps) => void;

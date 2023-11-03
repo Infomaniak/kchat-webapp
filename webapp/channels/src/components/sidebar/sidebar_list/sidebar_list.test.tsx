@@ -4,15 +4,14 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import type {MovementMode, DropResult} from 'react-beautiful-dnd';
+import {DraggingStates, DraggingStateTypes} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import {CategorySorting} from '@mattermost/types/channel_categories';
 import type {ChannelType} from '@mattermost/types/channels';
 import type {TeamType} from '@mattermost/types/teams';
 
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
-
-import {DraggingStates, DraggingStateTypes} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
 
 import SidebarList from './sidebar_list';
 
@@ -111,6 +110,9 @@ describe('SidebarList', () => {
             stopDragging: jest.fn(),
             clearChannelSelection: jest.fn(),
             multiSelectChannelAdd: jest.fn(),
+            markAllChannelsAsRead: jest.fn(),
+            openModal: jest.fn(),
+            closeModal: jest.fn(),
         },
     };
 

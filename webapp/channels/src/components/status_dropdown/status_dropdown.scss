@@ -19,7 +19,7 @@
     }
 
     #status-menu-dnd {
-        padding: 4px 16px;
+        padding: 0 10px;
 
         .dropdown-menu {
             margin: auto;
@@ -36,6 +36,15 @@
 
         .SubMenu__icon-right {
             padding-top: 5px;
+        }
+    }
+
+    .status-dropdown-menu__next-switch {
+        background-color: #7974B4;
+        color: white;
+
+        i {
+            color: white;
         }
     }
 }
@@ -97,9 +106,15 @@ button.custom_status__row {
 
     &__text {
         overflow: hidden;
-        max-width: 73%;
+        max-width: 80%;
         height: 16px;
         line-height: 16px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__textContent {
+        overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
@@ -141,7 +156,10 @@ button.custom_status__row {
 
 .status-dropdown-menu-global-header {
     padding: 4px 8px;
-    border-radius: 4px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    min-width: 50px;
 
     .icon > i:not(.status-icon) {
         color: rgba(var(--center-channel-color-rgb), 0.56);
@@ -217,7 +235,8 @@ button.custom_status__row {
 
     .MenuItem > button,
     #status-menu-dnd {
-        padding: 1px 16px;
+        // Infomaniak edit
+        padding: 0 10px;
 
         .flex {
             display: flex;

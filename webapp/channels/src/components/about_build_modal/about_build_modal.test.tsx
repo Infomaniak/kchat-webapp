@@ -1,20 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {shallow} from 'enzyme';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-import {shallow} from 'enzyme';
 import {Provider} from 'react-redux';
-
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
+import {AboutLinks} from 'utils/constants';
 
-import {ClientConfig, ClientLicense} from '@mattermost/types/config';
+import type {ClientConfig, ClientLicense} from '@mattermost/types/config';
 
 import AboutBuildModal from 'components/about_build_modal/about_build_modal';
-
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-
-import {AboutLinks} from 'utils/constants';
 
 import AboutBuildModalCloud from './about_build_modal_cloud/about_build_modal_cloud';
 

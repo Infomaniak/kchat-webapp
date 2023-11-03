@@ -2,16 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {mount} from 'enzyme';
+import MobileChannelHeaderPlug, {RawMobileChannelHeaderPlug} from 'plugins/mobile_channel_header_plug/mobile_channel_header_plug';
 import React from 'react';
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import {createCallContext} from 'utils/apps';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 
 import {AppCallResponseTypes} from 'mattermost-redux/constants/apps';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
-
-import MobileChannelHeaderPlug, {RawMobileChannelHeaderPlug} from 'plugins/mobile_channel_header_plug/mobile_channel_header_plug';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import {createCallContext} from 'utils/apps';
 
 describe('plugins/MobileChannelHeaderPlug', () => {
     const testPlug = {

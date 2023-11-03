@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {useCallback, useEffect, useState} from 'react';
 import type React from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import type {GlobalState} from '@mattermost/types/store';
@@ -16,6 +16,9 @@ import {trackEvent as trackEventAction} from 'actions/telemetry_actions';
 import {
     generateTelemetryTag,
 } from 'components/onboarding_tasks';
+import type {
+    ActionType,
+    ChannelsTourTipManager} from 'components/tours';
 import {
     getLastStep,
     isKeyPressed,
@@ -23,9 +26,6 @@ import {
     useGetTourSteps,
     useHandleNavigationAndExtraActions,
 } from 'components/tours';
-import type {
-    ActionType,
-    ChannelsTourTipManager} from 'components/tours';
 
 import {
     AutoTourStatus,

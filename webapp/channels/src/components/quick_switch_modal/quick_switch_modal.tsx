@@ -4,6 +4,10 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import {getHistory} from 'utils/browser_history';
+import Constants, {RHSStates} from 'utils/constants';
+import * as UserAgent from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 
@@ -14,13 +18,8 @@ import NoResultsIndicator from 'components/no_results_indicator/no_results_indic
 import {NoResultsVariant} from 'components/no_results_indicator/types';
 import SuggestionBox from 'components/suggestion/suggestion_box';
 import type SuggestionBoxComponent from 'components/suggestion/suggestion_box/suggestion_box';
-import SuggestionList from 'components/suggestion/suggestion_list';
-import SwitchChannelProvider from 'components/suggestion/switch_channel_provider';
-
-import {getHistory} from 'utils/browser_history';
-import Constants, {RHSStates} from 'utils/constants';
-import * as UserAgent from 'utils/user_agent';
-import * as Utils from 'utils/utils';
+import SuggestionList from 'components/suggestion/suggestion_list.jsx';
+import SwitchChannelProvider from 'components/suggestion/switch_channel_provider.jsx';
 
 import type {RhsState} from 'types/store/rhs';
 
@@ -159,7 +158,7 @@ export default class QuickSwitchModal extends React.PureComponent<Props, State> 
         const providers: SwitchChannelProvider[] = this.channelProviders;
 
         const header = (
-            <h1 id='quickSwitchHeader'>
+            <h1>
                 <FormattedMessage
                     id='quick_switch_modal.switchChannels'
                     defaultMessage='Find Channels'
@@ -192,8 +191,8 @@ export default class QuickSwitchModal extends React.PureComponent<Props, State> 
                 enforceFocus={false}
                 restoreFocus={false}
                 role='dialog'
-                aria-labelledby='quickSwitchHeader'
-                aria-describedby='quickSwitchHeaderWithHint'
+                aria-labelledby='quickSwitchModalLabel'
+                aria-describedby='quickSwitchHeader'
                 animation={false}
             >
                 <Modal.Header
@@ -203,7 +202,7 @@ export default class QuickSwitchModal extends React.PureComponent<Props, State> 
                 <Modal.Body>
                     <div
                         className='channel-switcher__header'
-                        id='quickSwitchHeaderWithHint'
+                        id='quickSwitchHeader'
                     >
                         {header}
                         <div

@@ -1,30 +1,29 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {uniq, difference} from 'lodash';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {uniq, difference} from 'lodash';
-
-import {Role} from '@mattermost/types/roles';
-import {Client4} from 'mattermost-redux/client';
-
-import {UserProfile} from '@mattermost/types/users';
-import {ActionResult} from 'mattermost-redux/types/actions';
-
-import Permissions from 'mattermost-redux/constants/permissions';
-
-import Constants from 'utils/constants';
 import {getHistory} from 'utils/browser_history';
+import Constants from 'utils/constants';
 
-import FormError from 'components/form_error';
+import type {Role} from '@mattermost/types/roles';
+import type {UserProfile} from '@mattermost/types/users';
+
+import {Client4} from 'mattermost-redux/client';
+import Permissions from 'mattermost-redux/constants/permissions';
+import type {ActionResult} from 'mattermost-redux/types/actions';
+
 import BlockableLink from 'components/admin_console/blockable_link';
 import SaveChangesPanel from 'components/admin_console/team_channel_settings/save_changes_panel';
+import FormError from 'components/form_error';
 
 import {isError} from 'types/actions';
 
-import SystemRoleUsers from './system_role_users';
 import SystemRolePermissions from './system_role_permissions';
-import {PermissionToUpdate, PermissionsToUpdate, writeAccess} from './types';
+import SystemRoleUsers from './system_role_users';
+import type {PermissionToUpdate, PermissionsToUpdate} from './types';
+import {writeAccess} from './types';
 
 type Props = {
     role: Role;
@@ -74,7 +73,7 @@ export default class SystemRole extends React.PureComponent<Props, State> {
             saveNeeded = saveNeeded || difference(updatedRolePermissions, role.permissions).length > 0 || difference(role.permissions, updatedRolePermissions).length > 0;
         }
         return saveNeeded;
-    }
+    };
 
     addUsersToRole = (users: UserProfile[]) => {
         const {actions: {setNavigationBlocked}} = this.props;
@@ -95,7 +94,7 @@ export default class SystemRole extends React.PureComponent<Props, State> {
         const saveNeeded = this.getSaveStateNeeded({usersToAdd, usersToRemove});
         setNavigationBlocked(saveNeeded);
         this.setState({usersToAdd, usersToRemove, saveNeeded});
-    }
+    };
 
     removeUserFromRole = (user: UserProfile) => {
         const {actions: {setNavigationBlocked}} = this.props;
@@ -114,7 +113,7 @@ export default class SystemRole extends React.PureComponent<Props, State> {
         const saveNeeded = this.getSaveStateNeeded({usersToAdd, usersToRemove});
         setNavigationBlocked(saveNeeded);
         this.setState({usersToRemove, usersToAdd, saveNeeded});
-    }
+    };
 
     handleSubmit = async () => {
         this.setState({saving: true, saveNeeded: false});
@@ -189,7 +188,7 @@ export default class SystemRole extends React.PureComponent<Props, State> {
             usersToRemove: {},
             saveKey,
         });
-    }
+    };
 
     updatePermissions = (permissions: PermissionToUpdate[]) => {
         const {role, actions: {setNavigationBlocked}} = this.props;
@@ -235,7 +234,7 @@ export default class SystemRole extends React.PureComponent<Props, State> {
             ...nextState,
             saveNeeded: this.getSaveStateNeeded(nextState),
         });
-    }
+    };
 
     render() {
         const {usersToAdd, usersToRemove, saving, saveNeeded, serverError, permissionsToUpdate, saveKey} = this.state;

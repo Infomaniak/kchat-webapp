@@ -1,23 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 
 import {getFirstAdminSetupComplete} from 'mattermost-redux/actions/general';
-import {getIsOnboardingFlowEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId, isCurrentUserSystemAdmin, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
 
-import RootRedirect from './root_redirect';
-import type {Props} from './root_redirect';
+import RootRedirect, {Props} from './root_redirect';
 
 function mapStateToProps(state: GlobalState) {
-    const onboardingFlowEnabled = getIsOnboardingFlowEnabled(state);
-    let isElegibleForFirstAdmingOnboarding = onboardingFlowEnabled;
+    const useCaseOnboarding = getUseCaseOnboarding(state);
+    let isElegibleForFirstAdmingOnboarding = useCaseOnboarding;
     if (isElegibleForFirstAdmingOnboarding) {
         isElegibleForFirstAdmingOnboarding = isCurrentUserSystemAdmin(state);
     }

@@ -1,15 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useIntl} from 'react-intl';
 import styled from 'styled-components';
+import {Constants} from 'utils/constants';
 
 import type {Channel, ChannelStats} from '@mattermost/types/channels';
-
-import LoadingSpinner from 'components/widgets/loading/loading_spinner';
-
-import {Constants} from 'utils/constants';
 
 const MenuItemContainer = styled.div`
     padding: 8px 16px;
@@ -34,9 +31,6 @@ const RightSide = styled.div`
 const Badge = styled.div`
     font-size: 12px;
     line-height: 18px;
-    width: 20px;
-    display: flex;
-    place-content: center;
 `;
 
 interface MenuItemProps {
@@ -44,7 +38,7 @@ interface MenuItemProps {
     icon: JSX.Element;
     text: string;
     opensSubpanel?: boolean;
-    badge?: string|number|JSX.Element;
+    badge?: string|number;
     onClick: () => void;
 }
 
@@ -99,26 +93,17 @@ interface MenuProps {
         showChannelFiles: (channelId: string) => void;
         showPinnedPosts: (channelId: string | undefined) => void;
         showChannelMembers: (channelId: string) => void;
-        getChannelStats: (channelId: string, includeFileCount: boolean) => Promise<{data: ChannelStats}>;
     };
 }
 
 const Menu = ({channel, channelStats, isArchived, className, actions}: MenuProps) => {
     const {formatMessage} = useIntl();
-    const [loadingStats, setLoadingStats] = useState(true);
+
+    const {member_count: memberCount, guest_count: guestCount} = channelStats;
+    const totalMemberCount = memberCount + guestCount;
 
     const showNotificationPreferences = channel.type !== Constants.DM_CHANNEL && !isArchived;
     const showMembers = channel.type !== Constants.DM_CHANNEL;
-    const fileCount = channelStats?.files_count >= 0 ? channelStats?.files_count : 0;
-
-    useEffect(() => {
-        actions.getChannelStats(channel.id, true).then(() => {
-            setLoadingStats(false);
-        });
-        return () => {
-            setLoadingStats(true);
-        };
-    }, [channel.id]);
 
     return (
         <div
@@ -137,7 +122,7 @@ const Menu = ({channel, channelStats, isArchived, className, actions}: MenuProps
                     icon={<i className='icon icon-account-outline'/>}
                     text={formatMessage({id: 'channel_info_rhs.menu.members', defaultMessage: 'Members'})}
                     opensSubpanel={true}
-                    badge={channelStats.member_count}
+                    badge={totalMemberCount}
                     onClick={() => actions.showChannelMembers(channel.id)}
                 />
             )}
@@ -152,7 +137,7 @@ const Menu = ({channel, channelStats, isArchived, className, actions}: MenuProps
                 icon={<i className='icon icon-file-text-outline'/>}
                 text={formatMessage({id: 'channel_info_rhs.menu.files', defaultMessage: 'Files'})}
                 opensSubpanel={true}
-                badge={loadingStats ? <LoadingSpinner/> : fileCount}
+                badge={channelStats?.files_count}
                 onClick={() => actions.showChannelFiles(channel.id)}
             />
         </div>

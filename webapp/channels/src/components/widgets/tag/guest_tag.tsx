@@ -4,14 +4,9 @@
 import classNames from 'classnames';
 import React from 'react';
 import {useIntl} from 'react-intl';
-import {useSelector} from 'react-redux';
 
-import type {GlobalState} from '@mattermost/types/store';
-
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
-
-import Tag from './tag';
 import type {TagSize} from './tag';
+import Tag from './tag';
 
 type Props = {
     className?: string;
@@ -20,12 +15,6 @@ type Props = {
 
 const GuestTag = ({className = '', size = 'xs'}: Props) => {
     const {formatMessage} = useIntl();
-    const shouldHideTag = useSelector((state: GlobalState) => getConfig(state).HideGuestTags === 'true');
-
-    if (shouldHideTag) {
-        return null;
-    }
-
     return (
         <Tag
             className={classNames('GuestTag', className)}

@@ -2,12 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import MainMenu from 'components/main_menu/main_menu';
-
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 describe('plugins/MainMenuActions', () => {
     const pluginAction = jest.fn();

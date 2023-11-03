@@ -160,9 +160,7 @@
         }
 
         .fullname {
-            overflow: hidden;
             opacity: 0.5;
-            text-overflow: ellipsis;
 
             &::before {
                 padding: 5px;
@@ -171,9 +169,7 @@
         }
 
         .nickname {
-            overflow: hidden;
             opacity: 0.5;
-            text-overflow: ellipsis;
 
             &::before {
                 content: "(";

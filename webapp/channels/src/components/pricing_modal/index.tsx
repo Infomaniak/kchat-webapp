@@ -4,13 +4,12 @@
 import React, {useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
+import {ModalIdentifiers} from 'utils/constants';
 
 import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 
 import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
-
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

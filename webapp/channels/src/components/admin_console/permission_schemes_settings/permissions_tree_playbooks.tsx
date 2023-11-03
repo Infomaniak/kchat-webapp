@@ -3,13 +3,12 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {isEnterpriseLicense, isNonEnterpriseLicense} from 'utils/license_utils';
 
-import {ClientLicense} from '@mattermost/types/config';
-import {Role} from '@mattermost/types/roles';
+import type {ClientLicense} from '@mattermost/types/config';
+import type {Role} from '@mattermost/types/roles';
 
 import Permissions from 'mattermost-redux/constants/permissions';
-
-import {isEnterpriseLicense, isNonEnterpriseLicense} from 'utils/license_utils';
 
 import PermissionGroup from './permission_group';
 

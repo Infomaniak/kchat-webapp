@@ -4,22 +4,21 @@
 import React from 'react';
 import {useIntl, FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-
-import {SalesInquiryIssue} from 'selectors/cloud';
-
 import {CloudProducts} from 'utils/constants';
 import {anyUsageDeltaExceededLimit} from 'utils/limits';
 
-import {getHasDismissedSystemConsoleLimitReached} from 'mattermost-redux/selectors/entities/preferences';
-import {Preferences} from 'mattermost-redux/constants';
+import type {Product} from '@mattermost/types/cloud';
 
-import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
+import {Preferences} from 'mattermost-redux/constants';
+import {getHasDismissedSystemConsoleLimitReached} from 'mattermost-redux/selectors/entities/preferences';
+
+import {SalesInquiryIssue} from 'selectors/cloud';
+
+import AlertBanner from 'components/alert_banner';
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
+import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import {useSaveBool} from 'components/common/hooks/useSavePreferences';
-import AlertBanner from 'components/alert_banner';
-
-import {Product} from '@mattermost/types/cloud';
 
 import './limit_reached_banner.scss';
 

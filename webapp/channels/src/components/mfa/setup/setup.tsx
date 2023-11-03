@@ -2,14 +2,15 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage, injectIntl, type IntlShape} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
-import * as Utils from 'utils/utils';
+import LocalizedInput from 'components/localized_input/localized_input';
 
 type MFAControllerState = {
     enforceMultifactorAuthentication: boolean;
@@ -21,7 +22,6 @@ type Props = {
      * Object containing enforceMultifactorAuthentication
      */
     state: MFAControllerState;
-    intl: IntlShape;
 
     /*
      * Function that updates parent component with state props
@@ -60,7 +60,7 @@ type State = {
     serverError?: string;
 }
 
-class Setup extends React.PureComponent<Props, State> {
+export default class Setup extends React.PureComponent<Props, State> {
     private input: React.RefObject<HTMLInputElement>;
 
     public constructor(props: Props) {
@@ -211,10 +211,10 @@ class Setup extends React.PureComponent<Props, State> {
                         />
                     </p>
                     <p>
-                        <input
+                        <LocalizedInput
                             ref={this.input}
                             className='form-control'
-                            placeholder={this.props.intl.formatMessage({id: 'mfa.setup.code', defaultMessage: 'MFA Code'})}
+                            placeholder={{id: t('mfa.setup.code'), defaultMessage: 'MFA Code'}}
                             autoFocus={true}
                         />
                     </p>
@@ -237,5 +237,3 @@ class Setup extends React.PureComponent<Props, State> {
 const style = {
     qrCode: {maxHeight: 170},
 };
-
-export default injectIntl(Setup);

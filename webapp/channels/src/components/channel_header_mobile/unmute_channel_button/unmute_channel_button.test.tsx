@@ -3,7 +3,6 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-
 import {NotificationLevels} from 'utils/constants';
 
 import UnmuteChannelButton from './unmute_channel_button';

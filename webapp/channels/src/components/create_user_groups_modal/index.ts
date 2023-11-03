@@ -2,17 +2,14 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
-import type {GroupCreateWithUserIds} from '@mattermost/types/groups';
+import {Action, ActionResult} from 'mattermost-redux/types/actions';
 
+import {GroupCreateWithUserIds} from '@mattermost/types/groups';
 import {createGroupWithUserIds} from 'mattermost-redux/actions/groups';
-import type {Action, ActionResult} from 'mattermost-redux/types/actions';
-
+import {ModalData} from 'types/actions';
 import {openModal} from 'actions/views/modals';
-
-import type {ModalData} from 'types/actions';
 
 import CreateUserGroupsModal from './create_user_groups_modal';
 

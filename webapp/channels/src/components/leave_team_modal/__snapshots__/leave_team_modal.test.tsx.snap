@@ -34,7 +34,7 @@ exports[`components/LeaveTeamModal should render the leave team model 1`] = `
 >
   <ModalHeader
     bsClass="modal-header"
-    closeButton={false}
+    closeButton={true}
     closeLabel="Close"
   >
     <ModalTitle
@@ -68,7 +68,7 @@ exports[`components/LeaveTeamModal should render the leave team model 1`] = `
     componentClass="div"
   >
     <button
-      className="btn btn-tertiary"
+      className="btn btn-link"
       id="leaveTeamNo"
       onClick={[Function]}
       type="button"

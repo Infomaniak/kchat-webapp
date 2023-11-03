@@ -2,11 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import Constants from 'utils/constants';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import Constants from 'utils/constants';
 
 export type TableItem = {
     name: string;

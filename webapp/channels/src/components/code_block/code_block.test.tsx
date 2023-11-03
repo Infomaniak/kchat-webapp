@@ -2,13 +2,10 @@
 // See LICENSE.txt for license information.
 
 import type {ReactWrapper} from 'enzyme';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 import {IntlProvider} from 'react-intl';
-import {Provider as ReduxProvider} from 'react-redux';
-
-import mockStore from 'tests/test_store';
 
 import CodeBlock from './code_block';
 
@@ -24,11 +21,6 @@ const actImmediate = (wrapper: ReactWrapper) =>
     );
 
 describe('codeBlock', () => {
-    const state = {
-        plugins: {components: {CodeBlockAction: []}},
-    };
-    const store = mockStore(state);
-
     test('should render typescript code block before syntax highlighting', async () => {
         const language = 'typescript';
         const input = `\`\`\`${language}
@@ -38,17 +30,12 @@ const myFunction = () => {
 \`\`\`
 `;
 
-        const wrapper = mount(
-            <ReduxProvider store={store}>
-                <IntlProvider locale='en'>
-                    <CodeBlock
-                        code={input}
-                        language={language}
-                    />
-                </IntlProvider>
-            </ReduxProvider>,
+        const wrapper = shallow(
+            <CodeBlock
+                code={input}
+                language={language}
+            />,
         );
-        await actImmediate(wrapper);
 
         const languageHeader = wrapper.find('span.post-code__language').text();
         const lineNumbersDiv = wrapper.find('.post-code__line-numbers').exists();
@@ -69,14 +56,12 @@ const myFunction = () => {
 `;
 
         const wrapper = mount(
-            <ReduxProvider store={store}>
-                <IntlProvider locale='en'>
-                    <CodeBlock
-                        code={input}
-                        language={language}
-                    />
-                </IntlProvider>
-            </ReduxProvider>,
+            <IntlProvider locale='en'>
+                <CodeBlock
+                    code={input}
+                    language={language}
+                />
+            </IntlProvider>,
         );
         await actImmediate(wrapper);
 
@@ -89,7 +74,7 @@ const myFunction = () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render html code block with proper indentation before syntax highlighting', async () => {
+    test('should render html code block with proper indentation before syntax highlighting', () => {
         const language = 'html';
         const input = `\`\`\`${language}
 <div className='myClass'>
@@ -98,17 +83,12 @@ const myFunction = () => {
 \`\`\`
 `;
 
-        const wrapper = mount(
-            <ReduxProvider store={store}>
-                <IntlProvider locale='en'>
-                    <CodeBlock
-                        code={input}
-                        language={language}
-                    />
-                </IntlProvider>
-            </ReduxProvider>,
+        const wrapper = shallow(
+            <CodeBlock
+                code={input}
+                language={language}
+            />,
         );
-        await actImmediate(wrapper);
 
         const languageHeader = wrapper.find('span.post-code__language').text();
         const lineNumbersDiv = wrapper.find('.post-code__line-numbers').exists();
@@ -128,14 +108,12 @@ const myFunction = () => {
 `;
 
         const wrapper = mount(
-            <ReduxProvider store={store}>
-                <IntlProvider locale='en'>
-                    <CodeBlock
-                        code={input}
-                        language={language}
-                    />
-                </IntlProvider>
-            </ReduxProvider>,
+            <IntlProvider locale='en'>
+                <CodeBlock
+                    code={input}
+                    language={language}
+                />
+            </IntlProvider>,
         );
         await actImmediate(wrapper);
 
@@ -147,7 +125,7 @@ const myFunction = () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render unknown language before syntax highlighting', async () => {
+    test('should render unknown language before syntax highlighting', () => {
         const language = 'unknownLanguage';
         const input = `\`\`\`${language}
 this is my unknown language
@@ -155,17 +133,12 @@ it shouldn't highlight, it's just garbage
 \`\`\`
 `;
 
-        const wrapper = mount(
-            <ReduxProvider store={store}>
-                <IntlProvider locale='en'>
-                    <CodeBlock
-                        code={input}
-                        language={language}
-                    />
-                </IntlProvider>
-            </ReduxProvider>,
+        const wrapper = shallow(
+            <CodeBlock
+                code={input}
+                language={language}
+            />,
         );
-        await actImmediate(wrapper);
 
         const languageHeader = wrapper.find('span.post-code__language').exists();
         const lineNumbersDiv = wrapper.find('.post-code__line-numbers').exists();
@@ -184,14 +157,12 @@ it shouldn't highlight, it's just garbage
 `;
 
         const wrapper = mount(
-            <ReduxProvider store={store}>
-                <IntlProvider locale='en'>
-                    <CodeBlock
-                        code={input}
-                        language={language}
-                    />
-                </IntlProvider>
-            </ReduxProvider>,
+            <IntlProvider locale='en'>
+                <CodeBlock
+                    code={input}
+                    language={language}
+                />
+            </IntlProvider>,
         );
         await actImmediate(wrapper);
 

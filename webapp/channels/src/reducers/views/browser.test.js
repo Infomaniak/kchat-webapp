@@ -1,9 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import browserReducer from 'reducers/views/browser';
-
 import {ActionTypes, WindowSizes} from 'utils/constants';
+
+import browserReducer from 'reducers/views/browser';
 
 describe('Reducers.Browser', () => {
     const initialState = {

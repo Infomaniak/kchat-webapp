@@ -8,15 +8,8 @@ import type {Placement} from 'tippy.js';
 import type {PunchOutCoordsHeightAndWidth} from '@mattermost/components';
 import {TourTip} from '@mattermost/components';
 
-import {t} from 'utils/i18n';
-
 import {useTourTipManager} from './tour_manager';
 import {getLastStep} from './utils';
-
-// TODO MM-51399 These strings are properly defined in @mattermost/components, but the i18n tooling currently can't
-// find them there, so we've had to redefine them here
-t('tutorial_tip.out');
-t('tutorial_tip.seen');
 
 export type ChannelsTourTipProps = {
     screen: JSX.Element;
@@ -33,7 +26,7 @@ export type ChannelsTourTipProps = {
     hideBackdrop?: boolean;
     tippyBlueStyle?: boolean;
     showOptOut?: boolean;
-    interactivePunchOut?: boolean;
+    link?: string;
 }
 
 export const ChannelsTourTip = ({
@@ -44,6 +37,7 @@ export const ChannelsTourTip = ({
     singleTip,
     pulsatingDotTranslate,
     pulsatingDotPlacement,
+    link,
     offset = [-18, 4],
     placement = 'right-start',
     width = 320,
@@ -51,7 +45,6 @@ export const ChannelsTourTip = ({
     hideBackdrop = false,
     tippyBlueStyle = false,
     showOptOut = true,
-    interactivePunchOut = false,
 }: ChannelsTourTipProps) => {
     const {
         show,
@@ -133,7 +126,7 @@ export const ChannelsTourTip = ({
             hideBackdrop={hideBackdrop}
             tippyBlueStyle={tippyBlueStyle}
             showOptOut={showOptOut}
-            interactivePunchOut={interactivePunchOut}
+            link={link}
         />
     );
 };

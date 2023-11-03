@@ -4,52 +4,50 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import ReactDOM from 'react-dom';
+import type {
+    IntlShape} from 'react-intl';
 import {
     defineMessages,
     injectIntl,
 } from 'react-intl';
-import type {
-    IntlShape} from 'react-intl';
 import {Provider} from 'react-redux';
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import type {StatusOK} from '@mattermost/types/client4';
 import type {UserProfile} from '@mattermost/types/users';
 
-import store from 'stores/redux_store';
+import store from 'stores/redux_store.jsx';
 
 import ConfirmModal from 'components/confirm_modal';
-
-import Constants from 'utils/constants';
-import * as Keyboard from 'utils/keyboard';
-import * as NotificationSounds from 'utils/notification_sounds';
-import * as Utils from 'utils/utils';
 
 const UserSettings = React.lazy(() => import(/* webpackPrefetch: true */ 'components/user_settings'));
 const SettingsSidebar = React.lazy(() => import(/* webpackPrefetch: true */ '../../settings_sidebar'));
 
 const holders = defineMessages({
     profile: {
-        id: 'user.settings.modal.profile',
+        id: t('user.settings.modal.profile'),
         defaultMessage: 'Profile',
     },
     security: {
-        id: 'user.settings.modal.security',
+        id: t('user.settings.modal.security'),
         defaultMessage: 'Security',
     },
     notifications: {
-        id: 'user.settings.modal.notifications',
+        id: t('user.settings.modal.notifications'),
         defaultMessage: 'Notifications',
     },
     display: {
-        id: 'user.settings.modal.display',
+        id: t('user.settings.modal.display'),
         defaultMessage: 'Display',
     },
     sidebar: {
-        id: 'user.settings.modal.sidebar',
+        id: t('user.settings.modal.sidebar'),
         defaultMessage: 'Sidebar',
     },
     advanced: {
-        id: 'user.settings.modal.advanced',
+        id: t('user.settings.modal.advanced'),
         defaultMessage: 'Advanced',
     },
     checkEmail: {
@@ -57,15 +55,15 @@ const holders = defineMessages({
         defaultMessage: 'Check your email at {email} to verify the address. Cannot find the email?',
     },
     confirmTitle: {
-        id: 'user.settings.modal.confirmTitle',
+        id: t('user.settings.modal.confirmTitle'),
         defaultMessage: 'Discard Changes?',
     },
     confirmMsg: {
-        id: 'user.settings.modal.confirmMsg',
+        id: t('user.settings.modal.confirmMsg'),
         defaultMessage: 'You have unsaved changes, are you sure you want to discard them?',
     },
     confirmBtns: {
-        id: 'user.settings.modal.confirmBtns',
+        id: t('user.settings.modal.confirmBtns'),
         defaultMessage: 'Yes, Discard',
     },
 });
@@ -151,7 +149,7 @@ class UserSettingsModal extends React.PureComponent<Props, State> {
     }
 
     handleKeyDown = (e: KeyboardEvent) => {
-        if (Keyboard.cmdOrCtrlPressed(e) && e.shiftKey && Keyboard.isKeyPressed(e, Constants.KeyCodes.A)) {
+        if (Utils.cmdOrCtrlPressed(e) && e.shiftKey && Utils.isKeyPressed(e, Constants.KeyCodes.A)) {
             e.preventDefault();
             this.handleHide();
         }
@@ -163,9 +161,6 @@ class UserSettingsModal extends React.PureComponent<Props, State> {
             this.showConfirmModal(() => this.handleHide());
             return;
         }
-
-        // Cancel any ongoing notification sound, if any (from DesktopNotificationSettings)
-        NotificationSounds.stopTryNotificationRing();
 
         this.setState({
             show: false,
@@ -278,13 +273,13 @@ class UserSettingsModal extends React.PureComponent<Props, State> {
         }
         const tabs = [];
         if (this.props.isContentProductSettings) {
-            tabs.push({name: 'notifications', uiName: formatMessage(holders.notifications), icon: 'icon icon-bell-outline', iconTitle: Utils.localizeMessage('user.settings.notifications.icon', 'Notification Settings Icon')});
-            tabs.push({name: 'display', uiName: formatMessage(holders.display), icon: 'icon icon-eye-outline', iconTitle: Utils.localizeMessage('user.settings.display.icon', 'Display Settings Icon')});
-            tabs.push({name: 'sidebar', uiName: formatMessage(holders.sidebar), icon: 'icon icon-dock-left', iconTitle: Utils.localizeMessage('user.settings.sidebar.icon', 'Sidebar Settings Icon')});
-            tabs.push({name: 'advanced', uiName: formatMessage(holders.advanced), icon: 'icon icon-tune', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Advanced Settings Icon')});
+            tabs.push({name: 'notifications', uiName: formatMessage(holders.notifications), icon: 'icon fa fa-exclamation-circle', iconTitle: Utils.localizeMessage('user.settings.notifications.icon', 'Notification Settings Icon')});
+            tabs.push({name: 'display', uiName: formatMessage(holders.display), icon: 'icon fa fa-eye', iconTitle: Utils.localizeMessage('user.settings.display.icon', 'Display Settings Icon')});
+            tabs.push({name: 'sidebar', uiName: formatMessage(holders.sidebar), icon: 'icon fa fa-columns', iconTitle: Utils.localizeMessage('user.settings.sidebar.icon', 'Sidebar Settings Icon')});
+            tabs.push({name: 'advanced', uiName: formatMessage(holders.advanced), icon: 'icon fa fa-list-alt', iconTitle: Utils.localizeMessage('user.settings.advance.icon', 'Advanced Settings Icon')});
         } else {
-            tabs.push({name: 'profile', uiName: formatMessage(holders.profile), icon: 'icon icon-settings-outline', iconTitle: Utils.localizeMessage('user.settings.profile.icon', 'Profile Settings Icon')});
-            tabs.push({name: 'security', uiName: formatMessage(holders.security), icon: 'icon icon-lock-outline', iconTitle: Utils.localizeMessage('user.settings.security.icon', 'Security Settings Icon')});
+            tabs.push({name: 'profile', uiName: formatMessage(holders.profile), icon: 'icon fa fa-gear', iconTitle: Utils.localizeMessage('user.settings.profile.icon', 'Profile Settings Icon')});
+            tabs.push({name: 'security', uiName: formatMessage(holders.security), icon: 'icon fa fa-lock', iconTitle: Utils.localizeMessage('user.settings.security.icon', 'Security Settings Icon')});
         }
 
         const title = this.props.isContentProductSettings ? formatMessage({

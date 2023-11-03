@@ -2,23 +2,20 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 import {Provider} from 'react-redux';
+import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';
+import mockStore from 'tests/test_store';
+import {generateId} from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import store from 'stores/redux_store';
-
-import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';
-import {SelfHostedProducts} from 'utils/constants';
-import {TestHelper as TH} from 'utils/test_helper';
-import {generateId} from 'utils/utils';
+import store from 'stores/redux_store.jsx';
 
 import InviteAs, {InviteType} from './invite_as';
-import InviteView from './invite_view';
 import type {Props} from './invite_view';
+import InviteView from './invite_view';
 
 const defaultProps: Props = deepFreeze({
     setInviteAs: jest.fn(),
@@ -60,6 +57,7 @@ const defaultProps: Props = deepFreeze({
     usersEmails: [],
     usersEmailsSearch: '',
     townSquareDisplayName: '',
+    shouldOpenMenu: true,
 });
 
 let props = defaultProps;
@@ -104,19 +102,6 @@ describe('InviteView', () => {
             preferences: {
                 myPreferences: {},
             },
-            hostedCustomer: {
-                products: {
-                    productsLoaded: true,
-                    products: {
-                        prod_professional: TH.getProductMock({
-                            id: 'prod_professional',
-                            name: 'Professional',
-                            sku: SelfHostedProducts.PROFESSIONAL,
-                            price_per_seat: 7.5,
-                        }),
-                    },
-                },
-            },
         },
     };
 
@@ -126,46 +111,40 @@ describe('InviteView', () => {
         props = defaultProps;
     });
 
-    it('shows InviteAs component when user can choose to invite guests or users', async () => {
-        await act(async () => {
-            const wrapper = mountWithThemedIntl(
-                <Provider store={store}>
-                    <InviteView {...props}/>
-                </Provider>,
-            );
-            expect(wrapper.find(InviteAs).length).toBe(1);
-        });
+    it('shows InviteAs component when user can choose to invite guests or users', () => {
+        const wrapper = mountWithThemedIntl(
+            <Provider store={store}>
+                <InviteView {...props}/>
+            </Provider>,
+        );
+        expect(wrapper.find(InviteAs).length).toBe(1);
     });
 
-    it('hides InviteAs component when user can not choose members option', async () => {
+    it('hides InviteAs component when user can not choose members option', () => {
         props = {
             ...defaultProps,
             canAddUsers: false,
         };
 
-        await act(async () => {
-            const wrapper = mountWithThemedIntl(
-                <Provider store={store}>
-                    <InviteView {...props}/>
-                </Provider>,
-            );
-            expect(wrapper.find(InviteAs).length).toBe(0);
-        });
+        const wrapper = mountWithThemedIntl(
+            <Provider store={store}>
+                <InviteView {...props}/>
+            </Provider>,
+        );
+        expect(wrapper.find(InviteAs).length).toBe(0);
     });
 
-    it('hides InviteAs component when user can not choose guests option', async () => {
+    it('hides InviteAs component when user can not choose guests option', () => {
         props = {
             ...defaultProps,
             canInviteGuests: false,
         };
 
-        await act(async () => {
-            const wrapper = mountWithThemedIntl(
-                <Provider store={store}>
-                    <InviteView {...props}/>
-                </Provider>,
-            );
-            expect(wrapper.find(InviteAs).length).toBe(0);
-        });
+        const wrapper = mountWithThemedIntl(
+            <Provider store={store}>
+                <InviteView {...props}/>
+            </Provider>,
+        );
+        expect(wrapper.find(InviteAs).length).toBe(0);
     });
 });

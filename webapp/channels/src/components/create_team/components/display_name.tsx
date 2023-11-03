@@ -1,16 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import logoImage from 'images/logo.png';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
+import {cleanUpUrlable} from 'utils/url';
 
 import type {Team} from '@mattermost/types/teams';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
-
-import logoImage from 'images/logo.png';
-import Constants from 'utils/constants';
-import {cleanUpUrlable} from 'utils/url';
 
 type CreateTeamState = {
     team?: Partial<Team>;

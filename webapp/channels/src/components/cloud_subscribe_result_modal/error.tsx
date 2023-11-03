@@ -4,18 +4,18 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
+import {ModalIdentifiers} from 'utils/constants';
 
 import {getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
 
 import {closeModal} from 'actions/views/modals';
+import {InquiryType} from 'selectors/cloud';
 import {isModalOpen} from 'selectors/views/modals';
 
-import {useOpenCloudZendeskSupportForm} from 'components/common/hooks/useOpenZendeskForm';
+import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import PaymentFailedSvg from 'components/common/svg_images_components/payment_failed_svg';
 import IconMessage from 'components/purchase_modal/icon_message';
 import FullScreenModal from 'components/widgets/modals/full_screen_modal';
-
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -29,8 +29,7 @@ type Props = {
 function ErrorModal(props: Props) {
     const dispatch = useDispatch();
     const subscriptionProduct = useSelector(getSubscriptionProduct);
-
-    const [openContactSupport] = useOpenCloudZendeskSupportForm('Cloud Subscription', '');
+    const openContactUs = useOpenSalesLink(undefined, InquiryType.Technical);
 
     const isSuccessModalOpen = useSelector((state: GlobalState) =>
         isModalOpen(state, ModalIdentifiers.ERROR_MODAL),
@@ -96,7 +95,7 @@ function ErrorModal(props: Props) {
                             }
                         />
                     }
-                    tertiaryButtonHandler={openContactSupport}
+                    tertiaryButtonHandler={openContactUs}
                     buttonHandler={onBackButtonPress}
                     className={'success'}
                 />

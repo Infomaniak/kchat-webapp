@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {shallow} from 'enzyme';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {shallow} from 'enzyme';
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import RequestButton from 'components/admin_console/request_button/request_button';
-
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 describe('components/admin_console/request_button/request_button.jsx', () => {
     test('should match snapshot', () => {

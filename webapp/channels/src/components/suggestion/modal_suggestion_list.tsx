@@ -2,14 +2,15 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {getClosestParent} from 'utils/utils';
 
-import SuggestionList from 'components/suggestion/suggestion_list';
+import SuggestionList from 'components/suggestion/suggestion_list.jsx';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface SuggestionItem {}
 
 type SuggestionListProps = {
-    ariaLiveRef?: React.RefObject<HTMLDivElement>;
+    ariaLiveRef?: React.Ref<HTMLDivElement>;
     renderDividers?: string[];
     renderNoResults?: boolean;
     preventClose?: () => void;
@@ -87,7 +88,7 @@ export default class ModalSuggestionList extends React.PureComponent<Props, Stat
 
     componentDidMount() {
         if (this.container.current) {
-            const modalBodyContainer = this.container.current.closest('.modal-body');
+            const modalBodyContainer = getClosestParent(this.container.current, '.modal-body');
             modalBodyContainer?.addEventListener('scroll', this.onModalScroll);
         }
         window.addEventListener('resize', this.updateModalBounds);
@@ -95,7 +96,7 @@ export default class ModalSuggestionList extends React.PureComponent<Props, Stat
 
     componentWillUnmount() {
         if (this.container.current) {
-            const modalBodyContainer = this.container.current.closest('.modal-body');
+            const modalBodyContainer = getClosestParent(this.container.current, '.modal-body');
             modalBodyContainer?.removeEventListener('scroll', this.onModalScroll);
         }
         window.removeEventListener('resize', this.updateModalBounds);
@@ -115,8 +116,7 @@ export default class ModalSuggestionList extends React.PureComponent<Props, Stat
             this.updatePosition(newInputBounds);
 
             if (this.container.current) {
-                const modalBodyContainer = this.container.current.closest('.modal-body');
-                const modalBodyRect = modalBodyContainer?.getBoundingClientRect();
+                const modalBodyRect = getClosestParent(this.container.current, '.modal-body')?.getBoundingClientRect();
                 if (modalBodyRect && ((newInputBounds.bottom < modalBodyRect.top) || (newInputBounds.top > modalBodyRect.bottom))) {
                     this.props.onLoseVisibility();
                     return;
@@ -180,8 +180,8 @@ export default class ModalSuggestionList extends React.PureComponent<Props, Stat
             return;
         }
 
-        const modalBodyContainer = this.container.current.closest('.modal-body');
-        const modalBounds = modalBodyContainer?.getBoundingClientRect();
+        const modalContainer = getClosestParent(this.container.current, '.modal-content');
+        const modalBounds = modalContainer?.getBoundingClientRect();
 
         if (modalBounds) {
             if (this.state.modalBounds.top !== modalBounds.top || this.state.modalBounds.bottom !== modalBounds.bottom) {

@@ -4,19 +4,21 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import {ActionResult} from 'mattermost-redux/types/actions';
-import {UserProfile} from '@mattermost/types/users';
-import {TeamMembership} from '@mattermost/types/teams';
-import {ChannelMembership} from '@mattermost/types/channels';
-import {RelationOneToOne} from '@mattermost/types/utilities';
+import type {ChannelMembership} from '@mattermost/types/channels';
+import type {TeamMembership} from '@mattermost/types/teams';
+import type {UserProfile} from '@mattermost/types/users';
+import type {RelationOneToOne} from '@mattermost/types/utilities';
+
 import GeneralConstants from 'mattermost-redux/constants/general';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
+import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import DataGrid from 'components/admin_console/data_grid/data_grid';
+import type {FilterOptions} from 'components/admin_console/filter/filter';
 import UserGridName from 'components/admin_console/user_grid/user_grid_name';
-import DataGrid, {Row, Column} from 'components/admin_console/data_grid/data_grid';
-import {FilterOptions} from 'components/admin_console/filter/filter';
 
-import GroupUsersRole from './users_to_remove_role';
 import UsersToRemoveGroups from './users_to_remove_groups';
+import GroupUsersRole from './users_to_remove_role';
 
 import './users_to_remove.scss';
 
@@ -83,7 +85,7 @@ export default class UsersToRemove extends React.PureComponent<Props, State> {
 
     setStateLoading = (loading: boolean) => {
         this.setState({loading});
-    }
+    };
 
     componentWillUnmount() {
         this.props.actions.setModalSearchTerm('');
@@ -98,23 +100,23 @@ export default class UsersToRemove extends React.PureComponent<Props, State> {
         } else if (scope === 'team') {
             await loadTeamMembersForProfilesList(profiles, scopeId);
         }
-    }
+    };
 
     previousPage = async () => {
         const page = this.state.page < 1 ? 0 : this.state.page - 1;
         this.setState({page});
-    }
+    };
 
     nextPage = async () => {
         const {total} = this.props;
         const page = (this.state.page + 1) * GROUP_MEMBERS_PAGE_SIZE >= total ? this.state.page : this.state.page + 1;
         this.setState({page});
-    }
+    };
 
     onSearch = (term: string) => {
         this.props.actions.setModalSearchTerm(term);
         this.setState({page: 0});
-    }
+    };
 
     private onFilter = async (filterOptions: FilterOptions) => {
         const roles = filterOptions.role.values;
@@ -147,7 +149,7 @@ export default class UsersToRemove extends React.PureComponent<Props, State> {
         }
         this.props.actions.setModalFilters(filters);
         this.setState({page: 0});
-    }
+    };
 
     private getPaginationProps = () => {
         const {page} = this.state;
@@ -161,7 +163,7 @@ export default class UsersToRemove extends React.PureComponent<Props, State> {
         const firstPage = page === 0;
 
         return {startCount, endCount, page, lastPage, firstPage, total};
-    }
+    };
 
     private getRows = (): Row[] => {
         const {members, memberships, scope} = this.props;
@@ -201,7 +203,7 @@ export default class UsersToRemove extends React.PureComponent<Props, State> {
                 },
             };
         });
-    }
+    };
 
     private getColumns = (): Column[] => {
         return [
@@ -236,7 +238,7 @@ export default class UsersToRemove extends React.PureComponent<Props, State> {
                 width: 3,
             },
         ];
-    }
+    };
 
     private getFilterOptions = (): FilterOptions => {
         const filterOptions: FilterOptions = {
@@ -325,7 +327,7 @@ export default class UsersToRemove extends React.PureComponent<Props, State> {
         }
 
         return filterOptions;
-    }
+    };
 
     public render = (): JSX.Element => {
         const rows: Row[] = this.getRows();
@@ -360,5 +362,5 @@ export default class UsersToRemove extends React.PureComponent<Props, State> {
                 />
             </div>
         );
-    }
+    };
 }

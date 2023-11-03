@@ -1,9 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {ChangeEvent, ChangeEventHandler} from 'react';
-import {FormattedMessage, injectIntl, type IntlShape} from 'react-intl';
+import React from 'react';
+import {FormattedMessage} from 'react-intl';
+import {t} from 'utils/i18n';
 
 import type {CustomEmoji} from '@mattermost/types/emojis';
 import type {ServerError} from '@mattermost/types/errors';
@@ -13,6 +14,7 @@ import {Emoji} from 'mattermost-redux/constants';
 
 import EmojiListItem from 'components/emoji/emoji_list_item';
 import LoadingScreen from 'components/loading_screen';
+import LocalizedInput from 'components/localized_input/localized_input';
 import SaveButton from 'components/save_button';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
@@ -32,7 +34,6 @@ interface Props {
      * Function to scroll list to top.
      */
     scrollToTop: () => void;
-    intl: IntlShape;
     actions: {
 
         /**
@@ -56,7 +57,7 @@ interface State {
     missingPages: boolean;
 }
 
-class EmojiList extends React.PureComponent<Props, State> {
+export default class EmojiList extends React.PureComponent<Props, State> {
     private searchTimeout: NodeJS.Timeout | null;
 
     constructor(props: Props) {
@@ -235,7 +236,7 @@ class EmojiList extends React.PureComponent<Props, State> {
 
                 nextButton = (
                     <SaveButton
-                        btnClass='btn-tertiary'
+                        btnClass='btn-link'
                         extraClasses='pull-right'
                         onClick={this.nextPage}
                         saving={this.state.nextLoading}
@@ -249,7 +250,7 @@ class EmojiList extends React.PureComponent<Props, State> {
             if (this.state.page > 0) {
                 previousButton = (
                     <button
-                        className='btn btn-tertiary'
+                        className='btn btn-link'
                         onClick={this.previousPage}
                     >
                         <PreviousIcon additionalClassName='mr-2'/>
@@ -267,10 +268,13 @@ class EmojiList extends React.PureComponent<Props, State> {
                 <div className='backstage-filters'>
                     <div className='backstage-filter__search'>
                         <SearchIcon/>
-                        <input
+                        <LocalizedInput
                             type='search'
                             className='form-control'
-                            placeholder={this.props.intl.formatMessage({id: 'emoji_list.search', defaultMessage: 'Search Custom Emoji'})}
+                            placeholder={{
+                                id: t('emoji_list.search'),
+                                defaultMessage: 'Search Custom Emoji',
+                            }}
                             onChange={this.onSearchChange}
                             style={style.search}
                         />
@@ -335,5 +339,3 @@ class EmojiList extends React.PureComponent<Props, State> {
 const style = {
     search: {flexGrow: 0, flexShrink: 0},
 };
-
-export default injectIntl(EmojiList);

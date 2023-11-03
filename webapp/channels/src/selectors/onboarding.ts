@@ -1,17 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
-import {makeGetCategory, getBool} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentUser, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {isMobile} from 'utils/utils';
 
-import {getIsMobileView} from 'selectors/views/browser';
+import {createSelector} from 'reselect';
 
-import {OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
+import {makeGetCategory, getBool, getInt} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentUser, getCurrentUserId, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
+
+import {GenericTaskSteps, OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
+import {FINISHED} from 'components/tours';
+
+import {GlobalState} from 'types/store';
+import {ClientConfig} from '@mattermost/types/config';
 
 import {RecommendedNextStepsLegacy, Preferences} from 'utils/constants';
-
-import type {GlobalState} from 'types/store';
 
 const getCategory = makeGetCategory();
 export const getABTestPreferences = (() => {
@@ -125,8 +129,9 @@ export const getShowTaskListBool = createSelector(
     (state: GlobalState) => state,
     (state: GlobalState) => getCategory(state, OnboardingTaskCategory),
     (state: GlobalState) => getCategory(state, Preferences.RECOMMENDED_NEXT_STEPS),
-    getIsMobileView,
-    (state, onboardingPreferences, legacyStepsPreferences, isMobileView) => {
+    (state, onboardingPreferences, legacyStepsPreferences) => {
+        const isMobileView = isMobile();
+
         // conditions to validate scenario where users (initially first_admins) had already set any of the onboarding task list preferences values.
         // We check wether the preference value exists meaning the onboarding tasks list already started no matter what the state of the process is
         const hasUserStartedOnboardingTaskListProcess = onboardingPreferences?.some((pref) =>
@@ -168,5 +173,19 @@ export const getShowTaskListBool = createSelector(
         const firstTimeOnboarding = existingUserHasntFinishedNorSkippedLegacyNextSteps;
 
         return [showTaskList, firstTimeOnboarding];
+    },
+);
+
+export const getShowTutorialStep = createSelector(
+    'getShowTutorialStep',
+    getConfig,
+    (state: GlobalState, {tourName}: {tourName: string; taskName: string; tourStep: number}) => getInt(state, tourName, getCurrentUserId(state), 0),
+    (state: GlobalState, {taskName}: {tourName: string; taskName: string; tourStep: number}) => getInt(state, OnboardingTaskCategory, taskName, FINISHED),
+    (state: GlobalState, {tourStep}: {tourName: string; taskName: string; tourStep: number}) => tourStep,
+    (config: Partial<ClientConfig>, tutorialStep: number, triggerStep: number, tourStep: number) => {
+        const channelTourTriggered = triggerStep === GenericTaskSteps.STARTED;
+        const isOnboardingEnabled = config.EnableOnboardingFlow === 'true' && config.EnableTutorial === 'true';
+        const showTutorialStep = tutorialStep === tourStep;
+        return isOnboardingEnabled && channelTourTriggered && showTutorialStep;
     },
 );

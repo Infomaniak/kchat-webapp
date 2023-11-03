@@ -1,23 +1,24 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useState, useMemo, useEffect, useCallback, ComponentProps} from 'react';
-import {useSelector} from 'react-redux';
+import classNames from 'classnames';
+import type {ComponentProps} from 'react';
+import React, {memo, useState, useMemo, useEffect, useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
-import classNames from 'classnames';
-
-import {trackEvent} from 'actions/telemetry_actions';
-
-import {GlobalState} from 'types/store';
-
-import {TimeFrame, TopPlaybook} from '@mattermost/types/insights';
+import type {TimeFrame, TopPlaybook} from '@mattermost/types/insights';
 
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
-import DataGrid, {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import {trackEvent} from 'actions/telemetry_actions';
+
+import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import DataGrid from 'components/admin_console/data_grid/data_grid';
 import Timestamp from 'components/timestamp';
+
+import type {GlobalState} from 'types/store';
 
 import './../../../activity_and_insights.scss';
 

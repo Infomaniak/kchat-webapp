@@ -1,15 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {AlertOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {AlertOutlineIcon} from '@mattermost/compass-icons/components';
+import {calculateOverageUserActivated} from 'utils/overage_team';
 
 import StatisticCount from 'components/analytics/statistic_count';
-
-import {calculateOverageUserActivated} from 'utils/overage_team';
 
 type ActivatedUserCardProps = {
     seatsPurchased: number;
@@ -56,7 +54,7 @@ export const ActivatedUserCard = ({activatedUsers, seatsPurchased, isCloud}: Act
                 />
                 <FormattedMessage
                     id='analytics.team.overageUsersSeats'
-                    defaultMessage='This exceeds total paid seats'
+                    defaultMessage='This exceeds total paid users'
                 >
                     {(text) => <span>{text}</span>}
                 </FormattedMessage>

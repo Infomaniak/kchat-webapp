@@ -2,13 +2,12 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import UserGuideDropdown from './user_guide_dropdown';
 
@@ -26,7 +25,6 @@ describe('components/channel_header/components/UserGuideDropdown', () => {
         helpLink: 'helpLink',
         isMobileView: false,
         reportAProblemLink: 'reportAProblemLink',
-        enableAskCommunityLink: 'true',
         location: {
             pathname: '/team/channel/channelId',
         },
@@ -36,25 +34,12 @@ describe('components/channel_header/components/UserGuideDropdown', () => {
         },
         pluginMenuItems: [],
         isFirstAdmin: false,
-        onboardingFlowEnabled: false,
+        useCaseOnboarding: false,
     };
 
     test('should match snapshot', () => {
         const wrapper = shallowWithIntl(
             <UserGuideDropdown {...baseProps}/>,
-        );
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should match snapshot for false of enableAskCommunityLink', () => {
-        const props = {
-            ...baseProps,
-            enableAskCommunityLink: 'false',
-        };
-
-        const wrapper = shallowWithIntl(
-            <UserGuideDropdown {...props}/>,
         );
 
         expect(wrapper).toMatchSnapshot();
@@ -93,15 +78,6 @@ describe('components/channel_header/components/UserGuideDropdown', () => {
         expect(baseProps.actions.openModal).toHaveBeenCalled();
     });
 
-    test('Should call for track event on click of askTheCommunityLink', () => {
-        const wrapper = shallowWithIntl(
-            <UserGuideDropdown {...baseProps}/>,
-        );
-
-        wrapper.find(Menu.ItemExternalLink).find('#askTheCommunityLink').prop('onClick')!({} as unknown as React.MouseEvent);
-        expect(trackEvent).toBeCalledWith('ui', 'help_ask_the_community');
-    });
-
     test('should have plugin menu items appended to the menu', () => {
         const props = {
             ...baseProps,
@@ -118,17 +94,18 @@ describe('components/channel_header/components/UserGuideDropdown', () => {
         expect(pluginMenuItem.prop('text')).toEqual('Test Plugin Item');
     });
 
-    test('should only render Report a Problem link when its value is non-empty', () => {
-        const wrapper = shallowWithIntl(
-            <UserGuideDropdown {...baseProps}/>,
-        );
-
-        expect(wrapper.find('#reportAProblemLink').exists()).toBe(true);
-
-        wrapper.setProps({
-            reportAProblemLink: '',
-        });
-
-        expect(wrapper.find('#reportAProblemLink').exists()).toBe(false);
-    });
+    // btn removed temporary
+    // test('should only render Report a Problem link when its value is non-empty', () => {
+    //     const wrapper = shallowWithIntl(
+    //         <UserGuideDropdown {...baseProps}/>,
+    //     );
+    //
+    //     expect(wrapper.find('#reportAProblemLink').exists()).toBe(true);
+    //
+    //     wrapper.setProps({
+    //         reportAProblemLink: '',
+    //     });
+    //
+    //     expect(wrapper.find('#reportAProblemLink').exists()).toBe(false);
+    // });
 });

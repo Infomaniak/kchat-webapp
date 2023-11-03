@@ -1,12 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import FailedPostOptions from 'components/post_view/failed_post_options/failed_post_options';
-
-import {renderWithIntl, screen, userEvent} from 'tests/react_testing_utils';
-import {TestHelper} from 'utils/test_helper';
 
 describe('components/post_view/FailedPostOptions', () => {
     const baseProps = {
@@ -17,21 +16,9 @@ describe('components/post_view/FailedPostOptions', () => {
         },
     };
 
-    test('should match default component state', () => {
-        renderWithIntl(<FailedPostOptions {...baseProps}/>);
-
-        const retryLink = screen.getByText('Retry');
-        const cancelLink = screen.getByText('Cancel');
-
-        expect(retryLink).toBeInTheDocument();
-        expect(retryLink).toHaveClass('post-retry');
-        expect(retryLink).toHaveAttribute('href', '#');
-
-        expect(cancelLink).toBeInTheDocument();
-        expect(cancelLink).toHaveClass('post-cancel');
-        expect(cancelLink).toHaveAttribute('href', '#');
-
-        expect(screen.getAllByRole('link')).toHaveLength(2);
+    test('should match snapshot', () => {
+        const wrapper = shallow(<FailedPostOptions {...baseProps}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should create post on retry', () => {
@@ -43,16 +30,13 @@ describe('components/post_view/FailedPostOptions', () => {
             },
         };
 
-        renderWithIntl(<FailedPostOptions {...props}/>);
+        const wrapper = shallow(<FailedPostOptions {...props}/>);
+        const e = {preventDefault: jest.fn()};
 
-        const retryLink = screen.getByText('Retry');
-
-        userEvent.click(retryLink);
-
+        wrapper.find('.post-retry').simulate('click', e);
         expect(props.actions.createPost.mock.calls.length).toBe(1);
 
-        userEvent.click(retryLink);
-
+        wrapper.find('.post-retry').simulate('click', e);
         expect(props.actions.createPost.mock.calls.length).toBe(2);
     });
 
@@ -65,12 +49,10 @@ describe('components/post_view/FailedPostOptions', () => {
             },
         };
 
-        renderWithIntl(<FailedPostOptions {...props}/>);
+        const wrapper = shallow(<FailedPostOptions {...props}/>);
+        const e = {preventDefault: jest.fn()};
 
-        const cancelLink = screen.getByText('Cancel');
-
-        userEvent.click(cancelLink);
-
+        wrapper.find('.post-cancel').simulate('click', e);
         expect(props.actions.removePost.mock.calls.length).toBe(1);
     });
 });

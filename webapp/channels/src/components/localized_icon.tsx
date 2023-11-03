@@ -2,10 +2,10 @@
 // See LICENSE.txt for license information.
 
 import type {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
-import React from 'react';
 import type {HTMLAttributes} from 'react';
-import {useIntl} from 'react-intl';
+import React from 'react';
 import type {MessageDescriptor} from 'react-intl';
+import {useIntl} from 'react-intl';
 
 type Props = Omit<HTMLAttributes<HTMLSpanElement | HTMLElement>, 'title' | 'component'> & {
     component?: 'i' | 'span';
@@ -17,9 +17,6 @@ type Props = Omit<HTMLAttributes<HTMLSpanElement | HTMLElement>, 'title' | 'comp
     };
 }
 
-/**
- * @deprecated Use react-intl for title and aria-label instead and make revelant i or span tags for the icon
- */
 const LocalizedIcon = React.forwardRef((props: Props, ref?: React.Ref<HTMLSpanElement | HTMLElement>) => {
     const {
         component = 'i',

@@ -4,8 +4,8 @@
 import throttle from 'lodash/throttle';
 import React, {forwardRef, memo, useCallback} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import {FixedSizeList} from 'react-window';
 import type {ListItemKeySelector, ListOnScrollProps} from 'react-window';
+import {FixedSizeList} from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 
 import type {Emoji, EmojiCategory, CustomEmoji, SystemEmoji} from '@mattermost/types/emojis';

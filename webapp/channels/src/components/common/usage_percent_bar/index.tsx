@@ -3,7 +3,6 @@
 
 import React from 'react';
 import styled from 'styled-components';
-
 import {limitThresholds} from 'utils/limits';
 
 type Thresholds = {

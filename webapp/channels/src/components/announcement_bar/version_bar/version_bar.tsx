@@ -3,13 +3,13 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
 import {AnnouncementBarTypes} from 'utils/constants';
 
 import AnnouncementBar from '../default_announcement_bar';
 
 interface Props {
     buildHash?: string;
+    isNewVersionCanaryOnly?: boolean;
 }
 
 interface State {
@@ -41,13 +41,14 @@ export default class VersionBar extends React.PureComponent <Props, State> {
 
     render() {
         const {buildHashOnAppLoad} = this.state;
-        const {buildHash} = this.props;
+        const {buildHash, isNewVersionCanaryOnly} = this.props;
+        const isCanary = document.cookie.indexOf('KCHAT_NEXT=always') !== -1;
 
         if (!buildHashOnAppLoad) {
             return null;
         }
 
-        if (buildHashOnAppLoad !== buildHash) {
+        if (buildHashOnAppLoad !== buildHash && (!isNewVersionCanaryOnly || isCanary)) {
             return (
                 <AnnouncementBar
                     type={AnnouncementBarTypes.ANNOUNCEMENT}
@@ -55,7 +56,7 @@ export default class VersionBar extends React.PureComponent <Props, State> {
                         <React.Fragment>
                             <FormattedMessage
                                 id='version_bar.new'
-                                defaultMessage='A new version of Mattermost is available.'
+                                defaultMessage='A new version of kChat is available.'
                             />
                             <a
                                 onClick={this.reloadPage}

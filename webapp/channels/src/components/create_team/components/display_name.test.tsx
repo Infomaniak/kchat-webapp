@@ -5,12 +5,11 @@ import {shallow} from 'enzyme';
 import type {ReactWrapper} from 'enzyme';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import DisplayName from 'components/create_team/components/display_name';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import Constants from 'utils/constants';
 import {cleanUpUrlable} from 'utils/url';
+
+import DisplayName from 'components/create_team/components/display_name';
 
 jest.mock('images/logo.png', () => 'logo.png');
 

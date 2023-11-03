@@ -1,20 +1,18 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-import {connect} from 'react-redux';
-
-import {getTeam} from 'mattermost-redux/selectors/entities/teams';
-
-import {getTeam as fetchTeam, membersMinusGroupMembers, patchTeam, removeUserFromTeam, updateTeamMemberSchemeRoles, addUserToTeam, deleteTeam, unarchiveTeam} from 'mattermost-redux/actions/teams';
-import {getAllGroups, getGroupsAssociatedToTeam} from 'mattermost-redux/selectors/entities/groups';
 import {
     getGroupsAssociatedToTeam as fetchAssociatedGroups,
     linkGroupSyncable,
     unlinkGroupSyncable,
     patchGroupSyncable,
 } from 'mattermost-redux/actions/groups';
+import {getTeam as fetchTeam, membersMinusGroupMembers, patchTeam, removeUserFromTeam, updateTeamMemberSchemeRoles, addUserToTeam, deleteTeam, unarchiveTeam} from 'mattermost-redux/actions/teams';
+import {getAllGroups, getGroupsAssociatedToTeam} from 'mattermost-redux/selectors/entities/groups';
+import {getTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import {setNavigationBlocked} from 'actions/admin_actions';
 

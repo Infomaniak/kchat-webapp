@@ -4,7 +4,7 @@
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import {GenericModal} from '@mattermost/components';
+import GenericModal from 'components/generic_modal';
 
 type Props = {
     displayName: string;

@@ -2,18 +2,19 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
-
-import type {GlobalState} from '@mattermost/types/store';
+import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
 
 import {regenOAuthAppSecret, deleteOAuthApp} from 'mattermost-redux/actions/integrations';
-import {Permissions} from 'mattermost-redux/constants';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getAppsOAuthAppIDs, getOAuthApps} from 'mattermost-redux/selectors/entities/integrations';
 import {haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
+import {Permissions} from 'mattermost-redux/constants';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
+
+import {GlobalState} from '@mattermost/types/store';
+
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {loadOAuthAppsAndProfiles} from 'actions/integration_actions';
 

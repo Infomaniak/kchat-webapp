@@ -3,18 +3,15 @@
 
 import memoize from 'memoize-one';
 import React from 'react';
+import type {MentionKey, TextFormattingOptions} from 'utils/text_formatting';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import type {Team} from '@mattermost/types/teams';
 
-import {Posts} from 'mattermost-redux/constants';
-
 import Markdown from 'components/markdown';
 
-import type {MentionKey, TextFormattingOptions} from 'utils/text_formatting';
-
-import {renderReminderSystemBotMessage, renderSystemMessage} from './system_message_helpers';
+import {renderSystemMessage} from './system_message_helpers';
 
 type Props = {
 
@@ -60,8 +57,6 @@ type Props = {
      */
     isMilitaryTime?: boolean;
     timezone?: string;
-
-    hideGuestTags: boolean;
 }
 
 export default class PostMarkdown extends React.PureComponent<Props> {
@@ -89,18 +84,12 @@ export default class PostMarkdown extends React.PureComponent<Props> {
             const renderedSystemMessage = renderSystemMessage(post,
                 this.props.currentTeam,
                 this.props.channel,
-                this.props.hideGuestTags,
                 this.props.isUserCanManageMembers,
                 this.props.isMilitaryTime,
                 this.props.timezone);
             if (renderedSystemMessage) {
                 return <div>{renderedSystemMessage}</div>;
             }
-        }
-
-        if (post && post.type === Posts.POST_TYPES.REMINDER) {
-            const renderedSystemBotMessage = renderReminderSystemBotMessage(post, this.props.currentTeam);
-            return <div>{renderedSystemBotMessage}</div>;
         }
 
         // Proxy images if we have an image proxy and the server hasn't already rewritten the post's image URLs.

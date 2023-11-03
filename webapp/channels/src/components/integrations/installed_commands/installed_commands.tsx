@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import * as Utils from 'utils/utils';
 
 import type {Command} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
@@ -11,12 +12,11 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
+
 import BackstageList from 'components/backstage/components/backstage_list';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
-import {DeveloperLinks} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import InstalledCommand, {matchesFilter} from '../installed_command';
 
@@ -115,29 +115,15 @@ export default class InstalledCommands extends React.PureComponent<Props> {
                 helpText={
                     <FormattedMessage
                         id='installed_commands.help'
-                        defaultMessage='Use slash commands to connect external tools to Mattermost. {buildYourOwn} or visit the {appDirectory} to find self-hosted, third-party apps and integrations.'
+                        defaultMessage='Use slash commands to connect external tools to kChat. {learnMore}'
                         values={{
-                            buildYourOwn: (
-                                <ExternalLink
-                                    href={DeveloperLinks.SETUP_CUSTOM_SLASH_COMMANDS}
-                                    location='installed_commands'
-                                >
+                            learnMore: (
+                                <a onClick={redirectToDeveloperDocumentation}>
                                     <FormattedMessage
-                                        id='installed_commands.help.buildYourOwn'
-                                        defaultMessage='Build Your Own'
+                                        id='developer_documentation.learn_more'
+                                        defaultMessage='Learn more'
                                     />
-                                </ExternalLink>
-                            ),
-                            appDirectory: (
-                                <ExternalLink
-                                    href='https://mattermost.com/marketplace'
-                                    location='installed_commands'
-                                >
-                                    <FormattedMessage
-                                        id='installed_commands.help.appDirectory'
-                                        defaultMessage='App Directory'
-                                    />
-                                </ExternalLink>
+                                </a>
                             ),
                         }}
                     />

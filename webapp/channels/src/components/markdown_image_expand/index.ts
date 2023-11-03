@@ -1,39 +1,28 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ReactNode} from 'react';
-import {connect} from 'react-redux';
-import type {ConnectedProps} from 'react-redux';
+import {bindActionCreators, Dispatch} from 'redux';
 
-import type {Post} from '@mattermost/types/posts';
+import {connect} from 'react-redux';
+
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {toggleInlineImageVisibility} from 'actions/post_actions';
 import {isInlineImageVisible} from 'selectors/posts';
+import {GlobalState} from 'types/store';
 
-import type {GlobalState} from 'types/store';
+import MarkdownImageExpand, {Props} from './markdown_image_expand';
 
-import MarkdownImageExpand from './markdown_image_expand';
-
-export type OwnProps = {
-    postId: Post['id'];
-    imageKey: string;
-    alt: string;
-    onToggle?: (visible: boolean) => void;
-    children: ReactNode;
-}
-
-const mapStateToProps = (state: GlobalState, {postId, imageKey}: OwnProps) => {
+const mapStateToProps = (state: GlobalState, {postId, imageKey}: Props) => {
     return {
         isExpanded: isInlineImageVisible(state, postId, imageKey),
     };
 };
 
-const mapDispatchToProps = {
-    toggleInlineImageVisibility,
+const mapDispatchToProps = (dispatch: Dispatch<GenericAction>) => {
+    return {
+        actions: bindActionCreators({toggleInlineImageVisibility}, dispatch),
+    };
 };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export type PropsFromRedux = ConnectedProps<typeof connector>;
-
-export default connector(MarkdownImageExpand);
+export default connect(mapStateToProps, mapDispatchToProps)(MarkdownImageExpand);

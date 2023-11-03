@@ -4,10 +4,11 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
-import {AuthorType, ReleaseStage} from '@mattermost/types/marketplace';
 import type {MarketplacePlugin} from '@mattermost/types/marketplace';
+import {AuthorType, ReleaseStage} from '@mattermost/types/marketplace';
 
-import MarketplaceList, {ITEMS_PER_PAGE} from './marketplace_list';
+import MarketplaceList from './marketplace_list';
+import NavigationRow from './navigation_row';
 
 import MarketplaceItem from '../marketplace_item/marketplace_item_plugin';
 
@@ -28,20 +29,8 @@ describe('components/marketplace/marketplace_list', () => {
         installed_version: '',
     };
 
-    it('should render default', () => {
-        const wrapper = shallow(
-            <MarketplaceList
-                listing={[]}
-                page={0}
-                noResultsMessage=''
-            />,
-        );
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    it('should render page with ITEMS_PER_PAGE plugins', () => {
-        const wrapper = shallow(
+    it('should render with multiple plugins', () => {
+        const wrapper = shallow<MarketplaceList>(
             <MarketplaceList
                 listing={[
                     samplePlugin, samplePlugin, samplePlugin, samplePlugin, samplePlugin,
@@ -49,29 +38,28 @@ describe('components/marketplace/marketplace_list', () => {
                     samplePlugin, samplePlugin, samplePlugin, samplePlugin, samplePlugin,
                     samplePlugin, samplePlugin,
                 ]}
-                page={0}
-                noResultsMessage=''
             />,
         );
+        expect(wrapper).toMatchSnapshot();
 
-        expect(wrapper.find(MarketplaceItem)).toHaveLength(ITEMS_PER_PAGE);
+        expect(wrapper.state().page).toEqual(0);
+        expect(wrapper.find(MarketplaceItem)).toHaveLength(15);
+        expect(wrapper.find(NavigationRow)).toHaveLength(1);
+        expect(wrapper.find(NavigationRow).props().page).toEqual(0);
+        expect(wrapper.find(NavigationRow).props().total).toEqual(17);
+        expect(wrapper.find(NavigationRow).props().maximumPerPage).toEqual(15);
     });
 
-    it('should render no results', () => {
-        const wrapper = shallow(
+    it('should set page to 0 when list of plugins changed', () => {
+        const wrapper = shallow<MarketplaceList>(
             <MarketplaceList
-                listing={[]}
-                page={0}
-                noResultsMessage='No plugins available'
-                noResultsAction={{
-                    label: 'action',
-                    onClick: jest.fn(),
-                }}
+                listing={[samplePlugin, samplePlugin]}
             />,
         );
 
-        expect(wrapper.find('.icon__plugin').length).toEqual(1);
-        expect(wrapper.find('.no_plugins__message').length).toEqual(1);
-        expect(wrapper.find('.no_plugins__action').length).toEqual(1);
+        wrapper.setState({page: 10});
+        wrapper.setProps({listing: [samplePlugin]});
+
+        expect(wrapper.state().page).toEqual(0);
     });
 });

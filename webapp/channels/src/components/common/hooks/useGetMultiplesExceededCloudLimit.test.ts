@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {FileSizes} from 'utils/file_utils';
 import {limitThresholds, LimitTypes} from 'utils/limits';
+import {FileSizes} from 'utils/file_utils';
 
-import useGetMultiplesExceededCloudLimit from './useGetMultiplesExceededCloudLimit';
-import type {LimitSummary} from './useGetMultiplesExceededCloudLimit';
+import useGetMultiplesExceededCloudLimit, {LimitSummary} from './useGetMultiplesExceededCloudLimit';
 
 jest.mock('react', () => ({
     useMemo: (fn: () => LimitSummary) => fn(),

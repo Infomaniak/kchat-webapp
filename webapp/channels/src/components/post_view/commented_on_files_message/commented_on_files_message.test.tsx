@@ -1,9 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {shallow} from 'enzyme';
 import React from 'react';
-
-import {render, renderWithIntl, screen} from 'tests/react_testing_utils';
 
 import CommentedOnFilesMessage from './commented_on_files_message';
 
@@ -12,28 +11,28 @@ describe('components/CommentedOnFilesMessage', () => {
         parentPostId: 'parentPostId',
     };
 
-    test('component state when no files', () => {
-        render(
+    test('Snapshot when no files', () => {
+        const wrapper = shallow(
             <CommentedOnFilesMessage {...baseProps}/>,
         );
 
-        //no file is given in props
-        expect(screen.queryByTestId('fileInfo')).not.toBeInTheDocument();
+        expect(wrapper).toMatchSnapshot();
     });
 
-    test('should match component state for single file', () => {
+    test('should match snapshot for single file', () => {
         const props = {
             ...baseProps,
             fileInfos: [{id: 'file_id_1', name: 'image_1.png', extension: 'png', create_at: 1}],
         };
 
-        render(
+        const wrapper = shallow(
             <CommentedOnFilesMessage {...props}/>,
         );
-        expect(screen.getByTestId('fileInfo')).toHaveTextContent('image_1.png');
+
+        expect(wrapper).toMatchSnapshot();
     });
 
-    test('should match component state for multiple files', () => {
+    test('should match snapshot for multiple files', () => {
         const fileInfos = [
             {id: 'file_id_3', name: 'image_3.png', extension: 'png', create_at: 3},
             {id: 'file_id_2', name: 'image_2.png', extension: 'png', create_at: 2},
@@ -45,11 +44,10 @@ describe('components/CommentedOnFilesMessage', () => {
             fileInfos,
         };
 
-        renderWithIntl(
+        const wrapper = shallow(
             <CommentedOnFilesMessage {...props}/>,
         );
 
-        // total files = 3
-        expect(screen.getByTestId('fileInfo')).toHaveTextContent('image_3.png plus 2 other files');
+        expect(wrapper).toMatchSnapshot();
     });
 });

@@ -3,13 +3,12 @@
 
 import React from 'react';
 import {Provider} from 'react-redux';
-
-import {PostPriority} from '@mattermost/types/posts';
-import type {UserProfile, UserStatus} from '@mattermost/types/users';
-
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
 import * as utils from 'utils/utils';
+
+import {PostPriority} from '@mattermost/types/posts';
+import type {UserProfile, UserStatus} from '@mattermost/types/users';
 
 import type {PostDraft} from 'types/store/draft';
 
@@ -25,6 +24,9 @@ describe('components/drafts/panel/panel_body', () => {
         uploadsInProgress: [] as PostDraft['uploadsInProgress'],
         userId: 'user_id' as UserProfile['id'],
         username: 'username' as UserProfile['username'],
+        draft: {} as PostDraft,
+        isEditing: false,
+        setIsEditing: jest.fn,
     };
 
     const initialState = {
@@ -110,7 +112,7 @@ describe('components/drafts/panel/panel_body', () => {
                     {...baseProps}
                     priority={{
                         priority: PostPriority.IMPORTANT,
-                        requested_ack: false,
+                        requested_ack: true,
                     }}
                 />
             </Provider>,

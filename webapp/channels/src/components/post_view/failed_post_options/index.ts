@@ -2,11 +2,10 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 
 import {removePost} from 'mattermost-redux/actions/posts';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {createPost} from 'actions/post_actions';
 

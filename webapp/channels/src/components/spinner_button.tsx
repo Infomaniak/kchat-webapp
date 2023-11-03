@@ -1,35 +1,38 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {ReactNode} from 'react';
+import React, {PureComponent} from 'react';
 
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
 
-type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+type Props = {
     children?: ReactNode;
     spinning: boolean;
     spinningText: ReactNode;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-const SpinnerButton = ({
-    spinning = false,
-    spinningText,
-    children,
-    ...props
-}: Props) => {
-    return (
-        <button
-            disabled={spinning}
-            {...props}
-        >
-            <LoadingWrapper
-                loading={spinning}
-                text={spinningText}
+export default class SpinnerButton extends PureComponent<Props & React.ButtonHTMLAttributes<HTMLButtonElement>> {
+    public static defaultProps: Partial<Props> = {
+        spinning: false,
+    };
+
+    public render(): JSX.Element {
+        const {spinning, spinningText, children, ...props} = this.props;
+
+        return (
+            <button
+                disabled={spinning}
+                {...props}
             >
-                {children}
-            </LoadingWrapper>
-        </button>
-    );
-};
-export default React.memo(SpinnerButton);
+                <LoadingWrapper
+                    loading={spinning}
+                    text={spinningText}
+                >
+                    {children}
+                </LoadingWrapper>
+            </button>
+        );
+    }
+}

@@ -3,7 +3,6 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-
 import {TestHelper} from 'utils/test_helper';
 
 import LeaveTeamModal from './leave_team_modal';
@@ -31,7 +30,7 @@ describe('components/LeaveTeamModal', () => {
 
     it('should hide when cancel is clicked', () => {
         const wrapper = shallow(<LeaveTeamModal {...requiredProps}/>);
-        const cancel = wrapper.find('.btn-tertiary').first();
+        const cancel = wrapper.find('.btn-link').first();
 
         cancel.simulate('click');
 

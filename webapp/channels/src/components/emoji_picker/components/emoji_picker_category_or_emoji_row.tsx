@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React, {memo} from 'react';
-import {areEqual} from 'react-window';
 import type {ListChildComponentProps} from 'react-window';
+import {areEqual} from 'react-window';
 
 import type {CustomEmoji, Emoji, SystemEmoji} from '@mattermost/types/emojis';
 

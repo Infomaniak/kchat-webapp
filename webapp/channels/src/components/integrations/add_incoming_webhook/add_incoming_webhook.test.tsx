@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import AddIncomingWebhook from 'components/integrations/add_incoming_webhook/add_incoming_webhook';
-
-import {TestHelper} from 'utils/test_helper';
 
 describe('components/integrations/AddIncomingWebhook', () => {
     const createIncomingHook = jest.fn().mockResolvedValue({data: true});

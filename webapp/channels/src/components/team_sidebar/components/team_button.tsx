@@ -1,12 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+// import {Link} from 'react-router-dom';
+
 import classNames from 'classnames';
 import React from 'react';
 import {Draggable} from 'react-beautiful-dnd';
-import {injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
-import {Link} from 'react-router-dom';
+import {injectIntl} from 'react-intl';
+import Constants from 'utils/constants';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+import {localizeMessage} from 'utils/utils';
 
 import {mark, trackEvent} from 'actions/telemetry_actions.jsx';
 
@@ -16,16 +21,13 @@ import KeyboardShortcutSequence, {
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import TeamIcon from 'components/widgets/team_icon/team_icon';
 
-import Constants from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
-import {localizeMessage} from 'utils/utils';
+import TeamIcon from '../../widgets/team_icon/team_icon';
 
 interface Props {
     btnClass?: string;
     url: string;
-    displayName?: string;
+    displayName: string;
     content?: React.ReactNode;
     tip: string | JSX.Element;
     order?: number;
@@ -35,11 +37,11 @@ interface Props {
     mentions?: number;
     placement?: 'left' | 'right' | 'top' | 'bottom';
     teamIconUrl?: string | null;
-    switchTeam: (url: string) => void;
+    switchTeam: (name: string, teamId: string) => void;
     intl: IntlShape;
     isDraggable?: boolean;
     teamIndex?: number;
-    teamId?: string;
+    teamId: string;
     isInProduct?: boolean;
     hasUrgent?: boolean;
 }
@@ -48,7 +50,8 @@ class TeamButton extends React.PureComponent<Props> {
     handleSwitch = (e: React.MouseEvent) => {
         mark('TeamLink#click');
         e.preventDefault();
-        this.props.switchTeam(this.props.url);
+        const {switchTeam, displayName, teamId} = this.props;
+        switchTeam(displayName, teamId);
 
         setTimeout(() => {
             trackEvent('ui', 'ui_team_sidebar_switch_team');
@@ -160,16 +163,29 @@ class TeamButton extends React.PureComponent<Props> {
             </OverlayTrigger>
         );
 
-        let teamButton = (
-            <Link
-                id={`${this.props.url.slice(1)}TeamButton`}
-                aria-label={ariaLabel}
-                to={this.props.url}
-                onClick={this.handleSwitch}
-            >
-                {btn}
-            </Link>
-        );
+        let teamButton;
+        if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+            teamButton = (
+                <a
+                    id={`${this.props.url.slice(1)}TeamButton`}
+                    aria-label={ariaLabel}
+                    to={this.props.url}
+                    onClick={this.handleSwitch}
+                >
+                    {btn}
+                </a>
+            );
+        } else {
+            teamButton = (
+                <a
+                    id={`${this.props.url.slice(1)}TeamButton`}
+                    aria-label={ariaLabel}
+                    href={this.props.url}
+                >
+                    {btn}
+                </a>
+            );
+        }
 
         if (isDesktopApp()) {
             // if this is not a "special" team button, give it a context menu

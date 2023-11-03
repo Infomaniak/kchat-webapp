@@ -19,6 +19,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
     onMouseLeave={[Function]}
   >
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="1"
       overlayProps={
@@ -59,11 +60,9 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
               hide={[Function]}
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -90,7 +89,6 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -146,11 +144,9 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                     id="name-1"
                     intl={
                       Object {
-                        "$t": [Function],
                         "defaultFormats": Object {},
                         "defaultLocale": "en",
                         "defaultRichTextElements": undefined,
-                        "fallbackOnEmptyString": true,
                         "formatDate": [Function],
                         "formatDateTimeRange": [Function],
                         "formatDateToParts": [Function],
@@ -177,7 +173,6 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                         "locale": "en",
                         "messages": Object {},
                         "onError": [Function],
-                        "onWarn": [Function],
                         "textComponent": "span",
                         "timeZone": "Etc/UTC",
                         "wrapRichTextChunksInFragment": undefined,
@@ -245,6 +240,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="6"
       overlayProps={
@@ -285,11 +281,9 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
               hide={[Function]}
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -316,7 +310,6 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -372,11 +365,9 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                     id="name-6"
                     intl={
                       Object {
-                        "$t": [Function],
                         "defaultFormats": Object {},
                         "defaultLocale": "en",
                         "defaultRichTextElements": undefined,
-                        "fallbackOnEmptyString": true,
                         "formatDate": [Function],
                         "formatDateTimeRange": [Function],
                         "formatDateToParts": [Function],
@@ -403,7 +394,6 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                         "locale": "en",
                         "messages": Object {},
                         "onError": [Function],
-                        "onWarn": [Function],
                         "textComponent": "span",
                         "timeZone": "Etc/UTC",
                         "wrapRichTextChunksInFragment": undefined,
@@ -471,6 +461,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="7"
       overlayProps={
@@ -511,11 +502,9 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
               hide={[Function]}
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -542,7 +531,6 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -598,11 +586,9 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                     id="name-7"
                     intl={
                       Object {
-                        "$t": [Function],
                         "defaultFormats": Object {},
                         "defaultLocale": "en",
                         "defaultRichTextElements": undefined,
-                        "fallbackOnEmptyString": true,
                         "formatDate": [Function],
                         "formatDateTimeRange": [Function],
                         "formatDateToParts": [Function],
@@ -629,7 +615,6 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                         "locale": "en",
                         "messages": Object {},
                         "onError": [Function],
-                        "onWarn": [Function],
                         "textComponent": "span",
                         "timeZone": "Etc/UTC",
                         "wrapRichTextChunksInFragment": undefined,
@@ -735,11 +720,9 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
               id="names-overflow"
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -766,7 +749,6 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -841,6 +823,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
     onMouseLeave={[Function]}
   >
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="1"
       overlayProps={
@@ -881,11 +864,9 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
               hide={[Function]}
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -912,7 +893,6 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -968,11 +948,9 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                     id="name-1"
                     intl={
                       Object {
-                        "$t": [Function],
                         "defaultFormats": Object {},
                         "defaultLocale": "en",
                         "defaultRichTextElements": undefined,
-                        "fallbackOnEmptyString": true,
                         "formatDate": [Function],
                         "formatDateTimeRange": [Function],
                         "formatDateToParts": [Function],
@@ -999,7 +977,6 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                         "locale": "en",
                         "messages": Object {},
                         "onError": [Function],
-                        "onWarn": [Function],
                         "textComponent": "span",
                         "timeZone": "Etc/UTC",
                         "wrapRichTextChunksInFragment": undefined,
@@ -1067,6 +1044,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="2"
       overlayProps={
@@ -1107,11 +1085,9 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
               hide={[Function]}
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -1138,7 +1114,6 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -1194,11 +1169,9 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                     id="name-2"
                     intl={
                       Object {
-                        "$t": [Function],
                         "defaultFormats": Object {},
                         "defaultLocale": "en",
                         "defaultRichTextElements": undefined,
-                        "fallbackOnEmptyString": true,
                         "formatDate": [Function],
                         "formatDateTimeRange": [Function],
                         "formatDateToParts": [Function],
@@ -1225,7 +1198,6 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                         "locale": "en",
                         "messages": Object {},
                         "onError": [Function],
-                        "onWarn": [Function],
                         "textComponent": "span",
                         "timeZone": "Etc/UTC",
                         "wrapRichTextChunksInFragment": undefined,
@@ -1293,6 +1265,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="3"
       overlayProps={
@@ -1333,11 +1306,9 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
               hide={[Function]}
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -1364,7 +1335,6 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -1420,11 +1390,9 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                     id="name-3"
                     intl={
                       Object {
-                        "$t": [Function],
                         "defaultFormats": Object {},
                         "defaultLocale": "en",
                         "defaultRichTextElements": undefined,
-                        "fallbackOnEmptyString": true,
                         "formatDate": [Function],
                         "formatDateTimeRange": [Function],
                         "formatDateToParts": [Function],
@@ -1451,7 +1419,6 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                         "locale": "en",
                         "messages": Object {},
                         "onError": [Function],
-                        "onWarn": [Function],
                         "textComponent": "span",
                         "timeZone": "Etc/UTC",
                         "wrapRichTextChunksInFragment": undefined,
@@ -1557,11 +1524,9 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
               id="names-overflow"
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -1588,7 +1553,6 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -1661,6 +1625,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
     onMouseLeave={[Function]}
   >
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="1"
       overlayProps={
@@ -1701,11 +1666,9 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
               hide={[Function]}
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -1732,7 +1695,6 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -1788,11 +1750,9 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                     id="name-1"
                     intl={
                       Object {
-                        "$t": [Function],
                         "defaultFormats": Object {},
                         "defaultLocale": "en",
                         "defaultRichTextElements": undefined,
-                        "fallbackOnEmptyString": true,
                         "formatDate": [Function],
                         "formatDateTimeRange": [Function],
                         "formatDateToParts": [Function],
@@ -1819,7 +1779,6 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                         "locale": "en",
                         "messages": Object {},
                         "onError": [Function],
-                        "onWarn": [Function],
                         "textComponent": "span",
                         "timeZone": "Etc/UTC",
                         "wrapRichTextChunksInFragment": undefined,
@@ -1887,6 +1846,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="2"
       overlayProps={
@@ -1927,11 +1887,9 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
               hide={[Function]}
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -1958,7 +1916,6 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -2014,11 +1971,9 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                     id="name-2"
                     intl={
                       Object {
-                        "$t": [Function],
                         "defaultFormats": Object {},
                         "defaultLocale": "en",
                         "defaultRichTextElements": undefined,
-                        "fallbackOnEmptyString": true,
                         "formatDate": [Function],
                         "formatDateTimeRange": [Function],
                         "formatDateToParts": [Function],
@@ -2045,7 +2000,6 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                         "locale": "en",
                         "messages": Object {},
                         "onError": [Function],
-                        "onWarn": [Function],
                         "textComponent": "span",
                         "timeZone": "Etc/UTC",
                         "wrapRichTextChunksInFragment": undefined,
@@ -2113,6 +2067,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
       </OverlayTrigger>
     </UserAvatar>
     <UserAvatar
+      disablePopover={false}
       disableProfileOverlay={false}
       key="3"
       overlayProps={
@@ -2153,11 +2108,9 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
               hide={[Function]}
               intl={
                 Object {
-                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
-                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -2184,7 +2137,6 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
-                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -2240,11 +2192,9 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                     id="name-3"
                     intl={
                       Object {
-                        "$t": [Function],
                         "defaultFormats": Object {},
                         "defaultLocale": "en",
                         "defaultRichTextElements": undefined,
-                        "fallbackOnEmptyString": true,
                         "formatDate": [Function],
                         "formatDateTimeRange": [Function],
                         "formatDateToParts": [Function],
@@ -2271,7 +2221,6 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                         "locale": "en",
                         "messages": Object {},
                         "onError": [Function],
-                        "onWarn": [Function],
                         "textComponent": "span",
                         "timeZone": "Etc/UTC",
                         "wrapRichTextChunksInFragment": undefined,

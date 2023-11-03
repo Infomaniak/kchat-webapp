@@ -1,31 +1,28 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classNames from 'classnames';
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {FormattedDate, FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-
-import classNames from 'classnames';
-
-import {trackEvent} from 'actions/telemetry_actions';
-
-import {getNewTeamMembers} from 'mattermost-redux/actions/insights';
-
-import {NewMember, TimeFrame} from '@mattermost/types/insights';
-import {UserProfile} from '@mattermost/types/users';
-
-import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
-import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
-
 import {InsightsScopes} from 'utils/constants';
 import {imageURLForUser} from 'utils/utils';
 
-import Avatar from 'components/widgets/users/avatar';
-import DataGrid, {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import type {NewMember, TimeFrame} from '@mattermost/types/insights';
+import type {UserProfile} from '@mattermost/types/users';
+
+import {getNewTeamMembers} from 'mattermost-redux/actions/insights';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {displayUsername} from 'mattermost-redux/utils/user_utils';
+
+import {trackEvent} from 'actions/telemetry_actions';
+
 import ModalPagination from 'components/activity_and_insights/insights/modal_pagination/modal_pagination';
+import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import DataGrid from 'components/admin_console/data_grid/data_grid';
+import Avatar from 'components/widgets/users/avatar';
 
 import './../../../activity_and_insights.scss';
 

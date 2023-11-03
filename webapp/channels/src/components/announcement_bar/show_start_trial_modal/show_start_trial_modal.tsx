@@ -3,6 +3,12 @@
 
 import {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {
+    Preferences,
+    Constants,
+    TELEMETRY_CATEGORIES,
+    ModalIdentifiers,
+} from 'utils/constants';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 
@@ -13,23 +19,16 @@ import {getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selecto
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions';
+import {openModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
 import useGetTotalUsersNoBots from 'components/common/hooks/useGetTotalUsersNoBots';
-import useOpenStartTrialFormModal from 'components/common/hooks/useOpenStartTrialFormModal';
-
-import {
-    Preferences,
-    Constants,
-    TELEMETRY_CATEGORIES,
-    ModalIdentifiers,
-} from 'utils/constants';
+import StartTrialModal from 'components/start_trial_modal';
 
 import type {GlobalState} from 'types/store';
 
 const ShowStartTrialModal = () => {
     const isUserAdmin = useSelector((state: GlobalState) => isCurrentUserSystemAdmin(state));
-    const openStartTrialFormModal = useOpenStartTrialFormModal();
 
     const dispatch = useDispatch<DispatchFunc>();
     const getCategory = makeGetCategory();
@@ -80,7 +79,11 @@ const ShowStartTrialModal = () => {
         const hasEnvMoreThan10Users = Number(totalUsers) > userThreshold;
         const hadAdminDismissedModal = preferences.some((pref: PreferenceType) => pref.name === Constants.TRIAL_MODAL_AUTO_SHOWN && pref.value === TRUE);
         if (isUserAdmin && !isBenefitsModalOpened && hasEnvMoreThan10Users && hasEnvMoreThan6Hours && !hadAdminDismissedModal && !isLicensedOrPreviousLicensed) {
-            openStartTrialFormModal({trackingLocation: 'show_start_trial_modal'}, handleOnClose);
+            dispatch(openModal({
+                modalId: ModalIdentifiers.START_TRIAL_MODAL,
+                dialogType: StartTrialModal,
+                dialogProps: {onClose: handleOnClose},
+            }));
             trackEvent(
                 TELEMETRY_CATEGORIES.SELF_HOSTED_START_TRIAL_AUTO_MODAL,
                 'trigger_start_trial_auto_modal',

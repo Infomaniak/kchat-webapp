@@ -2,11 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
-import ChannelView from 'components/channel_view/index';
-
 import {getHistory} from 'utils/browser_history';
 import Constants from 'utils/constants';
+
+import ChannelView from 'components/channel_view/index';
 
 export interface Match {
     params: {

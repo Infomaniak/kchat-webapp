@@ -2,10 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
-
-import type {GlobalState} from '@mattermost/types/store';
+import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
 
 import {
     clearUserAccessTokens,
@@ -15,7 +12,8 @@ import {
     enableUserAccessToken,
     disableUserAccessToken,
 } from 'mattermost-redux/actions/users';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import {GlobalState} from '@mattermost/types/store';
+import {ActionFunc} from 'mattermost-redux/types/actions';
 
 import UserAccessTokenSection from './user_access_token_section';
 

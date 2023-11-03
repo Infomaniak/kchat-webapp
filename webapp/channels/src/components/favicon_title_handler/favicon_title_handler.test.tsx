@@ -4,17 +4,16 @@
 import type {ShallowWrapper} from 'enzyme';
 import React from 'react';
 import type {ComponentProps} from 'react';
-
-import type {ChannelType} from '@mattermost/types/channels';
-import type {TeamType} from '@mattermost/types/teams';
-
-import FaviconTitleHandler from 'components/favicon_title_handler/favicon_title_handler';
-import type {FaviconTitleHandlerClass} from 'components/favicon_title_handler/favicon_title_handler';
-
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 import {Constants} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 import {isChrome, isFirefox} from 'utils/user_agent';
+
+import type {ChannelType} from '@mattermost/types/channels';
+import type {TeamType} from '@mattermost/types/teams';
+
+import type {FaviconTitleHandlerClass} from 'components/favicon_title_handler/favicon_title_handler';
+import FaviconTitleHandler from 'components/favicon_title_handler/favicon_title_handler';
 
 type Props = ComponentProps<typeof FaviconTitleHandlerClass>;
 
@@ -47,6 +46,7 @@ describe('components/FaviconTitleHandler', () => {
         currentTeammate: null,
         inGlobalThreads: false,
         inDrafts: false,
+        inActivityAndInsights: false,
     };
 
     test('set correctly the title when needed', () => {

@@ -4,10 +4,15 @@
 import type {ReactWrapper} from 'enzyme';
 import {shallow} from 'enzyme';
 import nock from 'nock';
-import React from 'react';
+import TestHelper from 'packages/mattermost-redux/test/test_helper';
 import type {ComponentProps} from 'react';
+import React from 'react';
 import {act} from 'react-dom/test-utils';
 import type {match} from 'react-router-dom';
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import mockStore from 'tests/test_store';
+import {getHistory} from 'utils/browser_history';
+import {ErrorPageTypes} from 'utils/constants';
 
 import {getPostThread} from 'mattermost-redux/actions/posts';
 import {Client4} from 'mattermost-redux/client';
@@ -16,12 +21,6 @@ import * as Channels from 'mattermost-redux/selectors/entities/channels';
 
 import {focusPost} from 'components/permalink_view/actions';
 import PermalinkView from 'components/permalink_view/permalink_view';
-
-import TestHelper from 'packages/mattermost-redux/test/test_helper';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import mockStore from 'tests/test_store';
-import {getHistory} from 'utils/browser_history';
-import {ErrorPageTypes} from 'utils/constants';
 
 jest.mock('actions/channel_actions', () => ({
     loadChannelsForCurrentUser: jest.fn(() => {

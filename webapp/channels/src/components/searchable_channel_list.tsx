@@ -4,6 +4,12 @@
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage, injectIntl, type WrappedComponentProps} from 'react-intl';
+import {isArchivedChannel} from 'utils/channel_utils';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {isKeyPressed} from 'utils/keyboard';
+import * as UserAgent from 'utils/user_agent';
+import {localizeMessage, localizeAndFormatMessage} from 'utils/utils';
 
 import {ArchiveOutlineIcon, CheckIcon, ChevronDownIcon, GlobeIcon, LockOutlineIcon, MagnifyIcon, AccountOutlineIcon, GlobeCheckedIcon} from '@mattermost/compass-icons/components';
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
@@ -17,13 +23,6 @@ import * as Menu from 'components/menu';
 import QuickInput from 'components/quick_input';
 import CheckboxCheckedIcon from 'components/widgets/icons/checkbox_checked_icon';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
-
-import {isArchivedChannel} from 'utils/channel_utils';
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {isKeyPressed} from 'utils/keyboard';
-import * as UserAgent from 'utils/user_agent';
-import {localizeMessage, localizeAndFormatMessage} from 'utils/utils';
 
 import type {FilterType} from './browse_channels/browse_channels';
 import {Filter} from './browse_channels/browse_channels';

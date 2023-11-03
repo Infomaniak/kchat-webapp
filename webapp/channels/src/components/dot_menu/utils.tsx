@@ -2,10 +2,9 @@
 // See LICENSE.txt for license information.
 
 import type React from 'react';
+import {EventTypes, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
-
-import {EventTypes, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 export type ChangeEvent = React.KeyboardEvent | React.MouseEvent;
 

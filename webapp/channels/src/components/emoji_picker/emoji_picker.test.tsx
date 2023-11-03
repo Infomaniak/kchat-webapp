@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {render, screen} from '@testing-library/react';
 import React from 'react';
 import {IntlProvider} from 'react-intl';
-
-import {render, screen} from 'tests/react_testing_utils';
 import EmojiMap from 'utils/emoji_map';
 
-import EmojiPicker from './emoji_picker';
+import EmojiPicker from 'components/emoji_picker/emoji_picker';
 
 jest.mock('components/emoji_picker/components/emoji_picker_skin', () => () => (
     <div/>

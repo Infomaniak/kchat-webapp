@@ -2,22 +2,20 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import React from 'react';
+import TestHelper from 'packages/mattermost-redux/test/test_helper';
 import type {ComponentProps} from 'react';
-
-import type {UserProfile} from '@mattermost/types/users';
+import React from 'react';
 
 import {setThreadFollow} from 'mattermost-redux/actions/threads';
 
+jest.mock('mattermost-redux/actions/threads');
 import Button from 'components/threading/common/button';
 import FollowButton from 'components/threading/common/follow_button';
 import Header from 'components/widgets/header';
 
-import TestHelper from 'packages/mattermost-redux/test/test_helper';
+import type {UserProfile} from '@mattermost/types/users';
 
 import ThreadPane from './thread_pane';
-
-jest.mock('mattermost-redux/actions/threads');
 
 const mockRouting = {
     currentUserId: 'uid',

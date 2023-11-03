@@ -1,17 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useRef} from 'react';
-import {useSelector} from 'react-redux';
-import {useIntl} from 'react-intl';
-import {Button, ButtonGroup, styled} from '@mui/material';
 import {SendIcon} from '@infomaniak/compass-icons/components';
+import {Button, ButtonGroup, styled} from '@mui/material';
+import React, {memo, useRef} from 'react';
+import {useIntl} from 'react-intl';
+import {useSelector} from 'react-redux';
+import {t} from 'utils/i18n';
 
 import {getTheme, syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import CompassDesignProvider from 'components/compass_design_provider';
-
-import {t} from 'utils/i18n';
 import SchedulePostButton from 'components/schedule_post/schedule_post_button';
 
 const SendButtonContainer = styled(Button)`

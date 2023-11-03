@@ -2,12 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import InfoIcon from 'components/widgets/icons/info_icon';
-
-import {localizeMessage} from 'utils/utils';
 
 type Props = {
     channel: Channel;

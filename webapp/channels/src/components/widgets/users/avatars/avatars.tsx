@@ -1,12 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useMemo, useEffect, useRef} from 'react';
 import type {ComponentProps, CSSProperties} from 'react';
+import React, {memo, useMemo, useEffect, useRef} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import tinycolor from 'tinycolor2';
+import {t} from 'utils/i18n';
+import {imageURLForUser} from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -14,14 +16,11 @@ import {getMissingProfilesByIds} from 'mattermost-redux/actions/users';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getUser as selectUser, makeDisplayNameGetter} from 'mattermost-redux/selectors/entities/users';
 
-import OverlayTrigger from 'components/overlay_trigger';
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
+import OverlayTrigger from 'components/overlay_trigger';
 import ProfilePopover from 'components/profile_popover';
 import SimpleTooltip, {useSynchronizedImmediate} from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
-
-import {t} from 'utils/i18n';
-import {imageURLForUser} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -34,6 +33,8 @@ type Props = {
     size?: ComponentProps<typeof Avatar>['size'];
     fetchMissingUsers?: boolean;
     disableProfileOverlay?: boolean;
+    disablePopover?: boolean;
+    disableButton?: boolean;
 };
 
 interface MMOverlayTrigger extends BaseOverlayTrigger {
@@ -63,11 +64,15 @@ function UserAvatar({
     userId,
     overlayProps,
     disableProfileOverlay,
+    disablePopover = false,
+    disableButton = false,
     ...props
 }: {
     userId: UserProfile['id'];
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
     disableProfileOverlay: boolean;
+    disablePopover?: boolean;
+    disableButton?: boolean;
 } & ComponentProps<typeof Avatar>) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
@@ -101,16 +106,22 @@ function UserAvatar({
                 content={name}
                 {...overlayProps}
             >
-                <RoundButton
-                    className={'style--none'}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <Avatar
-                        url={imageURLForUser(userId, user?.last_picture_update)}
-                        tabIndex={-1}
-                        {...props}
-                    />
-                </RoundButton>
+                {/* eslint-disable-next-line multiline-ternary */}
+                { disableButton ? (<Avatar
+                    url={imageURLForUser(userId, user?.last_picture_update)}
+                    tabIndex={-1}
+                    {...props}
+                                   />) :
+                    (<RoundButton
+                        className={'style--none'}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <Avatar
+                            url={imageURLForUser(userId, user?.last_picture_update)}
+                            tabIndex={-1}
+                            {...props}
+                        />
+                    </RoundButton>)}
             </SimpleTooltip>
         </OverlayTrigger>
     );
@@ -122,6 +133,7 @@ function Avatars({
     totalUsers,
     fetchMissingUsers = true,
     disableProfileOverlay = false,
+    disablePopover = false,
 }: Props) {
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
@@ -155,6 +167,7 @@ function Avatars({
                     size={size}
                     overlayProps={overlayProps}
                     disableProfileOverlay={disableProfileOverlay}
+                    disablePopover={disablePopover}
                 />
             ))}
             {Boolean(nonDisplayCount) && (

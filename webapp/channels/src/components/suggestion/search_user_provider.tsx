@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import * as Utils from 'utils/utils';
 
 import type {UserAutocomplete} from '@mattermost/types/autocomplete';
 import type {UserProfile} from '@mattermost/types/users';
@@ -10,59 +11,68 @@ import SharedUserIndicator from 'components/shared_user_indicator';
 import BotTag from 'components/widgets/tag/bot_tag';
 import Avatar from 'components/widgets/users/avatar';
 
-import * as Utils from 'utils/utils';
-
+import type {ProviderResults} from './generic_user_provider';
 import Provider from './provider';
-import type {ResultsCallback} from './provider';
-import {SuggestionContainer} from './suggestion';
-import type {SuggestionProps} from './suggestion';
+import Suggestion from './suggestion.jsx';
 
-const SearchUserSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<UserProfile>>((props, ref) => {
-    const {item} = props;
+class SearchUserSuggestion extends Suggestion {
+    private node?: HTMLDivElement | null;
+    render() {
+        const {item, isSelection} = this.props;
 
-    const username = item.username;
-    let description = '';
+        let className = 'suggestion-list__item';
+        if (isSelection) {
+            className += ' suggestion--selected';
+        }
 
-    if ((item.first_name || item.last_name) && item.nickname) {
-        description = `${Utils.getFullName(item)} (${item.nickname})`;
-    } else if (item.nickname) {
-        description = `(${item.nickname})`;
-    } else if (item.first_name || item.last_name) {
-        description = `${Utils.getFullName(item)}`;
-    }
+        const username = item.username;
+        let description = '';
 
-    let sharedIcon;
-    if (item.remote_id) {
-        sharedIcon = (
-            <SharedUserIndicator
-                className='mention__shared-user-icon'
-                withTooltip={true}
-            />
+        if ((item.first_name || item.last_name) && item.nickname) {
+            description = `${Utils.getFullName(item)} (${item.nickname})`;
+        } else if (item.nickname) {
+            description = `(${item.nickname})`;
+        } else if (item.first_name || item.last_name) {
+            description = `${Utils.getFullName(item)}`;
+        }
+
+        let sharedIcon;
+        if (item.remote_id) {
+            sharedIcon = (
+                <SharedUserIndicator
+                    className='mention__shared-user-icon'
+                    withTooltip={true}
+                />
+            );
+        }
+
+        return (
+            <div
+                className={className}
+                ref={(node) => {
+                    this.node = node;
+                }}
+                onClick={this.handleClick}
+                onMouseMove={this.handleMouseMove}
+                {...Suggestion.baseProps}
+            >
+                <Avatar
+                    size='sm'
+                    username={username}
+                    url={Utils.imageURLForUser(item.id, item.last_picture_update)}
+                />
+                <div className='suggestion-list__ellipsis'>
+                    <span className='suggestion-list__main'>
+                        {'@'}{username}
+                    </span>
+                    {item.is_bot && <BotTag/>}
+                    {description}
+                </div>
+                {sharedIcon}
+            </div>
         );
     }
-
-    return (
-        <SuggestionContainer
-            ref={ref}
-            {...props}
-        >
-            <Avatar
-                size='sm'
-                username={username}
-                url={Utils.imageURLForUser(item.id, item.last_picture_update)}
-            />
-            <div className='suggestion-list__ellipsis'>
-                <span className='suggestion-list__main'>
-                    {'@'}{username}
-                </span>
-                {item.is_bot && <BotTag/>}
-                {description}
-            </div>
-            {sharedIcon}
-        </SuggestionContainer>
-    );
-});
-SearchUserSuggestion.displayName = 'SearchUserSuggestion';
+}
 
 export default class SearchUserProvider extends Provider {
     private autocompleteUsersInTeam: (username: string) => Promise<UserAutocomplete>;
@@ -71,7 +81,7 @@ export default class SearchUserProvider extends Provider {
         this.autocompleteUsersInTeam = userSearchFunc;
     }
 
-    handlePretextChanged(pretext: string, resultsCallback: ResultsCallback<UserProfile>) {
+    handlePretextChanged(pretext: string, resultsCallback: (res: ProviderResults) => void) {
         const captured = (/\bfrom:\s*(\S*)$/i).exec(pretext.toLowerCase());
 
         this.doAutocomplete(captured, resultsCallback);
@@ -79,7 +89,7 @@ export default class SearchUserProvider extends Provider {
         return Boolean(captured);
     }
 
-    async doAutocomplete(captured: RegExpExecArray | null, resultsCallback: ResultsCallback<UserProfile>) {
+    async doAutocomplete(captured: RegExpExecArray | null, resultsCallback: (res: ProviderResults) => void) {
         if (!captured) {
             return;
         }

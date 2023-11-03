@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
 import Constants from 'utils/constants';
 
 import MenuWrapperAnimation from './menu_wrapper_animation';
@@ -29,9 +28,6 @@ type State = {
     open: boolean;
 }
 
-/**
- * @deprecated Use the "webapp/channels/src/components/menu" instead.
- */
 export default class MenuWrapper extends React.PureComponent<Props, State> {
     private node: React.RefObject<HTMLDivElement>;
 

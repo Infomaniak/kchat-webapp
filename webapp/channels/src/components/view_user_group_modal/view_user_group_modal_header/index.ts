@@ -2,19 +2,18 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
+import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
 
-import {addUsersToGroup, archiveGroup, removeUsersFromGroup, restoreGroup} from 'mattermost-redux/actions/groups';
-import {Permissions} from 'mattermost-redux/constants';
-import {getGroup as getGroupById, isMyGroup} from 'mattermost-redux/selectors/entities/groups';
-import {haveIGroupPermission} from 'mattermost-redux/selectors/entities/roles';
-import type {ActionFunc, ActionResult, GenericAction} from 'mattermost-redux/types/actions';
+import {ActionFunc, ActionResult, GenericAction} from 'mattermost-redux/types/actions';
 
+import {GlobalState} from 'types/store';
+import {ModalData} from 'types/actions';
 import {openModal} from 'actions/views/modals';
-
-import type {ModalData} from 'types/actions';
-import type {GlobalState} from 'types/store';
+import {getGroup as getGroupById, isMyGroup} from 'mattermost-redux/selectors/entities/groups';
+import {addUsersToGroup, archiveGroup, removeUsersFromGroup, restoreGroup} from 'mattermost-redux/actions/groups';
+import {haveIGroupPermission} from 'mattermost-redux/selectors/entities/roles';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {Permissions} from 'mattermost-redux/constants';
 
 import ViewUserGroupModalHeader from './view_user_group_modal_header';
 
@@ -48,6 +47,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         permissionToRestoreGroup,
         isGroupMember,
         group,
+        currentUserId: getCurrentUserId(state),
     };
 }
 

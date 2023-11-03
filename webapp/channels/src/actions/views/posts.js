@@ -1,6 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ActionTypes, AnnouncementBarTypes} from 'utils/constants';
+import {containsAtChannel, groupsMentionedInText} from 'utils/post_utils';
+import {getSiteURL} from 'utils/url';
+import {getTimestamp} from 'utils/utils';
+
 import {logError} from 'mattermost-redux/actions/errors';
 import * as PostActions from 'mattermost-redux/actions/posts';
 import {Permissions} from 'mattermost-redux/constants';
@@ -12,11 +17,6 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {getPermalinkURL} from 'selectors/urls';
-
-import {ActionTypes, AnnouncementBarTypes} from 'utils/constants';
-import {containsAtChannel, groupsMentionedInText} from 'utils/post_utils';
-import {getSiteURL} from 'utils/url';
-import {getTimestamp} from 'utils/utils';
 
 import {runMessageWillBePostedHooks} from '../hooks';
 

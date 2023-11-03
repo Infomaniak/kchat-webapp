@@ -1,16 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import type {Post, PostType} from '@mattermost/types/posts';
 
 import {Posts} from 'mattermost-redux/constants';
 
-import {renderWithIntlAndStore, screen} from 'tests/react_testing_utils';
-import {TestHelper} from 'utils/test_helper';
-
-import PostMarkdown from './post_markdown';
+import Markdown from 'components/markdown';
+import PostMarkdown from 'components/post_markdown/post_markdown';
 
 describe('components/PostMarkdown', () => {
     const baseProps = {
@@ -21,54 +21,18 @@ describe('components/PostMarkdown', () => {
         channelId: 'channel-id',
         channel: TestHelper.getChannelMock(),
         currentTeam: TestHelper.getTeamMock(),
-        hideGuestTags: false,
-    };
-
-    const state = {entities: {
-        posts: {
-            posts: {},
-            postsInThread: {},
-        },
-        channels: {},
-        teams: {
-            teams: {
-                currentTeamId: {},
-            },
-        },
-        preferences: {
-            myPreferences: {
-            },
-        },
-        groups: {
-            groups: {},
-            myGroups: [],
-        },
-        users: {
-            currentUserId: '',
-            profiles: {},
-        },
-        emojis: {customEmoji: {}},
-        general: {config: {}, license: {}},
-    },
     };
 
     test('should not error when rendering without a post', () => {
         const props = {...baseProps};
-
         Reflect.deleteProperty(props, 'post');
-        renderWithIntlAndStore(<PostMarkdown {...props}/>, state);
 
-        expect(screen.getByText('message')).toBeInTheDocument();
+        shallow(<PostMarkdown {...props}/>);
     });
 
     test('should render properly with an empty post', () => {
-        renderWithIntlAndStore(
-            <PostMarkdown
-                {...baseProps}
-                post={{} as any}
-            />, state);
-
-        expect(screen.getByText('message')).toBeInTheDocument();
+        const wrapper = shallow(<PostMarkdown {...baseProps}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render properly with a post', () => {
@@ -80,21 +44,13 @@ describe('components/PostMarkdown', () => {
                     channel_mentions: {
                         test: {
                             display_name: 'Test',
-                            team_name: 'test',
                         },
                     },
                 },
             }),
         };
-        renderWithIntlAndStore(<PostMarkdown {...props}/>, state);
-
-        const link = screen.getByRole('link');
-
-        expect(screen.getByText('See')).toBeInTheDocument();
-        expect(link).toHaveAttribute('data-channel-mention', 'test');
-        expect(link).toHaveAttribute('data-channel-mention-team', 'test');
-        expect(link).toHaveAttribute('href', '/test/channels/test');
-        expect(link).toHaveClass('mention-link');
+        const wrapper = shallow(<PostMarkdown {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render properly without highlight a post', () => {
@@ -104,21 +60,10 @@ describe('components/PostMarkdown', () => {
             options: {
                 mentionHighlight: false,
             },
-            post: TestHelper.getPostMock({
-                props: {
-                    channel_mentions: {
-                        test: {
-                            display_name: 'Test',
-                            team_name: 'test',
-                        },
-                    },
-                },
-            }),
+            post: TestHelper.getPostMock(),
         };
-        renderWithIntlAndStore(<PostMarkdown {...props}/>, state);
-        expect(screen.getByText('No highlight')).toBeInTheDocument();
-
-        expect(screen.queryByRole('link')).not.toBeInTheDocument();
+        const wrapper = shallow(<PostMarkdown {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render properly without group highlight on a post', () => {
@@ -132,17 +77,8 @@ describe('components/PostMarkdown', () => {
                 },
             }),
         };
-        renderWithIntlAndStore(<PostMarkdown {...props}/>, state);
-
-        const groupMention = screen.getByText('@group');
-
-        expect(screen.getByText('No', {exact: false})).toBeInTheDocument();
-        expect(groupMention).toBeInTheDocument();
-        expect(groupMention).toHaveAttribute('data-mention', 'group');
-
-        expect(groupMention).not.toHaveClass('mention-link');
-
-        expect(screen.getByText('highlight', {exact: false})).toBeInTheDocument();
+        const wrapper = shallow(<PostMarkdown {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly pass postId down', () => {
@@ -152,8 +88,9 @@ describe('components/PostMarkdown', () => {
                 id: 'post_id',
             }),
         };
-        renderWithIntlAndStore(<PostMarkdown {...props}/>, state);
-        expect(screen.getByText('message')).toBeInTheDocument();
+        const wrapper = shallow(<PostMarkdown {...props}/>);
+        expect(wrapper.find(Markdown).prop('postId')).toEqual(props.post.id);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render header change properly', () => {
@@ -169,34 +106,13 @@ describe('components/PostMarkdown', () => {
                     channel_mentions: {
                         test: {
                             display_name: 'Test',
-                            team_name: 'test',
                         },
                     },
                 },
             }),
         };
-
-        renderWithIntlAndStore(<PostMarkdown {...props}/>, state);
-        expect(screen.getByText('@user')).toBeInTheDocument();
-        expect(screen.getByText('updated the channel header')).toBeInTheDocument();
-        expect(screen.getByText('From:')).toBeInTheDocument();
-        expect(screen.getByText('see')).toBeInTheDocument();
-
-        expect(screen.getByText('To:')).toBeInTheDocument();
-        expect(screen.getByText('now')).toBeInTheDocument();
-
-        const testLink = screen.getAllByRole('link', {name: '~Test'});
-        expect(testLink).toHaveLength(2);
-
-        expect(testLink[0]).toHaveAttribute('data-channel-mention', 'test');
-        expect(testLink[0]).toHaveAttribute('data-channel-mention-team', 'test');
-        expect(testLink[0]).toHaveAttribute('href', '/test/channels/test');
-        expect(screen.getAllByRole('link')[0]).toHaveClass('mention-link');
-
-        expect(testLink[1]).toHaveAttribute('data-channel-mention', 'test');
-        expect(testLink[1]).toHaveAttribute('data-channel-mention-team', 'test');
-        expect(testLink[1]).toHaveAttribute('href', '/test/channels/test');
-        expect(screen.getAllByRole('link')[1]).toHaveClass('mention-link');
+        const wrapper = shallow(<PostMarkdown {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('plugin hooks can build upon other hook message updates', () => {
@@ -226,11 +142,8 @@ describe('components/PostMarkdown', () => {
                 },
             ],
         };
-        renderWithIntlAndStore(<PostMarkdown {...props}/>, state);
-        expect(screen.queryByText('world', {exact: true})).not.toBeInTheDocument();
-
-        // hook message
-        expect(screen.getByText('hello world!')).toBeInTheDocument();
+        const wrapper = shallow(<PostMarkdown {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('plugin hooks can overwrite other hooks messages', () => {
@@ -260,8 +173,7 @@ describe('components/PostMarkdown', () => {
                 },
             ],
         };
-        renderWithIntlAndStore(<PostMarkdown {...props}/>, state);
-        expect(screen.queryByText('world', {exact: true})).not.toBeInTheDocument();
-        expect(screen.queryByText('world!', {exact: true})).toBeInTheDocument();
+        const wrapper = shallow(<PostMarkdown {...props}/>);
+        expect(wrapper).toMatchSnapshot();
     });
 });

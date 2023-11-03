@@ -3,14 +3,13 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {Constants, NotificationLevels} from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
 import Menu from 'components/widgets/menu/menu';
 import MenuItemAction from 'components/widgets/menu/menu_items/menu_item_action';
-
-import {Constants, NotificationLevels} from 'utils/constants';
 
 import MenuItemToggleMuteChannel from './toggle_mute_channel';
 

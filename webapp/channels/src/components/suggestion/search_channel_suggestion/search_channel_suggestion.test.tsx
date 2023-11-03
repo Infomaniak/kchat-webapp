@@ -3,23 +3,21 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-
 import {TestHelper} from 'utils/test_helper';
 
 import SearchChannelSuggestion from './search_channel_suggestion';
 
 describe('components/suggestion/search_channel_suggestion', () => {
     const mockChannel = TestHelper.getChannelMock();
+    const mockTeamMate = TestHelper.getUserMock();
 
     const baseProps = {
         item: mockChannel,
         isSelection: false,
-        currentUserId: 'userid1',
-        teammateIsBot: false,
+        teammate: mockTeamMate,
+        currentUser: 'userid1',
         term: '',
         matchedPretext: '',
-        onClick: jest.fn(),
-        onMouseMove: jest.fn(),
     };
 
     test('should match snapshot', () => {

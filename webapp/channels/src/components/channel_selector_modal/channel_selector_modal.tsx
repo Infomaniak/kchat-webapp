@@ -4,17 +4,16 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
+import {localizeMessage, compareChannels} from 'utils/utils';
 
-import type {Channel, ChannelSearchOpts, ChannelWithTeamData} from '@mattermost/types/channels';
+import type {ChannelSearchOpts, ChannelWithTeamData} from '@mattermost/types/channels';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import MultiSelect from 'components/multiselect/multiselect';
 import type {Value} from 'components/multiselect/multiselect';
-
-import Constants from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
+import MultiSelect from 'components/multiselect/multiselect';
 
 type ChannelWithTeamDataValue = ChannelWithTeamData & Value;
 
@@ -264,17 +263,4 @@ export default class ChannelSelectorModal extends React.PureComponent<Props, Sta
             </Modal>
         );
     }
-}
-
-function compareChannels(a: Channel, b: Channel) {
-    const aDisplayName = a.display_name.toUpperCase();
-    const bDisplayName = b.display_name.toUpperCase();
-    const result = aDisplayName.localeCompare(bDisplayName);
-    if (result !== 0) {
-        return result;
-    }
-
-    const aName = a.name.toUpperCase();
-    const bName = b.name.toUpperCase();
-    return aName.localeCompare(bName);
 }

@@ -3,10 +3,10 @@
 
 import {connect} from 'react-redux';
 
-import {getBotAccounts} from 'mattermost-redux/selectors/entities/bots';
 import {getCommands, getOAuthApps, getIncomingHooks, getOutgoingHooks} from 'mattermost-redux/selectors/entities/integrations';
+import {getBotAccounts} from 'mattermost-redux/selectors/entities/bots';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
 
 import ConfirmIntegration from './confirm_integration';
 

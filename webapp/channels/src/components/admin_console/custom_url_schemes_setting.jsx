@@ -3,9 +3,8 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-
-import * as Utils from 'utils/utils';
 import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import LocalizedInput from 'components/localized_input/localized_input';
 

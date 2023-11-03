@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import React from 'react';
 import type {ChangeEvent} from 'react';
+import React from 'react';
 
 import {Preferences} from 'mattermost-redux/constants';
 
@@ -11,7 +11,7 @@ import CustomThemeChooser from 'components/user_settings/display/user_settings_t
 
 describe('components/user_settings/display/CustomThemeChooser', () => {
     const baseProps = {
-        theme: Preferences.THEMES.denim,
+        theme: Preferences.THEMES.ik,
         updateTheme: jest.fn(),
     };
 

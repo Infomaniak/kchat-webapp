@@ -3,17 +3,16 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {GroupSearchOpts, MixedUnlinkedGroupRedux} from '@mattermost/types/groups';
-
+import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
+import type {GroupSearchOpts, MixedUnlinkedGroupRedux} from '@mattermost/types/groups';
+
 import GroupRow from 'components/admin_console/group_settings/group_row';
+import CheckboxCheckedIcon from 'components/widgets/icons/checkbox_checked_icon';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
 import SearchIcon from 'components/widgets/icons/search_icon';
-import CheckboxCheckedIcon from 'components/widgets/icons/checkbox_checked_icon';
-import {Constants} from 'utils/constants';
 
 const LDAP_GROUPS_PAGE_SIZE = 200;
 
@@ -88,7 +87,7 @@ export default class GroupsList extends React.PureComponent<Props, State> {
 
     public closeFilters = () => {
         this.setState({showFilters: false});
-    }
+    };
 
     public componentDidMount() {
         this.props.actions.getLdapGroups(this.state.page, LDAP_GROUPS_PAGE_SIZE).then(() => {
@@ -222,7 +221,7 @@ export default class GroupsList extends React.PureComponent<Props, State> {
                 </div>
             </div>
         );
-    }
+    };
 
     public renderRows(): JSX.Element | JSX.Element[] {
         if (this.state.loading) {
@@ -437,7 +436,7 @@ export default class GroupsList extends React.PureComponent<Props, State> {
         this.props.actions.getLdapGroups(this.state.page, LDAP_GROUPS_PAGE_SIZE, {q: ''}).then(() => {
             this.setState({loading: false});
         });
-    }
+    };
 
     public render(): JSX.Element {
         const startCount = (this.state.page * LDAP_GROUPS_PAGE_SIZE) + 1;

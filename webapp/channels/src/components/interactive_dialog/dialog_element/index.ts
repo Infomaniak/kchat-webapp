@@ -2,16 +2,14 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
-
-import type {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
 import {autocompleteChannels} from 'actions/channel_actions';
 import {autocompleteUsers} from 'actions/user_actions';
 
-import DialogElement from './dialog_element';
-import type {Props} from './dialog_element';
+import {ActionFunc, GenericAction} from 'mattermost-redux/types/actions';
+
+import DialogElement, {Props} from './dialog_element';
 
 function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
     return {

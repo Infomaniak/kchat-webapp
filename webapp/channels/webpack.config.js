@@ -130,8 +130,9 @@ var config = {
         ],
         alias: {
             'mattermost-redux/test': 'packages/mattermost-redux/test',
-            'mattermost-redux': 'packages/mattermost-redux/src',
+            'mattermost-redux': 'src/packages/mattermost-redux/src',
             '@mui/styled-engine': '@mui/styled-engine-sc',
+            reselect: 'src/packages/reselect/src',
 
             // This alias restricts single version of styled components acros all packages
             'styled-components': path.resolve(__dirname, '..', 'node_modules', 'styled-components'),

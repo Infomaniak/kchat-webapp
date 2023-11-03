@@ -2,13 +2,12 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
-import {t} from 'utils/i18n';
 import {LicenseSkus} from 'utils/constants';
-
-import FeatureDiscovery from '../index';
+import {t} from 'utils/i18n';
 
 import GuestAccessSVG from './images/guest_access_svg';
+
+import FeatureDiscovery from '../index';
 
 const GuestAccessFeatureDiscovery: React.FC = () => {
     return (

@@ -3,6 +3,8 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {PostListRowListIds} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import type {ChannelType} from '@mattermost/types/channels';
 import type {CloudUsage} from '@mattermost/types/cloud';
@@ -14,9 +16,6 @@ import ChannelIntroMessage from 'components/post_view/channel_intro_message/';
 import CombinedUserActivityPost from 'components/post_view/combined_user_activity_post';
 import DateSeparator from 'components/post_view/date_separator';
 import NewMessageSeparator from 'components/post_view/new_message_separator/new_message_separator';
-
-import {PostListRowListIds} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
 
 import PostListRow from './post_list_row';
 
@@ -40,9 +39,6 @@ describe('components/post_view/post_list_row', () => {
         usage: {} as CloudUsage,
         post: TestHelper.getPostMock({id: 'post_id_1'}),
         currentUserId: 'user_id_1',
-        newMessagesSeparatorActions: [],
-        lastViewedAt: 0,
-        channelId: 'channel_id_1',
     };
 
     test('should render more messages loading indicator', () => {

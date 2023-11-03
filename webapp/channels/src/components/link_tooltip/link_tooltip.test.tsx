@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import React from 'react';
 import type {ReactPortal} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import LinkTooltip from 'components/link_tooltip/link_tooltip';

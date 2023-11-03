@@ -132,7 +132,7 @@ export default class GetLinkModal extends React.PureComponent<Props, State> {
                     <button
                         id='linkModalCloseButton'
                         type='button'
-                        className='btn btn-tertiary'
+                        className='btn btn-link'
                         onClick={this.onHide}
                     >
                         <FormattedMessage

@@ -3,11 +3,12 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {CloudLinks} from 'utils/constants';
 
 import {GenericModal} from '@mattermost/components';
-import {CloudLinks} from 'utils/constants';
-import CreditCardSvg from 'components/common/svg_images_components/credit_card_svg';
+
 import {useControlAirGappedSelfHostedPurchaseModal} from 'components/common/hooks/useControlModal';
+import CreditCardSvg from 'components/common/svg_images_components/credit_card_svg';
 
 import './content.scss';
 

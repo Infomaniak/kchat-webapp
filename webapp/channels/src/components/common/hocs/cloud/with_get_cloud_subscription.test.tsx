@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {mount} from 'enzyme';
-import React from 'react';
 import type {ComponentType} from 'react';
+import React from 'react';
 
 import withGetCloudSubscription from './with_get_cloud_subscription';
 

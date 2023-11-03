@@ -2,13 +2,8 @@
 // See LICENSE.txt for license information.
 
 import moment from 'moment-timezone';
-import React from 'react';
-
-import {SelfHostedSignupProgress} from '@mattermost/types/hosted_customer';
-import type {SelfHostedSignupForm} from '@mattermost/types/hosted_customer';
-import type {DeepPartial} from '@mattermost/types/utilities';
-
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
+import React from 'react';
 import {
     fireEvent,
     renderWithIntlAndStore,
@@ -17,6 +12,10 @@ import {
 } from 'tests/react_testing_utils';
 import {SelfHostedProducts, ModalIdentifiers, RecurringIntervals} from 'utils/constants';
 import {TestHelper as TH} from 'utils/test_helper';
+
+import {SelfHostedSignupProgress} from '@mattermost/types/hosted_customer';
+import type {SelfHostedSignupForm} from '@mattermost/types/hosted_customer';
+import type {DeepPartial} from '@mattermost/types/utilities';
 
 import type {GlobalState} from 'types/store';
 

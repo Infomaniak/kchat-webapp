@@ -2,15 +2,16 @@
 // See LICENSE.txt for license information.
 
 // Purpose of this file to exists is only required until channel header dropdown is migrated to new menus
-import React, {memo} from 'react';
-import {useIntl} from 'react-intl';
-import {useDispatch, useSelector} from 'react-redux';
-
 import {
     FolderOutlineIcon,
     StarOutlineIcon,
     FolderMoveOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
+import React, {memo} from 'react';
+import {useIntl} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import type {Channel} from '@mattermost/types/channels';
 
@@ -28,8 +29,6 @@ import {getCategoriesForCurrentTeam} from 'selectors/views/channel_sidebar';
 import EditCategoryModal from 'components/edit_category_modal';
 import Menu from 'components/widgets/menu/menu';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
-
 import type {GlobalState} from 'types/store';
 import type {Menu as MenuType} from 'types/store/plugins';
 
@@ -39,7 +38,7 @@ type Props = {
     inHeaderDropdown?: boolean;
 };
 
-const ChannelMoveToSubMenuOld = (props: Props) => {
+const ChannelMoveToSubMenu = (props: Props) => {
     const {formatMessage} = useIntl();
 
     const dispatch = useDispatch<DispatchFunc>();
@@ -166,4 +165,4 @@ const ChannelMoveToSubMenuOld = (props: Props) => {
     );
 };
 
-export default memo(ChannelMoveToSubMenuOld);
+export default memo(ChannelMoveToSubMenu);

@@ -1,9 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {shallow} from 'enzyme';
 import React from 'react';
-
-import {render, screen} from 'tests/react_testing_utils';
 
 import PostEmoji from './post_emoji';
 
@@ -14,16 +13,17 @@ describe('PostEmoji', () => {
     };
 
     test('should render image when imageUrl is provided', () => {
-        render(<PostEmoji {...baseProps}/>);
+        const wrapper = shallow(<PostEmoji {...baseProps}/>);
 
-        expect(screen.getByTitle(':' + baseProps.name + ':')).toBeInTheDocument();
-        expect(screen.getByTitle(':' + baseProps.name + ':')).toHaveStyle(`backgroundImage: url(${baseProps.imageUrl})}`);
+        expect(wrapper.find('span').prop('style')).toMatchObject({
+            backgroundImage: `url(${baseProps.imageUrl})`,
+        });
     });
 
     test('should render shortcode text within span when imageUrl is provided', () => {
-        render(<PostEmoji {...baseProps}/>);
+        const wrapper = shallow(<PostEmoji {...baseProps}/>);
 
-        expect(screen.getByTitle(':' + baseProps.name + ':')).toHaveTextContent(`:${baseProps.name}:`);
+        expect(wrapper.find('span').text()).toBe(`:${baseProps.name}:`);
     });
 
     test('should render original text when imageUrl is empty', () => {
@@ -32,9 +32,9 @@ describe('PostEmoji', () => {
             imageUrl: '',
         };
 
-        render(<PostEmoji {...props}/>);
+        const wrapper = shallow(<PostEmoji {...props}/>);
 
-        expect(screen.queryByTitle(':' + baseProps.name + ':')).not.toBeInTheDocument();
-        expect(screen.getByText(`:${props.name}:`)).toBeInTheDocument();
+        expect(wrapper.find('span')).toHaveLength(0);
+        expect(wrapper.text()).toBe(`:${props.name}:`);
     });
 });

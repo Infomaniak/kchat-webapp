@@ -3,10 +3,12 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
+import {Constants} from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
+import type {ServerError} from '@mattermost/types/errors';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {searchChannels as reduxSearchChannels} from 'mattermost-redux/actions/channels';
@@ -30,15 +32,19 @@ import type {CloseModalType} from 'actions/views/modals';
 
 import {makeAsyncComponent} from 'components/async_load';
 
-import {Constants} from 'utils/constants';
-
 import type {GlobalState} from 'types/store';
 
+import {InviteType} from './invite_as';
 import type {InviteResults} from './result_view';
 
 const InvitationModal = makeAsyncComponent('InvitationModal', React.lazy(() => import('./invitation_modal')));
 
-const searchProfiles = (term: string, options = {}) => {
+const searchProfiles = (term: string, options = {}, inviteType?: InviteType) => {
+    if (inviteType && inviteType === InviteType.GUEST) {
+        //disable users autocomplete
+        return () => Promise.resolve({data: []});
+    }
+
     if (!term) {
         return getProfiles(0, 20, options);
     }
@@ -64,6 +70,9 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
     const currentTeam = currentTeamId === '' && props.channelToInvite ? getTeam(state, props.channelToInvite.team_id) : getCurrentTeam(state);
     const currentChannel = getCurrentChannel(state);
     const invitableChannels = channels.filter((channel) => {
+        if (channel.delete_at > 0) {
+            return false;
+        }
         if (channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) {
             return false;
         }
@@ -95,11 +104,11 @@ export function mapStateToProps(state: GlobalState, props: OwnProps) {
 }
 
 type Actions = {
-    sendGuestsInvites: (teamId: string, channels: Channel[], users: UserProfile[], emails: string[], message: string) => Promise<{data: InviteResults}>;
+    sendGuestsInvites: (teamId: string, channels: Channel[], users: UserProfile[], emails: string[], message: string, openExternalLimitModalIfNeeded: (error: ServerError) => ActionFunc) => Promise<{data: InviteResults}>;
     sendMembersInvites: (teamId: string, users: UserProfile[], emails: string[]) => Promise<{data: InviteResults}>;
     sendMembersInvitesToChannels: (teamId: string, channels: Channel[], users: UserProfile[], emails: string[], message: string) => Promise<{data: InviteResults}>;
     regenerateTeamInviteId: (teamId: string) => void;
-    searchProfiles: (term: string, options?: Record<string, string>) => Promise<{data: UserProfile[]}>;
+    searchProfiles: (term: string, options?: Record<string, string>, inviteType?: InviteType) => Promise<{data: UserProfile[]}>;
     searchChannels: (teamId: string, term: string) => ActionFunc;
 }
 

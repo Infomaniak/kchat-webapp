@@ -2,12 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {toTitleCase} from 'utils/utils';
 
 import {Preferences} from 'mattermost-redux/constants';
 import type {Theme, ThemeKey} from 'mattermost-redux/selectors/entities/preferences';
 import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
-
-import {toTitleCase} from 'utils/utils';
 
 import ThemeThumbnail from '../theme_thumbnail';
 

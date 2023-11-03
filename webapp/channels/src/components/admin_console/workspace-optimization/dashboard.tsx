@@ -3,26 +3,29 @@
 
 import {CheckIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
-
 import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 
-import {GlobalState} from '@mattermost/types/store';
-import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
+import type {GlobalState} from '@mattermost/types/store';
+
 import {Client4} from 'mattermost-redux/client';
-import Accordion, {AccordionItemType} from 'components/common/accordion/accordion';
+import {getServerVersion} from 'mattermost-redux/selectors/entities/general';
+
+import type {AccordionItemType} from 'components/common/accordion/accordion';
+import Accordion from 'components/common/accordion/accordion';
+
+import type {ChipsInfoType} from './chips_list';
+import ChipsList from './chips_list';
+import CtaButtons from './cta_buttons';
+import type {DataModel, UpdatesParam} from './dashboard.data';
+import useMetricsData, {ItemStatus} from './dashboard.data';
 
 import {elasticsearchTest, ldapTest, testSiteURL} from '../../../actions/admin_actions';
 import LoadingScreen from '../../loading_screen';
 import FormattedAdminHeader from '../../widgets/admin_console/formatted_admin_header';
-import {Props} from '../admin_console';
-
-import ChipsList, {ChipsInfoType} from './chips_list';
-import CtaButtons from './cta_buttons';
-
-import useMetricsData, {DataModel, ItemStatus, UpdatesParam} from './dashboard.data';
+import type {Props} from '../admin_console';
 
 import './dashboard.scss';
 import OverallScore from './overall-score';

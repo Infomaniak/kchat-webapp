@@ -5,13 +5,12 @@ import classNames from 'classnames';
 import React, {useEffect} from 'react';
 import {useIntl, FormattedMessage} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-
-import {GenericModal} from '@mattermost/components';
+import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
+import {ModalIdentifiers, AboutLinks, LicenseLinks} from 'utils/constants';
 
 import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {checkHadPriorTrial} from 'mattermost-redux/selectors/entities/cloud';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
-import {deprecateCloudFree} from 'mattermost-redux/selectors/entities/preferences';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
@@ -21,16 +20,14 @@ import {isModalOpen} from 'selectors/views/modals';
 import CloudStartTrialButton from 'components/cloud_start_trial/cloud_start_trial_btn';
 import {NotifyStatus} from 'components/common/hooks/useGetNotifyAdmin';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
-import ExternalLink from 'components/external_link';
+import GenericModal from 'components/generic_modal';
 import StartTrialBtn from 'components/learn_more_trial_modal/start_trial_btn';
 import {useNotifyAdmin} from 'components/notify_admin_cta/notify_admin_cta';
-
-import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
-import {ModalIdentifiers, AboutLinks, LicenseLinks} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
 import './feature_restricted_modal.scss';
+import ExternalLink from 'components/external_link';
 
 type FeatureRestrictedModalProps = {
     titleAdminPreTrial: string;
@@ -62,7 +59,6 @@ const FeatureRestrictedModal = ({
         dispatch(getPrevTrialLicense());
     }, []);
 
-    const cloudFreeDeprecated = useSelector(deprecateCloudFree);
     const hasCloudPriorTrial = useSelector(checkHadPriorTrial);
     const prevTrialLicense = useSelector((state: GlobalState) => state.entities.admin.prevTrialLicense);
     const hasSelfHostedPriorTrial = prevTrialLicense.IsLicensed === 'true';
@@ -104,7 +100,7 @@ const FeatureRestrictedModal = ({
 
     const getTitle = () => {
         if (isSystemAdmin) {
-            return (hasPriorTrial || cloudFreeDeprecated) ? titleAdminPostTrial : titleAdminPreTrial;
+            return hasPriorTrial ? titleAdminPostTrial : titleAdminPreTrial;
         }
 
         return titleEndUser;
@@ -112,13 +108,13 @@ const FeatureRestrictedModal = ({
 
     const getMessage = () => {
         if (isSystemAdmin) {
-            return (hasPriorTrial || cloudFreeDeprecated) ? messageAdminPostTrial : messageAdminPreTrial;
+            return hasPriorTrial ? messageAdminPostTrial : messageAdminPreTrial;
         }
 
         return messageEndUser;
     };
 
-    const showStartTrial = isSystemAdmin && !hasPriorTrial && !cloudFreeDeprecated;
+    const showStartTrial = isSystemAdmin && !hasPriorTrial;
 
     // define what is the secondary button text and action, by default will be the View Plan button
     let secondaryBtnMsg = formatMessage({id: 'feature_restricted_modal.button.plans', defaultMessage: 'View plans'});
@@ -136,7 +132,7 @@ const FeatureRestrictedModal = ({
         trialBtn = (
             <CloudStartTrialButton
                 extraClass='button-trial'
-                message={formatMessage({id: 'trial_btn.free.tryFreeFor30Days', defaultMessage: 'Start trial'})}
+                message={formatMessage({id: 'trial_btn.free.tryFreeFor30Days', defaultMessage: 'Try free for 30 days'})}
                 telemetryId={'start_cloud_trial_after_team_creation_restricted'}
                 onClick={dismissAction}
             />
@@ -144,8 +140,7 @@ const FeatureRestrictedModal = ({
     } else {
         trialBtn = (
             <StartTrialBtn
-                message={formatMessage({id: 'trial_btn.free.tryFreeFor30Days', defaultMessage: 'Start trial'})}
-                onClick={dismissAction}
+                message={formatMessage({id: 'trial_btn.free.tryFreeFor30Days', defaultMessage: 'Try free for 30 days'})}
                 telemetryId='start_self_hosted_trial_after_team_creation_restricted'
                 btnClass='btn btn-primary'
                 renderAsButton={true}

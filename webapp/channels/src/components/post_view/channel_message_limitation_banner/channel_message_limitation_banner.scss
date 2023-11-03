@@ -1,0 +1,20 @@
+.channel-limitation-banner {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    margin: 0 15px 10px;
+    background: var(--link-color-08);
+    border-radius: 10px;
+    gap: 12px;
+
+    &__button {
+        padding: 0 !important;
+        border: none;
+        background: none !important;
+        color: #0098ff;
+    }
+
+    &__button:hover {
+        text-decoration: underline;
+    }
+}

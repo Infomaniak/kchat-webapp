@@ -8,6 +8,11 @@ exports[`components/post_view/Reaction should apply read-only class if user does
   overlay={
     <Tooltip
       id="post_id-smile-reaction"
+      style={
+        Object {
+          "opacity": "1",
+        }
+      }
     >
       <Memo(Connect(ReactionTooltip))
         canAddReactions={false}
@@ -92,6 +97,11 @@ exports[`components/post_view/Reaction should apply read-only class if user does
   overlay={
     <Tooltip
       id="post_id-smile-reaction"
+      style={
+        Object {
+          "opacity": "1",
+        }
+      }
     >
       <Memo(Connect(ReactionTooltip))
         canAddReactions={true}
@@ -176,6 +186,11 @@ exports[`components/post_view/Reaction should match snapshot 1`] = `
   overlay={
     <Tooltip
       id="post_id-smile-reaction"
+      style={
+        Object {
+          "opacity": "1",
+        }
+      }
     >
       <Memo(Connect(ReactionTooltip))
         canAddReactions={true}
@@ -260,6 +275,11 @@ exports[`components/post_view/Reaction should match snapshot when a current user
   overlay={
     <Tooltip
       id="post_id-smile-reaction"
+      style={
+        Object {
+          "opacity": "1",
+        }
+      }
     >
       <Memo(Connect(ReactionTooltip))
         canAddReactions={true}

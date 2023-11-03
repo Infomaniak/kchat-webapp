@@ -3,12 +3,11 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {localizeMessage} from 'utils/utils';
 
 import type {MarketplaceLabel} from '@mattermost/types/marketplace';
 
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
-
-import {localizeMessage} from 'utils/utils';
 
 import MarketplaceItem from '../marketplace_item';
 
@@ -50,7 +49,7 @@ export default class MarketplaceItemApp extends React.PureComponent <Marketplace
         if (this.props.installed && !this.props.installing && !this.props.error) {
             return (
                 <button
-                    className='app-installed'
+                    className='btn btn-outline'
                     disabled={true}
                 >
                     <FormattedMessage
@@ -81,7 +80,7 @@ export default class MarketplaceItemApp extends React.PureComponent <Marketplace
         return (
             <button
                 onClick={this.onInstall}
-                className='app-install always-show-enabled'
+                className='btn btn-primary'
                 disabled={this.props.installing}
             >
                 <LoadingWrapper

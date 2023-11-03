@@ -2,10 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React, {memo, useCallback} from 'react';
-
-import {TimeFrame, TimeFrames} from '@mattermost/types/insights';
-
 import {localizeMessage} from 'utils/utils';
+
+import type {TimeFrame} from '@mattermost/types/insights';
+import {TimeFrames} from '@mattermost/types/insights';
 
 import './../../../activity_and_insights.scss';
 

@@ -2,28 +2,26 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 
-import type {PreferenceType} from '@mattermost/types/preferences';
+import {createSelector} from 'reselect';
 
-import {getStandardAnalytics} from 'mattermost-redux/actions/admin';
+import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
+import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
+import {haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions} from 'mattermost-redux/constants';
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
-import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
-import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
-import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
-import {haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
+import {getStandardAnalytics} from 'mattermost-redux/actions/admin';
+
+import {PreferenceType} from '@mattermost/types/preferences';
+
+import {Preferences} from 'utils/constants';
 
 import {dismissNotice} from 'actions/views/notice';
 
 import Notices from 'components/system_notice/notices';
 import SystemNotice from 'components/system_notice/system_notice';
-
-import {Preferences} from 'utils/constants';
-
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
 
 function makeMapStateToProps() {
     const getCategory = makeGetCategory();
@@ -56,7 +54,6 @@ function makeMapStateToProps() {
             license,
             serverVersion,
             analytics,
-            currentChannel: getCurrentChannel(state),
         };
     };
 }

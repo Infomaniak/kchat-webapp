@@ -4,25 +4,23 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+import Constants, {ItemStatus} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
+import {localizeMessage} from 'utils/utils';
 
 import type {GroupCreateWithUserIds} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
+import 'components/user_groups_modal/user_groups_modal.scss';
+import './create_user_groups_modal.scss';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import AddUserToGroupMultiSelect from 'components/add_user_to_group_multiselect';
 import LocalizedIcon from 'components/localized_icon';
 import Input from 'components/widgets/inputs/input/input';
 
-import Constants, {ItemStatus} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
-import {localizeMessage} from 'utils/utils';
-
 import type {ModalData} from 'types/actions';
-
-import 'components/user_groups_modal/user_groups_modal.scss';
-import './create_user_groups_modal.scss';
 
 export type Props = {
     onExited: () => void;
@@ -177,46 +175,44 @@ export default class CreateUserGroupsModal extends React.PureComponent<Props, St
             >
                 <Modal.Header closeButton={true}>
                     {
-                        typeof this.props.backButtonCallback === 'function' ? (
-                            <>
-                                <button
-                                    type='button'
-                                    className='modal-header-back-button btn btn-icon'
-                                    aria-label='Back'
-                                    onClick={() => {
-                                        this.goBack();
-                                    }}
-                                >
-                                    <LocalizedIcon
-                                        className='icon icon-arrow-left'
-                                        ariaLabel={{id: t('user_groups_modal.goBackLabel'), defaultMessage: 'Back'}}
-                                    />
-                                </button>
-                                <Modal.Title
-                                    componentClass='h1'
-                                    id='createGroupsModalTitleWithBack'
-                                >
-                                    <FormattedMessage
-                                        id='user_groups_modal.createTitle'
-                                        defaultMessage='Create Group'
-                                    />
-                                </Modal.Title>
-                            </>
-                        ) : (
+                        typeof this.props.backButtonCallback === 'function' ? <>
+                            <button
+                                type='button'
+                                className='modal-header-back-button btn-icon'
+                                aria-label='Back'
+                                onClick={() => {
+                                    this.goBack();
+                                }}
+                            >
+                                <LocalizedIcon
+                                    className='icon icon-arrow-left'
+                                    ariaLabel={{id: t('user_groups_modal.goBackLabel'), defaultMessage: 'Back'}}
+                                />
+                            </button>
                             <Modal.Title
                                 componentClass='h1'
-                                id='createGroupsModalTitle'
+                                id='createGroupsModalTitleWithBack'
                             >
                                 <FormattedMessage
                                     id='user_groups_modal.createTitle'
                                     defaultMessage='Create Group'
                                 />
                             </Modal.Title>
-                        )
+                        </> : <Modal.Title
+                            componentClass='h1'
+                            id='createGroupsModalTitle'
+                        >
+                            <FormattedMessage
+                                id='user_groups_modal.createTitle'
+                                defaultMessage='Create Group'
+                            />
+                        </Modal.Title>
                     }
 
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body
+                    className='overflow--visible'
+                >
                     <div className='user-groups-modal__content'>
                         <div className='group-name-input-wrapper'>
                             <Input

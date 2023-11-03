@@ -1,10 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import classNames from 'classnames';
 import React, {useEffect, useMemo} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {Constants} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Team} from '@mattermost/types/teams';
@@ -12,19 +13,10 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import {trackEvent} from 'actions/telemetry_actions';
-
-import useCopyText from 'components/common/hooks/useCopyText';
-import {getAnalyticsCategory} from 'components/onboarding_tasks';
 import UsersEmailsInput from 'components/widgets/inputs/users_emails_input';
 
-import {Constants} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {getSiteURL} from 'utils/url';
-import {getTrackFlowRole, getRoleForTrackFlow, getSourceForTrackFlow} from 'utils/utils';
-
-import AddToChannels, {defaultCustomMessage, defaultInviteChannels} from './add_to_channels';
 import type {CustomMessageProps, InviteChannels} from './add_to_channels';
+import AddToChannels, {defaultCustomMessage, defaultInviteChannels} from './add_to_channels';
 import InviteAs, {InviteType} from './invite_as';
 import OverageUsersBannerNotice from './overage_users_banner_notice';
 
@@ -73,6 +65,7 @@ export type Props = InviteState & {
     townSquareDisplayName: string;
     channelToInvite?: Channel;
     onPaste?: (e: ClipboardEvent) => void;
+    shouldOpenMenu: boolean;
 }
 
 export default function InviteView(props: Props) {
@@ -83,49 +76,6 @@ export default function InviteView(props: Props) {
     }, [props.currentTeam.id, props.currentTeam.invite_id, props.regenerateTeamInviteId]);
 
     const {formatMessage} = useIntl();
-
-    const inviteURL = useMemo(() => {
-        return `${getSiteURL()}/signup_user_complete/?id=${props.currentTeam.invite_id}&md=link&sbr=${getTrackFlowRole()}`;
-    }, [props.currentTeam.invite_id]);
-
-    const copyText = useCopyText({
-        trackCallback: () => trackEvent(getAnalyticsCategory(props.isAdmin), 'click_copy_invite_link', {...getRoleForTrackFlow(), ...getSourceForTrackFlow()}),
-        text: inviteURL,
-    });
-
-    const copyButton = (
-        <button
-            onClick={copyText.onClick}
-            data-testid='InviteView__copyInviteLink'
-            aria-label={
-                formatMessage({
-                    id: 'invite_modal.copy_link.url_aria',
-                    defaultMessage: 'team invite link {inviteURL}',
-                }, {inviteURL})
-            }
-            className='btn btn-secondary'
-            aria-live='polite'
-        >
-            {!copyText.copiedRecently && (
-                <>
-                    <i className='icon icon-link-variant'/>
-                    <FormattedMessage
-                        id='invite_modal.copy_link'
-                        defaultMessage='Copy invite link'
-                    />
-                </>
-            )}
-            {copyText.copiedRecently && (
-                <>
-                    <i className='icon icon-check'/>
-                    <FormattedMessage
-                        id='invite_modal.copied'
-                        defaultMessage='Copied'
-                    />
-                </>
-            )}
-        </button>
-    );
 
     const errorProperties = {
         showError: false,
@@ -146,7 +96,10 @@ export default function InviteView(props: Props) {
         errorProperties.errorMessageValues.text = Constants.MAX_ADD_MEMBERS_BATCH.toString();
     }
 
-    let placeholder = formatMessage({
+    let placeholder = props.inviteType === InviteType.GUEST ? formatMessage({
+        id: 'invite_modal.add_invites.email',
+        defaultMessage: 'Enter an email address',
+    }) : formatMessage({
         id: 'invite_modal.add_invites',
         defaultMessage: 'Enter a name or email address',
     });
@@ -186,7 +139,10 @@ export default function InviteView(props: Props) {
 
     return (
         <>
-            <Modal.Header className={props.headerClass}>
+            <Modal.Header
+                closeButton={true}
+                className={props.headerClass}
+            >
                 <h1 id='invitation_modal_title'>
                     <FormattedMessage
                         id='invite_modal.title'
@@ -199,13 +155,6 @@ export default function InviteView(props: Props) {
                         }}
                     />
                 </h1>
-                <button
-                    id='closeIcon'
-                    className='icon icon-close'
-                    aria-label='Close'
-                    title='Close'
-                    onClick={props.onClose}
-                />
             </Modal.Header>
             <Modal.Body>
                 <div className='InviteView__sectionTitle InviteView__sectionTitle--first'>
@@ -237,6 +186,7 @@ export default function InviteView(props: Props) {
                     emailInvitationsEnabled={props.emailInvitationsEnabled}
                     autoFocus={true}
                     onPaste={props.onPaste}
+                    isMenuOpen={props.shouldOpenMenu}
                 />
                 {props.canInviteGuests && props.canAddUsers &&
                 <InviteAs
@@ -263,13 +213,12 @@ export default function InviteView(props: Props) {
                 )}
                 <OverageUsersBannerNotice/>
             </Modal.Body>
-            <Modal.Footer className={classNames('InviteView__footer', props.footerClass, {'InviteView__footer-guest': props.inviteType === InviteType.GUEST})}>
-                {props.inviteType === InviteType.MEMBER && copyButton}
+            <Modal.Footer className={'InviteView__footer ' + props.footerClass}>
                 <button
                     disabled={!isInviteValid}
                     onClick={props.invite}
                     className={'btn btn-primary'}
-                    data-testid={'inviteButton'}
+                    id={props.inviteType === InviteType.MEMBER ? 'inviteMembersButton' : 'inviteGuestButton'}
                 >
                     <FormattedMessage
                         id='invite_modal.invite'

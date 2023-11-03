@@ -1,7 +1,5 @@
-$dropdown_input_index: 999999;
-
 .DropdownInput {
-    z-index: $dropdown_input_index;
+    z-index: 999999;
 
     &.Input_container {
         margin-top: 20px;
@@ -25,20 +23,6 @@ $dropdown_input_index: 999999;
     }
 }
 
-.DropdownInput__controlContainer {
-    .DropDown__control {
-        background-color: var(--center-channel-bg);
-    }
-}
-
-.DropDown__menu {
-    background-color: var(--center-channel-bg) !important;
-}
-
-.DropDown__single-value {
-    color: var(--center-channel-color) !important;
-}
-
 .DropdownInput__indicatorsContainer {
     margin-right: 8px;
 
@@ -53,7 +37,7 @@ $dropdown_input_index: 999999;
 }
 
 .DropdownInput__option > div {
-    z-index: $dropdown_input_index;
+    z-index: 999999;
     padding: 10px 24px;
     cursor: pointer;
     line-height: 16px;
@@ -66,34 +50,4 @@ $dropdown_input_index: 999999;
 
 .DropdownInput__option.focused > div {
     background-color: rgba(var(--center-channel-color-rgb), 0.08);
-}
-
-.second-dropdown-sibling-wrapper {
-    .DropdownInput {
-        z-index: $dropdown_input_index - 1;
-    }
-
-    .DropdownInput__option > div {
-        z-index: $dropdown_input_index - 1;
-    }
-}
-
-.third-dropdown-sibling-wrapper {
-    .DropdownInput {
-        z-index: $dropdown_input_index - 2;
-    }
-
-    .DropdownInput__option > div {
-        z-index: $dropdown_input_index - 2;
-    }
-}
-
-.fourth-dropdown-sibling-wrapper {
-    .DropdownInput {
-        z-index: $dropdown_input_index - 3;
-    }
-
-    .DropdownInput__option > div {
-        z-index: $dropdown_input_index - 3;
-    }
 }

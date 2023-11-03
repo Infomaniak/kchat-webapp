@@ -3,17 +3,16 @@
 
 import classNames from 'classnames';
 import React from 'react';
-import {injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
+import {injectIntl} from 'react-intl';
+import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import Constants from 'utils/constants';
-import * as Keyboard from 'utils/keyboard';
 
 type Props = {
     intl: IntlShape;
@@ -40,7 +39,7 @@ export class ChannelFilter extends React.PureComponent<Props> {
     };
 
     handleUnreadFilterKeyPress = (e: KeyboardEvent) => {
-        if (Keyboard.cmdOrCtrlPressed(e) && e.shiftKey && Keyboard.isKeyPressed(e, Constants.KeyCodes.U)) {
+        if (Utils.cmdOrCtrlPressed(e) && e.shiftKey && Utils.isKeyPressed(e, Constants.KeyCodes.U)) {
             e.preventDefault();
             e.stopPropagation();
             this.toggleUnreadFilter();

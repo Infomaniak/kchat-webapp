@@ -4,11 +4,14 @@
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {PostListRowListIds, Locations} from 'utils/constants';
+import {isIdNotPost} from 'utils/post_utils';
 
 import type {CloudUsage, Limits} from '@mattermost/types/cloud';
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {hasLimitDate} from 'mattermost-redux/actions/posts';
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
 
 import type {emitShortcutReactToLastPostFrom} from 'actions/post_actions';
@@ -20,10 +23,7 @@ import CombinedUserActivityPost from 'components/post_view/combined_user_activit
 import DateSeparator from 'components/post_view/date_separator';
 import NewMessageSeparator from 'components/post_view/new_message_separator/new_message_separator';
 
-import {PostListRowListIds, Locations} from 'utils/constants';
-import {isIdNotPost} from 'utils/post_utils';
-
-import type {PluginComponent} from 'types/store/plugins';
+import ChannelMessageLimitationBanner from '../channel_message_limitation_banner/channel_message_limitation_banner';
 
 export type PostListRowProps = {
     listId: string;
@@ -57,10 +57,6 @@ export type PostListRowProps = {
     limitsLoaded: boolean;
     exceededLimitChannelId?: string;
     firstInaccessiblePostTime?: number;
-    lastViewedAt: number;
-    channelId: string;
-
-    newMessagesSeparatorActions: PluginComponent[];
 
     actions: {
 
@@ -94,7 +90,7 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
     }
 
     render() {
-        const {listId, previousListId, loadingOlderPosts, loadingNewerPosts} = this.props;
+        const {listId, previousListId, loadingOlderPosts, loadingNewerPosts, isLastPost} = this.props;
         const {
             OLDER_MESSAGES_LOADER,
             NEWER_MESSAGES_LOADER,
@@ -116,20 +112,21 @@ export default class PostListRow extends React.PureComponent<PostListRowProps> {
 
         if (PostListUtils.isStartOfNewMessages(listId)) {
             return (
-                <NewMessageSeparator
-                    separatorId={listId}
-                    newMessagesSeparatorActions={this.props.newMessagesSeparatorActions}
-                    channelId={this.props.channelId}
-                    lastViewedAt={this.props.lastViewedAt}
-                />
+                <NewMessageSeparator separatorId={listId}/>
             );
         }
 
-        if (this.props.exceededLimitChannelId) {
+        // todo: mattermost version
+        // if (this.props.exceededLimitChannelId) {
+        //     return (
+        //         <CenterMessageLock
+        //             channelId={this.props.exceededLimitChannelId}
+        //             firstInaccessiblePostTime={this.props.firstInaccessiblePostTime}
+
+        if (hasLimitDate && listId === CHANNEL_INTRO_MESSAGE && !isLastPost) {
             return (
-                <CenterMessageLock
-                    channelId={this.props.exceededLimitChannelId}
-                    firstInaccessiblePostTime={this.props.firstInaccessiblePostTime}
+                <ChannelMessageLimitationBanner
+                    olderMessagesDate={hasLimitDate}
                 />
             );
         }

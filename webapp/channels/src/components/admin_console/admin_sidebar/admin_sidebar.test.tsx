@@ -2,20 +2,18 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {IntlShape} from 'react-intl';
+import type {IntlShape} from 'react-intl';
+import {samplePlugin1} from 'tests/helpers/admin_console_plugin_index_sample_pluings';
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import {generateIndex} from 'utils/admin_console_index';
 
-import {ExperimentalSettings, PluginSettings, SSOSettings, Office365Settings} from '@mattermost/types/config';
 import {SelfHostedSignupProgress} from '@mattermost/types/cloud';
+import type {ExperimentalSettings, PluginSettings, SSOSettings, Office365Settings} from '@mattermost/types/config';
 
 import {RESOURCE_KEYS} from 'mattermost-redux/constants/permissions_sysconsole';
 
-import {samplePlugin1} from 'tests/helpers/admin_console_plugin_index_sample_pluings';
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-
-import AdminSidebar from 'components/admin_console/admin_sidebar/admin_sidebar';
 import AdminDefinition from 'components/admin_console/admin_definition';
-import {generateIndex} from 'utils/admin_console_index';
-
+import AdminSidebar from 'components/admin_console/admin_sidebar/admin_sidebar';
 import type {Props} from 'components/admin_console/admin_sidebar/admin_sidebar';
 
 jest.mock('utils/utils', () => {
@@ -91,7 +89,13 @@ describe('components/AdminSidebar', () => {
         cloud: {
             limits: {
                 limitsLoaded: false,
-                limits: {},
+                limits: {
+                    storage: 0,
+                    public_channels: 0,
+                    private_channels: 0,
+                    guests: 0,
+                    members: 0,
+                },
             },
             errors: {},
             selfHostedSignup: {

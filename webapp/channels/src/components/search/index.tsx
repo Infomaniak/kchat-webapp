@@ -2,8 +2,9 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
+import {RHSStates} from 'utils/constants';
 
 import {getMorePostsForSearch, getMoreFilesForSearch} from 'mattermost-redux/actions/search';
 import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -23,12 +24,10 @@ import {
     setRhsExpanded,
     openRHSSearch,
     filterFilesSearchByExt,
-    updateSearchType,
+    updateSearchType, showSettings,
 } from 'actions/views/rhs';
 import {getRhsState, getSearchTerms, getSearchType, getIsSearchingTerm, getIsRhsOpen, getIsRhsExpanded} from 'selectors/rhs';
 import {getIsMobileView} from 'selectors/views/browser';
-
-import {RHSStates} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -59,6 +58,7 @@ function mapStateToProps(state: GlobalState) {
         isFlaggedPosts: rhsState === RHSStates.FLAG,
         isPinnedPosts: rhsState === RHSStates.PIN,
         isChannelFiles: rhsState === RHSStates.CHANNEL_FILES,
+        isSettings: rhsState === RHSStates.SETTINGS,
         isMobileView,
     };
 }
@@ -82,6 +82,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             openRHSSearch,
             getMoreFilesForSearch,
             filterFilesSearchByExt,
+            showSettings,
         }, dispatch),
     };
 }

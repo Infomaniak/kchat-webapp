@@ -2,20 +2,20 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage, injectIntl, type IntlShape} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import Constants, {RHSStates} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import LocalizedIcon from 'components/localized_icon';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import Constants, {RHSStates} from 'utils/constants';
 
 import type {RhsState} from 'types/store/rhs';
 
 type Props = {
-    intl: IntlShape;
     previousRhsState?: RhsState;
     isExpanded: boolean;
     actions: {
@@ -28,7 +28,7 @@ type Props = {
     };
 };
 
-class RhsCardHeader extends React.PureComponent<Props> {
+export default class RhsCardHeader extends React.PureComponent<Props> {
     handleBack = (e: React.MouseEvent<HTMLAnchorElement>): void => {
         e.preventDefault();
 
@@ -140,9 +140,9 @@ class RhsCardHeader extends React.PureComponent<Props> {
                         onClick={this.handleBack}
                         className='sidebar--right__back'
                     >
-                        <i
+                        <LocalizedIcon
                             className='icon icon-arrow-back-ios'
-                            aria-label={this.props.intl.formatMessage({id: 'generic_icons.back', defaultMessage: 'Back Icon'})}
+                            ariaLabel={{id: t('generic_icons.back'), defaultMessage: 'Back Icon'}}
                         />
                     </a>
                 </OverlayTrigger>
@@ -166,17 +166,17 @@ class RhsCardHeader extends React.PureComponent<Props> {
                     >
                         <button
                             type='button'
-                            className='sidebar--right__expand btn btn-icon btn-sm'
+                            className='sidebar--right__expand btn-icon'
                             aria-label='Expand'
                             onClick={this.props.actions.toggleRhsExpanded}
                         >
-                            <i
+                            <LocalizedIcon
                                 className='icon icon-arrow-expand'
-                                aria-label={this.props.intl.formatMessage({id: 'rhs_header.expandSidebarTooltip.icon', defaultMessage: 'Expand Sidebar Icon'})}
+                                ariaLabel={{id: t('rhs_header.expandSidebarTooltip.icon'), defaultMessage: 'Expand Sidebar Icon'}}
                             />
-                            <i
+                            <LocalizedIcon
                                 className='icon icon-arrow-collapse'
-                                aria-label={this.props.intl.formatMessage({id: 'rhs_header.collapseSidebarTooltip.icon', defaultMessage: 'Collapse Sidebar Icon'})}
+                                ariaLabel={{id: t('rhs_header.collapseSidebarTooltip.icon'), defaultMessage: 'Collapse Sidebar Icon'}}
                             />
                         </button>
                     </OverlayTrigger>
@@ -187,13 +187,13 @@ class RhsCardHeader extends React.PureComponent<Props> {
                     >
                         <button
                             type='button'
-                            className='sidebar--right__close btn btn-icon btn-sm'
+                            className='sidebar--right__close btn-icon'
                             aria-label='Close'
                             onClick={this.props.actions.closeRightHandSide}
                         >
-                            <i
+                            <LocalizedIcon
                                 className='icon icon-close'
-                                aria-label={this.props.intl.formatMessage({id: 'rhs_header.closeTooltip.icon', defaultMessage: 'Close Sidebar Icon'})}
+                                ariaLabel={{id: t('rhs_header.closeTooltip.icon'), defaultMessage: 'Close Sidebar Icon'}}
                             />
                         </button>
                     </OverlayTrigger>
@@ -202,5 +202,3 @@ class RhsCardHeader extends React.PureComponent<Props> {
         );
     }
 }
-
-export default injectIntl(RhsCardHeader);

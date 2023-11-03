@@ -24,7 +24,8 @@
     "useUnknownInCatchVariables": false,
     "composite": true,
     "paths": {
-        "mattermost-redux/*": ["packages/mattermost-redux/src/*"],
+        "mattermost-redux/*": ["src/packages/mattermost-redux/src/*"],
+        "reselect": ["./src/packages/reselect/src/*"],
         "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"],
     }
   },

@@ -1,29 +1,35 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {shallow} from 'enzyme';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import Constants, {suitePluginIds} from 'utils/constants';
+import {cleanUpUrlable} from 'utils/url';
+
+import type {ChannelType} from '@mattermost/types/channels';
 
 import {createChannel} from 'mattermost-redux/actions/channels';
 import Permissions from 'mattermost-redux/constants/permissions';
 
-import {
-    render,
-    renderWithIntl,
-    screen,
-    userEvent,
-    waitFor,
-} from 'tests/react_testing_utils';
-import {suitePluginIds} from 'utils/constants';
-import {cleanUpUrlable} from 'utils/url';
+import {openChannelLimitModalIfNeeded} from 'actions/cloud';
+
+import GenericModal from 'components/generic_modal';
+import Input from 'components/widgets/inputs/input/input';
+import URLInput from 'components/widgets/inputs/url_input/url_input';
+import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
 
 import type {GlobalState} from 'types/store';
 
+jest.mock('mattermost-redux/actions/channels');
+jest.mock('mattermost-redux/actions/cloud', () => ({
+    openChannelLimitModalIfNeeded: jest.fn,
+}));
+
 import NewChannelModal from './new_channel_modal';
 
-jest.mock('mattermost-redux/actions/channels');
-
-const mockDispatch = jest.fn();
+const mockDispatch = jest.fn((action) => action());
 let mockState: GlobalState;
 
 jest.mock('react-redux', () => ({
@@ -105,6 +111,39 @@ describe('components/new_channel_modal', () => {
                         },
                     },
                 },
+                usage: {
+                    storage: 0,
+                    public_channels: 0,
+                    private_channels: 0,
+                    guests: 0,
+                    members: 0,
+                    files: {
+                        totalStorage: 0,
+                    },
+                    messages: {
+                        history: 0,
+                    },
+                    teams: {
+                        active: 0,
+                        cloudArchived: 0,
+                    },
+                    boards: {
+                        cards: 0,
+                    },
+                    usageLoaded: true,
+                },
+                cloud: {
+                    limits: {
+                        limits: {
+                            storage: 10,
+                            public_channels: 10,
+                            private_channels: 10,
+                            guests: 10,
+                            members: 10,
+                        },
+                        limitsLoaded: true,
+                    },
+                },
             },
             plugins: {
                 plugins: {focalboard: {id: suitePluginIds.focalboard}},
@@ -112,323 +151,313 @@ describe('components/new_channel_modal', () => {
         } as unknown as GlobalState;
     });
 
-    test('should match component state with given props', () => {
-        render(<NewChannelModal/>);
-
-        const heading = screen.getByRole('heading');
-        expect(heading).toBeInTheDocument();
-        expect(heading).toHaveAttribute('id', 'genericModalLabel');
-        expect(heading.parentElement).toHaveClass('GenericModal__header');
-        expect(heading).toHaveTextContent('Create a new channel');
-
-        const channelNameHeading = screen.getByText('Channel name');
-        expect(channelNameHeading).toBeInTheDocument();
-        expect(channelNameHeading).toHaveClass('Input_legend Input_legend___focus');
-
-        const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
-        expect(channelNameInput).toBeInTheDocument();
-        expect(channelNameInput).toHaveAttribute('value', '');
-        expect(channelNameInput).toHaveAttribute('type', 'text');
-        expect(channelNameInput).toHaveAttribute('name', 'new-channel-modal-name');
-        expect(channelNameInput).toHaveAttribute('id', 'input_new-channel-modal-name');
-        expect(channelNameInput).toHaveClass('Input form-control medium new-channel-modal-name-input Input__focus');
-
-        const editUrl = screen.getByText('Edit');
-        expect(editUrl).toBeInTheDocument();
-        expect(editUrl).toHaveClass('url-input-button-label');
-        expect(editUrl.parentElement).toHaveClass('url-input-button');
-
-        const publicChannelSvg = screen.getByLabelText('Globe Circle Solid Icon');
-        expect(publicChannelSvg).toBeInTheDocument();
-
-        const publicChannelHeading = screen.getByText('Public Channel');
-        expect(publicChannelHeading).toBeInTheDocument();
-        expect(publicChannelHeading.nextSibling).toHaveTextContent('Anyone can join');
-
-        const privateChannelSvg = screen.getByLabelText('Lock Circle Solid Icon');
-        expect(privateChannelSvg).toBeInTheDocument();
-
-        const privateChannelHeading = screen.getByText('Private Channel');
-        expect(privateChannelHeading).toBeInTheDocument();
-        expect(privateChannelHeading.nextSibling).toHaveTextContent('Only invited members');
-
-        const purposeTextArea = screen.getByPlaceholderText('Enter a purpose for this channel (optional)');
-        expect(purposeTextArea).toBeInTheDocument();
-        expect(purposeTextArea).toHaveClass('new-channel-modal-purpose-textarea');
-
-        const purposeDesc = screen.getByText('This will be displayed when browsing for channels.');
-        expect(purposeDesc).toBeInTheDocument();
-
-        const cancelButton = screen.getByText('Cancel');
-        expect(cancelButton).toBeInTheDocument();
-        expect(cancelButton).toHaveClass('btn-tertiary');
-
-        const createChannelButton = screen.getByText('Create channel');
-        expect(createChannelButton).toBeInTheDocument();
-        expect(createChannelButton).toHaveClass('btn-primary');
-        expect(createChannelButton).toBeDisabled();
+    test('should match snapshot', () => {
+        expect(
+            shallow(
+                <NewChannelModal/>,
+            ),
+        ).toMatchSnapshot();
     });
 
     test('should handle display name change', () => {
         const value = 'Channel name';
+        const mockChangeEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value,
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
 
-        render(
+        const wrapper = shallow(
             <NewChannelModal/>,
         );
 
         // Change display name
-        const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
-        expect(channelNameInput).toBeInTheDocument();
-        expect(channelNameInput).toHaveAttribute('value', '');
-
-        userEvent.type(channelNameInput, value);
+        let input = wrapper.find(Input).first();
+        input.props().onChange!(mockChangeEvent);
 
         // Display name should have been updated
-        expect(channelNameInput).toHaveAttribute('value', value);
+        input = wrapper.find(Input).first();
+        expect(input.props().value).toEqual(value);
 
         // URL should have been changed according to display name
-        const urlInputLabel = screen.getByTestId('urlInputLabel');
-        expect(urlInputLabel).toHaveTextContent(cleanUpUrlable(value));
+        const urlInput = wrapper.find(URLInput);
+        expect(urlInput.props().pathInfo).toEqual(cleanUpUrlable(value));
     });
 
-    test('should handle url change', async () => {
+    test('should handle url change', () => {
         const value = 'Channel name';
+        const mockInputChangeEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value,
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+        const mockInputChangeUpdatedEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value: `${value} updated`,
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
 
         const url = 'channel-name-new';
+        const mockURLInputChangeEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value: url,
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
 
-        render(
+        const wrapper = shallow(
             <NewChannelModal/>,
         );
 
         // Change display name
-        const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
-        expect(channelNameInput).toBeInTheDocument();
-        expect(channelNameInput).toHaveAttribute('value', '');
+        let input = wrapper.find(Input).first();
+        input.props().onChange!(mockInputChangeEvent);
 
-        userEvent.type(channelNameInput, value);
-        const urlInputLabel = screen.getByTestId('urlInputLabel');
-        expect(urlInputLabel).toHaveTextContent(cleanUpUrlable(value));
+        // URL should have been changed according to display name
+        let urlInput = wrapper.find(URLInput);
+        expect(urlInput.props().pathInfo).toEqual(cleanUpUrlable(value));
 
         // Change URL
-        const editUrl = screen.getByText('Edit');
-        expect(editUrl).toBeInTheDocument();
-
-        userEvent.click(editUrl);
-
-        const editUrlInput = screen.getByTestId('channelURLInput');
-        userEvent.clear(editUrlInput);
-        userEvent.type(editUrlInput, url);
-
-        const doneButton = screen.getByText('Done');
-        await waitFor(() =>
-            userEvent.click(doneButton),
-        );
+        urlInput.props().onChange!(mockURLInputChangeEvent);
 
         // URL should have been updated
-        expect(screen.getByText(url, {exact: false})).toBeInTheDocument();
+        urlInput = wrapper.find(URLInput);
+        expect(urlInput.props().pathInfo).toEqual(url);
 
         // Change display name again
-        userEvent.type(channelNameInput, `${value} updated`);
+        input = wrapper.find(Input).first();
+        input.props().onChange!(mockInputChangeUpdatedEvent);
 
         // URL should NOT be updated
-        expect(screen.getByText(url, {exact: false})).toBeInTheDocument();
+        urlInput = wrapper.find(URLInput);
+        expect(urlInput.props().pathInfo).toEqual(url);
     });
 
     test('should handle type changes', () => {
-        render(
+        const typePublic = Constants.OPEN_CHANNEL as ChannelType;
+        const typePrivate = Constants.PRIVATE_CHANNEL as ChannelType;
+
+        const wrapper = shallow(
             <NewChannelModal/>,
         );
 
         // Change type to private
-        const privateChannel = screen.getByText('Private Channel');
-        expect(privateChannel).toBeInTheDocument();
-
-        userEvent.click(privateChannel);
+        let selector = wrapper.find(PublicPrivateSelector);
+        selector.props().onChange!(typePrivate);
 
         // Type should have been updated to private
-        expect(privateChannel.parentElement?.nextSibling?.firstChild).toHaveAttribute('aria-label', 'Check Circle Icon');
+        selector = wrapper.find(PublicPrivateSelector);
+        expect(selector.props().selected).toEqual(typePrivate);
 
-        // Change type to public
-        const publicChannel = screen.getByText('Public Channel');
-        expect(publicChannel).toBeInTheDocument();
-
-        userEvent.click(publicChannel);
+        // Change type to private
+        selector = wrapper.find(PublicPrivateSelector);
+        selector.props().onChange!(typePublic);
 
         // Type should have been updated to public
-        expect(publicChannel.parentElement?.nextSibling?.firstChild).toHaveAttribute('aria-label', 'Check Circle Icon');
+        selector = wrapper.find(PublicPrivateSelector);
+        expect(selector.props().selected).toEqual(typePublic);
     });
 
     test('should handle purpose changes', () => {
         const value = 'Purpose';
+        const mockChangeEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value,
+            },
+        } as unknown as React.ChangeEvent<HTMLTextAreaElement>;
 
-        render(
+        const wrapper = shallow(
             <NewChannelModal/>,
         );
 
         // Change purpose
-        const ChannelPurposeTextArea = screen.getByPlaceholderText('Enter a purpose for this channel (optional)');
-        expect(ChannelPurposeTextArea).toBeInTheDocument();
-
-        userEvent.click(ChannelPurposeTextArea);
-        userEvent.type(ChannelPurposeTextArea, value);
+        let textarea = wrapper.find('textarea');
+        textarea.props().onChange!(mockChangeEvent);
 
         // Purpose should have been updated
-        expect(ChannelPurposeTextArea).toHaveValue(value);
+        textarea = wrapper.find('textarea');
+        expect(textarea.props().value).toEqual(value);
     });
 
     test('should enable confirm button when having valid display name, url and type', () => {
-        render(
+        const mockChangeEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value: 'Channel name',
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+        const wrapper = shallow(
             <NewChannelModal/>,
         );
 
         // Confirm button should be disabled
-        const createChannelButton = screen.getByText('Create channel');
-        expect(createChannelButton).toBeInTheDocument();
-        expect(createChannelButton).toBeDisabled();
+        let genericModal = wrapper.find(GenericModal);
+        expect(genericModal.props().isConfirmDisabled).toEqual(true);
 
         // Change display name
-        const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
-        expect(channelNameInput).toBeInTheDocument();
-        expect(channelNameInput).toHaveAttribute('value', '');
-
-        userEvent.type(channelNameInput, 'Channel name');
+        const input = wrapper.find(Input).first();
+        input.props().onChange!(mockChangeEvent);
 
         // Change type to private
-        const privateChannel = screen.getByText('Private Channel');
-        expect(privateChannel).toBeInTheDocument();
-
-        userEvent.click(privateChannel);
+        const selector = wrapper.find(PublicPrivateSelector);
+        selector.props().onChange!(Constants.PRIVATE_CHANNEL as ChannelType);
 
         // Confirm button should be enabled
-        expect(createChannelButton).toBeEnabled();
+        genericModal = wrapper.find(GenericModal);
+        expect(genericModal.props().isConfirmDisabled).toEqual(false);
     });
 
     test('should disable confirm button when display name in error', () => {
-        render(
+        const mockChangeEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value: 'Channel name',
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+        const mockChangeInvalidEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value: '',
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+        const wrapper = shallow(
             <NewChannelModal/>,
         );
 
         // Change display name
-        const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
-        expect(channelNameInput).toBeInTheDocument();
-        expect(channelNameInput).toHaveAttribute('value', '');
-
-        userEvent.type(channelNameInput, 'Channel name');
+        let input = wrapper.find(Input).first();
+        input.props().onChange!(mockChangeEvent);
 
         // Change type to private
-        const privateChannel = screen.getByText('Private Channel');
-        expect(privateChannel).toBeInTheDocument();
-
-        userEvent.click(privateChannel);
+        const selector = wrapper.find(PublicPrivateSelector);
+        selector.props().onChange!(Constants.PRIVATE_CHANNEL as ChannelType);
 
         // Confirm button should be enabled
-        const createChannelButton = screen.getByText('Create channel');
-        expect(createChannelButton).toBeEnabled();
+        let genericModal = wrapper.find(GenericModal);
+        expect(genericModal.props().isConfirmDisabled).toEqual(false);
 
         // Change display name to invalid
-        userEvent.clear(channelNameInput);
+        input = wrapper.find(Input).first();
+        input.props().onChange!(mockChangeInvalidEvent);
 
         // Confirm button should be disabled
-        expect(createChannelButton).toBeDisabled();
+        genericModal = wrapper.find(GenericModal);
+        expect(genericModal.props().isConfirmDisabled).toEqual(true);
     });
 
     test('should disable confirm button when url in error', () => {
-        render(
+        const mockChangeEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value: 'Channel name',
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+        const mockChangeURLInvalidEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value: 'c-',
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+        const wrapper = shallow(
             <NewChannelModal/>,
         );
 
         // Change display name
-        const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
-        expect(channelNameInput).toBeInTheDocument();
-        expect(channelNameInput).toHaveAttribute('value', '');
-
-        userEvent.type(channelNameInput, 'Channel name');
+        const input = wrapper.find(Input).first();
+        input.props().onChange!(mockChangeEvent);
 
         // Change type to private
-        const privateChannel = screen.getByText('Private Channel');
-        expect(privateChannel).toBeInTheDocument();
-
-        userEvent.click(privateChannel);
+        const selector = wrapper.find(PublicPrivateSelector);
+        selector.props().onChange!(Constants.PRIVATE_CHANNEL as ChannelType);
 
         // Confirm button should be enabled
-        const createChannelButton = screen.getByText('Create channel');
-        expect(createChannelButton).toBeEnabled();
+        let genericModal = wrapper.find(GenericModal);
+        expect(genericModal.props().isConfirmDisabled).toEqual(false);
 
         // Change url to invalid
-        const editUrl = screen.getByText('Edit');
-        expect(editUrl).toBeInTheDocument();
-
-        userEvent.click(editUrl);
-
-        const editUrlInput = screen.getByTestId('channelURLInput');
-        userEvent.clear(editUrlInput);
-        userEvent.type(editUrlInput, 'c-');
+        const urlInput = wrapper.find(URLInput);
+        urlInput.props().onChange!(mockChangeURLInvalidEvent);
 
         // Confirm button should be disabled
-        expect(createChannelButton).toBeDisabled();
+        genericModal = wrapper.find(GenericModal);
+        expect(genericModal.props().isConfirmDisabled).toEqual(true);
     });
 
     test('should disable confirm button when server error', async () => {
-        render(
+        const mockChangeEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value: 'Channel name',
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+        const wrapper = shallow(
             <NewChannelModal/>,
         );
 
         // Confirm button should be disabled
-        const createChannelButton = screen.getByText('Create channel');
-        expect(createChannelButton).toBeDisabled();
+        let genericModal = wrapper.find(GenericModal);
+        expect(genericModal.props().isConfirmDisabled).toEqual(true);
 
         // Change display name
-        const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
-        expect(channelNameInput).toBeInTheDocument();
-        expect(channelNameInput).toHaveAttribute('value', '');
-
-        userEvent.type(channelNameInput, 'Channel name');
+        const input = wrapper.find(Input).first();
+        input.props().onChange!(mockChangeEvent);
 
         // Change type to private
-        const privateChannel = screen.getByText('Private Channel');
-        expect(privateChannel).toBeInTheDocument();
-
-        userEvent.click(privateChannel);
+        const selector = wrapper.find(PublicPrivateSelector);
+        selector.props().onChange!(Constants.PRIVATE_CHANNEL as ChannelType);
 
         // Confirm button should be enabled
-        expect(createChannelButton).toBeEnabled();
+        genericModal = wrapper.find(GenericModal);
+        expect(genericModal.props().isConfirmDisabled).toEqual(false);
 
         // Submit
-        await act(async () => userEvent.click(createChannelButton));
+        await genericModal.props().handleConfirm!();
 
-        const serverError = screen.getByText('Something went wrong. Please try again.');
-        expect(serverError).toBeInTheDocument();
-        expect(createChannelButton).toBeDisabled();
+        genericModal = wrapper.find(GenericModal);
+        expect(genericModal.props().errorText).toEqual('Something went wrong. Please try again.');
+        expect(genericModal.props().isConfirmDisabled).toEqual(true);
     });
 
     test('should request team creation on submit', async () => {
         const name = 'Channel name';
+        const mockChangeEvent = {
+            preventDefault: jest.fn(),
+            target: {
+                value: name,
+            },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
 
-        renderWithIntl(
+        const wrapper = mountWithIntl(
             <NewChannelModal/>,
         );
 
+        const genericModal = wrapper.find('GenericModal');
+        const displayName = genericModal.find('.new-channel-modal-name-input');
+        const confirmButton = genericModal.find('button[type=\'submit\']');
+
         // Confirm button should be disabled
-        const createChannelButton = screen.getByText('Create channel');
-        expect(createChannelButton).toBeDisabled();
+        expect((confirmButton.instance() as unknown as HTMLButtonElement).disabled).toEqual(true);
 
         // Enter data
-
-        const channelNameInput = screen.getByPlaceholderText('Enter a name for your new channel');
-        expect(channelNameInput).toBeInTheDocument();
-        expect(channelNameInput).toHaveAttribute('value', '');
-
-        userEvent.type(channelNameInput, name);
+        displayName.simulate('change', mockChangeEvent);
 
         // Display name should be updated
-        expect(channelNameInput).toHaveValue(name);
+        expect((displayName.instance() as unknown as HTMLInputElement).value).toEqual(name);
 
         // Confirm button should be enabled
-        expect(createChannelButton).toBeEnabled();
+        expect((confirmButton.instance() as unknown as HTMLButtonElement).disabled).toEqual(false);
 
         // Submit
         await act(async () => {
-            userEvent.click(createChannelButton);
+            confirmButton.simulate('click');
         });
 
         // Request should be sent
@@ -448,6 +477,6 @@ describe('components/new_channel_modal', () => {
             team_id: 'current_team_id',
             type: 'O',
             update_at: 0,
-        }, '');
+        }, '', openChannelLimitModalIfNeeded);
     });
 });

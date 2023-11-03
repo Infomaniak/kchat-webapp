@@ -3,14 +3,13 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
 import {useOpenSelfHostedZendeskSupportForm} from 'components/common/hooks/useOpenZendeskForm';
 import PaymentFailedSvg from 'components/common/svg_images_components/payment_failed_svg';
 import IconMessage from 'components/purchase_modal/icon_message';
-
-import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import './error_page.scss';
 

@@ -5,17 +5,17 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {closeModal} from 'actions/views/modals';
+import {InquiryType} from 'selectors/cloud';
+import {isModalOpen} from 'selectors/views/modals';
+
+import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import IconMessage from 'components/purchase_modal/icon_message';
 import FullScreenModal from 'components/widgets/modals/full_screen_modal';
 
-import {closeModal} from 'actions/views/modals';
-import {isModalOpen} from 'selectors/views/modals';
-import {GlobalState} from 'types/store';
+import type {GlobalState} from 'types/store';
 
 import './result_modal.scss';
-
-import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
-import {InquiryType} from 'selectors/cloud';
 
 type Props = {
     onHide?: () => void;
@@ -64,12 +64,10 @@ export default function ResultModal(props: Props) {
                     buttonHandler={props.primaryButtonHandler}
                     className={'success'}
                     formattedTertiaryButonText={
-                        props.contactSupportButtonVisible ?
-                            <FormattedMessage
-                                id={'admin.billing.deleteWorkspace.resultModal.ContactSupport'}
-                                defaultMessage={'Contact Support'}
-                            /> :
-                            undefined
+                        props.contactSupportButtonVisible ? <FormattedMessage
+                            id={'admin.billing.deleteWorkspace.resultModal.ContactSupport'}
+                            defaultMessage={'Contact Support'}
+                        /> : undefined
                     }
                     tertiaryButtonHandler={props.contactSupportButtonVisible ? openContactUs : undefined}
                 />

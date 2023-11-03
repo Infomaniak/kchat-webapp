@@ -3,16 +3,14 @@
 
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {
+    LicenseLinks,
+    ModalIdentifiers,
+} from 'utils/constants';
 
 import {Client4} from 'mattermost-redux/client';
 
 import {trackEvent} from 'actions/telemetry_actions';
-
-import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
-
-import {
-    ModalIdentifiers,
-} from 'utils/constants';
 
 import type {ModalData} from 'types/actions';
 
@@ -32,9 +30,6 @@ export interface RenewalLinkProps {
 const RenewalLink = (props: RenewalLinkProps) => {
     const [renewalLink, setRenewalLink] = useState('');
     const [manualInterventionRequired, setManualInterventionRequired] = useState(false);
-
-    const [openContactSales] = useOpenSalesLink();
-
     useEffect(() => {
         Client4.getRenewalLink().then(({renewal_link: renewalLinkParam}) => {
             try {
@@ -52,14 +47,14 @@ const RenewalLink = (props: RenewalLinkProps) => {
     const handleLinkClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         try {
-            const {status} = await Client4.ping(false);
+            const {status} = await Client4.ping();
             if (status === 'OK' && renewalLink !== '') {
                 if (props.telemetryInfo?.success) {
                     trackEvent('renew_license', props.telemetryInfo.success);
                 }
                 window.open(renewalLink, '_blank');
             } else if (manualInterventionRequired) {
-                openContactSales();
+                window.open(LicenseLinks.CONTACT_SALES, '_blank');
             } else {
                 showConnectionErrorModal();
             }

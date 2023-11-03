@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
@@ -14,8 +14,8 @@ import {getIsMobileView} from 'selectors/views/browser';
 
 import type {GlobalState} from 'types/store';
 
-import QuickSwitchModal from './quick_switch_modal';
 import type {Props} from './quick_switch_modal';
+import QuickSwitchModal from './quick_switch_modal';
 
 function mapStateToProps(state: GlobalState) {
     return {

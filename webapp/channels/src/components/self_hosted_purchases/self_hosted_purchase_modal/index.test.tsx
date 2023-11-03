@@ -2,11 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
-import {SelfHostedSignupProgress} from '@mattermost/types/hosted_customer';
-import type {SelfHostedSignupForm} from '@mattermost/types/hosted_customer';
-import type {DeepPartial} from '@mattermost/types/utilities';
-
 import {
     fireEvent,
     renderWithIntlAndStore,
@@ -15,6 +10,10 @@ import {
 } from 'tests/react_testing_utils';
 import {SelfHostedProducts, ModalIdentifiers} from 'utils/constants';
 import {TestHelper as TH} from 'utils/test_helper';
+
+import {SelfHostedSignupProgress} from '@mattermost/types/hosted_customer';
+import type {SelfHostedSignupForm} from '@mattermost/types/hosted_customer';
+import type {DeepPartial} from '@mattermost/types/utilities';
 
 import type {GlobalState} from 'types/store';
 

@@ -1,11 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {RefObject} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import ReactSelect from 'react-select';
 import type {ValueType} from 'react-select';
+import ReactSelect from 'react-select';
+import {localizeMessage} from 'utils/utils';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 
@@ -14,8 +15,6 @@ import {Preferences} from 'mattermost-redux/constants';
 import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
 import type SettingItemMinComponent from 'components/setting_item_min/setting_item_min';
-
-import {localizeMessage} from 'utils/utils';
 
 type Limit = {
     value: number;

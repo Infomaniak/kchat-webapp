@@ -2,15 +2,15 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {useIntl} from 'react-intl';
+import {t} from 'utils/i18n';
+
+import LocalizedIcon from 'components/localized_icon';
 
 export default function SearchIcon() {
-    const {formatMessage} = useIntl();
-
     return (
-        <i
+        <LocalizedIcon
             className='fa fa-search'
-            title={formatMessage({id: 'generic_icons.search', defaultMessage: 'Search Icon'})}
+            title={{id: t('generic_icons.search'), defaultMessage: 'Search Icon'}}
         />
     );
 }

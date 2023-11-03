@@ -6,6 +6,7 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
 import semver from 'semver';
+import {localizeMessage} from 'utils/utils';
 
 import type {MarketplaceLabel} from '@mattermost/types/marketplace';
 import type {PluginStatusRedux} from '@mattermost/types/plugins';
@@ -14,8 +15,6 @@ import ConfirmModal from 'components/confirm_modal';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
-
-import {localizeMessage} from 'utils/utils';
 
 import MarketplaceItem from '../marketplace_item';
 
@@ -292,7 +291,7 @@ export default class MarketplaceItemPlugin extends React.PureComponent <Marketpl
                 >
                     <button
                         onClick={this.onConfigure}
-                        className='plugin-configure'
+                        className='btn btn-outline'
                     >
                         <FormattedMessage
                             id='marketplace_modal.list.configure'
@@ -323,7 +322,7 @@ export default class MarketplaceItemPlugin extends React.PureComponent <Marketpl
         return (
             <button
                 onClick={this.onInstall}
-                className='plugin-install always-show-enabled'
+                className='btn btn-primary'
                 disabled={this.props.installing}
             >
                 <LoadingWrapper

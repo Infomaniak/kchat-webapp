@@ -2,16 +2,14 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import type {ChangeEventHandler} from 'react';
-
-import type {Channel} from '@mattermost/types/channels';
-
 import Constants from 'utils/constants';
 import * as Utils from 'utils/utils';
 
+import type {Channel} from '@mattermost/types/channels';
+
 type Props = {
     channels: Channel[];
-    onChange?: ChangeEventHandler<HTMLSelectElement>;
+    onChange?: () => void;
     value?: string;
     selectOpen: boolean;
     selectPrivate: boolean;

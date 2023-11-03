@@ -2,30 +2,28 @@
 // See LICENSE.txt for license information.
 
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
+import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {FormattedMessage} from 'react-intl';
-
-import {TopChannel, TopChannelGraphData} from '@mattermost/types/insights';
-
-import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
-
-import {getCurrentRelativeTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {getMyTopChannels, getTopChannelsForTeam} from 'mattermost-redux/actions/insights';
-
 import Constants, {InsightsScopes} from 'utils/constants';
 
-import {trackEvent} from 'actions/telemetry_actions';
+import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
+import type {TopChannel, TopChannelGraphData} from '@mattermost/types/insights';
 
+import {getMyTopChannels, getTopChannelsForTeam} from 'mattermost-redux/actions/insights';
+import {getCurrentRelativeTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+
+import {trackEvent} from 'actions/telemetry_actions';
 import {getCurrentUserTimezone} from 'selectors/general';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 
-import widgetHoc, {WidgetHocProps} from '../widget_hoc/widget_hoc';
-import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
-
 import TopChannelsLineChart from './top_channels_line_chart/top_channels_line_chart';
+
+import WidgetEmptyState from '../widget_empty_state/widget_empty_state';
+import type {WidgetHocProps} from '../widget_hoc/widget_hoc';
+import widgetHoc from '../widget_hoc/widget_hoc';
 
 import './../../activity_and_insights.scss';
 

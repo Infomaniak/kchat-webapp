@@ -2,20 +2,16 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-
 import {isNil} from 'lodash';
-
 import React from 'react';
-
 import {FormattedMessage} from 'react-intl';
+import {localizeMessage} from 'utils/utils';
 
 import ConfirmModal from 'components/confirm_modal';
 import GlobeIcon from 'components/widgets/icons/globe_icon';
 import LockIcon from 'components/widgets/icons/lock_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-
-import {localizeMessage} from 'utils/utils';
 
 type Props = {
     id: string;
@@ -85,13 +81,9 @@ State
         let dropDown = null;
         if (!isNil(schemeAdmin)) {
             let currentRole = member;
-            let roleToBe = this.props.type.includes('team') ?
-                teamAdmin :
-                channelAdmin;
+            let roleToBe = this.props.type.includes('team') ? teamAdmin : channelAdmin;
             if (schemeAdmin) {
-                currentRole = this.props.type.includes('team') ?
-                    teamAdmin :
-                    channelAdmin;
+                currentRole = this.props.type.includes('team') ? teamAdmin : channelAdmin;
                 roleToBe = member;
             }
             dropDown = (
@@ -134,9 +126,7 @@ State
                 <i
                     className={
                         'fa ' +
-                        (this.props.collapsed ?
-                            'fa-caret-right' :
-                            'fa-caret-down')
+                        (this.props.collapsed ? 'fa-caret-right' : 'fa-caret-down')
                     }
                     onClick={this.toggleCollapse}
                 />

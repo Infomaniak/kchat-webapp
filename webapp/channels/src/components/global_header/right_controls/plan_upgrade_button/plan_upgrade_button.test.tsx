@@ -4,11 +4,10 @@
 import {mount} from 'enzyme';
 import React from 'react';
 import * as reactRedux from 'react-redux';
-
-import * as cloudActions from 'mattermost-redux/actions/cloud';
-
 import mockStore from 'tests/test_store';
 import {CloudProducts} from 'utils/constants';
+
+import * as cloudActions from 'mattermost-redux/actions/cloud';
 
 import PlanUpgradeButton from './index';
 

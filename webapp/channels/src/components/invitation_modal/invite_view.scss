@@ -21,12 +21,12 @@
             display: none;
         }
 
-        &-guest {
-            justify-content: flex-end;
-        }
-
         .btn {
             font-weight: 600;
+        }
+
+        .btn#inviteGuestButton {
+            margin-left: auto;
         }
     }
 
@@ -52,7 +52,7 @@ $less-than-6-user-lines-height: 227px;
 
         .users-emails-input__control {
             overflow: auto;
-            min-height: 84px;
+            // min-height: 84px;
             max-height: $less-than-6-user-lines-height;
             align-items: flex-start;
         }

@@ -3,8 +3,10 @@
 
 import React from 'react';
 import {Modal, Fade} from 'react-bootstrap';
-import {FormattedMessage, injectIntl} from 'react-intl';
 import type {WrappedComponentProps} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {filterEmptyOptions} from 'utils/apps';
+import {localizeMessage} from 'utils/utils';
 
 import type {AppCallResponse, AppField, AppForm, AppFormValues, AppSelectOption, FormResponseData, AppLookupResponse, AppFormValue} from '@mattermost/types/apps';
 import type {DialogElement} from '@mattermost/types/integrations';
@@ -19,9 +21,6 @@ import SpinnerButton from 'components/spinner_button';
 import ModalSuggestionList from 'components/suggestion/modal_suggestion_list';
 import SuggestionList from 'components/suggestion/suggestion_list';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
-
-import {filterEmptyOptions} from 'utils/apps';
-import {localizeMessage} from 'utils/utils';
 
 import type {DoAppCallResult} from 'types/apps';
 
@@ -235,7 +234,7 @@ export class AppsForm extends React.PureComponent<Props, State> {
             const errorResponse = res.error;
             const errMsg = errorResponse.text || intl.formatMessage({
                 id: 'apps.error.unknown',
-                defaultMessage: 'Unknown error occurred.',
+                defaultMessage: 'Unknown error.',
             });
             this.setState({
                 fieldErrors: {
@@ -257,7 +256,7 @@ export class AppsForm extends React.PureComponent<Props, State> {
         case AppCallResponseTypes.NAVIGATE: {
             const errMsg = intl.formatMessage({
                 id: 'apps.error.responses.unexpected_type',
-                defaultMessage: 'App response type was not expected. Response type: {type}',
+                defaultMessage: 'App response type was not expected. Response type: {type}.',
             }, {
                 type: callResp.type,
             },
@@ -339,7 +338,7 @@ export class AppsForm extends React.PureComponent<Props, State> {
                 case AppCallResponseTypes.NAVIGATE:
                     this.updateErrors([], undefined, this.props.intl.formatMessage({
                         id: 'apps.error.responses.unexpected_type',
-                        defaultMessage: 'App response type was not expected. Response type: {type}',
+                        defaultMessage: 'App response type was not expected. Response type: {type}.',
                     }, {
                         type: callResponse.type,
                     }));
@@ -562,7 +561,7 @@ export class AppsForm extends React.PureComponent<Props, State> {
                     <button
                         id='appsModalCancel'
                         type='button'
-                        className='btn btn-tertiary cancel-button'
+                        className='btn btn-link cancel-button'
                         onClick={this.onHide}
                     >
                         <FormattedMessage

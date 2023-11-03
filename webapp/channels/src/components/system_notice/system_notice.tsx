@@ -3,18 +3,16 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {Preferences} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {AnalyticsRow} from '@mattermost/types/admin';
-import type {Channel} from '@mattermost/types/channels';
 import type {ClientConfig, ClientLicense} from '@mattermost/types/config';
 import type {PreferenceType} from '@mattermost/types/preferences';
 
 import LocalizedIcon from 'components/localized_icon';
 import type {Notice} from 'components/system_notice/types';
 import MattermostLogo from 'components/widgets/icons/mattermost_logo';
-
-import {Preferences} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 type Props = {
     currentUserId: string;
@@ -26,7 +24,6 @@ type Props = {
     config: Partial<ClientConfig>;
     license: ClientLicense;
     analytics?: Record<string, number | AnalyticsRow[]>;
-    currentChannel?: Channel;
     actions: {
         savePreferences(userId: string, preferences: PreferenceType[]): void;
         dismissNotice(type: string): void;
@@ -62,13 +59,7 @@ export default class SystemNotice extends React.PureComponent<Props> {
                 continue;
             }
 
-            if (!notice.show?.(
-                this.props.serverVersion,
-                this.props.config,
-                this.props.license,
-                this.props.analytics,
-                this.props.currentChannel,
-            )) {
+            if (!notice.show?.(this.props.serverVersion, this.props.config, this.props.license, this.props.analytics)) {
                 continue;
             }
 
@@ -126,44 +117,44 @@ export default class SystemNotice extends React.PureComponent<Props> {
             );
         }
 
-        const icon = notice.icon || <MattermostLogo/>;
-
         return (
             <div
-                className='system-notice bg--white'
+                className='system-notice bg--white shadow--2'
             >
-                <div className='system-notice__logo'>
-                    {icon}
-                </div>
-                <div className='system-notice__body'>
+                <div className='system-notice__header'>
+                    <div className='system-notice__logo'>
+                        <MattermostLogo/>
+                    </div>
                     <div className='system-notice__title'>
                         {notice.title}
                     </div>
+                </div>
+                <div className='system-notice__body'>
                     {notice.body}
-                    {visibleMessage}
-                    <div className='system-notice__footer'>
+                </div>
+                {visibleMessage}
+                <div className='system-notice__footer'>
+                    <button
+                        id='systemnotice_remindme'
+                        className='btn btn-transparent'
+                        onClick={this.hideAndRemind}
+                    >
+                        <FormattedMessage
+                            id='system_notice.remind_me'
+                            defaultMessage='Remind Me Later'
+                        />
+                    </button>
+                    {notice.allowForget &&
                         <button
-                            id='systemnotice_remindme'
-                            className='btn btn-sm btn-primary'
-                            onClick={this.hideAndRemind}
+                            id='systemnotice_dontshow'
+                            className='btn btn-transparent'
+                            onClick={this.hideAndForget}
                         >
                             <FormattedMessage
-                                id='system_notice.remind_me'
-                                defaultMessage='Remind Me Later'
+                                id='system_notice.dont_show'
+                                defaultMessage="Don't Show Again"
                             />
-                        </button>
-                        {notice.allowForget &&
-                            <button
-                                id='systemnotice_dontshow'
-                                className='btn btn-sm btn-tertiary'
-                                onClick={this.hideAndForget}
-                            >
-                                <FormattedMessage
-                                    id='system_notice.dont_show'
-                                    defaultMessage="Don't Show Again"
-                                />
-                            </button>}
-                    </div>
+                        </button>}
                 </div>
             </div>
         );

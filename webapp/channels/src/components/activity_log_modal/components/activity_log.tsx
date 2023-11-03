@@ -3,12 +3,12 @@
 
 import React from 'react';
 import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
+import {getMonthLong, t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
+
+import type {Session} from '@mattermost/types/sessions';
 
 import {General} from 'mattermost-redux/constants';
-import {Session} from '@mattermost/types/sessions';
-
-import {localizeMessage} from 'utils/utils';
-import {getMonthLong, t} from 'utils/i18n';
 
 import MoreInfo from './more_info';
 
@@ -56,11 +56,11 @@ export default class ActivityLog extends React.PureComponent<Props, State> {
 
     handleMoreInfo = (): void => {
         this.setState({moreInfo: true});
-    }
+    };
 
     submitRevoke = (e: React.MouseEvent): void => {
         this.props.submitRevoke(this.props.currentSession.id, e);
-    }
+    };
 
     isMobileSession = (session: Session): boolean => {
         return Boolean(session.device_id && (session.device_id.includes('apple') || session.device_id.includes('android')));

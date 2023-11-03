@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import Constants from 'utils/constants';
 
 import QuickSwitchModal from 'components/quick_switch_modal/quick_switch_modal';
-
-import Constants from 'utils/constants';
 
 describe('components/QuickSwitchModal', () => {
     const baseProps = {

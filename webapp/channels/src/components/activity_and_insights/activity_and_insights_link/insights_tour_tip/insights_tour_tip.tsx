@@ -1,28 +1,25 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import insightsPreview from 'images/Insights-Preview-Image.jpg';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 
-import {setInsightsInitialisationState} from 'mattermost-redux/actions/preferences';
+import {TourTip, useMeasurePunchouts} from '@mattermost/components';
+import type {GlobalState as EntitiesGlobalState} from '@mattermost/types/store';
 
+import {setInsightsInitialisationState} from 'mattermost-redux/actions/preferences';
+import {Preferences} from 'mattermost-redux/constants';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 
-import {GlobalState as EntitiesGlobalState} from '@mattermost/types/store';
-
-import {Preferences} from 'mattermost-redux/constants';
-
 import {showInsightsPulsatingDot} from 'selectors/insights';
 
-import {GlobalState} from 'types/store';
-
-import insightsPreview from 'images/Insights-Preview-Image.jpg';
-
-import {TourTip, useMeasurePunchouts} from '@mattermost/components';
 import {OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
+
+import type {GlobalState} from 'types/store';
 
 const title = (
     <FormattedMessage

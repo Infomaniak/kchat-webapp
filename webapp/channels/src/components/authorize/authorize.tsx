@@ -1,17 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import icon50 from 'images/icon50x50.png';
 import type {ReactNode} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {getHistory} from 'utils/browser_history';
 
 import type {OAuthApp} from '@mattermost/types/integrations';
 
 import FormError from 'components/form_error';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
-import icon50 from 'images/icon50x50.png';
-import {getHistory} from 'utils/browser_history';
 
 export type Params = {
     responseType: string | null;
@@ -158,7 +157,7 @@ export default class Authorize extends React.PureComponent<Props, State> {
                     <div className='prompt__buttons'>
                         <button
                             type='submit'
-                            className='btn btn-tertiary authorize-btn'
+                            className='btn btn-link authorize-btn'
                             onClick={this.handleDeny}
                         >
                             <FormattedMessage

@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import EmojiMap from 'utils/emoji_map';
 
 import {AppCallResponseTypes} from 'mattermost-redux/constants/apps';
-
-import EmojiMap from 'utils/emoji_map';
 
 import {RawAppsFormContainer} from './apps_form_container';
 

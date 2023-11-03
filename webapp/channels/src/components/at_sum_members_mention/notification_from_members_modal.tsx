@@ -1,13 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
+import {ModalIdentifiers} from 'utils/constants';
+import {mapFeatureIdToTranslation} from 'utils/notify_admin_utils';
 
-import {GenericModal} from '@mattermost/components';
 import type {ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -22,12 +23,12 @@ import {openDirectChannelToUserId} from 'actions/channel_actions';
 import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
-import MemberList from 'components/channel_members_rhs/member_list';
-
-import {ModalIdentifiers} from 'utils/constants';
-import {mapFeatureIdToTranslation} from 'utils/notify_admin_utils';
+import {ListItemType} from 'components/channel_members_rhs/channel_members_rhs';
+import GenericModal from 'components/generic_modal';
 
 import type {GlobalState} from 'types/store';
+
+import MemberList from '../channel_members_rhs/member_list';
 
 import './notification_from_members_modal.scss';
 
@@ -41,12 +42,6 @@ export interface ChannelMember {
     membership?: ChannelMembership;
     status?: string;
     displayName: string;
-}
-
-enum ListItemType {
-    Member = 'member',
-    FirstSeparator = 'first-separator',
-    Separator = 'separator',
 }
 
 export interface ListItem {
@@ -95,13 +90,13 @@ function NotificationFromMembersModal(props: Props) {
         };
     });
 
-    const openDirectMessage = useCallback(async (user: UserProfile) => {
+    const openDirectMessage = async (user: UserProfile) => {
         // we first prepare the DM channel...
         await dispatch(openDirectChannelToUserId(user.id));
 
         // ... and then redirect to it
         history.push(teamUrl + '/messages/@' + user.username);
-    }, [openDirectChannelToUserId, history, teamUrl]);
+    };
 
     const handleOnClose = () => {
         dispatch(closeModal(ModalIdentifiers.SUM_OF_MEMBERS_MODAL));
@@ -135,8 +130,7 @@ function NotificationFromMembersModal(props: Props) {
                     members={members}
                     searchTerms={''}
                     editing={false}
-                    openDirectMessage={openDirectMessage}
-                    loadMore={loadMore}
+                    actions={{openDirectMessage, loadMore}}
                     hasNextPage={false}
                     isNextPageLoading={false}
                 />

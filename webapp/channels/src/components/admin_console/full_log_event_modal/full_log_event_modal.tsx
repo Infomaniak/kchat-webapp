@@ -5,7 +5,7 @@ import React from 'react';
 import {Button, Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import {LogObject} from '@mattermost/types/admin';
+import type {LogObject} from '@mattermost/types/admin';
 
 type Props = {
     log: LogObject | null;
@@ -42,12 +42,12 @@ export default class FullLogEventModal extends React.PureComponent<Props, State>
                 </pre>
             </div>
         );
-    }
+    };
 
     copyLog = () => {
         navigator.clipboard.writeText(JSON.stringify(this.props.log, undefined, 2));
         this.showCopySuccess();
-    }
+    };
 
     exportToCsv = () => {
         const file = navigator.clipboard.writeText(JSON.stringify(this.props.log, undefined, 2));
@@ -55,7 +55,7 @@ export default class FullLogEventModal extends React.PureComponent<Props, State>
         const encodedUri = encodeURI(csvContent);
         window.open(encodedUri);
         this.showExportSuccess();
-    }
+    };
 
     showCopySuccess = () => {
         this.setState({
@@ -67,7 +67,7 @@ export default class FullLogEventModal extends React.PureComponent<Props, State>
                 copySuccess: false,
             });
         }, 3000);
-    }
+    };
 
     showExportSuccess = () => {
         this.setState({
@@ -79,7 +79,7 @@ export default class FullLogEventModal extends React.PureComponent<Props, State>
                 exportSuccess: false,
             });
         }, 3000);
-    }
+    };
 
     render() {
         return (
@@ -100,17 +100,15 @@ export default class FullLogEventModal extends React.PureComponent<Props, State>
                             defaultMessage='Log Event'
                         />
                     </Modal.Title>
-                    {this.state.copySuccess ?
-                        <FormattedMessage
-                            id='admin.server_logs.DataCopied'
-                            defaultMessage='Data copied'
-                        /> :
-                        <Button onClick={this.copyLog}>
-                            <FormattedMessage
-                                id='admin.server_logs.CopyLog'
-                                defaultMessage='Copy log'
-                            />
-                        </Button>
+                    {this.state.copySuccess ? <FormattedMessage
+                        id='admin.server_logs.DataCopied'
+                        defaultMessage='Data copied'
+                    /> : <Button onClick={this.copyLog}>
+                                                  <FormattedMessage
+                            id='admin.server_logs.CopyLog'
+                            defaultMessage='Copy log'
+                        />
+                                              </Button>
                     }
                 </Modal.Header>
                 <Modal.Body>
@@ -127,17 +125,15 @@ export default class FullLogEventModal extends React.PureComponent<Props, State>
                             defaultMessage='Cancel'
                         />
                     </button>
-                    {this.state.exportSuccess ?
-                        <FormattedMessage
-                            id='admin.server_logs.Exported'
-                            defaultMessage='Exported'
-                        /> :
-                        <Button onClick={this.exportToCsv}>
-                            <FormattedMessage
-                                id='admin.server_logs.Export'
-                                defaultMessage='Export'
-                            />
-                        </Button>}
+                    {this.state.exportSuccess ? <FormattedMessage
+                        id='admin.server_logs.Exported'
+                        defaultMessage='Exported'
+                    /> : <Button onClick={this.exportToCsv}>
+                                                    <FormattedMessage
+                            id='admin.server_logs.Export'
+                            defaultMessage='Export'
+                        />
+                                                </Button>}
                 </Modal.Footer>
             </Modal>
         );

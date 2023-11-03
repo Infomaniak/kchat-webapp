@@ -2,18 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch, ActionCreatorsMapObject} from 'redux';
-
-import type {GlobalState} from '@mattermost/types/store';
-import type {UserProfile} from '@mattermost/types/users';
+import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
 
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import {GlobalState} from '@mattermost/types/store';
+import {UserProfile} from '@mattermost/types/users';
+import {ActionFunc} from 'mattermost-redux/types/actions';
 
 import {deactivateMfa} from 'actions/views/mfa';
-
 import Constants from 'utils/constants';
 
 import MfaSection from './mfa_section';

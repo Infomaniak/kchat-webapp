@@ -1,7 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {type ReactNode, useState} from 'react';
+import React, {useState} from 'react';
+import type {MessageDescriptor} from 'react-intl';
 import {useIntl} from 'react-intl';
 
 import type {SubmitOptions} from 'components/claim/components/email_to_ldap';
@@ -15,8 +16,8 @@ import './login_mfa.scss';
 type LoginMfaProps = {
     loginId: string | null;
     password: string;
-    title?: ReactNode;
-    subtitle?: ReactNode;
+    title?: MessageDescriptor;
+    subtitle?: MessageDescriptor;
     onSubmit: ({loginId, password, token}: SubmitOptions) => void;
 }
 
@@ -48,8 +49,8 @@ const LoginMfa = ({loginId, password, title, subtitle, onSubmit}: LoginMfaProps)
 
     return (
         <ColumnLayout
-            title={title || formatMessage({id: 'login_mfa.title', defaultMessage: 'Enter MFA Token'})}
-            message={subtitle || formatMessage({id: 'login_mfa.subtitle', defaultMessage: 'To complete the sign in process, please enter a token from your smartphone\'s authenticator'})}
+            title={formatMessage(title || {id: 'login_mfa.title', defaultMessage: 'Enter MFA Token'})}
+            message={formatMessage(subtitle || {id: 'login_mfa.subtitle', defaultMessage: 'To complete the sign in process, please enter a token from your smartphone\'s authenticator'})}
             SVGElement={<ShieldWithCheckmarkSVG/>}
             extraContent={(
                 <div className='login-mfa-form'>

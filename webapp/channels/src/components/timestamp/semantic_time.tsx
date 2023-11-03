@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {DateTime} from 'luxon';
-import React, {memo} from 'react';
 import type {FC, ReactNode, TimeHTMLAttributes} from 'react';
+import React, {memo} from 'react';
 
 export type Props = {
     value: Date;

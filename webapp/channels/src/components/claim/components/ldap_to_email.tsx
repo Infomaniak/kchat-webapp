@@ -3,14 +3,15 @@
 
 import classNames from 'classnames';
 import React, {useRef, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import {ClaimErrors} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {isValidPassword, localizeMessage} from 'utils/utils';
 
 import type {AuthChangeResponse} from '@mattermost/types/users';
 
+import LocalizedInput from 'components/localized_input/localized_input';
 import LoginMfa from 'components/login/login_mfa';
-
-import {ClaimErrors} from 'utils/constants';
-import {isValidPassword, localizeMessage} from 'utils/utils';
 
 import type {SubmitOptions} from './email_to_ldap';
 import ErrorLabel from './error_label';
@@ -35,8 +36,6 @@ const LDAPToEmail = (props: Props) => {
     const ldapPasswordInput = useRef<HTMLInputElement>(null);
     const passwordInput = useRef<HTMLInputElement>(null);
     const passwordConfirmInput = useRef<HTMLInputElement>(null);
-
-    const {formatMessage} = useIntl();
 
     const preSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -108,12 +107,17 @@ const LDAPToEmail = (props: Props) => {
         });
     };
 
+    const passwordPlaceholder = localizeMessage('claim.ldap_to_email.ldapPwd', 'AD/LDAP Password');
+    const titleMessage = {id: t('claim.ldap_to_email.title'), defaultMessage: 'Switch AD/LDAP Account to Email/Password'};
+    const placeholderPasswordMessage = {id: t('claim.ldap_to_email.pwd'), defaultMessage: 'Password'};
+    const placeholderConfirmMessage = {id: t('claim.ldap_to_email.confirm'), defaultMessage: 'Confirm Password'};
+
     if (showMfa) {
         return (
             <LoginMfa
                 loginId={props.email}
                 password={password}
-                title={formatMessage({id: 'claim.ldap_to_email.title', defaultMessage: 'Switch AD/LDAP Account to Email/Password'})}
+                title={titleMessage}
                 onSubmit={submit}
             />
         );
@@ -140,7 +144,8 @@ const LDAPToEmail = (props: Props) => {
                 <p>
                     <FormattedMessage
                         id='claim.ldap_to_email.enterLdapPwd'
-                        defaultMessage='AD/LDAP Password:'
+                        defaultMessage='{ldapPassword}:'
+                        values={{ldapPassword: passwordPlaceholder}}
                     />
                 </p>
                 <div className={classNames('form-group', {'has-error': ldapPasswordError})}>
@@ -149,7 +154,7 @@ const LDAPToEmail = (props: Props) => {
                         className='form-control'
                         name='ldapPassword'
                         ref={ldapPasswordInput}
-                        placeholder={formatMessage({id: 'claim.ldap_to_email.ldapPwd', defaultMessage: 'AD/LDAP Password'})}
+                        placeholder={passwordPlaceholder}
                         spellCheck='false'
                     />
                 </div>
@@ -161,23 +166,23 @@ const LDAPToEmail = (props: Props) => {
                     />
                 </p>
                 <div className={classNames('form-group', {'has-error': passwordError})}>
-                    <input
-                        ref={passwordInput}
+                    <LocalizedInput
                         type='password'
                         className='form-control'
                         name='password'
-                        placeholder={formatMessage({id: 'claim.ldap_to_email.pwd', defaultMessage: 'Password'})}
+                        ref={passwordInput}
+                        placeholder={placeholderPasswordMessage}
                         spellCheck='false'
                     />
                 </div>
                 <ErrorLabel errorText={passwordError}/>
                 <div className={classNames('form-group', {'has-error': confirmError})}>
-                    <input
-                        ref={passwordConfirmInput}
+                    <LocalizedInput
                         type='password'
                         className='form-control'
                         name='passwordconfirm'
-                        placeholder={formatMessage({id: 'claim.ldap_to_email.confirm', defaultMessage: 'Confirm Password'})}
+                        ref={passwordConfirmInput}
+                        placeholder={placeholderConfirmMessage}
                         spellCheck='false'
                     />
                 </div>

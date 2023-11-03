@@ -3,16 +3,15 @@
 
 import classNames from 'classnames';
 import React, {useCallback} from 'react';
-import {useIntl} from 'react-intl';
 import type {MessageDescriptor} from 'react-intl';
+import {useIntl} from 'react-intl';
+import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
+import {Constants, LicenseSkus, ModalIdentifiers} from 'utils/constants';
 
 import FeatureRestrictedModal from 'components/feature_restricted_modal/feature_restricted_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import ToggleModalButton from 'components/toggle_modal_button';
 import Tooltip from 'components/tooltip';
-
-import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
-import {Constants, LicenseSkus, ModalIdentifiers} from 'utils/constants';
 
 import './restricted_indicator.scss';
 

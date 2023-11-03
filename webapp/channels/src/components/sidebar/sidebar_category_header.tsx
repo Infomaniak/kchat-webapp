@@ -4,7 +4,6 @@
 import classNames from 'classnames';
 import React from 'react';
 import type {DraggableProvidedDragHandleProps} from 'react-beautiful-dnd';
-
 import {wrapEmojis} from 'utils/emoji_utils';
 
 type StaticProps = {
@@ -37,23 +36,17 @@ type Props = StaticProps & {
     isDraggingOver?: boolean;
     muted: boolean;
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
+    onContextMenu: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 export const SidebarCategoryHeader = React.forwardRef((props: Props, ref?: React.Ref<HTMLButtonElement>) => {
-    const {dragHandleProps} = props;
-
-    // (Accessibility) Ensures interactive controls are not nested as they are not always announced
-    // by screen readers or can cause focus problems for assistive technologies.
-    if (dragHandleProps && dragHandleProps.role) {
-        Reflect.deleteProperty(dragHandleProps, 'role');
-    }
-
     return (
         <div
             className={classNames('SidebarChannelGroupHeader', {
                 muted: props.muted,
                 dragging: props.isDragging,
             })}
+            onContextMenu={props.onContextMenu}
         >
             <button
                 ref={ref}
@@ -69,7 +62,7 @@ export const SidebarCategoryHeader = React.forwardRef((props: Props, ref?: React
                 />
                 <div
                     className='SidebarChannelGroupHeader_text'
-                    {...dragHandleProps}
+                    {...props.dragHandleProps}
                 >
                     {wrapEmojis(props.displayName)}
                 </div>

@@ -1,26 +1,24 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {screen, fireEvent} from '@testing-library/react';
-
+import React from 'react';
 import {Provider} from 'react-redux';
+import {renderWithIntl} from 'tests/react_testing_utils';
+import mockStore from 'tests/test_store';
+import {CloudProducts} from 'utils/constants';
 
-import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
+import type {GlobalState} from '@mattermost/types/store';
+import type {UserProfile, UsersState} from '@mattermost/types/users';
+
 import {Preferences} from 'mattermost-redux/constants';
+import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
-import * as useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import * as useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import * as useOpenCloudPurchaseModal from 'components/common/hooks/useOpenCloudPurchaseModal';
 import * as useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
+import * as useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import * as useSaveBool from 'components/common/hooks/useSavePreferences';
-import {renderWithIntl} from 'tests/react_testing_utils';
-import mockStore from 'tests/test_store';
-
-import {CloudProducts} from 'utils/constants';
-
-import {GlobalState} from '@mattermost/types/store';
-import {UserProfile, UsersState} from '@mattermost/types/users';
 
 import LimitReachedBanner from './limit_reached_banner';
 
@@ -91,14 +89,14 @@ const noLimitReached = {
         enabled: -1,
         enabledLoaded: true,
     },
-};
+} as any;
 const someLimitReached = {
     ...noLimitReached,
     integrations: {
         ...noLimitReached.integrations,
         enabled: 1,
     },
-};
+} as any;
 
 const titleFree = /Upgrade to one of our paid plans to avoid/;
 const titleProfessional = /Upgrade to Enterprise to avoid Professional plan/;

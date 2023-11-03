@@ -1,7 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import PluginRegistry from 'plugins/registry';
 import regeneratorRuntime from 'regenerator-runtime';
+import {ActionTypes} from 'utils/constants';
+import {getSiteURL} from 'utils/url';
 
 import {Client4} from 'mattermost-redux/client';
 import {Preferences} from 'mattermost-redux/constants';
@@ -13,10 +16,6 @@ import {trackPluginInitialization} from 'actions/telemetry_actions';
 import {unregisterPluginTranslationsSource} from 'actions/views/root';
 import {unregisterAllPluginWebSocketEvents, unregisterPluginReconnectHandler} from 'actions/websocket_actions';
 import store from 'stores/redux_store';
-
-import PluginRegistry from 'plugins/registry';
-import {ActionTypes} from 'utils/constants';
-import {getSiteURL} from 'utils/url';
 
 import {removeWebappPlugin} from './actions';
 

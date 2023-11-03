@@ -6,14 +6,18 @@ import React from 'react';
 
 import Menu from './menu';
 
-jest.mock('./is_mobile_view_hack', () => ({
-    isMobile: jest.fn(() => false),
-}));
-
 (global as any).MutationObserver = class {
     public disconnect() {}
     public observe() {}
 };
+
+jest.mock('utils/utils', () => {
+    const original = jest.requireActual('utils/utils');
+    return {
+        ...original,
+        isMobile: jest.fn(() => false),
+    };
+});
 
 describe('components/Menu', () => {
     test('should match snapshot', () => {
@@ -64,7 +68,10 @@ describe('components/Menu', () => {
     `);
     });
 
-    test('should match snapshot with openLeft and openUp', () => {
+    test('should match snapshot with openLeft and openUp when is mobile', () => {
+        const utils = require('utils/utils'); //eslint-disable-line global-require
+        utils.isMobile.mockReturnValue(true);
+
         const wrapper = shallow(
             <Menu
                 openLeft={true}
@@ -82,9 +89,52 @@ describe('components/Menu', () => {
         role="menu"
       >
         <ul
-          className="Menu__content dropdown-menu openLeft openUp"
+          className="Menu__content dropdown-menu"
           onClick={[Function]}
-          style={Object {}}
+          style={
+            Object {
+              "left": "inherit",
+              "right": 0,
+            }
+          }
+        >
+          text
+        </ul>
+      </div>
+    `);
+    });
+
+    test('should match snapshot with openLeft and openUp', () => {
+        const utils = require('utils/utils'); //eslint-disable-line global-require
+        utils.isMobile.mockReturnValue(false);
+
+        const wrapper = shallow(
+            <Menu
+                openLeft={true}
+                openUp={true}
+                ariaLabel='test-label'
+            >
+                {'text'}
+            </Menu>,
+        );
+
+        expect(wrapper).toMatchInlineSnapshot(`
+      <div
+        aria-label="test-label"
+        className="a11y__popup Menu"
+        role="menu"
+      >
+        <ul
+          className="Menu__content dropdown-menu"
+          onClick={[Function]}
+          style={
+            Object {
+              "bottom": "100%",
+              "left": "inherit",
+              "right": 0,
+              "top": "auto",
+            }
+          }
         >
           text
         </ul>
@@ -93,6 +143,8 @@ describe('components/Menu', () => {
     });
 
     test('should hide the correct dividers', () => {
+        const utils = require('utils/utils'); //eslint-disable-line global-require
+        utils.isMobile.mockReturnValue(false);
         const pseudoMenu = document.createElement('div');
         const listOfItems = [
             'menu-divider',
@@ -203,6 +255,8 @@ describe('components/Menu', () => {
     });
 
     test('should hide the correct dividers on mobile', () => {
+        const utils = require('utils/utils'); //eslint-disable-line global-require
+        utils.isMobile.mockReturnValue(false);
         const pseudoMenu = document.createElement('div');
         const listOfItems = [
             'mobile-menu-divider',

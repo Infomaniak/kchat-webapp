@@ -3,6 +3,8 @@
 
 import React, {memo} from 'react';
 import styled from 'styled-components';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {getSiteURL} from 'utils/url';
 
 import type {Channel, ChannelStats} from '@mattermost/types/channels';
 import type {Team} from '@mattermost/types/teams';
@@ -13,9 +15,6 @@ import ChannelNotificationsModal from 'components/channel_notifications_modal';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
 import EditChannelPurposeModal from 'components/edit_channel_purpose_modal';
 import MoreDirectChannels from 'components/more_direct_channels';
-
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {getSiteURL} from 'utils/url';
 
 import type {ModalData} from 'types/actions';
 
@@ -65,7 +64,6 @@ export interface Props {
         showChannelFiles: (channelId: string) => void;
         showPinnedPosts: (channelId: string | undefined) => void;
         showChannelMembers: (channelId: string) => void;
-        getChannelStats: (channelId: string) => Promise<{data: ChannelStats}>;
     };
 }
 
@@ -194,7 +192,6 @@ const ChannelInfoRhs = ({
                     showChannelFiles: actions.showChannelFiles,
                     showPinnedPosts: actions.showPinnedPosts,
                     showChannelMembers: actions.showChannelMembers,
-                    getChannelStats: actions.getChannelStats,
                 }}
             />
         </div>

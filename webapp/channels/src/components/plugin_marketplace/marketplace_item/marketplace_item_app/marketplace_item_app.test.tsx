@@ -4,8 +4,8 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
-import MarketplaceItemApp from './marketplace_item_app';
 import type {MarketplaceItemAppProps} from './marketplace_item_app';
+import MarketplaceItemApp from './marketplace_item_app';
 
 describe('components/MarketplaceItemApp', () => {
     describe('MarketplaceItem', () => {

@@ -5,11 +5,10 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 import {matchPath} from 'react-router-dom';
-
-import type {Post} from '@mattermost/types/posts';
-
 import {getHistory} from 'utils/browser_history';
 import * as UserAgent from 'utils/user_agent';
+
+import type {Post} from '@mattermost/types/posts';
 
 const urlFormatForDMGMPermalink = '/:teamName/messages/:username/:postid';
 const urlFormatForChannelPermalink = '/:teamName/channels/:channelname/:postid';
@@ -133,6 +132,7 @@ export default class DeletePostModal extends React.PureComponent<Props, State> {
                 onEntered={this.handleEntered}
                 onHide={this.onHide}
                 onExited={this.props.onExited}
+                enforceFocus={false}
                 id='deletePostModal'
                 role='dialog'
                 aria-labelledby='deletePostModalLabel'
@@ -166,7 +166,7 @@ export default class DeletePostModal extends React.PureComponent<Props, State> {
                 <Modal.Footer>
                     <button
                         type='button'
-                        className='btn btn-tertiary'
+                        className='btn btn-link secondary'
                         onClick={this.onHide}
                     >
                         <FormattedMessage

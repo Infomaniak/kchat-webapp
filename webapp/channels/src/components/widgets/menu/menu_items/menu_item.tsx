@@ -6,9 +6,6 @@ import React from 'react';
 
 import './menu_item.scss';
 
-/**
- * @deprecated Use the "webapp/channels/src/components/menu" instead.
- */
 export default function menuItem(Component: React.ComponentType<any>) {
     type Props = {
         show: boolean;

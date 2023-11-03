@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 import React from 'react';
-import {FormattedMessage, injectIntl} from 'react-intl';
 import type {WrappedComponentProps} from 'react-intl';
-
-import IconButton from '@mattermost/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {ModalIdentifiers} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -14,8 +14,6 @@ import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {PropsFromRedux} from './index';
 
@@ -76,21 +74,11 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
 
         return (
             <Menu.Group>
-                {this.props.enableAskCommunityLink === 'true' && (
-                    <Menu.ItemExternalLink
-                        id='askTheCommunityLink'
-                        url={askTheCommunityUrl}
-                        text={intl.formatMessage({id: 'userGuideHelp.askTheCommunity', defaultMessage: 'Ask the community'})}
-                        onClick={this.askTheCommunityClick}
-                    />
-                )}
-                {this.props.helpLink && (
-                    <Menu.ItemExternalLink
-                        id='helpResourcesLink'
-                        url={this.props.helpLink}
-                        text={intl.formatMessage({id: 'userGuideHelp.helpResources', defaultMessage: 'Help resources'})}
-                    />
-                )}
+                <Menu.ItemExternalLink
+                    id='helpResourcesLink'
+                    url={this.props.helpLink}
+                    text={intl.formatMessage({id: 'userGuideHelp.helpResources', defaultMessage: 'Help resources'})}
+                />
                 {this.props.reportAProblemLink && (
                     <Menu.ItemExternalLink
                         id='reportAProblemLink'
@@ -134,6 +122,7 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                     overlay={this.state.buttonActive ? <></> : tooltip}
                 >
                     <IconButton
+                        className='color-grey'
                         size={'sm'}
                         icon={'help-circle-outline'}
                         onClick={() => {}} // icon button currently requires onclick ... needs to revisit
@@ -146,7 +135,7 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
                     />
                 </OverlayTrigger>
                 <Menu
-                    openLeft={false}
+                    openLeft={true}
                     openUp={false}
                     id='AddChannelDropdown'
                     ariaLabel={intl.formatMessage({id: 'sidebar_left.add_channel_dropdown.dropdownAriaLabel', defaultMessage: 'Add Channel Dropdown'})}

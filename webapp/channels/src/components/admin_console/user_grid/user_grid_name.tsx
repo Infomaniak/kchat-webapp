@@ -3,8 +3,9 @@
 
 import React from 'react';
 
+import type {UserProfile} from '@mattermost/types/users';
+
 import {Client4} from 'mattermost-redux/client';
-import {UserProfile} from '@mattermost/types/users';
 
 import ProfilePicture from 'components/profile_picture';
 
@@ -34,5 +35,5 @@ export default class UserGridName extends React.Component<Props> {
                 </div>
             </div>
         );
-    }
+    };
 }

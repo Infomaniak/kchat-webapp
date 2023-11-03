@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React, {memo} from 'react';
+import {Locations} from 'utils/constants';
 
 import type {Post} from '@mattermost/types/posts';
 
@@ -13,10 +14,6 @@ import DateSeparator from 'components/post_view/date_separator';
 import NewMessageSeparator from 'components/post_view/new_message_separator/new_message_separator';
 import type {Props as TimestampProps} from 'components/timestamp/timestamp';
 
-import {Locations} from 'utils/constants';
-
-import type {PluginComponent} from 'types/store/plugins';
-
 import Reply from './reply';
 
 type Props = {
@@ -27,10 +24,9 @@ type Props = {
     listId: string;
     onCardClick: (post: Post) => void;
     previousPostId: string;
+    teamId: string;
     timestampProps?: Partial<TimestampProps>;
-    lastViewedAt: number;
-    threadId: string;
-    newMessagesSeparatorActions: PluginComponent[];
+    lastPost: Post;
 };
 
 function noop() {}
@@ -42,10 +38,8 @@ function ThreadViewerRow({
     listId,
     onCardClick,
     previousPostId,
+    teamId,
     timestampProps,
-    lastViewedAt,
-    threadId,
-    newMessagesSeparatorActions,
 }: Props) {
     switch (true) {
     case PostListUtils.isDateLine(listId): {
@@ -59,14 +53,7 @@ function ThreadViewerRow({
     }
 
     case PostListUtils.isStartOfNewMessages(listId):
-        return (
-            <NewMessageSeparator
-                separatorId={listId}
-                lastViewedAt={lastViewedAt}
-                threadId={threadId}
-                newMessagesSeparatorActions={newMessagesSeparatorActions}
-            />
-        );
+        return <NewMessageSeparator separatorId={listId}/>;
 
     case isRootPost:
         return (
@@ -74,8 +61,10 @@ function ThreadViewerRow({
                 postId={listId}
                 isLastPost={isLastPost}
                 handleCardClick={onCardClick}
+                teamId={teamId}
                 timestampProps={timestampProps}
                 location={Locations.RHS_ROOT}
+                disableConsecutive={true}
             />
         );
     case PostListUtils.isCombinedUserActivityPost(listId): {
@@ -99,6 +88,7 @@ function ThreadViewerRow({
                 isLastPost={isLastPost}
                 onCardClick={onCardClick}
                 previousPostId={previousPostId}
+                teamId={teamId}
                 timestampProps={timestampProps}
             />
         );

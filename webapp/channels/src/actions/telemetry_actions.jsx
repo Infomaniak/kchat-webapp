@@ -3,10 +3,10 @@
 
 import {Client4} from 'mattermost-redux/client';
 import {Preferences} from 'mattermost-redux/constants';
-import {getSortedTrackedSelectors} from 'mattermost-redux/selectors/create_selector';
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 
+import {getSortedTrackedSelectors} from 'selectors/create_selector';
 import {isDevModeEnabled} from 'selectors/general';
 import store from 'stores/redux_store';
 

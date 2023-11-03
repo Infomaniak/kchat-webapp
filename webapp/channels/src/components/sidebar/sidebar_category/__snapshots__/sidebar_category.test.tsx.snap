@@ -3,6 +3,7 @@
 exports[`components/sidebar/sidebar_category should match snapshot 1`] = `
 <div
   className="SidebarChannelGroup a11y__section"
+  id="sidebar-droppable-category-category1"
 >
   <Connect(Droppable)
     direction="vertical"
@@ -32,8 +33,9 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
+    onContextMenu={[Function]}
   >
-    <Memo(SidebarCategoryMenu)
+    <Connect(Component)
       category={
         Object {
           "channel_ids": Array [
@@ -47,6 +49,11 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
           "team_id": "team1",
           "type": "custom",
           "user_id": "",
+        }
+      }
+      menuTriggerRef={
+        Object {
+          "current": null,
         }
       }
     />
@@ -76,6 +83,7 @@ exports[`components/sidebar/sidebar_category should match snapshot 2`] = `
 exports[`components/sidebar/sidebar_category should match snapshot when collapsed 1`] = `
 <div
   className="SidebarChannelGroup a11y__section isCollapsed"
+  id="sidebar-droppable-category-category1"
 >
   <Connect(Droppable)
     direction="vertical"
@@ -105,8 +113,9 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
+    onContextMenu={[Function]}
   >
-    <Memo(SidebarCategoryMenu)
+    <Connect(Component)
       category={
         Object {
           "channel_ids": Array [
@@ -120,6 +129,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
           "team_id": "team1",
           "type": "custom",
           "user_id": "",
+        }
+      }
+      menuTriggerRef={
+        Object {
+          "current": null,
         }
       }
     />
@@ -149,6 +163,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when collapse
 exports[`components/sidebar/sidebar_category should match snapshot when isNewCategory 1`] = `
 <div
   className="SidebarChannelGroup a11y__section"
+  id="sidebar-droppable-category-category1"
 >
   <Connect(Droppable)
     direction="vertical"
@@ -178,16 +193,9 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
+    onContextMenu={[Function]}
   >
-    <div
-      className="SidebarCategory_newLabel"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="new"
-        id="sidebar_left.sidebar_category.newLabel"
-      />
-    </div>
-    <Memo(SidebarCategoryMenu)
+    <Connect(Component)
       category={
         Object {
           "channel_ids": Array [],
@@ -199,6 +207,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
           "team_id": "team1",
           "type": "custom",
           "user_id": "",
+        }
+      }
+      menuTriggerRef={
+        Object {
+          "current": null,
         }
       }
     />
@@ -245,6 +258,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when isNewCat
 exports[`components/sidebar/sidebar_category should match snapshot when sorting is set to by recency 1`] = `
 <div
   className="SidebarChannelGroup a11y__section"
+  id="sidebar-droppable-category-direct_messages"
 >
   <Connect(Droppable)
     direction="vertical"
@@ -262,6 +276,8 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
   <InviteMembersButton
     className="followingSibling"
     isAdmin={false}
+    onClick={[Function]}
+    touchedInviteMembersButton={false}
   />
 </div>
 `;
@@ -278,8 +294,9 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
+    onContextMenu={[Function]}
   >
-    <Memo(SidebarCategorySortingMenu)
+    <Connect(Component)
       category={
         Object {
           "channel_ids": Array [
@@ -296,6 +313,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
         }
       }
       handleOpenDirectMessagesModal={[Function]}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
     />
     <OverlayTrigger
       defaultOverlayShown={false}
@@ -368,6 +390,7 @@ exports[`components/sidebar/sidebar_category should match snapshot when sorting 
 exports[`components/sidebar/sidebar_category should match snapshot when the category is DM and there are no DMs to display 1`] = `
 <div
   className="SidebarChannelGroup a11y__section"
+  id="sidebar-droppable-category-direct_messages"
 >
   <Connect(Droppable)
     direction="vertical"
@@ -385,6 +408,8 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
   <InviteMembersButton
     className="followingSibling"
     isAdmin={false}
+    onClick={[Function]}
+    touchedInviteMembersButton={false}
   />
 </div>
 `;
@@ -401,8 +426,9 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
     isDraggingOver={false}
     muted={false}
     onClick={[Function]}
+    onContextMenu={[Function]}
   >
-    <Memo(SidebarCategorySortingMenu)
+    <Connect(Component)
       category={
         Object {
           "channel_ids": Array [
@@ -419,6 +445,11 @@ exports[`components/sidebar/sidebar_category should match snapshot when the cate
         }
       }
       handleOpenDirectMessagesModal={[Function]}
+      menuTriggerRef={
+        Object {
+          "current": null,
+        }
+      }
     />
     <OverlayTrigger
       defaultOverlayShown={false}

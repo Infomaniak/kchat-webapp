@@ -84,7 +84,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                 "mfa_active": false,
                 "nickname": "",
                 "notify_props": Object {
-                  "calls_desktop_sound": "true",
                   "channel": "false",
                   "comments": "never",
                   "desktop": "default",
@@ -125,7 +124,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                 "mfa_active": false,
                 "nickname": "",
                 "notify_props": Object {
-                  "calls_desktop_sound": "true",
                   "channel": "false",
                   "comments": "never",
                   "desktop": "default",
@@ -166,7 +164,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                 "mfa_active": false,
                 "nickname": "",
                 "notify_props": Object {
-                  "calls_desktop_sound": "true",
                   "channel": "false",
                   "comments": "never",
                   "desktop": "default",
@@ -207,7 +204,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                 "mfa_active": false,
                 "nickname": "",
                 "notify_props": Object {
-                  "calls_desktop_sound": "true",
                   "channel": "false",
                   "comments": "never",
                   "desktop": "default",
@@ -248,7 +244,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                 "mfa_active": false,
                 "nickname": "",
                 "notify_props": Object {
-                  "calls_desktop_sound": "true",
                   "channel": "false",
                   "comments": "never",
                   "desktop": "default",
@@ -462,11 +457,9 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                           id="name-id0"
                                           intl={
                                             Object {
-                                              "$t": [Function],
                                               "defaultFormats": Object {},
                                               "defaultLocale": "en",
                                               "defaultRichTextElements": undefined,
-                                              "fallbackOnEmptyString": true,
                                               "formatDate": [Function],
                                               "formatDateTimeRange": [Function],
                                               "formatDateToParts": [Function],
@@ -493,7 +486,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                               "locale": "en",
                                               "messages": Object {},
                                               "onError": [Function],
-                                              "onWarn": [Function],
                                               "textComponent": "span",
                                               "timeZone": "Etc/UTC",
                                               "wrapRichTextChunksInFragment": undefined,
@@ -514,7 +506,7 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                     >
                                       <DMButton
                                         aria-label="Send message to Name0 Surname0"
-                                        className="btn btn-icon btn-xs"
+                                        className="btn-icon"
                                         onBlur={[Function]}
                                         onClick={[Function]}
                                         onFocus={[Function]}
@@ -523,16 +515,27 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                       >
                                         <button
                                           aria-label="Send message to Name0 Surname0"
-                                          className="DMButton-hIFgRF ecgFEo btn btn-icon btn-xs"
+                                          className="DMButton-hIFgRF ecgFEo btn-icon"
                                           onBlur={[Function]}
                                           onClick={[Function]}
                                           onFocus={[Function]}
                                           onMouseOut={[Function]}
                                           onMouseOver={[Function]}
                                         >
-                                          <i
-                                            className="icon icon-send"
-                                          />
+                                          <SendIcon>
+                                            <svg
+                                              fill="currentColor"
+                                              height={24}
+                                              version="1.1"
+                                              viewBox="0 0 24 24"
+                                              width={24}
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <path
+                                                d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+                                              />
+                                            </svg>
+                                          </SendIcon>
                                         </button>
                                       </DMButton>
                                     </OverlayTrigger>
@@ -670,11 +673,9 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                           id="name-id1"
                                           intl={
                                             Object {
-                                              "$t": [Function],
                                               "defaultFormats": Object {},
                                               "defaultLocale": "en",
                                               "defaultRichTextElements": undefined,
-                                              "fallbackOnEmptyString": true,
                                               "formatDate": [Function],
                                               "formatDateTimeRange": [Function],
                                               "formatDateToParts": [Function],
@@ -701,7 +702,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                               "locale": "en",
                                               "messages": Object {},
                                               "onError": [Function],
-                                              "onWarn": [Function],
                                               "textComponent": "span",
                                               "timeZone": "Etc/UTC",
                                               "wrapRichTextChunksInFragment": undefined,
@@ -722,7 +722,7 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                     >
                                       <DMButton
                                         aria-label="Send message to Name1 Surname1"
-                                        className="btn btn-icon btn-xs"
+                                        className="btn-icon"
                                         onBlur={[Function]}
                                         onClick={[Function]}
                                         onFocus={[Function]}
@@ -731,16 +731,27 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                       >
                                         <button
                                           aria-label="Send message to Name1 Surname1"
-                                          className="DMButton-hIFgRF ecgFEo btn btn-icon btn-xs"
+                                          className="DMButton-hIFgRF ecgFEo btn-icon"
                                           onBlur={[Function]}
                                           onClick={[Function]}
                                           onFocus={[Function]}
                                           onMouseOut={[Function]}
                                           onMouseOver={[Function]}
                                         >
-                                          <i
-                                            className="icon icon-send"
-                                          />
+                                          <SendIcon>
+                                            <svg
+                                              fill="currentColor"
+                                              height={24}
+                                              version="1.1"
+                                              viewBox="0 0 24 24"
+                                              width={24}
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <path
+                                                d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+                                              />
+                                            </svg>
+                                          </SendIcon>
                                         </button>
                                       </DMButton>
                                     </OverlayTrigger>
@@ -878,11 +889,9 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                           id="name-id2"
                                           intl={
                                             Object {
-                                              "$t": [Function],
                                               "defaultFormats": Object {},
                                               "defaultLocale": "en",
                                               "defaultRichTextElements": undefined,
-                                              "fallbackOnEmptyString": true,
                                               "formatDate": [Function],
                                               "formatDateTimeRange": [Function],
                                               "formatDateToParts": [Function],
@@ -909,7 +918,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                               "locale": "en",
                                               "messages": Object {},
                                               "onError": [Function],
-                                              "onWarn": [Function],
                                               "textComponent": "span",
                                               "timeZone": "Etc/UTC",
                                               "wrapRichTextChunksInFragment": undefined,
@@ -930,7 +938,7 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                     >
                                       <DMButton
                                         aria-label="Send message to Name2 Surname2"
-                                        className="btn btn-icon btn-xs"
+                                        className="btn-icon"
                                         onBlur={[Function]}
                                         onClick={[Function]}
                                         onFocus={[Function]}
@@ -939,16 +947,27 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                       >
                                         <button
                                           aria-label="Send message to Name2 Surname2"
-                                          className="DMButton-hIFgRF ecgFEo btn btn-icon btn-xs"
+                                          className="DMButton-hIFgRF ecgFEo btn-icon"
                                           onBlur={[Function]}
                                           onClick={[Function]}
                                           onFocus={[Function]}
                                           onMouseOut={[Function]}
                                           onMouseOver={[Function]}
                                         >
-                                          <i
-                                            className="icon icon-send"
-                                          />
+                                          <SendIcon>
+                                            <svg
+                                              fill="currentColor"
+                                              height={24}
+                                              version="1.1"
+                                              viewBox="0 0 24 24"
+                                              width={24}
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <path
+                                                d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+                                              />
+                                            </svg>
+                                          </SendIcon>
                                         </button>
                                       </DMButton>
                                     </OverlayTrigger>
@@ -1086,11 +1105,9 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                           id="name-id3"
                                           intl={
                                             Object {
-                                              "$t": [Function],
                                               "defaultFormats": Object {},
                                               "defaultLocale": "en",
                                               "defaultRichTextElements": undefined,
-                                              "fallbackOnEmptyString": true,
                                               "formatDate": [Function],
                                               "formatDateTimeRange": [Function],
                                               "formatDateToParts": [Function],
@@ -1117,7 +1134,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                               "locale": "en",
                                               "messages": Object {},
                                               "onError": [Function],
-                                              "onWarn": [Function],
                                               "textComponent": "span",
                                               "timeZone": "Etc/UTC",
                                               "wrapRichTextChunksInFragment": undefined,
@@ -1138,7 +1154,7 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                     >
                                       <DMButton
                                         aria-label="Send message to Name3 Surname3"
-                                        className="btn btn-icon btn-xs"
+                                        className="btn-icon"
                                         onBlur={[Function]}
                                         onClick={[Function]}
                                         onFocus={[Function]}
@@ -1147,16 +1163,27 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                       >
                                         <button
                                           aria-label="Send message to Name3 Surname3"
-                                          className="DMButton-hIFgRF ecgFEo btn btn-icon btn-xs"
+                                          className="DMButton-hIFgRF ecgFEo btn-icon"
                                           onBlur={[Function]}
                                           onClick={[Function]}
                                           onFocus={[Function]}
                                           onMouseOut={[Function]}
                                           onMouseOver={[Function]}
                                         >
-                                          <i
-                                            className="icon icon-send"
-                                          />
+                                          <SendIcon>
+                                            <svg
+                                              fill="currentColor"
+                                              height={24}
+                                              version="1.1"
+                                              viewBox="0 0 24 24"
+                                              width={24}
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <path
+                                                d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+                                              />
+                                            </svg>
+                                          </SendIcon>
                                         </button>
                                       </DMButton>
                                     </OverlayTrigger>
@@ -1294,11 +1321,9 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                           id="name-id4"
                                           intl={
                                             Object {
-                                              "$t": [Function],
                                               "defaultFormats": Object {},
                                               "defaultLocale": "en",
                                               "defaultRichTextElements": undefined,
-                                              "fallbackOnEmptyString": true,
                                               "formatDate": [Function],
                                               "formatDateTimeRange": [Function],
                                               "formatDateToParts": [Function],
@@ -1325,7 +1350,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                               "locale": "en",
                                               "messages": Object {},
                                               "onError": [Function],
-                                              "onWarn": [Function],
                                               "textComponent": "span",
                                               "timeZone": "Etc/UTC",
                                               "wrapRichTextChunksInFragment": undefined,
@@ -1346,7 +1370,7 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                     >
                                       <DMButton
                                         aria-label="Send message to Name4 Surname4"
-                                        className="btn btn-icon btn-xs"
+                                        className="btn-icon"
                                         onBlur={[Function]}
                                         onClick={[Function]}
                                         onFocus={[Function]}
@@ -1355,16 +1379,27 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                       >
                                         <button
                                           aria-label="Send message to Name4 Surname4"
-                                          className="DMButton-hIFgRF ecgFEo btn btn-icon btn-xs"
+                                          className="DMButton-hIFgRF ecgFEo btn-icon"
                                           onBlur={[Function]}
                                           onClick={[Function]}
                                           onFocus={[Function]}
                                           onMouseOut={[Function]}
                                           onMouseOver={[Function]}
                                         >
-                                          <i
-                                            className="icon icon-send"
-                                          />
+                                          <SendIcon>
+                                            <svg
+                                              fill="currentColor"
+                                              height={24}
+                                              version="1.1"
+                                              viewBox="0 0 24 24"
+                                              width={24}
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <path
+                                                d="M2,21L23,12L2,3V10L17,12L2,14V21Z"
+                                              />
+                                            </svg>
+                                          </SendIcon>
                                         </button>
                                       </DMButton>
                                     </OverlayTrigger>

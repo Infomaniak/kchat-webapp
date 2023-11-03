@@ -1,0 +1,61 @@
+.draft-filter-menu {
+    &__button {
+        display: flex;
+        width: 32px;
+        height: 32px;
+        flex-direction: column;
+        align-items: center;
+        padding: 6px 8px;
+        border: none;
+        margin-left: auto;
+        background: transparent;
+        border-radius: 4px;
+        color: rgba(var(--center-channel-color-rgb), 0.56);
+        text-decoration: none;
+
+        &:hover {
+            background: rgba(var(--center-channel-color-rgb), 0.08);
+            border-radius: 4px;
+            color: rgba(var(--center-channel-color-rgb), 0.72);
+            fill: rgba(var(--center-channel-color-rgb), 0.72);
+        }
+
+        &:active {
+            background-color: rgba(var(--button-bg-rgb), 0.08);
+            color: var(--button-bg);
+        }
+
+        i.icon {
+            font-size: 18px;
+            line-height: 18px;
+        }
+    }
+
+    &__item.MuiMenuItem-root {
+        padding: 5px 20px;
+        &:hover {
+            .trailing-elements {
+                color: var(--button-bg);
+            }
+        }
+        .trailing-elements {
+            color: var(--button-bg);
+        }
+    }
+
+    &__title {
+        display: flex;
+        align-items: center;
+        padding: 5px 20px;
+        min-height: 32px;
+        min-width: 250px;
+        margin: 0;
+        color: var(--center-channel-color);
+        font-weight: bold;
+        pointer-events: none;
+
+        @media screen and (max-width: 768px) {
+            padding: 5px 8px;
+        }
+    }
+}

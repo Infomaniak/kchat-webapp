@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import type {AnyAction, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import {
     showMentions,

@@ -4,7 +4,6 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-
 import {TestHelper} from 'utils/test_helper';
 
 import TeamMembersModal from './team_members_modal';

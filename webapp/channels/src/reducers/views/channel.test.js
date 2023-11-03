@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ActionTypes} from 'utils/constants';
+
 import {GeneralTypes, UserTypes, ChannelTypes} from 'mattermost-redux/action_types';
 
 import channelReducer from 'reducers/views/channel';
-
-import {ActionTypes} from 'utils/constants';
 
 describe('Reducers.channel', () => {
     const initialState = {

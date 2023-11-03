@@ -3,8 +3,13 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {getHistory} from 'utils/browser_history';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {getSiteURL} from 'utils/url';
+import {isDesktopApp} from 'utils/user_agent';
+import {fileSizeToString, copyToClipboard, localizeMessage} from 'utils/utils';
 
-import {getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
+import {Client4} from 'mattermost-redux/client';
 
 import FileThumbnail from 'components/file_attachment/file_thumbnail';
 import FilePreviewModal from 'components/file_preview_modal';
@@ -13,16 +18,12 @@ import Timestamp, {RelativeRanges} from 'components/timestamp';
 import Tooltip from 'components/tooltip';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import Tag from 'components/widgets/tag/tag';
-
-import {getHistory} from 'utils/browser_history';
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {getSiteURL} from 'utils/url';
-import {fileSizeToString, copyToClipboard, localizeMessage} from 'utils/utils';
 
 import type {PropsFromRedux, OwnProps} from './index';
 
 import './file_search_result_item.scss';
+
+import Tag from 'components/widgets/tag/tag';
 
 type Props = OwnProps & PropsFromRedux;
 
@@ -118,6 +119,8 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
             );
         }
 
+        const fileDownloadUrl = isDesktopApp() ? `/api/v4/files/${fileInfo.id}?download=1&access_token=${Client4.getToken()}` : `/api/v4/files/${fileInfo.id}?download=1`;
+
         return (
             <div
                 data-testid='search-item-container'
@@ -193,7 +196,7 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                     >
                         <a
                             className='action-icon download-icon'
-                            href={getFileDownloadUrl(fileInfo.id)}
+                            href={fileDownloadUrl}
                             onClick={this.stopPropagation}
                         >
                             <i className='icon icon-download-outline'/>

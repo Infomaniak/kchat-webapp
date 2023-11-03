@@ -195,7 +195,7 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
           >
             <hr />
             <SaveButton
-              btnClass=""
+              btnClass="btn-primary"
               defaultMessage={
                 <Memo(MemoizedFormattedMessage)
                   defaultMessage="Save"
@@ -214,14 +214,14 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
               }
             >
               <button
-                className="btn btn-primary "
+                className="save-button btn btn-primary"
                 data-testid="saveSetting"
                 disabled={false}
                 id="saveSetting"
                 onClick={[Function]}
                 type="submit"
               >
-                <Memo(LoadingWrapper)
+                <LoadingWrapper
                   loading={false}
                   text={
                     <Memo(MemoizedFormattedMessage)
@@ -240,11 +240,11 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
                       </span>
                     </FormattedMessage>
                   </span>
-                </Memo(LoadingWrapper)>
+                </LoadingWrapper>
               </button>
             </SaveButton>
             <button
-              className="btn btn-tertiary"
+              className="btn btn-sm btn-cancel cursor--pointer style--none"
               id="cancelSetting"
               onClick={[Function]}
             >
@@ -378,7 +378,7 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
                   type="radio"
                 />
                 <Memo(MemoizedFormattedMessage)
-                  defaultMessage="Every {count, plural, one {minute} other {{count, number} minutes}}"
+                  defaultMessage="Every {count} minutes"
                   id="user.settings.notifications.email.everyXMinutes"
                   values={
                     Object {
@@ -523,7 +523,7 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
                       type="radio"
                     />
                     <FormattedMessage
-                      defaultMessage="Every {count, plural, one {minute} other {{count, number} minutes}}"
+                      defaultMessage="Every {count} minutes"
                       id="user.settings.notifications.email.everyXMinutes"
                       values={
                         Object {
@@ -612,7 +612,7 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
           >
             <hr />
             <SaveButton
-              btnClass=""
+              btnClass="btn-primary"
               defaultMessage={
                 <Memo(MemoizedFormattedMessage)
                   defaultMessage="Save"
@@ -631,14 +631,14 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
               }
             >
               <button
-                className="btn btn-primary "
+                className="save-button btn btn-primary"
                 data-testid="saveSetting"
                 disabled={false}
                 id="saveSetting"
                 onClick={[Function]}
                 type="submit"
               >
-                <Memo(LoadingWrapper)
+                <LoadingWrapper
                   loading={false}
                   text={
                     <Memo(MemoizedFormattedMessage)
@@ -657,11 +657,11 @@ exports[`components/user_settings/notifications/EmailNotificationSetting should 
                       </span>
                     </FormattedMessage>
                   </span>
-                </Memo(LoadingWrapper)>
+                </LoadingWrapper>
               </button>
             </SaveButton>
             <button
-              className="btn btn-tertiary"
+              className="btn btn-sm btn-cancel cursor--pointer style--none"
               id="cancelSetting"
               onClick={[Function]}
             >

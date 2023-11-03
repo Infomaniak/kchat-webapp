@@ -4,6 +4,10 @@
 import React, {useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
+import {
+    AnnouncementBarTypes, CloudProducts, CloudProductToSku, MattermostFeatures, Preferences, TELEMETRY_CATEGORIES,
+} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
@@ -15,11 +19,6 @@ import {trackEvent} from 'actions/telemetry_actions';
 
 import {useDelinquencySubscription} from 'components/common/hooks/useDelinquencySubscription';
 import {NotifyStatus, useGetNotifyAdmin} from 'components/common/hooks/useGetNotifyAdmin';
-
-import {
-    AnnouncementBarTypes, CloudProducts, CloudProductToSku, MattermostFeatures, Preferences, TELEMETRY_CATEGORIES,
-} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import type {GlobalState} from 'types/store';
 

@@ -2,8 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage, type WrappedComponentProps, injectIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
+import Constants, {RHSStates} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
@@ -11,9 +13,6 @@ import KeyboardShortcutSequence, {
 import LocalizedIcon from 'components/localized_icon';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import Constants, {RHSStates} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import type {RhsState} from 'types/store/rhs';
 
@@ -29,7 +28,7 @@ const BackButtonIcon = styled(LocalizedIcon)`
     font-size: 18px;
 `;
 
-interface Props extends WrappedComponentProps {
+type Props = {
     isExpanded: boolean;
     previousRhsState?: RhsState;
     canGoBack: boolean;
@@ -39,9 +38,9 @@ interface Props extends WrappedComponentProps {
         toggleRhsExpanded: () => void;
         goBack: () => void;
     };
-}
+};
 
-class SearchResultsHeader extends React.PureComponent<Props> {
+export default class SearchResultsHeader extends React.PureComponent<Props> {
     render(): React.ReactNode {
         const closeSidebarTooltip = (
             <Tooltip id='closeSidebarTooltip'>
@@ -108,16 +107,16 @@ class SearchResultsHeader extends React.PureComponent<Props> {
                         >
                             <button
                                 type='button'
-                                className='sidebar--right__expand btn btn-icon btn-sm'
+                                className='sidebar--right__expand btn-icon'
                                 onClick={this.props.actions.toggleRhsExpanded}
                             >
-                                <i
+                                <LocalizedIcon
                                     className='icon icon-arrow-expand'
-                                    aria-label={this.props.intl.formatMessage({id: 'rhs_header.expandSidebarTooltip.icon', defaultMessage: 'Expand Sidebar Icon'})}
+                                    ariaLabel={{id: t('rhs_header.expandSidebarTooltip.icon'), defaultMessage: 'Expand Sidebar Icon'}}
                                 />
-                                <i
+                                <LocalizedIcon
                                     className='icon icon-arrow-collapse'
-                                    aria-label={this.props.intl.formatMessage({id: 'rhs_header.collapseSidebarTooltip.icon', defaultMessage: 'Collapse Sidebar Icon'})}
+                                    ariaLabel={{id: t('rhs_header.collapseSidebarTooltip.icon'), defaultMessage: 'Collapse Sidebar Icon'}}
                                 />
                             </button>
                         </OverlayTrigger>
@@ -130,13 +129,13 @@ class SearchResultsHeader extends React.PureComponent<Props> {
                         <button
                             id='searchResultsCloseButton'
                             type='button'
-                            className='sidebar--right__close btn btn-icon btn-sm'
+                            className='sidebar--right__close btn-icon'
                             aria-label='Close'
                             onClick={this.props.actions.closeRightHandSide}
                         >
-                            <i
+                            <LocalizedIcon
                                 className='icon icon-close'
-                                aria-label={this.props.intl.formatMessage({id: 'rhs_header.closeTooltip.icon', defaultMessage: 'Close Sidebar Icon'})}
+                                ariaLabel={{id: t('rhs_header.closeTooltip.icon'), defaultMessage: 'Close Sidebar Icon'}}
                             />
                         </button>
                     </OverlayTrigger>
@@ -145,5 +144,3 @@ class SearchResultsHeader extends React.PureComponent<Props> {
         );
     }
 }
-
-export default injectIntl(SearchResultsHeader);

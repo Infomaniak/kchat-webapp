@@ -3,19 +3,19 @@
 
 import {connect} from 'react-redux';
 
-import type {Channel} from '@mattermost/types/channels';
-import type {Post} from '@mattermost/types/posts';
-
+import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getDirectTeammate} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
-import {getIsMobileView} from 'selectors/views/browser';
+import {Channel} from '@mattermost/types/channels';
+import {Post} from '@mattermost/types/posts';
+
+import {FakePost} from 'types/store/rhs';
+
 import {makePrepareReplyIdsForThreadViewer, makeGetThreadLastViewedAt} from 'selectors/views/threads';
 
-import type {GlobalState} from 'types/store';
-import type {FakePost} from 'types/store/rhs';
+import {GlobalState} from 'types/store';
 
 import ThreadViewerVirtualized from './virtualized_thread_viewer';
 
@@ -46,16 +46,13 @@ function makeMapStateToProps() {
             showDate: !useRelativeTimestamp,
             lastViewedAt: collapsedThreads ? lastViewedAt : undefined,
         });
-        const newMessagesSeparatorActions = state.plugins.components.NewMessagesSeparatorAction;
 
         return {
             currentUserId,
             directTeammate,
-            isMobileView: getIsMobileView(state),
             lastPost,
             replyListIds,
-            lastViewedAt,
-            newMessagesSeparatorActions,
+            teamId: channel.team_id,
         };
     };
 }

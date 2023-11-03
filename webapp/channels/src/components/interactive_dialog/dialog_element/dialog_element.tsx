@@ -7,12 +7,10 @@ import {FormattedMessage} from 'react-intl';
 import type {UserAutocomplete} from '@mattermost/types/autocomplete';
 import type {Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
-import type {UserProfile} from '@mattermost/types/users';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import AutocompleteSelector from 'components/autocomplete_selector';
-import type {Option, Selected} from 'components/autocomplete_selector';
 import GenericChannelProvider from 'components/suggestion/generic_channel_provider';
 import GenericUserProvider from 'components/suggestion/generic_user_provider';
 import MenuActionProvider from 'components/suggestion/menu_action_provider';
@@ -41,7 +39,7 @@ export type Props = {
         text: string;
         value: string;
     }>;
-    value?: string | number | boolean;
+    value?: string | boolean;
     onChange: (name: string, selected: string) => void;
     autoFocus?: boolean;
     actions: {
@@ -52,6 +50,14 @@ export type Props = {
 
 type State = {
     value: string;
+}
+
+type Selected = {
+    id: string;
+    username: string;
+    display_name: string;
+    value: string;
+    text: string;
 }
 
 export default class DialogElement extends React.PureComponent<Props, State> {
@@ -88,17 +94,14 @@ export default class DialogElement extends React.PureComponent<Props, State> {
         const {name, dataSource} = this.props;
 
         if (dataSource === 'users') {
-            const user = selected as UserProfile;
-            this.props.onChange(name, user.id);
-            this.setState({value: user.username});
+            this.props.onChange(name, selected.id);
+            this.setState({value: selected.username});
         } else if (dataSource === 'channels') {
-            const channel = selected as Channel;
-            this.props.onChange(name, channel.id);
-            this.setState({value: channel.display_name});
+            this.props.onChange(name, selected.id);
+            this.setState({value: selected.display_name});
         } else {
-            const option = selected as Option;
-            this.props.onChange(name, option.value);
-            this.setState({value: option.text});
+            this.props.onChange(name, selected.value);
+            this.setState({value: selected.text});
         }
     };
 
@@ -114,9 +117,9 @@ export default class DialogElement extends React.PureComponent<Props, State> {
             errorText,
             optional,
             options,
-            type,
-            maxLength,
         } = this.props;
+
+        let {type, maxLength} = this.props;
 
         let displayNameContent: React.ReactNode = displayName;
         if (optional) {
@@ -153,28 +156,27 @@ export default class DialogElement extends React.PureComponent<Props, State> {
         }
 
         if (type === 'text' || type === 'textarea') {
-            let textSettingMaxLength;
             if (type === 'text') {
-                textSettingMaxLength = maxLength || TEXT_DEFAULT_MAX_LENGTH;
+                maxLength = maxLength || TEXT_DEFAULT_MAX_LENGTH;
+
+                if (subtype && TextSetting.validTypes.includes(subtype)) {
+                    type = subtype;
+                } else {
+                    type = 'input';
+                }
             } else {
-                textSettingMaxLength = maxLength || TEXTAREA_DEFAULT_MAX_LENGTH;
+                maxLength = maxLength || TEXTAREA_DEFAULT_MAX_LENGTH;
             }
 
-            let assertedValue;
-            if (subtype === 'number' && typeof value === 'number') {
-                assertedValue = value as number;
-            } else {
-                assertedValue = value as string || '';
-            }
-
+            const textValue = value as string;
             return (
                 <TextSetting
                     autoFocus={this.props.autoFocus}
                     id={name}
-                    type={(type === 'textarea' ? 'textarea' : subtype) as InputTypes || 'text'}
+                    type={type as InputTypes}
                     label={displayNameContent}
-                    maxLength={textSettingMaxLength}
-                    value={assertedValue}
+                    maxLength={maxLength}
+                    value={textValue || ''}
                     placeholder={placeholder}
                     helpText={helpTextContent}
                     onChange={onChange}

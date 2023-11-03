@@ -1,13 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import IconButton from '@infomaniak/compass-components/components/icon-button';
 import classNames from 'classnames';
 import React, {useEffect, useCallback} from 'react';
 import {useIntl} from 'react-intl';
 import {CSSTransition} from 'react-transition-group';
-
-import IconButton from '@mattermost/compass-components/components/icon-button'; // eslint-disable-line no-restricted-imports
-
 import './info_toast.scss';
 
 type Props = {

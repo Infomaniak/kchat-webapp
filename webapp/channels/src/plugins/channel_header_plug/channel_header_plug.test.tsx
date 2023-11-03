@@ -1,14 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import ChannelHeaderPlug from 'plugins/channel_header_plug/channel_header_plug';
 import React from 'react';
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
-
-import ChannelHeaderPlug from 'plugins/channel_header_plug/channel_header_plug';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import type {PluginComponent} from 'types/store/plugins';
 

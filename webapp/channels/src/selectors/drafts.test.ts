@@ -2,9 +2,8 @@
 // See LICENSE.txt for license information.
 
 import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
+import {GlobalState} from 'types/store';
 import {StoragePrefixes} from 'utils/constants';
-
-import type {GlobalState} from 'types/store';
 
 import {makeGetDrafts, makeGetDraftsByPrefix, makeGetDraftsCount} from './drafts';
 

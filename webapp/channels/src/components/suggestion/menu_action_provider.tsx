@@ -3,39 +3,41 @@
 
 import React from 'react';
 
+import type {ProviderResults} from './generic_user_provider';
 import Provider from './provider';
-import type {ResultsCallback} from './provider';
-import {SuggestionContainer} from './suggestion';
-import type {SuggestionProps} from './suggestion';
+import Suggestion from './suggestion.jsx';
 
-interface MenuAction {
-    text: string;
-    value: string;
+class MenuActionSuggestion extends Suggestion {
+    render() {
+        const {item, isSelection} = this.props;
+
+        let className = 'suggestion-list__item';
+        if (isSelection) {
+            className += ' suggestion--selected';
+        }
+
+        return (
+            <div
+                className={className}
+                onClick={this.handleClick}
+                onMouseMove={this.handleMouseMove}
+                {...Suggestion.baseProps}
+            >
+                {item.text}
+            </div>
+        );
+    }
 }
 
-const MenuActionSuggestion = React.forwardRef<HTMLDivElement, SuggestionProps<MenuAction>>((props, ref) => {
-    const {item} = props;
-
-    return (
-        <SuggestionContainer
-            ref={ref}
-            {...props}
-        >
-            {item.text}
-        </SuggestionContainer>
-    );
-});
-MenuActionSuggestion.displayName = 'MenuActionSuggestion';
-
 export default class MenuActionProvider extends Provider {
-    private options: MenuAction[];
+    private options: Array<Record<string, any>>;
 
-    constructor(options: MenuAction[]) {
+    constructor(options: Array<Record<string, any>>) {
         super();
         this.options = options;
     }
 
-    handlePretextChanged(prefix: string, resultsCallback: ResultsCallback<MenuAction>) {
+    handlePretextChanged(prefix: string, resultsCallback: (res: ProviderResults) => void) {
         if (prefix.length === 0) {
             this.displayAllOptions(resultsCallback);
             return true;
@@ -49,7 +51,7 @@ export default class MenuActionProvider extends Provider {
         return false;
     }
 
-    async displayAllOptions(resultsCallback: ResultsCallback<MenuAction>) {
+    async displayAllOptions(resultsCallback: (res: ProviderResults) => void) {
         const terms = this.options.map((option) => option.text);
 
         resultsCallback({
@@ -60,7 +62,7 @@ export default class MenuActionProvider extends Provider {
         });
     }
 
-    async filterOptions(prefix: string, resultsCallback: ResultsCallback<MenuAction>) {
+    async filterOptions(prefix: string, resultsCallback: (res: ProviderResults) => void) {
         const filteredOptions = this.options.filter((option) => option.text.toLowerCase().indexOf(prefix.toLowerCase()) >= 0);
         const terms = filteredOptions.map((option) => option.text);
 

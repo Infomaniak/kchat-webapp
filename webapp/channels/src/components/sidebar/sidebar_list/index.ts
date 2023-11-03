@@ -2,15 +2,14 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 
 import {moveCategory} from 'mattermost-redux/actions/channel_categories';
 import {getCurrentChannelId, getUnreadChannelIds} from 'mattermost-redux/selectors/entities/channels';
 import {shouldShowUnreadsCategory, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getThreadCountsInCurrentTeam} from 'mattermost-redux/selectors/entities/threads';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 import {switchToChannelById} from 'actions/views/channel';
 import {
@@ -18,19 +17,21 @@ import {
     setDraggingState,
     stopDragging,
     clearChannelSelection,
+    multiSelectChannelAdd,
 } from 'actions/views/channel_sidebar';
 import {close, switchToLhsStaticPage} from 'actions/views/lhs';
-import {getCurrentStaticPageId, getVisibleStaticPages} from 'selectors/lhs';
 import {
     getDisplayedChannels,
     getDraggingState,
     getCategoriesForCurrentTeam,
     isUnreadFilterEnabled,
 } from 'selectors/views/channel_sidebar';
-
-import type {GlobalState} from 'types/store';
+import {GlobalState} from 'types/store';
+import {getCurrentStaticPageId, getVisibleStaticPages} from 'selectors/lhs';
 
 import SidebarList from './sidebar_list';
+import {markAllChannelsAsRead} from 'packages/mattermost-redux/src/actions/channels';
+import {closeModal, openModal} from 'actions/views/modals';
 
 function mapStateToProps(state: GlobalState) {
     const currentTeam = getCurrentTeam(state);
@@ -69,6 +70,10 @@ function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
             setDraggingState,
             stopDragging,
             clearChannelSelection,
+            multiSelectChannelAdd,
+            markAllChannelsAsRead,
+            openModal,
+            closeModal,
             switchToLhsStaticPage,
         }, dispatch),
     };

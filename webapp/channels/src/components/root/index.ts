@@ -1,36 +1,36 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {bindActionCreators, ActionCreatorsMapObject, Dispatch} from 'redux';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 
-import {getFirstAdminSetupComplete} from 'mattermost-redux/actions/general';
-import {getProfiles} from 'mattermost-redux/actions/users';
+import {Action} from 'mattermost-redux/types/actions';
 import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
-import {getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {shouldShowTermsOfService, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {Action} from 'mattermost-redux/types/actions';
+import {getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {getFirstAdminSetupComplete} from 'mattermost-redux/actions/general';
+import {getProfiles} from 'mattermost-redux/actions/users';
 
-import {migrateRecentEmojis} from 'actions/emoji_actions';
-import {loadConfigAndMe, registerCustomPostRenderer} from 'actions/views/root';
 import {getShowLaunchingWorkspace} from 'selectors/onboarding';
-import {shouldShowAppBar} from 'selectors/plugins';
 import {
     getIsRhsExpanded,
     getIsRhsOpen,
     getRhsState,
 } from 'selectors/rhs';
-import LocalStorageStore from 'stores/local_storage_store';
+import {shouldShowAppBar} from 'selectors/plugins';
+import {migrateRecentEmojis} from 'actions/emoji_actions';
+import {emitBrowserWindowResized} from 'actions/views/browser';
+import {loadConfigAndMe, registerCustomPostRenderer} from 'actions/views/root';
 
 import {initializeProducts} from 'plugins/products';
 
-import type {GlobalState} from 'types/store/index';
+import LocalStorageStore from 'stores/local_storage_store';
 
-import Root from './root';
-import type {Actions} from './root';
+import {GlobalState} from 'types/store/index';
+
+import Root, {Actions} from './root';
 
 function mapStateToProps(state: GlobalState) {
     const config = getConfig(state);
@@ -64,6 +64,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators<ActionCreatorsMapObject<Action>, Actions>({
             loadConfigAndMe,
+            emitBrowserWindowResized,
             getFirstAdminSetupComplete,
             getProfiles,
             migrateRecentEmojis,

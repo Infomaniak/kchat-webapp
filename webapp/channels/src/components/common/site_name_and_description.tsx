@@ -6,27 +6,41 @@ import {FormattedMessage} from 'react-intl';
 
 type Props = {
     customDescriptionText?: string;
-    siteName: string | undefined;
-};
-const SiteNameAndDescription = ({customDescriptionText, siteName = 'Mattermost'}: Props) => {
-    const description = customDescriptionText || (
-        <FormattedMessage
-            id='web.root.signup_info'
-            defaultMessage='All team communication in one place, searchable and accessible anywhere'
-        />
-    );
+    siteName: string;
+}
 
-    return (
-        <>
-            <h1 id='site_name'>{siteName}</h1>
-            <h3
-                id='site_description'
-                className='color--light'
-            >
-                {description}
-            </h3>
-        </>
-    );
-};
+export default class SiteNameAndDescription extends React.PureComponent<Props> {
+    public static defaultProps: Partial<Props> = {
+        siteName: 'Mattermost',
+    };
 
-export default React.memo(SiteNameAndDescription);
+    public render(): JSX.Element {
+        const {
+            customDescriptionText,
+            siteName,
+        } = this.props;
+        let description = null;
+        if (customDescriptionText) {
+            description = customDescriptionText;
+        } else {
+            description = (
+                <FormattedMessage
+                    id='web.root.signup_info'
+                    defaultMessage='All team communication in one place, searchable and accessible anywhere'
+                />
+            );
+        }
+
+        return (
+            <React.Fragment>
+                <h1 id='site_name'>{siteName}</h1>
+                <h3
+                    id='site_description'
+                    className='color--light'
+                >
+                    {description}
+                </h3>
+            </React.Fragment>
+        );
+    }
+}

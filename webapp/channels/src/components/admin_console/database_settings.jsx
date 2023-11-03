@@ -3,20 +3,19 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import {recycleDatabaseConnection} from 'actions/admin_actions.jsx';
-import * as Utils from 'utils/utils';
-import {t} from 'utils/i18n';
 
 import ExternalLink from 'components/external_link';
 
 import AdminSettings from './admin_settings';
 import BooleanSetting from './boolean_setting';
+import MigrationsTable from './database';
 import RequestButton from './request_button/request_button';
 import SettingsGroup from './settings_group.jsx';
 import TextSetting from './text_setting';
-
-import MigrationsTable from './database';
 
 export default class DatabaseSettings extends AdminSettings {
     getConfigFromState = (config) => {
@@ -32,7 +31,7 @@ export default class DatabaseSettings extends AdminSettings {
         config.ServiceSettings.MinimumHashtagLength = this.parseIntNonZero(this.state.minimumHashtagLength, 3, 2);
 
         return config;
-    }
+    };
 
     getStateFromConfig(config) {
         return {
@@ -370,5 +369,5 @@ export default class DatabaseSettings extends AdminSettings {
                 </div>
             </SettingsGroup>
         );
-    }
+    };
 }

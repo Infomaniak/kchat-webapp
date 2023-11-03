@@ -21,7 +21,7 @@ exports[`components/error_page/ErrorMessage should match snapshot, channel_not_f
 exports[`components/error_page/ErrorMessage should match snapshot, local_storage type 1`] = `
 <div>
   <MemoizedFormattedMessage
-    defaultMessage="Mattermost was unable to load because a setting in your browser prevents the use of its local storage features. To allow Mattermost to load, try the following actions:"
+    defaultMessage="kChat was unable to load because a setting in your browser prevents the use of its local storage features. To allow kChat to load, try the following actions:"
     id="error.local_storage.message"
   />
   <ul>
@@ -56,7 +56,7 @@ exports[`components/error_page/ErrorMessage should match snapshot, no type but w
 exports[`components/error_page/ErrorMessage should match snapshot, no type nor message 1`] = `
 <p>
   <MemoizedFormattedMessage
-    defaultMessage="An error has occurred."
+    defaultMessage="Veuillez réessayer ultérieurement ou essayer de rafraîchir la page. Si le problème persiste, veuillez contacter le support."
     id="error.generic.message"
   />
 </p>
@@ -65,7 +65,7 @@ exports[`components/error_page/ErrorMessage should match snapshot, no type nor m
 exports[`components/error_page/ErrorMessage should match snapshot, oauth_access_denied type 1`] = `
 <p>
   <MemoizedFormattedMessage
-    defaultMessage="You must authorize Mattermost to log in with {service}."
+    defaultMessage="You must authorize kChat to log in with {service}."
     id="error.oauth_access_denied"
     values={
       Object {
@@ -118,7 +118,7 @@ exports[`components/error_page/ErrorMessage should match snapshot, oauth_missing
   </p>
   <p>
     <MemoizedFormattedMessage
-      defaultMessage="For {link} make sure the administrator of your Microsoft organization has enabled the Mattermost app."
+      defaultMessage="For {link} make sure the administrator of your Microsoft organization has enabled the kChat app."
       id="error.oauth_missing_code.office365"
       values={
         Object {
@@ -167,7 +167,7 @@ exports[`components/error_page/ErrorMessage should match snapshot, oauth_missing
 exports[`components/error_page/ErrorMessage should match snapshot, page_not_found type 1`] = `
 <p>
   <MemoizedFormattedMessage
-    defaultMessage="The page you were trying to reach does not exist"
+    defaultMessage="Ce lien n’a peut-être jamais existé. Si ce lien existe, veuillez contacter la personne qui vous a partagé ce lien afin qu’elle vous donne les droits d’accès."
     id="error.not_found.message"
   />
 </p>
@@ -185,7 +185,7 @@ exports[`components/error_page/ErrorMessage should match snapshot, permalink_not
 exports[`components/error_page/ErrorMessage should match snapshot, team_not_found type 1`] = `
 <p>
   <MemoizedFormattedMessage
-    defaultMessage="The team you're requesting is private or does not exist. Please contact your Administrator for an invitation."
+    defaultMessage="The team you're requesting is private or does not exist."
     id="error.team_not_found.message"
   />
 </p>

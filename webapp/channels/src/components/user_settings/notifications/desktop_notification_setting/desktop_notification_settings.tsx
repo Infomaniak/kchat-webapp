@@ -1,20 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {ChangeEvent, RefObject} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import ReactSelect from 'react-select';
 import type {ValueType} from 'react-select';
+import ReactSelect from 'react-select';
+import semver from 'semver';
+import {NotificationLevels} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {isDesktopApp} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
 import type SettingItemMinComponent from 'components/setting_item_min/setting_item_min';
-
-import {NotificationLevels} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as NotificationSounds from 'utils/notification_sounds';
-import * as Utils from 'utils/utils';
 
 type SelectedOption = {
     label: string;
@@ -25,7 +25,6 @@ type Props = {
     activity: string;
     threads?: string;
     sound: string;
-    callsSound: string;
     updateSection: (section: string) => void;
     setParentState: (key: string, value: string | boolean) => void;
     submit: () => void;
@@ -35,31 +34,26 @@ type Props = {
     areAllSectionsInactive: boolean;
     saving: boolean;
     selectedSound: string;
-    callsSelectedSound: string;
     isCollapsedThreadsEnabled: boolean;
-    isCallsRingingEnabled: boolean;
 };
 
 type State = {
     selectedOption: SelectedOption;
-    callsSelectedOption: SelectedOption;
     blurDropdown: boolean;
 };
 
 export default class DesktopNotificationSettings extends React.PureComponent<Props, State> {
     dropdownSoundRef: RefObject<ReactSelect>;
-    callsDropdownRef: RefObject<ReactSelect>;
     minRef: RefObject<SettingItemMinComponent>;
 
     constructor(props: Props) {
         super(props);
+        const selectedOption = {value: props.selectedSound, label: props.selectedSound};
         this.state = {
-            selectedOption: {value: props.selectedSound, label: props.selectedSound},
-            callsSelectedOption: {value: props.callsSelectedSound, label: props.callsSelectedSound},
+            selectedOption,
             blurDropdown: false,
         };
         this.dropdownSoundRef = React.createRef();
-        this.callsDropdownRef = React.createRef();
         this.minRef = React.createRef();
     }
 
@@ -81,9 +75,6 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
             this.props.setParentState(key, value);
             Utils.a11yFocus(e.currentTarget);
         }
-        if (key === 'callsDesktopSound' && value === 'false') {
-            NotificationSounds.stopTryNotificationRing();
-        }
     };
 
     handleThreadsOnChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -95,15 +86,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         if (selectedOption && 'value' in selectedOption) {
             this.props.setParentState('desktopNotificationSound', selectedOption.value);
             this.setState({selectedOption});
-            NotificationSounds.tryNotificationSound(selectedOption.value);
-        }
-    };
-
-    setCallsNotificationRing: ReactSelect['onChange'] = (selectedOption: ValueType<SelectedOption>): void => {
-        if (selectedOption && 'value' in selectedOption) {
-            this.props.setParentState('callsNotificationSound', selectedOption.value);
-            this.setState({callsSelectedOption: selectedOption});
-            NotificationSounds.tryNotificationRing(selectedOption.value);
+            Utils.tryNotificationSound(selectedOption.value);
         }
     };
 
@@ -112,9 +95,6 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
             this.setState({blurDropdown: true});
             if (this.dropdownSoundRef.current) {
                 this.dropdownSoundRef.current.blur();
-            }
-            if (this.callsDropdownRef.current) {
-                this.callsDropdownRef.current.blur();
             }
         }
     }
@@ -134,8 +114,6 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         let soundSection;
         let notificationSelection;
         let threadsNotificationSelection;
-        let callsSection;
-        let callsNotificationSelection;
         if (this.props.activity !== NotificationLevels.NONE) {
             const soundRadio = [false, false];
             if (this.props.sound === 'false') {
@@ -145,108 +123,28 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
             }
 
             if (this.props.sound === 'true') {
-                const sounds = Array.from(NotificationSounds.notificationSounds.keys());
+                const sounds = Array.from(Utils.notificationSounds.keys());
                 const options = sounds.map((sound) => {
                     return {value: sound, label: sound};
                 });
 
-                notificationSelection = (<div className='pt-2'>
-                    <ReactSelect
-                        className='react-select notification-sound-dropdown'
-                        classNamePrefix='react-select'
-                        id='displaySoundNotification'
-                        options={options}
-                        clearable={false}
-                        onChange={this.setDesktopNotificationSound}
-                        value={this.state.selectedOption}
-                        isSearchable={false}
-                        ref={this.dropdownSoundRef}
-                        components={{SingleValue: (props) => <div data-testid='displaySoundNotificationValue'>{props.children}</div>}}
-                    /></div>);
-            }
-
-            if (this.props.isCallsRingingEnabled) {
-                const callsSoundRadio = [false, false];
-                if (this.props.callsSound === 'false') {
-                    callsSoundRadio[1] = true;
-                } else {
-                    callsSoundRadio[0] = true;
-                }
-
-                if (this.props.callsSound === 'true') {
-                    const callsSounds = Array.from(NotificationSounds.callsNotificationSounds.keys());
-                    const callsOptions = callsSounds.map((sound) => {
-                        return {value: sound, label: sound};
-                    });
-
-                    callsNotificationSelection = (<div className='pt-2'>
+                if (!isDesktopApp() || (window.desktop && semver.gte(window.desktop.version || '', '4.6.0'))) {
+                    notificationSelection = (<div className='pt-2'>
                         <ReactSelect
                             className='react-select notification-sound-dropdown'
                             classNamePrefix='react-select'
-                            id='displayCallsSoundNotification'
-                            options={callsOptions}
+                            id='displaySoundNotification'
+                            options={options}
                             clearable={false}
-                            onChange={this.setCallsNotificationRing}
-                            value={this.state.callsSelectedOption}
+                            onChange={this.setDesktopNotificationSound}
+                            value={this.state.selectedOption}
                             isSearchable={false}
-                            ref={this.callsDropdownRef}
-                            components={{SingleValue: (props) => <div data-testid='displayCallsSoundNotificationValue'>{props.children}</div>}}
+                            ref={this.dropdownSoundRef}
                         /></div>);
                 }
-
-                callsSection = (
-                    <>
-                        <hr/>
-                        <fieldset>
-                            <legend className='form-legend'>
-                                <FormattedMessage
-                                    id='user.settings.notifications.desktop.calls_sound'
-                                    defaultMessage='Notification sound for incoming calls'
-                                />
-                            </legend>
-                            <div className='radio'>
-                                <label>
-                                    <input
-                                        id='callsSoundOn'
-                                        type='radio'
-                                        name='callsNotificationSounds'
-                                        checked={callsSoundRadio[0]}
-                                        data-key={'callsDesktopSound'}
-                                        data-value={'true'}
-                                        onChange={this.handleOnChange}
-                                    />
-                                    <FormattedMessage
-                                        id='user.settings.notifications.on'
-                                        defaultMessage='On'
-                                    />
-                                </label>
-                                <br/>
-                            </div>
-                            <div className='radio'>
-                                <label>
-                                    <input
-                                        id='soundOff'
-                                        type='radio'
-                                        name='callsNotificationSounds'
-                                        checked={callsSoundRadio[1]}
-                                        data-key={'callsDesktopSound'}
-                                        data-value={'false'}
-                                        onChange={this.handleOnChange}
-                                    />
-                                    <FormattedMessage
-                                        id='user.settings.notifications.off'
-                                        defaultMessage='Off'
-                                    />
-                                </label>
-                                <br/>
-                            </div>
-                            {callsNotificationSelection}
-                        </fieldset>
-                    </>
-                );
             }
 
-            if (NotificationSounds.hasSoundOptions()) {
+            if (Utils.hasSoundOptions()) {
                 soundSection = (
                     <fieldset>
                         <legend className='form-legend'>
@@ -397,7 +295,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
                             />
                             <FormattedMessage
                                 id='user.settings.notifications.onlyMentions'
-                                defaultMessage='Only for mentions, direct messages, and group messages'
+                                defaultMessage='Only for mentions and direct messages'
                             />
                         </label>
                         <br/>
@@ -429,7 +327,6 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
                 <hr/>
                 {threadsNotificationSelection}
                 {soundSection}
-                {callsSection}
             </div>,
         );
 
@@ -447,7 +344,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
 
     buildMinimizedSetting = () => {
         let formattedMessageProps;
-        const hasSoundOption = NotificationSounds.hasSoundOptions();
+        const hasSoundOption = Utils.hasSoundOptions();
         if (this.props.activity === NotificationLevels.MENTION) {
             if (hasSoundOption && this.props.sound !== 'false') {
                 formattedMessageProps = {
@@ -502,14 +399,9 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
 
     componentDidUpdate(prevProps: Props) {
         this.blurDropdown();
+
         if (prevProps.active && !this.props.active && this.props.areAllSectionsInactive) {
             this.focusEditButton();
-        }
-        if (this.props.selectedSound !== prevProps.selectedSound) {
-            this.setState({selectedOption: {value: this.props.selectedSound, label: this.props.selectedSound}});
-        }
-        if (this.props.callsSelectedSound !== prevProps.callsSelectedSound) {
-            this.setState({callsSelectedOption: {value: this.props.callsSelectedSound, label: this.props.callsSelectedSound}});
         }
     }
 

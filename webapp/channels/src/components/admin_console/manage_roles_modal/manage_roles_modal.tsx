@@ -5,19 +5,20 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 
-import BotTag from 'components/widgets/tag/bot_tag';
+import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
 import {General} from 'mattermost-redux/constants';
-import {ActionResult} from 'mattermost-redux/types/actions';
-import {UserProfile} from '@mattermost/types/users';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
-import Avatar from 'components/widgets/users/avatar';
-import {isSuccess} from 'types/actions';
 import ExternalLink from 'components/external_link';
+import BotTag from 'components/widgets/tag/bot_tag';
+import Avatar from 'components/widgets/users/avatar';
+
+import {isSuccess} from 'types/actions';
 
 export type Props = {
     show: boolean;
@@ -69,7 +70,7 @@ export default class ManageRolesModal extends React.PureComponent<Props, State> 
         this.setState({
             error,
         });
-    }
+    };
 
     handleSystemAdminChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.name === 'systemadmin') {
@@ -115,7 +116,7 @@ export default class ManageRolesModal extends React.PureComponent<Props, State> 
         } else if (!UserUtils.hasPostAllPublicRole(roles) && UserUtils.hasPostAllPublicRole(oldRoles)) {
             trackEvent('actions', 'remove_roles', {role: General.SYSTEM_POST_ALL_PUBLIC_ROLE});
         }
-    }
+    };
 
     handleSave = async () => {
         this.setState({error: null});
@@ -146,7 +147,7 @@ export default class ManageRolesModal extends React.PureComponent<Props, State> 
                 />,
             );
         }
-    }
+    };
 
     renderContents = () => {
         const {user} = this.props;
@@ -335,7 +336,7 @@ export default class ManageRolesModal extends React.PureComponent<Props, State> 
                 </div>
             </div>
         );
-    }
+    };
 
     render() {
         return (

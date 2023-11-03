@@ -3,16 +3,15 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
 
-import {Channel} from '@mattermost/types/channels';
-import {Group} from '@mattermost/types/groups';
+import type {Channel} from '@mattermost/types/channels';
+import type {Group} from '@mattermost/types/groups';
 
 import AddGroupsToChannelModal from 'components/add_groups_to_channel_modal';
 import ToggleModalButton from 'components/toggle_modal_button';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
-
-import {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import GroupList from '../../group';
 

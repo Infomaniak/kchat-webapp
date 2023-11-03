@@ -1,9 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import type {ReactNode} from 'react';
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import Constants, {Locations} from 'utils/constants';
+import {fromAutoResponder, isFromWebhook} from 'utils/post_utils';
 
 import type {Post} from '@mattermost/types/posts';
 
@@ -12,12 +14,10 @@ import UserProfile from 'components/user_profile';
 import BotTag from 'components/widgets/tag/bot_tag';
 import Tag from 'components/widgets/tag/tag';
 
-import {Locations} from 'utils/constants';
-import {fromAutoResponder, isFromWebhook} from 'utils/post_utils';
-
 type Props = {
     post: Post;
     compactDisplay?: boolean;
+    currentUserId: string;
     colorizeUsernames?: boolean;
     enablePostUsernameOverride?: boolean;
     isConsecutivePost?: boolean;
@@ -95,11 +95,7 @@ const PostUserProfile = (props: Props): JSX.Element | null => {
                 />
             );
 
-            // user profile component checks and add bot tag in case webhook is from bot account, but if webhook is from user account we need this.
-
-            if (!isBot) {
-                botIndicator = (<BotTag/>);
-            }
+            botIndicator = (<BotTag/>);
         } else if (isFromAutoResponder) {
             userProfile = (
                 <span className='auto-responder'>
@@ -142,6 +138,7 @@ const PostUserProfile = (props: Props): JSX.Element | null => {
                         />
                     }
                     userId={post.user_id}
+                    overwriteImage={Constants.SYSTEM_MESSAGE_PROFILE_IMAGE}
                     disablePopover={true}
                     channelId={post.channel_id}
                     colorize={colorize}

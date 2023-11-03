@@ -3,23 +3,24 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {ActionResult} from 'mattermost-redux/types/actions';
-import {ServerError} from '@mattermost/types/errors';
-import {UserProfile, UsersStats, GetFilteredUsersStatsOpts} from '@mattermost/types/users';
-import {Channel, ChannelMembership} from '@mattermost/types/channels';
-import GeneralConstants from 'mattermost-redux/constants/general';
-
-import {t} from 'utils/i18n';
 import Constants, {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
+
+import type {Channel, ChannelMembership} from '@mattermost/types/channels';
+import type {ServerError} from '@mattermost/types/errors';
+import type {UserProfile, UsersStats, GetFilteredUsersStatsOpts} from '@mattermost/types/users';
+
+import GeneralConstants from 'mattermost-redux/constants/general';
+import type {ActionResult} from 'mattermost-redux/types/actions';
+
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
-import AdminPanel from 'components/widgets/admin_console/admin_panel';
+import type {FilterOptions} from 'components/admin_console/filter/filter';
 import UserGrid from 'components/admin_console/user_grid/user_grid';
-import {BaseMembership} from 'components/admin_console/user_grid/user_grid_role_dropdown';
+import type {BaseMembership} from 'components/admin_console/user_grid/user_grid_role_dropdown';
 import ChannelInviteModal from 'components/channel_invite_modal';
 import ToggleModalButton from 'components/toggle_modal_button';
-import {FilterOptions} from 'components/admin_console/filter/filter';
+import AdminPanel from 'components/widgets/admin_console/admin_panel';
 
 type Props = {
     channelId: string;
@@ -126,29 +127,29 @@ export default class ChannelMembers extends React.PureComponent<Props, State> {
 
     private setStateLoading = (loading: boolean) => {
         this.setState({loading});
-    }
+    };
 
     private loadPage = async (page: number) => {
         const {loadProfilesAndReloadChannelMembers} = this.props.actions;
         const {channelId, filters} = this.props;
         await loadProfilesAndReloadChannelMembers(page + 1, PROFILE_CHUNK_SIZE, channelId, '', {active: true, ...filters});
-    }
+    };
 
     private removeUser = (user: UserProfile) => {
         this.props.onRemoveCallback(user);
-    }
+    };
 
     private onAddCallback = (users: UserProfile[]) => {
         this.props.onAddCallback(users);
-    }
+    };
 
     private onSearch = async (term: string) => {
         this.props.actions.setUserGridSearch(term);
-    }
+    };
 
     private updateMembership = (membership: BaseMembership) => {
         this.props.updateRole(membership.user_id, membership.scheme_user, membership.scheme_admin);
-    }
+    };
 
     private onFilter = async (filterOptions: FilterOptions) => {
         const roles = filterOptions.role.values;
@@ -181,7 +182,7 @@ export default class ChannelMembers extends React.PureComponent<Props, State> {
         } else {
             this.props.actions.setUserGridFilters(filters);
         }
-    }
+    };
 
     render = () => {
         const {users, channel, channelId, usersToAdd, usersToRemove, channelMembers, totalCount, searchTerm, isDisabled} = this.props;
@@ -294,5 +295,5 @@ export default class ChannelMembers extends React.PureComponent<Props, State> {
                 />
             </AdminPanel>
         );
-    }
+    };
 }

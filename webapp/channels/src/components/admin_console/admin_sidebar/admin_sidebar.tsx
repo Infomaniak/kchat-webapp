@@ -1,26 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
-import {FormattedMessage, injectIntl, IntlShape} from 'react-intl';
-import Scrollbars from 'react-custom-scrollbars';
-import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
-
-import {PluginRedux} from '@mattermost/types/plugins';
-
-import {generateIndex, Index} from 'utils/admin_console_index';
+import isEqual from 'lodash/isEqual';
+import React from 'react';
+import Scrollbars from 'react-custom-scrollbars';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import type {IntlShape} from 'react-intl';
+import type {Index} from 'utils/admin_console_index';
+import {generateIndex} from 'utils/admin_console_index';
 import {getHistory} from 'utils/browser_history';
 import {localizeMessage} from 'utils/utils';
 
-import AdminSidebarCategory from 'components/admin_console/admin_sidebar/admin_sidebar_category';
-import AdminSidebarHeader from 'components/admin_console/admin_sidebar_header';
-import AdminSidebarSection from 'components/admin_console/admin_sidebar/admin_sidebar_section';
-import Highlight from 'components/admin_console/highlight';
-import SearchIcon from 'components/widgets/icons/search_icon';
-import QuickInput from 'components/quick_input';
+import type {PluginRedux} from '@mattermost/types/plugins';
 
-import AdminDefinition from '../admin_definition';
+import AdminSidebarCategory from 'components/admin_console/admin_sidebar/admin_sidebar_category';
+import AdminSidebarSection from 'components/admin_console/admin_sidebar/admin_sidebar_section';
+import AdminSidebarHeader from 'components/admin_console/admin_sidebar_header';
+import Highlight from 'components/admin_console/highlight';
+import QuickInput from 'components/quick_input';
+import SearchIcon from 'components/widgets/icons/search_icon';
+
+import type AdminDefinition from '../admin_definition';
 
 import type {PropsFromRedux} from './index';
 
@@ -57,11 +58,11 @@ const renderScrollThumbVertical = (props: Props) => (
 
 class AdminSidebar extends React.PureComponent<Props, State> {
     searchRef: React.RefObject<HTMLInputElement>;
-    idx: Index | null
+    idx: Index | null;
 
     static defaultProps = {
         plugins: {},
-    }
+    };
 
     constructor(props: Props) {
         super(props);
@@ -130,7 +131,7 @@ class AdminSidebar extends React.PureComponent<Props, State> {
                 }
             }
         }
-    }
+    };
 
     updateTitle = () => {
         let currentSiteName = '';
@@ -139,7 +140,7 @@ class AdminSidebar extends React.PureComponent<Props, State> {
         }
 
         document.title = localizeMessage('sidebar_right_menu.console', 'System Console') + currentSiteName;
-    }
+    };
 
     visibleSections = () => {
         const {config, license, buildEnterpriseReady, consoleAccess, adminDefinition, cloud} = this.props;
@@ -159,14 +160,14 @@ class AdminSidebar extends React.PureComponent<Props, State> {
         };
         const result = new Set();
         for (const section of Object.values(adminDefinition)) {
-            for (const item of Object.values(section)) {
+            for (const item of Object.values(section as any)) {
                 if (isVisible(item)) {
-                    result.add(item.url);
+                    result.add((item as any).url);
                 }
             }
         }
         return result;
-    }
+    };
 
     renderRootMenu = (definition: typeof AdminDefinition) => {
         const {config, license, buildEnterpriseReady, consoleAccess, cloud, subscriptionProduct} = this.props;
@@ -249,11 +250,11 @@ class AdminSidebar extends React.PureComponent<Props, State> {
             return null;
         });
         return sidebarSections;
-    }
+    };
 
     isPluginPresentInSections = (plugin: PluginRedux) => {
         return this.state.sections && this.state.sections.indexOf(`plugin_${plugin.id}`) >= 0;
-    }
+    };
 
     renderPluginsMenu = () => {
         const {config, plugins} = this.props;
@@ -279,12 +280,12 @@ class AdminSidebar extends React.PureComponent<Props, State> {
         }
 
         return [];
-    }
+    };
 
     handleClearFilter = () => {
         this.setState({sections: null, filter: ''});
         this.props.onFilterChange('');
-    }
+    };
 
     render() {
         const {showTaskList} = this.props;

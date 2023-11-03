@@ -3,19 +3,19 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {blevePurgeIndexes} from 'actions/admin_actions.jsx';
 import {JobStatuses, JobTypes} from 'utils/constants';
 import {t} from 'utils/i18n';
+
+import {blevePurgeIndexes} from 'actions/admin_actions.jsx';
 
 import ExternalLink from 'components/external_link';
 
 import AdminSettings from './admin_settings';
 import BooleanSetting from './boolean_setting';
-import TextSetting from './text_setting';
 import JobsTable from './jobs';
 import RequestButton from './request_button/request_button';
 import SettingsGroup from './settings_group.jsx';
+import TextSetting from './text_setting';
 
 export default class BleveSettings extends AdminSettings {
     getConfigFromState = (config) => {
@@ -25,7 +25,7 @@ export default class BleveSettings extends AdminSettings {
         config.BleveSettings.EnableAutocomplete = this.state.enableAutocomplete;
 
         return config;
-    }
+    };
 
     getStateFromConfig(config) {
         return {
@@ -55,17 +55,17 @@ export default class BleveSettings extends AdminSettings {
         }
 
         this.handleChange(id, value);
-    }
+    };
 
     handleSaved = () => {
         this.setState({
             canPurgeAndIndex: this.state.enableIndexing && this.state.indexDir !== '',
         });
-    }
+    };
 
     canSave = () => {
         return this.state.canSave;
-    }
+    };
 
     getExtraInfo(job) {
         if (job.status === JobStatuses.IN_PROGRESS) {
@@ -246,5 +246,5 @@ export default class BleveSettings extends AdminSettings {
                 />
             </SettingsGroup>
         );
-    }
+    };
 }

@@ -1,15 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {screen} from '@testing-library/react';
 import React from 'react';
 import {Provider} from 'react-redux';
+import {renderWithIntl} from 'tests/react_testing_utils';
+import mockStore from 'tests/test_store';
+import Constants from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
-
-import {renderWithIntl, screen} from 'tests/react_testing_utils';
-import mockStore from 'tests/test_store';
-import Constants from 'utils/constants';
 
 import AboutAreaDM from './about_area_dm';
 

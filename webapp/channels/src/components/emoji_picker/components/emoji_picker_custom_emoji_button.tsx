@@ -28,7 +28,7 @@ function EmojiPickerCustomEmojiButton({customEmojisEnabled, currentTeamName, han
         <AnyTeamPermissionGate permissions={[Permissions.CREATE_EMOJIS]}>
             <div className='emoji-picker__custom'>
                 <Link
-                    className='btn btn-tertiary'
+                    className='btn btn-link'
                     to={`/${currentTeamName}/emoji`}
                     onClick={handleEmojiPickerClose}
                 >

@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
 import {Constants} from 'utils/constants';
 import {t} from 'utils/i18n';
 

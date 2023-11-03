@@ -65,13 +65,18 @@ exports[`components/RenameChannelModal should match snapshot 1`] = `
             id="rename_channel.displayName"
           />
         </label>
-        <input
+        <LocalizedInput
           aria-label="display name"
           className="form-control"
           id="display_name"
           maxLength={64}
           onChange={[Function]}
-          placeholder="Enter display name"
+          placeholder={
+            Object {
+              "defaultMessage": "Enter display name",
+              "id": "rename_channel.displayNameHolder",
+            }
+          }
           type="text"
           value="Fake Channel"
         />
@@ -137,7 +142,7 @@ exports[`components/RenameChannelModal should match snapshot 1`] = `
       componentClass="div"
     >
       <button
-        className="btn btn-tertiary"
+        className="btn btn-link"
         onClick={[Function]}
         type="button"
       >

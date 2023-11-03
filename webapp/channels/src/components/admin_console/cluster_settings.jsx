@@ -3,14 +3,12 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import * as Utils from 'utils/utils';
 
 import {Client4} from 'mattermost-redux/client';
 
-import * as Utils from 'utils/utils';
-
-import WarningIcon from 'components/widgets/icons/fa_warning_icon';
-
 import ExternalLink from 'components/external_link';
+import WarningIcon from 'components/widgets/icons/fa_warning_icon';
 
 import AdminSettings from './admin_settings';
 import BooleanSetting from './boolean_setting';
@@ -29,7 +27,7 @@ export default class ClusterSettings extends AdminSettings {
         config.ClusterSettings.GossipPort = this.parseIntNonZero(this.state.GossipPort, 8074);
         config.ClusterSettings.StreamingPort = this.parseIntNonZero(this.state.StreamingPort, 8075);
         return config;
-    }
+    };
 
     getStateFromConfig(config) {
         const settings = config.ClusterSettings;
@@ -62,7 +60,7 @@ export default class ClusterSettings extends AdminSettings {
         });
 
         this.handleChange(id, value);
-    }
+    };
 
     renderSettings = () => {
         const licenseEnabled = this.props.license.IsLicensed === 'true' && this.props.license.Cluster === 'true';
@@ -309,7 +307,7 @@ export default class ClusterSettings extends AdminSettings {
                 />
             </SettingsGroup>
         );
-    }
+    };
 }
 
 const style = {

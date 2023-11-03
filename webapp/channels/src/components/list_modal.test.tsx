@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {TestHelper} from 'utils/test_helper';
 
 import type {Group} from '@mattermost/types/groups';
-
-import {TestHelper} from 'utils/test_helper';
 
 import ListModal, {DEFAULT_NUM_PER_PAGE} from './list_modal';
 

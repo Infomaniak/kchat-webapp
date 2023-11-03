@@ -1,18 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo} from 'react';
-import type {MouseEvent, KeyboardEvent} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch, useSelector} from 'react-redux';
-
 import {
     FolderOutlineIcon,
     StarOutlineIcon,
     FolderMoveOutlineIcon,
     ChevronRightIcon,
     CheckIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
+import React, {memo} from 'react';
+import type {MouseEvent, KeyboardEvent} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import type {Channel} from '@mattermost/types/channels';
 
@@ -30,13 +31,12 @@ import {getCategoriesForCurrentTeam} from 'selectors/views/channel_sidebar';
 import EditCategoryModal from 'components/edit_category_modal';
 import * as Menu from 'components/menu';
 
-import Constants, {ModalIdentifiers} from 'utils/constants';
-
 import type {GlobalState} from 'types/store';
 
 type Props = {
     channel: Channel;
     inHeaderDropdown?: boolean;
+    parentMenuId: string;
 };
 
 const ChannelMoveToSubMenu = (props: Props) => {
@@ -190,6 +190,7 @@ const ChannelMoveToSubMenu = (props: Props) => {
             trailingElements={<ChevronRightIcon size={16}/>}
             menuId={`moveTo-${props.channel.id}-menu`}
             menuAriaLabel={formatMessage({id: 'sidebar_left.sidebar_channel_menu.moveTo.dropdownAriaLabel', defaultMessage: 'Move to submenu'})}
+            parentMenuId={props.parentMenuId}
         >
             {getMoveToCategorySubmenuItems(categories, currentCategory)}
         </Menu.SubMenu>

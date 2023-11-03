@@ -1,10 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useCallback} from 'react';
 import type {ReactNode} from 'react';
+import React, {memo, useCallback} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {t} from 'utils/i18n';
+import {getSiteURL} from 'utils/url';
+import {copyToClipboard} from 'utils/utils';
 
 import type {UserThread} from '@mattermost/types/threads';
 
@@ -20,10 +23,6 @@ import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
 
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-
-import {t} from 'utils/i18n';
-import {getSiteURL} from 'utils/url';
-import {copyToClipboard} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

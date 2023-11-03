@@ -3,32 +3,30 @@
 
 import iNoBounce from 'inobounce';
 import React, {lazy, memo, useEffect, useRef, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import {Route, Switch, useHistory, useParams} from 'react-router-dom';
+import {hasNotificationsSettingsPathInUrl} from 'utils/browser_history';
+import Constants from 'utils/constants';
+import {isIosSafari} from 'utils/user_agent';
+import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {Team} from '@mattermost/types/teams';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import {reconnect} from 'actions/websocket_actions.jsx';
+import {showSettings} from 'actions/views/rhs';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import {makeAsyncComponent} from 'components/async_load';
 import ChannelController from 'components/channel_layout/channel_controller';
 import useTelemetryIdentitySync from 'components/common/hooks/useTelemetryIdentifySync';
 
-import Constants from 'utils/constants';
-import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
-import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
-import {isIosSafari} from 'utils/user_agent';
-
 import type {OwnProps, PropsFromRedux} from './index';
 
 const BackstageController = makeAsyncComponent('BackstageController', lazy(() => import('components/backstage')));
 const Pluggable = makeAsyncComponent('Pluggable', lazy(() => import('plugins/pluggable')));
 
-const WAKEUP_CHECK_INTERVAL = 30000; // 30 seconds
-const WAKEUP_THRESHOLD = 60000; // 60 seconds
 const UNREAD_CHECK_TIME_MILLISECONDS = 120 * 1000;
 
 declare global {
@@ -41,6 +39,7 @@ type Props = PropsFromRedux & OwnProps;
 
 function TeamController(props: Props) {
     const history = useHistory();
+    const dispatch = useDispatch();
     const {team: teamNameParam} = useParams<Props['match']['params']>();
 
     const [initialChannelsLoaded, setInitialChannelsLoaded] = useState(false);
@@ -54,26 +53,33 @@ function TeamController(props: Props) {
 
     useEffect(() => {
         async function fetchInitialChannels() {
-            await props.fetchAllMyTeamsChannelsAndChannelMembersREST();
+            if (props.graphQLEnabled) {
+                await props.fetchChannelsAndMembers();
+            } else {
+                await props.fetchAllMyTeamsChannelsAndChannelMembersREST();
+            }
 
             setInitialChannelsLoaded(true);
         }
 
         fetchInitialChannels();
-    }, []);
+    }, [props.graphQLEnabled]);
 
     useEffect(() => {
-        const wakeUpIntervalId = setInterval(() => {
-            const currentTime = Date.now();
-            if ((currentTime - lastTime.current) > WAKEUP_THRESHOLD) {
-                console.log('computer woke up - reconnecting'); //eslint-disable-line no-console
-                reconnect();
-            }
-            lastTime.current = currentTime;
-        }, WAKEUP_CHECK_INTERVAL);
+        let notificationsSettingsTimer: NodeJS.Timeout;
+
+        // open notifications settings panel if the url contains 'notifications-settings'
+        // eslint-disable-next-line @babel/no-unused-expressions
+        if (hasNotificationsSettingsPathInUrl()) {
+            notificationsSettingsTimer = setTimeout(() => {
+                dispatch(showSettings('notifications'));
+                history.push(window.location.pathname); //clear the hash params
+            });
+        }
 
         return () => {
-            clearInterval(wakeUpIntervalId);
+            // eslint-disable-next-line @babel/no-unused-expressions
+            notificationsSettingsTimer && clearInterval(notificationsSettingsTimer);
         };
     }, []);
 
@@ -88,11 +94,12 @@ function TeamController(props: Props) {
                 props.markChannelAsReadOnFocus(props.currentChannelId);
             }
 
-            // Temporary flag to disable refetching of channel members on browser focus
-            if (!props.disableRefetchingOnBrowserFocus) {
-                const currentTime = Date.now();
-                if ((currentTime - blurTime.current) > UNREAD_CHECK_TIME_MILLISECONDS && props.currentTeamId) {
+            const currentTime = Date.now();
+            if ((currentTime - blurTime.current) > UNREAD_CHECK_TIME_MILLISECONDS && props.currentTeamId) {
+                if (props.graphQLEnabled) {
                     props.fetchChannelsAndMembers(props.currentTeamId);
+                } else {
+                    props.fetchMyChannelsAndMembersREST(props.currentTeamId);
                 }
             }
         }
@@ -100,6 +107,10 @@ function TeamController(props: Props) {
         function handleBlur() {
             window.isActive = false;
             blurTime.current = Date.now();
+
+            if (props.currentUser) {
+                props.viewChannel('');
+            }
         }
 
         function handleKeydown(event: KeyboardEvent) {
@@ -125,7 +136,7 @@ function TeamController(props: Props) {
             window.removeEventListener('blur', handleBlur);
             window.removeEventListener('keydown', handleKeydown);
         };
-    }, [props.selectedThreadId, props.currentChannelId, props.currentTeamId]);
+    }, [props.selectedThreadId, props.graphQLEnabled, props.currentChannelId, props.currentTeamId, props.currentUser.id]);
 
     // Effect runs on mount, adds active state to window
     useEffect(() => {
@@ -197,11 +208,6 @@ function TeamController(props: Props) {
         }
     }, [teamNameParam, teamsListDependency]);
 
-    if (props.mfaRequired) {
-        history.push('/mfa/setup');
-        return null;
-    }
-
     if (team === null) {
         return null;
     }
@@ -209,17 +215,17 @@ function TeamController(props: Props) {
     return (
         <Switch>
             <Route
-                path={`/:team(${TEAM_NAME_PATH_PATTERN})/integrations`}
+                path={'/:team/integrations'}
                 component={BackstageController}
             />
             <Route
-                path={`/:team(${TEAM_NAME_PATH_PATTERN})/emoji`}
+                path={'/:team/emoji'}
                 component={BackstageController}
             />
             {props.plugins?.map((plugin) => (
                 <Route
                     key={plugin.id}
-                    path={`/:team(${TEAM_NAME_PATH_PATTERN})/` + (plugin as any).route}
+                    path={'/:team/' + (plugin as any).route}
                     render={() => (
                         <Pluggable
                             pluggableName={'NeedsTeamComponent'}

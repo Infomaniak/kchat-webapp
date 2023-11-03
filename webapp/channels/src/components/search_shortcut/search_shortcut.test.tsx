@@ -13,6 +13,12 @@ describe('components/SearchShortcut', () => {
             return {
                 ...original,
                 isDesktopApp: jest.fn(() => false),
+            };
+        });
+        jest.mock('utils/utils', () => {
+            const original = jest.requireActual('utils/utils');
+            return {
+                ...original,
                 isMac: jest.fn(() => false),
             };
         });
@@ -27,6 +33,12 @@ describe('components/SearchShortcut', () => {
             return {
                 ...original,
                 isDesktopApp: jest.fn(() => false),
+            };
+        });
+        jest.mock('utils/utils', () => {
+            const original = jest.requireActual('utils/utils');
+            return {
+                ...original,
                 isMac: jest.fn(() => true),
             };
         });
@@ -41,7 +53,13 @@ describe('components/SearchShortcut', () => {
             return {
                 ...original,
                 isDesktopApp: jest.fn(() => true),
-                isMac: jest.fn(() => true),
+            };
+        });
+        jest.mock('utils/utils', () => {
+            const original = jest.requireActual('utils/utils');
+            return {
+                ...original,
+                isMac: jest.fn(() => false),
             };
         });
 
@@ -55,6 +73,12 @@ describe('components/SearchShortcut', () => {
             return {
                 ...original,
                 isDesktopApp: jest.fn(() => true),
+            };
+        });
+        jest.mock('utils/utils', () => {
+            const original = jest.requireActual('utils/utils');
+            return {
+                ...original,
                 isMac: jest.fn(() => true),
             };
         });

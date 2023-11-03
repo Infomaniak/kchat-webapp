@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {AlertOutlineIcon, AlertCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import styled from 'styled-components';
 
-import {AlertOutlineIcon, AlertCircleOutlineIcon} from '@mattermost/compass-icons/components';
 import {PostPriority} from '@mattermost/types/posts';
 
 type Props = {
@@ -18,8 +18,8 @@ const Badge = styled.span`
     justify-content: center;
     height: 20px;
     width: 20px;
-    margin-left: 8px;
     min-width: 20px;
+    margin-right: 10px;
     border-radius: 10px;
     color: #fff;
 

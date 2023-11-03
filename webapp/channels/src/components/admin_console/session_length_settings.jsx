@@ -3,9 +3,9 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import * as Utils from 'utils/utils';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import * as Utils from 'utils/utils';
 
 import AdminSettings from './admin_settings';
 import BooleanSetting from './boolean_setting';
@@ -24,7 +24,7 @@ export default class SessionLengthSettings extends AdminSettings {
         config.ServiceSettings.SessionIdleTimeoutInMinutes = this.parseIntZeroOrMin(this.state.sessionIdleTimeoutInMinutes, MINIMUM_IDLE_TIMEOUT);
 
         return config;
-    }
+    };
 
     getStateFromConfig(config) {
         return {
@@ -204,5 +204,5 @@ export default class SessionLengthSettings extends AdminSettings {
                 {sessionTimeoutSetting}
             </SettingsGroup>
         );
-    }
+    };
 }

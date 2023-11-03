@@ -2,25 +2,20 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
+import Pluggable from 'plugins/pluggable';
 import React from 'react';
 import {Link} from 'react-router-dom';
+import Constants, {RHSStates} from 'utils/constants';
+import {wrapEmojis} from 'utils/emoji_utils';
+import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import {mark, trackEvent} from 'actions/telemetry_actions';
 
-import CopyUrlContextMenu from 'components/copy_url_context_menu';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-import {ChannelsAndDirectMessagesTour} from 'components/tours/onboarding_tour';
-
-import Pluggable from 'plugins/pluggable';
-import Constants, {RHSStates} from 'utils/constants';
-import {wrapEmojis} from 'utils/emoji_utils';
-import {cmdOrCtrlPressed} from 'utils/keyboard';
-import {isDesktopApp} from 'utils/user_agent';
-import {localizeMessage} from 'utils/utils';
 
 import type {RhsState} from 'types/store/rhs';
 
@@ -56,10 +51,6 @@ type Props = {
 
     teammateId?: string;
 
-    firstChannelName?: string;
-
-    showChannelsTutorialStep: boolean;
-
     hasUrgent: boolean;
     rhsState?: RhsState;
     rhsOpen?: boolean;
@@ -82,12 +73,14 @@ type State = {
 export default class SidebarChannelLink extends React.PureComponent<Props, State> {
     labelRef: React.RefObject<HTMLDivElement>;
     gmItemRef: React.RefObject<HTMLDivElement>;
+    menuTriggerRef: React.RefObject<HTMLButtonElement>;
 
     constructor(props: Props) {
         super(props);
 
         this.labelRef = React.createRef();
         this.gmItemRef = React.createRef();
+        this.menuTriggerRef = React.createRef();
 
         this.state = {
             isMenuOpen: false,
@@ -182,18 +175,8 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
             label,
             link,
             unreadMentions,
-            firstChannelName,
-            showChannelsTutorialStep,
             hasUrgent,
         } = this.props;
-
-        let channelsTutorialTip: JSX.Element | null = null;
-
-        // firstChannelName is based on channel.name,
-        // but we want to display `display_name` to the user, so we check against `.name` for channel equality but pass in the .display_name value
-        if (firstChannelName === channel.name || (!firstChannelName && showChannelsTutorialStep && channel.name === Constants.DEFAULT_CHANNEL)) {
-            channelsTutorialTip = firstChannelName ? (<ChannelsAndDirectMessagesTour firstChannelName={channel.display_name}/>) : <ChannelsAndDirectMessagesTour/>;
-        }
 
         let labelElement: JSX.Element = (
             <span className='SidebarChannelLinkLabel'>
@@ -275,6 +258,7 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                         isUnread={isUnread}
                         channelLeaveHandler={this.props.channelLeaveHandler}
                         onMenuToggle={this.handleMenuToggle}
+                        menuTriggerRef={this.menuTriggerRef}
                     />
                 </div>
             </>
@@ -290,30 +274,35 @@ export default class SidebarChannelLink extends React.PureComponent<Props, State
                 selected: isChannelSelected,
             },
         ]);
-        let element = (
+        const element = (
             <Link
                 className={className}
                 id={`sidebarItem_${channel.name}`}
                 aria-label={this.getAriaLabel()}
                 to={link}
                 onClick={this.handleChannelClick}
+                onContextMenu={(event) => {
+                    event.preventDefault();
+                    if (this.menuTriggerRef) {
+                        this.menuTriggerRef.current?.click();
+                    }
+                }}
                 tabIndex={0}
             >
                 {content}
-                {channelsTutorialTip}
             </Link>
         );
 
-        if (isDesktopApp()) {
-            element = (
-                <CopyUrlContextMenu
-                    link={this.props.link}
-                    menuId={channel.id}
-                >
-                    {element}
-                </CopyUrlContextMenu>
-            );
-        }
+        // if (isDesktopApp()) {
+        //     element = (
+        //         <CopyUrlContextMenu
+        //             link={this.props.link}
+        //             menuId={channel.id}
+        //         >
+        //             {element}
+        //         </CopyUrlContextMenu>
+        //     );
+        // }
 
         return element;
     }

@@ -4,13 +4,12 @@
 import throttle from 'lodash/throttle';
 import {useCallback, useEffect, useRef} from 'react';
 import {useDispatch} from 'react-redux';
+import Constants from 'utils/constants';
 
 import {setLhsSize} from 'actions/views/lhs';
 import {setRhsSize} from 'actions/views/rhs';
 
 import {SidebarSize} from 'components/resizable_sidebar/constants';
-
-import Constants from 'utils/constants';
 
 function WindowSizeObserver() {
     const dispatch = useDispatch();

@@ -3,6 +3,9 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {UserStatuses} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {toTitleCase} from 'utils/utils';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserStatus} from '@mattermost/types/users';
@@ -10,10 +13,7 @@ import type {UserStatus} from '@mattermost/types/users';
 import {Preferences} from 'mattermost-redux/constants';
 
 import ConfirmModal from 'components/confirm_modal';
-
-import {UserStatuses} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {toTitleCase} from 'utils/utils';
+import './reset_status_modal.scss';
 
 t('modal.manual_status.auto_responder.message_');
 t('modal.manual_status.auto_responder.message_away');
@@ -186,20 +186,17 @@ export default class ResetStatusModal extends React.PureComponent<Props, State> 
         const manualStatusButton = (
             <FormattedMessage
                 id={`modal.manual_status.button_${this.state.newStatus}`}
-                defaultMessage='Yes, set my status to "{status}"'
+                defaultMessage='Set my status to "{status}"'
                 values={{
                     status: toTitleCase(this.state.newStatus),
                 }}
             />
         );
-        const manualStatusId = 'modal.manual_status.cancel_' + userStatus;
+        const manualStatusId = 'modal.manual_status.cancel_';
         const manualStatusCancel = (
             <FormattedMessage
                 id={manualStatusId}
-                defaultMessage='No, keep it as "{status}"'
-                values={{
-                    status: toTitleCase(userStatus),
-                }}
+                defaultMessage='Keep my status'
             />
         );
 
@@ -218,6 +215,7 @@ export default class ResetStatusModal extends React.PureComponent<Props, State> 
                 title={manualStatusTitle}
                 message={manualStatusMessage}
                 confirmButtonText={manualStatusButton}
+                modalClass='resetStatus'
                 onConfirm={this.onConfirm}
                 cancelButtonText={manualStatusCancel}
                 onCancel={this.onCancel}

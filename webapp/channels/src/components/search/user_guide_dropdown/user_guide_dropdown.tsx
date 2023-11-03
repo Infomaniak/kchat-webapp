@@ -3,8 +3,9 @@
 
 import classNames from 'classnames';
 import React from 'react';
-import {FormattedMessage, injectIntl} from 'react-intl';
 import type {WrappedComponentProps} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {ModalIdentifiers} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -15,11 +16,7 @@ import UserGuideIcon from 'components/widgets/icons/user_guide_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
-import {ModalIdentifiers} from 'utils/constants';
-
 import type {PropsFromRedux} from './index';
-
-const askTheCommunityUrl = 'https://mattermost.com/pl/default-ask-mattermost-community/';
 
 type Props = PropsFromRedux & WrappedComponentProps
 
@@ -58,14 +55,6 @@ class UserGuideDropdown extends React.PureComponent<Props, State> {
 
         return (
             <Menu.Group>
-                {this.props.enableAskCommunityLink === 'true' && (
-                    <Menu.ItemExternalLink
-                        id='askTheCommunityLink'
-                        url={askTheCommunityUrl}
-                        text={intl.formatMessage({id: 'userGuideHelp.askTheCommunity', defaultMessage: 'Ask the community'})}
-                        onClick={this.askTheCommunityClick}
-                    />
-                )}
                 <Menu.ItemExternalLink
                     id='helpResourcesLink'
                     url={this.props.helpLink}

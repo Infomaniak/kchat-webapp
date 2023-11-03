@@ -3,28 +3,29 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import * as UserUtils from 'mattermost-redux/utils/user_utils';
-import {Permissions} from 'mattermost-redux/constants';
-import {AdminConfig} from '@mattermost/types/config';
-import {UserProfile} from '@mattermost/types/users';
-import {ServerError} from '@mattermost/types/errors';
-import {Bot} from '@mattermost/types/bots';
-import {DeepPartial} from '@mattermost/types/utilities';
-
-import {adminResetMfa} from 'actions/admin_actions.jsx';
-import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import {Constants} from 'utils/constants';
-import * as Utils from 'utils/utils';
 import {t} from 'utils/i18n';
 import {getSiteURL} from 'utils/url';
-import {emitUserLoggedOutEvent} from 'actions/global_actions';
-import ConfirmModal from 'components/confirm_modal';
-import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
+import * as Utils from 'utils/utils';
 
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
-import Menu from 'components/widgets/menu/menu';
+import type {Bot} from '@mattermost/types/bots';
+import type {AdminConfig} from '@mattermost/types/config';
+import type {ServerError} from '@mattermost/types/errors';
+import type {UserProfile} from '@mattermost/types/users';
+import type {DeepPartial} from '@mattermost/types/utilities';
+
+import {Permissions} from 'mattermost-redux/constants';
+import * as UserUtils from 'mattermost-redux/utils/user_utils';
+
+import {adminResetMfa} from 'actions/admin_actions.jsx';
+import {emitUserLoggedOutEvent} from 'actions/global_actions';
+
+import ConfirmModal from 'components/confirm_modal';
 import ExternalLink from 'components/external_link';
+import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
+import Menu from 'components/widgets/menu/menu';
+import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
 const ROWS_FROM_BOTTOM_TO_OPEN_UP = 3;
 const TOTAL_USERS_TO_OPEN_UP = 5;
@@ -86,40 +87,40 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
         e.preventDefault();
         this.props.actions.updateUserActive(this.props.user.id, true).
             then(this.onUpdateActiveResult);
-    }
+    };
 
     handleManageTeams = (e: {preventDefault: () => void}) => {
         e.preventDefault();
 
         this.props.doManageTeams(this.props.user);
-    }
+    };
 
     handleManageRoles = (e: {preventDefault: () => void}) => {
         e.preventDefault();
 
         this.props.doManageRoles(this.props.user);
-    }
+    };
 
     handleManageTokens = (e: {preventDefault: () => void}) => {
         e.preventDefault();
 
         this.props.doManageTokens(this.props.user);
-    }
+    };
 
     handleResetPassword = (e: {preventDefault: () => void}) => {
         e.preventDefault();
         this.props.doPasswordReset(this.props.user);
-    }
+    };
 
     handleResetEmail = (e: {preventDefault: () => void}) => {
         e.preventDefault();
         this.props.doEmailReset(this.props.user);
-    }
+    };
 
     handleResetMfa = (e: {preventDefault: () => void}) => {
         e.preventDefault();
         adminResetMfa(this.props.user.id, null, this.props.onError);
-    }
+    };
 
     handleShowDeactivateMemberModal = async (e: {preventDefault: () => void}) => {
         e.preventDefault();
@@ -130,23 +131,23 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
             );
         }
         this.setState({showDeactivateMemberModal: true});
-    }
+    };
 
     handleDeactivateMember = () => {
         this.props.actions.updateUserActive(this.props.user.id, false).
             then(this.onUpdateActiveResult);
         this.setState({showDeactivateMemberModal: false});
-    }
+    };
 
     onUpdateActiveResult = ({error}: {error: ServerError}) => {
         if (error) {
             this.props.onError({id: error.server_error_id, ...error});
         }
-    }
+    };
 
     handleDeactivateCancel = () => {
         this.setState({showDeactivateMemberModal: false});
-    }
+    };
 
     renderDeactivateMemberModal = () => {
         const user = this.props.user;
@@ -273,7 +274,7 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
                 onCancel={this.handleDeactivateCancel}
             />
         );
-    }
+    };
 
     shouldDisableBotsWhenOwnerIsDeactivated() {
         return this.props.config &&
@@ -284,12 +285,12 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
     handleShowRevokeSessionsModal = (e: {preventDefault: () => void}) => {
         e.preventDefault();
         this.setState({showRevokeSessionsModal: true});
-    }
+    };
 
     handleShowCreateGroupSyncableMembershipsModal = (e: {preventDefault: () => void}) => {
         e.preventDefault();
         this.setState({showCreateGroupMembershipsModal: true});
-    }
+    };
 
     handleCreateGroupSyncableMemberships = async () => {
         const {error} = await this.props.actions.createGroupTeamsAndChannels(this.props.user.id);
@@ -298,11 +299,11 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
         }
 
         this.setState({showCreateGroupMembershipsModal: false});
-    }
+    };
 
     handleCreateGroupSyncableMembershipsCancel = () => {
         this.setState({showCreateGroupMembershipsModal: false});
-    }
+    };
 
     handleRevokeSessions = async () => {
         const me = this.props.currentUser;
@@ -315,15 +316,15 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
         }
 
         this.setState({showRevokeSessionsModal: false});
-    }
+    };
 
     handleRevokeSessionsCancel = () => {
         this.setState({showRevokeSessionsModal: false});
-    }
+    };
 
     handlePromoteToUser = () => {
         this.setState({showPromoteToUserModal: true});
-    }
+    };
 
     handlePromoteToUserConfirm = async () => {
         const {error} = await this.props.actions.promoteGuestToUser(this.props.user.id);
@@ -332,15 +333,15 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
         }
 
         this.setState({showPromoteToUserModal: false});
-    }
+    };
 
     handlePromoteToUserCancel = () => {
         this.setState({showPromoteToUserModal: false});
-    }
+    };
 
     handleDemoteToGuest = () => {
         this.setState({showDemoteToGuestModal: true});
-    }
+    };
 
     handleDemoteToGuestConfirm = async () => {
         const {error} = await this.props.actions.demoteUserToGuest(this.props.user.id);
@@ -348,11 +349,11 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
             this.props.onError(error);
         }
         this.setState({showDemoteToGuestModal: false});
-    }
+    };
 
     handleDemoteToGuestCancel = () => {
         this.setState({showDemoteToGuestModal: false});
-    }
+    };
 
     renderPromoteToUserModal = () => {
         const title = (
@@ -393,7 +394,7 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
                 onCancel={this.handlePromoteToUserCancel}
             />
         );
-    }
+    };
 
     renderDemoteToGuestModal = () => {
         const title = (
@@ -434,7 +435,7 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
                 onCancel={this.handleDemoteToGuestCancel}
             />
         );
-    }
+    };
 
     renderRevokeSessionsModal = () => {
         const title = (
@@ -475,7 +476,7 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
                 onCancel={this.handleRevokeSessionsCancel}
             />
         );
-    }
+    };
 
     renderCreateGroupSyncablesMembershipsModal = () => {
         const title = (
@@ -524,7 +525,7 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
                 onCancel={this.handleCreateGroupSyncableMembershipsCancel}
             />
         );
-    }
+    };
 
     renderAccessToken = () => {
         const userAccessTokensEnabled = this.props.enableUserAccessTokens;
@@ -561,7 +562,7 @@ export default class SystemUsersDropdown extends React.PureComponent<Props, Stat
                 />
             </div>
         );
-    }
+    };
 
     render() {
         const {currentUser, user, isLicensed, config} = this.props;

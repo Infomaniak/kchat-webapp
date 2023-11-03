@@ -3,19 +3,18 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 
-import {GenericModal} from '@mattermost/components';
 import type {ProductNotices, ProductNotice} from '@mattermost/types/product_notices';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import ExternalLink from 'components/external_link';
+import GenericModal from 'components/generic_modal';
 import Markdown from 'components/markdown';
 import AdminEyeIcon from 'components/widgets/icons/admin_eye_icon';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
-
-import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 
 import type {PropsFromRedux} from './index';
 

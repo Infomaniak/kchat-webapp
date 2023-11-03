@@ -2,6 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {getHistory} from 'utils/browser_history';
+import {t} from 'utils/i18n';
 
 import type {IncomingWebhook} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
@@ -10,9 +12,6 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import AbstractIncomingWebhook from 'components/integrations/abstract_incoming_webhook';
 import LoadingScreen from 'components/loading_screen';
-
-import {getHistory} from 'utils/browser_history';
-import {t} from 'utils/i18n';
 
 const HEADER = {id: t('integrations.edit'), defaultMessage: 'Edit'};
 const FOOTER = {id: t('update_incoming_webhook.update'), defaultMessage: 'Update'};

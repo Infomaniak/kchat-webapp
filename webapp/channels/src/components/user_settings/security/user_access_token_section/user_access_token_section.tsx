@@ -3,6 +3,9 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
+import {isMobile} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -18,11 +21,6 @@ import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
 import type SettingItemMinComponent from 'components/setting_item_min/setting_item_min';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
-
-import {Constants, DeveloperLinks} from 'utils/constants';
-import * as Keyboard from 'utils/keyboard';
-import {isMobile} from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 const SECTION_TOKENS = 'tokens';
 const TOKEN_CREATING = 'creating';
@@ -265,7 +263,7 @@ export default class UserAccessTokenSection extends React.PureComponent<Props, S
     };
 
     saveTokenKeyPress = (e: React.KeyboardEvent) => {
-        if (Keyboard.isKeyPressed(e, Constants.KeyCodes.ENTER)) {
+        if (Utils.isKeyPressed(e, Constants.KeyCodes.ENTER)) {
             this.confirmCreateToken();
         }
     };
@@ -461,7 +459,7 @@ export default class UserAccessTokenSection extends React.PureComponent<Props, S
                         values={{
                             linkTokens: (msg: React.ReactNode) => (
                                 <ExternalLink
-                                    href={DeveloperLinks.PERSONAL_ACCESS_TOKENS}
+                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-personal-access-token/'
                                     location='user_access_token_section'
                                 >
                                     {msg}
@@ -488,7 +486,7 @@ export default class UserAccessTokenSection extends React.PureComponent<Props, S
                         values={{
                             linkTokens: (msg: React.ReactNode) => (
                                 <ExternalLink
-                                    href={DeveloperLinks.PERSONAL_ACCESS_TOKENS}
+                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-personal-access-token/'
                                     location='user_access_token_section'
                                 >
                                     {msg}
@@ -546,6 +544,7 @@ export default class UserAccessTokenSection extends React.PureComponent<Props, S
                             </label>
                         </div>
                         <SaveButton
+                            btnClass='btn-primary'
                             savingMessage={
                                 <FormattedMessage
                                     id='user.settings.tokens.save'
@@ -556,7 +555,7 @@ export default class UserAccessTokenSection extends React.PureComponent<Props, S
                             onClick={this.confirmCreateToken}
                         />
                         <button
-                            className='btn btn-tertiary'
+                            className='btn btn-link'
                             onClick={this.stopCreatingToken}
                         >
                             <FormattedMessage

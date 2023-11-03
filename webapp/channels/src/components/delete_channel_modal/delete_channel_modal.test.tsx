@@ -4,17 +4,16 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
+import {getHistory} from 'utils/browser_history';
 
 import type {Channel, ChannelType} from '@mattermost/types/channels';
 
-import DeleteChannelModal from 'components/delete_channel_modal/delete_channel_modal';
 import type {Props} from 'components/delete_channel_modal/delete_channel_modal';
-
-import {getHistory} from 'utils/browser_history';
+import DeleteChannelModal from 'components/delete_channel_modal/delete_channel_modal';
 
 describe('components/delete_channel_modal', () => {
     const channel: Channel = {
-        id: 'owsyt8n43jfxjpzh9np93mx1wa',
+        id: 'pjz4yj7jw7nzmmo3upi4htmt1yajknklnsxz',
         create_at: 1508265709607,
         update_at: 1508265709607,
         delete_at: 0,

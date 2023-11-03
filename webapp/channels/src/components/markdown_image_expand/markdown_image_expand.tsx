@@ -2,18 +2,25 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect} from 'react';
-
-import type {OwnProps, PropsFromRedux} from './index';
-
 import './markdown_image_expand.scss';
 
-type Props = OwnProps & PropsFromRedux;
+export type Props = {
+    alt: string;
+    imageKey: string;
+    children: React.ReactNode;
+    isExpanded: boolean;
+    postId: string;
+    onToggle?: (isExpanded: boolean) => void;
+    actions: {
+        toggleInlineImageVisibility: (postId: string, imageKey: string) => void;
+    };
+};
 
-const MarkdownImageExpand: React.FC<Props> = ({children, alt, isExpanded, postId, toggleInlineImageVisibility, onToggle, imageKey}: Props) => {
+const MarkdownImageExpand: React.FC<Props> = ({children, alt, isExpanded, postId, actions, onToggle, imageKey}: Props) => {
+    const {toggleInlineImageVisibility} = actions;
+
     useEffect(() => {
-        if (onToggle) {
-            onToggle(isExpanded);
-        }
+        onToggle?.(isExpanded);
     }, [isExpanded]);
 
     const handleToggleButtonClick = () => {

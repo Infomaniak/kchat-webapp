@@ -3,10 +3,9 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+import {searchHintOptions} from 'utils/constants';
 
 import SearchHint from 'components/search_hint/search_hint';
-
-import {searchHintOptions} from 'utils/constants';
 
 let mockState: any;
 

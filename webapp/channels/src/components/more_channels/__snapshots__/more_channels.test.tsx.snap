@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/MoreChannels should match snapshot and state 1`] = `
+<GenericModal
+  aria-labelledby="moreChannelsModalLabel"
+  aria-modal={true}
+  autoCloseOnCancelButton={true}
+  autoCloseOnConfirmButton={false}
+  autoCloseOnEnterKeyDown={true}
+  compassDesign={true}
+  enforceFocus={false}
+  id="moreChannelsModal"
+  keyboardEscape={true}
+  modalHeaderText={
+    <Memo(MemoizedFormattedMessage)
+      defaultMessage="Browse Channels"
+      id="more_channels.title"
+    />
+  }
+  onExited={[Function]}
+  show={true}
+>
+  <LoadingScreen />
+</GenericModal>
+`;

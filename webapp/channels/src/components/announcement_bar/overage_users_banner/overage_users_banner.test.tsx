@@ -1,7 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {fireEvent, screen} from '@testing-library/react';
 import React from 'react';
+import {renderWithIntlAndStore} from 'tests/react_testing_utils';
+import {LicenseLinks, OverActiveUserLimits, Preferences, StatTypes} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
+import {generateId} from 'utils/utils';
 
 import type {DeepPartial} from '@mattermost/types/utilities';
 
@@ -10,11 +15,6 @@ import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {General} from 'mattermost-redux/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
-
-import {fireEvent, renderWithIntlAndStore, screen} from 'tests/react_testing_utils';
-import {OverActiveUserLimits, Preferences, SelfHostedProducts, StatTypes} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
-import {generateId} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -51,8 +51,8 @@ const seatsMinimumFor5PercentageState = (Math.ceil(seatsPurchased * OverActiveUs
 
 const seatsMinimumFor10PercentageState = (Math.ceil(seatsPurchased * OverActiveUserLimits.MAX)) + seatsPurchased;
 
-const text5PercentageState = `(Only visible to admins) Your workspace user count has exceeded your paid license seat count by ${seatsMinimumFor5PercentageState - seatsPurchased} seats. Purchase additional seats to remain compliant.`;
-const text10PercentageState = `(Only visible to admins) Your workspace user count has exceeded your paid license seat count by ${seatsMinimumFor10PercentageState - seatsPurchased} seats. Purchase additional seats to remain compliant.`;
+const text5PercentageState = `Your workspace user count has exceeded your paid license seat count by ${seatsMinimumFor5PercentageState - seatsPurchased} seats. Purchase additional seats to remain compliant.`;
+const text10PercentageState = `Your workspace user count has exceeded your paid license seat count by ${seatsMinimumFor10PercentageState - seatsPurchased} seats. Purchase additional seats to remain compliant.`;
 
 const contactSalesTextLink = 'Contact Sales';
 const expandSeatsTextLink = 'Purchase additional seats';
@@ -110,19 +110,6 @@ describe('components/overage_users_banner', () => {
                     getRequestState: 'IDLE',
                 },
             },
-            hostedCustomer: {
-                products: {
-                    productsLoaded: true,
-                    products: {
-                        prod_professional: TestHelper.getProductMock({
-                            id: 'prod_professional',
-                            name: 'Professional',
-                            sku: SelfHostedProducts.PROFESSIONAL,
-                            price_per_seat: 7.5,
-                        }),
-                    },
-                },
-            },
         },
     };
 
@@ -145,7 +132,7 @@ describe('components/overage_users_banner', () => {
     it('should not render the banner because we are not on overage state', () => {
         renderComponent();
 
-        expect(screen.queryByText('(Only visible to admins) Your workspace user count has exceeded your paid license seat count by', {exact: false})).not.toBeInTheDocument();
+        expect(screen.queryByText('Your workspace user count has exceeded your paid license seat count by', {exact: false})).not.toBeInTheDocument();
         expect(getLicenseSelfServeStatus).not.toBeCalled();
     });
 
@@ -265,10 +252,7 @@ describe('components/overage_users_banner', () => {
 
         fireEvent.click(screen.getByText(contactSalesTextLink));
         expect(windowSpy).toBeCalledTimes(1);
-
-        // only the email is encoded and other params are empty. See logic for useOpenSalesLink hook
-        const salesLinkWithEncodedParams = 'https://mattermost.com/contact-sales/?qk=&qp=&qw=&qx=dGVzdEBtYXR0ZXJtb3N0LmNvbQ==&utm_source=mattermost&utm_medium=in-product';
-        expect(windowSpy).toBeCalledWith(salesLinkWithEncodedParams, '_blank');
+        expect(windowSpy).toBeCalledWith(LicenseLinks.CONTACT_SALES, '_blank');
         expect(trackEvent).toBeCalledTimes(1);
         expect(trackEvent).toBeCalledWith('insights', 'click_true_up_warning', {
             cta: 'Contact Sales',
@@ -387,10 +371,7 @@ describe('components/overage_users_banner', () => {
 
         fireEvent.click(screen.getByText(contactSalesTextLink));
         expect(windowSpy).toBeCalledTimes(1);
-
-        // only the email is encoded and other params are empty. See logic for useOpenSalesLink hook
-        const salesLinkWithEncodedParams = 'https://mattermost.com/contact-sales/?qk=&qp=&qw=&qx=dGVzdEBtYXR0ZXJtb3N0LmNvbQ==&utm_source=mattermost&utm_medium=in-product';
-        expect(windowSpy).toBeCalledWith(salesLinkWithEncodedParams, '_blank');
+        expect(windowSpy).toBeCalledWith(LicenseLinks.CONTACT_SALES, '_blank');
         expect(trackEvent).toBeCalledTimes(1);
         expect(trackEvent).toBeCalledWith('insights', 'click_true_up_error', {
             cta: 'Contact Sales',

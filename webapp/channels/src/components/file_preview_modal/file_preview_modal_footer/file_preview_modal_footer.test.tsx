@@ -4,9 +4,9 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
-import {TestHelper} from 'utils/test_helper';
-
 import FilePreviewModalFooter from './file_preview_modal_footer';
+
+import {TestHelper} from '../../../utils/test_helper';
 
 describe('components/file_preview_modal/file_preview_modal_footer/FilePreviewModalFooter', () => {
     const defaultProps = {

@@ -1,15 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {connect, useSelector} from 'react-redux';
 import {Link, Route} from 'react-router-dom';
+import {TestHelper} from 'utils/test_helper';
 
 import {getUser} from 'mattermost-redux/selectors/entities/users';
-
-import mergeObjects from 'packages/mattermost-redux/test/merge_objects';
-import {TestHelper} from 'utils/test_helper';
 
 import type {GlobalState} from 'types/store';
 

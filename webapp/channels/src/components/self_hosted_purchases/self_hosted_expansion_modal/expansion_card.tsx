@@ -5,6 +5,8 @@ import moment from 'moment-timezone';
 import React, {useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
+import {DocLinks} from 'utils/constants';
+import {findSelfHostedProductBySku} from 'utils/hosted_customer';
 
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 
@@ -12,9 +14,6 @@ import useGetSelfHostedProducts from 'components/common/hooks/useGetSelfHostedPr
 import ExternalLink from 'components/external_link';
 import {OutlinedInput} from 'components/outlined_input';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
-
-import {DocLinks} from 'utils/constants';
-import {findSelfHostedProductBySku} from 'utils/hosted_customer';
 
 import './expansion_card.scss';
 

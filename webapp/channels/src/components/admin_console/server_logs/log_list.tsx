@@ -1,16 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ArrowDownIcon, ArrowUpIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import {ArrowDownIcon, ArrowUpIcon} from '@infomaniak/compass-icons/components';
+import type {LogFilter, LogLevelEnum, LogObject} from '@mattermost/types/admin';
+import type {ChannelSearchOpts} from '@mattermost/types/channels';
 
-import DataGrid, {Row, Column} from 'components/admin_console/data_grid/data_grid';
-import {FilterOptions} from 'components/admin_console/filter/filter';
+import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
+import DataGrid from 'components/admin_console/data_grid/data_grid';
+import type {FilterOptions} from 'components/admin_console/filter/filter';
 
-import {LogFilter, LogLevelEnum, LogObject} from '@mattermost/types/admin';
-import {ChannelSearchOpts} from '@mattermost/types/channels';
 import './log_list.scss';
 import FullLogEventModal from '../full_log_event_modal';
 
@@ -46,21 +47,21 @@ export default class LogList extends React.PureComponent<Props, State> {
 
     isSearching = (term: string, filters: ChannelSearchOpts) => {
         return term.length > 0 || Object.keys(filters).length > 0;
-    }
+    };
 
     onSearch = (term: string) => {
         this.props.onSearchChange(term);
-    }
+    };
 
     nextPage = () => {
         const page = this.state.page + 1;
         this.setState({page});
-    }
+    };
 
     previousPage = () => {
         const page = this.state.page - 1;
         this.setState({page});
-    }
+    };
 
     getPaginationProps = (): {startCount: number; endCount: number; total: number} => {
         const {page} = this.state;
@@ -73,12 +74,12 @@ export default class LogList extends React.PureComponent<Props, State> {
         endCount = endCount > total ? total : endCount;
 
         return {startCount, endCount, total};
-    }
+    };
 
     handleDateSort = () => {
         this.setState({dateAsc: !this.state.dateAsc});
         this.getColumns(this.state.dateAsc);
-    }
+    };
 
     getColumns = (dateAsc: boolean): Column[] => {
         const timestamp: JSX.Element = (
@@ -155,7 +156,7 @@ export default class LogList extends React.PureComponent<Props, State> {
                 width: 1,
             },
         ];
-    }
+    };
 
     getRows = (): Row[] => {
         const {startCount, endCount} = this.getPaginationProps();
@@ -219,21 +220,21 @@ export default class LogList extends React.PureComponent<Props, State> {
                 onClick: () => this.showFullLogEvent(log),
             };
         });
-    }
+    };
 
     showFullLogEvent = (log: LogObject) => {
         this.setState({
             modalLog: log,
             modalOpen: true,
         });
-    }
+    };
 
     hideModal = () => {
         this.setState({
             modalLog: null,
             modalOpen: false,
         });
-    }
+    };
 
     onFilter = (filterOptions: FilterOptions) => {
         const filters = {} as unknown as LogFilter;
@@ -249,17 +250,17 @@ export default class LogList extends React.PureComponent<Props, State> {
             }, []);
         }
         this.props.onFiltersChange(filters);
-    }
+    };
 
     showErrors = () => {
         this.props.onFiltersChange({logLevels: ['error']} as unknown as LogFilter);
-    }
+    };
 
     getErrorCount = (): number => {
         let n = 0;
         this.props.logs.map((log) => log.level === 'error' && ++n);
         return n;
-    }
+    };
 
     render = (): JSX.Element => {
         const {search} = this.props;
@@ -377,5 +378,5 @@ export default class LogList extends React.PureComponent<Props, State> {
                 />
             </div>
         );
-    }
+    };
 }

@@ -3,11 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-
 import {TestHelper} from 'utils/test_helper';
 
-import ChannelHeaderDropdown from './channel_header_dropdown_items';
 import type {Props} from './channel_header_dropdown_items';
+import ChannelHeaderDropdown from './channel_header_dropdown_items';
 
 describe('components/ChannelHeaderDropdown', () => {
     const defaultProps = {
@@ -22,6 +21,11 @@ describe('components/ChannelHeaderDropdown', () => {
         penultimateViewedChannelName: 'test-channel',
         pluginMenuItems: [],
         isLicensedForLDAPGroups: false,
+        dmUserId: '',
+        hasCall: false,
+        actions: {
+            startOrJoinCallInChannelV2: jest.fn(() => ({type: ''})),
+        },
     };
     test('should match snapshot with no plugin items', () => {
         const wrapper = shallow(<ChannelHeaderDropdown {...defaultProps}/>);

@@ -4,8 +4,8 @@
 import React from 'react';
 import {CSSTransition} from 'react-transition-group';
 
-import {WizardSteps} from './steps';
 import type {WizardStep} from './steps';
+import {WizardSteps} from './steps';
 
 import './progress.scss';
 

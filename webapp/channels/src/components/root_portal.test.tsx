@@ -1,9 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {render} from '@testing-library/react';
 import React from 'react';
-
-import {render} from 'tests/react_testing_utils';
 
 import RootPortal from './root_portal';
 

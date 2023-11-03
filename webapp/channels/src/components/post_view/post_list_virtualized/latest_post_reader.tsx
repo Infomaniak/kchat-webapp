@@ -1,14 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useMemo} from 'react';
+import React, {useMemo, useRef} from 'react';
+import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
+import {getLatestPostId, makeCreateAriaLabelForPost} from 'utils/post_utils';
 
 import type {Post} from '@mattermost/types/posts';
 
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
-
-import {getLatestPostId, usePostAriaLabel} from 'utils/post_utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -17,11 +17,20 @@ interface Props {
 }
 
 const LatestPostReader = (props: Props): JSX.Element => {
+    const intl = useIntl();
+
     const {postIds} = props;
     const latestPostId = useMemo(() => getLatestPostId(postIds || []), [postIds]);
     const latestPost = useSelector<GlobalState, Post>((state) => getPost(state, latestPostId));
 
-    const ariaLabel = usePostAriaLabel(latestPost);
+    const createAriaLabelForPost = useRef(makeCreateAriaLabelForPost());
+    const ariaLabel = useSelector<GlobalState, string>((state) => {
+        if (!latestPost) {
+            return '';
+        }
+
+        return createAriaLabelForPost.current(state, latestPost)(intl);
+    });
 
     return (
         <span

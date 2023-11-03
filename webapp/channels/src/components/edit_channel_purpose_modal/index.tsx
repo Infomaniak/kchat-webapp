@@ -2,16 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import type {Dispatch, ActionCreatorsMapObject} from 'redux';
+import {bindActionCreators} from 'redux';
+import Constants from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import {patchChannel} from 'mattermost-redux/actions/channels';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import type {ActionFunc, GenericAction, ActionResult} from 'mattermost-redux/types/actions';
-
-import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

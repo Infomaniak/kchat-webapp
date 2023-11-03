@@ -4,10 +4,9 @@
 import {mount} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
+import mockStore from 'tests/test_store';
 
 import * as CustomStatusSelectors from 'selectors/views/custom_status';
-
-import mockStore from 'tests/test_store';
 
 import CustomStatusText from './custom_status_text';
 

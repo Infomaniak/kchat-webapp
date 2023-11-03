@@ -3,6 +3,8 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import Constants from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 import type {Emoji} from '@mattermost/types/emojis';
 import type {Post} from '@mattermost/types/posts';
@@ -17,9 +19,6 @@ import ChannelPermissionGate from 'components/permissions_gates/channel_permissi
 import Reaction from 'components/post_view/reaction';
 import Tooltip from 'components/tooltip';
 import AddReactionIcon from 'components/widgets/icons/add_reaction_icon';
-
-import Constants from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 const DEFAULT_EMOJI_PICKER_RIGHT_OFFSET = 15;
 const EMOJI_PICKER_WIDTH_OFFSET = 260;

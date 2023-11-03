@@ -1,10 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {CheckIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import styled from 'styled-components';
-
-import {CheckIcon} from '@mattermost/compass-icons/components';
 
 import Toggle from 'components/toggle';
 import MenuGroup from 'components/widgets/menu/menu_group';
@@ -33,7 +32,7 @@ const ItemButton = styled.button`
 `;
 
 const Wrapper = styled.div`
-    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    cursor: pointer;
 
     &:hover {
         background-color: rgba(var(--center-channel-color-rgb), 0.1);
@@ -113,8 +112,7 @@ function ToggleItem({
 }: ToggleProps) {
     return (
         <Wrapper
-            onClick={disabled ? undefined : onClick}
-            disabled={disabled}
+            onClick={onClick}
             role='button'
         >
             <ToggleMain>

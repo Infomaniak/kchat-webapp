@@ -4,14 +4,15 @@
 import React from 'react';
 
 import type {BasicUnreadMeta} from 'mattermost-redux/selectors/entities/channels';
+type Props = BasicUnreadMeta;
 
-const NotifyCounts = ({unreadMentionCount, isUnread}: BasicUnreadMeta) => {
-    if (unreadMentionCount) {
-        return <span className='badge badge-notify'>{unreadMentionCount}</span>;
-    } else if (isUnread) {
-        return <span className='badge badge-notify'>{'•'}</span>;
+export default class NotifyCounts extends React.PureComponent<Props> {
+    render() {
+        if (this.props.unreadMentionCount) {
+            return <span className='badge badge-notify'>{this.props.unreadMentionCount}</span>;
+        } else if (this.props.isUnread) {
+            return <span className='badge badge-notify'>{'•'}</span>;
+        }
+        return null;
     }
-    return null;
-};
-
-export default React.memo(NotifyCounts);
+}

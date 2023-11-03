@@ -2,15 +2,15 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-
-import {PostType} from '@mattermost/types/posts';
-import {PluginComponent} from 'types/store/plugins';
-
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-
 import {TestHelper} from 'utils/test_helper';
 
-import ActionsMenu, {PLUGGABLE_COMPONENT, Props} from './actions_menu';
+import type {PostType} from '@mattermost/types/posts';
+
+import type {PluginComponent} from 'types/store/plugins';
+
+import type {Props} from './actions_menu';
+import ActionsMenu, {PLUGGABLE_COMPONENT} from './actions_menu';
 
 jest.mock('utils/utils', () => {
     const original = jest.requireActual('utils/utils');

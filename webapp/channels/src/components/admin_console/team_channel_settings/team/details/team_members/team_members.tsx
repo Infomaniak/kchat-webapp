@@ -3,23 +3,24 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-
-import {ServerError} from '@mattermost/types/errors';
-import {ActionResult} from 'mattermost-redux/types/actions';
-import {UserProfile, UsersStats, GetFilteredUsersStatsOpts} from '@mattermost/types/users';
-import {TeamMembership, Team} from '@mattermost/types/teams';
-import GeneralConstants from 'mattermost-redux/constants/general';
-
-import {t} from 'utils/i18n';
 import Constants, {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
+
+import type {ServerError} from '@mattermost/types/errors';
+import type {TeamMembership, Team} from '@mattermost/types/teams';
+import type {UserProfile, UsersStats, GetFilteredUsersStatsOpts} from '@mattermost/types/users';
+
+import GeneralConstants from 'mattermost-redux/constants/general';
+import type {ActionResult} from 'mattermost-redux/types/actions';
+
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
-import AdminPanel from 'components/widgets/admin_console/admin_panel';
-import UserGrid from 'components/admin_console/user_grid/user_grid';
-import {BaseMembership} from 'components/admin_console/user_grid/user_grid_role_dropdown';
 import AddUsersToTeamModal from 'components/add_users_to_team_modal';
+import type {FilterOptions} from 'components/admin_console/filter/filter';
+import UserGrid from 'components/admin_console/user_grid/user_grid';
+import type {BaseMembership} from 'components/admin_console/user_grid/user_grid_role_dropdown';
 import ToggleModalButton from 'components/toggle_modal_button';
-import {FilterOptions} from 'components/admin_console/filter/filter';
+import AdminPanel from 'components/widgets/admin_console/admin_panel';
 
 type Props = {
     teamId: string;
@@ -126,25 +127,25 @@ export default class TeamMembers extends React.PureComponent<Props, State> {
 
     private setStateLoading = (loading: boolean) => {
         this.setState({loading});
-    }
+    };
 
     private loadPage = async (page: number) => {
         const {loadProfilesAndReloadTeamMembers} = this.props.actions;
         const {teamId, filters} = this.props;
         await loadProfilesAndReloadTeamMembers(page + 1, PROFILE_CHUNK_SIZE, teamId, {active: true, ...filters});
-    }
+    };
 
     private removeUser = (user: UserProfile) => {
         this.props.onRemoveCallback(user);
-    }
+    };
 
     private onAddCallback = (users: UserProfile[]) => {
         this.props.onAddCallback(users);
-    }
+    };
 
     private onSearch = async (term: string) => {
         this.props.actions.setUserGridSearch(term);
-    }
+    };
 
     private onFilter = async (filterOptions: FilterOptions) => {
         const roles = filterOptions.role.values;
@@ -177,11 +178,11 @@ export default class TeamMembers extends React.PureComponent<Props, State> {
         } else {
             this.props.actions.setUserGridFilters(filters);
         }
-    }
+    };
 
     private updateMembership = (membership: BaseMembership) => {
         this.props.updateRole(membership.user_id, membership.scheme_user, membership.scheme_admin);
-    }
+    };
 
     public render = () => {
         const {users, team, usersToAdd, usersToRemove, teamMembers, totalCount, searchTerm, isDisabled} = this.props;
@@ -294,5 +295,5 @@ export default class TeamMembers extends React.PureComponent<Props, State> {
                 />
             </AdminPanel>
         );
-    }
+    };
 }

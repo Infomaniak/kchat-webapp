@@ -2,17 +2,17 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
-
-import type {ChannelWithTeamData, ChannelSearchOpts} from '@mattermost/types/channels';
+import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 
 import {getAllChannels as loadChannels, searchAllChannels} from 'mattermost-redux/actions/channels';
-import type {ActionFunc, ActionResult, GenericAction} from 'mattermost-redux/types/actions';
+
+import {ChannelWithTeamData, ChannelSearchOpts} from '@mattermost/types/channels';
+
+import {ActionFunc, ActionResult, GenericAction} from 'mattermost-redux/types/actions';
 
 import {setModalSearchTerm} from 'actions/views/search';
 
-import type {GlobalState} from 'types/store';
+import {GlobalState} from '../../types/store';
 
 import ChannelSelectorModal from './channel_selector_modal';
 

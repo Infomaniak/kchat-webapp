@@ -2,6 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import {Constants, NotificationLevels} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 import type {Channel, ChannelNotifyProps} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -9,9 +11,6 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import Menu from 'components/widgets/menu/menu';
-
-import {Constants, NotificationLevels} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 export type Actions = {
     updateChannelNotifyProps(userId: string, channelId: string, props: Partial<ChannelNotifyProps>): ActionFunc;

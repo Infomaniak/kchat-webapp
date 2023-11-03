@@ -3,18 +3,16 @@
 
 import React, {useMemo, memo} from 'react';
 import {useSelector} from 'react-redux';
+import Constants from 'utils/constants';
 
 import {CustomStatusDuration} from '@mattermost/types/users';
 
-import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
-
+import {getCurrentUserTimezone} from 'selectors/general';
 import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 'selectors/views/custom_status';
 
 import RenderEmoji from 'components/emoji/render_emoji';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
-
-import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -44,7 +42,7 @@ function CustomStatusEmoji({
     const getCustomStatus = useMemo(makeGetCustomStatus, []);
     const customStatus = useSelector((state: GlobalState) => getCustomStatus(state, userID));
 
-    const timezone = useSelector(getCurrentTimezone);
+    const timezone = useSelector(getCurrentUserTimezone);
 
     const customStatusExpired = useSelector((state: GlobalState) => isCustomStatusExpired(state, customStatus));
     const customStatusEnabled = useSelector(isCustomStatusEnabled);

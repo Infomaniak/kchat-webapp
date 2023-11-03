@@ -1,9 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import WebSocketClient from 'client/web_websocket_client.jsx';
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import semver from 'semver';
+import {getBrowserTimezone} from 'utils/timezone';
+import * as UserAgent from 'utils/user_agent';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -14,11 +17,7 @@ import BrowserStore from 'stores/browser_store';
 
 import LoadingScreen from 'components/loading_screen';
 
-import WebSocketClient from 'client/web_websocket_client';
-import Constants from 'utils/constants';
-import {isKeyPressed} from 'utils/keyboard';
-import {getBrowserTimezone} from 'utils/timezone';
-import * as UserAgent from 'utils/user_agent';
+const BACKSPACE_CHAR = 8;
 
 declare global {
     interface Window {
@@ -31,16 +30,13 @@ declare global {
 export type Props = {
     currentUser?: UserProfile;
     currentChannelId?: string;
-    isCurrentChannelManuallyUnread: boolean;
     children?: React.ReactNode;
-    mfaRequired: boolean;
+    enableTimezone: boolean;
     actions: {
         autoUpdateTimezone: (deviceTimezone: string) => void;
         getChannelURLAction: (channel: Channel, teamId: string, url: string) => void;
-        markChannelAsViewedOnServer: (channelId: string) => void;
-        updateApproximateViewTime: (channelId: string) => void;
+        viewChannel: (channelId: string, prevChannelId?: string) => void;
     };
-    showTermsOfService: boolean;
     location: {
         pathname: string;
         search: string;
@@ -80,7 +76,9 @@ export default class LoggedIn extends React.PureComponent<Props> {
         // Initialize websocket
         WebSocketActions.initialize();
 
-        this.props.actions.autoUpdateTimezone(getBrowserTimezone());
+        if (this.props.enableTimezone && this.props.currentUser) {
+            this.props.actions.autoUpdateTimezone(getBrowserTimezone());
+        }
 
         // Make sure the websockets close and reset version
         window.addEventListener('beforeunload', this.handleBeforeUnload);
@@ -121,7 +119,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
         // Prevent backspace from navigating back a page
         window.addEventListener('keydown', this.handleBackSpace);
 
-        if (this.isValidState() && !this.props.mfaRequired) {
+        if (this.isValidState()) {
             BrowserStore.signalLogin();
         }
     }
@@ -141,18 +139,6 @@ export default class LoggedIn extends React.PureComponent<Props> {
             return <LoadingScreen/>;
         }
 
-        if (this.props.mfaRequired) {
-            if (this.props.location.pathname !== '/mfa/setup') {
-                return <Redirect to={'/mfa/setup'}/>;
-            }
-        } else if (this.props.location.pathname === '/mfa/confirm') {
-            // Nothing to do. Wait for MFA flow to complete before prompting TOS.
-        } else if (this.props.showTermsOfService) {
-            if (this.props.location.pathname !== '/terms_of_service') {
-                return <Redirect to={'/terms_of_service?redirect_to=' + encodeURIComponent(this.props.location.pathname)}/>;
-            }
-        }
-
         return this.props.children;
     }
 
@@ -165,7 +151,6 @@ export default class LoggedIn extends React.PureComponent<Props> {
     }
 
     // listen for messages from the desktop app
-    // TODO: This needs to be deprecated in favour of a more solid Desktop App API.
     private onDesktopMessageListener = (desktopMessage: DesktopMessage) => {
         if (!this.props.currentUser) {
             return;
@@ -176,7 +161,6 @@ export default class LoggedIn extends React.PureComponent<Props> {
 
         switch (desktopMessage.data.type) {
         case 'register-desktop': {
-            // Currently used by calls
             const {version} = desktopMessage.data.message;
             if (!window.desktop) {
                 window.desktop = {};
@@ -205,21 +189,9 @@ export default class LoggedIn extends React.PureComponent<Props> {
     };
 
     private handleBackSpace = (e: KeyboardEvent): void => {
-        const excludedElements = ['input', 'textarea'];
-        const targetElement = e.target as HTMLElement;
+        const excludedElements = ['input', 'textarea', 'module-reporting-tools-component'];
 
-        if (!targetElement) {
-            return;
-        }
-
-        const targetsTagName = targetElement.tagName.toLowerCase();
-        const isTargetNotContentEditable = targetElement.getAttribute?.('contenteditable') !== 'true';
-
-        if (
-            isKeyPressed(e, Constants.KeyCodes.BACKSPACE) &&
-            !(excludedElements.includes(targetsTagName)) &&
-            isTargetNotContentEditable
-        ) {
+        if (e.which === BACKSPACE_CHAR && !(excludedElements.includes((e.target as HTMLElement).tagName.toLowerCase()))) {
             e.preventDefault();
         }
     };
@@ -227,10 +199,7 @@ export default class LoggedIn extends React.PureComponent<Props> {
     private handleBeforeUnload = (): void => {
         // remove the event listener to prevent getting stuck in a loop
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
-        if (document.cookie.indexOf('MMUSERID=') > -1 && this.props.currentChannelId && !this.props.isCurrentChannelManuallyUnread) {
-            this.props.actions.updateApproximateViewTime(this.props.currentChannelId);
-            this.props.actions.markChannelAsViewedOnServer(this.props.currentChannelId);
-        }
+        this.props.actions.viewChannel('', this.props.currentChannelId || '');
         WebSocketActions.close();
     };
 }
