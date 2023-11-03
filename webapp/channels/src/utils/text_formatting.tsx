@@ -1,17 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import emojiRegex from 'emoji-regex';
-import type {Renderer} from 'marked';
+/* eslint-disable max-lines */
 
-import type {SystemEmoji} from '@mattermost/types/emojis';
+import emojiRegex from 'emoji-regex';
+import {Renderer} from 'marked';
+
+import {SystemEmoji} from '@mattermost/types/emojis';
 
 import {formatWithRenderer} from 'utils/markdown';
 
-import Constants from './constants';
-import type EmojiMap from './emoji_map.js';
 import * as Emoticons from './emoticons';
 import * as Markdown from './markdown';
+import Constants from './constants';
+import EmojiMap from './emoji_map.js';
 
 const punctuationRegex = /[^\p{L}\d]/u;
 const AT_MENTION_PATTERN = /(?:\B|\b_+)@([a-z0-9.\-_]+)/gi;
@@ -210,24 +212,9 @@ const DEFAULT_OPTIONS: TextFormattingOptions = {
     postId: '',
 };
 
-/**
-* pattern to detect the existence of a Chinese, Japanese, or Korean character in a string
-* http://stackoverflow.com/questions/15033196/using-javascript-to-check-whether-a-string-contains-japanese-characters-includi
-* recently enhanced to support some more CJK, Hangul, and Cyrillic characters
-* CJK punctuation: \u3000-\u303f
-* Hiragana: \u3040-\u309f
-* Katakana: \u30a0-\u30ff
-* Full-width ASCII characters: \uff00-\uff9f
-* Common CJK characters: \u4e00-\u9fff
-* Additional CJK characters: \u3400-\u4dbf
-* Hangul characters: \uac00-\ud7af
-* Hangul Jamo: \u1100-\u11ff
-* Hangul Compatibility Jamo: \u3130-\u318f
-* Cyrillic characters: \u0400-\u04ff, \u0500-\u052f
-* Additional CJK and Hangul compatibility characters: \u2de0-\u2dff
-**/
-// eslint-disable-next-line no-misleading-character-class
-export const cjkrPattern = /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf\uac00-\ud7a3\u1100-\u11ff\u3130-\u318f\u0400-\u04ff\u0500-\u052f\u2de0-\u2dff]/;
+// pattern to detect the existence of a Chinese, Japanese, or Korean character in a string
+// http://stackoverflow.com/questions/15033196/using-javascript-to-check-whether-a-string-contains-japanese-characters-includi
+const cjkPattern = /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf\uac00-\ud7a3]/;
 
 export function formatText(
     text: string,
@@ -496,7 +483,7 @@ export function allAtMentions(text: string): RegExpMatchArray {
     return text.match(Constants.SPECIAL_MENTIONS_REGEX && AT_MENTION_PATTERN) || [];
 }
 
-export function autolinkChannelMentions(
+function autolinkChannelMentions(
     text: string,
     tokens: Tokens,
     channelNamesMap: ChannelNamesMap,
@@ -513,7 +500,7 @@ export function autolinkChannelMentions(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             href = ((window as any).basename || '') + '/' + teamName + '/channels/' + channelName;
             tokens.set(alias, {
-                value: `<a class="mention-link" href="${href}" data-channel-mention-team="${teamName}" data-channel-mention="${channelName}">~${displayName}</a>`,
+                value: `<a class="mention-link" href="${href}" data-channel-mention-team="${teamName}" "data-channel-mention="${channelName}">~${displayName}</a>`,
                 originalText: mention,
             });
         } else if (team) {
@@ -631,7 +618,7 @@ export function convertEntityToCharacter(text: string): string {
         replace(/&amp;/g, '&');
 }
 
-export function highlightCurrentMentions(
+function highlightCurrentMentions(
     text: string,
     tokens: Tokens,
     mentionKeys: MentionKey[] = [],
@@ -689,7 +676,7 @@ export function highlightCurrentMentions(
         }
 
         let pattern;
-        if (cjkrPattern.test(mention.key)) {
+        if (cjkPattern.test(mention.key)) {
             // In the case of CJK mention key, even if there's no delimiters (such as spaces) at both ends of a word, it is recognized as a mention key
             pattern = new RegExp(`()(${escapeRegex(mention.key)})()`, flags);
         } else {
@@ -834,7 +821,7 @@ export function parseSearchTerms(searchTerm: string): string[] {
 function convertSearchTermToRegex(term: string): SearchPattern {
     let pattern;
 
-    if (cjkrPattern.test(term)) {
+    if (cjkPattern.test(term)) {
         // term contains Chinese, Japanese, or Korean characters so don't mark word boundaries
         pattern = '()(' + escapeRegex(term.replace(/\*/g, '')) + ')';
     } else if ((/[^\s][*]$/).test(term)) {
@@ -1012,4 +999,10 @@ function fixedCharCodeAt(str: string, idx = 0) {
     }
 
     return code;
+}
+
+export function fixedEncodeURIComponent(str: string) {
+    return str.replace(/[-._~:/?#[\]@!$&'()*+,;=]/g, (c: string) => {
+        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+    });
 }

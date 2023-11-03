@@ -1,18 +1,23 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Post} from '@mattermost/types/posts';
-import type {Reaction} from '@mattermost/types/reactions';
-import type {GlobalState} from '@mattermost/types/store';
-import type {UserProfile} from '@mattermost/types/users';
+import {PostWithFormatData} from 'mattermost-redux/selectors/entities/posts';
 
 import {Posts, Preferences} from 'mattermost-redux/constants';
+
 import * as Selectors from 'mattermost-redux/selectors/entities/posts';
-import type {PostWithFormatData} from 'mattermost-redux/selectors/entities/posts';
+
 import {makeGetProfilesForReactions} from 'mattermost-redux/selectors/entities/users';
+
 import deepFreezeAndThrowOnMutation from 'mattermost-redux/utils/deep_freeze';
 
+import {Post} from '@mattermost/types/posts';
+import {Reaction} from '@mattermost/types/reactions';
+import {GlobalState} from '@mattermost/types/store';
+
 import TestHelper from '../../../test/test_helper';
+
+import {UserProfile} from '@mattermost/types/users';
 
 const p = (override: Partial<PostWithFormatData>) => Object.assign(TestHelper.getPostMock(override), override);
 
@@ -38,11 +43,6 @@ describe('Selectors.Posts', () => {
 
     const testState = deepFreezeAndThrowOnMutation({
         entities: {
-            general: {
-                config: {
-                    EnableJoinLeaveMessageByDefault: 'true',
-                },
-            },
             users: {
                 currentUserId: user1.id,
                 profiles,
@@ -802,9 +802,6 @@ describe('Selectors.Posts', () => {
 
             const state = {
                 entities: {
-                    general: {
-                        config: {},
-                    },
                     users: {
                         currentUserId: user1.id,
                         profiles,
@@ -836,9 +833,6 @@ describe('Selectors.Posts', () => {
 
             const state = {
                 entities: {
-                    general: {
-                        config: {},
-                    },
                     users: {
                         currentUserId: user1.id,
                         profiles,
@@ -870,9 +864,6 @@ describe('Selectors.Posts', () => {
 
             let state = {
                 entities: {
-                    general: {
-                        config: {},
-                    },
                     users: {
                         currentUserId: user1.id,
                         profiles,
@@ -992,9 +983,6 @@ describe('Selectors.Posts', () => {
 
             const state = {
                 entities: {
-                    general: {
-                        config: {},
-                    },
                     users: {
                         currentUserId: user1.id,
                         profiles,
@@ -2443,6 +2431,38 @@ describe('getCurrentUsersLatestPost', () => {
     });
 });
 
+describe('getExpandedLink', () => {
+    it('should get the expanded link from the state', () => {
+        const state = {
+            entities: {
+                posts: {
+                    expandedURLs: {
+                        a: 'b',
+                        c: 'd',
+                    },
+                },
+            },
+        } as unknown as GlobalState;
+        expect(Selectors.getExpandedLink(state, 'a')).toEqual('b');
+        expect(Selectors.getExpandedLink(state, 'c')).toEqual('d');
+    });
+
+    it('should return undefined if it is not saved', () => {
+        const state = {
+            entities: {
+                posts: {
+                    expandedURLs: {
+                        a: 'b',
+                        c: 'd',
+                    },
+                },
+            },
+        } as unknown as GlobalState;
+        expect(Selectors.getExpandedLink(state, 'b')).toEqual(undefined);
+        expect(Selectors.getExpandedLink(state, '')).toEqual(undefined);
+    });
+});
+
 describe('makeGetProfilesForThread', () => {
     it('should return profiles for threads in the right order and exclude current user', () => {
         const getProfilesForThread = Selectors.makeGetProfilesForThread();
@@ -2452,11 +2472,6 @@ describe('makeGetProfilesForThread', () => {
 
         const state = {
             entities: {
-                general: {
-                    config: {
-                        EnableJoinLeaveMessageByDefault: 'true',
-                    },
-                },
                 posts: {
                     posts: {
                         1001: {id: '1001', create_at: 1001, user_id: 'user1'},
@@ -2492,11 +2507,6 @@ describe('makeGetProfilesForThread', () => {
 
         const state = {
             entities: {
-                general: {
-                    config: {
-                        EnableJoinLeaveMessageByDefault: 'true',
-                    },
-                },
                 posts: {
                     posts: {
                         1001: {id: '1001', create_at: 1001, user_id: 'user1'},

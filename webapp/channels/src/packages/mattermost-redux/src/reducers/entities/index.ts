@@ -3,29 +3,32 @@
 
 import {combineReducers} from 'redux';
 
-import admin from './admin';
-import apps from './apps';
-import bots from './bots';
-import channelCategories from './channel_categories';
 import channels from './channels';
-import cloud from './cloud';
-import emojis from './emojis';
-import files from './files';
 import general from './general';
-import groups from './groups';
-import hostedCustomer from './hosted_customer';
-import integrations from './integrations';
-import jobs from './jobs';
+import users from './users';
+import teams from './teams';
 import posts from './posts';
+import files from './files';
 import preferences from './preferences';
+import typing from './typing';
+import integrations from './integrations';
+import emojis from './emojis';
+import gifs from './gifs';
+import admin from './admin';
+import jobs from './jobs';
+import search from './search';
 import roles from './roles';
 import schemes from './schemes';
-import search from './search';
-import teams from './teams';
-import threads from './threads';
-import typing from './typing';
+import groups from './groups';
+import bots from './bots';
+import channelCategories from './channel_categories';
+import apps from './apps';
+import cloud from './cloud';
+import hostedCustomer from './hosted_customer';
 import usage from './usage';
-import users from './users';
+import threads from './threads';
+import insights from './insights';
+import worktemplates from './work_templates';
 
 export default combineReducers({
     general,
@@ -38,6 +41,7 @@ export default combineReducers({
     typing,
     integrations,
     emojis,
+    gifs,
     admin,
     jobs,
     search,
@@ -49,6 +53,8 @@ export default combineReducers({
     channelCategories,
     apps,
     cloud,
+    insights,
     usage,
     hostedCustomer,
+    worktemplates,
 });

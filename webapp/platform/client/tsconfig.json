@@ -12,14 +12,14 @@
         "jsx": "react",
         "outDir": "./lib",
         "rootDir": "./src",
+        "types": ["@types/react"],
+        "paths": {
+            "@mattermost/types/*": ["../types/lib/*"]
+        },
         "composite": true
     },
-    "include": [
-        "./src/**/*"
-    ],
-    "exclude": [
-        "**/*.test.*"
-    ],
+    "exclude": ["**/node_modules", "**/*.test.*"],
+    "include": ["src/**/*.ts"],
     "references": [
         {"path": "../types"}
     ]

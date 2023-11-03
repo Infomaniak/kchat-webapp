@@ -1,9 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {GeneralTypes} from 'mattermost-redux/action_types';
 import reducer from 'mattermost-redux/reducers/entities/general';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {GeneralTypes} from 'mattermost-redux/action_types';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 type ReducerState = ReturnType<typeof reducer>
 

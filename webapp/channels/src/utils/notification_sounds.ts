@@ -2,15 +2,11 @@
 // See LICENSE.txt for license information.
 
 import bing from 'sounds/bing.mp3';
-import calls_calm from 'sounds/calls_calm.mp3';
-import calls_cheerful from 'sounds/calls_cheerful.mp3';
-import calls_dynamic from 'sounds/calls_dynamic.mp3';
-import calls_urgent from 'sounds/calls_urgent.mp3';
 import crackle from 'sounds/crackle.mp3';
 import down from 'sounds/down.mp3';
 import hello from 'sounds/hello.mp3';
 import ripple from 'sounds/ripple.mp3';
-import upstairs from 'sounds/upstairs.mp3';
+import ring from 'sounds/ring.mp3';
 import * as UserAgent from 'utils/user_agent';
 
 export const notificationSounds = new Map([
@@ -19,43 +15,30 @@ export const notificationSounds = new Map([
     ['Down', down],
     ['Hello', hello],
     ['Ripple', ripple],
-    ['Upstairs', upstairs],
+
 ]);
 
 export const callsNotificationSounds = new Map([
-    ['Dynamic', calls_dynamic],
-    ['Calm', calls_calm],
-    ['Urgent', calls_urgent],
-    ['Cheerful', calls_cheerful],
+    ['Ring', ring],
 ]);
 
-let canDing = true;
-export function ding(name: string) {
-    if (hasSoundOptions() && canDing) {
-        tryNotificationSound(name);
-        canDing = false;
-        setTimeout(() => {
-            canDing = true;
-        }, 3000);
-    }
-}
-
-export function tryNotificationSound(name: string) {
-    const audio = new Audio(notificationSounds.get(name) ?? notificationSounds.get('Bing'));
-    audio.play();
-}
-
 let currentRing: HTMLAudioElement | null = null;
-export function ring(name: string) {
+export function ringing(name: string) {
     if (!hasSoundOptions()) {
         return;
     }
     stopRing();
 
     currentRing = loopNotificationRing(name);
+    currentRing.muted = false;
+    const promise = currentRing.play();
+
     currentRing.addEventListener('pause', () => {
         stopRing();
     });
+    if (promise !== undefined) {
+        promise.then(() => {}).catch((error) => console.error);
+    }
 }
 
 export function stopRing() {
@@ -96,9 +79,9 @@ export function stopTryNotificationRing() {
 }
 
 export function loopNotificationRing(name: string) {
-    const audio = new Audio(callsNotificationSounds.get(name) ?? callsNotificationSounds.get('Calm'));
+    const audio = new Audio(callsNotificationSounds.get(name) ?? callsNotificationSounds.get('Ring'));
+    audio.muted = true;
     audio.loop = true;
-    audio.play();
     return audio;
 }
 

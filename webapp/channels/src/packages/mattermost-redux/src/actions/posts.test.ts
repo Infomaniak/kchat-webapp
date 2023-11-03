@@ -5,21 +5,19 @@ import fs from 'fs';
 
 import nock from 'nock';
 
-import type {Post, PostList} from '@mattermost/types/posts';
-import type {GlobalState} from '@mattermost/types/store';
-
-import {PostTypes, UserTypes} from 'mattermost-redux/action_types';
-import {getChannelStats} from 'mattermost-redux/actions/channels';
-import {createCustomEmoji} from 'mattermost-redux/actions/emojis';
 import * as Actions from 'mattermost-redux/actions/posts';
-import {loadMe} from 'mattermost-redux/actions/users';
+import {getChannelStats} from 'mattermost-redux/actions/channels';
+import {loadMeREST} from 'mattermost-redux/actions/users';
+import {createCustomEmoji} from 'mattermost-redux/actions/emojis';
 import {Client4} from 'mattermost-redux/client';
-import type {ActionResult, GetStateFunc} from 'mattermost-redux/types/actions';
-import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
-
+import {Preferences, Posts, RequestStatus} from '../constants';
+import {PostTypes, UserTypes} from 'mattermost-redux/action_types';
 import TestHelper from '../../test/test_helper';
 import configureStore from '../../test/test_store';
-import {Preferences, Posts, RequestStatus} from '../constants';
+import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
+import {GlobalState} from '@mattermost/types/store';
+import {Post, PostList} from '@mattermost/types/posts';
+import {ActionResult, GetStateFunc} from 'mattermost-redux/types/actions';
 
 const OK_RESPONSE = {status: 'OK'};
 
@@ -35,12 +33,12 @@ describe('Actions.Posts', () => {
                 general: {
                     config: {
                         CollapsedThreads: 'always_on',
-                        EnableJoinLeaveMessageByDefault: 'true',
                     },
                 },
             },
         });
     });
+
     afterAll(() => {
         TestHelper.tearDown();
     });
@@ -274,7 +272,7 @@ describe('Actions.Posts', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await store.dispatch(loadMe());
+        await store.dispatch(loadMeREST());
 
         nock(Client4.getBaseRoute()).
             post('/posts').
@@ -368,7 +366,7 @@ describe('Actions.Posts', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await store.dispatch(loadMe());
+        await store.dispatch(loadMeREST());
 
         nock(Client4.getBaseRoute()).
             post('/posts').
@@ -594,7 +592,7 @@ describe('Actions.Posts', () => {
         });
     });
 
-    it('getNeededAtMentionedUsernames', async () => {
+    it('getNeededAtMentionedUsernamesAndGroups', async () => {
         const state = {
             entities: {
                 users: {
@@ -632,14 +630,7 @@ describe('Actions.Posts', () => {
 
         expect(
             Actions.getNeededAtMentionedUsernamesAndGroups(state, [
-                TestHelper.getPostMock({message: '@zzz'}),
-            ])).toEqual(
-            new Set(),
-        );
-
-        expect(
-            Actions.getNeededAtMentionedUsernamesAndGroups(state, [
-                TestHelper.getPostMock({message: '@aaa @bbb @ccc @zzz'}),
+                TestHelper.getPostMock({message: '@aaa @bbb @ccc'}),
             ])).toEqual(
             new Set(['bbb', 'ccc']),
         );
@@ -670,22 +661,6 @@ describe('Actions.Posts', () => {
                 TestHelper.getPostMock({message: '(@bbb/@ccc) ddd@eee'}),
             ])).toEqual(
             new Set(['bbb', 'ccc']),
-        );
-
-        expect(
-            Actions.getNeededAtMentionedUsernamesAndGroups(state, [
-                TestHelper.getPostMock({
-                    message: '@aaa @bbb',
-                    props: {
-                        attachments: [
-                            {text: '@ccc @ddd @zzz'},
-                            {pretext: '@eee @fff', text: '@ggg'},
-                        ],
-                    },
-                }),
-            ]),
-        ).toEqual(
-            new Set(['bbb', 'ccc', 'ddd', 'eee', 'fff', 'ggg']),
         );
 
         // should never try to request usernames matching special mentions
@@ -1015,7 +990,7 @@ describe('Actions.Posts', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await store.dispatch(loadMe());
+        await store.dispatch(loadMeREST());
 
         nock(Client4.getBaseRoute()).
             post('/posts').
@@ -1048,7 +1023,7 @@ describe('Actions.Posts', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await store.dispatch(loadMe());
+        await store.dispatch(loadMeREST());
 
         nock(Client4.getBaseRoute()).
             post('/posts').
@@ -1135,7 +1110,7 @@ describe('Actions.Posts', () => {
         const {dispatch, getState} = store;
 
         nock(Client4.getBaseRoute()).
-            get(`/channels/${TestHelper.basicChannel!.id}/stats?exclude_files_count=true`).
+            get(`/channels/${TestHelper.basicChannel!.id}/stats`).
             reply(200, {channel_id: TestHelper.basicChannel!.id, member_count: 1, pinnedpost_count: 0});
 
         await dispatch(getChannelStats(TestHelper.basicChannel!.id));
@@ -1174,7 +1149,7 @@ describe('Actions.Posts', () => {
         const {dispatch, getState} = store;
 
         nock(Client4.getBaseRoute()).
-            get(`/channels/${TestHelper.basicChannel!.id}/stats?exclude_files_count=true`).
+            get(`/channels/${TestHelper.basicChannel!.id}/stats`).
             reply(200, {channel_id: TestHelper.basicChannel!.id, member_count: 1, pinnedpost_count: 0});
 
         await dispatch(getChannelStats(TestHelper.basicChannel!.id));
@@ -1221,7 +1196,7 @@ describe('Actions.Posts', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await store.dispatch(loadMe());
+        await store.dispatch(loadMeREST());
 
         nock(Client4.getBaseRoute()).
             post('/posts').
@@ -1250,7 +1225,7 @@ describe('Actions.Posts', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await store.dispatch(loadMe());
+        await store.dispatch(loadMeREST());
 
         nock(Client4.getBaseRoute()).
             post('/posts').
@@ -1284,7 +1259,7 @@ describe('Actions.Posts', () => {
         store.dispatch({
             type: UserTypes.LOGIN_SUCCESS,
         });
-        await store.dispatch(loadMe());
+        await store.dispatch(loadMeREST());
 
         nock(Client4.getBaseRoute()).
             post('/posts').
@@ -1318,7 +1293,7 @@ describe('Actions.Posts', () => {
     });
 
     it('getCustomEmojiForReaction', async () => {
-        const testImageData = fs.createReadStream('src/packages/mattermost-redux/test/assets/images/test.png');
+        const testImageData = fs.createReadStream('packages/mattermost-redux/test/assets/images/test.png');
         const {dispatch, getState} = store;
 
         nock(Client4.getBaseRoute()).
@@ -1350,6 +1325,36 @@ describe('Actions.Posts', () => {
         expect(emojis).toBeTruthy();
         expect(emojis[created.id]).toBeTruthy();
         expect(state.entities.emojis.nonExistentEmoji.has(missingEmojiName)).toBeTruthy();
+    });
+
+    it('getOpenGraphMetadata', async () => {
+        const {dispatch, getState} = store;
+
+        const url = 'https://mattermost.com';
+        const docs = 'https://docs.mattermost.com/';
+
+        nock(Client4.getBaseRoute()).
+            post('/opengraph').
+            reply(200, {type: 'article', url: 'https://mattermost.com/', title: 'Mattermost private cloud messaging', description: 'Open source,  private cloud\nSlack-alternative, \nWorkplace messaging for web, PCs and phones.'});
+        await dispatch(Actions.getOpenGraphMetadata(url));
+
+        nock(Client4.getBaseRoute()).
+            post('/opengraph').
+            reply(200, {type: '', url: '', title: '', description: ''});
+        await dispatch(Actions.getOpenGraphMetadata(docs));
+
+        nock(Client4.getBaseRoute()).
+            post('/opengraph').
+            reply(200, undefined);
+        await dispatch(Actions.getOpenGraphMetadata(docs));
+
+        const state = getState();
+        const metadata = state.entities.posts.openGraph;
+        expect(metadata).toBeTruthy();
+        expect(metadata[url]).toBeTruthy();
+        if (metadata[docs]) {
+            throw new Error('unexpected metadata[docs]');
+        }
     });
 
     it('doPostAction', async () => {

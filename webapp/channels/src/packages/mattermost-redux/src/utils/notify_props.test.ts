@@ -1,9 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {getEmailInterval} from 'mattermost-redux/utils/notify_props';
-
 import {Preferences} from '../constants';
+import {getEmailInterval} from 'mattermost-redux/utils/notify_props';
 
 describe('user utils', () => {
     const testCases = [

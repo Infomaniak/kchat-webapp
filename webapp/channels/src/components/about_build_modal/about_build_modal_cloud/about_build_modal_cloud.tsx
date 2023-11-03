@@ -22,6 +22,9 @@ type Props = {
     doHide: () => void;
 };
 
+// Webpack global var
+declare const COMMIT_HASH: string;
+
 export default function AboutBuildModalCloud(props: Props) {
     const config = props.config;
     const license = props.license;
@@ -160,6 +163,12 @@ export default function AboutBuildModalCloud(props: Props) {
                             defaultMessage='EE Build Hash:'
                         />
                         {config.BuildHashEnterprise}
+                        <br/>
+                        <FormattedMessage
+                            id='about.hashwebapp'
+                            defaultMessage='Webapp Build Hash:'
+                        />
+                        {typeof COMMIT_HASH === 'undefined' ? '' : COMMIT_HASH}
                     </p>
                     <p>
                         <FormattedMessage

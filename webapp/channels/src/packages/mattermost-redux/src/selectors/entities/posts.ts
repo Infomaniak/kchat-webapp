@@ -1,34 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Channel} from '@mattermost/types/channels';
-import type {
-    MessageHistory,
-    OpenGraphMetadata,
-    Post,
-    PostAcknowledgement,
-    PostOrderBlock,
-} from '@mattermost/types/posts';
-import type {Reaction} from '@mattermost/types/reactions';
-import type {GlobalState} from '@mattermost/types/store';
-import type {Team} from '@mattermost/types/teams';
-import type {UserProfile} from '@mattermost/types/users';
-import type {
-    IDMappedObjects,
-    RelationOneToOne,
-    RelationOneToMany,
-} from '@mattermost/types/utilities';
+import {createSelector} from 'reselect';
 
-import {General, Posts, Preferences} from 'mattermost-redux/constants';
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
-import {getChannel} from 'mattermost-redux/selectors/entities/channels';
+import {Posts, Preferences} from 'mattermost-redux/constants';
+
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getMyPreferences} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getUsers, getCurrentUserId, getUserStatuses} from 'mattermost-redux/selectors/entities/users';
+import {getConfig, getFeatureFlagValue} from 'mattermost-redux/selectors/entities/general';
+
 import {createIdsSelector} from 'mattermost-redux/utils/helpers';
-import {shouldShowJoinLeaveMessages} from 'mattermost-redux/utils/post_list';
+
 import {
     isPostEphemeral,
     isSystemMessage,
@@ -37,8 +20,27 @@ import {
     isPostPendingOrFailed,
     isPostCommentMention,
 } from 'mattermost-redux/utils/post_utils';
+
 import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
-import {isGuest} from 'mattermost-redux/utils/user_utils';
+
+import {shouldShowJoinLeaveMessages} from 'mattermost-redux/utils/post_list';
+
+import {Channel} from '@mattermost/types/channels';
+import {
+    MessageHistory,
+    OpenGraphMetadata,
+    Post,
+    PostAcknowledgement,
+    PostOrderBlock,
+} from '@mattermost/types/posts';
+import {Reaction} from '@mattermost/types/reactions';
+import {GlobalState} from '@mattermost/types/store';
+import {UserProfile} from '@mattermost/types/users';
+import {
+    IDMappedObjects,
+    RelationOneToOne,
+    RelationOneToMany,
+} from '@mattermost/types/utilities';
 
 export function getAllPosts(state: GlobalState) {
     return state.entities.posts.posts;
@@ -69,13 +71,13 @@ export function getReactionsForPosts(state: GlobalState): RelationOneToOne<Post,
 
 export function makeGetReactionsForPost(): (state: GlobalState, postId: Post['id']) => {
     [x: string]: Reaction;
-} | undefined {
+} | undefined | null {
     return createSelector('makeGetReactionsForPost', getReactionsForPosts, (state: GlobalState, postId: string) => postId, (reactions, postId) => {
         if (reactions[postId]) {
             return reactions[postId];
         }
 
-        return undefined;
+        return null;
     });
 }
 
@@ -296,7 +298,7 @@ export function makeGetPostsInChannel(): (state: GlobalState, channelId: Channel
             for (let i = 0; i < postIds.length; i++) {
                 const post = allPosts[postIds[i]];
 
-                if (!post || shouldFilterJoinLeavePost(post, showJoinLeave, currentUser ? currentUser.username : '')) {
+                if (shouldFilterJoinLeavePost(post, showJoinLeave, currentUser ? currentUser.username : '')) {
                     continue;
                 }
 
@@ -386,7 +388,7 @@ export function makeGetPostsForThread(): (state: GlobalState, rootId: string) =>
     );
 }
 
-// The selector below filters current user if it exists. Excluding currentUser is just for convenience
+// The selector below filters current user if it exists. Excluding currentUser is just for convinience
 export function makeGetProfilesForThread(): (state: GlobalState, rootId: string) => UserProfile[] {
     const getPostsForThread = makeGetPostsForThread();
     return createSelector(
@@ -396,7 +398,7 @@ export function makeGetProfilesForThread(): (state: GlobalState, rootId: string)
         getPostsForThread,
         getUserStatuses,
         (allUsers, currentUserId, posts, userStatuses) => {
-            const profileIds = posts.map((post) => post.user_id).filter(Boolean);
+            const profileIds = posts.map((post) => post.user_id);
             const uniqueIds = [...new Set(profileIds)];
             return uniqueIds.reduce((acc: UserProfile[], id: string) => {
                 const profile: UserProfile = userStatuses ? {...allUsers[id], status: userStatuses[id]} : {...allUsers[id]};
@@ -452,6 +454,10 @@ export const getSearchResults: (state: GlobalState) => Post[] = createSelector(
         return postIds.map((id) => posts[id]);
     },
 );
+
+export function getHasLimitations(state: GlobalState) {
+    return state.entities.search.hasLimitation;
+}
 
 // Returns the matched text from the search results, if the server has provided them.
 // These matches will only be present if the server is running Mattermost 5.1 or higher
@@ -751,12 +757,19 @@ export const makeIsPostCommentMention = (): ((state: GlobalState, postId: Post['
     );
 };
 
+export function getExpandedLink(state: GlobalState, link: string): string {
+    return state.entities.posts.expandedURLs[link];
+}
+
 export function getLimitedViews(state: GlobalState): GlobalState['entities']['posts']['limitedViews'] {
     return state.entities.posts.limitedViews;
 }
 
 export function isPostPriorityEnabled(state: GlobalState) {
-    return getConfig(state).PostPriority === 'true';
+    return (
+        getFeatureFlagValue(state, 'PostPriority') === 'true' &&
+        getConfig(state).PostPriority === 'true'
+    );
 }
 
 export function isPostAcknowledgementsEnabled(state: GlobalState) {
@@ -766,39 +779,9 @@ export function isPostAcknowledgementsEnabled(state: GlobalState) {
     );
 }
 
-export function getAllowPersistentNotifications(state: GlobalState) {
-    return (
-        isPostPriorityEnabled(state) &&
-        getConfig(state).AllowPersistentNotifications === 'true'
-    );
-}
-
-export function getPersistentNotificationMaxRecipients(state: GlobalState) {
-    return getConfig(state).PersistentNotificationMaxRecipients;
-}
-
-export function getPersistentNotificationIntervalMinutes(state: GlobalState) {
-    return getConfig(state).PersistentNotificationIntervalMinutes;
-}
-
-export function getAllowPersistentNotificationsForGuests(state: GlobalState) {
-    return (
-        isPostPriorityEnabled(state) &&
-        getConfig(state).AllowPersistentNotificationsForGuests === 'true'
-    );
-}
-
 export function getPostAcknowledgements(state: GlobalState, postId: Post['id']): Record<UserProfile['id'], PostAcknowledgement['acknowledged_at']> {
     return state.entities.posts.acknowledgements[postId];
 }
-
-export const isPersistentNotificationsEnabled = createSelector(
-    'getPersistentNotificationsEnabled',
-    getCurrentUser,
-    getAllowPersistentNotifications,
-    getAllowPersistentNotificationsForGuests,
-    (user, forAll, forGuests) => (isGuest(user.roles) ? (forAll && forGuests) : forAll),
-);
 
 export function makeGetPostAcknowledgementsWithProfiles(): (state: GlobalState, postId: Post['id']) => Array<{user: UserProfile; acknowledgedAt: PostAcknowledgement['acknowledged_at']}> {
     return createSelector(
@@ -820,18 +803,4 @@ export function makeGetPostAcknowledgementsWithProfiles(): (state: GlobalState, 
             }).sort((a, b) => b.acknowledgedAt - a.acknowledgedAt);
         },
     );
-}
-
-export function getTeamIdFromPost(state: GlobalState, post: Post): Team['id'] | undefined {
-    const channel = getChannel(state, post.channel_id);
-
-    if (!channel) {
-        return undefined;
-    }
-
-    if (channel.type === General.DM_CHANNEL || channel.type === General.GM_CHANNEL) {
-        return getCurrentTeamId(state);
-    }
-
-    return channel.team_id;
 }

@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {TeamTypes, AdminTypes} from 'mattermost-redux/action_types';
+import {GenericAction} from 'mattermost-redux/types/actions';
 import teamsReducer from 'mattermost-redux/reducers/entities/teams';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
 type ReducerState = ReturnType<typeof teamsReducer>;
@@ -239,12 +239,6 @@ describe('Data Retention Teams', () => {
         expect(nextState).not.toBe(state);
         expect(nextState.teams.team1).toEqual({
             id: 'team1',
-        });
-        expect(nextState.teams.team2).toEqual({
-            id: 'team2',
-        });
-        expect(nextState.teams.team3).toEqual({
-            id: 'team3',
         });
         expect(nextState.teams.team4).toEqual({
             id: 'team4',

@@ -1,16 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Channel} from '@mattermost/types/channels';
-import type {Post} from '@mattermost/types/posts';
-import type {GlobalState} from '@mattermost/types/store';
-import type {Team} from '@mattermost/types/teams';
-import {UserThreadType} from '@mattermost/types/threads';
-import type {UserThread, ThreadsState, UserThreadSynthetic} from '@mattermost/types/threads';
-import type {IDMappedObjects, RelationOneToMany} from '@mattermost/types/utilities';
+import {createSelector} from 'reselect';
 
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+
+import {GlobalState} from '@mattermost/types/store';
+import {Team} from '@mattermost/types/teams';
+import {Channel} from '@mattermost/types/channels';
+import {UserThread, ThreadsState, UserThreadType, UserThreadSynthetic} from '@mattermost/types/threads';
+import {Post} from '@mattermost/types/posts';
+import {IDMappedObjects, RelationOneToMany} from '@mattermost/types/utilities';
 
 export function getThreadsInTeam(state: GlobalState): RelationOneToMany<Team, UserThread> {
     return state.entities.threads.threadsInTeam;
@@ -154,16 +154,11 @@ export const getUnreadThreadOrderInCurrentTeam: (
     (
         threadsInTeam,
         threads,
-        selectedThreadIdInTeam,
     ) => {
         const ids = threadsInTeam.filter((id) => {
             const thread = threads[id];
             return thread.is_following && (thread.unread_replies || thread.unread_mentions);
         });
-
-        if (selectedThreadIdInTeam && !ids.includes(selectedThreadIdInTeam)) {
-            ids.push(selectedThreadIdInTeam);
-        }
 
         return sortByLastReply(ids, threads);
     },

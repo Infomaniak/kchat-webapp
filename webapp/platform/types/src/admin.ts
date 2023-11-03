@@ -43,7 +43,6 @@ export type LogFilter = {
 
 export type AdminState = {
     logs: LogObject[];
-    plainLogs: string[];
     audits: Record<string, Audit>;
     config: Partial<AdminConfig>;
     environmentConfig: Partial<EnvironmentConfig>;
@@ -70,7 +69,6 @@ export type ClusterInfo = {
     config_hash: string;
     ipaddress: string;
     hostname: string;
-    schema_version: string;
 };
 
 export type AnalyticsRow = {

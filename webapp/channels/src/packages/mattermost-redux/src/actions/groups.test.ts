@@ -3,8 +3,7 @@
 
 import nock from 'nock';
 
-import type {GetGroupsParams} from '@mattermost/types/groups';
-import {SyncableType} from '@mattermost/types/groups';
+import {GetGroupsParams, SyncableType} from '@mattermost/types/groups';
 
 import * as Actions from 'mattermost-redux/actions/groups';
 import {Client4} from 'mattermost-redux/client';
@@ -882,3 +881,4 @@ describe('Actions.Groups', () => {
         expect(JSON.stringify(response) === JSON.stringify(stats[groupID])).toBeTruthy();
     });
 });
+

@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {formatWithRenderer} from 'utils/markdown';
 import LinkOnlyRenderer from 'utils/markdown/link_only_renderer';
+import {formatWithRenderer} from 'utils/markdown';
 
 describe('formatWithRenderer | LinkOnlyRenderer', () => {
     const testCases = [

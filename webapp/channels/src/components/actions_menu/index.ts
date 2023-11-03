@@ -3,17 +3,14 @@
 
 import type {ComponentProps} from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import type {AppBinding} from '@mattermost/types/apps';
 import type {Post} from '@mattermost/types/posts';
 
-import {Permissions} from 'mattermost-redux/constants';
 import {AppBindingLocations} from 'mattermost-redux/constants/apps';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
-import {isMarketplaceEnabled} from 'mattermost-redux/selectors/entities/general';
-import {haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import type {GenericAction} from 'mattermost-redux/types/actions';
@@ -68,10 +65,6 @@ function mapStateToProps(state: GlobalState, ownProps: Props) {
         pluginMenuItems: state.plugins.components.PostDropdownMenu,
         teamId: getCurrentTeamId(state),
         isMobileView: getIsMobileView(state),
-        canOpenMarketplace: (
-            isMarketplaceEnabled(state) &&
-            haveICurrentTeamPermission(state, Permissions.SYSCONSOLE_WRITE_PLUGINS)
-        ),
     };
 }
 

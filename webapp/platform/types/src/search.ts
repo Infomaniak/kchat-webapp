@@ -7,6 +7,7 @@ export type Search = {
 };
 
 export type SearchState = {
+    hasLimitation: string | number;
     current: any;
     results: string[];
     fileResults: string[];

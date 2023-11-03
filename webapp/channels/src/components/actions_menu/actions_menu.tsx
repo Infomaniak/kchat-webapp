@@ -4,8 +4,8 @@
 import classNames from 'classnames';
 import React from 'react';
 import {Tooltip} from 'react-bootstrap';
-import {FormattedMessage, injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 
 import type {AppBinding} from '@mattermost/types/apps';
 import type {Post} from '@mattermost/types/posts';
@@ -13,11 +13,11 @@ import type {Post} from '@mattermost/types/posts';
 import {AppCallResponseTypes} from 'mattermost-redux/constants/apps';
 import Permissions from 'mattermost-redux/constants/permissions';
 
+import {ActionsTutorialTip} from 'components/actions_menu/actions_menu_tutorial_tip';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import OverlayTrigger from 'components/overlay_trigger';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import MarketplaceModal from 'components/plugin_marketplace/marketplace_modal';
-import type {OpenedFromType} from 'components/plugin_marketplace/marketplace_modal';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
@@ -32,9 +32,6 @@ import type {HandleBindingClick, PostEphemeralCallResponseForPost, OpenAppsModal
 import type {PluginComponent} from 'types/store/plugins';
 
 import './actions_menu.scss';
-
-import {ActionsMenuIcon} from './actions_menu_icon';
-
 const MENU_BOTTOM_MARGIN = 80;
 
 export const PLUGGABLE_COMPONENT = 'PostDropdownMenuItem';
@@ -49,7 +46,11 @@ export type Props = {
     pluginMenuItems?: PluginComponent[];
     post: Post;
     teamId: string;
-    canOpenMarketplace: boolean;
+    handleOpenTip: () => void;
+    handleNextTip: (e: React.MouseEvent) => void;
+    handleDismissTip: () => void;
+    showPulsatingDot?: boolean;
+    showTutorialTip: boolean;
 
     /**
      * Components for overriding provided by plugins
@@ -146,11 +147,9 @@ export class ActionMenuClass extends React.PureComponent<Props, State> {
     };
 
     handleOpenMarketplace = (): void => {
-        const openedFrom: OpenedFromType = 'actions_menu';
         const openMarketplaceData = {
             modalId: ModalIdentifiers.PLUGIN_MARKETPLACE,
             dialogType: MarketplaceModal,
-            dialogProps: {openedFrom},
         };
         this.props.actions.openModal(openMarketplaceData);
     };
@@ -223,7 +222,7 @@ export class ActionMenuClass extends React.PureComponent<Props, State> {
                         className='btn btn-primary visit-marketplace-button'
                         onClick={this.handleOpenMarketplace}
                     >
-                        <ActionsMenuIcon name='icon-view-grid-plus-outline visit-marketplace-button-icon'/>
+                        {Utils.getMenuItemIcon('icon-view-grid-plus-outline visit-marketplace-button-icon')}
                         <span className='visit-marketplace-button-text'>
                             <FormattedMarkdownMessage
                                 id='post_info.actions.visitMarketplace'
@@ -235,6 +234,14 @@ export class ActionMenuClass extends React.PureComponent<Props, State> {
             </SystemPermissionGate>
         );
     }
+
+    handleActionsIconClick = (e: React.MouseEvent) => {
+        if (this.props.showPulsatingDot || this.props.showTutorialTip) {
+            this.props.handleOpenTip();
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
 
     renderDivider = (suffix: string): React.ReactNode => {
         return (
@@ -276,6 +283,8 @@ export class ActionMenuClass extends React.PureComponent<Props, State> {
         if (isSystemMessage) {
             return null;
         }
+
+        // const isMobile = this.props.isMobileView TODO;
 
         const pluginItems = this.props.pluginMenuItems?.
             filter((item) => {
@@ -334,7 +343,7 @@ export class ActionMenuClass extends React.PureComponent<Props, State> {
         const {formatMessage} = this.props.intl;
 
         let marketPlace = null;
-        if (this.props.canOpenMarketplace) {
+        if (this.props.isSysAdmin) {
             marketPlace = (
                 <React.Fragment key={'marketplace'}>
                     {this.renderDivider('marketplace')}
@@ -343,7 +352,7 @@ export class ActionMenuClass extends React.PureComponent<Props, State> {
                         key={`marketplace_${this.props.post.id}`}
                         show={true}
                         text={formatMessage({id: 'post_info.marketplace', defaultMessage: 'App Marketplace'})}
-                        icon={<ActionsMenuIcon name='icon-view-grid-plus-outline'/>}
+                        icon={Utils.getMenuItemIcon('icon-view-grid-plus-outline')}
                         onClick={this.handleOpenMarketplace}
                     />
                 </React.Fragment>
@@ -356,11 +365,11 @@ export class ActionMenuClass extends React.PureComponent<Props, State> {
         const hasPluginItems = Boolean(pluginItems?.length);
 
         const hasPluginMenuItems = hasPluginItems || hasApps || hasPluggables;
-        if (!this.props.canOpenMarketplace && !hasPluginMenuItems) {
+        if (!this.props.isSysAdmin && !hasPluginMenuItems) {
             return null;
         }
 
-        if (hasPluginMenuItems) {
+        if (hasPluginItems || hasApps || hasPluggables) {
             const pluggable = (
                 <Pluggable
                     postId={this.props.post.id}
@@ -403,8 +412,17 @@ export class ActionMenuClass extends React.PureComponent<Props, State> {
                         })}
                         type='button'
                         aria-expanded='false'
+                        onClick={this.handleActionsIconClick}
                     >
                         <i className={'icon icon-apps'}/>
+                        {this.props.showPulsatingDot &&
+                            <ActionsTutorialTip
+                                showTip={this.props.showTutorialTip}
+                                handleNext={this.props.handleNextTip}
+                                handleOpen={this.props.handleOpenTip}
+                                handleDismiss={this.props.handleDismissTip}
+                            />
+                        }
                     </button>
                 </OverlayTrigger>
                 <Menu

@@ -141,13 +141,11 @@ export type AppExpandLevel = ''
 | 'summary'
 | '+summary'
 | 'all'
-| '+all'
-| 'id';
+| '+all';
 
 export type AppExpand = {
     app?: AppExpandLevel;
     acting_user?: AppExpandLevel;
-    acting_user_access_token?: AppExpandLevel;
     channel?: AppExpandLevel;
     config?: AppExpandLevel;
     mentioned?: AppExpandLevel;

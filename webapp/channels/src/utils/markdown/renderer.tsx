@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import marked from 'marked';
-import type {MarkedOptions} from 'marked';
+import marked, {MarkedOptions} from 'marked';
 
-import EmojiMap from 'utils/emoji_map';
 import * as PostUtils from 'utils/post_utils';
 import * as TextFormatting from 'utils/text_formatting';
 import {getScheme, isUrlSafe, shouldOpenInNewTab} from 'utils/url';
+import EmojiMap from 'utils/emoji_map';
 
 import {parseImageDimensions} from './helpers';
 
@@ -259,7 +258,9 @@ function unescapeHtmlEntities(html: string) {
         if (n === 'colon') {
             return ':';
         } else if (n.charAt(0) === '#') {
-            return n.charAt(1) === 'x' ? String.fromCharCode(parseInt(n.substring(2), 16)) : String.fromCharCode(Number(n.substring(1)));
+            return n.charAt(1) === 'x' ?
+                String.fromCharCode(parseInt(n.substring(2), 16)) :
+                String.fromCharCode(Number(n.substring(1)));
         }
         return '';
     });

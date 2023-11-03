@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {formatWithRenderer} from './markdown';
-import PlainRenderer from './markdown/plain_renderer';
+import MentionableRenderer from './markdown/mentionable_renderer';
 
 export const emoticonPatterns: { [key: string]: RegExp } = {
     slightly_smiling_face: /(^|\B)(:-?\))($|\B)/g, // :)
@@ -28,7 +28,7 @@ export const emoticonPatterns: { [key: string]: RegExp } = {
 export const EMOJI_PATTERN = /(:([a-zA-Z0-9_+-]+):)/g;
 
 export function matchEmoticons(text: string): RegExpMatchArray | null {
-    const markdownCleanedText = formatWithRenderer(text, new PlainRenderer());
+    const markdownCleanedText = formatWithRenderer(text, new MentionableRenderer());
     let emojis = markdownCleanedText.match(EMOJI_PATTERN);
 
     for (const name of Object.keys(emoticonPatterns)) {

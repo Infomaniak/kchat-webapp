@@ -21,13 +21,10 @@ export type ChannelStats = {
 
 export type ChannelNotifyProps = {
     desktop: 'default' | 'all' | 'mention' | 'none';
-    desktop_sound: 'on' | 'off';
-    desktop_notification_sound?: 'Bing' | 'Crackle' | 'Down' | 'Hello' | 'Ripple' | 'Upstairs';
     email: 'default' | 'all' | 'mention' | 'none';
     mark_unread: 'all' | 'mention';
     push: 'default' | 'all' | 'mention' | 'none';
     ignore_channel_mentions: 'default' | 'off' | 'on';
-    channel_auto_follow_threads: 'off' | 'on';
 };
 
 export type Channel = {
@@ -156,7 +153,7 @@ export type ChannelsState = {
     channelModerations: RelationOneToOne<Channel, ChannelModeration[]>;
     channelMemberCountsByGroup: RelationOneToOne<Channel, ChannelMemberCountsByGroup>;
     messageCounts: RelationOneToOne<Channel, ChannelMessageCount>;
-    channelsMemberCount: Record<string, number>;
+    pendingGuests: Record<Channel['id'], PendingGuests>;
 };
 
 export type ChannelModeration = {
@@ -213,3 +210,27 @@ export type ChannelSearchOpts = {
     page?: number;
     per_page?: number;
 };
+
+export type PendingGuest = {
+    id: number;
+    key: string;
+    type: string;
+    status: string;
+    invited_by_id: number;
+    account_id: number;
+    user_id?: number;
+    email?: string;
+    sms?: number;
+    force_link?: string;
+    expires_at: number;
+    created_at: number;
+    updated_at: number;
+    deleted_at?: number;
+    data: {
+        team_id: string;
+        channel_ids: string[];
+        product_id: number;
+    };
+};
+
+export type PendingGuests = Record<string, PendingGuest>;

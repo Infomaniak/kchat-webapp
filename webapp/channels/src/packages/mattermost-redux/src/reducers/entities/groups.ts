@@ -3,10 +3,9 @@
 
 import {combineReducers} from 'redux';
 
-import type {GroupChannel, GroupSyncablesState, GroupTeam, Group} from '@mattermost/types/groups';
-
 import {GroupTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+import {GroupChannel, GroupSyncablesState, GroupTeam, Group} from '@mattermost/types/groups';
+import {GenericAction} from 'mattermost-redux/types/actions';
 
 function syncables(state: Record<string, GroupSyncablesState> = {}, action: GenericAction) {
     switch (action.type) {

@@ -41,7 +41,6 @@ export type Subscription = {
     is_free_trial: string;
     delinquent_since?: number;
     compliance_blocked?: string;
-    billing_type?: string;
 }
 
 export type Product = {
@@ -181,6 +180,11 @@ export type InvoiceLineItem = {
 }
 
 export type Limits = {
+    storage: number;
+    public_channels: number;
+    private_channels: number;
+    guests: number;
+    members: number;
     messages?: {
         history?: number;
     };
@@ -193,6 +197,13 @@ export type Limits = {
 }
 
 export interface CloudUsage {
+    storage: number;
+    public_channels: number;
+    private_channels: number;
+    guests: number;
+    pending_guests: number;
+    members: number;
+    usageLoaded: boolean;
     files: {
         totalStorage: number;
         totalStorageLoaded: boolean;
@@ -219,11 +230,6 @@ export interface CreateSubscriptionRequest {
     add_ons: string[];
     seats: number;
     internal_purchase_order?: string;
-}
-
-export interface NewsletterRequestBody {
-    email: string;
-    subscribed_content: string;
 }
 
 export const areShippingDetailsValid = (address: Address | null | undefined): boolean => {

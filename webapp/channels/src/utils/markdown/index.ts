@@ -5,11 +5,13 @@ import marked from 'marked';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
-import store from 'stores/redux_store';
+import store from 'stores/redux_store.jsx';
 
-import type EmojiMap from 'utils/emoji_map';
-import RemoveMarkdown from 'utils/markdown/remove_markdown';
 import {convertEntityToCharacter} from 'utils/text_formatting';
+
+import RemoveMarkdown from 'utils/markdown/remove_markdown';
+
+import EmojiMap from 'utils/emoji_map';
 
 import Renderer from './renderer';
 

@@ -4,6 +4,8 @@
 import keyMirror from 'mattermost-redux/utils/key_mirror';
 
 export default keyMirror({
+    PING_RESET: null,
+
     RECEIVED_SERVER_VERSION: null,
 
     CLIENT_CONFIG_RECEIVED: null,
@@ -24,6 +26,8 @@ export default keyMirror({
     WEBSOCKET_CLOSED: null,
     SET_CONNECTION_ID: null,
 
+    REDIRECT_LOCATION_SUCCESS: null,
+    REDIRECT_LOCATION_FAILURE: null,
     SET_CONFIG_AND_LICENSE: null,
 
     WARN_METRICS_STATUS_RECEIVED: null,

@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import reducerRegistry from 'mattermost-redux/store/reducer_registry';
-
 import configureStore from '../../test/test_store';
 
 describe('ReducerRegistry', () => {

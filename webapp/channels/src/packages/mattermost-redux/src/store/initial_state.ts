@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {SelfHostedSignupProgress} from '@mattermost/types/hosted_customer';
-import type {GlobalState} from '@mattermost/types/store';
+import {GlobalState} from '@mattermost/types/store';
 
 import {zeroStateLimitedViews} from '../reducers/entities/posts';
 
@@ -58,9 +58,10 @@ const state: GlobalState = {
             channelModerations: {},
             channelMemberCountsByGroup: {},
             messageCounts: {},
-            channelsMemberCount: {},
+            pendingGuests: {},
         },
         posts: {
+            expandedURLs: {},
             posts: {},
             postsReplies: {},
             postsInChannel: {},
@@ -96,7 +97,6 @@ const state: GlobalState = {
         },
         admin: {
             logs: [],
-            plainLogs: [],
             audits: {},
             config: {},
             environmentConfig: {},
@@ -142,12 +142,47 @@ const state: GlobalState = {
             pinned: {},
             isSearchingTerm: false,
             isSearchGettingMore: false,
-            isLimitedResults: -1,
+            hasLimitation: -1,
+            // mattermost limitations
+            // isLimitedResults: -1,
         },
         typing: {},
         roles: {
             roles: {},
             pending: new Set(),
+        },
+        gifs: {
+            app: {
+                appClassName: '',
+                appId: '',
+                appName: '',
+                basePath: '',
+                enableHistory: false,
+                header: {
+                    tabs: [],
+                    displayText: false,
+                },
+                itemTapType: 0,
+                shareEvent: '',
+            },
+            categories: {
+                tagsList: [],
+                tagsDict: {},
+                cursor: '',
+                hasMore: false,
+                isFetching: false,
+            },
+            cache: {
+                gifs: {},
+                updating: false,
+            },
+            search: {
+                searchText: '',
+                searchBarText: '',
+                resultsByTerm: {},
+                scrollPosition: 0,
+                priorLocation: null,
+            },
         },
         schemes: {
             schemes: {},
@@ -175,7 +210,13 @@ const state: GlobalState = {
         },
         cloud: {
             limits: {
-                limits: {},
+                limits: {
+                    public_channels: 0,
+                    private_channels: 0,
+                    members: 0,
+                    guests: 0,
+                    storage: 0,
+                },
                 limitsLoaded: false,
             },
             errors: {},
@@ -205,19 +246,36 @@ const state: GlobalState = {
             },
         },
         usage: {
+            storage: 0,
+            public_channels: 0,
+            private_channels: 0,
+            guests: 0,
+            pending_guests: 0,
+            members: 0,
+            usageLoaded: false,
             files: {
                 totalStorage: 0,
-                totalStorageLoaded: false,
+                totalStorageLoaded: true,
             },
             messages: {
                 history: 0,
-                historyLoaded: false,
+                historyLoaded: true,
             },
             teams: {
                 active: 0,
                 cloudArchived: 0,
-                teamsLoaded: false,
+                teamsLoaded: true,
             },
+        },
+        insights: {
+            topReactions: {},
+            myTopReactions: {},
+        },
+        worktemplates: {
+            categories: [],
+            templatesInCategory: {},
+            playbookTemplates: [],
+            linkedProducts: {},
         },
     },
     errors: [],
@@ -266,6 +324,10 @@ const state: GlobalState = {
         },
         teams: {
             getMyTeams: {
+                status: 'not_started',
+                error: null,
+            },
+            getMyKSuites: {
                 status: 'not_started',
                 error: null,
             },

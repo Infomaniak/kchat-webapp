@@ -3,14 +3,24 @@
 
 import {combineReducers} from 'redux';
 
-import type {TeamsRequestsStatuses, RequestStatusType} from '@mattermost/types/requests';
-
 import {TeamTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
+
+import {GenericAction} from 'mattermost-redux/types/actions';
+import {TeamsRequestsStatuses, RequestStatusType} from '@mattermost/types/requests';
 
 import {handleRequest, initialRequestState} from './helpers';
 
 function getMyTeams(state: RequestStatusType = initialRequestState(), action: GenericAction): RequestStatusType {
+    return handleRequest(
+        TeamTypes.MY_TEAMS_REQUEST,
+        TeamTypes.MY_TEAMS_SUCCESS,
+        TeamTypes.MY_TEAMS_FAILURE,
+        state,
+        action,
+    );
+}
+
+function getMyKSuites(state: RequestStatusType = initialRequestState(), action: GenericAction): RequestStatusType {
     return handleRequest(
         TeamTypes.MY_TEAMS_REQUEST,
         TeamTypes.MY_TEAMS_SUCCESS,
@@ -42,6 +52,7 @@ function joinTeam(state: RequestStatusType = initialRequestState(), action: Gene
 
 export default (combineReducers({
     getTeams,
+    getMyKSuites,
     getMyTeams,
     joinTeam,
 }) as (b: TeamsRequestsStatuses, a: GenericAction) => TeamsRequestsStatuses);

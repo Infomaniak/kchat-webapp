@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {Preferences, General} from '../constants';
 import {
     displayUsername,
     filterProfilesStartingWithTerm,
@@ -12,7 +13,6 @@ import {
 } from 'mattermost-redux/utils/user_utils';
 
 import TestHelper from '../../test/test_helper';
-import {Preferences, General} from '../constants';
 
 describe('user utils', () => {
     describe('displayUsername', () => {
