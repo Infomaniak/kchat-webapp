@@ -1,3 +1,9 @@
+## 1.4.7-next.3 (2023-11-03)
+
+### Fixed (1 change)
+
+- [Add scroll bar for long messages](kchat/webapp@5a8716c7d9c5658509cc20dfe0bf6717c6469702) by @benoit.nau ([merge request](kchat/webapp!568))
+
 ## 1.4.7-next.2 (2023-11-01)
 
 ### Fixed (1 change)
