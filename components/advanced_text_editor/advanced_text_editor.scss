@@ -32,7 +32,7 @@
                 var(--right-padding-for-preview-button)
         );
         box-shadow: none;
-
+        overflow:auto;
         &:focus {
             box-shadow: none;
         }
