@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import React, {MouseEvent} from 'react';
 import {shallow} from 'enzyme';
-import React from 'react';
-import type {MouseEvent} from 'react';
-
-import {General} from 'mattermost-redux/constants';
 
 import ActivityLogModal from 'components/activity_log_modal/activity_log_modal';
+
+import {General} from 'mattermost-redux/constants';
 
 describe('components/ActivityLogModal', () => {
     const baseProps = {
