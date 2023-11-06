@@ -30,6 +30,8 @@
     .admin-console__wrapper {
         position: relative;
         height: 100%;
+        min-height: 100%;
+        max-height: 100%;
         -webkit-flex: 1 1 auto;
         flex: 1 1 auto;
         padding: 20px;
@@ -690,10 +692,6 @@
                 &.fa-users {
                     font-size: 13px;
                 }
-
-                >svg {
-                    vertical-align: bottom;
-                }
             }
         }
 
@@ -916,7 +914,7 @@
         margin: 1em 0 0.3em;
         margin-top: 1em;
 
-        .btn-tertiary {
+        .btn-link {
             &.danger {
                 color: #c55151;
             }

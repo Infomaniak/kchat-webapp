@@ -7,8 +7,6 @@ import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import tinycolor from 'tinycolor2';
-import {t} from 'utils/i18n';
-import {imageURLForUser} from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -21,6 +19,9 @@ import OverlayTrigger from 'components/overlay_trigger';
 import ProfilePopover from 'components/profile_popover';
 import SimpleTooltip, {useSynchronizedImmediate} from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
+
+import {t} from 'utils/i18n';
+import {imageURLForUser} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

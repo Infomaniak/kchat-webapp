@@ -4,7 +4,6 @@
 import type {ChangeEvent, ChangeEventHandler} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {t} from 'utils/i18n';
 
 import type {CustomEmoji} from '@mattermost/types/emojis';
 import type {ServerError} from '@mattermost/types/errors';
@@ -19,6 +18,8 @@ import SaveButton from 'components/save_button';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
 import SearchIcon from 'components/widgets/icons/fa_search_icon';
+
+import {t} from 'utils/i18n';
 
 const EMOJI_PER_PAGE = 50;
 const EMOJI_SEARCH_DELAY_MILLISECONDS = 200;

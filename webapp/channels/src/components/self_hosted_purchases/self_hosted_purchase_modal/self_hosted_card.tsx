@@ -3,9 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {
-    SelfHostedProducts,
-} from 'utils/constants';
 
 import type {Product} from '@mattermost/types/cloud';
 
@@ -18,6 +15,10 @@ import SeatsCalculator from 'components/seats_calculator';
 import type {Seats} from 'components/seats_calculator';
 import Consequences from 'components/seats_calculator/consequences';
 import StarMarkSvg from 'components/widgets/icons/star_mark_icon';
+
+import {
+    SelfHostedProducts,
+} from 'utils/constants';
 
 // Card has a bunch of props needed for monthly/yearly payments that
 // do not apply to self-hosted.

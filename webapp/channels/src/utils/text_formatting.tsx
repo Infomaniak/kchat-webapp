@@ -5,9 +5,10 @@
 
 import emojiRegex from 'emoji-regex';
 import type {Renderer} from 'marked';
-import {formatWithRenderer} from 'utils/markdown';
 
 import type {SystemEmoji} from '@mattermost/types/emojis';
+
+import {formatWithRenderer} from 'utils/markdown';
 
 import Constants from './constants';
 import type EmojiMap from './emoji_map.js';
@@ -50,7 +51,7 @@ export type Team = {
     display_name: string;
 };
 
-interface TextFormattingOptionsBase {
+export interface TextFormattingOptionsBase {
 
     /**
      * If specified, this word is highlighted in the resulting html.
@@ -211,9 +212,24 @@ const DEFAULT_OPTIONS: TextFormattingOptions = {
     postId: '',
 };
 
-// pattern to detect the existence of a Chinese, Japanese, or Korean character in a string
-// http://stackoverflow.com/questions/15033196/using-javascript-to-check-whether-a-string-contains-japanese-characters-includi
-const cjkPattern = /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf\uac00-\ud7a3]/;
+/**
+* pattern to detect the existence of a Chinese, Japanese, or Korean character in a string
+* http://stackoverflow.com/questions/15033196/using-javascript-to-check-whether-a-string-contains-japanese-characters-includi
+* recently enhanced to support some more CJK, Hangul, and Cyrillic characters
+* CJK punctuation: \u3000-\u303f
+* Hiragana: \u3040-\u309f
+* Katakana: \u30a0-\u30ff
+* Full-width ASCII characters: \uff00-\uff9f
+* Common CJK characters: \u4e00-\u9fff
+* Additional CJK characters: \u3400-\u4dbf
+* Hangul characters: \uac00-\ud7af
+* Hangul Jamo: \u1100-\u11ff
+* Hangul Compatibility Jamo: \u3130-\u318f
+* Cyrillic characters: \u0400-\u04ff, \u0500-\u052f
+* Additional CJK and Hangul compatibility characters: \u2de0-\u2dff
+**/
+// eslint-disable-next-line no-misleading-character-class
+export const cjkPattern = /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf\uac00-\ud7a3\u1100-\u11ff\u3130-\u318f\u0400-\u04ff\u0500-\u052f\u2de0-\u2dff]/;
 
 export function formatText(
     text: string,
@@ -478,7 +494,7 @@ export function autolinkAtMentions(text: string, tokens: Tokens): string {
     return output;
 }
 
-export function allAtMentions(text: string): RegExpMatchArray {
+export function allAtMentions(text: string): RegExpMatchArray | [] {
     return text.match(Constants.SPECIAL_MENTIONS_REGEX && AT_MENTION_PATTERN) || [];
 }
 

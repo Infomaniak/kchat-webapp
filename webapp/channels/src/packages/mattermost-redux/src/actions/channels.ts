@@ -1,20 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-/* eslint-disable max-lines */
 
 /* eslint-disable max-lines */
 
-import {AnyAction} from 'redux';
+import type {AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 
+import type {Channel, ChannelNotifyProps, ChannelMembership, ChannelModerationPatch, ChannelsWithTotalCount, ChannelSearchOpts, ChannelType, ServerChannel} from '@mattermost/types/channels';
+import type {ServerError} from '@mattermost/types/errors';
+import type {PreferenceType} from '@mattermost/types/preferences';
+
 import {ChannelTypes, PreferenceTypes, UserTypes} from 'mattermost-redux/action_types';
-
 import {Client4} from 'mattermost-redux/client';
-
-import {General, Preferences} from '../constants';
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
 import {MarkUnread} from 'mattermost-redux/constants/channels';
-
 import {getCategoryInTeamByType} from 'mattermost-redux/selectors/entities/channel_categories';
 import {
     getChannel as getChannelSelector,
@@ -26,17 +25,11 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, getServerVersion} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-
-import {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
-
-import {Channel, ChannelNotifyProps, ChannelMembership, ChannelModerationPatch, ChannelsWithTotalCount, ChannelSearchOpts, ChannelType} from '@mattermost/types/channels';
-
-import {PreferenceType} from '@mattermost/types/preferences';
-import {ServerError} from '@mattermost/types/errors';
-
+import type {ActionFunc, ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import {getChannelsIdForTeam, getChannelByName} from 'mattermost-redux/utils/channel_utils';
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 
+// eslint-disable-next-line no-restricted-imports
 import {ActionTypes} from 'utils/constants';
 
 import {addChannelToInitialCategory, addChannelToCategory} from './channel_categories';
@@ -45,6 +38,8 @@ import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {savePreferences} from './preferences';
 import {loadRolesIfNeeded} from './roles';
 import {getMissingProfilesByIds} from './users';
+
+import {General, Preferences} from '../constants';
 
 export function selectChannel(channelId: string) {
     return {
@@ -526,6 +521,47 @@ export function fetchMyChannelsAndMembersREST(teamId: string): ActionFunc {
         }
 
         return {data: {channels, members: channelMembers}};
+    };
+}
+
+export function fetchChannelsAndMembers(teamId: string): ActionFunc<{channels: ServerChannel[]; channelMembers: ChannelMembership[]}> {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        let channels;
+        let channelMembers;
+        try {
+            [channels, channelMembers] = await Promise.all([
+                Client4.getMyChannels(teamId),
+                Client4.getMyChannelMembers(teamId),
+            ]);
+        } catch (error) {
+            forceLogoutIfNecessary(error, dispatch, getState);
+            dispatch(logError(error));
+            return {error: error as ServerError};
+        }
+
+        dispatch(batchActions([
+            {
+                type: ChannelTypes.RECEIVED_CHANNELS,
+                teamId,
+                data: channels,
+            },
+            {
+                type: ChannelTypes.RECEIVED_MY_CHANNEL_MEMBERS,
+                data: channelMembers,
+            },
+        ]));
+
+        const roles = new Set<string>();
+        for (const member of channelMembers) {
+            for (const role of member.roles.split(' ')) {
+                roles.add(role);
+            }
+        }
+        if (roles.size > 0) {
+            dispatch(loadRolesIfNeeded(roles));
+        }
+
+        return {data: {channels, channelMembers}};
     };
 }
 

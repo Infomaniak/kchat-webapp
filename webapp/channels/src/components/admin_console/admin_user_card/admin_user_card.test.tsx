@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import AdminUserCard from 'components/admin_console/admin_user_card/admin_user_card';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/admin_console/admin_user_card/admin_user_card', () => {
     const user = TestHelper.getUserMock({

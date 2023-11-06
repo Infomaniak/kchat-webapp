@@ -6,6 +6,7 @@ import {mount} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
 import type {DeepPartial} from 'redux';
+
 import {renderWithIntlAndStore} from 'tests/react_testing_utils';
 import mockStore from 'tests/test_store';
 

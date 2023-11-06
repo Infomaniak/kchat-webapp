@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as Utils from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -13,6 +12,8 @@ import AdminNavbarDropdown from 'components/admin_console/admin_navbar_dropdown'
 import MenuIcon from 'components/widgets/icons/menu_icon';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Avatar from 'components/widgets/users/avatar';
+
+import * as Utils from 'utils/utils';
 
 type Props = {
     currentUser: UserProfile;

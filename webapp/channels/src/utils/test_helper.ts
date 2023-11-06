@@ -1,25 +1,31 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {Channel, ChannelMembership, ChannelNotifyProps, ChannelWithTeamData} from '@mattermost/types/channels';
-import {Bot} from '@mattermost/types/bots';
-import {Role} from '@mattermost/types/roles';
-import {UserProfile, UserAccessToken} from '@mattermost/types/users';
+import type {Bot} from '@mattermost/types/bots';
+import type {ChannelCategory} from '@mattermost/types/channel_categories';
+import {CategorySorting} from '@mattermost/types/channel_categories';
+import type {Channel, ChannelMembership, ChannelNotifyProps, ChannelWithTeamData} from '@mattermost/types/channels';
+import type {Invoice, Product, Subscription, CloudCustomer} from '@mattermost/types/cloud';
+import type {ClientLicense} from '@mattermost/types/config';
+import type {SystemEmoji, CustomEmoji} from '@mattermost/types/emojis';
+import type {FileInfo} from '@mattermost/types/files';
+import type {Group} from '@mattermost/types/groups';
+import type {Command, IncomingWebhook} from '@mattermost/types/integrations';
+import type {Post} from '@mattermost/types/posts';
+import type {Role} from '@mattermost/types/roles';
 import {Team, TeamMembership} from '@mattermost/types/teams';
-import {Group} from '@mattermost/types/groups';
-import {FileInfo} from '@mattermost/types/files';
-import {Post} from '@mattermost/types/posts';
-import {CategorySorting, ChannelCategory} from '@mattermost/types/channel_categories';
-import {Command, IncomingWebhook} from '@mattermost/types/integrations';
+import {UserProfile, UserAccessToken} from '@mattermost/types/users';
+
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
-import {SystemEmoji, CustomEmoji} from '@mattermost/types/emojis';
-import {Session} from '@mattermost/types/sessions';
-import {ProductComponent} from 'types/store/plugins';
-import {ClientLicense} from '@mattermost/types/config';
-import {PreferenceType} from '@mattermost/types/preferences';
-import {Reaction} from '@mattermost/types/reactions';
+
+import type {Session} from '@mattermost/types/sessions';
+
 import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
-import {Invoice, Product, Subscription, CloudCustomer} from '@mattermost/types/cloud';
+
+import type {ProductComponent} from 'types/store/plugins';
+
+import type {PreferenceType} from '@mattermost/types/preferences';
+import type {Reaction} from '@mattermost/types/reactions';
 
 export class TestHelper {
     public static getUserMock(override: Partial<UserProfile> = {}): UserProfile {

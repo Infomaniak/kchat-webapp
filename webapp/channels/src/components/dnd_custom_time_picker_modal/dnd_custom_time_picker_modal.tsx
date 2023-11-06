@@ -4,10 +4,6 @@
 import type {Moment} from 'moment-timezone';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants, {UserStatuses} from 'utils/constants';
-import {toUTCUnix} from 'utils/datetime';
-import {getCurrentMomentForTimezone} from 'utils/timezone';
-import {isKeyPressed, localizeMessage} from 'utils/utils';
 
 import type {UserStatus} from '@mattermost/types/users';
 
@@ -15,6 +11,11 @@ import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import DateTimeInputContainer, {getRoundedTime} from 'components/custom_status/date_time_input';
 import GenericModal from 'components/generic_modal';
+
+import Constants, {UserStatuses} from 'utils/constants';
+import {toUTCUnix} from 'utils/datetime';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
+import {isKeyPressed, localizeMessage} from 'utils/utils';
 
 import './dnd_custom_time_picker_modal.scss';
 

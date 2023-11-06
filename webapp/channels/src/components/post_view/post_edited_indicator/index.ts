@@ -2,30 +2,30 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {bindActionCreators, Dispatch} from 'redux';
+import type {Post} from '@mattermost/types/posts';
 
+import {getPostEditHistory} from 'mattermost-redux/actions/posts';
+import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
+import {getPost} from 'mattermost-redux/selectors/entities/posts';
+import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {makeGetUserTimezone} from 'mattermost-redux/selectors/entities/timezone';
 import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
-import {getBool} from 'mattermost-redux/selectors/entities/preferences';
-import {getPost} from 'mattermost-redux/selectors/entities/posts';
-import {getPostEditHistory} from 'mattermost-redux/actions/posts';
-import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
-import {getChannel} from 'mattermost-redux/selectors/entities/channels';
+
+import {openShowEditHistory} from 'actions/views/rhs';
 
 import {Preferences} from 'utils/constants';
 import {isPostOwner, canEditPost} from 'utils/post_utils';
 
-import {areTimezonesEnabledAndSupported} from '../../../selectors/general';
-import {GlobalState} from '../../../types/store';
-import {Props as TimestampProps} from '../../timestamp/timestamp';
-
-import {openShowEditHistory} from 'actions/views/rhs';
-
-import {Post} from '@mattermost/types/posts';
-
 import PostEditedIndicator from './post_edited_indicator';
+
+import {areTimezonesEnabledAndSupported} from '../../../selectors/general';
+import type {GlobalState} from '../../../types/store';
+import type {Props as TimestampProps} from '../../timestamp/timestamp';
 
 type OwnProps = {
     postId?: string;

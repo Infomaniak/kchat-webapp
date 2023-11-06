@@ -8,7 +8,8 @@ import {
 } from '@mattermost/client';
 
 const Client4 = new ClientClass4();
-Client4.setWebappVersion(GIT_RELEASE);
+
+//Client4.setWebappVersion(GIT_RELEASE);
 
 export {
     Client4,

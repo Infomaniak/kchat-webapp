@@ -5,7 +5,6 @@ import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedDate, FormattedMessage, FormattedNumber} from 'react-intl';
 import {useDispatch} from 'react-redux';
-import {BillingSchemes, CloudLinks, TrialPeriodDays, ModalIdentifiers} from 'utils/constants';
 
 import type {Invoice, InvoiceLineItem, Product} from '@mattermost/types/cloud';
 
@@ -21,6 +20,8 @@ import UpgradeSvg from 'components/common/svg_images_components/upgrade_svg';
 import ExternalLink from 'components/external_link';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import {BillingSchemes, CloudLinks, TrialPeriodDays, ModalIdentifiers} from 'utils/constants';
 
 export const noBillingHistory = (
     <div className='BillingSummary__noBillingHistory'>

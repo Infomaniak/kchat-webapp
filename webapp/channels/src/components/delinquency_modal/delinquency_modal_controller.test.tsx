@@ -4,9 +4,6 @@
 import {screen} from '@testing-library/react';
 import React from 'react';
 import * as reactRedux from 'react-redux';
-import {renderWithIntl} from 'tests/react_testing_utils';
-import {CloudProducts, ModalIdentifiers, Preferences} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
 
 import * as cloudActions from 'mattermost-redux/actions/cloud';
 
@@ -14,6 +11,10 @@ import * as StorageSelectors from 'selectors/storage';
 import configureStore from 'store';
 
 import ModalController from 'components/modal_controller';
+
+import {renderWithIntl} from 'tests/react_testing_utils';
+import {CloudProducts, ModalIdentifiers, Preferences} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import DelinquencyModalController from './index';
 

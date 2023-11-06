@@ -6,13 +6,14 @@ import type {ReactNode, CSSProperties} from 'react';
 import React from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
-import {t} from 'utils/i18n';
 
 import ChannelFilesIcon from 'components/widgets/icons/channel_files_icon';
 import IKFlagIcon from 'components/widgets/icons/ik_flag_icon';
 import MentionsIcon from 'components/widgets/icons/mentions_icon';
 import PinIcon from 'components/widgets/icons/pin_icon';
 import SearchIcon from 'components/widgets/icons/search_icon';
+
+import {t} from 'utils/i18n';
 
 import {NoResultsVariant, NoResultsLayout} from './types';
 

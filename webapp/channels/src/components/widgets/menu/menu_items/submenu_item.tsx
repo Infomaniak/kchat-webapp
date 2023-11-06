@@ -4,9 +4,10 @@
 import classNames from 'classnames';
 import type {CSSProperties} from 'react';
 import React from 'react';
-import * as Utils from 'utils/utils';
 
 import {showMobileSubMenuModal} from 'actions/global_actions';
+
+import * as Utils from 'utils/utils';
 
 import type {Menu} from 'types/store/plugins';
 

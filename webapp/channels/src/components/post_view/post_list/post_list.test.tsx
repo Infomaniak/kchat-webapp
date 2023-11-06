@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {PostRequestTypes} from 'utils/constants';
 
 import VirtPostList from 'components/post_view/post_list_virtualized/post_list_virtualized';
+
+import {PostRequestTypes} from 'utils/constants';
 
 import PostList, {MAX_EXTRA_PAGES_LOADED} from './post_list';
 

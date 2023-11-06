@@ -2,10 +2,11 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import mattermostIcon from 'images/icon50x50.png';
 import React from 'react';
 
 import SystemNotice from 'components/system_notice/system_notice';
+
+import mattermostIcon from 'images/icon50x50.png';
 
 describe('components/SystemNotice', () => {
     const baseProps = {

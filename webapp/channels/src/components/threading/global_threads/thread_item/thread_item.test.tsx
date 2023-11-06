@@ -4,9 +4,6 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import type {ComponentProps} from 'react';
-import {WindowSizes} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
@@ -18,6 +15,10 @@ jest.mock('mattermost-redux/actions/threads');
 import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
 
 import Tag from 'components/widgets/tag/tag';
+
+import {WindowSizes} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
+import * as Utils from 'utils/utils';
 jest.mock('actions/views/threads');
 
 import ThreadItem from './thread_item';

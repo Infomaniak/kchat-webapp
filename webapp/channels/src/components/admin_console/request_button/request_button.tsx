@@ -3,12 +3,13 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import SuccessIcon from 'components/widgets/icons/fa_success_icon';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
+
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 /**
  * A button which, when clicked, performs an action and displays

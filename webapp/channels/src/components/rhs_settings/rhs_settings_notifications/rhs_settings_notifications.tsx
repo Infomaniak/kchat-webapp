@@ -10,9 +10,6 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import ReactSelect from 'react-select';
 import semver from 'semver';
-import Constants, {NotificationLevels, Preferences} from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
-import {localizeMessage, moveCursorToEnd} from 'utils/utils';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserNotifyProps, UserProfile} from '@mattermost/types/users';
@@ -22,6 +19,10 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 // import SettingItemMin from 'components/setting_item_min';
 
 import Toggle from 'components/toggle';
+
+import Constants, {NotificationLevels, Preferences} from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
+import {localizeMessage, moveCursorToEnd} from 'utils/utils';
 
 import DesktopNotificationSettings from './desktop_notification_setting/desktop_notification_settings';
 

@@ -3,12 +3,13 @@
 
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {t} from 'utils/i18n';
 
 import type {Command} from '@mattermost/types/integrations.js';
 import type {Team} from '@mattermost/types/teams.js';
 
 import type {ActionResult} from 'mattermost-redux/types/actions.js';
+
+import {t} from 'utils/i18n';
 
 import AbstractCommand from '../abstract_command.jsx';
 

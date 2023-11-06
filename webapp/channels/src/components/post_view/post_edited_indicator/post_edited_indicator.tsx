@@ -4,9 +4,10 @@
 import Icon from '@infomaniak/compass-components/foundations/icon';
 import React from 'react';
 import {useIntl} from 'react-intl';
-import {isSameDay, isWithinLastWeek, isYesterday} from 'utils/datetime';
 
 import {getDateForTimezone} from 'mattermost-redux/utils/timezone_utils';
+
+import {isSameDay, isWithinLastWeek, isYesterday} from 'utils/datetime';
 
 import OverlayTrigger from '../../overlay_trigger';
 import Tooltip from '../../tooltip';

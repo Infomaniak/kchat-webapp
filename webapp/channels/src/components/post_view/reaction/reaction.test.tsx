@@ -3,11 +3,12 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Reaction as ReactionType} from '@mattermost/types/reactions';
 
 import Reaction from 'components/post_view/reaction/reaction';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/post_view/Reaction', () => {
     const post = TestHelper.getPostMock({

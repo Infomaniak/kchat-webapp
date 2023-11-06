@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {localizeMessage} from 'utils/utils';
 
 import type {Team, TeamMembership} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
@@ -13,6 +12,8 @@ import {isAdmin, isSystemAdmin, isGuest} from 'mattermost-redux/utils/user_utils
 
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {localizeMessage} from 'utils/utils';
 
 type Props = {
     team: Team;

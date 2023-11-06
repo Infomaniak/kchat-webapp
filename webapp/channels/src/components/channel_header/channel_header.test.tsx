@@ -3,8 +3,6 @@
 
 import type {ComponentProps} from 'react';
 import React from 'react';
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-import Constants, {RHSStates} from 'utils/constants';
 
 import type {ChannelType} from '@mattermost/types/channels';
 import type {UserCustomStatus} from '@mattermost/types/users';
@@ -13,6 +11,9 @@ import ChannelHeader from 'components/channel_header/channel_header';
 import ChannelInfoButton from 'components/channel_header/channel_info_button';
 import Markdown from 'components/markdown';
 import GuestTag from 'components/widgets/tag/guest_tag';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import Constants, {RHSStates} from 'utils/constants';
 
 import {TestHelper} from '../../utils/test_helper';
 

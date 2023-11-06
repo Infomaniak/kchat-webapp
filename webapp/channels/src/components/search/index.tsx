@@ -4,7 +4,6 @@
 import {connect} from 'react-redux';
 import type {ActionCreatorsMapObject, Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
-import {RHSStates} from 'utils/constants';
 
 import {getMorePostsForSearch, getMoreFilesForSearch} from 'mattermost-redux/actions/search';
 import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -28,6 +27,8 @@ import {
 } from 'actions/views/rhs';
 import {getRhsState, getSearchTerms, getSearchType, getIsSearchingTerm, getIsRhsOpen, getIsRhsExpanded} from 'selectors/rhs';
 import {getIsMobileView} from 'selectors/views/browser';
+
+import {RHSStates} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

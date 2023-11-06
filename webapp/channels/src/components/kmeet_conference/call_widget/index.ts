@@ -1,30 +1,30 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import {GlobalState} from 'mattermost-redux/types/store';
-
-import {UserProfile} from 'mattermost-redux/types/users';
-
-import {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
 import {connect} from 'react-redux';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {bindActionCreators, Dispatch} from 'redux';
+import type {UserProfile} from '@mattermost/types/users';
 
-import {hideExpandedView, showExpandedView, updateAudioStatus, updateCameraStatus, updateScreenSharingStatus} from 'actions/calls';
 import {Client4} from 'mattermost-redux/client';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
-import {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import type {IDMappedObjects} from 'mattermost-redux/types/utilities';
 
+import {hideExpandedView, showExpandedView, updateAudioStatus, updateCameraStatus, updateScreenSharingStatus} from 'actions/calls';
 import {connectedCallID, connectedChannelID, expandedView, voiceChannelCallStartAt, voiceConnectedChannels, voiceConnectedProfilesInChannel, voiceUsersStatuses} from 'selectors/calls';
+
 import {ActionTypes} from 'utils/constants';
 
-import {getChannelURL} from '../utils';
-
-import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import type {GlobalState} from 'types/store';
 
 import CallWidget from './component';
+
+import {getChannelURL} from '../utils';
 
 const mapStateToProps = (state: GlobalState) => {
     const channel = getChannel(state, connectedChannelID(state));

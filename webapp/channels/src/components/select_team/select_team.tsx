@@ -1,13 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import logoImage from 'images/logo.png';
 import type {ReactNode, MouseEvent} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import Constants from 'utils/constants';
-import * as UserAgent from 'utils/user_agent';
 
 import type {CloudUsage} from '@mattermost/types/cloud';
 import type {Team} from '@mattermost/types/teams';
@@ -24,6 +21,10 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LoadingScreen from 'components/loading_screen';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import LogoutIcon from 'components/widgets/icons/fa_logout_icon';
+
+import logoImage from 'images/logo.png';
+import Constants from 'utils/constants';
+import * as UserAgent from 'utils/user_agent';
 
 import SelectTeamItem from './components/select_team_item';
 

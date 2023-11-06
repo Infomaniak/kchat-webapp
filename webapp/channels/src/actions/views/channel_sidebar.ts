@@ -1,12 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {createCategory as createCategoryRedux, moveChannelsToCategory} from 'mattermost-redux/actions/channel_categories';
+import type {ChannelCategory} from '@mattermost/types/channel_categories';
+
+import {createCategory as createCategoryRedux, moveChannelsToCategory, setCategoryCollapsed} from 'mattermost-redux/actions/channel_categories';
 import {General} from 'mattermost-redux/constants';
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
 import {getCategory, makeGetChannelIdsForCategory} from 'mattermost-redux/selectors/entities/channel_categories';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
-import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
+import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import {insertMultipleWithoutDuplicates} from 'mattermost-redux/utils/array_utils';
 
 import {getCategoriesForCurrentTeam, getChannelsInCategoryOrder, getDisplayedChannels} from 'selectors/views/channel_sidebar';
@@ -224,5 +226,13 @@ export function multiSelectChannelTo(channelId: string) {
             type: ActionTypes.MULTISELECT_CHANNEL_TO,
             data: inBetween,
         });
+    };
+}
+
+export function collapseAllCategoriesExcept(exception: (category: ChannelCategory) => boolean): ActionFunc {
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const categories = getCategoriesForCurrentTeam(getState());
+        categories.forEach((category: ChannelCategory) => dispatch(setCategoryCollapsed(category.id, exception(category))));
+        return {data: true};
     };
 }

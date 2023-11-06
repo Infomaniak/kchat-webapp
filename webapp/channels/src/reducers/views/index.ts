@@ -8,12 +8,14 @@ import addChannelDropdown from './add_channel_dropdown';
 import admin from './admin';
 import announcementBar from './announcement_bar';
 import browser from './browser';
+import calls from './calls';
 import channel from './channel';
 import channelSelectorModal from './channel_selector_modal';
 import channelSidebar from './channel_sidebar';
 import drafts from './drafts';
 import emoji from './emoji';
 import i18n from './i18n';
+import kmeetCalls from './kmeet_calls';
 import lhs from './lhs';
 import marketplace from './marketplace';
 import modals from './modals';
@@ -57,4 +59,6 @@ export default combineReducers({
     threads,
     productMenu,
     drafts,
+    calls,
+    kmeetCalls,
 });

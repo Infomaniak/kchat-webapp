@@ -5,16 +5,17 @@ import {screen} from '@testing-library/react';
 import React from 'react';
 import * as redux from 'react-redux';
 import {Provider} from 'react-redux';
-import {renderWithIntl} from 'tests/react_testing_utils';
-import mockStore from 'tests/test_store';
-import {Constants, CloudProducts} from 'utils/constants';
-import {FileSizes} from 'utils/file_utils';
 
 import type {Subscription, Product} from '@mattermost/types/cloud';
 import type {GlobalState} from '@mattermost/types/store';
 import type {UserProfile, UsersState} from '@mattermost/types/users';
 
 import * as cloudActions from 'actions/cloud';
+
+import {renderWithIntl} from 'tests/react_testing_utils';
+import mockStore from 'tests/test_store';
+import {Constants, CloudProducts} from 'utils/constants';
+import {FileSizes} from 'utils/file_utils';
 
 import Limits from './limits';
 

@@ -8,7 +8,7 @@ import {Preferences} from 'mattermost-redux/constants';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
-import {GlobalState} from 'types/store';
+import type {GlobalState} from 'types/store';
 
 import RhsLimitVisibleGMsDMs from './limit_visible_gms_dms';
 

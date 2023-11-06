@@ -3,9 +3,10 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
 
 import Popover from 'components/widgets/popover';
+
+import Constants from 'utils/constants';
 
 import type {UserProfile} from './command_provider/app_command_parser/app_command_parser_dependencies';
 import SuggestionList from './suggestion_list';

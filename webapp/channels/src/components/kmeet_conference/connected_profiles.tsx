@@ -4,7 +4,7 @@
 import React from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
-import type {UserProfile} from 'mattermost-redux/types/users';
+import type {UserProfile} from '@mattermost/types/users';
 
 import Avatar from 'components/widgets/users/avatar';
 import type {TAvatarSizeToken} from 'components/widgets/users/avatar/avatar';

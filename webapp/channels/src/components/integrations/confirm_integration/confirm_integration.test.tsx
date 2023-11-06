@@ -4,15 +4,16 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Router} from 'react-router-dom';
-import {renderWithIntlAndStore} from 'tests/react_testing_utils';
-import {getHistory} from 'utils/browser_history';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Bot} from '@mattermost/types/bots';
 import type {IncomingWebhook, OAuthApp, OutgoingWebhook} from '@mattermost/types/integrations';
 import type {IDMappedObjects} from '@mattermost/types/utilities';
 
 import ConfirmIntegration from 'components/integrations/confirm_integration/confirm_integration';
+
+import {renderWithIntlAndStore} from 'tests/react_testing_utils';
+import {getHistory} from 'utils/browser_history';
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/integrations/ConfirmIntegration', () => {
     const id = 'r5tpgt4iepf45jt768jz84djic';

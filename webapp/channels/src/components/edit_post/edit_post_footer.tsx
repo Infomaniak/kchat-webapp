@@ -4,10 +4,11 @@
 import React, {memo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {isMac} from 'utils/utils';
 
 import {Preferences} from 'mattermost-redux/constants';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
+
+import {isMac} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

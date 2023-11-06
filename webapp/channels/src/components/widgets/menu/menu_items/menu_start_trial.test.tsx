@@ -3,6 +3,7 @@
 
 import React from 'react';
 import * as reactRedux from 'react-redux';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import mockStore from 'tests/test_store';
 

@@ -4,11 +4,12 @@
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {injectIntl} from 'react-intl';
-import {createCallRequest, makeCallErrorResponse} from 'utils/apps';
 
 import type {AppContext, AppField, AppForm, AppFormValues, FormResponseData, AppLookupResponse} from '@mattermost/types/apps';
 
 import {AppCallResponseTypes} from 'mattermost-redux/constants/apps';
+
+import {createCallRequest, makeCallErrorResponse} from 'utils/apps';
 
 import type {DoAppSubmit, DoAppFetchForm, DoAppLookup, DoAppCallResult, PostEphemeralCallResponseForContext} from 'types/apps';
 

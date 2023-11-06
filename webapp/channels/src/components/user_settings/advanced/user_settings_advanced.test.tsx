@@ -4,11 +4,12 @@
 import {shallow} from 'enzyme';
 import type {ComponentProps} from 'react';
 import React from 'react';
+
+import AdvancedSettingsDisplay from 'components/user_settings/advanced/user_settings_advanced';
+
 import {Preferences} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 import {isMac} from 'utils/utils';
-
-import AdvancedSettingsDisplay from 'components/user_settings/advanced/user_settings_advanced';
 
 jest.mock('actions/global_actions');
 jest.mock('utils/utils');

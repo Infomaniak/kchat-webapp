@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import type {ComponentProps} from 'react';
 import React, {memo} from 'react';
 import {useIntl} from 'react-intl';
+
 import {t} from 'utils/i18n';
 
 import Button from '../button';

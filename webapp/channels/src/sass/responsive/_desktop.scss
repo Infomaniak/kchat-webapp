@@ -1,9 +1,23 @@
 @charset "utf-8";
 
+@media screen and (min-width: 1680px) and (max-width: 2135px) {
+    .inner-wrap {
+        &.move--left {
+            .ActivityAndInsights {
+                .insights-card {
+                    &.large {
+                        align-self: flex-start;
+                    }
+                }
+            }
+        }
+    }
+}
+
 @media screen and (min-width: 1680px) {
     .sidebar--right,
     .sidebar--right--width-holder {
-        width: var(--overrideRhsWidth, 500px);
+        width: 500px;
 
         .sidebar--right__title__channel {
             max-width: 30rem;
@@ -45,10 +59,6 @@
             }
         }
     }
-
-    .backstage-content {
-        margin: 46px 46px 46px 150px;
-    }
 }
 
 @media screen and (max-width: 1280px) {
@@ -64,10 +74,6 @@
                 margin: 10px auto 0;
             }
         }
-    }
-
-    .integration-option {
-        flex: 0 0 45%;
     }
 }
 

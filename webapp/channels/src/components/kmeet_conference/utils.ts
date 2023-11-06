@@ -1,22 +1,22 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
+import type {Channel} from '@mattermost/types/channels';
+import type {Team} from '@mattermost/types/teams';
+import type {UserProfile} from '@mattermost/types/users';
+
+import {Client4} from 'mattermost-redux/client';
+import {getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
 import {
     getCurrentRelativeTeamUrl,
     getCurrentTeamId,
     getTeam,
 } from 'mattermost-redux/selectors/entities/teams';
-
-import {Client4} from 'mattermost-redux/client';
-
-import {getRedirectChannelNameForTeam} from 'mattermost-redux/selectors/entities/channels';
 import {isDirectChannel, isGroupChannel} from 'mattermost-redux/utils/channel_utils';
 
-import {Team} from 'mattermost-redux/types/teams';
-import {Channel, ChannelMembership} from 'mattermost-redux/types/channels';
-import {UserProfile} from 'mattermost-redux/types/users';
+import type {UserState} from 'reducers/views/calls';
 
-import {GlobalState} from 'mattermost-redux/types/store';
-import {UserState} from 'reducers/views/calls';
+import type {GlobalState} from 'types/store';
 
 export function getWSConnectionURL(): string {
     const loc = window.location;

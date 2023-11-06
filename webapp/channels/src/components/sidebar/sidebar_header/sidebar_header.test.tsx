@@ -4,6 +4,7 @@
 import IconButton from '@infomaniak/compass-components/components/icon-button';
 import {shallow} from 'enzyme';
 import React from 'react';
+
 import {CloudProducts} from 'utils/constants';
 import {FileSizes} from 'utils/file_utils';
 

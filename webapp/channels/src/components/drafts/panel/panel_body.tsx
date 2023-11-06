@@ -5,7 +5,6 @@ import {CheckCircleOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {imageURLForUser, handleFormattedTextClick} from 'utils/utils';
 
 import type {PostPriorityMetadata} from '@mattermost/types/posts';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
@@ -17,6 +16,8 @@ import FilePreview from 'components/file_preview';
 import Markdown from 'components/markdown';
 import PriorityLabel from 'components/post_priority/post_priority_label';
 import ProfilePicture from 'components/profile_picture';
+
+import {imageURLForUser, handleFormattedTextClick} from 'utils/utils';
 
 import type {PostDraft} from 'types/store/draft';
 

@@ -4,12 +4,13 @@
 import classNames from 'classnames';
 import React, {useCallback} from 'react';
 import {useIntl} from 'react-intl';
-import {Constants} from 'utils/constants';
 
 import type {ChannelType} from '@mattermost/types/channels';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import {Constants} from 'utils/constants';
 
 import CheckCircleIcon from '../icons/check_circle_icon';
 import GlobeCircleSolidIcon from '../icons/globe_circle_solid_icon';

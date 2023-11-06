@@ -5,7 +5,6 @@ import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import Constants, {InsightsScopes} from 'utils/constants';
 
 import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
 import type {TopChannel, TopChannelGraphData} from '@mattermost/types/insights';
@@ -18,6 +17,8 @@ import {getCurrentUserTimezone} from 'selectors/general';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants, {InsightsScopes} from 'utils/constants';
 
 import TopChannelsLineChart from './top_channels_line_chart/top_channels_line_chart';
 

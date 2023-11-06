@@ -4,8 +4,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
-import Constants, {RHSStates} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
@@ -13,6 +11,9 @@ import KeyboardShortcutSequence, {
 import LocalizedIcon from 'components/localized_icon';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants, {RHSStates} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {RhsState} from 'types/store/rhs';
 

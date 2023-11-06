@@ -6,8 +6,6 @@ import moment from 'moment';
 import React, {useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {CloudBanners, Preferences} from 'utils/constants';
-import {getBrowserTimezone} from 'utils/timezone';
 
 import type {GlobalState} from '@mattermost/types/store';
 
@@ -20,6 +18,9 @@ import {SalesInquiryIssue} from 'selectors/cloud';
 import AlertBanner from 'components/alert_banner';
 import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import UpgradeLink from 'components/widgets/links/upgrade_link';
+
+import {CloudBanners, Preferences} from 'utils/constants';
+import {getBrowserTimezone} from 'utils/timezone';
 
 import './cloud_trial_banner.scss';
 

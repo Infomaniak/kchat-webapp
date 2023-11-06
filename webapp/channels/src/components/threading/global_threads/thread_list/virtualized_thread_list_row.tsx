@@ -4,7 +4,6 @@
 import React, {memo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {areEqual} from 'react-window';
-import {Constants} from 'utils/constants';
 
 import type {UserThread} from '@mattermost/types/threads';
 
@@ -14,6 +13,8 @@ import NoResultsIndicator from 'components/no_results_indicator';
 import {NoResultsLayout} from 'components/no_results_indicator/types';
 import {SearchShortcut} from 'components/search_shortcut/search_shortcut';
 import {ShortcutKeyVariant} from 'components/shortcut_key';
+
+import {Constants} from 'utils/constants';
 
 import ThreadItem from '../thread_item';
 

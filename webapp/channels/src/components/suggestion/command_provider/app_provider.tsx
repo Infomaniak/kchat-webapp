@@ -3,12 +3,13 @@
 
 import type React from 'react';
 import type {Store} from 'redux';
-import {Constants} from 'utils/constants';
 
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 
 import {openAppsModal} from 'actions/apps';
 import globalStore from 'stores/redux_store';
+
+import {Constants} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

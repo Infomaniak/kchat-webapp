@@ -2,9 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React, {useCallback} from 'react';
-import {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import type {Group} from '@mattermost/types/groups';
 
@@ -14,6 +11,10 @@ import LocalizedIcon from 'components/localized_icon';
 import UpdateUserGroupModal from 'components/update_user_group_modal';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 

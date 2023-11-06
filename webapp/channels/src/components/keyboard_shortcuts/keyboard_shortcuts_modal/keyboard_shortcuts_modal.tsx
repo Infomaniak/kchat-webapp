@@ -5,15 +5,16 @@ import React, {useCallback, useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import {defineMessages, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {suitePluginIds} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import type {
     KeyboardShortcutDescriptor} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import KeyboardShortcutSequence, {
     KEYBOARD_SHORTCUTS,
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+
+import {suitePluginIds} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

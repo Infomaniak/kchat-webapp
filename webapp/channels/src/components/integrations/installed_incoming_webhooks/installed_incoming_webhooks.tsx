@@ -3,8 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {IncomingWebhook} from '@mattermost/types/integrations';
@@ -20,6 +18,9 @@ import BackstageList from 'components/backstage/components/backstage_list';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import InstalledIncomingWebhook, {matchesFilter} from 'components/integrations/installed_incoming_webhook';
+
+import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 type Props = {
     team: Team;

@@ -4,8 +4,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {CloudProducts, ModalIdentifiers} from 'utils/constants';
-import {isCloudLicense} from 'utils/license_utils';
 
 import {getCloudSubscription, getSubscriptionProduct} from 'mattermost-redux/selectors/entities/cloud';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
@@ -14,6 +12,9 @@ import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
 import ExternalLink from 'components/external_link';
+
+import {CloudProducts, ModalIdentifiers} from 'utils/constants';
+import {isCloudLicense} from 'utils/license_utils';
 
 import DeleteWorkspaceModal from './delete_workspace_modal';
 

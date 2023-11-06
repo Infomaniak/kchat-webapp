@@ -5,10 +5,11 @@ import memoize from 'memoize-one';
 import type {ReactNode} from 'react';
 import React from 'react';
 import {Overlay} from 'react-bootstrap';
-import {Constants} from 'utils/constants';
-import {popOverOverlayPosition} from 'utils/position_utils';
 
 import type {Emoji} from '@mattermost/types/emojis';
+
+import {Constants} from 'utils/constants';
+import {popOverOverlayPosition} from 'utils/position_utils';
 
 import EmojiPickerTabs from './emoji_picker_tabs';
 

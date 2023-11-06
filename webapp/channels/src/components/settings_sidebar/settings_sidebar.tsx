@@ -3,6 +3,7 @@
 
 import type {RefObject} from 'react';
 import React from 'react';
+
 import Constants from 'utils/constants';
 import * as UserAgent from 'utils/user_agent';
 import {a11yFocus, isKeyPressed} from 'utils/utils';

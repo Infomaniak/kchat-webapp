@@ -5,7 +5,6 @@ import React, {useEffect} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-import Constants, {CloudProducts} from 'utils/constants';
 
 import {getCloudProducts, getCloudSubscription} from 'mattermost-redux/actions/cloud';
 import {getCloudSubscription as selectCloudSubscription, getSubscriptionProduct as selectSubscriptionProduct, isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
@@ -16,6 +15,8 @@ import type {TelemetryProps} from 'components/common/hooks/useOpenPricingModal';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants, {CloudProducts} from 'utils/constants';
 
 const UpgradeButton = styled.button`
 background: var(--denim-button-bg);

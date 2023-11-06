@@ -8,6 +8,7 @@ import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {CSSTransition} from 'react-transition-group';
 import styled from 'styled-components';
+
 import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 
 import FormattingIcon, {IconContainer} from './formatting_icon';

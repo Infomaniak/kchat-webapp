@@ -5,8 +5,6 @@ import IconButton from '@infomaniak/compass-components/components/icon-button';
 import React, {useEffect, useState, useCallback} from 'react';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
-import Constants from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -17,6 +15,9 @@ import KeyboardShortcutSequence, {
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 const HistoryButtonsContainer = styled.nav`
     display: flex;

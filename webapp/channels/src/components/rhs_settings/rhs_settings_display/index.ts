@@ -2,26 +2,25 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-
-import {bindActionCreators, Dispatch} from 'redux';
-
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 import timezones from 'timezones.json';
 
-import {GenericAction} from 'mattermost-redux/types/actions';
+import {CollapsedThreads} from '@mattermost/types/config';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {autoUpdateTimezone} from 'mattermost-redux/actions/timezone';
 import {updateMe} from 'mattermost-redux/actions/users';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
-import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 import {get, isCollapsedThreadsAllowed, getCollapsedThreadsPreference} from 'mattermost-redux/selectors/entities/preferences';
 import {getTimezoneLabel, makeGetUserTimezone} from 'mattermost-redux/selectors/entities/timezone';
+import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
+import type {GenericAction} from 'mattermost-redux/types/actions';
 import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
 
-import {GlobalState} from 'types/store';
 import {Preferences} from 'utils/constants';
 
-import {CollapsedThreads} from '@mattermost/types/config';
+import type {GlobalState} from 'types/store';
 
 import RhsSettingsDisplay from './rhs_settings_display';
 

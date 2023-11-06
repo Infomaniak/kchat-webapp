@@ -3,15 +3,15 @@
 
 import {connect} from 'react-redux';
 
-import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getPost} from 'mattermost-redux/selectors/entities/posts';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {makeGetThreadOrSynthetic} from 'mattermost-redux/selectors/entities/threads';
 
-import {PostDraft} from 'types/store/draft';
-import {GlobalState} from 'types/store';
-
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getChannelURL} from 'utils/utils';
+
+import type {GlobalState} from 'types/store';
+import type {PostDraft} from 'types/store/draft';
 
 import ThreadDraft from './thread_draft';
 

@@ -5,6 +5,7 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import {FormattedMessage} from 'react-intl';
+
 import * as Utils from 'utils/utils';
 const SettingsSidebar = React.lazy(() => import('components/settings_sidebar'));
 

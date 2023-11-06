@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {Modal} from 'react-bootstrap';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import ConfirmModalRedux from './confirm_modal_redux';

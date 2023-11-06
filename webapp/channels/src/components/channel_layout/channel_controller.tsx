@@ -2,11 +2,8 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import Pluggable from 'plugins/pluggable';
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {Constants} from 'utils/constants';
-import {isInternetExplorer, isEdge} from 'utils/user_agent';
 
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
@@ -17,6 +14,10 @@ import FaviconTitleHandler from 'components/favicon_title_handler';
 import LoadingScreen from 'components/loading_screen';
 import ResetStatusModal from 'components/reset_status_modal';
 import Sidebar from 'components/sidebar';
+
+import Pluggable from 'plugins/pluggable';
+import {Constants} from 'utils/constants';
+import {isInternetExplorer, isEdge} from 'utils/user_agent';
 
 const BODY_CLASS_FOR_CHANNEL = ['app__body', 'channel-view'];
 

@@ -5,7 +5,6 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import type {IntlShape} from 'react-intl';
 import {injectIntl} from 'react-intl';
-import {getRoleForTrackFlow} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
@@ -19,6 +18,8 @@ import {isEmail} from 'mattermost-redux/utils/helpers';
 
 import {openExternalLimitModalIfNeeded} from 'actions/cloud';
 import {trackEvent} from 'actions/telemetry_actions';
+
+import {getRoleForTrackFlow} from 'utils/utils';
 
 import {InviteType} from './invite_as';
 import type {InviteState} from './invite_view';

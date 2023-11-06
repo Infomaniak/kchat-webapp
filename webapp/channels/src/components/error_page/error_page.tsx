@@ -2,18 +2,18 @@
 // See LICENSE.txt for license information.
 
 import crypto from 'crypto';
-
 import kSuite from 'images/ik/kSuite.svg';
-import MattermostLogoSvg from 'images/logo.svg';
 import loaderkChat from 'images/logo_compact.png';
 import NoTeamIcon from 'images/no_team_icon.png';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import {ErrorPageTypes, Constants} from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
 
 import * as GlobalActions from 'actions/global_actions';
+
+import MattermostLogoSvg from 'images/logo.svg';
+import {ErrorPageTypes, Constants} from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
 
 import SvgIlluErrorBlocked from './assets/SvgIlluErrorBlocked';
 import SvgIlluErrorMaintenance from './assets/SvgIlluErrorMaintenance';

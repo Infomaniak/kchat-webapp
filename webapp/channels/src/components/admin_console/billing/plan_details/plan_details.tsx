@@ -3,10 +3,11 @@
 
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {CloudProducts} from 'utils/constants';
 
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import Tag from 'components/widgets/tag/tag';
+
+import {CloudProducts} from 'utils/constants';
 
 import './plan_details.scss';
 

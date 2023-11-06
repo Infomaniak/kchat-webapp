@@ -3,11 +3,12 @@
 
 import {connect} from 'react-redux';
 
-import {GlobalState} from 'types/store';
-
 import {getIsMobileView} from 'selectors/views/browser';
 
-import RhsSettings, {Props} from './rhs_settings_header';
+import type {GlobalState} from 'types/store';
+
+import type {Props} from './rhs_settings_header';
+import RhsSettings from './rhs_settings_header';
 
 function mapStateToProps(state: GlobalState) {
     const isMobile = getIsMobileView(state);

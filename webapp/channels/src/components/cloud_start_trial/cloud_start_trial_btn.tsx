@@ -4,7 +4,6 @@
 import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
-import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
@@ -14,6 +13,8 @@ import {openModal, closeModal} from 'actions/views/modals';
 
 import useGetSubscription from 'components/common/hooks/useGetSubscription';
 import TrialBenefitsModal from 'components/trial_benefits_modal/trial_benefits_modal';
+
+import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import RequestBusinessEmailModal from './request_business_email_modal';
 import './cloud_start_trial_btn.scss';

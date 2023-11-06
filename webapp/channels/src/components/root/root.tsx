@@ -3,71 +3,34 @@
 
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
-
-import {Client4} from 'mattermost-redux/client';
-import {rudderAnalytics, RudderTelemetryHandler} from 'mattermost-redux/client/rudder';
-
-import type {ProductComponent, PluginComponent} from 'types/store/plugins';
-
-import SystemNotice from 'components/system_notice';
-
-// import OpenPricingModalPost from 'components/custom_open_pricing_modal_post_renderer';
-// import OpenPluginInstallPost from 'components/custom_open_plugin_install_post_renderer';
-
-
-// import BrowserStore from 'stores/browser_store';
-
-import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
-import {EmojiIndicesByAlias} from 'utils/emoji';
-import * as Utils from 'utils/utils';
-import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
-import webSocketClient from 'client/web_websocket_client.jsx';
 import deepEqual from 'fast-deep-equal';
 import throttle from 'lodash/throttle';
-import {initializePlugins} from 'plugins';
-import Pluggable from 'plugins/pluggable';
 import React from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
 
-import LocalStorageStore from 'stores/local_storage_store';
-
 import 'plugins/export.js';
+import type {UserProfile} from '@mattermost/types/users';
 
-const LazyErrorPage = Utils.lazyWithRetries(() => import('components/error_page'));
-const LazyLogin = Utils.lazyWithRetries(() => import('components/login/login'));
-const LazyLoggedIn = Utils.lazyWithRetries(() => import('components/logged_in'));
-const LazyHelpController = Utils.lazyWithRetries(() => import('components/help/help_controller'));
-
-// const LazyLinkingLandingPage = Utils.lazyWithRetries(() => import('components/linking_landing_page'));
-const LazyPreparingWorkspace = Utils.lazyWithRetries(() => import('components/preparing_workspace'));
-const LazyTeamController = Utils.lazyWithRetries(() => import('components/team_controller'));
-const LazyOnBoardingTaskList = Utils.lazyWithRetries(() => import('components/onboarding_tasklist'));
-
-import A11yController from 'utils/a11y_controller';
-
-import {IKConstants} from 'utils/constants-ik';
-
-import {close, initialize} from 'actions/websocket_actions';
-
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-import {getSiteURL} from 'utils/url';
-import {UserProfile} from '@mattermost/types/users';
 import {setSystemEmojis} from 'mattermost-redux/actions/emojis';
 import {setUrl} from 'mattermost-redux/actions/general';
+import {Client4} from 'mattermost-redux/client';
+import {rudderAnalytics, RudderTelemetryHandler} from 'mattermost-redux/client/rudder';
 import {General} from 'mattermost-redux/constants';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {getUseCaseOnboarding} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, isCurrentUserSystemAdmin, checkIsFirstAdmin} from 'mattermost-redux/selectors/entities/users';
-import {ActionResult} from 'mattermost-redux/types/actions';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {setCallListeners} from 'actions/calls';
 import {loadRecentlyUsedCustomEmojis} from 'actions/emoji_actions';
 import * as GlobalActions from 'actions/global_actions';
 import {measurePageLoadTelemetry, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
-import store from 'stores/redux_store.jsx';
+import {close, initialize} from 'actions/websocket_actions';
+import LocalStorageStore from 'stores/local_storage_store';
+import store from 'stores/redux_store';
 
 import AccessProblem from 'components/access_problem';
 import AnnouncementBarController from 'components/announcement_bar';
@@ -82,14 +45,39 @@ import LaunchingWorkspace, {LAUNCHING_WORKSPACE_FULLSCREEN_Z_INDEX} from 'compon
 import {Animations} from 'components/preparing_workspace/steps';
 import SidebarRight from 'components/sidebar_right';
 import SidebarRightMenu from 'components/sidebar_right_menu';
+import SystemNotice from 'components/system_notice';
 import TeamSidebar from 'components/team_sidebar';
 import WelcomePostRenderer from 'components/welcome_post_renderer';
+
+import webSocketClient from 'client/web_websocket_client';
+import {initializePlugins} from 'plugins';
+import Pluggable from 'plugins/pluggable';
+import A11yController from 'utils/a11y_controller';
+import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
+import {IKConstants} from 'utils/constants-ik';
+import {EmojiIndicesByAlias} from 'utils/emoji';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getSiteURL} from 'utils/url';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
+
+import type {ProductComponent, PluginComponent} from 'types/store/plugins';
 
 import {applyLuxonDefaults} from './effects';
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
 
 import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
+
+const LazyErrorPage = Utils.lazyWithRetries(() => import('components/error_page'));
+const LazyLogin = Utils.lazyWithRetries(() => import('components/login/login'));
+const LazyLoggedIn = Utils.lazyWithRetries(() => import('components/logged_in'));
+const LazyHelpController = Utils.lazyWithRetries(() => import('components/help/help_controller'));
+
+// const LazyLinkingLandingPage = Utils.lazyWithRetries(() => import('components/linking_landing_page'));
+const LazyPreparingWorkspace = Utils.lazyWithRetries(() => import('components/preparing_workspace'));
+const LazyTeamController = Utils.lazyWithRetries(() => import('components/team_controller'));
+const LazyOnBoardingTaskList = Utils.lazyWithRetries(() => import('components/onboarding_tasklist'));
 
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const Login = makeAsyncComponent('LoginController', LazyLogin);

@@ -5,7 +5,6 @@ import deepEqual from 'fast-deep-equal';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {IgnoreChannelMentions, NotificationLevels, NotificationSections} from 'utils/constants';
 
 import type {Channel, ChannelNotifyProps} from '@mattermost/types/channels';
 import type {UserNotifyProps, UserProfile} from '@mattermost/types/users';
@@ -13,6 +12,8 @@ import type {UserNotifyProps, UserProfile} from '@mattermost/types/users';
 import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 
 import NotificationSection from 'components/channel_notifications_modal/components/notification_section.jsx';
+
+import {IgnoreChannelMentions, NotificationLevels, NotificationSections} from 'utils/constants';
 
 import type {PropsFromRedux} from './index';
 

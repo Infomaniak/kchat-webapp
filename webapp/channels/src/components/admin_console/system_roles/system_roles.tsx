@@ -4,8 +4,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import {getHistory} from 'utils/browser_history';
-import {t} from 'utils/i18n';
 
 import type {Role} from '@mattermost/types/roles';
 
@@ -13,6 +11,9 @@ import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
 import DataGrid from 'components/admin_console/data_grid/data_grid';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
+
+import {getHistory} from 'utils/browser_history';
+import {t} from 'utils/i18n';
 
 type Props = {
     roles: Record<string, Role>;

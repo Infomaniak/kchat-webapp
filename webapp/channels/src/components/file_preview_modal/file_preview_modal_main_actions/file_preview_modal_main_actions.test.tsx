@@ -4,12 +4,13 @@
 import {mount, shallow} from 'enzyme';
 import type {ComponentProps} from 'react';
 import React from 'react';
-import * as Utils from 'utils/utils';
 
 import * as fileActions from 'mattermost-redux/actions/files';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import * as Utils from 'utils/utils';
 
 import FilePreviewModalMainActions from './file_preview_modal_main_actions';
 

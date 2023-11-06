@@ -79,8 +79,6 @@
         }
 
         &.post--compact {
-            padding-left: 1em;
-
             .post__body {
                 padding-left: 0;
             }
@@ -104,7 +102,7 @@
             &.same--user {
                 .post__header {
                     .col__name {
-                        display: flex;
+                        display: inline-block;
                     }
                 }
             }
@@ -158,12 +156,13 @@
         .msg-typing {
             display: block;
             min-width: 1px;
-            max-width: 230px;
+            max-width: 300px;
             height: 20px;
-            margin: 2px 0;
+            margin-top: 4px;
+            margin-bottom: 10px;
             float: left;
-            font-size: 11px;
-            line-height: 16px;
+            font-size: 13px;
+            line-height: 20px;
             opacity: 0.7;
         }
 

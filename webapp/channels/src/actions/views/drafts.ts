@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import PQueue from 'p-queue';
 import {batchActions} from 'redux-batched-actions';
 
 import type {Draft as ServerDraft} from '@mattermost/types/drafts';
@@ -31,6 +32,8 @@ type Draft = {
     value: PostDraft;
     timestamp: Date;
 }
+
+const updateDraftQueue = new PQueue({concurrency: 1});
 
 /**
  * Gets drafts stored on the server and reconciles them with any locally stored drafts.
@@ -92,38 +95,56 @@ export function removeDraft(key: string, channelId: string, rootId = '') {
     };
 }
 
-export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false) {
+export function updateDraft(key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState() as GlobalState;
+        const activeDraft = getGlobalItem(state, key, {});
         let updatedValue: PostDraft|null = null;
         if (value) {
             const timestamp = new Date().getTime();
             const data = getGlobalItem(state, key, {});
             updatedValue = {
                 ...value,
+                id: value.id || activeDraft.id,
                 createAt: data.createAt || timestamp,
                 updateAt: timestamp,
             };
         }
 
-        dispatch(setGlobalDraft(key, updatedValue, false));
+        if (scheduleDelete) {
+            const newValue = {...updatedValue};
+            Reflect.deleteProperty(newValue, 'timestamp');
+            dispatch(setGlobalDraft(key, newValue as PostDraft, false));
+        } else {
+            dispatch(setGlobalDraft(key, updatedValue, false));
+        }
 
         if (syncedDraftsAreAllowedAndEnabled(state) && save && updatedValue) {
-            const connectionId = getConnectionId(state);
             const userId = getCurrentUserId(state);
+
             try {
-                await upsertDraft(updatedValue, userId, rootId, connectionId);
+                if (value?.message === '' || value?.message.replace(/\s/g, '').length || (value && value?.fileInfos.length > 0)) {
+                    if (value?.message.replace(/\s/g, '').length) {
+                        const {id} = await upsertDraft(updatedValue, userId, rootId, scheduleDelete);
+                        updatedValue.id = id;
+                    } else {
+                        //This case is when there is a file attached with no message
+                        await upsertDraft({...updatedValue, message: ''}, userId, rootId, scheduleDelete);
+                    }
+                }
             } catch (error) {
                 return {data: false, error};
             }
         }
+
         return {data: true};
     };
 }
 
-function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', connectionId: string) {
+function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', scheduleDelete = false) {
     const fileIds = draft.fileInfos.map((file) => file.id);
     const newDraft = {
+        id: draft.id,
         create_at: draft.createAt || 0,
         update_at: draft.updateAt || 0,
         delete_at: 0,
@@ -133,10 +154,18 @@ function upsertDraft(draft: PostDraft, userId: UserProfile['id'], rootId = '', c
         message: draft.message,
         props: draft.props,
         file_ids: fileIds,
+        timestamp: draft.timestamp,
         priority: draft.metadata?.priority as PostPriorityMetadata,
     };
 
-    return Client4.upsertDraft(newDraft, connectionId);
+    if (draft.timestamp && draft.id) {
+        if (scheduleDelete) {
+            Reflect.deleteProperty(newDraft, 'timestamp');
+        }
+        return Client4.updateScheduledDraft(newDraft);
+    }
+
+    return Client4.upsertDraft(newDraft);
 }
 
 export function setDraftsTourTipPreference(initializationState: Record<string, boolean>): ActionFunc {
@@ -206,3 +235,37 @@ export function transformServerDraft(draft: ServerDraft): Draft {
         },
     };
 }
+
+export const addToUpdateDraftQueue = (key: string, value: PostDraft|null, rootId = '', save = false, scheduleDelete = false) => {
+    return (dispatch: DispatchFunc) => {
+        return updateDraftQueue.add(() => dispatch(updateDraft(key, value, rootId, save, scheduleDelete)));
+    };
+};
+
+export function upsertScheduleDraft(key: string, value: PostDraft, rootId = ''): ActionFunc {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        const state = getState() as GlobalState;
+        if (!syncedDraftsAreAllowedAndEnabled(state)) {
+            return {error: new Error('Drafts are not allowed on the current server')};
+        }
+        const userId = getCurrentUserId(state);
+
+        const activeDraft = getGlobalItem(state, key, null);
+        dispatch(setGlobalItem(key, {message: '', fileInfos: [], uploadsInProgress: []}));
+
+        try {
+            const {id} = await upsertDraft(value, userId, rootId);
+            dispatch(setGlobalItem(`${key}_${id}`, {
+                ...value,
+                id,
+            }));
+        } catch (error) {
+            if (activeDraft) {
+                dispatch(setGlobalItem(key, activeDraft));
+            }
+            return {error};
+        }
+        return {data: true};
+    };
+}
+

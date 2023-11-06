@@ -4,9 +4,10 @@
 import type {ChangeEvent} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {localizeMessage} from 'utils/utils';
 
 import SettingItemMax from 'components/setting_item_max';
+
+import {localizeMessage} from 'utils/utils';
 
 const MESSAGE_MAX_LENGTH = 200;
 

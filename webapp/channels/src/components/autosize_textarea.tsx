@@ -99,6 +99,7 @@ export class AutosizeTextarea extends React.PureComponent<Props> {
         const props = {...this.props};
 
         Reflect.deleteProperty(props, 'onHeightChange');
+        Reflect.deleteProperty(props, 'onWidthChange');
         Reflect.deleteProperty(props, 'providers');
         Reflect.deleteProperty(props, 'channelId');
         Reflect.deleteProperty(props, 'forwardedRef');
@@ -179,7 +180,7 @@ export class AutosizeTextarea extends React.PureComponent<Props> {
                     <div
                         ref={this.referenceRef}
                         id={id + '-reference'}
-                        className={otherProps.className}
+                        className={(otherProps as any).className}
                         style={styles.reference}
                         dir='auto'
                         disabled={true}

@@ -3,10 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {ModalIdentifiers} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
 
 import Menu from 'components/widgets/menu/menu';
+
+import {ModalIdentifiers} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import LeaveChannel from './leave_channel';
 

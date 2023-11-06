@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import WebSocketClient from 'client/web_websocket_client';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
@@ -12,6 +11,8 @@ import deferComponentRender from 'components/deferComponentRender';
 import FileUploadOverlay from 'components/file_upload_overlay';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import PostView from 'components/post_view';
+
+import WebSocketClient from 'client/web_websocket_client';
 
 import type {PropsFromRedux} from './index';
 

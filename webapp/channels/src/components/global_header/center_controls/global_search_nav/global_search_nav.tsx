@@ -4,16 +4,17 @@
 import Flex from '@infomaniak/compass-components/utilities/layout/Flex';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-    Constants,
-    RHSStates,
-} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import {closeRightHandSide, showMentions} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
 import Search from 'components/search';
+
+import {
+    Constants,
+    RHSStates,
+} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

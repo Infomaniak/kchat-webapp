@@ -3,14 +3,16 @@
 
 import {connect} from 'react-redux';
 
-import {GlobalState} from 'types/store';
-
-import {getIsMobileView} from '../../selectors/views/browser';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
 import {getRhsSettingsTabState} from 'selectors/rhs';
 
-import RhsSettings, {Props} from './rhs_settings';
+import type {GlobalState} from 'types/store';
+
+import type {Props} from './rhs_settings';
+import RhsSettings from './rhs_settings';
+
+import {getIsMobileView} from '../../selectors/views/browser';
 
 function mapStateToProps(state: GlobalState) {
     const isMobile = getIsMobileView(state);

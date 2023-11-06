@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as Utils from 'utils/utils';
 
 import type {Command} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
@@ -17,6 +16,8 @@ import {redirectToDeveloperDocumentation} from 'actions/global_actions';
 import BackstageList from 'components/backstage/components/backstage_list';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import * as Utils from 'utils/utils';
 
 import InstalledCommand, {matchesFilter} from '../installed_command';
 

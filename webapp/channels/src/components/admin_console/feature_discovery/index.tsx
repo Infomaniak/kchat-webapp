@@ -4,8 +4,6 @@
 import {connect} from 'react-redux';
 import type {Dispatch, ActionCreatorsMapObject} from 'redux';
 import {bindActionCreators} from 'redux';
-import {LicenseSkus} from 'utils/constants';
-import {isCloudLicense} from 'utils/license_utils';
 
 import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {getCloudSubscription} from 'mattermost-redux/actions/cloud';
@@ -17,6 +15,9 @@ import {openModal} from 'actions/views/modals';
 import {getCloudContactUsLink, InquiryType} from 'selectors/cloud';
 
 import withGetCloudSubscription from 'components/common/hocs/cloud/with_get_cloud_subscription';
+
+import {LicenseSkus} from 'utils/constants';
+import {isCloudLicense} from 'utils/license_utils';
 
 import type {ModalData} from 'types/actions';
 import type {GlobalState} from 'types/store';

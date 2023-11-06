@@ -6,9 +6,6 @@ import type {MouseEvent, KeyboardEvent} from 'react';
 import React from 'react';
 import {Draggable, Droppable} from 'react-beautiful-dnd';
 import {FormattedMessage} from 'react-intl';
-import Constants, {A11yCustomEventTypes, DraggingStateTypes, DraggingStates, Preferences, Touched} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {isKeyPressed} from 'utils/utils';
 
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import {CategorySorting} from '@mattermost/types/channel_categories';
@@ -25,6 +22,10 @@ import KeyboardShortcutSequence, {
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import {ChannelsTour, DirectMessagesTour} from 'components/tours/onboarding_tour';
+
+import Constants, {A11yCustomEventTypes, DraggingStateTypes, DraggingStates, Preferences, Touched} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {isKeyPressed} from 'utils/utils';
 
 import type {DraggingState} from 'types/store';
 

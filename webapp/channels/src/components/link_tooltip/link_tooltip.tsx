@@ -2,11 +2,12 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import Pluggable from 'plugins/pluggable';
 import Popper from 'popper.js';
 import type {RefObject, CSSProperties} from 'react';
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import Pluggable from 'plugins/pluggable';
 import {Constants} from 'utils/constants';
 
 import './link_tooltip.scss';

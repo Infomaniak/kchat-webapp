@@ -2,12 +2,13 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import UserGuideDropdown from './user_guide_dropdown';
 

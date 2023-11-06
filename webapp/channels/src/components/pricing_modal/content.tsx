@@ -5,9 +5,6 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {CloudLinks, CloudProducts, LicenseSkus, ModalIdentifiers, MattermostFeatures, TELEMETRY_CATEGORIES, RecurringIntervals} from 'utils/constants';
-import {fallbackStarterLimits, asGBString, hasSomeLimits} from 'utils/limits';
-import {findOnlyYearlyProducts, findProductBySku} from 'utils/products';
 
 import type {Feedback} from '@mattermost/types/cloud';
 
@@ -38,6 +35,10 @@ import ExternalLink from 'components/external_link';
 import DowngradeFeedbackModal from 'components/feedback_modal/downgrade_feedback';
 import {useNotifyAdmin} from 'components/notify_admin_cta/notify_admin_cta';
 import CheckMarkSvg from 'components/widgets/icons/check_mark_icon';
+
+import {CloudLinks, CloudProducts, LicenseSkus, ModalIdentifiers, MattermostFeatures, TELEMETRY_CATEGORIES, RecurringIntervals} from 'utils/constants';
+import {fallbackStarterLimits, asGBString, hasSomeLimits} from 'utils/limits';
+import {findOnlyYearlyProducts, findProductBySku} from 'utils/products';
 
 import Card, {ButtonCustomiserClasses} from './card';
 import ContactSalesCTA from './contact_sales_cta';

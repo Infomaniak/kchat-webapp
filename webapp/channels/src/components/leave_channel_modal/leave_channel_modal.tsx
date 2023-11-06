@@ -3,12 +3,13 @@
 
 import React, {useState} from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {LeastActiveChannel} from '@mattermost/types/insights';
 
 import ConfirmModal from 'components/confirm_modal';
+
+import Constants from 'utils/constants';
 
 type Props = {
     channel: Channel | LeastActiveChannel;

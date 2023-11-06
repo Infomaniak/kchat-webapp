@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import * as Utils from 'utils/utils';
 
 import type {UserAutocomplete} from '@mattermost/types/autocomplete';
 import type {UserProfile} from '@mattermost/types/users';
@@ -10,6 +9,8 @@ import type {UserProfile} from '@mattermost/types/users';
 import SharedUserIndicator from 'components/shared_user_indicator';
 import BotTag from 'components/widgets/tag/bot_tag';
 import Avatar from 'components/widgets/users/avatar';
+
+import * as Utils from 'utils/utils';
 
 import type {ProviderResults} from './generic_user_provider';
 import Provider from './provider';

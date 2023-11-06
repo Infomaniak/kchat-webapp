@@ -4,9 +4,10 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
-import mockStore from 'tests/test_store';
 
 import GenericModal from 'components/generic_modal';
+
+import mockStore from 'tests/test_store';
 
 import SendDraftModal from './send_draft_modal';
 

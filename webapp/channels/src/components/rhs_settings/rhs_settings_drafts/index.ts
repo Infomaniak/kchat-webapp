@@ -2,18 +2,20 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
+import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
+import {get} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
+import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import {Preferences} from 'utils/constants';
 
-import {GlobalState} from 'types/store';
-import {ActionFunc} from 'mattermost-redux/types/actions';
+import type {GlobalState} from 'types/store';
 
-import AdvancedRhsSettingsDrafts, {Props} from './rhs_settings_drafts';
+import type {Props} from './rhs_settings_drafts';
+import AdvancedRhsSettingsDrafts from './rhs_settings_drafts';
 
 function makeMapStateToProps() {
     return (state: GlobalState) => {

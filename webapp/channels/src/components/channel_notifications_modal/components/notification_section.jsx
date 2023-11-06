@@ -3,6 +3,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+
 import {NotificationSections, NotificationLevels} from 'utils/constants';
 
 import CollapseView from './collapse_view';

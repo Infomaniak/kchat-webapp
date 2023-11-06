@@ -5,13 +5,14 @@ import type {ReactNode, MouseEventHandler} from 'react';
 import React from 'react';
 import type {OverlayTriggerProps} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import CloseIcon from 'components/widgets/icons/close_icon';
 import UnreadAboveIcon from 'components/widgets/icons/unread_above_icon';
 import UnreadBelowIcon from 'components/widgets/icons/unread_below_icon';
+
+import Constants from 'utils/constants';
 
 import './toast.scss';
 

@@ -6,9 +6,6 @@ import {noop} from 'lodash';
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {imageURLForTeam, localizeMessage} from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 
@@ -26,6 +23,10 @@ import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import UnarchiveIcon from 'components/widgets/icons/unarchive_icon';
 import TeamIcon from 'components/widgets/team_icon/team_icon';
+
+import {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {imageURLForTeam, localizeMessage} from 'utils/utils';
 
 import './team_profile.scss';
 

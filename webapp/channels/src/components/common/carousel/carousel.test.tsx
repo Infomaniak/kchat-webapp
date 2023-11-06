@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import Carousel from 'components/common/carousel/carousel';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import {BtnStyle} from './carousel_button';
 

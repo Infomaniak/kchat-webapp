@@ -2,31 +2,24 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
+import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {GlobalState} from 'types/store/index.js';
+import type {FileInfo} from '@mattermost/types/files.js';
+import type {CommandArgs} from '@mattermost/types/integrations.js';
+import type {Post} from '@mattermost/types/posts.js';
+import type {PreferenceType} from '@mattermost/types/preferences';
 
-import {Post} from '@mattermost/types/posts.js';
-
-import {FileInfo} from '@mattermost/types/files.js';
-
-import {ActionResult, GetStateFunc, DispatchFunc} from 'mattermost-redux/types/actions.js';
-
-import {CommandArgs} from '@mattermost/types/integrations.js';
+import {getChannelTimezones, getChannelMemberCountsByGroup} from 'mattermost-redux/actions/channels';
 
 import {ModalData} from 'types/actions.js';
 
 import {PostDraft} from 'types/store/draft';
 
-import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-
-import {getCurrentChannelId, getCurrentChannel, getCurrentChannelStats, getChannelMemberCountsByGroup as selectChannelMemberCountsByGroup} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId, getStatusForUserId, getUser, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 import {haveICurrentChannelPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getChannelTimezones, getChannelMemberCountsByGroup} from 'mattermost-redux/actions/channels';
 import {get, getInt, getBool, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {
     getCurrentUsersLatestPost,
@@ -42,28 +35,32 @@ import {
     removeReaction,
 } from 'mattermost-redux/actions/posts';
 import {Permissions, Posts, Preferences as PreferencesRedux} from 'mattermost-redux/constants';
+import {getCurrentChannelId, getCurrentChannel, getCurrentChannelStats, getChannelMemberCountsByGroup as selectChannelMemberCountsByGroup} from 'mattermost-redux/selectors/entities/channels';
+import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
+import {ActionResult, GetStateFunc, DispatchFunc} from 'mattermost-redux/types/actions.js';
 
-import {connectionErrorCount} from 'selectors/views/system';
-
-import {addReaction, createPost, setEditingPost, emitShortcutReactToLastPostFrom} from 'actions/post_actions';
-import {searchAssociatedGroupsForReference} from 'actions/views/group';
-import {scrollPostListToBottom} from 'actions/views/channel';
 import {selectPostFromRightHandSideSearchByPostId} from 'actions/views/rhs';
 import {setShowPreviewOnCreatePost} from 'actions/views/textbox';
 import {executeCommand} from 'actions/command';
 import {runMessageWillBePostedHooks, runSlashCommandWillBePostedHooks} from 'actions/hooks';
+import {addReaction, createPost, setEditingPost, emitShortcutReactToLastPostFrom} from 'actions/post_actions';
 import {makeGetChannelDraft, getIsRhsExpanded, getIsRhsOpen} from 'selectors/rhs';
-import {showPreviewOnCreatePost} from 'selectors/views/textbox';
 import {getCurrentLocale} from 'selectors/i18n';
 import {getEmojiMap, getShortcutReactToLastPostEmittedFrom} from 'selectors/emojis';
 import {actionOnGlobalItemsWithPrefix} from 'actions/storage';
+import {scrollPostListToBottom} from 'actions/views/channel';
 import {addToUpdateDraftQueue, removeDraft, upsertScheduleDraft, setGlobalDraft} from 'actions/views/drafts';
+import {searchAssociatedGroupsForReference} from 'actions/views/group';
 import {openModal} from 'actions/views/modals';
-import {AdvancedTextEditor, Constants, Preferences, StoragePrefixes, UserStatuses} from 'utils/constants';
-import {canUploadFiles} from 'utils/file_utils';
+import {connectionErrorCount} from 'selectors/views/system';
+import {showPreviewOnCreatePost} from 'selectors/views/textbox';
+
 import {OnboardingTourSteps, TutorialTourName, OnboardingTourStepsForGuestUsers} from 'components/tours';
 
-import {PreferenceType} from '@mattermost/types/preferences';
+import {AdvancedTextEditor, Constants, Preferences, StoragePrefixes, UserStatuses} from 'utils/constants';
+import {canUploadFiles} from 'utils/file_utils';
+
+import type {GlobalState} from 'types/store/index.js';
 
 import AdvancedCreatePost from './advanced_create_post';
 

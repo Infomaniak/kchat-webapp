@@ -4,7 +4,6 @@
 import classNames from 'classnames';
 import React, {useState} from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants, {durationValues} from 'utils/constants';
 
 import type {UserCustomStatus} from '@mattermost/types/users';
 import {CustomStatusDuration} from '@mattermost/types/users';
@@ -12,6 +11,8 @@ import {CustomStatusDuration} from '@mattermost/types/users';
 import RenderEmoji from 'components/emoji/render_emoji';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants, {durationValues} from 'utils/constants';
 
 import CustomStatusText from './custom_status_text';
 

@@ -10,6 +10,8 @@ export type DraftInfo = {
 }
 
 export type PostDraft = {
+    id: any;
+    timestamp: any;
     message: string;
     fileInfos: FileInfo[];
     uploadsInProgress: string[];

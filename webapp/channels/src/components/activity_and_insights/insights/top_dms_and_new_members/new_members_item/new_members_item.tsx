@@ -5,7 +5,6 @@ import React, {memo, useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {imageURLForUser} from 'utils/utils';
 
 import type {NewMember} from '@mattermost/types/insights';
 import type {GlobalState} from '@mattermost/types/store';
@@ -20,6 +19,8 @@ import {trackEvent} from 'actions/telemetry_actions';
 
 import RenderEmoji from 'components/emoji/render_emoji';
 import Avatar from 'components/widgets/users/avatar';
+
+import {imageURLForUser} from 'utils/utils';
 
 import './../../../activity_and_insights.scss';
 

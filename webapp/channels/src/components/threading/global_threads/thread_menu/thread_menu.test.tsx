@@ -5,8 +5,6 @@ import {shallow} from 'enzyme';
 import {set} from 'lodash';
 import type {ComponentProps} from 'react';
 import React from 'react';
-import {fakeDate} from 'tests/helpers/date';
-import {copyToClipboard} from 'utils/utils';
 
 import {setThreadFollow, updateThreadRead, markLastPostInThreadAsUnread} from 'mattermost-redux/actions/threads';
 jest.mock('mattermost-redux/actions/threads');
@@ -19,6 +17,9 @@ import {manuallyMarkThreadAsUnread} from 'actions/views/threads';
 jest.mock('actions/views/threads');
 
 import Menu from 'components/widgets/menu/menu';
+
+import {fakeDate} from 'tests/helpers/date';
+import {copyToClipboard} from 'utils/utils';
 
 import ThreadMenu from '../thread_menu';
 

@@ -2,32 +2,31 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
+import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {createSelector} from 'reselect';
+import type {Channel} from '@mattermost/types/channels';
 
+import {getChannels, getArchivedChannels, joinChannel, getChannelStats} from 'mattermost-redux/actions/channels';
 import {RequestStatus} from 'mattermost-redux/constants';
-import {Channel} from '@mattermost/types/channels';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
+import {getChannelsInCurrentTeam, getMyChannelMemberships, getAllChannelStats} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {Action, ActionResult} from 'mattermost-redux/types/actions';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import {getChannels, getArchivedChannels, joinChannel, getChannelStats} from 'mattermost-redux/actions/channels';
-import {getChannelsInCurrentTeam, getMyChannelMemberships, getAllChannelStats} from 'mattermost-redux/selectors/entities/channels';
+import type {Action, ActionResult} from 'mattermost-redux/types/actions';
+
+import {searchMoreChannels} from 'actions/channel_actions';
+import {setGlobalItem} from 'actions/storage';
+import {openModal, closeModal} from 'actions/views/modals';
+import {closeRightHandSide} from 'actions/views/rhs';
+import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
+import {makeGetGlobalItem} from 'selectors/storage';
 
 import {Constants, StoragePrefixes} from 'utils/constants';
 
-import {searchMoreChannels} from 'actions/channel_actions';
-import {openModal, closeModal} from 'actions/views/modals';
-import {setGlobalItem} from 'actions/storage';
-import {closeRightHandSide} from 'actions/views/rhs';
-
-import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
-
-import {GlobalState} from 'types/store';
-import {ModalData} from 'types/actions';
-
-import {makeGetGlobalItem} from 'selectors/storage';
+import type {ModalData} from 'types/actions';
+import type {GlobalState} from 'types/store';
 
 import MoreChannels from './more_channels';
 

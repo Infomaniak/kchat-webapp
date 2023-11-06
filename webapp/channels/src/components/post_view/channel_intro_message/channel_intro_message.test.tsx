@@ -3,10 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {Constants} from 'utils/constants';
 
 import type {Channel, ChannelType} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
+
+import {Constants} from 'utils/constants';
 
 import ChannelIntroMessage from './channel_intro_message';
 

@@ -4,17 +4,18 @@
 import type React from 'react';
 import * as lineBreakHelpers from 'tests/helpers/line_break_helpers.js';
 import {makeSelectionEvent} from 'tests/helpers/markdown_hotkey_helpers.js';
-import * as ua from 'tests/helpers/user_agent_mocks';
-import Constants, {ValidationErrors} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import {GeneralTypes} from 'mattermost-redux/action_types';
 
-import store from 'stores/redux_store.jsx';
+import store from 'stores/redux_store';
 
 import type {TextboxElement} from 'components/textbox';
+
+import * as ua from 'tests/helpers/user_agent_mocks';
+import Constants, {ValidationErrors} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 describe('Utils.getDisplayNameByUser', () => {
     afterEach(() => {

@@ -6,12 +6,13 @@ import cn from 'classnames';
 import type {ComponentProps} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Timestamp from 'components/timestamp';
 import Tooltip from 'components/tooltip';
 import Tag from 'components/widgets/tag/tag';
+
+import Constants from 'utils/constants';
 
 import './panel_header.scss';
 

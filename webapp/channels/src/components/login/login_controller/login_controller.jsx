@@ -2,18 +2,9 @@
 // See LICENSE.txt for license information.
 
 import crypto from 'crypto';
-
 import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import {browserHistory} from 'utils/browser_history';
-import Constants from 'utils/constants';
-import {IKConstants} from 'utils/constants-ik';
-import {t} from 'utils/i18n';
-import {showNotification} from 'utils/notifications';
-import {intlShape} from 'utils/react_intl';
-import {isDesktopApp} from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import {Client4} from 'mattermost-redux/client';
 
@@ -23,6 +14,15 @@ import LocalStorageStore from 'stores/local_storage_store';
 import LoadingIk from 'components/loading_ik';
 import LoadingScreen from 'components/loading_screen';
 import Markdown from 'components/markdown';
+
+import {browserHistory} from 'utils/browser_history';
+import Constants from 'utils/constants';
+import {IKConstants} from 'utils/constants-ik';
+import {t} from 'utils/i18n';
+import {showNotification} from 'utils/notifications';
+import {intlShape} from 'utils/react_intl';
+import {isDesktopApp} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 // TODO: clean login controller
 class LoginController extends React.PureComponent {

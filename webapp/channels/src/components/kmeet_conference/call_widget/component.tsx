@@ -5,12 +5,10 @@ import moment from 'moment-timezone';
 import type {CSSProperties} from 'react';
 import React from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
-import Constants from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
 
 import type {Channel} from 'mattermost-redux/types/channels';
-import type {Team} from 'mattermost-redux/types/teams';
-import type {UserProfile} from 'mattermost-redux/types/users';
+import type {Team} from 'types/teams';
+import type {UserProfile} from '@mattermost/types/users';
 import type {IDMappedObjects} from 'mattermost-redux/types/utilities';
 import {localizeMessage} from 'mattermost-redux/utils/i18n_utils';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
@@ -35,6 +33,9 @@ import ShrinkConvIcon from 'components/widgets/icons/shrink_conv_icon';
 import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
 import Avatar from 'components/widgets/users/avatar';
 import Avatars from 'components/widgets/users/avatars/avatars';
+
+import Constants from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
 
 // import {changeOpacity} from 'mattermost-redux/utils/theme_utils';
 

@@ -4,7 +4,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import * as Utils from 'utils/utils';
 
 import type {OAuthApp} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
@@ -12,6 +11,8 @@ import type {Team} from '@mattermost/types/teams';
 import CopyText from 'components/copy_text';
 import FormError from 'components/form_error';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import * as Utils from 'utils/utils';
 
 import DeleteIntegrationLink from '../delete_integration_link';
 

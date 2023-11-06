@@ -3,10 +3,11 @@
 
 import classNames from 'classnames';
 import React from 'react';
-import {isDesktopApp} from 'utils/user_agent';
-import {isMac} from 'utils/utils';
 
 import {ShortcutKey, ShortcutKeyVariant} from 'components/shortcut_key';
+
+import {isDesktopApp} from 'utils/user_agent';
+import {isMac} from 'utils/utils';
 
 import './search_shortcut.scss';
 

@@ -3,9 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {
-    SelfHostedProducts,
-} from 'utils/constants';
 
 import type {Product} from '@mattermost/types/cloud';
 
@@ -15,6 +12,10 @@ import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import PlanLabel from 'components/common/plan_label';
 import {Card, ButtonCustomiserClasses} from 'components/purchase_modal/purchase_modal';
 import StarMarkSvg from 'components/widgets/icons/star_mark_icon';
+
+import {
+    SelfHostedProducts,
+} from 'utils/constants';
 
 import type {Seats} from '../seats_calculator';
 import SeatsCalculator from '../seats_calculator';

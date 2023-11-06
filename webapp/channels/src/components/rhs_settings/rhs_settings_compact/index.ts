@@ -4,15 +4,14 @@
 import {connect} from 'react-redux';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
-
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {get} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
-import {GlobalState} from 'types/store';
-
-import {Preferences} from '../../../utils/constants';
+import type {GlobalState} from 'types/store';
 
 import RhsSettingsCompact from './rhs_settings_compact';
+
+import {Preferences} from '../../../utils/constants';
 
 function mapStateToProps(state: GlobalState) {
     return {

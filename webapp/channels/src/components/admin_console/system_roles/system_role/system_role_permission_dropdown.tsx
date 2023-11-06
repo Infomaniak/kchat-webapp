@@ -3,11 +3,12 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as Utils from 'utils/utils';
 
 import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import * as Utils from 'utils/utils';
 
 import type {PermissionAccess, PermissionToUpdate, SystemSection, WriteAccess, NoAccess, ReadAccess, MixedAccess} from './types';
 import {noAccess, writeAccess, readAccess, mixedAccess} from './types';

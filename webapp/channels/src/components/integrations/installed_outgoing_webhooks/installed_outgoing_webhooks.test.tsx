@@ -4,11 +4,12 @@
 import {shallow} from 'enzyme';
 import type {ComponentProps} from 'react';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {OutgoingWebhook} from '@mattermost/types/integrations';
 
 import InstalledOutgoingWebhooks from 'components/integrations/installed_outgoing_webhooks/installed_outgoing_webhooks';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/integrations/InstalledOutgoingWebhooks', () => {
     const teamId = 'testteamid';

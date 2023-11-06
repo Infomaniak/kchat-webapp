@@ -5,10 +5,6 @@ import iNoBounce from 'inobounce';
 import React, {lazy, memo, useEffect, useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {Route, Switch, useHistory, useParams} from 'react-router-dom';
-import {hasNotificationsSettingsPathInUrl} from 'utils/browser_history';
-import Constants from 'utils/constants';
-import {isIosSafari} from 'utils/user_agent';
-import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {Team} from '@mattermost/types/teams';
@@ -16,17 +12,25 @@ import type {Team} from '@mattermost/types/teams';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {showSettings} from 'actions/views/rhs';
+import {reconnect} from 'actions/websocket_actions.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import {makeAsyncComponent} from 'components/async_load';
 import ChannelController from 'components/channel_layout/channel_controller';
 import useTelemetryIdentitySync from 'components/common/hooks/useTelemetryIdentifySync';
 
+import {hasNotificationsSettingsPathInUrl} from 'utils/browser_history';
+import Constants from 'utils/constants';
+import {isIosSafari} from 'utils/user_agent';
+import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
+
 import type {OwnProps, PropsFromRedux} from './index';
 
 const BackstageController = makeAsyncComponent('BackstageController', lazy(() => import('components/backstage')));
 const Pluggable = makeAsyncComponent('Pluggable', lazy(() => import('plugins/pluggable')));
 
+const WAKEUP_CHECK_INTERVAL = 30000; // 30 seconds
+const WAKEUP_THRESHOLD = 60000; // 60 seconds
 const UNREAD_CHECK_TIME_MILLISECONDS = 120 * 1000;
 
 declare global {
@@ -76,8 +80,17 @@ function TeamController(props: Props) {
                 history.push(window.location.pathname); //clear the hash params
             });
         }
+        const wakeUpIntervalId = setInterval(() => {
+            const currentTime = Date.now();
+            if ((currentTime - lastTime.current) > WAKEUP_THRESHOLD) {
+                console.log('computer woke up - fetching latest'); //eslint-disable-line no-console
+                reconnect();
+            }
+            lastTime.current = currentTime;
+        }, WAKEUP_CHECK_INTERVAL);
 
         return () => {
+            clearInterval(wakeUpIntervalId);
             // eslint-disable-next-line @babel/no-unused-expressions
             notificationsSettingsTimer && clearInterval(notificationsSettingsTimer);
         };

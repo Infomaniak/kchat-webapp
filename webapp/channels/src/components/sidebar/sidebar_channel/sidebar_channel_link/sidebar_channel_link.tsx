@@ -2,12 +2,8 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import Pluggable from 'plugins/pluggable';
 import React from 'react';
 import {Link} from 'react-router-dom';
-import Constants, {RHSStates} from 'utils/constants';
-import {wrapEmojis} from 'utils/emoji_utils';
-import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 
@@ -16,6 +12,11 @@ import {mark, trackEvent} from 'actions/telemetry_actions';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Pluggable from 'plugins/pluggable';
+import Constants, {RHSStates} from 'utils/constants';
+import {wrapEmojis} from 'utils/emoji_utils';
+import {cmdOrCtrlPressed, localizeMessage} from 'utils/utils';
 
 import type {RhsState} from 'types/store/rhs';
 

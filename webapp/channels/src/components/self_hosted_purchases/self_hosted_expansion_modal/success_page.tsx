@@ -4,12 +4,13 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useHistory} from 'react-router-dom';
-import {ConsolePages, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
 import PaymentSuccessStandardSvg from 'components/common/svg_images_components/payment_success_standard_svg';
 import IconMessage from 'components/purchase_modal/icon_message';
+
+import {ConsolePages, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import './success_page.scss';
 

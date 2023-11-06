@@ -5,8 +5,6 @@ import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import {appsPluginID} from 'utils/apps';
-import * as Utils from 'utils/utils';
 
 import type {AdminConfig} from '@mattermost/types/config';
 import type {DeepPartial} from '@mattermost/types/utilities';
@@ -17,6 +15,9 @@ import ConfirmModal from 'components/confirm_modal';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LoadingScreen from 'components/loading_screen';
+
+import {appsPluginID} from 'utils/apps';
+import * as Utils from 'utils/utils';
 
 import type {BaseProps, BaseState} from '../admin_settings';
 import AdminSettings from '../admin_settings';

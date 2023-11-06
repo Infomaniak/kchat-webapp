@@ -4,13 +4,14 @@
 import classNames from 'classnames';
 import React, {memo} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants} from 'utils/constants';
 
 import type {EmojiCategory} from '@mattermost/types/emojis';
 
 import type {Category, CategoryOrEmojiRow} from 'components/emoji_picker/types';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import {Constants} from 'utils/constants';
 
 interface Props {
     category: Category;

@@ -19,6 +19,7 @@ body {
 
     &.admin-onboarding {
         background-image: url('images/admin-onboarding-background.jpg');
+        background-position: 50%;
         background-repeat: no-repeat;
         background-size: cover;
     }
@@ -42,12 +43,18 @@ body {
 
         > .row {
             &.content {
-                min-height: calc(100vh - 89px);
+                min-height: 100vh;
+                // min-height: calc(100vh - 89px);
 
-                @media (max-width: 768px) {
-                    min-height: calc(100vh - 187px);
-                }
+                // @media (max-width: 768px) {
+                //     min-height: calc(100vh - 187px);
+                // }
             }
+        }
+    }
+    &.error {
+        > .channel-view {
+            padding: 0;
         }
     }
 }
@@ -159,6 +166,11 @@ body.app__body #root {
             }
             #SidebarContainer.move--right {
                 position: relative;
+            }
+            .multi-teams {
+                #SidebarContainer.move--right {
+                    left: 65px;
+                }
             }
         }
     }

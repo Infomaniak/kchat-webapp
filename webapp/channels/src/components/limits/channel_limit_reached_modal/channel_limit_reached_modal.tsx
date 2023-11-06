@@ -4,7 +4,6 @@
 import React, {useCallback, useEffect} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
 
 import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
 import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
@@ -18,6 +17,8 @@ import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetUsage from 'components/common/hooks/useGetUsage';
 import GenericModal from 'components/generic_modal';
 import ChannelLimitReachedIcon from 'components/widgets/icons/channel_limit_reached_icon';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

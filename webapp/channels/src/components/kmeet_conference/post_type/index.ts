@@ -1,18 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import {connect} from 'react-redux';
-
-import {bindActionCreators, Dispatch} from 'redux';
-
-import {Post} from 'mattermost-redux/types/posts';
-import {GlobalState} from 'mattermost-redux/types/store';
-
-import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannelV2} from 'actions/calls';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
-import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
-
 import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import type {Post} from 'mattermost-redux/types/posts';
+import type {GlobalState} from 'types/store';
+
+import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannelV2} from 'actions/calls';
+import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
 
 import PostType from './component';
 

@@ -5,15 +5,16 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import Constants from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import BackstageHeader from 'components/backstage/components/backstage_header';
 import ExternalLink from 'components/external_link';
 import FormError from 'components/form_error';
 import LocalizedInput from 'components/localized_input/localized_input';
 import SpinnerButton from 'components/spinner_button';
+
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 const REQUEST_POST = 'P';
 const REQUEST_GET = 'G';

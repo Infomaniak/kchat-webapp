@@ -2,12 +2,13 @@
 // See LICENSE.txt for license information.
 
 import {createIntl} from 'react-intl';
+
+import {Preferences} from 'mattermost-redux/constants';
+
 import {PostListRowListIds, Constants} from 'utils/constants';
 import EmojiMap from 'utils/emoji_map';
 import * as PostUtils from 'utils/post_utils';
 import {TestHelper} from 'utils/test_helper';
-
-import {Preferences} from 'mattermost-redux/constants';
 
 import type {GlobalState} from 'types/store';
 

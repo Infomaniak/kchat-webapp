@@ -4,6 +4,7 @@
 import {mount} from 'enzyme';
 import React from 'react';
 import {IntlProvider} from 'react-intl';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import LocalizedInput from './localized_input';

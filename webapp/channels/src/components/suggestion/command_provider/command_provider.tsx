@@ -4,9 +4,6 @@
 import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
 import React from 'react';
 import type {Store} from 'redux';
-import {Constants} from 'utils/constants';
-import * as UserAgent from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import type {AutocompleteSuggestion, CommandArgs} from '@mattermost/types/integrations';
 
@@ -14,6 +11,10 @@ import {Client4} from 'mattermost-redux/client';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 
 import globalStore from 'stores/redux_store';
+
+import {Constants} from 'utils/constants';
+import * as UserAgent from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

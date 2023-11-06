@@ -6,13 +6,14 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 import {Provider} from 'react-redux';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import mockStore from 'tests/test_store';
-import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import StartTrialBtn from 'components/learn_more_trial_modal/start_trial_btn';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import mockStore from 'tests/test_store';
+import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 jest.mock('actions/telemetry_actions.jsx', () => {
     const original = jest.requireActual('actions/telemetry_actions.jsx');

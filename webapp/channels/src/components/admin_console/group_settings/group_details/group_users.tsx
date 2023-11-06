@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getSiteURL} from 'utils/url';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -13,6 +12,8 @@ import GroupUsersRow from 'components/admin_console/group_settings/group_details
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
+
+import {getSiteURL} from 'utils/url';
 
 const GROUP_MEMBERS_PAGE_SIZE = 20;
 

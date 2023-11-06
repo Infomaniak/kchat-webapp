@@ -7,24 +7,6 @@ import {AlertCircleOutlineIcon, CheckCircleOutlineIcon} from '@infomaniak/compas
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants, {
-    Locations,
-    Preferences,
-    AdvancedTextEditor as AdvancedTextEditorConst,
-    ModalIdentifiers,
-    StoragePrefixes,
-} from 'utils/constants';
-import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
-import {applyMarkdown} from 'utils/markdown/apply_markdown';
-import {
-    postMessageOnKeyPress,
-    isErrorInvalidSlashCommand,
-    splitMessageBasedOnCaretPosition,
-    specialMentionsInText,
-    groupsMentionedInText,
-} from 'utils/post_utils';
-import * as UserAgent from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import type {Channel, ChannelMemberCountsByGroup} from '@mattermost/types/channels';
 import type {Emoji} from '@mattermost/types/emojis';
@@ -52,6 +34,25 @@ import PostPriorityPickerOverlay from 'components/post_priority/post_priority_pi
 import type {TextboxElement} from 'components/textbox';
 import type TextboxClass from 'components/textbox/textbox';
 import Tooltip from 'components/tooltip';
+
+import Constants, {
+    Locations,
+    Preferences,
+    AdvancedTextEditor as AdvancedTextEditorConst,
+    ModalIdentifiers,
+    StoragePrefixes,
+} from 'utils/constants';
+import {applyMarkdown} from 'utils/markdown/apply_markdown';
+import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
+import {
+    postMessageOnKeyPress,
+    isErrorInvalidSlashCommand,
+    splitMessageBasedOnCaretPosition,
+    specialMentionsInText,
+    groupsMentionedInText,
+} from 'utils/post_utils';
+import * as UserAgent from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 import type {PostDraft} from 'types/store/draft';

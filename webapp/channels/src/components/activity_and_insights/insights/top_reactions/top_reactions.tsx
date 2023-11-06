@@ -3,7 +3,6 @@
 
 import React, {memo, useEffect, useState, useCallback, useMemo} from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {InsightsScopes} from 'utils/constants';
 
 import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
 import type {TopReaction} from '@mattermost/types/insights';
@@ -14,6 +13,8 @@ import {getTopReactionsForCurrentTeam, getMyTopReactionsForCurrentTeam} from 'ma
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
+
+import {InsightsScopes} from 'utils/constants';
 
 import TopReactionsBarChart from './top_reactions_bar_chart/top_reactions_bar_chart';
 

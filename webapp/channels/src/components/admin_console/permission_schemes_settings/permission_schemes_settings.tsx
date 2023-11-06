@@ -4,9 +4,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
-import {LicenseSkus} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import type {Scheme, SchemeScope, SchemesState} from '@mattermost/types/schemes';
 
@@ -17,6 +14,10 @@ import LoadingScreen from 'components/loading_screen';
 import AdminPanelWithLink from 'components/widgets/admin_console/admin_panel_with_link';
 import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
+
+import {LicenseSkus} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import PermissionsSchemeSummary from './permissions_scheme_summary';
 

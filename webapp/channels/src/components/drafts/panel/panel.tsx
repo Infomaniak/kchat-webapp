@@ -3,6 +3,7 @@
 
 import classNames from 'classnames';
 import React, {memo, useState} from 'react';
+
 import {makeIsEligibleForClick} from 'utils/utils';
 
 import './panel.scss';

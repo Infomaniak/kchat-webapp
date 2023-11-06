@@ -4,8 +4,6 @@
 import React, {useMemo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {LicenseLinks, StatTypes, Preferences, AnnouncementBarTypes} from 'utils/constants';
-import {calculateOverageUserActivated} from 'utils/overage_team';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 
@@ -17,6 +15,9 @@ import {getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selecto
 
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
 import {useExpandOverageUsersCheck} from 'components/common/hooks/useExpandOverageUsersCheck';
+
+import {LicenseLinks, StatTypes, Preferences, AnnouncementBarTypes} from 'utils/constants';
+import {calculateOverageUserActivated} from 'utils/overage_team';
 
 import type {GlobalState} from 'types/store';
 

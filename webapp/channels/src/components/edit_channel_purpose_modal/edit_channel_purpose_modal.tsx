@@ -6,12 +6,13 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import Constants from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
+
+import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 type Actions = {
     patchChannel: (channelId: string, patch: Partial<Channel>) => Promise<ActionResult>;

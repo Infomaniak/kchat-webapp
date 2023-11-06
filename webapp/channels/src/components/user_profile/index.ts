@@ -3,10 +3,10 @@
 
 import {connect} from 'react-redux';
 
-import {getUser, makeGetDisplayName} from 'mattermost-redux/selectors/entities/users';
-import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import type {GlobalState} from '@mattermost/types/store';
 
-import {GlobalState} from '@mattermost/types/store';
+import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+import {getUser, makeGetDisplayName} from 'mattermost-redux/selectors/entities/users';
 
 import UserProfile from './user_profile';
 

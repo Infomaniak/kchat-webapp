@@ -6,6 +6,7 @@ import type {AnimationEvent, ReactNode} from 'react';
 import React, {useState} from 'react';
 import {Draggable} from 'react-beautiful-dnd';
 import {FormattedMessage} from 'react-intl';
+
 import Constants from 'utils/constants';
 
 import SidebarBaseChannel from './sidebar_base_channel';

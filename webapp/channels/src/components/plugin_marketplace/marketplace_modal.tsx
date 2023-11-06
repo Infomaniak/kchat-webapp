@@ -6,8 +6,6 @@ import React from 'react';
 import type {SelectCallback} from 'react-bootstrap';
 import {Tabs, Tab} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
 
 import type {MarketplaceApp, MarketplacePlugin} from '@mattermost/types/marketplace';
 import type {PluginStatusRedux} from '@mattermost/types/plugins';
@@ -21,6 +19,9 @@ import QuickInput from 'components/quick_input';
 import RootPortal from 'components/root_portal';
 import PluginIcon from 'components/widgets/icons/plugin_icon';
 import FullScreenModal from 'components/widgets/modals/full_screen_modal';
+
+import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
 
 import './marketplace_modal.scss';
 import MarketplaceList from './marketplace_list/marketplace_list';

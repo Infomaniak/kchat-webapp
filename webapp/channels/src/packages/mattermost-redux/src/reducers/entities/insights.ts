@@ -3,9 +3,10 @@
 
 import {combineReducers} from 'redux';
 
+import type {TopReaction, TimeFrame} from '@mattermost/types/insights';
+
 import {InsightTypes} from 'mattermost-redux/action_types';
-import {GenericAction} from 'mattermost-redux/types/actions';
-import {TopReaction, TimeFrame} from '@mattermost/types/insights';
+import type {GenericAction} from 'mattermost-redux/types/actions';
 
 const sortReactionsIntoState = (data: TopReaction[]) => {
     const newItems: Record<string, TopReaction> = {};

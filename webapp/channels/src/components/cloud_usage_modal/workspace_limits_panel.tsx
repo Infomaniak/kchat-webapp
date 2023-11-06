@@ -3,10 +3,11 @@
 
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import type {Message} from 'utils/i18n';
-import {asGBString, inK} from 'utils/limits';
 
 import type {CloudUsage, Limits} from '@mattermost/types/cloud';
+
+import type {Message} from 'utils/i18n';
+import {asGBString, inK} from 'utils/limits';
 
 import LimitLine from './limit_line';
 

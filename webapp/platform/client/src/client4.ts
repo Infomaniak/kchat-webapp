@@ -4218,6 +4218,7 @@ export default class Client4 {
             id: string;
             url: string;
             user_id: string;
+            participants: any;
         }>>(
             `${this.getBaseRoute()}/conferences`,
             {method: 'get'},

@@ -4,7 +4,6 @@
 import React, {useRef} from 'react';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import Constants from 'utils/constants';
 
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
@@ -12,6 +11,8 @@ import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers} from 'components/tours';
 import {KmeetTour, useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
+
+import Constants from 'utils/constants';
 
 import './meet_button.scss';
 import meetSvg from './static/kmeet.svg';

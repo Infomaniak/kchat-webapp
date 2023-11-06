@@ -7,31 +7,6 @@ import {AlertCircleOutlineIcon, CheckCircleOutlineIcon} from '@infomaniak/compas
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants, {
-    StoragePrefixes,
-    ModalIdentifiers,
-    Locations,
-    A11yClassNames,
-    Preferences,
-    AdvancedTextEditor as AdvancedTextEditorConst,
-} from 'utils/constants';
-import type EmojiMap from 'utils/emoji_map';
-import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
-import {applyMarkdown} from 'utils/markdown/apply_markdown';
-import {getTable, hasHtmlLink, formatMarkdownMessage, formatGithubCodePaste, isGitHubCodeBlock} from 'utils/paste';
-import {
-    containsAtChannel,
-    specialMentionsInText,
-    postMessageOnKeyPress,
-    shouldFocusMainTextbox,
-    isErrorInvalidSlashCommand,
-    splitMessageBasedOnCaretPosition,
-    groupsMentionedInText,
-    mentionsMinusSpecialMentionsInText,
-} from 'utils/post_utils';
-import * as UserAgent from 'utils/user_agent';
-import {isMac} from 'utils/utils';
-import * as Utils from 'utils/utils';
 
 import type {Channel, ChannelMemberCountsByGroup} from '@mattermost/types/channels';
 import type {Emoji} from '@mattermost/types/emojis';
@@ -61,6 +36,32 @@ import ResetStatusModal from 'components/reset_status_modal';
 import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
 import type TextboxClass from 'components/textbox/textbox';
 import Tooltip from 'components/tooltip';
+
+import Constants, {
+    StoragePrefixes,
+    ModalIdentifiers,
+    Locations,
+    A11yClassNames,
+    Preferences,
+    AdvancedTextEditor as AdvancedTextEditorConst,
+} from 'utils/constants';
+import type EmojiMap from 'utils/emoji_map';
+import {applyMarkdown} from 'utils/markdown/apply_markdown';
+import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
+import {getTable, hasHtmlLink, formatMarkdownMessage, formatGithubCodePaste, isGitHubCodeBlock} from 'utils/paste';
+import {
+    containsAtChannel,
+    specialMentionsInText,
+    postMessageOnKeyPress,
+    shouldFocusMainTextbox,
+    isErrorInvalidSlashCommand,
+    splitMessageBasedOnCaretPosition,
+    groupsMentionedInText,
+    mentionsMinusSpecialMentionsInText,
+} from 'utils/post_utils';
+import * as UserAgent from 'utils/user_agent';
+import * as Utils from 'utils/utils';
+import {isMac} from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 import type {PostDraft} from 'types/store/draft';
@@ -164,10 +165,10 @@ type Props = {
     //To check if the timezones are enable on the server.
     isTimezoneEnabled: boolean;
 
-    canPost: boolean;
+    canPost?: boolean;
 
     //To determine if the current user can send special channel mentions
-    useChannelMentions: boolean;
+    useChannelMentions?: boolean;
 
     //Should preview be showed
     shouldShowPreview: boolean;
@@ -817,7 +818,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     focusTextbox = (keepFocus = false) => {
-        const postTextboxDisabled = !this.props.canPost;
+        const postTextboxDisabled = this.props.canPost;
         if (this.textboxRef.current && postTextboxDisabled) {
             this.textboxRef.current.blur(); // Fixes Firefox bug which causes keyboard shortcuts to be ignored (MM-22482)
             return;
@@ -1070,7 +1071,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     removePreview = (id: string) => {
         let modifiedDraft = {} as PostDraft;
         const draft = {...this.props.draft};
-        const channelId = this.props.currentChannel.id;
 
         // Clear previous errors
         this.setState({serverError: null});
@@ -1684,9 +1684,9 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
                     setShowPreview={this.setShowPreview}
                     shouldShowPreview={this.props.shouldShowPreview}
                     maxPostSize={this.props.maxPostSize}
-                    canPost={this.props.canPost}
+                    canPost={this.props.canPost ?? false}
                     applyMarkdown={this.applyMarkdown}
-                    useChannelMentions={this.props.useChannelMentions}
+                    useChannelMentions={this.props.useChannelMentions ?? false}
                     badConnection={this.props.badConnection}
                     canUploadFiles={this.props.canUploadFiles}
                     enableEmojiPicker={this.props.enableEmojiPicker}

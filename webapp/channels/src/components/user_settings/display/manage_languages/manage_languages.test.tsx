@@ -2,9 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import type {UserProfile} from '@mattermost/types/users';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import type {ManageLanguage as ManageLanguageClass} from './manage_languages';
 import ManageLanguages from './manage_languages';

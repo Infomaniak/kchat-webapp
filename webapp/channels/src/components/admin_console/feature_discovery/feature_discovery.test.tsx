@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {LicenseSkus} from 'utils/constants';
 
 import FeatureDiscovery from 'components/admin_console/feature_discovery/feature_discovery';
+
+import {LicenseSkus} from 'utils/constants';
 
 import SamlSVG from './features/images/saml_svg';
 

@@ -3,13 +3,14 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {getHistory} from 'utils/browser_history';
-import {TestHelper} from 'utils/test_helper';
 
 import type {OutgoingWebhook} from '@mattermost/types/integrations';
 
 import EditOutgoingWebhook
     from 'components/integrations/edit_outgoing_webhook/edit_outgoing_webhook';
+
+import {getHistory} from 'utils/browser_history';
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/integrations/EditOutgoingWebhook', () => {
     const team = TestHelper.getTeamMock();

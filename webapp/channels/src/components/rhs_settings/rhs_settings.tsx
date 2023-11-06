@@ -1,25 +1,19 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
 
 import React from 'react';
-/* eslint-disable react/no-string-refs */
-
 import {Tab, Tabs} from 'react-bootstrap';
 import {defineMessages, useIntl} from 'react-intl';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import NotificationsTab from 'components/rhs_settings/rhs_settings_notifications';
 import AdvancedTab from 'components/rhs_settings/rhs_settings_advanced';
 import DisplayTab from 'components/rhs_settings/rhs_settings_display';
 import DraftTab from 'components/rhs_settings/rhs_settings_drafts';
-
-import './rhs_settings.scss';
 import RhsSettingsHeader from 'components/rhs_settings/rhs_settings_header/rhs_settings_header';
+import NotificationsTab from 'components/rhs_settings/rhs_settings_notifications';
 
 import {t} from '../../utils/i18n';
 import * as Utils from '../../utils/utils';
-
+import './rhs_settings.scss';
 const holders = defineMessages({
     profile: {
         id: t('user.settings.modal.profile'),
@@ -88,7 +82,7 @@ export default function RhsSettings({
 
     const [activeTab, setActiveTab] = React.useState(settingsTab || tabs[0].name);
 
-    const handleUpdateActiveTab = (e) => {
+    const handleUpdateActiveTab = (e: any) => {
         setActiveTab(e);
     };
 
@@ -103,7 +97,7 @@ export default function RhsSettings({
     //     });
     // };
 
-    const updateSection = (section?: string) => {
+    const updateSection = () => {
     };
 
     return (
@@ -155,7 +149,6 @@ export default function RhsSettings({
                     {activeTab === 'drafts' && (
                         <div>
                             <DraftTab
-                                user={currentUser}
                                 updateSection={updateSection}
                             />
                         </div>

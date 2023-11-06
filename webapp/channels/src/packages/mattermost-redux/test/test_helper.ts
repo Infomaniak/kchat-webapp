@@ -1,23 +1,21 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {randomUUID} from 'crypto';
 import nock from 'nock';
 
-import {randomUUID} from 'crypto';
-
-import {Command, DialogElement, OAuthApp} from '@mattermost/types/integrations';
-import {SystemEmoji, CustomEmoji} from '@mattermost/types/emojis';
-import {Bot} from '@mattermost/types/bots';
-import {Team, TeamMembership} from '@mattermost/types/teams';
-import {Role} from '@mattermost/types/roles';
-import {Post, PostMetadata} from '@mattermost/types/posts';
-import {Channel, ChannelNotifyProps, ChannelMembership} from '@mattermost/types/channels';
-import {Group} from '@mattermost/types/groups';
-import {UserProfile, UserNotifyProps} from '@mattermost/types/users';
-import {Scheme} from '@mattermost/types/schemes';
-import {FileInfo} from '@mattermost/types/files';
-
 import {Client4} from '@mattermost/client';
+import type {Bot} from '@mattermost/types/bots';
+import type {Channel, ChannelNotifyProps, ChannelMembership} from '@mattermost/types/channels';
+import type {SystemEmoji, CustomEmoji} from '@mattermost/types/emojis';
+import type {FileInfo} from '@mattermost/types/files';
+import type {Group} from '@mattermost/types/groups';
+import type {Command, DialogElement, OAuthApp} from '@mattermost/types/integrations';
+import type {Post, PostMetadata} from '@mattermost/types/posts';
+import type {Role} from '@mattermost/types/roles';
+import type {Scheme} from '@mattermost/types/schemes';
+import type {Team, TeamMembership} from '@mattermost/types/teams';
+import type {UserProfile, UserNotifyProps} from '@mattermost/types/users';
 
 import General from 'mattermost-redux/constants/general';
 import {generateId} from 'mattermost-redux/utils/helpers';
@@ -306,7 +304,7 @@ class TestHelper {
             description: '',
             content_type: 'application/x-www-form-urlencoded',
         };
-    }
+    };
 
     testCommand = (teamId: string): Command => {
         return {
@@ -344,7 +342,7 @@ class TestHelper {
                     min_server_version: '5.12.0',
                 },
         };
-    }
+    };
 
     fakeChannel = (teamId: string): Channel => {
         const name = this.generateId();
@@ -392,7 +390,7 @@ class TestHelper {
 
     getChannelMock = (override?: Partial<Channel>) => {
         return Object.assign(this.fakeChannel(override?.team_id || ''), override);
-    }
+    };
 
     fakeChannelWithId = (teamId: string) => {
         return {
@@ -415,7 +413,7 @@ class TestHelper {
             id: this.generateId(),
             delete_at: 0,
         };
-    }
+    };
 
     fakeGmChannel = (...usernames: string[]) => {
         return {
@@ -426,7 +424,7 @@ class TestHelper {
             id: this.generateId(),
             delete_at: 0,
         };
-    }
+    };
 
     fakeChannelMember = (userId: string, channelId: string): ChannelMembership => {
         return {
@@ -455,7 +453,7 @@ class TestHelper {
             ignore_channel_mentions: 'default',
             ...override,
         };
-    }
+    };
 
     fakeUserNotifyProps = (override: Partial<UserNotifyProps>): UserNotifyProps => {
         return {
@@ -471,7 +469,7 @@ class TestHelper {
             mention_keys: '',
             ...override,
         };
-    }
+    };
 
     fakePost = (channelId: string): Post => {
         return {
@@ -528,11 +526,11 @@ class TestHelper {
             user_id: '',
             ...override,
         };
-    }
+    };
 
     getPostMock = (override?: Partial<Post>) => {
         return Object.assign(this.fakePost(override?.channel_id || ''), override);
-    }
+    };
 
     fakePostWithId = (channelId: string): Post => {
         return {
@@ -622,7 +620,7 @@ class TestHelper {
             delete_at: 0,
             description: '',
         };
-    }
+    };
 
     fakeGroup = (groupId: string, source = 'ldap'): Group => {
         const name = 'software-engineers';
@@ -740,7 +738,7 @@ class TestHelper {
         nock(clientBaseRoute).
             get('/users/me/preferences').
             reply(200, [{user_id: this.basicUser!.id, category: 'tutorial_step', name: this.basicUser!.id, value: '999'}]);
-    }
+    };
 
     initMockEntities = () => {
         this.basicUser = this.fakeUserWithId();
@@ -838,7 +836,7 @@ class TestHelper {
         };
         this.basicScheme = this.mockSchemeWithId();
         this.basicGroup = this.fakeGroupWithId('');
-    }
+    };
 
     initBasic = (client4 = this.createClient4()) => {
         client4.setUrl(DEFAULT_SERVER);
@@ -866,9 +864,9 @@ class TestHelper {
         this.basicChannel = null;
         this.basicChannelMember = null;
         this.basicPost = null;
-    }
+    };
 
-    wait = (time: number) => new Promise((resolve) => setTimeout(resolve, time))
+    wait = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
 }
 
 export default new TestHelper();

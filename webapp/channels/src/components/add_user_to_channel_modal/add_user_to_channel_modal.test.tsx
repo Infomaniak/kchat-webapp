@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import AddUserToChannelModal from 'components/add_user_to_channel_modal/add_user_to_channel_modal';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/AddUserToChannelModal', () => {
     const baseProps = {

@@ -2,10 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Constants} from 'utils/constants';
-import {applyTheme} from 'utils/utils';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+
+import {Constants} from 'utils/constants';
+import {applyTheme} from 'utils/utils';
 
 import PremadeThemeChooser from './premade_theme_chooser';
 

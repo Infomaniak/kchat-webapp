@@ -5,10 +5,6 @@ import classNames from 'classnames';
 import type {MouseEvent} from 'react';
 import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import Constants, {A11yCustomEventTypes, AppEvents, Locations} from 'utils/constants';
-import * as PostUtils from 'utils/post_utils';
-import {getDateForUnixTicks, makeIsEligibleForClick} from 'utils/utils';
 
 import type {Emoji} from '@mattermost/types/emojis';
 import type {Post} from '@mattermost/types/posts';
@@ -43,6 +39,11 @@ import type {Props as TimestampProps} from 'components/timestamp/timestamp';
 import Tooltip from 'components/tooltip';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import InfoSmallIcon from 'components/widgets/icons/info_small_icon';
+
+import {getHistory} from 'utils/browser_history';
+import Constants, {A11yCustomEventTypes, AppEvents, Locations} from 'utils/constants';
+import * as PostUtils from 'utils/post_utils';
+import {getDateForUnixTicks, makeIsEligibleForClick} from 'utils/utils';
 
 import type {PostPluginComponent} from 'types/store/plugins';
 

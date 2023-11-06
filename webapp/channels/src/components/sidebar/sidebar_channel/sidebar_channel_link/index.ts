@@ -2,20 +2,23 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
+import type {Channel} from '@mattermost/types/channels';
 
-import {GenericAction} from 'mattermost-redux/types/actions';
-import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 import {makeGetChannelUnreadCount} from 'mattermost-redux/selectors/entities/channels';
-import {clearChannelSelection, multiSelectChannelAdd, multiSelectChannelTo} from 'actions/views/channel_sidebar';
+import {getMyChannelMemberships} from 'mattermost-redux/selectors/entities/common';
+import type {GenericAction} from 'mattermost-redux/types/actions';
+import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
+
 import {markMostRecentPostInChannelAsUnread, unsetEditingPost} from 'actions/post_actions';
+import {clearChannelSelection, multiSelectChannelAdd, multiSelectChannelTo} from 'actions/views/channel_sidebar';
 import {closeRightHandSide} from 'actions/views/rhs';
-import {isChannelSelected} from 'selectors/views/channel_sidebar';
 import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
-import {GlobalState} from 'types/store';
-import {Channel} from '@mattermost/types/channels';
+import {isChannelSelected} from 'selectors/views/channel_sidebar';
+
+import type {GlobalState} from 'types/store';
 
 import SidebarChannelLink from './sidebar_channel_link';
 

@@ -4,6 +4,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import type {DraggableProvidedDragHandleProps} from 'react-beautiful-dnd';
+
 import {wrapEmojis} from 'utils/emoji_utils';
 
 type StaticProps = {

@@ -6,7 +6,6 @@ import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-import {ModalIdentifiers, suitePluginIds, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {
     Category,
@@ -40,6 +39,8 @@ import {showRHSPlugin} from 'actions/views/rhs';
 import LocalizedIcon from 'components/localized_icon';
 import {AutoTourStatus} from 'components/tours';
 import {TTNameMapToATStatusKey, TutorialTourName, WorkTemplateTourSteps} from 'components/tours/constant';
+
+import {ModalIdentifiers, suitePluginIds, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

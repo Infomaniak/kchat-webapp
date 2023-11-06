@@ -3,12 +3,6 @@
 
 import {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-    Preferences,
-    Constants,
-    TELEMETRY_CATEGORIES,
-    ModalIdentifiers,
-} from 'utils/constants';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 
@@ -24,6 +18,13 @@ import {isModalOpen} from 'selectors/views/modals';
 
 import useGetTotalUsersNoBots from 'components/common/hooks/useGetTotalUsersNoBots';
 import StartTrialModal from 'components/start_trial_modal';
+
+import {
+    Preferences,
+    Constants,
+    TELEMETRY_CATEGORIES,
+    ModalIdentifiers,
+} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

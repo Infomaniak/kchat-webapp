@@ -6,7 +6,7 @@
 import * as rudderAnalytics from 'rudder-sdk-js';
 export {rudderAnalytics};
 
-import {TelemetryHandler} from '@mattermost/client';
+import type {TelemetryHandler} from '@mattermost/client';
 
 import {isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 

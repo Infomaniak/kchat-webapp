@@ -4,11 +4,6 @@
 import React from 'react';
 import {Button, ButtonGroup} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import {Constants} from 'utils/constants';
-import type EmojiMap from 'utils/emoji_map';
-import messageHtmlToComponent from 'utils/message_html_to_component';
-import {formatText} from 'utils/text_formatting';
 
 import type {TermsOfService as ReduxTermsOfService} from '@mattermost/types/terms_of_service';
 
@@ -21,6 +16,12 @@ import LoadingScreen from 'components/loading_screen';
 import LogoutIcon from 'components/widgets/icons/fa_logout_icon';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
+
+import {getHistory} from 'utils/browser_history';
+import {Constants} from 'utils/constants';
+import type EmojiMap from 'utils/emoji_map';
+import messageHtmlToComponent from 'utils/message_html_to_component';
+import {formatText} from 'utils/text_formatting';
 
 export interface UpdateMyTermsOfServiceStatusResponse {
     terms_of_service_create_at: number;

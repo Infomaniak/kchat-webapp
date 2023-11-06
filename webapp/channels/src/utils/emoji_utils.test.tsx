@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+
 import {EmojiIndicesByAlias, Emojis} from 'utils/emoji';
 import {TestHelper as TH} from 'utils/test_helper';
 

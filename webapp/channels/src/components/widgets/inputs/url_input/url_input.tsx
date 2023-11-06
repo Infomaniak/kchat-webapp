@@ -4,11 +4,12 @@
 import classNames from 'classnames';
 import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
-import Constants from 'utils/constants';
-import {getShortenedURL} from 'utils/url';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants from 'utils/constants';
+import {getShortenedURL} from 'utils/url';
 
 import Input from '../input/input';
 

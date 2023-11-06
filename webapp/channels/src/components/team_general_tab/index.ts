@@ -1,18 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
-import {connect, ConnectedProps} from 'react-redux';
+import type {ConnectedProps} from 'react-redux';
+import {connect} from 'react-redux';
+import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import type {Team} from '@mattermost/types/teams';
+
 import {getTeam, patchTeam, removeTeamIcon, setTeamIcon, regenerateTeamInviteId} from 'mattermost-redux/actions/teams';
 import {Permissions} from 'mattermost-redux/constants';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {ActionResult, GenericAction} from 'mattermost-redux/types/actions';
+import type {ActionResult, GenericAction} from 'mattermost-redux/types/actions';
 
-import {GlobalState} from 'types/store/index';
-
-import {Team} from '@mattermost/types/teams';
+import type {GlobalState} from 'types/store/index';
 
 import TeamGeneralTab from './team_general_tab';
 

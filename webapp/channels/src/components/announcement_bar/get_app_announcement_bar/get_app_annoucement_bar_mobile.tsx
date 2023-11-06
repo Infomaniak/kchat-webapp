@@ -4,9 +4,10 @@
 import loaderkChat from 'images/logo_compact.png';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {AnnouncementBarTypes} from 'utils/constants';
 
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
+
+import {AnnouncementBarTypes} from 'utils/constants';
 
 import './get_app_annoucement_bar_mobile.scss';
 

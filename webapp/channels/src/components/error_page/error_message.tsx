@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+
 import {ErrorPageTypes} from 'utils/constants';
 import {t} from 'utils/i18n';
 

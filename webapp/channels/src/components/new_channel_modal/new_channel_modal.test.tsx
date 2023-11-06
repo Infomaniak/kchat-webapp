@@ -4,9 +4,6 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import Constants, {suitePluginIds} from 'utils/constants';
-import {cleanUpUrlable} from 'utils/url';
 
 import type {ChannelType} from '@mattermost/types/channels';
 
@@ -19,6 +16,10 @@ import GenericModal from 'components/generic_modal';
 import Input from 'components/widgets/inputs/input/input';
 import URLInput from 'components/widgets/inputs/url_input/url_input';
 import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import Constants, {suitePluginIds} from 'utils/constants';
+import {cleanUpUrlable} from 'utils/url';
 
 import type {GlobalState} from 'types/store';
 

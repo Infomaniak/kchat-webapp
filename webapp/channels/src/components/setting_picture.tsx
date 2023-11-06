@@ -4,14 +4,15 @@
 import type {ChangeEvent, CSSProperties, MouseEvent, ReactNode, RefObject} from 'react';
 import React, {Component, createRef} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants} from 'utils/constants';
-import * as FileUtils from 'utils/file_utils';
-import {localizeMessage} from 'utils/utils';
 
 import FormError from 'components/form_error';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
+
+import {Constants} from 'utils/constants';
+import * as FileUtils from 'utils/file_utils';
+import {localizeMessage} from 'utils/utils';
 
 type Props = {
     clientError?: ReactNode;

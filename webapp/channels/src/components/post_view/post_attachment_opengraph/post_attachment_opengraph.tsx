@@ -5,9 +5,6 @@ import {CloseIcon, MenuDownIcon, MenuRightIcon} from '@infomaniak/compass-icons/
 import classNames from 'classnames';
 import React, {memo, useRef} from 'react';
 import {useIntl} from 'react-intl';
-import Constants, {PostTypes} from 'utils/constants';
-import {isSystemMessage} from 'utils/post_utils';
-import {makeUrlSafe} from 'utils/url';
 
 import type {
     OpenGraphMetadata,
@@ -21,6 +18,10 @@ import ExternalImage from 'components/external_image';
 import ExternalLink from 'components/external_link';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants, {PostTypes} from 'utils/constants';
+import {isSystemMessage} from 'utils/post_utils';
+import {makeUrlSafe} from 'utils/url';
 
 import {getNearestPoint} from './get_nearest_point';
 

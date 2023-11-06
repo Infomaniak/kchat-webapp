@@ -6,11 +6,6 @@
 import {AccountMultipleOutlineIcon, ChartBarIcon, CogOutlineIcon, CreditCardOutlineIcon, FlaskOutlineIcon, FormatListBulletedIcon, InformationOutlineIcon, PowerPlugOutlineIcon, ServerVariantIcon, ShieldOutlineIcon, SitemapIcon, ProductsIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {isCloudFreePlan} from 'utils/cloud_utils';
-import {Constants, CloudProducts, LicenseSkus} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {isCloudLicense} from 'utils/license_utils';
-import {getSiteURL} from 'utils/url';
 
 import {RESOURCE_KEYS} from 'mattermost-redux/constants/permissions_sysconsole';
 
@@ -32,47 +27,53 @@ import TeamAnalytics from 'components/analytics/team_analytics';
 import ExternalLink from 'components/external_link';
 import RestrictedIndicator from 'components/widgets/menu/menu_items/restricted_indicator';
 
+import {isCloudFreePlan} from 'utils/cloud_utils';
+import {Constants, CloudProducts, LicenseSkus} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {isCloudLicense} from 'utils/license_utils';
+import {getSiteURL} from 'utils/url';
+
 import * as DefinitionConstants from './admin_definition_constants';
 import Audits from './audits';
 import BillingHistory from './billing/billing_history';
 import BillingSubscriptions from './billing/billing_subscriptions/index.tsx';
 import CompanyInfo from './billing/company_info';
+import CompanyInfoEdit from './billing/company_info_edit';
 import PaymentInfo from './billing/payment_info';
+import PaymentInfoEdit from './billing/payment_info_edit';
 import BleveSettings from './bleve_settings.jsx';
 import BrandImageSetting from './brand_image_setting/brand_image_setting';
+import ClusterSettings from './cluster_settings.jsx';
 import CustomEnableDisableGuestAccountsSetting from './custom_enable_disable_guest_accounts_setting';
+import CustomTermsOfServiceSettings from './custom_terms_of_service_settings';
 import CustomURLSchemesSetting from './custom_url_schemes_setting.jsx';
-import OpenIdConvert from './openid_convert';
+import DataRetentionSettings from './data_retention_settings';
+import CustomDataRetentionForm from './data_retention_settings/custom_policy_form';
+import GlobalDataRetentionForm from './data_retention_settings/global_policy_form';
+import GroupDetails from './group_settings/group_details';
+import GroupSettings from './group_settings/group_settings';
 import LicenseSettings from './license_settings';
+import OpenIdConvert from './openid_convert';
 import PasswordSettings from './password_settings.jsx';
 import PermissionSchemesSettings from './permission_schemes_settings';
 import PermissionSystemSchemeSettings from './permission_schemes_settings/permission_system_scheme_settings';
 import PermissionTeamSchemeSettings from './permission_schemes_settings/permission_team_scheme_settings';
+import PushNotificationsSettings from './push_settings.jsx';
 import ServerLogs from './server_logs';
 import SystemRoles from './system_roles';
 import ValidationResult from './validation';
 import SystemRole from './system_roles/system_role';
 import SystemUsers from './system_users';
 import SystemUserDetail from './system_user_detail';
-import GroupSettings from './group_settings/group_settings';
-import GroupDetails from './group_settings/group_details';
 import TeamSettings from './team_channel_settings/team';
 import TeamDetails from './team_channel_settings/team/details';
 import ChannelSettings from './team_channel_settings/channel';
 import ChannelDetails from './team_channel_settings/channel/details';
-import PushNotificationsSettings from './push_settings.jsx';
-import DataRetentionSettings from './data_retention_settings';
-import GlobalDataRetentionForm from './data_retention_settings/global_policy_form';
-import CustomDataRetentionForm from './data_retention_settings/custom_policy_form';
 import MessageExportSettings from './message_export_settings.jsx';
 import DatabaseSettings from './database_settings.jsx';
 import ElasticSearchSettings from './elasticsearch_settings.jsx';
 import FeatureFlags from './feature_flags.tsx';
-import ClusterSettings from './cluster_settings.jsx';
-import CustomTermsOfServiceSettings from './custom_terms_of_service_settings';
 import SessionLengthSettings from './session_length_settings';
-import CompanyInfoEdit from './billing/company_info_edit';
-import PaymentInfoEdit from './billing/payment_info_edit';
 import WorkspaceOptimizationDashboard from './workspace-optimization/dashboard';
 import {
     LDAPFeatureDiscovery,

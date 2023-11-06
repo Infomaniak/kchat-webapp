@@ -2,14 +2,10 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import Pluggable from 'plugins/pluggable';
 import React, {useState} from 'react';
 import {Tooltip} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import Constants, {ItemStatus, ModalIdentifiers} from 'utils/constants';
-import {cleanUpUrlable, validateChannelUrl, getSiteURL} from 'utils/url';
-import {localizeMessage} from 'utils/utils';
 
 import type {Board} from '@mattermost/types/boards';
 import type {ChannelType, Channel} from '@mattermost/types/channels';
@@ -36,6 +32,11 @@ import OverlayTrigger from 'components/overlay_trigger';
 import Input from 'components/widgets/inputs/input/input';
 import URLInput from 'components/widgets/inputs/url_input/url_input';
 import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
+
+import Pluggable from 'plugins/pluggable';
+import Constants, {ItemStatus, ModalIdentifiers} from 'utils/constants';
+import {cleanUpUrlable, validateChannelUrl, getSiteURL} from 'utils/url';
+import {localizeMessage} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

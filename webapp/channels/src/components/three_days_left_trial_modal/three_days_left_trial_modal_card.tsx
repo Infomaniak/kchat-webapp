@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+
 import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import LearnMoreActionButton from './learn_more_action_button';

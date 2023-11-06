@@ -3,10 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import Constants from 'utils/constants';
 
 import FilePreviewModal from 'components/file_preview_modal';
 import SizeAwareImage from 'components/size_aware_image';
+
+import Constants from 'utils/constants';
 
 import MarkdownImage from './markdown_image';
 

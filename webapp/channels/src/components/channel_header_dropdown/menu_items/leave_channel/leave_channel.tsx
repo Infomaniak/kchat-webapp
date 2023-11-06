@@ -2,13 +2,14 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Constants, ModalIdentifiers} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import LeaveChannelModal from 'components/leave_channel_modal';
 import Menu from 'components/widgets/menu/menu';
+
+import {Constants, ModalIdentifiers} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 import type {PropsFromRedux} from './index';
 

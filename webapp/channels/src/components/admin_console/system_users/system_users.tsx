@@ -4,10 +4,6 @@
 import type {ChangeEvent} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants, UserSearchOptions, SearchUserTeamFilter, UserFilters} from 'utils/constants';
-import {getUserOptionsFromFilter, searchUserOptionsFromFilter} from 'utils/filter_users';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {Team} from '@mattermost/types/teams';
@@ -24,6 +20,11 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LocalizedInput from 'components/localized_input/localized_input';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
+
+import {Constants, UserSearchOptions, SearchUserTeamFilter, UserFilters} from 'utils/constants';
+import {getUserOptionsFromFilter, searchUserOptionsFromFilter} from 'utils/filter_users';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import SystemUsersList from './list';
 

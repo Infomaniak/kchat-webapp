@@ -4,6 +4,15 @@
 import {isEmpty} from 'lodash';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+
+import type {Subscription} from '@mattermost/types/cloud';
+import type {PreferenceType} from '@mattermost/types/preferences';
+import type {UserProfile} from '@mattermost/types/users';
+
+import {trackEvent} from 'actions/telemetry_actions';
+
+import PricingModal from 'components/pricing_modal';
+
 import {
     Preferences,
     CloudBanners,
@@ -14,14 +23,6 @@ import {
 } from 'utils/constants';
 import {t} from 'utils/i18n';
 import {getLocaleDateFromUTC} from 'utils/utils';
-
-import type {Subscription} from '@mattermost/types/cloud';
-import type {PreferenceType} from '@mattermost/types/preferences';
-import type {UserProfile} from '@mattermost/types/users';
-
-import {trackEvent} from 'actions/telemetry_actions';
-
-import PricingModal from 'components/pricing_modal';
 
 import type {ModalData} from 'types/actions';
 

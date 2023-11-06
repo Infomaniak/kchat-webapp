@@ -4,8 +4,6 @@
 import moment from 'moment';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {daysToLicenseExpire} from 'utils/license_utils';
-import {getBrowserTimezone} from 'utils/timezone';
 
 import type {ClientLicense} from '@mattermost/types/config';
 
@@ -13,6 +11,9 @@ import AlertBanner from 'components/alert_banner';
 import ContactUsButton from 'components/announcement_bar/contact_sales/contact_us';
 import PurchaseLink from 'components/announcement_bar/purchase_link/purchase_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import {daysToLicenseExpire} from 'utils/license_utils';
+import {getBrowserTimezone} from 'utils/timezone';
 
 import './trial_license_card.scss';
 

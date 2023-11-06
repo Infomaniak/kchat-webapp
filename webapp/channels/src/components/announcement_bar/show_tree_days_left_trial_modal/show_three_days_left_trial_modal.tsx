@@ -4,12 +4,6 @@
 import moment from 'moment';
 import {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-    Preferences,
-    TELEMETRY_CATEGORIES,
-    ModalIdentifiers,
-    CloudBanners,
-} from 'utils/constants';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCloudSubscription} from 'mattermost-redux/selectors/entities/cloud';
@@ -26,6 +20,13 @@ import useGetHighestThresholdCloudLimit from 'components/common/hooks/useGetHigh
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetUsage from 'components/common/hooks/useGetUsage';
 import ThreeDaysLeftTrialModal from 'components/three_days_left_trial_modal/three_days_left_trial_modal';
+
+import {
+    Preferences,
+    TELEMETRY_CATEGORIES,
+    ModalIdentifiers,
+    CloudBanners,
+} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

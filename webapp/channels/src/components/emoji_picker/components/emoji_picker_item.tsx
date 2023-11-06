@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import imgTrans from 'images/img_trans.gif';
 import throttle from 'lodash/throttle';
 import React, {memo, useCallback} from 'react';
 import {useIntl} from 'react-intl';
@@ -13,6 +12,8 @@ import {getEmojiImageUrl, isSystemEmoji} from 'mattermost-redux/utils/emoji_util
 
 import {EMOJI_SCROLL_THROTTLE_DELAY} from 'components/emoji_picker/constants';
 import type {EmojiCursor} from 'components/emoji_picker/types';
+
+import imgTrans from 'images/img_trans.gif';
 
 interface Props {
     emoji: Emoji;

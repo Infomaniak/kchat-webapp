@@ -3,8 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import {t} from 'utils/i18n';
 
 import type {Command} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
@@ -12,6 +10,9 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import ConfirmModal from 'components/confirm_modal';
 import LoadingScreen from 'components/loading_screen';
+
+import {getHistory} from 'utils/browser_history';
+import {t} from 'utils/i18n';
 
 import AbstractCommand from '../abstract_command.jsx';
 

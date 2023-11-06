@@ -1,13 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import * as I18n from 'i18n/i18n';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {Link} from 'react-router-dom';
-import {useQuery} from 'utils/http_utils';
 
 import {HelpLink} from 'components/help/types';
+
+import * as I18n from 'i18n/i18n';
+import {useQuery} from 'utils/http_utils';
 
 type Props = {
     excludedLinks?: HelpLink[];

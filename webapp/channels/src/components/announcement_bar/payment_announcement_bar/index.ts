@@ -2,24 +2,25 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {savePreferences} from 'mattermost-redux/actions/preferences';
-import {getLicense} from 'mattermost-redux/selectors/entities/general';
-import {GenericAction} from 'mattermost-redux/types/actions';
 import {getCloudSubscription, getCloudCustomer} from 'mattermost-redux/actions/cloud';
-
-import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {
     getCloudSubscription as selectCloudSubscription,
     getCloudCustomer as selectCloudCustomer,
     getSubscriptionProduct,
 } from 'mattermost-redux/selectors/entities/cloud';
-import {CloudProducts} from 'utils/constants';
+import {getLicense} from 'mattermost-redux/selectors/entities/general';
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
+import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {openModal} from 'actions/views/modals';
 
-import {GlobalState} from 'types/store';
+import {CloudProducts} from 'utils/constants';
+
+import type {GlobalState} from 'types/store';
 
 import PaymentAnnouncementBar from './payment_announcement_bar';
 

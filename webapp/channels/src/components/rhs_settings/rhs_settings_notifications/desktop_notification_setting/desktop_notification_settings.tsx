@@ -7,13 +7,14 @@ import {FormattedMessage} from 'react-intl';
 import type {ValueType} from 'react-select';
 import ReactSelect from 'react-select';
 import semver from 'semver';
+
+import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_settings_item';
+import Toggle from 'components/toggle';
+
 import {NotificationLevels} from 'utils/constants';
 import {isDesktopApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 import {localizeMessage} from 'utils/utils';
-
-import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_settings_item';
-import Toggle from 'components/toggle';
 
 type SelectedOption = {
     label: string;

@@ -7,8 +7,6 @@ import type {PropsWithChildren} from 'react';
 import React, {memo, useCallback, useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {A11yClassNames, Constants, CrtTutorialSteps, ModalIdentifiers, Preferences} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {UserThread} from '@mattermost/types/threads';
 
@@ -26,6 +24,9 @@ import CRTListTutorialTip from 'components/tours/crt_tour/crt_list_tutorial_tip'
 import CRTUnreadTutorialTip from 'components/tours/crt_tour/crt_unread_tutorial_tip';
 import Header from 'components/widgets/header';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
+
+import {A11yClassNames, Constants, CrtTutorialSteps, ModalIdentifiers, Preferences} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

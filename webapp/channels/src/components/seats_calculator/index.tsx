@@ -4,11 +4,12 @@
 import {InformationOutlineIcon} from '@infomaniak/compass-icons/components';
 import React from 'react';
 import {useIntl, FormattedMessage, FormattedNumber} from 'react-intl';
-import {Constants, ItemStatus} from 'utils/constants';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import Input from 'components/widgets/inputs/input/input';
+
+import {Constants, ItemStatus} from 'utils/constants';
 
 import './seats_calculator.scss';
 

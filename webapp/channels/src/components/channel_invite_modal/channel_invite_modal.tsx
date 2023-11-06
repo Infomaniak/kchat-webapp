@@ -4,8 +4,6 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -23,6 +21,9 @@ import ToggleModalButton from 'components/toggle_modal_button';
 import AddIcon from 'components/widgets/icons/fa_add_icon';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
+
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 const USERS_PER_PAGE = 50;
 const USERS_FROM_DMS = 10;

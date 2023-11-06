@@ -2,23 +2,23 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {GlobalState} from 'types/store';
+import type {Channel} from '@mattermost/types/channels';
 
-import {Channel} from '@mattermost/types/channels';
-
-import {DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
-
-import {autoUpdateTimezone} from 'mattermost-redux/actions/timezone';
 import {viewChannel} from 'mattermost-redux/actions/channels';
+import {autoUpdateTimezone} from 'mattermost-redux/actions/timezone';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
+import type {DispatchFunc, GenericAction} from 'mattermost-redux/types/actions';
 
 import {getHistory} from 'utils/browser_history';
-import {getChannelURL} from 'utils/utils';
 import {isPermalinkURL} from 'utils/url';
+import {getChannelURL} from 'utils/utils';
+
+import type {GlobalState} from 'types/store';
 
 import LoggedIn from './logged_in';
 

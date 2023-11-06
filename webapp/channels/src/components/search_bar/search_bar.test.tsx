@@ -2,16 +2,17 @@
 // See LICENSE.txt for license information.
 
 import {render} from '@testing-library/react';
-import en from 'i18n/en.json';
 import type {ComponentProps} from 'react';
 import React from 'react';
 import {IntlProvider} from 'react-intl';
 import {Provider} from 'react-redux';
-import mockStore from 'tests/test_store';
 
 import SearchChannelProvider from 'components/suggestion/search_channel_provider';
 import SearchDateProvider from 'components/suggestion/search_date_provider';
 import SearchUserProvider from 'components/suggestion/search_user_provider';
+
+import en from 'i18n/en.json';
+import mockStore from 'tests/test_store';
 
 import SearchBar from './search_bar';
 

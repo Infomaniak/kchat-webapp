@@ -8,11 +8,6 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {useRouteMatch} from 'react-router-dom';
-import type {A11yFocusEventDetail} from 'utils/constants';
-import {A11yCustomEventTypes, Constants, ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {getCurrentMomentForTimezone} from 'utils/timezone';
-import {isKeyPressed, localizeMessage} from 'utils/utils';
 
 import type {Emoji} from '@mattermost/types/emojis';
 import type {UserCustomStatus} from '@mattermost/types/users';
@@ -35,6 +30,12 @@ import EmojiPickerOverlay from 'components/emoji_picker/emoji_picker_overlay';
 import GenericModal from 'components/generic_modal';
 import QuickInput, {MaxLengthInput} from 'components/quick_input';
 import EmojiIcon from 'components/widgets/icons/emoji_icon';
+
+import {A11yCustomEventTypes, Constants, ModalIdentifiers} from 'utils/constants';
+import type {A11yFocusEventDetail} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
+import {isKeyPressed, localizeMessage} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

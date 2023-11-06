@@ -4,9 +4,10 @@
 import {shallow} from 'enzyme';
 import type {ComponentProps} from 'react';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {UserNotifyProps} from '@mattermost/types/users';
+
+import {TestHelper} from 'utils/test_helper';
 
 import UserSettingsNotifications from './user_settings_notifications';
 

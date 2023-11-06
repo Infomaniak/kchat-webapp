@@ -4,9 +4,6 @@
 import type {ChangeEvent, MouseEvent, ReactNode} from 'react';
 import React from 'react';
 import {FormattedMessage, FormattedDate} from 'react-intl';
-import Constants from 'utils/constants';
-import {t} from 'utils/i18n';
-import {imageURLForTeam, isMobile, localizeMessage, moveCursorToEnd} from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 
@@ -15,6 +12,10 @@ import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
 import SettingPicture from 'components/setting_picture';
 import BackIcon from 'components/widgets/icons/fa_back_icon';
+
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
+import {imageURLForTeam, isMobile, localizeMessage, moveCursorToEnd} from 'utils/utils';
 
 import OpenInvite from './open_invite';
 

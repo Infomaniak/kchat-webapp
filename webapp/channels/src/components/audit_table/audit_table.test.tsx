@@ -2,10 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-import {TestHelper} from 'utils/test_helper';
 
 import AuditTable from 'components/audit_table/audit_table';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/audit_table/AuditTable', () => {
     const actions = {

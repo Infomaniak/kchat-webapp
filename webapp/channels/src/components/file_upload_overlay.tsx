@@ -1,10 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import fileOverlayImage from 'images/filesOverlay.png';
-import overlayLogoImage from 'images/logoWhite.png';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+
+import fileOverlayImage from 'images/filesOverlay.png';
+import overlayLogoImage from 'images/logoWhite.png';
 import {t} from 'utils/i18n';
 
 import LocalizedIcon from './localized_icon';

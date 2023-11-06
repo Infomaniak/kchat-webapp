@@ -1,10 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {Team} from '@mattermost/types/teams';
-import {IDMappedObjects} from '@mattermost/types/utilities';
+import type {Team} from '@mattermost/types/teams';
+import type {IDMappedObjects} from '@mattermost/types/utilities';
+
 import {Client4} from 'mattermost-redux/client';
 import {getCookie, setCookie} from 'mattermost-redux/utils/cookie_utils';
+
 import {General} from '../constants';
 
 const LAST_KSUITE_COOKIE = 'LAST_KSUITE';

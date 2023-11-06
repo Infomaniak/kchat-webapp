@@ -2,29 +2,29 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
-
 import {setStatus, unsetCustomStatus} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import {Preferences} from 'mattermost-redux/constants';
-
 import {get, getBool} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentUser, getStatusForUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUser, getStatusForUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
+import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {openModal} from 'actions/views/modals';
 import {setStatusDropdown} from 'actions/views/status_dropdown';
-
 import {getCurrentUserTimezone} from 'selectors/general';
+import {getShowTutorialStep} from 'selectors/onboarding';
 import {makeGetCustomStatus, isCustomStatusEnabled, showStatusDropdownPulsatingDot, isCustomStatusExpired} from 'selectors/views/custom_status';
 import {isStatusDropdownOpen} from 'selectors/views/status_dropdown';
-import {GenericAction} from 'mattermost-redux/types/actions';
-import {GlobalState} from 'types/store';
+
 import {OnboardingTasksName} from 'components/onboarding_tasks';
 import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours';
-import {getShowTutorialStep} from 'selectors/onboarding';
+
+import type {GlobalState} from 'types/store';
 
 import StatusDropdown from './status_dropdown';
 

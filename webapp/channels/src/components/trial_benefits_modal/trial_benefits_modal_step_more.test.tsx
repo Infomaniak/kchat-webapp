@@ -4,11 +4,12 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {useHistory} from 'react-router-dom';
-import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import TrialBenefitsModalStepMore from 'components/trial_benefits_modal/trial_benefits_modal_step_more';
+
+import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 jest.mock('react-router-dom', () => {
     const original = jest.requireActual('react-router-dom');

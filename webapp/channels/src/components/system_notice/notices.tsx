@@ -1,15 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import mattermostIcon from 'images/icon50x50.png';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as ServerVersion from 'utils/server_version';
-import * as UserAgent from 'utils/user_agent';
 
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import type {Notice} from 'components/system_notice/types';
+
+import mattermostIcon from 'images/icon50x50.png';
+import * as ServerVersion from 'utils/server_version';
+import * as UserAgent from 'utils/user_agent';
 
 // Notices are objects with the following fields:
 //  - name - string identifier

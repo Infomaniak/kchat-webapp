@@ -4,8 +4,6 @@
 import React from 'react';
 import {useIntl, FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {CloudProducts} from 'utils/constants';
-import {asGBString, fallbackStarterLimits, hasSomeLimits} from 'utils/limits';
 
 import {
     getCloudProducts,
@@ -19,6 +17,9 @@ import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetUsage from 'components/common/hooks/useGetUsage';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
+
+import {CloudProducts} from 'utils/constants';
+import {asGBString, fallbackStarterLimits, hasSomeLimits} from 'utils/limits';
 
 import LimitCard from './limit_card';
 

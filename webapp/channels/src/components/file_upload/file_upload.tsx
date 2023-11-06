@@ -7,6 +7,18 @@ import type {ChangeEvent, DragEvent, MouseEvent, TouchEvent, RefObject} from 're
 import React, {PureComponent} from 'react';
 import type {IntlShape} from 'react-intl';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
+
+import type {ServerError} from '@mattermost/types/errors';
+import type {FileInfo, FileUploadResponse} from '@mattermost/types/files';
+
+import type {UploadFile} from 'actions/file_actions';
+
+import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
+import OverlayTrigger from 'components/overlay_trigger';
+import Tooltip from 'components/tooltip';
+import Menu from 'components/widgets/menu/menu';
+import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
 import Constants from 'utils/constants';
 import DelayedAction from 'utils/delayed_action';
 import dragster from 'utils/dragster';
@@ -26,17 +38,6 @@ import {
     localizeMessage,
     isTextDroppableEvent,
 } from 'utils/utils';
-
-import type {ServerError} from '@mattermost/types/errors';
-import type {FileInfo, FileUploadResponse} from '@mattermost/types/files';
-
-import type {UploadFile} from 'actions/file_actions';
-
-import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
-import OverlayTrigger from 'components/overlay_trigger';
-import Tooltip from 'components/tooltip';
-import Menu from 'components/widgets/menu/menu';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 
 import type {FilesWillUploadHook, PluginComponent} from 'types/store/plugins';
 

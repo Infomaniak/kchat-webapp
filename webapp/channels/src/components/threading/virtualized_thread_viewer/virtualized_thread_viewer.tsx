@@ -6,10 +6,6 @@ import {DynamicSizeList} from 'dynamic-virtualized-list';
 import type {RefObject} from 'react';
 import React, {PureComponent} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import Constants from 'utils/constants';
-import DelayedAction from 'utils/delayed_action';
-import {getNewMessageIndex, getPreviousPostId, getLatestPostId} from 'utils/post_utils';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
@@ -20,6 +16,11 @@ import {isDateLine, isStartOfNewMessages, isCreateComment} from 'mattermost-redu
 import NewRepliesBanner from 'components/new_replies_banner';
 import FloatingTimestamp from 'components/post_view/floating_timestamp';
 import {THREADING_TIME as BASE_THREADING_TIME} from 'components/threading/common/options';
+
+import Constants from 'utils/constants';
+import DelayedAction from 'utils/delayed_action';
+import {getNewMessageIndex, getPreviousPostId, getLatestPostId} from 'utils/post_utils';
+import * as Utils from 'utils/utils';
 
 import type {FakePost} from 'types/store/rhs';
 

@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
 
 import type {GroupStats} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
@@ -11,6 +10,8 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
 import DataGrid from 'components/admin_console/data_grid/data_grid';
 import UserGridName from 'components/admin_console/user_grid/user_grid_name';
+
+import Constants from 'utils/constants';
 
 const USERS_PER_PAGE = 10;
 

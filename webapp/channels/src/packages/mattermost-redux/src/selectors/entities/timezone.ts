@@ -1,14 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import timezones, {Timezone} from 'timezones.json';
+import type {Timezone} from 'timezones.json';
+import timezones from 'timezones.json';
 
-import {getUser} from 'mattermost-redux/selectors/entities/users';
+import type {GlobalState} from '@mattermost/types/store';
+import type {UserProfile, UserTimezone} from '@mattermost/types/users';
 
-import {GlobalState} from '@mattermost/types/store';
-import {UserProfile, UserTimezone} from '@mattermost/types/users';
-import {createSelector} from 'reselect';
-
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
+import {getCurrentUser, getUser} from 'mattermost-redux/selectors/entities/users';
 import {getUserCurrentTimezone, getTimezoneLabel as getTimezoneLabelUtil} from 'mattermost-redux/utils/timezone_utils';
 
 export function getTimezoneForUserProfile(profile: UserProfile) {
@@ -49,5 +49,21 @@ export const getTimezoneLabel: (state: GlobalState, userId: UserProfile['id']) =
             return '';
         }
         return getTimezoneLabelUtil(timezones, timezone);
+    },
+);
+
+export const getCurrentTimezoneFull = createSelector(
+    'getCurrentTimezoneFull',
+    getCurrentUser,
+    (currentUser) => {
+        return getTimezoneForUserProfile(currentUser);
+    },
+);
+
+export const getCurrentTimezone = createSelector(
+    'getCurrentTimezone',
+    getCurrentTimezoneFull,
+    (timezoneFull) => {
+        return getUserCurrentTimezone(timezoneFull);
     },
 );

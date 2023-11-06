@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import RemovedFromChannelModal from 'components/removed_from_channel_modal/removed_from_channel_modal';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 describe('components/RemoveFromChannelModal', () => {
     const baseProps = {

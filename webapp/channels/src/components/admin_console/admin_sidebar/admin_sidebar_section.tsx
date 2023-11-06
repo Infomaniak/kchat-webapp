@@ -3,11 +3,12 @@
 
 import classNames from 'classnames';
 import React from 'react';
-import {createSafeId} from 'utils/utils';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import BlockableLink from 'components/admin_console/blockable_link';
+
+import {createSafeId} from 'utils/utils';
 
 type Props = {
     name: string;

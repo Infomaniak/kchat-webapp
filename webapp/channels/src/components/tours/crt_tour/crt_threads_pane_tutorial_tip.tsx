@@ -4,12 +4,13 @@
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {Constants, Preferences} from 'utils/constants';
 
 import {TourTip, useMeasurePunchouts} from '@mattermost/components';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+
+import {Constants, Preferences} from 'utils/constants';
 
 const translate = {x: 2, y: 25};
 

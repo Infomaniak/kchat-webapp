@@ -4,25 +4,6 @@
 /* eslint-disable max-lines */
 
 import React from 'react';
-import Constants, {AdvancedTextEditor as AdvancedTextEditorConst, Locations, ModalIdentifiers, Preferences} from 'utils/constants';
-import type EmojiMap from 'utils/emoji_map';
-import type {
-    ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
-import {
-    applyMarkdown,
-} from 'utils/markdown/apply_markdown';
-import {getTable, hasHtmlLink, formatMarkdownMessage, isGitHubCodeBlock, formatGithubCodePaste} from 'utils/paste';
-import {
-    specialMentionsInText,
-    postMessageOnKeyPress,
-    shouldFocusMainTextbox,
-    isErrorInvalidSlashCommand,
-    splitMessageBasedOnCaretPosition,
-    groupsMentionedInText,
-    mentionsMinusSpecialMentionsInText,
-} from 'utils/post_utils';
-import * as UserAgent from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import type {ChannelMemberCountsByGroup} from '@mattermost/types/channels';
 import type {Emoji} from '@mattermost/types/emojis';
@@ -42,6 +23,26 @@ import type {FileUpload as FileUploadClass} from 'components/file_upload/file_up
 import NotifyConfirmModal from 'components/notify_confirm_modal';
 import PostDeletedModal from 'components/post_deleted_modal';
 import ScheduledIndicator, {ScheduledIndicatorType} from 'components/schedule_post/scheduled_indicator';
+
+import Constants, {AdvancedTextEditor as AdvancedTextEditorConst, Locations, ModalIdentifiers, Preferences} from 'utils/constants';
+import type EmojiMap from 'utils/emoji_map';
+import {
+    applyMarkdown,
+} from 'utils/markdown/apply_markdown';
+import type {
+    ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
+import {getTable, hasHtmlLink, formatMarkdownMessage, isGitHubCodeBlock, formatGithubCodePaste} from 'utils/paste';
+import {
+    specialMentionsInText,
+    postMessageOnKeyPress,
+    shouldFocusMainTextbox,
+    isErrorInvalidSlashCommand,
+    splitMessageBasedOnCaretPosition,
+    groupsMentionedInText,
+    mentionsMinusSpecialMentionsInText,
+} from 'utils/post_utils';
+import * as UserAgent from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions.js';
 import type {PostDraft} from 'types/store/draft';

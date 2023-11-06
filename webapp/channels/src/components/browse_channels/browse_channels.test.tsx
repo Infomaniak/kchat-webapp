@@ -3,8 +3,6 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {getHistory} from 'utils/browser_history';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Channel} from '@mattermost/types/channels';
 
@@ -13,6 +11,9 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import type {Props} from 'components/browse_channels/browse_channels';
 import BrowseChannels, {Filter} from 'components/browse_channels/browse_channels';
 import SearchableChannelList from 'components/searchable_channel_list';
+
+import {getHistory} from 'utils/browser_history';
+import {TestHelper} from 'utils/test_helper';
 
 jest.useFakeTimers('legacy');
 

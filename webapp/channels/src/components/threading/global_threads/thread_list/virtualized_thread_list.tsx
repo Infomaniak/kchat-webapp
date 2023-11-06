@@ -5,9 +5,10 @@ import React, {memo, useCallback, useEffect, useMemo} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import {FixedSizeList} from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
-import {Constants} from 'utils/constants';
 
 import type {UserThread} from '@mattermost/types/threads';
+
+import {Constants} from 'utils/constants';
 
 import Row from './virtualized_thread_list_row';
 

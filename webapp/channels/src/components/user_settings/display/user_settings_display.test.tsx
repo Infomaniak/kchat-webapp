@@ -4,11 +4,12 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import configureStore from 'store';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import UserSettingsDisplay from './user_settings_display';
 

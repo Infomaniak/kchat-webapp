@@ -4,14 +4,15 @@
 import React, {memo, useMemo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import Constants from 'utils/constants';
-import {makeGetUserOrGroupMentionCountFromMessage} from 'utils/post_utils';
 
 import {GenericModal} from '@mattermost/components';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {getPersistentNotificationIntervalMinutes, getPersistentNotificationMaxRecipients} from 'mattermost-redux/selectors/entities/posts';
+
+import Constants from 'utils/constants';
+import {makeGetUserOrGroupMentionCountFromMessage} from 'utils/post_utils';
 
 import type {GlobalState} from 'types/store';
 

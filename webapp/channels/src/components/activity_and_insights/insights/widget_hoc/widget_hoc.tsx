@@ -5,7 +5,6 @@ import type {ComponentType} from 'react';
 import React, {useCallback, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
-import {InsightsScopes, InsightsCardTitles, ModalIdentifiers} from 'utils/constants';
 
 import type {CardSize, InsightsWidgetTypes, TimeFrame} from '@mattermost/types/insights';
 
@@ -13,6 +12,8 @@ import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
+
+import {InsightsScopes, InsightsCardTitles, ModalIdentifiers} from 'utils/constants';
 
 import InsightsCard from '../card/card';
 import InsightsModal from '../insights_modal/insights_modal';

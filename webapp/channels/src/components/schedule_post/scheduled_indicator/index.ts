@@ -3,10 +3,11 @@
 
 import {connect} from 'react-redux';
 
-import {GlobalState} from 'types/store';
 import {makeGetDraftsByPrefix} from 'selectors/drafts';
 
 import {StoragePrefixes} from 'utils/constants';
+
+import type {GlobalState} from 'types/store';
 
 import ScheduledIndicator from './scheduled_indicator';
 

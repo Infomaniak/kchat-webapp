@@ -4,11 +4,12 @@
 import React, {useMemo, useRef} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {getLatestPostId, makeCreateAriaLabelForPost} from 'utils/post_utils';
 
 import type {Post} from '@mattermost/types/posts';
 
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
+
+import {getLatestPostId, makeCreateAriaLabelForPost} from 'utils/post_utils';
 
 import type {GlobalState} from 'types/store';
 

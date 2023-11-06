@@ -4,9 +4,10 @@
 import type {Chart, ChartData} from 'chart.js';
 import {shallow, mount} from 'enzyme';
 import React from 'react';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import DoughnutChart from 'components/analytics/doughnut_chart';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 jest.mock('chart.js');
 

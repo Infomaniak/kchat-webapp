@@ -2,10 +2,17 @@
 // See LICENSE.txt for license information.
 
 /* eslint-disable max-lines */
+import solarizedDarkCSS from 'highlight.js/styles/base16/solarized-dark.css';
+import solarizedLightCSS from 'highlight.js/styles/base16/solarized-light.css';
+import githubCSS from 'highlight.js/styles/github.css';
+import monokaiCSS from 'highlight.js/styles/monokai.css';
+import keyMirror from 'key-mirror';
 
-import solarizedDarkCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/base16/solarized-dark.css';
-import githubCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/github.css';
-import monokaiCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/monokai.css';
+import {CustomStatusDuration} from '@mattermost/types/users';
+
+import Permissions from 'mattermost-redux/constants/permissions';
+import * as PostListUtils from 'mattermost-redux/utils/post_list';
+
 import audioIcon from 'images/icons/audio.svg';
 import codeIcon from 'images/icons/code.svg';
 import excelIcon from 'images/icons/excel.svg';
@@ -21,20 +28,7 @@ import monokaiIcon from 'images/themes/code_themes/monokai.png';
 import solarizedDarkIcon from 'images/themes/code_themes/solarized-dark.png';
 import solarizedLightIcon from 'images/themes/code_themes/solarized-light.png';
 import logoWebhook from 'images/webhook_icon.jpg';
-import keyMirror from 'key-mirror';
 import {t} from 'utils/i18n';
-
-import {CustomStatusDuration} from '@mattermost/types/users';
-
-import Permissions from 'mattermost-redux/constants/permissions';
-import * as PostListUtils from 'mattermost-redux/utils/post_list';
-
-// eslint-disable-line import/order
-
-// eslint-disable-line import/order
-
-// eslint-disable-line import/order
-import solarizedLightCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/base16/solarized-light.css'; // eslint-disable-line import/order
 
 export const SettingsTypes = {
     TYPE_TEXT: 'text',
@@ -265,6 +259,7 @@ export const ActionTypes = keyMirror({
 
     STATUS_DROPDOWN_TOGGLE: null,
     ADD_CHANNEL_DROPDOWN_TOGGLE: null,
+    ADD_CHANNEL_CTA_DROPDOWN_TOGGLE: null,
 
     SHOW_ONBOARDING_TASK_COMPLETION: null,
     SHOW_ONBOARDING_COMPLETE_PROFILE_TOUR: null,

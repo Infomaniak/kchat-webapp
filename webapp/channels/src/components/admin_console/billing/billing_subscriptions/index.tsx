@@ -3,15 +3,6 @@
 
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {isCustomerCardExpired} from 'utils/cloud_utils';
-import {
-    CloudProducts,
-    RecurringIntervals,
-    TrialPeriodDays,
-} from 'utils/constants';
-import {useQuery} from 'utils/http_utils';
-import {hasSomeLimits} from 'utils/limits';
-import {getRemainingDaysFromFutureTimestamp} from 'utils/utils';
 
 import type {GlobalState} from '@mattermost/types/store';
 
@@ -34,6 +25,16 @@ import useGetLimits from 'components/common/hooks/useGetLimits';
 import useOpenCloudPurchaseModal from 'components/common/hooks/useOpenCloudPurchaseModal';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
+
+import {isCustomerCardExpired} from 'utils/cloud_utils';
+import {
+    CloudProducts,
+    RecurringIntervals,
+    TrialPeriodDays,
+} from 'utils/constants';
+import {useQuery} from 'utils/http_utils';
+import {hasSomeLimits} from 'utils/limits';
+import {getRemainingDaysFromFutureTimestamp} from 'utils/utils';
 
 import {
     creditCardExpiredBanner,

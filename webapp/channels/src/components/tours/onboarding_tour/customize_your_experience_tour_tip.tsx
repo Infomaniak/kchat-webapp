@@ -1,11 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import CustomImg from 'images/Customize-Your-Experience.gif';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {useMeasurePunchouts} from '@mattermost/components';
+
+import CustomImg from 'images/Customize-Your-Experience.gif';
 
 import OnboardingTourTip from './onboarding_tour_tip';
 

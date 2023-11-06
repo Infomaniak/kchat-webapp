@@ -5,13 +5,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import {localizeMessage} from 'utils/utils';
 
 import BackstageHeader from 'components/backstage/components/backstage_header';
 import ChannelSelect from 'components/channel_select';
 import ExternalLink from 'components/external_link';
 import FormError from 'components/form_error';
 import SpinnerButton from 'components/spinner_button';
+
+import {localizeMessage} from 'utils/utils';
 
 export default class AbstractOutgoingWebhook extends React.PureComponent {
     static propTypes = {

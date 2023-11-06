@@ -2,10 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import RhsPlugin from 'plugins/rhs_plugin';
 import React from 'react';
-import Constants from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {ProductIdentifier} from '@mattermost/types/products';
@@ -22,6 +19,10 @@ import RhsCard from 'components/rhs_card';
 import RhsSettings from 'components/rhs_settings';
 import RhsThread from 'components/rhs_thread';
 import Search from 'components/search/index';
+
+import RhsPlugin from 'plugins/rhs_plugin';
+import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import type {RhsState} from 'types/store/rhs';
 

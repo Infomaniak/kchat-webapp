@@ -4,10 +4,6 @@
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import {ModalIdentifiers, StoragePrefixes, RHSStates} from 'utils/constants';
-import {getRelativeChannelURL} from 'utils/url';
-import {localizeMessage} from 'utils/utils';
 
 import type {Channel, ChannelMembership, ChannelStats} from '@mattermost/types/channels';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
@@ -19,6 +15,11 @@ import GenericModal from 'components/generic_modal';
 import LoadingScreen from 'components/loading_screen';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
+
+import {getHistory} from 'utils/browser_history';
+import {ModalIdentifiers, StoragePrefixes, RHSStates} from 'utils/constants';
+import {getRelativeChannelURL} from 'utils/url';
+import {localizeMessage} from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 import type {RhsState} from 'types/store/rhs';

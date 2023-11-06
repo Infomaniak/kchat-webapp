@@ -3,6 +3,7 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+
 import {TestHelper} from 'utils/test_helper';
 
 import AddUsersToRoleModal from './add_users_to_role_modal';

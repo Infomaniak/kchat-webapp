@@ -3,8 +3,6 @@
 
 import React, {memo, useEffect, useState, useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {InsightsScopes, ModalIdentifiers} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
 import type {NewMember, TopDM} from '@mattermost/types/insights';
@@ -14,6 +12,9 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
+
+import {InsightsScopes, ModalIdentifiers} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 import NewMembersItem from './new_members_item/new_members_item';
 import NewMembersTotal from './new_members_total/new_members_total';

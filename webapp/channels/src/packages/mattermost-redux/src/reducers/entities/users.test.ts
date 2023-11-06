@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {UserTypes, ChannelTypes} from 'mattermost-redux/action_types';
-import {GenericAction} from 'mattermost-redux/types/actions';
 import reducer from 'mattermost-redux/reducers/entities/users';
+import type {GenericAction} from 'mattermost-redux/types/actions';
 type ReducerState = ReturnType<typeof reducer>;
 
 describe('Reducers.users', () => {

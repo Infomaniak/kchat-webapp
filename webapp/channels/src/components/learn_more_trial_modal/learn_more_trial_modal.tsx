@@ -4,7 +4,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-import {ConsolePages, ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
@@ -19,6 +18,8 @@ import {BtnStyle} from 'components/common/carousel/carousel_button';
 import GuestAccessSvg from 'components/common/svg_images_components/guest_access_svg';
 import MonitorImacLikeSVG from 'components/common/svg_images_components/monitor_imaclike_svg';
 import GenericModal from 'components/generic_modal';
+
+import {ConsolePages, ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {LearnMoreTrialModalStepProps} from './learn_more_trial_modal_step';
 import LearnMoreTrialModalStep from './learn_more_trial_modal_step';

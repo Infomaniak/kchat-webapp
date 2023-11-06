@@ -5,7 +5,6 @@ import React, {memo, useCallback, useEffect} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 import {NavLink, useRouteMatch} from 'react-router-dom';
-import {RHSStates} from 'utils/constants';
 
 import {localDraftsAreEnabled, syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
@@ -16,6 +15,8 @@ import {makeGetDraftsCount} from 'selectors/drafts';
 import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
 
 import ChannelMentionBadge from 'components/sidebar/sidebar_channel/channel_mention_badge';
+
+import {RHSStates} from 'utils/constants';
 
 import './drafts_link.scss';
 

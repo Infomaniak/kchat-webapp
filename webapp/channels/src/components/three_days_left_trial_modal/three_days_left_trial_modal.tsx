@@ -4,7 +4,6 @@
 import React, {useMemo} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-import {ConsolePages, DocLinks, ModalIdentifiers} from 'utils/constants';
 
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
@@ -19,6 +18,8 @@ import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import GuestAccessSvg from 'components/common/svg_images_components/guest_access_svg';
 import MonitorImacLikeSVG from 'components/common/svg_images_components/monitor_imaclike_svg';
 import GenericModal from 'components/generic_modal';
+
+import {ConsolePages, DocLinks, ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

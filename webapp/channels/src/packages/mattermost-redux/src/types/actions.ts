@@ -1,10 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {AnyAction} from 'redux';
-import {BatchAction} from 'redux-batched-actions';
+import type {AnyAction} from 'redux';
+import type {BatchAction} from 'redux-batched-actions';
 
-import {GlobalState} from '@mattermost/types/store';
+// eslint-disable-next-line no-restricted-imports
+import type {GlobalState} from 'types/store';
 
 export type GetStateFunc = () => GlobalState;
 export type GenericAction = AnyAction;
@@ -27,4 +28,4 @@ export type DispatchFunc = (action: Action, getState?: GetStateFunc | null) => P
 export type ActionFunc<Data = any, Error = any> = (
     dispatch: DispatchFunc,
     getState: GetStateFunc
-) => Promise<ActionResult<Data, Error> | Array<ActionResult<Data, Error>>> | ActionResult<Data, Error>;
+) => Promise<ActionResult<Data, Error> | Array<ActionResult<Data, Error>>> | ActionResult<Data, Error> | Promise<void>;

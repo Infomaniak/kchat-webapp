@@ -3,10 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import GuestPermissionsTree from 'components/admin_console/permission_schemes_settings/guest_permissions_tree/guest_permissions_tree';
 import PermissionGroup from 'components/admin_console/permission_schemes_settings/permission_group';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/admin_console/permission_schemes_settings/permission_tree', () => {
     const defaultProps = {

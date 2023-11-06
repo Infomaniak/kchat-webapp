@@ -4,6 +4,9 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
+
+import {trackEvent} from 'actions/telemetry_actions';
+
 import {
     act,
     renderWithIntl,
@@ -13,8 +16,6 @@ import type {
     RenderResult} from 'tests/react_testing_utils';
 import mockStore from 'tests/test_store';
 import {ModalIdentifiers} from 'utils/constants';
-
-import {trackEvent} from 'actions/telemetry_actions';
 
 import StartTrialFormModal from '.';
 

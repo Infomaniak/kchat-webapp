@@ -3,8 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
@@ -12,6 +10,9 @@ import type {UserProfile} from '@mattermost/types/users';
 import {sendAddToChannelEphemeralPost} from 'actions/global_actions';
 
 import AtMention from 'components/at_mention';
+
+import {Constants} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 interface Actions {
     addChannelMember: (channelId: string, userId: string, rootId: string) => void;

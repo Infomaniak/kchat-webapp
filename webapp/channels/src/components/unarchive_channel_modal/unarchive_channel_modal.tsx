@@ -4,7 +4,6 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
 
 import type {Channel, ChannelType} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
@@ -14,6 +13,8 @@ import type {ActionFunc, ActionResult} from 'mattermost-redux/types/actions';
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import Constants from 'utils/constants';
 
 type Props = {
     onExited: () => void;

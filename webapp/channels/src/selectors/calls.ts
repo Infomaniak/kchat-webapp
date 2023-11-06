@@ -2,7 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {getCurrentChannelId, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
-import {GlobalState} from 'types/store';
+
+import type {GlobalState} from 'types/store';
 
 export const connectedChannelID = (state: GlobalState) => state.views.calls.connectedChannelID;
 export const connectedCallID = (state: GlobalState) => state.views.calls.connectedCallID;

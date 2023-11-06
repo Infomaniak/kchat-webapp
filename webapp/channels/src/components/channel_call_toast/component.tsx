@@ -4,7 +4,7 @@
 import moment from 'moment-timezone';
 import React from 'react';
 
-import type {UserProfile} from 'mattermost-redux/types/users';
+import type {UserProfile} from '@mattermost/types/users';
 
 import ActiveCallIcon from './active_call_icon';
 import ConnectedProfiles from './connected_profiles';

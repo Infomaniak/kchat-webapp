@@ -5,12 +5,13 @@ import classNames from 'classnames';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {CSSTransition} from 'react-transition-group';
-import {Constants} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import * as GlobalActions from 'actions/global_actions';
 
 import MainMenu from 'components/main_menu';
+
+import {Constants} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 type Action = {
     openRhsMenu: () => void;

@@ -1,15 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import ChannelsImg from 'images/channels_and_direct_tour_tip.svg';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import Constants from 'utils/constants';
 
 import {useMeasurePunchouts} from '@mattermost/components';
 
 import {getChannelsNameMapInCurrentTeam} from 'mattermost-redux/selectors/entities/channels';
+
+import ChannelsImg from 'images/channels_and_direct_tour_tip.svg';
+import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

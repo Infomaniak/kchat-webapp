@@ -4,8 +4,6 @@
 import React from 'react';
 import {useIntl, FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {CloudProducts} from 'utils/constants';
-import {anyUsageDeltaExceededLimit} from 'utils/limits';
 
 import type {Product} from '@mattermost/types/cloud';
 
@@ -19,6 +17,9 @@ import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import {useSaveBool} from 'components/common/hooks/useSavePreferences';
+
+import {CloudProducts} from 'utils/constants';
+import {anyUsageDeltaExceededLimit} from 'utils/limits';
 
 import './limit_reached_banner.scss';
 

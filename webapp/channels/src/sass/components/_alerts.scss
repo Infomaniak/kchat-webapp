@@ -1,18 +1,36 @@
 @charset 'UTF-8';
 
 .alert {
-    padding: 8px 12px;
-    border-radius: $border-rad;
+    padding: 16px 16px;
+    border-radius: 10px;
+    background: var(--ik-illustration-grey-15);
+    color: var(--center-channel-color);
 
     .alert-transparent {
-        border-color: rgba(var(--center-channel-color-rgb), 0.12);
         background: var(--center-channel-bg);
+    }
+    &.alert-with-icon {
+        display: flex;
+        justify-content: space-between;
+        i {
+            font-size: 16px;
+            // 3px is directly on the pseudo element, +9 to make 12px
+            padding-right: 9px;
+        }
     }
 }
 
 .alert-grey {
-    background: #f2f2f2;
-    color: #999;
+    i {
+        color: rgb(0, 152, 255);
+    }
+}
+
+.alert-danger {
+    border: none;
+    i {
+        color: rgb(255, 133, 0);
+    }
 }
 
 .alert--confirm {

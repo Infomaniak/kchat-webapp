@@ -3,17 +3,9 @@
 
 import {AccountOutlineIcon, AccountPlusOutlineIcon, CloseIcon, EmoticonHappyOutlineIcon, PhoneInTalkIcon, SendIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
-import Pluggable from 'plugins/pluggable';
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import type {A11yFocusEventDetail} from 'utils/constants';
-import Constants, {A11yClassNames, A11yCustomEventTypes, ModalIdentifiers, UserStatuses} from 'utils/constants';
-import {IKConstants} from 'utils/constants-ik';
-import {t} from 'utils/i18n';
-import {shouldFocusMainTextbox} from 'utils/post_utils';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
@@ -24,6 +16,18 @@ import {Client4} from 'mattermost-redux/client';
 import {displayUsername, isGuest, isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 import * as GlobalActions from 'actions/global_actions';
+import Pluggable from 'plugins/pluggable';
+
+import {getHistory} from 'utils/browser_history';
+import type {A11yFocusEventDetail} from 'utils/constants';
+import Constants, {A11yClassNames, A11yCustomEventTypes, ModalIdentifiers, UserStatuses} from 'utils/constants';
+import {IKConstants} from 'utils/constants-ik';
+import {t} from 'utils/i18n';
+import {shouldFocusMainTextbox} from 'utils/post_utils';
+import * as Utils from 'utils/utils';
+
+
+
 
 import AddUserToChannelModal from 'components/add_user_to_channel_modal';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';

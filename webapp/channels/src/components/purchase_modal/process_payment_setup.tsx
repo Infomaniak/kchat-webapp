@@ -7,9 +7,6 @@ import type {IntlShape} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
-import {RecurringIntervals, TELEMETRY_CATEGORIES} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {getNextBillingDate} from 'utils/utils';
 
 import type {Address, Feedback, Product} from '@mattermost/types/cloud';
 import type {Team} from '@mattermost/types/teams';
@@ -22,6 +19,10 @@ import ComplianceScreenFailedSvg from 'components/common/svg_images_components/a
 import CreditCardSvg from 'components/common/svg_images_components/credit_card_svg';
 import PaymentFailedSvg from 'components/common/svg_images_components/payment_failed_svg';
 import PaymentSuccessStandardSvg from 'components/common/svg_images_components/payment_success_standard_svg';
+
+import {RecurringIntervals, TELEMETRY_CATEGORIES} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {getNextBillingDate} from 'utils/utils';
 
 import type {BillingDetails} from 'types/cloud/sku';
 

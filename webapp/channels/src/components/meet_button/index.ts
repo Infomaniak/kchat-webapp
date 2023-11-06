@@ -2,20 +2,19 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-
-import {ActionCreatorsMapObject, Dispatch, bindActionCreators} from 'redux';
-
-import {GlobalState} from 'types/store';
+import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
-
-import {connectedKmeetCallUrl} from '../../selectors/kmeet_calls';
+import type {Action} from 'mattermost-redux/types/actions';
 
 import {startOrJoinCallInChannelV2} from 'actions/calls';
 
-import {Action} from 'mattermost-redux/types/actions';
+import type {GlobalState} from 'types/store';
 
 import MeetButton from './meet_button';
+
+import {connectedKmeetCallUrl} from '../../selectors/kmeet_calls';
 
 function mapStateToProps(state: GlobalState) {
     const currentChannelID = getCurrentChannelId(state);

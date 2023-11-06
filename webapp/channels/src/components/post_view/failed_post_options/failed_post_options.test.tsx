@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import FailedPostOptions from 'components/post_view/failed_post_options/failed_post_options';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/post_view/FailedPostOptions', () => {
     const baseProps = {

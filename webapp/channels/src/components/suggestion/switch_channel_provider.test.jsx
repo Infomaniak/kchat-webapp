@@ -1,13 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import mockStore from 'tests/test_store';
-
 import {Preferences} from 'mattermost-redux/constants';
 
 import {getState} from 'stores/redux_store';
 
 import SwitchChannelProvider from 'components/suggestion/switch_channel_provider.jsx';
+
+import mockStore from 'tests/test_store';
 
 const latestPost = {
     id: 'latest_post_id',

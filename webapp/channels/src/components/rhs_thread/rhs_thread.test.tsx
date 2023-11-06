@@ -3,11 +3,12 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
+
+import {TestHelper} from 'utils/test_helper';
 
 import RhsThread from './rhs_thread';
 

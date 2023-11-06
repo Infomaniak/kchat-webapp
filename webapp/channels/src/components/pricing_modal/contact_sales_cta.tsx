@@ -5,7 +5,6 @@ import React from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
-import {LicenseLinks, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 
@@ -13,6 +12,8 @@ import {trackEvent} from 'actions/telemetry_actions';
 import {SalesInquiryIssue} from 'selectors/cloud';
 
 import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
+
+import {LicenseLinks, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 const StyledA = styled.a`
 color: var(--denim-button-bg);

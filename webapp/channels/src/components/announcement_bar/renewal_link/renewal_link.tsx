@@ -3,14 +3,15 @@
 
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {
-    LicenseLinks,
-    ModalIdentifiers,
-} from 'utils/constants';
 
 import {Client4} from 'mattermost-redux/client';
 
 import {trackEvent} from 'actions/telemetry_actions';
+
+import {
+    LicenseLinks,
+    ModalIdentifiers,
+} from 'utils/constants';
 
 import type {ModalData} from 'types/actions';
 

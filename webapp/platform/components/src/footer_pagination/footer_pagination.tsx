@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import React from 'react';
 import {useIntl} from 'react-intl';
 
-import {ChevronLeftIcon, ChevronRightIcon} from '@mattermost/compass-icons/components';
+import {ChevronLeftIcon, ChevronRightIcon} from '@infomaniak/compass-icons/components';
 
 import './footer_pagination.scss';
 

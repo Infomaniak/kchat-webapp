@@ -3,14 +3,15 @@
 
 import classNames from 'classnames';
 import type {ReactComponentLike} from 'prop-types';
-import type {ReactNode} from 'react';
 import React from 'react';
+import type {ReactNode} from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
 
 import AutosizeTextarea from 'components/autosize_textarea';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants from 'utils/constants';
 
 export type Props = {
 

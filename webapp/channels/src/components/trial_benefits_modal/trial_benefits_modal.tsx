@@ -6,7 +6,6 @@ import React, {useCallback, useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {matchPath, useLocation} from 'react-router-dom';
-import {ConsolePages, ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 
@@ -22,6 +21,8 @@ import HandsSvg from 'components/common/svg_images_components/hands_svg';
 import MonitorImacLikeSVG from 'components/common/svg_images_components/monitor_imaclike_svg';
 import PersonWithChecklistSvg from 'components/common/svg_images_components/person_with_checklist';
 import GenericModal from 'components/generic_modal';
+
+import {ConsolePages, ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

@@ -2,8 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React, {useCallback} from 'react';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import type {Group} from '@mattermost/types/groups';
 import {GroupSource} from '@mattermost/types/groups';
@@ -13,6 +11,9 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import LocalizedIcon from 'components/localized_icon';
 import Avatar from 'components/widgets/users/avatar';
+
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 export type Props = {
     groupId: string;

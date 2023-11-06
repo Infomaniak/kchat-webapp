@@ -9,6 +9,7 @@ import {getTeamRedirectChannelIfIsAccesible} from 'actions/global_actions';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import InvitationModal from 'components/invitation_modal';
+import WorkTemplateModal from 'components/work_templates';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, Constants, ModalIdentifiers} from 'utils/constants';
@@ -29,6 +30,23 @@ export function switchToChannels() {
         const channelName = channel?.name || Constants.DEFAULT_CHANNEL;
 
         getHistory().push(`/${team.name}/channels/${channelName}`);
+        return {data: true};
+    };
+}
+
+export function openWorkTemplateModal(redirectToChannels = true) {
+    return (dispatch: DispatchFunc) => {
+        if (redirectToChannels) {
+            dispatch(switchToChannels());
+        }
+        setTimeout(() => {
+            dispatch(openModal({
+                modalId: ModalIdentifiers.WORK_TEMPLATE,
+                dialogType: WorkTemplateModal,
+                dialogProps: {
+                },
+            }));
+        }, redirectToChannels ? 1000 : 1);
         return {data: true};
     };
 }

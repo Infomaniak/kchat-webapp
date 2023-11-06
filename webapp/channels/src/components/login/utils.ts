@@ -1,12 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-/* eslint-disable no-console */
 
 import crypto from 'crypto';
 
 import {Client4} from 'mattermost-redux/client';
-import {IKConstants} from 'utils/constants-ik';
+
 import {redirectUserToDefaultTeam} from 'actions/global_actions';
+
+import {IKConstants} from 'utils/constants-ik';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion} from 'utils/user_agent';
 
@@ -37,7 +38,8 @@ export function storeTokenResponse(response: { expires_in?: number; access_token
     Client4.setAuthHeader = true;
 
     console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
-    Client4.setWebappVersion(GIT_RELEASE);
+
+    //Client4.setWebappVersion(GIT_RELEASE);
 }
 
 /**

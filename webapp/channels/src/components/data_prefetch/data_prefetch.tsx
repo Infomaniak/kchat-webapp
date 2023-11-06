@@ -3,11 +3,12 @@
 
 import PQueue from 'p-queue';
 import React from 'react';
-import {Constants} from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import {loadProfilesForSidebar} from 'actions/user_actions';
+
+import {Constants} from 'utils/constants';
 
 const queue = new PQueue({concurrency: 2});
 

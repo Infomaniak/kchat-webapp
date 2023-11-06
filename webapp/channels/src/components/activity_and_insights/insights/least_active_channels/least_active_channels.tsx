@@ -3,13 +3,14 @@
 
 import React, {memo, useState, useCallback, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {InsightsScopes} from 'utils/constants';
 
 import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
 import type {LeastActiveChannel} from '@mattermost/types/insights';
 
 import {getMyLeastActiveChannels, getLeastActiveChannelsForTeam} from 'mattermost-redux/actions/insights';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+
+import {InsightsScopes} from 'utils/constants';
 
 import LeastActiveChannelsItem from './least_active_channels_item/least_active_channels_item';
 

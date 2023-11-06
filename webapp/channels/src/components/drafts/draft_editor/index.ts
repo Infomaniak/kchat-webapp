@@ -2,32 +2,35 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {ActionCreatorsMapObject, Dispatch, bindActionCreators} from 'redux';
+import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {savePreferences} from 'mattermost-redux/actions/preferences';
+import type {PreferenceType} from '@mattermost/types/preferences';
+
 import {getChannelStats, getChannelTimezones} from 'mattermost-redux/actions/channels';
-import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions, Preferences as PreferencesRedux} from 'mattermost-redux/constants';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {getAllChannelStats, makeGetChannel, getChannelMemberCountsByGroup as selectChannelMemberCountsByGroup} from 'mattermost-redux/selectors/entities/channels';
-import {getBool, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {isPostPriorityEnabled} from 'mattermost-redux/selectors/entities/posts';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getAssociatedGroupsForReferenceByMention} from 'mattermost-redux/selectors/entities/groups';
+import {isPostPriorityEnabled} from 'mattermost-redux/selectors/entities/posts';
+import {getBool, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {openModal} from 'actions/views/modals';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import type {Action, ActionResult} from 'mattermost-redux/types/actions';
+
 import {upsertScheduleDraft} from 'actions/views/drafts';
-import {connectionErrorCount} from 'selectors/views/system';
+import {openModal} from 'actions/views/modals';
 import {getCurrentLocale} from 'selectors/i18n';
+import {connectionErrorCount} from 'selectors/views/system';
 
 import Constants, {AdvancedTextEditor, Preferences} from 'utils/constants';
 import {canUploadFiles} from 'utils/file_utils';
 
-import {Action, ActionResult} from 'mattermost-redux/types/actions';
-import {PreferenceType} from '@mattermost/types/preferences';
-import {ModalData} from 'types/actions';
-import {GlobalState} from 'types/store';
-import {PostDraft} from 'types/store/draft';
+import type {ModalData} from 'types/actions';
+import type {GlobalState} from 'types/store';
+import type {PostDraft} from 'types/store/draft';
 
 import DraftEditor from './draft_editor';
 

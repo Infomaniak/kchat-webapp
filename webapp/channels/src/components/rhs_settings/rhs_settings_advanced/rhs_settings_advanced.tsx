@@ -7,14 +7,15 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {ValueType} from 'react-select';
 import ReactSelect from 'react-select';
-import Constants, {Preferences} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {isMac, localizeMessage} from 'utils/utils';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile} from '@mattermost/types/users';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
+
+import Constants, {Preferences} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {isMac, localizeMessage} from 'utils/utils';
 
 import * as Utils from '../../../utils/utils';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from '../../keyboard_shortcuts/keyboard_shortcuts_sequence';

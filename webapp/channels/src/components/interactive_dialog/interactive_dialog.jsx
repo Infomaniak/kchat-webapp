@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {localizeMessage} from 'utils/utils';
 
 import {
     checkDialogElementForError,
@@ -13,6 +12,8 @@ import {
 } from 'mattermost-redux/utils/integration_utils';
 
 import SpinnerButton from 'components/spinner_button';
+
+import {localizeMessage} from 'utils/utils';
 
 import DialogElement from './dialog_element';
 import DialogIntroductionText from './dialog_introduction_text';

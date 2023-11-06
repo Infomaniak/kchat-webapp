@@ -3,10 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {LicenseSkus} from 'utils/constants';
 
 import PermissionGroup from 'components/admin_console/permission_schemes_settings/permission_group';
 import PermissionsTree from 'components/admin_console/permission_schemes_settings/permissions_tree/permissions_tree';
+
+import {LicenseSkus} from 'utils/constants';
 
 import type {Group, Permission} from './types';
 

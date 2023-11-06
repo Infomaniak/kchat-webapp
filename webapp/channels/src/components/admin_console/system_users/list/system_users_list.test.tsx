@@ -3,11 +3,12 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {Constants} from 'utils/constants';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import SystemUsersList from 'components/admin_console/system_users/list/system_users_list';
+
+import {Constants} from 'utils/constants';
 
 describe('components/admin_console/system_users/list', () => {
     const defaultProps = {

@@ -3,6 +3,7 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+
 import {getHistory} from 'utils/browser_history';
 
 import ChannelIdentifierRouter from './channel_identifier_router';

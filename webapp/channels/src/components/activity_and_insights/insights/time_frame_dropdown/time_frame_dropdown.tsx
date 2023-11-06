@@ -5,11 +5,12 @@ import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
 import React, {memo, useCallback} from 'react';
 import type {ValueType} from 'react-select';
 import ReactSelect from 'react-select';
-import {localizeMessage} from 'utils/utils';
 
 import {TimeFrames} from '@mattermost/types/insights';
 
 import {trackEvent} from 'actions/telemetry_actions';
+
+import {localizeMessage} from 'utils/utils';
 
 import './time_frame_dropdown.scss';
 

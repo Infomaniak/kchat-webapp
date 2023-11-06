@@ -3,9 +3,10 @@
 
 import React, {useCallback} from 'react';
 import {useIntl} from 'react-intl';
-import {JobStatuses} from 'utils/constants';
 
 import type {Job} from '@mattermost/types/jobs';
+
+import {JobStatuses} from 'utils/constants';
 
 import './job_cancel_button.scss';
 

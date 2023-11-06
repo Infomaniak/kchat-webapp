@@ -3,13 +3,14 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {JobStatuses, JobTypes} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import {elasticsearchPurgeIndexes, elasticsearchTest} from 'actions/admin_actions.jsx';
 
 import ExternalLink from 'components/external_link';
+
+import {JobStatuses, JobTypes} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import AdminSettings from './admin_settings';
 import BooleanSetting from './boolean_setting';

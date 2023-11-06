@@ -2,9 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {localizeMessage} from 'utils/utils';
 
 import SearchIcon from 'components/widgets/icons/search_icon';
+
+import {localizeMessage} from 'utils/utils';
 
 type Actions = {
     openRHSSearch: () => void;

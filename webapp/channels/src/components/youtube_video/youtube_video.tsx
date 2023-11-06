@@ -2,12 +2,13 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {getVideoId, ytRegex, handleYoutubeTime} from 'utils/youtube';
 
 import type {OpenGraphMetadata} from '@mattermost/types/posts';
 
 import ExternalImage from 'components/external_image';
 import ExternalLink from 'components/external_link';
+
+import {getVideoId, ytRegex, handleYoutubeTime} from 'utils/youtube';
 
 type Props = {
     postId: string;

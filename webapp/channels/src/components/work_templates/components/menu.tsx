@@ -5,11 +5,12 @@ import classNames from 'classnames';
 import React, {useEffect} from 'react';
 import {useIntl} from 'react-intl';
 import styled from 'styled-components';
-import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {Category, WorkTemplate} from '@mattermost/types/work_templates';
 
 import {trackEvent} from 'actions/telemetry_actions';
+
+import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import UseCaseMenuItem from './menu/use_case';
 

@@ -3,12 +3,13 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import EmojiMap from 'utils/emoji_map';
-import {TestHelper} from 'utils/test_helper';
 
 import type {CustomEmoji} from '@mattermost/types/emojis';
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
+
+import EmojiMap from 'utils/emoji_map';
+import {TestHelper} from 'utils/test_helper';
 
 import type {AddEmojiProps} from './add_emoji';
 import AddEmoji from './add_emoji';

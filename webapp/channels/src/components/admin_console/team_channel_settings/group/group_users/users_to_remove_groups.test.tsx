@@ -3,10 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
+
+import {TestHelper} from 'utils/test_helper';
 
 import UsersToRemoveGroups from './users_to_remove_groups';
 

@@ -3,10 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
+
+import {TestHelper} from 'utils/test_helper';
 
 import AddUsersToTeamModal from './add_users_to_team_modal';
 

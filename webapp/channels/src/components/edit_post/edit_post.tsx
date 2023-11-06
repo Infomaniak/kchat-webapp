@@ -5,6 +5,15 @@ import {EmoticonPlusOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
+
+import type {Emoji, SystemEmoji} from '@mattermost/types/emojis';
+import type {Post} from '@mattermost/types/posts';
+
+import DeletePostModal from 'components/delete_post_modal';
+import EmojiPickerOverlay from 'components/emoji_picker/emoji_picker_overlay';
+import type {TextboxClass, TextboxElement} from 'components/textbox';
+import Textbox from 'components/textbox';
+
 import {AppEvents, Constants, ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 import {applyMarkdown} from 'utils/markdown/apply_markdown';
@@ -17,14 +26,6 @@ import {
 } from 'utils/paste';
 import {postMessageOnKeyPress, splitMessageBasedOnCaretPosition} from 'utils/post_utils';
 import * as Utils from 'utils/utils';
-
-import type {Emoji, SystemEmoji} from '@mattermost/types/emojis';
-import type {Post} from '@mattermost/types/posts';
-
-import DeletePostModal from 'components/delete_post_modal';
-import EmojiPickerOverlay from 'components/emoji_picker/emoji_picker_overlay';
-import type {TextboxClass, TextboxElement} from 'components/textbox';
-import Textbox from 'components/textbox';
 
 import type {ModalData} from 'types/actions';
 

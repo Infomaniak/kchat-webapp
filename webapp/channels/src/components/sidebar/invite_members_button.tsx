@@ -4,7 +4,6 @@
 import React, {useEffect} from 'react';
 import {useIntl, FormattedMessage} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import {getTotalUsersStats} from 'mattermost-redux/actions/users';
 import {Permissions} from 'mattermost-redux/constants';
@@ -17,6 +16,8 @@ import InvitationModal from 'components/invitation_modal';
 import {getAnalyticsCategory} from 'components/onboarding_tasks';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import ToggleModalButton from 'components/toggle_modal_button';
+
+import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

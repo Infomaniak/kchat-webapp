@@ -2,9 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import * as Utils from 'utils/utils';
 
 import GetLinkModal from 'components/get_link_modal';
+
+import * as Utils from 'utils/utils';
 
 import type {PropsFromRedux} from './index';
 

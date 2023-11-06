@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {useSelector} from 'react-redux';
-import type {Message} from 'utils/i18n';
 
 import type {Limits} from '@mattermost/types/cloud';
 
@@ -13,6 +12,8 @@ import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetUsage from 'components/common/hooks/useGetUsage';
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
 import GenericModal from 'components/generic_modal';
+
+import type {Message} from 'utils/i18n';
 
 import WorkspaceLimitsPanel, {messageToElement} from './workspace_limits_panel';
 

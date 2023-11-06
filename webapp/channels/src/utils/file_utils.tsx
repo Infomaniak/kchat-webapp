@@ -2,10 +2,11 @@
 // See LICENSE.txt for license information.
 
 import exif2css from 'exif2css';
-import Constants from 'utils/constants';
-import * as UserAgent from 'utils/user_agent';
 
 import type {ClientConfig} from '@mattermost/types/config';
+
+import Constants from 'utils/constants';
+import * as UserAgent from 'utils/user_agent';
 
 export const FileSizes = {
     Bit: 1,

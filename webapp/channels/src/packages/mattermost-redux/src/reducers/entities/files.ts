@@ -3,11 +3,12 @@
 
 import {combineReducers} from 'redux';
 
+import type {FileInfo, FileSearchResultItem} from '@mattermost/types/files';
+import type {TopThread} from '@mattermost/types/insights';
+import type {Post} from '@mattermost/types/posts';
+
 import {FileTypes, InsightTypes, PostTypes, UserTypes} from 'mattermost-redux/action_types';
-import {GenericAction} from 'mattermost-redux/types/actions';
-import {Post} from '@mattermost/types/posts';
-import {FileInfo, FileSearchResultItem} from '@mattermost/types/files';
-import {TopThread} from '@mattermost/types/insights';
+import type {GenericAction} from 'mattermost-redux/types/actions';
 
 export function files(state: Record<string, FileInfo> = {}, action: GenericAction) {
     switch (action.type) {

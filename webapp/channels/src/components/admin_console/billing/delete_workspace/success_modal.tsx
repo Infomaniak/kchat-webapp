@@ -3,9 +3,10 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {MattermostLink, ModalIdentifiers} from 'utils/constants';
 
 import PaymentSuccessStandardSvg from 'components/common/svg_images_components/payment_success_standard_svg';
+
+import {MattermostLink, ModalIdentifiers} from 'utils/constants';
 
 import ResultModal from './result_modal';
 import './success_modal.scss';

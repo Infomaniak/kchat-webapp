@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import AddCommand from 'components/integrations/add_command/add_command';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/integrations/AddCommand', () => {
     test('should match snapshot', () => {

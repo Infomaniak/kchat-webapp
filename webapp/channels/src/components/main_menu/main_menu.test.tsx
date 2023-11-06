@@ -5,14 +5,15 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import {createIntl} from 'react-intl';
 import {Provider} from 'react-redux';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import mockStore from 'tests/test_store';
-import {Constants} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
 
 import {Permissions} from 'mattermost-redux/constants';
 
 import Menu from 'components/widgets/menu/menu';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import mockStore from 'tests/test_store';
+import {Constants} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import type {Props} from './main_menu';
 import {MainMenu} from './main_menu';

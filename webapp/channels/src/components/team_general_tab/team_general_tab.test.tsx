@@ -4,9 +4,10 @@
 import {shallow} from 'enzyme';
 import type {ChangeEvent, ComponentProps} from 'react';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import GeneralTab from 'components/team_general_tab/team_general_tab';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/TeamSettings', () => {
     const getTeam = jest.fn().mockResolvedValue({data: true});

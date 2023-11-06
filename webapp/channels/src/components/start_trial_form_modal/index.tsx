@@ -6,8 +6,6 @@ import React, {useEffect, useState} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-import {AboutLinks, LicenseLinks, ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import {getLicenseConfig} from 'mattermost-redux/actions/general';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
@@ -28,11 +26,13 @@ import CountrySelector from 'components/payment_form/country_selector';
 import Input, {SIZE} from 'components/widgets/inputs/input/input';
 import type {CustomMessageInputType} from 'components/widgets/inputs/input/input';
 
+import {AboutLinks, LicenseLinks, ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
+import {t} from 'utils/i18n';
+
 import type {GlobalState} from 'types/store';
 
 import AirGappedModal from './air_gapped_modal';
 import StartTrialFormModalResult from './failure_modal';
-
 import './start_trial_form_modal.scss';
 
 const TrialBenefitsModal = makeAsyncComponent('TrialBenefitsModal', React.lazy(() => import('components/trial_benefits_modal/trial_benefits_modal')));

@@ -4,7 +4,6 @@
 import React, {memo, useMemo, useEffect, useState, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import {ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
@@ -22,6 +21,8 @@ import {selectPost} from 'actions/views/rhs';
 import {getGlobalItem} from 'selectors/storage';
 
 import OverrideDraftModal from 'components/schedule_post/override_draft_modal';
+
+import {ModalIdentifiers, StoragePrefixes} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 import type {PostDraft} from 'types/store/draft';

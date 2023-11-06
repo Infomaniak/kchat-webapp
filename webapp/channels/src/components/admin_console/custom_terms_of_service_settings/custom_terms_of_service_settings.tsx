@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants} from 'utils/constants';
 
 import type {AdminConfig, ClientLicense} from '@mattermost/types/config';
 import type {TermsOfService} from '@mattermost/types/terms_of_service';
@@ -15,6 +14,8 @@ import SettingsGroup from 'components/admin_console/settings_group.jsx';
 import TextSetting from 'components/admin_console/text_setting';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LoadingScreen from 'components/loading_screen';
+
+import {Constants} from 'utils/constants';
 
 type Props = BaseProps & {
     actions: {

@@ -4,6 +4,7 @@
 import marked from 'marked';
 import React from 'react';
 import {useIntl} from 'react-intl';
+
 import {shouldOpenInNewTab, getSiteURL} from 'utils/url';
 
 const TARGET_BLANK_URL_PREFIX = '!';

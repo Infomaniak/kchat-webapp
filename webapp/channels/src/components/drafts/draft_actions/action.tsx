@@ -4,9 +4,10 @@
 import classNames from 'classnames';
 import React from 'react';
 import {Tooltip} from 'react-bootstrap';
-import Constants from 'utils/constants';
 
 import OverlayTrigger from 'components/overlay_trigger';
+
+import Constants from 'utils/constants';
 
 import './action.scss';
 

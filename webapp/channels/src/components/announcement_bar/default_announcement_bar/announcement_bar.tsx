@@ -3,8 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants, AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
-import {isStringContainingUrl} from 'utils/url';
 
 import type {WarnMetricStatus} from '@mattermost/types/config';
 
@@ -15,6 +13,9 @@ import OverlayTrigger from 'components/overlay_trigger';
 import ToggleModalButton from 'components/toggle_modal_button';
 import Tooltip from 'components/tooltip';
 import WarnMetricAckModal from 'components/warn_metric_ack_modal';
+
+import {Constants, AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
+import {isStringContainingUrl} from 'utils/url';
 
 type Props = {
     showCloseButton: boolean;

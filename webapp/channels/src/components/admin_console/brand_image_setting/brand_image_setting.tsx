@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants} from 'utils/constants';
 
 import {Client4} from 'mattermost-redux/client';
 
@@ -12,6 +11,8 @@ import {uploadBrandImage, deleteBrandImage} from 'actions/admin_actions.jsx';
 import FormError from 'components/form_error';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import {Constants} from 'utils/constants';
 
 const HTTP_STATUS_OK = 200;
 

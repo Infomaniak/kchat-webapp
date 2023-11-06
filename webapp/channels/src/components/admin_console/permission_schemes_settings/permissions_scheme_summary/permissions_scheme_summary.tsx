@@ -5,8 +5,6 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 import {Link} from 'react-router-dom';
-import Constants from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {Scheme} from '@mattermost/types/schemes';
 import type {Team} from '@mattermost/types/teams';
@@ -17,6 +15,9 @@ import ConfirmModal from 'components/confirm_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
+
+import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 const MAX_TEAMS_PER_SCHEME_SUMMARY = 8;
 

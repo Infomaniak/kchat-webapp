@@ -5,8 +5,6 @@ import classNames from 'classnames';
 import type {ReactNode} from 'react';
 import React from 'react';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import {Constants} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -19,6 +17,9 @@ import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
 import Tag from 'components/widgets/tag/tag';
 import Avatar from 'components/widgets/users/avatar';
+
+import {Constants} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import Suggestion from '../suggestion.jsx';
 

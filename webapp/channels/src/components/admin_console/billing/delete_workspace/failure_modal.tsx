@@ -4,11 +4,12 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
 
 import {closeModal, openModal} from 'actions/views/modals';
 
 import PaymentFailedSvg from 'components/common/svg_images_components/payment_failed_svg';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 import DeleteWorkspaceModal from './delete_workspace_modal';
 import ResultModal from './result_modal';

@@ -7,8 +7,6 @@ import type {MouseEvent} from 'react';
 import React, {memo, useCallback, useEffect, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {CrtTutorialSteps, Preferences} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
@@ -33,6 +31,9 @@ import CRTListTutorialTip from 'components/tours/crt_tour/crt_list_tutorial_tip'
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Tag from 'components/widgets/tag/tag';
 import Avatars from 'components/widgets/users/avatars';
+
+import {CrtTutorialSteps, Preferences} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

@@ -6,14 +6,15 @@ import type {Moment} from 'moment-timezone';
 import React, {useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
-import {toUTCUnix} from 'utils/datetime';
-import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import {closeModal} from 'actions/views/modals';
 
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
 import GenericModal from 'components/generic_modal';
+
+import {ModalIdentifiers} from 'utils/constants';
+import {toUTCUnix} from 'utils/datetime';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import './schedule_post_modal.scss';
 

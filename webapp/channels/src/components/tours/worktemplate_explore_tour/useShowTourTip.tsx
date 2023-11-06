@@ -2,13 +2,14 @@
 // See LICENSE.txt for license information.
 
 import {useSelector} from 'react-redux';
-import {suitePluginIds} from 'utils/constants';
 
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {getConfig, getWorkTemplatesLinkedProducts} from 'mattermost-redux/selectors/entities/general';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';
 
 import {getActiveRhsComponent} from 'selectors/rhs';
+
+import {suitePluginIds} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

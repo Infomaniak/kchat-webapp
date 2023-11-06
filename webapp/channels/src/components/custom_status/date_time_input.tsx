@@ -14,15 +14,16 @@ import {useSelector} from 'react-redux';
 import {components} from 'react-select';
 import type {ActionMeta, ValueType, ControlProps, OptionsType} from 'react-select';
 import Creatable from 'react-select/creatable';
-import Constants from 'utils/constants';
-import {getCurrentMomentForTimezone} from 'utils/timezone';
-import {isKeyPressed, localizeMessage} from 'utils/utils';
 
 import {getCurrentLocale} from 'selectors/i18n';
 
 import DatePicker from 'components/date_picker';
 import Timestamp from 'components/timestamp';
 import Input from 'components/widgets/inputs/input/input';
+
+import Constants from 'utils/constants';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
+import {isKeyPressed, localizeMessage} from 'utils/utils';
 
 import './date_time_input.scss';
 

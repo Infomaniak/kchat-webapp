@@ -3,16 +3,16 @@
 
 import {connect} from 'react-redux';
 
-import {getCurrentUser, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
-import {localDraftsAreEnabled, getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
-import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {Permissions} from 'mattermost-redux/constants';
-
-import {GlobalState} from 'types/store';
+import {localDraftsAreEnabled, getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
+import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUser, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
+import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {makeGetDrafts} from 'selectors/drafts';
+
+import type {GlobalState} from 'types/store';
 
 import Drafts from './drafts';
 

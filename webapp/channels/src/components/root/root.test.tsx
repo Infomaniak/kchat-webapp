@@ -5,8 +5,6 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import type {RouteComponentProps} from 'react-router-dom';
 import rudderAnalytics from 'rudder-sdk-js';
-import matchMedia from 'tests/helpers/match_media.mock';
-import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
 
 import {GeneralTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
@@ -15,6 +13,9 @@ import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import * as GlobalActions from 'actions/global_actions';
 
 import Root from 'components/root/root';
+
+import matchMedia from 'tests/helpers/match_media.mock';
+import Constants, {StoragePrefixes, WindowSizes} from 'utils/constants';
 
 jest.mock('rudder-sdk-js', () => ({
     identify: jest.fn(),

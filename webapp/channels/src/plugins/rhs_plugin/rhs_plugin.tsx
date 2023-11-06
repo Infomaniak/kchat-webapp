@@ -1,10 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import Pluggable from 'plugins/pluggable';
 import React from 'react';
 
 import SearchResultsHeader from 'components/search_results_header';
+
+import Pluggable from 'plugins/pluggable';
 
 export type Props = {
     showPluggable: boolean;

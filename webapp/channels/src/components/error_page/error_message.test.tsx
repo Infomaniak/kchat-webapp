@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {ErrorPageTypes} from 'utils/constants';
 
 import ErrorMessage from 'components/error_page/error_message';
+
+import {ErrorPageTypes} from 'utils/constants';
 
 describe('components/error_page/ErrorMessage', () => {
     const baseProps = {

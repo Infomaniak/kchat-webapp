@@ -4,7 +4,6 @@
 import React, {useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {getLicenseConfig} from 'mattermost-redux/actions/general';
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
@@ -15,6 +14,8 @@ import {openModal} from 'actions/views/modals';
 
 import {EmbargoedEntityTrialError} from 'components/admin_console/license_settings/trial_banner/trial_banner';
 import TrialBenefitsModal from 'components/trial_benefits_modal/trial_benefits_modal';
+
+import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

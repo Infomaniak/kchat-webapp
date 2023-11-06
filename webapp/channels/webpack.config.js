@@ -12,6 +12,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const {ModuleFederationPlugin} = require('webpack').container;
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 // const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
@@ -130,9 +131,10 @@ var config = {
         ],
         alias: {
             'mattermost-redux/test': 'packages/mattermost-redux/test',
-            'mattermost-redux': 'src/packages/mattermost-redux/src',
+            'mattermost-redux': 'packages/mattermost-redux/src',
             '@mui/styled-engine': '@mui/styled-engine-sc',
-            reselect: 'src/packages/reselect/src',
+            '@mattermost/client': '@infomaniak/mattermost-client',
+            '@mattermost/types': '@infomaniak/mattermost-types',
 
             // This alias restricts single version of styled components acros all packages
             'styled-components': path.resolve(__dirname, '..', 'node_modules', 'styled-components'),
@@ -204,10 +206,10 @@ var config = {
         // Generate manifest.json, honouring any configured publicPath. This also handles injecting
         // <link rel="apple-touch-icon" ... /> and <meta name="apple-*" ... /> tags into root.html.
         new WebpackPwaManifest({
-            name: 'Mattermost',
-            short_name: 'Mattermost',
+            name: 'kChat',
+            short_name: 'kChat',
             start_url: '..',
-            description: 'Mattermost is an open source, self-hosted Slack-alternative',
+            description: 'Infomaniak kChat',
             background_color: '#ffffff',
             inject: true,
             ios: true,
@@ -388,42 +390,77 @@ if (DEV) {
 const env = {};
 if (DEV) {
     env.PUBLIC_PATH = JSON.stringify(publicPath);
+    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || '');
+    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/next');
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.preprod.dev.infomaniak.ch');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'https://kmeet.preprod.dev.infomaniak.ch/');
+    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.preprod.dev.infomaniak.ch/');
+    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.preprod.dev.infomaniak.ch/');
+    env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.preprod.dev.infomaniak.ch');
+    if (process.env.MM_LIVE_RELOAD) {
+        config.plugins.push(new LiveReloadPlugin());
+    }
 } else {
     env.NODE_ENV = JSON.stringify('production');
+    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || '');
+    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || '');
+    env.WEBCOMPONENT_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_ENDPOINT || 'https://web-components.storage.infomaniak.com/next');
+    env.WEBCOMPONENT_API_ENDPOINT = JSON.stringify(process.env.WEBCOMPONENT_API_ENDPOINT || 'https://welcome.infomaniak.com');
+    env.KMEET_ENDPOINT = JSON.stringify(process.env.KMEET_ENDPOINT || 'https://kmeet.infomaniak.com/');
+    env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.infomaniak.com/');
+    env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.infomaniak.com/');
+    env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.infomaniak.com');
 }
 
 config.plugins.push(new webpack.DefinePlugin({
     'process.env': env,
 }));
 
-if (targetIsDevServer) {
-    const proxyToServer = {
-        logLevel: 'silent',
-        target: process.env.MM_SERVICESETTINGS_SITEURL ?? 'http://localhost:8065',
-        xfwd: true,
-    };
+config.plugins.push(new webpack.DefinePlugin({
+    'process.env': env,
+}));
 
+if (targetIsDevServer) {
     config = {
         ...config,
         devtool: 'eval-cheap-module-source-map',
         devServer: {
+            server: 'https',
+            allowedHosts: 'all',
             liveReload: true,
-            proxy: {
+            proxy: [{
+                context: () => true,
+                bypass(req) {
+                    if (req.url.indexOf('/api') === 0 ||
+                        req.url.indexOf('/plugins') === 0 ||
+                        req.url.indexOf('/static/plugins/') === 0 ||
+                        req.url.indexOf('/broadcasting/auth') === 0 ||
+                        req.url.indexOf('/sockjs-node/') !== -1) {
+                        return null; // send through proxy to the server
+                    }
+                    if (req.url.indexOf('/static/') === 0) {
+                        return path; // return the webpacked asset
+                    }
 
-                // Forward these requests to the server
-                '/api': {
-                    ...proxyToServer,
-                    ws: true,
+                    // redirect (root, team routes, etc)
+                    return '/static/root.html';
                 },
-                '/plugins': proxyToServer,
-                '/static/plugins': proxyToServer,
-            },
+                logLevel: 'silent',
+                target: process.env.BASE_URL || 'https://infomaniak.kchat.infomaniak.com/', //eslint-disable-line no-process-env
+                changeOrigin: true,
+                xfwd: true,
+                ws: false,
+            }],
             port: 9005,
             devMiddleware: {
                 writeToDisk: false,
             },
             historyApiFallback: {
                 index: '/static/root.html',
+            },
+            client: {
+                overlay: false,
             },
         },
         performance: false,

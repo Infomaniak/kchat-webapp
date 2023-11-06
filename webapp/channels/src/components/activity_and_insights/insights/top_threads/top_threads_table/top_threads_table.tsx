@@ -5,8 +5,6 @@ import classNames from 'classnames';
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {InsightsScopes, ModalIdentifiers} from 'utils/constants';
-import {imageURLForUser} from 'utils/utils';
 
 import type {TimeFrame, TopThread} from '@mattermost/types/insights';
 import type {GlobalState} from '@mattermost/types/store';
@@ -30,6 +28,9 @@ import Attachment from 'components/threading/global_threads/thread_item/attachme
 import Tag from 'components/widgets/tag/tag';
 import Avatar from 'components/widgets/users/avatar';
 import Avatars from 'components/widgets/users/avatars';
+
+import {InsightsScopes, ModalIdentifiers} from 'utils/constants';
+import {imageURLForUser} from 'utils/utils';
 
 import JoinChannelModal from '../../join_channel_modal/join_channel_modal';
 

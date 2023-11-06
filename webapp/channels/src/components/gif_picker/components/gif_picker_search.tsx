@@ -1,8 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import giphyBlackImage from 'images/gif_picker/powered-by-giphy-black.png';
-import giphyWhiteImage from 'images/gif_picker/powered-by-giphy-white.png';
 import type {ChangeEvent} from 'react';
 import React, {memo, useCallback, useMemo} from 'react';
 import {useIntl} from 'react-intl';
@@ -10,6 +8,9 @@ import {useSelector} from 'react-redux';
 import tinycolor from 'tinycolor2';
 
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
+
+import giphyBlackImage from 'images/gif_picker/powered-by-giphy-black.png';
+import giphyWhiteImage from 'images/gif_picker/powered-by-giphy-white.png';
 
 interface Props {
     value: string;

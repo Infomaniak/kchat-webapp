@@ -6,8 +6,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import {COUNTRIES} from 'utils/countries';
-import * as Utils from 'utils/utils';
 
 import {getCloudCustomer, updateCloudCustomer, updateCloudCustomerAddress} from 'mattermost-redux/actions/cloud';
 
@@ -18,6 +16,9 @@ import DropdownInput from 'components/dropdown_input';
 import StateSelector from 'components/payment_form/state_selector';
 import SaveButton from 'components/save_button';
 import Input from 'components/widgets/inputs/input/input';
+
+import {COUNTRIES} from 'utils/countries';
+import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

@@ -3,10 +3,11 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {t} from 'utils/i18n';
 
 import ConfirmModalRedux from 'components/confirm_modal_redux';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import {t} from 'utils/i18n';
 
 type Props = {
     mentions: string[];

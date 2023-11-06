@@ -6,6 +6,7 @@ import type {MenuItemProps as MuiMenuItemProps} from '@mui/material/MenuItem';
 import {styled} from '@mui/material/styles';
 import React, {Children} from 'react';
 import type {ReactElement, ReactNode, KeyboardEvent, MouseEvent} from 'react';
+
 import Constants from 'utils/constants';
 import {isKeyPressed} from 'utils/utils';
 

@@ -2,15 +2,16 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Preferences} from 'utils/constants';
-import {compareEmojis, emojiMatchesSkin} from 'utils/emoji_utils';
-import * as Emoticons from 'utils/emoticons';
 
 import {autocompleteCustomEmojis} from 'mattermost-redux/actions/emojis';
 import {getEmojiImageUrl, isSystemEmoji} from 'mattermost-redux/utils/emoji_utils';
 
 import {getEmojiMap, getRecentEmojisNames} from 'selectors/emojis';
-import store from 'stores/redux_store.jsx';
+import store from 'stores/redux_store';
+
+import {Preferences} from 'utils/constants';
+import {compareEmojis, emojiMatchesSkin} from 'utils/emoji_utils';
+import * as Emoticons from 'utils/emoticons';
 
 import Provider from './provider';
 import Suggestion from './suggestion.jsx';

@@ -4,9 +4,10 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import * as redux from 'react-redux';
-import * as productUtils from 'utils/products';
 
 import GlobalHeader from 'components/global_header/global_header';
+
+import * as productUtils from 'utils/products';
 
 describe('components/global/global_header', () => {
     test('should be disabled when global header is disabled', () => {

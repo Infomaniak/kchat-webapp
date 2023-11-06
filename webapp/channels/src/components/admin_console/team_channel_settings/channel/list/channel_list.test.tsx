@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Channel} from '@mattermost/types/channels';
+
+import {TestHelper} from 'utils/test_helper';
 
 import ChannelList from './channel_list';
 

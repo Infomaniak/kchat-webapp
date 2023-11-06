@@ -5,7 +5,6 @@ import React, {useCallback, useMemo} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {matchPath, useHistory, useLocation} from 'react-router-dom';
-import {ModalIdentifiers, TELEMETRY_CATEGORIES, ExploreOtherToolsTourSteps} from 'utils/constants';
 
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 
@@ -51,6 +50,8 @@ import {
     TTNameMapToATStatusKey,
     TutorialTourName,
 } from 'components/tours';
+
+import {ModalIdentifiers, TELEMETRY_CATEGORIES, ExploreOtherToolsTourSteps} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

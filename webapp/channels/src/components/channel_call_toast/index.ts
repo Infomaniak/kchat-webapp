@@ -1,22 +1,18 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import {connect} from 'react-redux';
-
-import {GlobalState} from 'mattermost-redux/types/store';
-
-import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
-
-import {Action} from 'mattermost-redux/types/actions';
-
-import {getUser} from 'mattermost-redux/selectors/entities/users';
-
-import {voiceConnectedChannels, voiceConnectedProfilesInChannel, connectedChannelID, voiceChannelCallStartAt, connectedCallID} from 'selectors/calls';
-
-import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
+import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import {Client4} from 'mattermost-redux/client';
+import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
+import {getUser} from 'mattermost-redux/selectors/entities/users';
+import type {Action} from 'mattermost-redux/types/actions';
+import type {GlobalState} from 'types/store';
 
 import {startOrJoinCallInChannelV2} from 'actions/calls';
+import {voiceConnectedChannels, voiceConnectedProfilesInChannel, connectedChannelID, voiceChannelCallStartAt, connectedCallID} from 'selectors/calls';
 
 import ChannelCallToast from './component';
 

@@ -3,8 +3,6 @@
 
 import React from 'react';
 import {FormattedDate, FormattedMessage} from 'react-intl';
-import {StatTypes} from 'utils/constants';
-import {getMonthLong} from 'utils/i18n';
 
 import type {AnalyticsRow} from '@mattermost/types/admin';
 import type {ClientLicense} from '@mattermost/types/config';
@@ -25,6 +23,9 @@ import TrueUpReview from 'components/analytics/true_up_review';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LoadingScreen from 'components/loading_screen';
+
+import {StatTypes} from 'utils/constants';
+import {getMonthLong} from 'utils/i18n';
 
 import {formatPostsPerDayData, formatUsersWithPostsPerDayData, synchronizeChartLabels} from '../format';
 

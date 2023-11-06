@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import {saveSearchScrollPosition} from 'mattermost-redux/actions/gifs';
 
-import {GlobalState} from 'types/store';
+import type {GlobalState} from 'types/store';
 
 import SearchGrid from './SearchGrid';
 

@@ -6,8 +6,6 @@ import {FormattedMessage} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 import type {RouteComponentProps} from 'react-router-dom';
 import {withRouter} from 'react-router-dom';
-import {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import type {Feedback, Product} from '@mattermost/types/cloud';
 import type {Team} from '@mattermost/types/teams';
@@ -27,6 +25,9 @@ import PaymentSuccessStandardSvg from 'components/common/svg_images_components/p
 import ProgressBar, {ProcessState} from 'components/icon_message_with_progress_bar';
 import IconMessage from 'components/purchase_modal/icon_message';
 import FullScreenModal from 'components/widgets/modals/full_screen_modal';
+
+import {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {GlobalState} from 'types/store';
 

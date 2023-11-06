@@ -4,6 +4,7 @@
 import {shallow} from 'enzyme';
 import type {ComponentProps} from 'react';
 import React from 'react';
+
 import {TestHelper} from 'utils/test_helper';
 
 import PostProfilePicture from './post_profile_picture';

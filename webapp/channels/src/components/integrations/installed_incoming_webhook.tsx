@@ -4,13 +4,14 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import {getSiteURL} from 'utils/url';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {IncomingWebhook} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
 
 import CopyText from 'components/copy_text';
+
+import {getSiteURL} from 'utils/url';
 
 import DeleteIntegrationLink from './delete_integration_link';
 

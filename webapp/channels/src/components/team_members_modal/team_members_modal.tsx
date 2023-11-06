@@ -4,7 +4,6 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {Team} from '@mattermost/types/teams';
 
@@ -13,6 +12,8 @@ import Permissions from 'mattermost-redux/constants/permissions';
 import InvitationModal from 'components/invitation_modal';
 import MemberListTeam from 'components/member_list_team';
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 import type {ModalData} from 'types/actions';
 

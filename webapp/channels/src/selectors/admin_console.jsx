@@ -2,9 +2,9 @@
 // See LICENSE.txt for license information.
 
 import {cloneDeep} from 'lodash';
-import {createSelector} from 'reselect';
 
 import {ResourceToSysConsolePermissionsTable, RESOURCE_KEYS} from 'mattermost-redux/constants/permissions_sysconsole';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getMySystemPermissions} from 'mattermost-redux/selectors/entities/roles_helpers';
 
 import AdminDefinition from 'components/admin_console/admin_definition.jsx';

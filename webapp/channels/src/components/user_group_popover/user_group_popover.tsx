@@ -6,10 +6,6 @@ import {debounce} from 'lodash';
 import React, {useEffect, useCallback, useState, useRef} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import styled from 'styled-components';
-import type {A11yFocusEventDetail} from 'utils/constants';
-import Constants, {A11yClassNames, A11yCustomEventTypes, ModalIdentifiers} from 'utils/constants';
-import {shouldFocusMainTextbox} from 'utils/post_utils';
-import * as Utils from 'utils/utils';
 
 import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
@@ -21,6 +17,11 @@ import GroupMemberList from 'components/user_group_popover/group_member_list';
 import UserGroupsModal from 'components/user_groups_modal';
 import ViewUserGroupModal from 'components/view_user_group_modal';
 import Popover from 'components/widgets/popover';
+
+import Constants, {A11yClassNames, A11yCustomEventTypes, ModalIdentifiers} from 'utils/constants';
+import type {A11yFocusEventDetail} from 'utils/constants';
+import {shouldFocusMainTextbox} from 'utils/post_utils';
+import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 

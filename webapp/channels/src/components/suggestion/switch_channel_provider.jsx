@@ -5,8 +5,6 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import {Constants, StoragePrefixes} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import {UserTypes} from 'mattermost-redux/action_types';
 import {fetchAllMyTeamsChannelsAndChannelMembersREST, searchAllChannels} from 'mattermost-redux/actions/channels';
@@ -45,16 +43,17 @@ import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {getPostDraft} from 'selectors/rhs';
+// eslint-disable-next-line import/no-unresolved
+import store from 'stores/redux_store';
 
-import store from 'stores/redux_store.jsx';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
-import SharedChannelIndicator from 'components/shared_channel_indicator';
 import ProfilePicture from 'components/profile_picture';
-
-
-
+import SharedChannelIndicator from 'components/shared_channel_indicator';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
+
+import {Constants, StoragePrefixes} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import Provider from './provider';
 import Suggestion from './suggestion.jsx';

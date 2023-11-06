@@ -66,12 +66,6 @@ fieldset {
     }
 }
 
-.app__body {
-    fieldset[disabled] {
-        color: var(--center-channel-color);
-    }
-}
-
 .admin-textarea {
     resize: none;
 }
@@ -106,8 +100,4 @@ input::-webkit-file-upload-button {
 :-moz-placeholder { /* Firefox 18- */
     color: inherit;
     opacity: 0.5;
-}
-
-.input-group-addon {
-    color: var(--center-channel-color);
 }

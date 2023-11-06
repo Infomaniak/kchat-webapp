@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {localizeMessage} from 'utils/utils';
 
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 
@@ -11,6 +10,8 @@ import {trackEvent} from 'actions/telemetry_actions';
 
 import GenericModal from 'components/generic_modal';
 import QuickInput, {MaxLengthInput} from 'components/quick_input';
+
+import {localizeMessage} from 'utils/utils';
 
 import '../category_modal.scss';
 

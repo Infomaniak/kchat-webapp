@@ -4,9 +4,6 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
-import {isMobile} from 'utils/user_agent';
-import {insertLineBreakFromKeyEvent, isKeyPressed, isUnhandledLineBreakKeyCombo, localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
@@ -17,6 +14,10 @@ import type {TextboxElement} from 'components/textbox';
 import Textbox from 'components/textbox';
 import type TextboxClass from 'components/textbox/textbox';
 import TextboxLinks from 'components/textbox/textbox_links';
+
+import Constants from 'utils/constants';
+import {isMobile} from 'utils/user_agent';
+import {insertLineBreakFromKeyEvent, isKeyPressed, isUnhandledLineBreakKeyCombo, localizeMessage} from 'utils/utils';
 
 const KeyCodes = Constants.KeyCodes;
 

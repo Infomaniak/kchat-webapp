@@ -4,7 +4,6 @@
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
@@ -14,6 +13,8 @@ import {isModalOpen} from 'selectors/views/modals';
 
 import Svg from 'components/common/svg_images_components/woman_credit_card_and_laptop_svg';
 import GenericModal from 'components/generic_modal';
+
+import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

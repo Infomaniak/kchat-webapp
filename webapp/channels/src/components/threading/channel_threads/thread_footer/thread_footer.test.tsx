@@ -4,14 +4,15 @@
 import {mount} from 'enzyme';
 import type {ComponentProps} from 'react';
 import React from 'react';
-import {fakeDate} from 'tests/helpers/date';
-import {mockStore} from 'tests/test_store';
 
 import type {UserThread} from '@mattermost/types/threads';
 
 import Timestamp from 'components/timestamp';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatars from 'components/widgets/users/avatars';
+
+import {fakeDate} from 'tests/helpers/date';
+import {mockStore} from 'tests/test_store';
 
 import ThreadFooter from './thread_footer';
 

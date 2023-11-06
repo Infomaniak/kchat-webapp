@@ -6,11 +6,12 @@ import {mount, shallow} from 'enzyme';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 import {IntlProvider} from 'react-intl';
-import {TestHelper} from 'utils/test_helper';
 
 import {General} from 'mattermost-redux/constants';
 
 import ManageTeamsModal from 'components/admin_console/manage_teams_modal/manage_teams_modal';
+
+import {TestHelper} from 'utils/test_helper';
 
 import ManageTeamsDropdown from './manage_teams_dropdown';
 

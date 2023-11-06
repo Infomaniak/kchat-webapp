@@ -9,11 +9,11 @@ import React from 'react';
 // import {Provider} from 'react-redux';
 // import {render, fireEvent, screen} from '@testing-library/react';
 
-import mockStore from 'tests/test_store';
-
 import {Preferences} from 'mattermost-redux/constants';
 
 import UserSettingsTheme from 'components/user_settings/display/user_settings_theme/user_settings_theme';
+
+import mockStore from 'tests/test_store';
 
 jest.mock('utils/utils', () => ({
     applyTheme: jest.fn(),

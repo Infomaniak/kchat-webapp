@@ -2,9 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import {mockDispatch} from 'packages/mattermost-redux/test/test_store';
 import React from 'react';
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -12,6 +10,9 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import ChannelMembersDropdown from 'components/channel_members_dropdown/channel_members_dropdown';
+
+import {mockDispatch} from 'packages/mattermost-redux/test/test_store';
+import {ModalIdentifiers} from 'utils/constants';
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux') as typeof import('react-redux'),

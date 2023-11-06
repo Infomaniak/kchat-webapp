@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import React from 'react';
 import type {WrappedComponentProps} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import {ModalIdentifiers} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -15,6 +14,8 @@ import Tooltip from 'components/tooltip';
 import UserGuideIcon from 'components/widgets/icons/user_guide_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 import type {PropsFromRedux} from './index';
 

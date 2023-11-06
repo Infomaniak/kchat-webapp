@@ -11,15 +11,15 @@
     margin: 16px 0 0 4px;
     background: transparent;
     border-radius: 4px;
-    color: rgba(var(--center-channel-color-rgb), 0.56);
+    color: rgba(var(--center-channel-color-rgb), 0.785);
     cursor: pointer;
-    fill: rgba(var(--center-channel-color-rgb), 0.56);
+    fill: rgba(var(--center-channel-color-rgb), 0.785);
     text-align: center;
 
     &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.08);
-        color: rgba(var(--center-channel-color-rgb), 0.72);
-        fill: rgba(var(--center-channel-color-rgb), 0.72);
+        color: rgba(var(--center-channel-color-rgb), 0.84);
+        fill: rgba(var(--center-channel-color-rgb), 0.84);
     }
 
     .icon {
@@ -90,6 +90,22 @@
     svg {
         width: 12px;
         height: 12px;
+    }
+}
+
+.channel-header__icon--call {
+    svg {
+        width: 20px;
+        height: 20px;
+        color: rgba(var(--center-channel-color-rgb), 0.56);
+        fill: rgba(var(--center-channel-color-rgb), 0.78);
+    }
+}
+
+.channel-header__icon--calling {
+    svg {
+        color: var(--online-indicator);
+        fill: var(--online-indicator);
     }
 }
 

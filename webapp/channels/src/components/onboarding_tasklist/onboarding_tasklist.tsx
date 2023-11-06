@@ -2,12 +2,10 @@
 // See LICENSE.txt for license information.
 
 import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
-import checklistImg from 'images/onboarding-checklist.svg';
 import React, {useRef, useCallback, useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled, {css} from 'styled-components';
-import {Preferences, RecommendedNextStepsLegacy, suitePluginIds} from 'utils/constants';
 
 import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {getMyPreferences, savePreferences} from 'mattermost-redux/actions/preferences';
@@ -30,6 +28,9 @@ import {
     OnboardingTaskList,
 } from 'components/onboarding_tasks';
 import {useHandleOnBoardingTaskTrigger} from 'components/onboarding_tasks/onboarding_tasks_manager';
+
+import checklistImg from 'images/onboarding-checklist.svg';
+import {Preferences, RecommendedNextStepsLegacy, suitePluginIds} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

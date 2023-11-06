@@ -16,7 +16,6 @@ import classNames from 'classnames';
 import type {MouseEvent, KeyboardEvent} from 'react';
 import React, {memo, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import {CategorySorting} from '@mattermost/types/channel_categories';
@@ -28,6 +27,8 @@ import {trackEvent} from 'actions/telemetry_actions';
 import DeleteCategoryModal from 'components/delete_category_modal';
 import EditCategoryModal from 'components/edit_category_modal';
 import * as Menu from 'components/menu';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 import type {PropsFromRedux} from './index';
 

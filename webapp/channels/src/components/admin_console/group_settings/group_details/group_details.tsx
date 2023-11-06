@@ -3,8 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
 
 import type {ChannelWithTeamData} from '@mattermost/types/channels';
 import type {
@@ -32,6 +30,9 @@ import TeamSelectorModal from 'components/team_selector_modal';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
 
 export type Props = {
     groupID: string;

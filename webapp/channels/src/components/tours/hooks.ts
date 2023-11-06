@@ -1,36 +1,34 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {without} from 'lodash';
 import {useCallback} from 'react';
-
 import {useDispatch, useSelector} from 'react-redux';
 
-import {without} from 'lodash';
-
-import {getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
-import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentTeamDefaultChannelId} from 'mattermost-redux/selectors/entities/channels';
-import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
-import {ChannelCategory} from '@mattermost/types/channel_categories';
-import {getWorkTemplatesLinkedProducts} from 'mattermost-redux/selectors/entities/general';
+import type {ChannelCategory} from '@mattermost/types/channel_categories';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
-import {close as closeLhs, open as openLhs} from 'actions/views/lhs';
+import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
+import {getCurrentTeamDefaultChannelId} from 'mattermost-redux/selectors/entities/channels';
+import {getWorkTemplatesLinkedProducts} from 'mattermost-redux/selectors/entities/general';
+import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUserId, isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
+
 import {setAddChannelDropdown} from 'actions/views/add_channel_dropdown';
+import {collapseAllCategoriesExcept} from 'actions/views/channel_sidebar';
+import {close as closeLhs, open as openLhs} from 'actions/views/lhs';
 import {switchToChannels} from 'actions/views/onboarding_tasks';
-import {showRHSPlugin} from 'actions/views/rhs';
 import {setProductMenuSwitcherOpen} from 'actions/views/product_menu';
+import {showRHSPlugin} from 'actions/views/rhs';
+import {setStatusDropdown} from 'actions/views/status_dropdown';
 
 import {useGetRHSPluggablesIds} from 'components/work_templates/hooks';
 
+import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
 import {getHistory} from 'utils/browser_history';
 import {suitePluginIds} from 'utils/constants';
-import {GlobalState} from 'types/store';
-import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
-import {setStatusDropdown} from 'actions/views/status_dropdown';
-import {collapseAllCategoriesExcept} from 'actions/views/channel_sidebar';
 
-import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from '../onboarding_tasks';
+import type {GlobalState} from 'types/store';
 
 import {
     CrtTutorialSteps,
@@ -43,8 +41,9 @@ import {
     WorkTemplateTourSteps,
 } from './constant';
 
-export const useGetTourSteps = (tourCategory: string) => {
+import {OnboardingTaskCategory, OnboardingTaskList, OnboardingTasksName} from '../onboarding_tasks';
 
+export const useGetTourSteps = (tourCategory: string) => {
     const workTemplatesLinkedItems = useSelector(getWorkTemplatesLinkedProducts);
     let tourSteps: Record<string, number> = TTNameMapToTourSteps[tourCategory];
 

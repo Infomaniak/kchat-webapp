@@ -3,8 +3,6 @@
 
 import type {MouseEvent, DragEvent, ChangeEvent} from 'react';
 import React from 'react';
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-import {clearFileInput} from 'utils/utils';
 
 import type {FileInfo} from '@mattermost/types/files';
 
@@ -12,6 +10,9 @@ import {General} from 'mattermost-redux/constants';
 
 import type {FileUpload as FileUploadClass} from 'components/file_upload/file_upload';
 import FileUpload from 'components/file_upload/file_upload';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import {clearFileInput} from 'utils/utils';
 
 import type {FilesWillUploadHook} from 'types/store/plugins';
 

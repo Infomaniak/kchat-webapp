@@ -3,7 +3,6 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Post, PostType} from '@mattermost/types/posts';
 
@@ -11,6 +10,8 @@ import {Posts} from 'mattermost-redux/constants';
 
 import Markdown from 'components/markdown';
 import PostMarkdown from 'components/post_markdown/post_markdown';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/PostMarkdown', () => {
     const baseProps = {

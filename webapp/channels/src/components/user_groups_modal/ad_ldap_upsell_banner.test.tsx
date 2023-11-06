@@ -6,6 +6,7 @@ import type {ReactWrapper} from 'enzyme';
 import {mount} from 'enzyme';
 import React from 'react';
 import * as reactRedux from 'react-redux';
+
 import mockStore from 'tests/test_store';
 import {CloudProducts, LicenseSkus} from 'utils/constants';
 

@@ -11,16 +11,17 @@ import {
     injectIntl,
 } from 'react-intl';
 import {Provider} from 'react-redux';
-import Constants from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import type {StatusOK} from '@mattermost/types/client4';
 import type {UserProfile} from '@mattermost/types/users';
 
-import store from 'stores/redux_store.jsx';
+import store from 'stores/redux_store';
 
 import ConfirmModal from 'components/confirm_modal';
+
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 const UserSettings = React.lazy(() => import(/* webpackPrefetch: true */ 'components/user_settings'));
 const SettingsSidebar = React.lazy(() => import(/* webpackPrefetch: true */ '../../settings_sidebar'));

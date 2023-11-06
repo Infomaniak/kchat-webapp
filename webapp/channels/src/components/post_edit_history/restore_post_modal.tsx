@@ -3,12 +3,13 @@
 
 import React, {memo} from 'react';
 import {defineMessages, useIntl} from 'react-intl';
-import {t} from 'utils/i18n';
 
 import type {Post} from '@mattermost/types/posts';
 
 import GenericModal from 'components/generic_modal';
 import PostMessageView from 'components/post_view/post_message_view';
+
+import {t} from 'utils/i18n';
 
 const modalMessages = defineMessages({
     title: {

@@ -3,6 +3,7 @@
 
 import {mount} from 'enzyme';
 import React from 'react';
+
 import Constants from 'utils/constants';
 
 import SubMenuItem from './submenu_item';

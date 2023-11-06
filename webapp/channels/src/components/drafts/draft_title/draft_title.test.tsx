@@ -4,11 +4,12 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
-import mockStore from 'tests/test_store';
-import Constants from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
+
+import mockStore from 'tests/test_store';
+import Constants from 'utils/constants';
 
 import DraftTitle from './draft_title';
 

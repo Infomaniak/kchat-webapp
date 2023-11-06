@@ -3,9 +3,10 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as Utils from 'utils/utils';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import * as Utils from 'utils/utils';
 
 import AdminSettings from './admin_settings';
 import BooleanSetting from './boolean_setting';

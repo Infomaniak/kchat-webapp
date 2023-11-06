@@ -1,15 +1,16 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import statusGreen from 'images/status_green.png';
-import statusYellow from 'images/status_yellow.png';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as Utils from 'utils/utils';
 
 import ReloadIcon from 'components/widgets/icons/fa_reload_icon';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
+
+import statusGreen from 'images/status_green.png';
+import statusYellow from 'images/status_yellow.png';
+import * as Utils from 'utils/utils';
 
 export default class ClusterTable extends React.PureComponent {
     static propTypes = {

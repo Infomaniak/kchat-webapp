@@ -4,7 +4,6 @@
 import {ArchiveOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {memo, forwardRef, useMemo} from 'react';
 import {useSelector} from 'react-redux';
-import Constants from 'utils/constants';
 
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
@@ -16,6 +15,8 @@ import {getPost, getLimitedViews} from 'mattermost-redux/selectors/entities/post
 import AdvancedCreateComment from 'components/advanced_create_comment';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import BasicSeparator from 'components/widgets/separator/basic-separator';
+
+import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

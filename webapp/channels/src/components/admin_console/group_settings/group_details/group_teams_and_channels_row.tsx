@@ -5,13 +5,14 @@ import classNames from 'classnames';
 import {isNil} from 'lodash';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {localizeMessage} from 'utils/utils';
 
 import ConfirmModal from 'components/confirm_modal';
 import GlobeIcon from 'components/widgets/icons/globe_icon';
 import LockIcon from 'components/widgets/icons/lock_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {localizeMessage} from 'utils/utils';
 
 type Props = {
     id: string;

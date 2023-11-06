@@ -7,8 +7,6 @@ import type {PopoverOrigin} from '@mui/material/Popover';
 import type {ReactNode, MouseEvent, KeyboardEvent} from 'react';
 import React, {useState, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import Constants, {A11yClassNames} from 'utils/constants';
-import {isKeyPressed} from 'utils/utils';
 
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
@@ -18,6 +16,9 @@ import {isAnyModalOpen} from 'selectors/views/modals';
 
 import CompassDesignProvider from 'components/compass_design_provider';
 import GenericModal from 'components/generic_modal';
+
+import Constants, {A11yClassNames} from 'utils/constants';
+import {isKeyPressed} from 'utils/utils';
 
 import type {Props as MenuItemProps} from './menu_item';
 import {MenuItem as ParentMenuItem} from './menu_item';

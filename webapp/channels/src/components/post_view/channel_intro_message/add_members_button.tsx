@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {Constants, ModalIdentifiers} from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 
@@ -20,6 +19,8 @@ import ToggleModalButton from 'components/toggle_modal_button';
 import './add_members_button.scss';
 
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
+
+import {Constants, ModalIdentifiers} from 'utils/constants';
 
 export interface AddMembersButtonProps {
     totalUsers?: number;

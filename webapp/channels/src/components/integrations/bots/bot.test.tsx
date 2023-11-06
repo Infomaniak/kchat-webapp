@@ -4,11 +4,12 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {TestHelper as UtilsTestHelper} from 'utils/test_helper';
 
 import {generateId} from 'mattermost-redux/utils/helpers';
 
 import Markdown from 'components/markdown';
+
+import {TestHelper as UtilsTestHelper} from 'utils/test_helper';
 
 import Bot from './bot';
 

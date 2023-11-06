@@ -53,7 +53,7 @@
     }
 
     &.btn {
-        padding: 6px 12px;
+        padding: 12px 16px;
     }
 
     &.btn--block {
@@ -114,12 +114,8 @@
         display: flex;
         font-size: 18px;
 
-        &:first-child::before {
+        &::before {
             margin: 0 7px 0 0;
-        }
-
-        &:last-child::before {
-            margin: 0 0 0 7px;
         }
     }
 }
@@ -136,10 +132,6 @@
     font-weight: 600;
     transition: all 0.15s ease-out;
 
-    &:hover {
-        background: linear-gradient(0deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08)), var(--button-bg);
-    }
-
     &:active {
         background: linear-gradient(0deg, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.16)), var(--button-bg);
     }
@@ -150,7 +142,7 @@
         outline: none;
     }
 
-    &:disabled:not(.always-show-enabled) {
+    &:disabled {
         background: rgba(var(--center-channel-color-rgb), 0.08);
         color: rgba(var(--center-channel-color-rgb), 0.32);
         cursor: not-allowed;
@@ -167,16 +159,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--denim-button-bg);
-    background: var(--center-channel-bg);
+    background: var(--ik-btn-secondary);
     border-radius: 4px;
-    color: var(--button-bg);
+    color: var(--ik-btn-secondary-color);
     font-weight: 600;
     transition: all 0.15s ease-out;
-
-    &:hover {
-        background: rgba(var(--denim-button-bg-rgb), 0.08);
-    }
 
     &:active {
         background: rgba(var(--denim-button-bg-rgb), 0.16);
@@ -266,49 +253,6 @@
     }
 }
 
-@mixin icon-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 0;
-    background: none;
-    border-radius: 4px;
-    color: rgba(var(--center-channel-color-rgb), 0.56);
-
-    &:focus,
-    &:focus-within {
-        box-sizing: border-box;
-        border: 2px solid rgba(var(--denim-button-bg-rgb), 0.32);
-        box-shadow: none;
-        outline: none;
-    }
-
-    &:hover {
-        border: 0;
-        background: rgba(var(--center-channel-color-rgb), 0.08);
-        color: rgba(var(--center-channel-color-rgb), 0.72);
-    }
-
-    &:active {
-        border: 0;
-        background: rgba(var(--button-bg-rgb), 0.08);
-        color: var(--button-bg);
-    }
-
-    &:disabled {
-        background: none;
-        color: rgba(var(--center-channel-color-rgb), 0.32);
-        cursor: not-allowed;
-    }
-}
-
-@mixin icon-button-small-compact {
-    width: 28px;
-    height: 28px;
-    padding: 6px;
-    font-size: 16px;
-}
-
 @mixin simple-in-and-out-after($classPrefix, $transition_time: 300ms) {
     .#{$classPrefix}--enter-from-after {
         &-enter {
@@ -370,16 +314,6 @@
         &-exit-done {
             transform: translateY(100vh);
         }
-    }
-}
-
-@keyframes emphasis-sidebar-resize-line {
-    50% {
-        transform: scaleX(1.5);
-    }
-
-    100% {
-        transform: scaleX(1);
     }
 }
 

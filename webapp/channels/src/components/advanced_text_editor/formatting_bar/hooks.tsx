@@ -4,6 +4,7 @@
 import type {Instance} from '@popperjs/core';
 import {debounce} from 'lodash';
 import React, {useEffect, useLayoutEffect, useState} from 'react';
+
 import type {MarkdownMode} from 'utils/markdown/apply_markdown';
 
 type WideMode = 'wide' | 'normal' | 'narrow';

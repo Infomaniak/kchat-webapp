@@ -4,7 +4,6 @@
 import React from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {localizeMessage} from 'utils/utils';
 
 import type {Post} from '@mattermost/types/posts';
 
@@ -14,6 +13,8 @@ import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/user
 import {submitCommand} from 'actions/views/create_comment';
 
 import PostMarkdown from 'components/post_markdown';
+
+import {localizeMessage} from 'utils/utils';
 
 import type {PostDraft} from 'types/store/draft';
 

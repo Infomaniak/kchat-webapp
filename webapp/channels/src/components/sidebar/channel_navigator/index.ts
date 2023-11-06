@@ -2,20 +2,22 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
+import type {Dispatch, ActionCreatorsMapObject} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {Action} from 'mattermost-redux/types/actions';
+import Permissions from 'mattermost-redux/constants/permissions';
 import {shouldShowUnreadsCategory, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
-import Permissions from 'mattermost-redux/constants/permissions';
+import type {Action} from 'mattermost-redux/types/actions';
 
 import {openModal, closeModal} from 'actions/views/modals';
-import {getHistory} from 'utils/browser_history';
-import {ModalIdentifiers} from 'utils/constants';
 import {isModalOpen} from 'selectors/views/modals';
 
-import {ModalData} from 'types/actions';
-import {GlobalState} from 'types/store';
+import {getHistory} from 'utils/browser_history';
+import {ModalIdentifiers} from 'utils/constants';
+
+import type {ModalData} from 'types/actions';
+import type {GlobalState} from 'types/store';
 
 import ChannelNavigator from './channel_navigator';
 

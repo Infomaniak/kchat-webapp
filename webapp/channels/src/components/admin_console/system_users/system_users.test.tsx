@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {Constants, SearchUserTeamFilter, UserFilters} from 'utils/constants';
 
 import SystemUsers from 'components/admin_console/system_users/system_users';
+
+import {Constants, SearchUserTeamFilter, UserFilters} from 'utils/constants';
 
 jest.mock('actions/admin_actions');
 

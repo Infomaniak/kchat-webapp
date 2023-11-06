@@ -4,14 +4,15 @@
 import React from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {
-    TELEMETRY_CATEGORIES,
-} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import {getCloudContactUsLink, InquiryType} from 'selectors/cloud';
 
 import ExternalLink from 'components/external_link';
+
+import {
+    TELEMETRY_CATEGORIES,
+} from 'utils/constants';
 
 export default function ContactSalesLink() {
     const contactSupportLink = useSelector(getCloudContactUsLink)(InquiryType.Technical);

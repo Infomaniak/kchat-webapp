@@ -3,8 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import * as Utils from 'utils/utils';
 
 import type {AdminConfig} from '@mattermost/types/config';
 import type {ServerError} from '@mattermost/types/errors';
@@ -15,6 +13,9 @@ import {keepForeverOption, yearsOption, daysOption, FOREVER, YEARS, DAYS} from '
 import Card from 'components/card/card';
 import SaveButton from 'components/save_button';
 import DropdownInputHybrid from 'components/widgets/inputs/dropdown_input_hybrid';
+
+import {getHistory} from 'utils/browser_history';
+import * as Utils from 'utils/utils';
 
 import './global_policy_form.scss';
 

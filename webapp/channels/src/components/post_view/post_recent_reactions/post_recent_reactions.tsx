@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Locations} from 'utils/constants';
 
 import type {Emoji} from '@mattermost/types/emojis';
 
@@ -11,6 +10,8 @@ import Permissions from 'mattermost-redux/constants/permissions';
 import OverlayTrigger from 'components/overlay_trigger';
 import ChannelPermissionGate from 'components/permissions_gates/channel_permission_gate';
 import Tooltip from 'components/tooltip';
+
+import {Locations} from 'utils/constants';
 
 import EmojiItem from './recent_reactions_emoji_item';
 

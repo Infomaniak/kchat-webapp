@@ -3,8 +3,6 @@
 
 import React, {useEffect, useRef} from 'react';
 import {useSelector} from 'react-redux';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 
 import {Client4} from 'mattermost-redux/client';
 import {RequestStatus} from 'mattermost-redux/constants';
@@ -14,6 +12,9 @@ import {redirectUserToDefaultTeam} from 'actions/global_actions';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import LoadingIk from 'components/loading_ik';
+
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 
 // import LoadingScreen from 'components/loading_screen';
 

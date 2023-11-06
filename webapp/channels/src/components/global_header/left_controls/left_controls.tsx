@@ -3,9 +3,10 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import {isDesktopApp} from 'utils/user_agent';
 
 import AppNameDisplay from 'components/app_name_display';
+
+import {isDesktopApp} from 'utils/user_agent';
 
 import HistoryButtons from './history_buttons';
 

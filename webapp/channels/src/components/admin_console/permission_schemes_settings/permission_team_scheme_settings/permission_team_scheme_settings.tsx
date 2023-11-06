@@ -4,9 +4,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
-import {PermissionsScope, ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
 
 import type {ClientConfig, ClientLicense} from '@mattermost/types/config';
 import type {ServerError} from '@mattermost/types/errors';
@@ -27,6 +24,10 @@ import TeamSelectorModal from 'components/team_selector_modal';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import AdminPanelTogglable from 'components/widgets/admin_console/admin_panel_togglable';
 import AdminPanelWithButton from 'components/widgets/admin_console/admin_panel_with_button';
+
+import {PermissionsScope, ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
 
 import TeamInList from './team_in_list';
 

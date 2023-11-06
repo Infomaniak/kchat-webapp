@@ -4,8 +4,6 @@
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {AboutLinks, LicenseLinks, Preferences, Unique} from 'utils/constants';
-import {format} from 'utils/markdown';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 
@@ -13,12 +11,15 @@ import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
-import store from 'stores/redux_store.jsx';
+import store from 'stores/redux_store';
 
 import AlertBanner from 'components/alert_banner';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
+
+import {AboutLinks, LicenseLinks, Preferences, Unique} from 'utils/constants';
+import {format} from 'utils/markdown';
 
 import type {GlobalState} from 'types/store';
 

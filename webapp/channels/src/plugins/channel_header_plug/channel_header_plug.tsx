@@ -8,8 +8,6 @@ import {Dropdown, Tooltip} from 'react-bootstrap';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
 import {RootCloseWrapper} from 'react-overlays';
-import {createCallContext} from 'utils/apps';
-import {Constants} from 'utils/constants';
 
 import type {AppBinding} from '@mattermost/types/apps';
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
@@ -20,6 +18,9 @@ import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import HeaderIconWrapper from 'components/channel_header/components/header_icon_wrapper';
 import OverlayTrigger from 'components/overlay_trigger';
 import PluginChannelHeaderIcon from 'components/widgets/icons/plugin_channel_header_icon';
+
+import {createCallContext} from 'utils/apps';
+import {Constants} from 'utils/constants';
 
 import type {HandleBindingClick, OpenAppsModal, PostEphemeralCallResponseForChannel} from 'types/apps';
 import type {PluginComponent} from 'types/store/plugins';

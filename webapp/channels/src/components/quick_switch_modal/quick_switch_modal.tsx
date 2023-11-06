@@ -4,10 +4,6 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import Constants, {RHSStates} from 'utils/constants';
-import * as UserAgent from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 
@@ -20,6 +16,11 @@ import SuggestionBox from 'components/suggestion/suggestion_box';
 import type SuggestionBoxComponent from 'components/suggestion/suggestion_box/suggestion_box';
 import SuggestionList from 'components/suggestion/suggestion_list.jsx';
 import SwitchChannelProvider from 'components/suggestion/switch_channel_provider.jsx';
+
+import {getHistory} from 'utils/browser_history';
+import Constants, {RHSStates} from 'utils/constants';
+import * as UserAgent from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {RhsState} from 'types/store/rhs';
 

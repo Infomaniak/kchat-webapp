@@ -3,7 +3,6 @@
 
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
-import {getImageSrc} from 'utils/post_utils';
 
 import type {GfycatAPIItem, GfycatAPITag} from '@mattermost/types/gifs';
 
@@ -12,6 +11,8 @@ import {requestCategoriesList, requestCategoriesListIfNeeded, saveSearchBarText,
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import InfiniteScroll from 'components/gif_picker/components/InfiniteScroll';
+
+import {getImageSrc} from 'utils/post_utils';
 
 import type {GlobalState} from 'types/store';
 

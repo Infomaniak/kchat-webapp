@@ -3,8 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
@@ -19,6 +17,9 @@ import ResetPasswordModal from 'components/admin_console/reset_password_modal';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import SearchableUserList from 'components/searchable_user_list/searchable_user_list';
 import UserListRowWithError from 'components/user_list_row_with_error';
+
+import {Constants} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import SystemUsersDropdown from '../system_users_dropdown';
 

@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import {isNil} from 'lodash';
 import React from 'react';
 import {FormattedMessage, defineMessages} from 'react-intl';
-import {t} from 'utils/i18n';
 
 import type {ChannelModeration as ChannelPermissions} from '@mattermost/types/channels';
 
@@ -14,6 +13,8 @@ import {Permissions, Roles} from 'mattermost-redux/constants';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import CheckboxCheckedIcon from 'components/widgets/icons/checkbox_checked_icon';
+
+import {t} from 'utils/i18n';
 
 import type {ChannelModerationRoles} from './types';
 

@@ -6,9 +6,6 @@ import {CheckIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {memo, useCallback, useState} from 'react';
 import {defineMessages, useIntl} from 'react-intl';
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {imageURLForUser} from 'utils/utils';
 
 import type {Post} from '@mattermost/types/posts';
 
@@ -20,6 +17,10 @@ import Timestamp, {RelativeRanges} from 'components/timestamp';
 import Tooltip from 'components/tooltip';
 import UserProfileComponent from 'components/user_profile';
 import Avatar from 'components/widgets/users/avatar';
+
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {imageURLForUser} from 'utils/utils';
 
 import RestorePostModal from '../restore_post_modal';
 

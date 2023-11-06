@@ -2,12 +2,13 @@
 // See LICENSE.txt for license information.
 
 import {shallow} from 'enzyme';
-import Constants from 'utils/constants';
-import messageHtmlToComponent from 'utils/message_html_to_component';
-import * as TextFormatting from 'utils/text_formatting';
 
 import AtMention from 'components/at_mention';
 import MarkdownImage from 'components/markdown_image';
+
+import Constants from 'utils/constants';
+import messageHtmlToComponent from 'utils/message_html_to_component';
+import * as TextFormatting from 'utils/text_formatting';
 
 describe('messageHtmlToComponent', () => {
     test('plain text', () => {

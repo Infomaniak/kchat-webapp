@@ -6,11 +6,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {FormattedMessage} from 'react-intl';
-import {Constants} from 'utils/constants';
-import {isEmptyObject} from 'utils/utils';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
+
+import {Constants} from 'utils/constants';
+import {isEmptyObject} from 'utils/utils';
 
 // When this file is migrated to TypeScript, type definitions for its props already exist in ./suggestion_list.d.ts.
 

@@ -3,8 +3,6 @@
 
 import React, {memo, useEffect, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {InsightsScopes, PreviousViewedTypes, suitePluginIds} from 'utils/constants';
-import {useProducts} from 'utils/products';
 
 import type {TimeFrame} from '@mattermost/types/insights';
 import {CardSizes, InsightsWidgetTypes, TimeFrames} from '@mattermost/types/insights';
@@ -17,6 +15,9 @@ import {selectLhsItem} from 'actions/views/lhs';
 import {suppressRHS, unsuppressRHS} from 'actions/views/rhs';
 import {useGlobalState} from 'stores/hooks';
 import LocalStorageStore from 'stores/local_storage_store';
+
+import {InsightsScopes, PreviousViewedTypes, suitePluginIds} from 'utils/constants';
+import {useProducts} from 'utils/products';
 
 import type {GlobalState} from 'types/store';
 import {LhsItemType, LhsPage} from 'types/store/lhs';

@@ -3,12 +3,13 @@
 
 import {screen} from '@testing-library/react';
 import React from 'react';
-import {renderWithIntlAndStore} from 'tests/react_testing_utils';
-import {TestHelper as TH} from 'utils/test_helper';
 
 import type {DeepPartial} from '@mattermost/types/utilities';
 
 import {Client4} from 'mattermost-redux/client';
+
+import {renderWithIntlAndStore} from 'tests/react_testing_utils';
+import {TestHelper as TH} from 'utils/test_helper';
 
 import type {GlobalState} from 'types/store';
 

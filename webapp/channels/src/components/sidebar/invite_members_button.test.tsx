@@ -3,12 +3,13 @@
 
 import React from 'react';
 import {Provider} from 'react-redux';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import mockStore from 'tests/test_store';
 
 import * as teams from 'mattermost-redux/selectors/entities/teams';
 
 import InviteMembersButton from 'components/sidebar/invite_members_button';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import mockStore from 'tests/test_store';
 
 describe('components/sidebar/invite_members_button', () => {
     // required state to mount using the provider

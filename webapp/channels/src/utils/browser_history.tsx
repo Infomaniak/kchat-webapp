@@ -3,6 +3,7 @@
 
 import type {History} from 'history';
 import {createBrowserHistory} from 'history';
+
 import {getModule} from 'module_registry';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';

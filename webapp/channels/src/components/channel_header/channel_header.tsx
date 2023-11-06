@@ -2,20 +2,11 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import ChannelHeaderPlug from 'plugins/channel_header_plug';
 import React from 'react';
 import type {MouseEvent, ReactNode, RefObject} from 'react';
 import {Overlay} from 'react-bootstrap';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
-import {
-    Constants,
-    ModalIdentifiers,
-    NotificationLevels,
-    RHSStates,
-} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {handleFormattedTextClick, localizeMessage, isEmptyObject, toTitleCase} from 'utils/utils';
 
 import type {Channel, ChannelMembership, ChannelNotifyProps} from '@mattermost/types/channels';
 import type {UserCustomStatus, UserProfile} from '@mattermost/types/users';
@@ -44,6 +35,16 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Popover from 'components/widgets/popover';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
+
+import ChannelHeaderPlug from 'plugins/channel_header_plug';
+import {
+    Constants,
+    ModalIdentifiers,
+    NotificationLevels,
+    RHSStates,
+} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {handleFormattedTextClick, localizeMessage, isEmptyObject, toTitleCase} from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 import type {RhsState} from 'types/store/rhs';

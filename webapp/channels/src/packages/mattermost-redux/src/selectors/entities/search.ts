@@ -1,13 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {createSelector} from 'reselect';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUserMentionKeys, UserMentionKey} from 'mattermost-redux/selectors/entities/users';
+import type {GlobalState} from '@mattermost/types/store';
+
 import {getMyGroupMentionKeys} from 'mattermost-redux/selectors/entities/groups';
-
-import {GlobalState} from '@mattermost/types/store';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import type {UserMentionKey} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserMentionKeys} from 'mattermost-redux/selectors/entities/users';
 
 export const getCurrentSearchForCurrentTeam: (state: GlobalState) => string = createSelector(
     'getCurrentSearchForCurrentTeam',

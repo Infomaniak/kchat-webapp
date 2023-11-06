@@ -4,11 +4,12 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
-import mockStore from 'tests/test_store';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserThread, UserThreadSynthetic} from '@mattermost/types/threads';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
+
+import mockStore from 'tests/test_store';
 
 import type {PostDraft} from 'types/store/draft';
 

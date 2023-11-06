@@ -1,17 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {bindActionCreators, Dispatch} from 'redux';
-
 import {connect} from 'react-redux';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {GenericAction} from 'mattermost-redux/types/actions';
+import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {toggleInlineImageVisibility} from 'actions/post_actions';
 import {isInlineImageVisible} from 'selectors/posts';
-import {GlobalState} from 'types/store';
 
-import MarkdownImageExpand, {Props} from './markdown_image_expand';
+import type {GlobalState} from 'types/store';
+
+import type {Props} from './markdown_image_expand';
+import MarkdownImageExpand from './markdown_image_expand';
 
 const mapStateToProps = (state: GlobalState, {postId, imageKey}: Props) => {
     return {

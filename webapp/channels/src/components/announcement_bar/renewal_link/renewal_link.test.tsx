@@ -4,9 +4,10 @@
 import type {ReactWrapper} from 'enzyme';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import {Client4} from 'mattermost-redux/client';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import RenewalLink from './renewal_link';
 

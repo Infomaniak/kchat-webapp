@@ -3,10 +3,11 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import Constants from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
+
+import Constants from 'utils/constants';
 
 import AboutAreaChannel from './about_area_channel';
 import AboutAreaDM from './about_area_dm';

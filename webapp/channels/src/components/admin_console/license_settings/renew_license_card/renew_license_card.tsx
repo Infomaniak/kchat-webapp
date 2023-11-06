@@ -4,8 +4,6 @@
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getSkuDisplayName} from 'utils/subscription';
-import {getRemainingDaysFromFutureTimestamp} from 'utils/utils';
 
 import type {ClientLicense} from '@mattermost/types/config';
 
@@ -15,6 +13,9 @@ import AlertBanner from 'components/alert_banner';
 import ContactUsButton from 'components/announcement_bar/contact_sales/contact_us';
 import RenewalLink from 'components/announcement_bar/renewal_link/';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import {getSkuDisplayName} from 'utils/subscription';
+import {getRemainingDaysFromFutureTimestamp} from 'utils/utils';
 
 import './renew_license_card.scss';
 

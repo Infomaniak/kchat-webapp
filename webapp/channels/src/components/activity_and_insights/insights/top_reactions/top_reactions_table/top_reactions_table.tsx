@@ -4,7 +4,6 @@
 import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {InsightsScopes} from 'utils/constants';
 
 import type {TimeFrame} from '@mattermost/types/insights';
 import type {GlobalState} from '@mattermost/types/store';
@@ -18,6 +17,8 @@ import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
 import DataGrid from 'components/admin_console/data_grid/data_grid';
 import RenderEmoji from 'components/emoji/render_emoji';
+
+import {InsightsScopes} from 'utils/constants';
 
 import './../../../activity_and_insights.scss';
 

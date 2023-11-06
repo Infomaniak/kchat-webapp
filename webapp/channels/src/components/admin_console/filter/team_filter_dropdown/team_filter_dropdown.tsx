@@ -3,15 +3,16 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {createSelector} from 'reselect';
-import * as Utils from 'utils/utils';
 
 import type {Team, TeamSearchOpts} from '@mattermost/types/teams';
 
 import {debounce} from 'mattermost-redux/actions/helpers';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 
 import InfiniteScroll from 'components/gif_picker/components/InfiniteScroll';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
+
+import * as Utils from 'utils/utils';
 
 import TeamFilterCheckbox from './team_filter_checkbox';
 

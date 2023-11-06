@@ -6,9 +6,6 @@ import React, {useEffect, useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {fallbackStarterLimits, asGBString} from 'utils/limits';
 
 import type {Feedback, Product} from '@mattermost/types/cloud';
 import type {Team} from '@mattermost/types/teams';
@@ -25,6 +22,10 @@ import RadioButtonGroup from 'components/common/radio_group';
 import type {ValueType} from 'components/dropdown_input';
 import DropdownInput from 'components/dropdown_input';
 import DowngradeFeedback from 'components/feedback_modal/downgrade_feedback';
+
+import {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {fallbackStarterLimits, asGBString} from 'utils/limits';
 
 import type {GlobalState} from 'types/store';
 

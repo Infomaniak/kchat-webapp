@@ -3,11 +3,12 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import {General} from 'mattermost-redux/constants';
 
 import MoreInfo from 'components/activity_log_modal/components/more_info';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/activity_log_modal/MoreInfo', () => {
     const baseProps = {

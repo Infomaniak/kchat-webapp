@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React, {useEffect, useState} from 'react';
+
 import Constants from 'utils/constants';
 
 import SuggestionList from './suggestion_list';

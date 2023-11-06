@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import {localizeMessage} from 'utils/utils';
 
 import {Permissions} from 'mattermost-redux/constants';
 
@@ -13,6 +12,8 @@ import BackstageHeader from 'components/backstage/components/backstage_header';
 import FormError from 'components/form_error';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import SpinnerButton from 'components/spinner_button';
+
+import {localizeMessage} from 'utils/utils';
 
 export default class AbstractOAuthApp extends React.PureComponent {
     static propTypes = {

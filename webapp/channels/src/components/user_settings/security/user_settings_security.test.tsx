@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import type * as Utils from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
+
+import type * as Utils from 'utils/utils';
 
 import UserSettingsSecurity from './user_settings_security';
 

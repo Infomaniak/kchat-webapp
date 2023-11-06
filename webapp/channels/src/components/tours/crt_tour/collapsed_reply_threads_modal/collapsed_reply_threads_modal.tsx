@@ -1,12 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import crtInProductImg from 'images/crt-in-product.gif';
 import React, {useCallback, useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {Constants, ModalIdentifiers, Preferences} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
@@ -16,6 +13,10 @@ import {closeModal} from 'actions/views/modals';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import GenericModal from 'components/generic_modal';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
+
+import crtInProductImg from 'images/crt-in-product.gif';
+import {Constants, ModalIdentifiers, Preferences} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import './collapsed_reply_threads_modal.scss';
 import {AutoTourStatus, TTNameMapToATStatusKey, TutorialTourName} from '../../constant';

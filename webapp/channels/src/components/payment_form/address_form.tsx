@@ -4,12 +4,13 @@
 import React from 'react';
 import type {MessageDescriptor} from 'react-intl';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {COUNTRIES} from 'utils/countries';
 
 import type {Address} from '@mattermost/types/cloud';
 
 import DropdownInput from 'components/dropdown_input';
 import Input from 'components/widgets/inputs/input/input';
+
+import {COUNTRIES} from 'utils/countries';
 
 import StateSelector from './state_selector';
 

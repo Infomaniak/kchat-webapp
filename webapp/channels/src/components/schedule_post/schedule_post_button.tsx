@@ -6,10 +6,6 @@ import {Button, styled} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {toUTCUnix} from 'utils/datetime';
-import {getCurrentMomentForTimezone} from 'utils/timezone';
-import {isKeyPressed, cmdOrCtrlPressed} from 'utils/utils';
 
 import {openModal} from 'actions/views/modals';
 import {getCurrentUserTimezone} from 'selectors/general';
@@ -20,6 +16,11 @@ import type {SchedulePostMenuOption} from 'components/schedule_post/schedule_pos
 import SchedulePostMenu from 'components/schedule_post/schedule_post_menu';
 import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
 import Tooltip from 'components/tooltip';
+
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {toUTCUnix} from 'utils/datetime';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
+import {isKeyPressed, cmdOrCtrlPressed} from 'utils/utils';
 
 const StyledSchedulePostButton = styled(Button)`
     display: flex;

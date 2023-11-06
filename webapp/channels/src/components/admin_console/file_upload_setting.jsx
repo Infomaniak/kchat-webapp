@@ -4,6 +4,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+
 import * as Utils from 'utils/utils';
 
 import Setting from './setting';

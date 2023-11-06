@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {ModalIdentifiers} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -13,6 +12,8 @@ import {CreateChannelsTour, InvitePeopleTour, JoinChannelsTour} from 'components
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import WorkTemplateModal from 'components/work_templates';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 type Props = {
     canCreateChannel: boolean;

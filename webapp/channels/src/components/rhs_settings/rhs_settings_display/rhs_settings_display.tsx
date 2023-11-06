@@ -5,10 +5,6 @@ import type {PrimitiveType, FormatXMLElementFn} from 'intl-messageformat';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import ReactSelect from 'react-select';
-import Constants from 'utils/constants';
-import {t} from 'utils/i18n';
-import {getBrowserTimezone} from 'utils/timezone';
-import {localizeMessage} from 'utils/utils';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile, UserTimezone} from '@mattermost/types/users';
@@ -21,6 +17,11 @@ import RhsLimitVisibleGMsDMs from 'components/rhs_settings/rhs_settings_display/
 import RhsSettingsItem from 'components/rhs_settings/rhs_settings_item/rhs_settings_item';
 import RhsThemeSetting from 'components/rhs_settings/rhs_settings_theme';
 import Toggle from 'components/toggle';
+
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
+import {getBrowserTimezone} from 'utils/timezone';
+import {localizeMessage} from 'utils/utils';
 
 import SvgCompactIcon from '../rhs_settings_compact/assets/SvgCompactIcon';
 import SvgNoCompactIcon from '../rhs_settings_compact/assets/SvgNoCompactIcon';

@@ -3,9 +3,10 @@
 
 import {screen} from '@testing-library/react';
 import React from 'react';
-import {renderWithIntlAndStore} from 'tests/react_testing_utils';
 
 import * as controlModalHooks from 'components/common/hooks/useControlModal';
+
+import {renderWithIntlAndStore} from 'tests/react_testing_utils';
 
 import ScreeningInProgressModal from './';
 

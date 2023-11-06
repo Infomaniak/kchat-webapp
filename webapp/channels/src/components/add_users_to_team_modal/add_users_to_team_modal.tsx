@@ -4,7 +4,6 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {displayEntireNameForUser, localizeMessage} from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
@@ -18,6 +17,8 @@ import ProfilePicture from 'components/profile_picture';
 import AddIcon from 'components/widgets/icons/fa_add_icon';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
+
+import {displayEntireNameForUser, localizeMessage} from 'utils/utils';
 
 const USERS_PER_PAGE = 50;
 const MAX_SELECTABLE_VALUES = 20;

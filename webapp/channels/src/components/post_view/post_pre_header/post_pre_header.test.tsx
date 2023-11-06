@@ -3,10 +3,11 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import PostPreHeader from 'components/post_view/post_pre_header/post_pre_header';
 import FlagIconFilled from 'components/widgets/icons/flag_icon_filled';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 describe('components/PostPreHeader', () => {
     const baseProps = {

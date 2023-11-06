@@ -204,20 +204,16 @@
         white-space: nowrap;
 
         .suggestion-list__main {
-            display: flex;
+            width: 100%;
             color: rgba(var(--center-channel-color-rgb), 1);
-            white-space: nowrap;
+            text-overflow: ellipsis;
 
             .suggestion-list__desc {
+                overflow: hidden;
+                white-space: nowrap;
                 margin-left: 8px;
                 color: rgba(var(--center-channel-color-rgb), 0.56);
             }
-        }
-
-        > span:nth-child(2) {
-            overflow: hidden;
-            width: 100%;
-            text-overflow: ellipsis;
         }
     }
 
@@ -229,11 +225,7 @@
 
         .suggestion-list__main {
             width: unset;
-
-            > span:first-child {
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
+            max-width: 70%;
         }
 
         .badge {

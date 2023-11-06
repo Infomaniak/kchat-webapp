@@ -3,10 +3,6 @@
 
 import React from 'react';
 import {Overlay} from 'react-bootstrap';
-import Constants from 'utils/constants';
-import {popOverOverlayPosition} from 'utils/position_utils';
-import {getUserOrGroupFromMentionName} from 'utils/post_utils';
-import {getViewportSize, isKeyPressed} from 'utils/utils';
 
 import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
@@ -16,6 +12,11 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import AtMentionGroup from 'components/at_mention/at_mention_group';
 import ProfilePopover from 'components/profile_popover';
+
+import Constants from 'utils/constants';
+import {popOverOverlayPosition} from 'utils/position_utils';
+import {getUserOrGroupFromMentionName} from 'utils/post_utils';
+import {getViewportSize, isKeyPressed} from 'utils/utils';
 
 type Props = {
     currentUserId: string;

@@ -3,10 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {getSiteURL} from 'utils/url';
-import * as Utils from 'utils/utils';
 
 import type {Bot} from '@mattermost/types/bots';
 import type {AdminConfig} from '@mattermost/types/config';
@@ -26,6 +22,11 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {Constants} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {getSiteURL} from 'utils/url';
+import * as Utils from 'utils/utils';
 
 const ROWS_FROM_BOTTOM_TO_OPEN_UP = 3;
 const TOTAL_USERS_TO_OPEN_UP = 5;

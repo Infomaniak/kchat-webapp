@@ -8,14 +8,15 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {t} from 'utils/i18n';
-import {localizeMessage, copyToClipboard} from 'utils/utils';
 
 import {getFileMiniPreviewUrl} from 'mattermost-redux/utils/file_utils';
 
 import LoadingImagePreview from 'components/loading_image_preview';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import {t} from 'utils/i18n';
+import {localizeMessage, copyToClipboard} from 'utils/utils';
 
 const MIN_IMAGE_SIZE = 48;
 const MIN_IMAGE_SIZE_FOR_INTERNAL_BUTTONS = 100;

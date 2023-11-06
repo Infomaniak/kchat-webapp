@@ -11,17 +11,6 @@ import type {ReactNode} from 'react';
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import {
-    Constants,
-    TELEMETRY_CATEGORIES,
-    CloudLinks,
-    CloudProducts,
-    BillingSchemes,
-    ModalIdentifiers,
-    RecurringIntervals,
-} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {localizeMessage, getNextBillingDate, getBlankAddressWithCountry} from 'utils/utils';
 
 import type {Address, CloudCustomer, Product, Invoice, Feedback} from '@mattermost/types/cloud';
 import {areShippingDetailsValid} from '@mattermost/types/cloud';
@@ -51,6 +40,18 @@ import SwitchToYearlyPlanConfirmModal from 'components/switch_to_yearly_plan_con
 import Tooltip from 'components/tooltip';
 import StarMarkSvg from 'components/widgets/icons/star_mark_icon';
 import FullScreenModal from 'components/widgets/modals/full_screen_modal';
+
+import {
+    Constants,
+    TELEMETRY_CATEGORIES,
+    CloudLinks,
+    CloudProducts,
+    BillingSchemes,
+    ModalIdentifiers,
+    RecurringIntervals,
+} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {localizeMessage, getNextBillingDate, getBlankAddressWithCountry} from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 

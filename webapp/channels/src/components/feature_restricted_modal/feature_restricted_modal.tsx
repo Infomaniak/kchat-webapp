@@ -5,8 +5,6 @@ import classNames from 'classnames';
 import React, {useEffect} from 'react';
 import {useIntl, FormattedMessage} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
-import {ModalIdentifiers, AboutLinks, LicenseLinks} from 'utils/constants';
 
 import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {checkHadPriorTrial} from 'mattermost-redux/selectors/entities/cloud';
@@ -28,6 +26,9 @@ import type {GlobalState} from 'types/store';
 
 import './feature_restricted_modal.scss';
 import ExternalLink from 'components/external_link';
+
+import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
+import {ModalIdentifiers, AboutLinks, LicenseLinks} from 'utils/constants';
 
 type FeatureRestrictedModalProps = {
     titleAdminPreTrial: string;

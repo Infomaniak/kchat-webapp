@@ -6,8 +6,8 @@ import type {CSSProperties} from 'react';
 import React from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
-import type {Channel} from 'mattermost-redux/types/channels';
-import type {UserProfile} from 'mattermost-redux/types/users';
+import type {Channel} from '@mattermost/types/channels';
+import type {UserProfile} from '@mattermost/types/users';
 
 import type {UserState} from 'reducers/views/calls';
 
@@ -19,11 +19,10 @@ import RaisedHandIcon from 'components/widgets/icons/raised_hand';
 import ScreenIcon from 'components/widgets/icons/screen_icon';
 import UnmutedIcon from 'components/widgets/icons/unmuted_icon';
 import UnraisedHandIcon from 'components/widgets/icons/unraised_hand';
-
-import './component.scss';
 import Avatar from 'components/widgets/users/avatar';
 
 import {getUserDisplayName, isDMChannel} from '../utils';
+import './component.scss';
 
 interface Props {
     show: boolean;
@@ -76,7 +75,7 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
 
     onDisconnectClick = () => {
         this.props.hideExpandedView();
-        const callsClient = window.opener ? window.opener.callsClient : window.callsClient;
+        const callsClient = window.opener ? window.opener.callsClient : (window as any).callsClient;
         if (callsClient) {
             callsClient.disconnect();
             if (window.opener) {
@@ -86,7 +85,7 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
     };
 
     onMuteToggle = () => {
-        const callsClient = window.opener ? window.opener.callsClient : window.callsClient;
+        const callsClient = window.opener ? window.opener.callsClient : (window as any).callsClient;
         if (callsClient.isMuted()) {
             callsClient.unmute();
         } else {
@@ -95,7 +94,7 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
     };
 
     // onShareScreenToggle = async () => {
-    //     const callsClient = window.opener ? window.opener.callsClient : window.callsClient;
+    //     const callsClient = window.opener ? window.opener.callsClient : (window as any).callsClient;
     //     if (this.props.screenSharingID === this.props.currentUserID) {
     //         callsClient.unshareScreen();
     //         this.setState({
@@ -118,7 +117,7 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
     // }
 
     // onRaiseHandToggle = () => {
-    //     const callsClient = window.opener ? window.opener.callsClient : window.callsClient;
+    //     const callsClient = window.opener ? window.opener.callsClient : (window as any).callsClient;
     //     if (callsClient.isHandRaised) {
     //         callsClient.unraiseHand();
     //     } else {
@@ -305,11 +304,11 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
     };
 
     render() {
-        if ((!this.props.show || !window.callsClient) && !window.opener) {
+        if ((!this.props.show || !(window as any).callsClient) && !window.opener) {
             return null;
         }
 
-        const callsClient = window.opener ? window.opener.callsClient : window.callsClient;
+        const callsClient = window.opener ? window.opener.callsClient : (window as any).callsClient;
         if (!callsClient) {
             return null;
         }
@@ -321,7 +320,6 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
         const isHandRaised = callsClient.isHandRaised;
         const HandIcon = isHandRaised ? UnraisedHandIcon : RaisedHandIcon;
         const raiseHandText = isHandRaised ? 'Lower hand' : 'Raise hand';
-        const participantsText = 'Show participants list';
 
         const sharingID = this.props.screenSharingID;
         const currentID = this.props.currentUserID;
@@ -382,7 +380,6 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
 
                                 <button
                                     className='button-center-controls'
-                                    onClick={this.onParticipantsListToggle}
                                     style={{background: this.state.showParticipantsList ? 'rgba(28, 88, 217, 0.32)' : ''}}
                                 >
                                     <ParticipantsIcon
@@ -398,7 +395,6 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
                             <div style={style.buttonContainer as CSSProperties}>
                                 <button
                                     className='button-center-controls'
-                                    onClick={this.onRaiseHandToggle}
                                     style={{background: isHandRaised ? 'rgba(255, 188, 66, 0.16)' : ''}}
                                 >
                                     <HandIcon
@@ -416,7 +412,6 @@ export default class ExpandedView extends React.PureComponent<Props, State> {
                             <div style={style.buttonContainer as CSSProperties}>
                                 <button
                                     className='button-center-controls'
-                                    onClick={this.onShareScreenToggle}
                                     style={{background: isSharing ? 'rgba(210, 75, 78, 0.12)' : ''}}
                                 >
                                     <ScreenIcon

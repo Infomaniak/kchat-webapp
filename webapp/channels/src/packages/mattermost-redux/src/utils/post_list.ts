@@ -3,21 +3,19 @@
 
 import moment from 'moment-timezone';
 
-import * as reselect from 'reselect';
+import type {Post} from '@mattermost/types/posts';
+import type {GlobalState} from '@mattermost/types/store';
 
 import {Posts, Preferences} from 'mattermost-redux/constants';
-
-import {makeGetPostsForIds, UserActivityPost} from 'mattermost-redux/selectors/entities/posts';
+import * as reselect from 'mattermost-redux/selectors/create_selector';
+import type {UserActivityPost} from 'mattermost-redux/selectors/entities/posts';
+import {makeGetPostsForIds} from 'mattermost-redux/selectors/entities/posts';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {isTimezoneEnabled} from 'mattermost-redux/selectors/entities/timezone';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
-
 import {createIdsSelector, memoizeResult} from 'mattermost-redux/utils/helpers';
 import {isUserActivityPost, shouldFilterJoinLeavePost, isFromWebhook} from 'mattermost-redux/utils/post_utils';
 import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
-
-import {Post} from '@mattermost/types/posts';
-import {GlobalState} from '@mattermost/types/store';
 
 export const COMBINED_USER_ACTIVITY = 'user-activity-';
 export const CREATE_COMMENT = 'create-comment';

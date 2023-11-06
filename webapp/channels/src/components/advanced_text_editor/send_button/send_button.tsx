@@ -6,12 +6,13 @@ import {Button, ButtonGroup, styled} from '@mui/material';
 import React, {memo, useRef} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {t} from 'utils/i18n';
 
 import {getTheme, syncedDraftsAreAllowedAndEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import CompassDesignProvider from 'components/compass_design_provider';
 import SchedulePostButton from 'components/schedule_post/schedule_post_button';
+
+import {t} from 'utils/i18n';
 
 const SendButtonContainer = styled(Button)`
     display: flex;

@@ -2,19 +2,21 @@
 // See LICENSE.txt for license information.
 
 import moment from 'moment-timezone';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 
-import {createSelector} from 'reselect';
+import type {UserCustomStatus} from '@mattermost/types/users';
+import {CustomStatusDuration} from '@mattermost/types/users';
 
-import {getCurrentUser, getUser} from 'mattermost-redux/selectors/entities/users';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
-
-import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {Preferences} from 'mattermost-redux/constants';
-import {CustomStatusDuration, UserCustomStatus} from '@mattermost/types/users';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {get} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentUser, getUser} from 'mattermost-redux/selectors/entities/users';
 
-import {GlobalState} from 'types/store';
 import {getCurrentUserTimezone} from 'selectors/general';
+
 import {getCurrentMomentForTimezone} from 'utils/timezone';
+
+import type {GlobalState} from 'types/store';
 
 export function makeGetCustomStatus(): (state: GlobalState, userID?: string) => UserCustomStatus {
     return createSelector(

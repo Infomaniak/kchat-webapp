@@ -1,12 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import MattermostLogoSvg from 'images/logo.svg';
 import loaderkChat from 'images/logo_compact.png';
 import React from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
 
 import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
@@ -15,6 +13,9 @@ import useGetOperatingSystem from 'components/common/hooks/useGetOperatingSystem
 import GenericModal from 'components/generic_modal';
 import Header from 'components/widgets/header';
 import GetTheAppModalIcon from 'components/widgets/icons/get_the_app_modal_icon';
+
+import MattermostLogoSvg from 'images/logo.svg';
+import {ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

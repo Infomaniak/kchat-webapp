@@ -3,9 +3,10 @@
 
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
-import {getImageSrc} from 'utils/post_utils';
 
 import type {GfycatAPIItem} from '@mattermost/types/gifs';
+
+import {getImageSrc} from 'utils/post_utils';
 
 import type {GlobalState} from 'types/store';
 

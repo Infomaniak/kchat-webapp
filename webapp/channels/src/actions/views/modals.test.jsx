@@ -3,10 +3,11 @@
 
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-import mockStore from 'tests/test_store';
-import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 
 import {openModal, closeModal} from 'actions/views/modals';
+
+import mockStore from 'tests/test_store';
+import {ActionTypes, ModalIdentifiers} from 'utils/constants';
 
 class TestModal extends React.PureComponent {
     render() {

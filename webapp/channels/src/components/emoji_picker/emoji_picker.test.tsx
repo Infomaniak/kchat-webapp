@@ -4,9 +4,10 @@
 import {render, screen} from '@testing-library/react';
 import React from 'react';
 import {IntlProvider} from 'react-intl';
-import EmojiMap from 'utils/emoji_map';
 
 import EmojiPicker from 'components/emoji_picker/emoji_picker';
+
+import EmojiMap from 'utils/emoji_map';
 
 jest.mock('components/emoji_picker/components/emoji_picker_skin', () => () => (
     <div/>

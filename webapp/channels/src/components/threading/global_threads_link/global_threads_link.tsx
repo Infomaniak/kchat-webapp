@@ -6,14 +6,6 @@ import React, {useCallback, useEffect} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 import {Link, useRouteMatch, useLocation, matchPath} from 'react-router-dom';
-import Constants, {
-    CrtTutorialSteps,
-    CrtTutorialTriggerSteps,
-    ModalIdentifiers,
-    Preferences,
-    RHSStates,
-} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import {PulsatingDot} from '@mattermost/components';
 
@@ -32,6 +24,15 @@ import {isAnyModalOpen} from 'selectors/views/modals';
 import ChannelMentionBadge from 'components/sidebar/sidebar_channel/channel_mention_badge';
 import CollapsedReplyThreadsModal
     from 'components/tours/crt_tour/collapsed_reply_threads_modal/collapsed_reply_threads_modal';
+
+import Constants, {
+    CrtTutorialSteps,
+    CrtTutorialTriggerSteps,
+    ModalIdentifiers,
+    Preferences,
+    RHSStates,
+} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {GlobalState} from 'types/store';
 

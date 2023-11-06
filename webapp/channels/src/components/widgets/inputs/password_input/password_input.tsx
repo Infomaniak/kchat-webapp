@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import type {ChangeEventHandler, FocusEventHandler} from 'react';
 import React, {useState} from 'react';
 import {useIntl} from 'react-intl';
+
 import {ItemStatus} from 'utils/constants';
 
 import type {CustomMessageInputType, SIZE} from '../input/input';

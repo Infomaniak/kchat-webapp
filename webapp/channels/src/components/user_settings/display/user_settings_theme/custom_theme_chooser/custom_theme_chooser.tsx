@@ -4,8 +4,6 @@
 import type {ChangeEvent, ClipboardEvent, MouseEvent, RefObject} from 'react';
 import React, {createRef} from 'react';
 import {defineMessages, FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 import {setThemeDefaults} from 'mattermost-redux/utils/theme_utils';
@@ -14,6 +12,9 @@ import LocalizedIcon from 'components/localized_icon';
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
 import OverlayTrigger from 'components/overlay_trigger';
 import Popover from 'components/widgets/popover';
+
+import Constants from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import ColorChooser from '../color_chooser/color_chooser';
 

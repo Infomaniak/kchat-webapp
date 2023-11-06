@@ -4,10 +4,11 @@
 import debounce from 'lodash/debounce';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants, ZoomSettings} from 'utils/constants';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import {Constants, ZoomSettings} from 'utils/constants';
 
 export interface Props {
     scale?: number;

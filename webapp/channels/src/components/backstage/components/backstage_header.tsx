@@ -3,9 +3,10 @@
 
 import type {ReactNode} from 'react';
 import React from 'react';
-import {t} from 'utils/i18n';
 
 import LocalizedIcon from 'components/localized_icon';
+
+import {t} from 'utils/i18n';
 
 type Props = {
     children?: ReactNode;

@@ -3,14 +3,15 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {AnnouncementBarTypes} from 'utils/constants';
-import {setCSRFFromCookie} from 'utils/utils';
 
 import {logError} from 'mattermost-redux/actions/errors';
 
 import store from 'stores/redux_store';
 
 import App from 'components/app';
+
+import {AnnouncementBarTypes} from 'utils/constants';
+import {setCSRFFromCookie} from 'utils/utils';
 
 // Import our styles
 import './sass/styles.scss';

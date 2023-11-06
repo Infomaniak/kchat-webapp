@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
@@ -11,6 +10,8 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {MobileChannelHeaderDropdown} from 'components/channel_header_dropdown';
 import FlagNext from 'components/flag_next';
+
+import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
 
 import ChannelInfoButton from './channel_info_button';
 import CollapseLhsButton from './collapse_lhs_button';

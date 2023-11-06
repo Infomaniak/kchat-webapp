@@ -6,9 +6,6 @@
 import type {ReactNode} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants, {AdvancedSections, Preferences} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {a11yFocus, isMac, localizeMessage} from 'utils/utils';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile} from '@mattermost/types/users';
@@ -21,6 +18,10 @@ import ConfirmModal from 'components/confirm_modal';
 import SettingItem from 'components/setting_item';
 import SettingItemMax from 'components/setting_item_max';
 import BackIcon from 'components/widgets/icons/fa_back_icon';
+
+import Constants, {AdvancedSections, Preferences} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {a11yFocus, isMac, localizeMessage} from 'utils/utils';
 
 import JoinLeaveSection from './join_leave_section';
 import PerformanceDebuggingSection from './performance_debugging_section';

@@ -5,8 +5,7 @@
 
 import {Constants} from 'utils/constants';
 
-import {
-    AppsTypes,
+import type {
     AppCallRequest,
     AppBinding,
     AppCall,
@@ -21,6 +20,9 @@ import {
     AutocompleteStaticSelect,
     Channel,
     Store,
+    ExtendedAutocompleteSuggestion} from './app_command_parser_dependencies';
+import {
+    AppsTypes,
 
     AppBindingLocations,
     AppCallResponseTypes,
@@ -52,7 +54,6 @@ import {
     getChannelSuggestions,
     getUserSuggestions,
     inTextMentionSuggestions,
-    ExtendedAutocompleteSuggestion,
     getAppCommandForm,
     getAppRHSCommandForm,
     makeRHSAppBindingSelector,
@@ -1122,7 +1123,7 @@ export class AppCommandParser {
         }
 
         return suggestions.map((suggestion) => this.decorateSuggestionComplete(parsed, suggestion));
-    }
+    };
 
     getNoMatchingSuggestion = () => {
         return [{

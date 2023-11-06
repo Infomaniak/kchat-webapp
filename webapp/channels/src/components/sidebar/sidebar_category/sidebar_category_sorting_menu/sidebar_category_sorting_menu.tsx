@@ -13,7 +13,6 @@ import classNames from 'classnames';
 import type {MouseEvent, KeyboardEvent} from 'react';
 import React, {memo, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import Constants from 'utils/constants';
 
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import {CategorySorting} from '@mattermost/types/channel_categories';
@@ -23,6 +22,8 @@ import {Preferences} from 'mattermost-redux/constants';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import * as Menu from 'components/menu';
+
+import Constants from 'utils/constants';
 
 import type {PropsFromRedux} from './index';
 

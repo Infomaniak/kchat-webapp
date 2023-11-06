@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+
 import {BillingSchemes, CloudProducts, CloudLinks, RecurringIntervals} from 'utils/constants';
 
 import type {Product} from '@mattermost/types/cloud';

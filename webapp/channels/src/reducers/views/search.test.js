@@ -1,9 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {SearchTypes} from 'utils/constants';
-
 import searchReducer from 'reducers/views/search';
+
+import {SearchTypes} from 'utils/constants';
 
 describe('Reducers.Search', () => {
     const initialState = {

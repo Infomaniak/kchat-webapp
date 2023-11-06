@@ -15,11 +15,12 @@ import {
     FormattedMessage,
 } from 'react-intl';
 import {isValidElementType} from 'react-is';
+
+import type {RequireOnlyOne} from '@mattermost/types/utilities';
+
 import {isSameYear, isWithin, isEqual, getDiff} from 'utils/datetime';
 import type {Resolvable} from 'utils/resolvable';
 import {resolve} from 'utils/resolvable';
-
-import type {RequireOnlyOne} from '@mattermost/types/utilities';
 
 import {STANDARD_UNITS} from './relative_ranges';
 import SemanticTime from './semantic_time';

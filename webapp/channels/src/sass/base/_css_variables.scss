@@ -1,29 +1,29 @@
 :root {
     // Default Hex values to be replaced by applyTheme()
     // these are define to prevent flashes of unstyled content
-    --away-indicator: #ffbc42;
+    --away-indicator: #FFAA4C;
     --away-indicator-dark: #c79e3f;
-    --button-bg: #166de0;
+    --button-bg: #0098FF;
     --button-color: #fff;
     --center-channel-bg: #fff;
     --center-channel-color: #3d3c40;
-    --dnd-indicator: #d24b4e;
-    --error-text: #d24b4e;
+    --dnd-indicator: #FB472E;
+    --error-text: #fd5960;
     --warning-text: #cc8f00;
-    --link-color: #2389d7;
+    --link-color: #0098FF;
     --mention-bg: #fff;
-    --mention-color: #145dbf;
+    --mention-color: #006AB2;
     --mention-highlight-bg: #ffe577;
     --mention-highlight-link: #166de0;
     --new-message-separator: #f80;
-    --online-indicator: #06d6a0;
-    --sidebar-bg: #145dbf;
+    --online-indicator: #3EBF4D;
+    --sidebar-bg: #292E3D;
     --sidebar-header-bg: #1153ab;
     --sidebar-header-text-color: #fff;
-    --sidebar-text: #fff;
+    --sidebar-text: #e0e0e0;
     --sidebar-text-active-border: #579eff;
     --sidebar-text-active-color: #fff;
-    --sidebar-text-hover-bg: #4578bf;
+    --sidebar-text-hover-bg: #3E435B;
     --sidebar-unread-text: #fff;
     --sidebar-team-background: #0b428c;
     --secondary-blue: #22406d;
@@ -31,30 +31,34 @@
     --denim-status-online: #3db887;
     --denim-sidebar-active-border: #5d89ea;
     --title-color-indigo-500: #1e325c;
+    --dark-modal-color:#333333;
+    --dark-modal-font-color:#fff;
+    --code-color: #f80;
+    --code-block-color: #fff;
 
     // Default RGB values to be replaced by applyTheme() (do not add opacity mutations here)
     // these are define to prevent flashes of unstyled content
-    --away-indicator-rgb: 255, 188, 66;
-    --button-bg-rgb: 22, 109, 224;
+    --away-indicator-rgb: 255, 133, 0;
+    --button-bg-rgb: 0, 152, 255;
     --button-color-rgb: 255, 255, 255;
     --center-channel-bg-rgb: 255, 255, 255;
-    --center-channel-color-rgb: 61, 60, 64;
-    --dnd-indicator-rgb: 247, 67, 67;
-    --error-text-color-rgb: 253, 89, 96;
-    --link-color-rgb: 35, 137, 215;
+    --center-channel-color-rgb: 60, 60, 60;
+    --dnd-indicator-rgb: 244, 67, 54;
+    --error-text-color-rgb: 244, 67, 54;
+    --link-color-rgb: 0, 152, 215;
     --mention-bg-rgb: 255, 255, 255;
     --mention-color-rgb: 20, 93, 191;
     --mention-highlight-bg-rgb: 255, 229, 119;
     --mention-highlight-link-rgb: 22, 109, 224;
     --new-message-separator-rgb: 255, 136, 0;
-    --online-indicator-rgb: 6, 214, 160;
-    --sidebar-bg-rgb: 20, 93, 191;
+    --online-indicator-rgb: 62, 191, 77;
+    --sidebar-bg-rgb: 41, 46, 61;
     --sidebar-header-bg-rgb: 17, 83, 171;
     --sidebar-header-text-color-rgb: 255, 255, 255;
-    --sidebar-text-rgb: 255, 255, 255;
-    --sidebar-text-active-border-rgb: 87, 158, 255;
+    --sidebar-text-rgb: 224, 224, 224;
+    --sidebar-text-active-border-rgb: 76, 183, 255;
     --sidebar-text-active-color-rgb: 255, 255, 255;
-    --sidebar-text-hover-bg-rgb: 69, 120, 191;
+    --sidebar-text-hover-bg-rgb: 62, 67, 91;
     --sidebar-unread-text-rgb: 255, 255, 255;
     --error-box-background: 197, 67, 72;
     --sidebar-team-background-rgb: 11, 66, 140;
@@ -77,10 +81,11 @@
     --elevation-6: 0 20px 32px 0 rgba(0, 0, 0, 0.12);
 
     // Global Header variables
-    --global-header-background: var(--sidebar-teambar-bg);
+    --global-header-background: var(--center-channel-bg);
+    // --global-header-background: var(--sidebar-teambar-bg);
     --global-header-text: var(--sidebar-header-text-color);
     --global-header-background-rgb: var(--sidebar-teambar-bg-rgb);
-    --global-header-text-rgb: var(--sidebar-header-text-color-rgb);
+    --global-header-text-rgb: var(--center-channel-text-rgb);
 
     // semantic colors
     // not to be overwritten, since they are shared among themes
@@ -95,4 +100,26 @@
     --center-channel-text: var(--center-channel-color);
     // use --center-channel-color-rgb instead
     --center-channel-text-rgb: var(--center-channel-color-rgb);
+
+    //IK Variables
+    --ik-modal-header: #FFFFFF;
+    --ik-btn-secondary: #F1F1F1;
+    --ik-btn-secondary-color: #666666;
+    --ik-illustration-grey-1: #F5F5F5;
+    --ik-illustration-grey-2: #FFFFFF;
+    --ik-illustration-grey-3: #E0E0E0;
+    --ik-illustration-grey-4: #FAFAFA;
+    --ik-illustration-grey-5: #F1F1F1;
+    --ik-illustration-grey-6: #FAFAFA;
+    --ik-illustration-grey-7: #E0E0E0;
+    --ik-illustration-grey-8: #F1F1F1;
+    --ik-illustration-grey-9: #F5F5F5;
+    --ik-illustration-grey-10: #E0E0E0;
+    --ik-illustration-grey-11: #FFFFFF;
+    --ik-illustration-grey-12: #FFFFFF;
+    --ik-illustration-grey-13: #F1F1F1;
+    --ik-illustration-grey-14: #FFFFFF;
+    --ik-illustration-grey-15: #F1F1F1;
+    --ik-illustration-grey-16: #F1F1F1;
+    --ik-illustration-grey-17: #F5F5F5;
 }

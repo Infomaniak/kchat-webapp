@@ -5,7 +5,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 import type {UserProfile} from '@mattermost/types/users';
@@ -13,6 +12,8 @@ import type {UserProfile} from '@mattermost/types/users';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import Toggle from 'components/toggle';
+
+import Constants from 'utils/constants';
 
 import RhsSettingsItem from '../rhs_settings_item/rhs_settings_item';
 

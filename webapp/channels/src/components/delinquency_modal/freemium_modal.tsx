@@ -4,10 +4,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {TELEMETRY_CATEGORIES} from 'utils/constants';
-import type {Message} from 'utils/i18n';
-import {t} from 'utils/i18n';
-import {LimitTypes} from 'utils/limits';
 
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
@@ -18,6 +14,11 @@ import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetMultiplesExceededCloudLimit from 'components/common/hooks/useGetMultiplesExceededCloudLimit';
 import useGetUsage from 'components/common/hooks/useGetUsage';
 import useOpenCloudPurchaseModal from 'components/common/hooks/useOpenCloudPurchaseModal';
+
+import {TELEMETRY_CATEGORIES} from 'utils/constants';
+import {t} from 'utils/i18n';
+import type {Message} from 'utils/i18n';
+import {LimitTypes} from 'utils/limits';
 
 import './delinquency_modal.scss';
 

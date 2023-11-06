@@ -3,14 +3,15 @@
 
 import React from 'react';
 import {useIntl} from 'react-intl';
-import {
-    TELEMETRY_CATEGORIES,
-} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
 import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import ExternalLink from 'components/external_link';
+
+import {
+    TELEMETRY_CATEGORIES,
+} from 'utils/constants';
 
 export default function ContactSalesLink() {
     const [, contactSalesLink] = useOpenSalesLink();

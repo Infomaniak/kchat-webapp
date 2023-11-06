@@ -4,7 +4,6 @@
 import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
-import {RHSStates} from 'utils/constants';
 
 import {Permissions} from 'mattermost-redux/constants';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
@@ -19,6 +18,8 @@ import type {GenericAction} from 'mattermost-redux/types/actions';
 import {openModal} from 'actions/views/modals';
 import {showMentions, showFlaggedPosts, showSettings, closeRightHandSide, closeMenu as closeRhsMenu} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
+
+import {RHSStates} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

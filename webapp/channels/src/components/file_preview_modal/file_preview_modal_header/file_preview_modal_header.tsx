@@ -2,10 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React, {memo} from 'react';
-import {FileTypes} from 'utils/constants';
 
 import type {FileInfo} from '@mattermost/types/files';
 import type {Post} from '@mattermost/types/posts';
+
+import {FileTypes} from 'utils/constants';
 
 import type {ZoomValue} from '../file_preview_modal_image_controls/file_preview_modal_image_controls';
 import FilePreviewModalImageControls from '../file_preview_modal_image_controls/file_preview_modal_image_controls';

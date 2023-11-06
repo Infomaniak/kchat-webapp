@@ -4,6 +4,7 @@
 import {shallow} from 'enzyme';
 import type {ComponentProps} from 'react';
 import React from 'react';
+
 import {NotificationLevels} from 'utils/constants';
 
 import DesktopNotificationSettings from './desktop_notification_settings';

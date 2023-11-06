@@ -3,10 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import SingleImageView from 'components/single_image_view/single_image_view';
 import SizeAwareImage from 'components/size_aware_image';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/SingleImageView', () => {
     const baseProps = {

@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
-import Constants from 'utils/constants';
 
 import type {Channel, PendingGuest as PendingGuestType} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -23,6 +22,8 @@ import ProfilePopover from 'components/profile_popover';
 import Tooltip from 'components/tooltip';
 import PendingGuestIcon from 'components/widgets/icons/pending_guest_icon';
 import GuestTag from 'components/widgets/tag/guest_tag';
+
+import Constants from 'utils/constants';
 
 import type {ChannelMember} from './channel_members_rhs';
 

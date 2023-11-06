@@ -5,9 +5,10 @@ import {mount, shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
 import type {DeepPartial} from 'redux';
-import mockStore from 'tests/test_store';
 
 import ExternalImage from 'components/external_image';
+
+import mockStore from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
 

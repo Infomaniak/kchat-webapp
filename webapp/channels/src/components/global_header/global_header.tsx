@@ -3,6 +3,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
+
 import {useCurrentProductId} from 'utils/products';
 
 import CenterControls from './center_controls/center_controls';

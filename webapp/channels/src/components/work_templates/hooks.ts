@@ -3,8 +3,8 @@
 
 import {useSelector} from 'react-redux';
 
-import {GlobalState} from 'types/store';
-import {PluginComponent} from 'types/store/plugins';
+import type {GlobalState} from 'types/store';
+import type {PluginComponent} from 'types/store/plugins';
 
 type HookReturnType = {
     pluggableId: string;

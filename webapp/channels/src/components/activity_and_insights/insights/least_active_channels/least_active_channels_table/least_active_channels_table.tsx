@@ -6,7 +6,6 @@ import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import Constants, {InsightsScopes} from 'utils/constants';
 
 import type {LeastActiveChannel, TimeFrame} from '@mattermost/types/insights';
 
@@ -19,6 +18,8 @@ import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
 import DataGrid from 'components/admin_console/data_grid/data_grid';
 import Timestamp from 'components/timestamp';
 import Avatars from 'components/widgets/users/avatars';
+
+import Constants, {InsightsScopes} from 'utils/constants';
 
 import ChannelActionsMenu from '../channel_actions_menu/channel_actions_menu';
 

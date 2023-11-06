@@ -3,7 +3,6 @@
 
 import React, {useMemo, memo} from 'react';
 import {useSelector} from 'react-redux';
-import Constants from 'utils/constants';
 
 import {CustomStatusDuration} from '@mattermost/types/users';
 
@@ -13,6 +12,8 @@ import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 
 import RenderEmoji from 'components/emoji/render_emoji';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

@@ -3,10 +3,11 @@
 
 import {fireEvent, screen} from '@testing-library/react';
 import React from 'react';
-import {renderWithIntl} from 'tests/react_testing_utils';
-import Constants from 'utils/constants';
 
 import type {Channel, ChannelStats} from '@mattermost/types/channels';
+
+import {renderWithIntl} from 'tests/react_testing_utils';
+import Constants from 'utils/constants';
 
 import Menu from './menu';
 

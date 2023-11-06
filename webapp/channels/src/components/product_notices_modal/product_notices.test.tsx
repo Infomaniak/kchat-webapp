@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 
 import GenericModal from 'components/generic_modal';
+
+import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 
 import ProductNoticesModal from './product_notices_modal';
 

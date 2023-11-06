@@ -3,24 +3,25 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch, ActionCreatorsMapObject} from 'redux';
+import type {Dispatch, ActionCreatorsMapObject} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {GenericAction, ActionFunc} from 'mattermost-redux/types/actions';
-
-import {GlobalState} from 'types/store';
-import {getListing, getInstalledListing} from 'selectors/views/marketplace';
-import {setFirstAdminVisitMarketplaceStatus} from 'mattermost-redux/actions/general';
 import {getPluginStatuses} from 'mattermost-redux/actions/admin';
+import {setFirstAdminVisitMarketplaceStatus} from 'mattermost-redux/actions/general';
 import {getFirstAdminVisitMarketplaceStatus} from 'mattermost-redux/selectors/entities/general';
+import type {GenericAction, ActionFunc} from 'mattermost-redux/types/actions';
+
+import {fetchListing, filterListing} from 'actions/marketplace';
+import {closeModal} from 'actions/views/modals';
+import {getListing, getInstalledListing} from 'selectors/views/marketplace';
+import {isModalOpen} from 'selectors/views/modals';
 
 import {makeAsyncComponent} from 'components/async_load';
 
-import {isModalOpen} from 'selectors/views/modals';
 import {ModalIdentifiers} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
 
-import {closeModal} from 'actions/views/modals';
-import {fetchListing, filterListing} from 'actions/marketplace';
+import type {GlobalState} from 'types/store';
 
 const MarketplaceModal = makeAsyncComponent('MarketplaceModal', React.lazy(() => import('./marketplace_modal')));
 

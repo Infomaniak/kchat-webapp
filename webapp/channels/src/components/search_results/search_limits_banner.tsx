@@ -5,8 +5,6 @@ import React from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
-import {DataSearchTypes} from 'utils/constants';
-import {asGBString} from 'utils/limits';
 
 import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
@@ -15,6 +13,9 @@ import {isAdmin} from 'mattermost-redux/utils/user_utils';
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetUsage from 'components/common/hooks/useGetUsage';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
+
+import {DataSearchTypes} from 'utils/constants';
+import {asGBString} from 'utils/limits';
 
 const StyledDiv = styled.div`
 width: 100%;

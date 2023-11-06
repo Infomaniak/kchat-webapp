@@ -2,10 +2,11 @@
     z-index: 17;
     display: flex;
     width: 65px;
-    height: 100%;
+    height: calc(100% + 46px);
     flex-direction: column;
     background: var(--sidebar-teambar-bg);
     text-align: center;
+    margin-top: -46px;
 
     .fa {
         color: var(--sidebar-header-text-color);
@@ -133,6 +134,25 @@
         .team-container a:hover {
             text-decoration: none;
         }
+    }
+
+    @media screen and (max-width: 768px) {
+        margin-top: 0px;
+    }
+}
+
+.multi-teams {
+    .sidebar--left {
+        left: 65px;
+    }
+
+    .product-wrapper {
+        width: calc(100% - 65px);
+    }
+
+    #calls-widget {
+        margin-left: 60px;
+        width: 225px !important;
     }
 }
 

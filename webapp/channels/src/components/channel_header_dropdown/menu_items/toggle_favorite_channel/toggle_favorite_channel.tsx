@@ -2,11 +2,12 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import Menu from 'components/widgets/menu/menu';
+
+import {localizeMessage} from 'utils/utils';
 
 type Action = {
     favoriteChannel: (channelId: string) => void;

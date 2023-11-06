@@ -3,10 +3,8 @@
 
 import {fireEvent, waitFor} from '@testing-library/react';
 import nock from 'nock';
-import TestHelper from 'packages/mattermost-redux/test/test_helper';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
-import {renderWithFullContext, screen} from 'tests/react_testing_utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Team} from '@mattermost/types/teams';
@@ -17,6 +15,9 @@ import {Client4} from 'mattermost-redux/client';
 import {Preferences} from 'mattermost-redux/constants';
 
 import ConvertGmToChannelModal from 'components/convert_gm_to_channel_modal/convert_gm_to_channel_modal';
+
+import TestHelper from 'packages/mattermost-redux/test/test_helper';
+import {renderWithFullContext, screen} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 

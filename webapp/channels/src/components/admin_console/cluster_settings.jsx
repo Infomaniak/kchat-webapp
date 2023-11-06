@@ -3,12 +3,13 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as Utils from 'utils/utils';
 
 import {Client4} from 'mattermost-redux/client';
 
 import ExternalLink from 'components/external_link';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
+
+import * as Utils from 'utils/utils';
 
 import AdminSettings from './admin_settings';
 import BooleanSetting from './boolean_setting';

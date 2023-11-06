@@ -5,10 +5,6 @@ import {ChevronRightIcon, ClockOutlineIcon} from '@infomaniak/compass-icons/comp
 import React from 'react';
 import {FormattedMessage, FormattedDate, FormattedTime, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
-import {toUTCUnix} from 'utils/datetime';
-import {t} from 'utils/i18n';
-import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import type {Post} from '@mattermost/types/posts';
 
@@ -18,6 +14,11 @@ import {openModal} from 'actions/views/modals';
 
 import * as Menu from 'components/menu';
 import PostReminderCustomTimePicker from 'components/post_reminder_custom_time_picker_modal';
+
+import {ModalIdentifiers} from 'utils/constants';
+import {toUTCUnix} from 'utils/datetime';
+import {t} from 'utils/i18n';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 type Props = {
     userId: string;

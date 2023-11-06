@@ -1,15 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import BotDefaultIcon from 'images/bot_default_icon.png';
 import React from 'react';
 import type {ChangeEvent, FormEvent} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import {getHistory} from 'utils/browser_history';
-import {AcceptedProfileImageTypes, Constants, ValidationErrors} from 'utils/constants';
-import * as FileUtils from 'utils/file_utils';
-import * as Utils from 'utils/utils';
 
 import type {Bot, BotPatch} from '@mattermost/types/bots';
 import type {Team} from '@mattermost/types/teams';
@@ -25,6 +20,12 @@ import FormError from 'components/form_error';
 import OverlayTrigger from 'components/overlay_trigger';
 import SpinnerButton from 'components/spinner_button';
 import Tooltip from 'components/tooltip';
+
+import BotDefaultIcon from 'images/bot_default_icon.png';
+import {getHistory} from 'utils/browser_history';
+import {AcceptedProfileImageTypes, Constants, ValidationErrors} from 'utils/constants';
+import * as FileUtils from 'utils/file_utils';
+import * as Utils from 'utils/utils';
 
 const roleOptionSystemAdmin = 'System Admin';
 const roleOptionMember = 'Member';

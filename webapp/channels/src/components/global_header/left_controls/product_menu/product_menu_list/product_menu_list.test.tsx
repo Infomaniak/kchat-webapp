@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {UserProfile} from '@mattermost/types/users';
+
+import {TestHelper} from 'utils/test_helper';
 
 import type {Props as ProductMenuListProps} from './product_menu_list';
 import ProductMenuList from './product_menu_list';

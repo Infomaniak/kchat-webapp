@@ -3,9 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import {ItemStatus} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {ChannelWithTeamData} from '@mattermost/types/channels';
 import type {
@@ -27,6 +24,10 @@ import SaveButton from 'components/save_button';
 import TeamSelectorModal from 'components/team_selector_modal';
 import DropdownInputHybrid from 'components/widgets/inputs/dropdown_input_hybrid';
 import Input from 'components/widgets/inputs/input/input';
+
+import {getHistory} from 'utils/browser_history';
+import {ItemStatus} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import './custom_policy_form.scss';
 

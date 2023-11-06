@@ -3,11 +3,12 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {imageURLForTeam} from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 
 import TeamIcon from 'components/widgets/team_icon/team_icon';
+
+import {imageURLForTeam} from 'utils/utils';
 
 type Props = {
     team: Team;

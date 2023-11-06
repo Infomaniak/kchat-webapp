@@ -8,7 +8,7 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {getChannelURL} from 'utils/utils';
 
-import {GlobalState} from 'types/store';
+import type {GlobalState} from 'types/store';
 
 import ChannelDraft from './channel_draft';
 

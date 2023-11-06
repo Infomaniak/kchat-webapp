@@ -3,6 +3,7 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+
 import {ModalIdentifiers} from 'utils/constants';
 
 import FeatureRestrictedModal from './feature_restricted_modal';

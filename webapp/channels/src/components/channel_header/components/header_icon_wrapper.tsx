@@ -3,9 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants, suitePluginIds} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
 
 import NewChannelWithBoardTourTip from 'components/app_bar/new_channel_with_board_tour_tip';
 import type {
@@ -15,6 +12,10 @@ import KeyboardShortcutSequence, {
 } from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import {Constants, suitePluginIds} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
 
 type Props = {
     ariaLabel?: boolean;

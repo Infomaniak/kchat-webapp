@@ -32,10 +32,6 @@ import type {
 } from '@mattermost/types/channels';
 export type {Channel};
 
-import {
-    GlobalState,
-} from 'types/store';
-
 import type {
     DispatchFunc,
 } from 'mattermost-redux/types/actions';
@@ -91,6 +87,10 @@ export const getStore = () => ReduxStore;
 export {getChannelSuggestions, getUserSuggestions, inTextMentionSuggestions} from '../mentions';
 
 import {Constants} from 'utils/constants';
+
+import type {
+    GlobalState,
+} from 'types/store';
 export const EXECUTE_CURRENT_COMMAND_ITEM_ID = Constants.Integrations.EXECUTE_CURRENT_COMMAND_ITEM_ID;
 export const OPEN_COMMAND_IN_MODAL_ITEM_ID = Constants.Integrations.OPEN_COMMAND_IN_MODAL_ITEM_ID;
 export const COMMAND_SUGGESTION_ERROR = Constants.Integrations.COMMAND_SUGGESTION_ERROR;

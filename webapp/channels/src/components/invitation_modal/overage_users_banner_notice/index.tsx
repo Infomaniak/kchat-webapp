@@ -4,18 +4,12 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {LicenseLinks, StatTypes, Preferences} from 'utils/constants';
-import {getIsGovSku} from 'utils/license_utils';
-import {calculateOverageUserActivated} from 'utils/overage_team';
 
 import type {PreferenceType} from '@mattermost/types/preferences';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
-
-import type {GlobalState} from 'types/store';
-
 import {makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
@@ -24,6 +18,12 @@ import {useExpandOverageUsersCheck} from 'components/common/hooks/useExpandOvera
 
 import './overage_users_banner_notice.scss';
 import ExternalLink from 'components/external_link';
+
+import {LicenseLinks, StatTypes, Preferences} from 'utils/constants';
+import {getIsGovSku} from 'utils/license_utils';
+import {calculateOverageUserActivated} from 'utils/overage_team';
+
+import type {GlobalState} from 'types/store';
 
 type AdminHasDismissedArgs = {
     preferenceName: string;

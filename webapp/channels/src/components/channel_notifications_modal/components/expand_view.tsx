@@ -5,11 +5,12 @@ import type {ChangeEvent} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {IgnoreChannelMentions, NotificationLevels, NotificationSections} from 'utils/constants';
 
 import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
 import SettingItemMax from 'components/setting_item_max';
+
+import {IgnoreChannelMentions, NotificationLevels, NotificationSections} from 'utils/constants';
 
 import Describe from './describe';
 import ExtraInfo from './extra_info';

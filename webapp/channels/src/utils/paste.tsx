@@ -3,6 +3,7 @@
 
 import {tables} from '@guyplusplus/turndown-plugin-gfm';
 import TurndownService from 'turndown';
+
 import {splitMessageBasedOnCaretPosition, splitMessageBasedOnTextSelection} from 'utils/post_utils';
 
 type FormatCodeOptions = {

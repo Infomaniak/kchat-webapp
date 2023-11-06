@@ -1,29 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {IntlShape} from 'react-intl';
+import type {IntlShape} from 'react-intl';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 
-import {createSelector} from 'reselect';
+import type {Channel} from '@mattermost/types/channels';
+import type {ClientConfig, ClientLicense} from '@mattermost/types/config';
+import type {ServerError} from '@mattermost/types/errors';
+import type {Group} from '@mattermost/types/groups';
+import type {Post} from '@mattermost/types/posts';
+import type {Reaction} from '@mattermost/types/reactions';
+import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
-
 import {Permissions, Posts} from 'mattermost-redux/constants';
-
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {makeGetReactionsForPost} from 'mattermost-redux/selectors/entities/posts';
 import {get, getTeammateNameDisplaySetting, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
-import {makeGetDisplayName, getCurrentUserId, getUser, UserMentionKey, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
-
-import {Channel} from '@mattermost/types/channels';
-import {ClientConfig, ClientLicense} from '@mattermost/types/config';
-import {ServerError} from '@mattermost/types/errors';
-import {Group} from '@mattermost/types/groups';
-import {Post} from '@mattermost/types/posts';
-import {Reaction} from '@mattermost/types/reactions';
-import {UserProfile} from '@mattermost/types/users';
+import type { UserMentionKey} from 'mattermost-redux/selectors/entities/users';
+import {makeGetDisplayName, getCurrentUserId, getUser, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
 
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
@@ -33,8 +31,6 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {getEmojiMap} from 'selectors/emojis';
 import {getIsMobileView} from 'selectors/views/browser';
 
-import {GlobalState} from 'types/store';
-
 import Constants, {PostListRowListIds, Preferences} from 'utils/constants';
 import {formatWithRenderer} from 'utils/markdown';
 import MentionableRenderer from 'utils/markdown/mentionable_renderer';
@@ -42,8 +38,10 @@ import {allAtMentions} from 'utils/text_formatting';
 import {isMobile} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 
+import type {GlobalState} from 'types/store';
+
+import type EmojiMap from './emoji_map';
 import * as Emoticons from './emoticons';
-import EmojiMap from './emoji_map';
 
 const CHANNEL_SWITCH_IGNORE_ENTER_THRESHOLD_MS = 500;
 

@@ -4,6 +4,7 @@
 import type {ReactWrapper} from 'enzyme';
 import {shallow} from 'enzyme';
 import React from 'react';
+
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 import * as Utils from 'utils/utils';
 

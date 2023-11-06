@@ -4,8 +4,6 @@
 import React, {useEffect} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
-import {isTrialLicense} from 'utils/license_utils';
 
 import type {GlobalState} from '@mattermost/types/store';
 
@@ -16,6 +14,9 @@ import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
 import {makeAsyncComponent} from 'components/async_load';
+
+import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
+import {isTrialLicense} from 'utils/license_utils';
 
 import './menu_item.scss';
 

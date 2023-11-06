@@ -6,7 +6,6 @@ import React, {useCallback, useRef, useState} from 'react';
 import {FormattedList, FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import type {ValueType} from 'react-select';
-import Constants from 'utils/constants';
 
 import type {PostPreviewMetadata} from '@mattermost/types/posts';
 
@@ -18,6 +17,8 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import GenericModal from 'components/generic_modal';
 import NotificationBox from 'components/notification_box';
 import PostMessagePreview from 'components/post_view/post_message_preview';
+
+import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

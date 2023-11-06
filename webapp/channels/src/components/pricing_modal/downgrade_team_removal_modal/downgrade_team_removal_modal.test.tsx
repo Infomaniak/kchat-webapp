@@ -4,6 +4,7 @@
 import {screen} from '@testing-library/react';
 import React from 'react';
 import * as redux from 'react-redux';
+
 import {renderWithIntl} from 'tests/react_testing_utils';
 import mockStore from 'tests/test_store';
 import {CloudProducts} from 'utils/constants';

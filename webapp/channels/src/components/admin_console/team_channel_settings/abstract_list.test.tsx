@@ -4,9 +4,10 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Channel} from '@mattermost/types/channels';
+
+import {TestHelper} from 'utils/test_helper';
 
 import AbstractList from './abstract_list';
 import GroupRow from './group/group_row';

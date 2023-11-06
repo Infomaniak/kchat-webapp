@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import insightsPreview from 'images/Insights-Preview-Image.jpg';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
@@ -18,6 +17,8 @@ import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/tea
 import {showInsightsPulsatingDot} from 'selectors/insights';
 
 import {OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
+
+import insightsPreview from 'images/Insights-Preview-Image.jpg';
 
 import type {GlobalState} from 'types/store';
 

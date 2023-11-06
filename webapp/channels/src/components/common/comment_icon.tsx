@@ -3,12 +3,13 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import type {Locations} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import ReplyIcon from 'components/widgets/icons/reply_icon';
+
+import type {Locations} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 type Props = {
     location: keyof typeof Locations;

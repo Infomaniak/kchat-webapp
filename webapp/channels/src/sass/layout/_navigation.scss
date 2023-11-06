@@ -8,7 +8,6 @@
 .nav-tabs {
     margin-bottom: 10px;
     background: var(--center-channel-bg);
-    color: var(--center-channel-color);
 
     > li {
         margin-right: 5px;
@@ -16,7 +15,6 @@
         &.active {
             > a {
                 background: var(--center-channel-bg);
-                color: var(--center-channel-color);
             }
         }
 

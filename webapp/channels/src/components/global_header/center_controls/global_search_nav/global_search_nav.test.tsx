@@ -4,6 +4,7 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import * as redux from 'react-redux';
+
 import mockStore from 'tests/test_store';
 
 import GlobalSearchNav from './global_search_nav';

@@ -5,9 +5,10 @@ import {AlertOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {calculateOverageUserActivated} from 'utils/overage_team';
 
 import StatisticCount from 'components/analytics/statistic_count';
+
+import {calculateOverageUserActivated} from 'utils/overage_team';
 
 type ActivatedUserCardProps = {
     seatsPurchased: number;

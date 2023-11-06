@@ -3,10 +3,11 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import ExternalLink from 'components/external_link';
+
+import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import AdminSettings from './admin_settings';
 import DropdownSetting from './dropdown_setting.jsx';

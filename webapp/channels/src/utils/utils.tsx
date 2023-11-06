@@ -59,7 +59,7 @@ import {searchForTerm} from 'actions/post_actions';
 import {addUserToTeam} from 'actions/team_actions';
 import {getCurrentLocale, getTranslations} from 'selectors/i18n';
 import {getIsMobileView} from 'selectors/views/browser';
-import store from 'stores/redux_store.jsx';
+import store from 'stores/redux_store';
 
 import {focusPost} from 'components/permalink_view/actions';
 

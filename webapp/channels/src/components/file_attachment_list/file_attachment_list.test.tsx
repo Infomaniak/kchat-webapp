@@ -3,10 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import FileAttachment from 'components/file_attachment';
 import SingleImageView from 'components/single_image_view';
+
+import {TestHelper} from 'utils/test_helper';
 
 import FileAttachmentList from './file_attachment_list';
 

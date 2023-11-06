@@ -3,9 +3,10 @@
 
 import React from 'react';
 import {useHistory} from 'react-router-dom';
-import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
+
+import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import './dashboard.scss';
 

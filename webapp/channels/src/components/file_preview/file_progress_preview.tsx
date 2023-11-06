@@ -4,10 +4,11 @@
 import React from 'react';
 import {ProgressBar} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {getFileTypeFromMime} from 'utils/file_utils';
-import * as Utils from 'utils/utils';
 
 import FilenameOverlay from 'components/file_attachment/filename_overlay';
+
+import {getFileTypeFromMime} from 'utils/file_utils';
+import * as Utils from 'utils/utils';
 
 import type {FilePreviewInfo} from './file_preview';
 

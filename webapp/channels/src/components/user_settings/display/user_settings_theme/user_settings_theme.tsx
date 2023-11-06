@@ -4,8 +4,6 @@
 import type {RefObject} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Constants, ModalIdentifiers} from 'utils/constants';
-import {applyTheme} from 'utils/utils';
 
 import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
@@ -13,6 +11,9 @@ import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
 import type SettingItemMinComponent from 'components/setting_item_min/setting_item_min';
 import ImportThemeModal from 'components/user_settings/import_theme_modal';
+
+import {Constants, ModalIdentifiers} from 'utils/constants';
+import {applyTheme} from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 

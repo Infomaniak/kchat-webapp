@@ -4,6 +4,7 @@
 import {fireEvent, screen, act} from '@testing-library/react';
 import React from 'react';
 import * as reactRedux from 'react-redux';
+
 import {renderWithIntlAndStore} from 'tests/react_testing_utils';
 import {TestHelper} from 'utils/test_helper';
 

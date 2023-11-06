@@ -3,8 +3,6 @@
 
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
-import {limitThresholds} from 'utils/limits';
 
 import {getCloudSubscription} from 'mattermost-redux/selectors/entities/cloud';
 import {isCloudLicense} from 'mattermost-redux/selectors/entities/general';
@@ -18,6 +16,9 @@ import useGetHighestThresholdCloudLimit from 'components/common/hooks/useGetHigh
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetUsage from 'components/common/hooks/useGetUsage';
 import UsagePercentBar from 'components/common/usage_percent_bar';
+
+import {ModalIdentifiers} from 'utils/constants';
+import {limitThresholds} from 'utils/limits';
 
 import useWords from './useWords';
 

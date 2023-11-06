@@ -1,21 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {isMobile} from 'utils/utils';
+import type {ClientConfig} from '@mattermost/types/config';
 
-import {createSelector} from 'reselect';
-
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
+import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {makeGetCategory, getBool, getInt} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser, getCurrentUserId, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
 import {GenericTaskSteps, OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
 import {FINISHED} from 'components/tours';
 
-import {GlobalState} from 'types/store';
-import {ClientConfig} from '@mattermost/types/config';
-
 import {RecommendedNextStepsLegacy, Preferences} from 'utils/constants';
+import {isMobile} from 'utils/utils';
+
+import type {GlobalState} from 'types/store';
 
 const getCategory = makeGetCategory();
 export const getABTestPreferences = (() => {

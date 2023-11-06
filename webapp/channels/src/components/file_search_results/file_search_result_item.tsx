@@ -3,11 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {getSiteURL} from 'utils/url';
-import {isDesktopApp} from 'utils/user_agent';
-import {fileSizeToString, copyToClipboard, localizeMessage} from 'utils/utils';
 
 import {Client4} from 'mattermost-redux/client';
 
@@ -24,6 +19,12 @@ import type {PropsFromRedux, OwnProps} from './index';
 import './file_search_result_item.scss';
 
 import Tag from 'components/widgets/tag/tag';
+
+import {getHistory} from 'utils/browser_history';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {getSiteURL} from 'utils/url';
+import {isDesktopApp} from 'utils/user_agent';
+import {fileSizeToString, copyToClipboard, localizeMessage} from 'utils/utils';
 
 type Props = OwnProps & PropsFromRedux;
 

@@ -5,7 +5,6 @@ import type {ChangeEvent, FormEvent} from 'react';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {placeCaretAtEnd} from 'utils/utils';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -18,6 +17,8 @@ import ModalSuggestionList from 'components/suggestion/modal_suggestion_list';
 import SearchChannelWithPermissionsProvider from 'components/suggestion/search_channel_with_permissions_provider.jsx';
 import SuggestionBox from 'components/suggestion/suggestion_box';
 import type SuggestionBoxComponent from 'components/suggestion/suggestion_box/suggestion_box';
+
+import {placeCaretAtEnd} from 'utils/utils';
 
 export type Props = {
 

@@ -1,12 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import groupsAvatar from 'images/groups-avatar.png';
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import {ModalIdentifiers} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Group} from '@mattermost/types/groups';
@@ -17,6 +14,10 @@ import ListModal, {DEFAULT_NUM_PER_PAGE} from 'components/list_modal';
 import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import groupsAvatar from 'images/groups-avatar.png';
+import {ModalIdentifiers} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 

@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
 
 import type {AnalyticsRow, PluginAnalyticsRow, IndexedPluginAnalyticsRow} from '@mattermost/types/admin';
 import type {ClientLicense} from '@mattermost/types/config';
@@ -14,6 +13,8 @@ import {ActivatedUserCard} from 'components/analytics/activated_users_card';
 import TrueUpReview from 'components/analytics/true_up_review';
 import ExternalLink from 'components/external_link';
 import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
+
+import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

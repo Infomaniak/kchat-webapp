@@ -4,6 +4,7 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
+
 import mockStore from 'tests/test_store';
 
 import DraftActions from './draft_actions';

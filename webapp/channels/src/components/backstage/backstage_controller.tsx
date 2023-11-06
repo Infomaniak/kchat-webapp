@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import Pluggable from 'plugins/pluggable';
 import type {ComponentType} from 'react';
 import React, {useRef} from 'react';
 import type {match} from 'react-router-dom';
@@ -27,6 +26,8 @@ import EditOutgoingWebhook from 'components/integrations/edit_outgoing_webhook';
 import InstalledIncomingWebhooks from 'components/integrations/installed_incoming_webhooks';
 import InstalledOauthApps from 'components/integrations/installed_oauth_apps';
 import InstalledOutgoingWebhooks from 'components/integrations/installed_outgoing_webhooks';
+
+import Pluggable from 'plugins/pluggable';
 
 import BackstageNavbar from './components/backstage_navbar';
 import BackstageSidebar from './components/backstage_sidebar';

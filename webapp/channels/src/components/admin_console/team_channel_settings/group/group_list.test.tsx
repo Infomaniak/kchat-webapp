@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Group} from '@mattermost/types/groups';
+
+import {TestHelper} from 'utils/test_helper';
 
 import GroupList from './group_list';
 

@@ -4,8 +4,6 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
-import {isKeyPressed} from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -13,6 +11,9 @@ import type {ActionFunc} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import Constants from 'utils/constants';
+import {isKeyPressed} from 'utils/utils';
 
 type Props = {
     currentUser: UserProfile;

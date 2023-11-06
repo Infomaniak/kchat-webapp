@@ -3,6 +3,7 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+
 import {TestHelper} from 'utils/test_helper';
 
 import SystemRolePermission from './system_role_permission';

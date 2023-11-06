@@ -2,13 +2,10 @@
 // See LICENSE.txt for license information.
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
-import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
 import React, {useRef} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-import {ExploreOtherToolsTourSteps, suitePluginIds} from 'utils/constants';
-import {useCurrentProductId, useProducts, isChannels} from 'utils/products';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';
@@ -28,6 +25,10 @@ import {FINISHED, TutorialTourName} from 'components/tours';
 import {BoardsTourTip, PlaybooksTourTip} from 'components/tours/onboarding_explore_tools_tour';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {useGetPluginsActivationState} from 'plugins/useGetPluginsActivationState';
+import {ExploreOtherToolsTourSteps, suitePluginIds} from 'utils/constants';
+import {useCurrentProductId, useProducts, isChannels} from 'utils/products';
 
 import type {GlobalState} from 'types/store';
 

@@ -11,9 +11,6 @@ import Scrollbars from 'react-custom-scrollbars';
 import {FormattedMessage} from 'react-intl';
 import type {Spring} from 'rebound';
 import {SpringSystem} from 'rebound';
-import * as ChannelUtils from 'utils/channel_utils';
-import {Constants, DraggingStates, DraggingStateTypes, ModalIdentifiers} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {ChannelCategory} from '@mattermost/types/channel_categories';
 import type {Channel} from '@mattermost/types/channels';
@@ -27,6 +24,10 @@ import ActivityAndInsightsLink
     from 'components/activity_and_insights/activity_and_insights_link/activity_and_insights_link';
 import DraftsLink from 'components/drafts/drafts_link/drafts_link';
 import GlobalThreadsLink from 'components/threading/global_threads_link';
+
+import * as ChannelUtils from 'utils/channel_utils';
+import {Constants, DraggingStates, DraggingStateTypes, ModalIdentifiers} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import type {DraggingState} from 'types/store';
 import type {StaticPage} from 'types/store/lhs';

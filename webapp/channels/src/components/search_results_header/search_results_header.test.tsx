@@ -3,6 +3,7 @@
 
 import {screen} from '@testing-library/react';
 import React from 'react';
+
 import {renderWithIntl} from 'tests/react_testing_utils';
 import {RHSStates} from 'utils/constants';
 

@@ -2,17 +2,10 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {createSelector} from 'reselect';
-
-import {
-    getUser,
-    getCurrentUser,
-    getUserStatuses,
-    getCurrentUserId,
-} from 'mattermost-redux/selectors/entities/users';
-import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {
     getCurrentChannel,
     isCurrentChannelDefault,
@@ -21,19 +14,24 @@ import {
     isCurrentChannelArchived,
     getRedirectChannelNameForTeam,
 } from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {
+    getUser,
+    getCurrentUser,
+    getUserStatuses,
+    getCurrentUserId,
+} from 'mattermost-redux/selectors/entities/users';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 
-import {getPenultimateViewedChannelName} from 'selectors/local_storage';
+import {startOrJoinCallInChannelV2} from 'actions/calls';
 import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
+import {getPenultimateViewedChannelName} from 'selectors/local_storage';
+import {getChannelHeaderMenuPluginComponents} from 'selectors/plugins';
 
 import {Constants} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
-import {getChannelHeaderMenuPluginComponents} from 'selectors/plugins';
-
-import {GlobalState} from 'types/store';
-
-import {startOrJoinCallInChannelV2} from 'actions/calls';
+import type {GlobalState} from 'types/store';
 
 import Desktop from './channel_header_dropdown';
 import Items from './channel_header_dropdown_items';

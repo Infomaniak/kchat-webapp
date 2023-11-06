@@ -6,9 +6,6 @@
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {defineMessages, FormattedDate, FormattedMessage, injectIntl} from 'react-intl';
-import {AnnouncementBarMessages, AnnouncementBarTypes, AcceptedProfileImageTypes, Constants, ValidationErrors} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -21,6 +18,10 @@ import SettingItem from 'components/setting_item';
 import SettingItemMax from 'components/setting_item_max';
 import SettingPicture from 'components/setting_picture';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
+
+import {AnnouncementBarMessages, AnnouncementBarTypes, AcceptedProfileImageTypes, Constants, ValidationErrors} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 const holders = defineMessages({
     usernameReserved: {

@@ -1,13 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import imgTrans from 'images/img_trans.gif';
 import React, {memo} from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import type {Emoji} from '@mattermost/types/emojis';
 
 import {getEmojiImageUrl, isSystemEmoji} from 'mattermost-redux/utils/emoji_utils';
+
+import imgTrans from 'images/img_trans.gif';
 
 interface Props {
     emoji?: Emoji;

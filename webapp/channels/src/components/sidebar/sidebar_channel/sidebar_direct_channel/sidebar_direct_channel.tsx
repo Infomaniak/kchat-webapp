@@ -4,8 +4,6 @@
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {injectIntl} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import {Constants} from 'utils/constants';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {PreferenceType} from '@mattermost/types/preferences';
@@ -16,6 +14,9 @@ import {Client4} from 'mattermost-redux/client';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import ProfilePicture from 'components/profile_picture';
+
+import {getHistory} from 'utils/browser_history';
+import {Constants} from 'utils/constants';
 
 import SidebarChannelLink from '../sidebar_channel_link';
 

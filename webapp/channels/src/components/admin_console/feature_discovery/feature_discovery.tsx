@@ -3,9 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
-import {ModalIdentifiers, TELEMETRY_CATEGORIES, AboutLinks, LicenseLinks, LicenseSkus} from 'utils/constants';
-import * as Utils from 'utils/utils';
 
 import type {AnalyticsRow} from '@mattermost/types/admin';
 import type {ClientLicense} from '@mattermost/types/config';
@@ -14,11 +11,8 @@ import {trackEvent} from 'actions/telemetry_actions';
 
 import {EmbargoedEntityTrialError} from 'components/admin_console/license_settings/trial_banner/trial_banner';
 import AlertBanner from 'components/alert_banner';
-import LoadingSpinner from 'components/widgets/loading/loading_spinner';
-import StartTrialBtn from 'components/learn_more_trial_modal/start_trial_btn';
 import ContactUsButton from 'components/announcement_bar/contact_sales/contact_us';
 import PurchaseLink from 'components/announcement_bar/purchase_link/purchase_link';
-import PurchaseModal from 'components/purchase_modal';
 import CloudStartTrialButton from 'components/cloud_start_trial/cloud_start_trial_btn';
 
 import type {ModalData} from 'types/actions';
@@ -26,6 +20,13 @@ import type {ModalData} from 'types/actions';
 import './feature_discovery.scss';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+import StartTrialBtn from 'components/learn_more_trial_modal/start_trial_btn';
+import PurchaseModal from 'components/purchase_modal';
+import LoadingSpinner from 'components/widgets/loading/loading_spinner';
+
+import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
+import {ModalIdentifiers, TELEMETRY_CATEGORIES, AboutLinks, LicenseLinks, LicenseSkus} from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 type Props = {
     featureName: string;

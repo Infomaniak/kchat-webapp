@@ -1,17 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {getHistory} from 'utils/browser_history';
-import Constants, {NotificationLevels, UserStatuses, IgnoreChannelMentions} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {stripMarkdown, formatWithRenderer} from 'utils/markdown';
-import MentionableRenderer from 'utils/markdown/mentionable_renderer';
-import * as NotificationSounds from 'utils/notification_sounds';
-import {showNotification} from 'utils/notifications';
-import {cjkrPattern, escapeRegex} from 'utils/text_formatting';
-import {isDesktopApp, isMobileApp, isWindowsApp} from 'utils/user_agent';
-
-import * as Utils from 'utils/utils';
 import {logError} from 'mattermost-redux/actions/errors';
 import {getProfilesByIds} from 'mattermost-redux/actions/users';
 import {getCurrentChannel, getMyChannelMember, makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -29,6 +18,16 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {getChannelURL, getPermalinkURL} from 'selectors/urls';
 import {isThreadOpen} from 'selectors/views/threads';
 
+import {getHistory} from 'utils/browser_history';
+import Constants, {NotificationLevels, UserStatuses, IgnoreChannelMentions} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {stripMarkdown, formatWithRenderer} from 'utils/markdown';
+import MentionableRenderer from 'utils/markdown/mentionable_renderer';
+import * as NotificationSounds from 'utils/notification_sounds';
+import {showNotification} from 'utils/notifications';
+import {cjkPattern, escapeRegex} from 'utils/text_formatting';
+import {isDesktopApp, isMobileApp, isWindowsApp} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import {runDesktopNotificationHooks} from './hooks';
 
@@ -75,13 +74,13 @@ export function sendDesktopNotification(post, msgProps) {
         }
 
         let mentions = [];
-        if (msgProps.mentions) {
-            mentions = JSON.parse(msgProps.mentions);
+        if (msgProps.mentions && Array.isArray(msgProps.mentions)) {
+            mentions = msgProps.mentions;
         }
 
         let followers = [];
         if (msgProps.followers) {
-            followers = JSON.parse(msgProps.followers);
+            followers = msgProps.followers;
             mentions = [...new Set([...followers, ...mentions])];
         }
 
@@ -166,7 +165,7 @@ export function sendDesktopNotification(post, msgProps) {
                 }
 
                 let pattern;
-                if (cjkrPattern.test(mention.key)) {
+                if (cjkPattern.test(mention.key)) {
                     // In the case of CJK mention key, even if there's no delimiters (such as spaces) at both ends of a word, it is recognized as a mention key
                     pattern = new RegExp(`()(${escapeRegex(mention.key)})()`, flags);
                 } else {
@@ -228,8 +227,10 @@ export function sendDesktopNotification(post, msgProps) {
         }
 
         let notifyText = post.message;
-
-        const msgPropsPost = JSON.parse(msgProps.post);
+        let msgPropsPost;
+        if (msgPropsPost) {
+            msgPropsPost = msgProps.post;
+        }
         const attachments = msgPropsPost && msgPropsPost.props && msgPropsPost.props.attachments ? msgPropsPost.props.attachments : [];
         let image = false;
         attachments.forEach((attachment) => {

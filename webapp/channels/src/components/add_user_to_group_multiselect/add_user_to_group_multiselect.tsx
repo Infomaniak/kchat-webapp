@@ -2,8 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import Constants from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
@@ -13,6 +11,9 @@ import {filterProfilesStartingWithTerm} from 'mattermost-redux/utils/user_utils'
 
 import type {Value} from 'components/multiselect/multiselect';
 import MultiSelect from 'components/multiselect/multiselect';
+
+import Constants from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 import MultiSelectOption from './multiselect_option/multiselect_option';
 

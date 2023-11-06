@@ -6,9 +6,6 @@ import {Overlay} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 import {Redirect} from 'react-router-dom';
-import {Constants} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {Team, TeamMembership} from '@mattermost/types/teams';
@@ -32,6 +29,10 @@ import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import AtIcon from 'components/widgets/icons/at_icon';
 import EmailIcon from 'components/widgets/icons/email_icon';
 import SheidOutlineIcon from 'components/widgets/icons/shield_outline_icon';
+
+import {Constants} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import './system_user_detail.scss';
 

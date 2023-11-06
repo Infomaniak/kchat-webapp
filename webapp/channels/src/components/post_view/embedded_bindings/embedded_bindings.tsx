@@ -2,10 +2,11 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import type {TextFormattingOptions} from 'utils/text_formatting';
 
 import type {AppBinding} from '@mattermost/types/apps';
 import type {Post} from '@mattermost/types/posts';
+
+import type {TextFormattingOptions} from 'utils/text_formatting';
 
 import EmbeddedBinding from './embedded_binding';
 

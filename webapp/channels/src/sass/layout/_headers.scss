@@ -39,6 +39,10 @@
         }
     }
 
+    .channel-header__push-right {
+        margin-left: auto;
+    }
+
     .icon::before {
         margin-right: 0;
         margin-left: 0;
@@ -134,6 +138,7 @@
     .flex-parent {
         display: flex;
         padding: 0 16px 0 8px;
+        height: 100%;
     }
 
     .flex-child {
@@ -217,7 +222,6 @@
     .heading {
         overflow: hidden;
         margin: 0 0 0 2px;
-        color: var(--center-channel-color);
         font-family: Metropolis, sans-serif;
         font-size: 16px;
         font-weight: 600;
@@ -403,15 +407,6 @@
                     margin: 0;
                 }
             }
-
-            .emoticon {
-                width: 18.8px;
-                min-width: 18.8px;
-                max-width: 18.8px;
-                height: 18.8px;
-                min-height: 18.8px;
-                max-height: 18.8px;
-            }
         }
 
         .markdown__heading {
@@ -525,7 +520,6 @@
         margin-bottom: 10px;
 
         .fa,
-        svg,
         i {
             margin-right: 5px;
         }
@@ -560,13 +554,16 @@
         margin-bottom: 15px;
         font-size: 28px;
         font-weight: 600;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .channel-intro__content {
         padding: 10px 15px;
         background: $bg--gray;
         border-radius: 3px;
-        word-break: break-word;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 }
 
@@ -820,9 +817,59 @@
     }
 }
 
+.app__body {
+    .channel-header__links {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        margin-right: 1px;
+        font-family: "Open Sans", sans-serif;
+        font-size: 22px;
+        line-height: 26px;
+        text-align: center;
+
+        th {
+            &:last-child {
+                div {
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        .channel__wrap.move--left & {
+            position: absolute;
+            top: 14px;
+            right: -400px;
+        }
+
+        > a {
+            color: inherit;
+            opacity: 0.6;
+            text-decoration: none;
+            transition: all 0.1s ease-in;
+
+            &:hover {
+                opacity: 0.7;
+            }
+
+            &:focus {
+                color: inherit;
+            }
+
+            &.active {
+                color: $primary-color;
+                opacity: 1;
+
+                .icon {
+                    fill: $primary-color;
+                }
+            }
+        }
+    }
+}
+
 .channel-header-archived-icon {
     position: relative;
     top: 2px;
     margin-right: 5px;
-    fill: var(--center-channel-color);
 }

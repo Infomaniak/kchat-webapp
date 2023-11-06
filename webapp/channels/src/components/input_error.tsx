@@ -3,9 +3,10 @@
 
 import classNames from 'classnames';
 import React from 'react';
-import {ItemStatus} from 'utils/constants';
 
 import type {CustomMessageInputType} from 'components/widgets/inputs/input/input';
+
+import {ItemStatus} from 'utils/constants';
 
 type Props = {
     message?: string;

@@ -5,7 +5,6 @@ import React, {memo, useState, useCallback} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {localizeMessage} from 'utils/utils';
 
 import type {TopThread} from '@mattermost/types/insights';
 
@@ -16,6 +15,8 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {selectPost} from 'actions/views/rhs';
 
 import SaveButton from 'components/save_button';
+
+import {localizeMessage} from 'utils/utils';
 
 import './../../activity_and_insights.scss';
 

@@ -10,7 +10,7 @@ import type {IntlShape} from 'react-intl';
 import {IntlContext} from 'react-intl';
 import {Provider} from 'react-redux';
 
-import store from 'stores/redux_store.jsx';
+import store from 'stores/redux_store';
 
 export type BaseOverlayTrigger = OriginalOverlayTrigger & {
     hide: () => void;

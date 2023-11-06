@@ -5,13 +5,14 @@ import moment from 'moment-timezone';
 import React, {memo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
-import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import {openModal} from 'actions/views/modals';
 
 import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
 import ScheduleIcon from 'components/widgets/icons/schedule_icon';
+
+import {ModalIdentifiers} from 'utils/constants';
+import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import Action from './action';
 import DeleteDraftModal from './delete_draft_modal';

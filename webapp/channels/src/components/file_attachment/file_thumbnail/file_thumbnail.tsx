@@ -2,16 +2,17 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+
+import type {FileInfo} from '@mattermost/types/files';
+
+import {getFileThumbnailUrl, getFileUrl} from 'mattermost-redux/utils/file_utils';
+
 import Constants, {FileTypes} from 'utils/constants';
 import {
     getFileType,
     getIconClassName,
     isGIFImage,
 } from 'utils/utils';
-
-import type {FileInfo} from '@mattermost/types/files';
-
-import {getFileThumbnailUrl, getFileUrl} from 'mattermost-redux/utils/file_utils';
 
 type Props = {
     enableSVGs: boolean;

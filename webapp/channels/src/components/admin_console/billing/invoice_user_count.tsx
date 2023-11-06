@@ -3,10 +3,11 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {numberToFixedDynamic} from 'utils/utils';
 
 import type {Invoice} from '@mattermost/types/cloud';
 import {InvoiceLineItemType} from '@mattermost/types/cloud';
+
+import {numberToFixedDynamic} from 'utils/utils';
 
 export default function InvoiceUserCount({invoice}: {invoice: Invoice}): JSX.Element {
     const fullUsers = invoice.line_items.filter((item) => item.type === InvoiceLineItemType.Full).reduce((val, item) => val + item.quantity, 0);

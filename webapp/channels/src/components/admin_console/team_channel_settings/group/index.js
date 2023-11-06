@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
+
 import {t} from 'utils/i18n';
 
 import List from './group_list';

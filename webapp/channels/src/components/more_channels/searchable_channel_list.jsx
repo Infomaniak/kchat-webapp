@@ -6,11 +6,6 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {isArchivedChannel} from 'utils/channel_utils';
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as UserAgent from 'utils/user_agent';
-import {isKeyPressed, localizeMessage, localizeAndFormatMessage} from 'utils/utils';
 
 import {isPrivateChannel} from 'mattermost-redux/utils/channel_utils';
 
@@ -23,6 +18,12 @@ import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {isArchivedChannel} from 'utils/channel_utils';
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as UserAgent from 'utils/user_agent';
+import {isKeyPressed, localizeMessage, localizeAndFormatMessage} from 'utils/utils';
 
 const NEXT_BUTTON_TIMEOUT_MILLISECONDS = 500;
 

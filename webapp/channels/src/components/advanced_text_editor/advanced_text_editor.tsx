@@ -5,9 +5,6 @@ import {EmoticonHappyOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import Constants, {Locations} from 'utils/constants';
-import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Emoji} from '@mattermost/types/emojis';
@@ -28,6 +25,10 @@ import Textbox from 'components/textbox';
 import type TextboxClass from 'components/textbox/textbox';
 import {SendMessageTour} from 'components/tours/onboarding_tour';
 
+import Constants, {Locations} from 'utils/constants';
+import type {ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
+import * as Utils from 'utils/utils';
+
 import type {PostDraft} from 'types/store/draft';
 
 import FormattingBar from './formatting_bar';
@@ -36,13 +37,13 @@ import {IconContainer} from './formatting_bar/formatting_icon';
 import SendButton from './send_button';
 import ShowFormat from './show_formatting';
 import TexteditorActions from './texteditor_actions';
+import ToggleFormattingBar from './toggle_formatting_bar/toggle_formatting_bar';
 
 import AutoHeightSwitcher from '../common/auto_height_switcher';
 import RhsSuggestionList from '../suggestion/rhs_suggestion_list';
 import Tooltip from '../tooltip';
 
 import './advanced_text_editor.scss';
-import ToggleFormattingBar from './toggle_formatting_bar/toggle_formatting_bar';
 
 type Props = {
 
@@ -171,7 +172,6 @@ const AdvanceTextEditor = ({
     const editorActionsRef = useRef<HTMLDivElement>(null);
     const editorBodyRef = useRef<HTMLDivElement>(null);
 
-    const [scrollbarWidth, setScrollbarWidth] = useState(0);
     const [renderScrollbar, setRenderScrollbar] = useState(false);
     const [showFormattingSpacer, setShowFormattingSpacer] = useState(shouldShowPreview);
 

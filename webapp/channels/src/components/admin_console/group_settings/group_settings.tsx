@@ -3,12 +3,13 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {t} from 'utils/i18n';
-import {getSiteURL} from 'utils/url';
 
 import GroupsList from 'components/admin_console/group_settings/groups_list';
 import ExternalLink from 'components/external_link';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
+
+import {t} from 'utils/i18n';
+import {getSiteURL} from 'utils/url';
 
 type Props = {
     isDisabled?: boolean;

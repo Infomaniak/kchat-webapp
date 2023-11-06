@@ -5,13 +5,14 @@ import IconButton from '@infomaniak/compass-components/components/icon-button';
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import Constants, {RHSStates} from 'utils/constants';
 
 import {closeRightHandSide, showFlaggedPosts} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants, {RHSStates} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

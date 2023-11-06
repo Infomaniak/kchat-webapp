@@ -4,8 +4,6 @@
 import React, {useEffect, useMemo} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {Constants} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Team} from '@mattermost/types/teams';
@@ -14,6 +12,9 @@ import type {UserProfile} from '@mattermost/types/users';
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
 import UsersEmailsInput from 'components/widgets/inputs/users_emails_input';
+
+import {Constants} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {CustomMessageProps, InviteChannels} from './add_to_channels';
 import AddToChannels, {defaultCustomMessage, defaultInviteChannels} from './add_to_channels';

@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Constants} from 'utils/constants';
 
 import {logError} from 'mattermost-redux/actions/errors';
 import {Permissions} from 'mattermost-redux/constants';
@@ -16,7 +15,9 @@ import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles'
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {sortChannelsByTypeAndDisplayName} from 'mattermost-redux/utils/channel_utils';
 
-import store from 'stores/redux_store.jsx';
+import store from 'stores/redux_store';
+
+import {Constants} from 'utils/constants';
 
 import Provider from './provider';
 import Suggestion from './suggestion.jsx';

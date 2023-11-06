@@ -4,11 +4,12 @@
 import {screen} from '@testing-library/react';
 import React from 'react';
 import {BrowserRouter} from 'react-router-dom';
+
+import {GlobalState} from '@mattermost/types/store';
+
 import {renderWithIntlAndStore} from 'tests/react_testing_utils';
 import {ErrorPageTypes} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
-
-import {GlobalState} from '@mattermost/types/store';
 
 import ErrorPage from './error_page';
 

@@ -4,7 +4,6 @@
 import {shallow, mount} from 'enzyme';
 import React from 'react';
 import {FormattedMessage, IntlProvider} from 'react-intl';
-import Constants, {WindowSizes} from 'utils/constants';
 
 import type {ClientConfig} from '@mattermost/types/config';
 
@@ -21,6 +20,8 @@ import Login from 'components/login/login';
 import SaveButton from 'components/save_button';
 import Input from 'components/widgets/inputs/input/input';
 import PasswordInput from 'components/widgets/inputs/password_input/password_input';
+
+import Constants, {WindowSizes} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

@@ -3,11 +3,12 @@
 
 import React, {useCallback, useMemo} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import Constants from 'utils/constants';
 
 import type {UserProfile} from '@mattermost/types/users';
 
 import MultiSelect from 'components/multiselect/multiselect';
+
+import Constants from 'utils/constants';
 
 import ListItem from '../list_item';
 import type {Option, OptionValue} from '../types';

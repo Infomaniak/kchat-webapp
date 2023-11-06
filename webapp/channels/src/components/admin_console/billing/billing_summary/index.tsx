@@ -3,9 +3,10 @@
 
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {CloudProducts} from 'utils/constants';
 
 import {getSubscriptionProduct, checkHadPriorTrial, getCloudSubscription} from 'mattermost-redux/selectors/entities/cloud';
+
+import {CloudProducts} from 'utils/constants';
 
 import {
     noBillingHistory,

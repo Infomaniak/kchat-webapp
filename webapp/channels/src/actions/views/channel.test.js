@@ -1,10 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import mockStore from 'tests/test_store';
-import {getHistory} from 'utils/browser_history';
-import {ActionTypes, PostRequestTypes} from 'utils/constants';
-
 import {leaveChannel, markChannelAsRead, getChannel} from 'mattermost-redux/actions/channels';
 import * as PostActions from 'mattermost-redux/actions/posts';
 import * as UserActions from 'mattermost-redux/actions/users';
@@ -12,6 +8,10 @@ import {General, Posts, RequestStatus} from 'mattermost-redux/constants';
 
 import * as Actions from 'actions/views/channel';
 import {closeRightHandSide} from 'actions/views/rhs';
+
+import mockStore from 'tests/test_store';
+import {getHistory} from 'utils/browser_history';
+import {ActionTypes, PostRequestTypes} from 'utils/constants';
 
 jest.mock('utils/channel_utils.tsx', () => {
     const original = jest.requireActual('utils/channel_utils.tsx');

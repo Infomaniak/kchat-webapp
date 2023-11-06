@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {t} from 'utils/i18n';
 
 import type {ServerError} from '@mattermost/types/errors';
 
@@ -11,6 +10,8 @@ import {isEmail} from 'mattermost-redux/utils/helpers';
 
 import BackButton from 'components/common/back_button';
 import LocalizedInput from 'components/localized_input/localized_input';
+
+import {t} from 'utils/i18n';
 
 interface Props {
     actions: {

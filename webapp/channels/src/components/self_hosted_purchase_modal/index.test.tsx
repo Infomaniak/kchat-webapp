@@ -3,13 +3,14 @@
 
 import {screen, fireEvent, waitFor} from '@testing-library/react';
 import React from 'react';
-import {renderWithIntlAndStore} from 'tests/react_testing_utils';
-import {SelfHostedProducts, ModalIdentifiers} from 'utils/constants';
-import {TestHelper as TH} from 'utils/test_helper';
 
 import {SelfHostedSignupProgress} from '@mattermost/types/hosted_customer';
 import type {SelfHostedSignupForm} from '@mattermost/types/hosted_customer';
 import type {DeepPartial} from '@mattermost/types/utilities';
+
+import {renderWithIntlAndStore} from 'tests/react_testing_utils';
+import {SelfHostedProducts, ModalIdentifiers} from 'utils/constants';
+import {TestHelper as TH} from 'utils/test_helper';
 
 import type {GlobalState} from 'types/store';
 

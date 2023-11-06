@@ -6,8 +6,6 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-import Constants, {RHSStates} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import {closeRightHandSide, showSettings} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
@@ -15,6 +13,9 @@ import {getRhsState} from 'selectors/rhs';
 import LocalizedIcon from 'components/localized_icon';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants, {RHSStates} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import type {GlobalState} from 'types/store';
 

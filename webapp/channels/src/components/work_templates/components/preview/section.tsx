@@ -6,13 +6,14 @@ import type {ReactNode} from 'react';
 import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import styled from 'styled-components';
-import {MattermostFeatures} from 'utils/constants';
 
 import {haveISystemPermission} from 'mattermost-redux/selectors/entities/roles';
 
 import store from 'stores/redux_store';
 
 import NotifyAdminCTA from 'components/notify_admin_cta/notify_admin_cta';
+
+import {MattermostFeatures} from 'utils/constants';
 
 interface GenericPreviewSectionProps {
     items: Array<{ id: string; name?: string; illustration?: string }>;

@@ -3,12 +3,13 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import Constants from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
 
 import type {ChannelType} from '@mattermost/types/channels';
 
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
+
+import Constants from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import SidebarChannelMenu from './sidebar_channel_menu';
 

@@ -4,7 +4,6 @@
 import {connect} from 'react-redux';
 import type {Dispatch, ActionCreatorsMapObject} from 'redux';
 import {bindActionCreators} from 'redux';
-import {getLatestPostId} from 'utils/post_utils';
 
 import {markChannelAsRead, markChannelAsViewed} from 'mattermost-redux/actions/channels';
 import {RequestStatus} from 'mattermost-redux/constants';
@@ -15,14 +14,16 @@ import {makePreparePostIdsForPostList} from 'mattermost-redux/utils/post_list';
 
 import {updateNewMessagesAtInChannel} from 'actions/global_actions';
 import {
-    checkAndSetMobileView,
     loadPosts,
     loadUnreads,
     loadPostsAround,
     syncPostsInChannel,
     loadLatestPosts,
+    checkAndSetMobileView,
 } from 'actions/views/channel';
 import {getIsMobileView} from 'selectors/views/browser';
+
+import {getLatestPostId} from 'utils/post_utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -38,7 +39,7 @@ const memoizedGetLatestPostId = memoizeResult((postIds: string[]) => getLatestPo
 
 interface Props {
     focusedPostId?: string;
-    unreadChunkTimeStamp: number;
+    unreadChunkTimeStamp: number | undefined;
     changeUnreadChunkTimeStamp: (lastViewedAt: number) => void;
     channelId: string;
 }

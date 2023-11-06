@@ -111,3 +111,11 @@
         }
     }
 }
+
+.app__body {
+    .modal-tabs {
+        .nav-tabs > li {
+            background-color: var(--center-channel-bg);
+        }
+    }
+}

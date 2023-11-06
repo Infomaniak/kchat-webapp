@@ -1,12 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
+
 import type {GroupMembership, GroupPermissions} from '@mattermost/types/groups';
 import type {Role} from '@mattermost/types/roles';
 import type {GlobalState} from '@mattermost/types/store';
 
 import {General, Permissions} from 'mattermost-redux/constants';
-import {createSelector} from 'reselect';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {
     getMySystemPermissions,

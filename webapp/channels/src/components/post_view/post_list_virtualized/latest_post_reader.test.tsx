@@ -2,10 +2,11 @@
 // See LICENSE.txt for license information.
 
 import {mount} from 'enzyme';
-import enMessages from 'i18n/en.json';
-import esMessages from 'i18n/es.json';
 import React from 'react';
 import {createIntl, useIntl} from 'react-intl';
+
+import enMessages from 'i18n/en.json';
+import esMessages from 'i18n/es.json';
 import {mockStore} from 'tests/test_store';
 import {TestHelper} from 'utils/test_helper';
 

@@ -5,7 +5,6 @@ import React, {useState, useCallback, useEffect, useRef} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import type {RouterProps} from 'react-router-dom';
-import Constants from 'utils/constants';
 
 import type {Team} from '@mattermost/types/teams';
 
@@ -22,6 +21,8 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {pageVisited, trackEvent} from 'actions/telemetry_actions';
 
 import LogoSvg from 'components/common/svg_images_components/logo_dark_blue_svg';
+
+import Constants from 'utils/constants';
 
 import LaunchingWorkspace, {START_TRANSITIONING_OUT} from './launching_workspace';
 import Plugins from './plugins';

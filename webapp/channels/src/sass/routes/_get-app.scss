@@ -46,11 +46,12 @@
     width: 1280px;
     justify-content: center;
     margin: 80px auto;
+    align-items: center;
 }
 
 .get-app__graphic {
     flex: 0 0 600px;
-    background-color: var(--sidebar-bg);
+    background-color: transparent;
 
     &.mobile {
         flex: 0 1 300px;
@@ -63,8 +64,8 @@
 
 .get-app__dialog-body {
     flex: 0 1 600px;
-    margin-top: 60px;
-    margin-left: 60px;
+    margin-right: 30px;
+    margin-left: 30px;
 }
 
 .get-app__launching > span {
@@ -123,6 +124,32 @@
     }
 }
 
+.get-app__download {
+    border: none !important;
+
+    &:hover {
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    &:active,
+    &:focus {
+    }
+}
+
+.get-app__continue {
+
+    &:hover {
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    &:focus {
+    }
+}
+
 .get-app__preference {
     display: flex;
     margin-top: 23px;
@@ -155,7 +182,7 @@
         border: 0;
 
         svg {
-            fill: #145dbf;
+            fill: var(--button-bg);
         }
     }
 }
@@ -169,7 +196,7 @@
     opacity: 0.8;
 
     > span > a {
-        color: #145dbf;
+        color: $primary-color;
         text-decoration: none;
     }
 

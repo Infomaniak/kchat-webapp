@@ -1,13 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import React from 'react';
+
 import amex from 'images/cloud/cards/amex.png';
 import dinersclub from 'images/cloud/cards/dinersclub.png';
 import discover from 'images/cloud/cards/discover.jpg';
 import jcb from 'images/cloud/cards/jcb.png';
 import mastercard from 'images/cloud/cards/mastercard.png';
 import visa from 'images/cloud/cards/visa.jpg';
-import React from 'react';
 
 import './card_image.css';
 

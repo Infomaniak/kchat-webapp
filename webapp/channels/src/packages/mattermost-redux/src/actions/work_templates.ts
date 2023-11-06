@@ -1,12 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {ExecuteWorkTemplateRequest} from '@mattermost/types/work_templates';
+
 import {WorkTemplatesType} from 'mattermost-redux/action_types';
-import {ActionFunc} from 'mattermost-redux/types/actions';
 import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
-
-import {ExecuteWorkTemplateRequest} from '@mattermost/types/work_templates';
+import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 export function getWorkTemplateCategories(): ActionFunc {
     return bindClientFunc({

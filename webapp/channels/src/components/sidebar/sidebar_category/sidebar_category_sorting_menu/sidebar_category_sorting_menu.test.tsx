@@ -3,6 +3,7 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
+
 import Constants from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 

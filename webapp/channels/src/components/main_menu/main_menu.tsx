@@ -4,8 +4,6 @@
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {injectIntl} from 'react-intl';
-import {Constants, ModalIdentifiers} from 'utils/constants';
-import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -21,6 +19,9 @@ import SystemPermissionGate from 'components/permissions_gates/system_permission
 import TeamPermissionGate from 'components/permissions_gates/team_permission_gate';
 import TeamGroupsManageModal from 'components/team_groups_manage_modal';
 import Menu from 'components/widgets/menu/menu';
+
+import {Constants, ModalIdentifiers} from 'utils/constants';
+import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
 
 // import {trackEvent} from 'actions/telemetry_actions';
 

@@ -6,6 +6,7 @@ import expect from 'expect';
 import moment from 'moment';
 import React from 'react';
 import type {ComponentProps} from 'react';
+
 import {fakeDate} from 'tests/helpers/date';
 import {LicenseSkus} from 'utils/constants';
 

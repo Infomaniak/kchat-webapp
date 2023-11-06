@@ -6,7 +6,6 @@ import React, {useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {MarketplacePlugin} from '@mattermost/types/marketplace';
 import type {Post} from '@mattermost/types/posts';
@@ -20,6 +19,8 @@ import {getError, getInstalledListing, getInstalling, getPlugins} from 'selector
 import Markdown from 'components/markdown';
 import MarketplaceModal from 'components/plugin_marketplace';
 import ToggleModalButton from 'components/toggle_modal_button';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

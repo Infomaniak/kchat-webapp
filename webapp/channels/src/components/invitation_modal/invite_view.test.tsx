@@ -3,15 +3,16 @@
 
 import React from 'react';
 import {Provider} from 'react-redux';
-import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';
-import mockStore from 'tests/test_store';
-import {generateId} from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import store from 'stores/redux_store.jsx';
+import store from 'stores/redux_store';
+
+import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';
+import mockStore from 'tests/test_store';
+import {generateId} from 'utils/utils';
 
 import InviteAs, {InviteType} from './invite_as';
 import type {Props} from './invite_view';

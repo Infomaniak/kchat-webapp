@@ -4,10 +4,11 @@
 import {shallow} from 'enzyme';
 import type {ComponentProps} from 'react';
 import React from 'react';
-import {LicenseSkus} from 'utils/constants';
 
 import PermissionGroup from 'components/admin_console/permission_schemes_settings/permission_group';
 import PermissionsTreePlaybooks from 'components/admin_console/permission_schemes_settings/permissions_tree_playbooks';
+
+import {LicenseSkus} from 'utils/constants';
 
 import type {Group, Permission} from './permissions_tree/types';
 

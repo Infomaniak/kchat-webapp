@@ -4,7 +4,6 @@
 import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {Channel, PendingGuest} from '@mattermost/types/channels';
 import type {GlobalState} from '@mattermost/types/store';
@@ -19,6 +18,8 @@ import CancelMultipleInvitesModal from 'components/cancel_mutiple_invites_modal'
 import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 type Props = {
     channel: Channel;

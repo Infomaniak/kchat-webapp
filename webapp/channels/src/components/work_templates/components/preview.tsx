@@ -6,7 +6,6 @@ import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {CSSTransition} from 'react-transition-group';
 import styled from 'styled-components';
-import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {MarketplacePlugin} from '@mattermost/types/marketplace';
 import type {Board, Channel, Integration, Playbook, WorkTemplate} from '@mattermost/types/work_templates';
@@ -14,6 +13,8 @@ import type {Board, Channel, Integration, Playbook, WorkTemplate} from '@matterm
 import {trackEvent} from 'actions/telemetry_actions';
 
 import type {AccordionItemType} from 'components/common/accordion/accordion';
+
+import {TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

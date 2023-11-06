@@ -4,12 +4,13 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import {TestHelper} from 'utils/test_helper';
 
 import type {UserNotifyProps, UserProfile} from '@mattermost/types/users';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import {TestHelper} from 'utils/test_helper';
 
 import ResetPasswordModal from './reset_password_modal';
 

@@ -3,9 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {PermissionsScope, DefaultRolePermissions} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
 
 import type {ClientConfig, ClientLicense} from '@mattermost/types/config';
 import type {Role} from '@mattermost/types/roles';
@@ -20,6 +17,10 @@ import FormError from 'components/form_error';
 import LoadingScreen from 'components/loading_screen';
 import SaveButton from 'components/save_button';
 import AdminPanelTogglable from 'components/widgets/admin_console/admin_panel_togglable';
+
+import {PermissionsScope, DefaultRolePermissions} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
 
 import GuestPermissionsTree, {GUEST_INCLUDED_PERMISSIONS} from '../guest_permissions_tree';
 import PermissionsTree, {EXCLUDED_PERMISSIONS} from '../permissions_tree';

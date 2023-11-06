@@ -1,12 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+// import {loadMe} from 'mattermost-redux/actions/users';
 import {getClientConfig, getLicenseConfig} from 'mattermost-redux/actions/general';
-import {loadMe} from 'mattermost-redux/actions/users';
+import {loadMeREST} from 'mattermost-redux/actions/users';
 import {Client4} from 'mattermost-redux/client';
 import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {getCurrentLocale, getTranslations} from 'selectors/i18n';
+
+import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
 import en from 'i18n/en.json';
 import {ActionTypes} from 'utils/constants';
@@ -14,23 +17,31 @@ import {ActionTypes} from 'utils/constants';
 import type {GlobalState} from 'types/store';
 import type {Translations} from 'types/store/i18n';
 
+import {isDesktopApp} from '../../utils/user_agent';
 const pluginTranslationSources: Record<string, TranslationPluginFunction> = {};
 
 export type TranslationPluginFunction = (locale: string) => Translations
 
 export function loadConfigAndMe() {
     return async (dispatch: DispatchFunc) => {
+        // If expired, refresh token
+        if (isDesktopApp() && checkIKTokenIsExpired()) {
+            console.log('[actions/view/root] desktop token is expired'); // eslint-disable-line no-console
+            await refreshIKToken(/*redirectToReam*/false)?.catch((e: unknown) => {
+                console.warn('[actions/view/root] desktop token refresh error: ', e); // eslint-disable-line no-console
+            });
+        }
+
         await Promise.all([
             dispatch(getClientConfig()),
             dispatch(getLicenseConfig()),
         ]);
 
-        let isMeLoaded = false;
-        if (document.cookie.includes('MMUSERID=')) {
-            const dataFromLoadMe = await dispatch(loadMe());
-            isMeLoaded = dataFromLoadMe?.data ?? false;
-        }
+        // const isGraphQLEnabled = clientConfig && clientConfig.FeatureFlagGraphQL === 'true';
 
+        let isMeLoaded = false;
+        const dataFromLoadMe = await dispatch(loadMeREST());
+        isMeLoaded = dataFromLoadMe?.data ?? false;
         return {data: isMeLoaded};
     };
 }

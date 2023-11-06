@@ -3,12 +3,13 @@
 
 import {isEmpty} from 'lodash';
 import React from 'react';
+
+import type {CloudCustomer, Subscription} from '@mattermost/types/cloud';
+
 import {getHistory} from 'utils/browser_history';
 import {isCustomerCardExpired} from 'utils/cloud_utils';
 import {AnnouncementBarTypes} from 'utils/constants';
 import {t} from 'utils/i18n';
-
-import type {CloudCustomer, Subscription} from '@mattermost/types/cloud';
 
 import AnnouncementBar from '../default_announcement_bar';
 

@@ -1,9 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import {
     favoriteChannel,
@@ -31,6 +32,7 @@ import {
     isCurrentUserGuestUser,
     makeGetProfilesInChannel,
 } from 'mattermost-redux/selectors/entities/users';
+import type {Action} from 'mattermost-redux/types/actions';
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 
 import {goToLastViewedChannel} from 'actions/views/channel';
@@ -41,21 +43,22 @@ import {
     closeRightHandSide,
     showChannelMembers,
 } from 'actions/views/rhs';
-import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 'selectors/views/custom_status';
+import {getShowTutorialStep} from 'selectors/onboarding';
 import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
-import {isModalOpen} from 'selectors/views/modals';
 import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
+import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 'selectors/views/custom_status';
+import {isModalOpen} from 'selectors/views/modals';
+
+import {OnboardingTasksName} from 'components/onboarding_tasks';
+import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours';
+
 import {ModalIdentifiers} from 'utils/constants';
 import {isFileAttachmentsEnabled} from 'utils/file_utils';
-import {OnboardingTourSteps, OnboardingTourStepsForGuestUsers, TutorialTourName} from 'components/tours';
-import {OnboardingTasksName} from 'components/onboarding_tasks';
-import {getShowTutorialStep} from 'selectors/onboarding';
 
-import {GlobalState} from 'types/store';
+import type {GlobalState} from 'types/store';
 
-import {Action} from 'mattermost-redux/types/actions';
-
-import ChannelHeader, {Props} from './channel_header';
+import type {Props} from './channel_header';
+import ChannelHeader from './channel_header';
 
 const EMPTY_CHANNEL = {};
 const EMPTY_CHANNEL_STATS = {member_count: 0, guest_count: 0, pinnedpost_count: 0, files_count: 0};

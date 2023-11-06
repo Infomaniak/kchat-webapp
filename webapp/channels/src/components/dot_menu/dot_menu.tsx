@@ -24,10 +24,6 @@ import classNames from 'classnames';
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import {Locations, ModalIdentifiers, Constants, TELEMETRY_LABELS, Preferences} from 'utils/constants';
-import DelayedAction from 'utils/delayed_action';
-import * as PostUtils from 'utils/post_utils';
-import * as Utils from 'utils/utils';
 
 import type {Post} from '@mattermost/types/posts';
 import type {UserThread} from '@mattermost/types/threads';
@@ -37,6 +33,11 @@ import Permissions from 'mattermost-redux/constants/permissions';
 import DeletePostModal from 'components/delete_post_modal';
 import * as Menu from 'components/menu';
 import ChannelPermissionGate from 'components/permissions_gates/channel_permission_gate';
+
+import {Locations, ModalIdentifiers, Constants, TELEMETRY_LABELS, Preferences} from 'utils/constants';
+import DelayedAction from 'utils/delayed_action';
+import * as PostUtils from 'utils/post_utils';
+import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 import type {PluginComponent} from 'types/store/plugins';

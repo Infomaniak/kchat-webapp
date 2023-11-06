@@ -5,10 +5,6 @@ import type {CSSProperties} from 'react';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {ModalIdentifiers, WarnMetricTypes} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {getSiteURL} from 'utils/url';
-import * as Utils from 'utils/utils';
 
 import type {WarnMetricStatus} from '@mattermost/types/config';
 import type {ServerError} from '@mattermost/types/errors';
@@ -21,6 +17,11 @@ import {trackEvent} from 'actions/telemetry_actions';
 import ErrorLink from 'components/error_page/error_link';
 import ExternalLink from 'components/external_link';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
+
+import {ModalIdentifiers, WarnMetricTypes} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {getSiteURL} from 'utils/url';
+import * as Utils from 'utils/utils';
 
 type Props = {
     user: UserProfile;

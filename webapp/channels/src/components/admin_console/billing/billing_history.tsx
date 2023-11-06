@@ -4,7 +4,6 @@
 import React, {useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {CloudLinks} from 'utils/constants';
 
 import {getInvoices} from 'mattermost-redux/actions/cloud';
 import {getCloudErrors, getCloudInvoices, isCurrentLicenseCloud} from 'mattermost-redux/selectors/entities/cloud';
@@ -18,6 +17,8 @@ import EmptyBillingHistorySvg from 'components/common/svg_images_components/empt
 import ExternalLink from 'components/external_link';
 import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
+
+import {CloudLinks} from 'utils/constants';
 
 import BillingHistoryTable from './billing_history_table';
 

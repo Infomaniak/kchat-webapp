@@ -1,14 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {Address, CloudCustomerPatch} from '@mattermost/types/cloud';
+
 import {CloudTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
-
-import {DispatchFunc, GetStateFunc, ActionFunc} from 'mattermost-redux/types/actions';
-import {Address, CloudCustomerPatch} from '@mattermost/types/cloud';
-
 import {getCloudErrors} from 'mattermost-redux/selectors/entities/cloud';
-import {getCloudLimits} from 'actions/cloud';
+import type {DispatchFunc, GetStateFunc, ActionFunc} from 'mattermost-redux/types/actions';
 
 import {bindClientFunc} from './helpers';
 
@@ -79,10 +77,6 @@ export function retryFailedCloudFetches() {
 
         if (errors.invoices) {
             dispatch(getInvoices());
-        }
-
-        if (errors.limits) {
-            getCloudLimits()(dispatch, getState);
         }
 
         return {data: true};

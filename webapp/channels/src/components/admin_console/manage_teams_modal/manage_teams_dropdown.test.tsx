@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import ManageTeamsDropdown from 'components/admin_console/manage_teams_modal/manage_teams_dropdown';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('ManageTeamsDropdown', () => {
     const baseProps = {

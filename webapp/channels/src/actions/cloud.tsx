@@ -3,21 +3,32 @@
 
 import type {Stripe} from '@stripe/stripe-js';
 import {getCode} from 'country-list';
-import {getBlankAddressWithCountry} from 'utils/utils';
 
-import type {Address, CloudCustomerPatch, Feedback, WorkspaceDeletionRequest} from '@mattermost/types/cloud';
+import type {ChannelType} from '@mattermost/types/channels';
+import type {Address, Feedback, WorkspaceDeletionRequest} from '@mattermost/types/cloud';
+import type {ServerError} from '@mattermost/types/errors';
 
 import {CloudTypes} from 'mattermost-redux/action_types';
 import {getCloudCustomer, getCloudProducts, getCloudSubscription, getInvoices} from 'mattermost-redux/actions/cloud';
 import {Client4} from 'mattermost-redux/client';
+import {General} from 'mattermost-redux/constants';
 import {getCloudErrors} from 'mattermost-redux/selectors/entities/cloud';
 import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
+import {isModalOpen} from 'selectors/views/modals';
 
+import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
+import ExternalLimitReachedModal from 'components/limits/external_limit_reached_modal';
 import {getConfirmCardSetup} from 'components/payment_form/stripe';
 
+import {ModalIdentifiers} from 'utils/constants';
+import {isLimitExceeded} from 'utils/limits';
+import {getBlankAddressWithCountry} from 'utils/utils';
+
 import type {StripeSetupIntent, BillingDetails} from 'types/cloud/sku';
+
+import {closeModal, openModal} from './views/modals';
 
 // Returns true for success, and false for any error
 export function completeStripeAddPaymentMethod(
@@ -88,7 +99,6 @@ export function subscribeCloudSubscription(
     shippingAddress: Address = getBlankAddressWithCountry(),
     seats = 0,
     downgradeFeedback?: Feedback,
-    customerPatch?: CloudCustomerPatch,
 ) {
     return async () => {
         try {
@@ -97,7 +107,6 @@ export function subscribeCloudSubscription(
                 shippingAddress,
                 seats,
                 downgradeFeedback,
-                customerPatch,
             );
 
             return {data: subscription};
@@ -105,6 +114,44 @@ export function subscribeCloudSubscription(
             // In the event that the status code returned is 422, this request has been blocked by export compliance
             return {data: false, error: {error: e.message, status: e.status_code}};
         }
+    };
+}
+
+export function getUsage(): ActionFunc {
+    return async (dispatch: DispatchFunc) => {
+        try {
+            const result = await Client4.getUsage();
+            if (result) {
+                dispatch({
+                    type: CloudTypes.RECEIVED_USAGE,
+                    data: result,
+                });
+            }
+        } catch (e) {
+            return e;
+        }
+        return {data: true};
+    };
+}
+
+export function openChannelLimitModalIfNeeded(error: ServerError, type: ChannelType) {
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        if (isLimitExceeded(error)) {
+            if (isModalOpen(getState(), ModalIdentifiers.NEW_CHANNEL_MODAL)) {
+                dispatch(closeModal(ModalIdentifiers.NEW_CHANNEL_MODAL));
+            } else if (isModalOpen(getState(), ModalIdentifiers.UNARCHIVE_CHANNEL)) {
+                dispatch(closeModal(ModalIdentifiers.UNARCHIVE_CHANNEL));
+            }
+            dispatch(openModal({
+                modalId: ModalIdentifiers.CHANNEL_LIMIT_REACHED,
+                dialogType: ChannelLimitReachedModal,
+                dialogProps: {
+                    isPublicLimited: type === General.OPEN_CHANNEL,
+                    isPrivateLimited: type === General.PRIVATE_CHANNEL,
+                },
+            }));
+        }
+        return {data: true};
     };
 }
 
@@ -263,6 +310,21 @@ export function retryFailedCloudFetches() {
             getCloudLimits()(dispatch, getState);
         }
 
+        return {data: true};
+    };
+}
+
+export function openExternalLimitModalIfNeeded(error: ServerError) {
+    return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        if (isLimitExceeded(error)) {
+            if (isModalOpen(getState(), ModalIdentifiers.INVITATION)) {
+                dispatch(closeModal(ModalIdentifiers.INVITATION));
+            }
+            dispatch(openModal({
+                modalId: ModalIdentifiers.EXTERNAL_LIMIT_REACHED,
+                dialogType: ExternalLimitReachedModal,
+            }));
+        }
         return {data: true};
     };
 }

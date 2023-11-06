@@ -3,14 +3,15 @@
 
 import {combineReducers} from 'redux';
 
+import type {Invoice, Product} from '@mattermost/types/cloud';
+import type {TrueUpReviewProfileReducer, TrueUpReviewStatusReducer} from '@mattermost/types/hosted_customer';
+import {SelfHostedSignupProgress} from '@mattermost/types/hosted_customer';
 import type {ValueOf} from '@mattermost/types/utilities';
+
 import {HostedCustomerTypes} from 'mattermost-redux/action_types';
+import type {GenericAction} from 'mattermost-redux/types/actions';
 
-import {GenericAction} from 'mattermost-redux/types/actions';
-import {Invoice, Product} from '@mattermost/types/cloud';
-import {SelfHostedSignupProgress, TrueUpReviewProfileReducer, TrueUpReviewStatusReducer} from '@mattermost/types/hosted_customer';
-
-interface SelfHostedProducts {
+export interface SelfHostedProducts {
     products: Record<string, Product>;
     productsLoaded: boolean;
 }
@@ -19,7 +20,7 @@ const initialProducts = {
     products: {},
     productsLoaded: false,
 };
-interface SelfHostedInvoices {
+export interface SelfHostedInvoices {
     invoices: Record<string, Invoice>;
     invoicesLoaded: boolean;
 }

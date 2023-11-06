@@ -4,6 +4,7 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 import type {ComponentProps} from 'react';
+
 import {TestHelper} from 'utils/test_helper';
 
 import {getThreads} from 'mattermost-redux/actions/threads';
@@ -11,11 +12,11 @@ import {getThreads} from 'mattermost-redux/actions/threads';
 jest.mock('mattermost-redux/actions/threads');
 jest.mock('actions/views/modals');
 
-import {Constants, WindowSizes} from 'utils/constants';
-
 import {openModal} from 'actions/views/modals';
 
 import Header from 'components/widgets/header';
+
+import {Constants, WindowSizes} from 'utils/constants';
 
 import ThreadList, {ThreadFilter} from './thread_list';
 import VirtualizedThreadList from './virtualized_thread_list';

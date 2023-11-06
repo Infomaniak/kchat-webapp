@@ -5,8 +5,8 @@ import bing from 'sounds/bing.mp3';
 import crackle from 'sounds/crackle.mp3';
 import down from 'sounds/down.mp3';
 import hello from 'sounds/hello.mp3';
-import ripple from 'sounds/ripple.mp3';
 import ring from 'sounds/ring.mp3';
+import ripple from 'sounds/ripple.mp3';
 import * as UserAgent from 'utils/user_agent';
 
 export const notificationSounds = new Map([
@@ -37,7 +37,7 @@ export function ringing(name: string) {
         stopRing();
     });
     if (promise !== undefined) {
-        promise.then(() => {}).catch((error) => console.error);
+        promise.then(() => {}).catch(console.error);
     }
 }
 
@@ -87,4 +87,25 @@ export function loopNotificationRing(name: string) {
 
 export function hasSoundOptions() {
     return (!UserAgent.isEdge());
+}
+
+let canDing = true;
+export function ding(name: string) {
+    if (hasSoundOptions() && canDing) {
+        tryNotificationSound(name);
+        canDing = false;
+        setTimeout(() => {
+            canDing = true;
+        }, 3000);
+    }
+}
+
+export function tryNotificationSound(name: string) {
+    if (document.hasFocus()) {
+        const audio = new Audio(notificationSounds.get(name) ?? notificationSounds.get('Bing'));
+        audio.play().catch((error) => {
+            // Handle any errors that may occur during the play attempt
+            console.error('Error playing audio:', error.message);
+        });
+    }
 }

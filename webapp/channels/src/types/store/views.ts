@@ -1,10 +1,12 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {Channel} from '@mattermost/types/channels';
+import type {Channel, ServerChannel} from '@mattermost/types/channels';
 import type {MarketplaceApp, MarketplacePlugin} from '@mattermost/types/marketplace';
+import type {Call} from '@mattermost/types/posts';
 import type {Team} from '@mattermost/types/teams';
 import type {UserThread} from '@mattermost/types/threads';
+import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import type {I18nState} from './i18n';
@@ -60,6 +62,35 @@ export type ViewsState = {
             [channelId: string]: string;
         };
         toastStatus: boolean;
+    };
+
+    calls: {
+        voiceConnectedProfiles: {
+            [channelId: string]: UserProfile[];
+        };
+        voiceUsersStatuses: {
+            // eslint-disable-next-line @typescript-eslint/ban-types
+            [channelId: string]: Object;
+        };
+        callStartAt: {
+            [channelId: string]: number;
+        };
+        expandedView: boolean;
+        switchCallModal: boolean;
+        connectedChannelID: string;
+        connectedCallID: string;
+        connectedCallUrl: string;
+        voiceConnectedChannels: any;
+        callParameters: {users: UserProfile[]; caller: UserProfile; channel: ServerChannel; msg: Call};
+    };
+
+    kmeetCalls: {
+        connectedKmeetUrls: {
+            [channelId: string]: {
+                url: string;
+                id: string;
+            };
+        };
     };
 
     drafts: {
@@ -183,10 +214,6 @@ export type ViewsState = {
     };
 
     addChannelDropdown: {
-        isOpen: boolean;
-    };
-
-    addChannelCtaDropdown: {
         isOpen: boolean;
     };
 

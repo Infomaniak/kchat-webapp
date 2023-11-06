@@ -2,16 +2,16 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import {ActionCreatorsMapObject, bindActionCreators, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
+import {ActionCreatorsMapObject, bindActionCreators} from 'redux';
 
+import {saveTheme, deleteTeamSpecificThemes} from 'mattermost-redux/actions/preferences';
 import {getTheme, makeGetCategory} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getMyTeamsCount} from 'mattermost-redux/selectors/entities/teams';
 
-import {saveTheme, deleteTeamSpecificThemes} from 'mattermost-redux/actions/preferences';
-
 import {Preferences} from 'utils/constants';
 
-import {GlobalState} from 'types/store';
+import type {GlobalState} from 'types/store';
 
 import RhsSettingsTheme from './rhs_settings_theme';
 

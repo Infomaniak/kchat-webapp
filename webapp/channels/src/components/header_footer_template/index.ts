@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 
-import {GlobalState} from 'types/store';
+import type {GlobalState} from 'types/store';
 
 import NotLoggedIn from './header_footer_template';
 

@@ -1,23 +1,25 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
-import {bindActionCreators, Dispatch} from 'redux';
+
 import {connect} from 'react-redux';
+import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
-import {GlobalState} from 'mattermost-redux/types/store';
-import {UserProfile} from 'mattermost-redux/types/users';
+import type {UserProfile} from '@mattermost/types/users';
 
+import {Client4} from 'mattermost-redux/client';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentUserId, getUser} from 'mattermost-redux/selectors/entities/users';
 
-import {Client4} from 'mattermost-redux/client';
-
-import {alphaSortProfiles, stateSortProfiles, isDMChannel, getUserIdFromDM} from '../utils';
 import {hideExpandedView} from 'actions/calls';
-import {expandedView, voiceChannelCallStartAt, connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelScreenSharingID} from '../../selectors';
+import type {UserState} from 'reducers/views/calls';
 
-import {UserState} from 'reducers/views/calls';
+import type {GlobalState} from 'types/store';
 
 import ExpandedView from './component';
+
+import {expandedView, voiceChannelCallStartAt, connectedChannelID, voiceConnectedProfiles, voiceUsersStatuses, voiceChannelScreenSharingID} from '../../selectors';
+import {alphaSortProfiles, stateSortProfiles, isDMChannel, getUserIdFromDM} from '../utils';
 
 const mapStateToProps = (state: GlobalState) => {
     const channel = getChannel(state, connectedChannelID(state));

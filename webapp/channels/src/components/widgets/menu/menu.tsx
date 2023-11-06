@@ -4,6 +4,7 @@
 import classNames from 'classnames';
 import type {CSSProperties} from 'react';
 import React from 'react';
+
 import {isMobile} from 'utils/utils';
 
 import MenuGroup from './menu_group';

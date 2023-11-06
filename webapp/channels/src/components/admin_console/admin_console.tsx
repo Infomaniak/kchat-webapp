@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
-import {applyTheme, resetTheme} from 'utils/utils';
 
 import type {CloudState, Product} from '@mattermost/types/cloud';
 import type {AdminConfig, EnvironmentConfig, ClientLicense} from '@mattermost/types/config';
@@ -20,6 +19,8 @@ import DelinquencyModal from 'components/delinquency_modal';
 import DiscardChangesModal from 'components/discard_changes_modal';
 import ModalController from 'components/modal_controller';
 import SystemNotice from 'components/system_notice';
+
+import {applyTheme, resetTheme} from 'utils/utils';
 
 import {LhsItemType} from 'types/store/lhs';
 

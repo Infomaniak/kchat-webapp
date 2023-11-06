@@ -6,7 +6,6 @@ import React from 'react';
 import type {FormatDateOptions} from 'react-intl';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {LicenseSkus, MattermostFeatures} from 'utils/constants';
 
 import type {GlobalState} from '@mattermost/types/store';
 
@@ -19,6 +18,8 @@ import useGetLimits from 'components/common/hooks/useGetLimits';
 import {NotifyStatus} from 'components/common/hooks/useGetNotifyAdmin';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import {useNotifyAdmin} from 'components/notify_admin_cta/notify_admin_cta';
+
+import {LicenseSkus, MattermostFeatures} from 'utils/constants';
 
 import './index.scss';
 

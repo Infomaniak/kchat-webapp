@@ -3,13 +3,14 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {Constants} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
 
 import type {ChannelType} from '@mattermost/types/channels';
 import type {TeamType} from '@mattermost/types/teams';
 
 import Menu from 'components/widgets/menu/menu';
+
+import {Constants} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
 
 import CloseMessage from './close_message';
 

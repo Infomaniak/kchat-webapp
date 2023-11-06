@@ -2,9 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import {Preferences} from 'mattermost-redux/constants';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
 import Pluggable from './pluggable';
 

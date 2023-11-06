@@ -6,8 +6,6 @@ import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {InsightsScopes} from 'utils/constants';
-import {imageURLForUser} from 'utils/utils';
 
 import type {TimeFrame, TopDM} from '@mattermost/types/insights';
 import type {UserProfile} from '@mattermost/types/users';
@@ -22,6 +20,9 @@ import {trackEvent} from 'actions/telemetry_actions';
 import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
 import DataGrid from 'components/admin_console/data_grid/data_grid';
 import Avatar from 'components/widgets/users/avatar';
+
+import {InsightsScopes} from 'utils/constants';
+import {imageURLForUser} from 'utils/utils';
 
 import './../../../activity_and_insights.scss';
 

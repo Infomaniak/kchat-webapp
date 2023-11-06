@@ -1,16 +1,17 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import brokenImageIcon from 'images/icons/brokenimage.png';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import ExternalImage from 'components/external_image';
 import ExternalLink from 'components/external_link';
 import FilePreviewModal from 'components/file_preview_modal';
 import MarkdownImageExpand from 'components/markdown_image_expand';
 import SizeAwareImage from 'components/size_aware_image';
+
+import brokenImageIcon from 'images/icons/brokenimage.png';
+import Constants, {ModalIdentifiers} from 'utils/constants';
 
 export default class MarkdownImage extends React.PureComponent {
     static defaultProps = {

@@ -4,9 +4,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import Constants, {ItemStatus} from 'utils/constants';
-import {t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import type {CustomGroupPatch, Group} from '@mattermost/types/groups';
 
@@ -17,6 +14,10 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import LocalizedIcon from 'components/localized_icon';
 import SaveButton from 'components/save_button';
 import Input from 'components/widgets/inputs/input/input';
+
+import Constants, {ItemStatus} from 'utils/constants';
+import {t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 

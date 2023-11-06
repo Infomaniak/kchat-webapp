@@ -1,15 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import * as I18n from 'i18n/i18n.jsx';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Overlay} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
-import Constants from 'utils/constants';
-import {rolesFromMapping, mappingValueFromRoles} from 'utils/policy_roles_adapter';
-import * as Utils from 'utils/utils';
 
 import BooleanSetting from 'components/admin_console/boolean_setting';
 import ColorSetting from 'components/admin_console/color_setting';
@@ -32,6 +28,11 @@ import Tooltip from 'components/tooltip';
 import AdminHeader from 'components/widgets/admin_console/admin_header';
 import FormattedAdminHeader from 'components/widgets/admin_console/formatted_admin_header';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
+
+import * as I18n from 'i18n/i18n.jsx';
+import Constants from 'utils/constants';
+import {rolesFromMapping, mappingValueFromRoles} from 'utils/policy_roles_adapter';
+import * as Utils from 'utils/utils';
 
 import Setting from './setting';
 

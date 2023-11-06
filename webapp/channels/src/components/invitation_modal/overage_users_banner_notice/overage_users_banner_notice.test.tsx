@@ -3,10 +3,6 @@
 
 import {fireEvent, screen} from '@testing-library/react';
 import React from 'react';
-import {renderWithIntlAndStore} from 'tests/react_testing_utils';
-import {LicenseLinks, OverActiveUserLimits, Preferences, StatTypes} from 'utils/constants';
-import {TestHelper} from 'utils/test_helper';
-import {generateId} from 'utils/utils';
 
 import type {DeepPartial} from '@mattermost/types/utilities';
 
@@ -14,6 +10,11 @@ import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {General} from 'mattermost-redux/constants';
 
 import {trackEvent} from 'actions/telemetry_actions';
+
+import {renderWithIntlAndStore} from 'tests/react_testing_utils';
+import {LicenseLinks, OverActiveUserLimits, Preferences, StatTypes} from 'utils/constants';
+import {TestHelper} from 'utils/test_helper';
+import {generateId} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

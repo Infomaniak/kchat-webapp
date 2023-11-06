@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import {getUnreadChannels} from 'selectors/views/channel_sidebar';
 
-import {GlobalState} from 'types/store';
+import type {GlobalState} from 'types/store';
 
 import UnreadChannels from './unread_channels';
 

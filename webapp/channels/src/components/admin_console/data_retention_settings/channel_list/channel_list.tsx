@@ -4,8 +4,6 @@
 import {debounce, isEqual} from 'lodash';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {isArchivedChannel} from 'utils/channel_utils';
-import {Constants} from 'utils/constants';
 
 import type {ChannelSearchOpts, ChannelWithTeamData} from '@mattermost/types/channels';
 
@@ -20,6 +18,9 @@ import './channel_list.scss';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import GlobeIcon from 'components/widgets/icons/globe_icon';
 import LockIcon from 'components/widgets/icons/lock_icon';
+
+import {isArchivedChannel} from 'utils/channel_utils';
+import {Constants} from 'utils/constants';
 
 type Props = {
     channels: ChannelWithTeamData[];

@@ -6,7 +6,6 @@ import Flex from '@infomaniak/compass-components/utilities/layout/Flex';
 import React, {useCallback, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-import Constants from 'utils/constants';
 
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
@@ -20,6 +19,8 @@ import Tooltip from 'components/tooltip';
 import {OnboardingTourSteps} from 'components/tours';
 import {useShowOnboardingTutorialStep} from 'components/tours/onboarding_tour';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import Constants from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

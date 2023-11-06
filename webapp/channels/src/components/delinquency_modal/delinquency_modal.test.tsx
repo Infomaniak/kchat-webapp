@@ -5,13 +5,14 @@ import {fireEvent, screen} from '@testing-library/react';
 import type {ComponentProps} from 'react';
 import React from 'react';
 import * as reactRedux from 'react-redux';
-import {renderWithIntl} from 'tests/react_testing_utils';
-import {ModalIdentifiers, Preferences, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 
 import {trackEvent} from 'actions/telemetry_actions';
 import configureStore from 'store';
+
+import {renderWithIntl} from 'tests/react_testing_utils';
+import {ModalIdentifiers, Preferences, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import DeliquencyModal from './delinquency_modal';
 

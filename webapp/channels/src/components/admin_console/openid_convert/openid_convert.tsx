@@ -1,11 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import imagePath from 'images/openid-convert/emoticon-outline.svg';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import {Constants} from 'utils/constants';
 
 import type {AdminConfig} from '@mattermost/types/config';
 
@@ -14,6 +11,10 @@ import type {ActionFunc} from 'mattermost-redux/types/actions';
 import type {BaseProps} from 'components/admin_console/admin_settings';
 import ExternalLink from 'components/external_link';
 import FormError from 'components/form_error';
+
+import imagePath from 'images/openid-convert/emoticon-outline.svg';
+import {getHistory} from 'utils/browser_history';
+import {Constants} from 'utils/constants';
 
 import './openid_convert.scss';
 

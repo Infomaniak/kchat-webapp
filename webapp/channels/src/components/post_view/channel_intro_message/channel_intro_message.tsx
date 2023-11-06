@@ -3,9 +3,6 @@
 
 import React from 'react';
 import {FormattedDate, FormattedMessage} from 'react-intl';
-import {Constants, ModalIdentifiers} from 'utils/constants';
-import {getMonthLong, t} from 'utils/i18n';
-import * as Utils from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile as UserProfileRedux} from '@mattermost/types/users';
@@ -23,6 +20,10 @@ import ProfilePicture from 'components/profile_picture';
 import ToggleModalButton from 'components/toggle_modal_button';
 import UserProfile from 'components/user_profile';
 import EditIcon from 'components/widgets/icons/fa_edit_icon';
+
+import {Constants, ModalIdentifiers} from 'utils/constants';
+import {getMonthLong, t} from 'utils/i18n';
+import * as Utils from 'utils/utils';
 
 import AddMembersButton from './add_members_button';
 import PluggableIntroButtons from './pluggable_intro_buttons';

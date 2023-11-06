@@ -5,11 +5,12 @@ import {mount} from 'enzyme';
 import React from 'react';
 import {IntlProvider} from 'react-intl';
 import {Provider} from 'react-redux';
-import mockStore from 'tests/test_store';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import * as teams from 'mattermost-redux/selectors/entities/teams';
+
+import mockStore from 'tests/test_store';
 
 import AddMembersButton from './add_members_button';
 

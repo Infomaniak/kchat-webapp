@@ -4,8 +4,6 @@
 import React, {useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link, useHistory} from 'react-router-dom';
-import {Constants, ErrorPageTypes} from 'utils/constants';
-import {getSiteURL} from 'utils/url';
 
 import type {Bot} from '@mattermost/types/bots';
 import type {Command, IncomingWebhook, OAuthApp, OutgoingWebhook} from '@mattermost/types/integrations';
@@ -16,6 +14,9 @@ import BackstageHeader from 'components/backstage/components/backstage_header';
 import CopyText from 'components/copy_text';
 import ExternalLink from 'components/external_link';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import {Constants, ErrorPageTypes} from 'utils/constants';
+import {getSiteURL} from 'utils/url';
 
 type Props = {
     team: Team;

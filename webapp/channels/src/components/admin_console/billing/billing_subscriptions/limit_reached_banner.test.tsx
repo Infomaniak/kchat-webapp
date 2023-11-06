@@ -4,9 +4,6 @@
 import {screen, fireEvent} from '@testing-library/react';
 import React from 'react';
 import {Provider} from 'react-redux';
-import {renderWithIntl} from 'tests/react_testing_utils';
-import mockStore from 'tests/test_store';
-import {CloudProducts} from 'utils/constants';
 
 import type {GlobalState} from '@mattermost/types/store';
 import type {UserProfile, UsersState} from '@mattermost/types/users';
@@ -19,6 +16,10 @@ import * as useOpenCloudPurchaseModal from 'components/common/hooks/useOpenCloud
 import * as useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
 import * as useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
 import * as useSaveBool from 'components/common/hooks/useSavePreferences';
+
+import {renderWithIntl} from 'tests/react_testing_utils';
+import mockStore from 'tests/test_store';
+import {CloudProducts} from 'utils/constants';
 
 import LimitReachedBanner from './limit_reached_banner';
 

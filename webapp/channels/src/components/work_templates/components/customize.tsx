@@ -5,8 +5,6 @@ import React, {useEffect} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
-import Constants, {TELEMETRY_CATEGORIES} from 'utils/constants';
-import {isEnterpriseOrE20License} from 'utils/license_utils';
 
 import type {ChannelType} from '@mattermost/types/channels';
 import type {WorkTemplate} from '@mattermost/types/work_templates';
@@ -17,6 +15,9 @@ import {getLicense} from 'mattermost-redux/selectors/entities/general';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';
+
+import Constants, {TELEMETRY_CATEGORIES} from 'utils/constants';
+import {isEnterpriseOrE20License} from 'utils/license_utils';
 export interface CustomizeProps {
     className?: string;
     name: string;

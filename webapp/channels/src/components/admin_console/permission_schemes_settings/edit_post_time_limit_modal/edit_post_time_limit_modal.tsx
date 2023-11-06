@@ -4,15 +4,16 @@
 import React, {useState} from 'react';
 import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import {Constants} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
 
 import type {AdminConfig} from '@mattermost/types/config';
 
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
+
+import {Constants} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
 
 const INT32_MAX = 2147483647;
 

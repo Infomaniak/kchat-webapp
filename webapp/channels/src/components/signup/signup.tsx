@@ -7,8 +7,6 @@ import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 import {useLocation, useHistory} from 'react-router-dom';
-import {Constants, ItemStatus, ValidationErrors} from 'utils/constants';
-import {isValidUsername, isValidPassword, getPasswordConfig, getRoleFromTrackFlow, getMediumFromTrackFlow} from 'utils/utils';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {UserProfile} from '@mattermost/types/users';
@@ -50,6 +48,9 @@ import LoginOpenIDIcon from 'components/widgets/icons/login_openid_icon';
 import type {CustomMessageInputType} from 'components/widgets/inputs/input/input';
 import Input, {SIZE} from 'components/widgets/inputs/input/input';
 import PasswordInput from 'components/widgets/inputs/password_input/password_input';
+
+import {Constants, ItemStatus, ValidationErrors} from 'utils/constants';
+import {isValidUsername, isValidPassword, getPasswordConfig, getRoleFromTrackFlow, getMediumFromTrackFlow} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

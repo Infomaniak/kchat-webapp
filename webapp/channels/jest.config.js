@@ -7,6 +7,9 @@ const config = {
     snapshotSerializers: ['enzyme-to-json/serializer'],
     testPathIgnorePatterns: ['/node_modules/'],
     clearMocks: true,
+    globals: {
+        GIT_RELEASE: '1.0.0',
+    },
     collectCoverageFrom: [
         'actions/src/**/*.{js,jsx,ts,tsx}',
         'client/src/**/*.{js,jsx,ts,tsx}',

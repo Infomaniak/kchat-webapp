@@ -3,7 +3,6 @@
 
 import classNames from 'classnames';
 import React from 'react';
-import {Constants} from 'utils/constants';
 
 import type {MarketplaceLabel} from '@mattermost/types/marketplace';
 
@@ -12,6 +11,8 @@ import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import PluginIcon from 'components/widgets/icons/plugin_icon';
 import Tag from 'components/widgets/tag/tag';
+
+import {Constants} from 'utils/constants';
 
 // Label renders a tag showing a name and a description in a tooltip.
 // If a URL is provided, clicking on the tag will open the URL in a new tab.

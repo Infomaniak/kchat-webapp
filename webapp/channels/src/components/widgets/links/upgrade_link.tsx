@@ -4,7 +4,6 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
@@ -12,6 +11,8 @@ import {trackEvent} from 'actions/telemetry_actions';
 import {openModal} from 'actions/views/modals';
 
 import PurchaseModal from 'components/purchase_modal';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 import './link.scss';
 

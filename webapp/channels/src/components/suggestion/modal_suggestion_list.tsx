@@ -2,9 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {getClosestParent} from 'utils/utils';
 
 import SuggestionList from 'components/suggestion/suggestion_list.jsx';
+
+import {getClosestParent} from 'utils/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface SuggestionItem {}

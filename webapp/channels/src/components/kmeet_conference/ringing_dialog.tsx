@@ -6,19 +6,17 @@ import * as React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
+import type {UserProfile} from '@mattermost/types/users';
+
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {hangUpCall, joinCallInChannel} from 'actions/calls';
 import {callParameters} from 'selectors/calls';
 
-import GenericModal from 'components/generic_modal';
-
-import './ringing_dialog.scss';
-
-import type {UserProfile} from '@mattermost/types/users';
-
 import Avatars from 'components/widgets/users/avatars';
 
+import './ringing_dialog.scss';
 type PropsType={
     toneTimeOut: number;
 }

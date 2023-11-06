@@ -4,8 +4,6 @@
 import {debounce} from 'lodash';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -13,6 +11,9 @@ import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import GenericModal from 'components/generic_modal';
 import type MultiSelect from 'components/multiselect/multiselect';
+
+import {getHistory} from 'utils/browser_history';
+import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import List from './list';
 import {USERS_PER_PAGE} from './list/list';

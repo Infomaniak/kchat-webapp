@@ -2,9 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import {Posts} from 'mattermost-redux/constants';
+
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import LastUsers from './last_users';
 

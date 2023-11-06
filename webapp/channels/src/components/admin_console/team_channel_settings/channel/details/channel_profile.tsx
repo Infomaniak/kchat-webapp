@@ -4,7 +4,6 @@
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {t} from 'utils/i18n';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Team} from '@mattermost/types/teams';
@@ -14,6 +13,8 @@ import SharedChannelIndicator from 'components/shared_channel_indicator';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
 import ArchiveIcon from 'components/widgets/icons/archive_icon';
 import UnarchiveIcon from 'components/widgets/icons/unarchive_icon';
+
+import {t} from 'utils/i18n';
 
 import './channel_profile.scss';
 interface ChannelProfileProps {

@@ -6,13 +6,14 @@ import {Modal} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
-import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import {cancelPendingGuestInvite} from 'mattermost-redux/actions/channels';
 import {makeGetChannelsForIds} from 'mattermost-redux/selectors/entities/channels';
 
 import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
+
+import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

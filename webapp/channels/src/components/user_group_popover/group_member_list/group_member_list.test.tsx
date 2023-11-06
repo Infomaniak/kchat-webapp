@@ -6,12 +6,13 @@ import type {ReactWrapper} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import mockStore from 'tests/test_store';
-import {TestHelper} from 'utils/test_helper';
 
 import {General} from 'mattermost-redux/constants';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import mockStore from 'tests/test_store';
+import {TestHelper} from 'utils/test_helper';
 
 import type {GroupMember} from './group_member_list';
 import GroupMemberList from './group_member_list';

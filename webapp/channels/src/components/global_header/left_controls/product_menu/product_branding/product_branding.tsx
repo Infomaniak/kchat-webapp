@@ -5,6 +5,7 @@ import Heading from '@infomaniak/compass-components/components/heading';
 import Icon from '@infomaniak/compass-components/foundations/icon';
 import React from 'react';
 import styled from 'styled-components';
+
 import {useCurrentProduct} from 'utils/products';
 
 const ProductBrandingContainer = styled.div`

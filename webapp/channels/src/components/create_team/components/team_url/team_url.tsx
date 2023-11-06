@@ -1,12 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import logoImage from 'images/logo.png';
 import React from 'react';
 import {Button} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
-import Constants from 'utils/constants';
-import * as URL from 'utils/url';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {Team} from '@mattermost/types/teams';
@@ -16,6 +13,10 @@ import {trackEvent} from 'actions/telemetry_actions.jsx';
 import ExternalLink from 'components/external_link';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import logoImage from 'images/logo.png';
+import Constants from 'utils/constants';
+import * as URL from 'utils/url';
 
 type State = {
     isLoading: boolean;

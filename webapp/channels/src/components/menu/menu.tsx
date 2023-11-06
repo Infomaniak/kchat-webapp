@@ -14,8 +14,6 @@ import React, {
     useEffect,
 } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import Constants, {A11yClassNames} from 'utils/constants';
-import {isKeyPressed} from 'utils/utils';
 
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
@@ -26,6 +24,9 @@ import CompassDesignProvider from 'components/compass_design_provider';
 import GenericModal from 'components/generic_modal';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
+
+import Constants, {A11yClassNames} from 'utils/constants';
+import {isKeyPressed} from 'utils/utils';
 
 import {MuiMenuStyled} from './menu_styled';
 

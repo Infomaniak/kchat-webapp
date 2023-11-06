@@ -4,6 +4,7 @@
 import classNames from 'classnames';
 import React, {useState, useEffect} from 'react';
 import {useIntl} from 'react-intl';
+
 import {ItemStatus} from 'utils/constants';
 
 import './input.scss';

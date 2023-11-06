@@ -7,8 +7,6 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
-import Constants from 'utils/constants';
-import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
 
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
@@ -25,6 +23,9 @@ import {
     SettingsTour,
     useShowOnboardingTutorialStep,
 } from 'components/tours/onboarding_tour';
+
+import Constants from 'utils/constants';
+import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
 

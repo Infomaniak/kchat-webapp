@@ -3,8 +3,6 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {getHistory} from 'utils/browser_history';
-import * as Utils from 'utils/utils';
 
 import type {Team, TeamMembership} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
@@ -17,6 +15,9 @@ import ConfirmModal from 'components/confirm_modal';
 import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import {getHistory} from 'utils/browser_history';
+import * as Utils from 'utils/utils';
 
 const ROWS_FROM_BOTTOM_TO_OPEN_UP = 3;
 

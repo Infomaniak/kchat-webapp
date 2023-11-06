@@ -2,11 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import Pluggable from 'plugins/pluggable';
 import React from 'react';
-import Constants, {ModalIdentifiers, RHSStates} from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -17,6 +13,11 @@ import InvitationModal from 'components/invitation_modal';
 import MoreChannels from 'components/more_channels';
 import MoreDirectChannels from 'components/more_direct_channels';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
+
+import Pluggable from 'plugins/pluggable';
+import Constants, {ModalIdentifiers, RHSStates} from 'utils/constants';
+import {isDesktopApp} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {ModalData} from 'types/actions';
 import type {RhsState} from 'types/store/rhs';

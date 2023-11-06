@@ -3,7 +3,6 @@
 
 import React, {memo, useEffect, useState, useCallback, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {InsightsScopes} from 'utils/constants';
 
 import {CircleSkeletonLoader, RectangleSkeletonLoader} from '@mattermost/components';
 import type {TopThread} from '@mattermost/types/insights';
@@ -11,6 +10,8 @@ import type {GlobalState} from '@mattermost/types/store';
 
 import {getMyTopThreads, getTopThreadsForTeam} from 'mattermost-redux/actions/insights';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+
+import {InsightsScopes} from 'utils/constants';
 
 import TopThreadsItem from './top_threads_item/top_threads_item';
 

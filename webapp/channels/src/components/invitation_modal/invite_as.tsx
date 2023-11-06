@@ -4,8 +4,6 @@
 import React, {useEffect} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
-import {CloudProducts, LicenseSkus, ModalIdentifiers, MattermostFeatures} from 'utils/constants';
 
 import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {getSubscriptionProduct, checkHadPriorTrial} from 'mattermost-redux/selectors/entities/cloud';
@@ -18,6 +16,9 @@ import {closeModal, openModal} from 'actions/views/modals';
 import RadioGroup from 'components/common/radio_group';
 import InvitationModal from 'components/invitation_modal';
 import RestrictedIndicator from 'components/widgets/menu/menu_items/restricted_indicator';
+
+import {FREEMIUM_TO_ENTERPRISE_TRIAL_LENGTH_DAYS} from 'utils/cloud_utils';
+import {CloudProducts, LicenseSkus, ModalIdentifiers, MattermostFeatures} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 import './invite_as.scss';

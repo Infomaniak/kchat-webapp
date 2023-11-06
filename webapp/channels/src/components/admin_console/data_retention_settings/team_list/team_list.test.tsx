@@ -3,11 +3,12 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import type {Team} from '@mattermost/types/teams';
 
 import TeamList from 'components/admin_console/data_retention_settings/team_list/team_list';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/admin_console/data_retention_settings/team_list', () => {
     const team: Team = Object.assign(TestHelper.getTeamMock({id: 'team-1'}));

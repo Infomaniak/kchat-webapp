@@ -2,15 +2,16 @@
 // See LICENSE.txt for license information.
 
 import type {MessageFormatElement} from '@formatjs/icu-messageformat-parser';
-import * as I18n from 'i18n/i18n';
 import type {ReactNode} from 'react';
 import React from 'react';
 import {IntlProvider as BaseIntlProvider} from 'react-intl';
-import {localizeMessage} from 'utils/utils';
 
 import {Client4} from 'mattermost-redux/client';
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 import {setLocalizeFunction} from 'mattermost-redux/utils/i18n_utils';
+
+import * as I18n from 'i18n/i18n';
+import {localizeMessage} from 'utils/utils';
 
 type Props = {
     children: ReactNode;

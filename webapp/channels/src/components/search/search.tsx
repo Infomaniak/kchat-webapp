@@ -8,10 +8,6 @@ import React, {useEffect, useState, useRef} from 'react';
 import type {ChangeEvent, MouseEvent, FormEvent} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import Constants, {searchHintOptions, RHSStates, searchFilesHintOptions} from 'utils/constants';
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-import {isDesktopApp, getDesktopVersion, isMacApp} from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import {getCurrentChannelNameForSearchShortcut} from 'mattermost-redux/selectors/entities/channels';
 
@@ -28,6 +24,11 @@ import FlagIcon from 'components/widgets/icons/flag_icon';
 import MentionsIcon from 'components/widgets/icons/mentions_icon';
 import SearchIcon from 'components/widgets/icons/search_icon';
 import Popover from 'components/widgets/popover';
+
+import Constants, {searchHintOptions, RHSStates, searchFilesHintOptions} from 'utils/constants';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {isDesktopApp, getDesktopVersion, isMacApp} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {SearchType} from 'types/store/rhs';
 

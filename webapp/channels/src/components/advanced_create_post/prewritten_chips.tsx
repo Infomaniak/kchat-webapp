@@ -4,11 +4,12 @@
 import React, {useMemo, memo} from 'react';
 import {useIntl} from 'react-intl';
 import styled from 'styled-components';
-import {t} from 'utils/i18n';
 
 import type {Channel} from '@mattermost/types/channels';
 
 import {trackEvent} from 'actions/telemetry_actions';
+
+import {t} from 'utils/i18n';
 
 import Chip from '../common/chip/chip';
 

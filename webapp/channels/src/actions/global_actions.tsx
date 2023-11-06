@@ -1,12 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import WebSocketClient from 'client/web_websocket_client';
 import {batchActions} from 'redux-batched-actions';
-import {getHistory} from 'utils/browser_history';
-import {ActionTypes, PostTypes, RHSStates, ModalIdentifiers, PreviousViewedTypes} from 'utils/constants';
-import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
-import * as Utils from 'utils/utils';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
@@ -16,19 +11,19 @@ import type {UserProfile} from '@mattermost/types/users';
 import {ChannelTypes} from 'mattermost-redux/action_types';
 import {fetchAppBindings} from 'mattermost-redux/actions/apps';
 import {
-    fetchChannelsAndMembers,
+    fetchMyChannelsAndMembersREST,
     getChannelByNameAndTeamName,
     getChannelStats,
     selectChannel,
 } from 'mattermost-redux/actions/channels';
-import {logout, loadMe} from 'mattermost-redux/actions/users';
+import {logout, loadMe, loadMeREST} from 'mattermost-redux/actions/users';
 import {Preferences} from 'mattermost-redux/constants';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedirectChannelNameForTeam, getChannelsNameMapInTeam, getAllDirectChannels, getChannelMessageCount} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
-import {getBool, getIsOnboardingFlowEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
-import {getCurrentTeamId, getMyTeams, getTeam, getMyTeamMember, getTeamMemberships, getActiveTeamsList} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUser, getCurrentUserId, isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
+import {getBool, isCollapsedThreadsEnabled, isGraphQLEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getCurrentTeamId, getTeam, getMyTeamMember, getTeamMemberships, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import {calculateUnreadCount} from 'mattermost-redux/utils/channel_utils';
 
@@ -45,7 +40,17 @@ import BrowserStore from 'stores/browser_store';
 import LocalStorageStore from 'stores/local_storage_store';
 import store from 'stores/redux_store';
 
+import {clearLocalStorageToken} from 'components/login/utils';
 import SubMenuModal from 'components/widgets/menu/menu_modals/submenu_modal/submenu_modal';
+
+import WebSocketClient from 'client/web_websocket_client';
+import {getHistory} from 'utils/browser_history';
+import {ActionTypes, PostTypes, RHSStates, ModalIdentifiers, PreviousViewedTypes} from 'utils/constants';
+import {IKConstants} from 'utils/constants-ik';
+import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
+import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
+import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -241,6 +246,7 @@ export function emitLocalUserTypingEvent(channelId: string, parentPostId: string
 
         const t = Date.now();
         const stats = getCurrentChannelStats(state);
+        const userId = getCurrentUserId(state);
         const membersInChannel = stats ? stats.member_count : 0;
 
         const timeBetweenUserTypingUpdatesMilliseconds = Utils.stringToNumber(config.TimeBetweenUserTypingUpdatesMilliseconds);
@@ -248,7 +254,7 @@ export function emitLocalUserTypingEvent(channelId: string, parentPostId: string
 
         if (((t - lastTimeTypingSent) > timeBetweenUserTypingUpdatesMilliseconds) &&
             (membersInChannel < maxNotificationsPerChannel) && (config.EnableUserTypingMessages === 'true')) {
-            WebSocketClient.userTyping(channelId, parentPostId);
+            WebSocketClient.userTyping(channelId, userId, parentPostId);
             lastTimeTypingSent = t;
         }
 
@@ -270,14 +276,46 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             BrowserStore.signalLogout();
         }
 
+        // Waiting for deleteToken login ik
+        if (isDesktopApp() && userAction) {
+            clearLocalStorageToken();
+            (window as any).authManager.logout();
+        }
+
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
 
         clearUserCookie();
 
-        getHistory().push(redirectTo);
+        if (redirectTo && redirectTo !== 'ikLogout') {
+            getHistory().push(redirectTo);
+        } else if (userAction) {
+            // if ikLogout go to external ik logout
+            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
+                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
+                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+
+            // Desktop version 2.0 and up handles logout through authManager
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+                return;
+            }
+
+            window.location.assign(url);
+        }
     }).catch(() => {
-        getHistory().push(redirectTo);
+        if (redirectTo && redirectTo !== 'ikLogout') {
+            getHistory().push(redirectTo);
+        } else if (userAction) {
+            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
+                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
+                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
+
+            // Desktop version 2.0 and up handles logout through authManager
+            if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
+                return;
+            }
+            window.location.assign(url);
+        }
     });
 }
 
@@ -308,7 +346,7 @@ export async function getTeamRedirectChannelIfIsAccesible(user: UserProfile, tea
     let teamChannels = getChannelsNameMapInTeam(state, team.id);
     if (!teamChannels || Object.keys(teamChannels).length === 0) {
         // This should be executed in pretty limited scenarios (empty teams)
-        await dispatch(fetchChannelsAndMembers(team.id)); // eslint-disable-line no-await-in-loop
+        await dispatch(fetchMyChannelsAndMembersREST(team.id)); // eslint-disable-line no-await-in-loop
         state = getState();
         teamChannels = getChannelsNameMapInTeam(state, team.id);
     }
@@ -353,9 +391,13 @@ export async function redirectUserToDefaultTeam() {
     // Assume we need to load the user if they don't have any team memberships loaded or the user loaded
     let user = getCurrentUser(state);
     const shouldLoadUser = Utils.isEmptyObject(getTeamMemberships(state)) || !user;
-    const onboardingFlowEnabled = getIsOnboardingFlowEnabled(state);
+
     if (shouldLoadUser) {
-        await dispatch(loadMe());
+        if (isGraphQLEnabled(state)) {
+            await dispatch(loadMe());
+        } else {
+            await dispatch(loadMeREST());
+        }
         state = getState();
         user = getCurrentUser(state);
     }
@@ -364,21 +406,12 @@ export async function redirectUserToDefaultTeam() {
         return;
     }
 
-    // if the user is the first admin
-    const isUserFirstAdmin = isFirstAdmin(state);
-
     const locale = getCurrentLocale(state);
     const teamId = LocalStorageStore.getPreviousTeamId(user.id);
 
-    let myTeams = getMyTeams(state);
-    const teams = getActiveTeamsList(state);
-    if (teams.length === 0) {
-        if (isUserFirstAdmin && onboardingFlowEnabled) {
-            getHistory().push('/preparing-workspace');
-            return;
-        }
-
-        getHistory().push('/select_team');
+    let myTeams = getMyKSuites(state);
+    if (myTeams.length === 0) {
+        getHistory().push('/error?type=no_ksuite');
         return;
     }
 
@@ -391,7 +424,8 @@ export async function redirectUserToDefaultTeam() {
         const channel = await getTeamRedirectChannelIfIsAccesible(user, team);
         if (channel) {
             dispatch(selectChannel(channel.id));
-            getHistory().push(`/${team.name}/channels/${channel.name}`);
+            const hashParams = window.location.hash ? `/${window.location.hash}` : '';
+            getHistory().push(`/${team.name}/channels/${channel.name}${hashParams}`);
             return;
         }
     }
@@ -408,5 +442,30 @@ export async function redirectUserToDefaultTeam() {
         }
     }
 
-    getHistory().push('/select_team');
+    getHistory().push('/error?type=team_not_found');
 }
+
+export function redirectToManagerDashboard(groupId: number) {
+    window.open(`${IKConstants.MANAGER_URL}v3/${groupId}/ng/kchat`, '_blank');
+}
+
+export function redirectToShop() {
+    window.open('https://www.infomaniak.com/gtl/kchat', '_blank');
+}
+
+export function redirectToKSuite() {
+    window.open('https://www.infomaniak.com/gtl/ksuite', '_blank');
+}
+
+export function redirectToManagerProfile() {
+    window.open(`${IKConstants.MANAGER_URL}v3/ng/profile/user/dashboard`, '_blank');
+}
+
+export function redirectTokSuiteDashboard(accountId?: number) {
+    window.open(`${IKConstants.MANAGER_URL}v3${accountId ? `/${accountId}` : ''}/ng/k-suite/dashboard`, '_blank');
+}
+
+export function redirectToDeveloperDocumentation() {
+    window.open('https://developer.infomaniak.com', '_blank', 'noopener,noreferrer');
+}
+

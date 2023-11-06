@@ -4,11 +4,12 @@
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {JobTypes} from 'utils/constants';
 
 import type {Job, JobType} from '@mattermost/types/jobs';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
+
+import {JobTypes} from 'utils/constants';
 
 import JobCancelButton from './job_cancel_button';
 import JobDownloadLink from './job_download_link';

@@ -5,7 +5,6 @@ import React, {useState} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-import {AboutLinks, LicenseLinks, ModalIdentifiers} from 'utils/constants';
 
 import {getLicenseConfig} from 'mattermost-redux/actions/general';
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
@@ -17,6 +16,8 @@ import {isModalOpen} from 'selectors/views/modals';
 import {makeAsyncComponent} from 'components/async_load';
 import useGetTotalUsersNoBots from 'components/common/hooks/useGetTotalUsersNoBots';
 import ExternalLink from 'components/external_link';
+
+import {AboutLinks, LicenseLinks, ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

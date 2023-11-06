@@ -6,8 +6,6 @@ import moment from 'moment';
 import React, {useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {DocLinks, TELEMETRY_CATEGORIES} from 'utils/constants';
-import {getIsStarterLicense, getIsGovSku} from 'utils/license_utils';
 
 import type {GlobalState} from '@mattermost/types/store';
 
@@ -20,6 +18,7 @@ import {
     getTrueUpReviewProfile as trueUpReviewProfileSelector,
     getTrueUpReviewStatus as trueUpReviewStatusSelector,
 } from 'mattermost-redux/selectors/entities/hosted_customer';
+import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import {submitTrueUpReview, getTrueUpReviewStatus} from 'actions/hosted_customer';
 import {pageVisited} from 'actions/telemetry_actions';
@@ -29,10 +28,10 @@ import CheckMarkSvg from 'components/widgets/icons/check_mark_icon';
 
 import './true_up_review.scss';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
-
-import {isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
-
 import ExternalLink from 'components/external_link';
+
+import {DocLinks, TELEMETRY_CATEGORIES} from 'utils/constants';
+import {getIsStarterLicense, getIsGovSku} from 'utils/license_utils';
 
 const TrueUpReview: React.FC = () => {
     const dispatch = useDispatch();

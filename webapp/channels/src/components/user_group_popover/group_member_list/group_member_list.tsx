@@ -10,7 +10,6 @@ import type {ListChildComponentProps} from 'react-window';
 import {VariableSizeList} from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 import styled, {css} from 'styled-components';
-import * as Utils from 'utils/utils';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {Group} from '@mattermost/types/groups';
@@ -21,6 +20,8 @@ import {NoResultsVariant} from 'components/no_results_indicator/types';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
+
+import * as Utils from 'utils/utils';
 
 import {Load} from '../user_group_popover';
 

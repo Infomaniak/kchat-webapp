@@ -7,10 +7,6 @@ import React from 'react';
 import Scrollbars from 'react-custom-scrollbars';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
-import type {Index} from 'utils/admin_console_index';
-import {generateIndex} from 'utils/admin_console_index';
-import {getHistory} from 'utils/browser_history';
-import {localizeMessage} from 'utils/utils';
 
 import type {PluginRedux} from '@mattermost/types/plugins';
 
@@ -20,6 +16,11 @@ import AdminSidebarHeader from 'components/admin_console/admin_sidebar_header';
 import Highlight from 'components/admin_console/highlight';
 import QuickInput from 'components/quick_input';
 import SearchIcon from 'components/widgets/icons/search_icon';
+
+import {generateIndex} from 'utils/admin_console_index';
+import type {Index} from 'utils/admin_console_index';
+import {getHistory} from 'utils/browser_history';
+import {localizeMessage} from 'utils/utils';
 
 import type AdminDefinition from '../admin_definition';
 

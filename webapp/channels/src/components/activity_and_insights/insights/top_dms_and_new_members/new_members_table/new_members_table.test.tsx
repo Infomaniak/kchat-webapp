@@ -6,10 +6,11 @@ import type {ReactWrapper} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
-import {mountWithIntl} from 'tests/helpers/intl-test-helper';
-import mockStore from 'tests/test_store';
 
 import {TimeFrames} from '@mattermost/types/insights';
+
+import {mountWithIntl} from 'tests/helpers/intl-test-helper';
+import mockStore from 'tests/test_store';
 
 import NewMembersTable from './new_members_table';
 

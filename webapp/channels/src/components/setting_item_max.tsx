@@ -4,10 +4,12 @@
 import type {ReactNode} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+
+import SaveButton from 'components/save_button';
+
 import Constants from 'utils/constants';
 import {a11yFocus, isKeyPressed} from 'utils/utils';
 
-import SaveButton from 'components/save_button';
 type Props = {
 
     // Array of inputs selection

@@ -1,14 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
 import {GiphyFetch} from '@giphy/js-fetch-api';
-import {GlobalState} from '@mattermost/types/store';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 
-import {ClientConfig, FeatureFlags, ClientLicense} from '@mattermost/types/config';
-
-import {createSelector} from 'reselect';
+import type {ClientConfig, FeatureFlags, ClientLicense} from '@mattermost/types/config';
+import type {GlobalState} from '@mattermost/types/store';
 
 import {General} from 'mattermost-redux/constants';
-
 import {isMinimumServerVersion} from 'mattermost-redux/utils/helpers';
 
 export function getConfig(state: GlobalState): Partial<ClientConfig> {

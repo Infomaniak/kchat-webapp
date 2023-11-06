@@ -4,8 +4,6 @@
 import React, {useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
-import {isDesktopApp, isMobile as getIsMobile} from 'utils/user_agent';
 
 import {openModal} from 'actions/views/modals';
 import {getAnnouncementBarCount} from 'selectors/views/announcement_bar';
@@ -16,6 +14,9 @@ import useGetOperatingSystem from 'components/common/hooks/useGetOperatingSystem
 import ExternalLink from 'components/external_link';
 import GetTheAppModal from 'components/get_the_app_modal';
 import GetTheAppIcon from 'components/widgets/icons/get_the_app_icon';
+
+import {AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants';
+import {isDesktopApp, isMobile as getIsMobile} from 'utils/user_agent';
 
 const GET_THE_APP_LAST_SEEN_AT = 'GetTheAppLastSeenAt';
 const DO_NOT_DISTURB = 'DoNotDisturb';

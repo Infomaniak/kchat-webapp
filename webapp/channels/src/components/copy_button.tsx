@@ -5,11 +5,12 @@ import classNames from 'classnames';
 import React, {useState} from 'react';
 import {Tooltip} from 'react-bootstrap';
 import {FormattedMessage} from 'react-intl';
+
+import OverlayTrigger from 'components/overlay_trigger';
+
 import Constants from 'utils/constants';
 import {t} from 'utils/i18n';
 import {copyToClipboard} from 'utils/utils';
-
-import OverlayTrigger from 'components/overlay_trigger';
 
 type Props = {
     content: string;

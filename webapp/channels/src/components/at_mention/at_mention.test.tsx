@@ -4,11 +4,12 @@
 import {shallow} from 'enzyme';
 import type {RefObject} from 'react';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import {General} from 'mattermost-redux/constants';
 
 import AtMention from 'components/at_mention/at_mention';
+
+import {TestHelper} from 'utils/test_helper';
 
 /* eslint-disable global-require */
 

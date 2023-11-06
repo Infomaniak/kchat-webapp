@@ -4,11 +4,12 @@
 import {getName} from 'country-list';
 import React from 'react';
 import {useIntl} from 'react-intl';
-import type {StateCode} from 'utils/states';
-import {US_STATES, CA_PROVINCES} from 'utils/states';
 
 import DropdownInput from 'components/dropdown_input';
 import Input from 'components/widgets/inputs/input/input';
+
+import type {StateCode} from 'utils/states';
+import {US_STATES, CA_PROVINCES} from 'utils/states';
 
 type Props = {
     country: string;

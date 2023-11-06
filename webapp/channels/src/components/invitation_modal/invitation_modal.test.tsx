@@ -4,15 +4,16 @@
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {Provider} from 'react-redux';
-import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';
-import mockStore from 'tests/test_store';
-import {generateId} from 'utils/utils';
 
 import type {Team} from '@mattermost/types/teams';
 
 import deepFreeze from 'mattermost-redux/utils/deep_freeze';
 
-import store from 'stores/redux_store.jsx';
+import store from 'stores/redux_store';
+
+import {mountWithThemedIntl} from 'tests/helpers/themed-intl-test-helper';
+import mockStore from 'tests/test_store';
+import {generateId} from 'utils/utils';
 
 import type {Props} from './invitation_modal';
 import InvitationModal, {View, InvitationModal as BaseInvitationModal} from './invitation_modal';

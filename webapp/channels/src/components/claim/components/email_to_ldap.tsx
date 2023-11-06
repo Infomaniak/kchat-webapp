@@ -4,9 +4,6 @@
 import classNames from 'classnames';
 import React, {useRef} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {ClaimErrors} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {localizeMessage} from 'utils/utils';
 
 import type {AuthChangeResponse} from '@mattermost/types/users';
 
@@ -14,6 +11,10 @@ import {emailToLdap} from 'actions/admin_actions.jsx';
 
 import LocalizedInput from 'components/localized_input/localized_input';
 import LoginMfa from 'components/login/login_mfa';
+
+import {ClaimErrors} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {localizeMessage} from 'utils/utils';
 
 import ErrorLabel from './error_label';
 

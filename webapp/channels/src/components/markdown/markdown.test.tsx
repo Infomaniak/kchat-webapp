@@ -3,12 +3,13 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import EmojiMap from 'utils/emoji_map';
-import {TestHelper} from 'utils/test_helper';
 
 import type {TeamType} from '@mattermost/types/teams';
 
 import Markdown from 'components/markdown/markdown';
+
+import EmojiMap from 'utils/emoji_map';
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/Markdown', () => {
     const baseProps = {

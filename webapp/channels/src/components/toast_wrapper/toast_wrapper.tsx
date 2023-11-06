@@ -5,11 +5,6 @@ import React from 'react';
 import type {IntlShape, WrappedComponentProps} from 'react-intl';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
-import {getHistory} from 'utils/browser_history';
-import Constants from 'utils/constants';
-import {isToday} from 'utils/datetime';
-import {isIdNotPost, getNewMessageIndex} from 'utils/post_utils';
-import {isKeyPressed, localizeMessage} from 'utils/utils';
 
 import {Preferences} from 'mattermost-redux/constants';
 
@@ -17,6 +12,12 @@ import {HintToast} from 'components/hint-toast/hint_toast';
 import {SearchShortcut} from 'components/search_shortcut';
 import Timestamp, {RelativeRanges} from 'components/timestamp';
 import Toast from 'components/toast/toast';
+
+import {getHistory} from 'utils/browser_history';
+import Constants from 'utils/constants';
+import {isToday} from 'utils/datetime';
+import {isIdNotPost, getNewMessageIndex} from 'utils/post_utils';
+import {isKeyPressed, localizeMessage} from 'utils/utils';
 
 const TOAST_TEXT_COLLAPSE_WIDTH = 500;
 

@@ -6,9 +6,6 @@ import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import './delete_workspace_modal.scss';
-import {CloudProducts, ModalIdentifiers, StatTypes} from 'utils/constants';
-import {isCloudLicense} from 'utils/license_utils';
-import {fileSizeToString} from 'utils/utils';
 
 import {GenericModal} from '@mattermost/components';
 import type {Feedback} from '@mattermost/types/cloud';
@@ -30,6 +27,10 @@ import useGetUsage from 'components/common/hooks/useGetUsage';
 import useOpenDowngradeModal from 'components/common/hooks/useOpenDowngradeModal';
 import LaptopAlertSVG from 'components/common/svg_images_components/laptop_alert_svg';
 import DowngradeFeedbackModal from 'components/feedback_modal/downgrade_feedback';
+
+import {CloudProducts, ModalIdentifiers, StatTypes} from 'utils/constants';
+import {isCloudLicense} from 'utils/license_utils';
+import {fileSizeToString} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 

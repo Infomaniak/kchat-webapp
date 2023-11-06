@@ -12,11 +12,12 @@ import {
 import React from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {CloudLinks, ConsolePages, DocLinks, LicenseLinks} from 'utils/constants';
 
 import type {GlobalState} from '@mattermost/types/store';
 
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
+
+import {CloudLinks, ConsolePages, DocLinks, LicenseLinks} from 'utils/constants';
 
 import {daysToLicenseExpire, isEnterpriseOrE20License, getIsStarterLicense} from '../../../utils/license_utils';
 

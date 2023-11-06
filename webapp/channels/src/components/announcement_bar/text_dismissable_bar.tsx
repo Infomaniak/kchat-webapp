@@ -1,12 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import alertIcon from 'images/icons/round-white-info-icon.svg';
 import React from 'react';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import Markdown from 'components/markdown';
+
+import alertIcon from 'images/icons/round-white-info-icon.svg';
 
 import AnnouncementBar from './default_announcement_bar';
 

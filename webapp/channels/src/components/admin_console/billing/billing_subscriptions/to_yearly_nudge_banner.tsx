@@ -4,8 +4,6 @@
 import React from 'react';
 import {useIntl, FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import {AnnouncementBarTypes, CloudBanners, CloudProducts, Preferences, RecurringIntervals} from 'utils/constants';
-import {t} from 'utils/i18n';
 
 import type {GlobalState} from '@mattermost/types/store';
 
@@ -20,6 +18,9 @@ import AlertBanner from 'components/alert_banner';
 import AnnouncementBar from 'components/announcement_bar/default_announcement_bar';
 import useOpenCloudPurchaseModal from 'components/common/hooks/useOpenCloudPurchaseModal';
 import useOpenSalesLink from 'components/common/hooks/useOpenSalesLink';
+
+import {AnnouncementBarTypes, CloudBanners, CloudProducts, Preferences, RecurringIntervals} from 'utils/constants';
+import {t} from 'utils/i18n';
 
 import './to_yearly_nudge_banner.scss';
 

@@ -4,9 +4,10 @@
 import React, {useRef} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
-import {makeCreateAriaLabelForPost} from 'utils/post_utils';
 
 import type {Post} from '@mattermost/types/posts';
+
+import {makeCreateAriaLabelForPost} from 'utils/post_utils';
 
 import type {GlobalState} from 'types/store';
 

@@ -4,7 +4,6 @@
 import React from 'react';
 import type {IntlShape, MessageDescriptor} from 'react-intl';
 import {injectIntl} from 'react-intl';
-import {t} from 'utils/i18n';
 
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -12,6 +11,8 @@ import {Posts} from 'mattermost-redux/constants';
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import Markdown from 'components/markdown';
+
+import {t} from 'utils/i18n';
 
 import LastUsers from './last_users';
 

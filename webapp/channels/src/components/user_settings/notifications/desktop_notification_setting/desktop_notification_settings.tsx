@@ -7,14 +7,15 @@ import {FormattedMessage} from 'react-intl';
 import type {ValueType} from 'react-select';
 import ReactSelect from 'react-select';
 import semver from 'semver';
-import {NotificationLevels} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {isDesktopApp} from 'utils/user_agent';
-import * as Utils from 'utils/utils';
 
 import SettingItemMax from 'components/setting_item_max';
 import SettingItemMin from 'components/setting_item_min';
 import type SettingItemMinComponent from 'components/setting_item_min/setting_item_min';
+
+import {NotificationLevels} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {isDesktopApp} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 type SelectedOption = {
     label: string;

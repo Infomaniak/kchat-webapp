@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {ModalIdentifiers} from 'utils/constants';
 
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
@@ -11,6 +10,8 @@ import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
 import GenericModal from 'components/generic_modal';
+
+import {ModalIdentifiers} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 

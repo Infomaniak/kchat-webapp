@@ -4,7 +4,6 @@
 import ColorContrastChecker from 'color-contrast-checker';
 import ColorHash from 'color-hash';
 import React, {PureComponent} from 'react';
-import {imageURLForUser, isMobile} from 'utils/utils';
 
 import type {UserProfile as UserProfileType} from '@mattermost/types/users';
 
@@ -17,6 +16,8 @@ import ProfilePopover from 'components/profile_popover';
 import SharedUserIndicator from 'components/shared_user_indicator';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
+
+import {imageURLForUser, isMobile} from 'utils/utils';
 
 import {generateColor} from './utils';
 

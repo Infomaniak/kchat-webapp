@@ -3,14 +3,15 @@
 
 import {connect} from 'react-redux';
 
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {makeGetUserTimezone} from 'mattermost-redux/selectors/entities/timezone';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
-import {getCurrentDateForTimezone} from 'utils/timezone';
 import {areTimezonesEnabledAndSupported} from 'selectors/general';
 import {getCurrentLocale} from 'selectors/i18n';
 
-import {GlobalState} from 'types/store';
+import {getCurrentDateForTimezone} from 'utils/timezone';
+
+import type {GlobalState} from 'types/store';
 
 import SearchDateSuggestion from './search_date_suggestion';
 

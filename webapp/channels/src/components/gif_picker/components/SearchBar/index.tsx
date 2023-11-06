@@ -4,7 +4,6 @@
 import type {ChangeEvent, FormEvent, RefObject} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {t} from 'utils/i18n';
 
 import type {GfycatAPITag} from '@mattermost/types/gifs';
 
@@ -16,6 +15,8 @@ import {changeOpacity, makeStyleFromTheme} from 'mattermost-redux/utils/theme_ut
 import LocalizedInput from 'components/localized_input/localized_input';
 import GifSearchClearIcon from 'components/widgets/icons/gif_search_clear_icon';
 import GifSearchIcon from 'components/widgets/icons/gif_search_icon';
+
+import {t} from 'utils/i18n';
 
 import type {GlobalState} from 'types/store';
 

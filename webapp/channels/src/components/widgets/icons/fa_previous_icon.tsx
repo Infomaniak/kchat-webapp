@@ -2,9 +2,10 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {t} from 'utils/i18n';
 
 import LocalizedIcon from 'components/localized_icon';
+
+import {t} from 'utils/i18n';
 
 type Props = {
     additionalClassName: string | null;

@@ -3,9 +3,10 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {TestHelper} from 'utils/test_helper';
 
 import AddOutgoingWebhook from 'components/integrations/add_outgoing_webhook/add_outgoing_webhook';
+
+import {TestHelper} from 'utils/test_helper';
 
 describe('components/integrations/AddOutgoingWebhook', () => {
     test('should match snapshot', () => {

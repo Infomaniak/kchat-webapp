@@ -1,10 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
 import React from 'react';
-import {Constants, ModalIdentifiers} from 'utils/constants';
-import {localizeMessage} from 'utils/utils';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
@@ -26,6 +23,10 @@ import ChannelPermissionGate from 'components/permissions_gates/channel_permissi
 import RenameChannelModal from 'components/rename_channel_modal';
 import UnarchiveChannelModal from 'components/unarchive_channel_modal';
 import Menu from 'components/widgets/menu/menu';
+
+import MobileChannelHeaderPlug from 'plugins/mobile_channel_header_plug';
+import {Constants, ModalIdentifiers} from 'utils/constants';
+import {localizeMessage} from 'utils/utils';
 
 import type {PluginComponent} from 'types/store/plugins';
 

@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {
     getMyGroupMentionKeysForChannel,

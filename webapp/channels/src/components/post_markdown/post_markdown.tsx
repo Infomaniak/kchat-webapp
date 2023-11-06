@@ -3,13 +3,14 @@
 
 import memoize from 'memoize-one';
 import React from 'react';
-import type {MentionKey, TextFormattingOptions} from 'utils/text_formatting';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Post} from '@mattermost/types/posts';
 import type {Team} from '@mattermost/types/teams';
 
 import Markdown from 'components/markdown';
+
+import type {MentionKey, TextFormattingOptions} from 'utils/text_formatting';
 
 import {renderSystemMessage} from './system_message_helpers';
 

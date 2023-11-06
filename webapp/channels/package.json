@@ -3,7 +3,7 @@
   "browser": {
     "./client/web_client.jsx": "./client/browser_web_client.jsx"
   },
-  "version": "9.2.0",
+  "version": "7.9.0",
   "private": true,
   "dependencies": {
     "@floating-ui/react-dom": "1.0.0",
@@ -107,7 +107,7 @@
     "@hot-loader/react-dom": "17.0.2",
     "@mattermost/eslint-plugin": "*",
     "@redux-devtools/extension": "3.2.3",
-    "@sentry/react": "7.47.0",
+"@sentry/react": "7.47.0",
     "@sentry/types": "7.47.0",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.4",
@@ -152,7 +152,6 @@
     "enzyme": "3.11.0",
     "enzyme-adapter-react-17-updated": "1.0.2",
     "enzyme-to-json": "3.6.2",
-    "eslint-import-resolver-webpack": "0.13.2",
     "eslint-plugin-header": "3.1.1",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-no-only-tests": "3.1.0",

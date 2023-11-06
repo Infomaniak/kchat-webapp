@@ -3,6 +3,7 @@
 
 import {fireEvent, screen} from '@testing-library/react';
 import React from 'react';
+
 import {renderWithIntl} from 'tests/react_testing_utils';
 
 import type {GatherIntentModalProps} from './gather_intent_modal';

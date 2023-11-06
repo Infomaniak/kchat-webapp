@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+
 import {NotificationSections} from 'utils/constants';
 
 type Props = {

@@ -4,11 +4,12 @@
 import {mount} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
-import {mockStore} from 'tests/test_store';
 
 import type {Post} from '@mattermost/types/posts';
 
 import WelcomePostRenderer from 'components/welcome_post_renderer';
+
+import {mockStore} from 'tests/test_store';
 
 import type {GlobalState} from 'types/store';
 

@@ -10,10 +10,6 @@ import type {ReactNode} from 'react';
 import React from 'react';
 import type {IntlShape} from 'react-intl';
 import {injectIntl, FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
-import {Constants, ModalIdentifiers, UserStatuses} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {getCurrentDateTimeForTimezone, getCurrentMomentForTimezone} from 'utils/timezone';
-import {localizeMessage} from 'utils/utils';
 
 import {PulsatingDot} from '@mattermost/components';
 import type {PreferenceType} from '@mattermost/types/preferences';
@@ -44,6 +40,11 @@ import type {ModalData} from 'types/actions';
 
 import './status_dropdown.scss';
 import ToggleNextModal from 'components/toggle_next_modal';
+
+import {Constants, ModalIdentifiers, UserStatuses} from 'utils/constants';
+import {t} from 'utils/i18n';
+import {getCurrentDateTimeForTimezone, getCurrentMomentForTimezone} from 'utils/timezone';
+import {localizeMessage} from 'utils/utils';
 
 type Props = {
     intl: IntlShape;

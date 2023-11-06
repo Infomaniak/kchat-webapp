@@ -4,9 +4,6 @@
 import React, {memo, useCallback} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
-import Constants, {ModalIdentifiers} from 'utils/constants';
-import {getSiteURL} from 'utils/url';
-import {copyToClipboard} from 'utils/utils';
 
 import type {LeastActiveChannel} from '@mattermost/types/insights';
 import type {GlobalState} from '@mattermost/types/store';
@@ -22,6 +19,10 @@ import {openModal} from 'actions/views/modals';
 import LeaveChannelModal from 'components/leave_channel_modal';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+
+import Constants, {ModalIdentifiers} from 'utils/constants';
+import {getSiteURL} from 'utils/url';
+import {copyToClipboard} from 'utils/utils';
 
 import './channel_actions_menu.scss';
 

@@ -6,7 +6,6 @@ import type {ReactNode} from 'react';
 import React, {memo, useCallback} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
-import {t} from 'utils/i18n';
 
 import type {UserThread} from '@mattermost/types/threads';
 
@@ -16,6 +15,8 @@ import {getPost, makeGetPostsForThread} from 'mattermost-redux/selectors/entitie
 
 import Header from 'components/widgets/header';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
+
+import {t} from 'utils/i18n';
 
 import type {GlobalState} from 'types/store';
 
