@@ -94,22 +94,24 @@ end
 begin
   merge_requests = get_merge_requests_with_label('guild-review')
 
+  puts "Merge requests to handle:"
+  puts merge_requests
+
   merge_requests.each do |mr|
     context = parse_context(mr['description'])
     staging_url = merge_request_has_label?(mr, 'staging') ? get_staging_url(mr['iid']) : 'none'
 
-    if context && staging_url
-      message = <<-MESSAGE
-Projet impacté : kchat-web
-Contexte : #{context}
+    message = <<-MESSAGE
+Projet impacté : kchat
+Contexte : #{context || 'N/A'}
 Url de test : #{staging_url}
 Priorité : Faible
-      MESSAGE
-      send_to_kchat(message)
+    MESSAGE
 
-      # Log the merge request that was sent for review
-      puts "Notified kChat about Merge Request: !#{mr['iid']} - #{mr['title']}"
-    end
+    send_to_kchat(message)
+
+    # Log the merge request that was sent for review
+    puts "Notified kChat about Merge Request: !#{mr['iid']} - #{mr['title']}"
   end
 rescue => e
   puts "An error occurred: #{e.message}"
