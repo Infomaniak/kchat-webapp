@@ -106,6 +106,9 @@ Url de test : #{staging_url}
 Priorité : Faible
       MESSAGE
       send_to_kchat(message)
+
+      # Log the merge request that was sent for review
+      puts "Notified kChat about Merge Request: !#{mr['iid']} - #{mr['title']}"
     end
   end
 rescue => e
