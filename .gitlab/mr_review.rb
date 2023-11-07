@@ -63,6 +63,24 @@ def merge_request_has_label?(merge_request, label)
   merge_request['labels'].include?(label)
 end
 
+# Function to remove a label from a merge request
+def remove_label_from_merge_request(merge_request_iid, current_labels, label)
+  uri = URI("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{merge_request_iid}")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = (uri.scheme == 'https')
+
+  # Remove the label from the array of existing labels
+  updated_labels = (current_labels - [label]).join(',')
+
+  request = Net::HTTP::Put.new(uri.request_uri, 'Content-Type' => 'application/json', 'PRIVATE-TOKEN' => GITLAB_ACCESS_TOKEN)
+  request.body = { labels: updated_labels }.to_json
+
+  response = http.request(request)
+  unless response.is_a?(Net::HTTPSuccess)
+    raise "Failed to remove label from Merge Request IID #{merge_request_iid}: #{response.body}"
+  end
+end
+
 # Function to parse the staging URL from the comments
 def get_staging_url(merge_request_id)
   page = 1
@@ -82,7 +100,7 @@ def get_staging_url(merge_request_id)
     comments = JSON.parse(res.body)
     break if comments.empty?
 
-    staging_comment = comments.find { |comment| comment['body'] =~ /Staging is now available at/ && comment['author']['username'] == 'dev_bot' }
+    staging_comment = comments.find { |comment| comment['body'] =~ /Staging is now available at/ }
     return staging_comment['body'][/Staging is now available at \{(.+)\}/, 1] if staging_comment
 
     page += 1
@@ -93,9 +111,6 @@ end
 # Main execution flow
 begin
   merge_requests = get_merge_requests_with_label('guild-review')
-
-  puts "Merge requests to handle:"
-  puts merge_requests
 
   merge_requests.each do |mr|
     context = parse_context(mr['description'])
@@ -109,6 +124,7 @@ Priorité : Faible
     MESSAGE
 
     send_to_kchat(message)
+    remove_label_from_merge_request(mr['iid'], mr['labels'], 'guild-review')
 
     # Log the merge request that was sent for review
     puts "Notified kChat about Merge Request: !#{mr['iid']} - #{mr['title']}"
