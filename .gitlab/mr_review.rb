@@ -82,30 +82,33 @@ def remove_label_from_merge_request(merge_request_iid, current_labels, label)
 end
 
 # Function to parse the staging URL from the comments
-def get_staging_url(merge_request_id)
-  page = 1
-  loop do
-    uri = URI("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{merge_request_id}/notes")
-    uri.query = URI.encode_www_form({ per_page: 100, page: page })
+def get_staging_url(merge_request_iid)
+  uri = URI("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{merge_request_iid}/notes")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = (uri.scheme == 'https')
 
-    req = Net::HTTP::Get.new(uri)
-    req['PRIVATE-TOKEN'] = GITLAB_ACCESS_TOKEN
+  request = Net::HTTP::Get.new(uri.request_uri, 'PRIVATE-TOKEN' => GITLAB_ACCESS_TOKEN)
+  response = http.request(request)
 
-    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
-      http.request(req)
-    end
-
-    raise "HTTP Request failed: #{res.body}" unless res.is_a?(Net::HTTPSuccess)
-
-    comments = JSON.parse(res.body)
-    break if comments.empty?
-
-    staging_comment = comments.find { |comment| comment['body'] =~ /Staging is now available at/ }
-    return staging_comment['body'][/Staging is now available at \{(.+)\}/, 1] if staging_comment
-
-    page += 1
+  unless response.is_a?(Net::HTTPSuccess)
+    raise "Failed to get notes from Merge Request IID #{merge_request_iid}: #{response.body}"
   end
-  nil
+
+  # Parse the notes
+  notes = JSON.parse(response.body)
+
+  # Find the note with the staging URL posted by dev_bot
+  staging_note = notes.find do |note|
+    note['author']['username'] == 'dev_bot' && note['body'].include?("Staging is now available at")
+  end
+
+  # Extract the URL if the note is found, or return 'none'
+  if staging_note
+    match = staging_note['body'].match(/Staging is now available at (\S+)/)
+    match[1] if match
+  else
+    'none'
+  end
 end
 
 # Main execution flow
@@ -116,7 +119,9 @@ begin
     context = parse_context(mr['description'])
     staging_url = merge_request_has_label?(mr, 'staging') ? get_staging_url(mr['iid']) : 'none'
 
+    merge_request_url = mr['web_url']
     message = <<-MESSAGE
+Merge Request: #{merge_request_url}
 Projet impacté : kchat
 Contexte : #{context || 'N/A'}
 Url de test : #{staging_url}
