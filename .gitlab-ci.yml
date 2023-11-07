@@ -294,6 +294,15 @@ changelog:
   script:
     - ruby ./.gitlab/release.rb ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${NOTIFY_CHANNEL}
 
+guild_review:
+  image: ruby:latest
+  script:
+    - ruby ./.gitlab/mr_review.rb ${GUILD_NOTIFY_CHANNEL}
+  rules:
+    - if: '$MR_REVIEW_SCHEDULE'
+      when: on_success
+    - when: never
+
 update_labels:
   image: ruby:latest
   script:
