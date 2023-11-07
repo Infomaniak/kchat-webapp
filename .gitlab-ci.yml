@@ -303,24 +303,6 @@ guild_review:
       when: on_success
     - when: never
 
-update_labels:
-  image: ruby:latest
-  script:
-    - ruby ./.gitlab/update_merge_request_labels.rb
-  rules:
-    - if: '$UPDATE_LABELS_SCHEDULE'
-      when: on_success
-    - when: never
-
-weekly_summary:
-  image: ruby:latest
-  script:
-    - ruby ./.gitlab/weekly_stats.rb ${WEEKLY_NOTIFY_CHANNEL}
-  rules:
-    - if: '$WEEKLY_SCHEDULE'
-      when: on_success
-    - when: never
-
 gitlab_triage:
   rules:
     - if: '$GITLAB_TRIAGE'
