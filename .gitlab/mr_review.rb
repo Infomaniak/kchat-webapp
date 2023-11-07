@@ -5,14 +5,13 @@ require 'json'
 GITLAB_API_BASE = ENV['CI_API_V4_URL']
 GITLAB_PROJECT_ID = ENV['CI_PROJECT_ID']
 GITLAB_ACCESS_TOKEN = ENV['GITLAB_API_TOKEN']
-NOTIFY_CHANNEL = ARGV[0]
 GUILD_WEBHOOK_URL = ENV['GUILD_WEBHOOK_URL']
 
 # Function to send a message to kChat
 def send_to_kchat(message)
   uri = URI(GUILD_WEBHOOK_URL)
   req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
-  req.body = { channel: NOTIFY_CHANNEL, text: message }.to_json
+  req.body = { text: message }.to_json
   res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
     http.request(req)
   end

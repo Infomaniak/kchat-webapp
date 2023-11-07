@@ -297,7 +297,7 @@ changelog:
 guild_review:
   image: ruby:latest
   script:
-    - ruby ./.gitlab/mr_review.rb ${GUILD_NOTIFY_CHANNEL}
+    - ruby ./.gitlab/mr_review.rb
   rules:
     - if: '$MR_REVIEW_SCHEDULE'
       when: on_success
