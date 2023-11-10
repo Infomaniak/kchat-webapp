@@ -13,15 +13,15 @@ import {closeModal, openModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
 import PurchaseInProgressModal from 'components/purchase_in_progress_modal';
-import SelfHostedPurchaseModal from 'components/self_hosted_purchase_modal';
-import {STORAGE_KEY_PURCHASE_IN_PROGRESS} from 'components/self_hosted_purchase_modal/constants';
+import {STORAGE_KEY_PURCHASE_IN_PROGRESS} from 'components/self_hosted_purchases/constants';
+import SelfHostedPurchaseModal from 'components/self_hosted_purchases/self_hosted_purchase_modal';
 
 import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
-import type {ControlModal} from './useControlModal';
 import {useControlModal} from './useControlModal';
+import type {ControlModal} from './useControlModal';
 
 interface HookOptions{
     onClick?: () => void;
@@ -67,6 +67,7 @@ export default function useControlSelfHostedPurchaseModal(options: HookOptions):
                         dialogType: PurchaseInProgressModal,
                         dialogProps: {
                             purchaserEmail: currentUser.email,
+                            storageKey: STORAGE_KEY_PURCHASE_IN_PROGRESS,
                         },
                     }));
                     return;
@@ -90,6 +91,7 @@ export default function useControlSelfHostedPurchaseModal(options: HookOptions):
                             dialogType: PurchaseInProgressModal,
                             dialogProps: {
                                 purchaserEmail: result.email,
+                                storageKey: STORAGE_KEY_PURCHASE_IN_PROGRESS,
                             },
                         }));
                         return;

@@ -16,9 +16,14 @@ exports[`components/FileUploadOverlay should match snapshot when file upload is 
         src={null}
       />
       <span>
-        <i
+        <LocalizedIcon
           className="fa fa-upload"
-          title="Upload Icon"
+          title={
+            Object {
+              "defaultMessage": "Upload Icon",
+              "id": "generic_icons.upload",
+            }
+          }
         />
         <MemoizedFormattedMessage
           defaultMessage="Drop a file to upload it."
@@ -51,9 +56,14 @@ exports[`components/FileUploadOverlay should match snapshot when file upload is 
         src={null}
       />
       <span>
-        <i
+        <LocalizedIcon
           className="fa fa-upload"
-          title="Upload Icon"
+          title={
+            Object {
+              "defaultMessage": "Upload Icon",
+              "id": "generic_icons.upload",
+            }
+          }
         />
         <MemoizedFormattedMessage
           defaultMessage="Drop a file to upload it."
@@ -86,9 +96,14 @@ exports[`components/FileUploadOverlay should match snapshot when file upload is 
         src={null}
       />
       <span>
-        <i
+        <LocalizedIcon
           className="fa fa-upload"
-          title="Upload Icon"
+          title={
+            Object {
+              "defaultMessage": "Upload Icon",
+              "id": "generic_icons.upload",
+            }
+          }
         />
         <MemoizedFormattedMessage
           defaultMessage="Drop a file to upload it."

@@ -56,7 +56,7 @@ import {Constants, StoragePrefixes} from 'utils/constants';
 import * as Utils from 'utils/utils';
 
 import Provider from './provider';
-import Suggestion from './suggestion.jsx';
+import Suggestion from './suggestion';
 
 const getState = store.getState;
 const searchProfilesMatchingWithTerm = makeSearchProfilesMatchingWithTerm();

@@ -10,7 +10,7 @@ import type {UserStatus} from '@mattermost/types/users';
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 
 import DateTimeInputContainer, {getRoundedTime} from 'components/custom_status/date_time_input';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 
 import Constants, {UserStatuses} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';

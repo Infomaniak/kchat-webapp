@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import type {IntlShape} from 'react-intl';
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {ClientConfig, ClientLicense} from '@mattermost/types/config';
@@ -14,15 +13,16 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {Client4} from 'mattermost-redux/client';
 import {Permissions, Posts} from 'mattermost-redux/constants';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getAllGroupsForReferenceByName} from 'mattermost-redux/selectors/entities/groups';
 import {makeGetReactionsForPost} from 'mattermost-redux/selectors/entities/posts';
 import {get, getTeammateNameDisplaySetting, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId, getTeam} from 'mattermost-redux/selectors/entities/teams';
-import type { UserMentionKey} from 'mattermost-redux/selectors/entities/users';
+import type {UserMentionKey} from 'mattermost-redux/selectors/entities/users';
 import {makeGetDisplayName, getCurrentUserId, getUser, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
-
 import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 import * as PostListUtils from 'mattermost-redux/utils/post_list';
 import {canEditPost as canEditPostRedux} from 'mattermost-redux/utils/post_utils';
@@ -720,3 +720,69 @@ export function mentionsMinusSpecialMentionsInText(message: string) {
 
     return mentions;
 }
+
+export function makeGetUserOrGroupMentionCountFromMessage(): (state: GlobalState, message: Post['message']) => number {
+    return createSelector(
+        'getUserOrGroupMentionCountFromMessage',
+        (_state: GlobalState, message: Post['message']) => message,
+        getUsersByUsername,
+        getAllGroupsForReferenceByName,
+        (message, users, groups) => {
+            let count = 0;
+            const markdownCleanedText = formatWithRenderer(message, new MentionableRenderer());
+            const mentions = new Set(markdownCleanedText.match(Constants.MENTIONS_REGEX) || []);
+            mentions.forEach((mention) => {
+                const [user, group] = getUserOrGroupFromMentionNameV2(mention.substring(1), users, groups);
+
+                if (user) {
+                    count++;
+                } else if (group) {
+                    count += group.member_count;
+                }
+            });
+            return count;
+        },
+    );
+}
+
+export function getUserOrGroupFromMentionNameV2(
+    mentionName: string,
+    users: Record<string, UserProfile>,
+    groups: Record<string, Group>,
+    groupsDisabled?: boolean,
+    getMention = getMentionDetails,
+): [UserProfile?, Group?] {
+    const user = getMention(users, mentionName) as UserProfile | undefined;
+
+    // prioritizes user if user exists with the same name as a group.
+    if (!user && !groupsDisabled) {
+        const group = getMention(groups, mentionName) as Group | undefined;
+        if (group && !group.allow_reference) {
+            return [undefined, undefined]; // remove group mention if not allowed to reference
+        }
+
+        return [undefined, group];
+    }
+
+    return [user, undefined];
+}
+
+export function getMentionDetails(usersByUsername: Record<string, UserProfile | Group>, mentionName: string): UserProfile | Group | undefined {
+    let mentionNameToLowerCase = mentionName.toLowerCase();
+
+    while (mentionNameToLowerCase.length > 0) {
+        if (usersByUsername.hasOwnProperty(mentionNameToLowerCase)) {
+            return usersByUsername[mentionNameToLowerCase];
+        }
+
+        // Repeatedly trim off trailing punctuation in case this is at the end of a sentence
+        if ((/[._-]$/).test(mentionNameToLowerCase)) {
+            mentionNameToLowerCase = mentionNameToLowerCase.substring(0, mentionNameToLowerCase.length - 1);
+        } else {
+            break;
+        }
+    }
+
+    return undefined;
+}
+

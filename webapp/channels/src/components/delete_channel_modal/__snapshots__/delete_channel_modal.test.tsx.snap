@@ -81,7 +81,7 @@ exports[`components/delete_channel_modal should match snapshot for delete_channe
       className="subtitle"
     >
       <MemoizedFormattedMessage
-        defaultMessage="Souhaitez-vous vraiment archiver le canal <strong>{channel}</strong> ?"
+        defaultMessage="Do you really want to archive the channel <strong>{channel}</strong> ?"
         id="delete_channel.confirm"
         values={
           Object {

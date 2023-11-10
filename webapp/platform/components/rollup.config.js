@@ -13,7 +13,6 @@ const externals = [
     ...Object.keys(packagejson.dependencies || {}),
     ...Object.keys(packagejson.peerDependencies || {}),
     'mattermost-redux',
-    'reselect',
 ];
 
 export default [

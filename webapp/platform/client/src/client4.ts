@@ -4590,6 +4590,19 @@ export default class Client4 {
             {method: 'DELETE', body: JSON.stringify({invitation_key: invitationKey})},
         );
     };
+
+    convertGroupMessageToPrivateChannel = (channelId: string, teamId: string, displayName: string, name: string) => {
+        const body = {
+            channel_id: channelId,
+            team_id: teamId,
+            display_name: displayName,
+            name: name,
+        }
+        return this.doFetchWithResponse<Channel>(
+            `${this.getChannelRoute(channelId)}/convert_to_channel?team_id=${teamId}`,
+            {method: 'post', body: JSON.stringify(body)},
+        )
+    }
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {

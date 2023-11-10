@@ -4,7 +4,7 @@ exports[`ProductNoticesModal Match snapshot for single notice 1`] = `
 <GenericModal
   autoCloseOnCancelButton={false}
   autoCloseOnConfirmButton={true}
-  autoCloseOnEnterKeyDown={true}
+  bodyPadding={true}
   cancelButtonText={null}
   className="productNotices"
   confirmButtonText={
@@ -45,7 +45,7 @@ exports[`ProductNoticesModal Match snapshot for user notice 1`] = `
 <GenericModal
   autoCloseOnCancelButton={false}
   autoCloseOnConfirmButton={true}
-  autoCloseOnEnterKeyDown={true}
+  bodyPadding={true}
   cancelButtonText={
     <React.Fragment>
       <PreviousIcon
@@ -124,7 +124,7 @@ exports[`ProductNoticesModal Should match snapshot for system admin notice 1`] =
 <GenericModal
   autoCloseOnCancelButton={false}
   autoCloseOnConfirmButton={false}
-  autoCloseOnEnterKeyDown={true}
+  bodyPadding={true}
   cancelButtonText={null}
   className="productNotices"
   confirmButtonText={

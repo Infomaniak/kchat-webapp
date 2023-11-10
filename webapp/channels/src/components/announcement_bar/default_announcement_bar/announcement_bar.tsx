@@ -18,6 +18,7 @@ import {Constants, AnnouncementBarTypes, ModalIdentifiers} from 'utils/constants
 import {isStringContainingUrl} from 'utils/url';
 
 type Props = {
+    id?: string;
     showCloseButton: boolean;
     color: string;
     textColor: string;
@@ -176,6 +177,7 @@ export default class AnnouncementBar extends React.PureComponent<Props, State> {
                 style={barStyle}
                 // eslint-disable-next-line react/no-unknown-property
                 css={{gridArea: 'announcement'}}
+                data-testid={this.props.id}
             >
                 <OverlayTrigger
                     delayShow={Constants.OVERLAY_TIME_DELAY}

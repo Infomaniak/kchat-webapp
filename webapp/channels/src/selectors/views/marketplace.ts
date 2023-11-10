@@ -1,10 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
-
 import type {MarketplaceApp, MarketplacePlugin} from '@mattermost/types/marketplace';
 
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {isPlugin} from 'mattermost-redux/utils/marketplace';
 
 import type {GlobalState} from 'types/store';

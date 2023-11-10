@@ -80,7 +80,7 @@ export function loadRolesIfNeeded(roles: Iterable<string>): ActionFunc {
         for (const role of roles) {
             pendingRoles.add(role);
         }
-        if (!state.entities.general.serverVersion) {
+        if (!state.entities?.general?.serverVersion) {
             dispatch(setPendingRoles(Array.from(pendingRoles)));
             setTimeout(() => dispatch(loadRolesIfNeeded([])), 500);
             return {data: []};

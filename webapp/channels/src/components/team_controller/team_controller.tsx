@@ -12,7 +12,6 @@ import type {Team} from '@mattermost/types/teams';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {showSettings} from 'actions/views/rhs';
-import {reconnect} from 'actions/websocket_actions.jsx';
 import LocalStorageStore from 'stores/local_storage_store';
 
 import {makeAsyncComponent} from 'components/async_load';
@@ -21,16 +20,15 @@ import useTelemetryIdentitySync from 'components/common/hooks/useTelemetryIdenti
 
 import {hasNotificationsSettingsPathInUrl} from 'utils/browser_history';
 import Constants from 'utils/constants';
+import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
+import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
 import {isIosSafari} from 'utils/user_agent';
-import {cmdOrCtrlPressed, isKeyPressed} from 'utils/utils';
 
 import type {OwnProps, PropsFromRedux} from './index';
 
 const BackstageController = makeAsyncComponent('BackstageController', lazy(() => import('components/backstage')));
 const Pluggable = makeAsyncComponent('Pluggable', lazy(() => import('plugins/pluggable')));
 
-const WAKEUP_CHECK_INTERVAL = 30000; // 30 seconds
-const WAKEUP_THRESHOLD = 60000; // 60 seconds
 const UNREAD_CHECK_TIME_MILLISECONDS = 120 * 1000;
 
 declare global {
@@ -51,47 +49,32 @@ function TeamController(props: Props) {
     const [team, setTeam] = useState<Team | null>(getTeamFromTeamList(props.teamsList, teamNameParam));
 
     const blurTime = useRef(Date.now());
-    const lastTime = useRef(Date.now());
 
     useTelemetryIdentitySync();
 
     useEffect(() => {
         async function fetchInitialChannels() {
-            if (props.graphQLEnabled) {
-                await props.fetchChannelsAndMembers();
-            } else {
-                await props.fetchAllMyTeamsChannelsAndChannelMembersREST();
-            }
+            await props.fetchAllMyTeamsChannelsAndChannelMembersREST();
 
             setInitialChannelsLoaded(true);
         }
 
         fetchInitialChannels();
-    }, [props.graphQLEnabled]);
+    }, []);
 
     useEffect(() => {
         let notificationsSettingsTimer: NodeJS.Timeout;
 
         // open notifications settings panel if the url contains 'notifications-settings'
-        // eslint-disable-next-line @babel/no-unused-expressions
-        if (hasNotificationsSettingsPathInUrl()) {
+        const test = hasNotificationsSettingsPathInUrl();
+        if (test) {
             notificationsSettingsTimer = setTimeout(() => {
                 dispatch(showSettings('notifications'));
                 history.push(window.location.pathname); //clear the hash params
             });
         }
-        const wakeUpIntervalId = setInterval(() => {
-            const currentTime = Date.now();
-            if ((currentTime - lastTime.current) > WAKEUP_THRESHOLD) {
-                console.log('computer woke up - fetching latest'); //eslint-disable-line no-console
-                reconnect();
-            }
-            lastTime.current = currentTime;
-        }, WAKEUP_CHECK_INTERVAL);
 
         return () => {
-            clearInterval(wakeUpIntervalId);
-            // eslint-disable-next-line @babel/no-unused-expressions
             notificationsSettingsTimer && clearInterval(notificationsSettingsTimer);
         };
     }, []);
@@ -107,12 +90,11 @@ function TeamController(props: Props) {
                 props.markChannelAsReadOnFocus(props.currentChannelId);
             }
 
-            const currentTime = Date.now();
-            if ((currentTime - blurTime.current) > UNREAD_CHECK_TIME_MILLISECONDS && props.currentTeamId) {
-                if (props.graphQLEnabled) {
+            // Temporary flag to disable refetching of channel members on browser focus
+            if (!props.disableRefetchingOnBrowserFocus) {
+                const currentTime = Date.now();
+                if ((currentTime - blurTime.current) > UNREAD_CHECK_TIME_MILLISECONDS && props.currentTeamId) {
                     props.fetchChannelsAndMembers(props.currentTeamId);
-                } else {
-                    props.fetchMyChannelsAndMembersREST(props.currentTeamId);
                 }
             }
         }
@@ -120,10 +102,6 @@ function TeamController(props: Props) {
         function handleBlur() {
             window.isActive = false;
             blurTime.current = Date.now();
-
-            if (props.currentUser) {
-                props.viewChannel('');
-            }
         }
 
         function handleKeydown(event: KeyboardEvent) {
@@ -149,7 +127,7 @@ function TeamController(props: Props) {
             window.removeEventListener('blur', handleBlur);
             window.removeEventListener('keydown', handleKeydown);
         };
-    }, [props.selectedThreadId, props.graphQLEnabled, props.currentChannelId, props.currentTeamId, props.currentUser.id]);
+    }, [props.selectedThreadId, props.currentChannelId, props.currentTeamId]);
 
     // Effect runs on mount, adds active state to window
     useEffect(() => {
@@ -221,6 +199,11 @@ function TeamController(props: Props) {
         }
     }, [teamNameParam, teamsListDependency]);
 
+    if (props.mfaRequired) {
+        history.push('/mfa/setup');
+        return null;
+    }
+
     if (team === null) {
         return null;
     }
@@ -228,17 +211,17 @@ function TeamController(props: Props) {
     return (
         <Switch>
             <Route
-                path={'/:team/integrations'}
+                path={`/:team(${TEAM_NAME_PATH_PATTERN})/integrations`}
                 component={BackstageController}
             />
             <Route
-                path={'/:team/emoji'}
+                path={`/:team(${TEAM_NAME_PATH_PATTERN})/emoji`}
                 component={BackstageController}
             />
             {props.plugins?.map((plugin) => (
                 <Route
                     key={plugin.id}
-                    path={'/:team/' + (plugin as any).route}
+                    path={`/:team(${TEAM_NAME_PATH_PATTERN})/` + (plugin as any).route}
                     render={() => (
                         <Pluggable
                             pluggableName={'NeedsTeamComponent'}

@@ -268,7 +268,7 @@ describe('notification_actions', () => {
 
         test('should notify user when notify props is set to mention and there are mentions', async () => {
             channelSettings.desktop = NotificationLevels.MENTION;
-            msgProps.mentions = JSON.stringify(['current_user_id']);
+            msgProps.mentions = ['current_user_id'];
 
             const store = testConfigureStore(baseState);
 

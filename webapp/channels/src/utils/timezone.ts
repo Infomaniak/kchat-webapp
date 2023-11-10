@@ -25,6 +25,6 @@ export function getCurrentDateTimeForTimezone(timezone: string) {
     return new Date(tztime.year(), tztime.month(), tztime.date(), tztime.hour(), tztime.minute(), tztime.second());
 }
 
-export function getCurrentMomentForTimezone(timezone?: string) {
+export function getCurrentMomentForTimezone(timezone: string | null | undefined) {
     return timezone ? moment.tz(timezone) : moment();
 }

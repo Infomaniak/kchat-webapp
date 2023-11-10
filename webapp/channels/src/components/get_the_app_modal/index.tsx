@@ -10,7 +10,7 @@ import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
 import useGetOperatingSystem from 'components/common/hooks/useGetOperatingSystem';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 import Header from 'components/widgets/header';
 import GetTheAppModalIcon from 'components/widgets/icons/get_the_app_modal_icon';
 

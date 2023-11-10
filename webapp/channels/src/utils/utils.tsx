@@ -91,6 +91,24 @@ const CLICKABLE_ELEMENTS = [
     'video',
 ];
 
+const MS_PER_SECOND = 1000;
+const MS_PER_MINUTE = 60 * MS_PER_SECOND;
+const MS_PER_HOUR = 60 * MS_PER_MINUTE;
+const MS_PER_DAY = 24 * MS_PER_HOUR;
+
+export enum TimeInformation {
+    MILLISECONDS = 'm',
+    SECONDS = 's',
+    MINUTES = 'x',
+    HOURS = 'h',
+    DAYS = 'd',
+    FUTURE = 'f',
+    PAST = 'p'
+}
+
+export type TimeUnit = Exclude<TimeInformation, TimeInformation.FUTURE | TimeInformation.PAST>;
+export type TimeDirection = TimeInformation.FUTURE | TimeInformation.PAST;
+
 export function isMac() {
     return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 }
@@ -143,6 +161,32 @@ export function isKeyPressed(event: React.KeyboardEvent | KeyboardEvent, key: [s
     return event.keyCode === key[1];
 }
 
+export function addTimeToTimestamp(timestamp: number, type: TimeUnit, diff: number, timeline: TimeDirection) {
+    let modifier = 1;
+    switch (type) {
+    case TimeInformation.SECONDS:
+        modifier = MS_PER_SECOND;
+        break;
+    case TimeInformation.MINUTES:
+        modifier = MS_PER_MINUTE;
+        break;
+    case TimeInformation.HOURS:
+        modifier = MS_PER_HOUR;
+        break;
+    case TimeInformation.DAYS:
+        modifier = MS_PER_DAY;
+        break;
+    }
+
+    return timeline === TimeInformation.FUTURE ? timestamp + (diff * modifier) : timestamp - (diff * modifier);
+}
+
+export function isDateWithinDaysRange(timestamp: number, days: number, timeline: TimeDirection): boolean {
+    const today = new Date().getTime();
+    const daysSince = Math.round((today - timestamp) / MS_PER_DAY);
+    return timeline === TimeInformation.PAST ? daysSince <= days : daysSince >= days;
+}
+
 /**
  * check keydown event for line break combo. Should catch alt/option + enter not all browsers except Safari
  */
@@ -158,7 +202,7 @@ export function isUnhandledLineBreakKeyCombo(e: React.KeyboardEvent | KeyboardEv
  * insert a new line character at keyboard cursor (or overwrites selection)
  * WARNING: HAS DOM SIDE EFFECTS
  */
-export function insertLineBreakFromKeyEvent(e: React.KeyboardEvent<TextboxElement>): string {
+export function insertLineBreakFromKeyEvent(e: KeyboardEvent): string {
     const el = e.target as TextboxElement;
     const {selectionEnd, selectionStart, value} = el;
 

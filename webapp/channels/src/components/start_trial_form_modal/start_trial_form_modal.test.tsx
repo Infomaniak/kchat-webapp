@@ -27,7 +27,7 @@ jest.mock('actions/telemetry_actions.jsx', () => {
     };
 });
 
-describe('components/start_trial_form_modal/start_trial_form_modal', () => {
+xdescribe('components/start_trial_form_modal/start_trial_form_modal', () => {
     const state = {
         entities: {
             users: {

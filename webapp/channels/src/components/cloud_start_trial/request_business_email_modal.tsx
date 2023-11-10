@@ -14,7 +14,7 @@ import {trackEvent} from 'actions/telemetry_actions';
 import {closeModal} from 'actions/views/modals';
 
 import ExternalLink from 'components/external_link';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 import type {CustomMessageInputType} from 'components/widgets/inputs/input/input';
 
 import {ItemStatus, TELEMETRY_CATEGORIES, ModalIdentifiers, LicenseLinks, AboutLinks} from 'utils/constants';

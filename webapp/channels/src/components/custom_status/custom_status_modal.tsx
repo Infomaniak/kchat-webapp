@@ -9,6 +9,7 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 import {useRouteMatch} from 'react-router-dom';
 
+import {GenericModal} from '@mattermost/components';
 import type {Emoji} from '@mattermost/types/emojis';
 import type {UserCustomStatus} from '@mattermost/types/users';
 import {CustomStatusDuration} from '@mattermost/types/users';
@@ -16,10 +17,10 @@ import {CustomStatusDuration} from '@mattermost/types/users';
 import {setCustomStatusInitialisationState} from 'mattermost-redux/actions/preferences';
 import {setCustomStatus, unsetCustomStatus, removeRecentCustomStatus} from 'mattermost-redux/actions/users';
 import {Preferences} from 'mattermost-redux/constants';
+import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {closeModal} from 'actions/views/modals';
-import {getCurrentUserTimezone} from 'selectors/general';
 import {makeGetCustomStatus, getRecentCustomStatuses, showStatusDropdownPulsatingDot, isCustomStatusExpired} from 'selectors/views/custom_status';
 
 import CustomStatusSuggestion from 'components/custom_status/custom_status_suggestion';
@@ -27,15 +28,15 @@ import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_
 import ExpiryMenu from 'components/custom_status/expiry_menu';
 import RenderEmoji from 'components/emoji/render_emoji';
 import EmojiPickerOverlay from 'components/emoji_picker/emoji_picker_overlay';
-import GenericModal from 'components/generic_modal';
 import QuickInput, {MaxLengthInput} from 'components/quick_input';
 import EmojiIcon from 'components/widgets/icons/emoji_icon';
 
 import {A11yCustomEventTypes, Constants, ModalIdentifiers} from 'utils/constants';
 import type {A11yFocusEventDetail} from 'utils/constants';
 import {t} from 'utils/i18n';
+import {isKeyPressed} from 'utils/keyboard';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
-import {isKeyPressed, localizeMessage} from 'utils/utils';
+import {localizeMessage} from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -118,10 +119,9 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
     const [emoji, setEmoji] = useState<string>(isCurrentCustomStatusSet ? currentCustomStatus?.emoji : '');
     const initialDuration = isCurrentCustomStatusSet ? currentCustomStatus?.duration : defaultDuration;
     const [duration, setDuration] = useState<CustomStatusDuration>(initialDuration === undefined ? defaultDuration : initialDuration);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const isStatusSet = Boolean(emoji || text);
     const firstTimeModalOpened = useSelector(showStatusDropdownPulsatingDot);
-    const timezone = useSelector(getCurrentUserTimezone);
+    const timezone = useSelector(getCurrentTimezone);
     const inCustomEmojiPath = useRouteMatch('/:team/emoji');
 
     const currentTime = getCurrentMomentForTimezone(timezone);
@@ -133,7 +133,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
     const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
 
     const handleKeyDown = useCallback((event: KeyboardEvent) => {
-        if (isKeyPressed(event, Constants.KeyCodes.ESCAPE) && !isDatePickerOpen && !isMenuOpen) {
+        if (isKeyPressed(event, Constants.KeyCodes.ESCAPE) && !isDatePickerOpen) {
             props.onExited();
         }
     }, [isDatePickerOpen, props.onExited]);
@@ -202,7 +202,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
         case TODAY:
             return moment().endOf('day').toISOString();
         case THIS_WEEK:
-            return moment().endOf('isoWeek').toISOString();
+            return moment().endOf('week').toISOString();
         case DATE_AND_TIME:
         case CUSTOM_DATE_TIME:
             return customExpiryTime.toISOString();
@@ -353,12 +353,15 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
 
     const showSuggestions = !isStatusSet || areSelectedAndSetStatusSame;
 
-    const disableSetStatus = !isStatusSet || text.length > CUSTOM_STATUS_TEXT_CHARACTER_LIMIT || isMenuOpen || isDatePickerOpen;
+    const disableSetStatus = !isStatusSet || text.length > CUSTOM_STATUS_TEXT_CHARACTER_LIMIT;
 
     const showDateAndTimeField = !showSuggestions && (duration === CUSTOM_DATE_TIME || duration === DATE_AND_TIME);
 
     const suggestion = (
-        <div className='statusSuggestion'>
+        <div
+            className='statusSuggestion'
+            style={{marginTop: isStatusSet ? 44 : 8}}
+        >
             <div className='statusSuggestion__content'>
                 {recentCustomStatuses.length > 0 && recentStatuses}
                 <div id='statusSuggestion__suggestions'>
@@ -391,10 +394,10 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                 />
             }
             isConfirmDisabled={disableSetStatus}
-            autoCloseOnEnterKeyDown={false}
             id='custom_status_modal'
             className={'StatusModal'}
             handleConfirm={handleSetStatus}
+            handleEnterKeyPress={handleSetStatus}
             handleCancel={handleClearStatus}
             confirmButtonClassName='btn btn-primary'
             ariaLabel={localizeMessage('custom_status.set_status', 'Set a status')}
@@ -432,7 +435,6 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                         </button>
                     </div>
                     <QuickInput
-                        autoFocus={true}
                         inputComponent={MaxLengthInput}
                         value={text}
                         maxLength={CUSTOM_STATUS_TEXT_CHARACTER_LIMIT}
@@ -443,6 +445,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                         tooltipPosition='top'
                         onChange={handleTextChange}
                         placeholder={formatMessage({id: 'custom_status.set_status', defaultMessage: 'Set a status'})}
+                        autoFocus={true}
                     />
                 </div>
                 {isStatusSet && (
@@ -459,7 +462,6 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
                         handleChange={setCustomExpiryTime}
                         timezone={timezone}
                         setIsDatePickerOpen={setIsDatePickerOpen}
-                        onMenuChange={setIsMenuOpen}
                     />
                 )}
             </div>

@@ -6,6 +6,7 @@ import React, {useRef} from 'react';
 import {FormattedDate, FormattedMessage} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
 import type {ClientLicense} from '@mattermost/types/config';
 
 import {uploadLicense} from 'mattermost-redux/actions/admin';
@@ -20,7 +21,6 @@ import {isModalOpen} from 'selectors/views/modals';
 import FileSvg from 'components/common/svg_images_components/file_svg';
 import HandsSvg from 'components/common/svg_images_components/hands_svg';
 import WomanArmOnTable from 'components/common/svg_images_components/woman_arm_on_table_svg';
-import GenericModal from 'components/generic_modal';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
 
 import {FileTypes, ModalIdentifiers} from 'utils/constants';

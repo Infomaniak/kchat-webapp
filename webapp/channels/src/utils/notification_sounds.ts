@@ -103,9 +103,11 @@ export function ding(name: string) {
 export function tryNotificationSound(name: string) {
     if (document.hasFocus()) {
         const audio = new Audio(notificationSounds.get(name) ?? notificationSounds.get('Bing'));
-        audio.play().catch((error) => {
-            // Handle any errors that may occur during the play attempt
-            console.error('Error playing audio:', error.message);
-        });
+        try {
+            audio.play();
+        } catch {
+        // Prevent the issue "DOMException: play() failed because the user didn't interact with the document first."
+        // Due to user gesture permissions: https://developer.chrome.com/blog/autoplay/
+        }
     }
 }

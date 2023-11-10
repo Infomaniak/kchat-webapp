@@ -10,7 +10,7 @@ import {useDispatch} from 'react-redux';
 import {closeModal} from 'actions/views/modals';
 
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 
 import {ModalIdentifiers} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';

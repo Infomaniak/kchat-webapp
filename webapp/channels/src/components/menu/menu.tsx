@@ -21,7 +21,7 @@ import {openModal, closeModal} from 'actions/views/modals';
 import {getIsMobileView} from 'selectors/views/browser';
 
 import CompassDesignProvider from 'components/compass_design_provider';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 

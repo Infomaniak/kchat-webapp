@@ -142,7 +142,7 @@ function isJoinLeavePostForUsername(post: Post, currentUsername: string): boolea
 }
 
 export function isPostPendingOrFailed(post: Post): boolean {
-    return post.failed || post.id === post.pending_post_id;
+    return !post || post.failed || post.id === post.pending_post_id;
 }
 
 export function comparePosts(a: Post, b: Post): number {

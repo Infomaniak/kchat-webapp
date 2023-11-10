@@ -6,7 +6,7 @@ import React from 'react';
 import {Provider} from 'react-redux';
 
 import Carousel from 'components/common/carousel/carousel';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 import LearnMoreTrialModal from 'components/learn_more_trial_modal/learn_more_trial_modal';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';

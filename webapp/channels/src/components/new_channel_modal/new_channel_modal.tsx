@@ -25,7 +25,7 @@ import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 import {switchToChannel} from 'actions/views/channel';
 import {closeModal, openModal} from 'actions/views/modals';
 
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 import ChannelLimitIndicator from 'components/limits/channel_limit_indicator';
 import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
 import OverlayTrigger from 'components/overlay_trigger';

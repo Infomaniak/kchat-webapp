@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 
+import {GenericModal} from '@mattermost/components';
 import type {ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
@@ -22,7 +23,6 @@ import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
 import {ListItemType} from 'components/channel_members_rhs/channel_members_rhs';
-import GenericModal from 'components/generic_modal';
 
 import {ModalIdentifiers} from 'utils/constants';
 import {mapFeatureIdToTranslation} from 'utils/notify_admin_utils';

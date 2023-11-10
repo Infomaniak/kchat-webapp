@@ -1,12 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import loaderkChat from 'images/logo_compact.png';
 import type {ReactNode, CSSProperties} from 'react';
 import React from 'react';
 
-import './app_name_display.scss';
+import loaderkChat from 'images/logo_compact.png';
 import {isDesktopApp} from 'utils/user_agent';
+import './app_name_display.scss';
+
 type Props = {
     position?: 'absolute' | 'fixed' | 'relative' | 'static' | 'inherit';
     style?: CSSProperties;

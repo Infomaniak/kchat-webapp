@@ -74,9 +74,11 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   hide={[Function]}
                   intl={
                     Object {
+                      "$t": [Function],
                       "defaultFormats": Object {},
                       "defaultLocale": "en",
                       "defaultRichTextElements": undefined,
+                      "fallbackOnEmptyString": true,
                       "formatDate": [Function],
                       "formatDateTimeRange": [Function],
                       "formatDateToParts": [Function],
@@ -103,6 +105,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       "locale": "en",
                       "messages": Object {},
                       "onError": [Function],
+                      "onWarn": [Function],
                       "textComponent": "span",
                       "timeZone": "Etc/UTC",
                       "wrapRichTextChunksInFragment": undefined,
@@ -158,9 +161,11 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                         id="name-5"
                         intl={
                           Object {
+                            "$t": [Function],
                             "defaultFormats": Object {},
                             "defaultLocale": "en",
                             "defaultRichTextElements": undefined,
+                            "fallbackOnEmptyString": true,
                             "formatDate": [Function],
                             "formatDateTimeRange": [Function],
                             "formatDateToParts": [Function],
@@ -187,6 +192,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                             "locale": "en",
                             "messages": Object {},
                             "onError": [Function],
+                            "onWarn": [Function],
                             "textComponent": "span",
                             "timeZone": "Etc/UTC",
                             "wrapRichTextChunksInFragment": undefined,
@@ -295,9 +301,11 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   hide={[Function]}
                   intl={
                     Object {
+                      "$t": [Function],
                       "defaultFormats": Object {},
                       "defaultLocale": "en",
                       "defaultRichTextElements": undefined,
+                      "fallbackOnEmptyString": true,
                       "formatDate": [Function],
                       "formatDateTimeRange": [Function],
                       "formatDateToParts": [Function],
@@ -324,6 +332,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       "locale": "en",
                       "messages": Object {},
                       "onError": [Function],
+                      "onWarn": [Function],
                       "textComponent": "span",
                       "timeZone": "Etc/UTC",
                       "wrapRichTextChunksInFragment": undefined,
@@ -379,9 +388,11 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                         id="name-4"
                         intl={
                           Object {
+                            "$t": [Function],
                             "defaultFormats": Object {},
                             "defaultLocale": "en",
                             "defaultRichTextElements": undefined,
+                            "fallbackOnEmptyString": true,
                             "formatDate": [Function],
                             "formatDateTimeRange": [Function],
                             "formatDateToParts": [Function],
@@ -408,6 +419,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                             "locale": "en",
                             "messages": Object {},
                             "onError": [Function],
+                            "onWarn": [Function],
                             "textComponent": "span",
                             "timeZone": "Etc/UTC",
                             "wrapRichTextChunksInFragment": undefined,
@@ -516,9 +528,11 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   hide={[Function]}
                   intl={
                     Object {
+                      "$t": [Function],
                       "defaultFormats": Object {},
                       "defaultLocale": "en",
                       "defaultRichTextElements": undefined,
+                      "fallbackOnEmptyString": true,
                       "formatDate": [Function],
                       "formatDateTimeRange": [Function],
                       "formatDateToParts": [Function],
@@ -545,6 +559,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       "locale": "en",
                       "messages": Object {},
                       "onError": [Function],
+                      "onWarn": [Function],
                       "textComponent": "span",
                       "timeZone": "Etc/UTC",
                       "wrapRichTextChunksInFragment": undefined,
@@ -600,9 +615,11 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                         id="name-3"
                         intl={
                           Object {
+                            "$t": [Function],
                             "defaultFormats": Object {},
                             "defaultLocale": "en",
                             "defaultRichTextElements": undefined,
+                            "fallbackOnEmptyString": true,
                             "formatDate": [Function],
                             "formatDateTimeRange": [Function],
                             "formatDateToParts": [Function],
@@ -629,6 +646,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                             "locale": "en",
                             "messages": Object {},
                             "onError": [Function],
+                            "onWarn": [Function],
                             "textComponent": "span",
                             "timeZone": "Etc/UTC",
                             "wrapRichTextChunksInFragment": undefined,
@@ -734,9 +752,11 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   id="names-overflow"
                   intl={
                     Object {
+                      "$t": [Function],
                       "defaultFormats": Object {},
                       "defaultLocale": "en",
                       "defaultRichTextElements": undefined,
+                      "fallbackOnEmptyString": true,
                       "formatDate": [Function],
                       "formatDateTimeRange": [Function],
                       "formatDateToParts": [Function],
@@ -763,6 +783,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       "locale": "en",
                       "messages": Object {},
                       "onError": [Function],
+                      "onWarn": [Function],
                       "textComponent": "span",
                       "timeZone": "Etc/UTC",
                       "wrapRichTextChunksInFragment": undefined,
@@ -925,9 +946,11 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           hourCycle="h12"
           intl={
             Object {
+              "$t": [Function],
               "defaultFormats": Object {},
               "defaultLocale": "en",
               "defaultRichTextElements": undefined,
+              "fallbackOnEmptyString": true,
               "formatDate": [Function],
               "formatDateTimeRange": [Function],
               "formatDateToParts": [Function],
@@ -954,6 +977,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
               "locale": "en",
               "messages": Object {},
               "onError": [Function],
+              "onWarn": [Function],
               "textComponent": "span",
               "timeZone": "Etc/UTC",
               "wrapRichTextChunksInFragment": undefined,
@@ -1076,9 +1100,11 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
               id="threadFooterIndicator"
               intl={
                 Object {
+                  "$t": [Function],
                   "defaultFormats": Object {},
                   "defaultLocale": "en",
                   "defaultRichTextElements": undefined,
+                  "fallbackOnEmptyString": true,
                   "formatDate": [Function],
                   "formatDateTimeRange": [Function],
                   "formatDateToParts": [Function],
@@ -1105,6 +1131,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   "locale": "en",
                   "messages": Object {},
                   "onError": [Function],
+                  "onWarn": [Function],
                   "textComponent": "span",
                   "timeZone": "Etc/UTC",
                   "wrapRichTextChunksInFragment": undefined,
@@ -1205,9 +1232,11 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   hide={[Function]}
                   intl={
                     Object {
+                      "$t": [Function],
                       "defaultFormats": Object {},
                       "defaultLocale": "en",
                       "defaultRichTextElements": undefined,
+                      "fallbackOnEmptyString": true,
                       "formatDate": [Function],
                       "formatDateTimeRange": [Function],
                       "formatDateToParts": [Function],
@@ -1234,6 +1263,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       "locale": "en",
                       "messages": Object {},
                       "onError": [Function],
+                      "onWarn": [Function],
                       "textComponent": "span",
                       "timeZone": "Etc/UTC",
                       "wrapRichTextChunksInFragment": undefined,
@@ -1289,9 +1319,11 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                         id="name-5"
                         intl={
                           Object {
+                            "$t": [Function],
                             "defaultFormats": Object {},
                             "defaultLocale": "en",
                             "defaultRichTextElements": undefined,
+                            "fallbackOnEmptyString": true,
                             "formatDate": [Function],
                             "formatDateTimeRange": [Function],
                             "formatDateToParts": [Function],
@@ -1318,6 +1350,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                             "locale": "en",
                             "messages": Object {},
                             "onError": [Function],
+                            "onWarn": [Function],
                             "textComponent": "span",
                             "timeZone": "Etc/UTC",
                             "wrapRichTextChunksInFragment": undefined,
@@ -1426,9 +1459,11 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   hide={[Function]}
                   intl={
                     Object {
+                      "$t": [Function],
                       "defaultFormats": Object {},
                       "defaultLocale": "en",
                       "defaultRichTextElements": undefined,
+                      "fallbackOnEmptyString": true,
                       "formatDate": [Function],
                       "formatDateTimeRange": [Function],
                       "formatDateToParts": [Function],
@@ -1455,6 +1490,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       "locale": "en",
                       "messages": Object {},
                       "onError": [Function],
+                      "onWarn": [Function],
                       "textComponent": "span",
                       "timeZone": "Etc/UTC",
                       "wrapRichTextChunksInFragment": undefined,
@@ -1510,9 +1546,11 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                         id="name-4"
                         intl={
                           Object {
+                            "$t": [Function],
                             "defaultFormats": Object {},
                             "defaultLocale": "en",
                             "defaultRichTextElements": undefined,
+                            "fallbackOnEmptyString": true,
                             "formatDate": [Function],
                             "formatDateTimeRange": [Function],
                             "formatDateToParts": [Function],
@@ -1539,6 +1577,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                             "locale": "en",
                             "messages": Object {},
                             "onError": [Function],
+                            "onWarn": [Function],
                             "textComponent": "span",
                             "timeZone": "Etc/UTC",
                             "wrapRichTextChunksInFragment": undefined,
@@ -1647,9 +1686,11 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   hide={[Function]}
                   intl={
                     Object {
+                      "$t": [Function],
                       "defaultFormats": Object {},
                       "defaultLocale": "en",
                       "defaultRichTextElements": undefined,
+                      "fallbackOnEmptyString": true,
                       "formatDate": [Function],
                       "formatDateTimeRange": [Function],
                       "formatDateToParts": [Function],
@@ -1676,6 +1717,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       "locale": "en",
                       "messages": Object {},
                       "onError": [Function],
+                      "onWarn": [Function],
                       "textComponent": "span",
                       "timeZone": "Etc/UTC",
                       "wrapRichTextChunksInFragment": undefined,
@@ -1731,9 +1773,11 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                         id="name-3"
                         intl={
                           Object {
+                            "$t": [Function],
                             "defaultFormats": Object {},
                             "defaultLocale": "en",
                             "defaultRichTextElements": undefined,
+                            "fallbackOnEmptyString": true,
                             "formatDate": [Function],
                             "formatDateTimeRange": [Function],
                             "formatDateToParts": [Function],
@@ -1760,6 +1804,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                             "locale": "en",
                             "messages": Object {},
                             "onError": [Function],
+                            "onWarn": [Function],
                             "textComponent": "span",
                             "timeZone": "Etc/UTC",
                             "wrapRichTextChunksInFragment": undefined,
@@ -1865,9 +1910,11 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   id="names-overflow"
                   intl={
                     Object {
+                      "$t": [Function],
                       "defaultFormats": Object {},
                       "defaultLocale": "en",
                       "defaultRichTextElements": undefined,
+                      "fallbackOnEmptyString": true,
                       "formatDate": [Function],
                       "formatDateTimeRange": [Function],
                       "formatDateToParts": [Function],
@@ -1894,6 +1941,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       "locale": "en",
                       "messages": Object {},
                       "onError": [Function],
+                      "onWarn": [Function],
                       "textComponent": "span",
                       "timeZone": "Etc/UTC",
                       "wrapRichTextChunksInFragment": undefined,
@@ -2056,9 +2104,11 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           hourCycle="h12"
           intl={
             Object {
+              "$t": [Function],
               "defaultFormats": Object {},
               "defaultLocale": "en",
               "defaultRichTextElements": undefined,
+              "fallbackOnEmptyString": true,
               "formatDate": [Function],
               "formatDateTimeRange": [Function],
               "formatDateToParts": [Function],
@@ -2085,6 +2135,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
               "locale": "en",
               "messages": Object {},
               "onError": [Function],
+              "onWarn": [Function],
               "textComponent": "span",
               "timeZone": "Etc/UTC",
               "wrapRichTextChunksInFragment": undefined,

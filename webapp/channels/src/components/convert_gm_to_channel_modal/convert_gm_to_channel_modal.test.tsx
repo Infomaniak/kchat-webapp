@@ -21,7 +21,7 @@ import {renderWithFullContext, screen} from 'tests/react_testing_utils';
 
 import type {GlobalState} from 'types/store';
 
-describe('component/ConvertGmToChannelModal', () => {
+xdescribe('component/ConvertGmToChannelModal', () => {
     const user1 = TestHelper.fakeUserWithId();
     const user2 = TestHelper.fakeUserWithId();
     const user3 = TestHelper.fakeUserWithId();

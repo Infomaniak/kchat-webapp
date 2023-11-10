@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {ArchiveOutlineIcon, CheckIcon, ChevronDownIcon, GlobeIcon, LockOutlineIcon, MagnifyIcon, AccountOutlineIcon, GlobeCheckedIcon} from '@infomaniak/compass-icons/components';
+import {ArchiveOutlineIcon, CheckIcon, ChevronDownIcon, GlobeIcon, LockOutlineIcon, MagnifyIcon, AccountOutlineIcon} from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage, injectIntl, type WrappedComponentProps} from 'react-intl';
-import {isKeyPressed} from 'utils/keyboard';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
@@ -22,6 +21,7 @@ import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
 import {isArchivedChannel} from 'utils/channel_utils';
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {t} from 'utils/i18n';
+import {isKeyPressed} from 'utils/keyboard';
 import * as UserAgent from 'utils/user_agent';
 import {localizeMessage, localizeAndFormatMessage} from 'utils/utils';
 
@@ -430,7 +430,7 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
                 key='channelsMoreDropdownAll'
                 id='channelsMoreDropdownAll'
                 onClick={() => this.props.changeFilter(Filter.All)}
-                leadingElement={<GlobeCheckedIcon size={16}/>}
+                leadingElement={<GlobeIcon size={16}/>}
                 labels={
                     <FormattedMessage
                         id='suggestion.all'

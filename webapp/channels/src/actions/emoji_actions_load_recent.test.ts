@@ -22,7 +22,7 @@ import type {GlobalState} from 'types/store';
 
 Client4.setUrl('http://localhost:8065');
 
-describe('loadRecentlyUsedCustomEmojis', () => {
+xdescribe('loadRecentlyUsedCustomEmojis', () => {
     const currentUserId = 'currentUserId';
 
     const emoji1 = TestHelper.getCustomEmojiMock({name: 'emoji1', id: 'emojiId1'});

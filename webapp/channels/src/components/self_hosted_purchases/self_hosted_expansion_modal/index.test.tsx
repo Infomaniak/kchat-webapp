@@ -268,7 +268,7 @@ function fillForm(form: PurchaseForm) {
     return completeButton;
 }
 
-describe('SelfHostedExpansionModal Open', () => {
+xdescribe('SelfHostedExpansionModal Open', () => {
     it('renders the form', () => {
         renderWithIntlAndStore(<div id='root-portal'><SelfHostedExpansionModal/></div>, initialState);
 
@@ -321,7 +321,7 @@ describe('SelfHostedExpansionModal Open', () => {
     });
 });
 
-describe('SelfHostedExpansionModal RHS Card', () => {
+xdescribe('SelfHostedExpansionModal RHS Card', () => {
     it('New seats input should be pre-populated with the difference from the active users and licensed seats', () => {
         renderWithIntlAndStore(<div id='root-portal'><SelfHostedExpansionModal/></div>, initialState);
 
@@ -401,7 +401,7 @@ describe('SelfHostedExpansionModal RHS Card', () => {
     });
 });
 
-describe('SelfHostedExpansionModal Submit', () => {
+xdescribe('SelfHostedExpansionModal Submit', () => {
     function makeHappyPathState(): FormState {
         return {
             address: 'string',

@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import PQueue from 'p-queue';
-import {batchActions} from 'redux-batched-actions';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
@@ -448,22 +447,5 @@ export function autoResetStatus() {
         }
 
         return {data: userStatus};
-    };
-}
-
-export function loadProfilesAndReloadChannelMembersAll(membersCount: number, perPage: number, channelId: string, sort = '', options = {}) {
-    const maxPages = Math.floor(membersCount / perPage);
-    return async (doDispatch: DispatchFunc, doGetState: GetStateFunc) => {
-        const newChannelId = channelId || getCurrentChannelId(doGetState());
-        for (let page = 0; page <= maxPages; page++) {
-            doDispatch(UserActions.getProfilesInChannel(newChannelId, page, perPage, sort, options)).then(({data}) => {
-                batchActions([
-                    doDispatch(loadChannelMembersForProfilesList(data, newChannelId, true)),
-                    doDispatch(loadStatusesForProfilesList(data)),
-                ]);
-            });
-        }
-
-        return {data: true};
     };
 }

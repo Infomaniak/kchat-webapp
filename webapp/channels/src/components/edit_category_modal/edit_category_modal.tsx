@@ -8,7 +8,7 @@ import type {ChannelCategory} from '@mattermost/types/channel_categories';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 import QuickInput, {MaxLengthInput} from 'components/quick_input';
 
 import {localizeMessage} from 'utils/utils';

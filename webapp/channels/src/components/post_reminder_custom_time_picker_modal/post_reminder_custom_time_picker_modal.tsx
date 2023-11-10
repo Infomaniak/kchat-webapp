@@ -6,7 +6,7 @@ import React, {useCallback, useState, useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 
 import Constants from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';
@@ -73,7 +73,6 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
             className={'post-reminder-modal'}
             compassDesign={true}
             enforceFocus={false}
-            autoCloseOnEnterKeyDown={false}
             keyboardEscape={false}
             isConfirmDisabled={isConfirmDisabled}
         >

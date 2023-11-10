@@ -258,9 +258,10 @@ export default class Textbox extends React.PureComponent<Props> {
         if (this.props.emojiEnabled) {
             textboxClassName += ' custom-textarea--emoji-picker';
         }
-        if (this.props.badConnection) {
+
+        /*if (this.props.badConnection) {
             textboxClassName += ' bad-connection';
-        }
+        }*/
         if (this.props.hasLabels) {
             textboxClassName += ' textarea--has-labels';
         }

@@ -46,6 +46,7 @@ describe('plugins/MainMenuActions', () => {
             closeRightHandSide: jest.fn(),
             closeRhsMenu: jest.fn(),
             getCloudLimits: jest.fn(),
+            showSettings: jest.fn(),
         },
         isCloud: false,
         isStarterFree: false,
@@ -57,6 +58,7 @@ describe('plugins/MainMenuActions', () => {
         teamsLimitReached: false,
         usageDeltaTeams: -1,
         mobile: false,
+        ikGroupId: 1,
     };
 
     test('should match snapshot in web view', () => {

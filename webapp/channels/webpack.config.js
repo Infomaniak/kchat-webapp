@@ -1,6 +1,3 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
-
 /* eslint-disable no-console, no-process-env */
 
 const path = require('path');
@@ -447,7 +444,7 @@ if (targetIsDevServer) {
                     return '/static/root.html';
                 },
                 logLevel: 'silent',
-                target: process.env.BASE_URL || 'https://infomaniak.kchat.infomaniak.com/', //eslint-disable-line no-process-env
+                target: process.env.BASE_URL || 'https://infomaniak.kchat.preprod.dev.infomaniak.ch/', //eslint-disable-line no-process-env
                 changeOrigin: true,
                 xfwd: true,
                 ws: false,

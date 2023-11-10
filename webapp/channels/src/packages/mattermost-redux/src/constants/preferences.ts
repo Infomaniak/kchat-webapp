@@ -288,7 +288,7 @@ const Preferences = {
             ikBtnSecondary: '#333333',
             ikBtnSecondaryColor: '#DDDFE4',
         },
-    } as Record<ThemeKey, Theme>,
+    } as unknown as Record<ThemeKey, Theme>,
     RECENT_EMOJIS: 'recent_emojis',
 };
 

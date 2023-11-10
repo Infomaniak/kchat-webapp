@@ -16,20 +16,9 @@ import {Client4} from 'mattermost-redux/client';
 import {displayUsername, isGuest, isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 import * as GlobalActions from 'actions/global_actions';
-import Pluggable from 'plugins/pluggable';
-
-import {getHistory} from 'utils/browser_history';
-import type {A11yFocusEventDetail} from 'utils/constants';
-import Constants, {A11yClassNames, A11yCustomEventTypes, ModalIdentifiers, UserStatuses} from 'utils/constants';
-import {IKConstants} from 'utils/constants-ik';
-import {t} from 'utils/i18n';
-import {shouldFocusMainTextbox} from 'utils/post_utils';
-import * as Utils from 'utils/utils';
-
-
-
 
 import AddUserToChannelModal from 'components/add_user_to_channel_modal';
+import CopyButton from 'components/copy_button';
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import CustomStatusModal from 'components/custom_status/custom_status_modal';
 import CustomStatusText from 'components/custom_status/custom_status_text';
@@ -45,14 +34,22 @@ import UserSettingsModal from 'components/user_settings/modal';
 import Popover from 'components/widgets/popover';
 import Avatar from 'components/widgets/users/avatar';
 
+import Pluggable from 'plugins/pluggable';
+import {getHistory} from 'utils/browser_history';
+import type {A11yFocusEventDetail} from 'utils/constants';
+import Constants, {A11yClassNames, A11yCustomEventTypes, ModalIdentifiers, UserStatuses} from 'utils/constants';
+import {IKConstants} from 'utils/constants-ik';
+import {t} from 'utils/i18n';
+import {shouldFocusMainTextbox} from 'utils/post_utils';
+import * as Utils from 'utils/utils';
+
 import type {ModalData} from 'types/actions';
 
-import './profile_popover.scss';
 import BotTag from '../widgets/tag/bot_tag';
 import GuestTag from '../widgets/tag/guest_tag';
 import Tag from '../widgets/tag/tag';
 
-import CopyButton from 'components/copy_button';
+import './profile_popover.scss';
 
 interface ProfilePopoverProps extends Omit<React.ComponentProps<typeof Popover>, 'id'> {
 

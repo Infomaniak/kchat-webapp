@@ -12,7 +12,7 @@ import {StoragePrefixes} from 'utils/constants';
 
 import type {PostDraft} from 'types/store/draft';
 
-import {removeDraft, setGlobalDraftSource, updateDraft} from './drafts';
+import {removeDraft, setGlobalDraftSource, addToUpdateDraftQueue} from './drafts';
 
 jest.mock('mattermost-redux/client', () => {
     const original = jest.requireActual('mattermost-redux/client');
@@ -101,6 +101,7 @@ describe('draft actions', () => {
             general: {
                 config: {
                     EnableCustomEmoji: 'true',
+                    FeatureFlagGlobalDrafts: 'true',
                     AllowSyncedDrafts: 'true',
                 },
             },
@@ -109,6 +110,7 @@ describe('draft actions', () => {
             storage: {
                 [`${StoragePrefixes.COMMENT_DRAFT}${rootId}`]: {
                     value: {
+                        id: 'draft_id',
                         message: '',
                         fileInfos: [],
                         uploadsInProgress: [],
@@ -126,7 +128,7 @@ describe('draft actions', () => {
 
     let store: any;
     const key = StoragePrefixes.DRAFT + channelId;
-    const upsertDraftSpy = jest.spyOn(Client4, 'upsertDraft');
+    const createDraftSpy = jest.spyOn(Client4, 'upsertDraft');
     const deleteDraftSpy = jest.spyOn(Client4, 'deleteDraft');
 
     beforeEach(() => {
@@ -140,7 +142,7 @@ describe('draft actions', () => {
             jest.useFakeTimers('modern');
             jest.setSystemTime(42);
 
-            await store.dispatch(updateDraft(key, draft, '', false));
+            await store.dispatch(addToUpdateDraftQueue(key, draft, '', false));
 
             const testStore = mockStore(initialState);
 
@@ -150,6 +152,7 @@ describe('draft actions', () => {
                 createAt: 42,
                 updateAt: 42,
             }));
+
             testStore.dispatch(setGlobalDraftSource(expectedKey, false));
 
             expect(store.getActions()).toEqual(testStore.getActions());
@@ -157,8 +160,8 @@ describe('draft actions', () => {
         });
 
         it('calls upsertDraft correctly', async () => {
-            await store.dispatch(updateDraft(key, draft, '', true));
-            expect(upsertDraftSpy).toHaveBeenCalled();
+            await store.dispatch(addToUpdateDraftQueue(key, draft, '', true));
+            expect(createDraftSpy).toHaveBeenCalled();
         });
     });
 
@@ -177,7 +180,7 @@ describe('draft actions', () => {
             expect(store.getActions()).toEqual(testStore.getActions());
         });
 
-        it('calls upsertDraft correctly', async () => {
+        it('calls deleteDraft correctly', async () => {
             await store.dispatch(removeDraft(key, channelId));
             expect(deleteDraftSpy).toHaveBeenCalled();
         });

@@ -13,7 +13,7 @@ import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
 import OffersFoldersSvg from 'components/common/svg_images_components/offers_folders_svg';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 
 import {ModalIdentifiers} from 'utils/constants';
 

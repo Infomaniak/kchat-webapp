@@ -9,6 +9,7 @@ import type {Post} from '@mattermost/types/posts';
 import {
     actionsToMarkChannelAsRead,
     actionsToMarkChannelAsUnread,
+    actionsToMarkChannelAsViewed,
     markChannelAsViewedOnServer,
 } from 'mattermost-redux/actions/channels';
 import * as PostActions from 'mattermost-redux/actions/posts';
@@ -119,7 +120,10 @@ export function setChannelReadAndViewed(dispatch: DispatchFunc, getState: GetSta
             dispatch(markChannelAsViewedOnServer(post.channel_id));
         }
 
-        return actionsToMarkChannelAsRead(getState, post.channel_id);
+        return [
+            ...actionsToMarkChannelAsRead(getState, post.channel_id),
+            ...actionsToMarkChannelAsViewed(getState, post.channel_id),
+        ];
     }
 
     return actionsToMarkChannelAsUnread(getState, websocketMessageProps.team_id, post.channel_id, websocketMessageProps.mentions, fetchedChannelMember, post.root_id === '', post?.metadata?.priority?.priority);

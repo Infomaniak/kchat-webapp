@@ -4,6 +4,7 @@ exports[`components/post_view/AddMembersButton should match snapshot, less than 
 <IntlProvider
   defaultFormats={Object {}}
   defaultLocale="en"
+  fallbackOnEmptyString={true}
   formats={Object {}}
   locale="en"
   messages={
@@ -12,6 +13,7 @@ exports[`components/post_view/AddMembersButton should match snapshot, less than 
     }
   }
   onError={[Function]}
+  onWarn={[Function]}
   textComponent={Symbol(react.fragment)}
 >
   <Provider
@@ -594,6 +596,7 @@ exports[`components/post_view/AddMembersButton should match snapshot, more than 
 <IntlProvider
   defaultFormats={Object {}}
   defaultLocale="en"
+  fallbackOnEmptyString={true}
   formats={Object {}}
   locale="en"
   messages={
@@ -602,6 +605,7 @@ exports[`components/post_view/AddMembersButton should match snapshot, more than 
     }
   }
   onError={[Function]}
+  onWarn={[Function]}
   textComponent={Symbol(react.fragment)}
 >
   <Provider
@@ -1184,6 +1188,7 @@ exports[`components/post_view/AddMembersButton should match snapshot, setHeader 
 <IntlProvider
   defaultFormats={Object {}}
   defaultLocale="en"
+  fallbackOnEmptyString={true}
   formats={Object {}}
   locale="en"
   messages={
@@ -1192,6 +1197,7 @@ exports[`components/post_view/AddMembersButton should match snapshot, setHeader 
     }
   }
   onError={[Function]}
+  onWarn={[Function]}
   textComponent={Symbol(react.fragment)}
 >
   <Provider

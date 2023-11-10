@@ -6,7 +6,7 @@ import React, {useEffect} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 
 import './occupied_modal.scss';
 

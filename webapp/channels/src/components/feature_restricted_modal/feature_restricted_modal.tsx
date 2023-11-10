@@ -18,7 +18,7 @@ import {isModalOpen} from 'selectors/views/modals';
 import CloudStartTrialButton from 'components/cloud_start_trial/cloud_start_trial_btn';
 import {NotifyStatus} from 'components/common/hooks/useGetNotifyAdmin';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 import StartTrialBtn from 'components/learn_more_trial_modal/start_trial_btn';
 import {useNotifyAdmin} from 'components/notify_admin_cta/notify_admin_cta';
 

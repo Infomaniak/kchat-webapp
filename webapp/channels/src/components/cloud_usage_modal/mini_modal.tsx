@@ -9,7 +9,7 @@ import type {Limits, CloudUsage} from '@mattermost/types/cloud';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 
 import type {Message} from 'utils/i18n';
 

@@ -101,7 +101,7 @@ export default class SearchUserProvider extends Provider {
 
         const data = await this.autocompleteUsersInTeam(usernamePrefix);
 
-        if (this.shouldCancelDispatch(usernamePrefix)) {
+        if (!data || this.shouldCancelDispatch(usernamePrefix)) {
             return;
         }
 

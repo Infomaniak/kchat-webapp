@@ -34,7 +34,7 @@
     }
   },
   "scripts": {
-    "build": "tsc --build --verbose",
+    "build": "tsc",
     "run": "tsc --watch --preserveWatchOutput",
     "clean": "rm -rf tsconfig.tsbuildinfo ./lib"
   }

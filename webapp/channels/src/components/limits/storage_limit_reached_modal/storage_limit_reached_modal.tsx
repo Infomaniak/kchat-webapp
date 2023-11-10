@@ -14,7 +14,7 @@ import {isModalOpen} from 'selectors/views/modals';
 
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetUsage from 'components/common/hooks/useGetUsage';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 import StorageLimitReachedIcon from 'components/widgets/icons/storage_limit_reached_icon';
 
 import {ModalIdentifiers} from 'utils/constants';

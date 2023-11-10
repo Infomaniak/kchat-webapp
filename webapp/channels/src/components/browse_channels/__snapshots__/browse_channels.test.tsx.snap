@@ -102,7 +102,6 @@ exports[`components/BrowseChannels should match snapshot and state 1`] = `
           "msg_count": 0,
           "msg_count_root": 0,
           "notify_props": Object {
-            "channel_auto_follow_threads": "off",
             "desktop": "default",
             "email": "default",
             "ignore_channel_mentions": "default",

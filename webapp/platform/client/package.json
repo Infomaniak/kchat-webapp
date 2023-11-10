@@ -24,8 +24,8 @@
     "typescript": "^4.3"
   },
   "scripts": {
-    "build": "tsc --build --verbose",
+    "build": "tsc",
     "run": "tsc --watch --preserveWatchOutput",
-    "clean": "rm -rf tsconfig.tsbuildinfo ./lib"
+    "clean": "rm -rf node_modules tsconfig.tsbuildinfo ./lib"
   }
 }

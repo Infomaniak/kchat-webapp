@@ -5,6 +5,8 @@ import React from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
+
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions';
@@ -12,7 +14,6 @@ import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
 import Svg from 'components/common/svg_images_components/woman_credit_card_and_laptop_svg';
-import GenericModal from 'components/generic_modal';
 
 import {ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 

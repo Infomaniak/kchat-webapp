@@ -9,7 +9,7 @@ import type {DispatchFunc} from 'mattermost-redux/types/actions';
 import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 
 import {ModalIdentifiers} from 'utils/constants';
 

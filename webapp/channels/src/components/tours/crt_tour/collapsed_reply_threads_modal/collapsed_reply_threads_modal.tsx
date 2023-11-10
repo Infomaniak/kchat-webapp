@@ -11,7 +11,7 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {closeModal} from 'actions/views/modals';
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-import GenericModal from 'components/generic_modal';
+import {GenericModal} from '@mattermost/components';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 
 import crtInProductImg from 'images/crt-in-product.gif';

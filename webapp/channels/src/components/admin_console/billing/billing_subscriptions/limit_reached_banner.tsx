@@ -10,8 +10,6 @@ import type {Product} from '@mattermost/types/cloud';
 import {Preferences} from 'mattermost-redux/constants';
 import {getHasDismissedSystemConsoleLimitReached} from 'mattermost-redux/selectors/entities/preferences';
 
-import {SalesInquiryIssue} from 'selectors/cloud';
-
 import AlertBanner from 'components/alert_banner';
 import useGetUsageDeltas from 'components/common/hooks/useGetUsageDeltas';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
@@ -33,7 +31,7 @@ const LimitReachedBanner = (props: Props) => {
 
     const hasDismissedBanner = useSelector(getHasDismissedSystemConsoleLimitReached);
 
-    const openSalesLink = useOpenSalesLink(props.product?.sku === CloudProducts.PROFESSIONAL ? SalesInquiryIssue.UpgradeEnterprise : undefined);
+    const [openSalesLink] = useOpenSalesLink();
     const openPricingModal = useOpenPricingModal();
     const saveBool = useSaveBool();
     if (hasDismissedBanner || !someLimitExceeded || !props.product || (props.product.sku !== CloudProducts.STARTER)) {
