@@ -5146,7 +5146,7 @@
   "drafts.info.tag.will_not_be_sent": "Ne sera pas envoyé",
   "drafts.info.tag.scheduled": "Planifié",
   "draft.info.scheduled_timestamp": "Envoie le {timestamp}",
-  "create_post.schedule_post.indicator": "Vous avez planifié l'envoie de {count} {count, plural, one {brouillon} other {brouillons}} dans ce {type}. Le prochain sera envoyé le {timestamp}. <GoToDrafts>Voir tous les brouillons</GoToDrafts>",
+  "create_post.schedule_post.indicator": "Vous avez planifié l'envoi de {count} {count, plural, one {brouillon} other {brouillons}} dans ce {type}. Le prochain sera envoyé le {timestamp}. <GoToDrafts>Voir tous les brouillons</GoToDrafts>",
   "create_post.schedule_post.indicator.channel": "canal",
   "create_post.schedule_post.indicator.thread": "fil de discussion",
   "drafts.actions.reschedule": "Replanifier le brouillon",
