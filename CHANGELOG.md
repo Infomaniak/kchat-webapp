@@ -1,3 +1,9 @@
+## 1.4.8-next.1 (2023-11-13)
+
+### Fixed (1 change)
+
+- [fix: schedule post typo](kchat/webapp@62799c324f239ac4ca22a2e527cc32680b20a7ad) by @leopold.jacquot ([merge request](kchat/webapp!569))
+
 ## 1.4.7-next.3 (2023-11-03)
 
 ### Fixed (1 change)
