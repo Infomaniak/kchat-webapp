@@ -578,6 +578,8 @@ export default class Root extends React.PureComponent<Props, State> {
         const tokenExpire = localStorage.getItem('IKTokenExpire');
         const refreshToken = localStorage.getItem('IKRefreshToken');
 
+        window.setWCToken(token);
+
         // Validate infinite token or setup token keepalive for older tokens
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {

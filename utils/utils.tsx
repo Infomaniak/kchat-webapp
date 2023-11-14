@@ -720,6 +720,17 @@ export function resetTheme() {
     applyTheme(Preferences.THEMES.ik);
 }
 
+export function injectWebcomponentInit() {
+    const oauth = Number(isDesktopApp());
+    // console.log('indexOf Electron', window.navigator.userAgent.indexOf('Electron'));
+    console.log('oauth var', oauth)
+    const script: HTMLScriptElement = document.createElement('script');
+    script.type = 'text/javascript';
+    script.id = 'webComponents';
+    script.src = `https://web-components.storage.infomaniak.com/next/init.js?project=kchat&oauth=${oauth}`;
+    document.head.appendChild(script);
+}
+
 function changeCss(className: string, classValue: string) {
     let styleEl: HTMLStyleElement = document.querySelector('style[data-class="' + className + '"]')!;
     if (!styleEl) {
