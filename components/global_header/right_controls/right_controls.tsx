@@ -149,13 +149,11 @@ const RightControls = (): JSX.Element => {
         <RightControlsContainer
             id={'RightControlsContainer'}
         >
-            {!isDesktopApp && (
-                <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                    <module-reporting-tools-component size='26'></module-reporting-tools-component>
-                </ReportingToolsWrapper>
-            )}
+            <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <module-reporting-tools-component size='26'></module-reporting-tools-component>
+            </ReportingToolsWrapper>
             <OverlayTrigger
                 trigger={['hover', 'focus']}
                 delayShow={Constants.OVERLAY_TIME_DELAY}
@@ -184,31 +182,27 @@ const RightControls = (): JSX.Element => {
                 <SavedPostsButton/>
                 {showCustomizeTip && <CustomizeYourExperienceTour/>}
             </>
-            {!isDesktopApp && (
-                <NewsWrapper className='grey wc-trigger-news--flex'>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                    <module-news-component></module-news-component>
-                </NewsWrapper>
-            )}
+            <NewsWrapper className='grey wc-trigger-news--flex'>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <module-news-component></module-news-component>
+            </NewsWrapper>
             <ButtonWrapper>
                 {showSettingsTutorialStep && <SettingsTour/>}
                 <SettingsButton/>
             </ButtonWrapper>
-            {!isDesktopApp && (
-                <div style={{position: 'relative'}}>
+            <div style={{position: 'relative'}}>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <module-products-component
+                    position='right'
+                    style={{height: '100%'}}
+                >
+                    {trigger}
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
-                    <module-products-component
-                        position='right'
-                        style={{height: '100%'}}
-                    >
-                        {trigger}
-                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                        {/* @ts-ignore */}
-                    </module-products-component>
-                </div>
-            )}
+                </module-products-component>
+            </div>
             <StatusDropdown/>
             <FlagNext/>
         </RightControlsContainer>
