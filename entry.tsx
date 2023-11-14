@@ -13,7 +13,7 @@ import 'katex/dist/katex.min.css';
 import '@infomaniak/compass-icons/css/compass-icons.css';
 import '@mattermost/components/dist/index.esm.css';
 
-import {setCSRFFromCookie} from 'utils/utils';
+import {injectWebcomponentInit, setCSRFFromCookie} from 'utils/utils';
 import {AnnouncementBarTypes} from 'utils/constants';
 import store from 'stores/redux_store.jsx';
 import App from 'components/app';
@@ -31,6 +31,7 @@ declare global {
 // This is for anything that needs to be done for ALL react components.
 // This runs before we start to render anything.
 function preRenderSetup(callwhendone: () => void) {
+    injectWebcomponentInit();
     window.onerror = (msg, url, line, column, error) => {
         if (msg === 'ResizeObserver loop limit exceeded') {
             return;
