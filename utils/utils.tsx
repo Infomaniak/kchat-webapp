@@ -93,8 +93,6 @@ const CLICKABLE_ELEMENTS = [
     'video',
 ];
 
-declare const WEBCOMPONENT_ENDPOINT: string;
-
 export function isMac() {
     return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 }
@@ -728,7 +726,8 @@ export function injectWebcomponentInit() {
     script.type = 'text/javascript';
     script.async = true;
     script.id = 'webComponents';
-    script.src = `${WEBCOMPONENT_ENDPOINT}/init.js?project=kchat&oauth=${oauth}`;
+    // eslint-disable-next-line no-process-env
+    script.src = `${process.env.WEBCOMPONENT_ENDPOINT}/init.js?project=kchat&oauth=${oauth}`;
     document.head.appendChild(script);
 }
 
