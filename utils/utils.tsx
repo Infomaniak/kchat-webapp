@@ -93,6 +93,8 @@ const CLICKABLE_ELEMENTS = [
     'video',
 ];
 
+declare const WEBCOMPONENT_ENDPOINT: string;
+
 export function isMac() {
     return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 }
@@ -722,12 +724,11 @@ export function resetTheme() {
 
 export function injectWebcomponentInit() {
     const oauth = Number(isDesktopApp());
-    // console.log('indexOf Electron', window.navigator.userAgent.indexOf('Electron'));
-    console.log('oauth var', oauth)
     const script: HTMLScriptElement = document.createElement('script');
     script.type = 'text/javascript';
+    script.async = true;
     script.id = 'webComponents';
-    script.src = `https://web-components.storage.infomaniak.com/next/init.js?project=kchat&oauth=${oauth}`;
+    script.src = `${WEBCOMPONENT_ENDPOINT}/init.js?project=kchat&oauth=${oauth}`;
     document.head.appendChild(script);
 }
 
