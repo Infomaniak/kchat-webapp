@@ -578,8 +578,6 @@ export default class Root extends React.PureComponent<Props, State> {
         const tokenExpire = localStorage.getItem('IKTokenExpire');
         const refreshToken = localStorage.getItem('IKRefreshToken');
 
-        window.setWCToken(token);
-
         // Validate infinite token or setup token keepalive for older tokens
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
@@ -588,6 +586,11 @@ export default class Root extends React.PureComponent<Props, State> {
                 if (isDefaultAuthServer() && !token) {
                     getChallengeAndRedirectToLogin(true);
                 }
+
+                // Provide token to webcomponents via injected function
+                (window as Window & typeof globalThis & {
+                    setWCToken?: (token: string) => void;
+                }).setWCToken?.(token!);
 
                 // migration from 2.0
                 if (token && (tokenExpire || refreshToken)) {
