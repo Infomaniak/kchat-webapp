@@ -15,9 +15,6 @@
     }
 
     .badge {
-        position: absolute;
-        top: 8px;
-        right: 10px;
         background: rgba(var(--center-channel-color-rgb), 0.48);
         color: var(--center-channel-bg);
         font-size: 10px;
@@ -207,6 +204,29 @@
             width: 100%;
             color: rgba(var(--center-channel-color-rgb), 1);
             text-overflow: ellipsis;
+
+            .suggestion-list__desc {
+                overflow: hidden;
+                white-space: nowrap;
+                margin-left: 8px;
+                color: rgba(var(--center-channel-color-rgb), 0.56);
+            }
+        }
+    }
+
+    .suggestion-list__custom {
+        display: flex;
+        overflow: hidden;
+        width: 100%;
+        color: rgba(var(--center-channel-color-rgb), 0.56);
+        gap: 8px;
+
+        .suggestion-list__main {
+            color: rgba(var(--center-channel-color-rgb), 1);
+            text-overflow: ellipsis;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
 
             .suggestion-list__desc {
                 overflow: hidden;
