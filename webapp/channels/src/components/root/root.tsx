@@ -69,15 +69,15 @@ import RootRedirect from './root_redirect';
 
 import {checkIKTokenExpiresSoon, checkIKTokenIsExpired, clearLocalStorageToken, getChallengeAndRedirectToLogin, isDefaultAuthServer, refreshIKToken, storeTokenResponse} from '../login/utils';
 
-const LazyErrorPage = Utils.lazyWithRetries(() => import('components/error_page'));
-const LazyLogin = Utils.lazyWithRetries(() => import('components/login/login'));
-const LazyLoggedIn = Utils.lazyWithRetries(() => import('components/logged_in'));
-const LazyHelpController = Utils.lazyWithRetries(() => import('components/help/help_controller'));
+const LazyErrorPage = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */ 'components/error_page'));
+const LazyLogin = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/login/login'));
+const LazyLoggedIn = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/logged_in'));
+const LazyHelpController = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/help/help_controller'));
 
-// const LazyLinkingLandingPage = Utils.lazyWithRetries(() => import('components/linking_landing_page'));
-const LazyPreparingWorkspace = Utils.lazyWithRetries(() => import('components/preparing_workspace'));
-const LazyTeamController = Utils.lazyWithRetries(() => import('components/team_controller'));
-const LazyOnBoardingTaskList = Utils.lazyWithRetries(() => import('components/onboarding_tasklist'));
+// const LazyLinkingLandingPage = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/linking_landing_page'));
+const LazyPreparingWorkspace = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/preparing_workspace'));
+const LazyTeamController = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/team_controller'));
+const LazyOnBoardingTaskList = Utils.lazyWithRetries(() => import(/* webpackPrefetch: true */'components/onboarding_tasklist'));
 
 const ErrorPage = makeAsyncComponent('ErrorPage', LazyErrorPage);
 const Login = makeAsyncComponent('LoginController', LazyLogin);
