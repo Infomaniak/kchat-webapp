@@ -1,3 +1,13 @@
+## 1.4.9-next.1 (2023-11-22)
+
+### Fixed (1 change)
+
+- [Fix the width in the search modal for the find channel research.](kchat/webapp@1821efc59607bb73397b803c6914333ab4d18148) by @benoit.nau ([merge request](kchat/webapp!573))
+
+### Removed (1 change)
+
+- [remove webhook helper msg](kchat/webapp@9e3f5e8f9e07bf0be682737abfcd11eedf4b0732) by @antonbuksa ([merge request](kchat/webapp!574))
+
 ## 1.4.8-next.1 (2023-11-13)
 
 ### Fixed (1 change)
