@@ -171,6 +171,7 @@
   "add_oauth_app.url": "**URL(s)**: {url}",
   "add_outgoing_webhook.callbackUrls": "URL di callback (una per riga)",
   "add_outgoing_webhook.callbackUrls.help": "L'URL a cui inviare i messaggi. Se l'URL è privato, aggiungerlo come {link}.",
+  "add_outgoing_webhook.callbackUrls.help2": "L'URL a cui inviare i messaggi.",
   "add_outgoing_webhook.callbackUrls.helpLinkText": "connessione interna certificata",
   "add_outgoing_webhook.callbackUrlsRequired": "Sono richiesti uno o più URL di callback",
   "add_outgoing_webhook.cancel": "Annulla",
