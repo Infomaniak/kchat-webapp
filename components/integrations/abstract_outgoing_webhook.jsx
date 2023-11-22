@@ -470,6 +470,12 @@ export default class AbstractOutgoingWebhook extends React.PureComponent {
                                     value={this.state.callbackUrls}
                                     onChange={this.updateCallbackUrls}
                                 />
+                                <div className='form__help'>
+                                    <FormattedMessage
+                                        id='add_outgoing_webhook.callbackUrls.help2'
+                                        defaultMessage='Specify the URL that the messages will be sent to.'
+                                    />
+                                </div>
                             </div>
                         </div>
                         {this.props.enablePostUsernameOverride &&

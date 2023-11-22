@@ -171,6 +171,7 @@
   "add_oauth_app.url": "**URL(s)**: {url}",
   "add_outgoing_webhook.callbackUrls": "Callback-URLs (eine pro Zeile)",
   "add_outgoing_webhook.callbackUrls.help": "Die URL, an die Nachrichten gesendet werden. Als {link} hinzufügen, falls die URL privat ist.",
+  "add_outgoing_webhook.callbackUrls.help2": "Die URL, an die Nachrichten gesendet werden.",
   "add_outgoing_webhook.callbackUrls.helpLinkText": "Vertrauenswürdige interne Verbindung",
   "add_outgoing_webhook.callbackUrlsRequired": "Eine oder mehrere Callback-URLs werden benötigt",
   "add_outgoing_webhook.cancel": "Abbrechen",

@@ -276,6 +276,14 @@ exports[`components/integrations/AbstractOutgoingWebhook should match snapshot 1
             rows="3"
             value=""
           />
+          <div
+            className="form__help"
+          >
+            <MemoizedFormattedMessage
+              defaultMessage="Specify the URL that the messages will be sent to."
+              id="add_outgoing_webhook.callbackUrls.help2"
+            />
+          </div>
         </div>
       </div>
       <div
