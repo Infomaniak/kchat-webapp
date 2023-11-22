@@ -276,27 +276,6 @@ exports[`components/integrations/AbstractOutgoingWebhook should match snapshot 1
             rows="3"
             value=""
           />
-          <div
-            className="form__help"
-          >
-            <MemoizedFormattedMessage
-              defaultMessage="Specify the URL that the messages will be sent to. If the URL is private, add it as a {link}."
-              id="add_outgoing_webhook.callbackUrls.help"
-              values={
-                Object {
-                  "link": <ExternalLink
-                    href="https://docs.mattermost.com/configure/configuration-settings.html#session-lengths"
-                    location="abstract_outgoing_webhook"
-                  >
-                    <Memo(MemoizedFormattedMessage)
-                      defaultMessage="trusted internal connection"
-                      id="add_outgoing_webhook.callbackUrls.helpLinkText"
-                    />
-                  </ExternalLink>,
-                }
-              }
-            />
-          </div>
         </div>
       </div>
       <div
