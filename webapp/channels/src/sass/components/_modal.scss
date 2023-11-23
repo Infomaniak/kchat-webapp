@@ -988,9 +988,15 @@
         font-weight: 600;
         white-space: nowrap;
 
+        .Tag{
+             span {
+                max-width: 100%;
+            }
+        }
+
         span {
             overflow: hidden;
-            max-width: 100%;
+            max-width: 95%;
             text-overflow: ellipsis;
         }
     }
