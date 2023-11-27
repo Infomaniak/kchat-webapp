@@ -182,27 +182,31 @@ const RightControls = (): JSX.Element => {
                 <SavedPostsButton/>
                 {showCustomizeTip && <CustomizeYourExperienceTour/>}
             </>
-            <NewsWrapper className='grey wc-trigger-news--flex'>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <module-news-component></module-news-component>
-            </NewsWrapper>
+            {!isDesktopApp && (
+                <NewsWrapper className='grey wc-trigger-news--flex'>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
+                    <module-news-component></module-news-component>
+                </NewsWrapper>
+            )}
             <ButtonWrapper>
                 {showSettingsTutorialStep && <SettingsTour/>}
                 <SettingsButton/>
             </ButtonWrapper>
-            <div style={{position: 'relative'}}>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <module-products-component
-                    position='right'
-                    style={{height: '100%'}}
-                >
-                    {trigger}
+            {!isDesktopApp && (
+                <div style={{position: 'relative'}}>
                     {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                     {/* @ts-ignore */}
-                </module-products-component>
-            </div>
+                    <module-products-component
+                        position='right'
+                        style={{height: '100%'}}
+                    >
+                        {trigger}
+                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                        {/* @ts-ignore */}
+                    </module-products-component>
+                </div>
+            )}
             <StatusDropdown/>
             <FlagNext/>
         </RightControlsContainer>
