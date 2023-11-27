@@ -244,6 +244,9 @@ export function getCollapsedThreadsPreference(state: GlobalState): string {
         preferenceDefault,
     );
 }
+export function getIsOnboardingFlowEnabled(state: GlobalState): boolean {
+    return getConfig(state).EnableOnboardingFlow === 'true';
+}
 
 export function isCollapsedThreadsAllowed(state: GlobalState): boolean {
     return Boolean(getConfig(state)) && getConfig(state).CollapsedThreads !== undefined && getConfig(state).CollapsedThreads !== CollapsedThreads.DISABLED;

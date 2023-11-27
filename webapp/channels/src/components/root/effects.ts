@@ -3,11 +3,8 @@
 
 import {Settings} from 'luxon';
 
-import {makeGetUserTimezone} from 'mattermost-redux/selectors/entities/timezone';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import {getUserCurrentTimezone} from 'mattermost-redux/utils/timezone_utils';
+import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 
-import {areTimezonesEnabledAndSupported} from 'selectors/general';
 import {getCurrentLocale} from 'selectors/i18n';
 
 import type {GlobalState} from 'types/store';
@@ -21,11 +18,9 @@ export function applyLuxonDefaults(state: GlobalState) {
         Settings.defaultLocale = locale;
     }
 
-    if (areTimezonesEnabledAndSupported(state)) {
-        const tz = getUserCurrentTimezone(makeGetUserTimezone()(state, getCurrentUserId(state))) ?? undefined;
-        if (tz !== prevTimezone) {
-            prevTimezone = tz;
-            Settings.defaultZone = tz ?? 'system';
-        }
+    const tz = getCurrentTimezone(state);
+    if (tz !== prevTimezone) {
+        prevTimezone = tz;
+        Settings.defaultZone = tz ?? 'system';
     }
 }

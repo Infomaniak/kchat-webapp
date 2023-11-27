@@ -10,6 +10,8 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {makeGetGlobalItem, makeGetGlobalItemWithDefault} from 'selectors/storage';
 
+import type {SidebarSize} from 'components/resizable_sidebar/constants';
+
 import {PostTypes, StoragePrefixes} from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
 
@@ -24,7 +26,9 @@ export function getSelectedPostId(state: GlobalState): Post['id'] {
 export function getSelectedPostFocussedAt(state: GlobalState): number {
     return state.views.rhs.selectedPostFocussedAt;
 }
-
+export function getRhsSize(state: GlobalState): SidebarSize {
+    return state.views.rhs.size;
+}
 export function getSelectedPostCardId(state: GlobalState): Post['id'] {
     return state.views.rhs.selectedPostCardId;
 }
@@ -94,10 +98,6 @@ export const getSelectedPost = createSelector(
 
 export function getRhsState(state: GlobalState): RhsState {
     return state.views.rhs.rhsState;
-}
-
-export function getRhsSettingsTabState(state: GlobalState): RhsState {
-    return state.views.rhs.settingsTabState;
 }
 
 export function getPreviousRhsState(state: GlobalState): RhsState {

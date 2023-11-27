@@ -263,6 +263,14 @@ export default class Client4 {
         this.defaultHeaders['X-Socket-Id'] = socketId;
     }
 
+    setHeader(header: string, value: string) {
+        this.defaultHeaders[header] = value;
+    }
+
+    removeHeader(header: string) {
+        delete this.defaultHeaders[header];
+    }
+
     setEnableLogging(enable: boolean) {
         this.enableLogging = enable;
     }
