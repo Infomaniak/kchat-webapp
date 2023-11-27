@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 /* eslint-disable max-lines */
+
 import solarizedDarkCSS from 'highlight.js/styles/base16/solarized-dark.css';
 import solarizedLightCSS from 'highlight.js/styles/base16/solarized-light.css';
 import githubCSS from 'highlight.js/styles/github.css';
@@ -157,6 +158,7 @@ export const Preferences = {
 // For one off things that have a special, attention-grabbing UI until you interact with them
 export const Touched = {
     INVITE_MEMBERS: 'invite_members',
+    ADD_CHANNELS_CTA: 'add_channels_cta',
 };
 
 // Category for actions/interactions that will happen just once
@@ -169,7 +171,7 @@ export const Unique = {
 export const TrialPeriodDays = {
     TRIAL_30_DAYS: 30,
     TRIAL_14_DAYS: 14,
-    TRIAL_WARNING_THRESHOLD: 3,
+    TRIAL_WARNING_THRESHOLD: 7,
     TRIAL_2_DAYS: 2,
     TRIAL_1_DAY: 1,
     TRIAL_0_DAYS: 0,
@@ -514,11 +516,6 @@ export const ModalIdentifiers = {
     START_TRIAL_FORM_MODAL_RESULT: 'start_trial_form_modal_result',
 };
 
-export const CloudBillingTypes = {
-    INTERNAL: 'internal',
-    LICENSED: 'licensed',
-};
-
 export const UserStatuses = {
     OUT_OF_OFFICE: 'ooo',
     OFFLINE: 'offline',
@@ -565,6 +562,11 @@ export const CloudProducts = {
     LEGACY: 'cloud-legacy',
 };
 
+export const CloudBillingTypes = {
+    INTERNAL: 'internal',
+    LICENSED: 'licensed',
+};
+
 export const SelfHostedProducts = {
     STARTER: 'starter',
     PROFESSIONAL: 'professional',
@@ -584,6 +586,7 @@ export const MattermostFeatures = {
     ALL_ENTERPRISE_FEATURES: 'mattermost.feature.all_enterprise',
     UPGRADE_DOWNGRADED_WORKSPACE: 'mattermost.feature.upgrade_downgraded_workspace',
     PLUGIN_FEATURE: 'mattermost.feature.plugin',
+    HIGHLIGHT_WITHOUT_NOTIFICATION: 'mattermost.feature.highlight_without_notification',
 };
 
 export enum LicenseSkus {
@@ -648,6 +651,7 @@ export const SocketEvents = {
     CHANNEL_UNARCHIVED: 'channel_restored',
     CHANNEL_UPDATED: 'channel_updated',
     CHANNEL_VIEWED: 'channel_viewed',
+    MULTIPLE_CHANNELS_VIEWED: 'multiple_channels_viewed',
     CHANNEL_MEMBER_UPDATED: 'channel_member_updated',
     CHANNEL_SCHEME_UPDATED: 'channel_scheme_updated',
     DIRECT_ADDED: 'direct_added',
@@ -667,13 +671,13 @@ export const SocketEvents = {
     ROLE_ADDED: 'role_added',
     ROLE_REMOVED: 'role_removed',
     ROLE_UPDATED: 'role_updated',
-    TYPING: 'client-user_typing',
+    TYPING: 'typing',
     PREFERENCE_CHANGED: 'preference_changed',
     PREFERENCES_CHANGED: 'preferences_changed',
     PREFERENCES_DELETED: 'preferences_deleted',
     EPHEMERAL_MESSAGE: 'ephemeral_message',
     STATUS_CHANGED: 'status_change',
-    HELLO: 'pusher:connection_established',
+    HELLO: 'hello',
     REACTION_ADDED: 'reaction_added',
     REACTION_REMOVED: 'reaction_removed',
     EMOJI_ADDED: 'emoji_added',
@@ -719,6 +723,7 @@ export const SocketEvents = {
     DRAFT_CREATED: 'draft_created',
     DRAFT_UPDATED: 'draft_updated',
     DRAFT_DELETED: 'draft_deleted',
+    PERSISTENT_NOTIFICATION_TRIGGERED: 'persistent_notification_triggered',
     HOSTED_CUSTOMER_SIGNUP_PROGRESS_UPDATED: 'hosted_customer_signup_progress_updated',
     KSUITE_ADDED: 'ksuite_added',
     KSUITE_DELETED: 'ksuite_deleted',
@@ -877,6 +882,8 @@ export const PostTypes = {
     REMOVE_LINK_PREVIEW: 'remove_link_preview',
     ME: 'me',
     REMINDER: 'reminder',
+    CUSTOM_CALLS: 'custom_calls',
+    CUSTOM_CALLS_RECORDING: 'custom_calls_recording',
 };
 
 export const StatTypes = keyMirror({
@@ -1008,7 +1015,7 @@ export const JobTypes = {
     BLEVE_POST_INDEXING: 'bleve_post_indexing',
     LDAP_SYNC: 'ldap_sync',
     MESSAGE_EXPORT: 'message_export',
-};
+} as const;
 
 export const JobStatuses = {
     PENDING: 'pending',
@@ -1075,14 +1082,25 @@ export const NotificationLevels = {
     NONE: 'none',
 } as const;
 
+export const DesktopSound = {
+    ON: 'on',
+    OFF: 'off',
+} as const;
+
 export const IgnoreChannelMentions = {
     ON: 'on',
     OFF: 'off',
     DEFAULT: 'default',
 } as const;
 
+export const ChannelAutoFollowThreads = {
+    ON: 'on',
+    OFF: 'off',
+} as const;
+
 export const NotificationSections = {
     IGNORE_CHANNEL_MENTIONS: 'ignoreChannelMentions',
+    CHANNEL_AUTO_FOLLOW_THREADS: 'channelAutoFollowThreads',
     MARK_UNREAD: 'markUnread',
     DESKTOP: 'desktop',
     PUSH: 'push',
@@ -1161,7 +1179,12 @@ export const CloudLinks = {
 
 export const HostedCustomerLinks = {
     BILLING_DOCS: 'https://mattermost.com/pl/how-self-hosted-billing-works',
+    SELF_HOSTED_BILLING: 'https://mattermost.com/pl/self-hosted-billing',
     TERMS_AND_CONDITIONS: 'https://mattermost.com/enterprise-edition-terms/',
+    SECURITY_UPDATES: 'https://mattermost.com/security-updates/',
+    DOWNLOAD: 'https://mattermost.com/download',
+    NEWSLETTER_UNSUBSCRIBE_LINK: 'https://forms.mattermost.com/UnsubscribePage.html',
+    PRIVACY: AboutLinks.PRIVACY_POLICY,
 };
 
 export const DocLinks = {
@@ -1230,6 +1253,7 @@ export const PermissionsScope = {
     [Permissions.DELETE_PRIVATE_CHANNEL]: 'channel_scope',
     [Permissions.EDIT_OTHER_USERS]: 'system_scope',
     [Permissions.READ_CHANNEL]: 'channel_scope',
+    [Permissions.READ_CHANNEL_CONTENT]: 'channel_scope',
     [Permissions.READ_PUBLIC_CHANNEL]: 'team_scope',
     [Permissions.ADD_REACTION]: 'channel_scope',
     [Permissions.REMOVE_REACTION]: 'channel_scope',
@@ -1289,6 +1313,7 @@ export const PermissionsScope = {
     [Permissions.DELETE_CUSTOM_GROUP]: 'system_scope',
     [Permissions.RESTORE_CUSTOM_GROUP]: 'system_scope',
     [Permissions.MANAGE_CUSTOM_GROUP_MEMBERS]: 'system_scope',
+    [Permissions.USE_SLASH_COMMANDS]: 'channel_scope',
 };
 
 export const DefaultRolePermissions = {
@@ -1310,6 +1335,7 @@ export const DefaultRolePermissions = {
         Permissions.INVITE_USER,
         Permissions.ADD_USER_TO_TEAM,
         Permissions.READ_CHANNEL,
+        Permissions.READ_CHANNEL_CONTENT,
         Permissions.ADD_REACTION,
         Permissions.REMOVE_REACTION,
         Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS,
@@ -1338,6 +1364,12 @@ export const DefaultRolePermissions = {
         Permissions.PLAYBOOK_PRIVATE_MANAGE_PROPERTIES,
         Permissions.PLAYBOOK_PUBLIC_MAKE_PRIVATE,
         Permissions.RUN_CREATE,
+        Permissions.USE_SLASH_COMMANDS,
+        Permissions.DELETE_EMOJIS,
+        Permissions.INVITE_GUEST,
+        Permissions.CREATE_EMOJIS,
+        Permissions.RUN_VIEW,
+        Permissions.RESTORE_CUSTOM_GROUP,
     ],
     channel_admin: [
         Permissions.MANAGE_CHANNEL_ROLES,
@@ -1487,8 +1519,8 @@ export const Constants = {
     MENTIONS_REGEX: /(?:\B|\b_+)@([a-z0-9.\-_]+)/gi,
     DEFAULT_CHARACTER_LIMIT: 4000,
     IMAGE_TYPE_GIF: 'gif',
-    TEXT_TYPES: ['txt', 'rtf'],
-    IMAGE_TYPES: ['jpg', 'gif', 'bmp', 'png', 'jpeg', 'tiff', 'tif', 'psd', 'heic', 'HEIC'],
+    TEXT_TYPES: ['txt', 'rtf', 'vtt'],
+    IMAGE_TYPES: ['jpg', 'gif', 'bmp', 'png', 'jpeg', 'tiff', 'tif', 'psd'],
     AUDIO_TYPES: ['mp3', 'wav', 'wma', 'm4a', 'flac', 'aac', 'ogg', 'm4r'],
     VIDEO_TYPES: ['mp4', 'avi', 'webm', 'mkv', 'wmv', 'mpg', 'mov', 'flv'],
     PRESENTATION_TYPES: ['ppt', 'pptx'],
@@ -1537,6 +1569,10 @@ export const Constants = {
     DESKTOP_SCREEN_WIDTH: 1679,
     TABLET_SCREEN_WIDTH: 1020,
     MOBILE_SCREEN_WIDTH: 768,
+
+    SMALL_SIDEBAR_BREAKPOINT: 900,
+    MEDIUM_SIDEBAR_BREAKPOINT: 1200,
+    LARGE_SIDEBAR_BREAKPOINT: 1680,
 
     POST_MODAL_PADDING: 180,
     SCROLL_DELAY: 2000,
@@ -1623,6 +1659,7 @@ export const Constants = {
     DEFAULT_EMOJI_PICKER_LEFT_OFFSET: 87,
     DEFAULT_EMOJI_PICKER_RIGHT_OFFSET: 15,
     EMOJI_PICKER_WIDTH_OFFSET: 295,
+    SIDEBAR_MINIMUM_WIDTH: 400,
     THEME_ELEMENTS: [
         {
             group: 'sidebarElements',
@@ -1867,7 +1904,7 @@ export const Constants = {
         F11: ['F11', 122],
         F12: ['F12', 123],
         NUM_LOCK: ['NumLock', 144],
-        SEMICOLON: [',', 186],
+        SEMICOLON: [';', 186],
         EQUAL: ['=', 187],
         COMMA: [',', 188],
         DASH: ['-', 189],
@@ -1892,7 +1929,7 @@ export const Constants = {
         css: {name: 'CSS', extensions: ['css']},
         d: {name: 'D', extensions: ['d', 'di'], aliases: ['dlang']},
         dart: {name: 'Dart', extensions: ['dart']},
-        delphi: {name: 'Delphi', extensions: ['delphi', 'dpr', 'dfm', 'pas', 'pascal', 'freepascal', 'lazarus', 'lpr', 'lfm']},
+        delphi: {name: 'Delphi', extensions: ['delphi', 'dpr', 'dfm', 'pas', 'pascal', 'freepascal', 'lazarus', 'lpr', 'lfm'], aliases: ['pas', 'pascal']},
         diff: {name: 'Diff', extensions: ['diff', 'patch'], aliases: ['patch', 'udiff']},
         django: {name: 'Django', extensions: ['django', 'jinja'], aliases: ['jinja']},
         dockerfile: {name: 'Dockerfile', extensions: ['dockerfile', 'docker'], aliases: ['docker']},
@@ -1942,6 +1979,7 @@ export const Constants = {
         vbscript: {name: 'VBScript', extensions: ['vbs'], aliases: ['vbs']},
         verilog: {name: 'Verilog', extensions: ['v', 'veo', 'sv', 'svh']},
         vhdl: {name: 'VHDL', extensions: ['vhd', 'vhdl'], aliases: ['vhd']},
+        vtt: {name: 'WebVTT', extensions: ['vtt'], aliases: ['vtt', 'webvtt']},
         xml: {name: 'HTML, XML', extensions: ['xml', 'html', 'xhtml', 'rss', 'atom', 'xsl', 'plist']},
         yaml: {name: 'YAML', extensions: ['yaml'], aliases: ['yml']},
     },
@@ -2006,7 +2044,8 @@ export const Constants = {
     EMOJI_PATH: '/static/emoji',
     RECENT_EMOJI_KEY: 'recentEmojis',
     DEFAULT_WEBHOOK_LOGO: logoWebhook,
-    MHPNS: 'https://push.mattermost.com',
+    MHPNS_US: 'https://push.mattermost.com',
+    MHPNS_DE: 'https://hpns-de.mattermost.com',
     MTPNS: 'https://push-test.mattermost.com',
     MAX_PREV_MSGS: 100,
     POST_COLLAPSE_TIMEOUT: 1000 * 60 * 5, // five minutes
@@ -2067,6 +2106,7 @@ export const Constants = {
     CHANNEL_HEADER_BUTTON_DISABLE_TIMEOUT: 1000,
     FIRST_ADMIN_ROLE: 'first_admin',
     MAX_PURCHASE_SEATS: 1000000,
+    MIN_PURCHASE_SEATS: 10,
 };
 
 export const ValidationErrors = {
@@ -2087,10 +2127,13 @@ export const ConsolePages = {
     GUEST_ACCOUNTS: '/admin_console/authentication/guest_access',
     LICENSE: '/admin_console/about/license',
     SAML: '/admin_console/authentication/saml',
+    FILE_STORAGE: '/admin_console/environment/file_storage',
     SESSION_LENGTHS: '/admin_console/environment/session_lengths',
     WEB_SERVER: '/admin_console/environment/web_server',
     PUSH_NOTIFICATION_CENTER: '/admin_console/environment/push_notification_server',
     SMTP: '/admin_console/environment/smtp',
+    PAYMENT_INFO: '/admin_console/billing/payment_info',
+    BILLING_HISTORY: '/admin_console/billing/billing_history',
 };
 
 export const WindowSizes = {
@@ -2337,7 +2380,11 @@ export const OverActiveUserLimits = {
     MIN: 0.05,
     MAX: 0.1,
 } as const;
-
 export const NotificationsSettingsPath = 'notifications-settings';
+
+export const PageLoadContext = {
+    PAGE_LOAD: 'page_load',
+    RECONNECT: 'reconnect',
+} as const;
 
 export default Constants;
