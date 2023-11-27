@@ -1,3 +1,11 @@
+## 1.4.9-next.2 (2023-11-27)
+
+### Fixed (3 changes)
+
+- [Trigger the correct textbox focus depending of the scenario.](kchat/webapp@5610abcec35dd8567750fc6b5f14bb6f84a5d1ca) by @benoit.nau ([merge request](kchat/webapp!519))
+- [Correction of DE translations.](kchat/webapp@6e5792edbf3806a7ff4e5099f9270b1743db03cc) by @benoit.nau ([merge request](kchat/webapp!576))
+- [Add scroll bar when user edits a long comment.](kchat/webapp@72c7e854b3159defc8d6d24d58a2fda2281852bd) by @benoit.nau ([merge request](kchat/webapp!575))
+
 ## 1.4.9-next.1 (2023-11-22)
 
 ### Fixed (1 change)
