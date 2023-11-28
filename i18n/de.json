@@ -2982,6 +2982,7 @@
   "channel_notifications.onlyMentions": "Nur für Erwähnungen",
   "channel_notifications.override": "Auswählen eines anderen Wertes als \"Globaler Standard\" wird die globalen Benachrichtigungseinstellungen außer Kraft setzen. Desktop Benachrichtigungen sind für Firefox, Safari und Chrome verfügbar.",
   "channel_notifications.overridePush": "Auswählen einer anderen Einstellung als \"Globaler Standard\" wird die globalen Benachrichtigungen für mobile Push-Benachrichtigungen in den Einstellungen überschreiben. Push-Benachrichtigungen müssen durch den Systemadministrator aktiviert sein.",
+  "channel_notifications.overridePush2": "Auswählen einer anderen Einstellung als \"Globaler Standard\" wird die globalen Benachrichtigungen für mobile Push-Benachrichtigungen in den Einstellungen überschreiben.",
   "channel_notifications.preferences": "Benachrichtigungseinstellungen für ",
   "channel_notifications.push": "Mobile Push-Benachrichtigungen versenden",
   "channel_notifications.sendDesktop": "Desktop-Benachrichtigungen senden",

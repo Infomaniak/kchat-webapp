@@ -25,8 +25,8 @@ export default function ExtraInfo({section}: Props) {
         return (
             <span>
                 <FormattedMessage
-                    id='channel_notifications.overridePush'
-                    defaultMessage='Selecting an option other than "Global default" will override the global notification settings for mobile push notifications in Settings. Push notifications must be enabled by the System Admin.'
+                    id='channel_notifications.overridePush2'
+                    defaultMessage='Selecting an option other than "Global default" will override the global notification settings for mobile push notifications in Settings.'
                 />
             </span>
         );
