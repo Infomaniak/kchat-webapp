@@ -23,8 +23,8 @@ import Constants from 'utils/constants';
 import {t} from 'utils/i18n';
 import * as Utils from 'utils/utils';
 
-const UserSettings = React.lazy(() => import(/* webpackPrefetch: true */ 'components/user_settings'));
-const SettingsSidebar = React.lazy(() => import(/* webpackPrefetch: true */ '../../settings_sidebar'));
+const UserSettings = React.lazy(() => import('components/user_settings'));
+const SettingsSidebar = React.lazy(() => import('../../settings_sidebar'));
 
 const holders = defineMessages({
     profile: {
