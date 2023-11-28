@@ -2839,6 +2839,7 @@
   "channel_notifications.onlyMentions": "Seulement pour les mentions",
   "channel_notifications.override": "Choisir une autre option que « Par défaut » remplacera le réglage par défaut. Les notifications de bureau sont disponibles sur Firefox, Safari et Chrome.",
   "channel_notifications.overridePush": "La sélection d'une option autre que « Par défaut (général) » remplacera les paramètres de notification pour les notifications push mobiles dans les paramètres. Les notifications push doit être activées par l'administrateur système.",
+  "channel_notifications.overridePush2": "La sélection d'une option autre que « Par défaut (général) » remplacera les paramètres de notification pour les notifications push mobiles dans les paramètres.",
   "channel_notifications.preferences": "Préférences de notification pour ",
   "channel_notifications.push": "Envoyer des notifications push mobiles",
   "channel_notifications.sendDesktop": "Envoyer des notifications de bureau",

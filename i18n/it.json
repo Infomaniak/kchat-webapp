@@ -2222,6 +2222,7 @@
   "channel_notifications.onlyMentions": "Solo per le citazioni",
   "channel_notifications.override": "Selezionando un opzione diversa da \"Default\" sovrascriverà le impostazioni di notifica globale. Le notifiche Desktop sono disponibili per Firefox, Safari e Chrome.",
   "channel_notifications.overridePush": "Selezionano un opzione diversa da \"Default globale\" sovrascriverà le impostazioni di notifica globali per il push mobile nelle impostazioni account. Le notifiche push devono essere abilitate da un Amministratore di Sistema.",
+  "channel_notifications.overridePush2": "Selezionano un opzione diversa da \"Default globale\" sovrascriverà le impostazioni di notifica globali per il push mobile nelle impostazioni account.",
   "channel_notifications.preferences": "Preferenze di notifica per ",
   "channel_notifications.push": "Invia le notifiche push pobile",
   "channel_notifications.sendDesktop": "Invia notifiche desktop",

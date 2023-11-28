@@ -2905,6 +2905,7 @@
   "channel_notifications.onlyMentions": "Sólo para menciones",
   "channel_notifications.override": "Seleccionar una opción diferente a \"Predeterminada\" anulará las configuraciones globales de notificación. Las notificaciones de Escritorio están disponibles para Firefox, Safari, y Chrome.",
   "channel_notifications.overridePush": "Seleccionando una opción diferente a \"Predeterminada Global\" sustituirá los ajustes globales de notificación para notificaciones móviles push en los ajustes. Las notificaciones push deben ser habilitadas por el Administrador del Sistema.",
+  "channel_notifications.overridePush2": "Seleccionando una opción diferente a \"Predeterminada Global\" sustituirá los ajustes globales de notificación para notificaciones móviles push en los ajustes.",
   "channel_notifications.preferences": "Preferencias de Notificación para ",
   "channel_notifications.push": "Enviar notificaciones a dispositivos móviles",
   "channel_notifications.sendDesktop": "Enviar notificaciones de escritorio",
