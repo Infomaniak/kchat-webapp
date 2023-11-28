@@ -6,7 +6,7 @@ import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
 
 import Constants from 'utils/constants';
-import {isKeyPressed} from 'utils/utils';
+import {isKeyPressed} from 'utils/keyboard';
 
 const Title = styled.div`
     flex:1;
@@ -59,8 +59,6 @@ export interface Props {
     className?: string;
     channelType: string;
     membersCount: number;
-    guestsCount: number;
-    pendingGuestsCount: number;
     canManageMembers: boolean;
     editing: boolean;
     actions: {
@@ -70,8 +68,8 @@ export interface Props {
     };
 }
 
-const ActionBar = ({className, channelType, membersCount, guestsCount, pendingGuestsCount, canManageMembers, editing, actions}: Props) => {
-    const showManageButton = channelType !== Constants.GM_CHANNEL && membersCount + guestsCount + pendingGuestsCount > 1;
+const ActionBar = ({className, channelType, membersCount, canManageMembers, editing, actions}: Props) => {
+    const showManageButton = channelType !== Constants.GM_CHANNEL && membersCount > 1;
 
     const handleShortcut = useCallback((e) => {
         if (isKeyPressed(e, Constants.KeyCodes.ESCAPE) && editing) {
@@ -98,7 +96,7 @@ const ActionBar = ({className, channelType, membersCount, guestsCount, pendingGu
                     <FormattedMessage
                         id='channel_members_rhs.action_bar.members_count_title'
                         defaultMessage='{members_count} members'
-                        values={{members_count: membersCount + guestsCount}}
+                        values={{members_count: membersCount}}
                     />
                 )}
 

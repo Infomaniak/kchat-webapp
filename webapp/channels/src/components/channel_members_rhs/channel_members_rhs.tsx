@@ -7,13 +7,14 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 
-import type {Channel, ChannelMembership, PendingGuest, PendingGuests} from '@mattermost/types/channels';
+import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {ProfilesInChannelSortBy} from 'mattermost-redux/actions/users';
 
 import AlertBanner from 'components/alert_banner';
 import ChannelInviteModal from 'components/channel_invite_modal';
+import ExternalLink from 'components/external_link';
 import MoreDirectChannels from 'components/more_direct_channels';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
@@ -42,18 +43,16 @@ export interface Props {
     channel: Channel;
     currentUserIsChannelAdmin: boolean;
     membersCount: number;
-    guestsCount: number;
     searchTerms: string;
     canGoBack: boolean;
     teamUrl: string;
     channelMembers: ChannelMember[];
     canManageMembers: boolean;
     editing: boolean;
-    pendingGuests: PendingGuests;
 
     actions: {
         openModal: <P>(modalData: ModalData<P>) => void;
-        openDirectChannelToUserId: (userId: string) => Promise<{ data: Channel }>;
+        openDirectChannelToUserId: (userId: string) => Promise<{data: Channel}>;
         closeRightHandSide: () => void;
         goBack: () => void;
         setChannelMembersRhsSearchTerm: (terms: string) => void;
@@ -61,20 +60,18 @@ export interface Props {
         loadMyChannelMemberAndRole: (channelId: string) => void;
         setEditChannelMembers: (active: boolean) => void;
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;
-        getChannelPendingGuests: (channelId: string) => void;
     };
 }
 
 export enum ListItemType {
     Member = 'member',
-    PendingGuest = 'pending-guest',
     FirstSeparator = 'first-separator',
     Separator = 'separator',
 }
 
 export interface ListItem {
     type: ListItemType;
-    data: ChannelMember | PendingGuest | JSX.Element;
+    data: ChannelMember | JSX.Element;
 }
 
 export default function ChannelMembersRHS({
@@ -82,13 +79,11 @@ export default function ChannelMembersRHS({
     currentUserIsChannelAdmin,
     searchTerms,
     membersCount,
-    guestsCount,
     canGoBack,
     teamUrl,
     channelMembers,
     canManageMembers,
     editing = false,
-    pendingGuests,
     actions,
 }: Props) {
     const history = useHistory();
@@ -105,12 +100,6 @@ export default function ChannelMembersRHS({
 
     // show search if there's more than 20 or if the user have an active search.
     const showSearch = searching || membersCount >= 20;
-
-    const pendingGuestsCount = Object.keys(pendingGuests).length;
-
-    useEffect(() => {
-        actions.getChannelPendingGuests(channel.id);
-    }, [channel, actions]);
 
     useEffect(() => {
         return () => {
@@ -162,24 +151,10 @@ export default function ChannelMembersRHS({
 
             listcp.push({type: ListItemType.Member, data: member});
         }
-        Object.keys(pendingGuests).forEach((key, index) => {
-            const pendingGuest = pendingGuests[key];
-            if (index === 0) {
-                const text = (
-                    <FormattedMessage
-                        id='channel_members_rhs.list.channel_pending_guests_title'
-                        defaultMessage='PENDING INVITATIONS'
-                    />
-                );
-                listcp.push({
-                    type: ListItemType.Separator,
-                    data: <MemberListSeparator>{text}</MemberListSeparator>,
-                });
-            }
-            listcp.push({type: ListItemType.PendingGuest, data: pendingGuest});
-        });
-        setList(listcp);
-    }, [channelMembers, pendingGuests]);
+        if (JSON.stringify(list) !== JSON.stringify(listcp)) {
+            setList(listcp);
+        }
+    }, [channelMembers]);
 
     useEffect(() => {
         if (channel.type === Constants.DM_CHANNEL) {
@@ -228,7 +203,7 @@ export default function ChannelMembersRHS({
         });
     };
 
-    const openDirectMessage = async (user: UserProfile) => {
+    const openDirectMessage = useCallback(async (user: UserProfile) => {
         // we first prepare the DM channel...
         await actions.openDirectChannelToUserId(user.id);
 
@@ -236,16 +211,17 @@ export default function ChannelMembersRHS({
         history.push(teamUrl + '/messages/@' + user.username);
 
         await actions.closeRightHandSide();
-    };
+    }, [actions.openDirectChannelToUserId, history, teamUrl, actions.closeRightHandSide]);
 
-    const loadMore = async () => {
+    const loadMore = useCallback(async () => {
         setIsNextPageLoading(true);
 
         await actions.loadProfilesAndReloadChannelMembers(page + 1, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
         setPage(page + 1);
 
         setIsNextPageLoading(false);
-    };
+    }, [actions.loadProfilesAndReloadChannelMembers, page, channel.id],
+    );
 
     return (
         <div
@@ -255,7 +231,7 @@ export default function ChannelMembersRHS({
 
             <Header
                 channel={channel}
-                canGoBack={true}
+                canGoBack={canGoBack}
                 onClose={actions.closeRightHandSide}
                 goBack={actions.goBack}
             />
@@ -263,8 +239,6 @@ export default function ChannelMembersRHS({
             <ActionBar
                 channelType={channel.type}
                 membersCount={membersCount}
-                guestsCount={guestsCount}
-                pendingGuestsCount={pendingGuestsCount}
                 canManageMembers={canManageMembers}
                 editing={editing}
                 actions={{
@@ -285,7 +259,12 @@ export default function ChannelMembersRHS({
                             defaultMessage: 'In this channel, you can only remove guests. Only <link>channel admins</link> can manage other members.',
                         }, {
                             link: (msg: React.ReactNode) => (
-                                <span>{msg}</span>
+                                <ExternalLink
+                                    href='https://docs.mattermost.com/welcome/about-user-roles.html#channel-admin'
+                                    location='channel_members_rhs'
+                                >
+                                    {msg}
+                                </ExternalLink>
                             ),
                         })}
                     />
@@ -306,8 +285,9 @@ export default function ChannelMembersRHS({
                         members={list}
                         editing={editing}
                         channel={channel}
-                        actions={{openDirectMessage, loadMore}}
-                        hasNextPage={channelMembers.length < membersCount + guestsCount}
+                        openDirectMessage={openDirectMessage}
+                        loadMore={loadMore}
+                        hasNextPage={channelMembers.length < membersCount}
                         isNextPageLoading={isNextPageLoading}
                     />
                 )}
