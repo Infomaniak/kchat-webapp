@@ -210,7 +210,7 @@ function createDMIntroMessage(channel: Channel, centeredIntro: string, teammate?
                                     >{'@'}{chunks}</AtMention>
                                 ),
                             }}
-                            defaultMessage='{limit} daily ChatGPT queries are included with kChat for free until {day} November to let you test the power of <mention>{botName}</mention>. With our AI, the data is processed exclusively in Switzerland on Infomaniak’s servers. Using ChatGPT, the data is sent and analysed on OpenAI servers in the United States. We advise you not to share sensitive information with ChatGPT and remind you that AI may generate inaccurate information about people, places or facts.'
+                            defaultMessage='{limit} daily ChatGPT queries are included with kChat for free until {day} May to let you test the power of <mention>{botName}</mention>. With our AI, the data is processed exclusively in Switzerland on Infomaniak’s servers. Using ChatGPT, the data is sent and analysed on OpenAI servers in the United States. We advise you not to share sensitive information with ChatGPT and remind you that AI may generate inaccurate information about people, places or facts.'
                         />
                     </p>
                 ) : null}
