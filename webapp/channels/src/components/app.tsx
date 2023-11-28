@@ -12,7 +12,9 @@ import {makeAsyncComponent} from 'components/async_load';
 import CRTPostsChannelResetWatcher from 'components/threading/channel_threads/posts_channel_reset_watcher';
 
 import {getHistory} from 'utils/browser_history';
-const LazyRoot = React.lazy(() => import('components/root'));
+import * as Utils from 'utils/utils';
+
+const LazyRoot = Utils.lazyWithRetries(() => import('components/root'));
 
 const Root = makeAsyncComponent('Root', LazyRoot);
 
