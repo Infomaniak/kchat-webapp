@@ -1,3 +1,10 @@
+## 1.4.9-next.3 (2023-11-28)
+
+### Changed (2 changes)
+
+- [only allow bugtracker webcomponent on desktop](kchat/webapp@96633df674dd69bf30f3dea7954a64c7459891ba) by @antonbuksa ([merge request](kchat/webapp!572))
+- [use webcomponent oauth mode](kchat/webapp@259db4fed2ecb5809aaf231ed1d8d818c0c72394) by @antonbuksa ([merge request](kchat/webapp!572))
+
 ## 1.4.9-next.2 (2023-11-27)
 
 ### Fixed (3 changes)
