@@ -42,6 +42,12 @@ jest.mock('mattermost-redux/actions/general', () => ({
 }));
 
 describe('components/Root', () => {
+    beforeEach(() => {
+        Object.defineProperty(window, 'setWCToken', {
+            writable: true,
+            value: () => {},
+        });
+    });
     const baseProps = {
         telemetryEnabled: true,
         telemetryId: '1234ab',

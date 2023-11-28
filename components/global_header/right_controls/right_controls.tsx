@@ -149,13 +149,11 @@ const RightControls = (): JSX.Element => {
         <RightControlsContainer
             id={'RightControlsContainer'}
         >
-            {!isDesktopApp && (
-                <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                    <module-reporting-tools-component size='26'></module-reporting-tools-component>
-                </ReportingToolsWrapper>
-            )}
+            <ReportingToolsWrapper className='wc-trigger-reporting-tools--flex'>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <module-reporting-tools-component size='26'></module-reporting-tools-component>
+            </ReportingToolsWrapper>
             <OverlayTrigger
                 trigger={['hover', 'focus']}
                 delayShow={Constants.OVERLAY_TIME_DELAY}

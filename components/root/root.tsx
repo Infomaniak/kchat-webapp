@@ -587,6 +587,11 @@ export default class Root extends React.PureComponent<Props, State> {
                     getChallengeAndRedirectToLogin(true);
                 }
 
+                // Provide token to webcomponents via injected function
+                (window as Window & typeof globalThis & {
+                    setWCToken?: (token: string) => void;
+                }).setWCToken?.(token!);
+
                 // migration from 2.0
                 if (token && (tokenExpire || refreshToken)) {
                     // Prepare migrate to infinite token by clearing all instances of old token
