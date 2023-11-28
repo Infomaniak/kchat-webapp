@@ -1,3 +1,10 @@
+## 1.4.9-next.4 (2023-11-28)
+
+### Changed (2 changes)
+
+- [change mobile push notification text](kchat/webapp@16983098f1e35468f38ba1c9b3e1edf5377aa439) by @antonbuksa ([merge request](kchat/webapp!578))
+- [update chatgpt limit date](kchat/webapp@a2e6c6311067a6bba707a4b7c7a1cc69aa39b56e) by @antonbuksa ([merge request](kchat/webapp!577))
+
 ## 1.4.9-next.3 (2023-11-28)
 
 ### Changed (2 changes)
