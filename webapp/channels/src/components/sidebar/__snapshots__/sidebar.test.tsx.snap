@@ -3,7 +3,7 @@
 exports[`components/sidebar should match empty div snapshot when teamId is missing 1`] = `<div />`;
 
 exports[`components/sidebar should match snapshot 1`] = `
-<div
+<ResizableLhs
   className=""
   id="SidebarContainer"
 >
@@ -54,5 +54,5 @@ exports[`components/sidebar should match snapshot 1`] = `
     onDragStart={[Function]}
   />
   <Connect(DataPrefetch) />
-</div>
+</ResizableLhs>
 `;

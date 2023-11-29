@@ -13,6 +13,7 @@ import InvitationModal from 'components/invitation_modal';
 import MoreChannels from 'components/more_channels';
 import MoreDirectChannels from 'components/more_direct_channels';
 import NewChannelModal from 'components/new_channel_modal/new_channel_modal';
+import ResizableLhs from 'components/resizable_sidebar/resizable_lhs';
 
 import Pluggable from 'plugins/pluggable';
 import Constants, {ModalIdentifiers, RHSStates} from 'utils/constants';
@@ -221,7 +222,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
         const ariaLabel = Utils.localizeMessage('accessibility.sections.lhsNavigator', 'channel navigator region');
 
         return (
-            <div
+            <ResizableLhs
                 id='SidebarContainer'
                 className={classNames({
                     'move--right': this.props.isOpen && this.props.isMobileView,
@@ -273,7 +274,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                     onDragEnd={this.onDragEnd}
                 />
                 <DataPrefetch/>
-            </div>
+            </ResizableLhs>
         );
     }
 }
