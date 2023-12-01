@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /* eslint-disable no-restricted-imports */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
@@ -137,7 +138,7 @@ export function loadMeREST(): ActionFunc {
 }
 
 export function loadMe(): ActionFunc {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+    return async (dispatch: DispatchFunc) => {
         // Sometimes the server version is set in one or the other
         // const serverVersion = state.entities.general.serverVersion || Client4.getServerVersion();
         const serverVersion = Client4.getServerVersion();
@@ -258,6 +259,7 @@ export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SI
         let currentFetch: UserProfile[];
         let currentPage = page;
         try {
+            // eslint-disable-next-line no-constant-condition
             while (true) {
                 // eslint-disable-next-line no-await-in-loop
                 currentFetch = await Client4.getProfiles(currentPage, perPage, options);
@@ -283,7 +285,7 @@ export function getProfiles(page = 0, perPage: number = General.PROFILE_CHUNK_SI
     };
 }
 
-export function getMissingProfilesByIds(userIds: string[]): ActionFunc {
+export function getMissingProfilesByIds(userIds: string[]) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {profiles} = getState().entities.users;
         const missingIds: string[] = [];
@@ -302,7 +304,7 @@ export function getMissingProfilesByIds(userIds: string[]): ActionFunc {
     };
 }
 
-export function getMissingProfilesByUsernames(usernames: string[]): ActionFunc {
+export function getMissingProfilesByUsernames(usernames: string[]) {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const {profiles} = getState().entities.users;
 
@@ -560,13 +562,13 @@ export function getProfilesNotInChannel(teamId: string, channelId: string, group
     };
 }
 
-export function getMe(): ActionFunc {
+export function getMe() {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const getMeFunc = bindClientFunc({
             clientFunc: Client4.getMe,
             onSuccess: UserTypes.RECEIVED_ME,
         });
-        const me = await getMeFunc(dispatch, getState);
+        const me = await getMeFunc(dispatch, getState) as any;
         if ('error' in me) {
             if (me.error?.status_code && me.error?.status_code === 404 && (window && !window.location.pathname.includes('static/call'))) {
                 getHistory().push('/error?type=page_not_found');
