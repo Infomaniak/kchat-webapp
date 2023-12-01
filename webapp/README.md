@@ -1,28 +1,48 @@
-# Mattermost Web App
+# kchat-webapp
 
-This folder contains the client code for the Mattermost web app. It's broken up into multiple packages each of which either contains an area of the app (such as `playbooks`) or shared logic used across other packages (such as the packages located in the `platform` directory). For anyone who's used to working in [the mattermost/mattermost-webapp repo](https://github.com/mattermost/mattermost-webapp), most of that is now located in `channels`.
+Infomaniak fork of the mattermost web client modified to work with our internal API as part of the kSuite.
 
-## npm Workspaces
+:warning: This project is still in beta.
 
-To interact with a workspace using npm, such as to add a dependency or run a script, use the `--workspace` (or `--workspaces`) flag. This can be done when using built-in npm commands such as `npm add` or when running scripts. Those commands should be run from this directory.
+## Running the project
 
-```sh
-# Add a dependency to a single package
-npm add react --workspace=playbooks
+### Prerequisites
 
-# Build multiple packages
-npm run build --workspace=platform/client --workspace=platform/components
+ - Node 16
+ - Yarn
 
-# Test all workspaces
-npm test --workspaces
+### Environment
 
-# Clean all workspaces that have a clean script defined
-npm run clean --workspaces --if-present
+Add an `NPM_TOKEN` env var with a Github token (read:packages scope)
+
+Create a .env file with the following variables
+
+```dotenv
+WEBCOMPONENT_ENDPOINT=https://web-components.storage.infomaniak.com/current
+WEBCOMPONENT_API_ENDPOINT=https://welcome.infomaniak.com
+MANAGER_ENDPOINT=https://manager.infomaniak.com
+LOGIN_ENDPOINT=https://login.infomaniak.com
 ```
 
-To install dependencies for a workspace, simply run `npm install` from this folder as you would do normally. Most packages' dependencies will be included in the root `node_modules`, and all packages' dependencies will appear in the `package-lock.json`. A `node_modules` will only be created inside a package if one of its dependencies conflicts with that of another package.
+### Installing and building dependencies
 
-## Useful Links
+We are using yarn berry with workspace tools for monorepo support building and better module caching between builds
 
-- [Developer setup](https://developers.mattermost.com/contribute/developer-setup/), now included with the Mattermost server developer setup
-- [Web app developer documentation](https://developers.mattermost.com/contribute/more-info/webapp/)
+```shell
+yarn
+yarn workspace @infomaniak/mattermost-types build
+yarn workspace @infomaniak/mattermost-client build
+yarn workspace @mattermost/components build
+```
+
+### Running with webpack dev server
+
+```shell
+export $(xargs < ./.env) && yarn dev-server:webapp
+```
+
+### Running prod build
+
+```shell
+export $(xargs < ./.env) && yarn build:webapp
+```
