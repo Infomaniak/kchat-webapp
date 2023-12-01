@@ -8,10 +8,11 @@ import {bindActionCreators} from 'redux';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import type {Post} from 'mattermost-redux/types/posts';
-import type {GlobalState} from 'types/store';
 
 import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannelV2} from 'actions/calls';
 import {connectedKmeetCallUrl} from 'selectors/kmeet_calls';
+
+import type {GlobalState} from 'types/store';
 
 import PostType from './component';
 

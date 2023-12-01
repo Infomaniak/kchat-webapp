@@ -17,19 +17,13 @@ import {isGuest} from 'mattermost-redux/utils/user_utils';
 import {muteChannel, unmuteChannel} from 'actions/channel_actions';
 import {openModal} from 'actions/views/modals';
 import {closeRightHandSide, showChannelFiles, showChannelMembers, showPinnedPosts} from 'actions/views/rhs';
+import {getIsMobileView} from 'selectors/views/browser';
 import {isModalOpen} from 'selectors/views/modals';
 
-
 import {Constants, ModalIdentifiers} from 'utils/constants';
-import {GlobalState} from 'types/store';
-
-
-
-import {getIsMobileView} from 'selectors/views/browser';
-
-
-
 import {getDisplayNameByUser, getUserIdFromChannelId} from 'utils/utils';
+
+import type {GlobalState} from 'types/store';
 
 import type {Props} from './channel_info_rhs';
 import RHS from './channel_info_rhs';

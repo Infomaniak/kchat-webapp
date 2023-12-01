@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import IconButton from '@infomaniak/compass-components/components/icon-button';
-import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
@@ -24,6 +23,7 @@ import {
     useShowOnboardingTutorialStep,
 } from 'components/tours/onboarding_tour';
 
+import imagePath from 'images/icons/messages-bubble-user-feedback.svg';
 import Constants from 'utils/constants';
 import {isDesktopApp as getIsDesktopApp} from 'utils/user_agent';
 

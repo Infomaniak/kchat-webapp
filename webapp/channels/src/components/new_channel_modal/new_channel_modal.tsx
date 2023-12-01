@@ -7,6 +7,7 @@ import {Tooltip} from 'react-bootstrap';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
 import type {Board} from '@mattermost/types/boards';
 import type {ChannelType, Channel} from '@mattermost/types/channels';
 import type {ServerError} from '@mattermost/types/errors';
@@ -25,7 +26,6 @@ import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 import {switchToChannel} from 'actions/views/channel';
 import {closeModal, openModal} from 'actions/views/modals';
 
-import {GenericModal} from '@mattermost/components';
 import ChannelLimitIndicator from 'components/limits/channel_limit_indicator';
 import ChannelLimitReachedModal from 'components/limits/channel_limit_reached_modal';
 import OverlayTrigger from 'components/overlay_trigger';

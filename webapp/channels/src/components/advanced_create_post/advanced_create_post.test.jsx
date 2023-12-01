@@ -3,7 +3,6 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {testComponentForMarkdownHotkeys} from 'tests/helpers/markdown_hotkey_helpers.js';
 
 import {Posts} from 'mattermost-redux/constants';
 
@@ -12,6 +11,7 @@ import * as GlobalActions from 'actions/global_actions';
 import AdvancedCreatePost from 'components/advanced_create_post/advanced_create_post';
 
 import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
+import {testComponentForMarkdownHotkeys} from 'tests/helpers/markdown_hotkey_helpers.js';
 import Constants, {StoragePrefixes, ModalIdentifiers} from 'utils/constants';
 import EmojiMap from 'utils/emoji_map';
 import * as Utils from 'utils/utils';

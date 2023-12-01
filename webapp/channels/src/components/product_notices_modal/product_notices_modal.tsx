@@ -4,12 +4,12 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import {GenericModal} from '@mattermost/components';
 import type {ProductNotices, ProductNotice} from '@mattermost/types/product_notices';
 
 import {trackEvent} from 'actions/telemetry_actions.jsx';
 
 import ExternalLink from 'components/external_link';
-import {GenericModal} from '@mattermost/components';
 import Markdown from 'components/markdown';
 import AdminEyeIcon from 'components/widgets/icons/admin_eye_icon';
 import NextIcon from 'components/widgets/icons/fa_next_icon';

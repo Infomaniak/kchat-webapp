@@ -6,6 +6,8 @@ import React, {useEffect} from 'react';
 import {useIntl, FormattedMessage} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
+
 import {getPrevTrialLicense} from 'mattermost-redux/actions/admin';
 import {checkHadPriorTrial} from 'mattermost-redux/selectors/entities/cloud';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
@@ -18,7 +20,6 @@ import {isModalOpen} from 'selectors/views/modals';
 import CloudStartTrialButton from 'components/cloud_start_trial/cloud_start_trial_btn';
 import {NotifyStatus} from 'components/common/hooks/useGetNotifyAdmin';
 import useOpenPricingModal from 'components/common/hooks/useOpenPricingModal';
-import {GenericModal} from '@mattermost/components';
 import StartTrialBtn from 'components/learn_more_trial_modal/start_trial_btn';
 import {useNotifyAdmin} from 'components/notify_admin_cta/notify_admin_cta';
 

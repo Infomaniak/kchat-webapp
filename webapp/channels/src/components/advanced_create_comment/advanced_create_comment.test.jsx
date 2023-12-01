@@ -3,11 +3,11 @@
 
 import {shallow} from 'enzyme';
 import React from 'react';
-import {testComponentForMarkdownHotkeys} from 'tests/helpers/markdown_hotkey_helpers.js';
 
 import AdvancedCreateComment from 'components/advanced_create_comment/advanced_create_comment';
 
 import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
+import {testComponentForMarkdownHotkeys} from 'tests/helpers/markdown_hotkey_helpers.js';
 import Constants, {ModalIdentifiers} from 'utils/constants';
 
 import AdvanceTextEditor from '../advanced_text_editor/advanced_text_editor';

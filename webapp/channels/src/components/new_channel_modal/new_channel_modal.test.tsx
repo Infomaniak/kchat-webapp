@@ -5,6 +5,7 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 
+import {GenericModal} from '@mattermost/components';
 import type {ChannelType} from '@mattermost/types/channels';
 
 import {createChannel} from 'mattermost-redux/actions/channels';
@@ -12,7 +13,6 @@ import Permissions from 'mattermost-redux/constants/permissions';
 
 import {openChannelLimitModalIfNeeded} from 'actions/cloud';
 
-import {GenericModal} from '@mattermost/components';
 import Input from 'components/widgets/inputs/input/input';
 import URLInput from 'components/widgets/inputs/url_input/url_input';
 import PublicPrivateSelector from 'components/widgets/public-private-selector/public-private-selector';

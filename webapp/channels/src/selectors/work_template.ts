@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
-
 import {getFeatureFlagValue} from 'mattermost-redux/selectors/entities/general';
 
 import type {GlobalState} from 'types/store';

@@ -7,6 +7,7 @@ import {FormattedList, FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import type {ValueType} from 'react-select';
 
+import {GenericModal} from '@mattermost/components';
 import type {PostPreviewMetadata} from '@mattermost/types/posts';
 
 import {General, Permissions} from 'mattermost-redux/constants';
@@ -14,7 +15,6 @@ import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
-import {GenericModal} from '@mattermost/components';
 import NotificationBox from 'components/notification_box';
 import PostMessagePreview from 'components/post_view/post_message_preview';
 

@@ -1,10 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import loaderIk from 'images/ik/manager2x.gif';
 import type {ReactNode, CSSProperties} from 'react';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+
+import loaderIk from 'images/ik/manager2x.gif';
 
 type Props = {
     position: 'absolute' | 'fixed' | 'relative' | 'static' | 'inherit';

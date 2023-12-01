@@ -17,32 +17,27 @@ import type {UserProfile} from '@mattermost/types/users';
 import {PostTypes, ChannelTypes, FileTypes, IntegrationTypes} from 'mattermost-redux/action_types';
 import {searchGroups} from 'mattermost-redux/actions/groups';
 import {Client4, DEFAULT_LIMIT_AFTER, DEFAULT_LIMIT_BEFORE} from 'mattermost-redux/client';
-
 import {getCurrentChannelId, getMyChannelMember as getMyChannelMemberSelector} from 'mattermost-redux/selectors/entities/channels';
 import {getCustomEmojisByName as selectCustomEmojisByName} from 'mattermost-redux/selectors/entities/emojis';
 import {getAllGroupsByName} from 'mattermost-redux/selectors/entities/groups';
 import * as Selectors from 'mattermost-redux/selectors/entities/posts';
 import {getUnreadScrollPositionPreference, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId, getUsersByUsername} from 'mattermost-redux/selectors/entities/users';
-
+import type {ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import {isCombinedUserActivityPost} from 'mattermost-redux/utils/post_list';
 
-import {ActionResult, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
-
-
-import {getProfilesByIds, getProfilesByUsernames, getStatusesByIds} from './users';
-import {General, Preferences, Posts} from '../constants';
-
-
+import {selectChannel} from './channels';
+import {systemEmojis, getCustomEmojiByName, getCustomEmojisByName} from './emojis';
+import {logError} from './errors';
+import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
 import {
     deletePreferences,
     savePreferences,
 } from './preferences';
-import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
-import {logError} from './errors';
-import {systemEmojis, getCustomEmojiByName, getCustomEmojisByName} from './emojis';
-import {selectChannel} from './channels';
 import {decrementThreadCounts} from './threads';
+import {getProfilesByIds, getProfilesByUsernames, getStatusesByIds} from './users';
+
+import {General, Preferences, Posts} from '../constants';
 
 export let hasLimitDate: string | null;
 

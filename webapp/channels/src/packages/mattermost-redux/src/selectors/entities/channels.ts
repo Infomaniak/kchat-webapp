@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import {max} from 'lodash';
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
 
 import type {
     Channel,
@@ -25,6 +24,7 @@ import type {
 
 import {General, Permissions, Preferences} from 'mattermost-redux/constants';
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
 import {getDataRetentionCustomPolicy} from 'mattermost-redux/selectors/entities/admin';
 import {getCategoryInTeamByType} from 'mattermost-redux/selectors/entities/channel_categories';
 import {

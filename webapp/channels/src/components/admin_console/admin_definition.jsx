@@ -50,31 +50,8 @@ import CustomURLSchemesSetting from './custom_url_schemes_setting.jsx';
 import DataRetentionSettings from './data_retention_settings';
 import CustomDataRetentionForm from './data_retention_settings/custom_policy_form';
 import GlobalDataRetentionForm from './data_retention_settings/global_policy_form';
-import GroupDetails from './group_settings/group_details';
-import GroupSettings from './group_settings/group_settings';
-import LicenseSettings from './license_settings';
-import OpenIdConvert from './openid_convert';
-import PasswordSettings from './password_settings.jsx';
-import PermissionSchemesSettings from './permission_schemes_settings';
-import PermissionSystemSchemeSettings from './permission_schemes_settings/permission_system_scheme_settings';
-import PermissionTeamSchemeSettings from './permission_schemes_settings/permission_team_scheme_settings';
-import PushNotificationsSettings from './push_settings.jsx';
-import ServerLogs from './server_logs';
-import SystemRoles from './system_roles';
-import ValidationResult from './validation';
-import SystemRole from './system_roles/system_role';
-import SystemUsers from './system_users';
-import SystemUserDetail from './system_user_detail';
-import TeamSettings from './team_channel_settings/team';
-import TeamDetails from './team_channel_settings/team/details';
-import ChannelSettings from './team_channel_settings/channel';
-import ChannelDetails from './team_channel_settings/channel/details';
-import MessageExportSettings from './message_export_settings.jsx';
 import DatabaseSettings from './database_settings.jsx';
 import ElasticSearchSettings from './elasticsearch_settings.jsx';
-import FeatureFlags from './feature_flags.tsx';
-import SessionLengthSettings from './session_length_settings';
-import WorkspaceOptimizationDashboard from './workspace-optimization/dashboard';
 import {
     LDAPFeatureDiscovery,
     SAMLFeatureDiscovery,
@@ -88,6 +65,29 @@ import {
     SystemRolesFeatureDiscovery,
     GroupsFeatureDiscovery,
 } from './feature_discovery/features';
+import FeatureFlags from './feature_flags.tsx';
+import GroupDetails from './group_settings/group_details';
+import GroupSettings from './group_settings/group_settings';
+import LicenseSettings from './license_settings';
+import MessageExportSettings from './message_export_settings.jsx';
+import OpenIdConvert from './openid_convert';
+import PasswordSettings from './password_settings.jsx';
+import PermissionSchemesSettings from './permission_schemes_settings';
+import PermissionSystemSchemeSettings from './permission_schemes_settings/permission_system_scheme_settings';
+import PermissionTeamSchemeSettings from './permission_schemes_settings/permission_team_scheme_settings';
+import PushNotificationsSettings from './push_settings.jsx';
+import ServerLogs from './server_logs';
+import SessionLengthSettings from './session_length_settings';
+import SystemRoles from './system_roles';
+import SystemRole from './system_roles/system_role';
+import SystemUserDetail from './system_user_detail';
+import SystemUsers from './system_users';
+import ChannelSettings from './team_channel_settings/channel';
+import ChannelDetails from './team_channel_settings/channel/details';
+import TeamSettings from './team_channel_settings/team';
+import TeamDetails from './team_channel_settings/team/details';
+import ValidationResult from './validation';
+import WorkspaceOptimizationDashboard from './workspace-optimization/dashboard';
 
 const FILE_STORAGE_DRIVER_LOCAL = 'local';
 const FILE_STORAGE_DRIVER_S3 = 'amazons3';

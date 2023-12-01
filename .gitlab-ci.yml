@@ -1,22 +1,291 @@
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  # - template: Security/Container-Scanning.gitlab-ci.yml
+  # - template: Code-Quality.gitlab-ci.yml
+  - project: 'docker-public/gitlab-triage'
+    ref: master
+    file: '/gitlab-triage.yaml'
+
+variables:
+  SAST_DISABLED: "true"
+  WEEKLY_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/994e7a29-4b7f-4fd5-a194-5eea8ac49bc2
+
 stages:
   - test
   - build
-  - publish
-  - create-vars
-  - trigger-build-ee
+  - release
 
-include:
-  - project: mattermost/ci/mattermost-server
-    ref: master
-    file: private.yml
+workflow:
+  rules:
+    - if: "$CI_COMMIT_TAG =~ /\\-rc.*/"
+      variables:
+        DEPLOY_VARIABLE: preprod
+        NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
+    - if: "$CI_COMMIT_TAG =~ /\\-next.*/"
+      variables:
+        DEPLOY_VARIABLE: canary
+        NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
+    - if: "$CI_COMMIT_TAG"
+      variables:
+        DEPLOY_VARIABLE: prod
+        NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/986f3435-6c53-4648-a86c-33c64fc14daf
+    - if: $CI_COMMIT_BRANCH == "master"
+      variables:
+        DEPLOY_VARIABLE: prodsec
+    - if: "$CI_MERGE_REQUEST_ID"
+      variables:
+        DEPLOY_VARIABLE: "staging/${CI_COMMIT_REF_SLUG}"
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - when: never
 
-variables:
-  BUILD: "yes"
-  IMAGE_BUILD_SERVER: $CI_REGISTRY/mattermost/ci/images/mattermost-build-server:20230904_golang-1.20.7
-  IMAGE_BUILD_DOCKER: $CI_REGISTRY/mattermost/ci/devops-images/mattermost-build-docker:23.0.1-0
-  IMAGE_DIND: $CI_REGISTRY/mattermost/ci/devops-images/docker-dind:23.0.1-0
-
-empty:
-  stage: create-vars
+build_docker_image:
+  stage: release
+  tags:
+    - kubernetes
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint:
+      - ''
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual
+      allow_failure: false
+    - when: never
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
   script:
-    - echo "empty"
+    - /kaniko/executor
+      --cache=true
+      --context ${CI_PROJECT_DIR}
+      --dockerfile ${CI_PROJECT_DIR}/Dockerfile
+      --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+
+build_front:
+  stage: build
+  image: node:18.10.0
+  tags:
+    - kubernetes
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "canary"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+      when: on_success
+    - when: never
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  before_script:
+    - cd webapp
+    - export ENVIRONMENT=${DEPLOY_VARIABLE}
+  script:
+    - npm i
+    - npm run build
+  artifacts:
+    paths:
+      - channels/dist
+    expire_in: 1 days
+    when: always
+
+publish_packages:
+  stage: build
+  image: node:18.10.0
+  tags:
+    - kubernetes
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
+    - when: never
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  before_script:
+    - cd webapp
+  script:
+    - npm i
+    - npm config set registry https://verdaccio.dev.infomaniak.ch
+    - npm config set "//verdaccio.dev.infomaniak.ch/:_authToken" "$VERDACCIO_TOKEN"
+    - npm config set "//verdaccio.dev.infomaniak.ch/:_npmAlwaysAuth" true
+    - npm config set @infomaniak:registry-server https://verdaccio.dev.infomaniak.ch
+    - npm config set @infomaniak:publish-config.registry https://verdaccio.dev.infomaniak.ch
+    - npm config set "//verdaccio.dev.infomaniak.ch/:_authToken" "$VERDACCIO_TOKEN"
+    - npm publish --workspace @infomaniak/mattermost-types
+    - npm publish --workspace @infomaniak/mattermost-client
+
+publish_front:
+  stage: release
+  tags:
+    - kubernetes
+  image:
+    name: minio/mc:RELEASE.2022-11-07T23-47-39Z
+    entrypoint: [ '' ]
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "canary"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+      when: on_success
+    - when: never
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  before_script:
+    - mc config host add $S3_BUCKET $S3_HOST $S3_KEY $S3_PASSWORD --api s3v4
+  script:
+    - mc cp --recursive dist/ $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE
+  after_script:
+    - mc rm --recursive --force --older-than 30d $S3_BUCKET/$S3_BUCKET/kchat/staging
+    - mc rm --recursive --force --older-than 30d $S3_BUCKET/$S3_BUCKET/kchat/preprod
+  artifacts:
+    paths:
+      - dist
+    expire_in: 1 days
+    when: always
+
+unit_test:
+  stage: test
+  image: node:16.14.2
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
+    - when: never
+  artifacts:
+    paths:
+      - coverage/
+    when: on_success
+    reports:
+      junit: coverage/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+  cache:
+    paths:
+      - .jestcache
+  before_script:
+    - cd webapp
+    - npm i
+  script:
+    - npm run test-ci
+
+eslint:
+  stage: test
+  image: node:18.10.0
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+      when: manual
+      allow_failure: true
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
+      allow_failure: true
+    - when: never
+  artifacts:
+    paths:
+      - gl-codequality.json
+    when: always
+    reports:
+      codequality: gl-codequality.json
+  before_script:
+    - cd webapp
+    - npm i
+  script:
+    - npm run check
+
+sentry_release:
+  stage: .post
+  image: getsentry/sentry-cli:2.17.1
+  needs:
+    - build_front
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "canary"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+      allow_failure: false
+    - when: never
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  script:
+    - sentry-cli releases new ${CI_COMMIT_TAG}
+    - sentry-cli releases set-commits --auto --ignore-empty --ignore-missing ${CI_COMMIT_TAG}
+    - sentry-cli releases files ${CI_COMMIT_TAG} upload-sourcemaps --url-prefix '~/static/' ./dist --ignore-file .sentryignore
+    - sentry-cli releases finalize ${CI_COMMIT_TAG}
+
+changelog:
+  stage: release
+  image: ruby:latest
+  needs:
+    - publish_front
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "canary"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - when: never
+  script:
+    - ruby ./webapp/channels/.gitlab/release.rb ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${NOTIFY_CHANNEL}
+
+guild_review:
+  image: ruby:latest
+  script:
+    - ruby ./webapp/channels/.gitlab/mr_review.rb
+  rules:
+    - if: '$MR_REVIEW_SCHEDULE'
+      when: on_success
+    - when: never
+
+gitlab_triage:
+  rules:
+    - if: '$GITLAB_TRIAGE'
+      when: on_success
+    - when: never
+  variables:
+    TRIAGE_POLICY_FILE: webapp/channels/.gitlab/triage-policies.yml
+
+technical_debt:
+  extends: gitlab_triage
+  rules:
+    - if: '$TRIAGE_TECHNICAL_DEBT'
+      when: on_success
+    - when: never
+  variables:
+    TRIAGE_POLICY_FILE: webapp/channels/.gitlab/summaries-technical-debt.yml

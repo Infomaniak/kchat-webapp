@@ -2,7 +2,6 @@
 // See LICENSE.txt for license information.
 
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
-
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getTimezoneForUserProfile} from 'mattermost-redux/selectors/entities/timezone';

@@ -5,13 +5,14 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
+
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
 
 import AlertSvg from 'components/common/svg_images_components/alert_svg';
-import {GenericModal} from '@mattermost/components';
 
 import {ModalIdentifiers} from 'utils/constants';
 

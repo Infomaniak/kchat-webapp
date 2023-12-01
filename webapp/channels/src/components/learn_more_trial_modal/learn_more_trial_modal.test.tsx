@@ -5,8 +5,9 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
 
-import Carousel from 'components/common/carousel/carousel';
 import {GenericModal} from '@mattermost/components';
+
+import Carousel from 'components/common/carousel/carousel';
 import LearnMoreTrialModal from 'components/learn_more_trial_modal/learn_more_trial_modal';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';

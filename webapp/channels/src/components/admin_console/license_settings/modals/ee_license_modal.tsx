@@ -4,12 +4,12 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
+
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 
 import {closeModal} from 'actions/views/modals';
 import {isModalOpen} from 'selectors/views/modals';
-
-import {GenericModal} from '@mattermost/components';
 
 import {ModalIdentifiers} from 'utils/constants';
 

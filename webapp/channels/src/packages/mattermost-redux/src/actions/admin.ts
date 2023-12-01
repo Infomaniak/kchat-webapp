@@ -24,9 +24,8 @@ import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/type
 
 import {logError} from './errors';
 import {bindClientFunc, forceLogoutIfNecessary} from './helpers';
+
 import {General} from '../constants';
-
-
 
 export function getLogs({serverNames = [], logLevels = [], dateFrom, dateTo}: LogFilter): ActionFunc {
     const logFilter = {

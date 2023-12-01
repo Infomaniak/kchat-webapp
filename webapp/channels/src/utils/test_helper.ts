@@ -12,20 +12,17 @@ import type {FileInfo} from '@mattermost/types/files';
 import type {Group} from '@mattermost/types/groups';
 import type {Command, IncomingWebhook} from '@mattermost/types/integrations';
 import type {Post} from '@mattermost/types/posts';
+import type {PreferenceType} from '@mattermost/types/preferences';
+import type {Reaction} from '@mattermost/types/reactions';
 import type {Role} from '@mattermost/types/roles';
-import {Team, TeamMembership} from '@mattermost/types/teams';
-import {UserProfile, UserAccessToken} from '@mattermost/types/users';
+import type {Session} from '@mattermost/types/sessions';
+import type {Team, TeamMembership} from '@mattermost/types/teams';
+import type {UserProfile, UserAccessToken} from '@mattermost/types/users';
 
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
-
-import type {Session} from '@mattermost/types/sessions';
-
 import {getPreferenceKey} from 'mattermost-redux/utils/preference_utils';
 
 import type {ProductComponent} from 'types/store/plugins';
-
-import type {PreferenceType} from '@mattermost/types/preferences';
-import type {Reaction} from '@mattermost/types/reactions';
 
 export class TestHelper {
     public static getUserMock(override: Partial<UserProfile> = {}): UserProfile {

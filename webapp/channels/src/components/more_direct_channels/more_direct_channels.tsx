@@ -5,11 +5,11 @@ import {debounce} from 'lodash';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import {GenericModal} from '@mattermost/components';
 import type {UserProfile} from '@mattermost/types/users';
 
 import type {GenericAction} from 'mattermost-redux/types/actions';
 
-import {GenericModal} from '@mattermost/components';
 import type MultiSelect from 'components/multiselect/multiselect';
 
 import {getHistory} from 'utils/browser_history';

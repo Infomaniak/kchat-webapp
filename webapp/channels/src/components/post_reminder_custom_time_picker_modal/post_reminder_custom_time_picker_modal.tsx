@@ -5,8 +5,9 @@ import type {Moment} from 'moment-timezone';
 import React, {useCallback, useState, useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
 import {GenericModal} from '@mattermost/components';
+
+import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
 
 import Constants from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';

@@ -7,10 +7,11 @@ import React, {useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
+
 import {closeModal} from 'actions/views/modals';
 
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
-import {GenericModal} from '@mattermost/components';
 
 import {ModalIdentifiers} from 'utils/constants';
 import {toUTCUnix} from 'utils/datetime';

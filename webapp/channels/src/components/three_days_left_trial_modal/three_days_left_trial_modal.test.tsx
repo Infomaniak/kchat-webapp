@@ -6,6 +6,7 @@ import React from 'react';
 import {Provider} from 'react-redux';
 
 import {GenericModal} from '@mattermost/components';
+
 import ThreeDaysLeftTrialModal from 'components/three_days_left_trial_modal/three_days_left_trial_modal';
 
 import TestHelper from 'packages/mattermost-redux/test/test_helper';

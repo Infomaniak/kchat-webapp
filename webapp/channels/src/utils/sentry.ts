@@ -15,6 +15,7 @@ const isCanaryOrPreprod = GIT_RELEASE.includes('-next') || GIT_RELEASE.includes(
 
 const bool = <T>(x: T | false | undefined | null | '' | 0): x is T => Boolean(x);
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export default function init({SENTRY_DSN}: Args) {
     const {host} = window.location;
 

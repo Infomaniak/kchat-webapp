@@ -15,13 +15,14 @@ import React, {
 } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
+
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {openModal, closeModal} from 'actions/views/modals';
 import {getIsMobileView} from 'selectors/views/browser';
 
 import CompassDesignProvider from 'components/compass_design_provider';
-import {GenericModal} from '@mattermost/components';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 

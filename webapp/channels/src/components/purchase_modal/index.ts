@@ -27,7 +27,6 @@ import {ModalIdentifiers} from 'utils/constants';
 import {findOnlyYearlyProducts} from 'utils/products';
 
 import type {ModalData} from 'types/actions';
-
 import type {BillingDetails} from 'types/cloud/sku';
 import type {GlobalState} from 'types/store';
 

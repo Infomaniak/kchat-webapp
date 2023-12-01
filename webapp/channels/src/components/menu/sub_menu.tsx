@@ -8,6 +8,8 @@ import type {ReactNode, MouseEvent, KeyboardEvent} from 'react';
 import React, {useState, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
+
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 
 import {openModal, closeModal, toggleModalVisibility} from 'actions/views/modals';
@@ -15,7 +17,6 @@ import {getIsMobileView} from 'selectors/views/browser';
 import {isAnyModalOpen} from 'selectors/views/modals';
 
 import CompassDesignProvider from 'components/compass_design_provider';
-import {GenericModal} from '@mattermost/components';
 
 import Constants, {A11yClassNames} from 'utils/constants';
 import {isKeyPressed} from 'utils/utils';

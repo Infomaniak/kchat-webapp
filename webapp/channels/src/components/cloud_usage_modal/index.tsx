@@ -4,6 +4,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
 import type {Limits} from '@mattermost/types/cloud';
 
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
@@ -11,7 +12,6 @@ import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import useGetLimits from 'components/common/hooks/useGetLimits';
 import useGetUsage from 'components/common/hooks/useGetUsage';
 import CompassThemeProvider from 'components/compass_theme_provider/compass_theme_provider';
-import {GenericModal} from '@mattermost/components';
 
 import type {Message} from 'utils/i18n';
 

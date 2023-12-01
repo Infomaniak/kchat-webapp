@@ -6,6 +6,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch} from 'react-redux';
 
+import {GenericModal} from '@mattermost/components';
+
 import type {DispatchFunc} from 'mattermost-redux/types/actions';
 import {isEmail} from 'mattermost-redux/utils/helpers';
 
@@ -14,7 +16,6 @@ import {trackEvent} from 'actions/telemetry_actions';
 import {closeModal} from 'actions/views/modals';
 
 import ExternalLink from 'components/external_link';
-import {GenericModal} from '@mattermost/components';
 import type {CustomMessageInputType} from 'components/widgets/inputs/input/input';
 
 import {ItemStatus, TELEMETRY_CATEGORIES, ModalIdentifiers, LicenseLinks, AboutLinks} from 'utils/constants';

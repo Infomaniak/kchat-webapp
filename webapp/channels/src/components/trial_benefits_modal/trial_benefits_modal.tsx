@@ -7,6 +7,8 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {matchPath, useLocation} from 'react-router-dom';
 
+import {GenericModal} from '@mattermost/components';
+
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
 
 import {trackEvent} from 'actions/telemetry_actions';
@@ -20,7 +22,6 @@ import GuestAccessSvg from 'components/common/svg_images_components/guest_access
 import HandsSvg from 'components/common/svg_images_components/hands_svg';
 import MonitorImacLikeSVG from 'components/common/svg_images_components/monitor_imaclike_svg';
 import PersonWithChecklistSvg from 'components/common/svg_images_components/person_with_checklist';
-import {GenericModal} from '@mattermost/components';
 
 import {ConsolePages, ModalIdentifiers, TELEMETRY_CATEGORIES} from 'utils/constants';
 
