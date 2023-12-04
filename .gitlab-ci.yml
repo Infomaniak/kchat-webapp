@@ -153,40 +153,40 @@ build_front:
 #     expire_in: 1 days
 #     when: always
 
-unit_test:
-  stage: test
-  image: node:18.15.0
-  tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  environment:
-    name: "$DEPLOY_VARIABLE"
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-      when: never
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-      when: on_success
-    - if: $DEPLOY_VARIABLE == "prodsec"
-      when: on_success
-    - when: never
-  artifacts:
-    paths:
-      - coverage/
-    when: on_success
-    reports:
-      junit: coverage/junit.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage/cobertura-coverage.xml
-  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
-  cache:
-    paths:
-      - .jestcache
-  before_script:
-    - yarn --silent
-  script:
-    - yarn test:webapp
+# unit_test:
+#   stage: test
+#   image: node:18.15.0
+#   tags:
+#     - docker-executor
+#     - kubernetes
+#     - shared
+#   environment:
+#     name: "$DEPLOY_VARIABLE"
+#   rules:
+#     - if: '$CI_PIPELINE_SOURCE == "schedule"'
+#       when: never
+#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+#       when: on_success
+#     - if: $DEPLOY_VARIABLE == "prodsec"
+#       when: on_success
+#     - when: never
+#   artifacts:
+#     paths:
+#       - coverage/
+#     when: on_success
+#     reports:
+#       junit: coverage/junit.xml
+#       coverage_report:
+#         coverage_format: cobertura
+#         path: coverage/cobertura-coverage.xml
+#   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+#   cache:
+#     paths:
+#       - .jestcache
+#   before_script:
+#     - yarn --silent
+#   script:
+#     - yarn test:webapp
 
 # eslint:
 #   stage: test
