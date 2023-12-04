@@ -1,6 +1,6 @@
 {
   "name": "@infomaniak/mattermost-types",
-  "version": "7.9.0-nightly.1",
+  "version": "9.2.0",
   "description": "Shared type definitions used by the Mattermost web app",
   "keywords": [
     "mattermost"
@@ -25,13 +25,11 @@
     "url": "github:mattermost/mattermost-server",
     "directory": "webapp/platform/types"
   },
-  "peerDependencies": {
+  "devDependencies": {
     "typescript": "^4.3"
   },
-  "peerDependenciesMeta": {
-    "typescript": {
-      "optional": true
-    }
+  "peerDependencies": {
+    "@types/react": "17.0.2"
   },
   "scripts": {
     "build": "tsc",

@@ -14,7 +14,7 @@
         "rootDir": "./src",
         "types": ["@types/react"],
         "paths": {
-            "@mattermost/types/*": ["../types/lib/*"]
+            "@mattermost/types/*": ["../types/lib/*"],
         },
         "composite": true
     },

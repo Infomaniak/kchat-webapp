@@ -66,28 +66,30 @@ build_front:
   tags:
     - kubernetes
   rules:
-    - if: $DEPLOY_VARIABLE == "prod"
-      when: on_success
-      allow_failure: false
-    - if: $DEPLOY_VARIABLE == "canary"
-      when: on_success
-      allow_failure: false
-    - if: $DEPLOY_VARIABLE == "preprod"
-      when: on_success
+    # - if: $DEPLOY_VARIABLE == "prod"
+    #   when: on_success
+    #   allow_failure: false
+    # - if: $DEPLOY_VARIABLE == "canary"
+    #   when: on_success
+    #   allow_failure: false
+    # - if: $DEPLOY_VARIABLE == "preprod"
+    #   when: on_success
     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - when: never
   environment:
     name: "$DEPLOY_VARIABLE"
   before_script:
-    - cd webapp
     - export ENVIRONMENT=${DEPLOY_VARIABLE}
   script:
-    - npm i
-    - npm run build
+    - yarn --silent
+    - yarn workspace @infomaniak/mattermost-types build
+    - yarn workspace @infomaniak/mattermost-client build
+    - yarn workspace @mattermost/components build
+    - yarn build:webapp
   artifacts:
     paths:
-      - channels/dist
+      - webapp/channels/dist
     expire_in: 1 days
     when: always
 
@@ -213,10 +215,9 @@ eslint:
     reports:
       codequality: gl-codequality.json
   before_script:
-    - cd webapp
-    - npm i
+    - yarn --silent
   script:
-    - npm run check
+    - yarn test:webapp
 
 # sentry_release:
 #   stage: .post

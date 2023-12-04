@@ -152,3 +152,18 @@ report.xml
 go.*.orig
 config.override.mk
 docker-compose.override.yaml
+
+.eslintcache
+
+# Yarn
+yarn-error.log
+# .yarn
+.yarn/cache
+.yarn/install-state.gz
+# !.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+.jestcache
+
