@@ -11,7 +11,7 @@ variables:
   WEEKLY_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/994e7a29-4b7f-4fd5-a194-5eea8ac49bc2
 
 stages:
-  # - test
+  - test
   - build
   # - release
 
