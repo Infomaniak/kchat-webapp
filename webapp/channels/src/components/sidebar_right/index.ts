@@ -1,16 +1,27 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {memo} from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 import type {RouteComponentProps} from 'react-router-dom';
-import {bindActionCreators} from 'redux';
+import {withRouter} from 'react-router-dom';
 import type {Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 
 import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
-import {setRhsExpanded, showChannelInfo, showPinnedPosts, showChannelFiles, openRHSSearch, closeRightHandSide, openAtPrevious, updateSearchTerms} from 'actions/views/rhs';
+import {
+    setRhsExpanded,
+    showChannelInfo,
+    showPinnedPosts,
+    showChannelFiles,
+    openRHSSearch,
+    closeRightHandSide,
+    openAtPrevious,
+    updateSearchTerms,
+    showSettings,
+} from 'actions/views/rhs';
 import {selectCurrentProductId} from 'selectors/products';
 import {
     getIsRhsExpanded,
@@ -44,7 +55,7 @@ function mapStateToProps(state: GlobalState, props: RouteComponentProps) {
         channel,
         postRightVisible: Boolean(selectedPostId) && rhsState !== RHSStates.EDIT_HISTORY,
         postCardVisible: Boolean(selectedPostCardId),
-        searchVisible: Boolean(rhsState) && rhsState !== RHSStates.PLUGIN,
+        searchVisible: Boolean(rhsState) && rhsState !== RHSStates.PLUGIN && rhsState !== RHSStates.SETTINGS,
         previousRhsState: getPreviousRhsState(state),
         isPinnedPosts: rhsState === RHSStates.PIN,
         isChannelFiles: rhsState === RHSStates.CHANNEL_FILES,
@@ -52,6 +63,7 @@ function mapStateToProps(state: GlobalState, props: RouteComponentProps) {
         isChannelMembers: rhsState === RHSStates.CHANNEL_MEMBERS,
         isPluginView: rhsState === RHSStates.PLUGIN,
         isPostEditHistory: rhsState === RHSStates.EDIT_HISTORY,
+        isSettings: rhsState === RHSStates.SETTINGS,
         rhsChannel: getSelectedChannel(state),
         selectedPostId,
         selectedPostCardId,
@@ -72,8 +84,9 @@ function mapDispatchToProps(dispatch: Dispatch) {
             updateSearchTerms,
             showChannelFiles,
             showChannelInfo,
+            showSettings,
         }, dispatch),
     };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SidebarRight));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(memo(SidebarRight)));

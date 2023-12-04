@@ -100,6 +100,10 @@ export function getRhsState(state: GlobalState): RhsState {
     return state.views.rhs.rhsState;
 }
 
+export function getRhsSettingsTabState(state: GlobalState): RhsState {
+    return state.views.rhs.settingsTabState;
+}
+
 export function getPreviousRhsState(state: GlobalState): RhsState {
     if (state.views.rhs.previousRhsStates === null || state.views.rhs.previousRhsStates.length === 0) {
         return null;
