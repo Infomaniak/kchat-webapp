@@ -184,40 +184,39 @@ unit_test:
     paths:
       - .jestcache
   before_script:
-    - cd webapp
-    - npm i
-  script:
-    - npm run test-ci
-
-eslint:
-  stage: test
-  image: node:18.10.0
-  tags:
-    - docker-executor
-    - kubernetes
-    - shared
-  environment:
-    name: "$DEPLOY_VARIABLE"
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-      when: never
-    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-      when: manual
-      allow_failure: true
-    - if: $DEPLOY_VARIABLE == "prodsec"
-      when: on_success
-      allow_failure: true
-    - when: never
-  artifacts:
-    paths:
-      - gl-codequality.json
-    when: always
-    reports:
-      codequality: gl-codequality.json
-  before_script:
     - yarn --silent
   script:
     - yarn test:webapp
+
+# eslint:
+#   stage: test
+#   image: node:18.10.0
+#   tags:
+#     - docker-executor
+#     - kubernetes
+#     - shared
+#   environment:
+#     name: "$DEPLOY_VARIABLE"
+#   rules:
+#     - if: '$CI_PIPELINE_SOURCE == "schedule"'
+#       when: never
+#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+#       when: manual
+#       allow_failure: true
+#     - if: $DEPLOY_VARIABLE == "prodsec"
+#       when: on_success
+#       allow_failure: true
+#     - when: never
+#   artifacts:
+#     paths:
+#       - gl-codequality.json
+#     when: always
+#     reports:
+#       codequality: gl-codequality.json
+#   before_script:
+#     - yarn --silent
+#   script:
+#     - yarn test:webapp
 
 # sentry_release:
 #   stage: .post
