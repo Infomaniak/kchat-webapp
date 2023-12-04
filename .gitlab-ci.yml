@@ -62,7 +62,7 @@ workflow:
 
 build_front:
   stage: build
-  image: node:18.10.0
+  image: node:18.15.0
   tags:
     - kubernetes
   rules:
@@ -155,7 +155,7 @@ build_front:
 
 unit_test:
   stage: test
-  image: node:18.10.0
+  image: node:18.15.0
   tags:
     - docker-executor
     - kubernetes
