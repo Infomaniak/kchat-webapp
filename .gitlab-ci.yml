@@ -274,19 +274,19 @@ eslint:
 #       when: on_success
 #     - when: never
 
-# gitlab_triage:
-#   rules:
-#     - if: '$GITLAB_TRIAGE'
-#       when: on_success
-#     - when: never
-#   variables:
-#     TRIAGE_POLICY_FILE: webapp/channels/.gitlab/triage-policies.yml
+gitlab_triage:
+  rules:
+    - if: '$GITLAB_TRIAGE'
+      when: on_success
+    - when: never
+  variables:
+    TRIAGE_POLICY_FILE: webapp/channels/.gitlab/triage-policies.yml
 
-# technical_debt:
-#   extends: gitlab_triage
-#   rules:
-#     - if: '$TRIAGE_TECHNICAL_DEBT'
-#       when: on_success
-#     - when: never
-#   variables:
-#     TRIAGE_POLICY_FILE: webapp/channels/.gitlab/summaries-technical-debt.yml
+technical_debt:
+  extends: gitlab_triage
+  rules:
+    - if: '$TRIAGE_TECHNICAL_DEBT'
+      when: on_success
+    - when: never
+  variables:
+    TRIAGE_POLICY_FILE: webapp/channels/.gitlab/summaries-technical-debt.yml
