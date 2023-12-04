@@ -111,6 +111,13 @@ export default class SizeAwareImage extends React.PureComponent {
         this.mounted = false;
     }
 
+    openDriveModule = () => {
+        const driveModule = document.querySelector('module-kdrive-component') as HTMLElement;
+        driveModule.open('save-to-drive', 'light').
+            then((data) => console.log(data)).
+            catch((error) => console.log(error));
+    }
+
     dimensionsAvailable = (dimensions) => {
         return dimensions && dimensions.width && dimensions.height;
     }
@@ -339,11 +346,21 @@ export default class SizeAwareImage extends React.PureComponent {
                         className={classNames('image-preview-utility-buttons-container', 'image-preview-utility-buttons-container--small-image', {
                             'image-preview-utility-buttons-container--small-image-no-copy-button': !enablePublicLink,
                         })}
+                        onClick={this.openDriveModule}
+                        style={leftStyle}
+                    >
+                        {/* {enablePublicLink && copyLink}
+                        {download} */}
+                    </span>
+                    {/* <span
+                        className={classNames('image-preview-utility-buttons-container', 'image-preview-utility-buttons-container--small-image', {
+                            'image-preview-utility-buttons-container--small-image-no-copy-button': !enablePublicLink,
+                        })}
                         style={leftStyle}
                     >
                         {enablePublicLink && copyLink}
                         {download}
-                    </span>
+                    </span> */}
                 </div>
             );
         }
@@ -352,6 +369,7 @@ export default class SizeAwareImage extends React.PureComponent {
         const utilityButtonsWrapper = this.props.hideUtilities || (this.state.isSmallImage && !this.isInternalImage) ? null :
             (
                 <span
+                    onClick={this.openDriveModule}
                     className={classNames('image-preview-utility-buttons-container', {
 
                         // cases for when image isn't a small image but width is < 100px
@@ -359,8 +377,8 @@ export default class SizeAwareImage extends React.PureComponent {
                         'image-preview-utility-buttons-container--small-image-no-copy-button': (!enablePublicLink || !this.isInternalImage) && this.state.imageWidth < MIN_IMAGE_SIZE_FOR_INTERNAL_BUTTONS,
                     })}
                 >
-                    {(enablePublicLink || !this.isInternalImage) && copyLink}
-                    {download}
+                    {/* {(enablePublicLink || !this.isInternalImage) && copyLink}
+                    {download} */}
                 </span>
             );
         return (
