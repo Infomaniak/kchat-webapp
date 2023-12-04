@@ -6,9 +6,9 @@ include:
     ref: master
     file: '/gitlab-triage.yaml'
 
-# variables:
-#   SAST_DISABLED: "true"
-#   WEEKLY_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/994e7a29-4b7f-4fd5-a194-5eea8ac49bc2
+variables:
+  SAST_DISABLED: "true"
+  WEEKLY_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/994e7a29-4b7f-4fd5-a194-5eea8ac49bc2
 
 stages:
   # - test
@@ -280,7 +280,7 @@ gitlab_triage:
       when: on_success
     - when: never
   variables:
-    TRIAGE_POLICY_FILE: webapp/channels/.gitlab/triage-policies.yml
+    TRIAGE_POLICY_FILE: .gitlab/triage-policies.yml
 
 technical_debt:
   extends: gitlab_triage
@@ -289,4 +289,4 @@ technical_debt:
       when: on_success
     - when: never
   variables:
-    TRIAGE_POLICY_FILE: webapp/channels/.gitlab/summaries-technical-debt.yml
+    TRIAGE_POLICY_FILE: .gitlab/summaries-technical-debt.yml
