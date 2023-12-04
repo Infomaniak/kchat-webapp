@@ -1,14 +1,14 @@
 include:
-  - template: Security/SAST.gitlab-ci.yml
+  # - template: Security/SAST.gitlab-ci.yml
   # - template: Security/Container-Scanning.gitlab-ci.yml
   # - template: Code-Quality.gitlab-ci.yml
   - project: 'docker-public/gitlab-triage'
     ref: master
     file: '/gitlab-triage.yaml'
 
-variables:
-  SAST_DISABLED: "true"
-  WEEKLY_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/994e7a29-4b7f-4fd5-a194-5eea8ac49bc2
+# variables:
+#   SAST_DISABLED: "true"
+#   WEEKLY_NOTIFY_CHANNEL: ${KCHAT_WHOOK_URL}/994e7a29-4b7f-4fd5-a194-5eea8ac49bc2
 
 stages:
   # - test
