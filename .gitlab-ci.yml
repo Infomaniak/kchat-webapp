@@ -13,7 +13,7 @@ variables:
 stages:
   - test
   - build
-  # - release
+  - release
 
 workflow:
   rules:
@@ -38,27 +38,27 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - when: never
 
-# build_docker_image:
-#   stage: release
-#   tags:
-#     - kubernetes
-#   image:
-#     name: gcr.io/kaniko-project/executor:debug
-#     entrypoint:
-#       - ''
-#   rules:
-#     - if: $CI_COMMIT_TAG
-#       when: manual
-#       allow_failure: false
-#     - when: never
-#   before_script:
-#     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-#   script:
-#     - /kaniko/executor
-#       --cache=true
-#       --context ${CI_PROJECT_DIR}
-#       --dockerfile ${CI_PROJECT_DIR}/Dockerfile
-#       --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+build_docker_image:
+  stage: release
+  tags:
+    - kubernetes
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint:
+      - ''
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual
+      allow_failure: false
+    - when: never
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"},\"$CI_DEPENDENCY_PROXY_SERVER\":{\"username\":\"$CI_DEPENDENCY_PROXY_USER\",\"password\":\"$CI_DEPENDENCY_PROXY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+  script:
+    - /kaniko/executor
+      --cache=true
+      --context ${CI_PROJECT_DIR}
+      --dockerfile ${CI_PROJECT_DIR}/Dockerfile
+      --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
 
 build_front:
   stage: build
@@ -66,14 +66,14 @@ build_front:
   tags:
     - kubernetes
   rules:
-    # - if: $DEPLOY_VARIABLE == "prod"
-    #   when: on_success
-    #   allow_failure: false
-    # - if: $DEPLOY_VARIABLE == "canary"
-    #   when: on_success
-    #   allow_failure: false
-    # - if: $DEPLOY_VARIABLE == "preprod"
-    #   when: on_success
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "canary"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
       when: on_success
     - when: never
@@ -89,69 +89,70 @@ build_front:
     - yarn build:webapp
   artifacts:
     paths:
-      - webapp/channels/dist
+      - dist
     expire_in: 1 days
     when: always
 
-# publish_packages:
-#   stage: build
-#   image: node:18.10.0
-#   tags:
-#     - kubernetes
-#   rules:
-#     - if: '$CI_PIPELINE_SOURCE == "schedule"'
-#       when: never
-#     - if: $DEPLOY_VARIABLE == "prodsec"
-#       when: on_success
-#     - when: never
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   before_script:
-#     - cd webapp
-#   script:
-#     - npm i
-#     - npm config set registry https://verdaccio.dev.infomaniak.ch
-#     - npm config set "//verdaccio.dev.infomaniak.ch/:_authToken" "$VERDACCIO_TOKEN"
-#     - npm config set "//verdaccio.dev.infomaniak.ch/:_npmAlwaysAuth" true
-#     - npm config set @infomaniak:registry-server https://verdaccio.dev.infomaniak.ch
-#     - npm config set @infomaniak:publish-config.registry https://verdaccio.dev.infomaniak.ch
-#     - npm config set "//verdaccio.dev.infomaniak.ch/:_authToken" "$VERDACCIO_TOKEN"
-#     - npm publish --workspace @infomaniak/mattermost-types
-#     - npm publish --workspace @infomaniak/mattermost-client
+publish_packages:
+  stage: build
+  image: node:18.15.0
+  tags:
+    - kubernetes
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: never
+    - if: $DEPLOY_VARIABLE == "prodsec"
+      when: on_success
+    - when: never
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  script:
+    - yarn --silent
+    - yarn workspace @infomaniak/mattermost-types build
+    - yarn workspace @infomaniak/mattermost-client build
+    - yarn config set npmPublishRegistry https://verdaccio.dev.infomaniak.ch
+    - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAuthToken' "$VERDACCIO_TOKEN"
+    - yarn config set 'npmRegistries["//verdaccio.dev.infomaniak.ch"].npmAlwaysAuth' true
+    - yarn config set npmScopes.infomaniak.npmRegistryServer https://verdaccio.dev.infomaniak.ch
+    - yarn config set npmScopes.infomaniak.npmPublishRegistry https://verdaccio.dev.infomaniak.ch
+    - yarn config set npmScopes.infomaniak.npmAuthToken "$VERDACCIO_TOKEN"
+    - yarn workspace @infomaniak/mattermost-types npm publish
+    - yarn workspace @infomaniak/mattermost-client npm publish
 
-# publish_front:
-#   stage: release
-#   tags:
-#     - kubernetes
-#   image:
-#     name: minio/mc:RELEASE.2022-11-07T23-47-39Z
-#     entrypoint: [ '' ]
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "prod"
-#       when: on_success
-#       allow_failure: false
-#     - if: $DEPLOY_VARIABLE == "canary"
-#       when: on_success
-#       allow_failure: false
-#     - if: $DEPLOY_VARIABLE == "preprod"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-#       when: on_success
-#     - when: never
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   before_script:
-#     - mc config host add $S3_BUCKET $S3_HOST $S3_KEY $S3_PASSWORD --api s3v4
-#   script:
-#     - mc cp --recursive dist/ $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE
-#   after_script:
-#     - mc rm --recursive --force --older-than 30d $S3_BUCKET/$S3_BUCKET/kchat/staging
-#     - mc rm --recursive --force --older-than 30d $S3_BUCKET/$S3_BUCKET/kchat/preprod
-#   artifacts:
-#     paths:
-#       - dist
-#     expire_in: 1 days
-#     when: always
+
+publish_front:
+  stage: release
+  tags:
+    - kubernetes
+  image:
+    name: minio/mc:RELEASE.2022-11-07T23-47-39Z
+    entrypoint: [ '' ]
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "canary"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
+      when: on_success
+    - when: never
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  before_script:
+    - mc config host add $S3_BUCKET $S3_HOST $S3_KEY $S3_PASSWORD --api s3v4
+  script:
+    - mc cp --recursive dist/ $S3_BUCKET/$S3_BUCKET/kchat/$DEPLOY_VARIABLE
+  after_script:
+    - mc rm --recursive --force --older-than 30d $S3_BUCKET/$S3_BUCKET/kchat/staging
+    - mc rm --recursive --force --older-than 30d $S3_BUCKET/$S3_BUCKET/kchat/preprod
+  artifacts:
+    paths:
+      - dist
+    expire_in: 1 days
+    when: always
 
 # unit_test:
 #   stage: test
@@ -188,90 +189,61 @@ build_front:
 #   script:
 #     - yarn test:webapp
 
-# eslint:
-#   stage: test
-#   image: node:18.10.0
-#   tags:
-#     - docker-executor
-#     - kubernetes
-#     - shared
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   rules:
-#     - if: '$CI_PIPELINE_SOURCE == "schedule"'
-#       when: never
-#     - if: $DEPLOY_VARIABLE == "staging/${CI_COMMIT_REF_SLUG}"
-#       when: manual
-#       allow_failure: true
-#     - if: $DEPLOY_VARIABLE == "prodsec"
-#       when: on_success
-#       allow_failure: true
-#     - when: never
-#   artifacts:
-#     paths:
-#       - gl-codequality.json
-#     when: always
-#     reports:
-#       codequality: gl-codequality.json
-#   before_script:
-#     - yarn --silent
-#   script:
-#     - yarn test:webapp
 
-# sentry_release:
-#   stage: .post
-#   image: getsentry/sentry-cli:2.17.1
-#   needs:
-#     - build_front
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "prod"
-#       when: on_success
-#       allow_failure: false
-#     - if: $DEPLOY_VARIABLE == "canary"
-#       when: on_success
-#       allow_failure: false
-#     - if: $DEPLOY_VARIABLE == "preprod"
-#       when: on_success
-#       allow_failure: false
-#     - when: never
-#   tags:
-#     - docker-executor
-#     - kubernetes
-#     - shared
-#   script:
-#     - sentry-cli releases new ${CI_COMMIT_TAG}
-#     - sentry-cli releases set-commits --auto --ignore-empty --ignore-missing ${CI_COMMIT_TAG}
-#     - sentry-cli releases files ${CI_COMMIT_TAG} upload-sourcemaps --url-prefix '~/static/' ./dist --ignore-file .sentryignore
-#     - sentry-cli releases finalize ${CI_COMMIT_TAG}
+sentry_release:
+  stage: .post
+  image: getsentry/sentry-cli:2.17.1
+  needs:
+    - build_front
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "canary"
+      when: on_success
+      allow_failure: false
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+      allow_failure: false
+    - when: never
+  tags:
+    - docker-executor
+    - kubernetes
+    - shared
+  script:
+    - sentry-cli releases new ${CI_COMMIT_TAG}
+    - sentry-cli releases set-commits --auto --ignore-empty --ignore-missing ${CI_COMMIT_TAG}
+    - sentry-cli releases files ${CI_COMMIT_TAG} upload-sourcemaps --url-prefix '~/static/' ./dist --ignore-file .sentryignore
+    - sentry-cli releases finalize ${CI_COMMIT_TAG}
 
-# changelog:
-#   stage: release
-#   image: ruby:latest
-#   needs:
-#     - publish_front
-#   environment:
-#     name: "$DEPLOY_VARIABLE"
-#   rules:
-#     - if: $DEPLOY_VARIABLE == "prod"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "canary"
-#       when: on_success
-#     - if: $DEPLOY_VARIABLE == "preprod"
-#       when: on_success
-#     - when: never
-#   script:
-#     - ruby ./webapp/channels/.gitlab/release.rb ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${NOTIFY_CHANNEL}
+changelog:
+  stage: release
+  image: ruby:latest
+  needs:
+    - publish_front
+  environment:
+    name: "$DEPLOY_VARIABLE"
+  rules:
+    - if: $DEPLOY_VARIABLE == "prod"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "canary"
+      when: on_success
+    - if: $DEPLOY_VARIABLE == "preprod"
+      when: on_success
+    - when: never
+  script:
+    - ruby .gitlab/release.rb ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${NOTIFY_CHANNEL}
 
-# guild_review:
-#   image: ruby:latest
-#   script:
-#     - ruby ./webapp/channels/.gitlab/mr_review.rb
-#   rules:
-#     - if: '$MR_REVIEW_SCHEDULE'
-#       when: on_success
-#     - when: never
+guild_review:
+  image: ruby:latest
+  script:
+    - ruby .gitlab/mr_review.rb
+  rules:
+    - if: '$MR_REVIEW_SCHEDULE'
+      when: on_success
+    - when: never
 
 gitlab_triage:
   rules:
