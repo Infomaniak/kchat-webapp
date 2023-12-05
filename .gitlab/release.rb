@@ -75,13 +75,61 @@ end
 # @return [String] The name of the last tag before the current tag. Throws an error if it fails to fetch the tags.
 =end
 def get_last_tag(current_tag)
-  all_tags = get_all_tags.select { |tag| tag["name"] =~ /\A\d+\.\d+\.\d+(-next\.\d+)?\z/ && tag["name"] < current_tag }
+  is_pre_release = current_tag.include?('-next.')
+  all_tags = get_all_tags.select { |tag| valid_version?(tag["name"]) }
 
-  if all_tags.empty?
+  current_tag_parts = parse_version(current_tag)
+  previous_tags = all_tags.select do |tag|
+    is_tag_pre_release = tag["name"].include?('-next.')
+    next false if is_pre_release != is_tag_pre_release  # Skip different types of tags
+    compare_versions(parse_version(tag["name"]), current_tag_parts) < 0
+  end
+
+  if previous_tags.empty?
     raise "No previous tags found that meet the criteria."
   else
-    all_tags.max_by { |tag| tag["name"] }["name"]
+    previous_tags.max_by { |tag| parse_version(tag["name"]) }["name"]
   end
+end
+
+def valid_version?(version)
+  version =~ /\A\d+\.\d+\.\d+(-next\.\d+)?\z/
+end
+
+=begin
+# Parses a version string into an array of integers for comparison.
+# The version string is expected to be in the format 'X.Y.Z' or 'X.Y.Z-next.W'.
+# Standard versions (without a 'next' part) are represented with -1 as the last element.
+#
+# @param version [String] The version string to parse.
+# @return [Array<Integer>] An array representing the parsed version number.
+=end
+def parse_version(version)
+  main, pre_release = version.split('-next.')
+  parts = main.split('.').map(&:to_i)
+  pre_release_part = pre_release ? pre_release.to_i : -1  # Use -1 for standard versions
+  parts << pre_release_part
+  parts
+end
+
+=begin
+# Compares two version arrays.
+# This method is used to determine if one version is less than, equal to, or greater than another version.
+# Each element of the version arrays is compared in sequence. The comparison stops at the first non-equal element or
+# when all elements have been compared.
+#
+# @param v1 [Array<Integer>] The first version array for comparison.
+# @param v2 [Array<Integer>] The second version array for comparison.
+# @return [Integer] -1 if v1 < v2, 0 if v1 == v2, 1 if v1 > v2.
+=end
+def compare_versions(v1, v2)
+  length = [v1.length, v2.length].max
+  (0...length).each do |i|
+    a = v1[i] || 0
+    b = v2[i] || 0
+    return a <=> b if a != b
+  end
+  0
 end
 
 =begin
@@ -96,11 +144,12 @@ def create_changelog(tag, branch)
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
   commit_sha = get_commit_sha(last_tag)
+  bot_message = "Add changelog for version #{tag} [skip ci]"
   uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
   request = Net::HTTP::Post.new(uri.request_uri)
   request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
   # "branch" => branch,
-  request.set_form_data("version" => tag, "from" => commit_sha)
+  request.set_form_data("version" => tag, "from" => commit_sha, "message" => bot_message)
 
   response = get_http(uri).request(request)
   response.body if response.code.to_i == 201
