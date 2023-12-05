@@ -206,7 +206,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                   onMouseOver={[Function]}
                 >
                   <button
-                    className="RoundButton-dvlhqG gHOQXq style--none"
+                    className="RoundButton-duhHHt YhKZY style--none"
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
@@ -433,7 +433,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                   onMouseOver={[Function]}
                 >
                   <button
-                    className="RoundButton-dvlhqG gHOQXq style--none"
+                    className="RoundButton-duhHHt YhKZY style--none"
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
@@ -660,7 +660,7 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
                   onMouseOver={[Function]}
                 >
                   <button
-                    className="RoundButton-dvlhqG gHOQXq style--none"
+                    className="RoundButton-duhHHt YhKZY style--none"
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
@@ -1031,7 +1031,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                   onMouseOver={[Function]}
                 >
                   <button
-                    className="RoundButton-dvlhqG gHOQXq style--none"
+                    className="RoundButton-duhHHt YhKZY style--none"
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
@@ -1258,7 +1258,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                   onMouseOver={[Function]}
                 >
                   <button
-                    className="RoundButton-dvlhqG gHOQXq style--none"
+                    className="RoundButton-duhHHt YhKZY style--none"
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
@@ -1485,7 +1485,7 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
                   onMouseOver={[Function]}
                 >
                   <button
-                    className="RoundButton-dvlhqG gHOQXq style--none"
+                    className="RoundButton-duhHHt YhKZY style--none"
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
@@ -1854,7 +1854,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                   onMouseOver={[Function]}
                 >
                   <button
-                    className="RoundButton-dvlhqG gHOQXq style--none"
+                    className="RoundButton-duhHHt YhKZY style--none"
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
@@ -2081,7 +2081,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                   onMouseOver={[Function]}
                 >
                   <button
-                    className="RoundButton-dvlhqG gHOQXq style--none"
+                    className="RoundButton-duhHHt YhKZY style--none"
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
@@ -2308,7 +2308,7 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
                   onMouseOver={[Function]}
                 >
                   <button
-                    className="RoundButton-dvlhqG gHOQXq style--none"
+                    className="RoundButton-duhHHt YhKZY style--none"
                     onBlur={[Function]}
                     onClick={[Function]}
                     onFocus={[Function]}
