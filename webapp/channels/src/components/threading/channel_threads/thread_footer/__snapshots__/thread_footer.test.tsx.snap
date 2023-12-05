@@ -220,7 +220,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-dvlhqG gHOQXq style--none"
+                        className="RoundButton-duhHHt YhKZY style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -447,7 +447,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-dvlhqG gHOQXq style--none"
+                        className="RoundButton-duhHHt YhKZY style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -674,7 +674,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-dvlhqG gHOQXq style--none"
+                        className="RoundButton-duhHHt YhKZY style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -1378,7 +1378,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-dvlhqG gHOQXq style--none"
+                        className="RoundButton-duhHHt YhKZY style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -1605,7 +1605,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-dvlhqG gHOQXq style--none"
+                        className="RoundButton-duhHHt YhKZY style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
@@ -1832,7 +1832,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                       onMouseOver={[Function]}
                     >
                       <button
-                        className="RoundButton-dvlhqG gHOQXq style--none"
+                        className="RoundButton-duhHHt YhKZY style--none"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}

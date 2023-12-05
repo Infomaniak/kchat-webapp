@@ -12,7 +12,10 @@
         "jsx": "react",
         "outDir": "./lib",
         "rootDir": "./src",
-        "composite": true
+        "baseUrl": ".",
+        "composite": true,
+        "types": ["react"],
+        "typeRoots": ["../../channels/node_modules/@types"],
     },
     "include": [
         "./src/**/*"

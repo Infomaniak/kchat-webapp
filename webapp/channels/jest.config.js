@@ -33,6 +33,8 @@ const config = {
             'identity-obj-proxy',
         '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
         '^.*i18n.*\\.(json)$': '<rootDir>/src/tests/i18n_mock.json',
+        '^@mattermost/compass-icons/(.*)$': '<rootDir>/../../node_modules/@infomaniak/compass-icons/$1',
+        '^@mattermost/compass-components/(.*)$': '<rootDir>/../../node_modules/@infomaniak/compass-components/$1'
     },
     moduleDirectories: ['src', 'node_modules'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],

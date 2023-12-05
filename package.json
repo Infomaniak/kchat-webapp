@@ -1,0 +1,23 @@
+{
+  "name": "kchat",
+  "private": true,
+  "scripts": {
+    "build:webapp": "yarn workspace mattermost-webapp build",
+    "dev-server:webapp": "yarn workspace mattermost-webapp dev-server",
+    "test:webapp": "yarn workspace mattermost-webapp test-ci"
+  },
+  "resolutions": {
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2"
+  },
+  "workspaces": {
+    "packages": [
+      "webapp/platform/client",
+      "webapp/platform/components",
+      "webapp/platform/types",
+      "webapp/platform/eslint-plugin",
+      "webapp/channels"
+    ]
+  },
+  "packageManager": "yarn@4.0.1"
+}

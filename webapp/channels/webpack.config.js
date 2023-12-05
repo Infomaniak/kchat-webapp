@@ -52,6 +52,7 @@ var config = {
         chunkFilename: '[name].[contenthash].js',
         assetModuleFilename: 'files/[contenthash][ext]',
         clean: true,
+        path: path.resolve(__dirname, '../../dist'),
     },
     module: {
         rules: [
@@ -130,11 +131,11 @@ var config = {
             'mattermost-redux/test': 'packages/mattermost-redux/test',
             'mattermost-redux': 'packages/mattermost-redux/src',
             '@mui/styled-engine': '@mui/styled-engine-sc',
+            marked: '@infomaniak/marked',
             '@mattermost/client': '@infomaniak/mattermost-client',
             '@mattermost/types': '@infomaniak/mattermost-types',
-
-            // This alias restricts single version of styled components acros all packages
-            'styled-components': path.resolve(__dirname, '..', 'node_modules', 'styled-components'),
+            '@mattermost/compass-icons': '@infomaniak/compass-icons',
+            'styled-components': path.resolve(__dirname, '../..', 'node_modules', 'styled-components'),
         },
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
         fallback: {
@@ -196,7 +197,7 @@ var config = {
                 {from: 'src/images/cloud-laptop-error.png', to: 'images'},
                 {from: 'src/images/cloud-laptop-warning.png', to: 'images'},
                 {from: 'src/images/cloud-upgrade-person-hand-to-face.png', to: 'images'},
-                {from: '../node_modules/pdfjs-dist/cmaps', to: 'cmaps'},
+                {from: '../../node_modules/pdfjs-dist/cmaps', to: 'cmaps'},
             ],
         }),
 
