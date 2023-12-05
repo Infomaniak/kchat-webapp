@@ -21,11 +21,6 @@ jest.mock('react-redux', () => ({
     useDispatch: () => mockDispatch,
 }));
 
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom') as typeof import('react-router-dom'),
-    useRouteMatch: jest.fn(),
-}));
-
 describe('components/RhsThread', () => {
     const post: Post = TestHelper.getPostMock({
         channel_id: 'channel_id',

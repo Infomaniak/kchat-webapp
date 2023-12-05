@@ -4,8 +4,6 @@
 import React, {memo, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
-import {useRouteMatch} from 'react-router-dom';
-
 import {Channel} from '@mattermost/types/channels';
 import {Post} from '@mattermost/types/posts';
 import {FakePost, RhsState} from 'types/store/rhs';
@@ -21,7 +19,6 @@ type Props = {
     channel: Channel | null;
     selected: Post | FakePost;
     previousRhsState?: RhsState;
-    wasOpen: boolean;
 }
 
 const RhsThread = ({
@@ -30,10 +27,8 @@ const RhsThread = ({
     posts,
     selected,
     previousRhsState,
-    wasOpen,
 }: Props) => {
     const dispatch = useDispatch();
-    const fromDraftOrThread = useRouteMatch(['/:team/drafts', '/:team/threads']);
 
     useEffect(() => {
         if (channel?.team_id && channel.team_id !== currentTeam.id) {
@@ -48,9 +43,6 @@ const RhsThread = ({
         );
     }
 
-    // defined the focus on the required textbox depending on the provenance scenario.
-    const focusRhsTextbox = !((fromDraftOrThread && fromDraftOrThread.isExact) || !wasOpen);
-
     return (
         <div
             id='rhsContainer'
@@ -64,7 +56,7 @@ const RhsThread = ({
             <ThreadViewer
                 rootPostId={selected.id}
                 useRelativeTimestamp={false}
-                isThreadView={focusRhsTextbox}
+                isThreadView={false}
             />
         </div>
     );

@@ -67,7 +67,6 @@ type State = {
 export default class SidebarRight extends React.PureComponent<Props, State> {
     sidebarRight: React.RefObject<HTMLDivElement>;
     previous: Partial<Props> | undefined = undefined;
-    wasOpen = false;
     focusSearchBar?: () => void;
 
     constructor(props: Props) {
@@ -148,10 +147,10 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props) {
-        this.wasOpen = prevProps.searchVisible || prevProps.postRightVisible;
+        const wasOpen = prevProps.searchVisible || prevProps.postRightVisible;
         const isOpen = this.props.searchVisible || this.props.postRightVisible;
 
-        if (!this.wasOpen && isOpen) {
+        if (!wasOpen && isOpen) {
             this.determineTransition();
             trackEvent('ui', 'ui_rhs_opened');
         }
@@ -264,10 +263,7 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
             content = (
                 <div className='post-right__container'>
                     <FileUploadOverlay overlayType='right'/>
-                    <RhsThread
-                        previousRhsState={previousRhsState}
-                        wasOpen={this.wasOpen}
-                    />
+                    <RhsThread previousRhsState={previousRhsState}/>
                 </div>
             );
             break;
