@@ -1,3 +1,13 @@
+## 1.4.10-next.2 (2023-12-05)
+
+### Changed (1 change)
+
+- [add skip ci tag on bot changelog messages](kchat/webapp@43fbbd6685f79ade4699f1c175a3a7740b39a26d) by @antonbuksa
+
+### Chore (1 change)
+
+- [improve last version parser in release script](kchat/webapp@fa0c2f8778df333afa612b1d9a4f287f94f4489a) by @antonbuksa
+
 ## 1.4.10-next.1 (2023-12-05)
 
 ### Chore (4 changes)
