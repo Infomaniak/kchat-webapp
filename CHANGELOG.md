@@ -1,65 +1,8 @@
 ## 1.4.10-next.1 (2023-12-05)
 
-### Added (2 changes)
-
-- [New path 'notifications-settings' to reach the notifications settings section on load.](kchat/webapp@695473afb1bca5ed87f01b33d412ad463efb0633) by @benoit.nau ([merge request](kchat/webapp!564))
-- [Add email setting section for unreads messages mail.](kchat/webapp@1a567b96d4c4668453f0163b5d270390bbd86dec) by @benoit.nau ([merge request](kchat/webapp!564))
-
-### Fixed (27 changes)
-
-- [Correction of DE translations.](kchat/webapp@6e5792edbf3806a7ff4e5099f9270b1743db03cc) by @benoit.nau ([merge request](kchat/webapp!576))
-- [Add scroll bar when user edits a long comment.](kchat/webapp@72c7e854b3159defc8d6d24d58a2fda2281852bd) by @benoit.nau ([merge request](kchat/webapp!575))
-- [Fix the width in the search modal for the find channel research.](kchat/webapp@1821efc59607bb73397b803c6914333ab4d18148) by @benoit.nau ([merge request](kchat/webapp!573))
-- [fix: schedule post typo](kchat/webapp@62799c324f239ac4ca22a2e527cc32680b20a7ad) by @leopold.jacquot ([merge request](kchat/webapp!569))
-- [Add scroll bar for long messages](kchat/webapp@5a8716c7d9c5658509cc20dfe0bf6717c6469702) by @benoit.nau ([merge request](kchat/webapp!568))
-- [fix count on DM for group members.](kchat/webapp@3bf3b7bb08044db2986dd48893fb8c98b95fd6aa) by @benoit.nau ([merge request](kchat/webapp!527))
-- [Add question mark to prevent null reference exception.](kchat/webapp@ffca47c59fb0c68b69015a664fac773903d90975) by @benoit.nau ([merge request](kchat/webapp!566))
-- [Avoid user to spam another user by clicking multiple time on the Join meeting button.](kchat/webapp@feab5f2f4fe5991fc2c52db4cb963433648585e2) by @benoit.nau ([merge request](kchat/webapp!562))
-- [Wrap the error triggered by the autoplay permission for notification sound.](kchat/webapp@95d09680cd3b3c41d212744ba00a2cd10ecc87fc) by @benoit.nau ([merge request](kchat/webapp!561))
-- [If the start meeting call returns a 409,](kchat/webapp@4d8e7a01b1776a18b70874e7af56aee26c336c07) by @benoit.nau ([merge request](kchat/webapp!559))
-- [fix: reconnect](kchat/webapp@28c44153d2e15fc299f1207dc9300f99932b26dd) by @benoit.nau ([merge request](kchat/webapp!558))
-- [fix: meet url](kchat/webapp@1fffeb80eb12c7ac22d49db7c5c91d3031475098) by @benoit.nau ([merge request](kchat/webapp!554))
-- [fix: loading](kchat/webapp@a76d15bc7fc692c8a58cf28b3e908f2d731ba437) by @benoit.nau ([merge request](kchat/webapp!543))
-- [fix: logs](kchat/webapp@0d7075df5c593e0e4f1cf38f26338c3f03f391fe) by @benoit.nau ([merge request](kchat/webapp!552))
-- [fix team id in follow changed ws event cb](kchat/webapp@4b95e2d7de077d4e922719866b8c37ba2b2fd5a7) by @antonbuksa ([merge request](kchat/webapp!547))
-- [bump compass-icons 0.11.0](kchat/webapp@75d8f5a6db40a37f723f513174711e3ba2c0eafa) by @antonbuksa
-- [fix: shortcut](kchat/webapp@6b5e980b5335acdf84102ea804586ec78fdf57c5) by @benoit.nau ([merge request](kchat/webapp!537))
-- [fix: null reference](kchat/webapp@a00c8c978f15d5efbd507c494493654ff630f6f5) by @benoit.nau ([merge request](kchat/webapp!518))
-- [fix: loading](kchat/webapp@df8e5d61f3c4becc1139507dbca4d2e64f6bdfa2) by @benoit.nau ([merge request](kchat/webapp!535))
-- [fix: avatars](kchat/webapp@2091f9a6e90a6d5e6c68ebc11a08e7f345193297) by @benoit.nau ([merge request](kchat/webapp!530))
-- [fix: user typing](kchat/webapp@656cc06c62fe2d653dffa385a9209ca2e6176803) by @benoit.nau ([merge request](kchat/webapp!528))
-- [fix: traduction](kchat/webapp@3bf85de76a2275c16c4cc43ad0334b6c7bb8d6b6) by @benoit.nau ([merge request](kchat/webapp!526))
-- [fix: ws](kchat/webapp@586192fc0d4dc1c89006930dc445cc7dd2e2b7dc) by @benoit.nau ([merge request](kchat/webapp!525))
-- [fix: date](kchat/webapp@bc5749917d9eae85b40a5a033143a1bb9bae323a) by @arthur.noguera ([merge request](kchat/webapp!516))
-- [fix: reconnexion ws](kchat/webapp@ba2843ff6cba10702cf98fa4c6f59c266a81ff35) by @benoit.nau ([merge request](kchat/webapp!523))
-- [fix wrong message on leave public channel modal](kchat/webapp@cbc0473d201efb8a3445b383ee71b68135089386) by @antonbuksa ([merge request](kchat/webapp!524))
-- [fix missing trad](kchat/webapp@067a5d973f5b1ce8bb27d062eda61d9aa682537f) by @antonbuksa ([merge request](kchat/webapp!524))
-
-### Changed (12 changes)
-
-- [change mobile push notification text](kchat/webapp@16983098f1e35468f38ba1c9b3e1edf5377aa439) by @antonbuksa ([merge request](kchat/webapp!578))
-- [update chatgpt limit date](kchat/webapp@a2e6c6311067a6bba707a4b7c7a1cc69aa39b56e) by @antonbuksa ([merge request](kchat/webapp!577))
-- [only allow bugtracker webcomponent on desktop](kchat/webapp@96633df674dd69bf30f3dea7954a64c7459891ba) by @antonbuksa ([merge request](kchat/webapp!572))
-- [use webcomponent oauth mode](kchat/webapp@259db4fed2ecb5809aaf231ed1d8d818c0c72394) by @antonbuksa ([merge request](kchat/webapp!572))
-- [hide team sidebar if app is running in iframe](kchat/webapp@4218e5504e5b917750e226d4c1f75732049f63d3) by @antonbuksa ([merge request](kchat/webapp!555))
-- [reverts test reconnecting ws via pusher](kchat/webapp@ba04eb4e3d33a6720b6061cef01abfffcadc271c) by @antonbuksa ([merge request](kchat/webapp!551))
-- [add 30 sec margin to ws last disconnect to account for timeouts](kchat/webapp@ba108eb9fcdb70305b1d2f857ae72a74c7893e54) by @antonbuksa ([merge request](kchat/webapp!549))
-- [do not schedule timeout reconnect after 1006 errors](kchat/webapp@05381e35c946a0fa2b23c757ac4bc2ae82f8e605) by @antonbuksa ([merge request](kchat/webapp!540))
-- [cherrypick older updates to groups code to fix params](kchat/webapp@7d2838d6692eba2de59638960bfd8eb7201918a4) by @antonbuksa ([merge request](kchat/webapp!531))
-- [restore mattermost getGroups func without pagination](kchat/webapp@278d240feacc62edffdb20b741275d3a18e24100) by @antonbuksa ([merge request](kchat/webapp!529))
-- [[MM-52964] Updates post text processing to fetch nonexisting custom groups](kchat/webapp@ae63ad104310066709e40b5fc66ba67d47c5af48) by @antonbuksa ([merge request](kchat/webapp!529))
-- [[MM-53842] Replace Gfycat with GIPHY in emoji/gif picker](kchat/webapp@939a0bce058a677c68fb61cc65a0b436112d7b9a) by @antonbuksa ([merge request](kchat/webapp!521))
-
-### Removed (1 change)
-
-- [remove webhook helper msg](kchat/webapp@9e3f5e8f9e07bf0be682737abfcd11eedf4b0732) by @antonbuksa ([merge request](kchat/webapp!574))
-
 ### Chore (4 changes)
 
 - [Revert "Trigger the correct textbox focus depending of the scenario."](kchat/webapp@7d83a958610de446a6cd02efed002205dfdb0187) by @antonbuksa
-- [tweak release script to handle pagination when checking last tag](kchat/webapp@1800bbc408da1785f7dd9152f3744f7190514120) by @antonbuksa
-- [update pusher-js lib](kchat/webapp@1a31e2f154d07bff95ca8041c8c4d3cf2b7594a4) by @antonbuksa ([merge request](kchat/webapp!544))
-- [add kchat dot local to localhost list for sentry](kchat/webapp@69713ba8b0e9279d8b4132d8ac3debd03689b4d6) by @antonbuksa ([merge request](kchat/webapp!511))
 
 ## 1.4.9-next.4 (2023-11-28)
 
