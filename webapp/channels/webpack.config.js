@@ -52,6 +52,7 @@ var config = {
         chunkFilename: '[name].[contenthash].js',
         assetModuleFilename: 'files/[contenthash][ext]',
         clean: true,
+        path: path.resolve(__dirname, '../../dist'),
     },
     module: {
         rules: [
