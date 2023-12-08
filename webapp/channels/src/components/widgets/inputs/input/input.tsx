@@ -93,7 +93,9 @@ const Input = React.forwardRef((
 
     const handleOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
         setFocused(false);
-        validateInput();
+
+        // remove the validation onblur
+        //validateInput();
 
         if (onBlur) {
             onBlur(event);
@@ -108,6 +110,7 @@ const Input = React.forwardRef((
         }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const validateInput = () => {
         if (!required || (value !== null && value !== '')) {
             return;
