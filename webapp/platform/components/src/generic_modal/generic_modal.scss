@@ -120,7 +120,6 @@
             border-radius: 12px;
 
             .modal-header {
-                flex-direction: column;
                 padding: 26px 32px 7px;
 
                 .close {
@@ -145,7 +144,7 @@
                     display: flex;
                     flex: 1;
                     flex-direction: row;
-                    align-items: center;
+                    align-items: left;
                     justify-content: space-between;
                     padding: 0;
                     margin-right: 32px;
