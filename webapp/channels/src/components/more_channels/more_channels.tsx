@@ -347,6 +347,7 @@ export default class MoreChannels extends React.PureComponent<Props, State> {
                 autoCloseOnConfirmButton={false}
                 aria-modal={true}
                 enforceFocus={false}
+                bodyPadding={false}
             >
                 {body}
             </GenericModal>
