@@ -13,12 +13,14 @@
 
         &-open {
             border: 1px solid var(--button-bg);
-            box-shadow: rgba(0, 152, 255, 0.5) 0px 0px 1px 2px, rgb(0, 152, 255) 0px 0px 0px 1px;
+            box-shadow: rgba(0, 152, 255, 0.5) 0px 0px 1px 2px,
+                rgb(0, 152, 255) 0px 0px 0px 1px;
         }
 
         &:focus-within {
             border: 1px solid var(--button-bg);
-            box-shadow: rgba(0, 152, 255, 0.5) 0px 0px 1px 2px, rgb(0, 152, 255) 0px 0px 0px 1px;
+            box-shadow: rgba(0, 152, 255, 0.5) 0px 0px 1px 2px,
+                rgb(0, 152, 255) 0px 0px 0px 1px;
         }
 
         &-icon {
@@ -95,7 +97,6 @@
 
     .dateTime__calendar-input {
         font-size: 14px;
-
 
         @media screen and (max-width: 768px) {
             width: auto;
