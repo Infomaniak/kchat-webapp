@@ -3155,6 +3155,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@mattermost/desktop-api@npm:5.7.0-1":
+  version: 5.7.0-1
+  resolution: "@mattermost/desktop-api@npm:5.7.0-1"
+  peerDependencies:
+    typescript: ^4.3
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 6b3379de26eea073d1b841998e2f0f0291734f805f215627a10f74b1cc3c03b9cab69761cf76d503beea8347ff03b7cabedba7a2c3e98fc6dce06205c8ba5514
+  languageName: node
+  linkType: hard
+
 "@mattermost/eslint-plugin@workspace:webapp/platform/eslint-plugin":
   version: 0.0.0-use.local
   resolution: "@mattermost/eslint-plugin@workspace:webapp/platform/eslint-plugin"
@@ -13644,6 +13656,7 @@ __metadata:
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client"
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types"
     "@mattermost/components": "workspace:webapp/platform/components"
+    "@mattermost/desktop-api": "npm:5.7.0-1"
     "@mattermost/eslint-plugin": "workspace:webapp/platform/eslint-plugin"
     "@mui/base": "npm:5.0.0-alpha.127"
     "@mui/material": "npm:5.11.16"

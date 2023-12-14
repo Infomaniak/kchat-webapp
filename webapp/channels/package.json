@@ -17,6 +17,7 @@
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client",
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types",
     "@mattermost/components": "workspace:webapp/platform/components",
+    "@mattermost/desktop-api": "5.7.0-1",
     "@mui/base": "5.0.0-alpha.127",
     "@mui/material": "5.11.16",
     "@mui/styled-engine-sc": "5.11.11",

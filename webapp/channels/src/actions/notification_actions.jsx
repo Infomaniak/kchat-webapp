@@ -20,12 +20,13 @@ import {isThreadOpen} from 'selectors/views/threads';
 
 import {getHistory} from 'utils/browser_history';
 import Constants, {NotificationLevels, UserStatuses, IgnoreChannelMentions} from 'utils/constants';
+import DesktopApp from 'utils/desktop_api';
 import {t} from 'utils/i18n';
 import {stripMarkdown, formatWithRenderer} from 'utils/markdown';
 import MentionableRenderer from 'utils/markdown/mentionable_renderer';
 import * as NotificationSounds from 'utils/notification_sounds';
 import {showNotification} from 'utils/notifications';
-import {cjkPattern, escapeRegex} from 'utils/text_formatting';
+import {cjkrPattern, escapeRegex} from 'utils/text_formatting';
 import {isDesktopApp, isMobileApp, isWindowsApp} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
 
@@ -74,7 +75,7 @@ export function sendDesktopNotification(post, msgProps) {
         }
 
         let mentions = [];
-        if (msgProps.mentions && Array.isArray(msgProps.mentions)) {
+        if (msgProps.mentions) {
             mentions = msgProps.mentions;
         }
 
@@ -165,7 +166,7 @@ export function sendDesktopNotification(post, msgProps) {
                 }
 
                 let pattern;
-                if (cjkPattern.test(mention.key)) {
+                if (cjkrPattern.test(mention.key)) {
                     // In the case of CJK mention key, even if there's no delimiters (such as spaces) at both ends of a word, it is recognized as a mention key
                     pattern = new RegExp(`()(${escapeRegex(mention.key)})()`, flags);
                 } else {
@@ -227,10 +228,8 @@ export function sendDesktopNotification(post, msgProps) {
         }
 
         let notifyText = post.message;
-        let msgPropsPost;
-        if (msgPropsPost) {
-            msgPropsPost = msgProps.post;
-        }
+
+        const msgPropsPost = msgProps.post;
         const attachments = msgPropsPost && msgPropsPost.props && msgPropsPost.props.attachments ? msgPropsPost.props.attachments : [];
         let image = false;
         attachments.forEach((attachment) => {
@@ -314,24 +313,7 @@ export function sendDesktopNotification(post, msgProps) {
 export const notifyMe = (title, body, channel, teamId, silent, soundName, url) => (dispatch) => {
     // handle notifications in desktop app
     if (isDesktopApp()) {
-        const msg = {
-            title,
-            body,
-            channel,
-            teamId,
-            silent,
-        };
-        msg.data = {soundName};
-        msg.url = url;
-
-        // get the desktop app to trigger the notification
-        window.postMessage(
-            {
-                type: 'dispatch-notification',
-                message: msg,
-            },
-            window.location.origin,
-        );
+        DesktopApp.dispatchNotification(title, body, channel.id, teamId, silent, soundName, url);
     } else {
         showNotification({
             title,
