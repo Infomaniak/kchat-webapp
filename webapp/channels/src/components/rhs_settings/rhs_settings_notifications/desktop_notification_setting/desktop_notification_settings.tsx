@@ -103,7 +103,7 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
             },
             {
                 value: NotificationLevels.MENTION,
-                label: localizeMessage('user.settings.notifications.onlyMentions', 'Only for mentions and direct messages'),
+                label: localizeMessage('user.settings.notifications.onlyMentions', 'Only for mentions, direct messages, and group messages'),
             },
             {value: NotificationLevels.NONE, label: localizeMessage('user.settings.notifications.never', 'Never')},
         ];
