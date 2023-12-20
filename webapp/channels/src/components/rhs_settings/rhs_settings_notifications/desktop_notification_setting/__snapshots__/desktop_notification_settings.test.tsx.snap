@@ -23,7 +23,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
             "value": "all",
           },
           Object {
-            "label": "Only for mentions and direct messages",
+            "label": "Only for mentions, direct messages, and group messages",
             "value": "mention",
           },
           Object {
@@ -40,7 +40,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
       value={
         Array [
           Object {
-            "label": "Only for mentions and direct messages",
+            "label": "Only for mentions, direct messages, and group messages",
             "value": "mention",
           },
         ]
@@ -82,7 +82,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
             "value": "all",
           },
           Object {
-            "label": "Only for mentions and direct messages",
+            "label": "Only for mentions, direct messages, and group messages",
             "value": "mention",
           },
           Object {
@@ -142,7 +142,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
               "value": "all",
             },
             Object {
-              "label": "Only for mentions and direct messages",
+              "label": "Only for mentions, direct messages, and group messages",
               "value": "mention",
             },
             Object {
@@ -159,7 +159,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
         value={
           Array [
             Object {
-              "label": "Only for mentions and direct messages",
+              "label": "Only for mentions, direct messages, and group messages",
               "value": "mention",
             },
           ]
@@ -267,7 +267,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
               "value": "all",
             },
             Object {
-              "label": "Only for mentions and direct messages",
+              "label": "Only for mentions, direct messages, and group messages",
               "value": "mention",
             },
             Object {
@@ -284,7 +284,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
         value={
           Array [
             Object {
-              "label": "Only for mentions and direct messages",
+              "label": "Only for mentions, direct messages, and group messages",
               "value": "mention",
             },
           ]
@@ -442,7 +442,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
               "value": "all",
             },
             Object {
-              "label": "Only for mentions and direct messages",
+              "label": "Only for mentions, direct messages, and group messages",
               "value": "mention",
             },
             Object {
@@ -459,7 +459,7 @@ exports[`components/user_settings/notifications/DesktopNotificationSettings shou
         value={
           Array [
             Object {
-              "label": "Only for mentions and direct messages",
+              "label": "Only for mentions, direct messages, and group messages",
               "value": "mention",
             },
           ]
