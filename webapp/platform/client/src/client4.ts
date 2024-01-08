@@ -2220,6 +2220,13 @@ export default class Client4 {
         );
     };
 
+    getFileInfosForFile = (fileId: string) => {
+        return this.doFetch<FileInfo[]>(
+            `${this.getFileRoute(fileId)}/info`,
+            {method: 'get'},
+        );
+    };
+
     getFlaggedPosts = (userId: string, channelId = '', teamId = '', page = 0, perPage = PER_PAGE_DEFAULT) => {
         this.trackEvent('api', 'api_posts_get_flagged', {team_id: teamId});
 
