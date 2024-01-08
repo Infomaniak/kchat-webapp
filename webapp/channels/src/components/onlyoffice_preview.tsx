@@ -38,7 +38,7 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
             const result = await this.fetchFileInfoForUrl(this.props.fileInfo.id);
             console.log(result);
             if (!result.error) {
-                this.loadDocument();
+                this.loadDocument(result);
             }
         } else {
             const script = document.createElement('script');
@@ -54,7 +54,7 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
                 const result = await this.fetchFileInfoForUrl(this.props.fileInfo.id);
                 console.log(result);
                 if (!result.error) {
-                    this.loadDocument();
+                    this.loadDocument(result);
                 }
             };
         }
@@ -70,9 +70,9 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
         }
     }
 
-    loadDocument() {
+    loadDocument(freshFileInfo: FileInfo) {
         // eslint-disable-next-line no-new
-        new DocsAPI.DocEditor('onlyoffice-placeholder', this.props.fileInfo.onlyoffice);
+        new DocsAPI.DocEditor('onlyoffice-placeholder', freshFileInfo.onlyoffice);
     }
 
     render() {
