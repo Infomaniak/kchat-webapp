@@ -31,6 +31,7 @@ import calls from './calls';
 import onboardingTasks from './onboarding_tasks';
 import kmeetCalls from './kmeet_calls';
 import drafts from './drafts';
+import ksuiteBridge from './ksuite_bridge';
 
 export default combineReducers({
     admin,
@@ -61,4 +62,5 @@ export default combineReducers({
     drafts,
     calls,
     kmeetCalls,
+    ksuiteBridge,
 });
