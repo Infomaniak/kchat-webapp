@@ -764,9 +764,9 @@ export function resetTheme() {
 
 export function injectWebcomponentInit() {
     // eslint-disable-next-line no-process-env, @typescript-eslint/no-unused-vars
-    const WEB_COMPONENT_API_ENDPOINT = process.env.WEBCOMPONENT_API_ENDPOINT;
+    window.WEB_COMPONENT_API_ENDPOINT = process.env.WEBCOMPONENT_API_ENDPOINT;
     // eslint-disable-next-line no-process-env, @typescript-eslint/no-unused-vars
-    const WEBCOMPONENT_API_ENDPOINT = process.env.WEBCOMPONENT_API_ENDPOINT;
+    window.WEBCOMPONENT_API_ENDPOINT = process.env.WEBCOMPONENT_API_ENDPOINT;
 
     // @ts-expect-error for webcomponents
     window.CURRENT_PROJECT = 'kchat';
