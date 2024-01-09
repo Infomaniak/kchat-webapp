@@ -359,10 +359,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         if (prevProps.shouldShowPreview && !this.props.shouldShowPreview) {
             this.focusTextbox();
         }
-
-        if (prevState.message !== this.state.message) {
-            this.setMessageAndCaretPostion(this.state.message, this.state.message.length);
-        }
     }
 
     componentWillUnmount() {
