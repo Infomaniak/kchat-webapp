@@ -278,7 +278,7 @@ var config = {
 };
 
 function generateCSP() {
-    let csp = 'script-src \'self\' cdn.rudderlabs.com/ js.stripe.com/v3';
+    let csp = 'script-src \'self\' cdn.rudderlabs.com/ js.stripe.com/v3 documentserver.kdrive.infomaniak.com/';
 
     if (DEV) {
         // react-hot-loader and development source maps require eval
