@@ -762,6 +762,17 @@ export function resetTheme() {
     applyTheme(Preferences.THEMES.ik);
 }
 
+export function injectWebcomponentInit() {
+    const oauth = Number(isDesktopApp());
+    const script: HTMLScriptElement = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = true;
+    script.id = 'webComponents';
+    // eslint-disable-next-line no-process-env
+    script.src = `${process.env.WEBCOMPONENT_ENDPOINT}/init.js?project=kchat&oauth=${oauth}`;
+    document.head.appendChild(script);
+}
+
 function changeCss(className: string, classValue: string) {
     let styleEl: HTMLStyleElement = document.querySelector('style[data-class="' + className + '"]')!;
     if (!styleEl) {
