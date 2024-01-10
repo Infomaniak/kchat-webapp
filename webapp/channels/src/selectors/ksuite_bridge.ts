@@ -5,5 +5,5 @@
 import type {GlobalState} from 'types/store';
 
 export function getKSuiteBridge(state: GlobalState): any {
-    return state.views.ksuiteBridge.bridge;
+    return state.ksuite_bridge.bridge;
 }
