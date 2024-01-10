@@ -65,6 +65,11 @@
             "position": "after"
           },
           {
+            "pattern": "utils/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
             "pattern": "types{,/**}",
             "group": "internal",
             "position": "after"
