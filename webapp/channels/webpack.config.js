@@ -208,6 +208,9 @@ var config = {
                 {from: 'src/images/cloud-laptop-error.png', to: 'images'},
                 {from: 'src/images/cloud-laptop-warning.png', to: 'images'},
                 {from: 'src/images/cloud-upgrade-person-hand-to-face.png', to: 'images'},
+                {from: 'src/images/only_office_cell_logo.png', to: 'images'},
+                {from: 'src/images/only_office_slide_logo.png', to: 'images'},
+                {from: 'src/images/only_office_word_logo.png', to: 'images'},
                 {from: '../../node_modules/pdfjs-dist/cmaps', to: 'cmaps'},
             ],
         }),
@@ -289,7 +292,7 @@ var config = {
 };
 
 function generateCSP() {
-    let csp = 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.preprod.dev.infomaniak.ch/ ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV;
+    let csp = 'script-src \'self\' blob: cdn.rudderlabs.com/ js.stripe.com/v3 web-components.storage.infomaniak.com/ welcome.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.infomaniak.com/ welcome.preprod.dev.infomaniak.ch/ kmeet.preprod.dev.infomaniak.ch/ documentserver.kdrive.infomaniak.com/ ' + CSP_UNSAFE_INLINE + CSP_UNSAFE_EVAL_IF_DEV;
 
     if (IS_CANARY || IS_PREPROD) {
         csp += CSP_WORKER_SRC;

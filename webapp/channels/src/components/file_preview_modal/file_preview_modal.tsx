@@ -30,6 +30,8 @@ import PopoverBar from './popover_bar';
 import type {LinkInfo} from './types';
 import {isFileInfo} from './types';
 
+import OnlyofficePreview from 'components/onlyoffice_preview';
+
 const PDFPreview = React.lazy(() => import('components/pdf_preview'));
 
 const KeyCodes = Constants.KeyCodes;
@@ -278,12 +280,14 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
         let fileDownloadUrl;
         let isExternalFile;
         let canCopyContent = false;
+        let fileOnlyoffice;
         if (isFileInfo(fileInfo)) {
             showPublicLink = true;
             fileName = fileInfo.name;
             fileUrl = getFileUrl(fileInfo.id);
             fileDownloadUrl = getFileDownloadUrl(fileInfo.id);
             isExternalFile = false;
+            fileOnlyoffice = fileInfo.onlyoffice;
         } else {
             showPublicLink = false;
             fileName = fileInfo.name || fileInfo.link;
@@ -346,6 +350,21 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                             handleZoomOut={this.handleZoomOut}
                             handleZoomReset={this.handleZoomReset}
                         />
+                    );
+                } else if (fileOnlyoffice) {
+                    content = (
+                        <div
+                            className='file-preview-modal__scrollable'
+                            onClick={this.handleBgClose}
+                        >
+                            <React.Suspense fallback={null}>
+                                <OnlyofficePreview
+                                    fileInfo={fileInfo}
+                                    fileUrl={fileUrl}
+                                    handleBgClose={this.handleBgClose}
+                                />
+                            </React.Suspense>
+                        </div>
                     );
                 } else if (CodePreview.supports(fileInfo)) {
                     dialogClassName += ' modal-code';
