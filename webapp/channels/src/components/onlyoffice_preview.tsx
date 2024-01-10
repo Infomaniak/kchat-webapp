@@ -16,8 +16,6 @@ import store from 'stores/redux_store';
 
 type Props = {
     fileInfo: FileInfo;
-    fileUrl: string;
-    handleBgClose: React.MouseEventHandler;
 }
 
 function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
