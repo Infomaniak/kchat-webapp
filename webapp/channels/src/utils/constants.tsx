@@ -198,6 +198,10 @@ export const suitePluginIds = {
     channelExport: 'com.mattermost.plugin-channel-export',
 };
 
+export const BridgeActionTypes = keyMirror({
+    STORE_BRIDGE: null,
+});
+
 export const ActionTypes = keyMirror({
     SET_INFOMANIAK_TOKEN: null,
 
