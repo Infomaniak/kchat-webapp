@@ -2100,6 +2100,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.9.tgz":
+  version: 0.0.9
+  resolution: "@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.9.tgz"
+  dependencies:
+    emittery: "npm:^1.0.1"
+  checksum: b63effac28b680d795fa7c7fdcfd59d2e1da367c4be2b60f79c363cb302535574c8f4ced8eca32a54f5441d1b4def466c883bf9d164fe9588cbaa2a4176fbc6d
+  languageName: node
+  linkType: hard
+
 "@infomaniak/marked@npm:^0.2.0":
   version: 0.2.0
   resolution: "@infomaniak/marked@npm:0.2.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40infomaniak%2Fmarked%2F0.2.0%2F7497d3a2d1b083a2467bc0a84aae2dbd026bad1b"
@@ -8396,6 +8405,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"emittery@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "emittery@npm:1.0.1"
+  checksum: 65dacfa022e5d412eac767fc1e62c4b89dbdf52d8fe96c25435149ca656907e7d87a325d1e5b1dab063315a154f56f5ea4fdaa0f12f228370af1dc0d91b017c2
+  languageName: node
+  linkType: hard
+
 "emoji-datasource-apple@npm:6.1.1":
   version: 6.1.1
   resolution: "emoji-datasource-apple@npm:6.1.1"
@@ -13652,6 +13668,7 @@ __metadata:
     "@hot-loader/react-dom": "npm:17.0.2"
     "@infomaniak/compass-components": "npm:0.17.0"
     "@infomaniak/compass-icons": "npm:0.13.0"
+    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.9.tgz"
     "@infomaniak/marked": "npm:^0.2.0"
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client"
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types"
