@@ -42,14 +42,13 @@ import * as Utils from 'utils/utils';
 import type {ModalData} from 'types/actions';
 import type {PluginComponent} from 'types/store/plugins';
 
+import {PostReminderSubmenu} from './post_reminder_submenu';
 import type {ChangeEvent} from './utils';
 import {trackDotMenuEvent} from './utils';
 
 import ForwardPostModal from '../forward_post_modal';
-import Tag from '../widgets/tag/tag';
 
 import './dot_menu.scss';
-import {PostReminderSubmenu} from './post_reminder_submenu';
 
 type ShortcutKeyProps = {
     shortcutKey: string;
@@ -72,7 +71,7 @@ type Props = {
     handleAddReactionClick?: () => void;
     isMenuOpen?: boolean;
     isReadOnly?: boolean;
-    postTranslationEnabled: boolean;
+    postTranslationEnabled?: boolean;
     isLicensed?: boolean; // TechDebt: Made non-mandatory while converting to typescript
     postEditTimeLimit?: string; // TechDebt: Made non-mandatory while converting to typescript
     enableEmojiPicker?: boolean; // TechDebt: Made non-mandatory while converting to typescript
