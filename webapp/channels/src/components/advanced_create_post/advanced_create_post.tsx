@@ -359,10 +359,6 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
         if (prevProps.shouldShowPreview && !this.props.shouldShowPreview) {
             this.focusTextbox();
         }
-
-        if (prevState.message !== this.state.message) {
-            this.setMessageAndCaretPostion(this.state.message, this.state.message.length);
-        }
     }
 
     componentWillUnmount() {
@@ -822,7 +818,7 @@ class AdvancedCreatePost extends React.PureComponent<Props, State> {
     }
 
     focusTextbox = (keepFocus = false) => {
-        const postTextboxDisabled = this.props.canPost;
+        const postTextboxDisabled = !this.props.canPost;
         if (this.textboxRef.current && postTextboxDisabled) {
             this.textboxRef.current.blur(); // Fixes Firefox bug which causes keyboard shortcuts to be ignored (MM-22482)
             return;

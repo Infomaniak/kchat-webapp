@@ -20,7 +20,6 @@ import {isThreadOpen} from 'selectors/views/threads';
 
 import {getHistory} from 'utils/browser_history';
 import Constants, {NotificationLevels, UserStatuses, IgnoreChannelMentions} from 'utils/constants';
-import DesktopApp from 'utils/desktop_api';
 import {t} from 'utils/i18n';
 import {stripMarkdown, formatWithRenderer} from 'utils/markdown';
 import MentionableRenderer from 'utils/markdown/mentionable_renderer';
@@ -313,7 +312,24 @@ export function sendDesktopNotification(post, msgProps) {
 export const notifyMe = (title, body, channel, teamId, silent, soundName, url) => (dispatch) => {
     // handle notifications in desktop app
     if (isDesktopApp()) {
-        DesktopApp.dispatchNotification(title, body, channel.id, teamId, silent, soundName, url);
+        const msg = {
+            title,
+            body,
+            channel,
+            teamId,
+            silent,
+        };
+        msg.data = {soundName};
+        msg.url = url;
+
+        // get the desktop app to trigger the notification
+        window.postMessage(
+            {
+                type: 'dispatch-notification',
+                message: msg,
+            },
+            window.location.origin,
+        );
     } else {
         showNotification({
             title,

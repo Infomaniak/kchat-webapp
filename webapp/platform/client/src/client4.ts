@@ -4219,6 +4219,13 @@ export default class Client4 {
         );
     }
 
+    getGroupMessageMembersCommonTeams = (channelId: string) => {
+        return this.doFetchWithResponse<Team[]>(
+            `${this.getChannelRoute(channelId)}/common_teams`,
+            {method: 'get'},
+        )
+    }
+
     getAppliedSchemaMigrations = () => {
         return this.doFetch<SchemaMigration[]>(
             `${this.getSystemRoute()}/schema/version`,

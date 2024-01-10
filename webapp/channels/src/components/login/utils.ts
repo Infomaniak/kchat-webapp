@@ -38,8 +38,7 @@ export function storeTokenResponse(response: { expires_in?: number; access_token
     Client4.setAuthHeader = true;
 
     console.log('[login/utils > storeTokenResponse] new token stored at: ', d);
-
-    //Client4.setWebappVersion(GIT_RELEASE);
+    Client4.setWebappVersion(GIT_RELEASE);
 }
 
 /**

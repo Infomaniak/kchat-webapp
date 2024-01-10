@@ -11,7 +11,8 @@ import store from 'stores/redux_store';
 import App from 'components/app';
 
 import {AnnouncementBarTypes} from 'utils/constants';
-import {setCSRFFromCookie} from 'utils/utils';
+import sentry from 'utils/sentry';
+import {injectWebcomponentInit, setCSRFFromCookie} from 'utils/utils';
 
 // Import our styles
 import './sass/styles.scss';
@@ -19,6 +20,8 @@ import 'katex/dist/katex.min.css';
 
 import '@mattermost/compass-icons/css/compass-icons.css';
 import '@mattermost/components/dist/index.esm.css';
+
+sentry({SENTRY_DSN: 'https://6f9a56a8dc39412c9a67b37869e3f346@sentry-kchat.infomaniak.com/4'});
 
 declare global {
     interface Window {
@@ -29,6 +32,7 @@ declare global {
 // This is for anything that needs to be done for ALL react components.
 // This runs before we start to render anything.
 function preRenderSetup(callwhendone: () => void) {
+    injectWebcomponentInit();
     window.onerror = (msg, url, line, column, error) => {
         if (msg === 'ResizeObserver loop limit exceeded') {
             return;

@@ -335,10 +335,6 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
         if (this.props.createPostErrorId === 'api.post.create_post.root_id.app_error' && this.props.createPostErrorId !== prevProps.createPostErrorId) {
             this.showPostDeletedModal();
         }
-
-        if (prevState.draft?.message !== this.state.draft?.message) {
-            this.state.draft?.message?.length && this.setCaretPosition(this.state.draft.message.length);
-        }
     }
 
     getChannelMemberCountsByGroup = () => {
