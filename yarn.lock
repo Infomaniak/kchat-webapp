@@ -2583,12 +2583,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.11.tgz":
-  version: 0.0.11
-  resolution: "@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.11.tgz"
+"@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.12.tgz":
+  version: 0.0.12
+  resolution: "@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.12.tgz"
   dependencies:
     emittery: ^1.0.1
-  checksum: 90a6c283819a476e816dd8f401477f6bb19583f023ad92eeca0a738ab0bd37da2293e28b808f5c3fddff9179fd2418eed6bf574e463dc1138d2ed0013215a9c2
+  checksum: 309ff6c996bca39cedac45a8ba28dd2dece00e787e469dfc01e2570aa21d8a2997e6dcd52d3e33f60f19274b52480c14e175cd7c4d0d50306af5d0f09b5ccc10
   languageName: node
   linkType: hard
 
@@ -14500,7 +14500,7 @@ __metadata:
     "@hot-loader/react-dom": 17.0.2
     "@infomaniak/compass-components": 0.13.0
     "@infomaniak/compass-icons": 0.12.0
-    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.11.tgz"
+    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.12.tgz"
     "@infomaniak/marked": ^0.2.0
     "@infomaniak/mattermost-client": "workspace:packages/client"
     "@infomaniak/mattermost-types": "workspace:packages/types"
