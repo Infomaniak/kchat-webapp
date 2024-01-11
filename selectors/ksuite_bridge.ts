@@ -3,6 +3,6 @@
 
 import {GlobalState} from 'types/store';
 
-export function getKSuiteBridge(state: GlobalState): any {
-    return state.views.ksuiteBridge.bridge;
+export function getKSuiteBridge(state: GlobalState) {
+    return state.ksuite_bridge.bridge;
 }

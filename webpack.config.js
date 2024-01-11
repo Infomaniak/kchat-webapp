@@ -654,7 +654,6 @@ if (DEV) {
     env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.preprod.dev.infomaniak.ch/');
     env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.preprod.dev.infomaniak.ch/');
     env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.preprod.dev.infomaniak.ch');
-    env.KSUITE_URL = JSON.stringify(process.env.KSUITE_URL || 'https://ksuite.preprod.dev.infomaniak.ch');
     if (process.env.MM_LIVE_RELOAD) {
         config.plugins.push(new LiveReloadPlugin());
     }
@@ -668,7 +667,6 @@ if (DEV) {
     env.MANAGER_ENDPOINT = JSON.stringify(process.env.MANAGER_ENDPOINT || 'https://manager.infomaniak.com/');
     env.LOGIN_ENDPOINT = JSON.stringify(process.env.LOGIN_ENDPOINT || 'https://login.infomaniak.com/');
     env.BASE_URL = JSON.stringify(process.env.BASE_URL || 'https://kchat.infomaniak.com');
-    env.KSUITE_URL = JSON.stringify(process.env.KSUITE_URL || 'https://ksuite.infomaniak.com');
 }
 
 config.plugins.push(new webpack.DefinePlugin({

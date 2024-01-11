@@ -6,7 +6,7 @@ import deepEqual from 'fast-deep-equal';
 import {Route, Switch, Redirect, RouteComponentProps} from 'react-router-dom';
 import throttle from 'lodash/throttle';
 import * as Sentry from '@sentry/react';
-import {KSuiteBridge} from '@infomaniak/ksuite-bridge';
+import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
 import classNames from 'classnames';
 
 import {Client4} from 'mattermost-redux/client';
@@ -170,7 +170,7 @@ type Props = {
     rhsIsExpanded: boolean;
     rhsIsOpen: boolean;
     shouldShowAppBar: boolean;
-    ksuiteBridge: any;
+    ksuiteBridge: KSuiteBridge;
 } & RouteComponentProps
 
 interface State {
@@ -641,7 +641,7 @@ export default class Root extends React.PureComponent<Props, State> {
             }
         });
 
-        const ksuiteBridge = new KSuiteBridge(process.env.KSUITE_URL); // eslint-disable-line no-process-env
+        const ksuiteBridge = new KSuiteBridge();
         storeBridge(ksuiteBridge)(store.dispatch);
 
         this.initiateMeRequests();
@@ -765,7 +765,12 @@ export default class Root extends React.PureComponent<Props, State> {
 
     render() {
         const {ksuiteBridge, location} = this.props;
-        ksuiteBridge?.sendMessage({type: 'navigate', path: location.pathname});
+
+        ksuiteBridge?.sendMessage({
+            type: NavigateMessageKey,
+            path: location.pathname,
+            title: document.title
+        });
 
         if (!this.state.configLoaded) {
             return <div/>;
