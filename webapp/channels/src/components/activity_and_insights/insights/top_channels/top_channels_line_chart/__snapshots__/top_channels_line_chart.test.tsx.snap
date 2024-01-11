@@ -166,7 +166,7 @@ exports[`components/activity_and_insights/insights/top_channels should match sna
                 "tooltip": Object {
                   "bodyAlign": "left",
                   "bodyFont": Object {
-                    "family": "Open Sans",
+                    "family": "SuisseIntl",
                     "weight": "bold",
                   },
                   "bodySpacing": 10,
@@ -178,7 +178,7 @@ exports[`components/activity_and_insights/insights/top_channels should match sna
                   "footerAlign": "center",
                   "footerColor": "rgba(255, 255, 255, .64)",
                   "footerFont": Object {
-                    "family": "Open Sans",
+                    "family": "SuisseIntl",
                     "size": 11,
                     "style": "normal",
                   },
@@ -196,7 +196,7 @@ exports[`components/activity_and_insights/insights/top_channels should match sna
                     "callback": [Function],
                     "color": "rgba(63,67,80,0.72)",
                     "font": Object {
-                      "family": "Open Sans",
+                      "family": "SuisseIntl",
                       "size": 10,
                     },
                   },
@@ -209,7 +209,7 @@ exports[`components/activity_and_insights/insights/top_channels should match sna
                   "ticks": Object {
                     "color": "rgba(63,67,80,0.72)",
                     "font": Object {
-                      "family": "Open Sans",
+                      "family": "SuisseIntl",
                       "size": 10,
                     },
                     "maxTicksLimit": 5,
