@@ -10,7 +10,7 @@ import {isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/pre
 
 import SettingItemMax from 'components/setting_item_max';
 
-import {IgnoreChannelMentions, NotificationLevels, NotificationSections} from 'utils/constants';
+import {FollowAllThreads, IgnoreChannelMentions, NotificationLevels, NotificationSections} from 'utils/constants';
 
 import Describe from './describe';
 import ExtraInfo from './extra_info';
@@ -18,6 +18,7 @@ import SectionTitle from './section_title';
 
 type Props = {
     ignoreChannelMentions?: string;
+    followAllThreads?: string;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onChangeThreads?: (e: ChangeEvent<HTMLInputElement>) => void;
     onCollapseSection: (section: string) => void;
@@ -40,6 +41,7 @@ export default function ExpandView({
     serverError,
     onCollapseSection,
     ignoreChannelMentions,
+    followAllThreads,
 }: Props) {
     const isCRTEnabled = useSelector(isCollapsedThreadsEnabled);
 
@@ -190,10 +192,49 @@ export default function ExpandView({
                 </div>
             </fieldset>
             }
+            {section === NotificationSections.FOLLOW_ALL_THREADS &&
+                <fieldset>
+                    <div className='radio'>
+                        <label>
+                            <input
+                                id='followAllThreadsOn'
+                                name='followAllThreads'
+                                type='radio'
+                                value={FollowAllThreads.ON}
+                                checked={followAllThreads === FollowAllThreads.ON}
+                                onChange={onChange}
+                            />
+                            <Describe
+                                section={section}
+                                followAllThreads={FollowAllThreads.ON}
+                                memberNotifyLevel={memberNotifyLevel}
+                                globalNotifyLevel={globalNotifyLevel}
+                            />
+                        </label>
+                    </div>
+                    <div className='radio'>
+                        <label>
+                            <input
+                                id='followAllThreadssOff'
+                                name='followAllThreads'
+                                type='radio'
+                                value={FollowAllThreads.OFF}
+                                checked={followAllThreads === FollowAllThreads.OFF}
+                                onChange={onChange}
+                            />
+                            <Describe
+                                section={section}
+                                followAllThreads={FollowAllThreads.OFF}
+                                memberNotifyLevel={memberNotifyLevel}
+                                globalNotifyLevel={globalNotifyLevel}
+                            />
+                        </label>
+                    </div>
+                </fieldset>
+            }
             <div className='mt-5'>
                 <ExtraInfo section={section}/>
             </div>
-
             {isCRTEnabled &&
             section === NotificationSections.DESKTOP &&
             memberNotifyLevel === NotificationLevels.MENTION &&
