@@ -38,6 +38,11 @@ export default class NotificationSection extends React.PureComponent {
         ignoreChannelMentions: PropTypes.string,
 
         /**
+         * Follow all threads in the channel
+         */
+        followAllThreads: PropTypes.string,
+
+        /**
          * User's global notification level
          */
         globalNotificationLevel: PropTypes.string,
@@ -93,6 +98,7 @@ export default class NotificationSection extends React.PureComponent {
             memberNotificationLevel,
             memberThreadsNotificationLevel,
             ignoreChannelMentions,
+            followAllThreads,
             onSubmit,
             section,
             serverError,
@@ -106,6 +112,7 @@ export default class NotificationSection extends React.PureComponent {
                     memberThreadsNotifyLevel={memberThreadsNotificationLevel}
                     globalNotifyLevel={globalNotificationLevel}
                     ignoreChannelMentions={ignoreChannelMentions}
+                    followAllThreads={followAllThreads}
                     onChange={this.handleOnChange}
                     onChangeThreads={this.handleOnChangeThreads}
                     onSubmit={onSubmit}
@@ -119,6 +126,7 @@ export default class NotificationSection extends React.PureComponent {
             <CollapseView
                 section={section}
                 onExpandSection={this.handleExpandSection}
+                followAllThreads={followAllThreads}
                 memberNotifyLevel={memberNotificationLevel}
                 globalNotifyLevel={globalNotificationLevel}
                 ignoreChannelMentions={ignoreChannelMentions}

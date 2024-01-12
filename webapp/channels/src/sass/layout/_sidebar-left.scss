@@ -24,14 +24,30 @@ $sidebarOpacityAnimationDuration: 0.15s;
 }
 
 #SidebarContainer {
+    position: relative;
     z-index: 16;
     left: 0;
     display: flex;
-    width: 320px;
+    width: var(--overrideLhsWidth, 240px);
+    min-width: 240px;
+    max-width: 240px;
     height: 100%;
     flex-direction: column;
     border-right: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
     background-color: var(--sidebar-bg);
+
+    @media screen and (min-width: 769px) {
+        min-width: 200px;
+        max-width: 264px;
+    }
+
+    @media screen and (min-width: 1201px) {
+        max-width: 304px;
+    }
+
+    @media screen and (min-width: 1681px) {
+        max-width: 440px;
+    }
 
     h1,
     h2,
@@ -178,6 +194,46 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
         }
 
+        &__inviteMembersLhsButton,
+        &__addChannelsCtaLhsButton {
+            display: flex;
+            padding: 6px 0;
+            margin-left: 15px;
+            color: rgba(var(--sidebar-text-rgb), 0.72);
+            line-height: 20px;
+            list-style: none;
+
+            i {
+                font-size: 20px;
+            }
+
+            span {
+                align-self: flex-end;
+                margin-top: -2px;
+                margin-left: 5px;
+            }
+
+            &--untouched {
+                color: var(--sidebar-unread-text);
+                font-weight: $font-weight--semibold;
+
+                i::before {
+                    font-weight: $font-weight--semibold;
+                }
+            }
+        }
+
+        &__addChannelsCtaLhsButton {
+            border: none;
+            margin-left: 0;
+            background: none;
+
+            div {
+                display: flex;
+                margin-left: 15px;
+            }
+        }
+
         .AddChannelDropdown_dropdownButton,
         .SidebarChannelNavigator_inviteUsers,
         .SidebarChannelNavigator_jumpToButton,
@@ -298,8 +354,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
 
             button {
-                // Infomaniak edit
-                padding: 0px 10px;
+                padding: 1px 16px;
             }
 
             i {
@@ -337,11 +392,13 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
     .sidebar-header {
         display: flex;
+        overflow: hidden;
         flex-direction: row;
         align-items: center;
     }
 
     .SidebarHeaderMenuWrapper {
+        overflow: hidden;
         padding-left: 5px;
         background: transparent;
         border-radius: 4px;
@@ -367,8 +424,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
         .dropdown-menu {
             min-width: 0;
-            // Infomaniak edit
-            padding: 3px 0;
+            padding: 8px 0;
             line-height: 20px;
 
             span {
@@ -376,8 +432,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
 
             button {
-                // Infomaniak edit
-                padding: 0px 10px;
+                padding: 1px 16px;
             }
 
             i {
@@ -474,12 +529,11 @@ $sidebarOpacityAnimationDuration: 0.15s;
             }
 
             .selected {
-                width: 100%;
+                width: 60%;
                 margin-top: 1px;
-                margin-left: 3px;
                 color: rgba(var(--center-channel-color-rgb), 0.56);
                 font-size: 12px;
-                text-align: left;
+                text-align: right;
                 text-transform: none;
             }
         }
@@ -539,6 +593,24 @@ $sidebarOpacityAnimationDuration: 0.15s;
         }
     }
 
+    .SidebarCategory_newLabel {
+        display: flex;
+        width: 32px;
+        height: 16px;
+        align-items: center;
+        padding: 0 4px;
+        margin-right: 16px;
+        margin-left: 4px;
+        background: var(--mention-bg);
+        border-radius: 4px;
+        color: var(--mention-color);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        line-height: 16px;
+        text-transform: uppercase;
+    }
+
     .SidebarCategory_newDropBox {
         padding-bottom: 6px;
         margin-bottom: -6px;
@@ -589,6 +661,10 @@ $sidebarOpacityAnimationDuration: 0.15s;
     }
 
     .SidebarChannelGroup.a11y--active {
+        .SidebarCategory_newLabel {
+            opacity: 0;
+        }
+
         .SidebarMenu {
             display: block !important;
 
@@ -710,9 +786,24 @@ $sidebarOpacityAnimationDuration: 0.15s;
         }
     }
 
-    #introTextInvite {
+    .AddChannelsCtaDropdown .dropdown-menu {
+        min-width: 210px !important;
+        margin-left: 20px;
+
+        .MenuItem button span {
+            color: rgba(var(--center-channel-color-rgb), 0.9);
+
+            i {
+                color: rgba(var(--center-channel-color-rgb), 0.72);
+            }
+        }
+    }
+
+    #inviteMembersButton,
+    #addChannelsCta {
         display: flex;
         width: 100%;
+        margin-top: -6px;
 
         &:hover {
             background-color: var(--sidebar-text-hover-bg);
@@ -810,6 +901,14 @@ $sidebarOpacityAnimationDuration: 0.15s;
 
     .SidebarChannelGroup.menuIsOpen ~ .SidebarChannelGroup .SidebarChannelGroupHeader_groupButton {
         background-color: inherit !important;
+
+        .SidebarCategory_newLabel {
+            display: none;
+        }
+    }
+
+    .SidebarChannelGroup.menuIsOpen .SidebarCategory_newLabel {
+        display: none;
     }
 
     .SidebarNavContainer.disabled .SidebarChannelGroup .SidebarChannelGroupHeader_groupButton {
@@ -823,6 +922,10 @@ $sidebarOpacityAnimationDuration: 0.15s;
     .SidebarNavContainer:not(.disabled) .SidebarChannelGroup .SidebarChannelGroupHeader:hover {
         .SidebarMenu {
             display: block;
+        }
+
+        .SidebarCategory_newLabel {
+            display: none;
         }
 
         .SidebarChannelGroupHeader_sortButton {
@@ -1057,6 +1160,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
         }
 
         >span {
+            width: 100%;
             flex-grow: 1;
         }
 
@@ -1102,7 +1206,7 @@ $sidebarOpacityAnimationDuration: 0.15s;
     .SidebarChannel .SidebarLink {
         position: relative;
         display: flex;
-        width: 320px;
+        width: 100%;
         height: 32px;
         align-items: center;
         padding: 7px 16px 7px 19px;
@@ -1297,53 +1401,15 @@ $sidebarOpacityAnimationDuration: 0.15s;
         color: var(--dnd-indicator);
     }
 
-    ~ .inner-wrap {
-        #app-content {
-            margin-left: 320px;
-        }
+    +.inner-wrap #app-content {
+        margin-left: 240px;
     }
 }
 
 .multi-teams {
     #SidebarContainer {
-        left: 65px;
-        width: 255px;
-
-        .SidebarChannel .SidebarLink {
-            width: 255px;
-        }
-
-        ~ .inner-wrap {
-            #app-content {
-                margin-left: 320px;
-            }
-        }
-    }
-}
-
-.no-webcomponents {
-    #SidebarContainer {
-        .SidebarChannel .SidebarLink {
-            width: 255px;
-        }
-        width: 255px;
-
-        ~ .inner-wrap {
-            #app-content {
-                margin-left: 255px;
-            }
-        }
-    }
-}
-
-.multi-teams.no-webcomponents {
-    #SidebarContainer {
-        width: 255px;
-
-        ~ .inner-wrap {
-            #app-content {
-                margin-left: 320px;
-            }
+        +.inner-wrap #app-content {
+            margin-left: 305px;
         }
     }
 }
@@ -1375,11 +1441,15 @@ $sidebarOpacityAnimationDuration: 0.15s;
 }
 
 // Manual override of the global menu (and items) styling for the sidebar dropdown menu
-#sidebarDropdownMenu .MenuItem {
-    >button,
-    >div,
-    >a {
-        padding: 0 32px 0 24px;
+#sidebarDropdownMenu {
+    position: fixed;
+
+    .MenuItem {
+        >button,
+        >div,
+        >a {
+            padding: 0 32px 0 24px;
+        }
     }
 }
 
