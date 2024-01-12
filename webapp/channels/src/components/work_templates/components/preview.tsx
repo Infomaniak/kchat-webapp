@@ -311,7 +311,7 @@ const StyledPreview = styled(Preview)`
 
     strong {
         display: block;
-        font-family: 'Metropolis';
+        font-family: 'SuisseIntl';
         font-weight: 600;
         font-size: 18px;
         line-height: 24px;

@@ -157,7 +157,7 @@ const TopChannelsLineChart = ({topChannels, timeFrame, channelLineChartData, tim
                                 return value;
                             },
                             font: {
-                                family: 'Open Sans',
+                                family: 'SuisseIntl',
                                 size: 10,
                             },
                             color: changeOpacity(theme.centerChannelColor, 0.72),
@@ -171,7 +171,7 @@ const TopChannelsLineChart = ({topChannels, timeFrame, channelLineChartData, tim
                         ticks: {
                             maxTicksLimit: 5,
                             font: {
-                                family: 'Open Sans',
+                                family: 'SuisseIntl',
                                 size: 10,
                             },
                             precision: 0,
@@ -205,12 +205,12 @@ const TopChannelsLineChart = ({topChannels, timeFrame, channelLineChartData, tim
                         },
                         bodyFont: {
                             weight: 'bold',
-                            family: 'Open Sans',
+                            family: 'SuisseIntl',
                         },
                         bodyAlign: 'left',
                         bodySpacing: 10,
                         footerFont: {
-                            family: 'Open Sans',
+                            family: 'SuisseIntl',
                             size: 11,
                             style: 'normal',
                         },

@@ -10,7 +10,7 @@ import {isKeyPressed} from 'utils/keyboard';
 
 const Title = styled.div`
     flex:1;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'SuisseIntl', sans-serif;
     font-weight: 600;
     font-size: 14px;
     line-height: 20px;

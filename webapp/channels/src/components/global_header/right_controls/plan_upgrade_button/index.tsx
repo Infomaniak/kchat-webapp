@@ -25,7 +25,7 @@ border: none;
 box-shadow: none;
 height: 24px;
 width: auto;
-font-family: 'Open Sans';
+font-family: 'SuisseIntl';
 font-style: normal;
 font-weight: 600;
 font-size: 11px !important;
