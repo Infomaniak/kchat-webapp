@@ -17,7 +17,7 @@ import {LicenseLinks, TELEMETRY_CATEGORIES} from 'utils/constants';
 
 const StyledA = styled.a`
 color: var(--denim-button-bg);
-font-family: 'Open Sans';
+font-family: 'SuisseIntl';
 font-size: 12px;
 font-style: normal;
 font-weight: 600;

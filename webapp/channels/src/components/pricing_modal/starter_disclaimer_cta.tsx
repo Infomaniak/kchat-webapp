@@ -22,7 +22,7 @@ import {fallbackStarterLimits, asGBString, hasSomeLimits} from 'utils/limits';
 const Disclaimer = styled.div`
 margin-bottom: 8px;
 color: var(--error-text);
-font-family: 'Open Sans';
+font-family: 'SuisseIntl';
 font-size: 12px;
 font-style: normal;
 font-weight: 600;

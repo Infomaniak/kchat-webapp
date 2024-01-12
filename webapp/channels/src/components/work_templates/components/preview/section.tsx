@@ -193,7 +193,7 @@ const StyledPreviewSection = styled(PreviewSection)`
     .preview-integrations {
         #notify_admin_cta {
             padding: 0 2px;
-            font-family: 'Open Sans';
+            font-family: 'SuisseIntl';
             font-style: normal;
             font-weight: 600;
             font-size: 11px;
@@ -239,7 +239,7 @@ const StyledPreviewSection = styled(PreviewSection)`
                     flex-grow: 2;
                     margin-top: 8px;
                     color: var(--center-channel-text);
-                    font-family: 'Open Sans';
+                    font-family: 'SuisseIntl';
                     font-size: 11px;
                     font-style: normal;
                     font-weight: 600;
@@ -256,7 +256,7 @@ const StyledPreviewSection = styled(PreviewSection)`
 
             &-message {
                 margin-left: 3px;
-                font-family: 'Open Sans';
+                font-family: 'SuisseIntl';
                 font-size: 11px;
                 font-style: normal;
                 font-weight: 600;

@@ -139,7 +139,7 @@ class CardInput extends React.PureComponent<Props, State> {
             hidePostalCode: true,
             style: {
                 base: {
-                    fontFamily: "'Open Sans', sans-serif",
+                    fontFamily: "'SuisseIntl', sans-serif",
                     fontSize: '14px',
                     fontSmoothing: 'antialiased',
                     color: theme.centerChannelColor,
