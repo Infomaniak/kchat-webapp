@@ -20,6 +20,7 @@ import {isThreadOpen} from 'selectors/views/threads';
 
 import {getHistory} from 'utils/browser_history';
 import Constants, {NotificationLevels, UserStatuses, IgnoreChannelMentions} from 'utils/constants';
+import DesktopApp from 'utils/desktop_api';
 import {t} from 'utils/i18n';
 import {stripMarkdown, formatWithRenderer} from 'utils/markdown';
 import MentionableRenderer from 'utils/markdown/mentionable_renderer';
