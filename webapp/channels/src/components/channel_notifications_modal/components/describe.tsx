@@ -4,18 +4,19 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import {IgnoreChannelMentions, NotificationLevels, NotificationSections} from 'utils/constants';
+import {FollowAllThreads, IgnoreChannelMentions, NotificationLevels, NotificationSections} from 'utils/constants';
 import {t} from 'utils/i18n';
 
 type Props = {
     globalNotifyLevel?: string;
     ignoreChannelMentions?: string;
+    followAllThreads?: string;
     memberNotifyLevel: string;
     section: string;
     isCollapsed?: boolean;
 }
 
-export default function Describe({section, isCollapsed, memberNotifyLevel, globalNotifyLevel, ignoreChannelMentions}: Props) {
+export default function Describe({section, isCollapsed, memberNotifyLevel, globalNotifyLevel, ignoreChannelMentions, followAllThreads}: Props) {
     if (memberNotifyLevel === NotificationLevels.DEFAULT && globalNotifyLevel) {
         t('channel_notifications.levels.default');
         t('channel_notifications.levels.all');
@@ -62,7 +63,27 @@ export default function Describe({section, isCollapsed, memberNotifyLevel, globa
         );
     } else if (
         section === NotificationSections.IGNORE_CHANNEL_MENTIONS &&
-        ignoreChannelMentions === IgnoreChannelMentions.OFF
+        ignoreChannelMentions === FollowAllThreads.OFF
+    ) {
+        return (
+            <FormattedMessage
+                id='channel_notifications.ignoreChannelMentions.off.title'
+                defaultMessage='Off'
+            />
+        );
+    } else if (
+        section === NotificationSections.FOLLOW_ALL_THREADS &&
+        followAllThreads === FollowAllThreads.ON
+    ) {
+        return (
+            <FormattedMessage
+                id='channel_notifications.ignoreChannelMentions.on.title'
+                defaultMessage='On'
+            />
+        );
+    } else if (
+        section === NotificationSections.FOLLOW_ALL_THREADS &&
+        followAllThreads === IgnoreChannelMentions.OFF
     ) {
         return (
             <FormattedMessage

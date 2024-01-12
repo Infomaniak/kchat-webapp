@@ -358,11 +358,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                             onClick={this.handleBgClose}
                         >
                             <React.Suspense fallback={null}>
-                                <OnlyofficePreview
-                                    fileInfo={fileInfo}
-                                    fileUrl={fileUrl}
-                                    handleBgClose={this.handleBgClose}
-                                />
+                                <OnlyofficePreview fileInfo={fileInfo} />
                             </React.Suspense>
                         </div>
                     );

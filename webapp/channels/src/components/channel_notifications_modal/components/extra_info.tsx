@@ -48,6 +48,15 @@ export default function ExtraInfo({section}: Props) {
                 />
             </span>
         );
+    case NotificationSections.FOLLOW_ALL_THREADS:
+        return (
+            <span>
+                <FormattedMessage
+                    id='channel_notifications.autoFollowThreadsDesc'
+                    defaultMessage='When enabled, all new replies in this channel will be automatically followed and will appear in your Threads view.'
+                />
+            </span>
+        );
     default:
         return null;
     }

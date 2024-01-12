@@ -2821,6 +2821,8 @@
     "channel_modal.type.public.description": "N'importe qui peut rejoindre",
     "channel_modal.type.public.title": "Canal public",
     "channel_notifications.allActivity": "Pour toute activité",
+    "channel_notifications.autoFollowThreadsDesc": "Lorsqu'activé, toutes les nouvelles réponses dans ce canal seront automatiquement suivies et apparaîtront dans votre vue des fils de discussion.",
+    "channel_notifications.autoFollowThreadsTitle": "Suivre tous les fils de discussion dans ce canal",
     "channel_notifications.globalDefault": "Par défaut (général) ({notifyLevel})",
     "channel_notifications.ignoreChannelMentions": "Ignorer les mentions @channel, @here et @all",
     "channel_notifications.ignoreChannelMentions.help": "Si activé, @channel, @here et @all ne déclencheront plus de mentions ou de notifications dans ce canal.",
