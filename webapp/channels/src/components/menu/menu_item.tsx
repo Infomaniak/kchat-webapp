@@ -137,7 +137,7 @@ const MenuItemStyled = styled(MuiMenuItem, {
 
         return ({
             '&.MuiMenuItem-root': {
-                fontFamily: '"Open Sans", sans-serif',
+                fontFamily: '"SuisseIntl", sans-serif',
                 color: isRegular ? 'var(--center-channel-color)' : 'var(--error-text)',
                 padding: '5px 10px',
                 display: 'flex',

@@ -49,7 +49,7 @@ const Header = styled.h4`
     align-items: center;
     display: flex;
     gap: 8px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'SuisseIntl', sans-serif;
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 0;
@@ -67,7 +67,7 @@ const Footer = styled.div`
     align-items: center;
     border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
     display: flex;
-    font-family: Open Sans;
+    font-family: SuisseIntl;
     justify-content: flex-end;
     padding: 16px;
     gap: 8px;
