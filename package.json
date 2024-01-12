@@ -17,6 +17,7 @@
     "@guyplusplus/turndown-plugin-gfm": "1.0.7",
     "@infomaniak/compass-components": "0.13.0",
     "@infomaniak/compass-icons": "0.12.0",
+    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.12.tgz",
     "@infomaniak/marked": "^0.2.0",
     "@infomaniak/mattermost-client": "workspace:packages/client",
     "@infomaniak/mattermost-types": "workspace:packages/types",

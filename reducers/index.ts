@@ -4,9 +4,11 @@
 import plugins from './plugins';
 import views from './views';
 import storage from './storage';
+import ksuite_bridge from './plugins/ksuite_bridge';
 
 export default {
     views,
     plugins,
     storage,
+    ksuite_bridge,
 };

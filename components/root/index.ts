@@ -30,6 +30,8 @@ import LocalStorageStore from 'stores/local_storage_store';
 
 import {GlobalState} from 'types/store/index';
 
+import {getKSuiteBridge} from 'selectors/ksuite_bridge';
+
 import Root, {Actions} from './root';
 
 function mapStateToProps(state: GlobalState) {
@@ -57,6 +59,7 @@ function mapStateToProps(state: GlobalState) {
         rhsState: getRhsState(state),
         shouldShowAppBar: shouldShowAppBar(state),
         isCloud: isCurrentLicenseCloud(state),
+        ksuiteBridge: getKSuiteBridge(state),
     };
 }
 

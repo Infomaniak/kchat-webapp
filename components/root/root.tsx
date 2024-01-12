@@ -6,6 +6,7 @@ import deepEqual from 'fast-deep-equal';
 import {Route, Switch, Redirect, RouteComponentProps} from 'react-router-dom';
 import throttle from 'lodash/throttle';
 import * as Sentry from '@sentry/react';
+import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
 import classNames from 'classnames';
 
 import {Client4} from 'mattermost-redux/client';
@@ -87,6 +88,8 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {setCallListeners} from 'actions/calls';
 import {clearUserCookie} from 'actions/views/cookie';
 
+import {storeBridge} from 'actions/ksuite_bridge_actions';
+
 import {applyLuxonDefaults} from './effects';
 
 import RootProvider from './root_provider';
@@ -167,6 +170,7 @@ type Props = {
     rhsIsExpanded: boolean;
     rhsIsOpen: boolean;
     shouldShowAppBar: boolean;
+    ksuiteBridge: KSuiteBridge;
 } & RouteComponentProps
 
 interface State {
@@ -637,6 +641,9 @@ export default class Root extends React.PureComponent<Props, State> {
             }
         });
 
+        const ksuiteBridge = new KSuiteBridge();
+        storeBridge(ksuiteBridge)(store.dispatch);
+
         this.initiateMeRequests();
 
         // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
@@ -757,6 +764,14 @@ export default class Root extends React.PureComponent<Props, State> {
     }
 
     render() {
+        const {ksuiteBridge, location} = this.props;
+
+        ksuiteBridge?.sendMessage({
+            type: NavigateMessageKey,
+            path: location.pathname,
+            title: document.title
+        });
+
         if (!this.state.configLoaded) {
             return <div/>;
         }
