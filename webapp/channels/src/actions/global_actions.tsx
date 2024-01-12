@@ -441,8 +441,6 @@ export async function redirectUserToDefaultTeam() {
             return;
         }
     }
-
-    getHistory().push('/error?type=team_not_found');
 }
 
 export function redirectToManagerDashboard(groupId: number) {
