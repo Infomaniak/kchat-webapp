@@ -6,8 +6,8 @@ import React from 'react';
 const KDriveIcon = (props: React.HTMLAttributes<HTMLSpanElement>) => (
     <span {...props}>
         <svg
-            width={80}
-            height={80}
+            width={20}
+            height={20}
             viewBox='0 0 80 80'
         >
             <g

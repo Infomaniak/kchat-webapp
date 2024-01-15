@@ -102,10 +102,20 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                         }
                     >
                         <>
-                            <KDriveIcon
-                                onClick={() => handleKdriveSave(fileName)}
-                                className='icon file-kdrive__icon'
-                            />
+                            <OverlayTrigger
+                                delayShow={200}
+                                placement='top'
+                                overlay={
+                                    <Tooltip id='file-name__tooltip'>
+                                        {localizeMessage('infomaniak.saveToDrive', 'Save file to kDrive')}
+                                    </Tooltip>
+                                }
+                            >
+                                <KDriveIcon
+                                    onClick={() => handleKdriveSave(fileName)}
+                                    className='icon file-kdrive__icon'
+                                />
+                            </OverlayTrigger>
                             <ExternalLink
                                 href={getFileDownloadUrl(fileInfo.id)}
                                 aria-label={localizeMessage('view_image_popover.download', 'Download').toLowerCase()}
