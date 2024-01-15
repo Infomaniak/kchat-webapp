@@ -11,6 +11,7 @@ import ExternalLink from 'components/external_link';
 import OverlayTrigger from 'components/overlay_trigger';
 import Tooltip from 'components/tooltip';
 import AttachmentIcon from 'components/widgets/icons/attachment_icon';
+import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
 import {trimFilename} from 'utils/file_utils';
 import {localizeMessage} from 'utils/utils';
@@ -26,6 +27,11 @@ type Props = {
      * Handler for when the thumbnail is clicked passed the index above
      */
     handleImageClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+
+    /*
+     * Handler for saving image to kdrive.
+     */
+    handleKdriveSave: (fileName: string) => void;
 
     /*
      * Display in compact format
@@ -56,6 +62,7 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
             compactDisplay,
             fileInfo,
             handleImageClick,
+            handleKdriveSave,
             iconClass,
         } = this.props;
 
@@ -94,14 +101,20 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                             </Tooltip>
                         }
                     >
-                        <ExternalLink
-                            href={getFileDownloadUrl(fileInfo.id)}
-                            aria-label={localizeMessage('view_image_popover.download', 'Download').toLowerCase()}
-                            download={fileName}
-                            location='filename_overlay'
-                        >
-                            {children || trimmedFilename}
-                        </ExternalLink>
+                        <>
+                            <KDriveIcon
+                                onClick={() => handleKdriveSave(fileName)}
+                                className='icon file-kdrive__icon'
+                            />
+                            <ExternalLink
+                                href={getFileDownloadUrl(fileInfo.id)}
+                                aria-label={localizeMessage('view_image_popover.download', 'Download').toLowerCase()}
+                                download={fileName}
+                                location='filename_overlay'
+                            >
+                                {children || trimmedFilename}
+                            </ExternalLink>
+                        </>
                     </OverlayTrigger>
                 </div>
             );
