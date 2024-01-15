@@ -202,6 +202,7 @@ InsightsEnabled: string;
     AllowPersistentNotificationsForGuests: string;
     DelayChannelAutocomplete: 'true' | 'false';
     ServiceEnvironment: string;
+    FeatureFlagTranslation: string;
 };
 
 export type License = {
