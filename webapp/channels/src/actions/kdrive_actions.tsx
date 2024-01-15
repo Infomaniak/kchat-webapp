@@ -37,10 +37,13 @@ interface IDriveSelectionOutput {
 export function saveFileToKdrive(fileId: string, fileName: string) {
     return async (_: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
+
+        // account for medium
+        const color = theme.ikType === 'dark' ? 'dark' : 'light';
         const driveModule = document.querySelector('module-kdrive-component') as HTMLElement &
         { open: (mode: string, theme: string, fileName?: string) => Promise<{ driveId: number; elementId: number; name: string }> };
 
-        driveModule.open('save-to-drive', theme, fileName).
+        driveModule.open('save-to-drive', color, fileName).
             then((data: { driveId: number; elementId: number; name: string }) => Client4.uploadToKdrive(fileId, data.driveId, data.elementId, data.name)).
             catch((error: string) => console.warn(error));
 
@@ -51,9 +54,12 @@ export function saveFileToKdrive(fileId: string, fileName: string) {
 export function selectFileFromKdrive() {
     return async (_: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
+
+        // account for medium
+        const color = theme.ikType === 'dark' ? 'dark' : 'light';
         const driveModule = document.querySelector('module-kdrive-component') as HTMLElement & { open: (mode: string, theme: string) => Promise<IDriveSelectionOutput> };
 
-        driveModule.open('select-from-drive-mail', theme).
+        driveModule.open('select-from-drive-mail', color).
             then((data: IDriveSelectionOutput) => console.log(data)).
             catch((error: string) => console.warn(error));
 
