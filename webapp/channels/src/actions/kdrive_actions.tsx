@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {batchActions} from 'redux-batched-actions';
 
+import {Client4} from 'mattermost-redux/client';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
@@ -34,22 +34,22 @@ interface IDriveSelectionOutput {
     }>;
 }
 
-export function saveFileToKdrive(fileName: string) {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function saveFileToKdrive(fileId: string, fileName: string) {
+    return async (_: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
         const driveModule = document.querySelector('module-kdrive-component') as HTMLElement &
-        { open: (mode: string, theme: string) => Promise<{ driveId: number; elementId: number; name: string }> };
+        { open: (mode: string, theme: string, fileName?: string) => Promise<{ driveId: number; elementId: number; name: string }> };
 
         driveModule.open('save-to-drive', theme, fileName).
-            then((data: { driveId: number; elementId: number; name: string }) => console.log(data)).
+            then((data: { driveId: number; elementId: number; name: string }) => Client4.uploadToKdrive(fileId, data.driveId, data.elementId, data.name)).
             catch((error: string) => console.warn(error));
 
         return {data: true};
     };
 }
 
-export function importFileFromKdrive() {
-    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+export function selectFileFromKdrive() {
+    return async (_: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
         const driveModule = document.querySelector('module-kdrive-component') as HTMLElement & { open: (mode: string, theme: string) => Promise<IDriveSelectionOutput> };
 
@@ -69,7 +69,7 @@ export function registerInteralKdrivePlugin() {
             data: {
                 id: generateId(),
                 pluginId: 'kdrive',
-                action: () => dispatch(importFileFromKdrive()),
+                action: (data: unknown) => console.log(data),
             },
         });
 
@@ -81,9 +81,11 @@ export function registerInteralKdrivePlugin() {
                 pluginId: 'kdrive',
                 text: 'Upload from kDrive',
 
-                action: () => dispatch(importFileFromKdrive()),
+                action: () => dispatch(selectFileFromKdrive()),
                 icon: <KDriveIcon/>,
             },
         });
+
+        return {data: true};
     };
 }

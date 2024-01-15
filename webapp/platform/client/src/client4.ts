@@ -4618,6 +4618,17 @@ export default class Client4 {
             {method: 'post', body: JSON.stringify(body)},
         )
     }
+
+    uploadToKdrive = (fileId: string, driveId: number, directoryId: number, fileName: string) => {
+        return this.doFetch(
+            `${this.getFileRoute(fileId)}/kdrive/upload`,
+            {method: 'POST', body: JSON.stringify({
+                drive_id: driveId,
+                directory_id: directoryId,
+                file_name: fileName,
+            })}
+        )
+    }
 }
 
 export function parseAndMergeNestedHeaders(originalHeaders: any) {
