@@ -87,6 +87,10 @@ exports[`components/delete_channel_modal should match snapshot for delete_channe
           Object {
             "channel": "testing",
             "strong": [Function],
+            "visibility": <Memo(MemoizedFormattedMessage)
+              defaultMessage="public"
+              id="delete_channel.public"
+            />,
           }
         }
       />
