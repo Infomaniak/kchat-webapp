@@ -388,11 +388,13 @@ function handleClose(failCount) {
     const nowTimestamp = Date.now();
     const thirtySecondsAgoTimestamp = nowTimestamp - (30 * 1000);
 
-    dispatch({
-        type: GeneralTypes.WEBSOCKET_FAILURE,
-        timestamp: thirtySecondsAgoTimestamp,
-    });
-    dispatch(incrementWsErrorCount());
+    dispatch(batchActions([
+        {
+            type: GeneralTypes.WEBSOCKET_FAILURE,
+            timestamp: thirtySecondsAgoTimestamp,
+        },
+        incrementWsErrorCount(),
+    ]));
 }
 
 export function handleEvent(msg) {
