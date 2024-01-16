@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import deepEqual from 'fast-deep-equal';
@@ -26,6 +27,7 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 import {setCallListeners} from 'actions/calls';
 import {loadRecentlyUsedCustomEmojis} from 'actions/emoji_actions';
 import * as GlobalActions from 'actions/global_actions';
+import {storeBridge} from 'actions/ksuite_bridge_actions';
 import {measurePageLoadTelemetry, trackEvent, trackSelectorMetrics} from 'actions/telemetry_actions.jsx';
 import {clearUserCookie} from 'actions/views/cookie';
 import {close, initialize} from 'actions/websocket_actions';
@@ -155,6 +157,7 @@ type Props = {
     rhsIsExpanded: boolean;
     rhsIsOpen: boolean;
     shouldShowAppBar: boolean;
+    ksuiteBridge: KSuiteBridge;
 } & RouteComponentProps
 
 interface State {
@@ -625,6 +628,9 @@ export default class Root extends React.PureComponent<Props, State> {
             }
         });
 
+        const ksuiteBridge = new KSuiteBridge({debug: true}); // eslint-disable-line no-process-env
+        storeBridge(ksuiteBridge)(store.dispatch);
+
         this.initiateMeRequests();
 
         // See figma design on issue https://mattermost.atlassian.net/browse/MM-43649
@@ -748,6 +754,9 @@ export default class Root extends React.PureComponent<Props, State> {
         if (!this.state.configLoaded) {
             return <div/>;
         }
+
+        const {ksuiteBridge, location} = this.props;
+        ksuiteBridge?.sendMessage({type: NavigateMessageKey, path: location.pathname});
 
         return (
             <RootProvider>
