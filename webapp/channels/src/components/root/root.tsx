@@ -137,7 +137,7 @@ export type Actions = {
     migrateRecentEmojis: () => void;
     loadConfigAndMe: () => Promise<{data: boolean}>;
     registerCustomPostRenderer: (type: string, component: any, id: string) => Promise<ActionResult>;
-    registerInteralKdrivePlugin: () => void;
+    registerInteralKdriveHook: () => void;
     initializeProducts: () => Promise<void[]>;
 }
 
@@ -632,7 +632,7 @@ export default class Root extends React.PureComponent<Props, State> {
         // this.props.actions.registerCustomPostRenderer('custom_up_notification', OpenPricingModalPost, 'upgrade_post_message_renderer');
         // this.props.actions.registerCustomPostRenderer('custom_pl_notification', OpenPluginInstallPost, 'plugin_install_post_message_renderer');
         this.props.actions.registerCustomPostRenderer('system_welcome_post', WelcomePostRenderer, 'welcome_post_renderer');
-        this.props.actions.registerInteralKdrivePlugin();
+        this.props.actions.registerInteralKdriveHook();
 
         if (this.desktopMediaQuery.addEventListener) {
             this.desktopMediaQuery.addEventListener('change', this.handleMediaQueryChangeEvent);
