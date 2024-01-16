@@ -247,6 +247,7 @@ export default styled(Member)`
         flex-direction: row;
         align-items: center;
         margin-right: auto;
+        overflow: hidden;
     }
 
     .MenuWrapper {
