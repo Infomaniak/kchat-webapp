@@ -2100,12 +2100,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.12.tgz":
-  version: 0.0.12
-  resolution: "@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.12.tgz"
-  dependencies:
-    emittery: "npm:^1.0.1"
-  checksum: 9c02ca8824a1dab92770bdf9c446fe53a439f0a619d0c254e8d0aeff622ff349efb9c25695c9bb7f99279a30ea1e979bf20e6843c8fb7a3fe78df3419a65cf8c
+"@infomaniak/font-suisse@https://verdaccio.dev.infomaniak.ch/@infomaniak/font-suisse/-/font-suisse-1.0.0.tgz":
+  version: 1.0.0
+  resolution: "@infomaniak/font-suisse@https://verdaccio.dev.infomaniak.ch/@infomaniak/font-suisse/-/font-suisse-1.0.0.tgz"
+  checksum: e1181e4a20a71d618de6e0c74ca5580b79d8aa36f552a0c3db01130f2c4564c04d3c392fa1325c1cf864d8ccd68c00b65b93ede8a9063a12fe43d6d98933557b
   languageName: node
   linkType: hard
 
@@ -8405,13 +8403,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"emittery@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "emittery@npm:1.0.1"
-  checksum: 65dacfa022e5d412eac767fc1e62c4b89dbdf52d8fe96c25435149ca656907e7d87a325d1e5b1dab063315a154f56f5ea4fdaa0f12f228370af1dc0d91b017c2
-  languageName: node
-  linkType: hard
-
 "emoji-datasource-apple@npm:6.1.1":
   version: 6.1.1
   resolution: "emoji-datasource-apple@npm:6.1.1"
@@ -13668,7 +13659,7 @@ __metadata:
     "@hot-loader/react-dom": "npm:17.0.2"
     "@infomaniak/compass-components": "npm:0.17.0"
     "@infomaniak/compass-icons": "npm:0.13.0"
-    "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.0.12.tgz"
+    "@infomaniak/font-suisse": "https://verdaccio.dev.infomaniak.ch/@infomaniak/font-suisse/-/font-suisse-1.0.0.tgz"
     "@infomaniak/marked": "npm:^0.2.0"
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client"
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types"

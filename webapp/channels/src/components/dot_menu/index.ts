@@ -131,6 +131,7 @@ function makeMapStateToProps() {
             showForwardPostNewLabel,
             timezone: getCurrentUserTimezone(state),
             isMilitaryTime,
+            postTranslationEnabled: config.FeatureFlagTranslation === 'true',
         };
     };
 }

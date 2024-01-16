@@ -13,7 +13,7 @@ import {isChannelMuted} from 'mattermost-redux/utils/channel_utils';
 
 import NotificationSection from 'components/channel_notifications_modal/components/notification_section.jsx';
 
-import {IgnoreChannelMentions, NotificationLevels, NotificationSections} from 'utils/constants';
+import {FollowAllThreads, IgnoreChannelMentions, NotificationLevels, NotificationSections} from 'utils/constants';
 
 import type {PropsFromRedux} from './index';
 
@@ -47,6 +47,7 @@ type State = {
     pushNotifyLevel: ChannelNotifyProps['push'];
     pushThreadsNotifyLevel: UserNotifyProps['push_threads'];
     ignoreChannelMentions: ChannelNotifyProps['ignore_channel_mentions'];
+    followAllThreads: ChannelNotifyProps['channel_auto_follow_threads'];
 };
 
 export default class ChannelNotificationsModal extends React.PureComponent<Props, State> {
@@ -95,6 +96,7 @@ export default class ChannelNotificationsModal extends React.PureComponent<Props
             pushNotifyLevel: channelMemberNotifyProps?.push || NotificationLevels.DEFAULT,
             pushThreadsNotifyLevel: channelMemberNotifyProps?.push_threads || NotificationLevels.ALL,
             ignoreChannelMentions,
+            followAllThreads: channelMemberNotifyProps?.channel_auto_follow_threads || FollowAllThreads.OFF,
         };
     }
 
@@ -163,6 +165,19 @@ export default class ChannelNotificationsModal extends React.PureComponent<Props
         this.handleUpdateChannelNotifyProps(props);
     };
 
+    handleSubmitFollowAllThreads = () => {
+        const channelNotifyProps = this.props.channelMember && this.props.channelMember.notify_props;
+        const {followAllThreads} = this.state;
+
+        if (channelNotifyProps?.channel_auto_follow_threads === followAllThreads) {
+            this.updateSection('');
+            return;
+        }
+
+        const props = {channel_auto_follow_threads: followAllThreads};
+        this.handleUpdateChannelNotifyProps(props);
+    };
+
     handleUpdateMarkUnreadLevel = (markUnreadNotifyLevel: ChannelNotifyProps['mark_unread']) => this.setState({markUnreadNotifyLevel});
 
     handleSubmitPushNotificationLevel = () => {
@@ -184,6 +199,7 @@ export default class ChannelNotificationsModal extends React.PureComponent<Props
     handleUpdatePushNotificationLevel = (pushNotifyLevel: ChannelNotifyProps['push']) => this.setState({pushNotifyLevel});
     handleUpdatePushThreadsNotificationLevel = (pushThreadsNotifyLevel: UserNotifyProps['push_threads']) => this.setState({pushThreadsNotifyLevel});
     handleUpdateIgnoreChannelMentions = (ignoreChannelMentions: ChannelNotifyProps['ignore_channel_mentions']) => this.setState({ignoreChannelMentions});
+    handleUpdateFollowAllThreads = (followAllThreads: ChannelNotifyProps['channel_auto_follow_threads']) => this.setState({followAllThreads});
 
     handleSubmitIgnoreChannelMentions = () => {
         const channelNotifyProps = this.props.channelMember && this.props.channelMember.notify_props;
@@ -207,6 +223,7 @@ export default class ChannelNotificationsModal extends React.PureComponent<Props
             pushNotifyLevel,
             pushThreadsNotifyLevel,
             ignoreChannelMentions,
+            followAllThreads,
             serverError,
         } = this.state;
 
@@ -265,6 +282,17 @@ export default class ChannelNotificationsModal extends React.PureComponent<Props
                                     ignoreChannelMentions={ignoreChannelMentions}
                                     onChange={this.handleUpdateIgnoreChannelMentions}
                                     onSubmit={this.handleSubmitIgnoreChannelMentions}
+                                    onUpdateSection={this.updateSection}
+                                    serverError={serverError}
+                                />
+                                <div className='divider-light'/>
+                                <NotificationSection
+                                    section={NotificationSections.FOLLOW_ALL_THREADS}
+                                    expand={activeSection === NotificationSections.FOLLOW_ALL_THREADS}
+                                    memberNotificationLevel={markUnreadNotifyLevel}
+                                    followAllThreads={followAllThreads}
+                                    onChange={this.handleUpdateFollowAllThreads}
+                                    onSubmit={this.handleSubmitFollowAllThreads}
                                     onUpdateSection={this.updateSection}
                                     serverError={serverError}
                                 />

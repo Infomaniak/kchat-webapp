@@ -139,7 +139,7 @@ const StyledUseCaseMenuItem = styled(UseCase)`
         padding: 14px 12px;
         width: 220px;
         height: 44px;
-        font-family: 'Open Sans';
+        font-family: 'SuisseIntl';
         line-height: 16px;
         font-weight: 600;
         font-size: 12px;

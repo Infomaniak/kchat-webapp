@@ -34,7 +34,10 @@ declare global {
 function preRenderSetup(callwhendone: () => void) {
     injectWebcomponentInit();
     window.onerror = (msg, url, line, column, error) => {
-        if (msg === 'ResizeObserver loop limit exceeded') {
+        // Ignore exceptions raised by ResizeObserver like:
+        // - ResizeObserver loop limit exceeded.
+        // - ResizeObserver loop completed with undelivered notifications.
+        if (msg.toString()?.startsWith('ResizeObserver loop')) {
             return;
         }
 

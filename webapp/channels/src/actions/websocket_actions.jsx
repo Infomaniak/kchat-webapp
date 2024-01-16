@@ -109,12 +109,13 @@ import InteractiveDialog from 'components/interactive_dialog';
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 import RemovedFromChannelModal from 'components/removed_from_channel_modal';
 
-import WebSocketClient from 'client/web_websocket_client';
-import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, Constants, AnnouncementBarMessages, SocketEvents, UserStatuses, ModalIdentifiers, WarnMetricTypes, StoragePrefixes} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
+
+import WebSocketClient from 'client/web_websocket_client';
+import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, receivedCall} from './calls';
 
@@ -387,11 +388,13 @@ function handleClose(failCount) {
     const nowTimestamp = Date.now();
     const thirtySecondsAgoTimestamp = nowTimestamp - (30 * 1000);
 
-    dispatch({
-        type: GeneralTypes.WEBSOCKET_FAILURE,
-        timestamp: thirtySecondsAgoTimestamp,
-    });
-    dispatch(incrementWsErrorCount());
+    dispatch(batchActions([
+        {
+            type: GeneralTypes.WEBSOCKET_FAILURE,
+            timestamp: thirtySecondsAgoTimestamp,
+        },
+        incrementWsErrorCount(),
+    ]));
 }
 
 export function handleEvent(msg) {
@@ -927,9 +930,10 @@ function handleKSuiteAdded(msg) {
 
 function handleKSuiteDeleted(msg) {
     return (doDispatch, doGetState) => {
+        const currentTeams = getMyKSuites(doGetState());
+        const newTeams = currentTeams.filter((team) => team.id !== msg.data.team.id);
+
         if (isDesktopApp()) {
-            const currentTeams = getMyKSuites(doGetState());
-            const newTeams = currentTeams.filter((team) => team.id !== msg.data.team.id);
             window.postMessage(
                 {
                     type: 'update-teams',
@@ -943,6 +947,16 @@ function handleKSuiteDeleted(msg) {
 
         doDispatch({type: TeamTypes.RECEIVED_TEAM_DELETED, data: {id: msg.data.team.id}});
         doDispatch({type: TeamTypes.UPDATED_TEAM, data: msg.data.team});
+
+        if (!isDesktopApp()) {
+            if (newTeams.length === 0) {
+                getHistory().push('/error?type=no_ksuite');
+
+                return;
+            }
+
+            redirectUserToDefaultTeam();
+        }
     };
 }
 
