@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {KSuiteBridge} from '@infomaniak/ksuite-bridge';
+import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import deepEqual from 'fast-deep-equal';
@@ -157,7 +157,7 @@ type Props = {
     rhsIsExpanded: boolean;
     rhsIsOpen: boolean;
     shouldShowAppBar: boolean;
-    ksuiteBridge: any;
+    ksuiteBridge: KSuiteBridge;
 } & RouteComponentProps
 
 interface State {
@@ -628,7 +628,7 @@ export default class Root extends React.PureComponent<Props, State> {
             }
         });
 
-        const ksuiteBridge = new KSuiteBridge(process.env.KSUITE_URL); // eslint-disable-line no-process-env
+        const ksuiteBridge = new KSuiteBridge({debug: true}); // eslint-disable-line no-process-env
         storeBridge(ksuiteBridge)(store.dispatch);
 
         this.initiateMeRequests();
@@ -756,7 +756,7 @@ export default class Root extends React.PureComponent<Props, State> {
         }
 
         const {ksuiteBridge, location} = this.props;
-        ksuiteBridge?.sendMessage({type: 'navigate', path: location.pathname});
+        ksuiteBridge?.sendMessage({type: NavigateMessageKey, path: location.pathname});
 
         return (
             <RootProvider>
