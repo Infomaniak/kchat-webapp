@@ -16,12 +16,12 @@ import {
     getChannelStats,
     selectChannel,
 } from 'mattermost-redux/actions/channels';
-import {logout, loadMe, loadMeREST} from 'mattermost-redux/actions/users';
+import {logout, loadMe} from 'mattermost-redux/actions/users';
 import {Preferences} from 'mattermost-redux/constants';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 import {getCurrentChannelStats, getCurrentChannelId, getMyChannelMember, getRedirectChannelNameForTeam, getChannelsNameMapInTeam, getAllDirectChannels, getChannelMessageCount} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig, isPerformanceDebuggingEnabled} from 'mattermost-redux/selectors/entities/general';
-import {getBool, isCollapsedThreadsEnabled, isGraphQLEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {getBool, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getTeam, getMyTeamMember, getTeamMemberships, getMyKSuites} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFunc, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
@@ -43,7 +43,6 @@ import store from 'stores/redux_store';
 import {clearLocalStorageToken} from 'components/login/utils';
 import SubMenuModal from 'components/widgets/menu/menu_modals/submenu_modal/submenu_modal';
 
-import WebSocketClient from 'client/web_websocket_client';
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, PostTypes, RHSStates, ModalIdentifiers, PreviousViewedTypes} from 'utils/constants';
 import {IKConstants} from 'utils/constants-ik';
@@ -51,6 +50,8 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {filterAndSortTeamsByDisplayName} from 'utils/team_utils';
 import {isDesktopApp, getDesktopVersion} from 'utils/user_agent';
 import * as Utils from 'utils/utils';
+
+import WebSocketClient from 'client/web_websocket_client';
 
 import type {GlobalState} from 'types/store';
 
@@ -393,11 +394,7 @@ export async function redirectUserToDefaultTeam() {
     const shouldLoadUser = Utils.isEmptyObject(getTeamMemberships(state)) || !user;
 
     if (shouldLoadUser) {
-        if (isGraphQLEnabled(state)) {
-            await dispatch(loadMe());
-        } else {
-            await dispatch(loadMeREST());
-        }
+        await dispatch(loadMe());
         state = getState();
         user = getCurrentUser(state);
     }
@@ -441,6 +438,8 @@ export async function redirectUserToDefaultTeam() {
             return;
         }
     }
+
+    getHistory().push('/select_team');
 }
 
 export function redirectToManagerDashboard(groupId: number) {
