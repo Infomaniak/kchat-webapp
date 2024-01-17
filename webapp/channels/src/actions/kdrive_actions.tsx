@@ -12,8 +12,28 @@ import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
-import {ActionTypes, KdriveActionTypes} from 'utils/constants';
+import {ActionTypes} from 'utils/constants';
 import {generateId} from 'utils/utils';
+
+// const fileInfo = {
+// id: string;
+// user_id: string;
+// create_at: number;
+// update_at: number;
+// delete_at: number;
+// name: file.name,
+// extension: string;
+// size: file.size,
+// mime_type: file.mimetype,
+// width: number;
+// height: number;
+// has_preview_image: boolean;
+// clientId,
+// post_id?: string;
+// mini_preview?: string;
+// archived: boolean;
+// link?: string;
+// };
 
 interface IDriveSelectionOutput {
     attachmentsSize: number;
@@ -41,7 +61,7 @@ export function saveFileToKdrive(fileId: string, fileName: string) {
     return async (_: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
 
-        // account for medium
+        // handle medium
         const color = theme.ikType === 'dark' ? 'dark' : 'light';
         const driveModule = document.querySelector('module-kdrive-component') as HTMLElement &
         { open: (mode: string, theme: string, fileName?: string) => Promise<{ driveId: number; elementId: number; name: string }> };
@@ -65,9 +85,10 @@ export function selectFileFromKdrive(
     return async (_: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
 
-        // account for medium
+        // handle medium
         const color = theme.ikType === 'dark' ? 'dark' : 'light';
-        const driveModule = document.querySelector('module-kdrive-component') as HTMLElement & { open: (mode: string, theme: string) => Promise<IDriveSelectionOutput> };
+        const driveModule = document.querySelector('module-kdrive-component') as HTMLElement &
+        { open: (mode: string, theme: string) => Promise<IDriveSelectionOutput> };
 
         driveModule.open('select-from-drive-mail', color).
             then((data: IDriveSelectionOutput) => {
@@ -75,30 +96,20 @@ export function selectFileFromKdrive(
                     const clientId = generateId();
                     const dummyRequest = stateAdd(clientId, file.name, file.type);
                     const fileInfo = {
-                        // id: string;
-                        // user_id: string;
-                        // create_at: number;
-                        // update_at: number;
-                        // delete_at: number;
                         name: file.name,
-                        // extension: string;
                         size: file.size,
                         mime_type: file.mimetype,
-                        // width: number;
-                        // height: number;
-                        // has_preview_image: boolean;
                         clientId,
-                        // post_id?: string;
-                        // mini_preview?: string;
-                        // archived: boolean;
-                        // link?: string;
                     };
-
                     dummyRequest.onProgress(fileInfo);
                     uploadStartHandler([clientId], channelId);
-                    const {file_infos, client_ids} = await Client4.downloadFromKdrive(channelId, file.driveId, file.id, clientId);
-                    onUpload(file_infos, client_ids, channelId, rootId);
-                    stateRemove(clientId);
+                    try {
+                        const {file_infos, client_ids} = await Client4.downloadFromKdrive(channelId, file.driveId, file.id, clientId);
+                        onUpload(file_infos, client_ids, channelId, rootId);
+                        stateRemove(clientId);
+                    } catch (error) {
+                        console.warn(error);
+                    }
                 });
             }).
             catch((error: string) => console.warn(error));
@@ -106,29 +117,6 @@ export function selectFileFromKdrive(
         return {data: true};
     };
 }
-
-/**
- * Idk what this is used for yet but without it FileUploadMethod doesn't work.
- *
- * @returns {void}
- */
-// export function registerInteralKdriveHook() {
-//     return async (dispatch: DispatchFunc) => {
-//         dispatch({
-//             type: ActionTypes.RECEIVED_PLUGIN_COMPONENT,
-//             name: 'FilesWillUploadHook',
-//             data: {
-//                 id: generateId(),
-//                 pluginId: 'kdrive',
-//                 action: (d) => console.log(d),
-//                 onUploadSuccess: (e) => console.log(e),
-//                 // hook: (f) => console.log(f)
-//             },
-//         });
-
-//         return {data: true};
-//     };
-// }
 
 /**
  * This action is called every channel switch in {@code ChannelView} to register a kdrive upload plugin.
