@@ -576,6 +576,30 @@ export class FileUpload extends PureComponent<Props, State> {
         this.fileInput.current?.click();
     };
 
+    addDummyRequest = (clientId: string, fileName: string, fileType: string) => {
+        const request = {
+            file: {},
+            name: fileName,
+            type: fileType,
+            rootId: this.props.rootId || '',
+            channelId: this.props.channelId,
+            clientId,
+            onProgress: this.props.onUploadProgress,
+            onSuccess: this.fileUploadSuccess,
+            onError: this.fileUploadFail,
+        };
+
+        this.setState({requests: {...this.state.requests, [clientId]: request}});
+
+        return request;
+    };
+
+    removeDummyRequest = (clientId: string) => {
+        const requests = Object.assign({}, this.state.requests);
+        Reflect.deleteProperty(requests, clientId);
+        this.setState({requests});
+    };
+
     render() {
         const {formatMessage} = this.props.intl;
         let multiple = true;
@@ -650,7 +674,20 @@ export class FileUpload extends PureComponent<Props, State> {
                         key={item.pluginId + '_fileuploadpluginmenuitem'}
                         onClick={() => {
                             if (item.action) {
-                                item.action(this.checkPluginHooksAndUploadFiles);
+                                if (item.customArgs) {
+                                    const args: Array<keyof FileUpload | keyof Props> = [];
+
+                                    item.customArgs.forEach((arg) => {
+                                        if (arg in this || arg in this.props) {
+                                            // @ts-expect-error ts can't infer this properly
+                                            args.push(this[arg] || this.props[arg]);
+                                        }
+                                    });
+
+                                    item.action(...args);
+                                } else {
+                                    item.action(this.checkPluginHooksAndUploadFiles);
+                                }
                             }
                             this.setState({menuOpen: false});
                         }}

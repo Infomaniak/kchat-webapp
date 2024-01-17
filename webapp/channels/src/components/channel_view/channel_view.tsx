@@ -98,7 +98,6 @@ export default class ChannelView extends React.PureComponent<Props, State> {
             if (this.props.channelId && !this.props.deactivatedChannel && !this.props.channelIsArchived) {
                 WebSocketClient.bindPresenceChannel(this.props.channelId);
             }
-            this.props.registerInternalKdrivePlugin(this.props.channelId);
         }
     }
 

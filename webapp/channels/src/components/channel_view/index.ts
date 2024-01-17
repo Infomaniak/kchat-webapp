@@ -10,7 +10,6 @@ import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general
 import {getCurrentRelativeTeamUrl} from 'mattermost-redux/selectors/entities/teams';
 import {isFirstAdmin} from 'mattermost-redux/selectors/entities/users';
 
-import {registerInternalKdrivePlugin} from 'actions/kdrive_actions';
 import {goToLastViewedChannel} from 'actions/views/channel';
 
 import type {GlobalState} from 'types/store';
@@ -52,7 +51,6 @@ function mapStateToProps(state: GlobalState) {
 
 const mapDispatchToProps = ({
     goToLastViewedChannel,
-    registerInternalKdrivePlugin,
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

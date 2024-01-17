@@ -4630,13 +4630,14 @@ export default class Client4 {
         )
     }
 
-    downloadFromKdrive = (channelId: string, driveId: number, driveFileId: number) => {
+    downloadFromKdrive = (channelId: string, driveId: number, driveFileId: number, clientId: string): Promise<{client_ids: string[], file_infos: FileInfo[]}> => {
         return this.doFetch(
             `${this.getFilesRoute()}/drive/download`,
             {method: 'POST', body: JSON.stringify({
                 channel_id: channelId,
                 drive_id: driveId,
                 file_id: driveFileId,
+                client_ids: clientId,
             })}
         )
     }

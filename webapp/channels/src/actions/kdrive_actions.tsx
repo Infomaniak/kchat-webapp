@@ -1,6 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/ban-types */
+
 import React from 'react';
 
 import {Client4} from 'mattermost-redux/client';
@@ -51,7 +54,14 @@ export function saveFileToKdrive(fileId: string, fileName: string) {
     };
 }
 
-export function selectFileFromKdrive(channelId: string) {
+export function selectFileFromKdrive(
+    channelId: string,
+    rootId: string,
+    onUpload: Function,
+    uploadStartHandler: Function,
+    stateAdd: Function,
+    stateRemove: Function,
+) {
     return async (_: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
 
@@ -62,7 +72,33 @@ export function selectFileFromKdrive(channelId: string) {
         driveModule.open('select-from-drive-mail', color).
             then((data: IDriveSelectionOutput) => {
                 data.attachments.forEach(async (file) => {
-                    await Client4.downloadFromKdrive(channelId, file.driveId, file.id);
+                    const clientId = generateId();
+                    const dummyRequest = stateAdd(clientId, file.name, file.type);
+                    const fileInfo = {
+                        // id: string;
+                        // user_id: string;
+                        // create_at: number;
+                        // update_at: number;
+                        // delete_at: number;
+                        name: file.name,
+                        // extension: string;
+                        size: file.size,
+                        mime_type: file.mimetype,
+                        // width: number;
+                        // height: number;
+                        // has_preview_image: boolean;
+                        clientId,
+                        // post_id?: string;
+                        // mini_preview?: string;
+                        // archived: boolean;
+                        // link?: string;
+                    };
+
+                    dummyRequest.onProgress(fileInfo);
+                    uploadStartHandler([clientId], channelId);
+                    const {file_infos, client_ids} = await Client4.downloadFromKdrive(channelId, file.driveId, file.id, clientId);
+                    onUpload(file_infos, client_ids, channelId, rootId);
+                    stateRemove(clientId);
                 });
             }).
             catch((error: string) => console.warn(error));
@@ -76,20 +112,23 @@ export function selectFileFromKdrive(channelId: string) {
  *
  * @returns {void}
  */
-export function registerInteralKdriveHook() {
-    return async (dispatch: DispatchFunc) => {
-        dispatch({
-            type: ActionTypes.RECEIVED_PLUGIN_COMPONENT,
-            name: 'FileWillUploadHook',
-            data: {
-                id: generateId(),
-                pluginId: 'kdrive',
-            },
-        });
+// export function registerInteralKdriveHook() {
+//     return async (dispatch: DispatchFunc) => {
+//         dispatch({
+//             type: ActionTypes.RECEIVED_PLUGIN_COMPONENT,
+//             name: 'FilesWillUploadHook',
+//             data: {
+//                 id: generateId(),
+//                 pluginId: 'kdrive',
+//                 action: (d) => console.log(d),
+//                 onUploadSuccess: (e) => console.log(e),
+//                 // hook: (f) => console.log(f)
+//             },
+//         });
 
-        return {data: true};
-    };
-}
+//         return {data: true};
+//     };
+// }
 
 /**
  * This action is called every channel switch in {@code ChannelView} to register a kdrive upload plugin.
@@ -99,13 +138,8 @@ export function registerInteralKdriveHook() {
  * @param channelId - Current channel id.
  * @returns {void}
  */
-export function registerInternalKdrivePlugin(channelId: string) {
+export function registerInternalKdrivePlugin() {
     return async (dispatch: DispatchFunc) => {
-        dispatch({
-            type: ActionTypes.REMOVED_PLUGIN_COMPONENT,
-            name: 'FileUploadMethod',
-            id: 'kdrive',
-        });
         dispatch({
             type: ActionTypes.RECEIVED_PLUGIN_COMPONENT,
             name: 'FileUploadMethod',
@@ -113,8 +147,31 @@ export function registerInternalKdrivePlugin(channelId: string) {
                 id: 'kdrive',
                 pluginId: 'kdrive',
                 text: 'Upload from kDrive',
-
-                action: () => dispatch(selectFileFromKdrive(channelId)),
+                customArgs: [
+                    'onFileUpload',
+                    'onUploadStart',
+                    'addDummyRequest',
+                    'removeDummyRequest',
+                    'channelId',
+                    'rootId',
+                ],
+                action: (
+                    onFileUpload: Function,
+                    onUploadStart: Function,
+                    stateAdd: Function,
+                    stateRemove: Function,
+                    channelId: string,
+                    rootId: string,
+                ) => {
+                    dispatch(selectFileFromKdrive(
+                        channelId,
+                        rootId,
+                        onFileUpload,
+                        onUploadStart,
+                        stateAdd,
+                        stateRemove,
+                    ));
+                },
                 icon: <KDriveIcon/>,
             },
         });
