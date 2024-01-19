@@ -360,7 +360,7 @@ const CustomStatusModal: React.FC<Props> = (props: Props) => {
     const suggestion = (
         <div
             className='statusSuggestion'
-            style={{marginTop: isStatusSet ? 44 : 8}}
+            style={{marginTop: 8}}
         >
             <div className='statusSuggestion__content'>
                 {recentCustomStatuses.length > 0 && recentStatuses}

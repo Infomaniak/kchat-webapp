@@ -95,8 +95,6 @@ export default class DndCustomTimePicker extends React.PureComponent<Props, Stat
 
     setTime = (time: Moment) => this.setState({time});
 
-    setIsMenuOpen = (isMenuOpen: boolean) => this.setState({isMenuOpen});
-
     handlePopperOpenState = (isPopperOpen: boolean) => {
         this.setState({isPopperOpen});
     };
@@ -128,7 +126,6 @@ export default class DndCustomTimePicker extends React.PureComponent<Props, Stat
                     time={time}
                     timezone={this.props.timezone}
                     handleChange={this.setTime}
-                    onMenuChange={this.setIsMenuOpen}
                     setIsDatePickerOpen={this.handlePopperOpenState}
                 />
             </GenericModal>
