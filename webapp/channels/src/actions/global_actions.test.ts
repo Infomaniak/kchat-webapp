@@ -10,8 +10,9 @@ import {closeRightHandSide, closeMenu as closeRhsMenu} from 'actions/views/rhs';
 import LocalStorageStore from 'stores/local_storage_store';
 import reduxStore from 'stores/redux_store';
 
-import mockStore from 'tests/test_store';
 import {getHistory} from 'utils/browser_history';
+
+import mockStore from 'tests/test_store';
 
 jest.mock('actions/views/rhs', () => ({
     closeMenu: jest.fn(),
@@ -23,7 +24,7 @@ jest.mock('actions/views/lhs', () => ({
 }));
 
 jest.mock('mattermost-redux/actions/users', () => ({
-    loadMeREST: () => ({type: 'MOCK_RECEIVED_ME'}),
+    loadMe: () => ({type: 'MOCK_RECEIVED_ME'}),
 }));
 
 jest.mock('stores/redux_store', () => {
@@ -217,7 +218,7 @@ describe('actions/global_actions', () => {
             expect(getHistory().push).toHaveBeenCalledWith('/team2/channels/channel-in-team-2');
         });
 
-        it('should redirect to /error?type=team_not_found when the user have no channels in the any of his teams', async () => {
+        it('should redirect to /select_team when the user have no channels in the any of his teams', async () => {
             const userId = 'user1';
             LocalStorageStore.setPreviousTeamId(userId, 'team1');
             LocalStorageStore.setPreviousChannelName(userId, 'team1', 'channel-in-team-1');
@@ -286,7 +287,7 @@ describe('actions/global_actions', () => {
             reduxStore.getState.mockImplementation(store.getState);
 
             await redirectUserToDefaultTeam();
-            expect(getHistory().push).toHaveBeenCalledWith('/error?type=team_not_found');
+            expect(getHistory().push).toHaveBeenCalledWith('/select_team');
         });
 
         it('should do nothing if there is not current user', async () => {

@@ -21,17 +21,17 @@ const useResponsiveFormattingBar = (ref: React.RefObject<HTMLDivElement>): WideM
         if (ref.current?.clientWidth === undefined) {
             return;
         }
-        if (ref.current.clientWidth > 640) {
+        if (ref.current?.clientWidth > 640) {
             setWideMode('wide');
         }
-        if (ref.current.clientWidth >= 424 && ref.current.clientWidth <= 640) {
+        if (ref.current?.clientWidth >= 424 && ref.current?.clientWidth <= 640) {
             setWideMode('normal');
         }
-        if (ref.current.clientWidth < 424) {
+        if (ref.current?.clientWidth < 424) {
             setWideMode('narrow');
         }
 
-        if (ref.current.clientWidth < 310) {
+        if (ref.current?.clientWidth < 310) {
             setWideMode('min');
         }
     }, 10), []);

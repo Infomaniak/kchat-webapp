@@ -181,7 +181,7 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                       >
                         <Heading>
                           <div
-                            className="Heading-datPAZ hKsoDb"
+                            className="Heading-datPAZ gevCje"
                           >
                             <Title
                               className="overflow--ellipsis text-nowrap"

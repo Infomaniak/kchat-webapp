@@ -122,10 +122,9 @@ type Props = {
     handleChange: (date: Moment) => void;
     timezone?: string;
     setIsDatePickerOpen?: (isDatePickerOpen: boolean) => void;
-    onMenuChange: (open: boolean) => void;
 }
 
-const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, onMenuChange, setIsDatePickerOpen}: Props) => {
+const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, setIsDatePickerOpen}: Props) => {
     const locale = useSelector(getCurrentLocale);
     const [timeOptions, setTimeOptions] = useState<CreatableOption[]>([]);
     const [selectedValue, setSelectedValue] = useState<ValueType<CreatableOption>>(null);
@@ -140,7 +139,6 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
 
     const handleMenuOpenState = (isOpen: boolean) => {
         setIsMenuOpen(isOpen);
-        onMenuChange(isOpen);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent, open: boolean, setter: (open: boolean) => void) => {
@@ -202,7 +200,6 @@ const DateTimeInputContainer: React.FC<Props> = ({time, handleChange, timezone, 
             className='dateTime__calendar-icon'
             size={'sm'}
             aria-haspopup='grid'
-            tabIndex={-1}
         />
     );
 

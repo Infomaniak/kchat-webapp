@@ -109,10 +109,10 @@ ol {
     font-style: normal;
     font-weight: normal;
 
-    src: url("../fonts/SuisseIntl-Regular.eot");
-    src: url("../fonts/SuisseIntl-Regular.eot#iefix") format("embedded-opentype"),
-        url("../fonts/SuisseIntl-Regular.woff") format("woff"),
-        url("../fonts/SuisseIntl-Regular.ttf") format("truetype");
+    src: url("~@infomaniak/font-suisse/SuisseIntl-Regular.eot");
+    src: url("~@infomaniak/font-suisse/SuisseIntl-Regular.eot#iefix") format("embedded-opentype"),
+        url("~@infomaniak/font-suisse/SuisseIntl-Regular.woff") format("woff"),
+        url("~@infomaniak/font-suisse/SuisseIntl-Regular.ttf") format("truetype");
 }
 
 @font-face {
@@ -120,10 +120,10 @@ ol {
     font-style: normal;
     font-weight: bold;
 
-    src: url("../fonts/SuisseIntl-Medium.eot");
-    src: url("../fonts/SuisseIntl-Medium.eot#iefix") format("embedded-opentype"),
-        url("../fonts/SuisseIntl-Medium.woff") format("woff"),
-        url("../fonts/SuisseIntl-Medium.ttf") format("truetype");
+    src: url("~@infomaniak/font-suisse/SuisseIntl-Medium.eot");
+    src: url("~@infomaniak/font-suisse/SuisseIntl-Medium.eot#iefix") format("embedded-opentype"),
+        url("~@infomaniak/font-suisse/SuisseIntl-Medium.woff") format("woff"),
+        url("~@infomaniak/font-suisse/SuisseIntl-Medium.ttf") format("truetype");
 }
 
 // SuisseIntl font definitions

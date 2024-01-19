@@ -19,7 +19,19 @@ export type FileInfo = {
     mini_preview?: string;
     archived: boolean;
     link?: string;
+    onlyoffice?: OnlyofficeMeta;
 };
+
+export type OnlyofficeMeta = {
+    document: {
+        fileType: string;
+        key: string;
+    };
+    documentType: string;
+    editorConfig: any;
+    type: string;
+};
+
 export type FilesState = {
     files: Record<string, FileInfo>;
     filesFromSearch: Record<string, FileSearchResultItem>;

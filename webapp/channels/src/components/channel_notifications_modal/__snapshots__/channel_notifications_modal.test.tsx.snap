@@ -87,6 +87,19 @@ exports[`components/channel_notifications_modal/ChannelNotificationsModal should
             section="ignoreChannelMentions"
             serverError={null}
           />
+          <div
+            className="divider-light"
+          />
+          <NotificationSection
+            expand={false}
+            followAllThreads="off"
+            memberNotificationLevel="all"
+            onChange={[Function]}
+            onSubmit={[Function]}
+            onUpdateSection={[Function]}
+            section="followAllThreads"
+            serverError={null}
+          />
           <div>
             <div
               className="divider-light"
