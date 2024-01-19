@@ -30,7 +30,7 @@ import PopoverBar from './popover_bar';
 import type {LinkInfo} from './types';
 import {isFileInfo} from './types';
 
-import OnlyofficePreview from 'components/onlyoffice_preview';
+const OnlyofficePreview = React.lazy(() => import('components/onlyoffice_preview'));
 
 const PDFPreview = React.lazy(() => import('components/pdf_preview'));
 
@@ -358,7 +358,7 @@ export default class FilePreviewModal extends React.PureComponent<Props, State> 
                             onClick={this.handleBgClose}
                         >
                             <React.Suspense fallback={null}>
-                                <OnlyofficePreview fileInfo={fileInfo} />
+                                <OnlyofficePreview fileInfo={fileInfo as FileInfo}/>
                             </React.Suspense>
                         </div>
                     );

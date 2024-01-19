@@ -2221,7 +2221,7 @@ export default class Client4 {
     };
 
     getFileInfosForFile = (fileId: string) => {
-        return this.doFetch<FileInfo[]>(
+        return this.doFetch<FileInfo>(
             `${this.getFileRoute(fileId)}/info`,
             {method: 'get'},
         );

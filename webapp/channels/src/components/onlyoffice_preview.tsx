@@ -12,8 +12,6 @@ import {forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
 import type {GenericAction} from 'mattermost-redux/types/actions';
 
-import store from 'stores/redux_store';
-
 type Props = {
     fileInfo: FileInfo;
 }
@@ -34,9 +32,11 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
     async componentDidMount() {
         if (document.getElementById('onlyoffice-script')) {
             const result = await this.fetchFileInfoForUrl(this.props.fileInfo.id);
-            console.log(result);
-            if (!result.error) {
-                this.loadDocument(result);
+
+            if ('error' in result) {
+                console.warn(result.error);
+            } else {
+                this.loadDocument(result as FileInfo);
             }
         } else {
             const script = document.createElement('script');
@@ -50,9 +50,11 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
 
             script.onload = async () => {
                 const result = await this.fetchFileInfoForUrl(this.props.fileInfo.id);
-                console.log(result);
-                if (!result.error) {
-                    this.loadDocument(result);
+
+                if ('error' in result) {
+                    console.warn(result.error);
+                } else {
+                    this.loadDocument(result as FileInfo);
                 }
             };
         }
@@ -63,7 +65,7 @@ class OnlyofficePreview extends React.PureComponent<PropsFromRedux> {
             const fileInfo = await Client4.getFileInfosForFile(fileId);
             return fileInfo;
         } catch (error) {
-            this.props.actions.forceLogoutIfNecessary(error, store.dispatch, store.getState);
+            console.warn(error);
             return {error};
         }
     }
