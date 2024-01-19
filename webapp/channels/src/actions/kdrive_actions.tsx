@@ -13,6 +13,7 @@ import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
 import {ActionTypes} from 'utils/constants';
+import {t} from 'utils/i18n';
 import {generateId} from 'utils/utils';
 
 // const fileInfo = {
@@ -81,6 +82,9 @@ export function selectFileFromKdrive(
     uploadStartHandler: Function,
     stateAdd: Function,
     stateRemove: Function,
+    handleInputChange: Function,
+    message: string,
+    caretPosition: number,
 ) {
     return async (_: DispatchFunc, getState: GetStateFunc) => {
         const theme = getTheme(getState());
@@ -92,6 +96,7 @@ export function selectFileFromKdrive(
 
         driveModule.open('select-from-drive-mail', color).
             then((data: IDriveSelectionOutput) => {
+                console.log(data);
                 data.attachments.forEach(async (file) => {
                     const clientId = generateId();
                     const dummyRequest = stateAdd(clientId, file.name, file.type);
@@ -110,6 +115,10 @@ export function selectFileFromKdrive(
                     } catch (error) {
                         console.warn(error);
                     }
+                });
+                data.shareAttachments.forEach((share) => {
+                    const newMessage = message.slice(0, caretPosition) + share.url + message.slice(caretPosition);
+                    handleInputChange({target: {value: newMessage}});
                 });
             }).
             catch((error: string) => console.warn(error));
@@ -134,7 +143,7 @@ export function registerInternalKdrivePlugin() {
             data: {
                 id: 'kdrive',
                 pluginId: 'kdrive',
-                text: 'Upload from kDrive',
+                text: t('kdrive.upload'),
                 customArgs: [
                     'onFileUpload',
                     'onUploadStart',
@@ -142,6 +151,9 @@ export function registerInternalKdrivePlugin() {
                     'removeDummyRequest',
                     'channelId',
                     'rootId',
+                    'handleDriveSharelink',
+                    'message',
+                    'caretPosition',
                 ],
                 action: (
                     onFileUpload: Function,
@@ -150,6 +162,9 @@ export function registerInternalKdrivePlugin() {
                     stateRemove: Function,
                     channelId: string,
                     rootId: string,
+                    handleDriveSharelink: Function,
+                    message: string,
+                    caretPosition: number,
                 ) => {
                     dispatch(selectFileFromKdrive(
                         channelId,
@@ -158,6 +173,9 @@ export function registerInternalKdrivePlugin() {
                         onUploadStart,
                         stateAdd,
                         stateRemove,
+                        handleDriveSharelink,
+                        message,
+                        caretPosition,
                     ));
                 },
                 icon: <KDriveIcon/>,

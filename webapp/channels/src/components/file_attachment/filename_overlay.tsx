@@ -107,7 +107,7 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                                 placement='top'
                                 overlay={
                                     <Tooltip id='file-name__tooltip'>
-                                        {localizeMessage('infomaniak.saveToDrive', 'Save file to kDrive')}
+                                        {localizeMessage('kdrive.save', 'Save file to kDrive')}
                                     </Tooltip>
                                 }
                             >

@@ -4109,5 +4109,7 @@
     "drafts.confirm.send.button": "Sì, inviare ora",
     "drafts.confirm.send.text": "Sei sicuro di voler inviare questo messaggio a <strong>{displayName}</strong>?",
     "drafts.confirm.send.title": "Enviar mensaje ahora",
-    "drafts.actions.openInChannel": "Aperto nel canale"
+    "drafts.actions.openInChannel": "Aperto nel canale",
+    "kdrive.save": "Salvare il file su kDrive",
+    "kdrive.upload": "Caricare da kDrive"
 }

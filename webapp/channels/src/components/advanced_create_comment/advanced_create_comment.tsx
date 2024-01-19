@@ -1270,6 +1270,7 @@ class AdvancedCreateComment extends React.PureComponent<Props, State> {
                     isThreadView={this.props.isThreadView}
                     isSchedulable={true}
                     handleSchedulePost={this.handleSchedulePost}
+                    caretPosition={this.state.caretPosition}
                 />
             </form>
         );

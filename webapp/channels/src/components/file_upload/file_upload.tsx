@@ -15,6 +15,7 @@ import type {UploadFile} from 'actions/file_actions';
 
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import OverlayTrigger from 'components/overlay_trigger';
+import type {TextboxElement} from 'components/textbox';
 import Tooltip from 'components/tooltip';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
@@ -155,6 +156,14 @@ export type Props = {
      * Function called when xhr fires progress event.
      */
     onUploadProgress: (filePreviewInfo: FilePreviewInfo) => void;
+
+    /**
+     * For drive sharelinks, recovered via the plugin action hack in {@code selectFileFromKdrive}
+     */
+    message: string;
+    caretPosition: number;
+    handleDriveSharelink: (e: React.ChangeEvent<TextboxElement>) => void;
+
     actions: {
 
         /**
@@ -692,8 +701,14 @@ export class FileUpload extends PureComponent<Props, State> {
                             this.setState({menuOpen: false});
                         }}
                     >
-                        <a href='#'>
-                            <span className='mr-2'>
+                        <a
+                            href='#'
+                            style={{display: 'flex', alignItems: 'center'}}
+                        >
+                            <span
+                                className='mr-2'
+                                style={{marginLeft: -3, height: 20}}
+                            >
                                 {item.icon}
                             </span>
                             {item.text}
