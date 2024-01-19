@@ -13,8 +13,7 @@ import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 import KDriveIcon from 'components/widgets/icons/kdrive_icon';
 
 import {ActionTypes} from 'utils/constants';
-import {t} from 'utils/i18n';
-import {generateId} from 'utils/utils';
+import {generateId, localizeMessage} from 'utils/utils';
 
 // const fileInfo = {
 // id: string;
@@ -143,7 +142,7 @@ export function registerInternalKdrivePlugin() {
             data: {
                 id: 'kdrive',
                 pluginId: 'kdrive',
-                text: t('kdrive.upload'),
+                text: localizeMessage('kdrive.upload', 'Upload from kDrive'),
                 customArgs: [
                     'onFileUpload',
                     'onUploadStart',
