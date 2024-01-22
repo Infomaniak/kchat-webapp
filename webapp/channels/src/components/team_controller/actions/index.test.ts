@@ -7,8 +7,9 @@ import * as teamActions from 'actions/team_actions';
 
 import {joinTeam} from 'components/team_controller/actions';
 
-import mockStore from 'tests/test_store';
 import {TestHelper} from 'utils/test_helper';
+
+import mockStore from 'tests/test_store';
 
 describe('components/team_controller/actions', () => {
     const testUserId = 'test_user_id';
