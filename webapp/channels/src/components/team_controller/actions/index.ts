@@ -5,13 +5,13 @@ import type {ServerError} from '@mattermost/types/errors';
 import type {GetGroupsForUserParams, GetGroupsParams} from '@mattermost/types/groups';
 import type {Team} from '@mattermost/types/teams';
 
-import {fetchMyChannelsAndMembersREST, fetchChannelsAndMembers} from 'mattermost-redux/actions/channels';
+import {fetchChannelsAndMembers} from 'mattermost-redux/actions/channels';
 import {logError} from 'mattermost-redux/actions/errors';
 import {getGroups, getAllGroupsAssociatedToChannelsInTeam, getAllGroupsAssociatedToTeam, getGroupsByUserIdPaginated} from 'mattermost-redux/actions/groups';
 import {forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
 import {getTeamByName, selectTeam} from 'mattermost-redux/actions/teams';
 import {getLicense} from 'mattermost-redux/selectors/entities/general';
-import {isCustomGroupsEnabled, isGraphQLEnabled} from 'mattermost-redux/selectors/entities/preferences';
+import {isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 import type {ActionFunc} from 'mattermost-redux/types/actions';
 import {setLastKSuiteSeenCookie} from 'mattermost-redux/utils/team_utils';
@@ -32,13 +32,8 @@ export function initializeTeam(team: Team): ActionFunc<Team, ServerError> {
 
         setLastKSuiteSeenCookie(team.id);
 
-        const graphQLEnabled = isGraphQLEnabled(state);
         try {
-            if (graphQLEnabled) {
-                await dispatch(fetchChannelsAndMembers(team.id));
-            } else {
-                await dispatch(fetchMyChannelsAndMembersREST(team.id));
-            }
+            await dispatch(fetchChannelsAndMembers(team.id));
         } catch (error) {
             forceLogoutIfNecessary(error as ServerError, dispatch, getState);
             dispatch(logError(error as ServerError));
